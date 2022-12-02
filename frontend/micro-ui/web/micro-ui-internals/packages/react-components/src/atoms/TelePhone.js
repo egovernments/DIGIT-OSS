@@ -9,7 +9,7 @@ const TelePhone = ({ mobile, text, privacy }) => (
     <div className="telephone">
       <div className="call">
         <Phone fillcolor={"FFFFFF"} style={{marginLeft:"0px"}} />
-        {privacy && <a href={`tel:${mobile}`}><WrapUnMaskComponent value={`+91 ${mobile}`} iseyevisible={mobile?.includes("*")?true:false} privacy={privacy}></WrapUnMaskComponent></a>}
+        {privacy && <a href={`tel:${mobile}`}><WrapUnMaskComponent value={`+91 ${mobile}`} iseyevisible={mobile?.includes("*")?true:false} privacy={privacy} style={{marginBottom:"-4px"}}></WrapUnMaskComponent></a>}
         {!privacy &&<a href={`tel:${mobile}`}>{"+91"} {mobile}</a>}
       </div>
     </div>

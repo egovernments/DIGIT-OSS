@@ -26,11 +26,11 @@ const MyChallanResult = ({ template, header, actionButtonLabel }) => {
       let from =
         new Date(fromPeriod).getDate() +
         " " +
-        Digit.Utils.date.monthNames[new Date(fromPeriod).getMonth() + 1] +
+        Digit.Utils.date.monthNames[new Date(fromPeriod).getMonth()] +
         " " +
         new Date(fromPeriod).getFullYear();
       let to =
-        new Date(toPeriod).getDate() + " " + Digit.Utils.date.monthNames[new Date(toPeriod).getMonth() + 1] + " " + new Date(toPeriod).getFullYear();
+        new Date(toPeriod).getDate() + " " + Digit.Utils.date.monthNames[new Date(toPeriod).getMonth()] + " " + new Date(toPeriod).getFullYear();
       return from + " - " + to;
     } else return "N/A";
   }

@@ -73,7 +73,24 @@ function ApplicationDetailsContent({
       return <TLCaption data={caption} />;
     } else if (window.location.href.includes("/obps/") || window.location.href.includes("/noc/") || window.location.href.includes("/ws/")) {
       //From BE side assigneeMobileNumber is masked/unmasked with connectionHoldersMobileNumber and not assigneeMobileNumber
-      const privacy = { uuid: checkpoint?.assignes?.[0]?.uuid, fieldName: ["connectionHoldersMobileNumber"], model: "WaterConnectionOwner" }
+      const privacy = { uuid: checkpoint?.assignes?.[0]?.uuid, fieldName: "mobileNumber", model: "User",showValue: false,
+      loadData: {
+        serviceName: "/egov-workflow-v2/egov-wf/process/_search",
+        requestBody: {},
+        requestParam: { tenantId : applicationDetails?.tenantId, businessIds : applicationDetails?.applicationNo, history:true },
+        jsonPath: "ProcessInstances[0].assignes[0].mobileNumber",
+        isArray: false,
+        d: (res) => {
+          let resultstring = "";
+          res?.ProcessInstances?.map((ob,index) => {
+            if(ob?.state?.state === checkpoint?.state)
+            { 
+              resultstring = `+91 ${_.get(res,`ProcessInstances[${index}].assignes[0].mobileNumber`)}`;
+            }
+          })
+          return resultstring;
+        }
+      }, }
       const caption = {
         date: checkpoint?.auditDetails?.lastModified,
         name: checkpoint?.assignes?.[0]?.name,
