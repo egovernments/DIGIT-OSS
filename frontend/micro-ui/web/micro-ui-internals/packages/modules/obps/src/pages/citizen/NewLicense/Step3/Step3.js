@@ -10,6 +10,12 @@ import axios from "axios";
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
 import Spinner from "../../../../components/Loader";
 import CommercialColonyInResidential from "./CommercialColonyResidential";
+import CommercialLicense from "./CommercialLicense";
+import LowDensityEco from "./LowDensityEco";
+import CyberPark from "./CyberPark";
+import RetirementHousing from "./RetirementHousing";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { getDocShareholding } from "../docView/docView.help";
 
 const potentialOptons = [
   {
@@ -79,7 +85,7 @@ const LandScheduleForm = (props) => {
   useEffect(() => {
     const landType = LandData?.["common-masters"]?.LandType?.map(function (data) {
       console.log("data===", data);
-      return { value: data?.code, label: data?.zone };
+      return { value: data?.landId, label: data?.land };
     });
     setYypeOfLand({ data: landType, isLoading: false });
   }, [LandData]);
@@ -99,7 +105,6 @@ const LandScheduleForm = (props) => {
     const token = window?.localStorage?.getItem("token");
     setLoader(true);
     data["potential"] = data?.potential?.value;
-    data["approachType"] = data?.approachType?.value;
     data["typeLand"] = data?.typeLand?.value;
     data["purposeParentLic"] = data?.purposeParentLic?.value;
     data["releaseStatus"] = data?.releaseStatus?.value;
@@ -140,14 +145,19 @@ const LandScheduleForm = (props) => {
   useEffect(() => {
     console.log("props?.getLicData?.ApplicantInfo", props?.getLicData?.LandSchedule);
     const valueData = props?.getLicData?.LandSchedule;
-    if (props?.getLicData?.LandSchedule) {
-      Object?.keys(valueData)?.map((item) => setValue(item, valueData[item]));
+    if (valueData) {
+      Object?.keys(valueData)?.map((item) => {
+        if (item === "purpose" || item === "potential") return null;
+        else setValue(item, valueData[item]);
+      });
       const data = purposeOptions?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.purpose);
       const potientialData = getPotentialOptons?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.potential);
+      const typeLandData = typeOfLand?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.typeLand);
       setValue("purpose", { label: data?.[0]?.label, value: data?.[0]?.value });
       setValue("potential", { label: potientialData?.[0]?.label, value: potientialData?.[0]?.value });
+      setValue("typeLand", { label: typeLandData?.[0]?.label, value: typeLandData?.[0]?.value });
     }
-  }, [props?.getLicData]);
+  }, [props?.getLicData, purposeOptions, getPotentialOptons, typeOfLand]);
 
   const getSubmitDataLabel = async () => {
     try {
@@ -240,11 +250,17 @@ const LandScheduleForm = (props) => {
                               <input type="text" className="form-control" {...register("siteLoc")} />
                             </div>
                             <div className="col col-12">
-                              <label>
-                                <h2>
-                                  Approach Type (Type of Policy) <span style={{ color: "red" }}>*</span>
-                                </h2>
-                              </label>
+                              {Purpose === "DDJAY_APHP" && <CommercialColonyInResidential watch={watch} register={register} />}
+                              {Purpose === "RPL" && <CommercialColonyInResidential watch={watch} register={register} />}
+                              {Purpose === "NILPC" && <CommercialColonyInResidential watch={watch} register={register} />}
+                              {Purpose === "AHP" && <CommercialColonyInResidential watch={watch} register={register} />}
+                              {Purpose === "CIC" && <CommercialLicense watch={watch} register={register} />}
+                              {Purpose === "LDEF" && <LowDensityEco watch={watch} register={register} />}
+                              {Purpose === "IPL" && <CyberPark watch={watch} register={register} />}
+                              {Purpose === "ITP" && <CyberPark watch={watch} register={register} />}
+                              {Purpose === "ITC" && <CyberPark watch={watch} register={register} />}
+                              {Purpose === "RHP" && <RetirementHousing watch={watch} register={register} />}
+
                               {/* <ReactMultiSelect
                               control={control}
                               name="approachType"
@@ -252,11 +268,11 @@ const LandScheduleForm = (props) => {
                               data={potentialOptons}
                               labels="Potential"
                             /> */}
-                              <select className="form-control" id="approachType" {...register("approachType")}>
-                                <option>{Purpose === "DDJAY_APHP" && <CommercialColonyInResidential watch={watch} register={register} />}</option>
-                                {/* <option value="potential 2">(a) Existing ser-vice road along with sector di-viding road.</option> */}
-                                {/* <option value="potential 2">(c) Constructed sector road or internal circula-tion road of min. 18m/24m (licenced) part of the approved sectoral plan and further leadup up to at least 4 karam wide public ras-ta.</option> */}
-                              </select>
+                              {/* <select className="form-control" id="approachType" {...register("approachType")}>
+                                <option>{Purpose === "DDJAY_APHP" && <CommercialColonyInResidential watch={watch} register={register} />}</option> */}
+                              {/* <option value="potential 2">(a) Existing ser-vice road along with sector di-viding road.</option> */}
+                              {/* <option value="potential 2">(c) Constructed sector road or internal circula-tion road of min. 18m/24m (licenced) part of the approved sectoral plan and further leadup up to at least 4 karam wide public ras-ta.</option> */}
+                              {/* </select> */}
                             </div>
                           </div>
                           <br></br>
@@ -288,8 +304,8 @@ const LandScheduleForm = (props) => {
                                 control={control}
                                 name="typeLand"
                                 placeholder="Type of Land"
-                                data={potentialOptons}
-                                labels="typeLand"
+                                data={typeOfLand?.data}
+                                labels="typeland"
                               />
 
                               {/* <select className="form-control" id="typeLand" {...register("typeLand")}>
@@ -328,6 +344,10 @@ const LandScheduleForm = (props) => {
                                       {" "}
                                       <h2>
                                         Document Upload <span style={{ color: "red" }}>*</span>
+                                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(LandSchedule?.thirdPartyDoc)}>
+                                          {" "}
+                                        </VisibilityIcon>
                                       </h2>
                                     </label>
                                     <input
@@ -345,6 +365,10 @@ const LandScheduleForm = (props) => {
                                     <label>
                                       <h2>
                                         Document Upload <span style={{ color: "red" }}>*</span>
+                                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(LandSchedule?.thirdPartyDoc)}>
+                                          {" "}
+                                        </VisibilityIcon>
                                       </h2>
                                     </label>
                                     <input
@@ -454,6 +478,9 @@ const LandScheduleForm = (props) => {
                               >
                                 Approved Layout of Plan. &nbsp;&nbsp;
                                 <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                                <VisibilityIcon color="primary" onClick={() => getDocShareholding(LandSchedule?.approvedLayoutPlan)}>
+                                  {" "}
+                                </VisibilityIcon>
                               </h2>
                               <input
                                 type="file"
@@ -470,6 +497,9 @@ const LandScheduleForm = (props) => {
                               >
                                 Proposed Layout of Plan. &nbsp;&nbsp;
                                 <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                                <VisibilityIcon color="primary" onClick={() => getDocShareholding(LandSchedule?.proposedLayoutPlan)}>
+                                  {" "}
+                                </VisibilityIcon>
                               </h2>
                               <input
                                 type="file"
@@ -480,7 +510,11 @@ const LandScheduleForm = (props) => {
                             </div>
                             <div className="col col-3">
                               <h2 data-toggle="tooltip" data-placement="top" title="Upload Previously approved Layout Plan.">
-                                Upload Previously approved. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                                Upload Previously approved. &nbsp;&nbsp;
+                                <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                                <VisibilityIcon color="primary" onClick={() => getDocShareholding(LandSchedule?.uploadPreviouslyLayoutPlan)}>
+                                  {" "}
+                                </VisibilityIcon>
                               </h2>
                               <input
                                 type="file"
@@ -548,7 +582,11 @@ const LandScheduleForm = (props) => {
                           </div>
                           <div className="col col-6">
                             <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">
-                              Document Upload &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                              Document Upload &nbsp;&nbsp;
+                              <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                              <VisibilityIcon color="primary" onClick={() => getDocShareholding(LandSchedule?.litigationDoc)}>
+                                {" "}
+                              </VisibilityIcon>
                             </h2>
                             <input
                               type="file"
@@ -589,7 +627,11 @@ const LandScheduleForm = (props) => {
                           </div>
                           <div className="col col-6">
                             <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">
-                              Document Upload &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                              Document Upload &nbsp;&nbsp;
+                              <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                              <VisibilityIcon color="primary" onClick={() => getDocShareholding(LandSchedule?.courtDoc)}>
+                                {" "}
+                              </VisibilityIcon>
                             </h2>
                             <input
                               type="file"
@@ -631,7 +673,11 @@ const LandScheduleForm = (props) => {
                           <div className="col col-6">
                             <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">
                               {" "}
-                              Document Upload &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                              Document Upload &nbsp;&nbsp;
+                              <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                              <VisibilityIcon color="primary" onClick={() => getDocShareholding(LandSchedule?.insolvencyDoc)}>
+                                {" "}
+                              </VisibilityIcon>
                             </h2>
                             <input
                               type="file"
@@ -664,7 +710,11 @@ const LandScheduleForm = (props) => {
                         <div className="row ">
                           <div className="col col-12">
                             <h6 data-toggle="tooltip" data-placement="top" title="Upload Document">
-                              Document Upload &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                              Document Upload &nbsp;&nbsp;
+                              <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                              <VisibilityIcon color="primary" onClick={() => getDocShareholding(LandSchedule?.registeringAuthorityDoc)}>
+                                {" "}
+                              </VisibilityIcon>
                             </h6>
                             <input
                               type="file"
@@ -1179,6 +1229,9 @@ const LandScheduleForm = (props) => {
                     <div className="col col-3">
                       <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                         Land schedule &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(LandSchedule?.landSchedule)}>
+                          {" "}
+                        </VisibilityIcon>
                       </h2>
 
                       <input
@@ -1191,6 +1244,9 @@ const LandScheduleForm = (props) => {
                     <div className="col col-3">
                       <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                         Copy of Mutation &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(LandSchedule?.mutation)}>
+                          {" "}
+                        </VisibilityIcon>
                       </h2>
 
                       <input
@@ -1203,6 +1259,9 @@ const LandScheduleForm = (props) => {
                     <div className="col col-3">
                       <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                         Copy of Jamabandi &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(LandSchedule?.jambandhi)}>
+                          {" "}
+                        </VisibilityIcon>
                       </h2>
 
                       <input
@@ -1215,6 +1274,9 @@ const LandScheduleForm = (props) => {
                     <div className="col col-3">
                       <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                         Details of lease / patta, if any &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(LandSchedule?.detailsOfLease)}>
+                          {" "}
+                        </VisibilityIcon>
                       </h2>
                       <input
                         type="file"
@@ -1234,6 +1296,9 @@ const LandScheduleForm = (props) => {
                         title=" Add sales/Deed/exchange/gift deed, mutation, lease/Patta"
                       >
                         Add sales/Deed/exchange &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(LandSchedule?.addSalesDeed)}>
+                          {" "}
+                        </VisibilityIcon>
                       </h2>
                       <input
                         type="file"
@@ -1251,6 +1316,9 @@ const LandScheduleForm = (props) => {
                       >
                         Copy of spa/GPA/board resolution &nbsp;&nbsp;
                         <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(LandSchedule?.copyofSpaBoard)}>
+                          {" "}
+                        </VisibilityIcon>
                       </h2>
                       <input
                         type="file"
@@ -1263,6 +1331,9 @@ const LandScheduleForm = (props) => {
                     <div className="col col-3">
                       <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                         Revised Land Schedule &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(LandSchedule?.revisedLanSchedule)}>
+                          {" "}
+                        </VisibilityIcon>
                       </h2>
                       <input
                         type="file"
@@ -1274,6 +1345,9 @@ const LandScheduleForm = (props) => {
                     <div className="col col-3">
                       <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                         Copy of Shajra Plan &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(LandSchedule?.copyOfShajraPlan)}>
+                          {" "}
+                        </VisibilityIcon>
                       </h2>
                       <input
                         type="file"

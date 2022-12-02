@@ -13,13 +13,13 @@ const CommercialPlottedForm = ({ register }) => {
         <div className="col col-12">
           <h6>
             Number of Plots/SCOs (saleable area) &nbsp;&nbsp;
-            <input type="radio" value="Y" id="Yes" {...register("farAvailed")} name="Yes" />
+            <input type="radio" value="Y" id="Yes" {...register("noOfPlotsSealableOneFifty")} name="Yes" />
             &nbsp;&nbsp;
             <label className="m-0  mx-2" for="Yes">
               150%
             </label>
             &nbsp;&nbsp;
-            <input type="radio" value="N" id="No" {...register("farAvailed")} name="Yes" />
+            <input type="radio" value="N" id="No" {...register("noOfPlotsSealableOneSeventyfive")} name="Yes" />
             &nbsp;&nbsp;
             <label className="m-0 mx-2" for="No">
               175%
@@ -49,19 +49,19 @@ const CommercialPlottedForm = ({ register }) => {
                 </td>
                 <td align="right">
                   {" "}
-                  <input type="number" className="form-control" {...register("colonyfiftyNo")} />
+                  <input type="number" className="form-control" {...register("scoPlotno")} />
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("colonyfiftyArea")} />
+                  <input type="number" className="form-control" {...register("scoLength")} />
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("colonyfiftyArea")} />
+                  <input type="number" className="form-control" {...register("scoWidth")} />
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("colonyfiftyArea")} />
+                  <input type="number" className="form-control" {...register("scoArea")} />
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("colonyfiftyArea")} />
+                  <input type="number" className="form-control" {...register("scoSimilarShape")} />
                 </td>
               </tr>
               <tr>
@@ -72,19 +72,19 @@ const CommercialPlottedForm = ({ register }) => {
                 </td>
                 <td align="right">
                   {" "}
-                  <input type="number" className="form-control" {...register("fiftyToTwoNo")} />
+                  <input type="number" className="form-control" {...register("boothPlotno")} />
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("fiftyToTwoArea")} />
+                  <input type="number" className="form-control" {...register("boothLength")} />
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("fiftyToTwoArea")} />
+                  <input type="number" className="form-control" {...register("boothWidth")} />
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("fiftyToTwoArea")} />
+                  <input type="number" className="form-control" {...register("boothArea")} />
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("fiftyToTwoArea")} />
+                  <input type="number" className="form-control" {...register("boothSimilarShape")} />
                 </td>
               </tr>
               <tr>
@@ -107,21 +107,21 @@ const CommercialPlottedForm = ({ register }) => {
                 </td>
                 <td align="right">
                   {" "}
-                  <input type="number" className="form-control" {...register("resiNo")} />
+                  <input type="number" className="form-control" {...register("stpPlotno")} />
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("resiArea")} />
+                  <input type="number" className="form-control" {...register("stpLength")} />
                 </td>
                 <td align="right">
                   {" "}
-                  <input type="number" className="form-control" {...register("resiNo")} />
+                  <input type="number" className="form-control" {...register("stpWidth")} />
                 </td>
                 <td align="right">
                   {" "}
-                  <input type="number" className="form-control" {...register("resiNo")} />
+                  <input type="number" className="form-control" {...register("stpArea")} />
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("fiftyToTwoArea")} />
+                  <input type="number" className="form-control" {...register("stpSimilarShape")} />
                 </td>
               </tr>
               <tr>
@@ -132,19 +132,19 @@ const CommercialPlottedForm = ({ register }) => {
                 </td>
                 <td align="right">
                   {" "}
-                  <input type="number" className="form-control" {...register("commerNo")} />
+                  <input type="number" className="form-control" {...register("wtpPlotno")} />
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("commerArea")} />
+                  <input type="number" className="form-control" {...register("wtpLength")} />
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("commerArea")} />
+                  <input type="number" className="form-control" {...register("wtpWidth")} />
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("commerArea")} />
+                  <input type="number" className="form-control" {...register("wtpArea")} />
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("fiftyToTwoArea")} />
+                  <input type="number" className="form-control" {...register("wtpSimilarShape")} />
                 </td>
               </tr>
               <tr>
@@ -155,21 +155,21 @@ const CommercialPlottedForm = ({ register }) => {
                 </td>
                 <td align="right">
                   {" "}
-                  <input type="number" className="form-control" {...register("labourNo")} />
+                  <input type="number" className="form-control" {...register("ugtPlotno")} />
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("labourArea")} />
+                  <input type="number" className="form-control" {...register("ugtLength")} />
                 </td>
                 <td align="right">
                   {" "}
-                  <input type="number" className="form-control" {...register("labourNo")} />
+                  <input type="number" className="form-control" {...register("ugtWidth")} />
                 </td>
                 <td align="right">
                   {" "}
-                  <input type="number" className="form-control" {...register("labourNo")} />
+                  <input type="number" className="form-control" {...register("ugtArea")} />
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("fiftyToTwoArea")} />
+                  <input type="number" className="form-control" {...register("ugtSimilarShape")} />
                 </td>
               </tr>
               <tr>
@@ -180,21 +180,21 @@ const CommercialPlottedForm = ({ register }) => {
                 </td>
                 <td align="right">
                   {" "}
-                  <input type="number" className="form-control" {...register("labourNo")} />
+                  <input type="number" className="form-control" {...register("milkPlotno")} />
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("labourArea")} />
+                  <input type="number" className="form-control" {...register("milkLength")} />
                 </td>
                 <td align="right">
                   {" "}
-                  <input type="number" className="form-control" {...register("labourNo")} />
+                  <input type="number" className="form-control" {...register("milkWidth")} />
                 </td>
                 <td align="right">
                   {" "}
-                  <input type="number" className="form-control" {...register("labourNo")} />
+                  <input type="number" className="form-control" {...register("milkArea")} />
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("fiftyToTwoArea")} />
+                  <input type="number" className="form-control" {...register("milkSimilarShape")} />
                 </td>
               </tr>
               <tr>
@@ -205,21 +205,21 @@ const CommercialPlottedForm = ({ register }) => {
                 </td>
                 <td align="right">
                   {" "}
-                  <input type="number" className="form-control" {...register("labourNo")} />
+                  <input type="number" className="form-control" {...register("gssPlotno")} />
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("labourArea")} />
+                  <input type="number" className="form-control" {...register("gssLength")} />
                 </td>
                 <td align="right">
                   {" "}
-                  <input type="number" className="form-control" {...register("labourNo")} />
+                  <input type="number" className="form-control" {...register("gssWidth")} />
                 </td>
                 <td align="right">
                   {" "}
-                  <input type="number" className="form-control" {...register("labourNo")} />
+                  <input type="number" className="form-control" {...register("gssArea")} />
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("fiftyToTwoArea")} />
+                  <input type="number" className="form-control" {...register("gssSimilarShape")} />
                 </td>
               </tr>
               <tr>
@@ -246,10 +246,10 @@ const CommercialPlottedForm = ({ register }) => {
                   </div>
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("fiftyToTwoArea")} />
+                  <input type="number" className="form-control" {...register("etcDim")} />
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("fiftyToTwoArea")} />
+                  <input type="number" className="form-control" {...register("etcArea")} />
                 </td>
               </tr>
             </tbody>
