@@ -4,7 +4,7 @@ import SubmitBar from "../atoms/SubmitBar"
 
 const PageBasedInput = ({children, texts, onSubmit}) => {
     return <div className="PageBasedInputWrapper">
-        <Card>
+        <Card  style={{  height:250,Width:150 }}>
             {children}
             <SubmitBar className="SubmitBarInCardInDesktopView" label={texts.submitBarLabel} onSubmit={onSubmit} />
         </Card>

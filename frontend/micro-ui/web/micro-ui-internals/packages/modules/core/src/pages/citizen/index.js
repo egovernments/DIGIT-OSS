@@ -6,7 +6,7 @@ import ErrorBoundary from "../../components/ErrorBoundaries";
 import { AppHome } from "../../components/Home";
 import TopBarSideBar from "../../components/TopBarSideBar";
 import CitizenHome from "./Home";
-import LanguageSelection from "./Home/LanguageSelection";
+// import LanguageSelection from "./Home/LanguageSelection";
 import LocationSelection from "./Home/LocationSelection";
 import Login from "./Login";
 import UserProfile from "./Home/UserProfile";
@@ -81,9 +81,9 @@ const Home = ({
             <CitizenHome />
           </Route>
 
-          <Route exact path={`${path}/select-language`}>
+          {/* <Route exact path={`${path}/select-language`}>
             <LanguageSelection />
-          </Route>
+          </Route> */}
 
           <Route exact path={`${path}/select-location`}>
             <LocationSelection />

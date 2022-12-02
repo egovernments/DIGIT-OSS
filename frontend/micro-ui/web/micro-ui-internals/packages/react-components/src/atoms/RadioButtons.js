@@ -12,11 +12,14 @@ const RadioButtons = (props) => {
   }
 
   return (
+   
     <div style={props.style} className={`radio-wrap ${props?.additionalWrapperClass}`}>
+       <div className="row">
       {props?.options?.map((option, ind) => {
         if (props?.optionsKey && !props?.isDependent) {
           return (
             <div style={props.innerStyles} key={ind}>
+              
               <span className="radio-btn-wrap">
                 <input
                   className="radio-btn"
@@ -31,6 +34,7 @@ const RadioButtons = (props) => {
                 <span className="radio-btn-checkmark"></span>
               </span>
               <label style={props.inputStyle}>{t(option[props.optionsKey])}</label>
+              
             </div>
           );
         } else if (props?.optionsKey && props?.isDependent) {
@@ -74,6 +78,8 @@ const RadioButtons = (props) => {
         }
       })}
     </div>
+    </div>
+    
   );
 };
 

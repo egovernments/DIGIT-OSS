@@ -2,6 +2,7 @@ import React, { Fragment, useMemo, useState } from "react";
 import { PageBasedInput, CardHeader, BackButton, SearchOnRadioButtons, CardLabelError } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
+// import Select from 'react-select';
 
 const LocationSelection = () => {
   const { t } = useTranslation();
@@ -43,17 +44,71 @@ const LocationSelection = () => {
       setShowError(true);
     }
   }
+  console.log("gfsdgf", RadioButtonProps?.options?.[0]?.name);
+  // const stateId = Digit.ULBService.getStateId();
+  // const { data: PurposeType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["RadioButtonProps"]);
+
+  // useEffect(() => {
+  //   const purpose = PurposeType?.["common-masters"]?.RadioButtonProps?.map(function (data) {
+  //     return { value: data?.purposeCode, label: data?.name };
+  //   });
+  //   setPurposeOptions({ data: purpose, isLoading: false });
+  // }, [PurposeType]);
 
   return isLoading ? (
     <loader />
   ) : (
     <>
-      <BackButton />
+      {/* <BackButton /> */}
       <PageBasedInput texts={texts} onSubmit={onSubmit}>
-        <CardHeader>{t("CS_COMMON_CHOOSE_LOCATION")}</CardHeader>
-        <SearchOnRadioButtons {...RadioButtonProps} placeholder={t("COMMON_TABLE_SEARCH")} />
-        {showError ? <CardLabelError>{t("CS_COMMON_LOCATION_SELECTION_ERROR")}</CardLabelError> : null}
+        <div style={{  height:250,Width:150 }} >{t("CS_COMMON_CHOOSE_LOCATION")}</div>
+        {/* <SearchOnRadioButtons {...RadioButtonProps} placeholder={t("COMMON_TABLE_SEARCH")}/> */}
+        {/* <div class="input-field col 12"> */}
+        
+    
+
+    <div class="row">
+  <div class="col-sm-8">
+    <div class="form-group">
+      <select  className="selectpicker form-control"
+      // className="basic-single"
+      {...RadioButtonProps}  placeholder={t("COMMON_TABLE_SEARCH")}>
+      <option value="0">CHOOSE LOCATION</option>
+      <option value="1">{RadioButtonProps?.options?.[0]?.name}</option>
+      <option value="2">{RadioButtonProps?.options?.[1]?.name}</option>
+      <option value="3">{RadioButtonProps?.options?.[2]?.name}</option>
+      <option value="4">{RadioButtonProps?.options?.[3]?.name}</option>
+      <option value="5">{RadioButtonProps?.options?.[4]?.name}</option>
+      <option value="6">{RadioButtonProps?.options?.[5]?.name}</option>
+      <option value="7">{RadioButtonProps?.options?.[7]?.name}</option>
+      <option value="8">{RadioButtonProps?.options?.[8]?.name}</option>
+      <option value="9">{RadioButtonProps?.options?.[9]?.name}</option>
+      <option value="10">{RadioButtonProps?.options?.[10]?.name}</option>
+      <option value="11">{RadioButtonProps?.options?.[11]?.name}</option>
+      <option value="12">{RadioButtonProps?.options?.[12]?.name}</option>
+      <option value="13">{RadioButtonProps?.options?.[13]?.name}</option>
+      <option value="14">{RadioButtonProps?.options?.[14]?.name}</option>
+      <option value="15">{RadioButtonProps?.options?.[15]?.name}</option>
+      <option value="16">{RadioButtonProps?.options?.[16]?.name}</option>
+      <option value="17">{RadioButtonProps?.options?.[17]?.name}</option>
+      <option value="18">{RadioButtonProps?.options?.[18]?.name}</option>
+      <option value="19">{RadioButtonProps?.options?.[19]?.name}</option>
+      <option value="20">{RadioButtonProps?.options?.[20]?.name}</option>
+      <option value="21">{RadioButtonProps?.options?.[21]?.name}</option>
+      <option value="22">{RadioButtonProps?.options?.[22]?.name}</option>
+      </select>
+    </div>
+  </div>
+</div>
+         
+    
+    
+
+        {showError ? <div>{t("CS_COMMON_LOCATION_SELECTION_ERROR")}</div> : null}
+    
       </PageBasedInput>
+      
+      
     </>
   );
 };
