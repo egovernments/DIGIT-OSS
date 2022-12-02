@@ -596,7 +596,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                                 <input 
                                   id="uploadAdhaarDoc"
                                   type="file" 
-                                  access=".pdf"
+                                  access="application/pdf"
                                   style={{display: "none"}}
                                   onChange={(e) => getDocumentData(e?.target?.files[0], "uploadAadharPdf")} 
                                 />
@@ -616,7 +616,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                                 <input 
                                   id="uploadSignDoc"
                                   type="file" 
-                                  access=".pdf"
+                                  access="application/pdf"
                                   style={{display: "none"}}
                                   onChange={(e) => getDocumentData(e?.target?.files[0], "uploadDigitalSignaturePdf")} 
                                 />
@@ -783,6 +783,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                         <input
                           type="file"
                           name="uploadAadharPdf"
+                          accept="application/pdf"
                           placeholder=""
                           class="employee-card-input"
                           onChange={(e) => getDocumentData(e?.target?.files[0], "uploadAadharPdf")}
@@ -793,6 +794,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                         <input
                           type="file"
                           name="uploadDigitalSignaturePdf"
+                          accept="application/pdf"
                           placeholder=""
                           class="employee-card-input"
                           onChange={(e) => getDocumentData(e?.target?.files[0], "uploadDigitalSignaturePdf")}

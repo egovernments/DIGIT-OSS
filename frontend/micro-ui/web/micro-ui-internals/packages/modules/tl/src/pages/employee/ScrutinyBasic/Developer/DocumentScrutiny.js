@@ -219,14 +219,15 @@ const DocumentScrutiny = (props) => {
                             <thead>
                               <tr>
                                 <th class="fw-normal">S.No.</th>
-                                <th class="fw-normal">Agreement*</th>
+                                <th class="fw-normal">Licence Document Details</th>
                                 <th class="fw-normal">Annexure </th>
                               </tr>
                             </thead>
                             <tbody>
                               <tr>
                                 <td> 1 </td>
-                                <td>Identity Proof      
+                                <td>Identity Proof  
+                                  <p>(Copy of Govt approved Identity card with photo attested by a gazetted officer within one month from the data of application .)</p>    
                                     {/* <ReportProblemIcon
                       style={{
                         color: fieldIconColors.developerType
@@ -250,16 +251,19 @@ const DocumentScrutiny = (props) => {
                       remarksUpdate={currentRemarks}
                     ></ModalChild> */}
                      </td>
-                                <td align="center" size="large">
+                                <td >
                                   <div className="row">
-                                 
+                                  <div className="btn btn-sm col-md-6">
                                      <IconButton
                                       onClick={()=>getDocShareholding(item?.boardDoc)}
                                       >
                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                      </div>
+                                      <div className="btn btn-sm col-md-6">
                                
                                   <IconButton onClick={()=>getDocShareholding(item?.boardDoc)}>
                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                      </div>
                                
                                   </div>
                                 </td>
@@ -268,7 +272,7 @@ const DocumentScrutiny = (props) => {
                               <tr>
                                 <td> 2 </td>
                                 <td>Educational Certifiates *</td>
-                                <td align="center" size="large">
+                                <td >
                                   <div className="row">
                                     {/* <button className="btn btn-sm col-md-6">
                                       <VisibilityIcon color="info" className="icon" />
@@ -276,15 +280,18 @@ const DocumentScrutiny = (props) => {
                                     <button className="btn btn-sm col-md-6">
                                       <FileDownloadIcon color="primary" />
                                     </button> */}
+                                     <div className="btn btn-sm col-md-6">
                                      <IconButton 
                                     //  onClick={()=>getDocShareholding(item?.boardDocN)}
                                      >
                                       <VisibilityIcon color="info" className="icon" /></IconButton>
-                                 
+                                 </div>
+                                 <div className="btn btn-sm col-md-6">
                                   <IconButton 
                                   // onClick={()=>getDocShareholding(item?.boardDocN)}
                                   >
                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                      </div>
                                   </div>
                                 </td>
                               </tr>
@@ -294,7 +301,7 @@ const DocumentScrutiny = (props) => {
                                 <td>
                                   Experience Certifiates *
                                 </td>
-                                <td align="center" size="large">
+                                <td >
                                   <div className="row">
                                     {/* <button className="btn btn-sm col-md-6">
                                       <VisibilityIcon color="info" className="icon" />
@@ -302,15 +309,18 @@ const DocumentScrutiny = (props) => {
                                     <button className="btn btn-sm col-md-6">
                                       <FileDownloadIcon color="primary" />
                                     </button> */}
+                                     <div className="btn btn-sm col-md-6">
                                      <IconButton 
                                     //  onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}
                                      >
                                       <VisibilityIcon color="info" className="icon" /></IconButton>
-                                
+                                </div>
+                                <div className="btn btn-sm col-md-6">
                                   <IconButton 
                                   // onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}
                                   >
                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                      </div>
                                   </div>
                                 </td>
                               </tr>
@@ -319,19 +329,22 @@ const DocumentScrutiny = (props) => {
 
                                 <td>
                                   Recent PassPosrt Size photograph of the applicant  *
+                                  <p>(Recent passport size photo - Take within six months prior to the date of application shall be uploaded please ensure that the photo uploaded is of passport and gives a front and clear view of the face.)</p>
                                 </td>
-                                <td align="center" size="large">
+                                <td>
                                   <div className="row">
-                                    
+                                  <div className="btn btn-sm col-md-6">
                                      <IconButton 
                                     //  onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}
                                      >
                                       <VisibilityIcon color="info" className="icon" /></IconButton>
-                                
+                                      </div>
+                                      <div className="btn btn-sm col-md-6">
                                   <IconButton 
                                   // onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}
                                   >
                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                      </div>
                                   </div>
                                 </td>
                               </tr>
@@ -340,19 +353,23 @@ const DocumentScrutiny = (props) => {
 
                                 <td>
                                   Showcause notice  *
+                                  <p>(Details of show cause notice received/cancellations of licence if any )</p>
                                 </td>
-                                <td align="center" size="large">
+                                <td>
                                   <div className="row">
-                                    
+                                  <div className="btn btn-sm col-md-6">
                                      <IconButton 
                                     //  onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}
                                      >
                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                      </div>
+                                      <div className="btn btn-sm col-md-6">
                                 
                                   <IconButton 
                                   // onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}
                                   >
                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                      </div>
                                   </div>
                                 </td>
                               </tr>
@@ -361,19 +378,23 @@ const DocumentScrutiny = (props) => {
 
                                 <td>
                                   Income tax statement  *
+                                  <p>(Income Tax Statement of Last Three Consecutive Financial Year)</p>
                                 </td>
-                                <td align="center" size="large">
+                                <td>
                                   <div className="row">
-                                    
+                                  <div className="btn btn-sm col-md-6">
                                      <IconButton 
                                     //  onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}
                                      >
                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                      </div>
+                                      <div className="btn btn-sm col-md-6">
                                 
                                   <IconButton 
                                   // onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}
                                   >
                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                      </div>
                                   </div>
                                 </td>
                               </tr>
@@ -383,18 +404,20 @@ const DocumentScrutiny = (props) => {
                                 <td>
                                  other  
                                 </td>
-                                <td align="center" size="large">
+                                <td>
                                   <div className="row">
-                                    
+                                  <div className="btn btn-sm col-md-6">
                                      <IconButton 
                                     //  onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}
                                      >
                                       <VisibilityIcon color="info" className="icon" /></IconButton>
-                                
+                                      </div>
+                                      <div className="btn btn-sm col-md-6">
                                   <IconButton 
                                   // onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}
                                   >
                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                      </div>
                                   </div>
                                 </td>
                               </tr>
@@ -403,19 +426,22 @@ const DocumentScrutiny = (props) => {
 
                                 <td>
                                   Registration Certificate of licence 
+                                  <p>(Registration certifiate of the  licence copy attested by a gazette officer attested within one month prior to the date of be scanned and uploaded.(including renewal certifiate if any ))</p>
                                 </td>
-                                <td align="center" size="large">
+                                <td>
                                   <div className="row">
-                                    
+                                  <div className="btn btn-sm col-md-6">
                                      <IconButton 
                                     //  onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}
                                      >
                                       <VisibilityIcon color="info" className="icon" /></IconButton>
-                                
+                                      </div>
+                                      <div className="btn btn-sm col-md-6">
                                   <IconButton 
                                   // onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}
                                   >
                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                  </div>
                                   </div>
                                 </td>
                               </tr>
