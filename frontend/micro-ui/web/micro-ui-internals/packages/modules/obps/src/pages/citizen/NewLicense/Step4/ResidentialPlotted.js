@@ -6,7 +6,9 @@ const ResidentialPlottedForm = ({ register }) => {
   return (
     <Row className="ml-auto" style={{ marginBottom: 5 }}>
       <Col col-12>
-        <h6 className="text-black">Residential Plotted</h6>
+        <h6 className="text-black">
+          <b>Residential Plotted</b>
+        </h6>
 
         <div className="table table-bordered table-responsive">
           <thead>

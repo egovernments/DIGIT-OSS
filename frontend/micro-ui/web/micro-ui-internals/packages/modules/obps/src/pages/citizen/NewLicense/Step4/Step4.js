@@ -28,20 +28,20 @@ const AppliedDetailForm = (props) => {
     defaultValues: {
       dgpsDetails: [
         {
-          XLongitude: "",
-          YLatitude: "",
+          longitude: "",
+          latitude: "",
         },
         {
-          XLongitude: "",
-          YLatitude: "",
+          longitude: "",
+          latitude: "",
         },
         {
-          XLongitude: "",
-          YLatitude: "",
+          longitude: "",
+          latitude: "",
         },
         {
-          XLongitude: "",
-          YLatitude: "",
+          longitude: "",
+          latitude: "",
         },
       ],
     },
@@ -53,6 +53,7 @@ const AppliedDetailForm = (props) => {
   });
 
   const AppliedDetailFormSubmitHandler = async (data) => {
+    setLoader(true);
     const token = window?.localStorage?.getItem("token");
     const postDistrict = {
       pageName: "DetailsofAppliedLand",
@@ -209,139 +210,39 @@ const AppliedDetailForm = (props) => {
         userInfo: props?.userData,
       },
     };
-
-    console.log("data------", postDistrict);
-    // return;
     try {
       const Resp = await axios.post("/tl-services/new/_create", postDistrict);
-      // console.log("MMM", Resp?.data?.NewServiceInfo?.[0]?.id);
-      props.Step4Continue();
+      setLoader(false);
+      props.Step4Continue(Resp?.data?.LicenseServiceResponseInfo?.[0]?.newServiceInfoData?.[0]);
     } catch (error) {
-      console.log(error.message);
+      setLoader(false);
+      return error?.message;
     }
   };
 
-  const [applicantId, setApplicantId] = useState("");
-  const getApplicantDetailsUserData = async (id) => {
-    console.log("here");
+  useEffect(() => {
+    console.log("props?.getLicData?.ApplicantInfo", props?.getLicData);
+    // const valueData = props?.getLicData;
+    // if (props?.getLicData?.LandSchedule) {
+    //   Object?.keys(valueData)?.map((item) => setValue(item, valueData[item]));
+    //   const data = purposeOptions?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.purpose);
+    //   const potientialData = getPotentialOptons?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.potential);
+    //   setValue("purpose", { label: data?.[0]?.label, value: data?.[0]?.value });
+    //   setValue("potential", { label: potientialData?.[0]?.label, value: potientialData?.[0]?.value });
+    // }
+  }, [props?.getLicData]);
+
+  const getSubmitDataLabel = async () => {
     try {
-      const Resp = await axios.get(`http://103.166.62.118:8443/tl-services/new/licenses/_get?id=${id}`);
-      const userData = Resp?.data?.newServiceInfoData[0]?.DetailsofAppliedLand;
-      console.log("dd", Resp?.data?.newServiceInfoData[0]?.DetailsofAppliedLand?.DetailsAppliedLandDdjay.frozenNo);
-      // setValue("dgpsDetails", userData?.dgpsDetails);
-      setValue("regularOption", userData?.DetailsAppliedLandPlot?.regularOption);
-      setValue("resplotno", userData?.DetailsAppliedLandPlot?.resplotno);
-      setValue("reslengthmtr", userData?.DetailsAppliedLandPlot?.reslengthmtr);
-      setValue("reswidthmtr", userData?.DetailsAppliedLandPlot?.reswidthmtr);
-      setValue("resareasq", userData?.DetailsAppliedLandPlot?.resareasq);
-      setValue("npnlplotno", userData?.DetailsAppliedLandPlot?.npnlplotno);
-      setValue("npnllengthmtr", userData?.DetailsAppliedLandPlot?.npnllengthmtr);
-      setValue("npnlwidthmtr", userData?.DetailsAppliedLandPlot?.npnlwidthmtr);
-      setValue("npnlareasq", userData?.DetailsAppliedLandPlot?.npnlareasq);
-      setValue("ewsplotno", userData?.DetailsAppliedLandPlot?.ewsplotno);
-      setValue("ewslengthmtr", userData?.DetailsAppliedLandPlot?.ewslengthmtr);
-      setValue("ewswidthmtr", userData?.DetailsAppliedLandPlot?.ewswidthmtr);
-      setValue("ewsareasq", userData?.DetailsAppliedLandPlot?.ewsareasq);
-      setValue("complotno", userData?.DetailsAppliedLandPlot?.complotno);
-      setValue("comlengthmtr", userData?.DetailsAppliedLandPlot?.comlengthmtr);
-      setValue("comwidthmtr", userData?.DetailsAppliedLandPlot?.comwidthmtr);
-      setValue("comareasq", userData?.DetailsAppliedLandPlot?.comareasq);
-      setValue("siteplotno", userData?.DetailsAppliedLandPlot?.siteplotno);
-      setValue("sitelengthmtr", userData?.DetailsAppliedLandPlot?.sitelengthmtr);
-      setValue("sitewidthmtr", userData?.DetailsAppliedLandPlot?.sitewidthmtr);
-      setValue("siteareasq", userData?.DetailsAppliedLandPlot?.siteareasq);
-      setValue("parkplotno", userData?.DetailsAppliedLandPlot?.parkplotno);
-      setValue("parklengthmtr", userData?.DetailsAppliedLandPlot?.parklengthmtr);
-      setValue("parkwidthmtr", userData?.DetailsAppliedLandPlot?.parkwidthmtr);
-      setValue("parkareasq", userData?.DetailsAppliedLandPlot?.parkareasq);
-      setValue("publicplotno", userData?.DetailsAppliedLandPlot?.publicplotno);
-      setValue("publiclengthmtr", userData?.DetailsAppliedLandPlot?.publiclengthmtr);
-      setValue("publicwidthmtr", userData?.DetailsAppliedLandPlot?.publicwidthmtr);
-      setValue("publicareasq", userData?.DetailsAppliedLandPlot?.publicareasq);
-      setValue("etpplotno", userData?.DetailsAppliedLandPlot?.etpplotno);
-      setValue("etplengthmtr", userData?.DetailsAppliedLandPlot?.etplengthmtr);
-      setValue("etpwidthmtr", userData?.DetailsAppliedLandPlot?.etpwidthmtr);
-      setValue("etpareasq", userData?.DetailsAppliedLandPlot?.etpareasq);
-      setValue("wtpplotno", userData?.DetailsAppliedLandPlot?.wtpplotno);
-      setValue("wtplengthmtr", userData?.DetailsAppliedLandPlot?.wtplengthmtr);
-      setValue("wtpwidthmtr", userData?.DetailsAppliedLandPlot?.wtpwidthmtr);
-      setValue("wtpareasq", userData?.DetailsAppliedLandPlot?.wtpareasq);
-      setValue("ugtplotno", userData?.DetailsAppliedLandPlot?.ugtplotno);
-      setValue("ugtlengthmtr", userData?.DetailsAppliedLandPlot?.ugtlengthmtr);
-      setValue("ugtwidthmtr", userData?.DetailsAppliedLandPlot?.ugtwidthmtr);
-      setValue("ugtareasq", userData?.DetailsAppliedLandPlot?.ugtareasq);
-      setValue("milkboothplotno", userData?.DetailsAppliedLandPlot?.milkboothplotno);
-      setValue("milkboothlengthmtr", userData?.DetailsAppliedLandPlot?.milkboothlengthmtr);
-      setValue("milkboothwidthmtr", userData?.DetailsAppliedLandPlot?.milkboothwidthmtr);
-      setValue("milkboothareasq", userData?.DetailsAppliedLandPlot?.milkboothareasq);
-      setValue("gssplotno", userData?.DetailsAppliedLandPlot?.gssplotno);
-      setValue("gssplotno", userData?.DetailsAppliedLandPlot?.gssplotno);
-      setValue("gssWidthmtr", userData?.DetailsAppliedLandPlot?.gssWidthmtr);
-      setValue("gssareasq", userData?.DetailsAppliedLandPlot?.gssareasq);
-      setValue("resDimension", userData?.DetailsAppliedLandPlot?.resDimension);
-      setValue("resEnteredArea", userData?.DetailsAppliedLandPlot?.resEnteredArea);
-      setValue("comDimension", userData?.DetailsAppliedLandPlot?.comDimension);
-      setValue("comEnteredArea", userData?.DetailsAppliedLandPlot?.comEnteredArea);
-      setValue("secPlanPlot", userData?.DetailsAppliedLandPlot?.secPlanPlot);
-      setValue("secPlanLength", userData?.DetailsAppliedLandPlot?.secPlanLength);
-      setValue("secPlanDim", userData?.DetailsAppliedLandPlot?.secPlanDim);
-      setValue("secPlanEntered", userData?.DetailsAppliedLandPlot?.secPlanEntered);
-      setValue("greenBeltPlot", userData?.DetailsAppliedLandPlot?.greenBeltPlot);
-      setValue("greenBeltLength", userData?.DetailsAppliedLandPlot?.greenBeltLength);
-      setValue("greenBeltDim ", userData?.DetailsAppliedLandPlot?.greenBeltDim);
-      setValue("greenBeltEntered", userData?.DetailsAppliedLandPlot?.greenBeltEntered);
-      setValue("internalPlot ", userData?.DetailsAppliedLandPlot?.internalPlot);
-      setValue("internalLength", userData?.DetailsAppliedLandPlot?.internalLength);
-      setValue("internalDim", userData?.DetailsAppliedLandPlot?.internalDim);
-      setValue("internalEntered", userData?.DetailsAppliedLandPlot?.internalEntered);
-      setValue("otherPlot", userData?.DetailsAppliedLandPlot?.otherPlot);
-      setValue("otherLength", userData?.DetailsAppliedLandPlot?.otherLength);
-      setValue("otherDim", userData?.DetailsAppliedLandPlot?.otherDim);
-      setValue("otherEntered", userData?.DetailsAppliedLandPlot?.otherEntered);
-      setValue("undeterminedPlot", userData?.DetailsAppliedLandPlot?.undeterminedPlot);
-      setValue("undeterminedLength", userData?.DetailsAppliedLandPlot?.undeterminedLength);
-      setValue("undeterminedDim ", userData?.DetailsAppliedLandPlot?.undeterminedDim);
-      setValue("undeterminedEntered", userData?.DetailsAppliedLandPlot?.undeterminedEntered);
-      setValue("frozenNo ", userData?.DetailsAppliedLandDdjay?.frozenNo);
-      setValue("frozenArea ", userData?.DetailsAppliedLandDdjay?.frozenArea);
-      setValue("organize ", userData?.DetailsAppliedLandDdjay?.organize);
-      setValue("organizeArea ", userData?.DetailsAppliedLandDdjay?.organizeArea);
-      setValue("colonyfiftyNo ", userData?.DetailsAppliedLandIndustrial?.colonyfiftyNo);
-      setValue("colonyfiftyArea ", userData?.DetailsAppliedLandIndustrial?.colonyfiftyArea);
-      setValue("fiftyToTwoNo ", userData?.DetailsAppliedLandIndustrial?.fiftyToTwoNo);
-      setValue("fiftyToTwoArea ", userData?.DetailsAppliedLandIndustrial?.fiftyToTwoArea);
-      setValue("twoHundredNo ", userData?.DetailsAppliedLandIndustrial?.twoHundredNo);
-      setValue("twoHundredArea ", userData?.DetailsAppliedLandIndustrial?.twoHundredArea);
-      setValue("resiNo ", userData?.DetailsAppliedLandIndustrial?.resiNo);
-      setValue("resiArea ", userData?.DetailsAppliedLandIndustrial?.resiArea);
-      setValue("commerNo ", userData?.DetailsAppliedLandIndustrial?.commerNo);
-      setValue("commerArea ", userData?.DetailsAppliedLandIndustrial?.commerArea);
-      setValue("labourNo ", userData?.DetailsAppliedLandIndustrial?.labourNo);
-      setValue("labourArea ", userData?.DetailsAppliedLandIndustrial?.labourArea);
-      setValue("npnlNo ", userData?.DetailsAppliedLandResidential?.npnlNo);
-      setValue("npnlArea ", userData?.DetailsAppliedLandResidential?.npnlArea);
-      setValue("ewsNo ", userData?.DetailsAppliedLandResidential?.ewsNo);
-      setValue("ewsArea ", userData?.DetailsAppliedLandResidential?.ewsArea);
-      setValue("surrender ", userData?.DetailsAppliedLandNILP?.surrender);
-      setValue("surrenderArea ", userData?.DetailsAppliedLandNILP?.surrenderArea);
-      setValue("pocketAreaEnter ", userData?.DetailsAppliedLandNILP?.pocketAreaEnter);
-      setValue("pocketProposed ", userData?.DetailsAppliedLandNILP?.pocketProposed);
-      setValue("pocketDim ", userData?.DetailsAppliedLandNILP?.pocketDim);
-      setValue("deposit ", userData?.DetailsAppliedLandNILP?.deposit);
-      setValue("depositArea ", userData?.DetailsAppliedLandNILP?.depositArea);
-      setValue("surrendered ", userData?.DetailsAppliedLandNILP?.surrendered);
-      setValue("surrenderedDim ", userData?.DetailsAppliedLandNILP?.surrenderedDim);
+      const Resp = await axios.get(`http://103.166.62.118:8443/land-services/new/licenses/_get?id=${props.getId}`).then((response) => {
+        return response;
+      });
     } catch (error) {
       console.log(error.message);
     }
   };
   useEffect(() => {
-    const search = location?.search;
-    const params = new URLSearchParams(search);
-    const id = params.get("id");
-
-    setApplicantId(id?.toString());
-    if (id) getApplicantDetailsUserData(id);
+    getSubmitDataLabel();
   }, []);
 
   const getDocumentData = async (file, fieldName) => {
@@ -368,7 +269,7 @@ const AppliedDetailForm = (props) => {
       {loader && <Spinner />}
       <form onSubmit={handleSubmit(AppliedDetailFormSubmitHandler)}>
         <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New License </h4>
+          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New Licence </h4>
           <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
             <Form.Group className="justify-content-center" controlId="formBasicEmail">
               <Row className="ml-auto" style={{ marginBottom: 5 }}>
@@ -384,11 +285,11 @@ const AppliedDetailForm = (props) => {
                         <div className="row ">
                           <div className="col col-4">
                             <label>X:Longitude</label>
-                            <input type="number" className="form-control" {...register(`dgpsDetails.${index}.XLongitude`)} />
+                            <input type="number" className="form-control" {...register(`dgpsDetails.${index}.longitudtue`)} />
                           </div>
                           <div className="col col-4">
                             <label>Y:Latitude</label>
-                            <input type="number" className="form-control" {...register(`dgpsDetails.${index}.YLatitude`)} />
+                            <input type="number" className="form-control" {...register(`dgpsDetails.${index}.latitude`)} />
                           </div>
                         </div>
                         {index > 3 && (
@@ -402,7 +303,7 @@ const AppliedDetailForm = (props) => {
                       type="button"
                       style={{ float: "right", marginRight: 15 }}
                       className="btn btn-primary"
-                      onClick={() => append({ XLongitude: "", YLatitude: "" })}
+                      onClick={() => append({ longitude: "", latitude: "" })}
                     >
                       Add
                     </button>
@@ -928,16 +829,16 @@ const AppliedDetailForm = (props) => {
                         <td>1. </td>
                         <td>
                           {" "}
-                          Whether you want to surrender the 10% area of license colony to Govt. the instead of providing 10% under EWS and NPNL plots{" "}
+                          Whether you want to surrender the 10% area of licence colony to Govt. the instead of providing 10% under EWS and NPNL plots{" "}
                         </td>
                         <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
                           <label htmlFor="surrender">
                             <input {...register("surrender")} type="radio" value="Y" id="surrender" />
-                            Yes
+                            &nbsp; Yes &nbsp;&nbsp;
                           </label>
                           <label htmlFor="surrender">
                             <input {...register("surrender")} type="radio" value="N" id="surrender" />
-                            No
+                            &nbsp; No &nbsp;&nbsp;
                           </label>
                           {watch("surrender") === "Y" && (
                             <div className="row ">
@@ -956,11 +857,11 @@ const AppliedDetailForm = (props) => {
                         <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
                           <label htmlFor="pocketProposed">
                             <input {...register("pocketProposed")} type="radio" value="Y" id="pocketProposed" />
-                            Yes
+                            &nbsp; Yes &nbsp;&nbsp;
                           </label>
                           <label htmlFor="pocketProposed">
                             <input {...register("pocketProposed")} type="radio" value="N" id="pocketProposed" />
-                            No
+                            &nbsp; No &nbsp;&nbsp;
                           </label>
                           {watch("pocketProposed") === "Y" && (
                             <div className="row ">
@@ -985,11 +886,11 @@ const AppliedDetailForm = (props) => {
                         <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
                           <label htmlFor="deposit">
                             <input {...register("deposit")} type="radio" value="Y" id="deposit" />
-                            Yes
+                            &nbsp; Yes &nbsp;&nbsp;
                           </label>
                           <label htmlFor="deposit">
                             <input {...register("deposit")} type="radio" value="N" id="deposit" />
-                            No
+                            &nbsp; No &nbsp;&nbsp;
                           </label>
                           {watch("deposit") === "Y" && (
                             <div className="row ">
@@ -1010,11 +911,11 @@ const AppliedDetailForm = (props) => {
                         <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
                           <label htmlFor="surrendered">
                             <input {...register("surrendered")} type="radio" value="Y" id="surrendered" />
-                            Yes
+                            &nbsp; Yes &nbsp;&nbsp;
                           </label>
                           <label htmlFor="surrendered">
                             <input {...register("surrendered")} type="radio" value="N" id="surrendered" />
-                            No
+                            &nbsp; No &nbsp;&nbsp;
                           </label>
                           {watch("surrendered") === "Y" && (
                             <div className="row ">
@@ -1055,17 +956,18 @@ const AppliedDetailForm = (props) => {
                     </div>
                     <div className="col col-3">
                       <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
-                        Sectoral Plan &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        Sectoral Plan. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "sectoralPlan")} />
                     </div>
                     <div className="col col-3">
                       <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
-                        Upload Layout Plan &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        Upload Layout Plan. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "uploadLayoutPlan")} />
                     </div>
                   </div>
+                  <br></br>
                   <div className="row">
                     <div className="col col-3">
                       <h6
@@ -1074,7 +976,7 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Copy of plans showing cross sections of proposed roads indicating, in particular, the width of proposed carriage ways cycle tracks and footpaths etc"
                       >
-                        Plans showing cross sections &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        Plans showing cross sections. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "planCrossSection")} />
                     </div>
@@ -1085,11 +987,16 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Copy of plans indicating, in addition, the position of sewers, stormwater channels, water supply and any other public health services."
                       >
-                        Plans indicating position of public health services. &nbsp;&nbsp;
+                        Plans indicating position of public. &nbsp;&nbsp;
                         <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
 
-                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "publicHealthServices")} />
+                      <input
+                        type="file"
+                        className="form-control"
+                        onChange={(e) => getDocumentData(e?.target?.files[0], "publicHealthServices")}
+                        style={{ marginTop: "-12px" }}
+                      />
                     </div>
                     <div className="col col-3">
                       <h6
@@ -1098,7 +1005,7 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Copy of detailed specifications and designs of road works and estimated costs thereof"
                       >
-                        Specifications and designs of road works &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        Specifications and designs. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "designRoad")} />
                     </div>
@@ -1109,12 +1016,13 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Copy of detailed specifications and designs of sewerage, storm, water and water supply works and estimated costs thereof"
                       >
-                        Designs of sewerage, storm and water supply &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        Designs of sewerage and storm. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
 
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "designSewarage")} />
                     </div>
                   </div>
+                  <br></br>
                   <div className="row">
                     <div className="col col-3">
                       <h6
@@ -1123,7 +1031,7 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Copy of detailed specifications and designs for disposal and treatment of storm and sullage water and estimated costs of works."
                       >
-                        Designs for disposal and treatment of storm &nbsp;&nbsp;
+                        Disposal and storm treatment. &nbsp;&nbsp;
                         <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
 
@@ -1136,7 +1044,7 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Whether intimated each of the allottees through registered post regarding the proposed changes in the layout plan: - If yes selected upload"
                       >
-                        Undertaking that no change &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        Undertaking that no change. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
 
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "undertakingChange")} />
@@ -1148,19 +1056,20 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Whether you hosted the existing approved layout plan & in-principle approved layout on the website of your company/organization Yes/No if yes upload"
                       >
-                        Whether you hosted the existing approved layout plan &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        Hosted approved layout plan. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
 
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "hostedLayoutPlan")} />
                     </div>
                     <div className="col col-3">
                       <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
-                        Report any objection from any of the allottees &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        Report any objection. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
 
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "reportObjection")} />
                     </div>
                   </div>
+                  <br></br>
                   <div className="row">
                     <div className="col col-3">
                       <h6
@@ -1169,7 +1078,7 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Consent of RERA if there is any change in the phasing ."
                       >
-                        Consent of RERA &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        Consent of RERA. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
 
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "consentRera")} />
@@ -1181,7 +1090,7 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Undertaking that no change has been made in the phasing "
                       >
-                        Undertaking &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        Undertaking. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
 
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "undertaking")} />
@@ -1193,7 +1102,7 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Copy of detailed specifications and designs for electric supply including street lighting"
                       >
-                        Detailed specifications and designs for electric supply &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        Designs for electric supply.&nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
 
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "detailedElectricSupply")} />
@@ -1205,7 +1114,7 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Explanatory note regarding the salient feature of the proposed colony."
                       >
-                        Salient feature of the proposed colony &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        Salient feature of the colony. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
 
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "proposedColony")} />

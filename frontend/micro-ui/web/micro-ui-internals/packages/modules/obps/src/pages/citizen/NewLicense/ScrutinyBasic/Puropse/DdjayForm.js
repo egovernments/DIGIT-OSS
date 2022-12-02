@@ -109,22 +109,22 @@ const DDJAYForm = (props) => {
       <Form.Group className="justify-content-center" controlId="formBasicEmail">
         <Row className="ml-auto" style={{ marginBottom: 5 }}>
           <Col col-12>
-            <h5 className="text-black"><b>Deen Dayal Jan Awas Yojna (DDJAY):-</b></h5>
+            <h5 className="text-black"><h5>Deen Dayal Jan Awas Yojna (DDJAY):-</h5></h5>
 
             <div className="table table-bordered table-responsive">
               <thead>
                 <tr>
-                  <td><b>Detail of plots</b></td>
-                  <td ><b>No.</b></td>
-                  <td ><b>Area</b></td>
+                  <td><h5>Detail of plots</h5></td>
+                  <td ><h5>No.</h5></td>
+                  <td ><h5>Area</h5></td>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td >
                     <div className="px-2">
-                      <p className="mb-2" ><b>Details of frozen plots (50%)
-                      </b></p>
+                      <p className="mb-2" ><h5>Details of frozen plots (50%)
+                      </h5></p>
                     </div>
                   </td>
                   <td align="right">
@@ -169,7 +169,7 @@ const DDJAYForm = (props) => {
             <br></br>
             <div className="row">
               <div className="col col-12">
-                <h6><b> Whether one organizes open space/pocket of min area 0.3 acre proposed in the layout plan (Yes/No)</b>&nbsp;&nbsp;
+                <h6><h5> Whether one organizes open space/pocket of min area 0.3 acre proposed in the layout plan (Yes/No)</h5>&nbsp;&nbsp;
 
 
                   <input type="radio" value="Yes"   checked={ddjayData?.minArea==="Y"?true:false} disabled />&nbsp;&nbsp;
