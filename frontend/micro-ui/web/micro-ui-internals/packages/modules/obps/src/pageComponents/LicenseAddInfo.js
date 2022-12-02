@@ -26,6 +26,7 @@ import FileUpload from '@mui/icons-material/FileUpload'
 import DeleteIcon from '@mui/icons-material/Delete';
 import Delete from "@mui/icons-material/Delete";
 import { getDocShareholding } from "../../../tl/src/pages/employee/ScrutinyBasic/ScrutinyDevelopment/docview.helper";
+import { MenuItem, Select } from "@mui/material";
 const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
   let validation = {};
   const { pathname: url } = useLocation();
@@ -36,19 +37,19 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   const [panNumber, setPanNumber] = useState();
   const [dob, setDOB] = useState();
   const [developerDataAddinfo, setDeveloperDataAddinfo] = useState([]);
-  const [existingColonizer,setExistingColonizer] = useState();
+  const [existingColonizer, setExistingColonizer] = useState();
   const [existingColonizerDetails, setExistingColonizerDetails] = useState({
-    name:"",
-    mobile:"",
-    email:"",
-    dob:"",
-    pan:"",
-    licNo:"",
-    licDate:"",
-    licValidity:"",
-    licPurpose:"",
-    aggreementBtw:"",
-    boardResolution:""
+    name: "",
+    mobile: "",
+    email: "",
+    dob: "",
+    pan: "",
+    licNo: "",
+    licDate: "",
+    licValidity: "",
+    licPurpose: "",
+    aggreementBtw: "",
+    boardResolution: ""
   })
 
   let isOpenLinkFlow = window.location.href.includes("openlink");
@@ -113,7 +114,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         totalRemainingShareholdingPattern -= Number(item.percentage.split("%")[0]);
         console.log("log123", item.percentage, item.percentage.split("%")[0], totalRemainingShareholdingPattern)
       })
-      setRemainingStakeholderPercentage(totalRemainingShareholdingPattern);
+      setRemainingStakeholderPercentage(Number(totalRemainingShareholdingPattern));
       console.log("log123", totalRemainingShareholdingPattern, developerDataGet?.devDetail[0]?.addInfo?.shareHoldingPatterens, developerDataGet?.devDetail[0]?.addInfo?.shareHoldingPatterens[0].percentage.split("%")[0])
 
     } catch (error) {
@@ -183,6 +184,17 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     dob: ""
   })
   const [addPeopleModal, setAddPeopleModal] = useState(false);
+  const [purposeOptions, setPurposeOptions] = useState({ data: [], isLoading: true });
+
+  const { data: PurposeType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
+
+  useEffect(() => {
+    const purpose = PurposeType?.["common-masters"]?.Purpose?.map(function (data) {
+      return { value: data?.purposeCode, label: data?.name };
+    });
+    console.log("log123",purpose)
+    setPurposeOptions({ data: purpose, isLoading: false });
+  }, [PurposeType])
 
   // useEffect(() => {
   //   fetch("https://apisetu.gov.in/mca/v1/companies/U72200CH1998PTC022006").then((result) => {
@@ -305,7 +317,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   //   setShowDevTypeFields(value)
   //   console.log(value);
   // }
-  const getDocumentData = async (file, fieldName,type) => {
+  const getDocumentData = async (file, fieldName, type) => {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("tenantId", "hr");
@@ -318,9 +330,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       });
       console.log(Resp?.data?.files);
 
-      if(type === "existingColonizer"){
-        console.log("log123 ====> ",fieldName,Resp?.data?.files?.[0]?.fileStoreId,Resp)
-        setExistingColonizerDetails({...existingColonizerDetails,[fieldName]:Resp?.data?.files?.[0]?.fileStoreId})
+      if (type === "existingColonizer") {
+        console.log("log123 ====> ", fieldName, Resp?.data?.files?.[0]?.fileStoreId, Resp)
+        setExistingColonizerDetails({ ...existingColonizerDetails, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId })
       } else {
         setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
         // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
@@ -335,7 +347,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     }
   };
   useEffect(() => {
-      getDocumentData();
+    getDocumentData();
   }, [file]);
 
   const getDocShareholding = async () => {
@@ -424,7 +436,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   const handleArrayValues = () => {
 
     if (modalNAme !== "" && modaldesignition !== "" && modalPercentage !== "") {
-      setRemainingStakeholderPercentage((remainingStakeholderPercentage - Number(modalPercentage)).toFixed(2));
+      setRemainingStakeholderPercentage(Number(Number(remainingStakeholderPercentage) - Number(modalPercentage)).toFixed(2));
       const values = {
         "name": modalNAme,
         "designition": modaldesignition,
@@ -485,7 +497,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     let tempRows = rows.splice(i, 1);
     console.log("log123", tempRows)
     // if(remainingStakeholderPercentage === 100){
-    setRemainingStakeholderPercentage(remainingStakeholderPercentage + Number(tempRows[0].percentage.split("%")[0]))
+    setRemainingStakeholderPercentage(Number(remainingStakeholderPercentage) + Number(tempRows[0].percentage.split("%")[0]))
     // }
     setModalValuesArray(rows);
   }
@@ -1273,13 +1285,14 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                   >
                     Add More
                   </button> */}
+                    {/* <div> {remainingStakeholderPercentage} */}
                     <div>
-                      <button 
+                      <button
                         type="button"
                         style={{
                           color: "white",
                         }}
-                        disabled={remainingStakeholderPercentage === 0}
+                        disabled={Number(remainingStakeholderPercentage) === 0}
                         className="btn btn-primary mt-3"
                         // onClick={() => setNoOfRows(noofRows + 1)}
                         // onClick={() => setmodal(true)}
@@ -1577,6 +1590,244 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
                     </div>
                   </div>
+
+                  <p className="ml-1">
+                In case the Partner/director of the applicant firm/company is common with any existing colonizer who has been granted a license under the 1975 act Yes/No.
+
+              </p>
+
+              <div className="form-group ml-2">
+                <input
+                  type="radio"
+                  value="Y"
+                  id="existingColonizer"
+                  className="mx-2 mt-1"
+                  onChange={(e) => setExistingColonizer(e.target.value)}
+                  name="existingColonizer"
+                />
+                <label for="Yes">Yes</label>
+
+                <input
+                  type="radio"
+                  value="N"
+                  id="existingColonizerN"
+                  className="mx-2 mt-1"
+                  onChange={(e) => setExistingColonizer(e.target.value)}
+                  name="existingColonizer"
+                />
+                <label for="No">No</label>
+                {existingColonizer === "Y" && (
+                  <div>
+                    <div className="row ">
+                      <div className="form-group row">
+                        <div className="col-sm-12">
+                          <Col xs="12" md="12" sm="12">
+                            <Table className="table table-bordered" size="sm">
+                              <thead>
+                                <tr>
+                                  <th>S.No.</th>
+                                  <th>Document Name </th>
+                                  <th> Upload Documents</th>
+                                  <th> Annexure</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td> 1 &nbsp;&nbsp;</td>
+                                  <td>
+                                    {" "}
+                                    Agreement between the proposed developer and existing colonizer
+                                  </td>
+                                  <td align="center" size="large">
+                                    <input
+                                      type="file"
+                                      accept="application/pdf"
+                                      name="agreementDoc"
+                                      onChange={(e) => getDocumentData(e?.target?.files[0], "aggreementBtw", "existingColonizer")}
+                                      class="employee-card-input"
+                                    />
+                                  </td>
+                                  <td>
+                                    {existingColonizerDetails.aggreementBtw !== "" ?
+                                      <button type="button" onClick={() => getDocShareholding(existingColonizerDetails.aggreementBtw)} className="btn btn-sm col-md-6">
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </button> : <p></p>
+                                    }
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td> 2&nbsp;&nbsp; </td>
+                                  <td>
+                                    Board resolution of authorised signatory of the existing colonizer
+                                  </td>
+                                  <td align="center" size="large">
+                                    <input
+                                      type="file"
+                                      accept="application/pdf"
+                                      name="boardDoc"
+                                      onChange={(e) => getDocumentData(e?.target?.files[0], "boardResolution", "existingColonizer")}
+                                      class="employee-card-input"
+                                    />
+                                  </td>
+                                  <td>
+                                    {existingColonizerDetails.boardResolution !== "" ?
+                                      <button type="button" onClick={() => getDocShareholding(existingColonizerDetails.boardResolution)} className="btn btn-sm col-md-6">
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </button> : <p></p>
+                                    }
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </Table>
+                          </Col>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="row mx-2">
+
+                      {/* <div className="col col-4">
+                        <div className="form-group">
+                          <label htmlFor="name">Name</label>
+                          <input
+                            type="text"
+                            value={existingColonizerDetails.name}
+                            name="name"
+                            // onChange={SelectName}
+                            onChange={(e) => setExistingColonizerDetails({...existingColonizerDetails,name:e.target.value})}
+                            className="employee-card-input"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="col col-4">
+                        <div className="form-group">
+                          <label htmlFor="mobile">Mobile</label>
+                          <input
+                            type="text"
+                            value={existingColonizerDetails.mobile}
+                            name="mobile"
+                            // onChange={SelectName}
+                            onChange={(e) => setExistingColonizerDetails({...existingColonizerDetails,mobile:e.target.value})}
+                            className="employee-card-input"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="col col-4">
+                        <div className="form-group">
+                          <label htmlFor="email">Email ID</label>
+                          <input
+                            type="text"
+                            value={existingColonizerDetails.email}
+                            name="email"
+                            // onChange={SelectName}
+                            onChange={(e) => setExistingColonizerDetails({...existingColonizerDetails,email:e.target.value})}
+                            className="employee-card-input"
+                          />
+                        </div>
+                      </div> */}
+
+                      <div className="col col-4">
+                        <div className="form-group">
+                          <label htmlFor="dob">DOB</label>
+                          <input
+                            type="date"
+                            value={existingColonizerDetails.dob}
+                            name="dob"
+                            // onChange={SelectName}
+                            onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, dob: e.target.value })}
+                            className="employee-card-input"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="col col-4">
+                        <div className="form-group">
+                          <label htmlFor="pan">PAN Number</label>
+                          <input
+                            type="pan"
+                            value={existingColonizerDetails.pan}
+                            name="dob"
+                            // onChange={SelectName}
+                            onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, pan: e.target.value })}
+                            className="employee-card-input"
+                            maxLength={10}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="col col-4">
+                        <div className="form-group">
+                          <label htmlFor="licNo">License No.</label>
+                          <input
+                            type="text"
+                            value={existingColonizerDetails.licNo}
+                            name="licNo"
+                            // onChange={SelectName}
+                            onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, licNo: e.target.value })}
+                            className="employee-card-input"
+                            maxLength={10}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="col col-4">
+                        <div className="form-group">
+                          <label htmlFor="licDate">Date</label>
+                          <input
+                            type="date"
+                            value={existingColonizerDetails.licDate}
+                            name="licDate"
+                            // onChange={SelectName}
+                            onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, licDate: e.target.value })}
+                            className="employee-card-input"
+                            maxLength={10}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="col col-4">
+                        <div className="form-group">
+                          <label htmlFor="licValidity">Validity</label>
+                          <input
+                            type="date"
+                            value={existingColonizerDetails.licValidity}
+                            name="licValidity"
+                            // onChange={SelectName}
+                            onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, licValidity: e.target.value })}
+                            className="employee-card-input"
+                          // maxLength={10}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="col col-4">
+                        <div className="form-group">
+                          <label htmlFor="licValidity">Purpose</label>
+                          <Select
+                          onChange={(e) => setExistingColonizerDetails({...existingColonizerDetails,licPurpose:e.target.value})}
+                          value={existingColonizerDetails.licPurpose}
+                          className="w-100"
+                          variant="standard"
+                          >
+                            {
+                              purposeOptions?.data.map((item,index)=>(
+                                <MenuItem value={item.value} >{item?.label}</MenuItem>
+                              ))
+                            }
+                          </Select>
+                          
+                        </div>
+                      </div>
+
+                      
+                    </div>
+                  </div>
+                )}
+              </div>
+
+
                 </div>
               )}
 
@@ -2109,238 +2360,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
               </button>
             </div> */}
 
-              <p className="ml-1">
-                In case the Partner/director of the applicant firm/company is common with any existing colonizer who has been granted a license under the 1975 act Yes/No.
-
-              </p>
-
-              <div className="form-group ml-2">
-                <input
-                  type="radio"
-                  value="Y"
-                  id="existingColonizer"
-                  className="mx-2 mt-1"
-                  onChange={(e)=>setExistingColonizer(e.target.value)}
-                  name="existingColonizer"
-                />
-                <label for="Yes">Yes</label>
-
-                <input
-                  type="radio"
-                  value="N"
-                  id="existingColonizerN"
-                  className="mx-2 mt-1"
-                  onChange={(e)=>setExistingColonizer(e.target.value)}
-                  name="existingColonizer"
-                />
-                <label for="No">No</label>
-                {existingColonizer === "Y" && (
-                  <div>
-                  <div className="row ">
-                    <div className="form-group row">
-                      <div className="col-sm-12">
-                        <Col xs="12" md="12" sm="12">
-                          <Table className="table table-bordered" size="sm">
-                            <thead>
-                              <tr>
-                                <th>S.No.</th>
-                                <th>Document Name </th>
-                                <th> Upload Documents</th>
-                                <th> Annexure</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td> 1 &nbsp;&nbsp;</td>
-                                <td>
-                                  {" "}
-                                  Agreement between the proposed developer and existing colonizer
-                                </td>
-                                <td align="center" size="large">
-                                  <input
-                                    type="file"
-                                    accept="application/pdf"
-                                    name="agreementDoc"
-                                    onChange={(e) => getDocumentData(e?.target?.files[0], "aggreementBtw","existingColonizer")}
-                                    class="employee-card-input"
-                                  />
-                                </td>
-                                <td>
-                                  {existingColonizerDetails.aggreementBtw !== "" ?
-                                    <button type="button" onClick={()=>getDocShareholding(existingColonizerDetails.aggreementBtw)} className="btn btn-sm col-md-6">
-                                      <VisibilityIcon color="info" className="icon" />
-                                    </button> : <p></p>
-                                  }
-                                </td>
-                              </tr>
-                              <tr>
-                                <td> 2&nbsp;&nbsp; </td>
-                                <td>
-                                Board resolution of authorised signatory of the existing colonizer
-                                </td>
-                                <td align="center" size="large">
-                                  <input
-                                    type="file"
-                                    accept="application/pdf"
-                                    name="boardDoc"
-                                    onChange={(e) => getDocumentData(e?.target?.files[0], "boardResolution","existingColonizer" )}
-                                    class="employee-card-input"
-                                  />
-                                </td>
-                                <td>
-                                {existingColonizerDetails.boardResolution !== "" ?
-                                    <button type="button" onClick={()=>getDocShareholding(existingColonizerDetails.boardResolution)} className="btn btn-sm col-md-6">
-                                      <VisibilityIcon color="info" className="icon" />
-                                    </button> : <p></p>
-                                  }
-                                </td>
-                              </tr>
-                            </tbody>
-                          </Table>
-                        </Col>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="row mx-2">
-
-                  {/* <div className="col col-4">
-                        <div className="form-group">
-                          <label htmlFor="name">Name</label>
-                          <input
-                            type="text"
-                            value={existingColonizerDetails.name}
-                            name="name"
-                            // onChange={SelectName}
-                            onChange={(e) => setExistingColonizerDetails({...existingColonizerDetails,name:e.target.value})}
-                            className="employee-card-input"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="col col-4">
-                        <div className="form-group">
-                          <label htmlFor="mobile">Mobile</label>
-                          <input
-                            type="text"
-                            value={existingColonizerDetails.mobile}
-                            name="mobile"
-                            // onChange={SelectName}
-                            onChange={(e) => setExistingColonizerDetails({...existingColonizerDetails,mobile:e.target.value})}
-                            className="employee-card-input"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="col col-4">
-                        <div className="form-group">
-                          <label htmlFor="email">Email ID</label>
-                          <input
-                            type="text"
-                            value={existingColonizerDetails.email}
-                            name="email"
-                            // onChange={SelectName}
-                            onChange={(e) => setExistingColonizerDetails({...existingColonizerDetails,email:e.target.value})}
-                            className="employee-card-input"
-                          />
-                        </div>
-                      </div> */}
-
-                      <div className="col col-4">
-                        <div className="form-group">
-                          <label htmlFor="dob">DOB</label>
-                          <input
-                            type="date"
-                            value={existingColonizerDetails.dob}
-                            name="dob"
-                            // onChange={SelectName}
-                            onChange={(e) => setExistingColonizerDetails({...existingColonizerDetails,dob:e.target.value})}
-                            className="employee-card-input"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="col col-4">
-                        <div className="form-group">
-                          <label htmlFor="pan">PAN Number</label>
-                          <input
-                            type="pan"
-                            value={existingColonizerDetails.pan}
-                            name="dob"
-                            // onChange={SelectName}
-                            onChange={(e) => setExistingColonizerDetails({...existingColonizerDetails,pan:e.target.value})}
-                            className="employee-card-input"
-                            maxLength={10}
-                          />
-                        </div>
-                      </div>
-
-                      <div className="col col-4">
-                        <div className="form-group">
-                          <label htmlFor="licNo">License No.</label>
-                          <input
-                            type="text"
-                            value={existingColonizerDetails.licNo}
-                            name="licNo"
-                            // onChange={SelectName}
-                            onChange={(e) => setExistingColonizerDetails({...existingColonizerDetails,licNo:e.target.value})}
-                            className="employee-card-input"
-                            maxLength={10}
-                          />
-                        </div>
-                      </div>
-
-                      <div className="col col-4">
-                        <div className="form-group">
-                          <label htmlFor="licDate">Date</label>
-                          <input
-                            type="date"
-                            value={existingColonizerDetails.licDate}
-                            name="licDate"
-                            // onChange={SelectName}
-                            onChange={(e) => setExistingColonizerDetails({...existingColonizerDetails,licDate:e.target.value})}
-                            className="employee-card-input"
-                            maxLength={10}
-                          />
-                        </div>
-                      </div>
-
-                      <div className="col col-4">
-                        <div className="form-group">
-                          <label htmlFor="licValidity">Validity</label>
-                          <input
-                            type="date"
-                            value={existingColonizerDetails.licValidity}
-                            name="licValidity"
-                            // onChange={SelectName}
-                            onChange={(e) => setExistingColonizerDetails({...existingColonizerDetails,licValidity:e.target.value})}
-                            className="employee-card-input"
-                            // maxLength={10}
-                          />
-                        </div>
-                      </div>
-
-                      <div className="col col-4">
-                        <div className="form-group">
-                          <label htmlFor="licValidity">Purpose</label>
-                          <input
-                            type="text"
-                            value={existingColonizerDetails.licPurpose}
-                            name="licValidity"
-                            // onChange={SelectName}
-                            onChange={(e) => setExistingColonizerDetails({...existingColonizerDetails,licPurpose:e.target.value})}
-                            className="employee-card-input"
-                            // maxLength={10}
-                          />
-                        </div>
-                      </div>
-
-                  </div>
-                  </div>
-                )}
-              </div>
-
-
+            
             </div>
 
           </FormStep> : <Loader />}

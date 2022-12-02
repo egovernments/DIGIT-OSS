@@ -41,6 +41,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
         filtredBpaDocs?.[0]?.docTypes?.forEach(doc => {
             documentsList.push(doc);
         });
+        console.log("log123",documentsList)
         setBpaTaxDocuments(documentsList);
 
     }, [!isLoading]);

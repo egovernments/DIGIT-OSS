@@ -15,6 +15,7 @@ import FileUpload from '@mui/icons-material/FileUpload';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { getDocShareholding } from "../../../tl/src/pages/employee/ScrutinyBasic/ScrutinyDevelopment/docview.helper";
+import { MenuItem, Select } from "@mui/material";
 const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) => {
     const { pathname: url } = useLocation();
     let validation = {};
@@ -117,6 +118,14 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
             setNetworthFirm(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.networthFirm)
             console.log("Developer-Capacity", getDevDetails?.data?.devDetail[0]?.capacityDevelopAColony);
             setPanNumber(developerDataGet?.devDetail[0]?.licenceDetails?.PanNumber);
+            setTechnicalCapacityOutsideHaryana(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.technicalCapacityOutsideHaryana);
+            setTechnicalCapacityOutsideHaryanaDetails(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.technicalCapacityOutsideHaryanaDetails || technicalCapacityOutsideHaryanaDetails)
+            setTechnicalCapacitySoughtFromAnyColonizer({
+                licNo: developerDataGet?.devDetail[0]?.capacityDevelopAColony?.obtainedLicense?.licNo || "",
+                dateOfGrantingLic:developerDataGet?.devDetail[0]?.capacityDevelopAColony?.obtainedLicense?.dateOfGrantingLic || "",
+                licValidity:developerDataGet?.devDetail[0]?.capacityDevelopAColony?.obtainedLicense?.licValidity || "",
+                purpose:developerDataGet?.devDetail[0]?.capacityDevelopAColony?.obtainedLicense?.purpose || ""
+            })
         } catch (error) {
             console.log(error);
         }
@@ -226,17 +235,40 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
     const [urlGetRegisteredDocUrl, setRegisteredDocUrl] = useState("");
     const [urlGetBoardDocYUrl, setBoardDocYUrl] = useState("");
     const [urlGetEarlierDocYUrl, setEarlierDocYUrl] = useState("");
-    const [hrduModalData,setHrduModalData] = useState({
+    const [hrduModalData, setHrduModalData] = useState({
+        licNo: "",
+        dateOfGrantingLic: "",
+        purposeOfColony: "",
+        licValidity: "",
+        technicalExpertEngaged: "",
+        engineerDegree: "",
+        architectDegree: "",
+        townPlannerDegree: "",
+    })
+    const [technicalCapacityOutsideHaryana, setTechnicalCapacityOutsideHaryana] = useState()
+    const [technicalCapacityOutsideHaryanaDetails, setTechnicalCapacityOutsideHaryanaDetails] = useState({
+        project: "",
+        authority: "",
+        statusOfDevelopment: ""
+    })
+    const [purposeOptions, setPurposeOptions] = useState({ data: [], isLoading: true });
+    const [ technicalCapacitySoughtFromAnyColonizer,setTechnicalCapacitySoughtFromAnyColonizer ] = useState({
         licNo:"",
         dateOfGrantingLic:"",
-        purposeOfColony:"",
         licValidity:"",
-        technicalExpertEngaged:"",
-        engineerDegree:"",
-        architectDegree:"",
-        townPlannerDegree:"",
+        purpose:""
     })
-    
+
+
+    const { data: PurposeType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
+
+    useEffect(() => {
+      const purpose = PurposeType?.["common-masters"]?.Purpose?.map(function (data) {
+        return { value: data?.purposeCode, label: data?.name };
+      });
+      console.log("log123",purpose)
+      setPurposeOptions({ data: purpose, isLoading: false });
+    }, [PurposeType])
 
     if (isopenlink)
         window.onunload = function () {
@@ -713,14 +745,14 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
             getDocValidLic();
             handleCloseCapacityDevelopColony()
             setHrduModalData({
-                licNo:"",
-                dateOfGrantingLic:"",
-                purposeOfColony:"",
-                licValidity:"",
-                technicalExpertEngaged:"",
-                engineerDegree:"",
-                architectDegree:"",
-                townPlannerDegree:""
+                licNo: "",
+                dateOfGrantingLic: "",
+                purposeOfColony: "",
+                licValidity: "",
+                technicalExpertEngaged: "",
+                engineerDegree: "",
+                architectDegree: "",
+                townPlannerDegree: ""
             })
         }
         //   console.log("DevCapacityFirst", capacityDevelopColonyHdruAct);
@@ -875,8 +907,14 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                             earlierDocY: earlierDocY,
                             boardDocN: boardDocN,
                             earlierDocN: earlierDocN,
-                            technicalAssistanceAgreementDoc: technicalAssistanceAgreementDoc
-                        }]
+                            technicalAssistanceAgreementDoc: technicalAssistanceAgreementDoc,
+                            licNo: technicalCapacitySoughtFromAnyColonizer.licNo,
+                            dateOfGrantingLic: technicalCapacitySoughtFromAnyColonizer.dateOfGrantingLic,
+                            licValidity: technicalCapacitySoughtFromAnyColonizer.licValidity,
+                            purpose: technicalCapacitySoughtFromAnyColonizer.purpose
+                        }],
+                        technicalCapacityOutsideHaryana:technicalCapacityOutsideHaryana,
+                        technicalCapacityOutsideHaryanaDetails: technicalCapacityOutsideHaryanaDetails
                     }
                 }
             }
@@ -1239,14 +1277,14 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                         />
                                                                     </td>
                                                                     <td>
-                                                                        <p>{elementInArray?.technicalExpertEngaged === "Y"?"Yes":"No"}</p>
+                                                                        <p>{elementInArray?.technicalExpertEngaged === "Y" ? "Yes" : "No"}</p>
                                                                     </td>
                                                                     <td>
                                                                         <div className="row">
                                                                             {elementInArray.engineerDegree ?
-                                                                                <button type="button" 
-                                                                                onClick={()=>getDocShareholding(elementInArray.engineerDegree)}
-                                                                                 className="btn btn-sm col-md-6">
+                                                                                <button type="button"
+                                                                                    onClick={() => getDocShareholding(elementInArray.engineerDegree)}
+                                                                                    className="btn btn-sm col-md-6">
                                                                                     <VisibilityIcon color="info" className="icon" />
                                                                                 </button> : <p></p>
                                                                             }
@@ -1256,9 +1294,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     <td>
                                                                         <div className="row">
                                                                             {elementInArray.architectDegree ?
-                                                                                <button type="button" 
-                                                                                onClick={()=>getDocShareholding(elementInArray.architectDegree)}
-                                                                                 className="btn btn-sm col-md-6">
+                                                                                <button type="button"
+                                                                                    onClick={() => getDocShareholding(elementInArray.architectDegree)}
+                                                                                    className="btn btn-sm col-md-6">
                                                                                     <VisibilityIcon color="info" className="icon" />
                                                                                 </button> : <p></p>
                                                                             }
@@ -1268,8 +1306,8 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     <td>
                                                                         <div className="row">
                                                                             {elementInArray.townPlannerDegree ?
-                                                                                <button type="button" 
-                                                                                onClick={()=>getDocShareholding(elementInArray.townPlannerDegree)} className="btn btn-sm col-md-6">
+                                                                                <button type="button"
+                                                                                    onClick={() => getDocShareholding(elementInArray.townPlannerDegree)} className="btn btn-sm col-md-6">
                                                                                     <VisibilityIcon color="info" className="icon" />
                                                                                 </button> : <p></p>
                                                                             }
@@ -1314,7 +1352,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                 <input
                                                                     type="text"
                                                                     value={hrduModalData.licNo}
-                                                                    onChange={(e) => setHrduModalData({...hrduModalData,licNo:e.target.value})}
+                                                                    onChange={(e) => setHrduModalData({ ...hrduModalData, licNo: e.target.value })}
                                                                     placeholder=""
                                                                     class="employee-card-input"
                                                                     required="required"
@@ -1325,7 +1363,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                 <input
                                                                     type="date"
                                                                     value={hrduModalData.dateOfGrantingLic}
-                                                                    onChange={(e) => setHrduModalData({...hrduModalData,dateOfGrantingLic:e.target.value})}
+                                                                    onChange={(e) => setHrduModalData({ ...hrduModalData, dateOfGrantingLic: e.target.value })}
                                                                     placeholder=""
                                                                     class="employee-card-input"
                                                                     isMandatory={false}
@@ -1377,7 +1415,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     type="date"
                                                                     name="validatingLicence"
                                                                     value={hrduModalData.licValidity}
-                                                                    onChange={(e) => setHrduModalData({...hrduModalData,licValidity:e.target.value})}
+                                                                    onChange={(e) => setHrduModalData({ ...hrduModalData, licValidity: e.target.value })}
                                                                     placeholder=""
                                                                     class="employee-card-input"
                                                                 />
@@ -1394,7 +1432,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                 value="Y"
                                                                 id="technicalExpert"
                                                                 className="mx-2 mt-1"
-                                                                onChange={(e)=>setHrduModalData({...hrduModalData,technicalExpertEngaged:e.target.value})}
+                                                                onChange={(e) => setHrduModalData({ ...hrduModalData, technicalExpertEngaged: e.target.value })}
                                                                 name="technicalExpert"
                                                             />
                                                             <label for="Yes">Yes</label>
@@ -1404,57 +1442,54 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                 value="N"
                                                                 id="technicalExpertN"
                                                                 className="mx-2 mt-1"
-                                                                onChange={(e)=>setHrduModalData({...hrduModalData,technicalExpertEngaged:e.target.value})}
+                                                                onChange={(e) => setHrduModalData({ ...hrduModalData, technicalExpertEngaged: e.target.value })}
                                                                 name="technicalExpert"
                                                             />
                                                             <label for="No">No</label>
                                                         </div>
 
-                                                            {
-                                                                hrduModalData.technicalExpertEngaged === "Y" &&
-                                                                <Row>
-                                                            <Col md={4} xxl lg="4">
-                                                                <label htmlFor="name" className="text"> Copy of degree of engineer </label>
-                                                                <input
-                                                                    type="file"
-                                                                    accept="application/pdf"
-                                                                    name="validatingLicence"
-                                                                    onChange={(e) => getDocumentData(e?.target?.files[0], "engineerDegree")}
-                                                                    placeholder=""
-                                                                    class="employee-card-input"
-                                                                />
+                                                        {
+                                                            hrduModalData.technicalExpertEngaged === "Y" &&
+                                                            <Row>
+                                                                <Col md={4} xxl lg="4">
+                                                                    <label htmlFor="name" className="text"> Copy of degree of engineer </label>
+                                                                    <input
+                                                                        type="file"
+                                                                        accept="application/pdf"
+                                                                        name="validatingLicence"
+                                                                        onChange={(e) => getDocumentData(e?.target?.files[0], "engineerDegree")}
+                                                                        placeholder=""
+                                                                        class="employee-card-input"
+                                                                    />
 
-                                                            </Col>
-                                                            <Col md={4} xxl lg="4">
-                                                                <label htmlFor="name" className="text"> Copy of degree of architect </label>
-                                                                <input
-                                                                    type="file"
-                                                                    accept="application/pdf"
-                                                                    name="validatingLicence"
-                                                                    onChange={(e) => getDocumentData(e?.target?.files[0], "architectDegree")}
-                                                                    placeholder=""
-                                                                    class="employee-card-input"
-                                                                />
+                                                                </Col>
+                                                                <Col md={4} xxl lg="4">
+                                                                    <label htmlFor="name" className="text"> Copy of degree of architect </label>
+                                                                    <input
+                                                                        type="file"
+                                                                        accept="application/pdf"
+                                                                        name="validatingLicence"
+                                                                        onChange={(e) => getDocumentData(e?.target?.files[0], "architectDegree")}
+                                                                        placeholder=""
+                                                                        class="employee-card-input"
+                                                                    />
 
-                                                            </Col>
-                                                            <Col md={4} xxl lg="4">
-                                                                <label htmlFor="name" className="text"> Copy of degree of Town planer </label>
-                                                                <input
-                                                                    type="file"
-                                                                    accept="application/pdf"
-                                                                    name="validatingLicence"
-                                                                    onChange={(e) => getDocumentData(e?.target?.files[0], "townPlannerDegree")}
-                                                                    placeholder=""
-                                                                    class="employee-card-input"
-                                                                />
+                                                                </Col>
+                                                                <Col md={4} xxl lg="4">
+                                                                    <label htmlFor="name" className="text"> Copy of degree of Town planer </label>
+                                                                    <input
+                                                                        type="file"
+                                                                        accept="application/pdf"
+                                                                        name="validatingLicence"
+                                                                        onChange={(e) => getDocumentData(e?.target?.files[0], "townPlannerDegree")}
+                                                                        placeholder=""
+                                                                        class="employee-card-input"
+                                                                    />
 
-                                                            </Col>
+                                                                </Col>
                                                             </Row>
-                                                            }
+                                                        }
 
-                                                            {
-                                                                JSON.stringify(hrduModalData)
-                                                            }
                                                     </form>
                                                 </Modal.Body>
                                                 <Modal.Footer>
@@ -1462,8 +1497,8 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                         Close
                                                     </Button>
                                                     <Button
-                                                    disabled={!(hrduModalData.licNo && hrduModalData.licValidity && hrduModalData.dateOfGrantingLic && purposeOfColony && hrduModalData.technicalExpertEngaged)}
-                                                    variant="primary" onClick={handleArrayValues}>
+                                                        disabled={!(hrduModalData.licNo && hrduModalData.licValidity && hrduModalData.dateOfGrantingLic && purposeOfColony && hrduModalData.technicalExpertEngaged)}
+                                                        variant="primary" onClick={handleArrayValues}>
                                                         Submit
                                                     </Button>
                                                 </Modal.Footer>
@@ -1479,6 +1514,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                             )}
                         </div>
 
+
                         <div className="hl"></div>
                         <p>
                             (ii) If director/partner of the proposed
@@ -1491,6 +1527,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                             <input
                                 type="radio"
                                 value="Y"
+                                checked={designatedDirectors === "Y" ? true : false}
                                 id="designatedDirectors"
                                 className="mx-2 mt-1"
                                 onChange={changeDesignatedDirectors}
@@ -1501,6 +1538,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                             <input
                                 type="radio"
                                 value="N"
+                                checked={designatedDirectors === "N" ? true : false}
                                 id="designatedDirectorsN"
                                 className="mx-2 mt-1"
                                 onChange={changeDesignatedDirectors}
@@ -1576,10 +1614,81 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                 </div>
                             )}
                         </div>
-                        
+
                         <div className="hl"></div>
                         <p>
-                            (iii). In case of technical capacity sought from another
+                            (iii) In case of technical capacity of company/firm developed projects outside Haryana:-
+                        </p>
+
+                        <div className="form-group">
+                            <input
+                                type="radio"
+                                value="Y"
+                                checked={technicalCapacityOutsideHaryana === "Y" ? true : false}
+                                id="technicalCapacityOutsideHaryana"
+                                className="mx-2 mt-1"
+                                onChange={(e) => setTechnicalCapacityOutsideHaryana(e.target.value)}
+                                name="technicalCapacityOutsideHaryana"
+                            />
+                            <label for="Yes">Yes</label>
+
+                            <input
+                                type="radio"
+                                value="N"
+                                checked={technicalCapacityOutsideHaryana === "N" ? true : false}
+                                id="technicalCapacityOutsideHaryanaN"
+                                className="mx-2 mt-1"
+                                onChange={(e) => setTechnicalCapacityOutsideHaryana(e.target.value)}
+                                name="technicalCapacityOutsideHaryana"
+                            />
+                            <label for="No">No</label>
+                            {technicalCapacityOutsideHaryana === "Y" && (
+                                <Row>
+                                    <Col md={4} xxl lg="4">
+                                        <label htmlFor="project" className="text"> Project </label>
+                                        <input
+                                            type="text"
+                                            name="project"
+                                            value={technicalCapacityOutsideHaryanaDetails.project}
+                                            onChange={(e) => setTechnicalCapacityOutsideHaryanaDetails({...technicalCapacityOutsideHaryanaDetails,project:e.target.value})}
+                                            placeholder=""
+                                            class="employee-card-input"
+                                        />
+
+                                    </Col>
+
+                                    <Col md={4} xxl lg="4">
+                                        <label htmlFor="authority" className="text"> Authority </label>
+                                        <input
+                                            type="text"
+                                            name="authority"
+                                            value={technicalCapacityOutsideHaryanaDetails.authority}
+                                            onChange={(e) => setTechnicalCapacityOutsideHaryanaDetails({...technicalCapacityOutsideHaryanaDetails,authority:e.target.value})}
+                                            placeholder=""
+                                            class="employee-card-input"
+                                        />
+
+                                    </Col>
+
+                                    <Col md={4} xxl lg="4">
+                                        <label htmlFor="statusOfDevelopment" className="text"> (iii) Status of Development </label>
+                                        <input
+                                            type="text"
+                                            name="statusOfDevelopment"
+                                            value={technicalCapacityOutsideHaryanaDetails.statusOfDevelopment}
+                                            onChange={(e) => setTechnicalCapacityOutsideHaryanaDetails({...technicalCapacityOutsideHaryanaDetails,statusOfDevelopment:e.target.value})}
+                                            placeholder=""
+                                            class="employee-card-input"
+                                        />
+
+                                    </Col>
+                                </Row>
+                            )}
+                        </div>
+
+                        <div className="hl"></div>
+                        <p>
+                            (iv). In case of technical capacity sought from another
                             company/firm who has already obtained license(s) under act of
                             1975 or outside Haryana:
                         </p>
@@ -1605,6 +1714,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                             />
                             <label for="No">No</label>
                             {alreadtObtainedLic === "Y" && (
+                                <div>
                                 <div className="row ">
                                     <div className="form-group row">
                                         <div className="col-sm-12">
@@ -1620,8 +1730,60 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr>
+                                                        <tr>
                                                                 <td> 1 </td>
+
+                                                                <td>
+                                                                Agreement between the proposed developer and existing colonizer
+                                                                </td>
+                                                                <td align="center" size="large">
+                                                                    <input
+                                                                        type="file"
+                                                                        name="agreementDocY"
+                                                                        // onChange={((e)=> setEarlierDocY(e.target.value))}
+                                                                        onChange={(e) => getDocumentData(e?.target?.files[0], "agreementDocY")}
+                                                                        class="employee-card-input"
+                                                                    />
+                                                                </td>
+                                                                <td>
+                                                                    {DevelopersAllData?.agreementDocY !== "" ?
+                                                                        <button 
+                                                                        type="button"
+                                                                        onClick={()=>getDocShareholding(DevelopersAllData?.agreementDocY)}
+                                                                        >
+                                                                            <VisibilityIcon />
+                                                                        </button> : <p></p>
+                                                                    }
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td> 2 </td>
+
+                                                                <td>
+                                                                Board resolution of authorised signatory of the existing colonizer
+                                                                </td>
+                                                                <td align="center" size="large">
+                                                                    <input
+                                                                        type="file"
+                                                                        name="boardDocX"
+                                                                        // onChange={((e)=> setEarlierDocY(e.target.value))}
+                                                                        onChange={(e) => getDocumentData(e?.target?.files[0], "boardDocX")}
+                                                                        class="employee-card-input"
+                                                                    />
+                                                                </td>
+                                                                <td>
+                                                                    {DevelopersAllData?.boardDocX !== "" ?
+                                                                        <button 
+                                                                        type="button"
+                                                                        onClick={()=>getDocShareholding(DevelopersAllData?.boardDocX)}
+                                                                        >
+                                                                            <VisibilityIcon />
+                                                                        </button>: <p></p>
+                                                                    }
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td> 3 </td>
                                                                 <td> Registered and Irrevocable Agreement</td>
                                                                 <td align="center" size="large">
                                                                     <input
@@ -1642,7 +1804,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                             </tr>
 
                                                             <tr>
-                                                                <td> 2 </td>
+                                                                <td> 4 </td>
                                                                 <td>
                                                                     Board resolutions of authorized signatory of
                                                                     firm/company provided technical assistance
@@ -1663,31 +1825,6 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     }
                                                                 </td>
                                                             </tr>
-                                                            <tr>
-                                                                <td> 3 </td>
-
-                                                                <td>
-                                                                    Auto populate details of earlier license(s)
-                                                                    granted to existing developer company/firm
-                                                                    to set up a colony under act of 1975.
-                                                                </td>
-                                                                <td align="center" size="large">
-                                                                    <input
-                                                                        type="file"
-                                                                        name="earlierDocY"
-                                                                        // onChange={((e)=> setEarlierDocY(e.target.value))}
-                                                                        onChange={(e) => getDocumentData(e?.target?.files[0], "earlierDocY")}
-                                                                        class="employee-card-input"
-                                                                    />
-                                                                </td>
-                                                                <td>
-                                                                    {DevelopersAllData?.earlierDocY !== "" ?
-                                                                        <a href={urlGetEarlierDocYUrl} target="_blank" >
-                                                                            <VisibilityIcon />
-                                                                        </a> : <p></p>
-                                                                    }
-                                                                </td>
-                                                            </tr>
                                                         </tbody>{" "}
                                                     </Table>
                                                 </div>
@@ -1695,8 +1832,73 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                         </div>
                                     </div>
                                 </div>
+
+                                <div className="row mx-1">
+                                <div className="col col-4">
+                        <div className="form-group">
+                          <label htmlFor="licNo">License No.</label>
+                          <input
+                            type="text"
+                            name="licNo"
+                            value={technicalCapacitySoughtFromAnyColonizer.licNo}
+                            onChange={(e) => setTechnicalCapacitySoughtFromAnyColonizer({...technicalCapacitySoughtFromAnyColonizer,licNo:e.target.value})}
+                            className="employee-card-input"
+                            maxLength={10}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="col col-4">
+                        <div className="form-group">
+                          <label htmlFor="licDate">Date</label>
+                          <input
+                            type="date"
+                            name="licDate"
+                            value={technicalCapacitySoughtFromAnyColonizer.dateOfGrantingLic}
+                            onChange={(e) => setTechnicalCapacitySoughtFromAnyColonizer({...technicalCapacitySoughtFromAnyColonizer,dateOfGrantingLic:e.target.value})}
+                            className="employee-card-input"
+                            maxLength={10}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="col col-4">
+                        <div className="form-group">
+                          <label htmlFor="licValidity">Validity</label>
+                          <input
+                            type="date"
+                            name="licValidity"
+                            value={technicalCapacitySoughtFromAnyColonizer.licValidity}
+                            onChange={(e) => setTechnicalCapacitySoughtFromAnyColonizer({...technicalCapacitySoughtFromAnyColonizer,licValidity:e.target.value})}
+                            className="employee-card-input"
+                          // maxLength={10}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="col col-4">
+                        <div className="form-group">
+                          <label htmlFor="licValidity">Purpose</label>
+                          <Select
+                          value={technicalCapacitySoughtFromAnyColonizer.purpose}
+                          onChange={(e) => setTechnicalCapacitySoughtFromAnyColonizer({...technicalCapacitySoughtFromAnyColonizer,purpose:e.target.value})}
+                          className="w-100"
+                          variant="standard"
+                          >
+                            {
+                              purposeOptions?.data.map((item,index)=>(
+                                <MenuItem value={item.value} >{item?.label}</MenuItem>
+                              ))
+                            }
+                          </Select>
+                          
+                        </div>
+                      </div>
+                                </div>
+
+                                </div>
                             )}
-                            {alreadtObtainedLic === "N" && (
+                            {/* {alreadtObtainedLic === "N" && (
                                 <div className="row ">
                                     <div className="form-group row">
                                         <div className="col-sm-12">
@@ -1765,11 +1967,11 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
 
                                     </div>
                                 </div>
-                            )}
+                            )} */}
                         </div>
 
                         <div className="mb-3"></div>
-                        <p>(iii) Whether any technical expert(s) engaged</p>
+                        <p>(v) Whether any technical expert(s) engaged</p>
 
                         <div className="form-group">
                             <input
@@ -2065,20 +2267,18 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                         </div>
 
 
-                        <div className="hl"></div>
+                        {/* <div className="hl"></div>
                         <p>
-                            (ii) Licences/permissions granted to
+                            (vi) Licences/permissions granted to
                             Developer/ group company for development of colony under any
                             other law/Act as .
                         </p>
                         <div>
                             <div className="card-body">
-                                {/* <h5 className="card-h">Add/Remove Authorized Users</h5> */}
                                 <div className="table-bd">
                                     <Table className="table table-bordered">
                                         <thead>
                                             <tr>
-                                                {/* <th>Add More</th> */}
                                                 <th>S.No</th>
                                                 <th>Colonies developed</th>
                                                 <th>Area</th>
@@ -2160,7 +2360,6 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                 color: "white",
                                             }}
                                             className="btn mt-3"
-                                            // onClick={() => setNoOfRows(noofRows + 1)}
                                             onClick={handleShowColoniesDeveloped}
                                         >
                                             Add More
@@ -2206,8 +2405,6 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                             <label htmlFor="name" className="text">Status of development</label>
                                                             <input
                                                                 type="file"
-                                                                // onChange={(e) => setColonyStatusDev(e.target.value)}
-
                                                                 onChange={(e) => getDocumentData(e.target.files[0], "statusOfDevelopment")}
                                                                 placeholder=""
                                                                 class="employee-card-input"
@@ -2217,7 +2414,6 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                             <label htmlFor="name" className="text">Outstanding Dues</label>
                                                             <input
                                                                 type="file"
-                                                                // onChange={(e) => setColonyoutstandingDue(e.target.value)}
                                                                 onChange={(e) => getDocumentData(e.target.files[0], "outstandingDues")}
                                                                 placeholder=""
                                                                 class="employee-card-input"
@@ -2241,11 +2437,11 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                     <br></br>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
 
-                        
 
-                        
+
+
                         {/* </Col> */}
                     </div>
                     {/* <div className="form-group col-md2 mt-4">
