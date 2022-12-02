@@ -195,7 +195,7 @@ const FeesChargesForm = (props) => {
   console.log("lic", data);
 
   useEffect(() => {
-    console.log("ddtt", props?.getLicData?.FeesAndCharges);
+    console.log("ddtt", props?.getLicData);
   }, [props?.getLicData]);
 
   return (
