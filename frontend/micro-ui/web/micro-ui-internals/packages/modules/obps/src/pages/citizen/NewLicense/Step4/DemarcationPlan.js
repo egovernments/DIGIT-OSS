@@ -12,7 +12,7 @@ const DemarcationPlan = ({ register }) => {
         <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
           Demarcation plan. &nbsp;&nbsp;
           <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-          <VisibilityIcon color="primary" onClick={() => getDocShareholding(modalData?.registeringAuthorityDoc)}>
+          <VisibilityIcon color="primary" onClick={() => getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.demarcationPlan)}>
             {" "}
           </VisibilityIcon>
         </h6>

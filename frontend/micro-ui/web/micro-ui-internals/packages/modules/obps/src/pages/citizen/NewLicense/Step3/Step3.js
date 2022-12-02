@@ -345,7 +345,7 @@ const LandScheduleForm = (props) => {
                                       <h2>
                                         Document Upload <span style={{ color: "red" }}>*</span>
                                         <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(modalData?.registeringAuthorityDoc)}>
+                                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(LandSchedule?.thirdPartyDoc)}>
                                           {" "}
                                         </VisibilityIcon>
                                       </h2>
@@ -366,7 +366,7 @@ const LandScheduleForm = (props) => {
                                       <h2>
                                         Document Upload <span style={{ color: "red" }}>*</span>
                                         <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(modalData?.registeringAuthorityDoc)}>
+                                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(LandSchedule?.thirdPartyDoc)}>
                                           {" "}
                                         </VisibilityIcon>
                                       </h2>
@@ -478,7 +478,7 @@ const LandScheduleForm = (props) => {
                               >
                                 Approved Layout of Plan. &nbsp;&nbsp;
                                 <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                                <VisibilityIcon color="primary" onClick={() => getDocShareholding(modalData?.registeringAuthorityDoc)}>
+                                <VisibilityIcon color="primary" onClick={() => getDocShareholding(LandSchedule?.approvedLayoutPlan)}>
                                   {" "}
                                 </VisibilityIcon>
                               </h2>
@@ -497,7 +497,7 @@ const LandScheduleForm = (props) => {
                               >
                                 Proposed Layout of Plan. &nbsp;&nbsp;
                                 <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                                <VisibilityIcon color="primary" onClick={() => getDocShareholding(modalData?.registeringAuthorityDoc)}>
+                                <VisibilityIcon color="primary" onClick={() => getDocShareholding(LandSchedule?.proposedLayoutPlan)}>
                                   {" "}
                                 </VisibilityIcon>
                               </h2>
@@ -512,7 +512,7 @@ const LandScheduleForm = (props) => {
                               <h2 data-toggle="tooltip" data-placement="top" title="Upload Previously approved Layout Plan.">
                                 Upload Previously approved. &nbsp;&nbsp;
                                 <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                                <VisibilityIcon color="primary" onClick={() => getDocShareholding(modalData?.registeringAuthorityDoc)}>
+                                <VisibilityIcon color="primary" onClick={() => getDocShareholding(LandSchedule?.uploadPreviouslyLayoutPlan)}>
                                   {" "}
                                 </VisibilityIcon>
                               </h2>
@@ -584,7 +584,7 @@ const LandScheduleForm = (props) => {
                             <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">
                               Document Upload &nbsp;&nbsp;
                               <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                              <VisibilityIcon color="primary" onClick={() => getDocShareholding(modalData?.registeringAuthorityDoc)}>
+                              <VisibilityIcon color="primary" onClick={() => getDocShareholding(LandSchedule?.litigationDoc)}>
                                 {" "}
                               </VisibilityIcon>
                             </h2>
@@ -629,7 +629,7 @@ const LandScheduleForm = (props) => {
                             <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">
                               Document Upload &nbsp;&nbsp;
                               <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                              <VisibilityIcon color="primary" onClick={() => getDocShareholding(modalData?.registeringAuthorityDoc)}>
+                              <VisibilityIcon color="primary" onClick={() => getDocShareholding(LandSchedule?.courtDoc)}>
                                 {" "}
                               </VisibilityIcon>
                             </h2>
@@ -675,7 +675,7 @@ const LandScheduleForm = (props) => {
                               {" "}
                               Document Upload &nbsp;&nbsp;
                               <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                              <VisibilityIcon color="primary" onClick={() => getDocShareholding(modalData?.registeringAuthorityDoc)}>
+                              <VisibilityIcon color="primary" onClick={() => getDocShareholding(LandSchedule?.insolvencyDoc)}>
                                 {" "}
                               </VisibilityIcon>
                             </h2>
@@ -712,7 +712,7 @@ const LandScheduleForm = (props) => {
                             <h6 data-toggle="tooltip" data-placement="top" title="Upload Document">
                               Document Upload &nbsp;&nbsp;
                               <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                              <VisibilityIcon color="primary" onClick={() => getDocShareholding(modalData?.registeringAuthorityDoc)}>
+                              <VisibilityIcon color="primary" onClick={() => getDocShareholding(LandSchedule?.registeringAuthorityDoc)}>
                                 {" "}
                               </VisibilityIcon>
                             </h6>
@@ -1229,7 +1229,7 @@ const LandScheduleForm = (props) => {
                     <div className="col col-3">
                       <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                         Land schedule &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(modalData?.registeringAuthorityDoc)}>
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(LandSchedule?.landSchedule)}>
                           {" "}
                         </VisibilityIcon>
                       </h2>
@@ -1244,7 +1244,7 @@ const LandScheduleForm = (props) => {
                     <div className="col col-3">
                       <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                         Copy of Mutation &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(modalData?.registeringAuthorityDoc)}>
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(LandSchedule?.mutation)}>
                           {" "}
                         </VisibilityIcon>
                       </h2>
@@ -1259,7 +1259,7 @@ const LandScheduleForm = (props) => {
                     <div className="col col-3">
                       <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                         Copy of Jamabandi &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(modalData?.registeringAuthorityDoc)}>
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(LandSchedule?.jambandhi)}>
                           {" "}
                         </VisibilityIcon>
                       </h2>
@@ -1274,7 +1274,7 @@ const LandScheduleForm = (props) => {
                     <div className="col col-3">
                       <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                         Details of lease / patta, if any &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(modalData?.registeringAuthorityDoc)}>
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(LandSchedule?.detailsOfLease)}>
                           {" "}
                         </VisibilityIcon>
                       </h2>
@@ -1296,7 +1296,7 @@ const LandScheduleForm = (props) => {
                         title=" Add sales/Deed/exchange/gift deed, mutation, lease/Patta"
                       >
                         Add sales/Deed/exchange &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(modalData?.registeringAuthorityDoc)}>
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(LandSchedule?.addSalesDeed)}>
                           {" "}
                         </VisibilityIcon>
                       </h2>
@@ -1316,7 +1316,7 @@ const LandScheduleForm = (props) => {
                       >
                         Copy of spa/GPA/board resolution &nbsp;&nbsp;
                         <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(modalData?.registeringAuthorityDoc)}>
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(LandSchedule?.copyofSpaBoard)}>
                           {" "}
                         </VisibilityIcon>
                       </h2>
@@ -1331,7 +1331,7 @@ const LandScheduleForm = (props) => {
                     <div className="col col-3">
                       <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                         Revised Land Schedule &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(modalData?.registeringAuthorityDoc)}>
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(LandSchedule?.revisedLanSchedule)}>
                           {" "}
                         </VisibilityIcon>
                       </h2>
@@ -1345,7 +1345,7 @@ const LandScheduleForm = (props) => {
                     <div className="col col-3">
                       <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                         Copy of Shajra Plan &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(modalData?.registeringAuthorityDoc)}>
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(LandSchedule?.copyOfShajraPlan)}>
                           {" "}
                         </VisibilityIcon>
                       </h2>
