@@ -429,7 +429,7 @@ const ApllicantPuropseForm = (props) => {
     const potentialSelected = data?.value;
     window?.localStorage.setItem("potential", JSON.stringify(potentialSelected));
   };
-
+  const [fileStoreId, setFileStoreId] = useState({});
   const getDocumentData = async (file) => {
     const formData = new FormData();
     formData.append("file", file);
@@ -439,7 +439,8 @@ const ApllicantPuropseForm = (props) => {
     setLoader(true);
     try {
       const Resp = await axios.post("/filestore/v1/files", formData, {});
-      setDocId(Resp?.data?.files?.[0]?.fileStoreId);
+      setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
+      setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
       setLoader(false);
     } catch (error) {
       setLoader(false);
@@ -914,7 +915,7 @@ const ApllicantPuropseForm = (props) => {
                           <h2 data-toggle="tooltip" data-placement="top" title="Upload Document" style={{ marginTop: "-4px" }}>
                             Registring Authority document <span style={{ color: "red" }}>*</span>
                             <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                            <VisibilityIcon color="primary" onClick={() => getDocShareholding(modalData?.registeringAuthorityDoc)}>
+                            <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.registeringAuthorityDoc)}>
                               {" "}
                             </VisibilityIcon>
                           </h2>

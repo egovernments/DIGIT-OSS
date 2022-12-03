@@ -99,6 +99,8 @@ const LandScheduleForm = (props) => {
     watch,
   } = useForm();
 
+  const [fileStoreId, setFileStoreId] = useState({});
+
   const Purpose = localStorage.getItem("purpose");
 
   const landScheduleFormSubmitHandler = async (data) => {
@@ -181,6 +183,7 @@ const LandScheduleForm = (props) => {
     try {
       const Resp = await axios.post("/filestore/v1/files", formData, {});
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
+      setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
       // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
       setLoader(false);
     } catch (error) {
@@ -317,16 +320,16 @@ const LandScheduleForm = (props) => {
                             </div>
                             <div className="col col-3 ">
                               <h2>
-                                Third-party right created<span style={{ color: "red" }}>*</span>
+                                Third-party right created<span style={{ color: "red" }}>*</span>&nbsp; Yes &nbsp;&nbsp;
                               </h2>
 
                               <label htmlFor="thirdParty">
                                 <input {...register("thirdParty")} type="radio" value="Y" id="thirdParty" />
-                                Yes
+                                &nbsp; Yes &nbsp;&nbsp;
                               </label>
                               <label htmlFor="thirdParty">
                                 <input {...register("thirdParty")} type="radio" value="N" id="thirdParty" />
-                                No
+                                &nbsp; No &nbsp;&nbsp;
                               </label>
                               {watch("thirdParty") === "Y" && (
                                 <div className="row ">
@@ -344,8 +347,9 @@ const LandScheduleForm = (props) => {
                                       {" "}
                                       <h2>
                                         Document Upload <span style={{ color: "red" }}>*</span>
-                                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(data?.thirdPartyDoc)}>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>&nbsp;&nbsp;
+                                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.thirdPartyDoc)}>
                                           {" "}
                                         </VisibilityIcon>
                                       </h2>
@@ -365,8 +369,9 @@ const LandScheduleForm = (props) => {
                                     <label>
                                       <h2>
                                         Document Upload <span style={{ color: "red" }}>*</span>
-                                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(data?.thirdPartyDoc)}>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>&nbsp;&nbsp;
+                                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.thirdPartyDoc)}>
                                           {" "}
                                         </VisibilityIcon>
                                       </h2>
@@ -476,9 +481,10 @@ const LandScheduleForm = (props) => {
                                 data-placement="top"
                                 title=" Approved Layout of Plan/ Site plan for(GH)Showing Area(s)/Proposed migration."
                               >
-                                Approved Layout of Plan. &nbsp;&nbsp;
-                                <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                                <VisibilityIcon color="primary" onClick={() => getDocShareholding(data?.approvedLayoutPlan)}>
+                                Approved Layout of Plan.
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.approvedLayoutPlan)}>
                                   {" "}
                                 </VisibilityIcon>
                               </h2>
@@ -495,9 +501,10 @@ const LandScheduleForm = (props) => {
                                 data-placement="top"
                                 title="Proposed Layout of Plan /site plan for area applied for migration."
                               >
-                                Proposed Layout of Plan. &nbsp;&nbsp;
-                                <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                                <VisibilityIcon color="primary" onClick={() => getDocShareholding(data?.proposedLayoutPlan)}>
+                                Proposed Layout of Plan.
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.proposedLayoutPlan)}>
                                   {" "}
                                 </VisibilityIcon>
                               </h2>
@@ -510,9 +517,10 @@ const LandScheduleForm = (props) => {
                             </div>
                             <div className="col col-3">
                               <h2 data-toggle="tooltip" data-placement="top" title="Upload Previously approved Layout Plan.">
-                                Upload Previously approved. &nbsp;&nbsp;
-                                <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                                <VisibilityIcon color="primary" onClick={() => getDocShareholding(data?.uploadPreviouslyLayoutPlan)}>
+                                Upload Previously approved.
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.uploadPreviouslyLayoutPlan)}>
                                   {" "}
                                 </VisibilityIcon>
                               </h2>
@@ -582,9 +590,9 @@ const LandScheduleForm = (props) => {
                           </div>
                           <div className="col col-6">
                             <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">
-                              Document Upload &nbsp;&nbsp;
-                              <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                              <VisibilityIcon color="primary" onClick={() => getDocShareholding(data?.litigationDoc)}>
+                              Document Upload &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                              <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>&nbsp;&nbsp;&nbsp;&nbsp;
+                              <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.litigationDoc)}>
                                 {" "}
                               </VisibilityIcon>
                             </h2>
@@ -627,9 +635,9 @@ const LandScheduleForm = (props) => {
                           </div>
                           <div className="col col-6">
                             <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">
-                              Document Upload &nbsp;&nbsp;
-                              <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                              <VisibilityIcon color="primary" onClick={() => getDocShareholding(data?.courtDoc)}>
+                              Document Upload &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                              <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>&nbsp;&nbsp;&nbsp;&nbsp;
+                              <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.courtDoc)}>
                                 {" "}
                               </VisibilityIcon>
                             </h2>
@@ -673,8 +681,8 @@ const LandScheduleForm = (props) => {
                           <div className="col col-6">
                             <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">
                               {" "}
-                              Document Upload &nbsp;&nbsp;
-                              <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                              Document Upload &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                              <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>&nbsp;&nbsp;&nbsp;&nbsp;
                               <VisibilityIcon color="primary" onClick={() => getDocShareholding(data?.insolvencyDoc)}>
                                 {" "}
                               </VisibilityIcon>
@@ -1228,10 +1236,13 @@ const LandScheduleForm = (props) => {
                   <div className="row">
                     <div className="col col-3">
                       <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
-                        Land schedule &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(data?.landSchedule)}>
-                          {" "}
-                        </VisibilityIcon>
+                        Land schedule &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <VisibilityIcon
+                          classNmae="text-right"
+                          color="primary"
+                          onClick={() => getDocShareholding(fileStoreId?.landSchedule)}
+                        ></VisibilityIcon>
                       </h2>
 
                       <input
@@ -1243,8 +1254,9 @@ const LandScheduleForm = (props) => {
                     </div>
                     <div className="col col-3">
                       <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
-                        Copy of Mutation &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(data?.mutation)}>
+                        Copy of Mutation &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.mutation)}>
                           {" "}
                         </VisibilityIcon>
                       </h2>
@@ -1258,8 +1270,9 @@ const LandScheduleForm = (props) => {
                     </div>
                     <div className="col col-3">
                       <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
-                        Copy of Jamabandi &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(data?.jambandhi)}>
+                        Copy of Jamabandi &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.jambandhi)}>
                           {" "}
                         </VisibilityIcon>
                       </h2>
@@ -1273,8 +1286,10 @@ const LandScheduleForm = (props) => {
                     </div>
                     <div className="col col-3">
                       <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
-                        Details of lease / patta, if any &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(data?.detailsOfLease)}>
+                        Details of lease / patta, if any
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.detailsOfLease)}>
                           {" "}
                         </VisibilityIcon>
                       </h2>
@@ -1295,8 +1310,9 @@ const LandScheduleForm = (props) => {
                         data-placement="top"
                         title=" Add sales/Deed/exchange/gift deed, mutation, lease/Patta"
                       >
-                        Add sales/Deed/exchange &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(data?.addSalesDeed)}>
+                        Add sales/Deed/exchange &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.addSalesDeed)}>
                           {" "}
                         </VisibilityIcon>
                       </h2>
@@ -1312,17 +1328,16 @@ const LandScheduleForm = (props) => {
                         style={{ display: "flex" }}
                         data-toggle="tooltip"
                         data-placement="top"
-                        title="    Copy of spa/GPA/board resolution to sign collaboration agrrement"
+                        title="Copy of spa/GPA/board resolution to sign collaboration agrrement"
                       >
-                        Copy of spa/GPA/board resolution &nbsp;&nbsp;
-                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(data?.copyofSpaBoard)}>
+                        Copy of spa/GPA/board. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.copyofSpaBoard)}>
                           {" "}
                         </VisibilityIcon>
                       </h2>
                       <input
                         type="file"
-                        style={{ marginTop: "-13px" }}
                         className="form-control"
                         // {...register("copyofSpaBoard")}
                         onChange={(e) => getDocumentData(e?.target?.files[0], "copyofSpaBoard")}
@@ -1330,8 +1345,9 @@ const LandScheduleForm = (props) => {
                     </div>
                     <div className="col col-3">
                       <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
-                        Revised Land Schedule &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(data?.revisedLanSchedule)}>
+                        Revised Land Schedule &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.revisedLanSchedule)}>
                           {" "}
                         </VisibilityIcon>
                       </h2>
@@ -1344,8 +1360,9 @@ const LandScheduleForm = (props) => {
                     </div>
                     <div className="col col-3">
                       <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
-                        Copy of Shajra Plan &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(data?.copyOfShajraPlan)}>
+                        Copy of Shajra Plan &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.copyOfShajraPlan)}>
                           {" "}
                         </VisibilityIcon>
                       </h2>
