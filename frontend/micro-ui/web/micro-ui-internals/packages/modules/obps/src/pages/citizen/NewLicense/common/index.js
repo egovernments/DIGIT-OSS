@@ -136,7 +136,7 @@ const CommonForm = () => {
       ) : isStep3 ? (
         <AppliedDetailForm getLicData={getLicData} getId={getId} userData={userData} Step4Continue={handlestep4} step4Back={handleBack3} />
       ) : isStep4 ? (
-        <FeesChargesForm getId={getId} userData={userData} Step5Continue={handlestep5} step5Back={handleBack4} />
+        <FeesChargesForm getLicData={getLicData} getId={getId} userData={userData} Step5Continue={handlestep5} step5Back={handleBack4} />
       ) : (
         <ApllicantFormStep1 getLicData={getLicData} getId={getId} userData={userData} Step1Continue={handleStep1} />
       )}
