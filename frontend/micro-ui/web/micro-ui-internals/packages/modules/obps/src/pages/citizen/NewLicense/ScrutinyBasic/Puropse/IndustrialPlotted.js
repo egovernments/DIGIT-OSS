@@ -123,22 +123,22 @@ const IndustrialPlottedForm = (props) => {
       <Form.Group className="justify-content-center" controlId="formBasicEmail">
         <Row className="ml-auto" style={{ marginBottom: 5 }}>
           <Col col-12>
-            <h5 className="text-black"><b>Industrial Plotted:-</b></h5>
+            <h5 className="text-black"><h5>Industrial Plotted:-</h5></h5>
 
             <div className="table table-bordered table-responsive">
               <thead>
                 <tr>
-                  <td><b>Detail of plots</b></td>
-                  <td ><b>No.</b></td>
-                  <td ><b>Area in Acres</b></td>
+                  <td><h5>Detail of plots</h5></td>
+                  <td ><h5>No.</h5></td>
+                  <td ><h5>Area in Acres</h5></td>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td >
                     <div className="px-2">
-                      <p className="mb-2"><b>Area of the colony, Up to 50 acres
-                      </b></p>
+                      <p className="mb-2"><h5>Area of the colony, Up to 50 acres
+                      </h5></p>
                     </div>
                   </td>
                   <td align="right">  
@@ -179,7 +179,7 @@ const IndustrialPlottedForm = (props) => {
                 <tr>
                   <td >
                     <div className="px-2">
-                      <p className="mb-2"><b>More than 50 to 200 acres </b></p>
+                      <p className="mb-2"><h5>More than 50 to 200 acres </h5></p>
 
                     </div>
                   </td>
@@ -221,7 +221,7 @@ const IndustrialPlottedForm = (props) => {
                 <tr>
                   <td >
                     <div className="px-2">
-                      <p className="mb-2" ><b>More than 200 acres </b></p>
+                      <p className="mb-2" ><h5>More than 200 acres </h5></p>
 
                     </div>
                   </td>
@@ -263,7 +263,7 @@ const IndustrialPlottedForm = (props) => {
                 <tr>
                   <td >
                     <div className="px-2">
-                      <p className="mb-2"><b>Proposed plots under residential component DDJAY  </b></p>
+                      <p className="mb-2"><h5>Proposed plots under residential component DDJAY  </h5></p>
 
                     </div>
                   </td>
@@ -305,7 +305,7 @@ const IndustrialPlottedForm = (props) => {
                 <tr>
                   <td >
                     <div className="px-2">
-                      <p className="mb-2"><b>Proposed plots under community facilities in DDJAY Area  </b></p>
+                      <p className="mb-2"><h5>Proposed plots under community facilities in DDJAY Area  </h5></p>
 
                     </div>
                   </td>
@@ -347,7 +347,7 @@ const IndustrialPlottedForm = (props) => {
                 <tr>
                   <td >
                     <div className="px-2">
-                      <p className="mb-2" ><b>Details of plots for Labour dormitories from affordable Industries Housing component  </b></p>
+                      <p className="mb-2" ><h5>Details of plots for Labour dormitories from affordable Industries Housing component  </h5></p>
 
                     </div>
                   </td>

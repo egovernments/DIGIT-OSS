@@ -2,7 +2,7 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import { Row, Col } from "react-bootstrap";
 
-const CommercialColonyInResidential = ({ register, watch }) => {
+const CyberPark = ({ register, watch }) => {
   return (
     <div>
       <label>
@@ -27,8 +27,7 @@ const CommercialColonyInResidential = ({ register, watch }) => {
             <td>
               <div className="px-2">
                 <p className="mb-2">
-                  Min. 4 Karam existing public rasta further linking to a higher order ex-isting road/ pub-lic rasta along with proposed any internal
-                  cir-culation road.
+                  Min. 22 ft wide existing public rasta along with proposed min. 24/18 m wide internal circula-tion road in an urbanized zone.
                 </p>
               </div>
             </td>
@@ -41,9 +40,7 @@ const CommercialColonyInResidential = ({ register, watch }) => {
             </td>
             <td>
               <div className="px-2">
-                <p className="mb-2">
-                  Min. 11 ft. wide existing road and also abuts acquired align-ment of the sector road without any stay on the construc-tion.
-                </p>
+                <p className="mb-2">Min. 18 m wide existing public road/revenue rasta outside urbanizable zone.</p>
               </div>
             </td>
           </tr>
@@ -51,21 +48,6 @@ const CommercialColonyInResidential = ({ register, watch }) => {
             <td>
               <div className="px-2">
                 <p className="mb-2">3.</p>
-              </div>
-            </td>
-            <td>
-              <div className="px-2">
-                <p className="mb-2">
-                  Constructed sector road or internal circula-tion road of min. 18m/24m (licenced) part of the approved sectoral plan and further
-                  leadup up to at least 4 karam wide public ras-ta.
-                </p>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <div className="px-2">
-                <p className="mb-2">4.</p>
               </div>
             </td>
             <td>
@@ -79,4 +61,4 @@ const CommercialColonyInResidential = ({ register, watch }) => {
     </div>
   );
 };
-export default CommercialColonyInResidential;
+export default CyberPark;
