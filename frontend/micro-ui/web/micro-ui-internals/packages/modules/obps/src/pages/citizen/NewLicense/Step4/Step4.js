@@ -266,10 +266,6 @@ const AppliedDetailForm = (props) => {
     if (valueData) {
       Object?.keys(valueData?.DetailsAppliedLandPlot)?.map((item) => setValue(item, valueData?.DetailsAppliedLandPlot[item]));
       Object?.keys(valueData?.DetailsAppliedLandNILP)?.map((item) => setValue(item, valueData?.DetailsAppliedLandNILP[item]));
-      // const data = purposeOptions?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.purpose);
-      // const potientialData = getPotentialOptons?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.potential);
-      // setValue("purpose", { label: data?.[0]?.label, value: data?.[0]?.value });
-      // setValue("potential", { label: potientialData?.[0]?.label, value: potientialData?.[0]?.value });
     }
   }, [props?.getLicData]);
 

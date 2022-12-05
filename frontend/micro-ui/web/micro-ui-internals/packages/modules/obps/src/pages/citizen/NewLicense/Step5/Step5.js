@@ -172,6 +172,26 @@ const FeesChargesForm = (props) => {
       console.log(error.message);
     }
   };
+
+  const getWholeData = async () => {
+    try {
+      const Resp = await axios.get(`http://103.166.62.118:8443/tl-services/new/licenses/object/_get?id=${props.getId}`);
+      console.log("Resp====", Resp?.data);
+      // let temp = {};
+      // Object.keys(Resp?.data).forEach((el) => {
+      //   const newKey = el?.replace(/"/g, "");
+      //   temp[newKey] = Resp?.data[el];
+      // });
+      console.log("temp==", temp);
+    } catch (error) {
+      return error;
+    }
+  };
+
+  useEffect(() => {
+    getWholeData();
+  }, []);
+
   useEffect(() => {
     getSubmitDataLabel();
   }, []);
@@ -180,10 +200,12 @@ const FeesChargesForm = (props) => {
     const purposeSelected = data.data;
     setSelectPurpose(purposeSelected);
   };
+
   const handleChangePotential = (data) => {
     const purposeSelected = data.data;
     setSelectPurpose(purposeSelected);
   };
+
   const handleScrutiny = (event) => {
     setCalculateData(event.target.value);
   };
