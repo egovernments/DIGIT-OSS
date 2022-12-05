@@ -21,9 +21,6 @@ import {
   import get from "lodash/get";
 import mutationReasonData from "./registrationDetails.json";
 
-
-
-
   
 export const registrationDetails = getCommonCard(
   {
@@ -94,17 +91,28 @@ export const registrationDetails = getCommonCard(
                 )
             );
             })
-              let mutationReason = mutationReasonData[action.value];
-              mutationReason && mutationReason.map((item,index)=>{
-                fields && fields.includes(item) && dispatch(
-                  handleField(
-                      "apply",
-                      `components.div.children.formwizardFirstStep.children.registrationDetails.children.cardContent.children.registrationDetailsContainer.children.${item}`,
-                      "visible",
-                      true
-                  )
+            let mutationReason = mutationReasonData[action.value];
+            mutationReason && mutationReason.map((item, index) => {
+              fields && fields.includes(item) && dispatch(
+                handleField(
+                  "apply",
+                  `components.div.children.formwizardFirstStep.children.registrationDetails.children.cardContent.children.registrationDetailsContainer.children.${item}`,
+                  "visible",
+                  true
+                )
               );
-              })
+            })
+            mutationReason && mutationReason.map((item, index) => {
+              fields && fields.includes(item) && dispatch(
+                handleField(
+                  "apply",
+                  `components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.registrationSummary.children.cardContent.children.cardOne.children.cardContent.children.propertyLocationContainer.children.${item}.visible`,
+                  "visible",
+                  true
+                )
+              );
+            })
+            
           }
         },
 

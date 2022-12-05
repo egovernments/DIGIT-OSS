@@ -575,6 +575,24 @@ const screenConfig = {
   uiFramework: "material-ui",
   name: "apply",
   beforeInitScreen: (action, state, dispatch) => {
+    let fields = ["marketValue", "powerOfAttorneyRegNo", "powerOfAttorneyRegDate", 
+      "documentNumber", "documentIssueDateField",
+      "documentValue", "remarks", "NameAndAddressOfWitnesses", "DateOfWritingWill", 
+      "NameOfAuctionAuthority", "AuctionDate",
+      "AuctionRegistrationnumber", "AuctionRegistrationDate", "SerialNumber", 
+      "IssuingAuthority", "IssuingDate", "CourtName",
+      "DecreeNo","DecreeDate",
+      "IsThereAnyStayOrderOnCourtDecreeByUpperCourt",
+      "DetailsOfUpperCourtStayOrder"];
+      
+    fields && fields.map((item) => {
+      set(
+        action.screenConfig,
+        `components.div.children.formwizardThirdStep.children.summary.children.cardContent.children.registrationSummary.children.cardContent.children.cardOne.children.cardContent.children.propertyLocationContainer.children.${item}.visible`,
+        false
+      );
+    })
+
     dispatch(unMountScreen("propertySearch"));
     dispatch(unMountScreen("search-preview"));
     const applicationNumber = getQueryArg(
