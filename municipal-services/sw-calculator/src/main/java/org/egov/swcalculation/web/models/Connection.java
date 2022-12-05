@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import lombok.*;
 import org.egov.swcalculation.web.models.workflow.ProcessInstance;
 import org.springframework.validation.annotation.Validated;
 
@@ -26,6 +27,11 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @ApiModel(description = "This is lightweight property object that can be used as reference by definitions needing property linking. Actual Property Object extends this to include more elaborate attributes of the property.")
 @Validated
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-03-13T11:29:47.358+05:30[Asia/Kolkata]")
 public class Connection {
 	@JsonProperty("id")
@@ -130,6 +136,9 @@ public class Connection {
 
 	@JsonProperty("oldApplication")
 	private Boolean oldApplication = false;
+
+	@JsonProperty("disconnectionExecutionDate")
+	private Long disconnectionExecutionDate = null;
 
 	public Connection id(String id) {
 		this.id = id;

@@ -181,7 +181,7 @@ public class WSCalculationServiceImpl implements WSCalculationService {
 							}
 							Long taxPeriod = toDate - fromDate;
 							BigDecimal finalWaterCharge = waterCharge.add(BigDecimal.valueOf((Double.parseDouble(totalTaxAmount.toString()) *
-									(waterConnection.getConnectionExecutionDate() - Double.parseDouble(toDate.toString()))) / taxPeriod));
+									(waterConnection.getDisconnectionExecutionDate() - Double.parseDouble(toDate.toString()))) / taxPeriod));
 							estimates.stream().forEach(estimate -> {
 								if (taxHeadCategoryMap.get(estimate.getTaxHeadCode()).equals(CHARGES)) {
 									estimate.setEstimateAmount(finalWaterCharge);

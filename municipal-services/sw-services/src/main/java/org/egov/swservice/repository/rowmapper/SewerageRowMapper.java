@@ -55,6 +55,7 @@ public class SewerageRowMapper implements ResultSetExtractor<List<SewerageConnec
                 sewarageConnection.setOldApplication(rs.getBoolean("isoldapplication"));
                 sewarageConnection.setDisconnectionReason(rs.getString("disconnectionReason"));
                 sewarageConnection.setIsDisconnectionTemporary(rs.getBoolean("isDisconnectionTemporary"));
+                sewarageConnection.setDisconnectionExecutionDate(rs.getLong("disconnectionExecutionDate"));
 
                 // get property id and get property object
                 PGobject pgObj = (PGobject) rs.getObject("additionaldetails");
