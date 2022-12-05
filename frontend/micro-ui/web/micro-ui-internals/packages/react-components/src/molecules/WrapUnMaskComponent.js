@@ -1,9 +1,9 @@
 import _ from "lodash";
 import PropTypes from "prop-types";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Loader, UnMaskComponent } from "..";
-import { PrivacyMaskIcon } from "..";
+import { Loader, UnMaskComponent,PrivacyMaskIcon} from "..";
+
 /**
  * Custom Component to demask the masked values.
  *
@@ -34,6 +34,7 @@ const WrapUnMaskComponent = React.memo(({ privacy = {}, value, unmaskField, ...r
     { recordId: privacy?.uuid, plainRequestFields: Array.isArray(privacy?.fieldName) ? privacy?.fieldName : [privacy?.fieldName] },
     {
       enabled: privacyState,
+      cacheTime: 100,
       select: (data) => {
         if (loadData?.d) {
           return loadData?.d(data, value);
@@ -42,10 +43,23 @@ const WrapUnMaskComponent = React.memo(({ privacy = {}, value, unmaskField, ...r
       },
     },
   ];
-  const { isLoading, data } = Digit.Hooks.useCustomAPIHook(...requestCriteria);
+  const { isLoading, data, revalidate } = Digit.Hooks.useCustomAPIHook(...requestCriteria);
+  useEffect(() => {
+    return () => {
+      revalidate();
+      setPrivacyState(false);
+    };
+  });
   if (isLoading) {
-    return !unmaskField ? <Loader /> : <span style={{ display: "inline-flex", width: "fit-content", marginLeft: "10px" }}><div className={`tooltip`}>
-    <PrivacyMaskIcon className="privacy-icon-2" style={{...rem?.style,cursor:"default"}}></PrivacyMaskIcon></div></span>;
+    return !unmaskField ? (
+      <Loader />
+    ) : (
+      <span style={{ display: "inline-flex", width: "fit-content", marginLeft: "10px" }}>
+        <div className={`tooltip`}>
+          <PrivacyMaskIcon className="privacy-icon-2" style={{ ...rem?.style, cursor: "default" }}></PrivacyMaskIcon>
+        </div>
+      </span>
+    );
   }
 
   return privacy?.uuid && data ? (
