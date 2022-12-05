@@ -15,6 +15,7 @@ import org.egov.swservice.util.SewerageServicesUtil;
 import org.egov.swservice.validator.ValidateProperty;
 import org.egov.swservice.web.models.*;
 import org.egov.swservice.web.models.users.UserDetailResponse;
+import org.egov.swservice.web.models.workflow.ProcessInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -81,15 +82,18 @@ public class EditNotificationService {
 		
 		String localizationMessage = notificationUtil
 				.getLocalizationMessages(property.getTenantId(), sewerageConnectionRequest.getRequestInfo());
+		ProcessInstance workflow = sewerageConnectionRequest.getSewerageConnection().getProcessInstance();
+
 		String code = SW_EDIT_IN_APP;
-		if ((!sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction().equalsIgnoreCase(SWConstants.ACTIVATE_CONNECTION))
-				&& servicesUtil.isModifyConnectionRequest(sewerageConnectionRequest)) {
+		if ((!workflow.getAction().equalsIgnoreCase(SWConstants.ACTIVATE_CONNECTION))
+				&& servicesUtil.isModifyConnectionRequestForNotification(sewerageConnectionRequest)) {
 			code = SWConstants.SW_MODIFY_IN_APP;
 		}
-		if(!sewerageConnectionRequest.getSewerageConnection().getApplicationStatus().equalsIgnoreCase(DISCONNECT_SEWERAGE_CONNECTION))
-		{
+		if ((!workflow.getAction().equalsIgnoreCase(SWConstants.ACTIVATE_CONNECTION)) &&
+				(!workflow.getAction().equalsIgnoreCase(APPROVE_CONNECTION)) && servicesUtil.isDisconnectConnectionRequest(sewerageConnectionRequest)) {
 			code = SW_DISCONNECT_EDIT_INAPP;
 		}
+
 		String message = notificationUtil.getCustomizedMsg(code, localizationMessage);
 		if (message == null) {
 			log.info("No localized message found!!, Using default message");
@@ -169,16 +173,18 @@ public class EditNotificationService {
 		
 		String localizationMessage = notificationUtil
 				.getLocalizationMessages(property.getTenantId(), sewerageConnectionRequest.getRequestInfo());
+		ProcessInstance workflow = sewerageConnectionRequest.getSewerageConnection().getProcessInstance();
+
 		String code = SWConstants.SW_EDIT_SMS;
-		if ((!sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction().equalsIgnoreCase(SWConstants.ACTIVATE_CONNECTION))
-				&& servicesUtil.isModifyConnectionRequest(sewerageConnectionRequest)) {
-			code = SWConstants.SW_MODIFY_SMS;
+		if ((!workflow.getAction().equalsIgnoreCase(SWConstants.ACTIVATE_CONNECTION))
+				&& servicesUtil.isModifyConnectionRequestForNotification(sewerageConnectionRequest)) {
+			code = SWConstants.SW_MODIFY_IN_APP;
+		}
+		if ((!workflow.getAction().equalsIgnoreCase(SWConstants.ACTIVATE_CONNECTION)) &&
+				(!workflow.getAction().equalsIgnoreCase(APPROVE_CONNECTION)) && servicesUtil.isDisconnectConnectionRequest(sewerageConnectionRequest)) {
+			code = SW_DISCONNECT_EDIT_INAPP;
 		}
 
-		if(!sewerageConnectionRequest.getSewerageConnection().getApplicationStatus().equalsIgnoreCase(DISCONNECT_SEWERAGE_CONNECTION))
-		{
-			code = SW_DISCONNECT_EDIT_SMS;
-		}
 		String message = notificationUtil.getCustomizedMsg(code, localizationMessage);
 		if (message == null) {
 			log.info("No localized message found!!, Using default message");

@@ -149,6 +149,9 @@ public class WSConfiguration {
     
     	@Value("${ws.view.history.link}")
     	private String viewHistoryLink;
+
+		@Value("${ws.mypayments.link}")
+		private String myPaymentsLink;
     
     	@Value("${ws.connectiondetails.link}")
     	private String connectionDetailsLink;

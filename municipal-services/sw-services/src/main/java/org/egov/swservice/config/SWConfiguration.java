@@ -135,6 +135,9 @@ public class SWConfiguration {
 	@Value("${sw.view.history.link}")
 	private String viewHistoryLink;
 
+	@Value("${sw.mypayments.link}")
+	private String myPaymentsLink;
+
 	@Value("${sw.connectiondetails.link}")
 	private String connectionDetailsLink;
 

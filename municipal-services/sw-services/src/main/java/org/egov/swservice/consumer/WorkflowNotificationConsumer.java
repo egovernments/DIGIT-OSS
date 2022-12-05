@@ -1,19 +1,22 @@
 package org.egov.swservice.consumer;
 
-import java.util.HashMap;
-
-import org.egov.swservice.web.models.SewerageConnectionRequest;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
+import org.egov.swservice.service.SewerageService;
 import org.egov.swservice.service.WorkflowNotificationService;
+import org.egov.swservice.util.EncryptionDecryptionUtil;
+import org.egov.swservice.util.SWConstants;
+import org.egov.swservice.web.models.OwnerInfo;
+import org.egov.swservice.web.models.SewerageConnectionRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.HashMap;
 
-import lombok.extern.slf4j.Slf4j;
+import static org.egov.swservice.util.SWConstants.WNS_OWNER_DECRYPTION_MODEL;
 
 @Service
 @Slf4j
@@ -22,6 +25,11 @@ public class WorkflowNotificationConsumer {
 	@Autowired
 	WorkflowNotificationService workflowNotificationService;
 
+	@Autowired
+	private SewerageService sewerageService;
+
+	@Autowired
+	private EncryptionDecryptionUtil encryptionDecryptionUtil;
 	@Autowired
 	private ObjectMapper mapper;
 
@@ -39,6 +47,12 @@ public class WorkflowNotificationConsumer {
 		try {
 			SewerageConnectionRequest sewerageConnectionRequest = mapper.convertValue(record,
 					SewerageConnectionRequest.class);
+			String applicationStatus = sewerageConnectionRequest.getSewerageConnection().getApplicationStatus();
+			if (!SWConstants.NOTIFICATION_ENABLE_FOR_STATUS.contains(sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction()+"_"+applicationStatus)) {
+				log.info("Workflow Notification Disabled For State :" + sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction()+"_"+applicationStatus);
+				return;
+			}
+			sewerageConnectionRequest.getSewerageConnection().setConnectionHolders(encryptionDecryptionUtil.decryptObject(sewerageConnectionRequest.getSewerageConnection().getConnectionHolders(), WNS_OWNER_DECRYPTION_MODEL, OwnerInfo.class, sewerageConnectionRequest.getRequestInfo()));
 			workflowNotificationService.process(sewerageConnectionRequest, topic);
 		} catch (Exception ex) {
 			StringBuilder builder = new StringBuilder("Error while listening to value: ").append(record)

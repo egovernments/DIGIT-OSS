@@ -11,6 +11,7 @@ import org.egov.waterconnection.validator.ValidateProperty;
 import org.egov.waterconnection.web.models.*;
 import org.egov.waterconnection.web.models.users.User;
 import org.egov.waterconnection.web.models.users.UserDetailResponse;
+import org.egov.waterconnection.web.models.workflow.ProcessInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -73,15 +74,18 @@ public class EditNotificationService {
 	private EventRequest getEventRequest(WaterConnectionRequest waterConnectionRequest, Property property) {
 		String localizationMessage = notificationUtil
 				.getLocalizationMessages(property.getTenantId(), waterConnectionRequest.getRequestInfo());
+		ProcessInstance workflow = waterConnectionRequest.getWaterConnection().getProcessInstance();
+
 		String code = WCConstants.WS_EDIT_IN_APP;
-		if ((!waterConnectionRequest.getWaterConnection().getProcessInstance().getAction().equalsIgnoreCase(WCConstants.ACTIVATE_CONNECTION))
-				&& waterServicesUtil.isModifyConnectionRequest(waterConnectionRequest)) {
-			   code = WCConstants.WS_MODIFY_IN_APP;
+		if ((!workflow.getAction().equalsIgnoreCase(WCConstants.ACTIVATE_CONNECTION))
+				&& waterServicesUtil.isModifyConnectionRequestForNotification(waterConnectionRequest)) {
+			code = WCConstants.WS_MODIFY_IN_APP;
 		}
-		if(!waterConnectionRequest.getWaterConnection().getApplicationStatus().equalsIgnoreCase(WCConstants.DISCONNECT_WATER_CONNECTION))
-		{
+		if ((!workflow.getAction().equalsIgnoreCase(WCConstants.ACTIVATE_CONNECTION)) &&
+				(!workflow.getAction().equalsIgnoreCase(APPROVE_CONNECTION)) && waterServicesUtil.isDisconnectConnectionRequest(waterConnectionRequest)) {
 			code = WS_DISCONNECT_EDIT_INAPP;
 		}
+
 		String message = notificationUtil.getCustomizedMsg(code, localizationMessage);
 		if (message == null) {
 			log.info("No localized message found!!, Using default message");
@@ -159,15 +163,18 @@ public class EditNotificationService {
 	private List<SMSRequest> getSmsRequest(WaterConnectionRequest waterConnectionRequest, Property property) {
 		String localizationMessage = notificationUtil
 				.getLocalizationMessages(property.getTenantId(), waterConnectionRequest.getRequestInfo());
+		ProcessInstance workflow = waterConnectionRequest.getWaterConnection().getProcessInstance();
+
 		String code = WCConstants.WS_EDIT_SMS;
-		if ((!waterConnectionRequest.getWaterConnection().getProcessInstance().getAction().equalsIgnoreCase(WCConstants.ACTIVATE_CONNECTION))
-				&& waterServicesUtil.isModifyConnectionRequest(waterConnectionRequest)) {
-			code = WCConstants.WS_MODIFY_SMS;
+		if ((!workflow.getAction().equalsIgnoreCase(WCConstants.ACTIVATE_CONNECTION))
+				&& waterServicesUtil.isModifyConnectionRequestForNotification(waterConnectionRequest)) {
+			code = WCConstants.WS_MODIFY_IN_APP;
 		}
-		if(!waterConnectionRequest.getWaterConnection().getApplicationStatus().equalsIgnoreCase(WCConstants.DISCONNECT_WATER_CONNECTION))
-		{
-			code = WS_DISCONNECT_EDIT_SMS;
+		if ((!workflow.getAction().equalsIgnoreCase(WCConstants.ACTIVATE_CONNECTION)) &&
+				(!workflow.getAction().equalsIgnoreCase(APPROVE_CONNECTION)) && waterServicesUtil.isDisconnectConnectionRequest(waterConnectionRequest)) {
+			code = WS_DISCONNECT_EDIT_INAPP;
 		}
+		
 		String message = notificationUtil.getCustomizedMsg(code, localizationMessage);
 		if (message == null) {
 			log.info("No localized message found!!, Using default message");

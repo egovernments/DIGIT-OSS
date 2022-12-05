@@ -1,10 +1,7 @@
 package org.egov.waterconnection.service;
 
 
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
+import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.PlainAccessRequest;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tracer.model.CustomException;
@@ -25,13 +22,14 @@ import org.egov.waterconnection.web.models.workflow.ProcessInstance;
 import org.egov.waterconnection.workflow.WorkflowIntegrator;
 import org.egov.waterconnection.workflow.WorkflowService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.egov.waterconnection.constants.WCConstants.*;
 
@@ -133,6 +131,8 @@ public class WaterServiceImpl implements WaterService {
 
 		/* encrypt here */
 		waterConnectionRequest.setWaterConnection(encryptConnectionDetails(waterConnectionRequest.getWaterConnection()));
+		/* encrypt here for connection holder details */
+		waterConnectionRequest.setWaterConnection(encryptConnectionHolderDetails(waterConnectionRequest.getWaterConnection()));
 
 		waterDao.saveWaterConnection(waterConnectionRequest);
 
@@ -144,6 +144,10 @@ public class WaterServiceImpl implements WaterService {
 		//PlumberInfo unmasked during create call of Disconnect/Modify Applications
 		else
 			waterConnectionRequest.setWaterConnection(encryptionDecryptionUtil.decryptObject(waterConnectionRequest.getWaterConnection(), "WnSConnectionPlumberDecrypDisabled", WaterConnection.class, waterConnectionRequest.getRequestInfo()));
+
+		List<OwnerInfo> connectionHolders = waterConnectionRequest.getWaterConnection().getConnectionHolders();
+		if (!CollectionUtils.isEmpty(connectionHolders))
+			waterConnectionRequest.getWaterConnection().setConnectionHolders(encryptionDecryptionUtil.decryptObject(connectionHolders, WNS_OWNER_ENCRYPTION_MODEL, OwnerInfo.class, waterConnectionRequest.getRequestInfo()));
 
 		return Arrays.asList(waterConnectionRequest.getWaterConnection());
 	}
@@ -293,6 +297,9 @@ public class WaterServiceImpl implements WaterService {
 				waterConnectionRequest.getWaterConnection().getApplicationNo(),
 				waterConnectionRequest.getWaterConnection().getTenantId(),
 				config.getBusinessServiceValue());
+
+		boolean isStateUpdatable = waterServiceUtil.getStatusForUpdate(businessService, previousApplicationStatus);
+
 		enrichmentService.enrichUpdateWaterConnection(waterConnectionRequest);
 		actionValidator.validateUpdateRequest(waterConnectionRequest, businessService, previousApplicationStatus);
 		waterConnectionValidator.validateUpdate(waterConnectionRequest, searchResult, WCConstants.UPDATE_APPLICATION);
@@ -308,18 +315,19 @@ public class WaterServiceImpl implements WaterService {
 		//call calculator service to generate the demand for one time fee
 		calculationService.calculateFeeAndGenerateDemand(waterConnectionRequest, property);
 		//check for edit and send edit notification
-		waterDaoImpl.pushForEditNotification(waterConnectionRequest);
+		waterDaoImpl.pushForEditNotification(waterConnectionRequest, isStateUpdatable);
 		//Enrich file store Id After payment
 		enrichmentService.enrichFileStoreIds(waterConnectionRequest);
 //		userService.createUser(waterConnectionRequest);
 		enrichmentService.postStatusEnrichment(waterConnectionRequest);
-		boolean isStateUpdatable = waterServiceUtil.getStatusForUpdate(businessService, previousApplicationStatus);
 
 		/* encrypt here */
 		waterConnectionRequest.setWaterConnection(encryptConnectionDetails(waterConnectionRequest.getWaterConnection()));
+		/* encrypt here for connection holder details */
 		waterConnectionRequest.setWaterConnection(encryptConnectionHolderDetails(waterConnectionRequest.getWaterConnection()));
 
 		waterDao.updateWaterConnection(waterConnectionRequest, isStateUpdatable);
+
 		enrichmentService.postForMeterReading(waterConnectionRequest,  WCConstants.UPDATE_APPLICATION);
 		if (!StringUtils.isEmpty(waterConnectionRequest.getWaterConnection().getTenantId()))
 			criteria.setTenantId(waterConnectionRequest.getWaterConnection().getTenantId());
@@ -350,6 +358,9 @@ public class WaterServiceImpl implements WaterService {
 				waterConnectionRequest.getWaterConnection().getApplicationNo(),
 				waterConnectionRequest.getWaterConnection().getTenantId(),
 				config.getDisconnectBusinessServiceName());
+
+		boolean isStateUpdatable = waterServiceUtil.getStatusForUpdate(businessService, previousApplicationStatus);
+
 		enrichmentService.enrichUpdateWaterConnection(waterConnectionRequest);
 		actionValidator.validateUpdateRequest(waterConnectionRequest, businessService, previousApplicationStatus);
 		waterConnectionValidator.validateUpdate(waterConnectionRequest, searchResult, WCConstants.DISCONNECT_CONNECTION);
@@ -369,18 +380,19 @@ public class WaterServiceImpl implements WaterService {
 		//Call workflow
 		wfIntegrator.callWorkFlow(waterConnectionRequest, property);
 		//check for edit and send edit notification
-		waterDaoImpl.pushForEditNotification(waterConnectionRequest);
+		waterDaoImpl.pushForEditNotification(waterConnectionRequest, isStateUpdatable);
 		//Enrich file store Id After payment
 		enrichmentService.enrichFileStoreIds(waterConnectionRequest);
 //		userService.createUser(waterConnectionRequest);
 		enrichmentService.postStatusEnrichment(waterConnectionRequest);
-		boolean isStateUpdatable = waterServiceUtil.getStatusForUpdate(businessService, previousApplicationStatus);
 
 		/* encrypt here */
 		waterConnectionRequest.setWaterConnection(encryptConnectionDetails(waterConnectionRequest.getWaterConnection()));
+		/* encrypt here for connection holder details */
 		waterConnectionRequest.setWaterConnection(encryptConnectionHolderDetails(waterConnectionRequest.getWaterConnection()));
 
 		waterDao.updateWaterConnection(waterConnectionRequest, isStateUpdatable);
+
 		// setting oldApplication Flag
 		markOldApplication(waterConnectionRequest);
 		enrichmentService.postForMeterReading(waterConnectionRequest,  WCConstants.DISCONNECT_CONNECTION);
@@ -455,15 +467,18 @@ public class WaterServiceImpl implements WaterService {
 		wfIntegrator.callWorkFlow(waterConnectionRequest, property);
 		boolean isStateUpdatable = waterServiceUtil.getStatusForUpdate(businessService, previousApplicationStatus);
 
+		//check for edit and send edit notification
+		waterDaoImpl.pushForEditNotification(waterConnectionRequest, isStateUpdatable);
+
 		/* encrypt here */
 		waterConnectionRequest.setWaterConnection(encryptConnectionDetails(waterConnectionRequest.getWaterConnection()));
+		/* encrypt here for connection holder details */
 		waterConnectionRequest.setWaterConnection(encryptConnectionHolderDetails(waterConnectionRequest.getWaterConnection()));
 
 		waterDao.updateWaterConnection(waterConnectionRequest, isStateUpdatable);
+
 		// setting oldApplication Flag
 		markOldApplication(waterConnectionRequest);
-		//check for edit and send edit notification
-		waterDaoImpl.pushForEditNotification(waterConnectionRequest);
 		enrichmentService.postForMeterReading(waterConnectionRequest, WCConstants.MODIFY_CONNECTION);
 
 		/* decrypt here */

@@ -1,20 +1,22 @@
 package org.egov.swservice.consumer;
 
-import java.util.HashMap;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
+import org.egov.swservice.service.DiffService;
+import org.egov.swservice.service.SewerageService;
+import org.egov.swservice.service.SewerageServiceImpl;
+import org.egov.swservice.web.models.SearchCriteria;
 import org.egov.swservice.web.models.SewerageConnection;
 import org.egov.swservice.web.models.SewerageConnectionRequest;
-import org.egov.swservice.service.DiffService;
-import org.egov.swservice.service.SewerageServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import lombok.extern.slf4j.Slf4j;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -29,6 +31,9 @@ public class EditWorkflowNotificationConsumer {
 	@Autowired
 	private DiffService diffService;
 
+	@Autowired
+	private SewerageService sewerageService;
+
 	/**
 	 * Consumes the sewerage connection record and send the edit notification
 	 * 
@@ -40,9 +45,11 @@ public class EditWorkflowNotificationConsumer {
 		try {
 			SewerageConnectionRequest sewerageConnectionRequest = mapper.convertValue(record,
 					SewerageConnectionRequest.class);
-			SewerageConnection searchResult = sewarageServiceImpl.getConnectionForUpdateRequest(
-					sewerageConnectionRequest.getSewerageConnection().getId(),
+			SearchCriteria criteria = SearchCriteria.builder().applicationNumber(Collections.singleton(sewerageConnectionRequest.getSewerageConnection().getApplicationNo()))
+					.tenantId(sewerageConnectionRequest.getSewerageConnection().getTenantId()).isInternalCall(Boolean.TRUE).build();
+			List<SewerageConnection> sewerageConnections = sewerageService.search(criteria,
 					sewerageConnectionRequest.getRequestInfo());
+			SewerageConnection searchResult = sewerageConnections.get(0);
 			diffService.checkDifferenceAndSendEditNotification(sewerageConnectionRequest, searchResult);
 		} catch (Exception ex) {
 			StringBuilder builder = new StringBuilder("Error while listening to value: ").append(record)

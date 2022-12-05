@@ -33,12 +33,7 @@ public class DiffService {
 	 */
 	public void checkDifferenceAndSendEditNotification(WaterConnectionRequest request, WaterConnection searchResult) {
 		try {
-				WaterConnection updateConnection = request.getWaterConnection();
-				if (!CollectionUtils.isEmpty(getUpdateFields(updateConnection, searchResult))
-						|| !CollectionUtils.isEmpty(getObjectsAdded(updateConnection, searchResult))
-						|| !CollectionUtils.isEmpty(getObjectsRemoved(updateConnection, searchResult))) {
-					editNotificationService.sendEditNotification(request);
-				}
+				editNotificationService.sendEditNotification(request);
 		} catch (Exception ex) {
 			log.error("Edit Notification Error!!", ex);
 		}

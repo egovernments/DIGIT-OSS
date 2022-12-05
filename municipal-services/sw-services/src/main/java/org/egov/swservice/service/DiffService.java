@@ -35,12 +35,7 @@ public class DiffService {
 	public void checkDifferenceAndSendEditNotification(SewerageConnectionRequest request,
 			SewerageConnection searchResult) {
 		try {
-			SewerageConnection updateConnection = request.getSewerageConnection();
-			if (!CollectionUtils.isEmpty(getUpdateFields(updateConnection, searchResult))
-					|| !CollectionUtils.isEmpty(getObjectsAdded(updateConnection, searchResult))
-					|| !CollectionUtils.isEmpty(getObjectsRemoved(updateConnection, searchResult))) {
 				editNotificationService.sendEditNotification(request);
-			}
 		} catch (Exception ex) {
 			log.error("Edit Notification Error!!", ex);
 		}
@@ -62,7 +57,8 @@ public class DiffService {
 		
 		List<String> updatedValues = new LinkedList<>();
 		changes.forEach(change -> {
-			if (SWConstants.FIELDS_TO_CHECK.contains(change.getPropertyName())) {
+			if (SWConstants.FIELDS_TO_CHECK.contains(change.getPropertyName()) &&
+					!SWConstants.FIELDS_TO_IGNORE.contains(change.getPropertyName())) {
 				updatedValues.add(change.getPropertyName());
 			}
 		});

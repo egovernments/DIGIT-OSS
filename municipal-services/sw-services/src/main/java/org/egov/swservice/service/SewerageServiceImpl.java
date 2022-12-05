@@ -1,9 +1,5 @@
 package org.egov.swservice.service;
 
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.PlainAccessRequest;
 import org.egov.common.contract.request.RequestInfo;
@@ -27,11 +23,14 @@ import org.egov.tracer.model.CustomException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
+
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.egov.swservice.util.SWConstants.*;
 
@@ -132,6 +131,8 @@ public class SewerageServiceImpl implements SewerageService {
 
 		/* encrypt here */
 		sewerageConnectionRequest.setSewerageConnection(encryptConnectionDetails(sewerageConnectionRequest.getSewerageConnection()));
+		/* encrypt here for connection holder details */
+		sewerageConnectionRequest.setSewerageConnection(encryptConnectionHolderDetails(sewerageConnectionRequest.getSewerageConnection()));
 
 		sewerageDao.saveSewerageConnection(sewerageConnectionRequest);
 
@@ -143,6 +144,10 @@ public class SewerageServiceImpl implements SewerageService {
 		//PlumberInfo unmasked during create call of Disconnect/Modify Applications
 		else
 			sewerageConnectionRequest.setSewerageConnection(encryptionDecryptionUtil.decryptObject(sewerageConnectionRequest.getSewerageConnection(), "WnSConnectionPlumberDecrypDisabled", SewerageConnection.class, sewerageConnectionRequest.getRequestInfo()));
+
+		List<OwnerInfo> connectionHolders = sewerageConnectionRequest.getSewerageConnection().getConnectionHolders();
+		if (!CollectionUtils.isEmpty(connectionHolders))
+			sewerageConnectionRequest.getSewerageConnection().setConnectionHolders(encryptionDecryptionUtil.decryptObject(connectionHolders, WNS_OWNER_ENCRYPTION_MODEL, OwnerInfo.class, sewerageConnectionRequest.getRequestInfo()));
 
 		return Arrays.asList(sewerageConnectionRequest.getSewerageConnection());
 	}
@@ -290,6 +295,8 @@ public class SewerageServiceImpl implements SewerageService {
 		SewerageConnection searchResult = getConnectionForUpdateRequest(
 				sewerageConnectionRequest.getSewerageConnection().getId(), sewerageConnectionRequest.getRequestInfo());
 
+		Boolean isStateUpdatable = sewerageServicesUtil.getStatusForUpdate(businessService, previousApplicationStatus);
+
 		boolean isPlumberSwapped = unmaskingUtil.getUnmaskedPlumberInfo(sewerageConnectionRequest.getSewerageConnection().getPlumberInfo(), searchResult.getPlumberInfo());
 		if (isPlumberSwapped)
 			sewerageConnectionRequest.setSewerageConnection(encryptionDecryptionUtil.decryptObject(sewerageConnectionRequest.getSewerageConnection(), "WnSConnectionPlumberDecrypDisabled", SewerageConnection.class, sewerageConnectionRequest.getRequestInfo()));
@@ -298,7 +305,7 @@ public class SewerageServiceImpl implements SewerageService {
 		actionValidator.validateUpdateRequest(sewerageConnectionRequest, businessService, previousApplicationStatus);
 		sewerageConnectionValidator.validateUpdate(sewerageConnectionRequest, searchResult);
 		calculationService.calculateFeeAndGenerateDemand(sewerageConnectionRequest, property);
-		sewerageDaoImpl.pushForEditNotification(sewerageConnectionRequest);
+		sewerageDaoImpl.pushForEditNotification(sewerageConnectionRequest, isStateUpdatable);
 		userService.updateUser(sewerageConnectionRequest, searchResult);
 		//Enriching the property details
 		List<SewerageConnection> sewerageConnectionList = new ArrayList<>();
@@ -314,10 +321,11 @@ public class SewerageServiceImpl implements SewerageService {
 
 		/* encrypt here */
 		sewerageConnectionRequest.setSewerageConnection(encryptConnectionDetails(sewerageConnectionRequest.getSewerageConnection()));
+		/* encrypt here for connection holder details */
 		sewerageConnectionRequest.setSewerageConnection(encryptConnectionHolderDetails(sewerageConnectionRequest.getSewerageConnection()));
 
-		sewerageDao.updateSewerageConnection(sewerageConnectionRequest,
-				sewerageServicesUtil.getStatusForUpdate(businessService, previousApplicationStatus));
+		sewerageDao.updateSewerageConnection(sewerageConnectionRequest, isStateUpdatable);
+
 		if (!StringUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getTenantId()))
 			criteria.setTenantId(sewerageConnectionRequest.getSewerageConnection().getTenantId());
 		enrichmentService.enrichProcessInstance(Arrays.asList(sewerageConnectionRequest.getSewerageConnection()), criteria, sewerageConnectionRequest.getRequestInfo());
@@ -345,6 +353,8 @@ public class SewerageServiceImpl implements SewerageService {
 		SewerageConnection searchResult = getConnectionForUpdateRequest(
 				sewerageConnectionRequest.getSewerageConnection().getId(), sewerageConnectionRequest.getRequestInfo());
 
+		Boolean isStateUpdatable = sewerageServicesUtil.getStatusForUpdate(businessService, previousApplicationStatus);
+
 		boolean isPlumberSwapped = unmaskingUtil.getUnmaskedPlumberInfo(sewerageConnectionRequest.getSewerageConnection().getPlumberInfo(), searchResult.getPlumberInfo());
 		if (isPlumberSwapped)
 			sewerageConnectionRequest.setSewerageConnection(encryptionDecryptionUtil.decryptObject(sewerageConnectionRequest.getSewerageConnection(), "WnSConnectionPlumberDecrypDisabled", SewerageConnection.class, sewerageConnectionRequest.getRequestInfo()));
@@ -352,7 +362,7 @@ public class SewerageServiceImpl implements SewerageService {
 		enrichmentService.enrichUpdateSewerageConnection(sewerageConnectionRequest);
 		actionValidator.validateUpdateRequest(sewerageConnectionRequest, businessService, previousApplicationStatus);
 		sewerageConnectionValidator.validateUpdate(sewerageConnectionRequest, searchResult);
-		sewerageDaoImpl.pushForEditNotification(sewerageConnectionRequest);
+		sewerageDaoImpl.pushForEditNotification(sewerageConnectionRequest, isStateUpdatable);
 		userService.updateUser(sewerageConnectionRequest, searchResult);
 		calculationService.calculateFeeAndGenerateDemand(sewerageConnectionRequest, property);
 		//check whether amount is due
@@ -373,10 +383,10 @@ public class SewerageServiceImpl implements SewerageService {
 
 		/* encrypt here */
 		sewerageConnectionRequest.setSewerageConnection(encryptConnectionDetails(sewerageConnectionRequest.getSewerageConnection()));
+		/* encrypt here for connection holder details */
 		sewerageConnectionRequest.setSewerageConnection(encryptConnectionHolderDetails(sewerageConnectionRequest.getSewerageConnection()));
 
-		sewerageDao.updateSewerageConnection(sewerageConnectionRequest,
-				sewerageServicesUtil.getStatusForUpdate(businessService, previousApplicationStatus));
+		sewerageDao.updateSewerageConnection(sewerageConnectionRequest, isStateUpdatable);
 
 		// setting oldApplication Flag
 		markOldApplication(sewerageConnectionRequest);
@@ -453,6 +463,7 @@ public class SewerageServiceImpl implements SewerageService {
 		SewerageConnection searchResult = getConnectionForUpdateRequest(
 				sewerageConnectionRequest.getSewerageConnection().getId(), sewerageConnectionRequest.getRequestInfo());
 
+		Boolean isStateUpdatable = sewerageServicesUtil.getStatusForUpdate(businessService, previousApplicationStatus);
 		boolean isPlumberSwapped = unmaskingUtil.getUnmaskedPlumberInfo(sewerageConnectionRequest.getSewerageConnection().getPlumberInfo(), searchResult.getPlumberInfo());
 		if (isPlumberSwapped)
 			sewerageConnectionRequest.setSewerageConnection(encryptionDecryptionUtil.decryptObject(sewerageConnectionRequest.getSewerageConnection(), "WnSConnectionPlumberDecrypDisabled", SewerageConnection.class, sewerageConnectionRequest.getRequestInfo()));
@@ -461,15 +472,17 @@ public class SewerageServiceImpl implements SewerageService {
 		actionValidator.validateUpdateRequest(sewerageConnectionRequest, businessService, previousApplicationStatus);
 		sewerageConnectionValidator.validateUpdate(sewerageConnectionRequest, searchResult);
 		userService.updateUser(sewerageConnectionRequest, searchResult);
-		sewerageDaoImpl.pushForEditNotification(sewerageConnectionRequest);
+		sewerageDaoImpl.pushForEditNotification(sewerageConnectionRequest, isStateUpdatable);
 		// Call workflow
 		wfIntegrator.callWorkFlow(sewerageConnectionRequest, property);
 
 		/* encrypt here */
 		sewerageConnectionRequest.setSewerageConnection(encryptConnectionDetails(sewerageConnectionRequest.getSewerageConnection()));
+		/* encrypt here for connection holder details */
 		sewerageConnectionRequest.setSewerageConnection(encryptConnectionHolderDetails(sewerageConnectionRequest.getSewerageConnection()));
 
-		sewerageDaoImpl.updateSewerageConnection(sewerageConnectionRequest, sewerageServicesUtil.getStatusForUpdate(businessService, previousApplicationStatus));
+		sewerageDaoImpl.updateSewerageConnection(sewerageConnectionRequest, isStateUpdatable);
+
 		// setting oldApplication Flag
 		markOldApplication(sewerageConnectionRequest);
 

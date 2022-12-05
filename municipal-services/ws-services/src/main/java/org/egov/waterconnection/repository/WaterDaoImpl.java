@@ -120,8 +120,8 @@ public class WaterDaoImpl implements WaterDao {
 	 * 
 	 * @param waterConnectionRequest
 	 */
-	public void pushForEditNotification(WaterConnectionRequest waterConnectionRequest) {
-		if (!WCConstants.EDIT_NOTIFICATION_STATE
+	public void pushForEditNotification(WaterConnectionRequest waterConnectionRequest, boolean isStateUpdatable) {
+		if (isStateUpdatable && !WCConstants.EDIT_NOTIFICATION_STATE
 				.contains(waterConnectionRequest.getWaterConnection().getProcessInstance().getAction())) {
 			waterConnectionProducer.push(wsConfiguration.getEditNotificationTopic(), waterConnectionRequest);
 		}

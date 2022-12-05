@@ -10,6 +10,7 @@ import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.mdms.model.ModuleDetail;
 import org.egov.tracer.model.CustomException;
 import org.egov.waterconnection.config.WSConfiguration;
+import org.egov.waterconnection.constants.WCConstants;
 import org.egov.waterconnection.repository.ServiceRequestRepository;
 import org.egov.waterconnection.web.models.*;
 import org.egov.waterconnection.web.models.workflow.BusinessService;
@@ -312,6 +313,20 @@ public class WaterServicesUtil {
 	
 	public boolean isModifyConnectionRequest(WaterConnectionRequest waterConnectionRequest) {
 		return !StringUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionNo());
+	}
+
+	public boolean isModifyConnectionRequestForNotification(WaterConnectionRequest waterConnectionRequest) {
+		if(waterConnectionRequest.getWaterConnection().getApplicationType().equalsIgnoreCase(WCConstants.MODIFY_WATER_CONNECTION))
+			return !StringUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionNo());
+
+		return false;
+	}
+
+	public boolean isDisconnectConnectionRequest(WaterConnectionRequest waterConnectionRequest) {
+		if(waterConnectionRequest.getWaterConnection().getApplicationType().equalsIgnoreCase(WCConstants.DISCONNECT_WATER_CONNECTION))
+			return !StringUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionNo());
+
+		return false;
 	}
 
 	public StringBuilder getcollectionURL() {

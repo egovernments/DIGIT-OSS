@@ -2,7 +2,6 @@ package org.egov.swservice.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.minidev.json.JSONObject;
-import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.mdms.model.MasterDetail;
@@ -19,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -280,7 +280,7 @@ public class SewerageServicesUtil {
 			isanyparametermatch = true;
 			url.append(name).append(criteria.getName());
 		}
-		if (!org.springframework.util.StringUtils.isEmpty(criteria.getLocality())) {
+		if (!StringUtils.isEmpty(criteria.getLocality())) {
 			if (isanyparametermatch)url.append("&");
 			isanyparametermatch = true;
 			url.append(locality).append(criteria.getLocality());
@@ -300,8 +300,23 @@ public class SewerageServicesUtil {
 	 * @return
 	 */
 	public boolean isModifyConnectionRequest(SewerageConnectionRequest sewerageConnectionRequest) {
-		return !org.springframework.util.StringUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionNo());
+		return !StringUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionNo());
 	}
+
+	public boolean isModifyConnectionRequestForNotification(SewerageConnectionRequest sewerageConnectionRequest) {
+		if(sewerageConnectionRequest.getSewerageConnection().getApplicationType().equalsIgnoreCase(SWConstants.MODIFY_SEWERAGE_CONNECTION))
+			return !StringUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionNo());
+
+		return false;
+	}
+
+	public boolean isDisconnectConnectionRequest(SewerageConnectionRequest sewerageConnectionRequest) {
+		if(sewerageConnectionRequest.getSewerageConnection().getApplicationType().equalsIgnoreCase(SWConstants.DISCONNECT_SEWERAGE_CONNECTION))
+			return !StringUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionNo());
+
+		return false;
+	}
+
 
 	public StringBuilder getcollectionURL() {
 		StringBuilder builder = new StringBuilder();
