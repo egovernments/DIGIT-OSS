@@ -64,7 +64,7 @@ function ApplicationDetailsContent({
     day = (day > 9 ? "" : "0") + day;
     return `${day}/${month}/${year}`;
   };
-  const getTimelineCaptions = (checkpoint) => {
+  const getTimelineCaptions = (checkpoint,index=0) => {
     if (checkpoint.state === "OPEN" || (checkpoint.status === "INITIATED" && !window.location.href.includes("/obps/"))) {
       const caption = {
         date: convertEpochToDateDMY(applicationData?.auditDetails?.createdTime),
@@ -82,12 +82,7 @@ function ApplicationDetailsContent({
         isArray: false,
         d: (res) => {
           let resultstring = "";
-          res?.ProcessInstances?.map((ob,index) => {
-            if(ob?.state?.state === checkpoint?.state)
-            { 
-              resultstring = `+91 ${_.get(res,`ProcessInstances[${index}].assignes[0].mobileNumber`)}`;
-            }
-          })
+          resultstring = `+91 ${_.get(res,`ProcessInstances[${index}].assignes[0].mobileNumber`)}`;
           return resultstring;
         }
       }, }
@@ -408,7 +403,7 @@ function ApplicationDetailsContent({
                                 checkpoint?.performedAction === "REOPEN" ? checkpoint?.performedAction : checkpoint?.[statusAttribute]
                               }${timelineStatusPostfix}`
                             )}
-                            customChild={getTimelineCaptions(checkpoint)}
+                            customChild={getTimelineCaptions(checkpoint,index)}
                           />
                         </React.Fragment>
                       );
