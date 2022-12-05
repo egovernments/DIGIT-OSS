@@ -68,6 +68,7 @@ public class BillRepositoryV2 {
 				AuditDetails auditDetails = bill.getAuditDetails();
 				
 				ps.setString(1, bill.getId());
+				ps.setString(15, bill.getUserId());
 				ps.setString(2, bill.getTenantId());
 				ps.setString(3, bill.getPayerName());
 				ps.setString(4, bill.getPayerAddress());

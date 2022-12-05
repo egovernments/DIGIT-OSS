@@ -1,9 +1,26 @@
 package org.egov.demand.service;
 
-import com.fasterxml.jackson.databind.node.MissingNode;
-import com.jayway.jsonpath.JsonPath;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+
 import org.egov.common.contract.request.RequestInfo;
-import org.egov.demand.model.*;
+import org.egov.demand.model.AuditDetails;
+import org.egov.demand.model.BillAccountDetailV2;
+import org.egov.demand.model.BillDetailV2;
+import org.egov.demand.model.BillV2;
+import org.egov.demand.model.Demand;
+import org.egov.demand.model.DemandCriteria;
+import org.egov.demand.model.DemandDetail;
 import org.egov.demand.util.Util;
 import org.egov.demand.web.contract.BillRequestV2;
 import org.egov.demand.web.contract.DemandRequest;
@@ -16,14 +33,8 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import com.fasterxml.jackson.databind.node.MissingNode;
+import com.jayway.jsonpath.JsonPath;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -204,7 +215,7 @@ public class ReceiptServiceV2Test {
         BigDecimal totalAmount = BigDecimal.valueOf(42L);
         MissingNode additionalDetails = MissingNode.getInstance();
         ArrayList<BillDetailV2> billDetails = new ArrayList<>();
-        billV2List.add(new BillV2("42", "42", "Payer Name", "42 Main St", "jane.doe@example.org", BillV2.BillStatus.ACTIVE,
+        billV2List.add(new BillV2("42", "userid", "42", "Payer Name", "42 Main St", "jane.doe@example.org", BillV2.BillStatus.ACTIVE,
                 totalAmount, "Business Service", "42", 1L, "Consumer Code", additionalDetails, billDetails, "42", "42",
                 new AuditDetails()));
         BillRequestV2 billRequestV2 = mock(BillRequestV2.class);
@@ -226,7 +237,7 @@ public class ReceiptServiceV2Test {
         billDetailV2List.add(new BillDetailV2());
         BigDecimal totalAmount = BigDecimal.valueOf(42L);
         MissingNode additionalDetails = MissingNode.getInstance();
-        BillV2 e = new BillV2("42", "42", "Payer Name", "42 Main St", "jane.doe@example.org", BillV2.BillStatus.ACTIVE,
+        BillV2 e = new BillV2("42", "userid", "42", "Payer Name", "42 Main St", "jane.doe@example.org", BillV2.BillStatus.ACTIVE,
                 totalAmount, "Business Service", "42", 1L, "Consumer Code", additionalDetails, billDetailV2List, "42", "42",
                 new AuditDetails());
 
@@ -276,7 +287,7 @@ public class ReceiptServiceV2Test {
         BigDecimal totalAmount = BigDecimal.valueOf(42L);
         MissingNode additionalDetails = MissingNode.getInstance();
         ArrayList<BillDetailV2> billDetails = new ArrayList<>();
-        billV2List.add(new BillV2("42", "42", "BillingService", "42 Main St", "jane.doe@example.org",
+        billV2List.add(new BillV2("42", "userid", "42", "BillingService", "42 Main St", "jane.doe@example.org",
                 BillV2.BillStatus.ACTIVE, totalAmount, "BillingService", "42", 2L, "BillingService", additionalDetails,
                 billDetails, "42", "42", new AuditDetails()));
         BillRequestV2 billRequestV2 = mock(BillRequestV2.class);

@@ -457,6 +457,7 @@ public class BillServicev2 {
 						.status(BillStatus.ACTIVE)
 						.billDetails(billDetails)
 						.totalAmount(billAmount)
+						.userId(payer.getUuid())
 						.billNumber(billNumber)
 						.tenantId(tenantId)
 						.id(billId)

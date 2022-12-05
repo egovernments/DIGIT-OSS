@@ -22,8 +22,9 @@ public class BillQueryBuilder {
 	public static final String BILL_STATUS_UPDATE_BASE_QUERY = "UPDATE egbs_bill_v1 SET status=? {replace} WHERE status='ACTIVE' AND tenantId = ? ";
 	
 	public static final String INSERT_BILL_QUERY = "INSERT into egbs_bill_v1 "
-			+"(id, tenantid, payername, payeraddress, payeremail, isactive, iscancelled, createdby, createddate, lastmodifiedby, lastmodifieddate, mobilenumber, status, additionaldetails)"
-			+"values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			+"(id, tenantid, payername, payeraddress, payeremail, isactive, iscancelled, createdby, createddate, lastmodifiedby, lastmodifieddate,"
+			+" mobilenumber, status, additionaldetails, payerid)"
+			+"values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 	
 	public static final String INSERT_BILLDETAILS_QUERY = "INSERT into egbs_billdetail_v1 "
 			+"(id, tenantid, billid, demandid, fromperiod, toperiod, businessservice, billno, billdate, consumercode, consumertype, billdescription, displaymessage, "
@@ -46,7 +47,7 @@ public class BillQueryBuilder {
 			+ " INNER JOIN (SELECT bd_consumercode, min(b_createddate) as mindate FROM billresult GROUP BY bd_consumercode) as uniqbill"
 			+ " ON uniqbill.bd_consumercode=billresult.bd_consumercode AND uniqbill.mindate=billresult.b_createddate ";
 	
-	public static final String BILL_BASE_QUERY = "SELECT b.id AS b_id,b.mobilenumber, b.tenantid AS b_tenantid,"
+	public static final String BILL_BASE_QUERY = "SELECT b.id AS b_id,b.mobilenumber, b.tenantid AS b_tenantid,b.payerid AS b_payerid"
 			+ " b.payername AS b_payername, b.payeraddress AS b_payeraddress, b.payeremail AS b_payeremail,b.filestoreid AS b_fileStoreId,"
 			+ " b.isactive AS b_isactive, b.iscancelled AS b_iscancelled, b.createdby AS b_createdby, b.status as b_status,"
 			+ " b.createddate AS b_createddate, b.lastmodifiedby AS b_lastmodifiedby, b.lastmodifieddate AS b_lastmodifieddate,"
