@@ -137,8 +137,9 @@ const SearchWaterConnection = ({ tenantId, onSubmit, data, count, resultOk, busi
         Header: t("WS_COMMON_TABLE_COL_DUE_DATE_LABEL"),
         disableSortBy: true,
         Cell: ({ row }) => {
+          const status = row.original?.["status"]?.toUpperCase() || "";
           const dueDate = row.original?.dueDate === "NA" ? t("WS_NA") : convertEpochToDate(row.original?.dueDate);
-          return GetCell(t(`${dueDate}`));
+          return GetCell(status === "INACTIVE" ? t("WS_NA") : t(`${dueDate}`));
         },
       },
 

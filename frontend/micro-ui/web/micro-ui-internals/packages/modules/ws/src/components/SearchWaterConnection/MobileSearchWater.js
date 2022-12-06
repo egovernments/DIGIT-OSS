@@ -115,7 +115,7 @@ const MobileSearchWater = ({ Controller, register, control, t, reset, previousPa
       [t("WS_COMMON_TABLE_COL_STATUS_LABEL")]: t(`WS_${data?.status?.toUpperCase()}`),
       [t("WS_COMMON_TABLE_COL_AMT_DUE_LABEL")]: data?.due || t(`${"WS_NA"}`),
       [t("WS_COMMON_TABLE_COL_ADDRESS")]: data?.address || t(`${"WS_NA"}`),
-      [t("WS_COMMON_TABLE_COL_DUE_DATE_LABEL")]: convertEpochToDate(data?.dueDate) || t(`${"WS_NA"}`),
+      [t("WS_COMMON_TABLE_COL_DUE_DATE_LABEL")]: data?.status?.toUpperCase() === "INACTIVE" ? t(`${"WS_NA"}`) : data?.dueDate ? convertEpochToDate(data?.dueDate) : t(`${"WS_NA"}`),
       [t("WS_COMMON_TABLE_COL_ACTION_LABEL")]: data?.due ? getActionItems(data?.status, data) : t(`${"WS_NA"}`),
     }));
   }, [data]);
