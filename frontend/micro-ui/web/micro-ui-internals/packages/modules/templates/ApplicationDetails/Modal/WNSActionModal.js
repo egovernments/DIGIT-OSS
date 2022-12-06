@@ -28,7 +28,7 @@ const convertDateToEpochNew = (dateString, dayStartOrEnd = "dayend") => {
   //example input format : "2018-10-02"
   try {
     const parts = dateString.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
-    const DateObj = new Date(Date.UTC(parts[1], parts[3] - 1, parts[2]));
+    const DateObj = new Date(Date.UTC(parts[1], parts[2] - 1, parts[3]));
 
     DateObj.setMinutes(DateObj.getMinutes() + DateObj.getTimezoneOffset());
     if (dayStartOrEnd === "dayend") {
@@ -180,8 +180,12 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
           : []
       }
     };
-    
-    if (data?.date) {
+    if(data?.date && applicationData?.applicationType?.includes("DISCONNECT"))
+    {
+      const disconnectionExecutionDate = cloneDeep(data?.date);
+      applicationData.disconnectionExecutionDate = convertDateToEpochNew(disconnectionExecutionDate)
+    }
+    else if (data?.date) {
       const connectionExecutionDate = cloneDeep(data?.date);
       applicationData.connectionExecutionDate = convertDateToEpochNew(connectionExecutionDate)
     }

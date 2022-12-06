@@ -1791,6 +1791,7 @@ export const WSSearch = {
           { title: "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_DISCONNECTION_TYPE", value: t(`${applicationType}`) },
           { title: "WNS_COMMON_TABLE_COL_AMT_DUE_LABEL", value: fetchBillData.Bill[0]?.totalAmount ? "₹ " + fetchBillData.Bill[0]?.totalAmount : "₹ 0" },
           { title: "WS_DISCONNECTION_PROPOSED_DATE", value: wsDataDetails?.dateEffectiveFrom ? convertEpochToDate(wsDataDetails?.dateEffectiveFrom) : t("NA") },
+          { title: "WS_DISCONNECTION_EXECUTED_DATE", value: wsDataDetails?.disconnectionExecutionDate ? convertEpochToDate(wsDataDetails?.disconnectionExecutionDate) : t("NA") },
           { title: "WS_DISCONNECTION_REASON", value: wsDataDetails?.disconnectionReason || t("NA") },
         ]
     };
