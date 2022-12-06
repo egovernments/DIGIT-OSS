@@ -221,33 +221,15 @@ const AppliedDetailForm = (props) => {
       },
       RequestInfo: {
         apiId: "Rainmaker",
-        msgId: "1669293303096|en_IN",
-        authToken: "8428d41b-01ff-4e90-a125-9af324bbf409",
-        userInfo: {
-          id: 330,
-          uuid: "36ea2b0e-52f5-4d16-96b2-4b3963eee30a",
-          userName: "9050784591",
-          name: "renuka",
-          mobileNumber: "9050784591",
-          emailId: "",
-          locale: null,
-          type: "CITIZEN",
-          roles: [
-            {
-              code: "DEVELOPER",
-              name: "Developer ",
-              tenantId: "hr",
-            },
-            {
-              name: "Citizen",
-              code: "CITIZEN",
-              tenantId: "hr",
-            },
-          ],
-          active: true,
-          tenantId: "hr",
-          permanentCity: null,
-        },
+        ver: "v1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msgId: "090909",
+        requesterId: "",
+        authToken: token,
+        userInfo: props?.userData,
       },
     };
     try {
@@ -266,6 +248,10 @@ const AppliedDetailForm = (props) => {
     if (valueData) {
       Object?.keys(valueData?.DetailsAppliedLandPlot)?.map((item) => setValue(item, valueData?.DetailsAppliedLandPlot[item]));
       Object?.keys(valueData?.DetailsAppliedLandNILP)?.map((item) => setValue(item, valueData?.DetailsAppliedLandNILP[item]));
+      // const data = purposeOptions?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.purpose);
+      // const potientialData = getPotentialOptons?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.potential);
+      // setValue("purpose", { label: data?.[0]?.label, value: data?.[0]?.value });
+      // setValue("potential", { label: potientialData?.[0]?.label, value: potientialData?.[0]?.value });
     }
   }, [props?.getLicData]);
 

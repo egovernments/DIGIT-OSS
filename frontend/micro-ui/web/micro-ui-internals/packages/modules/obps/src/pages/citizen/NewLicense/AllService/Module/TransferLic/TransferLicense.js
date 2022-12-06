@@ -4,6 +4,7 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import { useForm } from "react-hook-form";
+import { Card } from "react-bootstrap";
 
 function TransferLicense() {
   const { register, handleSubmit } = useForm();

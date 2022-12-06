@@ -154,13 +154,14 @@ const LandScheduleForm = (props) => {
       });
       const data = purposeOptions?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.purpose);
       const potientialData = getPotentialOptons?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.potential);
+      const typeLandData = typeOfLand?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.typeLand);
       getPotentialOptons?.data?.filter((item) => console.log("=====", item));
       console.log("data===", data, potientialData);
       setValue("purpose", { label: data?.[0]?.label, value: data?.[0]?.value });
       setValue("potential", { label: potientialData?.[0]?.label, value: potientialData?.[0]?.value });
       setValue("typeLand", { label: typeLandData?.[0]?.label, value: typeLandData?.[0]?.value });
     }
-  }, [props?.getLicData, purposeOptions, getPotentialOptons]);
+  }, [props?.getLicData, purposeOptions, getPotentialOptons, typeOfLand]);
 
   const getSubmitDataLabel = async () => {
     try {

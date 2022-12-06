@@ -4,6 +4,7 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import { useForm } from "react-hook-form";
+import { Card } from "react-bootstrap";
 
 function LayoutPlanClu() {
   const [selects, setSelects] = useState();
@@ -55,29 +56,29 @@ function LayoutPlanClu() {
                       Any other feature
                       <span style={{ color: "red" }}>*</span>
                     </Form.Label>
-                    <Col className="col-2">
-                      <Form.Check
-                        type="radio"
-                        label="Yes"
-                        name="formHorizontalRadios"
-                        id="formHorizontalRadios1"
-                        value="4"
-                        placeholder=""
-                        className="form-control"
-                        {...register("anyFeature")}
-                      />
-                    </Col>
-                    <Col className="col-2">
-                      <Form.Check
-                        type="radio"
-                        label="No"
-                        name="formHorizontalRadios"
-                        id="formHorizontalRadios2"
-                        placeholder=""
-                        className="form-control"
-                        {...register("anyFeature")}
-                      />
-                    </Col>
+                    <Row>
+                      <Col className="col-3">
+                        <Form.Check
+                          type="radio"
+                          value="true"
+                          label="Yes"
+                          name="Anyotherfeature"
+                          id="Anyotherfeature"
+                          {...register(" Anyotherfeature")}
+                          onChange={(e) => handleselects(e)}
+                        />
+
+                        <Form.Check
+                          type="radio"
+                          value="false"
+                          label="No"
+                          name="Anyotherfeature"
+                          id="Anyotherfeature"
+                          {...register("Anyotherfeature")}
+                          onChange={(e) => handleselects(e)}
+                        />
+                      </Col>
+                    </Row>
                   </Form.Group>
                 </fieldset>
               </Col>
@@ -98,60 +99,56 @@ function LayoutPlanClu() {
           </Form>
           <div className=" col-12 m-auto">
             <div className="card">
-              <div class="bordere">
-                <div class="table-responsive">
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th scope="col">Sr.No</th>
-                        <th scope="col">Field Name</th>
-                        <th scope="col">Upload Documents</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <th scope="row">1</th>
-                        <td>
-                          Reasons for revision in the layout plan <span style={{ color: "red" }}>*</span>
-                        </td>
-                        <td>
-                          <input type="file" placeholder="" className="form-control" {...register("reasonRevision")}></input>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row">2</th>
-                        <td>
-                          {" "}
-                          Copy of earlier approved layout plan <span style={{ color: "red" }}>*</span>
-                        </td>
-                        <td>
-                          <input type="file" placeholder="" className="form-control" {...register("earlierApprovedlayoutPlan")}></input>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row">3</th>
-                        <td>
-                          {" "}
-                          Any Other <span style={{ color: "red" }}>*</span>
-                        </td>
-                        <td>
-                          <input type="file" placeholder="" className="form-control" {...register("anyOther")}></input>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+              <div className="table table-bordered table-responsive">
+                <thead>
+                  <tr>
+                    <th style={{ textAlign: "center" }}>Sr.No</th>
+                    <th style={{ textAlign: "center" }}>Field Name</th>
+                    <th style={{ textAlign: "center" }}>Upload Documents</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">1</th>
+                    <td>
+                      Reasons for revision in the layout plan <span style={{ color: "red" }}>*</span>
+                    </td>
+                    <td>
+                      <input type="file" placeholder="" className="form-control" {...register("reasonRevision")}></input>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">2</th>
+                    <td>
+                      {" "}
+                      Copy of earlier approved layout plan <span style={{ color: "red" }}>*</span>
+                    </td>
+                    <td>
+                      <input type="file" placeholder="" className="form-control" {...register("earlierApprovedlayoutPlan")}></input>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">3</th>
+                    <td>
+                      {" "}
+                      Any Other <span style={{ color: "red" }}>*</span>
+                    </td>
+                    <td>
+                      <input type="file" placeholder="" className="form-control" {...register("anyOther")}></input>
+                    </td>
+                  </tr>
+                </tbody>
               </div>
-
-              <Row className="justify-content-end">
-                <Button variant="outline-primary" className="col-md-2 my-2 mx-2" type="submit" aria-label="right-end">
-                  Save as Draft
-                </Button>
-                <Button variant="outline-primary" className="col-md-2 my-2 mx-2" type="submit" aria-label="right-end">
-                  Submit
-                </Button>
-              </Row>
             </div>
+
+            <Row className="justify-content-end">
+              <Button variant="outline-primary" className="col-md-2 my-2 mx-2" type="submit" aria-label="right-end">
+                Save as Draft
+              </Button>
+              <Button variant="outline-primary" className="col-md-2 my-2 mx-2" type="submit" aria-label="right-end">
+                Submit
+              </Button>
+            </Row>
           </div>
         </div>
       </Card>

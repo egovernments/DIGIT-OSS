@@ -1,5 +1,16 @@
 import {
-  Card, CardHeader, Header, LinkButton, Row, StatusTable, SubmitBar, Table, CardSectionHeader, OpenLinkContainer, BackButton, EditIcon
+  Card,
+  CardHeader,
+  Header,
+  LinkButton,
+  Row,
+  StatusTable,
+  SubmitBar,
+  Table,
+  CardSectionHeader,
+  OpenLinkContainer,
+  BackButton,
+  EditIcon,
 } from "@egovernments/digit-ui-react-components";
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
@@ -11,7 +22,7 @@ const CheckPage = ({ onSubmit, value }) => {
   const { t } = useTranslation();
   const history = useHistory();
   const match = useRouteMatch();
-  let user = Digit.UserService.getUser()
+  let user = Digit.UserService.getUser();
   // console.log("USER-INFO",user);
   const tenantId = user && user?.info && user?.info?.permanentCity ? user?.info?.permanentCity : Digit.ULBService.getCurrentTenantId();
   const tenant = Digit.ULBService.getStateId();
@@ -21,14 +32,12 @@ const CheckPage = ({ onSubmit, value }) => {
   if (isopenlink)
     window.onunload = function () {
       sessionStorage.removeItem("Digit.BUILDING_PERMIT");
-    }
+    };
 
   const { result, formData, documents } = value;
-  console.log("form DATA",value?.formData);
+  console.log("form DATA", value?.formData);
   let consumerCode = value?.result?.Licenses[0].applicationNumber;
   const fetchBillParams = { consumerCode };
-
-
 
   const { data: paymentDetails } = Digit.Hooks.obps.useBPAREGgetbill(
     { businessService: "BPAREG", ...fetchBillParams, tenantId: tenant ? tenant : tenantId.split(".")[0] },
@@ -44,7 +53,6 @@ const CheckPage = ({ onSubmit, value }) => {
     history.push(jumpTo);
   }
 
-
   return (
     <React.Fragment>
       <div className={isopenlink ? "OpenlinkContainer" : ""}>
@@ -55,7 +63,11 @@ const CheckPage = ({ onSubmit, value }) => {
           <Header styles={{ fontSize: "32px" }}>{t("BPA_STEPPER_SUMMARY_HEADER")}</Header>
           <Card style={{ paddingRight: "16px" }}>
             <StatusTable>
-              <Row className="border-none" label={t(`BPA_APPLICATION_NUMBER_LABEL`)} text={result?.Licenses?.[0]?.applicationNumber ? result?.Licenses?.[0]?.applicationNumber : ""} />
+              <Row
+                className="border-none"
+                label={t(`BPA_APPLICATION_NUMBER_LABEL`)}
+                text={result?.Licenses?.[0]?.applicationNumber ? result?.Licenses?.[0]?.applicationNumber : ""}
+              />
             </StatusTable>
           </Card>
           <Card style={{ paddingRight: "16px" }}>
@@ -66,8 +78,15 @@ const CheckPage = ({ onSubmit, value }) => {
               onClick={() => routeTo(`${routeLink}/provide-license-type`)}
             />
             <StatusTable>
-              <Row className="border-none" label={t(`BPA_LICENSE_TYPE`)} textStyle={{ paddingLeft: "12px" }} text={t(formData?.LicneseType?.LicenseType?.i18nKey)} />
-              {formData?.LicneseType?.LicenseType?.i18nKey.includes("ARCHITECT") && <Row className="border-none" label={t(`BPA_COUNCIL_NUMBER`)} text={formData?.LicneseType?.ArchitectNo} />}
+              <Row
+                className="border-none"
+                label={t(`BPA_LICENSE_TYPE`)}
+                textStyle={{ paddingLeft: "12px" }}
+                text={t(formData?.LicneseType?.LicenseType?.i18nKey)}
+              />
+              {formData?.LicneseType?.LicenseType?.i18nKey.includes("ARCHITECT") && (
+                <Row className="border-none" label={t(`BPA_COUNCIL_NUMBER`)} text={formData?.LicneseType?.ArchitectNo} />
+              )}
             </StatusTable>
           </Card>
           <Card style={{ paddingRight: "16px" }}>
@@ -78,11 +97,28 @@ const CheckPage = ({ onSubmit, value }) => {
               onClick={() => routeTo(`${routeLink}/license-details`)}
             />
             <StatusTable>
-              <Row className="border-none" label={t(`BPA_APPLICANT_NAME_LABEL`)} textStyle={{ paddingLeft: "12px" }} text={t(formData?.LicneseDetails?.devDetail?.licenceDetails?.name)} />
+              <Row
+                className="border-none"
+                label={t(`BPA_APPLICANT_NAME_LABEL`)}
+                textStyle={{ paddingLeft: "12px" }}
+                text={t(formData?.LicneseDetails?.devDetail?.licenceDetails?.name)}
+              />
               {/* <Row className="border-none" label={t(`BPA_APPLICANT_GENDER_LABEL`)} text={t(formData?.LicneseDetails?.gender.i18nKey)} /> */}
-              <Row className="border-none" label={t(`BPA_OWNER_MOBILE_NO_LABEL`)} text={formData?.LicneseDetails?.devDetail?.licenceDetails?.mobileNumber} />
-              <Row className="border-none" label={t(`BPA_APPLICANT_EMAIL_LABEL`)} text={formData?.LicneseDetails?.devDetail?.licenceDetails?.email || t("CS_NA")} />
-              <Row className="border-none" label={t(`BPA_APPLICANT_PAN_NO`)} text={formData?.LicneseDetails?.devDetail?.licenceDetails?.PanNumber || t("CS_NA")} />
+              <Row
+                className="border-none"
+                label={t(`BPA_OWNER_MOBILE_NO_LABEL`)}
+                text={formData?.LicneseDetails?.devDetail?.licenceDetails?.mobileNumber}
+              />
+              <Row
+                className="border-none"
+                label={t(`BPA_APPLICANT_EMAIL_LABEL`)}
+                text={formData?.LicneseDetails?.devDetail?.licenceDetails?.email || t("CS_NA")}
+              />
+              <Row
+                className="border-none"
+                label={t(`BPA_APPLICANT_PAN_NO`)}
+                text={formData?.LicneseDetails?.devDetail?.licenceDetails?.PanNumber || t("CS_NA")}
+              />
               <Row className="border-none" label={`Pin Code`} text={formData?.LicneseDetails?.devDetail?.licenceDetails?.pincode || t("CS_NA")} />
               <Row className="border-none" label={`Date of Birth`} text={formData?.LicneseDetails?.devDetail?.licenceDetails?.dob || t("CS_NA")} />
             </StatusTable>
@@ -126,11 +162,15 @@ const CheckPage = ({ onSubmit, value }) => {
             />
             {documents?.documents.map((doc, index) => (
               <div key={index}>
-                <CardSectionHeader styles={{ fontSize: "18px" }}>{t(`BPAREG_HEADER_${doc?.documentType?.replace('.', '_')}`)}</CardSectionHeader>
-                {doc?.info ? <div style={{ fontSize: "12px", color: "#505A5F", fontWeight: 400, lineHeight: "15px" }}>{`${t(doc?.info)}`}</div> : null}
+                <CardSectionHeader styles={{ fontSize: "18px" }}>{t(`BPAREG_HEADER_${doc?.documentType?.replace(".", "_")}`)}</CardSectionHeader>
+                {doc?.info ? (
+                  <div style={{ fontSize: "12px", color: "#505A5F", fontWeight: 400, lineHeight: "15px" }}>{`${t(doc?.info)}`}</div>
+                ) : null}
                 <StatusTable>
                   <OBPSDocument value={value} Code={doc?.documentType} index={index} isNOC={false} svgStyles={{}} isStakeHolder={true} />
-                  {documents?.documents?.length != index + 1 ? <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} /> : null}
+                  {documents?.documents?.length != index + 1 ? (
+                    <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} />
+                  ) : null}
                 </StatusTable>
               </div>
             ))}
@@ -143,7 +183,11 @@ const CheckPage = ({ onSubmit, value }) => {
                   <Row className="border-none" label={t(`${bill.taxHeadCode}`)} text={`₹ ${bill?.amount}` || t("CS_NA")} />
                 </div>
               ))}
-              <Row className="border-none" label={t(`BPA_COMMON_TOTAL_AMT`)} text={`₹ ${paymentDetails?.billResponse?.Bill?.[0]?.billDetails[0]?.amount}` || t("CS_NA")} />
+              <Row
+                className="border-none"
+                label={t(`BPA_COMMON_TOTAL_AMT`)}
+                text={`₹ ${paymentDetails?.billResponse?.Bill?.[0]?.billDetails[0]?.amount}` || t("CS_NA")}
+              />
             </StatusTable>
             <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} />
             <CardHeader styles={{ fontSize: "24px" }}>{t("BPA_COMMON_TOTAL_AMT")}</CardHeader>

@@ -8,7 +8,6 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import axios from "axios";
-
 // import InfoIcon from '@mui/icons-material/Info';
 // import TextField from '@mui/material/TextField';
 const style = {
@@ -31,12 +30,14 @@ const FeesChargesForm = (props) => {
   const [calculateData, setCalculateData] = useState({});
   const [modal, setmodal] = useState(false);
   const [modal1, setmodal1] = useState(false);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
     setValue,
+    watch,
     reset,
   } = useForm({
     mode: "onSubmit",
@@ -308,7 +309,7 @@ const FeesChargesForm = (props) => {
                 <div className="row">
                   <div className="col col-4">
                     <h6 data-toggle="tooltip" data-placement="top" title="Total Fees (License fee 25% + Scrutiny Fees)">
-                      (i)&nbsp;Amount Payable at the time of Application &nbsp;&nbsp;
+                      (i)&nbsp;Amount Payable &nbsp;&nbsp;
                     </h6>
 
                     <input
@@ -351,6 +352,32 @@ const FeesChargesForm = (props) => {
                         <div className="col col-12">
                           <label>Enter Licence Number/LOI number</label>
                           <input type="text" className="form-control" {...register("licNumber")} />
+                          <label>
+                            Click Yes,if Lic No/LOI number belongs to other developers.
+                            <label htmlFor="belongsDeveloper">
+                              <input {...register("belongsDeveloper")} type="radio" value="Y" id="belongsDeveloper" />
+                              &nbsp; Yes &nbsp;&nbsp;
+                            </label>
+                            <label htmlFor="belongsDeveloper">
+                              <input {...register("belongsDeveloper")} type="radio" value="N" id="belongsDeveloper" />
+                              &nbsp; No &nbsp;&nbsp;
+                            </label>
+                            {watch("belongsDeveloper") === "Y" && (
+                              <div>
+                                <div className="row">
+                                  <div className="col col-12">
+                                    <label>
+                                      <h2>
+                                        Consent letter in case of Another Developer (verified by the Department)
+                                        <span style={{ color: "red" }}>*</span>
+                                      </h2>
+                                    </label>
+                                    <input type="file" className="form-control" {...register("consentLetter")} />
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                          </label>
                           <label>Amount (previous)</label>
                           <input type="text" className="form-control" disabled {...register("amount")} />
                           <label>Amount to be paid after adjustment</label>
@@ -403,12 +430,11 @@ const FeesChargesForm = (props) => {
                     </label>
                   </div>
                   <div class="my-2">
-                    .
-                    <button className="btn btn-primary" onClick={() => setmodal(true)}>
+                    <a href="./pages/citizen/StakeholderRegistration/CheckPage" className="btn btn-primary">
                       Pay Now
-                    </button>
+                    </a>
                   </div>
-                  <div>
+                  {/* <div>
                     <Modal
                       size="lg"
                       isOpen={modal}
@@ -430,7 +456,7 @@ const FeesChargesForm = (props) => {
                       </ModalBody>
                       <ModalFooter toggle={() => setmodal(!modal)}></ModalFooter>
                     </Modal>
-                  </div>
+                  </div> */}
                 </div>
                 <div class="row">
                   <div class="col-sm-12 text-right">
