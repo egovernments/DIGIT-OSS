@@ -79,7 +79,7 @@ export const CollectPayment = (props) => {
     data.paidBy = data.paidBy.code;
 
     if (
-      BillDetailsFormConfig({ consumerCode, businessService }, t)[ModuleWorkflow ? ModuleWorkflow : businessService] &&
+      BillDetailsFormConfig({ consumerCode, businessService }, t)[ModuleWorkflow ? (businessService === "SW" && ModuleWorkflow === "WS"? businessService : ModuleWorkflow) : businessService] &&
       !data?.amount?.paymentAllowed
     ) {
       let action =
@@ -296,7 +296,7 @@ export const CollectPayment = (props) => {
 
   const getFormConfig = () => {
     if (
-      BillDetailsFormConfig({ consumerCode, businessService }, t)[ModuleWorkflow ? ModuleWorkflow : businessService] ||
+      BillDetailsFormConfig({ consumerCode, businessService }, t)[ModuleWorkflow ? (businessService === "SW" && ModuleWorkflow === "WS"? businessService : ModuleWorkflow) : businessService] ||
       ModuleWorkflow ||
       businessService === "TL" ||
       businessService.includes("ONE_TIME_FEE")
@@ -305,8 +305,8 @@ export const CollectPayment = (props) => {
     }
     let conf = config.concat(formConfigMap[formState?.paymentMode?.code] || []);
     conf = conf?.concat(cashConfig);
-    return BillDetailsFormConfig({ consumerCode, businessService }, t)[ModuleWorkflow ? ModuleWorkflow : businessService]
-      ? BillDetailsFormConfig({ consumerCode, businessService }, t)[ModuleWorkflow ? ModuleWorkflow : businessService].concat(conf)
+    return BillDetailsFormConfig({ consumerCode, businessService }, t)[ModuleWorkflow ? (businessService === "SW" && ModuleWorkflow === "WS"? businessService : ModuleWorkflow) : businessService]
+      ? BillDetailsFormConfig({ consumerCode, businessService }, t)[ModuleWorkflow ? (businessService === "SW" && ModuleWorkflow === "WS"? businessService : ModuleWorkflow) : businessService].concat(conf)
       : conf;
   };
   const checkFSM = window.location.href.includes("FSM");

@@ -30,6 +30,9 @@ const GroupBill = () => {
     const { isLoading: hookLoading, data, ...rest } = Digit.Hooks.useBillSearch({
         tenantId,
         filters: { ...payload, tenantId },
+        config: {
+            cacheTime : 0
+          },
     });
 
     //identify the consumerids for which expiry date is < date rn

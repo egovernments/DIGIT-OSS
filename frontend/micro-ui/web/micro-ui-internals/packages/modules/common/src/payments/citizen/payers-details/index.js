@@ -45,6 +45,19 @@ const SelectPaymentType = (props) => {
 
   const { data, isLoading } = state?.bill ? { isLoading: false } : Digit.Hooks.useFetchPayment({ tenantId, businessService, consumerCode });
 
+  let Useruuid = data?.Bill?.[0]?.userId || "";
+  let requestCriteria = [
+    "/user/_search",
+    {},
+    {uuid:[Useruuid]},
+    { recordId: Useruuid, plainRequestFields: ["mobileNumber"] },
+    {
+        enabled: Useruuid ? true : false,
+        cacheTime: 100,
+      }
+  ]
+  const { isLoading : isUserLoading, data: userData, revalidate } = Digit.Hooks.useCustomAPIHook(...requestCriteria);
+
   const billDetails = bill?.billDetails?.sort((a, b) => b.fromPeriod - a.fromPeriod)?.[0] || [];
   const Arrears =
     bill?.billDetails
@@ -89,7 +102,7 @@ const SelectPaymentType = (props) => {
         paymentAmount: paymentAmt,
         tenantId: billDetails.tenantId,
         name: paymentType?.code !== optionSecound?.code && ConsumerName !== "undefined" ? ConsumerName : userInfo ? payersActiveName : payersName,
-        mobileNumber: paymentType?.code !== optionSecound?.code ? bill?.mobileNumber : userInfo ? payersActiveMobileNumber : payersMobileNumber,
+        mobileNumber: paymentType?.code !== optionSecound?.code ? (bill?.mobileNumber?.includes("*") ? userData?.user?.[0]?.mobileNumber : bill?.mobileNumber ) : userInfo ? payersActiveMobileNumber : payersMobileNumber,
       });
     }
     else{
@@ -97,14 +110,14 @@ const SelectPaymentType = (props) => {
       paymentAmount: paymentAmt,
       tenantId: billDetails.tenantId,
       name: paymentType?.code !== optionSecound?.code ? bill?.payerName : userInfo ? payersActiveName : payersName,
-      mobileNumber: paymentType?.code !== optionSecound?.code ? bill?.mobileNumber : userInfo ? payersActiveMobileNumber : payersMobileNumber,
+      mobileNumber: paymentType?.code !== optionSecound?.code ? (bill?.mobileNumber?.includes("*") ? userData?.user?.[0]?.mobileNumber : bill?.mobileNumber )  : userInfo ? payersActiveMobileNumber : payersMobileNumber,
     });
   }
   };
 
-  /* if (isLoading || paymentLoading) {
+   if (isLoading || isUserLoading) {
     return <Loader />;
-  } */
+  } 
 
   return (
     <React.Fragment>

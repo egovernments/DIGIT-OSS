@@ -23,6 +23,20 @@ const BillDetails = ({ paymentRules, businessService }) => {
         businessService,
         consumerCode: wrkflow === "WNS" ? stringReplaceAll(consumerCode, "+", "/") : consumerCode,
       });
+
+  let Useruuid = data?.Bill?.[0]?.userId || "";
+  let requestCriteria = [
+    "/user/_search",
+    {},
+    {uuid:[Useruuid]},
+    { recordId: Useruuid, plainRequestFields: ["mobileNumber"] },
+    {
+        enabled: Useruuid ? true : false,
+        cacheTime: 100,
+        
+    }
+]
+const { isLoading : isUserLoading, data: userData, revalidate } = Digit.Hooks.useCustomAPIHook(...requestCriteria);
   let { minAmountPayable, isAdvanceAllowed } = paymentRules;
   minAmountPayable = wrkflow === "WNS" ? 100 : minAmountPayable;
   const billDetails = bill?.billDetails?.sort((a, b) => b.fromPeriod - a.fromPeriod)?.[0] || [];
@@ -119,14 +133,14 @@ const BillDetails = ({ paymentRules, businessService }) => {
         paymentAmount,
         tenantId: billDetails.tenantId,
         name: bill.payerName,
-        mobileNumber: bill.mobileNumber,
+        mobileNumber: bill.mobileNumber && bill.mobileNumber?.includes("*") ? userData?.user?.[0]?.mobileNumber : bill.mobileNumber,
       });
     } else if (businessService === "PT") {
       history.push(`/digit-ui/citizen/payment/billDetails/${businessService}/${consumerCode}/${paymentAmount}`, {
         paymentAmount,
         tenantId: billDetails.tenantId,
         name: bill.payerName,
-        mobileNumber: bill.mobileNumber,
+        mobileNumber: bill.mobileNumber && bill.mobileNumber?.includes("*") ? userData?.user?.[0]?.mobileNumber : bill.mobileNumber,
       });
     } else {
       history.push(`/digit-ui/citizen/payment/collect/${businessService}/${consumerCode}`, { paymentAmount, tenantId: billDetails.tenantId });

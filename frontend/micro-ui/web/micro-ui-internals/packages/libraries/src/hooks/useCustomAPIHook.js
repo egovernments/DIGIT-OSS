@@ -18,7 +18,7 @@ const useCustomAPIHook = (url, params, body, plainAccessRequest, options = {}) =
   //api name, querystr, reqbody
   const { isLoading, data } = useQuery(
     ["CUSTOM", { ...params, ...body, ...plainAccessRequest }].filter((e) => e),
-    () => CustomService.getResponse({ url, params, body, plainAccessRequest }),
+    () => CustomService.getResponse({ url, params, data : body, plainAccessRequest }),
     options
   );
   return {

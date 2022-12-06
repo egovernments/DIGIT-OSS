@@ -27,7 +27,9 @@ const BillInbox = ({ parentRoute, initialStates, businessService, filterComponen
   const { isFetching, isLoading: hookLoading, searchResponseKey, data, searchFields, ...rest } = Digit.Hooks.useBillSearch({
     tenantId,
     filters: { ...searchParams, businessService, ...paginationParams, sortParams },
-    config: {},
+    config: {
+      cacheTime : 0
+    },
   });
 
   useEffect(() => {
