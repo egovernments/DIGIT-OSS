@@ -1,18 +1,12 @@
 package org.egov.bpa.config;
 
-import java.util.Map;
-import java.util.TimeZone;
-
-import javax.annotation.PostConstruct;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+import lombok.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import java.util.Map;
+import java.util.TimeZone;
 
 @Getter
 @Setter
@@ -336,6 +330,12 @@ public class BPAConfiguration {
 
 	@Value("${egov.download.receipt.link}")
 	private String receiptDownloadLink;
+
+	@Value("${egov.download.permit.order.link}")
+	private String downloadPermitOrderLink;
+
+	@Value("${egov.download.occupancy.certificate.link}")
+	private String downloadOccupancyCertificateLink;
 
 	// url shortner
 	@Value("${egov.url.shortner.host}")
