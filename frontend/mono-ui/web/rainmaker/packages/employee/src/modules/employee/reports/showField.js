@@ -222,7 +222,14 @@ export default class ShowField extends Component {
               id={obj.label.split(".").join("-")}
               fullWidth={true}
               multiple={true}
-              dropDownMenuProps={{ targetOrigin: { horizontal: "left", vertical: "top" } }}
+              style={{ height: "auto" }}
+              dropDownMenuProps={{
+                anchorOrigin: { 
+                  vertical: 'bottom',
+                  horizontal: 'left'
+              },
+              }}
+              // dropDownMenuProps={{ targetOrigin: { horizontal: "left", vertical: "top" } }}
               floatingLabelFixed={true}
               floatingLabelText={
                 <div className="rainmaker-displayInline">

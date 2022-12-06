@@ -944,11 +944,20 @@ class ShowField extends Component {
     sumColumn = [];
     let { reportResult, metaData } = this.props;
     let { drillDown, checkIfDate } = this;
+    let elapsedTimeValue = [];
+
+    if (
+      metaData && 
+      metaData.reportDetails &&
+      metaData.reportDetails.reportName == "TLRenewalPendingReport"  ) {
+        reportResult.reportHeader.forEach((data, index) => data.index = index);
+        elapsedTimeValue = reportResult.reportHeader.filter((data, index) => data.name == "elapsedtime" && index);
+      }
     let reportResultArray = [];
     if(reportResult && reportResult.reportData && reportResult.reportData.length) {
       reportResult.reportData.forEach(data => {
         let reportDataArray = [];
-        data.forEach(details => {
+        data.forEach((details, index) => {
           if(details == null || details == undefined || details == "") {
             reportDataArray.push("NA")
           } else {
@@ -956,7 +965,14 @@ class ShowField extends Component {
               let localisedData = getLocaleLabels(details, details);
               reportDataArray.push(localisedData);
             } else {
-              reportDataArray.push(details)
+              if ( metaData && 
+                metaData.reportDetails &&
+                metaData.reportDetails.reportName == "TLRenewalPendingReport" && elapsedTimeValue && elapsedTimeValue[0].index == index && Number(details) > 7) {
+                  reportDataArray.push(<span style={{color: "red"}}>{details}</span>)
+              } else {
+                reportDataArray.push(details)
+              }
+              
             }
           }
         })
