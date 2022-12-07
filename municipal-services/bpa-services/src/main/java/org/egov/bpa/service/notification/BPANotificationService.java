@@ -121,7 +121,7 @@ public class BPANotificationService {
 					Map<String, String> mapOfPhnoAndEmail = util.fetchUserEmailIds(mobileNumbers, requestInfo, tenantId);
 					String localizationMessages = util.getLocalizationMessages(tenantId, bpaRequest.getRequestInfo());
 					String message = util.getEmailCustomizedMsg(bpaRequest.getRequestInfo(), bpaRequest.getBPA(), localizationMessages);
-					List<EmailRequest> emailRequests = util.createEmailRequest(bpaRequest, message, mapOfPhnoAndEmail);
+					List<EmailRequest> emailRequests = util.createEmailRequest(bpaRequest, message, mapOfPhnoAndEmail,mobileNumberToOwner);
 					util.sendEmail(emailRequests);
 				}
 			}

@@ -399,11 +399,12 @@ public class NotificationUtil {
 		return message;
 	}
 
-	public List<EmailRequest> createEmailRequest(BPARequest bpaRequest,String message, Map<String, String> mobileNumberToEmailId) {
+	public List<EmailRequest> createEmailRequest(BPARequest bpaRequest,String message, Map<String, String> mobileNumberToEmailId, Map<String, String> mobileNumberToOwner) {
 
 		List<EmailRequest> emailRequest = new LinkedList<>();
+
 		for (Map.Entry<String, String> entryset : mobileNumberToEmailId.entrySet()) {
-			String customizedMsg = message.replace("{1}",entryset.getValue());
+			String customizedMsg = message.replace("{1}",mobileNumberToOwner.get(entryset.getKey()));
 			customizedMsg = customizedMsg.replace("{MOBILE_NUMBER}",entryset.getKey());
 			if (customizedMsg.contains("{RECEIPT_LINK}")) {
 				String linkToReplace = getRecepitDownloadLink(bpaRequest, entryset.getKey());
