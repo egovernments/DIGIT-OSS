@@ -84,6 +84,9 @@ public class WsQueryBuilder {
 	private static final String ORDER_BY_CLAUSE= " ORDER BY wc.appCreatedDate DESC";
 	
 	private static final String ORDER_BY_COUNT_CLAUSE= " ORDER BY appCreatedDate DESC";
+
+	private static final String LATEST_EXECUTED_MIGRATION_QUERY = "select * from eg_ws_enc_audit where tenantid = ? order by createdTime desc limit 1;";
+
 	/**
 	 * 
 	 * @param criteria
@@ -402,7 +405,6 @@ public class WsQueryBuilder {
 			preparedStmtList.add(limit + offset);
 		}
 
-		System.out.println("\nFinal Query ::" + finalQuery);
 		return finalQuery.toString();
 	}
 	
@@ -420,4 +422,10 @@ public class WsQueryBuilder {
 	public String getTotalApplicationsCountQueryString(SearchCriteria criteria) {
 		return TOTAL_APPLICATIONS_COUNT_QUERY.replace("{}",criteria.getTenantId());
 	}
+
+	public String getLastExecutionDetail(SearchCriteria criteria, List<Object> preparedStatement) {
+		preparedStatement.add(criteria.getTenantId());
+		return LATEST_EXECUTED_MIGRATION_QUERY;
+	}
+
 }

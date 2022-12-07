@@ -4,10 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.waterconnection.repository.WaterDao;
 import org.egov.waterconnection.util.EncryptionDecryptionUtil;
-import org.egov.waterconnection.web.models.SearchCriteria;
-import org.egov.waterconnection.web.models.WaterConnection;
-import org.egov.waterconnection.web.models.WaterConnectionRequest;
-import org.egov.waterconnection.web.models.WaterConnectionResponse;
+import org.egov.waterconnection.web.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -17,7 +14,6 @@ import java.util.*;
 
 /* Encrypts Water Applications' data(connectionHolderDetails, PlumberInfo) for existing records */
 import static org.egov.waterconnection.constants.WCConstants.WNS_ENCRYPTION_MODEL;
-
 import static org.egov.waterconnection.constants.WCConstants.WNS_PLUMBER_ENCRYPTION_MODEL;
 
 @Slf4j
@@ -62,10 +58,14 @@ public class WaterEncryptionService {
         List<WaterConnection> waterConnectionList = new ArrayList();
         WaterConnectionResponse waterConnectionResponse;
 
-        if (StringUtils.isEmpty(criteria.getLimit()))
+        EncryptionCount encryptionCount = waterDao.getLastExecutionDetail(criteria);
+
+        if (criteria.getLimit() == null)
             criteria.setLimit(Integer.valueOf(batchSize));
 
-        if (StringUtils.isEmpty(criteria.getOffset()))
+        if (encryptionCount.getRecordCount() != null)
+            criteria.setOffset((int) (encryptionCount.getBatchOffset() + encryptionCount.getRecordCount()));
+        else if (criteria.getOffset() == null)
             criteria.setOffset(Integer.valueOf(batchOffset));
 
         waterConnectionList = initiateEncryption(requestInfo, criteria);
@@ -87,10 +87,13 @@ public class WaterEncryptionService {
 
         WaterConnectionResponse waterConnectionResponse;
 
+        EncryptionCount encryptionCount;
+
         Integer startBatch = Math.toIntExact(criteria.getOffset());
         Integer batchSizeInput = Math.toIntExact(criteria.getLimit());
 
         Integer count = waterDao.getTotalApplications(criteria);
+        Map<String, String> map = new HashMap<>();
 
         log.info("Count: " + count);
         log.info("startbatch: " + startBatch);
@@ -98,8 +101,10 @@ public class WaterEncryptionService {
         while (startBatch < count) {
             long startTime = System.nanoTime();
             List<WaterConnection> waterConnectionList = new LinkedList<>();
-            waterConnectionResponse = waterService.plainSearch(criteria, requestInfo);
             try {
+                waterConnectionResponse = waterService.plainSearch(criteria, requestInfo);
+                countPushed = 0;
+
                 for (WaterConnection waterConnection : waterConnectionResponse.getWaterConnection()) {
                     /* encrypt here */
                     waterConnection = encryptionDecryptionUtil.encryptObject(waterConnection, WNS_ENCRYPTION_MODEL, WaterConnection.class);
@@ -108,17 +113,33 @@ public class WaterEncryptionService {
                     WaterConnectionRequest waterConnectionRequest = WaterConnectionRequest.builder()
                             .requestInfo(requestInfo)
                             .waterConnection(waterConnection)
+                            .isOldDataEncryptionRequest(Boolean.TRUE)
                             .build();
 
                     waterDao.updateOldWaterConnections(waterConnectionRequest);
                     countPushed++;
-                    /* decrypt here */
-                    waterConnection = encryptionDecryptionUtil.decryptObject(waterConnection, WNS_ENCRYPTION_MODEL, WaterConnection.class, requestInfo);
                     waterConnectionList.add(waterConnection);
+                    map.put("message", "Encryption successfull till batchOffset : " + criteria.getOffset() + ". Records encrypted in current batch : " + countPushed);
                 }
             } catch (Exception e) {
+                map.put("message", "Encryption failed at batchOffset  :  " + startBatch + "  with message : " + e.getMessage() + ". Records encrypted in current batch : " + countPushed);
                 log.error("Encryption failed at batch count of : " + startBatch);
                 log.error("Encryption failed at batch count : " + startBatch + "=>" + e.getMessage());
+
+                encryptionCount = EncryptionCount.builder()
+                        .tenantid(criteria.getTenantId())
+                        .limit(Long.valueOf(criteria.getLimit()))
+                        .id(UUID.randomUUID().toString())
+                        .batchOffset(Long.valueOf(startBatch))
+                        .createdTime(System.currentTimeMillis())
+                        .recordCount(Long.valueOf(countPushed))
+                        .message(map.get("message"))
+                        .encryptiontime(System.currentTimeMillis())
+                        .build();
+
+                waterDao.updateEncryptionStatus(encryptionCount);
+
+                finalWaterList.addAll(waterConnectionList);
                 return finalWaterList;
             }
 
@@ -127,6 +148,18 @@ public class WaterEncryptionService {
             long elapseTime = endTime - startTime;
             log.debug("\n\nBatch elapsed time: " + elapseTime + "\n\n");
 
+            encryptionCount = EncryptionCount.builder()
+                    .tenantid(criteria.getTenantId())
+                    .limit(Long.valueOf(criteria.getLimit()))
+                    .id(UUID.randomUUID().toString())
+                    .batchOffset(Long.valueOf(startBatch))
+                    .createdTime(System.currentTimeMillis())
+                    .recordCount(Long.valueOf(countPushed))
+                    .message(map.get("message"))
+                    .encryptiontime(System.currentTimeMillis())
+                    .build();
+
+            waterDao.updateEncryptionStatus(encryptionCount);
             startBatch = startBatch + batchSizeInput;
             criteria.setOffset(Integer.valueOf(startBatch));
             log.info("WaterConnections Count which pushed into kafka topic:" + countPushed);

@@ -40,6 +40,10 @@ public class WaterConnectionRequest {
 	@JsonProperty("isCreateCall")
 	private boolean isCreateCall = false;
 
+	@Builder.Default
+	@JsonProperty("isOldDataEncryptionRequest")
+	private boolean isOldDataEncryptionRequest = false;
+
 	public WaterConnectionRequest requestInfo(RequestInfo requestInfo) {
 		this.requestInfo = requestInfo;
 		return this;

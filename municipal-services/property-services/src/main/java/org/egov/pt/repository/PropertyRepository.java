@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.pt.models.EncryptionCount;
 import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
@@ -16,6 +18,7 @@ import org.egov.pt.models.user.User;
 import org.egov.pt.models.user.UserDetailResponse;
 import org.egov.pt.models.user.UserSearchRequest;
 import org.egov.pt.repository.builder.PropertyQueryBuilder;
+import org.egov.pt.repository.rowmapper.EncryptionCountRowMapper;
 import org.egov.pt.repository.rowmapper.OpenPropertyRowMapper;
 import org.egov.pt.repository.rowmapper.PropertyAuditRowMapper;
 import org.egov.pt.repository.rowmapper.PropertyRowMapper;
@@ -30,6 +33,7 @@ import org.springframework.util.ObjectUtils;
 
 import com.google.common.collect.Sets;
 
+@Slf4j
 @Repository
 public class PropertyRepository {
 
@@ -53,6 +57,9 @@ public class PropertyRepository {
 	
     @Autowired
     private UserService userService;
+
+	@Autowired
+	private EncryptionCountRowMapper encryptionCountRowMapper;
     
 	public List<String> getPropertyIds(Set<String> ownerIds, String tenantId) {
 
@@ -106,7 +113,7 @@ public class PropertyRepository {
 			if(!ObjectUtils.isEmpty(tenantIds))
 			{
 				builder.append(" where tenantid IN (").append(createQuery(tenantIds)).append(")");
-				preparedStmtList.add(tenantIds);
+				addToPreparedStatement(preparedStmtList, tenantIds);
 			}
 		}
 		else
@@ -258,4 +265,23 @@ public class PropertyRepository {
 		return count;
 	}
 	
+	private void addToPreparedStatement(List<Object> preparedStmtList, Set<String> ids) {
+		ids.forEach(id -> {
+			preparedStmtList.add(id);
+		});
+	}
+
+	/* Method to find the last execution details in dB */
+	public EncryptionCount getLastExecutionDetail(PropertyCriteria criteria) {
+
+		List<Object> preparedStatement = new ArrayList<>();
+		String query = queryBuilder.getLastExecutionDetail(criteria, preparedStatement);
+
+		log.info("\nQuery executed:" + query);
+		if (query == null)
+			return null;
+		EncryptionCount encryptionCount = jdbcTemplate.query(query, preparedStatement.toArray(), encryptionCountRowMapper);
+		return encryptionCount;
+	}
+
 }

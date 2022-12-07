@@ -360,4 +360,8 @@ public class PropertyConfiguration {
     @Value("${inbox.property.search.allowed}")
     private Boolean isInboxSearchAllowed;
 
+    //encryptOldDataStatus topic
+    @Value("${property.oldDataEncryptionStatus.topic}")
+    private String encryptionStatusTopic;
+
 }

@@ -511,7 +511,6 @@ public class EnrichmentService {
 				List<OwnerInfo> ownerInfoList = propertyToOwner.get(sewerageConnection.getPropertyId());
 				if(!CollectionUtils.isEmpty(ownerInfoList)){
 					additionalDetail.put("ownerName",ownerInfoList.get(0).getName());
-					additionalDetail.put("ownerMobileNumber", ownerInfoList.get(0).getMobileNumber());
 				}
 				sewerageConnection.setAdditionalDetails(additionalDetail);
 				finalConnectionList.add(sewerageConnection);

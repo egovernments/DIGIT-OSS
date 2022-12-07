@@ -121,6 +121,8 @@ public class PropertyQueryBuilder {
 			+ "(SELECT *, DENSE_RANK() OVER (ORDER BY plastmodifiedtime DESC, pid) offset_ FROM " + "({})" + " result) result_offset "
 			+ "WHERE offset_ > ? AND offset_ <= ?";
 
+	private static final String LATEST_EXECUTED_MIGRATION_QUERY = "select * from eg_pt_enc_audit where tenantid = ? order by createdTime desc limit 1;";
+
 	private String addPaginationWrapper(String query, List<Object> preparedStmtList, PropertyCriteria criteria) {
 		
 		
@@ -431,4 +433,10 @@ public class PropertyQueryBuilder {
     public String getTotalApplicationsCountQueryString(PropertyCriteria criteria) {
 		return TOTAL_APPLICATIONS_COUNT_QUERY.replace("{}",criteria.getTenantId());
     }
+
+	public String getLastExecutionDetail(PropertyCriteria criteria, List<Object> preparedStatement) {
+		preparedStatement.add(criteria.getTenantId());
+		return LATEST_EXECUTED_MIGRATION_QUERY;
+	}
+	
 }

@@ -9,11 +9,9 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.common.contract.request.User;
 import org.egov.swservice.config.SWConfiguration;
+import org.egov.swservice.repository.rowmapper.EncryptionCountRowMapper;
 import org.egov.swservice.repository.rowmapper.OpenSewerageRowMapper;
-import org.egov.swservice.web.models.Connection;
-import org.egov.swservice.web.models.SearchCriteria;
-import org.egov.swservice.web.models.SewerageConnection;
-import org.egov.swservice.web.models.SewerageConnectionRequest;
+import org.egov.swservice.web.models.*;
 import org.egov.swservice.producer.SewarageConnectionProducer;
 import org.egov.swservice.repository.builder.SWQueryBuilder;
 import org.egov.swservice.repository.rowmapper.SewerageRowMapper;
@@ -47,11 +45,17 @@ public class SewerageDaoImpl implements SewerageDao {
 	@Autowired
 	private SWConfiguration swConfiguration;
 
+	@Autowired
+	private EncryptionCountRowMapper encryptionCountRowMapper;
+
 	@Value("${egov.sewarageservice.createconnection.topic}")
 	private String createSewarageConnection;
 
 	@Value("${egov.sewarageservice.updateconnection.topic}")
 	private String updateSewarageConnection;
+
+	@Value("${egov.sewerageservice.oldDataEncryptionStatus.topic}")
+	private String encryptionStatusTopic;
 
 	@Override
 	public void saveSewerageConnection(SewerageConnectionRequest sewerageConnectionRequest) {
@@ -148,8 +152,7 @@ public class SewerageDaoImpl implements SewerageDao {
 		String query = swQueryBuilder.getSearchQueryStringForPlainSearch(criteria, preparedStatement, requestInfo);
 		if (query == null)
 			return Collections.emptyList();
-		System.out.println("\nFinal Query ::" + query);
-
+		log.info("\nFinal Query ::" + query);
 		Boolean isOpenSearch = isSearchOpen(requestInfo.getUserInfo());
 		List<SewerageConnection> sewerageConnectionList = new ArrayList<>();
 		if(isOpenSearch)
@@ -182,4 +185,25 @@ public class SewerageDaoImpl implements SewerageDao {
 		Integer count = jdbcTemplate.queryForObject(query, Integer.class);
 		return count;
 	}
+
+	/* Method to push the old data encryption status to the 'ws-enc-audit' topic  */
+	@Override
+	public void updateEncryptionStatus(EncryptionCount encryptionCount) {
+		sewarageConnectionProducer.push(encryptionStatusTopic, encryptionCount);
+	}
+
+	/* Method to find the last execution details in dB */
+	@Override
+	public EncryptionCount getLastExecutionDetail(SearchCriteria criteria) {
+
+		List<Object> preparedStatement = new ArrayList<>();
+		String query = swQueryBuilder.getLastExecutionDetail(criteria, preparedStatement);
+
+		log.info("\nQuery executed:" + query);
+		if (query == null)
+			return null;
+		EncryptionCount encryptionCount = jdbcTemplate.query(query, preparedStatement.toArray(), encryptionCountRowMapper);
+		return encryptionCount;
+	}
+
 }

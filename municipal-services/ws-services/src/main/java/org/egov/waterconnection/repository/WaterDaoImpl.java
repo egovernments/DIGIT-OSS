@@ -12,6 +12,7 @@ import org.egov.common.contract.request.Role;
 import org.egov.common.contract.request.User;
 import org.egov.waterconnection.config.WSConfiguration;
 import org.egov.waterconnection.constants.WCConstants;
+import org.egov.waterconnection.repository.rowmapper.EncryptionCountRowMapper;
 import org.egov.waterconnection.repository.rowmapper.OpenWaterRowMapper;
 import org.egov.waterconnection.web.models.*;
 import org.egov.waterconnection.producer.WaterConnectionProducer;
@@ -47,12 +48,18 @@ public class WaterDaoImpl implements WaterDao {
 	@Autowired
 	private WSConfiguration wsConfiguration;
 
+	@Autowired
+	private EncryptionCountRowMapper encryptionCountRowMapper;
+
 	@Value("${egov.waterservice.createwaterconnection.topic}")
 	private String createWaterConnection;
 
 	@Value("${egov.waterservice.updatewaterconnection.topic}")
 	private String updateWaterConnection;
-	
+
+	@Value("${egov.waterservice.oldDataEncryptionStatus.topic}")
+	private String encryptionStatusTopic;
+
 	@Override
 	public void saveWaterConnection(WaterConnectionRequest waterConnectionRequest) {
 		waterConnectionProducer.push(createWaterConnection, waterConnectionRequest);
@@ -221,6 +228,26 @@ public class WaterDaoImpl implements WaterDao {
 			return 0;
 		Integer count = jdbcTemplate.queryForObject(query, Integer.class);
 		return count;
+	}
+
+	/* Method to push the old data encryption status to the 'ws-enc-audit' topic  */
+	@Override
+	public void updateEncryptionStatus(EncryptionCount encryptionCount) {
+		waterConnectionProducer.push(encryptionStatusTopic, encryptionCount);
+	}
+
+	/* Method to find the last execution details in dB */
+	@Override
+	public EncryptionCount getLastExecutionDetail(SearchCriteria criteria) {
+
+		List<Object> preparedStatement = new ArrayList<>();
+		String query = wsQueryBuilder.getLastExecutionDetail(criteria, preparedStatement);
+
+		log.info("\nQuery executed:" + query);
+		if (query == null)
+			return null;
+		EncryptionCount encryptionCount = jdbcTemplate.query(query, preparedStatement.toArray(), encryptionCountRowMapper);
+		return encryptionCount;
 	}
 	
 }

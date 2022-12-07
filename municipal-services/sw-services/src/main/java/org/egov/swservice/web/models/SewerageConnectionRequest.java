@@ -40,6 +40,10 @@ public class SewerageConnectionRequest {
 	@JsonProperty("isCreateCall")
 	private boolean isCreateCall = false;
 
+	@Builder.Default
+	@JsonProperty("isOldDataEncryptionRequest")
+	private boolean isOldDataEncryptionRequest = false;
+
 	@JsonProperty("disconnectRequest")
 	private boolean disconnectRequest;
 

@@ -50,7 +50,8 @@ public class EditWorkflowNotificationConsumer {
 			List<SewerageConnection> sewerageConnections = sewerageService.search(criteria,
 					sewerageConnectionRequest.getRequestInfo());
 			SewerageConnection searchResult = sewerageConnections.get(0);
-			diffService.checkDifferenceAndSendEditNotification(sewerageConnectionRequest, searchResult);
+			if (!sewerageConnectionRequest.isOldDataEncryptionRequest())
+				diffService.checkDifferenceAndSendEditNotification(sewerageConnectionRequest, searchResult);
 		} catch (Exception ex) {
 			StringBuilder builder = new StringBuilder("Error while listening to value: ").append(record)
 					.append("on topic: ").append(topic);

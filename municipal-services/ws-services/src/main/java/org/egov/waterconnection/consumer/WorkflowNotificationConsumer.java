@@ -50,7 +50,8 @@ public class WorkflowNotificationConsumer {
 				return;
 			}
 			waterConnectionRequest.getWaterConnection().setConnectionHolders(encryptionDecryptionUtil.decryptObject(waterConnectionRequest.getWaterConnection().getConnectionHolders(), WNS_OWNER_DECRYPTION_MODEL, OwnerInfo.class, waterConnectionRequest.getRequestInfo()));
-			workflowNotificationService.process(waterConnectionRequest, topic);
+			if (!waterConnectionRequest.isOldDataEncryptionRequest())
+				workflowNotificationService.process(waterConnectionRequest, topic);
 		} catch (Exception ex) {
 			StringBuilder builder = new StringBuilder("Error while listening to value: ").append(record)
 					.append("on topic: ").append(topic).append(". Exception :").append(ex.getMessage());

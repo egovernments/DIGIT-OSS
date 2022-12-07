@@ -46,7 +46,8 @@ public class EditWorkFlowNotificationConsumer {
 			List<WaterConnection> waterConnections = waterServiceImpl.search(criteria,
 					waterConnectionRequest.getRequestInfo());
 			WaterConnection searchResult = waterConnections.get(0);
-			diffService.checkDifferenceAndSendEditNotification(waterConnectionRequest, searchResult);
+			if (!waterConnectionRequest.isOldDataEncryptionRequest())
+				diffService.checkDifferenceAndSendEditNotification(waterConnectionRequest, searchResult);
 		} catch (Exception ex) {
 			StringBuilder builder = new StringBuilder("Error while listening to value: ").append(record)
 					.append("on topic: ").append(topic);

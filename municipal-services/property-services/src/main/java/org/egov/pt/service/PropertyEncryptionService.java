@@ -3,6 +3,7 @@ package org.egov.pt.service;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
+import org.egov.pt.models.EncryptionCount;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
 import org.egov.pt.producer.PropertyProducer;
@@ -63,10 +64,15 @@ public class PropertyEncryptionService {
      */
     public List<Property> updateBatchCriteria(RequestInfo requestInfo, PropertyCriteria criteria) {
         List<Property> propertyList = new ArrayList<>();
-        if (StringUtils.isEmpty(criteria.getLimit()))
+
+        EncryptionCount encryptionCount = repository.getLastExecutionDetail(criteria);
+
+        if (criteria.getLimit() == null)
             criteria.setLimit(Long.valueOf(batchSize));
 
-        if (StringUtils.isEmpty(criteria.getOffset()))
+        if (encryptionCount.getRecordCount() != null)
+            criteria.setOffset(encryptionCount.getBatchOffset() + encryptionCount.getRecordCount());
+        else if (criteria.getOffset() == null)
             criteria.setOffset(Long.valueOf(batchOffset));
 
         propertyList = initiateEncryption(requestInfo, criteria);
@@ -84,10 +90,13 @@ public class PropertyEncryptionService {
         List<Property> finalPropertyList = new LinkedList<>();
         Map<String, String> responseMap = new HashMap<>();
 
+        EncryptionCount encryptionCount;
+
         Integer startBatch = Math.toIntExact(criteria.getOffset());
         Integer batchSizeInput = Math.toIntExact(criteria.getLimit());
 
         Integer count = repository.getTotalApplications(criteria);
+        Map<String, String> map = new HashMap<>();
 
         log.info("Count: " + count);
         log.info("startbatch: " + startBatch);
@@ -95,8 +104,11 @@ public class PropertyEncryptionService {
         while (startBatch < count) {
             long startTime = System.nanoTime();
             List<Property> propertyList = new LinkedList<>();
-            propertyList = propertyService.searchPropertyPlainSearch(criteria, requestInfo);
+            List<Property> encryptedPropertyList = new LinkedList<>();
             try {
+                propertyList = propertyService.searchPropertyPlainSearch(criteria, requestInfo);
+                countPushed = 0;
+
                 for (Property property : propertyList) {
                     /* encrypt here */
                     property = encryptionDecryptionUtil.encryptObject(property, "Property", Property.class);
@@ -106,15 +118,32 @@ public class PropertyEncryptionService {
                             .property(property)
                             .build();
 
+                    request.getProperty().setOldDataEncryptionRequest(Boolean.TRUE);
+
                     producer.push(config.getUpdatePropertyTopic(), request);
                     countPushed++;
-                    /* decrypt here */
-                    property = encryptionDecryptionUtil.decryptObject(property, "Property", Property.class, requestInfo);
+                    encryptedPropertyList.add(property);
+                    map.put("message", "Encryption successfull till batchOffset : " + criteria.getOffset() + ". Records encrypted in current batch : " + countPushed);
                 }
             } catch (Exception e) {
-
+                map.put("message", "Encryption failed at batchOffset  :  " + startBatch + "  with message : " + e.getMessage() + ". Records encrypted in current batch : " + countPushed);
                 log.error("Encryption failed at batch count of : " + startBatch);
                 log.error("Encryption failed at batch count : " + startBatch + "=>" + e.getMessage());
+
+                encryptionCount = EncryptionCount.builder()
+                        .tenantid(criteria.getTenantId())
+                        .limit(Long.valueOf(criteria.getLimit()))
+                        .id(UUID.randomUUID().toString())
+                        .batchOffset(Long.valueOf(startBatch))
+                        .createdTime(System.currentTimeMillis())
+                        .recordCount(Long.valueOf(countPushed))
+                        .message(map.get("message"))
+                        .encryptiontime(System.currentTimeMillis())
+                        .build();
+
+                producer.push(config.getEncryptionStatusTopic(), encryptionCount);
+
+                finalPropertyList.addAll(encryptedPropertyList);
                 return finalPropertyList;
             }
 
@@ -123,10 +152,23 @@ public class PropertyEncryptionService {
             long elapsetime = endtime - startTime;
             log.debug("\n\nBatch elapsed time: " + elapsetime + "\n\n");
 
+            encryptionCount = EncryptionCount.builder()
+                    .tenantid(criteria.getTenantId())
+                    .limit(Long.valueOf(criteria.getLimit()))
+                    .id(UUID.randomUUID().toString())
+                    .batchOffset(Long.valueOf(startBatch))
+                    .createdTime(System.currentTimeMillis())
+                    .recordCount(Long.valueOf(countPushed))
+                    .message(map.get("message"))
+                    .encryptiontime(System.currentTimeMillis())
+                    .build();
+
+            producer.push(config.getEncryptionStatusTopic(), encryptionCount);
+
             startBatch = startBatch + batchSizeInput;
             criteria.setOffset(Long.valueOf(startBatch));
             log.info("Property Count pushed into kafka topic:" + countPushed);
-            finalPropertyList.addAll(propertyList);
+            finalPropertyList.addAll(encryptedPropertyList);
         }
         criteria.setOffset(Long.valueOf(batchOffset));
 
