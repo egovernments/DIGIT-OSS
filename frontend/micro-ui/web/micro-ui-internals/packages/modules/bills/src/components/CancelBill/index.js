@@ -188,7 +188,11 @@ const CancelBills = ({ tenantId, onSubmit, data, count,isLoading,resultOk }) => 
                 <SearchFields {...{ register, control, reset, tenantId, t,formState }} />
             </SearchForm>
             {isLoading && <Loader/>}
-            {isLoading===false && resultOk && 
+            {data && data?.length == 0 ?  (
+                <Card style={{ backgroundColor: "white", textAlign:"center" }}>
+                {t("ES_COMMON_NO_DATA")}
+            </Card>):
+            (isLoading===false && resultOk && 
                 <div style={{ backgroundColor: "white" }}>
                     <div className="sideContent" style={{ float: "left", padding:"20px 10px", fontSize:"24px", fontWeight:"700", fontFamily:"Roboto"}}>
                     {t("ABG_SEARCH_RESULTS_HEADER")}
@@ -214,7 +218,7 @@ const CancelBills = ({ tenantId, onSubmit, data, count,isLoading,resultOk }) => 
                         }}
                         manualPagination={false}
                     />
-                </div> }
+                </div> )}
             {showModal && <CancelBillModal 
                 t={t}
                 //surveyTitle={surveyData.title}

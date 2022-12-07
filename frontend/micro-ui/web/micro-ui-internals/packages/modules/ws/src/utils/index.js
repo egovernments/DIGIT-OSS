@@ -649,7 +649,7 @@ export const createPayloadOfWSDisconnection = async (data, storeData, service) =
       roadCuttingInfo: storeData?.applicationData?.roadCuttingInfo,
       roadCuttingArea: null,
       roadType: null,
-      connectionExecutionDate: convertDateToEpoch(data?.date),
+      connectionExecutionDate: storeData?.applicationData?.connectionExecutionDate,
       noOfWaterClosets: storeData?.applicationData?.noOfWaterClosets,
       noOfToilets: storeData?.applicationData?.noOfToilets,
       additionalDetails: storeData?.applicationData?.additionalDetails,
