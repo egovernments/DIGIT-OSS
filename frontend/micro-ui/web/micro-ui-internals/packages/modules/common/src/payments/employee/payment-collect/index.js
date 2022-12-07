@@ -25,8 +25,8 @@ export const CollectPayment = (props) => {
 
   const { data: paymentdetails, isLoading } = Digit.Hooks.useFetchPayment({ tenantId: tenantId, consumerCode, businessService });
   const bill = paymentdetails?.Bill ? paymentdetails?.Bill[0] : {};
+  const { data: applicationData } = Digit.Hooks.fsm.useSearch(tenantId, { applicationNos: consumerCode }, { staleTime: Infinity, enabled: businessService?.toUpperCase()?.includes("FSM") ? true : false });
 
-  const { data: applicationData } = Digit.Hooks.fsm.useSearch(tenantId, { applicationNos: consumerCode }, { staleTime: Infinity });
   const advanceBill = applicationData?.advanceAmount;
 
   // const { isLoading: storeLoading, data: store } = Digit.Services.useStore({

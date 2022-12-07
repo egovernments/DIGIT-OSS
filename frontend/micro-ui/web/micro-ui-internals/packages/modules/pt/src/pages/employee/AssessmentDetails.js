@@ -113,8 +113,9 @@ const AssessmentDetails = () => {
             sessionStorage.setItem("IsPTAccessDone", data?.Assessments?.[0]?.auditDetails?.lastModifiedTime);
             setShowToast({ key: "success", action: { action: "ASSESSMENT" } });
             setTimeout(closeToast, 5000);
-            queryClient.clear();
-            queryClient.setQueryData(["PT_ASSESSMENT", propertyId, location?.state?.Assessment?.financialYear], true);
+            // queryClient.clear();
+            // queryClient.setQueryData(["PT_ASSESSMENT", propertyId, location?.state?.Assessment?.financialYear], true);
+            history.push(`/digit-ui/employee/payment/collect/PT/${propertyId}`);
           },
         }
       );

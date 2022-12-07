@@ -158,7 +158,7 @@ const BillDetails = ({ businessService, consumerCode, _amount, onChange }) => {
   const { isLoading: isDataLoading, data: applicationData } = Digit.Hooks.fsm.useSearch(
     tenantId,
     { applicationNos: consumerCode },
-    { staleTime: Infinity }
+    { staleTime: Infinity, enabled: businessService?.toUpperCase()?.includes("FSM") ? true : false }
   );
   const [bill, setBill] = useState();
   const [showDetails, setShowDetails] = useState(true);
