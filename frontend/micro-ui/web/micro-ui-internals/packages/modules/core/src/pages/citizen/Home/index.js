@@ -65,9 +65,9 @@ const Home = () => {
         // onClick: () => history.push("/digit-ui/citizen/tl-home"),
       },
       {
-        name: "License Services",
+        name: "Licencing Services",
         Icon: <CaseIcon className="fill-path-primary-main" />,
-        onClick: () => history.push("/digit-ui/citizen/obps/tab"),
+        onClick: () => history.push("/digit-ui/citizen/obps/card"),
       },
       {
         name: t("CS_COMMON_INBOX_BPA"),

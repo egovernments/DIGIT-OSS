@@ -41,30 +41,8 @@ import ServiceCard from "../citizen/NewLicense/AllService/Service";
 import ServicePlanService from "./ServicePlan";
 import electricalPlanService from "./ElectricalPlan";
 import renewalClu from "./NewLicense/AllService/Module/Renewal/Renewal";
-import ZoningPlan from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/ZoningPlan/ZoningPlan";
-import Beneficial from "../citizen/NewLicense/AllService/Module/BeneficialInterest/Beneficial";
-import CompletionLic from "../citizen/NewLicense/AllService/Module/CompletionLic/CompletionLic";
-// import CompositionClu from "../citizen/NewLicense/AllService/Module/CompositionClu/CompositionClu";
-// import ExtensionClu from "../citizen/NewLicense/AllService/Module/ExtensionClu/ExtensionClu";
-import TransferLic from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/TransferLic/TransferLicense";
-// import LayoutPlan from "./NewLicense/AllService/Module/LayoutPlan/LayoutPlan";
-import SurrenderLic from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/SurrenderLic/SurrenderLic";
-// import ExtensionCom from "./NewLicense/AllService/Module/ExtensionCommunity/ExtensionCom";
-// import Standard from "./NewLicense/AllService/Module/StandardDesign/StandardDesign";
-// import LayoutPlanClu from "./NewLicense/AllService/Module/LayoutPlan/LayoutPlan";
-
-import Beneficialscrutiny from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/BeneficialInterest/Beneficial";
-import Completionscrutiny from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/CompletionLic/CompletionLic";
-import CompositionClu from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/CompositionClu/CompositionClu";
-import ExtensionClu from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/ExtensionClu/ExtensionClu";
-import ExtensionCom from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/ExtensionCommunity/ExtensionCom";
-import LayoutPlanClu from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/LayoutPlan/LayoutPlan";
-import Standard from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/StandardDesign/StandardDesign";
-import Loi from "./NewLicense/ScrutinyContainer/Loi";
-// import LandScheduleForm from "./NewLicense/Step3/Step3";
-// import AppliedDetailForm from "./NewLicense/Step4/Step4";
-// import FeesChargesForm from "./NewLicense/Step5/Step5";
-
+import ZoningPlan from "../citizen/NewLicense/AllService/Module/ZoningPlan/ZoningPlan";
+import CardNewLicence from "./NewLicense/CardNewLicence/CadNewLicence";
 const App = ({ path }) => {
   const location = useLocation();
   const { t } = useTranslation();
@@ -102,7 +80,7 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/tab`} component={CommonForm} />
         <PrivateRoute path={`${path}/bank`} component={CommonBank} />
         <PrivateRoute path={`${path}/electricalPlan`} component={electricalPlanService} />
-
+        <Route path={`${path}/card`} component={CardNewLicence} />
         <PrivateRoute path={`${path}/servicePlan`} component={ServicePlanService} />
         <PrivateRoute path={`${path}/submitNew`} component={SubmitNew} />
         <PrivateRoute path={`${path}/renew`} component={RenewNew} />

@@ -10,8 +10,9 @@ const LayoutPlan = ({ register }) => {
     <Row className="ml-auto" style={{ marginBottom: 5 }}>
       <div className="col col-12">
         <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
-          Upload Layout Plan. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-          <VisibilityIcon color="primary" onClick={() => getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.uploadLayoutPlan)}>
+          Upload Layout Plan. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon> &nbsp;&nbsp;
+          <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.uploadLayoutPlan)}>
             {" "}
           </VisibilityIcon>
         </h6>
