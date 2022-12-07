@@ -53,7 +53,7 @@ const FeesChargesForm = (props) => {
 
   const [FeesChargesFormSubmitted, SetFeesChargesFormSubmitted] = useState(false);
 
-  console.log("securedData", props?.securedData);
+  console.log("securedData", props);
 
   const FeesChrgesFormSubmitHandler = async (data) => {
     try {
