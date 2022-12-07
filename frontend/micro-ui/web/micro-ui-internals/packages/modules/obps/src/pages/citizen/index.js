@@ -42,6 +42,7 @@ import ServicePlanService from "./ServicePlan";
 import electricalPlanService from "./ElectricalPlan";
 import renewalClu from "./NewLicense/AllService/Module/Renewal/Renewal";
 import ZoningPlan from "../citizen/NewLicense/AllService/Module/ZoningPlan/ZoningPlan";
+import CardNewLicence from "./NewLicense/CardNewLicence/CadNewLicence";
 const App = ({ path }) => {
   const location = useLocation();
   const { t } = useTranslation();
@@ -79,7 +80,7 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/tab`} component={CommonForm} />
         <PrivateRoute path={`${path}/bank`} component={CommonBank} />
         <PrivateRoute path={`${path}/electricalPlan`} component={electricalPlanService} />
-
+        <Route path={`${path}/card`} component={CardNewLicence} />
         <PrivateRoute path={`${path}/servicePlan`} component={ServicePlanService} />
         <PrivateRoute path={`${path}/submitNew`} component={SubmitNew} />
         <PrivateRoute path={`${path}/renew`} component={RenewNew} />
