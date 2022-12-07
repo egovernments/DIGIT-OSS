@@ -253,7 +253,7 @@ const AppliedDetailForm = (props) => {
     try {
       const Resp = await axios.post("/tl-services/new/_create", postDistrict);
       setLoader(false);
-      props.Step4Continue(Resp?.data?.LicenseServiceResponseInfo?.[0]?.newServiceInfoData?.[0]);
+      props.Step4Continue(Resp?.data?.LicenseServiceResponseInfo?.[0]?.newServiceInfoData?.[0], Resp?.data?.LicenseServiceResponseInfo?.[0]);
     } catch (error) {
       setLoader(false);
       return error?.message;

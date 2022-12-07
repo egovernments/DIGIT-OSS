@@ -8,6 +8,8 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import axios from "axios";
+import { round } from "lodash";
+import { useHistory } from "react-router-dom";
 
 // import InfoIcon from '@mui/icons-material/Info';
 // import TextField from '@mui/material/TextField';
@@ -24,6 +26,7 @@ const style = {
 };
 
 const FeesChargesForm = (props) => {
+  const history = useHistory();
   const [purpose, setPurpose] = useState("");
   const [totalFee, setTotalFee] = useState("");
   const [remark, setRemark] = useState("");
@@ -47,6 +50,8 @@ const FeesChargesForm = (props) => {
   const [submitDataLabel, setSubmitDataLabel] = useState([]);
 
   const [FeesChargesFormSubmitted, SetFeesChargesFormSubmitted] = useState(false);
+
+  console.log("securedData", props?.securedData);
 
   const FeesChrgesFormSubmitHandler = async (data) => {
     try {
@@ -142,7 +147,7 @@ const FeesChargesForm = (props) => {
         totalLandSize: 1,
         potenialZone: potential,
         purposeCode: Purpose,
-        applicationNumber: "HR-TL-2022-12-05-000495",
+        applicationNumber: props?.securedData?.applicationNumber,
       },
     };
 
@@ -404,7 +409,16 @@ const FeesChargesForm = (props) => {
                   </div>
                   <div class="my-2">
                     .
-                    <button className="btn btn-primary" onClick={() => setmodal(true)}>
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => {
+                        // `/digit-ui/citizen/payment/collect/${mutation2.data.Licenses[0].businessService}/${mutation2.data.Licenses[0].applicationNumber}`
+                        history.push(`/digit-ui/citizen/payment/collect/tl/${props?.securedData?.applicationNumber}`, {
+                          // paymentAmount: paymentAmt,
+                        });
+                        setmodal(true);
+                      }}
+                    >
                       Pay Now
                     </button>
                   </div>

@@ -158,7 +158,7 @@ const LandScheduleForm = (props) => {
       console.log("data===", data, potientialData);
       setValue("purpose", { label: data?.[0]?.label, value: data?.[0]?.value });
       setValue("potential", { label: potientialData?.[0]?.label, value: potientialData?.[0]?.value });
-      setValue("typeLand", { label: typeLandData?.[0]?.label, value: typeLandData?.[0]?.value });
+      // setValue("typeLand", { label: typeOfLand?.[0]?.label, value: typeOfLand?.[0]?.value });
     }
   }, [props?.getLicData, purposeOptions, getPotentialOptons]);
 
