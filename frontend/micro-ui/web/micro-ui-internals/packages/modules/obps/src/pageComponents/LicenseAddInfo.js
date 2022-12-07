@@ -1326,7 +1326,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                           <Modal.Title>Add Stakeholders</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                          {JSON.stringify(Documents)}efewfewf
+                          {/* {JSON.stringify(Documents)}efewfewf */}
                           <form className="text1" id="myForm">
                             <Row>
                               <Col md={3} xxl lg="4">

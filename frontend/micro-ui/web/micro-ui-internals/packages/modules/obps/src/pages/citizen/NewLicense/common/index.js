@@ -18,6 +18,7 @@ const CommonForm = () => {
   const [userData, setUserData] = useState(null);
   const [getCheck, setCheck] = useState(null);
   const [getLicData, setLicData] = useState(null);
+  const [securedData, setSucuredData] = useState(null);
   const [stepActive, setStepActive] = useState({ step1: false, step2: false, step3: false, step4: false, step5: false });
 
   const handleStep = () => {
@@ -60,7 +61,8 @@ const CommonForm = () => {
     setStep(4);
   };
 
-  const handlestep4 = (licData) => {
+  const handlestep4 = (licData, sucuredData) => {
+    setSucuredData(sucuredData);
     setLicData(licData);
     setIsStep4(true);
     setIsStep1(false);
@@ -136,7 +138,14 @@ const CommonForm = () => {
       ) : isStep3 ? (
         <AppliedDetailForm getLicData={getLicData} getId={getId} userData={userData} Step4Continue={handlestep4} step4Back={handleBack3} />
       ) : isStep4 ? (
-        <FeesChargesForm getId={getId} getLicData={getLicData} userData={userData} Step5Continue={handlestep5} step5Back={handleBack4} />
+        <FeesChargesForm
+          securedData={securedData}
+          getId={getId}
+          getLicData={getLicData}
+          userData={userData}
+          Step5Continue={handlestep5}
+          step5Back={handleBack4}
+        />
       ) : (
         <ApllicantFormStep1 getLicData={getLicData} getId={getId} userData={userData} Step1Continue={handleStep1} />
       )}

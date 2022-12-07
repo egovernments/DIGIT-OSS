@@ -31,6 +31,7 @@ const LanguageSelection = () => {
         <CardHeader>{t("CS_COMMON_CHOOSE_LANGUAGE")}</CardHeader>
         <RadioButtons {...RadioButtonProps}/>
     </PageBasedInput>
+    // additionalWrapperClass
 }
 
 export default LanguageSelection

@@ -10,9 +10,9 @@ const DemarcationPlan = ({ register }) => {
     <Row className="ml-auto" style={{ marginBottom: 5 }}>
       <div className="col col-12">
         <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
-          Demarcation plan. &nbsp;&nbsp;
-          <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-          <VisibilityIcon color="primary" onClick={() => getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.demarcationPlan)}>
+          Demarcation plan. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon> &nbsp;&nbsp;
+          <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.demarcationPlan)}>
             {" "}
           </VisibilityIcon>
         </h6>
