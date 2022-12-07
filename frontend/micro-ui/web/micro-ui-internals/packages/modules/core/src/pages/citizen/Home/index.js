@@ -65,7 +65,7 @@ const Home = () => {
         // onClick: () => history.push("/digit-ui/citizen/tl-home"),
       },
       {
-        name: "New License Services",
+        name: "License Services",
         Icon: <CaseIcon className="fill-path-primary-main" />,
         onClick: () => history.push("/digit-ui/citizen/obps/tab"),
       },

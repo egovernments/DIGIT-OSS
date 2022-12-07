@@ -2,7 +2,6 @@ import React, { Fragment, useMemo, useState } from "react";
 import { PageBasedInput, CardHeader, BackButton, SearchOnRadioButtons, CardLabelError } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
-// import Select from 'react-select';
 
 const LocationSelection = () => {
   const { t } = useTranslation();
@@ -31,6 +30,7 @@ const LocationSelection = () => {
       options: cities,
       optionsKey: "i18nKey",
       additionalWrapperClass: "reverse-radio-selection-wrapper",
+      // additionalWrapperClass: "selectpicker form-control",
       onSelect: selectCity,
       selectedOption: selectedCity,
     };
@@ -44,30 +44,18 @@ const LocationSelection = () => {
       setShowError(true);
     }
   }
-  console.log("gfsdgf", RadioButtonProps?.options?.[0]?.name);
-  // const stateId = Digit.ULBService.getStateId();
-  // const { data: PurposeType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["RadioButtonProps"]);
-
-  // useEffect(() => {
-  //   const purpose = PurposeType?.["common-masters"]?.RadioButtonProps?.map(function (data) {
-  //     return { value: data?.purposeCode, label: data?.name };
-  //   });
-  //   setPurposeOptions({ data: purpose, isLoading: false });
-  // }, [PurposeType]);
 
   return isLoading ? (
     <loader />
   ) : (
     <>
       {/* <BackButton /> */}
-      <PageBasedInput texts={texts} onSubmit={onSubmit}>
-        <div style={{  height:250,Width:150 }} >{t("CS_COMMON_CHOOSE_LOCATION")}</div>
-        {/* <SearchOnRadioButtons {...RadioButtonProps} placeholder={t("COMMON_TABLE_SEARCH")}/> */}
-        {/* <div class="input-field col 12"> */}
-        
-    
-
-    <div class="row">
+      <PageBasedInput texts={texts} onSubmit={onSubmit}  style={{ marginTop:4,  border: "5px solid #1266af" }}>
+        {/* <CardHeader>{t("CS_COMMON_CHOOSE_LOCATION")}</CardHeader> */}
+        <div  style={{ textAlign:"center" }}>{t("CS_COMMON_CHOOSE_LOCATION")}</div>
+        <SearchOnRadioButtons {...RadioButtonProps} placeholder={t("COMMON_TABLE_SEARCH")} />
+        {showError ? <CardLabelError>{t("CS_COMMON_LOCATION_SELECTION_ERROR")}</CardLabelError> : null}
+        {/* <div class="row">
   <div class="col-sm-8">
     <div class="form-group">
       <select  className="selectpicker form-control"
@@ -99,16 +87,8 @@ const LocationSelection = () => {
       </select>
     </div>
   </div>
-</div>
-         
-    
-    
-
-        {showError ? <div>{t("CS_COMMON_LOCATION_SELECTION_ERROR")}</div> : null}
-    
+</div> */}
       </PageBasedInput>
-      
-      
     </>
   );
 };
