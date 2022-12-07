@@ -28,7 +28,7 @@ const BillDetails = ({ paymentRules, businessService }) => {
   let requestCriteria = [
     "/user/_search",
     {},
-    {uuid:[Useruuid]},
+    {data : {uuid:[Useruuid]}},
     { recordId: Useruuid, plainRequestFields: ["mobileNumber"] },
     {
         enabled: Useruuid ? true : false,
