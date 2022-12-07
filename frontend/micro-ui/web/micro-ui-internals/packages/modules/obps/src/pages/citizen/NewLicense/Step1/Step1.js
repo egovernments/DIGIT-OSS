@@ -44,12 +44,14 @@ const ApllicantFormStep1 = (props) => {
 
   const ApplicantFormSubmitHandlerForm = async (data) => {
     const token = window?.localStorage?.getItem("token");
+    data["notSigned"] = data?.notSigned?.value;
     const postDistrict = {
       pageName: "ApplicantInfo",
       ApplicationStatus: "DRAFT",
       id: applicantId,
       createdBy: userInfo?.id,
       updatedBy: userInfo?.id,
+
       LicenseDetails: {
         ApplicantInfo: {
           ...data,
@@ -80,7 +82,7 @@ const ApllicantFormStep1 = (props) => {
 
   useEffect(() => {
     if (props?.getLicData?.ApplicantInfo) {
-      setValue("notSigned", props?.getLicData?.ApplicantInfo?.notSigned);
+      setValue("notSigned", { label: props?.getLicData?.ApplicantInfo?.notSigned, value: props?.getLicData?.ApplicantInfo?.notSigned });
       setValue("LC", props?.getLicData?.ApplicantInfo?.LC);
     }
   }, [props?.getLicData]);
@@ -478,11 +480,11 @@ const ApllicantFormStep1 = (props) => {
                     </h2>
                   </Form.Label>
                 </div>
-                <ReactMultiSelect control={control} name="LcNotSigned" placeholder="LC Not Signed" data={LcNotSigned} labels="LcNotSigned" />
+                <ReactMultiSelect control={control} name="notSigned" placeholder="LC Not Signed" data={LcNotSigned} labels="LcNotSigned" />
                 {/* <Form.Control type="text" placeholder="" {...register("notSigned")} /> */}
 
                 <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.notSigned && errors?.notSigned?.message}
+                  {errors?.notSigned?.value && errors?.notSigned?.value?.message}
                 </h3>
               </Col>
               <Col md={4} xxl lg="4">
