@@ -859,7 +859,7 @@ const ApllicantPuropseForm = (props) => {
                             Date of validity of collaboration agreement<span style={{ color: "red" }}>*</span>
                           </h2>
                         </label>
-                        <Form.Control type="date" className="form-control" placeholder="" {...register("agreementValidTill")} />
+                        <Form.Control type="date" className="form-control" placeholder="" {...register("validitydate")} />
                       </div>
                     </div>
                     <br></br>
@@ -925,8 +925,7 @@ const ApllicantPuropseForm = (props) => {
                           type="file"
                           style={{ marginTop: "-6px" }}
                           className="form-control"
-                          {...register("registeringAuthorityDoc")}
-                          onChange={(e) => getDocumentData(e?.target?.files[0])}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], registeringAuthorityDoc)}
                         />
                       </div>
                     </div>
