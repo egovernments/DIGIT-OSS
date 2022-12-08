@@ -327,7 +327,9 @@ public class WCConstants {
 
 	public static final String WNS_OWNER_ENCRYPTION_MODEL = "WnSConnectionOwner";
 
-	public static final String WNS_OWNER_DECRYPTION_MODEL = "WnSConnectionOwnerDecrypDisabled";
+	public static final String WNS_OWNER_PLAIN_DECRYPTION_MODEL = "WnSConnectionOwnerDecrypDisabled";
+
+	public static final String WNS_PLUMBER_PLAIN_DECRYPTION_MODEL = "WnSConnectionPlumberDecrypDisabled";
 
 	public static final String WNS_PLUMBER_ENCRYPTION_MODEL = "WnSConnectionPlumber";
 

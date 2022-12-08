@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.waterconnection.service.DiffService;
 import org.egov.waterconnection.service.WaterServiceImpl;
+import org.egov.waterconnection.util.EncryptionDecryptionUtil;
+import org.egov.waterconnection.web.models.OwnerInfo;
 import org.egov.waterconnection.web.models.SearchCriteria;
 import org.egov.waterconnection.web.models.WaterConnection;
 import org.egov.waterconnection.web.models.WaterConnectionRequest;
@@ -17,6 +19,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import static org.egov.waterconnection.constants.WCConstants.WNS_OWNER_PLAIN_DECRYPTION_MODEL;
+import static org.egov.waterconnection.constants.WCConstants.WNS_PLUMBER_PLAIN_DECRYPTION_MODEL;
+
 @Slf4j
 @Service
 public class EditWorkFlowNotificationConsumer {
@@ -29,8 +34,10 @@ public class EditWorkFlowNotificationConsumer {
 	
 	@Autowired
 	private DiffService diffService;
-	
-	
+
+	@Autowired
+	EncryptionDecryptionUtil encryptionDecryptionUtil;
+
 	/**
 	 * Consumes the water connection record and send the edit notification
 	 * 
@@ -41,11 +48,14 @@ public class EditWorkFlowNotificationConsumer {
 	public void listen(final HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
 		try {
 			WaterConnectionRequest waterConnectionRequest = mapper.convertValue(record, WaterConnectionRequest.class);
-			SearchCriteria criteria = SearchCriteria.builder().applicationNumber(Collections.singleton(waterConnectionRequest.getWaterConnection().getApplicationNo()))
+			WaterConnection waterConnection = waterConnectionRequest.getWaterConnection();
+			SearchCriteria criteria = SearchCriteria.builder().applicationNumber(Collections.singleton(waterConnection.getApplicationNo()))
 					.tenantId(waterConnectionRequest.getWaterConnection().getTenantId()).build();
 			List<WaterConnection> waterConnections = waterServiceImpl.search(criteria,
 					waterConnectionRequest.getRequestInfo());
 			WaterConnection searchResult = waterConnections.get(0);
+
+			waterConnection.setConnectionHolders(encryptionDecryptionUtil.decryptObject(waterConnection.getConnectionHolders(), WNS_OWNER_PLAIN_DECRYPTION_MODEL, OwnerInfo.class, waterConnectionRequest.getRequestInfo()));
 			if (!waterConnectionRequest.isOldDataEncryptionRequest())
 				diffService.checkDifferenceAndSendEditNotification(waterConnectionRequest, searchResult);
 		} catch (Exception ex) {

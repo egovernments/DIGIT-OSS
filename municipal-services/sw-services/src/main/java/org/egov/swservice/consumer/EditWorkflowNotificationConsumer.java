@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.egov.swservice.service.DiffService;
 import org.egov.swservice.service.SewerageService;
 import org.egov.swservice.service.SewerageServiceImpl;
+import org.egov.swservice.util.EncryptionDecryptionUtil;
+import org.egov.swservice.web.models.OwnerInfo;
 import org.egov.swservice.web.models.SearchCriteria;
 import org.egov.swservice.web.models.SewerageConnection;
 import org.egov.swservice.web.models.SewerageConnectionRequest;
@@ -17,6 +19,9 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+
+import static org.egov.swservice.util.SWConstants.WNS_OWNER_PLAIN_DECRYPTION_MODEL;
+import static org.egov.swservice.util.SWConstants.WNS_PLUMBER_PLAIN_DECRYPTION_MODEL;
 
 @Slf4j
 @Service
@@ -34,6 +39,9 @@ public class EditWorkflowNotificationConsumer {
 	@Autowired
 	private SewerageService sewerageService;
 
+	@Autowired
+	private EncryptionDecryptionUtil encryptionDecryptionUtil;
+
 	/**
 	 * Consumes the sewerage connection record and send the edit notification
 	 * 
@@ -45,11 +53,14 @@ public class EditWorkflowNotificationConsumer {
 		try {
 			SewerageConnectionRequest sewerageConnectionRequest = mapper.convertValue(record,
 					SewerageConnectionRequest.class);
-			SearchCriteria criteria = SearchCriteria.builder().applicationNumber(Collections.singleton(sewerageConnectionRequest.getSewerageConnection().getApplicationNo()))
-					.tenantId(sewerageConnectionRequest.getSewerageConnection().getTenantId()).isInternalCall(Boolean.TRUE).build();
+			SewerageConnection sewerageConnection = sewerageConnectionRequest.getSewerageConnection();
+			SearchCriteria criteria = SearchCriteria.builder().applicationNumber(Collections.singleton(sewerageConnection.getApplicationNo()))
+					.tenantId(sewerageConnection.getTenantId()).isInternalCall(Boolean.TRUE).build();
 			List<SewerageConnection> sewerageConnections = sewerageService.search(criteria,
 					sewerageConnectionRequest.getRequestInfo());
 			SewerageConnection searchResult = sewerageConnections.get(0);
+
+			sewerageConnection.setConnectionHolders(encryptionDecryptionUtil.decryptObject(sewerageConnection.getConnectionHolders(), WNS_OWNER_PLAIN_DECRYPTION_MODEL, OwnerInfo.class, sewerageConnectionRequest.getRequestInfo()));
 			if (!sewerageConnectionRequest.isOldDataEncryptionRequest())
 				diffService.checkDifferenceAndSendEditNotification(sewerageConnectionRequest, searchResult);
 		} catch (Exception ex) {

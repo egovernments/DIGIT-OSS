@@ -7,6 +7,7 @@ import org.egov.swservice.service.WorkflowNotificationService;
 import org.egov.swservice.util.EncryptionDecryptionUtil;
 import org.egov.swservice.util.SWConstants;
 import org.egov.swservice.web.models.OwnerInfo;
+import org.egov.swservice.web.models.SewerageConnection;
 import org.egov.swservice.web.models.SewerageConnectionRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -16,7 +17,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 
-import static org.egov.swservice.util.SWConstants.WNS_OWNER_DECRYPTION_MODEL;
+import static org.egov.swservice.util.SWConstants.WNS_OWNER_PLAIN_DECRYPTION_MODEL;
+import static org.egov.swservice.util.SWConstants.WNS_PLUMBER_PLAIN_DECRYPTION_MODEL;
 
 @Service
 @Slf4j
@@ -47,12 +49,15 @@ public class WorkflowNotificationConsumer {
 		try {
 			SewerageConnectionRequest sewerageConnectionRequest = mapper.convertValue(record,
 					SewerageConnectionRequest.class);
-			String applicationStatus = sewerageConnectionRequest.getSewerageConnection().getApplicationStatus();
-			if (!SWConstants.NOTIFICATION_ENABLE_FOR_STATUS.contains(sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction()+"_"+applicationStatus)) {
-				log.info("Workflow Notification Disabled For State :" + sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction()+"_"+applicationStatus);
+			SewerageConnection sewerageConnection = sewerageConnectionRequest.getSewerageConnection();
+			String applicationStatus = sewerageConnection.getApplicationStatus();
+			if (!SWConstants.NOTIFICATION_ENABLE_FOR_STATUS.contains(sewerageConnection.getProcessInstance().getAction()+"_"+applicationStatus)) {
+				log.info("Workflow Notification Disabled For State :" + sewerageConnection.getProcessInstance().getAction()+"_"+applicationStatus);
 				return;
 			}
-			sewerageConnectionRequest.getSewerageConnection().setConnectionHolders(encryptionDecryptionUtil.decryptObject(sewerageConnectionRequest.getSewerageConnection().getConnectionHolders(), WNS_OWNER_DECRYPTION_MODEL, OwnerInfo.class, sewerageConnectionRequest.getRequestInfo()));
+
+			sewerageConnection.setConnectionHolders(encryptionDecryptionUtil.decryptObject(sewerageConnection.getConnectionHolders(), WNS_OWNER_PLAIN_DECRYPTION_MODEL, OwnerInfo.class, sewerageConnectionRequest.getRequestInfo()));
+			sewerageConnectionRequest.setSewerageConnection(encryptionDecryptionUtil.decryptObject(sewerageConnection, WNS_PLUMBER_PLAIN_DECRYPTION_MODEL, SewerageConnection.class, sewerageConnectionRequest.getRequestInfo()));
 			if (!sewerageConnectionRequest.isOldDataEncryptionRequest())
 				workflowNotificationService.process(sewerageConnectionRequest, topic);
 		} catch (Exception ex) {

@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang.StringUtils;
+import org.egov.common.contract.request.User;
 import org.egov.swservice.config.SWConfiguration;
 import org.egov.swservice.util.NotificationUtil;
 import org.egov.swservice.util.SWConstants;
@@ -19,7 +21,6 @@ import org.egov.swservice.web.models.workflow.ProcessInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -52,8 +53,14 @@ public class EditNotificationService {
 
 	public void sendEditNotification(SewerageConnectionRequest request) {
 		try {
+			User userInfoCopy = request.getRequestInfo().getUserInfo();
+			User userInfo = notificationUtil.getInternalMicroserviceUser(request.getSewerageConnection().getTenantId());
+			request.getRequestInfo().setUserInfo(userInfo);
+
 			Property property = validateProperty.getOrValidateProperty(request);
 			List<String> configuredChannelNames =  notificationUtil.fetchChannelList(request.getRequestInfo(), request.getSewerageConnection().getTenantId(), SEWERAGE_SERVICE_BUSINESS_ID, request.getSewerageConnection().getProcessInstance().getAction());
+
+			request.getRequestInfo().setUserInfo(userInfoCopy);
 
 			if(configuredChannelNames.contains(CHANNEL_NAME_EVENT)) {
 
@@ -102,41 +109,41 @@ public class EditNotificationService {
 				message = SWConstants.DEFAULT_OBJECT_MODIFY_APP_MSG;
 		}
 
-		Set<String> ownersUuids = new HashSet<>();
+		Map<String, String> mobileNumbersAndNames = new HashMap<>();
+		Map<String, String> mapOfPhoneNoAndUUIDs = new HashMap<>();
 
-			//Send the notification to all owners
-			property.getOwners().forEach(owner -> {
-				if (owner.getUuid() != null)
-					ownersUuids.add(owner.getUuid());
+		Set<String> ownersMobileNumbers = new HashSet<>();
+		//Send the notification to all owners
+		property.getOwners().forEach(owner -> {
+			if (owner.getMobileNumber() != null)
+				ownersMobileNumbers.add(owner.getMobileNumber());
+		});
+
+		//send the notification to the connection holders
+		if (!CollectionUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionHolders())) {
+			sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().forEach(holder -> {
+				if (!StringUtils.isEmpty(holder.getMobileNumber())) {
+					ownersMobileNumbers.add(holder.getMobileNumber());
+				}
 			});
-			//send the notification to the connection holders
-			if (!CollectionUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionHolders())) {
-				sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().forEach(holder -> {
-					if (!StringUtils.isEmpty(holder.getUuid())) {
-						ownersUuids.add(holder.getUuid());
-					}
-				});
-			}
+		}
 
-			UserDetailResponse userDetailResponse = workflowNotificationService.fetchUserByUUID(ownersUuids,sewerageConnectionRequest.getRequestInfo(),sewerageConnectionRequest.getSewerageConnection().getTenantId());
-			Map<String, String> mobileNumbersAndNames = new HashMap<>();
-			for(OwnerInfo user:userDetailResponse.getUser())
-			{
-				mobileNumbersAndNames.put(user.getMobileNumber(),user.getName());
+		for (String mobileNumber : ownersMobileNumbers) {
+			UserDetailResponse userDetailResponse = workflowNotificationService.fetchUserByUsername(mobileNumber, sewerageConnectionRequest.getRequestInfo(), sewerageConnectionRequest.getSewerageConnection().getTenantId());
+			if (!CollectionUtils.isEmpty(userDetailResponse.getUser())) {
+				OwnerInfo user = userDetailResponse.getUser().get(0);
+				mobileNumbersAndNames.put(user.getMobileNumber(), user.getName());
+				mapOfPhoneNoAndUUIDs.put(user.getMobileNumber(), user.getUuid());
+			} else {
+				log.info("No User for mobile {} skipping event", mobileNumber);
 			}
+		}
 
-			Map<String, String> mapOfPhoneNoAndUUIDs = new HashMap<>();
-			for(OwnerInfo user:userDetailResponse.getUser())
-			{
-				mapOfPhoneNoAndUUIDs.put(user.getMobileNumber(),user.getUuid());
-			}
-
-			//Send the notification to applicant
-			if(!org.apache.commons.lang.StringUtils.isEmpty(sewerageConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber()))
-			{
-				mobileNumbersAndNames.put(sewerageConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber(), sewerageConnectionRequest.getRequestInfo().getUserInfo().getName());
-				mapOfPhoneNoAndUUIDs.put(sewerageConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber(), sewerageConnectionRequest.getRequestInfo().getUserInfo().getUuid());
-			}
+		//Send the notification to applicant
+		if (!StringUtils.isEmpty(sewerageConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber())) {
+			mobileNumbersAndNames.put(sewerageConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber(), sewerageConnectionRequest.getRequestInfo().getUserInfo().getName());
+			mapOfPhoneNoAndUUIDs.put(sewerageConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber(), sewerageConnectionRequest.getRequestInfo().getUserInfo().getUuid());
+		}
 
 		Map<String, String> mobileNumberAndMesssage = workflowNotificationService
 				.getMessageForMobileNumber(mobileNumbersAndNames, sewerageConnectionRequest, message, property);

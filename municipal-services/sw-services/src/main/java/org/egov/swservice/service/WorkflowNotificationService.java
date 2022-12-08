@@ -181,32 +181,31 @@ public class WorkflowNotificationService {
 		Map<String, String> mapOfPhoneNoAndUUIDs = new HashMap<>();
 
 		Set<String> ownersMobileNumbers = new HashSet<>();
-			//Send the notification to all owners
-			property.getOwners().forEach(owner -> {
-				if (owner.getMobileNumber() != null)
-					ownersMobileNumbers.add(owner.getMobileNumber());
-			});
+		//Send the notification to all owners
+		property.getOwners().forEach(owner -> {
+			if (owner.getMobileNumber() != null)
+				ownersMobileNumbers.add(owner.getMobileNumber());
+		});
 
-			//send the notification to the connection holders
-			if(!CollectionUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionHolders())) {
-				sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().forEach(holder -> {
-					if (!StringUtils.isEmpty(holder.getMobileNumber())) {
-						ownersMobileNumbers.add(holder.getMobileNumber());
-					}
-				});
-			}
-
-			for(String mobileNumber:ownersMobileNumbers) {
-				UserDetailResponse userDetailResponse = fetchUserByUsername(mobileNumber, sewerageConnectionRequest.getRequestInfo(), sewerageConnectionRequest.getSewerageConnection().getTenantId());
-				if(!CollectionUtils.isEmpty(userDetailResponse.getUser()))
-				{
-					OwnerInfo user = userDetailResponse.getUser().get(0);
-					mobileNumbersAndNames.put(user.getMobileNumber(),user.getName());
-					mapOfPhoneNoAndUUIDs.put(user.getMobileNumber(),user.getUuid());
+		//send the notification to the connection holders
+		if (!CollectionUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionHolders())) {
+			sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().forEach(holder -> {
+				if (!StringUtils.isEmpty(holder.getMobileNumber())) {
+					ownersMobileNumbers.add(holder.getMobileNumber());
 				}
-				else
-				{	log.info("No User for mobile {} skipping event", mobileNumber);}
+			});
+		}
+
+		for (String mobileNumber : ownersMobileNumbers) {
+			UserDetailResponse userDetailResponse = fetchUserByUsername(mobileNumber, sewerageConnectionRequest.getRequestInfo(), sewerageConnectionRequest.getSewerageConnection().getTenantId());
+			if (!CollectionUtils.isEmpty(userDetailResponse.getUser())) {
+				OwnerInfo user = userDetailResponse.getUser().get(0);
+				mobileNumbersAndNames.put(user.getMobileNumber(), user.getName());
+				mapOfPhoneNoAndUUIDs.put(user.getMobileNumber(), user.getUuid());
+			} else {
+				log.info("No User for mobile {} skipping event", mobileNumber);
 			}
+		}
 
 			//Send the notification to applicant
 			if(!StringUtils.isEmpty(sewerageConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber()))

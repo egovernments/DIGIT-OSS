@@ -179,38 +179,36 @@ public class WorkflowNotificationService {
 
         Set<String> ownersMobileNumbers = new HashSet<>();
         //Send the notification to all owners
-            property.getOwners().forEach(owner -> {
-                if (owner.getMobileNumber() != null)
-                    ownersMobileNumbers.add(owner.getMobileNumber());
-            });
+        property.getOwners().forEach(owner -> {
+            if (owner.getMobileNumber() != null)
+                ownersMobileNumbers.add(owner.getMobileNumber());
+        });
 
-            //send the notification to the connection holders
-            if (!CollectionUtils.isEmpty(request.getWaterConnection().getConnectionHolders())) {
-                request.getWaterConnection().getConnectionHolders().forEach(holder -> {
-                    if (!StringUtils.isEmpty(holder.getMobileNumber())) {
-                        ownersMobileNumbers.add(holder.getMobileNumber());
-                    }
-                });
-            }
-
-            for(String mobileNumber:ownersMobileNumbers) {
-                UserDetailResponse userDetailResponse = fetchUserByUsername(mobileNumber, request.getRequestInfo(), request.getWaterConnection().getTenantId());
-                if(!CollectionUtils.isEmpty(userDetailResponse.getUser()))
-                {
-                    OwnerInfo user = userDetailResponse.getUser().get(0);
-                    mobileNumbersAndNames.put(user.getMobileNumber(),user.getName());
-                    mapOfPhoneNoAndUUIDs.put(user.getMobileNumber(),user.getUuid());
+        //send the notification to the connection holders
+        if (!CollectionUtils.isEmpty(request.getWaterConnection().getConnectionHolders())) {
+            request.getWaterConnection().getConnectionHolders().forEach(holder -> {
+                if (!StringUtils.isEmpty(holder.getMobileNumber())) {
+                    ownersMobileNumbers.add(holder.getMobileNumber());
                 }
-                else
-                {	log.info("No User for mobile {} skipping event", mobileNumber);}
-            }
+            });
+        }
 
-            //Send the notification to applicant
-            if(!StringUtils.isEmpty(request.getRequestInfo().getUserInfo().getMobileNumber()))
-            {
-                mobileNumbersAndNames.put(request.getRequestInfo().getUserInfo().getMobileNumber(), request.getRequestInfo().getUserInfo().getName());
-                mapOfPhoneNoAndUUIDs.put(request.getRequestInfo().getUserInfo().getMobileNumber(), request.getRequestInfo().getUserInfo().getUuid());
+        for (String mobileNumber : ownersMobileNumbers) {
+            UserDetailResponse userDetailResponse = fetchUserByUsername(mobileNumber, request.getRequestInfo(), request.getWaterConnection().getTenantId());
+            if (!CollectionUtils.isEmpty(userDetailResponse.getUser())) {
+                OwnerInfo user = userDetailResponse.getUser().get(0);
+                mobileNumbersAndNames.put(user.getMobileNumber(), user.getName());
+                mapOfPhoneNoAndUUIDs.put(user.getMobileNumber(), user.getUuid());
+            } else {
+                log.info("No User for mobile {} skipping event", mobileNumber);
             }
+        }
+
+        //Send the notification to applicant
+        if (!StringUtils.isEmpty(request.getRequestInfo().getUserInfo().getMobileNumber())) {
+            mobileNumbersAndNames.put(request.getRequestInfo().getUserInfo().getMobileNumber(), request.getRequestInfo().getUserInfo().getName());
+            mapOfPhoneNoAndUUIDs.put(request.getRequestInfo().getUserInfo().getMobileNumber(), request.getRequestInfo().getUserInfo().getUuid());
+        }
 
 
         Map<String, String> mobileNumberAndMessage = getMessageForMobileNumber(mobileNumbersAndNames, request,
@@ -234,7 +232,7 @@ public class WorkflowNotificationService {
             // List<String> payTriggerList =
             // Arrays.asList(config.getPayTriggers().split("[,]"));
 
-            Action  action = getActionForEventNotification(mobileNumberAndMessage, mobile, request, property);
+            Action action = getActionForEventNotification(mobileNumberAndMessage, mobile, request, property);
             events.add(Event.builder().tenantId(property.getTenantId())
                     .description(mobileNumberAndMessage.get(mobile)).eventType(WCConstants.USREVENTS_EVENT_TYPE)
                     .name(WCConstants.USREVENTS_EVENT_NAME).postedBy(WCConstants.USREVENTS_EVENT_POSTEDBY)
