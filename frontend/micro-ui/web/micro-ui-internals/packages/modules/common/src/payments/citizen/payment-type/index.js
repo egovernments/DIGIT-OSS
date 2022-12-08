@@ -11,7 +11,7 @@ import {
   InfoBanner,
   Loader,
   Toast,
-  CardText
+  CardText,
 } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useForm, Controller } from "react-hook-form";
@@ -34,15 +34,21 @@ export const SelectPaymentType = (props) => {
   const stateTenant = Digit.ULBService.getStateId();
   const { control, handleSubmit } = useForm();
   const { data: menu, isLoading } = Digit.Hooks.useCommonMDMS(stateTenant, "DIGIT-UI", "PaymentGateway");
-  const { data: paymentdetails, isLoading: paymentLoading } = Digit.Hooks.useFetchPayment({ tenantId: tenantId, consumerCode: wrkflow === "WNS" ? stringReplaceAll(consumerCode, "+", "/") : consumerCode, businessService }, {});
+  const { data: paymentdetails, isLoading: paymentLoading } = Digit.Hooks.useFetchPayment(
+    { tenantId: tenantId, consumerCode: wrkflow === "WNS" ? stringReplaceAll(consumerCode, "+", "/") : consumerCode, businessService },
+    {}
+  );
+
   useEffect(() => {
     if (paymentdetails?.Bill && paymentdetails.Bill.length == 0) {
       setShowToast({ key: true, label: "CS_BILL_NOT_FOUND" });
     }
   }, [paymentdetails]);
-  useEffect(()=>{
-    localStorage.setItem("BillPaymentEnabled","true") 
-   },[])
+
+  useEffect(() => {
+    localStorage.setItem("BillPaymentEnabled", "true");
+  }, []);
+
   const { name, mobileNumber } = state;
 
   const billDetails = paymentdetails?.Bill ? paymentdetails?.Bill[0] : {};
@@ -108,7 +114,7 @@ export const SelectPaymentType = (props) => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Header>{t("PAYMENT_CS_HEADER")}</Header>
         <Card>
-          <div className="payment-amount-info" style={{marginBottom: "26px"}}>
+          <div className="payment-amount-info" style={{ marginBottom: "26px" }}>
             <CardLabel className="dark">{t("PAYMENT_CS_TOTAL_AMOUNT_DUE")}</CardLabel>
             <CardSectionHeader> ₹ {paymentAmount || billDetails?.totalAmount}</CardSectionHeader>
           </div>

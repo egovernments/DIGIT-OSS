@@ -441,7 +441,7 @@ const FeesChargesForm = (props) => {
                       className="btn btn-primary"
                       onClick={() => {
                         // `/digit-ui/citizen/payment/collect/${mutation2.data.Licenses[0].businessService}/${mutation2.data.Licenses[0].applicationNumber}`
-                        history.push(`/digit-ui/citizen/payment/collect/tl/${props?.securedData?.applicationNumber}`, {
+                        history.push(`/digit-ui/citizen/payment/collect/TL/${props?.securedData?.applicationNumber}`, {
                           // paymentAmount: paymentAmt,
                         });
                         setmodal(true);
