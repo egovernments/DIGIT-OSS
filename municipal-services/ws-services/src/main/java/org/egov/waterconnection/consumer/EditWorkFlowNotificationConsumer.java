@@ -2,6 +2,7 @@ package org.egov.waterconnection.consumer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.egov.common.contract.request.Role;
 import org.egov.waterconnection.service.DiffService;
 import org.egov.waterconnection.service.WaterServiceImpl;
 import org.egov.waterconnection.util.EncryptionDecryptionUtil;
@@ -19,8 +20,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import static org.egov.waterconnection.constants.WCConstants.WNS_OWNER_PLAIN_DECRYPTION_MODEL;
-import static org.egov.waterconnection.constants.WCConstants.WNS_PLUMBER_PLAIN_DECRYPTION_MODEL;
+import static org.egov.waterconnection.constants.WCConstants.*;
 
 @Slf4j
 @Service
@@ -50,14 +50,13 @@ public class EditWorkFlowNotificationConsumer {
 			WaterConnectionRequest waterConnectionRequest = mapper.convertValue(record, WaterConnectionRequest.class);
 			WaterConnection waterConnection = waterConnectionRequest.getWaterConnection();
 			SearchCriteria criteria = SearchCriteria.builder().applicationNumber(Collections.singleton(waterConnection.getApplicationNo()))
-					.tenantId(waterConnectionRequest.getWaterConnection().getTenantId()).build();
+					.tenantId(waterConnectionRequest.getWaterConnection().getTenantId()).isInternalCall(Boolean.TRUE).build();
 			List<WaterConnection> waterConnections = waterServiceImpl.search(criteria,
 					waterConnectionRequest.getRequestInfo());
 			WaterConnection searchResult = waterConnections.get(0);
 
-			waterConnection.setConnectionHolders(encryptionDecryptionUtil.decryptObject(waterConnection.getConnectionHolders(), WNS_OWNER_PLAIN_DECRYPTION_MODEL, OwnerInfo.class, waterConnectionRequest.getRequestInfo()));
 			if (!waterConnectionRequest.isOldDataEncryptionRequest())
-				diffService.checkDifferenceAndSendEditNotification(waterConnectionRequest, searchResult);
+				diffService.checkDifferenceAndSendEditNotification(waterConnectionRequest);
 		} catch (Exception ex) {
 			StringBuilder builder = new StringBuilder("Error while listening to value: ").append(record)
 					.append("on topic: ").append(topic);

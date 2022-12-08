@@ -2,6 +2,7 @@ package org.egov.swservice.consumer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.egov.common.contract.request.Role;
 import org.egov.swservice.service.SewerageService;
 import org.egov.swservice.service.WorkflowNotificationService;
 import org.egov.swservice.util.EncryptionDecryptionUtil;
@@ -16,9 +17,9 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 
-import static org.egov.swservice.util.SWConstants.WNS_OWNER_PLAIN_DECRYPTION_MODEL;
-import static org.egov.swservice.util.SWConstants.WNS_PLUMBER_PLAIN_DECRYPTION_MODEL;
+import static org.egov.swservice.util.SWConstants.*;
 
 @Service
 @Slf4j
@@ -55,9 +56,19 @@ public class WorkflowNotificationConsumer {
 				log.info("Workflow Notification Disabled For State :" + sewerageConnection.getProcessInstance().getAction()+"_"+applicationStatus);
 				return;
 			}
-
-			sewerageConnection.setConnectionHolders(encryptionDecryptionUtil.decryptObject(sewerageConnection.getConnectionHolders(), WNS_OWNER_PLAIN_DECRYPTION_MODEL, OwnerInfo.class, sewerageConnectionRequest.getRequestInfo()));
-			sewerageConnectionRequest.setSewerageConnection(encryptionDecryptionUtil.decryptObject(sewerageConnection, WNS_PLUMBER_PLAIN_DECRYPTION_MODEL, SewerageConnection.class, sewerageConnectionRequest.getRequestInfo()));
+			List<Role> roles = sewerageConnectionRequest.getRequestInfo().getUserInfo().getRoles();
+			boolean isCitizenRole = false;
+			for(Role role : roles){
+				if(role.getCode().equals(CITIZEN_ROLE_CODE)) {
+					isCitizenRole = true;
+				}
+			}
+			if(!isCitizenRole) {
+				sewerageConnection.setConnectionHolders(encryptionDecryptionUtil.decryptObject(sewerageConnection.getConnectionHolders(),
+						WNS_OWNER_PLAIN_DECRYPTION_MODEL, OwnerInfo.class, sewerageConnectionRequest.getRequestInfo()));
+				sewerageConnectionRequest.setSewerageConnection(encryptionDecryptionUtil.decryptObject(sewerageConnection,
+						WNS_PLUMBER_PLAIN_DECRYPTION_MODEL, SewerageConnection.class, sewerageConnectionRequest.getRequestInfo()));
+			}
 			if (!sewerageConnectionRequest.isOldDataEncryptionRequest())
 				workflowNotificationService.process(sewerageConnectionRequest, topic);
 		} catch (Exception ex) {

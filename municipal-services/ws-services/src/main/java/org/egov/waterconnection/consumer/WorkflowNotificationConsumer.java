@@ -2,11 +2,14 @@ package org.egov.waterconnection.consumer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.egov.common.contract.request.Role;
 import org.egov.waterconnection.constants.WCConstants;
 import org.egov.waterconnection.service.WaterService;
+import org.egov.waterconnection.service.WaterServiceImpl;
 import org.egov.waterconnection.service.WorkflowNotificationService;
 import org.egov.waterconnection.util.EncryptionDecryptionUtil;
 import org.egov.waterconnection.web.models.OwnerInfo;
+import org.egov.waterconnection.web.models.SearchCriteria;
 import org.egov.waterconnection.web.models.WaterConnection;
 import org.egov.waterconnection.web.models.WaterConnectionRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +18,9 @@ import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import static org.egov.waterconnection.constants.WCConstants.*;
 
@@ -35,6 +40,9 @@ public class WorkflowNotificationConsumer {
 	@Autowired
 	private ObjectMapper mapper;
 
+	@Autowired
+	private WaterServiceImpl waterServiceImpl;
+
 	/**
 	 * Consumes the water connection record and send notification
 	 * 
@@ -51,9 +59,20 @@ public class WorkflowNotificationConsumer {
 				log.info("Notification Disabled For State :" + waterConnection.getProcessInstance().getAction() + "_" + applicationStatus);
 				return;
 			}
+			List<Role> roles = waterConnectionRequest.getRequestInfo().getUserInfo().getRoles();
+			boolean isCitizenRole = false;
+			for(Role role : roles){
+				if(role.getCode().equals(CITIZEN_ROLE_CODE)) {
+					isCitizenRole = true;
+				}
+			}
+			if(!isCitizenRole) {
+				waterConnection.setConnectionHolders(encryptionDecryptionUtil.decryptObject(waterConnection.getConnectionHolders(),
+						WNS_OWNER_PLAIN_DECRYPTION_MODEL, OwnerInfo.class, waterConnectionRequest.getRequestInfo()));
+				waterConnectionRequest.setWaterConnection(encryptionDecryptionUtil.decryptObject(waterConnection,
+						WNS_PLUMBER_PLAIN_DECRYPTION_MODEL, WaterConnection.class, waterConnectionRequest.getRequestInfo()));
+			}
 
-			waterConnection.setConnectionHolders(encryptionDecryptionUtil.decryptObject(waterConnection.getConnectionHolders(), WNS_OWNER_PLAIN_DECRYPTION_MODEL, OwnerInfo.class, waterConnectionRequest.getRequestInfo()));
-			waterConnectionRequest.setWaterConnection(encryptionDecryptionUtil.decryptObject(waterConnection, WNS_PLUMBER_PLAIN_DECRYPTION_MODEL, WaterConnection.class, waterConnectionRequest.getRequestInfo()));
 			if (!waterConnectionRequest.isOldDataEncryptionRequest())
 				workflowNotificationService.process(waterConnectionRequest, topic);
 		} catch (Exception ex) {

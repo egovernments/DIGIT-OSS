@@ -27,11 +27,10 @@ public class DiffService {
 	private EditNotificationService editNotificationService;
 	/**
 	 * Creates a list of Difference object between the update and search
-	 * 
+	 *
 	 * @param request The water connection request for update
-	 * @param searchResult The searched result
 	 */
-	public void checkDifferenceAndSendEditNotification(WaterConnectionRequest request, WaterConnection searchResult) {
+	public void checkDifferenceAndSendEditNotification(WaterConnectionRequest request) {
 		try {
 				editNotificationService.sendEditNotification(request);
 		} catch (Exception ex) {

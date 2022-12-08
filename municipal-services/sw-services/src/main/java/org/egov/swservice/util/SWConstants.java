@@ -341,4 +341,6 @@ public class SWConstants {
 
 	public static final List<String> EDIT_NOTIFICATION_STATE = Collections.unmodifiableList(Arrays.asList(ACTION_INITIATE, SUBMIT_APPLICATION_CONST, ACTION_PAY, EXECUTE_DISCONNECTION, ACTIVATE_CONNECTION, APPROVE_CONNECTION));
 
+	public static final String CITIZEN_ROLE_CODE = "CITIZEN";
+
 }

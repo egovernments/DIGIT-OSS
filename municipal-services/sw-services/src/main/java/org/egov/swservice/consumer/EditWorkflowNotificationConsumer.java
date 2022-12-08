@@ -2,6 +2,7 @@ package org.egov.swservice.consumer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.egov.common.contract.request.Role;
 import org.egov.swservice.service.DiffService;
 import org.egov.swservice.service.SewerageService;
 import org.egov.swservice.service.SewerageServiceImpl;
@@ -20,8 +21,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import static org.egov.swservice.util.SWConstants.WNS_OWNER_PLAIN_DECRYPTION_MODEL;
-import static org.egov.swservice.util.SWConstants.WNS_PLUMBER_PLAIN_DECRYPTION_MODEL;
+import static org.egov.swservice.util.SWConstants.*;
 
 @Slf4j
 @Service
@@ -60,7 +60,6 @@ public class EditWorkflowNotificationConsumer {
 					sewerageConnectionRequest.getRequestInfo());
 			SewerageConnection searchResult = sewerageConnections.get(0);
 
-			sewerageConnection.setConnectionHolders(encryptionDecryptionUtil.decryptObject(sewerageConnection.getConnectionHolders(), WNS_OWNER_PLAIN_DECRYPTION_MODEL, OwnerInfo.class, sewerageConnectionRequest.getRequestInfo()));
 			if (!sewerageConnectionRequest.isOldDataEncryptionRequest())
 				diffService.checkDifferenceAndSendEditNotification(sewerageConnectionRequest, searchResult);
 		} catch (Exception ex) {
