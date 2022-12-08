@@ -281,6 +281,18 @@ let serviceType = data && data?.WaterConnection?.[0] ? "WATER" : "SEWERAGE";
                 />
               )
             }
+            {(data?.WaterConnection?.[0].applicationType?.includes("DISCONNECT")  || data?.SewerageConnections?.[0].applicationType?.includes("DISCONNECT")) 
+              && (
+                <Row
+                  className="border-none"
+                  label={t("WS_DISCONNECTION_EXECUTED_DATE")}
+                  text={ applicationNobyData?.includes("WS") 
+                          ? convertEpochToDate(data?.WaterConnection?.[0]?.disconnectionExecutionDate) 
+                          : convertEpochToDate(data?.SewerageConnections?.[0]?.disconnectionExecutionDate)}
+                  textStyle={{wordBreak:"break-word"}}
+                />
+              )
+            }
              {(data?.WaterConnection?.[0].applicationType?.includes("DISCONNECT")  || data?.SewerageConnections?.[0].applicationType?.includes("DISCONNECT")) 
               && (
                 <Row
@@ -313,11 +325,11 @@ let serviceType = data && data?.WaterConnection?.[0] ? "WATER" : "SEWERAGE";
               <Row
                 className="border-none"
                 label={t("WS_COMMON_TABLE_COL_APPLICATION_STATUS")}
-                text={isPaid ? t("WS_COMMON_PAID_LABEL") : t("WS_COMMON_NOT_PAID")}
+                text={isPaid || Number(paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.amount).toFixed(2) == 0 ? t("WS_COMMON_PAID_LABEL") : t("WS_COMMON_NOT_PAID")}
                 textStyle={
-                  !isPaid
-                    ? { textAlign: "right", color: "red" }
-                    : { textAlign: "right", color: "darkgreen" }
+                  isPaid || (Number(paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.amount).toFixed(2) == 0 )
+                    ? { textAlign: "right", color: "darkgreen" }
+                    : { textAlign: "right", color: "red" }
                 }
               />
               {/* <Row label={t("One time Fee")} text={"₹ 16500.00"} textStyle={{textAlign: "right" }} />
