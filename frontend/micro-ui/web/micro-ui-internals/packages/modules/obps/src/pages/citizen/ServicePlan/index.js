@@ -27,16 +27,8 @@ const ServicePlanService = () => {
           auth_token: null,
         },
 
-        servicePlanRequest: {
+        ServicePlanRequest: {
           ...data,
-          //   loiNumber: data?.loiNumber,
-          //   undertaking: data?.undertaking,
-          //   selfCertifiedDrawingsFromCharetedEng: data?.selfCertifiedDrawingsFromCharetedEng,
-          //   selfCertifiedDrawingFromEmpaneledDoc: data?.selfCertifiedDrawingFromEmpaneledDoc?.[0]?.name,
-          //   environmentalClearance: data?.environmentalClearance?.[0]?.name,
-          //   shapeFileAsPerTemplate: data?.shapeFileAsPerTemplate?.[0]?.name,
-          //   autoCadFile: data?.autoCadFile?.[0]?.name,
-          //   certifieadCopyOfThePlan: data?.certifieadCopyOfThePlan?.[0]?.name,
         },
       };
       const Resp = await axios.post("/land-services/serviceplan/_create", postDistrict);
@@ -45,37 +37,26 @@ const ServicePlanService = () => {
       console.log(error.message);
     }
   };
-  console.log("uu", ServicePlanDataLabel);
-
-  const getDocumentData = async () => {
-    if (file === null) {
-      return;
-    }
+  const [fileStoreId, setFileStoreId] = useState({});
+  const getDocumentData = async (file, fieldName) => {
     const formData = new FormData();
-    formData.append("file", file.file);
+    formData.append("file", file);
     formData.append("tenantId", "hr");
     formData.append("module", "property-upload");
     formData.append("tag", "tag-property");
-
+    setLoader(true);
     try {
-      const Resp = await axios
-        .post("/filestore/v1/files", formData, {
-          headers: {
-            "content-type": "multipart/form-data",
-          },
-        })
-        .then((response) => {
-          return response;
-        });
-
-      setDocuploadData(Resp.data);
+      const Resp = await axios.post("/filestore/v1/files", formData, {});
+      setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
+      setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
+      // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
+      setLoader(false);
     } catch (error) {
-      console.log(error.message);
+      setLoader(false);
+      return error.message;
     }
   };
-  useEffect(() => {
-    getDocumentData();
-  }, [file]);
+
   // const getSubmitDataLabel = async () => {
   //   try {
   //     const postDistrict = {
@@ -183,8 +164,7 @@ const ServicePlanService = () => {
                   <input
                     type="file"
                     className="form-control"
-                    {...register("selfCertifiedDrawingFromEmpaneledDoc")}
-                    onChange1={(e) => setFile({ file: e.target.files[0] })}
+                    onChange={(e) => getDocumentData(e?.target?.files[0], "selfCertifiedDrawingFromEmpaneledDoc")}
                   />
                 </td>
               </tr>
