@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import com.jayway.jsonpath.Filter;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.contract.request.Role;
 import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsCriteria;
 import org.egov.mdms.model.MdmsCriteriaReq;
@@ -620,6 +621,27 @@ public class SWCalculationUtil {
 			e.printStackTrace();
 		}
 		return  returnDate.getTime();
+	}
+
+	/**
+	 *
+	 * @param tenantId
+	 * @return internal microservice user to fetch plain user details
+	 */
+	public org.egov.common.contract.request.User getInternalMicroserviceUser(String tenantId)
+	{
+		//Creating role with INTERNAL_MICROSERVICE_ROLE
+		org.egov.common.contract.request.Role role = Role.builder()
+				.name("Internal Microservice Role").code("INTERNAL_MICROSERVICE_ROLE")
+				.tenantId(tenantId).build();
+
+		//Creating userinfo with uuid and role of internal micro service role
+		org.egov.common.contract.request.User userInfo = org.egov.common.contract.request.User.builder()
+				.uuid(config.getEgovInternalMicroserviceUserUuid())
+				.type("SYSTEM")
+				.roles(Collections.singletonList(role)).id(0L).build();
+
+		return userInfo;
 	}
 
 }

@@ -72,6 +72,10 @@ public class PaymentNotificationService {
 			Map<String, Object> info = (Map<String, Object>) record.get("requestInfo");
 			RequestInfo requestInfo = mapper.convertValue(info, RequestInfo.class);
 
+			org.egov.common.contract.request.User userInfoCopy = requestInfo.getUserInfo();
+			org.egov.common.contract.request.User userInfo = util.getInternalMicroserviceUser(requestInfo.getUserInfo().getTenantId());
+			requestInfo.setUserInfo(userInfo);
+
 			List<SewerageConnection> sewerageConnectionList = calculatorUtils.getSewerageConnection(requestInfo,
 					mappedRecord.get(consumerCode), mappedRecord.get(tenantId));
 			int size = sewerageConnectionList.size();
@@ -80,6 +84,8 @@ public class PaymentNotificationService {
 			SewerageConnectionRequest sewerageConnectionRequest = SewerageConnectionRequest.builder()
 					.sewerageConnection(sewerageConnection).requestInfo(requestInfo).build();
 			Property property = sWCalculationUtil.getProperty(sewerageConnectionRequest);
+
+			sewerageConnectionRequest.getRequestInfo().setUserInfo(userInfoCopy);
 
 			List<String> configuredChannelNames = util.fetchChannelList(sewerageConnectionRequest.getRequestInfo(), sewerageConnectionRequest.getSewerageConnection().getTenantId(), SERVICE_FIELD_VALUE_SW, sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction());
 

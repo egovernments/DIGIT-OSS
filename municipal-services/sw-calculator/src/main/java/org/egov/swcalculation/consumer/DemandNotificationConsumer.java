@@ -36,6 +36,11 @@ public class DemandNotificationConsumer {
 	public void listen(final HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
 		try {
 			DemandNotificationObj demandNotificationObj = mapper.convertValue(record, DemandNotificationObj.class);
+			String tenantId= demandNotificationObj.getTenantId();
+			if (sWCalculationConfiguration.getIsLocalizationStateLevel())
+				tenantId = tenantId.split("\\.")[0];
+			demandNotificationObj.setTenantId(tenantId);
+
 			notificationService.process(demandNotificationObj, topic);
 		} catch (final Exception e) {
 			StringBuilder builder = new StringBuilder();

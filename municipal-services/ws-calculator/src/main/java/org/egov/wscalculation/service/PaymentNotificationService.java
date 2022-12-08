@@ -74,13 +74,21 @@ public class PaymentNotificationService {
 			HashMap<String, String> mappedRecord = mapRecords(context);
 			Map<String, Object> info = (Map<String, Object>) record.get("requestInfo");
 			RequestInfo requestInfo = mapper.convertValue(info, RequestInfo.class);
+
+			org.egov.common.contract.request.User userInfoCopy = requestInfo.getUserInfo();
+			org.egov.common.contract.request.User userInfo = notificationUtil.getInternalMicroserviceUser(requestInfo.getUserInfo().getTenantId());
+			requestInfo.setUserInfo(userInfo);
+
 			List<WaterConnection> waterConnectionList = calculatorUtil.getWaterConnection(requestInfo,
 					mappedRecord.get(consumerCode), mappedRecord.get(tenantId));
 			int size = waterConnectionList.size();
 			WaterConnection waterConnection = waterConnectionList.get(size - 1);
 			WaterConnectionRequest waterConnectionRequest = WaterConnectionRequest.builder()
 					.waterConnection(waterConnection).requestInfo(requestInfo).build();
+
 			Property property = wSCalculationUtil.getProperty(waterConnectionRequest);
+
+			waterConnectionRequest.getRequestInfo().setUserInfo(userInfoCopy);
 
 			List<String> configuredChannelNames = notificationUtil.fetchChannelList(waterConnectionRequest.getRequestInfo(), waterConnectionRequest.getWaterConnection().getTenantId(), "WS", waterConnectionRequest.getWaterConnection().getProcessInstance().getAction());
 

@@ -23,6 +23,7 @@ public class BillingNotificationConsumer {
 	@KafkaListener(topics = { "${kafka.topics.billgen.topic}" })
 	public void listen(final HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
 		try {
+			log.info("Consuming record: " + record);
 			service.process(record, topic);
 		} catch (final Exception e) {
 			StringBuilder builder = new StringBuilder();
