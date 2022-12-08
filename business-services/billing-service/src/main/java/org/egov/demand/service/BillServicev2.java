@@ -62,6 +62,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.egov.common.contract.request.PlainAccessRequest;
 import org.egov.common.contract.request.RequestInfo;
@@ -90,6 +91,8 @@ import org.egov.demand.web.contract.BillResponseV2;
 import org.egov.demand.web.contract.BusinessServiceDetailCriteria;
 import org.egov.demand.web.contract.RequestInfoWrapper;
 import org.egov.demand.web.contract.User;
+import org.egov.demand.web.contract.UserResponse;
+import org.egov.demand.web.contract.UserSearchRequest;
 import org.egov.demand.web.contract.factory.ResponseFactory;
 import org.egov.demand.web.validator.BillValidator;
 import org.egov.tracer.model.CustomException;
@@ -101,6 +104,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -143,6 +148,9 @@ public class BillServicev2 {
 
 	@Autowired
 	private Producer producer;
+	
+	@Autowired
+	private ObjectMapper mapper;
 
 	@Value("${kafka.topics.cancel.bill.topic.name}")
 	private String billCancelTopic;
@@ -368,24 +376,11 @@ public class BillServicev2 {
 				.receiptRequired(false)
 				.demandId(demandIds)
 				.build();
-		/*
-		 * Privacy changes 
-		 */
-		PlainAccessRequest apiPlainAccessRequest = requestInfo.getPlainAccessRequest();
-		List<String> plainRequestFieldsList = getOwnerFieldsPlainAccessList();
-		PlainAccessRequest plainAccessRequest = PlainAccessRequest.builder()
-				.plainRequestFields(plainRequestFieldsList)
-				.build();
-		requestInfo.setPlainAccessRequest(plainAccessRequest);
 		
 
 		/* Fetching demands for the given bill search criteria */
 		List<Demand> demands = demandService.getDemands(demandCriteria, requestInfo);
 		
-		/*
-		 * Privacy changes 
-		 */
-		requestInfo.setPlainAccessRequest(apiPlainAccessRequest);
 		List<BillV2> bills;
 
 		if (!demands.isEmpty())
@@ -399,6 +394,37 @@ public class BillServicev2 {
 	}
 
 	/**
+	 * method to get user unmasked
+	 * 
+	 * @param requestInfo
+	 * @param uuid
+	 * @return user
+	 */
+	private User getUnmaskedUser(RequestInfo requestInfo, String uuid) {
+		
+		PlainAccessRequest apiPlainAccessRequest = requestInfo.getPlainAccessRequest();
+		List<String> plainRequestFieldsList = getOwnerFieldsPlainAccessList();
+		PlainAccessRequest plainAccessRequest = PlainAccessRequest.builder()
+				.plainRequestFields(plainRequestFieldsList)
+				.recordId(uuid)
+				.build();
+		requestInfo.setPlainAccessRequest(plainAccessRequest);
+		
+		UserSearchRequest  userSearchRequest= UserSearchRequest.builder()
+				.uuid(Stream.of(uuid).collect(Collectors.toSet()))
+				.requestInfo(requestInfo)
+				.build();
+		String userUri = appProps.getUserServiceHostName()
+				.concat(appProps.getUserServiceSearchPath());
+		List<User> payer = mapper.convertValue(restRepository.fetchResult(userUri, userSearchRequest),
+				UserResponse.class).getUser();
+		
+		requestInfo.setPlainAccessRequest(apiPlainAccessRequest);
+		
+		return payer.get(0);
+	}
+
+	/**
 	 * Prepares the bill object from the list of given demands
 	 * 
 	 * @param demands demands for which bill should be generated
@@ -409,7 +435,9 @@ public class BillServicev2 {
 
 		
 		List<BillV2> bills = new ArrayList<>();
-		User payer = null != demands.get(0).getPayer() ?  demands.get(0).getPayer() : new User();
+		User payer = null != demands.get(0).getPayer() ? demands.get(0).getPayer() : new User();
+		if (payer.getUuid() != null)
+			payer = getUnmaskedUser(requestInfo, payer.getUuid());
 
 		Map<String, List<Demand>> tenatIdDemandsList = demands.stream().collect(Collectors.groupingBy(Demand::getTenantId));
 		for (Entry<String, List<Demand>> demandTenantEntry : tenatIdDemandsList.entrySet()) {
