@@ -63,6 +63,7 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.egov.common.contract.request.PlainAccessRequest;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.demand.config.ApplicationProperties;
 import org.egov.demand.model.BillAccountDetailV2;
@@ -148,6 +149,8 @@ public class BillServicev2 {
 
 	@Value("${kafka.topics.billgen.topic.name}")
 	private String notifTopicName;
+	
+	private static List<String> ownerPlainRequestFieldsList;
 	
 	/**
 	 * Cancell bill operation can be carried by this method, based on consumerCodes
@@ -365,10 +368,24 @@ public class BillServicev2 {
 				.receiptRequired(false)
 				.demandId(demandIds)
 				.build();
+		/*
+		 * Privacy changes 
+		 */
+		PlainAccessRequest apiPlainAccessRequest = requestInfo.getPlainAccessRequest();
+		List<String> plainRequestFieldsList = getOwnerFieldsPlainAccessList();
+		PlainAccessRequest plainAccessRequest = PlainAccessRequest.builder()
+				.plainRequestFields(plainRequestFieldsList)
+				.build();
+		requestInfo.setPlainAccessRequest(plainAccessRequest);
+		
 
 		/* Fetching demands for the given bill search criteria */
 		List<Demand> demands = demandService.getDemands(demandCriteria, requestInfo);
-
+		
+		/*
+		 * Privacy changes 
+		 */
+		requestInfo.setPlainAccessRequest(apiPlainAccessRequest);
 		List<BillV2> bills;
 
 		if (!demands.isEmpty())
@@ -669,6 +686,22 @@ public class BillServicev2 {
 		if (!CollectionUtils.isEmpty(billRequest.getBills()))
 			billRepository.saveBill(billRequest);
 		return getBillResponse(billRequest.getBills());
+	}
+	
+	public static List<String> getOwnerFieldsPlainAccessList() {
+
+		if (ownerPlainRequestFieldsList == null) {
+			
+			ownerPlainRequestFieldsList = new ArrayList<>();
+			ownerPlainRequestFieldsList.add("mobileNumber");
+			ownerPlainRequestFieldsList.add("guardian");
+			ownerPlainRequestFieldsList.add("fatherOrHusbandName");
+			ownerPlainRequestFieldsList.add("correspondenceAddress");
+			ownerPlainRequestFieldsList.add("userName");
+			ownerPlainRequestFieldsList.add("name");
+			ownerPlainRequestFieldsList.add("gender");
+		}
+		return ownerPlainRequestFieldsList;
 	}
 	
 }
