@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Card, Row, Col, Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { getDocShareholding } from "../NewLicense/docView/docView.help";
 
 const ServicePlanService = () => {
   const { register, handleSubmit } = useForm();
@@ -73,7 +75,7 @@ const ServicePlanService = () => {
   //       },
   //     };
 
-  //     const Resp = await axios.post(`http://10.1.1.18:8443/land-services/serviceplan/_get?loiNumber=123`, postDistrict);
+  //     const Resp = await axios.post(`http://10.1.1.18:80/land-services/serviceplan/_get?loiNumber=123`, postDistrict);
   //   } catch (error) {
   //     console.log(error.message);
   //   }
@@ -166,6 +168,9 @@ const ServicePlanService = () => {
                     className="form-control"
                     onChange={(e) => getDocumentData(e?.target?.files[0], "selfCertifiedDrawingFromEmpaneledDoc")}
                   />
+                  <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.selfCertifiedDrawingFromEmpaneledDoc)}>
+                    {" "}
+                  </VisibilityIcon>
                 </td>
               </tr>
               <tr>

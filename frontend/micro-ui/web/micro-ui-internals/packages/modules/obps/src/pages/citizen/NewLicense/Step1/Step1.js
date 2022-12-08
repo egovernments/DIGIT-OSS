@@ -220,9 +220,7 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <h2>
-                      Alternate Mobile No<span style={{ color: "red" }}>*</span>
-                    </h2>
+                    <h2>Alternate Mobile No.</h2>
                   </Form.Label>
                 </div>
                 <Controller
