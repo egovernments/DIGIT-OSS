@@ -174,11 +174,16 @@ const GroupBills = ({ tenantId, onSubmit, data, count, isLoading, resultOk,servi
         downloadAll(fsObj)
     };
     const handleMergeAndDownload = (e) => {
-        downloadBills();
+        if (serviceType == "PT") {
+            startWSBillDownloadJob(true, "pt-bill")
+        } else {
+            downloadBills();
+        }
+        
     };
     const [showToast, setShowToast] = useState(null)
-    const startWSBillDownloadJob = async (isConsolidated) => {
-        const result = await Digit.WSService.wnsGroupBill({ key: "ws-bill", tenantId, locality: locality?.code, isConsolidated, bussinessService: serviceType });
+    const startWSBillDownloadJob = async (isConsolidated, key = "ws-bill") => {
+        const result = await Digit.WSService.wnsGroupBill({ key: key ? key : "ws-bill", tenantId, locality: locality?.code, isConsolidated, bussinessService: serviceType });
         setShowToast({
             label: `${t("GRP_JOB_INITIATED_STATUS")} ${result?.jobId}`
         })

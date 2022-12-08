@@ -92,7 +92,7 @@ const useSearchApplicationTableConfig = (setShowToast) => {
         Header: t("BUSINESS_SERVICE"),
         disableSortBy: true,
         Cell: ({ row }) => {
-          if (row?.original?.isConsolidated) {
+          if (row?.original?.isConsolidated && (row?.original?.bussinessService == "WS" || row?.original?.bussinessService == "SW")) {
             let replaceKey = row?.original?.bussinessService == "WS" ? "WS" : "SW";
             let replaceWith = row?.original?.bussinessService == "WS" ? "SW" : "WS";
             return GetCell(t(`BILLINGSERVICE_BUSINESSSERVICE_${replaceKey}`) + "," + t(`BILLINGSERVICE_BUSINESSSERVICE_${replaceWith}`));

@@ -16,8 +16,8 @@ const DownloadBillInbox = () => {
   const [pageSize, setPageSize] = useState(10);
 
   const filters = {
-    offset: 0,
-    limit: 100,
+    // offset: 0,
+    // limit: 100,
   };
 
   const { data, isLoading, isError, error } = Digit.Hooks.useBulkPdfDetails({ filters: filters });
