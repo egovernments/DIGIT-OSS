@@ -139,7 +139,7 @@ const MyApplication = () => {
               <KeyNote keyValue={t("BPA_BASIC_DETAILS_APPLICATION_TYPE_LABEL")} note={application?.businessService !== "BPA_OC" ? t(`WF_BPA_BUILDING_PLAN_SCRUTINY`) : t(`WF_BPA_BUILDING_OC_PLAN_SCRUTINY`)} />
               <KeyNote keyValue={t("BPA_COMMON_SERVICE")} note={t(`BPA_SERVICETYPE_NEW_CONSTRUCTION`)} />
               <KeyNote keyValue={t("TL_COMMON_TABLE_COL_STATUS")} note={t(`WF_BPA_${application?.state}`)} noteStyle={application?.status === "APPROVED" ? { color: "#00703C" } : { color: "#D4351C" }} />
-              <KeyNote keyValue={t("BPA_COMMON_SLA")} note={application?.sla} />
+              <KeyNote keyValue={t("BPA_COMMON_SLA")} note={application?.sla?.includes("NA") ? t(`${application?.sla}`) : application?.sla} />
               {application.action === "SEND_TO_ARCHITECT" || application.status !== "INITIATED" ? <Link to={{ pathname: `/digit-ui/citizen/obps/bpa/${application?.applicationNo}`, state: { tenantId: '' } }}>
                 <SubmitBar label={t("TL_VIEW_DETAILS")} />
               </Link> :

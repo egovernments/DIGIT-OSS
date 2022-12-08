@@ -1,6 +1,6 @@
 {
   "name": "@egovernments/digit-ui-module-obps",
-  "version": "1.6.0-alpha.8",
+  "version": "1.6.0-alpha.9",
   "description": "",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
