@@ -473,7 +473,7 @@ class ShowField extends Component {
 
     const buttons = [
       {
-        text: `<span>${getLocaleLabels("RT_DOWNLOAD_AS", "RT_DOWNLOAD_AS")}</span>`,
+        text: `<span style="color:#767676">${getLocaleLabels("RT_DOWNLOAD_AS", "RT_DOWNLOAD_AS")}</span>`,
         className: "report-download-button-text",
       },
       {

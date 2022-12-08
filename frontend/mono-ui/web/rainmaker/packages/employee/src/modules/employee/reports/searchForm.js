@@ -708,14 +708,7 @@ class ShowForm extends Component {
                   <Row>
                     <div style={{ marginTop: "16px", textAlign: "center" }} className="col-xs-12">
                       <RaisedButton
-                        // style={{ height: "48px",borderRadius: "2px", width: "80%", backgroundColor: "rgba(0, 0, 0, 0.6)" }}
-                        type="submit"
-                        //disabled={!isFormValid}
-                        primary={true}
-                        label={buttonText}
-                      />
-                      <RaisedButton
-                        style={{ marginLeft: "8px" }}
+                        // style={{ marginLeft: "8px" }}
                         type="button"
                         //disabled={!isFormValid}
                         // primary={true}
@@ -723,6 +716,14 @@ class ShowForm extends Component {
                           this.resetFields();
                         }}
                         label={<LabelContainer labelName="RESET" labelKey="REPORTS_SEARCH_RESET_LABEL" />}
+                      />
+                      <RaisedButton
+                        style={{ marginLeft: "8px" }}
+                        // style={{ height: "48px",borderRadius: "2px", width: "80%", backgroundColor: "rgba(0, 0, 0, 0.6)" }}
+                        type="submit"
+                        //disabled={!isFormValid}
+                        primary={true}
+                        label={buttonText}
                       />
                     </div>
                   </Row>
