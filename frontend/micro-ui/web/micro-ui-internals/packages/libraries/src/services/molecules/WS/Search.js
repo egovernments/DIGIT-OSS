@@ -1525,7 +1525,7 @@ export const WSSearch = {
               { title: "WS_INITIAL_METER_READING_LABEL", value: wsDataDetails?.additionalDetails?.initialMeterReading || t("NA") },
               {
                 title: "WS_VIEW_CONSUMPTION_DETAIL",
-                to: `/digit-ui/employee/ws/consumption-details?applicationNo=${wsDataDetails?.connectionNo}&tenantId=${wsDataDetails?.tenantId}&service=${serviceType}&from=WS_COMMON_CONNECTION_DETAIL`,
+                to: `/digit-ui/employee/ws/consumption-details?applicationNo=${wsDataDetails?.connectionNo}&tenantId=${wsDataDetails?.tenantId}&service=${serviceType}&from=ABG_BILL_DETAILS_HEADER`,
                 value: "",
                 isLink: wsDataDetails?.connectionType ==="Metered" ? true:false,
               },
@@ -1576,7 +1576,7 @@ export const WSSearch = {
         },
         {
           title: "WS_VIEW_PROPERTY_DETAIL",
-          to: `/digit-ui/employee/pt/property-details/${propertyDataDetails?.propertyId}?from=WS_COMMON_CONNECTION_DETAIL`,
+          to: `/digit-ui/employee/pt/property-details/${propertyDataDetails?.propertyId}?from=ABG_BILL_DETAILS_HEADER`,
           value: "",
           isLink: true,
         },

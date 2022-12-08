@@ -1437,7 +1437,7 @@ export const convertModifyApplicationDetails = async (data, appData, actionData 
   });
 
   let formData = { ...appData.applicationData };
-
+  if (data?.cpt?.details?.propertyId) formData.propertyId = data?.cpt?.details?.propertyId;
   if (data?.connectionDetails?.[0]?.connectionType?.code) formData.connectionType = data?.connectionDetails?.[0]?.connectionType?.code;
   if (data?.connectionDetails?.[0]?.waterSource?.code) formData.waterSource = data?.connectionDetails?.[0]?.waterSource?.code;
   if (data?.connectionDetails?.[0]?.pipeSize?.size) formData.pipeSize = data?.connectionDetails?.[0]?.pipeSize?.size;
