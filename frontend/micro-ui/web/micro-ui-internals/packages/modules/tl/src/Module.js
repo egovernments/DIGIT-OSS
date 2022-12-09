@@ -49,6 +49,8 @@ import EditTrade from "./pages/citizen/EditTrade";
 import { TLList } from "./pages/citizen/Renewal";
 import RenewTrade from "./pages/citizen/Renewal/renewTrade";
 import SearchTradeComponent from "./pages/citizen/SearchTrade";
+import SelectTradeUnitsInitial from "./pageComponents/SelectTradeUnitsInitial";
+import TLTradeUnitsEmployeeInitial from "./pageComponents/TLTradeUnitsEmployeeInitial";
 
 import CitizenApp from "./pages/citizen";
 import EmployeeApp from "./pages/employee";
@@ -142,6 +144,8 @@ const componentsToRegister = {
   TLSearch : Search,
   TLResponse : Response,
   SelectOtherTradeDetails,
+  SelectTradeUnitsInitial,
+  TLTradeUnitsEmployeeInitial,
 };
 
 export const initTLComponents = () => {

@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 import Timeline from "../components/TLTimeline";
 import { sortDropdownNames } from "../utils/index";
 
-const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
+const SelectTradeUnitsInitial = ({ t, config, onSelect, userType, formData }) => {
   let validation = {};
   const [TradeCategory, setTradeCategory] = useState("");
   const [TradeType, setTradeType] = useState(formData?.TadeDetails?.Units?.TradeType || "");
@@ -33,22 +33,21 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
     }
   }
 
-  const { isLoading, data: Data = {} } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "TradeLicense", "TradeUnits", "[?(@.type=='TL')]");
-  const { data: billingSlabTradeTypeData, isLoading : isBillingSlabLoading } = Digit.Hooks.tl.useTradeLicenseBillingslab({ tenantId: tenantId, filters: {} }, {
+  // const { isLoading, data: Data = {} } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "TradeLicense", "TradeUnits", "[?(@.type=='TL')]");
+  const { data: billingSlabTradeTypeData, isLoading } = Digit.Hooks.tl.useTradeLicenseBillingslab({ tenantId: tenantId, filters: {} }, {
     select: (data) => {
     return data?.billingSlab.filter((e) => e.tradeType && e.applicationType === "NEW" && e.licenseType === "PERMANENT" && e.uom);
     }});
   let TradeCategoryMenu = [];
-  let TradeCategoryMenu2 = [];
   //let TradeTypeMenu = [];
 
-  Data &&
-    Data.TradeLicense &&
-    Data.TradeLicense.TradeType.map((ob) => {
-      if (!TradeCategoryMenu2.some((TradeCategoryMenu) => TradeCategoryMenu.code === `${ob.code.split(".")[0]}`)) {
-        TradeCategoryMenu2.push({ i18nKey: `TRADELICENSE_TRADETYPE_${ob.code.split(".")[0]}`, code: `${ob.code.split(".")[0]}` });
-      }
-    });
+  // Data &&
+  //   Data.TradeLicense &&
+  //   Data.TradeLicense.TradeType.map((ob) => {
+  //     if (!TradeCategoryMenu.some((TradeCategoryMenu) => TradeCategoryMenu.code === `${ob.code.split(".")[0]}`)) {
+  //       TradeCategoryMenu.push({ i18nKey: `TRADELICENSE_TRADETYPE_${ob.code.split(".")[0]}`, code: `${ob.code.split(".")[0]}` });
+  //     }
+  //   });
 
     billingSlabTradeTypeData &&
     billingSlabTradeTypeData.length > 0 &&
@@ -67,70 +66,52 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
 
   function getTradeTypeMenu(TradeCategory) {
     let TradeTypeMenu = [];
-    if(TradeCategory && Data?.TradeLicense && Data?.TradeLicense?.TradeType?.length > 0)
-    {
-      Data?.TradeLicense?.TradeType?.map((ob) => {
-        if (ob.code.split(".")[0] === TradeCategory.code && !TradeTypeMenu.some((TradeTypeMenu) => TradeTypeMenu.code === `${ob.code.split(".")[1]}`))
-         {
-           TradeTypeMenu.push({ i18nKey: `TRADELICENSE_TRADETYPE_${ob.code.split(".")[1]}`, code: `${ob.code.split(".")[1]}` });
-         }
-      })
+    if(billingSlabTradeTypeData && billingSlabTradeTypeData.length > 0){
+      if(formData?.TradeDetails?.BuildingType){
+        billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.BuildingType?.code.toString() ).map((ob) => {
+          if (
+            ob.tradeType.split(".")[0] === TradeCategory.code &&
+            !TradeTypeMenu.some((TradeTypeMenu) => TradeTypeMenu.code === `${ob.tradeType.split(".")[1]}`)
+          ) {
+            TradeTypeMenu.push({ i18nKey: `TRADELICENSE_TRADETYPE_${ob.tradeType.split(".")[1]}`, code: `${ob.tradeType.split(".")[1]}` });
+          }
+        });
+        return TradeTypeMenu;
+      }
+      else if(formData?.TradeDetails?.VehicleType){
+        billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.VehicleType?.code.toString() ).map((ob) => {
+          if (
+            ob.tradeType.split(".")[0] === TradeCategory.code &&
+            !TradeTypeMenu.some((TradeTypeMenu) => TradeTypeMenu.code === `${ob.tradeType.split(".")[1]}`)
+          ) {
+            TradeTypeMenu.push({ i18nKey: `TRADELICENSE_TRADETYPE_${ob.tradeType.split(".")[1]}`, code: `${ob.tradeType.split(".")[1]}` });
+          }
+        });
+        return TradeTypeMenu;
+      }
     }
-    return TradeTypeMenu;
-    // if(billingSlabTradeTypeData && billingSlabTradeTypeData.length > 0){
-    //   if(formData?.TradeDetails?.BuildingType){
-    //     billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.BuildingType?.code.toString() ).map((ob) => {
-    //       if (
-    //         ob.tradeType.split(".")[0] === TradeCategory.code &&
-    //         !TradeTypeMenu.some((TradeTypeMenu) => TradeTypeMenu.code === `${ob.tradeType.split(".")[1]}`)
-    //       ) {
-    //         TradeTypeMenu.push({ i18nKey: `TRADELICENSE_TRADETYPE_${ob.tradeType.split(".")[1]}`, code: `${ob.tradeType.split(".")[1]}` });
-    //       }
-    //     });
-    //     return TradeTypeMenu;
-    //   }
-    //   else if(formData?.TradeDetails?.VehicleType){
-    //     billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.VehicleType?.code.toString() ).map((ob) => {
-    //       if (
-    //         ob.tradeType.split(".")[0] === TradeCategory.code &&
-    //         !TradeTypeMenu.some((TradeTypeMenu) => TradeTypeMenu.code === `${ob.tradeType.split(".")[1]}`)
-    //       ) {
-    //         TradeTypeMenu.push({ i18nKey: `TRADELICENSE_TRADETYPE_${ob.tradeType.split(".")[1]}`, code: `${ob.tradeType.split(".")[1]}` });
-    //       }
-    //     });
-    //     return TradeTypeMenu;
-    //   }
-    // }
   }
 
   function getTradeSubTypeMenu(TradeType) {
     let TradeSubTypeMenu = [];
-    if(TradeType && Data?.TradeLicense && Data?.TradeLicense?.TradeType?.length > 0){
-      Data?.TradeLicense?.TradeType?.map((ob) => {
-        if (ob.code.split(".")[1] === TradeType.code && !TradeSubTypeMenu.some((TradeSubTypeMenu) => TradeSubTypeMenu.code === `${ob.code}`)) {
-                  TradeSubTypeMenu.push({ i18nKey: `TL_${ob.code}`, code: `${ob.code}` });
-                }
-      })
+    if(TradeType && billingSlabTradeTypeData && billingSlabTradeTypeData.length > 0){
+      if(formData?.TradeDetails?.BuildingType){
+        billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.BuildingType?.code.toString() ).map((ob) => {
+          if (ob.tradeType.split(".")[1] === TradeType.code && !TradeSubTypeMenu.some((TradeSubTypeMenu) => TradeSubTypeMenu.code === `${ob.tradeType}`)) {
+            TradeSubTypeMenu.push({ i18nKey: `TL_${ob.tradeType}`, code: `${ob.tradeType}` });
+          }
+        });
+        return TradeSubTypeMenu;
+      }
+      else if(formData?.TradeDetails?.VehicleType){
+        billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.VehicleType?.code.toString() ).map((ob) => {
+          if (ob.tradeType.split(".")[1] === TradeType.code && !TradeSubTypeMenu.some((TradeSubTypeMenu) => TradeSubTypeMenu.code === `${ob.tradeType}`)) {
+            TradeSubTypeMenu.push({ i18nKey: `TL_${ob.tradeType}`, code: `${ob.tradeType}` });
+          }
+        });
+        return TradeSubTypeMenu;
+      }
     }
-    return TradeSubTypeMenu;
-    // if(TradeType && billingSlabTradeTypeData && billingSlabTradeTypeData.length > 0){
-    //   if(formData?.TradeDetails?.BuildingType){
-    //     billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.BuildingType?.code.toString() ).map((ob) => {
-    //       if (ob.tradeType.split(".")[1] === TradeType.code && !TradeSubTypeMenu.some((TradeSubTypeMenu) => TradeSubTypeMenu.code === `${ob.tradeType}`)) {
-    //         TradeSubTypeMenu.push({ i18nKey: `TL_${ob.tradeType}`, code: `${ob.tradeType}` });
-    //       }
-    //     });
-    //     return TradeSubTypeMenu;
-    //   }
-    //   else if(formData?.TradeDetails?.VehicleType){
-    //     billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.VehicleType?.code.toString() ).map((ob) => {
-    //       if (ob.tradeType.split(".")[1] === TradeType.code && !TradeSubTypeMenu.some((TradeSubTypeMenu) => TradeSubTypeMenu.code === `${ob.tradeType}`)) {
-    //         TradeSubTypeMenu.push({ i18nKey: `TL_${ob.tradeType}`, code: `${ob.tradeType}` });
-    //       }
-    //     });
-    //     return TradeSubTypeMenu;
-    //   }
-    // }
   }
 
   const isUpdateProperty = formData?.isUpdateProperty || false;
@@ -157,14 +138,6 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
     let units = [...fields];
     units[i].tradesubtype = value;
     setTradeSubType(value);
-    setError(null);
-    // if(){
-    //   setError("TL_UOM_VALUE_GREATER_O")
-    // }
-    if(value && billingSlabTradeTypeData?.filter((ob) => ob?.tradeType === value?.code && (ob?.structureType === formData?.TradeDetails?.VehicleType?.code || ob?.structureType === formData?.TradeDetails?.BuildingType?.code))?.length <= 0)
-    {
-      setError("TL_BILLING_SLAB_NOT_FOUND_FOR_COMB")
-    }
     if (value == null) {
       units[i].unit = null;
       setUnitOfMeasure(null);
@@ -239,7 +212,7 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
   return (
     <React.Fragment>
       {window.location.href.includes("/citizen") ? <Timeline /> : null}
-      {isLoading || isBillingSlabLoading ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <FormStep
@@ -288,10 +261,10 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
                     style={{ width: "100px", display: "inline" }}
                     onClick={(e) => handleRemove(index)}
                   />
-                  {!isLoading || !isBillingSlabLoading ? (
+                  {!isLoading ? (
                     <RadioButtons
                       t={t}
-                      options={TradeCategoryMenu2}
+                      options={TradeCategoryMenu}
                       optionsKey="i18nKey"
                       name={`TradeCategory-${index}`}
                       value={field?.tradecategory}
@@ -308,7 +281,7 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
                     t={t}
                     optionKey="i18nKey"
                     isMandatory={config.isMandatory}
-                    option={sortDropdownNames(getTradeTypeMenu(field?.tradecategory),"i18nKey",t)}
+                    option={getTradeTypeMenu(field?.tradecategory)}
                     selected={field?.tradetype}
                     select={(e) => selectTradeType(index, e)}
                   />
@@ -317,7 +290,7 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
                       t={t}
                       optionKey="i18nKey"
                       isMandatory={config.isMandatory}
-                      option={sortDropdownNames(getTradeSubTypeMenu(field?.tradetype),"i18nKey",t)}
+                      option={getTradeSubTypeMenu(field?.tradetype)}
                       selected={field?.tradesubtype}
                       optionCardStyles={{maxHeight:"125px",overflow:"scroll"}}
                       select={(e) => selectTradeSubType(index, e)}
@@ -368,4 +341,4 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
     </React.Fragment>
   );
 };
-export default SelectTradeUnits;
+export default SelectTradeUnitsInitial;
