@@ -105,7 +105,7 @@ const ScrutitnyForms = () => {
   };
   const handleGetInputFieldsValues = async () => {
     try {
-      const Resp = await axios.get("/tl-services/new/licenses/_get?id=643").then((response) => {
+      const Resp = await axios.get("/tl-services/new/licenses/_get?id=702").then((response) => {
         return response.data;
       });
 
@@ -130,7 +130,7 @@ const ScrutitnyForms = () => {
         }
     };
     try {
-      const Resp = await axios.post("/land-services/egscrutiny/_search?applicationNumber=123&userId=0", dataToPass).then((response) => {
+      const Resp = await axios.post("/land-services/egscrutiny/_search?applicationNumber=702&userId=0", dataToPass).then((response) => {
         return response.data;
       });
 
@@ -157,7 +157,7 @@ const ScrutitnyForms = () => {
       },
     };
     try {
-      const Resp = await axios.post("/land-services/egscrutiny/_searchbylogin?applicationId=123&userid=123", dataToPass).then((response) => {
+      const Resp = await axios.post("/land-services/egscrutiny/_searchbylogin?applicationId=702&userid=123", dataToPass).then((response) => {
         return response.data;
       });
 
@@ -190,7 +190,7 @@ const ScrutitnyForms = () => {
       },
     };
     try {
-      const Resp = await axios.post("/land-services/egscrutiny/_search?applicationNumber=123&userId=0", dataToSend).then((response) => {
+      const Resp = await axios.post("/land-services/egscrutiny/_search?applicationNumber=702&userId=0", dataToSend).then((response) => {
         return response.data;
       });
 
