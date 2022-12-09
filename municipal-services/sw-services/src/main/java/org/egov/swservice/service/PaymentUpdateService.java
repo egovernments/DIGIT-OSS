@@ -268,6 +268,11 @@ public class PaymentUpdateService {
 	 * @return
 	 */
 	private EventRequest getEventRequest(SewerageConnectionRequest request, Property property, PaymentDetail paymentDetail) {
+
+		//Return without sending notifs for disconnection payment since payment is managed in workflow notifs
+		if(request.isDisconnectRequest())
+			return null;
+
 		String localizationMessage = notificationUtil
 				.getLocalizationMessages(property.getTenantId(), request.getRequestInfo());
 		String message = notificationUtil.getMessageTemplate(SWConstants.PAYMENT_NOTIFICATION_APP, localizationMessage);
@@ -351,6 +356,11 @@ public class PaymentUpdateService {
 	 */
 	private List<SMSRequest> getSmsRequest(SewerageConnectionRequest sewerageConnectionRequest,
 										   Property property, PaymentDetail paymentDetail) {
+
+		//Return without sending notifs for disconnection payment since payment is managed in workflow notifs
+		if(sewerageConnectionRequest.isDisconnectRequest())
+			return null;
+
 		String localizationMessage = notificationUtil.getLocalizationMessages(property.getTenantId(),
 				sewerageConnectionRequest.getRequestInfo());
 		String message = notificationUtil.getMessageTemplate(SWConstants.PAYMENT_NOTIFICATION_SMS, localizationMessage);
@@ -399,6 +409,11 @@ public class PaymentUpdateService {
 	 */
 	private List<EmailRequest> getEmailRequest(SewerageConnectionRequest sewerageConnectionRequest,
 											   Property property, PaymentDetail paymentDetail) {
+
+		//Return without sending notifs for disconnection payment since payment is managed in workflow notifs
+		if(sewerageConnectionRequest.isDisconnectRequest())
+			return null;
+
 		String localizationMessage = notificationUtil.getLocalizationMessages(property.getTenantId(),
 				sewerageConnectionRequest.getRequestInfo());
 		String message = notificationUtil.getMessageTemplate(SWConstants.PAYMENT_NOTIFICATION_EMAIL, localizationMessage);

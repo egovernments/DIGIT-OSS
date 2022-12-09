@@ -61,6 +61,8 @@ public class PaymentNotificationService {
 	String totalBillAmount = "billAmount";
 	String dueDate = "dueDate";
 
+	String applicationNumberReplacer = "$applicationNumber";
+
 	/**
 	 * @param record record is bill response.
 	 * @param topic  topic is bill generation topic for water.
@@ -182,9 +184,9 @@ public class PaymentNotificationService {
 			toUsers.add(mapOfPhoneNoAndUUIDs.get(mobile));
 			Recipient recepient = Recipient.builder().toUsers(toUsers).toRoles(null).build();
 			List<ActionItem> items = new ArrayList<>();
-			String actionLink = config.getPayLink().replace("$mobile", mobile)
-					.replace("$consumerCode", waterConnectionRequest.getWaterConnection().getConnectionNo())
-					.replace("$tenantId", property.getTenantId());
+			String actionLink = config.getViewHistoryLink();
+			actionLink = actionLink.replace(applicationNumberReplacer, waterConnectionRequest.getWaterConnection().getApplicationNo());
+
 			actionLink = config.getNotificationUrl() + actionLink;
 			ActionItem item = ActionItem.builder().actionUrl(actionLink).code(config.getPayCode()).build();
 			items.add(item);

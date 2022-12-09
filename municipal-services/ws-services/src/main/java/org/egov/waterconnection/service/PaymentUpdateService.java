@@ -274,6 +274,10 @@ public class PaymentUpdateService {
 	 * @return
 	 */
 	private EventRequest getEventRequest(WaterConnectionRequest request, Property property, PaymentDetail paymentDetail) {
+		//Return without sending notifs for disconnection payment since payment is managed in workflow notifs
+		if(request.isDisconnectRequest())
+			return null;
+
 		String localizationMessage = notificationUtil
 				.getLocalizationMessages(property.getTenantId(), request.getRequestInfo());
 		String message = notificationUtil.getMessageTemplate(WCConstants.PAYMENT_NOTIFICATION_APP, localizationMessage);
@@ -355,6 +359,10 @@ public class PaymentUpdateService {
 	 */
 	private List<SMSRequest> getSmsRequest(WaterConnectionRequest waterConnectionRequest,
 										   Property property, PaymentDetail paymentDetail) {
+		//Return without sending notifs for disconnection payment since payment is managed in workflow notifs
+		if(waterConnectionRequest.isDisconnectRequest())
+			return null;
+
 		String localizationMessage = notificationUtil.getLocalizationMessages(property.getTenantId(),
 				waterConnectionRequest.getRequestInfo());
 		String message = notificationUtil.getMessageTemplate(WCConstants.PAYMENT_NOTIFICATION_SMS, localizationMessage);
@@ -404,6 +412,11 @@ public class PaymentUpdateService {
 	 */
 	private List<EmailRequest> getEmailRequest(WaterConnectionRequest waterConnectionRequest,
 											   Property property, PaymentDetail paymentDetail) {
+
+		//Return without sending notifs for disconnection payment since payment is managed in workflow notifs
+		if(waterConnectionRequest.isDisconnectRequest())
+			return null;
+
 		String localizationMessage = notificationUtil.getLocalizationMessages(property.getTenantId(),
 				waterConnectionRequest.getRequestInfo());
 		String message = notificationUtil.getMessageTemplate(WCConstants.PAYMENT_NOTIFICATION_EMAIL, localizationMessage);

@@ -190,4 +190,8 @@ public class SWCalculationConfiguration {
 
 	@Value("${egov.bill.search.endpoint}")
 	private String searchBillEndPoint;
+
+	@Value("${egov.sw.view.history.link}")
+	private String viewHistoryLink;
+
 }

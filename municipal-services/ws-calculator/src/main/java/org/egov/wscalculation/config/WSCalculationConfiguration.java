@@ -209,4 +209,8 @@ public class WSCalculationConfiguration {
 
 	@Value("${egov.bill.search.endpoint}")
 	private String searchBillEndPoint;
+
+	@Value("${egov.ws.view.history.link}")
+	private String viewHistoryLink;
+
 }

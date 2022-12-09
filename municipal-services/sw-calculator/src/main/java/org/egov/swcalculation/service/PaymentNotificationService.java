@@ -62,6 +62,8 @@ public class PaymentNotificationService {
 	String totalBillAmount = "billAmount";
 	String dueDate = "dueDate";
 
+	String applicationNumberReplacer = "$applicationNumber";
+
 	@SuppressWarnings("unchecked")
 	public void process(HashMap<String, Object> record, String topic) {
 		try {
@@ -247,9 +249,9 @@ public class PaymentNotificationService {
 			// Arrays.asList(config.getPayTriggers().split("[,]"));
 			Action action;
 			List<ActionItem> items = new ArrayList<>();
-			String actionLink = config.getPayLink().replace("$mobile", mobile)
-					.replace("$consumerCode", sewerageConnectionRequest.getSewerageConnection().getConnectionNo())
-					.replace("$tenantId", property.getTenantId());
+			String actionLink = config.getViewHistoryLink();
+			actionLink = actionLink.replace(applicationNumberReplacer, sewerageConnectionRequest.getSewerageConnection().getApplicationNo());
+
 			actionLink = config.getNotificationUrl() + actionLink;
 			ActionItem item = ActionItem.builder().actionUrl(actionLink).code(config.getPayCode()).build();
 			items.add(item);
