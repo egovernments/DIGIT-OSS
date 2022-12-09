@@ -1,4 +1,4 @@
-ALTER TABLE egbs_bill_v1 add column consumercode character varying(256);
+ALTER TABLE egbs_bill_v1 ADD COLUMN consumercode CHARACTER VARYING(256);
 
 UPDATE egbs_bill_v1 b SET consumerCode = bd.consumercode FROM egbs_billdetail_v1 bd WHERE bd.billid = b.id;
 
