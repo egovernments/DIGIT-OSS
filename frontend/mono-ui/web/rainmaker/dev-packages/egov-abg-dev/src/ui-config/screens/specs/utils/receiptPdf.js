@@ -1,4 +1,4 @@
-import { downloadMultipleBill } from "egov-common/ui-utils/commons";
+// import { downloadMultipleBill } from "egov-common/ui-utils/commons";
 import { toggleSpinner } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";
 import isEmpty from "lodash/isEmpty";
@@ -9,6 +9,7 @@ import {
   loadMdmsData, loadPtBillData,
   loadUlbLogo
 } from "./receiptTransformer";
+import { downloadMultipleBill } from "./index";
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 

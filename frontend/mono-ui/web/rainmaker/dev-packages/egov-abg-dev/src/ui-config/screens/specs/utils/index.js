@@ -11,6 +11,8 @@ import {
 import { httpRequest } from "../../../../ui-utils";
 import {  prepareFinalObject } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { set } from "lodash";
+import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
+import commonConfig from "config/common.js";
 
 export const getCommonApplyFooter = children => {
   return {
@@ -52,6 +54,85 @@ export const getMdmsData = async  requestBody=> {
     return {};
   }
 };
+
+const getMdmsDataforCollection = async (businesService) => {
+  let mdmsBody = null;
+
+  if (businesService == "SW") {
+    mdmsBody = {
+      MdmsCriteria: {
+        tenantId: "uk",
+        moduleDetails: [
+          { moduleName: "sw-services-calculation", masterDetails: [{ name: "Penalty" }] }]
+      }
+    };
+  }
+  else {
+    mdmsBody = {
+      MdmsCriteria: {
+        tenantId: "uk",
+        moduleDetails: [
+          { moduleName: "ws-services-calculation", masterDetails: [{ name: "Penalty" }] }]
+      }
+    };
+  }
+  try {
+    let payload = null;
+    payload = await httpRequest("post", "/egov-mdms-service/v1/_search", "_search", [], mdmsBody);
+    if (payload.MdmsRes['ws-services-calculation'] && payload.MdmsRes['ws-services-calculation'].Penalty !== undefined && payload.MdmsRes['ws-services-calculation'].Penalty.length > 0) {
+      return payload.MdmsRes['ws-services-calculation'].Penalty[0].rate;
+    }
+    else if (payload.MdmsRes['sw-services-calculation'] && payload.MdmsRes['sw-services-calculation'].Penalty !== undefined && payload.MdmsRes['sw-services-calculation'].Penalty.length > 0) {
+      return payload.MdmsRes['sw-services-calculation'].Penalty[0].rate;
+    }
+
+  } catch (e) { console.log(e); }
+
+};
+
+export const downloadMultipleBill = async (bills = [], configKey, businesService) => {
+  let rate = await getMdmsDataforCollection(businesService);
+
+  try {
+    const DOWNLOADRECEIPT = {
+      GET: {
+        URL: "/pdf-service/v1/_create",
+        ACTION: "_get",
+      },
+    };
+    const queryStr = [
+      { key: "key", value: configKey },
+      { key: "tenantId", value: commonConfig.tenantId }
+    ]
+    var addDetail = null;
+
+    addDetail = {
+      "penaltyRate": rate
+    }
+    bills = bills.filter(item => item.totalAmount > 0);
+    bills.map(item => {
+
+      item.additionalDetails = addDetail;
+    })
+
+    var actualBills = [], size = 40;
+    for (let i = 0; bills.length > 0; i++) {
+      actualBills.push(bills.splice(0, size));
+    }
+      for( let i = 0; i < actualBills.length; i++) {
+        await downloadPdfs(DOWNLOADRECEIPT, queryStr, actualBills[i])
+      }
+  } catch (error) {
+    console.log(error);
+
+  }
+
+}
+
+export const downloadPdfs = async (DOWNLOADRECEIPT, queryStr, bills) => {
+  const pfResponse = await httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Bill: bills }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
+  downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0], 'download');
+}
 
 export const getTranslatedLabel = (labelKey, localizationLabels) => {
   let translatedLabel = null;
