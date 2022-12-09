@@ -496,7 +496,7 @@ public class WorkflowNotificationService {
             if (messageToReplace.contains("{Service}"))
                 messageToReplace = messageToReplace.replace("{Service}", WCConstants.SERVICE_FIELD_VALUE_NOTIFICATION);
 
-            if (messageToReplace.contains("{Plumber Info}"))
+            if (messageToReplace.contains("{Plumb Info}"))
                 messageToReplace = getMessageForPlumberInfo(waterConnectionRequest.getWaterConnection(), messageToReplace);
 
             if (messageToReplace.contains("{SLA}"))
@@ -586,27 +586,27 @@ public class WorkflowNotificationService {
         if(!StringUtils.isEmpty(String.valueOf(addDetail.get(WCConstants.DETAILS_PROVIDED_BY)))){
             String detailsProvidedBy = String.valueOf(addDetail.get(WCConstants.DETAILS_PROVIDED_BY));
             if ( StringUtils.isEmpty(detailsProvidedBy) || detailsProvidedBy.equalsIgnoreCase(WCConstants.SELF)) {
-                String code = StringUtils.substringBetween(messageTemplate, "{Plumber Info}", "{/Plumber Info}");
-                messageTemplate = messageTemplate.replace("{Plumber Info}", "");
-                messageTemplate = messageTemplate.replace("{/Plumber Info}", "");
+                String code = StringUtils.substringBetween(messageTemplate, "{Plumb Info}", "{/Plumb Info}");
+                messageTemplate = messageTemplate.replace("{Plumb Info}", "");
+                messageTemplate = messageTemplate.replace("{/Plumb Info}", "");
                 messageTemplate = messageTemplate.replace(code, "");
             } else {
-                messageTemplate = messageTemplate.replace("{Plumber Info}", "").replace("{/Plumber Info}", "");
-                messageTemplate = messageTemplate.replace("{Plumber name}",
+                messageTemplate = messageTemplate.replace("{Plumb Info}", "").replace("{/Plumb Info}", "");
+                messageTemplate = messageTemplate.replace("{Plumb name}",
                         StringUtils.isEmpty(waterConnection.getPlumberInfo().get(0).getName()) ? ""
                                 : waterConnection.getPlumberInfo().get(0).getName());
-                messageTemplate = messageTemplate.replace("{Plumber Licence No.}",
+                messageTemplate = messageTemplate.replace("{Plumb Licence No.}",
                         StringUtils.isEmpty(waterConnection.getPlumberInfo().get(0).getLicenseNo()) ? ""
                                 : waterConnection.getPlumberInfo().get(0).getLicenseNo());
-                messageTemplate = messageTemplate.replace("{Plumber Mobile No.}",
+                messageTemplate = messageTemplate.replace("{Plumb Mobile No.}",
                         StringUtils.isEmpty(waterConnection.getPlumberInfo().get(0).getMobileNumber()) ? ""
                                 : waterConnection.getPlumberInfo().get(0).getMobileNumber());
             }
 
         }else{
-            String code = StringUtils.substringBetween(messageTemplate, "{Plumber Info}", "{/Plumber Info}");
-            messageTemplate = messageTemplate.replace("{Plumber Info}", "");
-            messageTemplate = messageTemplate.replace("{/Plumber Info}", "");
+            String code = StringUtils.substringBetween(messageTemplate, "{Plumb Info}", "{/Plumb Info}");
+            messageTemplate = messageTemplate.replace("{Plumb Info}", "");
+            messageTemplate = messageTemplate.replace("{/Plumb Info}", "");
             messageTemplate = messageTemplate.replace(code, "");
         }
         return messageTemplate;

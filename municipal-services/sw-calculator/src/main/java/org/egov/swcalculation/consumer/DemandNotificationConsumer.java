@@ -41,7 +41,7 @@ public class DemandNotificationConsumer {
 				tenantId = tenantId.split("\\.")[0];
 			demandNotificationObj.setTenantId(tenantId);
 
-			notificationService.process(demandNotificationObj, topic);
+//			notificationService.process(demandNotificationObj, topic);
 		} catch (final Exception e) {
 			StringBuilder builder = new StringBuilder();
 			builder.append("Error while listening to value: ").append(record).append(" on topic: ").append(topic)

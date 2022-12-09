@@ -43,7 +43,7 @@ public class DemandNotificationConsumer {
 				tenantId = tenantId.split("\\.")[0];
 			notificationObj.setTenantId(tenantId);
 
-			notificationService.process(notificationObj, topic);
+//			notificationService.process(notificationObj, topic);
 		} catch (final Exception e) {
 			log.error("Error while listening to value: " + request + " on topic: " + topic + ": " + e);
 		}
