@@ -10,6 +10,7 @@ const VALIDATION_SCHEMA = Yup.object().shape({
   district: Yup.object({
     value: Yup.string().required("This field is required"),
   }),
+  khewats: Yup.string().required("This field is required."),
 });
 
 export { VALIDATION_SCHEMA };

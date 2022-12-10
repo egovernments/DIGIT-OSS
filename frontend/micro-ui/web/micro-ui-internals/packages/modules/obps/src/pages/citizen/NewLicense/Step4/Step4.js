@@ -300,6 +300,7 @@ const AppliedDetailForm = (props) => {
                 <Col col-12>
                   <h4>
                     1. DGPS points <span className="text-primary"> (Click here for instructions to capture DGPS points)</span>
+                    <span style={{ color: "red" }}>*</span>
                   </h4>
                   <br></br>
                   <div className="px-2">
@@ -338,7 +339,7 @@ const AppliedDetailForm = (props) => {
                   <br></br>
                   <div>
                     <h5>
-                      2.Details of Plots&nbsp;&nbsp;
+                      2.Details of Plots <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
                       <label htmlFor="regularOption">
                         &nbsp;&nbsp;
                         <input {...register("regularOption")} type="radio" value="regular" id="regularOption" />
@@ -378,7 +379,9 @@ const AppliedDetailForm = (props) => {
                         <tr>
                           <td>
                             <div className="px-2">
-                              <p className="mb-2">Gen</p>
+                              <p className="mb-2">
+                                Gen <span style={{ color: "red" }}>*</span>
+                              </p>
                             </div>
                           </td>
                           <td component="th" scope="row">
@@ -401,7 +404,9 @@ const AppliedDetailForm = (props) => {
                         <tr>
                           <td>
                             <div className="px-2">
-                              <p className="mb-2">NPNL</p>
+                              <p className="mb-2">
+                                NPNL <span style={{ color: "red" }}>*</span>
+                              </p>
                             </div>
                           </td>
                           <td component="th" scope="row">
@@ -424,7 +429,9 @@ const AppliedDetailForm = (props) => {
                         <tr>
                           <td>
                             <div className="px-2">
-                              <p className="mb-2">EWS</p>
+                              <p className="mb-2">
+                                EWS <span style={{ color: "red" }}>*</span>
+                              </p>
                             </div>
                           </td>
                           <td component="th" scope="row">
@@ -447,7 +454,9 @@ const AppliedDetailForm = (props) => {
                         <tr>
                           <td>
                             <div className="px-2">
-                              <p className="mb-2">Commercial</p>
+                              <p className="mb-2">
+                                Commercial <span style={{ color: "red" }}>*</span>
+                              </p>
                             </div>
                           </td>
                           <td component="th" scope="row">
@@ -470,7 +479,9 @@ const AppliedDetailForm = (props) => {
                         <tr>
                           <td>
                             <div className="px-2">
-                              <p className="mb-2">Community Sites</p>
+                              <p className="mb-2">
+                                Community Sites <span style={{ color: "red" }}>*</span>
+                              </p>
                             </div>
                           </td>
                           <td component="th" scope="row">
@@ -493,7 +504,9 @@ const AppliedDetailForm = (props) => {
                         <tr>
                           <td>
                             <div className="px-2">
-                              <p className="mb-2">Parks</p>
+                              <p className="mb-2">
+                                Parks <span style={{ color: "red" }}>*</span>
+                              </p>
                             </div>
                           </td>
                           <td component="th" scope="row">
@@ -525,7 +538,9 @@ const AppliedDetailForm = (props) => {
                         <tr>
                           <td>
                             <div className="px-2">
-                              <p className="mb-2">STP</p>
+                              <p className="mb-2">
+                                STP <span style={{ color: "red" }}>*</span>
+                              </p>
                             </div>
                           </td>
                           <td component="th" scope="row">
@@ -548,7 +563,9 @@ const AppliedDetailForm = (props) => {
                         <tr>
                           <td>
                             <div className="px-2">
-                              <p className="mb-2">ETP</p>
+                              <p className="mb-2">
+                                ETP <span style={{ color: "red" }}>*</span>
+                              </p>
                             </div>
                           </td>
                           <td component="th" scope="row">
@@ -571,7 +588,9 @@ const AppliedDetailForm = (props) => {
                         <tr>
                           <td>
                             <div className="px-2">
-                              <p className="mb-2">WTP</p>
+                              <p className="mb-2">
+                                WTP <span style={{ color: "red" }}>*</span>
+                              </p>
                             </div>
                           </td>
                           <td component="th" scope="row">
@@ -594,7 +613,9 @@ const AppliedDetailForm = (props) => {
                         <tr>
                           <td>
                             <div className="px-2">
-                              <p className="mb-2">UGT</p>
+                              <p className="mb-2">
+                                UGT <span style={{ color: "red" }}>*</span>
+                              </p>
                             </div>
                           </td>
                           <td component="th" scope="row">
@@ -617,7 +638,9 @@ const AppliedDetailForm = (props) => {
                         <tr>
                           <td>
                             <div className="px-2">
-                              <p className="mb-2">Milk Booth</p>
+                              <p className="mb-2">
+                                Milk Booth <span style={{ color: "red" }}>*</span>
+                              </p>
                             </div>
                           </td>
                           <td component="th" scope="row">
@@ -640,7 +663,9 @@ const AppliedDetailForm = (props) => {
                         <tr>
                           <td>
                             <div className="px-2">
-                              <p className="mb-2">GSS</p>
+                              <p className="mb-2">
+                                GSS <span style={{ color: "red" }}>*</span>
+                              </p>
                             </div>
                           </td>
                           <td component="th" scope="row">
@@ -679,7 +704,9 @@ const AppliedDetailForm = (props) => {
                           <tr>
                             <td>
                               <div className="px-2">
-                                <p className="mb-2">Residential</p>
+                                <p className="mb-2">
+                                  Residential <span style={{ color: "red" }}>*</span>
+                                </p>
                               </div>
                             </td>
                             <td align="right">
@@ -694,7 +721,9 @@ const AppliedDetailForm = (props) => {
                           <tr>
                             <td>
                               <div className="px-2">
-                                <p className="mb-2">Commercial</p>
+                                <p className="mb-2">
+                                  Commercial <span style={{ color: "red" }}>*</span>{" "}
+                                </p>
                               </div>
                             </td>
                             <td align="right">
@@ -727,7 +756,9 @@ const AppliedDetailForm = (props) => {
                           <tr>
                             <td>
                               <div className="px-2">
-                                <p className="mb-2">Sectoral Plan Road</p>
+                                <p className="mb-2">
+                                  Sectoral Plan Road <span style={{ color: "red" }}>*</span>
+                                </p>
                               </div>
                             </td>
                             <td align="right">
@@ -749,7 +780,9 @@ const AppliedDetailForm = (props) => {
                           <tr>
                             <td>
                               <div className="px-2">
-                                <p className="mb-2">Green Belt</p>
+                                <p className="mb-2">
+                                  Green Belt <span style={{ color: "red" }}>*</span>
+                                </p>
                               </div>
                             </td>
                             <td align="right">
@@ -771,7 +804,9 @@ const AppliedDetailForm = (props) => {
                           <tr>
                             <td>
                               <div className="px-2">
-                                <p className="mb-2">24/18 mtr wide internal circulation Plan road</p>
+                                <p className="mb-2">
+                                  24/18 mtr wide internal circulation Plan road <span style={{ color: "red" }}>*</span>
+                                </p>
                               </div>
                             </td>
                             <td align="right">
@@ -793,7 +828,9 @@ const AppliedDetailForm = (props) => {
                           <tr>
                             <td>
                               <div className="px-2">
-                                <p className="mb-2">Other Roads</p>
+                                <p className="mb-2">
+                                  Other Roads <span style={{ color: "red" }}>*</span>
+                                </p>
                               </div>
                             </td>
                             <td align="right">
@@ -815,7 +852,9 @@ const AppliedDetailForm = (props) => {
                           <tr>
                             <td>
                               <div className="px-2">
-                                <p className="mb-2">Undetermined use(UD)</p>
+                                <p className="mb-2">
+                                  Undetermined use(UD) <span style={{ color: "red" }}>*</span>
+                                </p>
                               </div>
                             </td>
                             <td align="right">
@@ -853,7 +892,8 @@ const AppliedDetailForm = (props) => {
                         <td>1. </td>
                         <td>
                           {" "}
-                          Whether you want to surrender the 10% area of licence colony to Govt. the instead of providing 10% under EWS and NPNL plots{" "}
+                          Whether you want to surrender the 10% area of licence colony to Govt. the instead of providing 10% under EWS and NPNL plots
+                          <span style={{ color: "red" }}>*</span>
                         </td>
                         <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
                           <label htmlFor="surrender">
@@ -877,7 +917,9 @@ const AppliedDetailForm = (props) => {
                       </tr>
                       <tr>
                         <td>2. </td>
-                        <td>Whether any pocket proposed to be transferred less than 1 acre </td>
+                        <td>
+                          Whether any pocket proposed to be transferred less than 1 acre <span style={{ color: "red" }}>*</span>
+                        </td>
                         <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
                           <label htmlFor="pocketProposed">
                             <input {...register("pocketProposed")} type="radio" value="Y" id="pocketProposed" />
@@ -906,7 +948,10 @@ const AppliedDetailForm = (props) => {
                       </tr>
                       <tr>
                         <td>3. </td>
-                        <td>Whether you want to deposit an amount @ of 3 times of collector rate instead of the surrender 10% land to Govt. </td>
+                        <td>
+                          Whether you want to deposit an amount @ of 3 times of collector rate instead of the surrender 10% land to Govt.
+                          <span style={{ color: "red" }}>*</span>{" "}
+                        </td>
                         <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
                           <label htmlFor="deposit">
                             <input {...register("deposit")} type="radio" value="Y" id="deposit" />
@@ -931,7 +976,9 @@ const AppliedDetailForm = (props) => {
                       </tr>
                       <tr>
                         <td>4. </td>
-                        <td>Whether the surrendered area is having a minimum of 18 mtr independent access </td>
+                        <td>
+                          Whether the surrendered area is having a minimum of 18 mtr independent access <span style={{ color: "red" }}>*</span>
+                        </td>
                         <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
                           <label htmlFor="surrendered">
                             <input {...register("surrendered")} type="radio" value="Y" id="surrendered" />
@@ -973,8 +1020,8 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Whether you hosted the existing approved layout plan & in-principle approved layout on the website of your company/organization Yes/No if yes upload"
                       >
-                        Hosted approved layout plan. &nbsp;&nbsp;
-                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>&nbsp;&nbsp;
+                        Hosted approved layout plan.<span style={{ color: "red" }}>*</span>
+                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                         <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.hostedLayoutPlan)}>
                           {" "}
                         </VisibilityIcon>
@@ -990,7 +1037,7 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Consent of RERA if there is any change in the phasing ."
                       >
-                        Consent of RERA. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        Consent of RERA. <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon> &nbsp;&nbsp;
                         <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.consentRera)}>
                           {" "}
@@ -1001,7 +1048,7 @@ const AppliedDetailForm = (props) => {
                     </div>
                     <div className="col col-3">
                       <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
-                        Sectoral Plan. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        Sectoral Plan.<span style={{ color: "red" }}>*</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon> &nbsp;&nbsp;
                         <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.sectoralPlan)}>
                           {" "}
@@ -1016,7 +1063,8 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Copy of detailed specifications and designs for electric supply including street lighting"
                       >
-                        Designs for electric supply.&nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon> &nbsp;&nbsp;
+                        Designs for electric supply.<span style={{ color: "red" }}>*</span>
+                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon> &nbsp;&nbsp;
                         <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.detailedElectricSupply)}>
                           {" "}
                         </VisibilityIcon>
@@ -1034,7 +1082,7 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Copy of plans showing cross sections of proposed roads indicating, in particular, the width of proposed carriage ways cycle tracks and footpaths etc"
                       >
-                        Plans showing cross sections. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon> &nbsp;&nbsp;
+                        Plans showing cross sections.<span style={{ color: "red" }}>*</span> <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>{" "}
                         <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.planCrossSection)}>
                           {" "}
                         </VisibilityIcon>
@@ -1048,7 +1096,7 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Copy of plans indicating, in addition, the position of sewers, stormwater channels, water supply and any other public health services."
                       >
-                        Plans indicating position of public. &nbsp;&nbsp;
+                        Plans indicating position of public.<span style={{ color: "red" }}>*</span>
                         <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon> &nbsp;&nbsp;
                         <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.publicHealthServices)}>
                           {" "}
@@ -1064,7 +1112,8 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Copy of detailed specifications and designs of road works and estimated costs thereof"
                       >
-                        Specifications and designs. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon> &nbsp;&nbsp;
+                        Specifications and designs.<span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon> &nbsp;&nbsp;
                         <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.designRoad)}>
                           {" "}
                         </VisibilityIcon>
@@ -1078,7 +1127,8 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Copy of detailed specifications and designs of sewerage, storm, water and water supply works and estimated costs thereof"
                       >
-                        Designs of sewerage and storm. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon> &nbsp;&nbsp;
+                        Designs of sewerage and storm. <span style={{ color: "red" }}>*</span>
+                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon> &nbsp;&nbsp;
                         <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.designSewarage)}>
                           {" "}
                         </VisibilityIcon>
@@ -1096,7 +1146,7 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Copy of detailed specifications and designs for disposal and treatment of storm and sullage water and estimated costs of works."
                       >
-                        Disposal and storm treatment. &nbsp;&nbsp;
+                        Disposal treatment.<span style={{ color: "red" }}>*</span>
                         <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon> &nbsp;&nbsp;
                         <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.designDisposal)}>
                           {" "}
@@ -1112,7 +1162,8 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Whether intimated each of the allottees through registered post regarding the proposed changes in the layout plan: - If yes selected upload"
                       >
-                        Undertaking that no change. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon> &nbsp;&nbsp;
+                        Undertaking that no change. <span style={{ color: "red" }}>*</span>
+                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon> &nbsp;&nbsp;
                         <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.undertakingChange)}>
                           {" "}
                         </VisibilityIcon>
@@ -1127,7 +1178,8 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Explanatory note regarding the salient feature of the proposed colony."
                       >
-                        Salient feature of the colony. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon> &nbsp;&nbsp;
+                        Salient feature of the colony. <span style={{ color: "red" }}>*</span>
+                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon> &nbsp;&nbsp;
                         <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.proposedColony)}>
                           {" "}
                         </VisibilityIcon>
@@ -1137,7 +1189,7 @@ const AppliedDetailForm = (props) => {
                     </div>
                     <div className="col col-3">
                       <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
-                        Report any objection. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        Report any objection. <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;&nbsp;
                         <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon> &nbsp;&nbsp;
                         <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.reportObjection)}>
                           {" "}
@@ -1156,7 +1208,7 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Undertaking that no change has been made in the phasing "
                       >
-                        Undertaking. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        Undertaking.<span style={{ color: "red" }}>*</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon> &nbsp;&nbsp;
                         <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.undertaking)}>
                           {" "}

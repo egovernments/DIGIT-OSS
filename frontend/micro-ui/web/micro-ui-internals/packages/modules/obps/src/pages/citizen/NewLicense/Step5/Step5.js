@@ -10,6 +10,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import axios from "axios";
 import { round } from "lodash";
 import { useHistory } from "react-router-dom";
+// import Pdf from "../Documents/Document.pdf";
 
 // import InfoIcon from '@mui/icons-material/Info';
 // import TextField from '@mui/material/TextField';
@@ -256,7 +257,9 @@ const FeesChargesForm = (props) => {
                 <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))", width: "629px", marginLeft: "273px" }}>
                   <thead>
                     <tr>
-                      <th>Total Area (In acres)</th>
+                      <th>
+                        Total Area (In acres) <span style={{ color: "red" }}>*</span>
+                      </th>
                       <td>
                         <input type="text" className="form-control" disabled {...register("totalArea")} placeholder={totalAreaAcre} />
                       </td>
@@ -264,7 +267,9 @@ const FeesChargesForm = (props) => {
                   </thead>
                   <tbody>
                     <tr>
-                      <th>Purpose</th>
+                      <th>
+                        Purpose <span style={{ color: "red" }}>*</span>
+                      </th>
                       <td>
                         <input
                           type="text"
@@ -278,7 +283,9 @@ const FeesChargesForm = (props) => {
                       </td>
                     </tr>
                     <tr>
-                      <th>Dev Plan</th>
+                      <th>
+                        Dev Plan <span style={{ color: "red" }}>*</span>
+                      </th>
                       <td>
                         <input
                           type="text"
@@ -292,19 +299,25 @@ const FeesChargesForm = (props) => {
                       </td>
                     </tr>
                     <tr>
-                      <th>Scrutiny Fees</th>
+                      <th>
+                        Scrutiny Fees <span style={{ color: "red" }}>*</span>
+                      </th>
                       <td>
                         <input type="text" className="form-control" disabled {...register("scrutinyFee")} />
                       </td>
                     </tr>
                     <tr>
-                      <th>Licence Fees</th>
+                      <th>
+                        Licence Fees <span style={{ color: "red" }}>*</span>
+                      </th>
                       <td>
                         <input type="text" className="form-control" disabled {...register("licenseFee")} />
                       </td>
                     </tr>
                     <tr>
-                      <th>Conversion Charges</th>
+                      <th>
+                        Conversion Charges <span style={{ color: "red" }}>*</span>
+                      </th>
                       <td>
                         <input type="text" className="form-control" disabled {...register("conversionCharges")} />
                       </td>
@@ -315,7 +328,7 @@ const FeesChargesForm = (props) => {
                 <div className="row">
                   <div className="col col-4">
                     <h6 data-toggle="tooltip" data-placement="top" title="Total Fees (License fee 25% + Scrutiny Fees)">
-                      (i)&nbsp;Amount Payable &nbsp;&nbsp;
+                      (i)&nbsp;Amount Payable <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
                     </h6>
 
                     <input
@@ -347,7 +360,7 @@ const FeesChargesForm = (props) => {
 
                   <div className="col col-4">
                     <h6 data-toggle="tooltip" data-placement="top" title="Do you want to adjust the fee from any previous licence (Yes/No)">
-                      (iii)&nbsp;Adjust Fees &nbsp;&nbsp;
+                      (iii)&nbsp;Adjust Fees <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
                     </h6>
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow0} />
                     <label for="Yes">Yes</label>&nbsp;&nbsp;
@@ -356,10 +369,12 @@ const FeesChargesForm = (props) => {
                     {showhide0 === "Yes" && (
                       <div className="row ">
                         <div className="col col-12">
-                          <label>Enter Licence Number/LOI number</label>
+                          <label>
+                            Enter Licence Number/LOI number <span style={{ color: "red" }}>*</span>
+                          </label>
                           <input type="text" className="form-control" {...register("licNumber")} />
                           <label>
-                            Click Yes,if Lic No/LOI number belongs to other developers.
+                            Click Yes,if Lic No/LOI number belongs to other developers.<span style={{ color: "red" }}>*</span>
                             <label htmlFor="belongsDeveloper">
                               <input {...register("belongsDeveloper")} type="radio" value="Y" id="belongsDeveloper" />
                               &nbsp; Yes &nbsp;&nbsp;
@@ -384,9 +399,13 @@ const FeesChargesForm = (props) => {
                               </div>
                             )}
                           </label>
-                          <label>Amount (previous)</label>
+                          <label>
+                            Amount (previous) <span style={{ color: "red" }}>*</span>
+                          </label>
                           <input type="text" className="form-control" disabled {...register("amount")} />
-                          <label>Amount to be paid after adjustment</label>
+                          <label>
+                            Amount to be paid after adjustment <span style={{ color: "red" }}>*</span>
+                          </label>
                           <input type="text" className="form-control" {...register("amountAdjusted")} />
                         </div>
                       </div>
@@ -396,7 +415,9 @@ const FeesChargesForm = (props) => {
                 <br></br>
                 <hr />
                 <br></br>
-                <h5 className="text-black">Undertakings</h5>
+                <h5 className="text-black">
+                  Undertakings <span style={{ color: "red" }}>*</span>
+                </h5>
                 <div className="px-2">
                   <p className="text-black">The following is undertaken: </p>
                   <ul className="Undertakings">
@@ -440,10 +461,7 @@ const FeesChargesForm = (props) => {
                     <button
                       className="btn btn-primary"
                       onClick={() => {
-                        // `/digit-ui/citizen/payment/collect/${mutation2.data.Licenses[0].businessService}/${mutation2.data.Licenses[0].applicationNumber}`
-                        history.push(`/digit-ui/citizen/payment/collect/TL/${props?.securedData?.applicationNumber}`, {
-                          // paymentAmount: paymentAmt,
-                        });
+                        history.push(`/digit-ui/citizen/payment/collect/TL/${props?.securedData?.applicationNumber}`, {});
                         setmodal(true);
                       }}
                     >
@@ -476,10 +494,15 @@ const FeesChargesForm = (props) => {
                 </div>
                 <div class="row">
                   <div class="col-sm-12 text-right">
-                    <button id="btnSearch" class="btn btn-primary btn-md ">
-                      {" "}
-                      View as PDF &nbsp;&nbsp; <VisibilityIcon color="white" />
-                    </button>{" "}
+                    {/* <button id="btnSearch" class="btn btn-primary btn-md ">
+                      {" "} */}
+                    <a href="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" target="_blank">
+                      <button id="btnSearch" class="btn btn-primary btn-md">
+                        View as PDF &nbsp;&nbsp; <VisibilityIcon color="white" />
+                      </button>
+                    </a>
+                    {/* View as PDF &nbsp;&nbsp; <VisibilityIcon color="white" /> */}
+                    {/* </button>{" "} */}
                     &nbsp;&nbsp;
                     <button id="btnClear" class="btn btn-primary btn-md ">
                       Submit
