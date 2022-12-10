@@ -39,6 +39,20 @@ const LicenseDetailsScrutiny = (props) => {
   const [labelValue, setLabelValue] = useState("");
   const [modaldData, setmodaldData] = useState({ label: "", Remarks: "" });
   const [isyesOrNochecked, setYesorNochecked] = useState(true);
+  const [existingColonizer, setExistingColonizer] = useState();
+  const [existingColonizerDetails, setExistingColonizerDetails] = useState({
+    name: "",
+    mobile: "",
+    email: "",
+    dob: "",
+    pan: "",
+    licNo: "",
+    licDate: "",
+    licValidity: "",
+    licPurpose: "",
+    aggreementBtw: "",
+    boardResolution: ""
+  })
 
   const [fieldIconColors, setFieldIconColors] = useState({
     developerType: Colors.info,
@@ -523,6 +537,7 @@ const LicenseDetailsScrutiny = (props) => {
 
 
                   <Card style={{ margin: 5 }}>
+                  <h5 className="card-title fw-bold">Shareholding Patterns</h5>
                     <div className="table-bd">
                       <table className="table table-bordered">
                         <thead>
@@ -552,14 +567,18 @@ const LicenseDetailsScrutiny = (props) => {
                                 <td>
                                   <div className="row">
                                     {/* <button className="btn btn-sm col-md-6" onClick={()=>getDocShareholding(item?.uploadPdf)} > */}
+                                    <div className="btn btn-sm col-md-6">
                                     <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}>
                                       <Visibility color="info" className="icon" /></IconButton>
+                                      </div>
                                     {/* </button> */}
                                     {/* <button className="btn btn-sm col-md-6" onClick={() => window.open(item?.uploadPdf)} >
                                       <FileDownload color="primary" /> */}
+                                      <div className="btn btn-sm col-md-6">
                                       <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}>
                                 <FileDownload color="primary" className="mx-1" />
                         </IconButton>
+                        </div>
                                     {/* </button> */}
                                   </div>
                                 </td>
@@ -574,6 +593,9 @@ const LicenseDetailsScrutiny = (props) => {
                   <div className="card mb-3">
                     <h5 className="card-title fw-bold">Directors Information</h5>
                     <div className="card-body"> */}
+                    <Card style={{ margin:5}}>
+                    <h5 className="card-title fw-bold">Directors Information</h5>
+               
                   <div className="table-bd">
                     <table className="table table-bordered">
                       <thead>
@@ -581,8 +603,8 @@ const LicenseDetailsScrutiny = (props) => {
                           <th>Sr. No</th>
                           <th>DIN Number</th>
                           <th>Name</th>
-                          <th>PAN Number</th>
-                          <th>Upload PDF</th>
+                          <th>Contact Number</th>
+                          <th>View PDF</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -606,14 +628,18 @@ const LicenseDetailsScrutiny = (props) => {
                                   {/* <button className="btn btn-sm col-md-6" onClick={()=>getDocShareholding(item?.uploadPdf)}>
                                     <Visibility color="info" className="icon" />
                                   </button> */}
+                                  <div className="btn btn-sm col-md-6">
                                     <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}>
                                       <Visibility color="info" className="icon" /></IconButton>
                                   {/* <button className="btn btn-sm col-md-6" onClick={() => window.open(item?.uploadPdf)} >
                                     <FileDownload color="primary" />
                                   </button> */}
+                                  </div>
+                                  <div className="btn btn-sm col-md-6">
                                     <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}>
                                 <FileDownload color="primary" className="mx-1" />
                         </IconButton>
+                        </div>
                                 </div>
                               </td>
                             </tr>
@@ -624,10 +650,213 @@ const LicenseDetailsScrutiny = (props) => {
                       </tbody>
                     </table>
                   </div>
-                  {/* </div>
+                  </Card>
+                 
+                  <Card style={{ margin: 5 }}>
+                  <p className="ml-1">
+                    In case the Partner/director of the applicant firm/company is common with any existing colonizer who has been granted a license under the 1975 act Yes/No.
+
+                  </p>
+
+                  <div className="form-group ml-2">
+                    <input
+                      type="radio"
+                      value="Y"
+                      id="existingColonizer"
+                      className="mx-2 mt-1"
+                      // onChange={(e) => setExistingColonizer(e.target.value)}
+                      name="existingColonizer"
+                    />
+                    <label for="Yes">Yes</label>
+
+                    <input
+                      type="radio"
+                      value="N"
+                      id="existingColonizerN"
+                      className="mx-2 mt-1"
+                      // onChange={(e) => setExistingColonizer(e.target.value)}
+                      name="existingColonizer"
+                    />
+                    <label for="No">No</label>
+                    {existingColonizer === "Y" && (
+                      <div>
+                        <div className="row ">
+                          <div className="form-group row">
+                            <div className="col-sm-12">
+                              <Col xs="12" md="12" sm="12">
+                                <Table className="table table-bordered" size="sm">
+                                  <thead>
+                                    <tr>
+                                      <th>S.No.</th>
+                                      <th>Document Name </th>
+                                      <th> Upload Documents</th>
+                                      <th> Annexure</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr>
+                                      <td> 1 &nbsp;&nbsp;</td>
+                                      <td>
+                                        {" "}
+                                        Agreement between the proposed developer and existing colonizer
+                                      </td>
+                                      <td align="center" size="large">
+                                        {/* <input
+                                          type="file"
+                                          accept="application/pdf"
+                                          name="agreementDoc"
+                                          onChange={(e) => getDocumentData(e?.target?.files[0], "aggreementBtw", "existingColonizer")}
+                                          class="employee-card-input"
+                                        /> */}
+                                      </td>
+                                      <td>
+                                        {/* {existingColonizerDetails.aggreementBtw? */}
+                                        <div className="btn btn-sm col-md-6">
+                                          <button type="button" 
+                                       
+                                          className="btn btn-sm col-md-6">
+                                            <Visibility color="info" className="icon" />
+                                          </button> : <p></p>
+                                          </div>
+                                        {/* // } */}
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <td> 2&nbsp;&nbsp; </td>
+                                      <td>
+                                        Board resolution of authorised signatory of the existing colonizer
+                                      </td>
+                                      <td align="center" size="large">
+                                        {/* <input
+                                          type="file"
+                                          accept="application/pdf"
+                                          name="boardDoc"
+                                          onChange={(e) => getDocumentData(e?.target?.files[0], "boardResolution", "existingColonizer")}
+                                          class="employee-card-input"
+                                        /> */}
+                                      </td>
+                                      <td>
+                                        {/* {existingColonizerDetails.boardResolution ? */}
+                                        <div className="btn btn-sm col-md-6">
+                                          <button type="button"
+                                          // onClick={() => getDocShareholding(existingColonizerDetails.boardResolution)}
+                                          className="btn btn-sm col-md-6">
+                                            <Visibility color="info" className="icon" />
+                                          </button> : <p></p>
+                                          </div>
+                                        {/* } */}
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </Table>
+                              </Col>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="row mx-2">
+
+
+                          <div className="col col-4">
+                            <div className="form-group">
+                              <label htmlFor="dob">DOB</label>
+                              {/* <input
+                                type="date"
+                                value={existingColonizerDetails.dob}
+                                name="dob"
+                               
+                                onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, dob: e.target.value })}
+                                className="employee-card-input"
+                              /> */}
+                            </div>
+                          </div>
+
+                          <div className="col col-4">
+                            <div className="form-group">
+                              <label htmlFor="pan">PAN Number</label>
+                              {/* <input
+                                type="pan"
+                                value={existingColonizerDetails.pan}
+                                name="dob"
+                               
+                                onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, pan: e.target.value })}
+                                className="employee-card-input"
+                                maxLength={10}
+                              /> */}
+                            </div>
+                          </div>
+
+                          <div className="col col-4">
+                            <div className="form-group">
+                              <label htmlFor="licNo">License No.</label>
+                              {/* <input
+                                type="text"
+                                value={existingColonizerDetails.licNo}
+                                name="licNo"
+                                
+                                onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, licNo: e.target.value })}
+                                className="employee-card-input"
+                                maxLength={10}
+                              /> */}
+                            </div>
+                          </div>
+
+                          <div className="col col-4">
+                            <div className="form-group">
+                              <label htmlFor="licDate">Date</label>
+                              {/* <input
+                                type="date"
+                                value={existingColonizerDetails.licDate}
+                                name="licDate"
+                               
+                                onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, licDate: e.target.value })}
+                                className="employee-card-input"
+                                maxLength={10}
+                              /> */}
+                            </div>
+                          </div>
+
+                          <div className="col col-4">
+                            <div className="form-group">
+                              <label htmlFor="licValidity">Validity</label>
+                              {/* <input
+                                type="date"
+                                value={existingColonizerDetails.licValidity}
+                                name="licValidity"
+                               
+                                onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, licValidity: e.target.value })}
+                                className="employee-card-input"
+                             
+                              /> */}
+                            </div>
+                          </div>
+
+                          <div className="col col-4">
+                            <div className="form-group">
+                              <label htmlFor="licValidity">Purpose</label>
+                              {/* <Select
+                                onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, licPurpose: e.target.value })}
+                                value={existingColonizerDetails.licPurpose}
+                                className="w-100"
+                                variant="standard"
+                              >
+                                {
+                                  purposeOptions?.data.map((item, index) => (
+                                    <MenuItem value={item.value} >{item?.label}</MenuItem>
+                                  ))
+                                }
+                              </Select> */}
+
+                            </div>
+                          </div>
+
+
+                        </div>
+                      </div>
+                    )}
                   </div>
-                )} */}
-                  {/* <Card style={{ margin: 5 }}></Card> */}
+
+                  </Card>
                 </div>
               }
             </div>
