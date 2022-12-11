@@ -85,11 +85,13 @@ module.exports = function (app) {
     "/land-services/_calculate",
     "/user/developer/_getAuthorizedUser",
     "/land-services/new/licenses/_get",
+    "/land-services/electric/plan/_create",
+    "/land-services/serviceplan/_create",
   ].forEach((location) => app.use(location, createProxy));
   ["/pb-egov-assets"].forEach((location) => app.use(location, assetsProxy));
   ["/mca/v1/companies", "/mca-directors/v1/companies", "/certificate/v3/pan/pancr"].forEach((location) => app.use(location, apiSetuProxy));
   // ["/egov-mdms-service/v1"].forEach((location) => app.use(location, LicProxy));
   ["/filestore/v1/files"].forEach((location) => app.use(location, docUploadProxy));
   // ["/user/developer"].forEach((location) => app.use(location, devRegistration));
-  ["/land-services/egscrutiny", "/land-services/new/licenses"].forEach((location) => app.use(location, EgScrutinyProxy));
+  // ["/land-services/egscrutiny", "/land-services/new/licenses"].forEach((location) => app.use(location, EgScrutinyProxy));
 };

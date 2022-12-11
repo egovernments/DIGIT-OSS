@@ -10,6 +10,8 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import axios from "axios";
 import { round } from "lodash";
 import { useHistory } from "react-router-dom";
+import Spinner from "../../../../components/Loader";
+// import Pdf from "../Documents/Document.pdf";
 
 // import InfoIcon from '@mui/icons-material/Info';
 // import TextField from '@mui/material/TextField';
@@ -34,6 +36,7 @@ const FeesChargesForm = (props) => {
   const [calculateData, setCalculateData] = useState({});
   const [modal, setmodal] = useState(false);
   const [modal1, setmodal1] = useState(false);
+  const [loader, setLoader] = useState(false);
 
   const {
     register,
@@ -52,8 +55,6 @@ const FeesChargesForm = (props) => {
   const [submitDataLabel, setSubmitDataLabel] = useState([]);
 
   const [FeesChargesFormSubmitted, SetFeesChargesFormSubmitted] = useState(false);
-
-  console.log("securedData", props);
 
   const FeesChrgesFormSubmitHandler = async (data) => {
     try {
@@ -161,35 +162,54 @@ const FeesChargesForm = (props) => {
       setValue("conversionCharges", charges?.conversionCharges);
       // setCalculateData(Resp.data);
     } catch (error) {
-      console.log(error.message);
+      return error;
     }
   };
   useEffect(() => {
     CalculateApiCall();
   }, []);
 
+  const showPdf = async () => {
+    setLoader(true);
+    try {
+      const Resp = await axios
+        .get(`http://103.166.62.118:8443/tl-services/new/license/report?id=${props.getId}`, {
+          responseType: "blob",
+        })
+        .then((response) => {
+          setLoader(false);
+          //Create a Blob from the PDF Stream
+          const file = new Blob([response?.data], { type: "application/pdf" });
+          //Build a URL from the file
+          const fileURL = URL.createObjectURL(file);
+          //Open the URL on new Window
+          window.open(fileURL);
+        });
+    } catch (error) {
+      setLoader(false);
+      return error;
+    }
+  };
+
   const getSubmitDataLabel = async () => {
     try {
       const Resp = await axios.get(`http://103.166.62.118:8443/land-services/new/licenses/_get?id=${props.getId}`).then((response) => {
         return response;
       });
-      console.log("RESP+++", Resp?.data);
       setSubmitDataLabel(Resp?.data);
     } catch (error) {
-      console.log(error.message);
+      return error;
     }
   };
 
   const getWholeData = async () => {
     try {
       const Resp = await axios.get(`http://103.166.62.118:8443/tl-services/new/licenses/object/_get?id=${props.getId}`);
-      console.log("Resp====", Resp?.data);
       // let temp = {};
       // Object.keys(Resp?.data).forEach((el) => {
       //   const newKey = el?.replace(/"/g, "");
       //   temp[newKey] = Resp?.data[el];
       // });
-      console.log("temp==", temp);
     } catch (error) {
       return error;
     }
@@ -230,227 +250,236 @@ const FeesChargesForm = (props) => {
   const dataAreaBiswansi = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.biswansi;
   const totalAreaAcre =
     dataArea * 0.125 + dataAreaMarla * 0.0062 + dataAreaSarai * 0.00069 + dataAreaBigha * 0.33 + dataAreaBiswa * 0.0309 + dataAreaBiswansi * 0.619;
-  console.log("abc", totalAreaAcre);
-
-  useEffect(() => {
-    console.log("dd", props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.kanal);
-  }, [props?.getLicData]);
 
   const dataScrutiny = props?.getLicData?.FeesAndCharges?.scrutinyFee;
   const dataLicence = props?.getLicData?.FeesAndCharges?.licenseFee;
   const data = dataLicence + (25 % dataScrutiny);
-  console.log("lic", data);
-
-  useEffect(() => {
-    console.log("ddtt", props?.getLicData);
-  }, [props?.getLicData]);
 
   return (
-    <form onSubmit={handleSubmit(FeesChrgesFormSubmitHandler)}>
-      <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New Licence </h4>
-        <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
-          <Form.Group className="justify-content-center" controlId="formBasicEmail">
-            <Row className="ml-auto" style={{ marginBottom: 5 }}>
-              <Col col-12>
-                <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))", width: "629px", marginLeft: "273px" }}>
-                  <thead>
-                    <tr>
-                      <th>Total Area (In acres)</th>
-                      <td>
-                        <input type="text" className="form-control" disabled {...register("totalArea")} placeholder={totalAreaAcre} />
-                      </td>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <th>Purpose</th>
-                      <td>
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder={Purpose}
-                          onChange1={handleChangePurpose}
-                          value={purpose}
-                          disabled
-                          {...register("purpose")}
-                        />
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Dev Plan</th>
-                      <td>
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder={potential}
-                          onChange1={handleChangePotential}
-                          value={potential}
-                          disabled
-                          {...register("potential")}
-                        />
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Scrutiny Fees</th>
-                      <td>
-                        <input type="text" className="form-control" disabled {...register("scrutinyFee")} />
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Licence Fees</th>
-                      <td>
-                        <input type="text" className="form-control" disabled {...register("licenseFee")} />
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Conversion Charges</th>
-                      <td>
-                        <input type="text" className="form-control" disabled {...register("conversionCharges")} />
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+    <>
+      {loader && <Spinner />}
+      <form onSubmit={handleSubmit(FeesChrgesFormSubmitHandler)}>
+        <Card style={{ width: "126%", border: "5px solid #1266af" }}>
+          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New Licence </h4>
+          <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
+            <Form.Group className="justify-content-center" controlId="formBasicEmail">
+              <Row className="ml-auto" style={{ marginBottom: 5 }}>
+                <Col col-12>
+                  <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))", width: "629px", marginLeft: "273px" }}>
+                    <thead>
+                      <tr>
+                        <th>
+                          Total Area (In acres) <span style={{ color: "red" }}>*</span>
+                        </th>
+                        <td>
+                          <input type="text" className="form-control" disabled {...register("totalArea")} placeholder={totalAreaAcre} />
+                        </td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th>
+                          Purpose <span style={{ color: "red" }}>*</span>
+                        </th>
+                        <td>
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder={Purpose}
+                            onChange1={handleChangePurpose}
+                            value={purpose}
+                            disabled
+                            {...register("purpose")}
+                          />
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>
+                          Dev Plan <span style={{ color: "red" }}>*</span>
+                        </th>
+                        <td>
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder={potential}
+                            onChange1={handleChangePotential}
+                            value={potential}
+                            disabled
+                            {...register("potential")}
+                          />
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>
+                          Scrutiny Fees <span style={{ color: "red" }}>*</span>
+                        </th>
+                        <td>
+                          <input type="text" className="form-control" disabled {...register("scrutinyFee")} />
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>
+                          Licence Fees <span style={{ color: "red" }}>*</span>
+                        </th>
+                        <td>
+                          <input type="text" className="form-control" disabled {...register("licenseFee")} />
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>
+                          Conversion Charges <span style={{ color: "red" }}>*</span>
+                        </th>
+                        <td>
+                          <input type="text" className="form-control" disabled {...register("conversionCharges")} />
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
 
-                <div className="row">
-                  <div className="col col-4">
-                    <h6 data-toggle="tooltip" data-placement="top" title="Total Fees (License fee 25% + Scrutiny Fees)">
-                      (i)&nbsp;Amount Payable &nbsp;&nbsp;
-                    </h6>
+                  <div className="row">
+                    <div className="col col-4">
+                      <h6 data-toggle="tooltip" data-placement="top" title="Total Fees (License fee 25% + Scrutiny Fees)">
+                        (i)&nbsp;Amount Payable <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
+                      </h6>
 
-                    <input
-                      type="text"
-                      className="form-control"
-                      disabled
-                      minLength={1}
-                      maxLength={20}
-                      pattern="[0-9]*"
-                      onChange1={handleTotalFeesChange}
-                      onChange={(e) => setPayableNow(e.target.value)}
-                      value={payableNow}
-                    />
-                    {errors.totalFee && <p></p>}
-                  </div>
+                      <input
+                        type="text"
+                        className="form-control"
+                        disabled
+                        minLength={1}
+                        maxLength={20}
+                        pattern="[0-9]*"
+                        onChange1={handleTotalFeesChange}
+                        onChange={(e) => setPayableNow(e.target.value)}
+                        value={payableNow}
+                      />
+                      {errors.totalFee && <p></p>}
+                    </div>
 
-                  <div className="col col-4">
-                    <h6>(ii)Remark (If any)</h6>
-                    <input
-                      type="text"
-                      className="form-control"
-                      minLength={2}
-                      maxLength={100}
-                      {...register("remark")}
-                      onChange1={handleRemarkChange}
-                    />
-                    {errors.remark && <p></p>}
-                  </div>
+                    <div className="col col-4">
+                      <h6>(ii)Remark (If any)</h6>
+                      <input
+                        type="text"
+                        className="form-control"
+                        minLength={2}
+                        maxLength={100}
+                        {...register("remark")}
+                        onChange1={handleRemarkChange}
+                      />
+                      {errors.remark && <p></p>}
+                    </div>
 
-                  <div className="col col-4">
-                    <h6 data-toggle="tooltip" data-placement="top" title="Do you want to adjust the fee from any previous licence (Yes/No)">
-                      (iii)&nbsp;Adjust Fees &nbsp;&nbsp;
-                    </h6>
-                    <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow0} />
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" value="No" id="No" onChange={handleChange} name="Yes" onClick={handleshow0} />
-                    <label for="No">No</label>
-                    {showhide0 === "Yes" && (
-                      <div className="row ">
-                        <div className="col col-12">
-                          <label>Enter Licence Number/LOI number</label>
-                          <input type="text" className="form-control" {...register("licNumber")} />
-                          <label>
-                            Click Yes,if Lic No/LOI number belongs to other developers.
-                            <label htmlFor="belongsDeveloper">
-                              <input {...register("belongsDeveloper")} type="radio" value="Y" id="belongsDeveloper" />
-                              &nbsp; Yes &nbsp;&nbsp;
+                    <div className="col col-4">
+                      <h6 data-toggle="tooltip" data-placement="top" title="Do you want to adjust the fee from any previous licence (Yes/No)">
+                        (iii)&nbsp;Adjust Fees <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
+                      </h6>
+                      <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow0} />
+                      <label for="Yes">Yes</label>&nbsp;&nbsp;
+                      <input type="radio" value="No" id="No" onChange={handleChange} name="Yes" onClick={handleshow0} />
+                      <label for="No">No</label>
+                      {showhide0 === "Yes" && (
+                        <div className="row ">
+                          <div className="col col-12">
+                            <label>
+                              Enter Licence Number/LOI number <span style={{ color: "red" }}>*</span>
                             </label>
-                            <label htmlFor="belongsDeveloper">
-                              <input {...register("belongsDeveloper")} type="radio" value="N" id="belongsDeveloper" />
-                              &nbsp; No &nbsp;&nbsp;
-                            </label>
-                            {watch("belongsDeveloper") === "Y" && (
-                              <div>
-                                <div className="row">
-                                  <div className="col col-12">
-                                    <label>
-                                      <h2>
-                                        Consent letter in case of Another Developer (verified by the Department)
-                                        <span style={{ color: "red" }}>*</span>
-                                      </h2>
-                                    </label>
-                                    <input type="file" className="form-control" {...register("consentLetter")} />
+                            <input type="text" className="form-control" {...register("licNumber")} />
+                            <label>
+                              Click Yes,if Lic No/LOI number belongs to other developers.<span style={{ color: "red" }}>*</span>
+                              <label htmlFor="belongsDeveloper">
+                                <input {...register("belongsDeveloper")} type="radio" value="Y" id="belongsDeveloper" />
+                                &nbsp; Yes &nbsp;&nbsp;
+                              </label>
+                              <label htmlFor="belongsDeveloper">
+                                <input {...register("belongsDeveloper")} type="radio" value="N" id="belongsDeveloper" />
+                                &nbsp; No &nbsp;&nbsp;
+                              </label>
+                              {watch("belongsDeveloper") === "Y" && (
+                                <div>
+                                  <div className="row">
+                                    <div className="col col-12">
+                                      <label>
+                                        <h2>
+                                          Consent letter in case of Another Developer (verified by the Department)
+                                          <span style={{ color: "red" }}>*</span>
+                                        </h2>
+                                      </label>
+                                      <input type="file" className="form-control" {...register("consentLetter")} />
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                            )}
-                          </label>
-                          <label>Amount (previous)</label>
-                          <input type="text" className="form-control" disabled {...register("amount")} />
-                          <label>Amount to be paid after adjustment</label>
-                          <input type="text" className="form-control" {...register("amountAdjusted")} />
+                              )}
+                            </label>
+                            <label>
+                              Amount (previous) <span style={{ color: "red" }}>*</span>
+                            </label>
+                            <input type="text" className="form-control" disabled {...register("amount")} />
+                            <label>
+                              Amount to be paid after adjustment <span style={{ color: "red" }}>*</span>
+                            </label>
+                            <input type="text" className="form-control" {...register("amountAdjusted")} />
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
-                </div>
-                <br></br>
-                <hr />
-                <br></br>
-                <h5 className="text-black">Undertakings</h5>
-                <div className="px-2">
-                  <p className="text-black">The following is undertaken: </p>
-                  <ul className="Undertakings">
-                    <li>I hereby declare that the details furnished above are true and correct to the best of my knowledge</li>.
-                    <button className="btn btn-primary" onClick={() => setmodal1(true)}>
-                      Read More
-                    </button>
-                  </ul>
-                </div>
-                <Modal
-                  size="lg"
-                  isOpen={modal1}
-                  toggle={() => setmodal(!modal1)}
-                  style={{ width: "500px", height: "200px" }}
-                  aria-labelledby="contained-modal-title-vcenter"
-                  centered
-                >
-                  <ModalHeader toggle={() => setmodal1(!modal1)}></ModalHeader>
-                  <ModalBody style={{ fontSize: 20 }}>
-                    <h2>
-                      {" "}
-                      I hereby declare that the details furnished above are true and correct to the best of my knowledge and belief and I undertake to
-                      inform you of any changes therein, immediately. In case any of the above information is found to be false or untrue or
-                      misleading or misrepresenting, I am aware that I may be held liable for it.
-                    </h2>
-                  </ModalBody>
-                  <ModalFooter toggle={() => setmodal(!modal1)}></ModalFooter>
-                </Modal>
-                <div className="">
-                  <div className="form-check">
-                    <input className="form-check-input" formControlName="agreeCheck" type="checkbox" value="" id="flexCheckDefault" />
-                    <label className="checkbox" for="flexCheckDefault">
-                      I agree and accept the terms and conditions.
-                      <span className="text-danger">
-                        <b>*</b>
-                      </span>
-                    </label>
+                  <br></br>
+                  <hr />
+                  <br></br>
+                  <h5 className="text-black">
+                    Undertakings <span style={{ color: "red" }}>*</span>
+                  </h5>
+                  <div className="px-2">
+                    <p className="text-black">The following is undertaken: </p>
+                    <ul className="Undertakings">
+                      <li>I hereby declare that the details furnished above are true and correct to the best of my knowledge</li>.
+                      <button className="btn btn-primary" onClick={() => setmodal1(true)}>
+                        Read More
+                      </button>
+                    </ul>
                   </div>
-                  <div class="my-2">
-                    .
-                    <button
-                      className="btn btn-primary"
-                      onClick={() => {
-                        // `/digit-ui/citizen/payment/collect/${mutation2.data.Licenses[0].businessService}/${mutation2.data.Licenses[0].applicationNumber}`
-                        history.push(`/digit-ui/citizen/payment/collect/TL/${props?.securedData?.applicationNumber}`, {
-                          // paymentAmount: paymentAmt,
-                        });
-                        setmodal(true);
-                      }}
-                    >
-                      Pay Now
-                    </button>
-                  </div>
-                  {/* <div>
+                  <Modal
+                    size="lg"
+                    isOpen={modal1}
+                    toggle={() => setmodal(!modal1)}
+                    style={{ width: "500px", height: "200px" }}
+                    aria-labelledby="contained-modal-title-vcenter"
+                    centered
+                  >
+                    <ModalHeader toggle={() => setmodal1(!modal1)}></ModalHeader>
+                    <ModalBody style={{ fontSize: 20 }}>
+                      <h2>
+                        {" "}
+                        I hereby declare that the details furnished above are true and correct to the best of my knowledge and belief and I undertake
+                        to inform you of any changes therein, immediately. In case any of the above information is found to be false or untrue or
+                        misleading or misrepresenting, I am aware that I may be held liable for it.
+                      </h2>
+                    </ModalBody>
+                    <ModalFooter toggle={() => setmodal(!modal1)}></ModalFooter>
+                  </Modal>
+                  <div className="">
+                    <div className="form-check">
+                      <input className="form-check-input" formControlName="agreeCheck" type="checkbox" value="" id="flexCheckDefault" />
+                      <label className="checkbox" for="flexCheckDefault">
+                        I agree and accept the terms and conditions.
+                        <span className="text-danger">
+                          <b>*</b>
+                        </span>
+                      </label>
+                    </div>
+                    <div class="my-2">
+                      .
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => {
+                          history.push(`/digit-ui/citizen/payment/collect/TL/${props?.securedData?.applicationNumber}`, {});
+                          setmodal(true);
+                        }}
+                      >
+                        Pay Now
+                      </button>
+                    </div>
+                    {/* <div>
                     <Modal
                       size="lg"
                       isOpen={modal}
@@ -473,25 +502,29 @@ const FeesChargesForm = (props) => {
                       <ModalFooter toggle={() => setmodal(!modal)}></ModalFooter>
                     </Modal>
                   </div> */}
-                </div>
-                <div class="row">
-                  <div class="col-sm-12 text-right">
-                    <button id="btnSearch" class="btn btn-primary btn-md ">
-                      {" "}
-                      View as PDF &nbsp;&nbsp; <VisibilityIcon color="white" />
-                    </button>{" "}
-                    &nbsp;&nbsp;
-                    <button id="btnClear" class="btn btn-primary btn-md ">
-                      Submit
-                    </button>
                   </div>
-                </div>
-              </Col>
-            </Row>
-          </Form.Group>
+                  <div class="row">
+                    <div class="col-sm-12 text-right">
+                      {/* <button id="btnSearch" class="btn btn-primary btn-md ">
+                      {" "} */}
+                      {/* <a href="http://103.166.62.118:8443/tl-services/new/license/report?id=875" target="_blank"> */}
+                      <div onClick={() => showPdf()} id="btnSearch" class="btn btn-primary btn-md">
+                        View as PDF &nbsp;&nbsp; <VisibilityIcon color="white" />
+                      </div>
+                      {/* </a> */}
+                      &nbsp;&nbsp;
+                      <button type="submit" id="btnClear" class="btn btn-primary btn-md ">
+                        Submit
+                      </button>
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+            </Form.Group>
+          </Card>
         </Card>
-      </Card>
-    </form>
+      </form>
+    </>
   );
 };
 export default FeesChargesForm;

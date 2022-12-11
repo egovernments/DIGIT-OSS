@@ -103,7 +103,7 @@ const ApllicantFormStep1 = (props) => {
 
   const getDeveloperDataLabel = async (id) => {
     try {
-      const Resp = await axios.get(`http://103.166.62.118:8443/user/developer/_getDeveloperById?id=${id}&isAllData=false`);
+      const Resp = await axios.get(`http://103.166.62.118:80/user/developer/_getDeveloperById?id=${id}&isAllData=false`);
       setDeveloperDataLabel(Resp?.data?.devDetail?.[0]);
     } catch (error) {
       return error;
@@ -140,7 +140,7 @@ const ApllicantFormStep1 = (props) => {
 
   const getApplicantUserData = async (id) => {
     try {
-      const Resp = await axios.get(`http://103.166.62.118:8443/tl-services/new/licenses/_get?id=${id}`);
+      const Resp = await axios.get(`http://103.166.62.118:80/tl-services/new/licenses/_get?id=${id}`);
       const userData = Resp?.data?.newServiceInfoData[0]?.ApplicantInfo;
       setValue("notSigned", userData?.notSigned);
       setValue("LC", userData?.LC);
@@ -220,9 +220,7 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <h2>
-                      Alternate Mobile No<span style={{ color: "red" }}>*</span>
-                    </h2>
+                    <h2>Alternate Mobile No.</h2>
                   </Form.Label>
                 </div>
                 <Controller
@@ -532,7 +530,6 @@ const ApllicantFormStep1 = (props) => {
               </button>
             </div>
           </div>
-          ``
         </Card>
       </Card>
     </form>
