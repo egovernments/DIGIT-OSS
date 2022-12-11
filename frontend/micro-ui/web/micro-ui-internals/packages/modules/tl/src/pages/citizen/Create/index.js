@@ -13,7 +13,7 @@ const CreateTradeLicence = ({ parentRoute }) => {
   const { pathname } = useLocation();
   const history = useHistory();
   let config = [];
-  const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("PT_CREATE_TRADE", {});
+  const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("TL_CREATE_TRADE", {});
   let isReneworEditTrade = window.location.href.includes("/renew-trade/") || window.location.href.includes("/edit-application/")
 
   const stateId = Digit.ULBService.getStateId();

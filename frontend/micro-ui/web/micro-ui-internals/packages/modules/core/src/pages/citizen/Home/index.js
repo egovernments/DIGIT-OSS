@@ -26,7 +26,8 @@ const Home = () => {
   const tenantId = Digit.ULBService.getCitizenCurrentTenant(true);
   const { data: { stateInfo, uiHomePage } = {}, isLoading } = Digit.Hooks.useStore.getInitData();
   let isMobile = window.Digit.Utils.browser.isMobile();
-
+  if(window.Digit.SessionStorage.get("TL_CREATE_TRADE")) window.Digit.SessionStorage.set("TL_CREATE_TRADE",{})
+   
   const conditionsToDisableNotificationCountTrigger = () => {
     if (Digit.UserService?.getUser()?.info?.type === "EMPLOYEE") return false;
     if (!Digit.UserService?.getUser()?.access_token) return false;

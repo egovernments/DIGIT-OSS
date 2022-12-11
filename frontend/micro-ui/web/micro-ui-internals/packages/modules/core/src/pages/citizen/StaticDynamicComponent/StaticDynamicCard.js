@@ -25,7 +25,7 @@ const StaticDynamicCard = ({moduleCode}) => {
     const handleClickOnWhatsApp = (obj) => {
       window.open(obj);
     };
-
+    if(window.location.href.includes("tl") && window.Digit.SessionStorage.get("TL_CREATE_TRADE")) window.Digit.SessionStorage.set("TL_CREATE_TRADE",{})
     const IconComponent = ({module, styles}) => {
 
       switch(module){

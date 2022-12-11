@@ -127,6 +127,7 @@ const CitizenHome = ({ modules, getCitizenMenu, fetchedCitizen, isLoading }) => 
 };
 
 const EmployeeHome = ({ modules }) => {
+  if(window.Digit.SessionStorage.get("PT_CREATE_EMP_TRADE_NEW_FORM")) window.Digit.SessionStorage.set("PT_CREATE_EMP_TRADE_NEW_FORM",{})
   return (
     <div className="employee-app-container">
       <div className="ground-container moduleCardWrapper gridModuleWrapper">
