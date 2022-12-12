@@ -196,7 +196,7 @@ const EmployeeApp = ({ path, url, userType }) => {
           <PrivateRoute path={`${path}/edit-application-details/:id`} component={(props) => <ReNewApplication {...props} header={t("TL_ACTION_RESUBMIT")} parentRoute={path} />} />
           <PrivateRoute path={`${path}/response`} component={(props) => <Response {...props} parentRoute={path} />} />
           <PrivateRoute path={`${path}/search/:variant`} component={(props) => <Search {...props} parentRoute={path} />} />
-          <PrivateRoute path={`${path}/scrutiny`} component={ScrutinyFormcontainer} />
+          <PrivateRoute path={`${path}/scrutiny/:id`} component={ScrutinyFormcontainer} />
           <PrivateRoute path={`${path}/Loi`} component={Loi} />
           <PrivateRoute path={`${path}/Records`} component={Records} />
         </div>

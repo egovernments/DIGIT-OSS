@@ -14,7 +14,7 @@ import { useForkRef } from "@mui/material";
 import axios from "axios";
 // import AddIcon from "@mui/icons-material/Add";
 
-const ScrutitnyForms = () => {
+const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => {
   const personalInfoRef = useRef();
   const generalInfoRef = useRef();
   const developerInfoRef = useRef();
@@ -43,7 +43,7 @@ const ScrutitnyForms = () => {
   const [defaultheightApplied, setDefaultheightApplied] = useState(0);
   const [defaultheightFee, setDefaultheightFee] = useState(0);
   const [open, setOpen] = useState(false);
-  const [apiResppnse, setApiResponse] = useState({});
+  // const [apiResponse, setApiResponse] = useState({});
   const [remarksResponse, setRemarksResponse] = useState({});
   const [sumrol, setSumrol] = useState({});
   const [uncheckedValue, setUncheckedVlue] = useState([]);
@@ -52,6 +52,9 @@ const ScrutitnyForms = () => {
   const [applictaionNo, setApplicationNO] = useState(null);
   const [iconStates,setIconState]= useState(null)
   const [urlGetShareHoldingDoc,setDocShareHoldingUrl] = useState("")
+
+  const userInfo = Digit.UserService.getUser()?.info || {};
+
 
   const getUncheckedPersonalinfos = (data) => {
     setDisplayPersonalInfo(data.data);
@@ -103,18 +106,18 @@ const ScrutitnyForms = () => {
     setDisplayFeeandChargesInfo(data.data);
     console.log(data);
   };
-  const handleGetInputFieldsValues = async () => {
-    try {
-      const Resp = await axios.get("/tl-services/new/licenses/_get?id=702").then((response) => {
-        return response.data;
-      });
+  // const handleGetInputFieldsValues = async () => {
+  //   try {
+  //     const Resp = await axios.get("/tl-services/new/licenses/_get?id=702").then((response) => {
+  //       return response.data;
+  //     });
 
-      console.log("Response From API", Resp);
-      setApiResponse(Resp);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //     console.log("Response From API", Resp);
+  //     setApiResponse(Resp);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
   const handleGetFiledsStatesById=async()=>{
       const dataToPass={
         "requestInfo": {
@@ -130,7 +133,7 @@ const ScrutitnyForms = () => {
         }
     };
     try {
-      const Resp = await axios.post("/land-services/egscrutiny/_search?applicationNumber=702&userId=0", dataToPass).then((response) => {
+      const Resp = await axios.post(`/land-services/egscrutiny/_search?applicationNumber=${applicationNumber}&userId=${userInfo?.id}`, dataToPass).then((response) => {
         return response.data;
       });
 
@@ -157,7 +160,7 @@ const ScrutitnyForms = () => {
       },
     };
     try {
-      const Resp = await axios.post("/land-services/egscrutiny/_searchbylogin?applicationId=702&userid=123", dataToPass).then((response) => {
+      const Resp = await axios.post(`/land-services/egscrutiny/_searchbylogin?applicationId=${apiResponse?.id}&userid=${userInfo?.id}`, dataToPass).then((response) => {
         return response.data;
       });
 
@@ -179,18 +182,11 @@ const ScrutitnyForms = () => {
         ts: 0,
         ver: ".01",
         authToken: "80458c19-3b48-4aa8-b86e-e2e195e6753a",
-        userInfo: {
-          uuid: "5fe074f2-c12d-4a27-bd7b-92d15f9ab19c",
-          name: "rahul7",
-          userName: "rahul7",
-          tenantId: "hr",
-          id: 97,
-          mobileNumber: "7895877833",
-        },
+        userInfo: userInfo,
       },
     };
     try {
-      const Resp = await axios.post("/land-services/egscrutiny/_search?applicationNumber=702&userId=0", dataToSend).then((response) => {
+      const Resp = await axios.post(`/land-services/egscrutiny/_search?applicationNumber=${applicationNumber}&userId=${userInfo?.id}`, dataToSend).then((response) => {
         return response.data;
       });
 
@@ -202,19 +198,26 @@ const ScrutitnyForms = () => {
   };
 
   useEffect(() => {
-    handleGetDisapprovalList();
-  }, [remarksChanges]);
+    if(apiResponse?.id){
+      handleGetDisapprovalList();
+    }
+  }, [remarksChanges,apiResponse]);
 
+  // useEffect(() => {
+  //   handleGetInputFieldsValues();
+  // }, []);
   useEffect(() => {
-    handleGetInputFieldsValues();
-  }, []);
-  useEffect(() => {
-    handleGetRemarkssValues();
-  }, []);
+    if(applicationNumber){
+      // console.log("log123...",userInfo)
+      handleGetRemarkssValues();
+    }
+  }, [applicationNumber]);
 
   useEffect(()=>{
-    handleGetFiledsStatesById();
-  },[]);
+    if(applicationNumber){
+      handleGetFiledsStatesById();
+    }
+  },[applicationNumber]);
 
   const curentDataPersonal = (data) => {
     setRemarksChanges(data.data);
@@ -278,12 +281,12 @@ const ScrutitnyForms = () => {
       setDefaultheightFee(0);
     }
   };
-  console.log("scrutiny form api get", apiResppnse.newServiceInfoData !== undefined ? apiResppnse.newServiceInfoData[0].ApplicantInfo : apiResppnse);
+  console.log("scrutiny form api get", apiResponse?.newServiceInfoData !== undefined ? apiResponse?.newServiceInfoData[0]?.ApplicantInfo : apiResponse);
   console.log(
     "scrutiny form api get1",
-    apiResppnse.newServiceInfoData !== undefined ? apiResppnse.newServiceInfoData[0].ApplicantPurpose : apiResppnse
+    apiResponse?.newServiceInfoData !== undefined ? apiResponse?.newServiceInfoData[0]?.ApplicantPurpose : apiResponse
   );
-  // console.log("scrutiny form api get2", apiResppnse.newServiceInfoData !== undefined ? apiResppnse.newServiceInfoData[0].LandSchedule : apiResppnse);
+  // console.log("scrutiny form api get2", apiResponse?.newServiceInfoData !== undefined ? apiResponse?.newServiceInfoData[0].LandSchedule : apiResponse);
   console.log("remarks api", remarksResponse.egScrutiny !== undefined ? remarksResponse.egScrutiny : null);
 
   console.log("remakes data parsnalinfo", remarksChanges);
@@ -302,7 +305,7 @@ const ScrutitnyForms = () => {
               passUncheckedList={getUncheckedPersonalinfos}
               passCheckedList={getCheckedPersonalInfoValue}
               onClick={() => setOpen(!open)}
-              ApiResponseData={apiResppnse.newServiceInfoData !== undefined ? apiResppnse.newServiceInfoData[0].ApplicantInfo : null}
+              ApiResponseData={apiResponse?.newServiceInfoData !== undefined ? apiResponse?.newServiceInfoData[0].ApplicantInfo : null}
               showTable={curentDataPersonal}
               dataForIcons={iconStates}
             ></Personalinfo>
@@ -313,7 +316,7 @@ const ScrutitnyForms = () => {
               passUncheckedList={getUncheckedGeneralinfos}
               passCheckedList={getCheckedGeneralInfoValue}
               onClick={() => setOpen(!open)}
-              ApiResponseData={apiResppnse.newServiceInfoData !== undefined ? apiResppnse.newServiceInfoData[0].ApplicantPurpose : null}
+              ApiResponseData={apiResponse?.newServiceInfoData !== undefined ? apiResponse?.newServiceInfoData[0].ApplicantPurpose : null}
               dataForIcons={iconStates}
             ></Genarelinfo>
             {/* </Col> */}
@@ -325,7 +328,7 @@ const ScrutitnyForms = () => {
               passUncheckedList={getUncheckedPurposeinfos}
               passCheckedList={getCheckedPurposeInfoValue}
               onClick={() => setOpen(!open)}
-              ApiResponseData={apiResppnse.newServiceInfoData !== undefined ? apiResppnse.newServiceInfoData[0].LandSchedule
+              ApiResponseData={apiResponse?.newServiceInfoData !== undefined ? apiResponse?.newServiceInfoData[0].LandSchedule
                 : null}
               dataForIcons={iconStates}
             ></Developerinfo>
@@ -334,10 +337,10 @@ const ScrutitnyForms = () => {
           <div>
             <AppliedLandinfo
               appliedInfoRef={appliedInfoRef}
-              purpose={apiResppnse.newServiceInfoData?apiResppnse.newServiceInfoData[0]?.ApplicantPurpose?.purpose:null}
+              purpose={apiResponse?.newServiceInfoData?apiResponse?.newServiceInfoData[0]?.ApplicantPurpose?.purpose:null}
               passUncheckedList={getUncheckedAppliedLandInfo}
               passCheckedList={getCheckedAppliedInfoValue}
-              ApiResponseData={apiResppnse.newServiceInfoData !== undefined ? apiResppnse.newServiceInfoData[0].DetailsofAppliedLand
+              ApiResponseData={apiResponse?.newServiceInfoData !== undefined ? apiResponse?.newServiceInfoData[0].DetailsofAppliedLand
                 : null}
               heightApplied={defaultheightApplied}
               dataForIcons={iconStates}
@@ -349,7 +352,7 @@ const ScrutitnyForms = () => {
               feeandchargesInfoRef={feeandchargesInfoRef}
               passUncheckedList={getUncheckedFeeandChargesInfo}
               heightFee={defaultheightFee}
-              ApiResponseData={apiResppnse.newServiceInfoData !== undefined ? apiResppnse.newServiceInfoData[0].FeesAndCharges
+              ApiResponseData={apiResponse?.newServiceInfoData !== undefined ? apiResponse?.newServiceInfoData[0].FeesAndCharges
                 : null}
             ></Feeandcharges>
             {/* </Col> */}

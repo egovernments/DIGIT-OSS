@@ -1,3 +1,4 @@
+import axios from "axios";
 import { size } from "lodash";
 import React, { useState, useEffect } from "react";
 import { Container } from "react-bootstrap";
@@ -5,11 +6,12 @@ import { Card, Row, Col } from "react-bootstrap";
 import { Button, Form } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import ApplicationDetailsActionBar from "../../../../../templates/ApplicationDetails/components/ApplicationDetailsActionBar";
 import ActionModal from "../../../../../templates/ApplicationDetails/Modal";
 // import { commoncolor, primarycolor } from "../../constants";
 import ScrutitnyForms from "../ScrutinyBasic/ScutinyBasic";
+// import { useSearchParams } from "react-router-dom";
 
 const ScrutinyFormcontainer = (props) => {
 
@@ -19,14 +21,16 @@ const ScrutinyFormcontainer = (props) => {
   // const [LandScheduleFormshow, SetLandScheduleForm] = useState(false);
   // const [AppliedDetailsFormshow, SetAppliedDetailsForm] = useState(false);
   // const [FeesChargesFormshow, SetFeesChargesForm] = useState(false);
-  const applicationNumber = "HR-TL-2022-12-07-000498"
 
+const {id} = useParams();
+
+  // const applicationNumber = "HR-TL-2022-12-07-000498"
+
+  // let applicationNumber = "";
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const state = Digit.ULBService.getStateId();
   const { t } = useTranslation();
   const history = useHistory();
-
-  const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.tl.useApplicationDetail(t, tenantId, applicationNumber);
   
   const [displayMenu, setDisplayMenu] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
@@ -36,17 +40,47 @@ const ScrutinyFormcontainer = (props) => {
   const [showhide19, setShowhide19] = useState("true");
   const [businessService, setBusinessService] = useState("NewTL");
   const [moduleCode,setModuleCode] = useState("TL")
+  const [ scrutinyDetails, setScrutinyDetails] = useState();
+  const [applicationNumber,setApplicationNumber] = useState("");
+  const [applicationDetails, setApplicationDetails] = useState();
+  const [workflowDetails, setWorkflowDetails] = useState();
+
+  const getScrutinyData = async () => {
+    try {
+      const Resp = await axios.get(`/tl-services/new/licenses/_get?id=${id}`).then((response) => {
+        return response?.data;
+      });
+      console.log("Response From API1", Resp);
+      setScrutinyDetails(Resp);
+      setApplicationNumber(Resp?.applicationNumber);
+      // setApplicationNumber("HR-TL-2022-12-07-000498");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   let EditRenewalApplastModifiedTime = Digit.SessionStorage.get("EditRenewalApplastModifiedTime");
 
-  let workflowDetails = Digit.Hooks.useWorkflowDetails({
+  let workflowDetailsTemp = Digit.Hooks.useWorkflowDetails({
     tenantId:  tenantId,
     id: applicationNumber,
     moduleCode: businessService,
     role: "TL_CEMP",
     config:{EditRenewalApplastModifiedTime:EditRenewalApplastModifiedTime},
   });
+  
+  const { isLoading, isError, data: applicationDetailsTemp, error } = Digit.Hooks.tl.useApplicationDetail(t, tenantId, applicationNumber);
+  
 
+
+
+  const {
+    // isLoading: updatingApplication,
+    // isError: updateApplicationError,
+    // data: updateResponse,
+    // error: updateError,
+    mutate,
+  } = Digit.Hooks.tl.useApplicationActions(tenantId);
 
 
   function onActionSelect(action) {
@@ -82,6 +116,7 @@ const ScrutinyFormcontainer = (props) => {
   }
 
   const submitAction = async (data, nocData = false, isOBPS = {}) => {
+    console.log("log123...upDate",data,nocData,isOBPS)
     setIsEnableLoader(true);
     if (typeof data?.customFunctionToExecute === "function") {
       data?.customFunctionToExecute({ ...data });
@@ -108,6 +143,7 @@ const ScrutinyFormcontainer = (props) => {
     }
     if (mutate) {
       setIsEnableLoader(true);
+      console.log("log123...mutate",mutate)
       mutate(data, {
         onError: (error, variables) => {
           setIsEnableLoader(false);
@@ -138,43 +174,27 @@ const ScrutinyFormcontainer = (props) => {
     closeModal();
   };
 
+  useEffect(()=>{
+    console.log("log123...",applicationDetailsTemp)
+    if(applicationDetailsTemp){
+      setApplicationDetails(applicationDetailsTemp)
+    }
+  },[applicationDetailsTemp])
 
-
-
-  // const PuposeformHandler = (data) => {
-  //   SetLandScheduleForm(data);
-  //   SetPurposeForm(false);
-  // };
-
-  // const ApllicantFormHandler = (data) => {
-  //   SetPurposeForm(data);
-  //   SetApplicantForm(false);
-  // };
-  // const LandFormHandler = (data) => {
-  //   SetAppliedDetailsForm(data);
-  //   SetLandScheduleForm(false);
-  // };
-  // const AppliedDetailFormHandler = (data) => {
-  //   SetFeesChargesForm(data);
-  //   SetAppliedDetailsForm(false);
-  // };
-  // const FeesChargesFormHandler = (data) => {
-  //   SetFeesChargesForm(false);
-  // };
-  // const handleshow19 = (e) => {
-  //   const getshow = e.target.value;
-  //   setShowhide19(getshow);
-  // };
-  // const handleChange = (e) => {
-  //   this.setState({ isRadioSelected: true });
-  // };
 
   useEffect(() => {
-    if (workflowDetails?.data?.applicationBusinessService) {
-      setBusinessService(workflowDetails?.data?.applicationBusinessService);
+    console.log("log123...",id,workflowDetailsTemp,applicationNumber,scrutinyDetails,applicationDetails)
+    if (workflowDetailsTemp?.data?.applicationBusinessService) {
+      setWorkflowDetails(workflowDetailsTemp);
+      setBusinessService(workflowDetailsTemp?.data?.applicationBusinessService);
     }
-  }, [workflowDetails.data]);
+  }, [workflowDetailsTemp?.data]);
+  
  
+  useEffect(()=>{
+    getScrutinyData();
+  },[])
+
 
   return (
     <Card>
@@ -184,7 +204,11 @@ const ScrutinyFormcontainer = (props) => {
         </div>
       </Row>
       <Row style={{ top: 30, padding: 10 }}>
-        <ScrutitnyForms></ScrutitnyForms>
+        <ScrutitnyForms
+          apiResponse={scrutinyDetails}
+          applicationNumber={applicationNumber}
+          refreshScrutinyData={getScrutinyData}
+        ></ScrutitnyForms>
       </Row>
       <Row style={{ top: 30, padding: "10px 22px" }}>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
@@ -237,8 +261,8 @@ const ScrutinyFormcontainer = (props) => {
               tenantId={tenantId}
               state={state}
               id={applicationNumber}
-              // applicationDetails={applicationDetails}
-              // applicationData={applicationDetails?.applicationData}
+              applicationDetails={applicationDetails}
+              applicationData={applicationDetails?.applicationData}
               closeModal={closeModal}
               submitAction={submitAction}
               actionData={workflowDetails?.data?.timeline}

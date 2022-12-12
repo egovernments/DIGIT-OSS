@@ -1479,12 +1479,13 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                     </td>
                                     <td>
                                       <div className="row">
-                                        {/* {(elementInArray?.uploadPdf) ? */}
+                                        {JSON.stringify(elementInArray?.uploadPdf)}
+                                        {(elementInArray?.uploadPdf) ?
                                           <button type="button" onClick={()=>getDocShareholding(elementInArray?.uploadPdf)} className="btn btn-sm col-md-6 text-center">
                                             <VisibilityIcon color="info" className="icon" />
                                           </button> 
-                                          {/* : <p></p> */}
-                                        {/* } */}
+                                          : <p></p>
+                                        }
                                         <div className="btn btn-sm col-md-6">
                                           <label for={"uploaddirectorInfoPdf"+input}> 
                                           <FileUpload color="primary" for={"uploaddirectorInfoPdf"+input} />
