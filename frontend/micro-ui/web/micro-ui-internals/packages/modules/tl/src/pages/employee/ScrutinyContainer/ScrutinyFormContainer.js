@@ -19,7 +19,7 @@ const ScrutinyFormcontainer = (props) => {
   // const [LandScheduleFormshow, SetLandScheduleForm] = useState(false);
   // const [AppliedDetailsFormshow, SetAppliedDetailsForm] = useState(false);
   // const [FeesChargesFormshow, SetFeesChargesForm] = useState(false);
-  const applicationNumber = "HR-TL-2022-12-06-000450"
+  const applicationNumber = "HR-TL-2022-12-07-000498"
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const state = Digit.ULBService.getStateId();
@@ -40,8 +40,8 @@ const ScrutinyFormcontainer = (props) => {
   let EditRenewalApplastModifiedTime = Digit.SessionStorage.get("EditRenewalApplastModifiedTime");
 
   let workflowDetails = Digit.Hooks.useWorkflowDetails({
-    tenantId: applicationDetails?.tenantId || tenantId,
-    id: applicationDetails?.applicationData?.applicationNumber,
+    tenantId:  tenantId,
+    id: applicationNumber,
     moduleCode: businessService,
     role: "TL_CEMP",
     config:{EditRenewalApplastModifiedTime:EditRenewalApplastModifiedTime},
@@ -237,8 +237,8 @@ const ScrutinyFormcontainer = (props) => {
               tenantId={tenantId}
               state={state}
               id={applicationNumber}
-              applicationDetails={applicationDetails}
-              applicationData={applicationDetails?.applicationData}
+              // applicationDetails={applicationDetails}
+              // applicationData={applicationDetails?.applicationData}
               closeModal={closeModal}
               submitAction={submitAction}
               actionData={workflowDetails?.data?.timeline}
