@@ -281,12 +281,12 @@ const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => 
       setDefaultheightFee(0);
     }
   };
-  console.log("scrutiny form api get", apiResponse?.newServiceInfoData !== undefined ? apiResponse?.newServiceInfoData[0]?.ApplicantInfo : apiResponse);
+  console.log("scrutiny form api get", apiResponse !== undefined ? apiResponse?.ApplicantInfo : apiResponse);
   console.log(
     "scrutiny form api get1",
-    apiResponse?.newServiceInfoData !== undefined ? apiResponse?.newServiceInfoData[0]?.ApplicantPurpose : apiResponse
+    apiResponse !== undefined ? apiResponse?.ApplicantPurpose : apiResponse
   );
-  // console.log("scrutiny form api get2", apiResponse?.newServiceInfoData !== undefined ? apiResponse?.newServiceInfoData[0].LandSchedule : apiResponse);
+  // console.log("scrutiny form api get2", apiResponse !== undefined ? apiResponse?.LandSchedule : apiResponse);
   console.log("remarks api", remarksResponse.egScrutiny !== undefined ? remarksResponse.egScrutiny : null);
 
   console.log("remakes data parsnalinfo", remarksChanges);
@@ -305,7 +305,7 @@ const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => 
               passUncheckedList={getUncheckedPersonalinfos}
               passCheckedList={getCheckedPersonalInfoValue}
               onClick={() => setOpen(!open)}
-              ApiResponseData={apiResponse?.newServiceInfoData !== undefined ? apiResponse?.newServiceInfoData[0].ApplicantInfo : null}
+              ApiResponseData={apiResponse !== undefined ? apiResponse?.ApplicantInfo : null}
               showTable={curentDataPersonal}
               dataForIcons={iconStates}
             ></Personalinfo>
@@ -316,7 +316,7 @@ const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => 
               passUncheckedList={getUncheckedGeneralinfos}
               passCheckedList={getCheckedGeneralInfoValue}
               onClick={() => setOpen(!open)}
-              ApiResponseData={apiResponse?.newServiceInfoData !== undefined ? apiResponse?.newServiceInfoData[0].ApplicantPurpose : null}
+              ApiResponseData={apiResponse !== undefined ? apiResponse?.ApplicantPurpose : null}
               dataForIcons={iconStates}
             ></Genarelinfo>
             {/* </Col> */}
@@ -328,7 +328,7 @@ const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => 
               passUncheckedList={getUncheckedPurposeinfos}
               passCheckedList={getCheckedPurposeInfoValue}
               onClick={() => setOpen(!open)}
-              ApiResponseData={apiResponse?.newServiceInfoData !== undefined ? apiResponse?.newServiceInfoData[0].LandSchedule
+              ApiResponseData={apiResponse !== undefined ? apiResponse?.LandSchedule
                 : null}
               dataForIcons={iconStates}
             ></Developerinfo>
@@ -337,10 +337,10 @@ const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => 
           <div>
             <AppliedLandinfo
               appliedInfoRef={appliedInfoRef}
-              purpose={apiResponse?.newServiceInfoData?apiResponse?.newServiceInfoData[0]?.ApplicantPurpose?.purpose:null}
+              purpose={apiResponse?apiResponse?.ApplicantPurpose?.purpose:null}
               passUncheckedList={getUncheckedAppliedLandInfo}
               passCheckedList={getCheckedAppliedInfoValue}
-              ApiResponseData={apiResponse?.newServiceInfoData !== undefined ? apiResponse?.newServiceInfoData[0].DetailsofAppliedLand
+              ApiResponseData={apiResponse !== undefined ? apiResponse?.DetailsofAppliedLand
                 : null}
               heightApplied={defaultheightApplied}
               dataForIcons={iconStates}
@@ -352,7 +352,7 @@ const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => 
               feeandchargesInfoRef={feeandchargesInfoRef}
               passUncheckedList={getUncheckedFeeandChargesInfo}
               heightFee={defaultheightFee}
-              ApiResponseData={apiResponse?.newServiceInfoData !== undefined ? apiResponse?.newServiceInfoData[0].FeesAndCharges
+              ApiResponseData={apiResponse !== undefined ? apiResponse?.FeesAndCharges
                 : null}
             ></Feeandcharges>
             {/* </Col> */}

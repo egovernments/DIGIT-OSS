@@ -41,18 +41,30 @@ const {id} = useParams();
   const [businessService, setBusinessService] = useState("NewTL");
   const [moduleCode,setModuleCode] = useState("TL")
   const [ scrutinyDetails, setScrutinyDetails] = useState();
-  const [applicationNumber,setApplicationNumber] = useState("");
+  // const [applicationNumber,setApplicationNumber] = useState("");
   const [applicationDetails, setApplicationDetails] = useState();
   const [workflowDetails, setWorkflowDetails] = useState();
 
+  const authToken = Digit.UserService.getUser()?.access_token || null;
+
+
   const getScrutinyData = async () => {
+    console.log("log123... userInfo",authToken);
+    let requestInfo = {
+      "RequestInfo": {
+        "apiId": "Rainmaker",
+        "msgId": "1669293303096|en_IN",
+        "authToken": authToken
+       
+    }
+    }
     try {
-      const Resp = await axios.get(`/tl-services/new/licenses/_get?id=${id}`).then((response) => {
+      const Resp = await axios.post(`/tl-services/v1/_search?tenantId=hr&applicationNumber=${id}`,requestInfo).then((response) => {
         return response?.data;
       });
-      console.log("Response From API1", Resp);
-      setScrutinyDetails(Resp);
-      setApplicationNumber(Resp?.applicationNumber);
+      console.log("Response From API1", Resp, Resp?.Licenses[0]?.applicationNumber,Resp?.Licenses[0]?.tradeLicenseDetail?.additionalDetail[0]);
+      setScrutinyDetails(Resp?.Licenses[0]?.tradeLicenseDetail?.additionalDetail[0]);
+      // setApplicationNumber(Resp?.Licenses[0]?.applicationNumber);
       // setApplicationNumber("HR-TL-2022-12-07-000498");
     } catch (error) {
       console.log(error);
@@ -63,13 +75,13 @@ const {id} = useParams();
 
   let workflowDetailsTemp = Digit.Hooks.useWorkflowDetails({
     tenantId:  tenantId,
-    id: applicationNumber,
+    id: id,
     moduleCode: businessService,
     role: "TL_CEMP",
     config:{EditRenewalApplastModifiedTime:EditRenewalApplastModifiedTime},
   });
   
-  const { isLoading, isError, data: applicationDetailsTemp, error } = Digit.Hooks.tl.useApplicationDetail(t, tenantId, applicationNumber);
+  const { isLoading, isError, data: applicationDetailsTemp, error } = Digit.Hooks.tl.useApplicationDetail(t, tenantId, id);
   
 
 
@@ -183,7 +195,7 @@ const {id} = useParams();
 
 
   useEffect(() => {
-    console.log("log123...",id,workflowDetailsTemp,applicationNumber,scrutinyDetails,applicationDetails)
+    console.log("log123...",id,workflowDetailsTemp,scrutinyDetails,applicationDetails)
     if (workflowDetailsTemp?.data?.applicationBusinessService) {
       setWorkflowDetails(workflowDetailsTemp);
       setBusinessService(workflowDetailsTemp?.data?.applicationBusinessService);
@@ -206,7 +218,7 @@ const {id} = useParams();
       <Row style={{ top: 30, padding: 10 }}>
         <ScrutitnyForms
           apiResponse={scrutinyDetails}
-          applicationNumber={applicationNumber}
+          applicationNumber={id}
           refreshScrutinyData={getScrutinyData}
         ></ScrutitnyForms>
       </Row>
@@ -260,7 +272,7 @@ const {id} = useParams();
               action={selectedAction}
               tenantId={tenantId}
               state={state}
-              id={applicationNumber}
+              id={id}
               applicationDetails={applicationDetails}
               applicationData={applicationDetails?.applicationData}
               closeModal={closeModal}
