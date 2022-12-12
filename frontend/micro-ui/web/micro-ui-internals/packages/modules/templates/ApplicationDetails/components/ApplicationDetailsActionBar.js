@@ -1,33 +1,50 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { SubmitBar, ActionBar, Menu } from "@egovernments/digit-ui-react-components";
 
 function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSelect, setDisplayMenu, businessService, forcedActionPrefix,ActionBarStyle={},MenuStyle={} }) {
+
   const { t } = useTranslation();
-  let user = Digit.UserService.getUser();
-  if (window.location.href.includes("/obps") || window.location.href.includes("/noc")) {
-    const userInfos = sessionStorage.getItem("Digit.citizen.userRequestObject");
-    const userInfo = userInfos ? JSON.parse(userInfos) : {};
-    user = userInfo?.value;
-  }
-  const userRoles = user?.info?.roles?.map((e) => e.code);
-  let isSingleButton = false;
-  let isMenuBotton = false;
 
-  let actions = workflowDetails?.data?.actionState?.nextActions?.filter((e) => {
-    return userRoles.some((role) => e.roles?.includes(role)) || !e.roles;
-  });
+  const [isSingleButton,setIsSingleButton] = useState(false)
+  const [isMenuBotton,setIsMenuBotton] = useState(false)
+  const [actions,setActions] = useState([]);
 
-  if (((window.location.href.includes("/obps") || window.location.href.includes("/noc")) && actions?.length == 1) || (actions?.[0]?.redirectionUrl?.pathname.includes("/pt/property-details/")) && actions?.length == 1) {
-    isMenuBotton = false;
-    isSingleButton = true; 
-  } else if (actions?.length > 0) {
-    isMenuBotton = true; 
-    isSingleButton = false;
-  }
+  
+  useEffect(()=>{
+
+    let user = Digit.UserService.getUser();
+    const userRoles = user?.info?.roles?.map((e) => e.code);
+
+    let tempAction = workflowDetails?.data?.actionState?.nextActions?.filter((e) => {
+      return userRoles.some((role) => e.roles?.includes(role)) || !e.roles;
+    })
+    console.log("log wrkflw",workflowDetails,tempAction,userRoles)
+    setActions(tempAction);
+
+  },[workflowDetails])
+
+  useEffect(()=>{
+    console.log("log actions",workflowDetails,actions)
+
+    if (window.location.href.includes("/obps") || window.location.href.includes("/noc")) {
+      const userInfos = sessionStorage.getItem("Digit.citizen.userRequestObject");
+      const userInfo = userInfos ? JSON.parse(userInfos) : {};
+      user = userInfo?.value;
+    }
+
+    if (((window.location.href.includes("/obps") || window.location.href.includes("/noc")) && actions?.length == 1) || (actions?.[0]?.redirectionUrl?.pathname.includes("/pt/property-details/")) && actions?.length == 1) {
+      setIsMenuBotton(false)
+      setIsSingleButton(true)
+    } else if (actions?.length > 0) {
+      setIsMenuBotton(true)
+      setIsSingleButton(false)
+    }
+  },[actions])
 
   return (
     <React.Fragment>
+      
       {!workflowDetails?.isLoading && isMenuBotton && !isSingleButton && (
         <ActionBar style={{...ActionBarStyle}}>
           {displayMenu && workflowDetails?.data?.actionState?.nextActions ? (

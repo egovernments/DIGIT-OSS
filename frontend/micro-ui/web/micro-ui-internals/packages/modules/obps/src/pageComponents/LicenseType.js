@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { stringReplaceAll } from "../utils";
 import Timeline from "../components/Timeline";
 import { Form, Row } from "react-bootstrap";
+import { MenuItem, Select } from "@mui/material";
 
 const LicenseType = ({ t, config, onSelect, userType, formData }) => {
   if (JSON.parse(sessionStorage.getItem("BPAREGintermediateValue")) !== null) {
@@ -22,7 +23,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
   let isopenlink = window.location.href.includes("/openlink/");
   const isCitizenUrl = Digit.Utils.browser.isMobile() ? true : false;
 
-  if(isopenlink)  
+  if (isopenlink)
     window.onunload = function () {
       sessionStorage.removeItem("Digit.BUILDING_PERMIT");
     }
@@ -44,6 +45,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
   const onSkip = () => onSelect();
 
   function selectLicenseType(value) {
+    console.log("log123", value)
     setLicenseType(value);
   }
 
@@ -62,9 +64,9 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
     }
   }
 
-  
 
-  
+
+
 
   return (
     <div>
@@ -78,22 +80,17 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
               <CardLabel>{t("BPA_LICENSE_TYPE")}*</CardLabel>
               <div className={"form-pt-dropdown-only"}>
                 {data && (
-                  <RadioOrSelect
-                    t={t}
-                    optionKey="i18nKey"
-                    isMandatory={config.isMandatory}
-                    options={getLicenseType() || {}}
-                    selectedOption={LicenseType}
-                    onSelect={selectLicenseType}
-                  />
-                  // <RadioOrSelect
-                  //   t={t}
-                  //   optionKey="i18nKey"
-                  //   isMandatory={config.isMandatory}
-                  //   options={getLicenseType() || {}}
-                  //   selectedOption={LicenseType}
-                  //   onSelect={selectLicenseType}
-                  // />
+                  <div>
+                    <RadioOrSelect
+                      t={t}
+                      optionKey="i18nKey"
+                      isMandatory={config.isMandatory}
+                      options={getLicenseType() || {}}
+                      selectedOption={LicenseType}
+                      onSelect={selectLicenseType}
+                      // placeholder={"Select"}
+                    />
+                  </div>
                 )}
               </div>
             </Form.Group>
@@ -113,8 +110,8 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
             </Form.Group>
 
             <Form.Group>
-            
-             
+
+
             </Form.Group>
           </Row>
         </FormStep>

@@ -35,7 +35,7 @@ const Home = () => {
   });
 
   if (!tenantId) {
-    history.push(`/digit-ui/citizen/select-language`);
+    history.push(`/digit-ui/citizen/select-location`);
   }
 
   const allCitizenServicesProps = {
@@ -65,9 +65,9 @@ const Home = () => {
         // onClick: () => history.push("/digit-ui/citizen/tl-home"),
       },
       {
-        name: "New License Services",
+        name: "Licencing Services",
         Icon: <CaseIcon className="fill-path-primary-main" />,
-        onClick: () => history.push("/digit-ui/citizen/obps/tab"),
+        onClick: () => history.push("/digit-ui/citizen/obps/card"),
       },
       {
         name: t("CS_COMMON_INBOX_BPA"),
