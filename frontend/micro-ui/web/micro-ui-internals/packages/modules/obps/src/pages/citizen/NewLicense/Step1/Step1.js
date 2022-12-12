@@ -44,12 +44,14 @@ const ApllicantFormStep1 = (props) => {
 
   const ApplicantFormSubmitHandlerForm = async (data) => {
     const token = window?.localStorage?.getItem("token");
+    data["notSigned"] = data?.notSigned?.value;
     const postDistrict = {
       pageName: "ApplicantInfo",
       ApplicationStatus: "DRAFT",
       id: applicantId,
       createdBy: userInfo?.id,
       updatedBy: userInfo?.id,
+
       LicenseDetails: {
         ApplicantInfo: {
           ...data,
@@ -80,7 +82,7 @@ const ApllicantFormStep1 = (props) => {
 
   useEffect(() => {
     if (props?.getLicData?.ApplicantInfo) {
-      setValue("notSigned", props?.getLicData?.ApplicantInfo?.notSigned);
+      setValue("notSigned", { label: props?.getLicData?.ApplicantInfo?.notSigned, value: props?.getLicData?.ApplicantInfo?.notSigned });
       setValue("LC", props?.getLicData?.ApplicantInfo?.LC);
     }
   }, [props?.getLicData]);
@@ -101,7 +103,7 @@ const ApllicantFormStep1 = (props) => {
 
   const getDeveloperDataLabel = async (id) => {
     try {
-      const Resp = await axios.get(`http://103.166.62.118:8443/user/developer/_getDeveloperById?id=${id}&isAllData=false`);
+      const Resp = await axios.get(`http://103.166.62.118:80/user/developer/_getDeveloperById?id=${id}&isAllData=false`);
       setDeveloperDataLabel(Resp?.data?.devDetail?.[0]);
     } catch (error) {
       return error;
@@ -138,7 +140,7 @@ const ApllicantFormStep1 = (props) => {
 
   const getApplicantUserData = async (id) => {
     try {
-      const Resp = await axios.get(`http://103.166.62.118:8443/tl-services/new/licenses/_get?id=${id}`);
+      const Resp = await axios.get(`http://103.166.62.118:80/tl-services/new/licenses/_get?id=${id}`);
       const userData = Resp?.data?.newServiceInfoData[0]?.ApplicantInfo;
       setValue("notSigned", userData?.notSigned);
       setValue("LC", userData?.LC);
@@ -218,9 +220,7 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <h2>
-                      Alternate Mobile No<span style={{ color: "red" }}>*</span>
-                    </h2>
+                    <h2>Alternate Mobile No.</h2>
                   </Form.Label>
                 </div>
                 <Controller
@@ -478,11 +478,11 @@ const ApllicantFormStep1 = (props) => {
                     </h2>
                   </Form.Label>
                 </div>
-                <ReactMultiSelect control={control} name="LcNotSigned" placeholder="LC Not Signed" data={LcNotSigned} labels="LcNotSigned" />
+                <ReactMultiSelect control={control} name="notSigned" placeholder="LC Not Signed" data={LcNotSigned} labels="LcNotSigned" />
                 {/* <Form.Control type="text" placeholder="" {...register("notSigned")} /> */}
 
                 <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.notSigned && errors?.notSigned?.message}
+                  {errors?.notSigned?.value && errors?.notSigned?.value?.message}
                 </h3>
               </Col>
               <Col md={4} xxl lg="4">

@@ -22,7 +22,9 @@ const ResidentialPlottedForm = ({ register }) => {
             <tr>
               <td>
                 <div className="px-2">
-                  <p className="mb-2">NPNL</p>
+                  <p className="mb-2">
+                    NPNL <span style={{ color: "red" }}>*</span>
+                  </p>
                 </div>
               </td>
               <td align="right">
@@ -36,7 +38,9 @@ const ResidentialPlottedForm = ({ register }) => {
             <tr>
               <td>
                 <div className="px-2">
-                  <p className="mb-2">EWS</p>
+                  <p className="mb-2">
+                    EWS <span style={{ color: "red" }}>*</span>
+                  </p>
                 </div>
               </td>
               <td align="right">

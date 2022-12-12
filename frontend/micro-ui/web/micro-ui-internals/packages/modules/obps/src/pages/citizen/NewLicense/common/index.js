@@ -124,7 +124,7 @@ const CommonForm = () => {
     if (getCheck == 2 && stepActive.step2) handleStep1(getId, userData, getLicData);
     else if (getCheck == 3 && stepActive.step3) handlestep2(getLicData);
     else if (getCheck == 4 && stepActive.step4) handlestep3(getLicData);
-    else if (getCheck == 5 && stepActive.step5) handlestep4(getLicData);
+    else if (getCheck == 5 && stepActive.step5) handlestep4(getLicData, securedData);
     else if (getCheck == 1) handleStep();
   }, [getCheck, getLicData]);
 

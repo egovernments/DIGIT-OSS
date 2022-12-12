@@ -7,7 +7,9 @@ const CommercialPlottedForm = ({ register }) => {
     <Row className="ml-auto" style={{ marginBottom: 5 }}>
       <Col col-12>
         <h5 className="text-black">
-          <b>Commercial Plotted</b>
+          <b>
+            Commercial Plotted <span style={{ color: "red" }}>*</span>
+          </b>
         </h5>
         <br></br>
         <div className="col col-12">
@@ -28,7 +30,10 @@ const CommercialPlottedForm = ({ register }) => {
         </div>
         <br></br>
         <div>
-          <h6> Total FAR has been availed &nbsp;&nbsp;</h6>
+          <h6>
+            {" "}
+            Total FAR has been availed <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+          </h6>
           <div className="table table-bordered table-responsive">
             <thead>
               <tr>
@@ -44,7 +49,9 @@ const CommercialPlottedForm = ({ register }) => {
               <tr>
                 <td>
                   <div className="px-2">
-                    <p className="mb-2">SCOs</p>
+                    <p className="mb-2">
+                      SCOs <span style={{ color: "red" }}>*</span>
+                    </p>
                   </div>
                 </td>
                 <td align="right">
@@ -67,7 +74,9 @@ const CommercialPlottedForm = ({ register }) => {
               <tr>
                 <td>
                   <div className="px-2">
-                    <p className="mb-2">Booths </p>
+                    <p className="mb-2">
+                      Booths <span style={{ color: "red" }}>*</span>
+                    </p>
                   </div>
                 </td>
                 <td align="right">
@@ -90,7 +99,9 @@ const CommercialPlottedForm = ({ register }) => {
               <tr>
                 <td>
                   <div className="px-2">
-                    <p className="mb-2">Public Utilities </p>
+                    <p className="mb-2">
+                      Public Utilities <span style={{ color: "red" }}>*</span>
+                    </p>
                   </div>
                 </td>
                 <td></td>
@@ -102,7 +113,9 @@ const CommercialPlottedForm = ({ register }) => {
               <tr>
                 <td>
                   <div className="px-2">
-                    <p className="mb-2">STP </p>
+                    <p className="mb-2">
+                      STP <span style={{ color: "red" }}>*</span>
+                    </p>
                   </div>
                 </td>
                 <td align="right">
@@ -127,7 +140,9 @@ const CommercialPlottedForm = ({ register }) => {
               <tr>
                 <td>
                   <div className="px-2">
-                    <p className="mb-2">WTP </p>
+                    <p className="mb-2">
+                      WTP <span style={{ color: "red" }}>*</span>
+                    </p>
                   </div>
                 </td>
                 <td align="right">
@@ -150,7 +165,9 @@ const CommercialPlottedForm = ({ register }) => {
               <tr>
                 <td>
                   <div className="px-2">
-                    <p className="mb-2">UGT </p>
+                    <p className="mb-2">
+                      UGT <span style={{ color: "red" }}>*</span>
+                    </p>
                   </div>
                 </td>
                 <td align="right">
@@ -175,7 +192,9 @@ const CommercialPlottedForm = ({ register }) => {
               <tr>
                 <td>
                   <div className="px-2">
-                    <p className="mb-2">Milk booth </p>
+                    <p className="mb-2">
+                      Milk booth <span style={{ color: "red" }}>*</span>
+                    </p>
                   </div>
                 </td>
                 <td align="right">
@@ -200,7 +219,9 @@ const CommercialPlottedForm = ({ register }) => {
               <tr>
                 <td>
                   <div className="px-2">
-                    <p className="mb-2">GSS</p>
+                    <p className="mb-2">
+                      GSS <span style={{ color: "red" }}>*</span>
+                    </p>
                   </div>
                 </td>
                 <td align="right">
@@ -242,7 +263,9 @@ const CommercialPlottedForm = ({ register }) => {
               <tr>
                 <td colSpan={4}>
                   <div className="px-2">
-                    <p className="mb-2">SCOs, booths etc </p>
+                    <p className="mb-2">
+                      SCOs, booths etc <span style={{ color: "red" }}>*</span>
+                    </p>
                   </div>
                 </td>
                 <td component="th" scope="row">

@@ -22,7 +22,7 @@ const electricalPlanService = () => {
           auth_token: null,
         },
 
-        electricPlanRequest: {
+        ElectricPlanRequest: {
           ...data,
         },
       };
