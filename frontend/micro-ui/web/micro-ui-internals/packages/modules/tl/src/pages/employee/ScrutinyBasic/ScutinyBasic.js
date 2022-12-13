@@ -195,6 +195,7 @@ const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => 
     } catch (error) {
       console.log(error);
     }
+    // console.log("MdMS123",remarksResponse)
   };
 
   useEffect(() => {
@@ -298,14 +299,26 @@ const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => 
   return (
     <div>
       <div style={{ position: "relative", maxWidth: "100%", padding: 2 }}>
+          {/* <b>Application : {remarksResponse?.egScrutiny?.[0]?.applicationId} </b> */}
+          <Row style={{ top: 25, padding: 5 }}>
+        <div className="ml-auto">
+        {/* applicationNumber: "HR-TL-2022-12-06-000450" */}
+          <h2>Application : 
+        {apiResppnse.newServiceInfoData !== undefined ? apiResppnse.applicationNumber:null}
+          </h2>
+
+        </div>
+      </Row>
         <div>
+        
           <div>
             <Personalinfo
               personalInfoRef={personalInfoRef}
               passUncheckedList={getUncheckedPersonalinfos}
               passCheckedList={getCheckedPersonalInfoValue}
               onClick={() => setOpen(!open)}
-              ApiResponseData={apiResponse?.newServiceInfoData !== undefined ? apiResponse?.newServiceInfoData[0].ApplicantInfo : null}
+              ApiResponseData={apiResppnse.newServiceInfoData !== undefined ? apiResppnse.newServiceInfoData[0].ApplicantInfo : null}
+              // remarkData={remarksResponse.egScrutiny !== undefined ? remarksResponse.egScrutiny : null}
               showTable={curentDataPersonal}
               dataForIcons={iconStates}
             ></Personalinfo>

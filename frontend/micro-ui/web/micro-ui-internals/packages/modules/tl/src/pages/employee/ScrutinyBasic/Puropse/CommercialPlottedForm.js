@@ -1,24 +1,24 @@
-import React, { useState, useEffect } from "react";
-import 'bootstrap/dist/css/bootstrap.css';
-import { useForm } from "react-hook-form";
-// import { tr, thead, TableContainer, td, tbody, Table, Paper } from '@material-ui/core';
-// import AddIcon from "@material-ui/icons/Add";
-// import DeleteIcon from "@material-ui/icons/Delete";
+import React,{ useState, useEffect } from "react";
+import "bootstrap/dist/css/bootstrap.css";
+
+
 import { Button, Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import { useStyles } from "../css/personalInfoChild.style";
 import ModalChild from "../Remarks/ModalChild";
 
-const DDJAY = (props) => {
+
+const CommercialPlottedForm  = (props) => {
 
 
-  const DDJAYSubmitHandler = (e) => {
+
+  const CommercialPlottedFormSubmitHandler = (e) => {
     e.preventDefault();
-    SetDdjaySubmitted(true);
+    SetCommercialPlottedFormSubmitted(true);
   }
 
-  const ddData = props.data;
+  const CommercialPlotted = props.data;
   const dataIcons = props.dataForIcons;
 
   const classes = useStyles();
@@ -95,32 +95,34 @@ const DDJAY = (props) => {
   };
 
 
+
   return (
-    <Form onSubmit={DDJAYSubmitHandler} style={{ display: props.displayDd }}>
-      <ModalChild
-        labelmodal={labelValue}
-        passmodalData={handlemodaldData}
-        displaymodal={smShow}
-        onClose={() => setSmShow(false)}
-        selectedFieldData={selectedFieldData}
-        fieldValue={fieldValue}
-        remarksUpdate={currentRemarks}
-      ></ModalChild>
-      <Form.Group className="justify-content-center" controlId="formBasicEmail">
+    <Form onSubmit={CommercialPlottedFormSubmitHandler} style={{ display: props.displayCommercialPlottedData }}>
+    <ModalChild
+      labelmodal={labelValue}
+      passmodalData={handlemodaldData}
+      displaymodal={smShow}
+      onClose={() => setSmShow(false)}
+      selectedFieldData={selectedFieldData}
+      fieldValue={fieldValue}
+      remarksUpdate={currentRemarks}
+    ></ModalChild>
+    <Form.Group className="justify-content-center" controlId="formBasicEmail">
       <Row className="ml-auto" style={{ marginBottom: 5 }}>
+    {/* <Row className="ml-auto" style={{ marginBottom: 5 }}> */}
       <Col col-12>
         <h5 className="text-black">Commercial Plotted:-</h5>
         <br></br>
         <div className="col col-12">
           <h6>
             Number of Plots/SCOs (saleable area) &nbsp;&nbsp;
-            <input type="radio" value="Y" id="Yes" {...register("farAvailed")} name="Yes" />
+            <input type="radio" value="Y" id="Yes" name="Yes" />
             &nbsp;&nbsp;
             <label className="m-0  mx-2" for="Yes">
               150%
             </label>
             &nbsp;&nbsp;
-            <input type="radio" value="N" id="No" {...register("farAvailed")} name="Yes" />
+            <input type="radio" value="N" id="No"  name="Yes" />
             &nbsp;&nbsp;
             <label className="m-0 mx-2" for="No">
               175%
@@ -150,19 +152,104 @@ const DDJAY = (props) => {
                 </td>
                 <td align="right">
                   {" "}
-                  <input type="number" className="form-control" {...register("colonyfiftyNo")} />
+                  {/*  <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div> */}
+                  <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("colonyfiftyArea")} />
+                   <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("colonyfiftyArea")} />
+                   <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("colonyfiftyArea")} />
+                   <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("colonyfiftyArea")} />
+                   <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
               </tr>
               <tr>
@@ -173,19 +260,89 @@ const DDJAY = (props) => {
                 </td>
                 <td align="right">
                   {" "}
-                  <input type="number" className="form-control" {...register("fiftyToTwoNo")} />
+                   <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("fiftyToTwoArea")} />
+                   <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("fiftyToTwoArea")} />
+                   <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("fiftyToTwoArea")} />
+                  <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("fiftyToTwoArea")} />
+                   <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
               </tr>
               <tr>
@@ -208,21 +365,91 @@ const DDJAY = (props) => {
                 </td>
                 <td align="right">
                   {" "}
-                  <input type="number" className="form-control" {...register("resiNo")} />
+                   <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("resiArea")} />
+                   <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
                 <td align="right">
                   {" "}
-                  <input type="number" className="form-control" {...register("resiNo")} />
+                   <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
                 <td align="right">
                   {" "}
-                  <input type="number" className="form-control" {...register("resiNo")} />
+                  <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("fiftyToTwoArea")} />
+                   <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
               </tr>
               <tr>
@@ -233,19 +460,89 @@ const DDJAY = (props) => {
                 </td>
                 <td align="right">
                   {" "}
-                  <input type="number" className="form-control" {...register("commerNo")} />
+                  <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("commerArea")} />
+                   <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("commerArea")} />
+                   <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("commerArea")} />
+                  <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("fiftyToTwoArea")} />
+                  <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
               </tr>
               <tr>
@@ -256,21 +553,91 @@ const DDJAY = (props) => {
                 </td>
                 <td align="right">
                   {" "}
-                  <input type="number" className="form-control" {...register("labourNo")} />
+                   <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("labourArea")} />
+                   <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
                 <td align="right">
                   {" "}
-                  <input type="number" className="form-control" {...register("labourNo")} />
+                   <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
                 <td align="right">
                   {" "}
-                  <input type="number" className="form-control" {...register("labourNo")} />
+                  <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("fiftyToTwoArea")} />
+                   <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
               </tr>
               <tr>
@@ -281,21 +648,91 @@ const DDJAY = (props) => {
                 </td>
                 <td align="right">
                   {" "}
-                  <input type="number" className="form-control" {...register("labourNo")} />
+                  <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("labourArea")} />
+                   <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
                 <td align="right">
                   {" "}
-                  <input type="number" className="form-control" {...register("labourNo")} />
+                  <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
                 <td align="right">
                   {" "}
-                  <input type="number" className="form-control" {...register("labourNo")} />
+                  <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("fiftyToTwoArea")} />
+                  <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
               </tr>
               <tr>
@@ -306,21 +743,91 @@ const DDJAY = (props) => {
                 </td>
                 <td align="right">
                   {" "}
-                  <input type="number" className="form-control" {...register("labourNo")} />
+                   <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("labourArea")} />
+                  <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
                 <td align="right">
                   {" "}
-                  <input type="number" className="form-control" {...register("labourNo")} />
+                  <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
                 <td align="right">
                   {" "}
-                  <input type="number" className="form-control" {...register("labourNo")} />
+                  <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("fiftyToTwoArea")} />
+                   <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
               </tr>
               <tr>
@@ -347,10 +854,38 @@ const DDJAY = (props) => {
                   </div>
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("fiftyToTwoArea")} />
+                  <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("fiftyToTwoArea")} />
+                <div className="d-flex flex-row align-items-center">
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.frozenPlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Details of frozen plots (50%) No."),
+                              setOpennedModal("frozenPlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(CommercialPlotted?.frozenPlot?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                 </td>
               </tr>
             </tbody>
@@ -358,7 +893,8 @@ const DDJAY = (props) => {
         </div>
       </Col>
     </Row>
-      </Form.Group>
-    </Form>)
+    </Form.Group>
+    </Form>
+  );
 };
-export default DDJAYForm;
+export default CommercialPlottedForm;

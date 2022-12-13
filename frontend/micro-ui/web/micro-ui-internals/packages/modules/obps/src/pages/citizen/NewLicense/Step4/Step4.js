@@ -4,12 +4,16 @@ import { useForm, useFieldArray } from "react-hook-form";
 import DDJAYForm from "../Step4/DdjayForm";
 import ResidentialPlottedForm from "./ResidentialPlotted";
 import IndustrialPlottedForm from "./IndustrialPlotted";
+import LayoutPlan from "./LayoutPlan";
+import DemarcationPlan from "./DemarcationPlan";
 import { Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import CalculateIcon from "@mui/icons-material/Calculate";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import axios from "axios";
 import Spinner from "../../../../components/Loader";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { getDocShareholding } from "../docView/docView.help";
 
 const AppliedDetailForm = (props) => {
   // console.log("DD", props);
@@ -28,24 +32,42 @@ const AppliedDetailForm = (props) => {
     defaultValues: {
       dgpsDetails: [
         {
-          longitude: "",
-          latitude: "",
+          longitude: props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[0]?.longitude
+            ? props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[0]?.longitude
+            : "",
+          latitude: props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[0]?.latitude
+            ? props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[0]?.latitude
+            : "",
         },
         {
-          longitude: "",
-          latitude: "",
+          longitude: props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[1]?.longitude
+            ? props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[1]?.longitude
+            : "",
+          latitude: props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[1]?.latitude
+            ? props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[1]?.latitude
+            : "",
         },
         {
-          longitude: "",
-          latitude: "",
+          longitude: props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[2]?.longitude
+            ? props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[2]?.longitude
+            : "",
+          latitude: props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[2]?.latitude
+            ? props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[2]?.latitude
+            : "",
         },
         {
-          longitude: "",
-          latitude: "",
+          longitude: props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[3]?.longitude
+            ? props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[3]?.longitude
+            : "",
+          latitude: props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[3]?.latitude
+            ? props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[3]?.latitude
+            : "",
         },
       ],
     },
   });
+
+  const [fileStoreId, setFileStoreId] = useState({});
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -57,7 +79,7 @@ const AppliedDetailForm = (props) => {
     const token = window?.localStorage?.getItem("token");
     const postDistrict = {
       pageName: "DetailsofAppliedLand",
-      ApplicationStatus: "DRAFT",
+      ApplicationStatus: "INITIATE",
       id: props.getId,
       createdBy: props?.userData?.id,
       updatedBy: props?.userData?.id,
@@ -213,7 +235,7 @@ const AppliedDetailForm = (props) => {
     try {
       const Resp = await axios.post("/tl-services/new/_create", postDistrict);
       setLoader(false);
-      props.Step4Continue(Resp?.data?.LicenseServiceResponseInfo?.[0]?.newServiceInfoData?.[0]);
+      props.Step4Continue(Resp?.data?.LicenseServiceResponseInfo?.[0]?.newServiceInfoData?.[0], Resp?.data?.LicenseServiceResponseInfo?.[0]);
     } catch (error) {
       setLoader(false);
       return error?.message;
@@ -222,14 +244,15 @@ const AppliedDetailForm = (props) => {
 
   useEffect(() => {
     console.log("props?.getLicData?.ApplicantInfo", props?.getLicData);
-    // const valueData = props?.getLicData;
-    // if (props?.getLicData?.LandSchedule) {
-    //   Object?.keys(valueData)?.map((item) => setValue(item, valueData[item]));
-    //   const data = purposeOptions?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.purpose);
-    //   const potientialData = getPotentialOptons?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.potential);
-    //   setValue("purpose", { label: data?.[0]?.label, value: data?.[0]?.value });
-    //   setValue("potential", { label: potientialData?.[0]?.label, value: potientialData?.[0]?.value });
-    // }
+    const valueData = props?.getLicData?.DetailsofAppliedLand;
+    if (valueData) {
+      Object?.keys(valueData?.DetailsAppliedLandPlot)?.map((item) => setValue(item, valueData?.DetailsAppliedLandPlot[item]));
+      Object?.keys(valueData?.DetailsAppliedLandNILP)?.map((item) => setValue(item, valueData?.DetailsAppliedLandNILP[item]));
+      // const data = purposeOptions?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.purpose);
+      // const potientialData = getPotentialOptons?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.potential);
+      // setValue("purpose", { label: data?.[0]?.label, value: data?.[0]?.value });
+      // setValue("potential", { label: potientialData?.[0]?.label, value: potientialData?.[0]?.value });
+    }
   }, [props?.getLicData]);
 
   const getSubmitDataLabel = async () => {
@@ -255,6 +278,7 @@ const AppliedDetailForm = (props) => {
     try {
       const Resp = await axios.post("/filestore/v1/files", formData, {});
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
+      setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
       // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
       console.log("getval======", getValues());
       setLoader(false);
@@ -285,7 +309,7 @@ const AppliedDetailForm = (props) => {
                         <div className="row ">
                           <div className="col col-4">
                             <label>X:Longitude</label>
-                            <input type="number" className="form-control" {...register(`dgpsDetails.${index}.longitudtue`)} />
+                            <input type="number" className="form-control" {...register(`dgpsDetails.${index}.longitude`)} />
                           </div>
                           <div className="col col-4">
                             <label>Y:Latitude</label>
@@ -943,28 +967,62 @@ const AppliedDetailForm = (props) => {
                   <br></br>
                   <div className="row">
                     <div className="col col-3">
-                      <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
-                        Demarcation plan. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                      <h6
+                        style={{ display: "flex" }}
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="Whether you hosted the existing approved layout plan & in-principle approved layout on the website of your company/organization Yes/No if yes upload"
+                      >
+                        Hosted approved layout plan. &nbsp;&nbsp;
+                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>&nbsp;&nbsp;
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.hostedLayoutPlan)}>
+                          {" "}
+                        </VisibilityIcon>
                       </h6>
-                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "demarcationPlan")} />
+
+                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "hostedLayoutPlan")} />
+                    </div>
+
+                    <div className="col col-3">
+                      <h6
+                        style={{ display: "flex" }}
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="Consent of RERA if there is any change in the phasing ."
+                      >
+                        Consent of RERA. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon> &nbsp;&nbsp;
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.consentRera)}>
+                          {" "}
+                        </VisibilityIcon>
+                      </h6>
+
+                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "consentRera")} />
                     </div>
                     <div className="col col-3">
                       <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
-                        Democratic Plan. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                      </h6>
-                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "democraticPlan")} />
-                    </div>
-                    <div className="col col-3">
-                      <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
-                        Sectoral Plan. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        Sectoral Plan. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon> &nbsp;&nbsp;
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.sectoralPlan)}>
+                          {" "}
+                        </VisibilityIcon>
                       </h6>
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "sectoralPlan")} />
                     </div>
                     <div className="col col-3">
-                      <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
-                        Upload Layout Plan. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                      <h6
+                        style={{ display: "flex" }}
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="Copy of detailed specifications and designs for electric supply including street lighting"
+                      >
+                        Designs for electric supply.&nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon> &nbsp;&nbsp;
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.detailedElectricSupply)}>
+                          {" "}
+                        </VisibilityIcon>
                       </h6>
-                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "uploadLayoutPlan")} />
+
+                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "detailedElectricSupply")} />
                     </div>
                   </div>
                   <br></br>
@@ -976,7 +1034,10 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Copy of plans showing cross sections of proposed roads indicating, in particular, the width of proposed carriage ways cycle tracks and footpaths etc"
                       >
-                        Plans showing cross sections. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        Plans showing cross sections. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon> &nbsp;&nbsp;
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.planCrossSection)}>
+                          {" "}
+                        </VisibilityIcon>
                       </h6>
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "planCrossSection")} />
                     </div>
@@ -988,15 +1049,13 @@ const AppliedDetailForm = (props) => {
                         title="Copy of plans indicating, in addition, the position of sewers, stormwater channels, water supply and any other public health services."
                       >
                         Plans indicating position of public. &nbsp;&nbsp;
-                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon> &nbsp;&nbsp;
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.publicHealthServices)}>
+                          {" "}
+                        </VisibilityIcon>
                       </h6>
 
-                      <input
-                        type="file"
-                        className="form-control"
-                        onChange={(e) => getDocumentData(e?.target?.files[0], "publicHealthServices")}
-                        style={{ marginTop: "-12px" }}
-                      />
+                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "publicHealthServices")} />
                     </div>
                     <div className="col col-3">
                       <h6
@@ -1005,7 +1064,10 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Copy of detailed specifications and designs of road works and estimated costs thereof"
                       >
-                        Specifications and designs. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        Specifications and designs. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon> &nbsp;&nbsp;
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.designRoad)}>
+                          {" "}
+                        </VisibilityIcon>
                       </h6>
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "designRoad")} />
                     </div>
@@ -1016,7 +1078,10 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Copy of detailed specifications and designs of sewerage, storm, water and water supply works and estimated costs thereof"
                       >
-                        Designs of sewerage and storm. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        Designs of sewerage and storm. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon> &nbsp;&nbsp;
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.designSewarage)}>
+                          {" "}
+                        </VisibilityIcon>
                       </h6>
 
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "designSewarage")} />
@@ -1032,7 +1097,10 @@ const AppliedDetailForm = (props) => {
                         title="Copy of detailed specifications and designs for disposal and treatment of storm and sullage water and estimated costs of works."
                       >
                         Disposal and storm treatment. &nbsp;&nbsp;
-                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon> &nbsp;&nbsp;
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.designDisposal)}>
+                          {" "}
+                        </VisibilityIcon>
                       </h6>
 
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "designDisposal")} />
@@ -1044,7 +1112,10 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Whether intimated each of the allottees through registered post regarding the proposed changes in the layout plan: - If yes selected upload"
                       >
-                        Undertaking that no change. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        Undertaking that no change. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon> &nbsp;&nbsp;
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.undertakingChange)}>
+                          {" "}
+                        </VisibilityIcon>
                       </h6>
 
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "undertakingChange")} />
@@ -1054,16 +1125,23 @@ const AppliedDetailForm = (props) => {
                         style={{ display: "flex" }}
                         data-toggle="tooltip"
                         data-placement="top"
-                        title="Whether you hosted the existing approved layout plan & in-principle approved layout on the website of your company/organization Yes/No if yes upload"
+                        title="Explanatory note regarding the salient feature of the proposed colony."
                       >
-                        Hosted approved layout plan. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        Salient feature of the colony. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon> &nbsp;&nbsp;
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.proposedColony)}>
+                          {" "}
+                        </VisibilityIcon>
                       </h6>
 
-                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "hostedLayoutPlan")} />
+                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "proposedColony")} />
                     </div>
                     <div className="col col-3">
                       <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
-                        Report any objection. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        Report any objection. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon> &nbsp;&nbsp;
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.reportObjection)}>
+                          {" "}
+                        </VisibilityIcon>
                       </h6>
 
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "reportObjection")} />
@@ -1076,48 +1154,43 @@ const AppliedDetailForm = (props) => {
                         style={{ display: "flex" }}
                         data-toggle="tooltip"
                         data-placement="top"
-                        title="Consent of RERA if there is any change in the phasing ."
-                      >
-                        Consent of RERA. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                      </h6>
-
-                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "consentRera")} />
-                    </div>
-                    <div className="col col-3">
-                      <h6
-                        style={{ display: "flex" }}
-                        data-toggle="tooltip"
-                        data-placement="top"
                         title="Undertaking that no change has been made in the phasing "
                       >
-                        Undertaking. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        Undertaking. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon> &nbsp;&nbsp;
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.undertaking)}>
+                          {" "}
+                        </VisibilityIcon>
                       </h6>
 
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "undertaking")} />
                     </div>
                     <div className="col col-3">
-                      <h6
-                        style={{ display: "flex" }}
-                        data-toggle="tooltip"
-                        data-placement="top"
-                        title="Copy of detailed specifications and designs for electric supply including street lighting"
-                      >
-                        Designs for electric supply.&nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                      </h6>
-
-                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "detailedElectricSupply")} />
-                    </div>
-                    <div className="col col-3">
-                      <h6
-                        style={{ display: "flex" }}
-                        data-toggle="tooltip"
-                        data-placement="top"
-                        title="Explanatory note regarding the salient feature of the proposed colony."
-                      >
-                        Salient feature of the colony. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                      </h6>
-
-                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "proposedColony")} />
+                      {Purpose === "RPL" && <LayoutPlan watch={watch} register={register} />}
+                      {Purpose === "IPL" && <LayoutPlan watch={watch} register={register} />}
+                      {Purpose === "IPA" && <LayoutPlan watch={watch} register={register} />}
+                      {Purpose === "CPL" && <LayoutPlan watch={watch} register={register} />}
+                      {Purpose === "CIC" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "ITP" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "ITC" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "CIR" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "RGP" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "AHP" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "SGC" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "CIS" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "DDJAY_APHP" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "MLU-CZ" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "MLU-RZ" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "NILP" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "LDEF" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "NILPC" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "TODGH" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "TODCOMM" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "TODIT" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "TODMUD" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "SPRPRGH" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "DRH" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "RHP" && <DemarcationPlan watch={watch} register={register} />}
                     </div>
                   </div>
                   <div class="row">

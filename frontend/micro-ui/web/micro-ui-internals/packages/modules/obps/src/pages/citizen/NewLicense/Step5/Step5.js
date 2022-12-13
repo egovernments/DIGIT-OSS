@@ -8,12 +8,8 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import axios from "axios";
-// import Pdf from "react-to-pdf";
-// import ReactToPdf from "ReactToPdf";
-// import { Document, Page, pdfjs } from 'react-pdf';
-// import Pdf from "react-to-pdf";
-
-
+import { round } from "lodash";
+import { useHistory } from "react-router-dom";
 
 // import InfoIcon from '@mui/icons-material/Info';
 // import TextField from '@mui/material/TextField';
@@ -32,6 +28,7 @@ const style = {
 
 
 const FeesChargesForm = (props) => {
+  const history = useHistory();
   const [purpose, setPurpose] = useState("");
   const [totalFee, setTotalFee] = useState("");
   const [remark, setRemark] = useState("");
@@ -39,13 +36,14 @@ const FeesChargesForm = (props) => {
   const [calculateData, setCalculateData] = useState({});
   const [modal, setmodal] = useState(false);
   const [modal1, setmodal1] = useState(false);
-  // const ref = React.createRef();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
     setValue,
+    watch,
     reset,
   } = useForm({
     mode: "onSubmit",
@@ -56,6 +54,8 @@ const FeesChargesForm = (props) => {
   const [submitDataLabel, setSubmitDataLabel] = useState([]);
 
   const [FeesChargesFormSubmitted, SetFeesChargesFormSubmitted] = useState(false);
+
+  console.log("securedData", props?.securedData);
 
   const FeesChrgesFormSubmitHandler = async (data) => {
     try {
@@ -108,22 +108,39 @@ const FeesChargesForm = (props) => {
 
   const Purpose = localStorage.getItem("purpose");
   const potential = JSON.parse(localStorage.getItem("potential"));
-  const totalAreaAcre = JSON.parse(localStorage.getItem("add"));
 
   const CalculateApiCall = async () => {
     const token = window?.localStorage?.getItem("token");
     const payload = {
       RequestInfo: {
         apiId: "Rainmaker",
-        ver: "v1",
-        ts: 0,
-        action: "_search",
-        did: "",
-        key: "",
-        msgId: "090909",
-        requesterId: "",
-        authToken: token,
-        userInfo: props?.userData,
+        msgId: "1669293303096|en_IN",
+        authToken: "8428d41b-01ff-4e90-a125-9af324bbf409",
+        userInfo: {
+          id: 330,
+          uuid: "36ea2b0e-52f5-4d16-96b2-4b3963eee30a",
+          userName: "9050784591",
+          name: "renuka",
+          mobileNumber: "9050784591",
+          emailId: "",
+          locale: null,
+          type: "CITIZEN",
+          roles: [
+            {
+              code: "DEVELOPER",
+              name: "Developer ",
+              tenantId: "hr",
+            },
+            {
+              name: "Citizen",
+              code: "CITIZEN",
+              tenantId: "hr",
+            },
+          ],
+          active: true,
+          tenantId: "hr",
+          permanentCity: null,
+        },
       },
       CalulationCriteria: [
         {
@@ -134,7 +151,7 @@ const FeesChargesForm = (props) => {
         totalLandSize: 1,
         potenialZone: potential,
         purposeCode: Purpose,
-        applicationNumber: "INITIATE",
+        applicationNumber: props?.securedData?.applicationNumber,
       },
     };
 
@@ -164,6 +181,26 @@ const FeesChargesForm = (props) => {
       console.log(error.message);
     }
   };
+
+  const getWholeData = async () => {
+    try {
+      const Resp = await axios.get(`http://103.166.62.118:8443/tl-services/new/licenses/object/_get?id=${props.getId}`);
+      console.log("Resp====", Resp?.data);
+      // let temp = {};
+      // Object.keys(Resp?.data).forEach((el) => {
+      //   const newKey = el?.replace(/"/g, "");
+      //   temp[newKey] = Resp?.data[el];
+      // });
+      console.log("temp==", temp);
+    } catch (error) {
+      return error;
+    }
+  };
+
+  useEffect(() => {
+    getWholeData();
+  }, []);
+
   useEffect(() => {
     getSubmitDataLabel();
   }, []);
@@ -172,10 +209,12 @@ const FeesChargesForm = (props) => {
     const purposeSelected = data.data;
     setSelectPurpose(purposeSelected);
   };
+
   const handleChangePotential = (data) => {
     const purposeSelected = data.data;
     setSelectPurpose(purposeSelected);
   };
+
   const handleScrutiny = (event) => {
     setCalculateData(event.target.value);
   };
@@ -185,6 +224,28 @@ const FeesChargesForm = (props) => {
   const handleConversion = (event) => {
     setCalculateData(event.target.value);
   };
+  const dataArea = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.kanal;
+  const dataAreaMarla = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.marla;
+  const dataAreaSarai = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.sarsai;
+  const dataAreaBigha = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.bigha;
+  const dataAreaBiswa = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.biswa;
+  const dataAreaBiswansi = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.biswansi;
+  const totalAreaAcre =
+    dataArea * 0.125 + dataAreaMarla * 0.0062 + dataAreaSarai * 0.00069 + dataAreaBigha * 0.33 + dataAreaBiswa * 0.0309 + dataAreaBiswansi * 0.619;
+  console.log("abc", totalAreaAcre);
+
+  useEffect(() => {
+    console.log("dd", props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.kanal);
+  }, [props?.getLicData]);
+
+  const dataScrutiny = props?.getLicData?.FeesAndCharges?.scrutinyFee;
+  const dataLicence = props?.getLicData?.FeesAndCharges?.licenseFee;
+  const data = dataLicence + (25 % dataScrutiny);
+  console.log("lic", data);
+
+  useEffect(() => {
+    console.log("ddtt", props?.getLicData);
+  }, [props?.getLicData]);
 
   return (
     <form onSubmit={handleSubmit(FeesChrgesFormSubmitHandler)}>
@@ -239,7 +300,7 @@ const FeesChargesForm = (props) => {
                       </td>
                     </tr>
                     <tr>
-                      <th>License Fees</th>
+                      <th>Licence Fees</th>
                       <td>
                         <input type="text" className="form-control" disabled {...register("licenseFee")} />
                       </td>
@@ -256,7 +317,7 @@ const FeesChargesForm = (props) => {
                 <div className="row">
                   <div className="col col-4">
                     <h6 data-toggle="tooltip" data-placement="top" title="Total Fees (License fee 25% + Scrutiny Fees)">
-                      (i)&nbsp;Amount Payable at the time of Application &nbsp;&nbsp;
+                      (i)&nbsp;Amount Payable &nbsp;&nbsp;
                     </h6>
 
                     <input
@@ -299,6 +360,32 @@ const FeesChargesForm = (props) => {
                         <div className="col col-12">
                           <label>Enter Licence Number/LOI number</label>
                           <input type="text" className="form-control" {...register("licNumber")} />
+                          <label>
+                            Click Yes,if Lic No/LOI number belongs to other developers.
+                            <label htmlFor="belongsDeveloper">
+                              <input {...register("belongsDeveloper")} type="radio" value="Y" id="belongsDeveloper" />
+                              &nbsp; Yes &nbsp;&nbsp;
+                            </label>
+                            <label htmlFor="belongsDeveloper">
+                              <input {...register("belongsDeveloper")} type="radio" value="N" id="belongsDeveloper" />
+                              &nbsp; No &nbsp;&nbsp;
+                            </label>
+                            {watch("belongsDeveloper") === "Y" && (
+                              <div>
+                                <div className="row">
+                                  <div className="col col-12">
+                                    <label>
+                                      <h2>
+                                        Consent letter in case of Another Developer (verified by the Department)
+                                        <span style={{ color: "red" }}>*</span>
+                                      </h2>
+                                    </label>
+                                    <input type="file" className="form-control" {...register("consentLetter")} />
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                          </label>
                           <label>Amount (previous)</label>
                           <input type="text" className="form-control" disabled {...register("amount")} />
                           <label>Amount to be paid after adjustment</label>
@@ -352,11 +439,20 @@ const FeesChargesForm = (props) => {
                   </div>
                   <div class="my-2">
                     .
-                    <button className="btn btn-primary" onClick={() => setmodal(true)}>
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => {
+                        // `/digit-ui/citizen/payment/collect/${mutation2.data.Licenses[0].businessService}/${mutation2.data.Licenses[0].applicationNumber}`
+                        history.push(`/digit-ui/citizen/payment/collect/tl/${props?.securedData?.applicationNumber}`, {
+                          // paymentAmount: paymentAmt,
+                        });
+                        setmodal(true);
+                      }}
+                    >
                       Pay Now
                     </button>
                   </div>
-                  <div>
+                  {/* <div>
                     <Modal
                       size="lg"
                       isOpen={modal}
@@ -378,7 +474,7 @@ const FeesChargesForm = (props) => {
                       </ModalBody>
                       <ModalFooter toggle={() => setmodal(!modal)}></ModalFooter>
                     </Modal>
-                  </div>
+                  </div> */}
                 </div>
                 <div class="row">
                   <div class="col-sm-12 text-right">

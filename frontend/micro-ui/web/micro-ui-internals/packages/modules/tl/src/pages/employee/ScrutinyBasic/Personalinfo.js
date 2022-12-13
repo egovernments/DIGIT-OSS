@@ -18,7 +18,7 @@ import InfoIcon from "@mui/icons-material/Info";
 import PersonalinfoChild from "./PersonalinfoChild";
 import LicenseDetailsScrutiny from "../ScrutinyBasic/Developer/LicenseDetailsScrutiny";
 import CapacityScrutiny from "../ScrutinyBasic/Developer/CapacityScrutiny";
-// import DocumentScrutiny from "./Developer/DocumentScrutiny";
+import DocumentScrutiny from "./Developer/DocumentScrutiny";
 import Collapse from "react-bootstrap/Collapse";
 import Modal from "react-bootstrap/Modal";
 import ModalChild from "./Remarks/ModalChild";
@@ -193,7 +193,7 @@ const Personalinfo = (props) => {
             capacityScrutinyInfo={applicantInfoPersonal?.devDetail?.capacityDevelopAColony ? applicantInfoPersonal?.devDetail?.capacityDevelopAColony : null}
             displayPersonal={open2 ? "block" : "none"}
           />
-          {/* <DocumentScrutiny /> */}
+          <DocumentScrutiny />
           {/* <DocumentScrutiny
             iconColorState={iconStates}
             showTable={currentRemarklifo}

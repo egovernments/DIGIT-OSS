@@ -6,6 +6,18 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step1";
 import { useHistory, useLocation } from "react-router-dom";
+import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
+
+const LcNotSigned = [
+  {
+    label: "GPA",
+    value: "GPA",
+  },
+  {
+    label: "SPA",
+    value: "SPA",
+  },
+];
 
 const ApllicantFormStep1 = (props) => {
   const location = useLocation();
@@ -466,7 +478,8 @@ const ApllicantFormStep1 = (props) => {
                     </h2>
                   </Form.Label>
                 </div>
-                <Form.Control type="text" placeholder="" {...register("notSigned")} />
+                <ReactMultiSelect control={control} name="LcNotSigned" placeholder="LC Not Signed" data={LcNotSigned} labels="LcNotSigned" />
+                {/* <Form.Control type="text" placeholder="" {...register("notSigned")} /> */}
 
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.notSigned && errors?.notSigned?.message}
