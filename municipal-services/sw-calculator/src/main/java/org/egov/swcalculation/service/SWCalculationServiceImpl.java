@@ -148,7 +148,7 @@ public class SWCalculationServiceImpl implements SWCalculationService {
 							}
 							Long taxPeriod = toDate - fromDate;
 							BigDecimal finalSewerageCharge = sewerageCharge.add(BigDecimal.valueOf((Double.parseDouble(totalTaxAmount.toString()) *
-									(sewerageConnection.getDisconnectionExecutionDate() - Double.parseDouble(toDate.toString()))) / taxPeriod));
+									Math.abs(Double.parseDouble(toDate.toString()) - sewerageConnection.getDateEffectiveFrom())) / taxPeriod));
 							estimates.stream().forEach(estimate -> {
 								if (taxHeadCategoryMap.get(estimate.getTaxHeadCode()).equals(CHARGES)) {
 									estimate.setEstimateAmount(finalSewerageCharge);
