@@ -728,6 +728,7 @@ public class BillServicev2 {
 			ownerPlainRequestFieldsList.add("userName");
 			ownerPlainRequestFieldsList.add("name");
 			ownerPlainRequestFieldsList.add("gender");
+			ownerPlainRequestFieldsList.add("permanentAddress");
 		}
 		return ownerPlainRequestFieldsList;
 	}
