@@ -2,16 +2,30 @@ import React, { useState, useEffect } from "react";
 import { Card, Row, Col, Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { getDocShareholding } from "../NewLicense/docView/docView.help";
 
 const electricalPlanService = () => {
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+    setValue,
+    watch,
+  } = useForm({
+    mode: "onChange",
+
+    shouldFocusError: true,
+  });
   const [developerDataLabel, setDeveloperDataLabel] = useState([]);
   const electricPlan = async (data) => {
+    const token = window?.localStorage?.getItem("token");
     console.log(data);
     try {
       const postDistrict = {
         requestInfo: {
-          api_id: "1",
+          api_id: "Rainmaker",
           ver: "1",
           ts: null,
           action: "create",
@@ -19,7 +33,7 @@ const electricalPlanService = () => {
           key: "",
           msg_id: "",
           requester_id: "",
-          auth_token: null,
+          auth_token: token,
         },
 
         ElectricPlanRequest: {
@@ -29,6 +43,27 @@ const electricalPlanService = () => {
       const Resp = await axios.post("/land-services/electric/plan/_create", postDistrict);
       setDeveloperDataLabel(Resp.data);
     } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const [fileStoreId, setFileStoreId] = useState({});
+  const getDocumentData = async (file, fieldName) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("tenantId", "hr");
+    formData.append("module", "property-upload");
+    formData.append("tag", "tag-property");
+    // setLoader(true);
+    try {
+      const Resp = await axios.post("/filestore/v1/files", formData, {});
+      setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
+      setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
+      // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
+      console.log("getval======", getValues());
+      // setLoader(false);
+    } catch (error) {
+      // setLoader(false);
       console.log(error.message);
     }
   };
@@ -211,7 +246,10 @@ const electricalPlanService = () => {
                   <h2>Self-certified drawings from empanelled/certified architects that conform to the standard approved template.</h2>
                 </td>
                 <td component="th" scope="row">
-                  <input type="file" className="form-control" {...register("selfCenteredDrawings")} />
+                  <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "selfCenteredDrawings")} />
+                  <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.selfCenteredDrawings)}>
+                    {" "}
+                  </VisibilityIcon>
                 </td>
               </tr>
               <tr>
@@ -224,7 +262,10 @@ const electricalPlanService = () => {
                   <h2>Environmental Clearance.</h2>
                 </td>
                 <td component="th" scope="row">
-                  <input type="file" className="form-control" {...register("environmentalClearance")} />
+                  <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "environmentalClearance")} />
+                  <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.environmentalClearance)}>
+                    {" "}
+                  </VisibilityIcon>
                 </td>
               </tr>
               <tr>
@@ -237,7 +278,10 @@ const electricalPlanService = () => {
                   <h2>PDF (OCR Compatible) + GIS format (shapefile as per the template uploaded on the department website).</h2>
                 </td>
                 <td component="th" scope="row">
-                  <input type="file" className="form-control" {...register("pdfFormat")} />
+                  <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "pdfFormat")} />
+                  <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.pdfFormat)}>
+                    {" "}
+                  </VisibilityIcon>
                 </td>
               </tr>
               <tr>
@@ -250,7 +294,10 @@ const electricalPlanService = () => {
                   <h2>AutoCAD (DXF) file.</h2>
                 </td>
                 <td component="th" scope="row">
-                  <input type="file" className="form-control" {...register("autoCad")} />
+                  <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "autoCad")} />
+                  <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.autoCad)}>
+                    {" "}
+                  </VisibilityIcon>
                 </td>
               </tr>
               <tr>
@@ -263,7 +310,10 @@ const electricalPlanService = () => {
                   <h2>Certified copy of the plan verified by a third party.</h2>
                 </td>
                 <td component="th" scope="row">
-                  <input type="file" className="form-control" {...register("verifiedPlan")} />
+                  <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "verifiedPlan")} />
+                  <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.verifiedPlan)}>
+                    {" "}
+                  </VisibilityIcon>
                 </td>
               </tr>
             </tbody>

@@ -57,30 +57,34 @@ const FeesChargesForm = (props) => {
   const [FeesChargesFormSubmitted, SetFeesChargesFormSubmitted] = useState(false);
 
   const FeesChrgesFormSubmitHandler = async (data) => {
-    try {
-      const postDistrict = {
-        NewServiceInfo: {
-          pageName: "FeesAndCharges",
-          id: props.getId,
-          newServiceInfoData: {
-            FeesAndCharges: {
-              totalArea: data.totalArea,
-              purpose: data.purpose,
-              devPlan: data.potential,
-              scrutinyFee: data.scrutinyFee,
-              licenseFee: data.licenseFee,
-              conversionCharges: data.conversionCharges,
-              remark: data.remark,
-              adjustFee: data.licNumber,
-            },
-          },
+    setLoader(true);
+    const token = window?.localStorage?.getItem("token");
+    const postDistrict = {
+      pageName: "FeesAndCharges",
+      ApplicationStatus: "DRAFT",
+      id: props?.getId,
+      createdBy: props?.userData?.id,
+      updatedBy: props?.userData?.id,
+      LicenseDetails: {
+        FeesAndCharges: {
+          ...data,
         },
-      };
-
-      const Resp = await axios.post("/land-services/new/_create", postDistrict).then((Resp) => {
-        return Resp;
-      });
-
+      },
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: "v1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msgId: "090909",
+        requesterId: "",
+        authToken: token,
+        userInfo: props?.userData,
+      },
+    };
+    try {
+      const Resp = await axios.post("/tl-services/new/_create", postDistrict);
       props.Step5Continue(data, Resp?.data?.NewServiceInfo?.[0]?.id);
       SetFeesChargesFormSubmitted(Resp.data);
     } catch (error) {
