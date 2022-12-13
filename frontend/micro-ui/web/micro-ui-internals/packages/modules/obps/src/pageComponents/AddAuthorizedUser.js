@@ -402,19 +402,15 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
  
     try {
       const requestResp = {          
-            "requestInfo": {
-              "apiId": "Rainmaker",
-              "ver": ".01",
-              "ts": null,
-              "action": "_update",
-              "did": "1",
-              "key": "",
-              "msgId": "20170310130900|en_IN",
-              "authToken": "dce88a06-7e09-4923-97f9-f15af2deea66",
-              
-              userInfo:userInfo
-            },
-            user:user
+        "RequestInfo": {
+          "apiId": "Rainmaker",
+          "msgId": "1669293303096|en_IN",
+          "authToken": "",
+          "active": true,
+          "tenantId": "hr",
+          "permanentCity": null
+        },
+        "user":user
           
       }
       const postDataAuthUser = axios.post(`/user/users/_createnovalidate`,requestResp,{headers:{
