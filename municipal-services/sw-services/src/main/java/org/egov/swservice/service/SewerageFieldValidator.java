@@ -79,6 +79,8 @@ public class SewerageFieldValidator implements SewerageActionValidator {
 
 	public void validateModifyRequest(SewerageConnectionRequest sewerageConnectionRequest, Map<String, String> errorMap) {
 		if (SWConstants.APPROVE_CONNECTION.equalsIgnoreCase(
+				sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction())
+				|| SWConstants.ACTION_INITIATE.equalsIgnoreCase(
 				sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction())) {
 			if (StringUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionType())) {
 				errorMap.put("INVALID_SEWERAGE_CONNECTION_TYPE", "Connection type should not be empty");
@@ -106,6 +108,8 @@ public class SewerageFieldValidator implements SewerageActionValidator {
 		if (SWConstants.SUBMIT_APPLICATION_CONST
 				.equals(sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction())
 				|| SWConstants.APPROVE_CONNECTION.equalsIgnoreCase(
+				sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction())
+				|| SWConstants.ACTION_INITIATE.equalsIgnoreCase(
 				sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction())) {
 			if (sewerageConnectionRequest.getSewerageConnection().getDateEffectiveFrom() == null
 					|| sewerageConnectionRequest.getSewerageConnection().getDateEffectiveFrom() < 0
