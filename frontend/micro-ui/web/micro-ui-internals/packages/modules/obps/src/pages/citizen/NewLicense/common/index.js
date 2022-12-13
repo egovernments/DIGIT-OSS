@@ -115,22 +115,25 @@ const CommonForm = () => {
     setStep(3);
   };
 
+  const changeSteps = (value) => {
+    if (value == 1 && stepActive?.step1) handleStep();
+    else if (value == 2 && stepActive.step2) handleStep1(getId, userData, getLicData);
+    else if (value == 3 && stepActive.step3) handlestep2(getLicData);
+    else if (value == 4 && stepActive.step4) handlestep3(getLicData);
+    else if (value == 5 && stepActive.step5) handlestep4(getLicData, securedData);
+  };
+
   useEffect(() => {
     if (_.isEmpty(getLicData)) setStepActive({ step1: true, step2: false, step3: false, step4: false, step5: false });
     if (!_.isEmpty(getLicData?.ApplicantInfo)) setStepActive({ step1: true, step2: true, step3: false, step4: false, step5: false });
     if (!_.isEmpty(getLicData?.ApplicantPurpose)) setStepActive({ step1: true, step2: true, step3: true, step4: false, step5: false });
     if (!_.isEmpty(getLicData?.LandSchedule)) setStepActive({ step1: true, step2: true, step3: true, step4: true, step5: false });
     if (!_.isEmpty(getLicData?.DetailsofAppliedLand)) setStepActive({ step1: true, step2: true, step3: true, step4: true, step5: true });
-    if (getCheck == 2 && stepActive.step2) handleStep1(getId, userData, getLicData);
-    else if (getCheck == 3 && stepActive.step3) handlestep2(getLicData);
-    else if (getCheck == 4 && stepActive.step4) handlestep3(getLicData);
-    else if (getCheck == 5 && stepActive.step5) handlestep4(getLicData, securedData);
-    else if (getCheck == 1) handleStep();
-  }, [getCheck, getLicData]);
+  }, [getLicData]);
 
   return (
     <div>
-      <TimelineNewLic currentStep={step} setCheck={setCheck} flow="NEWLICENSE" />
+      <TimelineNewLic currentStep={step} setCheck={setCheck} changeSteps={changeSteps} flow="NEWLICENSE" />
       {isStep1 ? (
         <ApllicantPuropseForm getLicData={getLicData} userData={userData} getId={getId} Step2Continue={handlestep2} Step2Back={handleBack} />
       ) : isStep2 ? (

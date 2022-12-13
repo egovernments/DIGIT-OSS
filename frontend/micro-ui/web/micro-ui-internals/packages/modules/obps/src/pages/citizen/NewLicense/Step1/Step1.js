@@ -530,7 +530,6 @@ const ApllicantFormStep1 = (props) => {
               </button>
             </div>
           </div>
-          ``
         </Card>
       </Card>
     </form>

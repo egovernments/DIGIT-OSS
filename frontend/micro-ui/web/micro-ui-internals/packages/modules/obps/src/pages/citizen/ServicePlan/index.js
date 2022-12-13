@@ -59,9 +59,7 @@ const ServicePlanService = () => {
       return error.message;
     }
   };
-  useEffect(() => {
-    getDocumentData();
-  }, []);
+
   return (
     <form onSubmit={handleSubmit(servicePlan)}>
       <Card style={{ width: "126%", border: "5px solid #1266af" }}>
@@ -144,9 +142,11 @@ const ServicePlanService = () => {
                   <input
                     type="file"
                     className="form-control"
-                    // {...register("selfCertifiedDrawingFromEmpaneledDoc")}
                     onChange={(e) => getDocumentData(e?.target?.files[0], "selfCertifiedDrawingFromEmpaneledDoc")}
                   />
+                  <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.selfCertifiedDrawingFromEmpaneledDoc)}>
+                    {" "}
+                  </VisibilityIcon>
                 </td>
               </tr>
               <tr>

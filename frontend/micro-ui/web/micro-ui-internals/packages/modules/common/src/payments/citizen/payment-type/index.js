@@ -26,6 +26,7 @@ export const SelectPaymentType = (props) => {
   const { tenantId: __tenantId, authorization, workflow: wrkflow } = Digit.Hooks.useQueryParams();
   const paymentAmount = state?.paymentAmount;
   const { t } = useTranslation();
+
   const history = useHistory();
   const {
     register,
@@ -141,7 +142,7 @@ export const SelectPaymentType = (props) => {
         <Card>
           <div className="payment-amount-info" style={{ marginBottom: "26px" }}>
             <CardLabel className="dark">{t("PAYMENT_CS_TOTAL_AMOUNT_DUE")}</CardLabel>
-            <CardSectionHeader> ₹ {paymentAmount || billDetails?.totalAmount}</CardSectionHeader>
+            <CardSectionHeader> ₹ {paymentAmount || Intl?.NumberFormat("en-IN")?.format(billDetails?.totalAmount)}</CardSectionHeader>
           </div>
           <Row>
             <div className="col col-6">
@@ -172,17 +173,22 @@ export const SelectPaymentType = (props) => {
             </div>
           </Row>
           <br></br>
-          <div></div>
-          <CardLabel>{t("PAYMENT_CS_SELECT_METHOD")}</CardLabel>
-          {menu?.length && (
-            <Controller
-              name="paymentType"
-              defaultValue={menu[0]}
-              control={control}
-              render={(props) => <RadioButtons selectedOption={props.value} options={menu} onSelect={props.onChange} />}
-            />
-          )}
-          {!showToast && <SubmitBar label={t("PAYMENT_CS_BUTTON_LABEL")} submit={true} />}
+          <div>
+            <CardLabel>{t("PAYMENT_CS_SELECT_METHOD")}</CardLabel>
+            {menu?.length && (
+              <Controller
+                name="paymentType"
+                defaultValue={menu[0]}
+                control={control}
+                render={(props) => <RadioButtons selectedOption={props.value} options={menu} onSelect={props.onChange} />}
+              />
+            )}
+            <div>
+              {/* <Button style={{ textAlign: "right" }}> Generate LOI</Button> */}
+
+              {!showToast && <SubmitBar label={t("PAYMENT_CS_BUTTON_LABEL")} submit={true} />}
+            </div>
+          </div>
         </Card>
       </form>
       <InfoBanner label={t("CS_COMMON_INFO")} text={t("CS_PAYMENT_REDIRECT_NOTICE")} />

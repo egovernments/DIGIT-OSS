@@ -424,7 +424,6 @@ const ApllicantPuropseForm = (props) => {
   }, [props?.getLicData, purposeOptions, potentialOptons, districtDataLabels]);
 
   const handleChangePurpose = (data) => {
-    console.log("data", data);
     const purposeSelected = data?.value;
     window?.localStorage.setItem("purpose", purposeSelected);
   };
