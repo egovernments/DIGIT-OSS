@@ -21,6 +21,7 @@ import ExtensionCom from "../employee/ScrutinyBasic/AllServiceScrutiny/Extension
 import StandardDesign from "../employee/ScrutinyBasic/AllServiceScrutiny/StandardDesign/StandardDesign";
 import CompositionClu from "../employee/ScrutinyBasic/AllServiceScrutiny/CompositionClu/CompositionClu";
 import CompletionLic from "../employee/ScrutinyBasic/AllServiceScrutiny/CompletionLic/CompletionLic";
+import ServicePlanService from "../employee/ScrutinyBasic/ServicePlanScrutniy/ServicePlan";
 
 
 const TLBreadCrumb = ({ location }) => {
@@ -221,6 +222,9 @@ const EmployeeApp = ({ path, url, userType }) => {
           <PrivateRoute path={`${path}/StandardDesign`} component={StandardDesign} />
           <PrivateRoute path={`${path}/CompositionClu`} component={CompositionClu} />
           <PrivateRoute path={`${path}/CompletionLic`} component={CompletionLic} />
+          <PrivateRoute path={`${path}/ServicePlanService`} component={ServicePlanService} />
+
+         
         </div>
       </React.Fragment>
     </Switch>

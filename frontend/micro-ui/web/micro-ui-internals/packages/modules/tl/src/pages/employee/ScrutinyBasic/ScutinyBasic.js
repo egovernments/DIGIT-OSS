@@ -303,9 +303,9 @@ const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => 
           <Row style={{ top: 25, padding: 5 }}>
         <div className="ml-auto">
         {/* applicationNumber: "HR-TL-2022-12-06-000450" */}
-          <h2>Application : 
+          {/* <h2>Application : 
         {apiResppnse.newServiceInfoData !== undefined ? apiResppnse.applicationNumber:null}
-          </h2>
+          </h2> */}
 
         </div>
       </Row>
