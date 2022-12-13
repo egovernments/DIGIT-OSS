@@ -115,7 +115,7 @@ export const downloadMultipleBill = async (bills = [], configKey, businesService
       item.additionalDetails = addDetail;
     })
 
-    var actualBills = [], size = 40;
+    var actualBills = [], size = 5;
     for (let i = 0; bills.length > 0; i++) {
       actualBills.push(bills.splice(0, size));
     }
@@ -124,9 +124,7 @@ export const downloadMultipleBill = async (bills = [], configKey, businesService
       }
   } catch (error) {
     console.log(error);
-
   }
-
 }
 
 export const downloadPdfs = async (DOWNLOADRECEIPT, queryStr, bills) => {
