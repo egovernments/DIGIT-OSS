@@ -1,6 +1,6 @@
 {
   "name": "@egovernments/digit-ui-module-mcollect",
-  "version": "1.6.0-alpha.5",
+  "version": "1.6.0-alpha.6",
   "license": "MIT",
   "description": "Digit Misc Collections Module",
   "main": "dist/index.js",

@@ -183,7 +183,7 @@ const NewChallan = ({ChallanData}) => {
             });
           }
         })
-        .catch((e) => setShowToast({ key: true, label: e?.response?.data?.Errors[0].message }));
+        .catch((e) => setShowToast({ key: "error", label: e?.response?.data?.Errors[0].message }));
     } else {
       Digit.MCollectService.create({ Challan: Challan }, tenantId)
         .then((result, err) => {
@@ -200,7 +200,7 @@ const NewChallan = ({ChallanData}) => {
             });
           }
         })
-        .catch((e) => {setShowToast({ key: true, label: e?.response?.data?.Errors[0].message })});
+        .catch((e) => {setShowToast({ key: "error", label: e?.response?.data?.Errors[0].message })});
     }
   };
   let configs = newConfig || [];
@@ -248,7 +248,7 @@ const NewChallan = ({ChallanData}) => {
         onFormValueChange={onFormValueChange}
         breaklineStyle={{ border: "0px" }}
       />}
-      {showToast && <Toast error={showToast?.key === "error" ? true : false} label={error} onClose={closeToast} />}
+      {showToast && <Toast error={showToast?.key === "error" ? true : false} label={showToast?.label} onClose={closeToast} />}
     </div>
   );
 };
