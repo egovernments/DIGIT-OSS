@@ -667,7 +667,18 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             t={t}
                             required
                           />
-
+                          {/* <Select
+                            onChange={(e) => setDevType({showDevTypeFields: e.target.value })}
+                            value={showDevTypeFields}
+                            className="w-100"
+                            variant="standard"
+                          >
+                            {
+                              arrayDevList.map((item, index) => (
+                                <MenuItem value={item.code} >{item?.code}</MenuItem>
+                              ))
+                            }
+                          </Select> */}
                           {/* <MuiDropdown 
                           listOfData={optionsArrList}
                           labels="text"
@@ -1479,7 +1490,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                     </td>
                                     <td>
                                       <div className="row">
-                                        {JSON.stringify(elementInArray?.uploadPdf)}
+                                        {/* {JSON.stringify(elementInArray?.uploadPdf)} */}
                                         {(elementInArray?.uploadPdf) ?
                                           <button type="button" onClick={()=>getDocShareholding(elementInArray?.uploadPdf)} className="btn btn-sm col-md-6 text-center">
                                             <VisibilityIcon color="info" className="icon" />
@@ -1627,6 +1638,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                     <input
                       type="radio"
                       value="Y"
+                      checked={existingColonizer === "Y" ? true : false}
                       id="existingColonizer"
                       className="mx-2 mt-1"
                       onChange={(e) => setExistingColonizer(e.target.value)}
@@ -1637,6 +1649,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                     <input
                       type="radio"
                       value="N"
+                      checked={existingColonizer === "N" ? true : false}
                       id="existingColonizerN"
                       className="mx-2 mt-1"
                       onChange={(e) => setExistingColonizer(e.target.value)}
@@ -1839,7 +1852,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                 variant="standard"
                               >
                                 {
-                                  purposeOptions?.data.map((item, index) => (
+                                  purposeOptions?.data?.map((item, index) => (
                                     <MenuItem value={item.value} >{item?.label}</MenuItem>
                                   ))
                                 }

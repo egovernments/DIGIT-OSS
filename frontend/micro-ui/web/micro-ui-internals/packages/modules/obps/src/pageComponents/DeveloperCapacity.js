@@ -877,7 +877,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                         "designatedDirectors": designatedDirectors,
                         "alreadtObtainedLic": alreadtObtainedLic,
                         capacityDevelopColonyHdruAct: capacityDevelopColonyHdruAct,
-                        capacityDevelopColonyLawAct: capacityDevelopColonyLawAct,
+                        // capacityDevelopColonyLawAct: capacityDevelopColonyLawAct,
                         technicalExpertEngaged: [{
                             engineerName: engineerName,
                             engineerQualification: engineerQualification,
@@ -1026,9 +1026,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                 <td align="center" size="large">
                                                     <div className="row">
                                                         {Documents?.individualCertificateCA ?
-                                                            <button type="button" onClick={() => getDocShareholding(Documents?.individualCertificateCA)} className="btn btn-sm col-md-6">
+                                                            <a onClick={() => getDocShareholding(Documents?.individualCertificateCA)} className="btn btn-sm col-md-6">
                                                                 <VisibilityIcon color="info" className="icon" />
-                                                            </button> : <p></p>
+                                                            </a> : <p></p>
                                                         }
                                                         <div className="btn btn-sm col-md-6">
                                                             <label for="individualCertificateCA"> <FileUpload color="primary" /></label>
@@ -1061,9 +1061,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                 <td align="center" size="large">
                                                     <div className="row">
                                                         {Documents?.companyBalanceSheet ?
-                                                            <button type="button" onClick={() => getDocShareholding(Documents?.companyBalanceSheet)} className="btn btn-sm col-md-6">
+                                                            <a onClick={() => getDocShareholding(Documents?.companyBalanceSheet)} className="btn btn-sm col-md-6">
                                                                 <VisibilityIcon color="info" className="icon" />
-                                                            </button> : <p></p>
+                                                            </a> : <p></p>
                                                         }
                                                         <div className="btn btn-sm col-md-6">
                                                             <label for="companyBalanceSheet"> <FileUpload color="primary" /></label>
@@ -1276,9 +1276,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
 
                                                     <div className="row">
                                                         {Documents?.companyBalanceSheet ?
-                                                            <button type="button" onClick={() => getDocShareholding(Documents?.companyBalanceSheet)} className="btn btn-sm col-md-6">
+                                                            <a  onClick={() => getDocShareholding(Documents?.companyBalanceSheet)} className="btn btn-sm col-md-6">
                                                                 <VisibilityIcon color="info" className="icon" />
-                                                            </button> : <p></p>
+                                                            </a> : <p></p>
                                                         }
                                                         <div className="btn btn-sm col-md-6">
                                                             <label for="uploadBalanceDoc"> <FileUpload color="primary" /></label>
@@ -1309,9 +1309,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                     <div className="row">
 
                                                         {Documents?.paidUpCapital ?
-                                                            <button onClick={() => getDocShareholding(Documents?.paidUpCapital)} className="btn btn-sm col-md-6">
+                                                            <a onClick={() => getDocShareholding(Documents?.paidUpCapital)} className="btn btn-sm col-md-6">
                                                                 <VisibilityIcon color="info" className="icon" />
-                                                            </button> : <p></p>
+                                                            </a> : <p></p>
                                                         }
                                                         <div className="btn btn-sm col-md-6">
                                                             <label for="uploadPaidUpDoc"> <FileUpload color="primary" /></label>
@@ -1344,9 +1344,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                     <div className="row">
 
                                                         {Documents?.reservesAndSurplus ?
-                                                            <button onClick={() => getDocShareholding(Documents?.reservesAndSurplus)} className="btn btn-sm col-md-6">
+                                                            <a onClick={() => getDocShareholding(Documents?.reservesAndSurplus)} className="btn btn-sm col-md-6">
                                                                 <VisibilityIcon color="info" className="icon" />
-                                                            </button> : <p></p>
+                                                            </a> : <p></p>
                                                         }
                                                         <div className="btn btn-sm col-md-6">
                                                             <label for="reservesAndSurplus"> <FileUpload color="primary" /></label>
@@ -1379,9 +1379,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                     <div className="row">
 
                                                         {Documents?.anyOtherDoc ?
-                                                            <button onClick={() => getDocShareholding(Documents?.anyOtherDoc)} className="btn btn-sm col-md-6">
+                                                            <a onClick={() => getDocShareholding(Documents?.anyOtherDoc)} className="btn btn-sm col-md-6">
                                                                 <VisibilityIcon color="info" className="icon" />
-                                                            </button> : <p></p>
+                                                            </a> : <p></p>
                                                         }
                                                         <div className="btn btn-sm col-md-6">
                                                             <label for="anyOtherDoc"> <FileUpload color="primary" /></label>
@@ -1427,9 +1427,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                     <div className="row">
 
                                                         {Documents?.netWorthOfPartners ?
-                                                            <button onClick={() => getDocShareholding(Documents?.netWorthOfPartners)} className="btn btn-sm col-md-6">
+                                                            <a onClick={() => getDocShareholding(Documents?.netWorthOfPartners)} className="btn btn-sm col-md-6">
                                                                 <VisibilityIcon color="info" className="icon" />
-                                                            </button> : <p></p>
+                                                            </a> : <p></p>
                                                         }
                                                         <div className="btn btn-sm col-md-6">
                                                             <label for="netWorthOfPartners"> <FileUpload color="primary" /></label>
@@ -1452,9 +1452,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                     <div className="row">
 
                                                         {Documents?.netWorthOfFirm ?
-                                                            <button onClick={() => getDocShareholding(Documents?.netWorthOfFirm)} className="btn btn-sm col-md-6">
+                                                            <a onClick={() => getDocShareholding(Documents?.netWorthOfFirm)} className="btn btn-sm col-md-6">
                                                                 <VisibilityIcon color="info" className="icon" />
-                                                            </button> : <p></p>
+                                                            </a> : <p></p>
                                                         }
                                                         <div className="btn btn-sm col-md-6">
                                                             <label for="netWorthOfFirm"> <FileUpload color="primary" /></label>
@@ -1494,6 +1494,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                             <input
                                 type="radio"
                                 value="Y"
+                                checked={permissionGrantedHRDU === "Y" ? true : false}
                                 id="permissionGrantedHRDU"
                                 className="mx-2 mt-1"
                                 onChange={changeValueHrdu}
@@ -1504,6 +1505,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                             <input
                                 type="radio"
                                 value="N"
+                                checked={permissionGrantedHRDU === "N" ? true : false}
                                 id="permissionGrantedHRDUN"
                                 className="mx-2 mt-1"
                                 onChange={changeValueHrdu}
@@ -1575,11 +1577,11 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     <td>
                                                                         <div className="row">
                                                                             {elementInArray.engineerDegree ?
-                                                                                <button type="button"
+                                                                                <a 
                                                                                     onClick={() => getDocShareholding(elementInArray.engineerDegree)}
                                                                                     className="btn btn-sm col-md-6">
                                                                                     <VisibilityIcon color="info" className="icon" />
-                                                                                </button> : <p></p>
+                                                                                </a> : <p></p>
                                                                             }
 
                                                                         </div>
@@ -1587,11 +1589,11 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     <td>
                                                                         <div className="row">
                                                                             {elementInArray.architectDegree ?
-                                                                                <button type="button"
+                                                                                <a 
                                                                                     onClick={() => getDocShareholding(elementInArray.architectDegree)}
                                                                                     className="btn btn-sm col-md-6">
                                                                                     <VisibilityIcon color="info" className="icon" />
-                                                                                </button> : <p></p>
+                                                                                </a> : <p></p>
                                                                             }
 
                                                                         </div>
@@ -1599,10 +1601,10 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     <td>
                                                                         <div className="row">
                                                                             {elementInArray.townPlannerDegree ?
-                                                                                <button type="button"
+                                                                                <a 
                                                                                     onClick={() => getDocShareholding(elementInArray.townPlannerDegree)} className="btn btn-sm col-md-6">
                                                                                     <VisibilityIcon color="info" className="icon" />
-                                                                                </button> : <p></p>
+                                                                                </a> : <p></p>
                                                                             }
 
                                                                         </div>
@@ -1668,7 +1670,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                             </Col>
                                                             <Col md={3} xxl lg="4">
                                                                 <label htmlFor="name" className="text">{`${t("Purpose of colony")}`}<span class="text-danger font-weight-bold mx-2">*</span></label>
-                                                                <Dropdown
+                                                                {/* <Dropdown
                                                                     labels="Select Type"
                                                                     className="form-field"
                                                                     selected={purposeOfColony}
@@ -1680,7 +1682,19 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     placeholder={purposeOfColony}
                                                                     style={{ width: "100%" }}
                                                                     t={t}
-                                                                />
+                                                                /> */}
+                                                                <Select
+                                                                    value={purposeOfColony}
+                                                                    onChange={(e) => setShowPurposeType(e.target.value)}
+                                                                    className="w-100"
+                                                                    variant="standard"
+                                                                >
+                                                                    {
+                                                                        purposeOptions?.data.map((item, index) => (
+                                                                            <MenuItem value={item.value} >{item?.label}</MenuItem>
+                                                                        ))
+                                                                    }
+                                                                </Select>
                                                             </Col>
                                                         </Row>
                                                         <Row>
@@ -1871,9 +1885,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                             </td>
                                                             <td>
                                                                 {DevelopersAllData?.agreementDoc ?
-                                                                    <button type="button" onClick={() => getDocShareholding(DevelopersAllData?.agreementDoc)} className="btn btn-sm col-md-6">
+                                                                    <a  onClick={() => getDocShareholding(DevelopersAllData?.agreementDoc)} className="btn btn-sm col-md-6">
                                                                         <VisibilityIcon color="info" className="icon" />
-                                                                    </button> : <p></p>
+                                                                    </a> : <p></p>
                                                                 }
                                                             </td>
                                                         </tr>
@@ -1893,9 +1907,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                             </td>
                                                             <td>
                                                                 {DevelopersAllData?.boardDoc !== "" ?
-                                                                    <button type="button" onClick={() => getDocShareholding(DevelopersAllData?.boardDoc)} className="btn btn-sm col-md-6">
+                                                                    <a  onClick={() => getDocShareholding(DevelopersAllData?.boardDoc)} className="btn btn-sm col-md-6">
                                                                         <VisibilityIcon color="info" className="icon" />
-                                                                    </button> : <p></p>
+                                                                    </a> : <p></p>
                                                                 }
                                                             </td>
                                                         </tr>
@@ -1989,6 +2003,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                             <input
                                 type="radio"
                                 value="Y"
+                                checked={alreadtObtainedLic === "Y" ? true : false}
                                 id="alreadtObtainedLic"
                                 className="mx-2 mt-1"
                                 onChange={changeAlreadyObtainedLic}
@@ -1999,6 +2014,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                             <input
                                 type="radio"
                                 value="N"
+                                checked={alreadtObtainedLic === "N" ? true : false}
                                 id="alreadtObtainedLicN"
                                 className="mx-2 mt-1"
                                 onChange={changeAlreadyObtainedLic}
@@ -2040,12 +2056,11 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     </td>
                                                                     <td>
                                                                         {DevelopersAllData?.agreementDocY !== "" ?
-                                                                            <button
-                                                                                type="button"
+                                                                            <a
                                                                                 onClick={() => getDocShareholding(DevelopersAllData?.agreementDocY)}
                                                                             >
                                                                                 <VisibilityIcon />
-                                                                            </button> : <p></p>
+                                                                            </a> : <p></p>
                                                                         }
                                                                     </td>
                                                                 </tr>
@@ -2066,12 +2081,11 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     </td>
                                                                     <td>
                                                                         {DevelopersAllData?.boardDocX !== "" ?
-                                                                            <button
-                                                                                type="button"
+                                                                            <a
                                                                                 onClick={() => getDocShareholding(DevelopersAllData?.boardDocX)}
                                                                             >
                                                                                 <VisibilityIcon />
-                                                                            </button> : <p></p>
+                                                                            </a> : <p></p>
                                                                         }
                                                                     </td>
                                                                 </tr>
@@ -2089,7 +2103,8 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     </td>
                                                                     <td>
                                                                         {DevelopersAllData?.registeredDoc !== "" ?
-                                                                            <a href={urlGetRegisteredDocUrl} target="_blank" >
+                                                                            <a 
+                                                                                onClick={() => getDocShareholding(DevelopersAllData?.registeredDoc)} >
                                                                                 <VisibilityIcon />
                                                                             </a> : <p></p>
                                                                         }
@@ -2112,7 +2127,8 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     </td>
                                                                     <td>
                                                                         {DevelopersAllData?.boardDocY !== "" ?
-                                                                            <a href={urlGetBoardDocYUrl} target="_blank" >
+                                                                            <a 
+                                                                                onClick={() => getDocShareholding(DevelopersAllData?.boardDocY)}  >
                                                                                 <VisibilityIcon />
                                                                             </a> : <p></p>
                                                                         }
