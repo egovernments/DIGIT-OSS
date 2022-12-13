@@ -26,11 +26,6 @@ export const SelectPaymentType = (props) => {
   const { tenantId: __tenantId, authorization, workflow: wrkflow } = Digit.Hooks.useQueryParams();
   const paymentAmount = state?.paymentAmount;
   const { t } = useTranslation();
-  const [showhide19, setShowhide19] = useState("true");
-  const handleshow19 = (e) => {
-    const getshow = e.target.value;
-    setShowhide19(getshow);
-  };
   const history = useHistory();
   const {
     register,
@@ -167,7 +162,7 @@ export const SelectPaymentType = (props) => {
                 <Form.Label>
                   <h2>Payment Aggregator</h2>
                 </Form.Label>
-                <select className="form-control" onClick={handleshow19} value="submit" id="submit" {...register("PaymentAggregator")}>
+                <select className="form-control" {...register("PaymentAggregator")}>
                   {
                     /** This is where we have used our options variable */
                     options
@@ -177,24 +172,17 @@ export const SelectPaymentType = (props) => {
             </div>
           </Row>
           <br></br>
-          <div>
-            <CardLabel>{t("PAYMENT_CS_SELECT_METHOD")}</CardLabel>
-            {menu?.length && (
-              <Controller
-                name="paymentType"
-                defaultValue={menu[0]}
-                control={control}
-                render={(props) => <RadioButtons selectedOption={props.value} options={menu} onSelect={props.onChange} />}
-              />
-            )}
-            {showhide19 === "submit" && (
-              <div>
-                {/* <Button style={{ textAlign: "right" }}> Generate LOI</Button> */}
-
-                {!showToast && <SubmitBar label={t("PAYMENT_CS_BUTTON_LABEL")} submit={true} />}
-              </div>
-            )}
-          </div>
+          <div></div>
+          <CardLabel>{t("PAYMENT_CS_SELECT_METHOD")}</CardLabel>
+          {menu?.length && (
+            <Controller
+              name="paymentType"
+              defaultValue={menu[0]}
+              control={control}
+              render={(props) => <RadioButtons selectedOption={props.value} options={menu} onSelect={props.onChange} />}
+            />
+          )}
+          {!showToast && <SubmitBar label={t("PAYMENT_CS_BUTTON_LABEL")} submit={true} />}
         </Card>
       </form>
       <InfoBanner label={t("CS_COMMON_INFO")} text={t("CS_PAYMENT_REDIRECT_NOTICE")} />

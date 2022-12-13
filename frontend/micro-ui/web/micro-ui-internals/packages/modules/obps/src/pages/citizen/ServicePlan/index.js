@@ -14,11 +14,12 @@ const ServicePlanService = () => {
   const [docUpload, setDocuploadData] = useState([]);
 
   const servicePlan = async (data) => {
+    const token = window?.localStorage?.getItem("token");
     console.log(data);
     try {
       const postDistrict = {
         requestInfo: {
-          api_id: "1",
+          api_id: "Rainmaker",
           ver: "1",
           ts: null,
           action: "create",
@@ -26,7 +27,7 @@ const ServicePlanService = () => {
           key: "",
           msg_id: "",
           requester_id: "",
-          auth_token: null,
+          authToken: token,
         },
 
         ServicePlanRequest: {
@@ -58,32 +59,9 @@ const ServicePlanService = () => {
       return error.message;
     }
   };
-
-  // const getSubmitDataLabel = async () => {
-  //   try {
-  //     const postDistrict = {
-  //       requestInfo: {
-  //         api_id: "1",
-  //         ver: "1",
-  //         ts: null,
-  //         action: "create",
-  //         did: "",
-  //         key: "",
-  //         msg_id: "",
-  //         requester_id: "",
-  //         auth_token: null,
-  //       },
-  //     };
-
-  //     const Resp = await axios.post(`http://10.1.1.18:80/land-services/serviceplan/_get?loiNumber=123`, postDistrict);
-  //   } catch (error) {
-  //     console.log(error.message);
-  //   }
-  // };
-  // useEffect(() => {
-  //   getSubmitDataLabel();
-  // }, []);
-
+  useEffect(() => {
+    getDocumentData();
+  }, []);
   return (
     <form onSubmit={handleSubmit(servicePlan)}>
       <Card style={{ width: "126%", border: "5px solid #1266af" }}>
@@ -166,11 +144,9 @@ const ServicePlanService = () => {
                   <input
                     type="file"
                     className="form-control"
+                    // {...register("selfCertifiedDrawingFromEmpaneledDoc")}
                     onChange={(e) => getDocumentData(e?.target?.files[0], "selfCertifiedDrawingFromEmpaneledDoc")}
                   />
-                  <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.selfCertifiedDrawingFromEmpaneledDoc)}>
-                    {" "}
-                  </VisibilityIcon>
                 </td>
               </tr>
               <tr>
@@ -186,8 +162,8 @@ const ServicePlanService = () => {
                   <input
                     type="file"
                     className="form-control"
-                    {...register("environmentalClearance")}
-                    onChange1={(e) => setFile({ file: e.target.files[0] })}
+                    // {...register("environmentalClearance")}
+                    onChange={(e) => getDocumentData(e?.target?.files[0], "environmentalClearance")}
                   />
                 </td>
               </tr>
@@ -204,8 +180,8 @@ const ServicePlanService = () => {
                   <input
                     type="file"
                     className="form-control"
-                    {...register("shapeFileAsPerTemplate")}
-                    onChange1={(e) => setFile({ file: e.target.files[0] })}
+                    // {...register("shapeFileAsPerTemplate")}
+                    onChange={(e) => getDocumentData(e?.target?.files[0], "shapeFileAsPerTemplate")}
                   />
                 </td>
               </tr>
@@ -219,7 +195,12 @@ const ServicePlanService = () => {
                   <h2>AutoCAD (DXF) file.</h2>
                 </td>
                 <td component="th" scope="row">
-                  <input type="file" className="form-control" {...register("autoCadFile")} onChange1={(e) => setFile({ file: e.target.files[0] })} />
+                  <input
+                    type="file"
+                    className="form-control"
+                    // {...register("autoCadFile")}
+                    onChange={(e) => getDocumentData(e?.target?.files[0], "autoCadFile")}
+                  />
                 </td>
               </tr>
               <tr>
@@ -235,8 +216,8 @@ const ServicePlanService = () => {
                   <input
                     type="file"
                     className="form-control"
-                    {...register("certifieadCopyOfThePlan")}
-                    onChange1={(e) => setFile({ file: e.target.files[0] })}
+                    // {...register("certifieadCopyOfThePlan")}
+                    onChange={(e) => getDocumentData(e?.target?.files[0], "certifieadCopyOfThePlan")}
                   />
                 </td>
               </tr>
