@@ -224,6 +224,9 @@ const LandScheduleForm = (props) => {
                             <input {...register("licenseApplied")} type="radio" value="N" id="licenseApplied" />
                             &nbsp; No &nbsp;&nbsp;
                           </label>
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.licenseApplied && errors?.licenseApplied?.message}
+                          </h3>
                         </h2>
                       </div>
 
