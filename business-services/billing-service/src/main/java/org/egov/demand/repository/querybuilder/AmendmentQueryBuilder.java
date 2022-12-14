@@ -13,7 +13,9 @@ public class AmendmentQueryBuilder {
 	private Integer defaultLimit;
 	
 	public static final String AMENDMENT_UPDATE_QUERY = "UPDATE egbs_amendment SET status=:status, amendeddemandid=:amendeddemandid,"
-			+ " lastmodifiedby=:lastmodifiedby,lastmodifiedtime=:lastmodifiedtime, additionaldetails=:additionaldetails "
+			+ " lastmodifiedby=:lastmodifiedby,lastmodifiedtime=:lastmodifiedtime, additionaldetails=:additionaldetails, "
+			+ " amendmentreason=:amendmentreason, reasondocumentnumber=:reasondocumentnumber, effectivefrom=:effectivefrom, "
+			+ " effectivetill=:effectivetill "
 			+ " WHERE tenantid=:tenantid AND amendmentid=:amendmentid;";
 	
 	public static final String AMENDMENT_INSERT_QUERY = "INSERT INTO egbs_amendment (id, tenantid, amendmentid, businessservice,"
