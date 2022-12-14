@@ -15,6 +15,8 @@ function ModalChild(props) {
   const inputFieldValue = props.fieldValue;
   const inputFieldLabel = props.labelValue;
   const dateTime = new Date();
+  const authToken = Digit.UserService.getUser()?.access_token || null;
+
 
   const handlemodalsubmit = async () => {
     if(status){
@@ -30,7 +32,7 @@ function ModalChild(props) {
           key: "",
           msg_id: "",
           requester_id: "",
-          auth_token: null,
+          authToken: authToken,
         },
         egScrutiny: {
           applicationId: "123",

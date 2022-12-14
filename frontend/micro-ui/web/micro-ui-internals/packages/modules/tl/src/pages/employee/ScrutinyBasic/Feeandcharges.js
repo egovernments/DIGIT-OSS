@@ -198,7 +198,7 @@ const Feeandcharges = (props) => {
                     <div className="row">
                       <div className="col col-5">
                         <h6 data-toggle="tooltip" data-placement="top" title="Total Fees (License fee 25% + Scrutiny Fees)">
-                          (i)&nbsp;Amount Payable at the time of Application
+                          (i)&nbsp;Amount Payable 
                         </h6>
 
                         <input type="text" className="form-control" minLength={1} maxLength={20} pattern="[0-9]*" disabled placeholder={feeAndChargesData?.payableNow} />
@@ -266,6 +266,25 @@ const Feeandcharges = (props) => {
                               <label>Enter License Number/LOI number</label>
                               <input type="text" className="form-control" disabled placeholder={feeAndChargesData?.licNo} />
                               </div>
+                              <div className="col col-2">
+                        <h6 data-toggle="tooltip" data-placement="top" title="Click Yes,if Lic No/LOI number belongs to other developers">
+                          &nbsp;Click Yes,if Lic No/LOI number 
+                        </h6>
+                        <div className="mt-2 ml-1">
+                        <input type="radio" value="Yes" disabled checked={feeAndChargesData?.adjustFee==="Y"?true:false} />
+                        <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                        <input type="radio" value="No" disabled checked={feeAndChargesData?.adjustFee==="N"?true:false} />
+                        <label className="m-0 mx-2" for="No">No</label>
+                        </div>
+                      </div>
+                      {/* {feeAndChargesData?.adjustFee === "Y" && (
+                          <div className="row mt-3">
+                             <div className="col col-4">
+                              <label>Consent letter in case of Another Developer (verified by the Department)</label>
+                              <input type="text" className="form-control" disabled placeholder={feeAndChargesData?.amount}/>
+                              </div>
+                            </div>
+                        )} */}
                               <div className="col col-4">
                               <label>Amount (previous)</label>
                               <input type="text" className="form-control" disabled placeholder={feeAndChargesData?.amount}/>
