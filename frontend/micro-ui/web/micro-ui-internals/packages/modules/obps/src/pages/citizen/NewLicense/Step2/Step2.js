@@ -20,6 +20,8 @@ const ApllicantPuropseForm = (props) => {
     tehsil: "",
     revenueEstate: "",
     rectangleNo: "",
+    hadbastNo: "",
+    khewats: "",
     kanal: "",
     marla: "",
     sarsai: "",
@@ -159,16 +161,23 @@ const ApllicantPuropseForm = (props) => {
       dataIndex: "",
       render: (data) => (
         <div>
-          <h6
+          <EditIcon
+            style={{ cursor: "pointer" }}
             onClick={() => {
               setmodal(true);
               setSpecificTableData(data);
             }}
-          >
-            <EditIcon color="primary" />
+            color="primary"
+          />
 
-            <DeleteIcon color="error" />
-          </h6>
+          <DeleteIcon
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              const filteredData = modalData?.filter((item) => item?.rowid !== data?.rowid);
+              setModalData(filteredData);
+            }}
+            color="error"
+          />
         </div>
       ),
     },
@@ -188,17 +197,44 @@ const ApllicantPuropseForm = (props) => {
   const [docId, setDocId] = useState(null);
   const [loader, setLoader] = useState(false);
 
+  const resetValues = () => {
+    resetField("tehsil");
+    resetField("revenueEstate");
+    resetField("rectangleNo");
+    resetField("hadbastNo");
+    resetField("khewats");
+    resetField("kanal");
+    resetField("marla");
+    resetField("sarsai");
+    resetField("bigha");
+    resetField("biswa");
+    resetField("biswansi");
+    resetField("agreementValidFrom");
+    resetField("agreementValidTill");
+    resetField("authSignature");
+    resetField("collaboration");
+    resetField("developerCompany");
+    resetField("landOwner");
+    resetField("nameAuthSign");
+    resetField("registeringAuthority");
+  };
+
   useEffect(() => {
+    console.log("specificTableData", specificTableData);
     if (specificTableData) {
       setValue("tehsil", specificTableData?.tehsil);
       setValue("revenueEstate", specificTableData?.revenueEstate);
+      setValue("hadbastNo", specificTableData?.hadbastNo);
       setValue("rectangleNo", specificTableData?.rectangleNo);
+      setValue("khewats", specificTableData?.khewats);
+      setValue("consolidationType", specificTableData?.consolidationType);
       setValue("kanal", specificTableData?.kanal);
       setValue("marla", specificTableData?.marla);
       setValue("sarsai", specificTableData?.sarsai);
       setValue("bigha", specificTableData?.bigha);
       setValue("biswansi", specificTableData?.biswansi);
       setValue("biswa", specificTableData?.biswa);
+      setValue("collaboration", specificTableData?.collaboration);
       setValue("landOwner", specificTableData?.landOwner);
     }
   }, [specificTableData]);
@@ -212,13 +248,11 @@ const ApllicantPuropseForm = (props) => {
     reset,
     getValues,
     watch,
+    resetField,
   } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
     resolver: yupResolver(VALIDATION_SCHEMA),
-    defaultValues: {
-      consolidationType: "consolidated",
-    },
     shouldFocusError: true,
   });
 
@@ -322,31 +356,31 @@ const ApllicantPuropseForm = (props) => {
     DistrictApiCall();
   }, []);
 
-  const ApplicantPurposeModalData = (modalData) => {
-    modalData["tehsil"] = modalData?.tehsil?.value;
-    modalData["revenueEstate"] = modalData?.revenueEstate?.value;
-    modalData["rectangleNo"] = modalData?.rectangleNo?.value;
-    modalData["registeringAuthorityDoc"] = docId;
-    delete modalData?.district;
-    delete modalData?.potential;
-    delete modalData?.purpose;
-    delete modalData?.state;
+  const ApplicantPurposeModalData = (modaldata) => {
+    modaldata["tehsil"] = modaldata?.tehsil?.value;
+    modaldata["revenueEstate"] = modaldata?.revenueEstate?.value;
+    modaldata["rectangleNo"] = modaldata?.rectangleNo?.value;
+    modaldata["registeringAuthorityDoc"] = docId;
+    delete modaldata?.district;
+    delete modaldata?.potential;
+    delete modaldata?.purpose;
+    delete modaldata?.state;
 
-    if (modalData?.consolidationType === "consolidated") {
-      delete modalData?.bigha;
-      delete modalData?.biswa;
-      delete modalData?.biswansi;
+    if (modaldata?.consolidationType === "consolidated") {
+      delete modaldata?.bigha;
+      delete modaldata?.biswa;
+      delete modaldata?.biswansi;
     }
-    if (modalData?.consolidationType === "non-consolidated") {
-      delete modalData?.marla;
-      delete modalData?.kanal;
-      delete modalData?.sarsai;
+    if (modaldata?.consolidationType === "non-consolidated") {
+      delete modaldata?.marla;
+      delete modaldata?.kanal;
+      delete modaldata?.sarsai;
     }
-    modalData["rowid"] = "1";
-
-    setModalData((prev) => [...prev, modalData]);
+    const length = modalData?.length + 1;
+    modaldata["rowid"] = length.toString();
+    setModalData((prev) => [...prev, modaldata]);
     setmodal(false);
-    // reset(resetFields);
+    resetValues();
   };
 
   const PurposeFormSubmitHandler = async (data) => {
@@ -457,12 +491,21 @@ const ApllicantPuropseForm = (props) => {
 
   let delay;
 
-  useEffect(() => {
+  const setLandVal = () => {
+    if (delay) clearTimeout(delay);
     delay = setTimeout(() => {
       if (watch("khewats")) getLandOwnerStateData(watch("khewats"));
-    }, 500);
-    return () => clearTimeout(delay);
-  }, [watch("khewats")]);
+    }, 300);
+  };
+
+  // useEffect(() => {
+  //   if (delay) clearTimeout(delay);
+
+  //   delay = setTimeout(() => {
+  //     if (watch("khewats")) getLandOwnerStateData(watch("khewats"));
+  //   }, 500);
+  //   return () => clearTimeout(delay);
+  // }, [watch("khewats")]);
 
   return (
     <div>
@@ -616,14 +659,14 @@ const ApllicantPuropseForm = (props) => {
         size="xl"
         isOpen={modal}
         toggle={() => {
-          // reset(resetFields);
+          // resetValues();
           setmodal(!modal);
         }}
       >
         <ModalHeader
           toggle={() => {
             setmodal(!modal);
-            // reset(resetFields);
+            // resetValues();
           }}
         ></ModalHeader>
         <ModalBody>
@@ -682,9 +725,9 @@ const ApllicantPuropseForm = (props) => {
                   </Form.Label>
                 </div>
                 <input type="number" className="form-control" placeholder="" {...register("hadbastNo")} />
-                {/* <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.revenueEstate && errors?.revenueEstate?.message}
-                </h3> */}
+                <h3 className="error-message" style={{ color: "red" }}>
+                  {errors?.hadbastNo && errors?.hadbastNo?.message}
+                </h3>
               </Col>
             </Row>
 
@@ -717,7 +760,7 @@ const ApllicantPuropseForm = (props) => {
                     </h2>
                   </label>
                 </div>
-                <input type="text" className="form-control" placeholder="Enter Khewat" {...register("khewats")} />
+                <input onChange={() => setLandVal()} type="text" className="form-control" placeholder="Enter Khewat" {...register("khewats")} />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.khewats?.value && errors?.khewats?.value?.message}
                 </h3>
@@ -743,14 +786,7 @@ const ApllicantPuropseForm = (props) => {
                   <h2>
                     Consolidation Type<span style={{ color: "red" }}>*</span> &nbsp;&nbsp;&nbsp;&nbsp;
                     <label htmlFor="consolidated">
-                      <input
-                        {...register("consolidationType")}
-                        type="radio"
-                        value="consolidated"
-                        defaultChecked={true}
-                        defaultValue="consolidated"
-                        id="consolidated"
-                      />
+                      <input {...register("consolidationType")} type="radio" value="consolidated" defaultValue="consolidated" id="consolidated" />
                       &nbsp; Consolidated &nbsp;&nbsp;
                     </label>
                     <label htmlFor="non-consolidated">
