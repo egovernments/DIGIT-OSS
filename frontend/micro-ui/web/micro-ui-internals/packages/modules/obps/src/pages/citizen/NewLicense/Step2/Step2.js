@@ -8,6 +8,8 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import axios from "axios";
 import { yupResolver } from "@hookform/resolvers/yup";
 import WorkingTable from "../../../../components/Table";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step2";
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
 import Spinner from "../../../../components/Loader";
@@ -17,7 +19,7 @@ const ApllicantPuropseForm = (props) => {
   const resetFields = {
     tehsil: "",
     revenueEstate: "",
-    mustil: "",
+    rectangleNo: "",
     kanal: "",
     marla: "",
     sarsai: "",
@@ -163,9 +165,10 @@ const ApllicantPuropseForm = (props) => {
               setSpecificTableData(data);
             }}
           >
-            Edit
+            <EditIcon color="primary" />
+
+            <DeleteIcon color="error" />
           </h6>
-          <h6>Delete</h6>
         </div>
       ),
     },
@@ -189,7 +192,7 @@ const ApllicantPuropseForm = (props) => {
     if (specificTableData) {
       setValue("tehsil", specificTableData?.tehsil);
       setValue("revenueEstate", specificTableData?.revenueEstate);
-      setValue("mustil", specificTableData?.mustil);
+      setValue("rectangleNo", specificTableData?.rectangleNo);
       setValue("kanal", specificTableData?.kanal);
       setValue("marla", specificTableData?.marla);
       setValue("sarsai", specificTableData?.sarsai);
@@ -322,7 +325,7 @@ const ApllicantPuropseForm = (props) => {
   const ApplicantPurposeModalData = (modalData) => {
     modalData["tehsil"] = modalData?.tehsil?.value;
     modalData["revenueEstate"] = modalData?.revenueEstate?.value;
-    modalData["mustil"] = modalData?.mustil?.value;
+    modalData["rectangleNo"] = modalData?.rectangleNo?.value;
     modalData["registeringAuthorityDoc"] = docId;
     delete modalData?.district;
     delete modalData?.potential;
@@ -353,7 +356,7 @@ const ApllicantPuropseForm = (props) => {
     data["state"] = "Haryana";
     delete data?.tehsil;
     delete data?.revenueEstate;
-    delete data?.mustil;
+    delete data?.rectangleNo;
     delete data?.kanal;
     delete data?.marla;
     delete data?.sarsai;
@@ -426,7 +429,6 @@ const ApllicantPuropseForm = (props) => {
   }, [props?.getLicData, purposeOptions, potentialOptons, districtDataLabels]);
 
   const handleChangePurpose = (data) => {
-    console.log("data", data);
     const purposeSelected = data?.value;
     window?.localStorage.setItem("purpose", purposeSelected);
   };
@@ -697,11 +699,10 @@ const ApllicantPuropseForm = (props) => {
                 </div>
                 <ReactMultiSelect
                   control={control}
-                  name="mustil"
                   data={mustilDataLabels?.data}
                   loading={mustilDataLabels?.isLoading}
                   labels="Rectangle No."
-                  {...register("mustil")}
+                  {...register("rectangleNo")}
                 />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.mustil && errors?.mustil?.message}
@@ -711,10 +712,15 @@ const ApllicantPuropseForm = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <label>
-                    <h2>Enter Khewat</h2>
+                    <h2>
+                      Enter Khewat <span style={{ color: "red" }}>*</span>
+                    </h2>
                   </label>
                 </div>
                 <input type="text" className="form-control" placeholder="Enter Khewat" {...register("khewats")} />
+                <h3 className="error-message" style={{ color: "red" }}>
+                  {errors?.khewats?.value && errors?.khewats?.value?.message}
+                </h3>
               </Col>
               <Col md={4} xxl lg="4">
                 <div>
@@ -759,21 +765,31 @@ const ApllicantPuropseForm = (props) => {
                     <thead>
                       <tr>
                         <th>
-                          <h2>Kanal</h2>
+                          <h2>
+                            Kanal <span style={{ color: "red" }}>*</span>
+                          </h2>
                         </th>
                         <th>
-                          <h2>Marla</h2>
+                          <h2>
+                            Marla <span style={{ color: "red" }}>*</span>
+                          </h2>
                         </th>
                         <th>
-                          <h2>Sarsai</h2>&nbsp;&nbsp;
+                          <h2>
+                            Sarsai <span style={{ color: "red" }}>*</span>
+                          </h2>
+                          &nbsp;&nbsp;
                         </th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
                         <td>
-                          <input type="text" className="form-control" {...register("kanal")} id="kanal" />
+                          <input type="text" className="form-control" {...register("kanal")} id="kanal" minLength={1} maxLength={20} />
                           <label htmlFor="sum">Total: {watch("kanal") * 0.125}</label>&nbsp;&nbsp;
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.kanal?.value && errors?.kanal?.value?.message}
+                          </h3>
                         </td>
                         <td>
                           <input type="text" className="form-control" {...register("marla")} id="marla" />
@@ -792,13 +808,20 @@ const ApllicantPuropseForm = (props) => {
                     <thead>
                       <tr>
                         <th>
-                          <h2>Bigha</h2>
+                          <h2>
+                            Bigha <span style={{ color: "red" }}>*</span>
+                          </h2>
                         </th>
                         <th>
-                          <h2>Biswa</h2>
+                          <h2>
+                            Biswa <span style={{ color: "red" }}>*</span>
+                          </h2>
                         </th>
                         <th>
-                          <h2>Biswansi</h2>&nbsp;&nbsp;
+                          <h2>
+                            Biswansi <span style={{ color: "red" }}>*</span>
+                          </h2>
+                          &nbsp;&nbsp;
                         </th>
                       </tr>
                     </thead>
@@ -864,7 +887,7 @@ const ApllicantPuropseForm = (props) => {
                             Date of validity of collaboration agreement<span style={{ color: "red" }}>*</span>
                           </h2>
                         </label>
-                        <Form.Control type="date" className="form-control" placeholder="" {...register("agreementValidTill")} />
+                        <Form.Control type="date" className="form-control" placeholder="" {...register("validitydate")} />
                       </div>
                     </div>
                     <br></br>
@@ -910,7 +933,7 @@ const ApllicantPuropseForm = (props) => {
                       <div className="col col-4">
                         <label>
                           <h2>
-                            Registring Authority<span style={{ color: "red" }}>*</span>
+                            Registering Authority<span style={{ color: "red" }}>*</span>
                           </h2>
                         </label>
                         <Form.Control type="text" className="form-control" placeholder="" {...register("registeringAuthority")} />
@@ -918,7 +941,7 @@ const ApllicantPuropseForm = (props) => {
                       <div className="col col-4">
                         <label>
                           <h2 data-toggle="tooltip" data-placement="top" title="Upload Document" style={{ marginTop: "-4px" }}>
-                            Registring Authority document <span style={{ color: "red" }}>*</span>
+                            Registering Authority document <span style={{ color: "red" }}>*</span>
                             <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                             <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.registeringAuthorityDoc)}>
                               {" "}
@@ -930,8 +953,7 @@ const ApllicantPuropseForm = (props) => {
                           type="file"
                           style={{ marginTop: "-6px" }}
                           className="form-control"
-                          {...register("registeringAuthorityDoc")}
-                          onChange={(e) => getDocumentData(e?.target?.files[0])}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], registeringAuthorityDoc)}
                         />
                       </div>
                     </div>
