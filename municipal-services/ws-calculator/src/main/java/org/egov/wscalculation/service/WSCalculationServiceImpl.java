@@ -163,7 +163,7 @@ public class WSCalculationServiceImpl implements WSCalculationService {
 		Long fromDate = (Long) financialYearMaster.get(WSCalculationConstant.STARTING_DATE_APPLICABLES);
 		Long toDate = (Long) financialYearMaster.get(WSCalculationConstant.ENDING_DATE_APPLICABLES);
 		if(isLastElementWithDisconnectionRequest) {
-			if (waterConnection.getApplicationStatus().equalsIgnoreCase(WSCalculationConstant.PENDING_FOR_PAYMENT) ||
+			if (waterConnection.getApplicationStatus().equalsIgnoreCase(WSCalculationConstant.PENDING_APPROVAL_FOR_DISCONNECTION) ||
 					waterConnection.getApplicationStatus().equalsIgnoreCase(WSCalculationConstant.CONNECTION_INACTIVATED)) {
 
 				Map<String, Object> finalMap = new HashMap<>();
@@ -179,9 +179,10 @@ public class WSCalculationServiceImpl implements WSCalculationService {
 									totalTaxAmount = totalTaxAmount.add(demandDetail.getTaxAmount());
 								}
 							}
-							Long taxPeriod = toDate - fromDate;
-							BigDecimal finalWaterCharge = waterCharge.add(BigDecimal.valueOf((Double.parseDouble(totalTaxAmount.toString()) *
-									Math.abs(Double.parseDouble(toDate.toString()) - waterConnection.getDateEffectiveFrom())) / taxPeriod));
+							Integer taxPeriod = Math.round((toDate - fromDate)/86400000);
+							Long daysOfUsage = Math.round(Math.abs(Double.parseDouble(toDate.toString()) - waterConnection.getDateEffectiveFrom())/86400000);
+							BigDecimal finalWaterCharge = waterCharge.add(BigDecimal.valueOf(
+									(Double.parseDouble(totalTaxAmount.toString()) * daysOfUsage) / taxPeriod));
 							estimates.stream().forEach(estimate -> {
 								if (taxHeadCategoryMap.get(estimate.getTaxHeadCode()).equals(CHARGES)) {
 									estimate.setEstimateAmount(finalWaterCharge);

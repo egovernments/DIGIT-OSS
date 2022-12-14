@@ -131,7 +131,7 @@ public class SWCalculationServiceImpl implements SWCalculationService {
 		Long toDate = (Long) financialYearMaster.get(SWCalculationConstant.ENDING_DATE_APPLICABLES);
 
 		if(isLastElementWithDisconnectionRequest) {
-			if (sewerageConnection.getApplicationStatus().equalsIgnoreCase(SWCalculationConstant.PENDING_FOR_PAYMENT) ||
+			if (sewerageConnection.getApplicationStatus().equalsIgnoreCase(SWCalculationConstant.PENDING_APPROVAL_FOR_DISCONNECTION) ||
 					sewerageConnection.getApplicationStatus().equalsIgnoreCase(SWCalculationConstant.CONNECTION_INACTIVATED)) {
 
 				List<SewerageConnection> sewerageConnectionList = util.getSewerageConnection(requestInfo, criteria.getConnectionNo(), requestInfo.getUserInfo().getTenantId());
@@ -146,9 +146,10 @@ public class SWCalculationServiceImpl implements SWCalculationService {
 									totalTaxAmount = totalTaxAmount.add(demandDetail.getTaxAmount());
 								}
 							}
-							Long taxPeriod = toDate - fromDate;
-							BigDecimal finalSewerageCharge = sewerageCharge.add(BigDecimal.valueOf((Double.parseDouble(totalTaxAmount.toString()) *
-									Math.abs(Double.parseDouble(toDate.toString()) - sewerageConnection.getDateEffectiveFrom())) / taxPeriod));
+							Integer taxPeriod = Math.round((toDate - fromDate)/86400000);
+							Long daysOfUsage = Math.round(Math.abs(Double.parseDouble(toDate.toString()) - sewerageConnection.getDateEffectiveFrom())/86400000);
+							BigDecimal finalSewerageCharge = sewerageCharge.add(BigDecimal.valueOf(
+									(Double.parseDouble(totalTaxAmount.toString()) * daysOfUsage) / taxPeriod));
 							estimates.stream().forEach(estimate -> {
 								if (taxHeadCategoryMap.get(estimate.getTaxHeadCode()).equals(CHARGES)) {
 									estimate.setEstimateAmount(finalSewerageCharge);

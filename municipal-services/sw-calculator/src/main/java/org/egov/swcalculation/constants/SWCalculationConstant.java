@@ -346,7 +346,7 @@ public class SWCalculationConstant {
 
 	public static final String STATUS_APPROVED = "CONNECTION_ACTIVATED";
 
-	public static final String PENDING_FOR_PAYMENT = "PENDING_FOR_PAYMENT";
+	public static final String PENDING_APPROVAL_FOR_DISCONNECTION = "PENDING_APPROVAL_FOR_DISCONNECTION";
 
 	public static final String CONNECTION_INACTIVATED = "Inactive";
 
