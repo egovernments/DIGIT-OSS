@@ -442,12 +442,12 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
       <Collapse in={open}>
         <div id="example-collapse-text">
           <FormStep config={config} onSelect={submitTechdevData} onSkip={onSkip} t={t}>
-            {devTypeFlagVal === "01" && (
+            {/* {devTypeFlagVal === "01" && (
               <div className="card-body">
                 <div className="form-group row mb-12">
-                  {/* <label className="col-sm-3 col-form-label">Individual</label> */}
+                  <label className="col-sm-3 col-form-label">Individual</label>
                   <div className="col-sm-12">
-                    {/* <textarea type="text" className="employee-card-input" id="details" placeholder="Enter Details" /> */}
+                    <textarea type="text" className="employee-card-input" id="details" placeholder="Enter Details" />
                     <table className="table table-bordered" size="sm">
                       <thead>
                         <tr>
@@ -471,7 +471,7 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                   </div>
                 </div>
               </div>
-            )}
+            )} */}
             {devTypeFlagVal === "02" && (
               <div className="card-body">
                 <div className="form-group row">
@@ -492,7 +492,22 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                           <td>
                             <input type="file" name="upload" placeholder="" class="employee-card-input" />
                           </td>
-                          <td align="center" size="large"></td>
+                          <td align="center" size="large">
+                          <div>
+                            <ReportProblemIcon
+                  style={{
+                    color: fieldIconColors.caution1
+                  }}
+                  onClick={() => {
+                    setOpennedModal("caution1")
+                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
+                      setSmShow(true),
+                      console.log("modal open"),
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
+                  }}
+                ></ReportProblemIcon>
+                </div>
+                          </td>
                         </tr>
                         <tr>
                           <td> 2 </td>
@@ -500,7 +515,68 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                           <td>
                             <input type="file" name="upload" placeholder="" class="employee-card-input" />
                           </td>
-                          <td align="center" size="large"></td>
+                          <td align="center" size="large">
+                          <div>
+                            <ReportProblemIcon
+                  style={{
+                    color: fieldIconColors.caution1
+                  }}
+                  onClick={() => {
+                    setOpennedModal("caution1")
+                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
+                      setSmShow(true),
+                      console.log("modal open"),
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
+                  }}
+                ></ReportProblemIcon>
+                </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td> 3 </td>
+                          <td>Reserves and surpluses</td>
+                          <td>
+                            <input type="file" name="upload" placeholder="" class="employee-card-input" />
+                          </td>
+                          <td align="center" size="large">
+                          <div>
+                            <ReportProblemIcon
+                  style={{
+                    color: fieldIconColors.caution1
+                  }}
+                  onClick={() => {
+                    setOpennedModal("caution1")
+                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
+                      setSmShow(true),
+                      console.log("modal open"),
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
+                  }}
+                ></ReportProblemIcon>
+                </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td> 4 </td>
+                          <td>Any other documents (in the case of the company)</td>
+                          <td>
+                            <input type="file" name="upload" placeholder="" class="employee-card-input" />
+                          </td>
+                          <td align="center" size="large">
+                          <div>
+                            <ReportProblemIcon
+                  style={{
+                    color: fieldIconColors.caution1
+                  }}
+                  onClick={() => {
+                    setOpennedModal("caution1")
+                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
+                      setSmShow(true),
+                      console.log("modal open"),
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
+                  }}
+                ></ReportProblemIcon>
+                </div>
+                          </td>
                         </tr>
                       </tbody>
                     </table>
@@ -508,12 +584,12 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                 </div>
               </div>
             )}
-            {devTypeFlagVal === "03" && (
+            {/* {devTypeFlagVal === "03" && (
               <div className="card-body">
                 <div className="form-group row">
-                  {/* <label className="col-sm-3 col-form-label">LLP</label> */}
+                  <label className="col-sm-3 col-form-label">LLP</label>
                   <div className="col-sm-12">
-                    {/* <input type="text" className="employee-card-input" id="llp" placeholder="Enter Email" /> */}
+                    <input type="text" className="employee-card-input" id="llp" placeholder="Enter Email" />
                     <table className="table table-bordered" size="sm">
                       <thead>
                         <tr>
@@ -531,7 +607,8 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                             <input type="file" name="upload" placeholder="" class="employee-card-input" />
                           </td>
                           <td align="center" size="large">
-                            {/* <FileUploadIcon /> */}
+                            
+                            
                           </td>
                         </tr>
                         <tr>
@@ -541,7 +618,7 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                             <input type="file" name="upload" placeholder="" class="employee-card-input" />
                           </td>
                           <td align="center" size="large">
-                            {/* <FileUploadIcon /> */}
+                           
                           </td>
                         </tr>
                       </tbody>
@@ -549,7 +626,7 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                   </div>
                 </div>
               </div>
-            )}
+            )} */}
 
             <div className="card-body">
               <p>1. We hereby submit the following information/ enclose the relevant documents:-</p>
@@ -584,12 +661,22 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                     <Table className="table table-bordered">
                       <thead>
                         <tr>
-                          <th class="fw-normal">S. no</th>
+                          {/* <th class="fw-normal">S. no</th>
                           <th class="fw-normal"> Licence No / year and date of grant of licence </th>
                           <th class="fw-normal">Name of developer *</th>
                           <th class="fw-normal">Purpose of colony </th>
                           <th class="fw-normal">Sector and development plan </th>
-                          <th class="fw-normal">Validity of licence including renewals if any</th>
+                          <th class="fw-normal">Validity of licence including renewals if any</th> */}
+                          <th class="fw-normal">S. no</th>
+                                                    <th class="fw-normal"> Licence No. </th>
+                                                    <th class="fw-normal">Date of grant of license</th>
+                                                    <th class="fw-normal">Purpose of colony</th>
+                                                    <th class="fw-normal">Validity of Licence</th>
+                                                    <th class="fw-normal">Technical Expert Engaged</th>
+                                                    <th class="fw-normal">Degrees of Engineer</th>
+                                                    <th class="fw-normal">Degrees of Architect</th>
+                                                    <th class="fw-normal">Degrees of Town Planner</th>
+                                                    <th class="fw-normal">Actions</th>
                           {/* <th>Remove</th> */}
                         </tr>
                       </thead>
@@ -625,6 +712,24 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                               <input
                                 type="text"
                                 // value={item?.purposeOfColony}
+                                placeholder={item?.purposeOfColony}
+                                class="employee-card-input"
+                                disabled
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="text"
+                                // Validity of Licence
+                                placeholder={item?.purposeOfColony}
+                                class="employee-card-input"
+                                disabled
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="text"
+                                // Technical Expert Engaged
                                 placeholder={item?.purposeOfColony}
                                 class="employee-card-input"
                                 disabled
@@ -667,6 +772,44 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                                       </div>
                                  
                               </div>
+                            </td>
+                            <td>
+                              <div className="row">
+                                {/* <button className="btn btn-sm col-md-6">
+                                  <VisibilityIcon color="info" className="icon" />
+                                </button> */}
+                               
+                                 <div className="btn btn-sm col-md-6">
+                                <IconButton onClick={()=>getDocShareholding(item?.validatingLicence)}>
+                                      <VisibilityIcon color="info" className="icon" /></IconButton>
+                                      </div>
+                                 <div className="btn btn-sm col-md-6">
+                                {/* <button className="btn btn-sm col-md-6">
+                                  <FileDownloadIcon color="primary" />
+                                </button> */}
+                                 <IconButton onClick={()=>getDocShareholding(item?.validatingLicence)}>
+                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                      </div>
+                                 
+                              </div>
+                            </td>
+                            <td>
+                            <div className="btn btn-sm col-md-6">
+                            <ReportProblemIcon
+                  style={{
+                    color: fieldIconColors.caution1
+                  }}
+                  onClick={() => {
+                    setOpennedModal("caution1")
+                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
+                      setSmShow(true),
+                      console.log("modal open"),
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
+                  }}
+                ></ReportProblemIcon>
+                </div>
+                            
+
                             </td>
                           </tr>
 
@@ -761,226 +904,800 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                 </div>
                 {/* )} */}
               </div>
-
-              <div className="hl"></div>
+{/* ///////////////////////////////////////////////////////////////////////////////////////////////// */}
+<br></br>
+<div className="hl"></div>
               <p className="ml-3">
-                (ii) Licences/permissions granted to Developer/ group company for development of colony under any other law/Act as .
-                <ReportProblemIcon
-                  style={{
-                    color: fieldIconColors.caution2
-                  }}
-                  onClick={() => {
-                    setOpennedModal("caution2")
-                    setLabelValue("Licences/permissions granted to Developer/ group company for development of colony under any other law/Act as"),
-                    setSmShow(true),
-                    console.log("modal open"),
-                    setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution2: null);
-                  }}
-                ></ReportProblemIcon>
+              (ii) If director/partner of the proposed developer company/firm also holds designation of director/partner in any other company/firm who has already obtained license(s) under act of 1975:
+                
               </p>
+              <div className="ml-3" >
+                  <input
+                    type="radio"
+                    value="Yes"
+                    
+                    className="mx-2 mt-1"
+                    checked={capacityScrutinyInfo?.designatedDirectors === "Y" ?true:false}
+                    // onChange={(e) => handleChange(e.target.value)}
+                    // 
+                    // onClick={handleshow}
+                    disabled
+                  />
+                  <label className="m-0  mx-1" for="Yes">Yes</label>
+
+                  <input
+                    type="radio"
+                    value="No"
+                    
+                    className="mx-2 mt-1"
+                    checked={capacityScrutinyInfo?.designatedDirectors === "N" ?true:false}
+                    // onChange={(e) => handleChange(e.target.value)}
+                    // 
+                    // onClick={handleshow}
+                    disabled
+                  />
+                  <label className="m-0 mx-2" for="No">No</label>
+                  <ReportProblemIcon
+                    style={{
+                      color:fieldIconColors.caution4
+                    }}
+                    onClick={() => {
+                      setOpennedModal("caution4")
+                      setLabelValue("If director/partner of the proposed developer company/firm also holds designation of director/partner in any other company/firm who has already obtained license(s) under act of 1975"),
+                      setSmShow(true),
+                      console.log("modal open"),
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution4: null);
+                    }}
+                  ></ReportProblemIcon>
+                </div>
 
               <div>
-                <div className="card-body">
-                  {/* <h5 className="card-h">Add/Remove Authorized Users</h5> */}
-                  <div className="table-bd">
-                    <Table className="table table-bordered">
-                      <thead>
-                        <tr>
-                          {/* <th>Add More</th> */}
-                          <th class="fw-normal">S.No</th>
-                          <th class="fw-normal">Colonies developed</th>
-                          <th class="fw-normal">Area</th>
-                          <th class="fw-normal">Purpose</th>
-                          <th class="fw-normal">Status of development</th>
-                          <th class="fw-normal">Outstanding Dues</th>
-                          {/* <th>Action</th> */}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {/* {capacityDevelopColonyLawAct.length > 0 ? (
-                          capacityDevelopColonyLawAct.map((elementInArray, input) => {
-                            return ( */}
 
-                        {
-                          capacityScrutinyInfo?.capacityDevelopColonyLawAct?.map((item,index)=>(
-                        <tr>
-                          <td>{index + 1}</td>
-                          <td>
-                            <input
-                              type="text"
-                              // value={elementInArray.licenceNumber}
-                              placeholder={item?.coloniesDeveloped}
-                              class="employee-card-input"
-                              disabled
-                            />
-                          </td>
-                          <td>
-                            <input
-                              type="text"
-                              // value={elementInArray.area} placeholder={elementInArray.area}
-                              placeholder={item?.area}
-                              class="employee-card-input"
-                              disabled
-                            />
-                          </td>
-                          <td>
-                            <input
-                              type="text"
-                              // value={elementInArray.licenceNumber}
-                              placeholder={item?.purpose}
-                              class="employee-card-input"
-                              disabled
-                            />
-                          </td>
-                          <td>
-                            <div className="row">
-                              {/* <button className="btn btn-sm col-md-6">
-                                <VisibilityIcon color="info" className="icon" />
-                              </button> */}
-                            
-                                 <div className="btn btn-sm col-md-6">
-                              <IconButton onClick={()=>getDocShareholding(item?.statusOfDevelopment)}>
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
-                              {/* <button className="btn btn-sm col-md-6">
-                                <FileDownloadIcon color="primary" />
-                              </button> */}
-                              </div>
-                                 <div className="btn btn-sm col-md-6">
-                               <IconButton onClick={()=>getDocShareholding(item?.statusOfDevelopment)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 
-                            </div>
-                          </td>
-                          <td>
-                            <div className="row">
-                           
-                                 <div className="btn btn-sm col-md-6">
-                            <IconButton onClick={()=>getDocShareholding(item?.outstandingDues)}>
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 <div className="btn btn-sm col-md-6">
-                              {/* <button className="btn btn-sm col-md-6">
-                                <VisibilityIcon color="info" className="icon" />
-                              </button> */}
-                              {/* <button className="btn btn-sm col-md-6">
-                                <FileDownloadIcon color="primary" />
-                              </button> */}
-                              <IconButton onClick={()=>getDocShareholding(item?.outstandingDues)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                            </div>
-                          </td>
-                        </tr>
-
-                          ))
-                        }
-                        {/* );
-                          })
-                        ) : (
-                          <p>Click on add more</p>
-                        )} */}
-                      </tbody>
-                    </Table>
-                    {/* <div>
-                      <button
-                        type="button"
-                        style={{
-                          float: "left",
-                          backgroundColor: "#0b3629",
-                          color: "white",
-                        }}
-                        className="btn mt-3"
-                        onClick={() => setmodalColony(true)}
-                      >
-                        Add More
-                      </button>
-
-                      <div> */}
-                    {/* <Modal size="lg" isOpen={modalColony} toggle={() => setmodalColony(!modalColony)}>
-                          <ModalHeader toggle={() => setmodalColony(!modalColony)}></ModalHeader>
-
-                          <ModalBody>
-                            <div className="card2">
-                              <div className="popupcard">
-                                <form className="text1">
-                                  <Row>
-                                    <Col md={4} xxl lg="4">
-                                      <label htmlFor="name" className="text">
-                                        Colonies developed
-                                      </label>
-                                      <input type="text" onChange={(e) => setColonyDev(e.target.value)} placeholder="" class="employee-card-input" />
-                                    </Col>
-                                    <Col md={4} xxl lg="4">
-                                      <label htmlFor="name" className="text">
-                                        Area
-                                      </label>
-                                      <input
-                                        type="number"
-                                        onChange={(e) => setColonyArea(e.target.value)}
-                                        placeholder=""
-                                        class="employee-card-input"
-                                      />
-                                    </Col>
-                                    <Col md={4} xxl lg="4">
-                                      <label htmlFor="name" className="text">
-                                        Purpose
-                                      </label>
-                                      <input
-                                        type="text"
-                                        onChange={(e) => setColonyPurpose(e.target.value)}
-                                        placeholder=""
-                                        class="employee-card-input"
-                                      />
-                                    </Col>
-                                  </Row>
-                                  <Row>
-                                    <Col md={4} xxl lg="4">
-                                      <label htmlFor="name" className="text">
-                                        Status of development
-                                      </label>
-                                      <input
-                                        type="file"
-                                        onChange={(e) => setColonyStatusDev(e.target.value)}
-                                        placeholder=""
-                                        class="employee-card-input"
-                                      />
-                                    </Col>
-                                    <Col md={4} xxl lg="4">
-                                      <label htmlFor="name" className="text">
-                                        Outstanding Dues
-                                      </label>
-                                      <input
-                                        type="file"
-                                        onChange={(e) => setColonyoutstandingDue(e.target.value)}
-                                        placeholder=""
-                                        class="employee-card-input"
-                                      />
-                                    </Col>
-                                  </Row>
-                                </form>
-                              </div>
-                              <div className="submit-btn">
-                                <div className="form-group col-md6 mt-6">
-                                  <button type="button" style={{ float: "right" }} className="btn btn-success" onClick={handleColonyDevGrp}>
-                                    Submit
+                {/* {showhide === "Yes" && ( */}
+                {/* <div className="row "> */}
+                  <div className="form-group row">
+                    <div className="col-sm-12">
+                      <Col xs="12" md="12" sm="12">
+                        <Table className="table table-bordered" size="sm">
+                          <thead>
+                            <tr>
+                              <th class="fw-normal">S.No.</th>
+                              <th class="fw-normal">Professional </th>
+                              <th class="fw-normal"> Annexure</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td> 1 &nbsp;&nbsp;</td>
+                              <td> Agreement between the entities to provide technical assistance</td>
+                              <td align="center" size="large">
+                                <div className="row">
+                                  {/* <button className="btn btn-sm col-md-6">
+                                    <VisibilityIcon color="info" className="icon" />
                                   </button>
+                                  <button className="btn btn-sm col-md-6">
+                                    <FileDownloadIcon color="primary" />
+                                  </button> */}
+                                  
+                                 <div className="btn btn-sm col-md-6">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                      <VisibilityIcon color="info" className="icon" /></IconButton>
+                                      </div>
+                                 <div className="btn btn-sm col-md-6">
+                                  <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                      </div>
                                 </div>
-                              </div>
-                            </div>
-                          </ModalBody>
-                          <ModalFooter toggle={() => setmodalColony(!modalColony)}></ModalFooter>
-                        </Modal> */}
-                    {/* </div>
-                    </div> */}
-                    <br></br>
-                    <br></br>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td> 2&nbsp;&nbsp; </td>
+                              <td>Board resolutions of authorized signatory of firm/company provided technical assistance</td>
+                              <td align="center" size="large">
+                                <div className="row">
+                               
+                                 <div className="btn btn-sm col-md-6">
+                                <IconButton onClick={()=>getDocShareholding(item?.boardDoc)}>
+                                      <VisibilityIcon color="info" className="icon" /></IconButton>
+                                      </div>
+                                 <div className="btn btn-sm col-md-6">
+                                  {/* <button className="btn btn-sm col-md-6">
+                                    <VisibilityIcon color="info" className="icon" />
+                                  </button> */}
+                                  {/* <button className="btn btn-sm col-md-6">
+                                    <FileDownloadIcon color="primary" />
+                                  </button> */}
+                                  <IconButton onClick={()=>getDocShareholding(item?.boardDoc)}>
+                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                      </div>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </Table>
+                      </Col>
+                    </div>
                   </div>
                 </div>
-              </div>
+                {/* )} */}
+              {/* </div> */}
 
-              <div className="hl"></div>
-              <p className="ml-3 d-flex flex-row mb-4">(iii) Whether any technical expert(s) engaged   &nbsp;&nbsp;&nbsp;
+{/* /////////////////////////////////////////////////////////////////////////////////////// */}
+<br></br>
+<br></br>
+<div className="hl"></div>
+                        <p >
+                            (iii) In case of technical capacity of company/firm developed projects outside Haryana:-
+                        </p>
+
+                        <div >
+                        {/* <div className="d-flex flex-row align-items-center ml-4">
+                <input type="radio" value="Yes" checked={capacityScrutinyInfo?.permissionGrantedHRDU === "Y"?true:false}  disabled />
+                <label className="m-0  mx-1" for="Yes">Yes</label>
+                <input type="radio" value="No"  checked={capacityScrutinyInfo?.permissionGrantedHRDU === "N"?true:false} disabled />
+                <label className="m-0 mx-2" for="No">No</label>
+                <ReportProblemIcon
+                  style={{
+                    color: fieldIconColors.caution1
+                  }}
+                  onClick={() => {
+                    setOpennedModal("caution1")
+                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
+                      setSmShow(true),
+                      console.log("modal open"),
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
+                  }}
+                ></ReportProblemIcon>
+
+              </div> */}
+              <div >
+                            <input
+                                type="radio"
+                                value="Y"
+                                // checked={technicalCapacityOutsideHaryana === "Y" ? true : false}
+                                id="technicalCapacityOutsideHaryana"
+                                className="mx-2 mt-1"
+                                // onChange={(e) => setTechnicalCapacityOutsideHaryana(e.target.value)}
+                                name="technicalCapacityOutsideHaryana"
+                            />
+                            <label for="Yes">Yes</label>
+
+                            <input
+                                type="radio"
+                                value="N"
+                                // checked={technicalCapacityOutsideHaryana === "N" ? true : false}
+                                id="technicalCapacityOutsideHaryanaN"
+                                className="mx-2 mt-1"
+                                // onChange={(e) => setTechnicalCapacityOutsideHaryana(e.target.value)}
+                                name="technicalCapacityOutsideHaryana"
+                            />
+                            <label for="No">No</label>
+
+                            <ReportProblemIcon
+                  style={{
+                    color: fieldIconColors.caution1
+                  }}
+                  onClick={() => {
+                    setOpennedModal("caution1")
+                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
+                      setSmShow(true),
+                      console.log("modal open"),
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
+                  }}
+                ></ReportProblemIcon>
+                            </div>
+                            {/* {technicalCapacityOutsideHaryana === "Y" && ( */}
+                                <Row>
+                                    <Col md={4} xxl lg="4">
+                                        <label htmlFor="project" className="text"> Project </label>
+                                        {/* <input
+                                            type="text"
+                                            name="project"
+                                            value={technicalCapacityOutsideHaryanaDetails.project}
+                                            onChange={(e) => setTechnicalCapacityOutsideHaryanaDetails({ ...technicalCapacityOutsideHaryanaDetails, project: e.target.value })}
+                                            placeholder=""
+                                            class="employee-card-input"
+                                        /> */}
+                                         <div className={classes.fieldContainer}>
+                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+                              //  placeholder={item?.din} 
+                               disabled></Form.Control>
+                               &nbsp;&nbsp;
+                               <ReportProblemIcon
+                  style={{
+                    color: fieldIconColors.caution1
+                  }}
+                  onClick={() => {
+                    setOpennedModal("caution1")
+                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
+                      setSmShow(true),
+                      console.log("modal open"),
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
+                  }}
+                ></ReportProblemIcon>
+            </div>
+
+                                    </Col>
+
+                                    <Col md={4} xxl lg="4">
+                                        <label htmlFor="authority" className="text"> Authority </label>
+                                        {/* <input
+                                            type="text"
+                                            name="authority"
+                                            value={technicalCapacityOutsideHaryanaDetails.authority}
+                                            onChange={(e) => setTechnicalCapacityOutsideHaryanaDetails({ ...technicalCapacityOutsideHaryanaDetails, authority: e.target.value })}
+                                            placeholder=""
+                                            class="employee-card-input"
+                                        /> */}
+                                           <div className={classes.fieldContainer}>
+                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+                              //  placeholder={item?.din} 
+                               disabled></Form.Control>
+                               &nbsp;&nbsp;
+                               <ReportProblemIcon
+                  style={{
+                    color: fieldIconColors.caution1
+                  }}
+                  onClick={() => {
+                    setOpennedModal("caution1")
+                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
+                      setSmShow(true),
+                      console.log("modal open"),
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
+                  }}
+                ></ReportProblemIcon>
+            </div>
+
+                                    </Col>
+
+                                    <Col md={4} xxl lg="4">
+                                        <label htmlFor="statusOfDevelopment" className="text"> (iii) Status of Development </label>
+                                        {/* <input
+                                            type="text"
+                                            name="statusOfDevelopment"
+                                            value={technicalCapacityOutsideHaryanaDetails.statusOfDevelopment}
+                                            onChange={(e) => setTechnicalCapacityOutsideHaryanaDetails({ ...technicalCapacityOutsideHaryanaDetails, statusOfDevelopment: e.target.value })}
+                                            placeholder=""
+                                            class="employee-card-input"
+                                        /> */}
+                                           <div className={classes.fieldContainer}>
+                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+                              //  placeholder={item?.din} 
+                               disabled></Form.Control>
+                               &nbsp;&nbsp;
+                               <ReportProblemIcon
+                  style={{
+                    color: fieldIconColors.caution1
+                  }}
+                  onClick={() => {
+                    setOpennedModal("caution1")
+                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
+                      setSmShow(true),
+                      console.log("modal open"),
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
+                  }}
+                ></ReportProblemIcon>
+            </div>
+
+                                    </Col>
+                                </Row>
+                            {/* )} */}
+                        </div>
+
+
+{/* /////////////////////////////////////////////////////////////////////////////////// */}
+<br></br>
+<br></br>
+<div className="hl"></div>
+                        <p>
+                            (iv). In case of technical capacity sought from another
+                            company/firm who has already obtained license(s) under act of
+                            1975 or outside Haryana:
+                        </p>
+                        <div >
+                          <div >
+                            <input
+                                type="radio"
+                                value="Y"
+                                id="alreadtObtainedLic"
+                                className="mx-2 mt-1"
+                                // onChange={changeAlreadyObtainedLic}
+                                name="alreadtObtainedLic"
+                            />
+                            <label for="Yes">Yes</label>
+
+                            <input
+                                type="radio"
+                                value="N"
+                                id="alreadtObtainedLicN"
+                                className="mx-2 mt-1"
+                                // onChange={changeAlreadyObtainedLic}
+                                name="alreadtObtainedLic"
+                                onClick={handleshow6}
+                            />
+                            <label for="No">No</label>
+                            </div>
+                            {/* {alreadtObtainedLic === "Y" && ( */}
+                                <div>
+                                <div className="row">
+                    <div className="col-sm-12">
+                      <div className="table-bd">
+                        
+                                    {/* <div className="row ">
+                                        <div className="form-group row">
+                                            <div className="col-sm-12"> */}
+                                                {/* <Col xs="12" md="12" sm="12"> */}
+                                                    <div>
+                                                        <Table className="table table-bordered" >
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>S.No.</th>
+                                                                    <th>Agreement*</th>
+                                                                    <th>Upload Document </th>
+                                                                    <th>Annexure </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td> 1 </td>
+
+                                                                    <td>
+                                                                        Agreement between the proposed developer and existing colonizer
+                                                                    </td>
+                                                                    <td align="center" size="large">
+                                                                        {/* <input
+                                                                            type="file"
+                                                                            name="agreementDocY"
+                                                                            onChange={((e)=> setEarlierDocY(e.target.value))}
+                                                                            onChange={(e) => getDocumentData(e?.target?.files[0], "agreementDocY")}
+                                                                            class="employee-card-input"
+                                                                        /> */}
+                                                                        <div className="row">
+                               
+                               <div className="btn btn-sm col-md-6">
+                              <IconButton onClick={()=>getDocShareholding(item?.boardDoc)}>
+                                    <VisibilityIcon color="info" className="icon" /></IconButton>
+                                    </div>
+                               <div className="btn btn-sm col-md-6">
+                                {/* <button className="btn btn-sm col-md-6">
+                                  <VisibilityIcon color="info" className="icon" />
+                                </button> */}
+                                {/* <button className="btn btn-sm col-md-6">
+                                  <FileDownloadIcon color="primary" />
+                                </button> */}
+                                <IconButton onClick={()=>getDocShareholding(item?.boardDoc)}>
+                                    <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                    </div>
+                              </div>
+
+                                                                    </td>
+                                                                    <td>
+                                                                        {/* {DevelopersAllData?.agreementDocY !== "" ?
+                                                                            <button
+                                                                                type="button"
+                                                                                onClick={() => getDocShareholding(DevelopersAllData?.agreementDocY)}
+                                                                            >
+                                                                                <VisibilityIcon />
+                                                                            </button> : <p></p>
+                                                                        } */}
+                                                          <div className={classes.fieldContainer}>
+                              {/* <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+                               placeholder={item?.din} 
+                               disabled></Form.Control> */}
+                               &nbsp;&nbsp;
+                               <ReportProblemIcon
+                  style={{
+                    color: fieldIconColors.caution1
+                  }}
+                  onClick={() => {
+                    setOpennedModal("caution1")
+                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
+                      setSmShow(true),
+                      console.log("modal open"),
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
+                  }}
+                ></ReportProblemIcon>
+            </div>
+
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td> 2 </td>
+
+                                                                    <td>
+                                                                        Board resolution of authorised signatory of the existing colonizer
+                                                                    </td>
+                                                                    <td align="center" size="large">
+                                                                        {/* <input
+                                                                            type="file"
+                                                                            name="boardDocX"
+                                                                            onChange={((e)=> setEarlierDocY(e.target.value))}
+                                                                            onChange={(e) => getDocumentData(e?.target?.files[0], "boardDocX")}
+                                                                            class="employee-card-input"
+                                                                        /> */}
+                                                                        <div className="row">
+                               
+                               <div className="btn btn-sm col-md-6">
+                              <IconButton onClick={()=>getDocShareholding(item?.boardDoc)}>
+                                    <VisibilityIcon color="info" className="icon" /></IconButton>
+                                    </div>
+                               <div className="btn btn-sm col-md-6">
+                                {/* <button className="btn btn-sm col-md-6">
+                                  <VisibilityIcon color="info" className="icon" />
+                                </button> */}
+                                {/* <button className="btn btn-sm col-md-6">
+                                  <FileDownloadIcon color="primary" />
+                                </button> */}
+                                <IconButton onClick={()=>getDocShareholding(item?.boardDoc)}>
+                                    <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                    </div>
+                              </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        {/* {DevelopersAllData?.boardDocX !== "" ?
+                                                                            <button
+                                                                                type="button"
+                                                                                onClick={() => getDocShareholding(DevelopersAllData?.boardDocX)}
+                                                                            >
+                                                                                <VisibilityIcon />
+                                                                            </button> : <p></p>
+                                                                        } */}
+                                                                        <div className={classes.fieldContainer}>
+                              {/* <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+                               placeholder={item?.din} 
+                               disabled></Form.Control> */}
+                               &nbsp;&nbsp;
+                               <ReportProblemIcon
+                  style={{
+                    color: fieldIconColors.caution1
+                  }}
+                  onClick={() => {
+                    setOpennedModal("caution1")
+                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
+                      setSmShow(true),
+                      console.log("modal open"),
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
+                  }}
+                ></ReportProblemIcon>
+            </div>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td> 3 </td>
+                                                                    <td> Registered and Irrevocable Agreement</td>
+                                                                    <td align="center" size="large">
+                                                                        {/* <input
+                                                                            type="file"
+                                                                            name="registeredDoc"
+                                                                            // onChange={((e)=> setRegisteredDoc(e.target.value))}
+                                                                            onChange={(e) => getDocumentData(e?.target?.files[0], "registeredDoc")}
+                                                                            class="employee-card-input"
+                                                                        /> */}
+                                                                        <div className="row">
+                               
+                               <div className="btn btn-sm col-md-6">
+                              <IconButton onClick={()=>getDocShareholding(item?.boardDoc)}>
+                                    <VisibilityIcon color="info" className="icon" /></IconButton>
+                                    </div>
+                               <div className="btn btn-sm col-md-6">
+                                {/* <button className="btn btn-sm col-md-6">
+                                  <VisibilityIcon color="info" className="icon" />
+                                </button> */}
+                                {/* <button className="btn btn-sm col-md-6">
+                                  <FileDownloadIcon color="primary" />
+                                </button> */}
+                                <IconButton onClick={()=>getDocShareholding(item?.boardDoc)}>
+                                    <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                    </div>
+                              </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        {/* {DevelopersAllData?.registeredDoc !== "" ?
+                                                                            <a href={urlGetRegisteredDocUrl} target="_blank" >
+                                                                                <VisibilityIcon />
+                                                                            </a> : <p></p>
+                                                                        } */}
+                                                                        <div className={classes.fieldContainer}>
+                              {/* <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+                               placeholder={item?.din} 
+                               disabled></Form.Control> */}
+                               &nbsp;&nbsp;
+                               <ReportProblemIcon
+                  style={{
+                    color: fieldIconColors.caution1
+                  }}
+                  onClick={() => {
+                    setOpennedModal("caution1")
+                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
+                      setSmShow(true),
+                      console.log("modal open"),
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
+                  }}
+                ></ReportProblemIcon>
+            </div>
+                                                                    </td>
+                                                                </tr>
+
+                                                                <tr>
+                                                                    <td> 4 </td>
+                                                                    <td>
+                                                                        Board resolutions of authorized signatory of
+                                                                        firm/company provided technical assistance
+                                                                    </td>
+                                                                    <td align="center" size="large">
+                                                                        {/* <input
+                                                                            type="file"
+                                                                            // onChange={((e)=> setBoardDocY(e.target.value))}
+                                                                            onChange={(e) => getDocumentData(e?.target?.files[0], "boardDocY")}
+                                                                            class="employee-card-input"
+                                                                        /> */}
+                                                                        <div className="row">
+                               
+                               <div className="btn btn-sm col-md-6">
+                              <IconButton onClick={()=>getDocShareholding(item?.boardDoc)}>
+                                    <VisibilityIcon color="info" className="icon" /></IconButton>
+                                    </div>
+                               <div className="btn btn-sm col-md-6">
+                                {/* <button className="btn btn-sm col-md-6">
+                                  <VisibilityIcon color="info" className="icon" />
+                                </button> */}
+                                {/* <button className="btn btn-sm col-md-6">
+                                  <FileDownloadIcon color="primary" />
+                                </button> */}
+                                <IconButton onClick={()=>getDocShareholding(item?.boardDoc)}>
+                                    <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                    </div>
+                              </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        {/* {DevelopersAllData?.boardDocY !== "" ?
+                                                                            <a href={urlGetBoardDocYUrl} target="_blank" >
+                                                                                <VisibilityIcon />
+                                                                            </a> : <p></p>
+                                                                        } */}
+                                                                           <div className={classes.fieldContainer}>
+                              {/* <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+                               placeholder={item?.din} 
+                               disabled></Form.Control> */}
+                               &nbsp;&nbsp;
+                               <ReportProblemIcon
+                  style={{
+                    color: fieldIconColors.caution1
+                  }}
+                  onClick={() => {
+                    setOpennedModal("caution1")
+                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
+                      setSmShow(true),
+                      console.log("modal open"),
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
+                  }}
+                ></ReportProblemIcon>
+            </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>{" "}
+                                                        </Table>
+                                                    </div>
+                                                {/* </Col> */}
+                                               
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+<br></br>
+                                    <div className="row">
+                                        <div className="col col-4">
+                                            <div >
+                                                <label htmlFor="licNo">License No.</label>
+                                                {/* <input
+                                                    type="text"
+                                                    name="licNo"
+                                                    value={technicalCapacitySoughtFromAnyColonizer.licNo}
+                                                    onChange={(e) => setTechnicalCapacitySoughtFromAnyColonizer({ ...technicalCapacitySoughtFromAnyColonizer, licNo: e.target.value })}
+                                                    className="employee-card-input"
+                                                    maxLength={10}
+                                                /> */}
+                                                   <div className={classes.fieldContainer}>
+                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+                              //  placeholder={item?.din} 
+                               disabled></Form.Control>
+                               &nbsp;&nbsp;
+                               <ReportProblemIcon
+                  style={{
+                    color: fieldIconColors.caution1
+                  }}
+                  onClick={() => {
+                    setOpennedModal("caution1")
+                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
+                      setSmShow(true),
+                      console.log("modal open"),
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
+                  }}
+                ></ReportProblemIcon>
+            </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="col col-4">
+                                            <div >
+                                                <label htmlFor="licDate">Date</label>
+                                                {/* <input
+                                                    type="date"
+                                                    name="licDate"
+                                                    value={technicalCapacitySoughtFromAnyColonizer.dateOfGrantingLic}
+                                                    onChange={(e) => setTechnicalCapacitySoughtFromAnyColonizer({ ...technicalCapacitySoughtFromAnyColonizer, dateOfGrantingLic: e.target.value })}
+                                                    className="employee-card-input"
+                                                    maxLength={10}
+                                                /> */}
+                                                   <div className={classes.fieldContainer}>
+                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+                              //  placeholder={item?.din} 
+                               disabled></Form.Control>
+                               &nbsp;&nbsp;
+                               <ReportProblemIcon
+                  style={{
+                    color: fieldIconColors.caution1
+                  }}
+                  onClick={() => {
+                    setOpennedModal("caution1")
+                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
+                      setSmShow(true),
+                      console.log("modal open"),
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
+                  }}
+                ></ReportProblemIcon>
+            </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="col col-4">
+                                            <div >
+                                                <label htmlFor="licValidity">Validity</label>
+                                                {/* <input
+                                                    type="date"
+                                                    name="licValidity"
+                                                    value={technicalCapacitySoughtFromAnyColonizer.licValidity}
+                                                    onChange={(e) => setTechnicalCapacitySoughtFromAnyColonizer({ ...technicalCapacitySoughtFromAnyColonizer, licValidity: e.target.value })}
+                                                    className="employee-card-input"
+                                                maxLength={10}
+                                                /> */}
+                                                   <div className={classes.fieldContainer}>
+                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+                              //  placeholder={item?.din} 
+                               disabled></Form.Control>
+                               &nbsp;&nbsp;
+                               <ReportProblemIcon
+                  style={{
+                    color: fieldIconColors.caution1
+                  }}
+                  onClick={() => {
+                    setOpennedModal("caution1")
+                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
+                      setSmShow(true),
+                      console.log("modal open"),
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
+                  }}
+                ></ReportProblemIcon>
+            </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="col col-4">
+                                            <div c>
+                                                <label htmlFor="licValidity">Purpose</label>
+                                                {/* <Select
+                                                    value={technicalCapacitySoughtFromAnyColonizer.purpose}
+                                                    onChange={(e) => setTechnicalCapacitySoughtFromAnyColonizer({ ...technicalCapacitySoughtFromAnyColonizer, purpose: e.target.value })}
+                                                    className="w-100"
+                                                    variant="standard"
+                                                >
+                                                    {
+                                                        purposeOptions?.data.map((item, index) => (
+                                                            <MenuItem value={item.value} >{item?.label}</MenuItem>
+                                                        ))
+                                                    }
+                                                </Select> */}
+                                                   <div className={classes.fieldContainer}>
+                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+                              //  placeholder={item?.din} 
+                               disabled></Form.Control>
+                               &nbsp;&nbsp;
+                               <ReportProblemIcon
+                  style={{
+                    color: fieldIconColors.caution1
+                  }}
+                  onClick={() => {
+                    setOpennedModal("caution1")
+                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
+                      setSmShow(true),
+                      console.log("modal open"),
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
+                  }}
+                ></ReportProblemIcon>
+            </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                            {/* )} */}
+                            {/* {alreadtObtainedLic === "N" && (
+                                <div className="row ">
+                                    <div className="form-group row">
+                                        <div className="col-sm-12">
+                                            <div>
+                                                <Table className="table table-bordered" size="sm">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>S.No.</th>
+                                                            <th>Agreement*</th>
+                                                            <th>Annexure </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td> 1 </td>
+                                                            <td>
+                                                                Agreement between the entities to provide
+                                                                technical assistance
+                                                            </td>
+                                                            <td align="center" size="large">
+                                                                <input
+                                                                    type="file"
+                                                                    // onChange={((e)=> setTechnicalAssistanceAgreementDoc(e.target.value))}
+                                                                    onChange={(e) => setFile({ file: e.target.files[0] })}
+                                                                    class="employee-card-input"
+                                                                />
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td> 2 </td>
+                                                            <td>
+                                                                Board resolutions of authorized signatory of
+                                                                firm/company provided technical assistance
+                                                            </td>
+                                                            <td align="center" size="large">
+                                                                <input
+                                                                    type="file"
+                                                                    // onChange={((e)=> setBoardDocN(e.target.value))}
+                                                                    onChange={(e) => setFile({ file: e.target.files[0] })}
+                                                                    class="employee-card-input"
+                                                                />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td> 3 </td>
+
+                                                            <td>
+                                                                Auto populate details of earlier license(s)
+                                                                granted to existing developer company/firm to
+                                                                set up a colony under act of 1975.
+                                                            </td>
+                                                            <td align="center" size="large">
+                                                                <input
+                                                                    type="file"
+                                                                    // onChange={((e)=> setEarlierDocN(e.target.value))}
+                                                                    onChange={(e) => setFile({ file: e.target.files[0] })}
+                                                                    class="employee-card-input"
+                                                                />
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </Table>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            )} */}
+                        </div>
+
+{/* /////////////////////////////////////////////////////////////////////////////////// */}
+<br></br>
+<br></br>
+<div className="hl"></div>
+              <p>(v) Whether any technical expert(s) engaged   &nbsp;&nbsp;&nbsp;
                 <div className="d-flex flex-row align-items-center ml-2">
                   <input type="radio" value="Yes"  className="mx-2 mt-1" checked={capacityScrutinyInfo?.technicalExpert === "Y" ? true : false} disabled />
                   <label className="m-0  mx-1" for="Yes">Yes</label>
@@ -1333,343 +2050,13 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                   </div>
                 )}
               </div>
+              <br></br>
 
-              <div className="hl"></div>
-              <p className="ml-3 d-flex mb-3">
-                (iv) If director/partner of the proposed developer company/firm also holds designation of director/partner in any
-                other company/firm who has already obtained license(s) under act of 1975:
-                <div className="d-flex flex-row align-items-center ml-4 mt-1 mb-3">
-                  <input
-                    type="radio"
-                    value="Yes"
-                    
-                    className="mx-2 mt-1"
-                    checked={capacityScrutinyInfo?.designatedDirectors === "Y" ?true:false}
-                    // onChange={(e) => handleChange(e.target.value)}
-                    // 
-                    // onClick={handleshow}
-                    disabled
-                  />
-                  <label className="m-0  mx-1" for="Yes">Yes</label>
 
-                  <input
-                    type="radio"
-                    value="No"
-                    
-                    className="mx-2 mt-1"
-                    checked={capacityScrutinyInfo?.designatedDirectors === "N" ?true:false}
-                    // onChange={(e) => handleChange(e.target.value)}
-                    // 
-                    // onClick={handleshow}
-                    disabled
-                  />
-                  <label className="m-0 mx-2" for="No">No</label>
-                  <ReportProblemIcon
-                    style={{
-                      color:fieldIconColors.caution4
-                    }}
-                    onClick={() => {
-                      setOpennedModal("caution4")
-                      setLabelValue("If director/partner of the proposed developer company/firm also holds designation of director/partner in any other company/firm who has already obtained license(s) under act of 1975"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution4: null);
-                    }}
-                  ></ReportProblemIcon>
-                </div>
-              </p>
 
-              <div>
+{/* /////////////////////////////////////////////////////////////////////////////////////////// */}
 
-                {/* {showhide === "Yes" && ( */}
-                <div className="row ">
-                  <div className="form-group row">
-                    <div className="col-sm-12">
-                      <Col xs="12" md="12" sm="12">
-                        <Table className="table table-bordered" size="sm">
-                          <thead>
-                            <tr>
-                              <th class="fw-normal">S.No.</th>
-                              <th class="fw-normal">Professional </th>
-                              <th class="fw-normal"> Annexure</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td> 1 &nbsp;&nbsp;</td>
-                              <td> Agreement between the entities to provide technical assistance</td>
-                              <td align="center" size="large">
-                                <div className="row">
-                                  {/* <button className="btn btn-sm col-md-6">
-                                    <VisibilityIcon color="info" className="icon" />
-                                  </button>
-                                  <button className="btn btn-sm col-md-6">
-                                    <FileDownloadIcon color="primary" />
-                                  </button> */}
-                                  
-                                 <div className="btn btn-sm col-md-6">
-                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td> 2&nbsp;&nbsp; </td>
-                              <td>Board resolutions of authorized signatory of firm/company provided technical assistance</td>
-                              <td align="center" size="large">
-                                <div className="row">
-                               
-                                 <div className="btn btn-sm col-md-6">
-                                <IconButton onClick={()=>getDocShareholding(item?.boardDoc)}>
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  {/* <button className="btn btn-sm col-md-6">
-                                    <VisibilityIcon color="info" className="icon" />
-                                  </button> */}
-                                  {/* <button className="btn btn-sm col-md-6">
-                                    <FileDownloadIcon color="primary" />
-                                  </button> */}
-                                  <IconButton onClick={()=>getDocShareholding(item?.boardDoc)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </Table>
-                      </Col>
-                    </div>
-                  </div>
-                </div>
-                {/* )} */}
-              </div>
 
-              <div className="hl"></div>
-              <p className="ml-3 d-flex mb-3">
-                2. In case of technical capacity sought from another company/firm who has already obtained license(s) under act of 1975 or outside
-                Haryana:
-                <div className="d-flex flex-row align-items-center ml-2">
-                  <input type="radio" value="Yes"  className="mx-2 mt-1" disabled checked={capacityScrutinyInfo?.alreadtObtainedLic === "Y" ? true : false} />
-                  <label className="m-0  mx-1" for="Yes">Yes</label>
-                  <input type="radio" value="No"  className="mx-2 mt-1" disabled checked={capacityScrutinyInfo?.alreadtObtainedLic === "N" ? true : false} />
-                  <label className="m-0 mx-2" for="No">No</label>
-
-                  <ReportProblemIcon
-                    style={{
-                      color: fieldIconColors.caution5
-                    }}
-                    onClick={() => {
-                      setOpennedModal("caution5")
-                      setLabelValue("In case of technical capacity sought from another company/firm who has already obtained license(s) under act of 1975 or outside Haryana"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution5: null);
-                    }}
-                  ></ReportProblemIcon>
-                </div>
-              </p>
-              <div>
-                {/* <input type="radio" value="Yes"  className="mx-2 mt-1" disabled />
-                <label className="m-0  mx-1" for="Yes">Yes</label>
-
-                <input type="radio" value="No"  className="mx-2 mt-1" disabled />
-                <label className="m-0 mx-2" for="No">No</label> */}
-                {showhide6 === "Yes" && (
-                  <div className="row ">
-                    <div className="form-group row">
-                      <div className="col-sm-12">
-                        <Col xs="12" md="12" sm="12">
-                          <div>
-                            <Table className="table table-bordered" size="sm">
-                              <thead>
-                                <tr>
-                                  <th class="fw-normal">S.No.</th>
-                                  <th class="fw-normal">Agreement*</th>
-                                  <th class="fw-normal">Annexure </th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr>
-                                  <td> 1 </td>
-                                  <td> Registered and Irrevocable Agreement</td>
-                                  <td align="center" size="large">
-                                    <div className="row">
-                                      {/* <button className="btn btn-sm col-md-6">
-                                        <VisibilityIcon color="info" className="icon" />
-                                      </button>
-                                      <button className="btn btn-sm col-md-6">
-                                        <FileDownloadIcon color="primary" />
-                                      </button> */}
-                                      
-                                 <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={()=>getDocShareholding(item?.earlierDocY)}>
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 <div className="btn btn-sm col-md-6">
-                                 
-                                  <IconButton onClick={()=>getDocShareholding(item?.earlierDocY)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                    </div>
-                                  </td>
-                                </tr>
-
-                                <tr>
-                                  <td> 2 </td>
-                                  <td>Board resolutions of authorized signatory of firm/company provided technical assistance</td>
-                                  <td align="center" size="large">
-                                    <div className="row">
-                                      {/* <button className="btn btn-sm col-md-6">
-                                        <VisibilityIcon color="info" className="icon" />
-                                      </button>
-                                      <button className="btn btn-sm col-md-6">
-                                        <FileDownloadIcon color="primary" />
-                                      </button> */}
-                                      
-                                 <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={()=>getDocShareholding(item?.boardDocY)}>
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.boardDocY)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                    </div>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td> 3 </td>
-
-                                  <td>
-                                    Auto populate details of earlier license(s) granted to existing developer company/firm to set up a colony under
-                                    act of 1975.
-                                  </td>
-                                  <td align="center" size="large">
-                                    <div className="row">
-                                      
-                                        
-                                 <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}>
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                      </div>
-                                  
-                                  </td>
-                                </tr>
-                              </tbody>{" "}
-                            </Table>
-                          </div>
-                        </Col>
-                      </div>
-                    </div>
-                  </div>
-                )}
-                {showhide6 === "No" && (
-                  <div className="row ">
-                    <div className="form-group row">
-                      <div className="col-sm-12">
-                        <div>
-                          <Table className="table table-bordered ml-2" size="sm">
-                            <thead>
-                              <tr>
-                                <th class="fw-normal">S.No.</th>
-                                <th class="fw-normal">Agreement*</th>
-                                <th class="fw-normal">Annexure </th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td> 1 </td>
-                                <td>Agreement between the entities to provide technical assistance</td>
-                                <td align="center" size="large">
-                                  <div className="row">
-                                    {/* <button className="btn btn-sm col-md-6">
-                                      <VisibilityIcon color="info" className="icon" />
-                                    </button>
-                                    <button className="btn btn-sm col-md-6">
-                                      <FileDownloadIcon color="primary" />
-                                    </button> */}
-                                     
-                                 <div className="btn btn-sm col-md-6">
-                                     <IconButton onClick={()=>getDocShareholding(item?.boardDoc)}>
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.boardDoc)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                  </div>
-                                </td>
-                              </tr>
-
-                              <tr>
-                                <td> 2 </td>
-                                <td>Board resolutions of authorized signatory of firm/company provided technical assistance</td>
-                                <td align="center" size="large">
-                                  <div className="row">
-                                    {/* <button className="btn btn-sm col-md-6">
-                                      <VisibilityIcon color="info" className="icon" />
-                                    </button>
-                                    <button className="btn btn-sm col-md-6">
-                                      <FileDownloadIcon color="primary" />
-                                    </button> */}
-                                      
-                                 <div className="btn btn-sm col-md-6">
-                                     <IconButton onClick={()=>getDocShareholding(item?.boardDocN)}>
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.boardDocN)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                  </div>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td> 3 </td>
-
-                                <td>
-                                  Auto populate details of earlier license(s) granted to existing developer company/firm to set up a colony under act
-                                  of 1975.
-                                </td>
-                                <td align="center" size="large">
-                                  <div className="row">
-                                    {/* <button className="btn btn-sm col-md-6">
-                                      <VisibilityIcon color="info" className="icon" />
-                                    </button>
-                                    <button className="btn btn-sm col-md-6">
-                                      <FileDownloadIcon color="primary" />
-                                    </button> */}
-                                    
-                                 <div className="btn btn-sm col-md-6">
-                                     <IconButton onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}>
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                  </div>
-                                </td>
-                              </tr>
-                            </tbody>
-                          </Table>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
             </div>
           </FormStep>
         </div>

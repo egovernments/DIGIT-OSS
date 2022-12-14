@@ -95,6 +95,31 @@ const ServicePlanService = () => {
     {label:"Certified copy of the plan verified by a third party",key:"certified"},
     {label:"AutoCAD (DXF) file.",key:"AutoCAD"}
     ]
+  //////////////////////////////////////////////////////////////
+  const getSubmitDataLabel = async () => {
+      try {
+        const postDistrict = {
+          requestInfo: {
+            api_id: "1",
+            ver: "1",
+            ts: null,
+            action: "create",
+            did: "",
+            key: "",
+            msg_id: "",
+            requester_id: "",
+            auth_token: null,
+          },
+        };
+  
+        const Resp = await axios.post(`http://10.1.1.18:80/land-services/serviceplan/_get?loiNumber=123`, postDistrict);
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+    useEffect(() => {
+      getSubmitDataLabel();
+    }, []);
   
   
   

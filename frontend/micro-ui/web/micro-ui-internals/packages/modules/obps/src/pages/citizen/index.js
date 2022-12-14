@@ -43,6 +43,8 @@ import electricalPlanService from "./ElectricalPlan";
 import renewalClu from "./NewLicense/AllService/Module/Renewal/Renewal";
 import ZoningPlan from "../citizen/NewLicense/AllService/Module/ZoningPlan/ZoningPlan";
 import CardNewLicence from "./NewLicense/CardNewLicence/CadNewLicence";
+import Beneficial from "./NewLicense/AllService/Module/BeneficialInterest/Beneficial";
+import CompletionLic from "./NewLicense/AllService/Module/CompositionClu/CompositionClu";
 const App = ({ path }) => {
   const location = useLocation();
   const { t } = useTranslation();
@@ -115,7 +117,7 @@ const App = ({ path }) => {
 
 
 
-        <PrivateRoute path={`${path}/Beneficialscrutiny`} component={Beneficialscrutiny} />
+        {/* <PrivateRoute path={`${path}/Beneficialscrutiny`} component={Beneficialscrutiny} />
         <PrivateRoute path={`${path}/Completionscrutiny`} component={Completionscrutiny} />
         <PrivateRoute path={`${path}/CompositionClu`} component={CompositionClu} />
         <PrivateRoute path={`${path}/ExtensionClu`} component={ExtensionClu} />
@@ -125,7 +127,7 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/TransferLic`} component={TransferLic} />
         <PrivateRoute path={`${path}/SurrenderLic`} component={SurrenderLic} />
         <PrivateRoute path={`${path}/Standard`} component={Standard} />
-        <PrivateRoute path={`${path}/Loi`} component={Loi} />
+        <PrivateRoute path={`${path}/Loi`} component={Loi} /> */}
 
       </Switch>
     </React.Fragment>

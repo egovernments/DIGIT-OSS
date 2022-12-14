@@ -228,9 +228,25 @@ const DocumentScrutiny = (props) => {
                                 <td> 1 </td>
                                 <td>Identity Proof  
                                   <p>(Copy of Govt approved Identity card with photo attested by a gazetted officer within one month from the data of application .)</p>    
-                                    {/* <ReportProblemIcon
+                                  
+                     </td>
+                                <td >
+                                  <div className="row">
+                                  <div className="btn btn-sm col-md-4">
+                                     <IconButton
+                                      onClick={()=>getDocShareholding(item?.boardDoc)}
+                                      >
+                                      <VisibilityIcon color="info" className="icon" /></IconButton>
+                                      </div>
+                                      <div className="btn btn-sm col-md-4">
+                               
+                                  <IconButton onClick={()=>getDocShareholding(item?.boardDoc)}>
+                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                      </div>
+                                      <div className="btn btn-sm col-md-4">
+                                      <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.developerType
+                        color: fieldIconColors.IdentityProof
                       }}
                       onClick={() => {
                         setOpennedModal("IdentityProof")
@@ -249,20 +265,7 @@ const DocumentScrutiny = (props) => {
                       selectedFieldData={selectedFieldData}
                       fieldValue={fieldValue}
                       remarksUpdate={currentRemarks}
-                    ></ModalChild> */}
-                     </td>
-                                <td >
-                                  <div className="row">
-                                  <div className="btn btn-sm col-md-6">
-                                     <IconButton
-                                      onClick={()=>getDocShareholding(item?.boardDoc)}
-                                      >
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                      <div className="btn btn-sm col-md-6">
-                               
-                                  <IconButton onClick={()=>getDocShareholding(item?.boardDoc)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
+                    ></ModalChild>
                                       </div>
                                
                                   </div>
@@ -280,18 +283,32 @@ const DocumentScrutiny = (props) => {
                                     <button className="btn btn-sm col-md-6">
                                       <FileDownloadIcon color="primary" />
                                     </button> */}
-                                     <div className="btn btn-sm col-md-6">
+                                     <div className="btn btn-sm col-md-4">
                                      <IconButton 
                                     //  onClick={()=>getDocShareholding(item?.boardDocN)}
                                      >
                                       <VisibilityIcon color="info" className="icon" /></IconButton>
                                  </div>
-                                 <div className="btn btn-sm col-md-6">
+                                 <div className="btn btn-sm col-md-4">
                                   <IconButton 
                                   // onClick={()=>getDocShareholding(item?.boardDocN)}
                                   >
                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
                                       </div>
+                                      <div className="btn btn-sm col-md-4">
+                                      <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.IdentityProof
+                      }}
+                      onClick={() => {
+                        setOpennedModal("IdentityProof")
+                        setLabelValue("Identity Proof"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(item?.boardDoc || null);
+                      }}
+                    ></ReportProblemIcon>
+                    </div>
                                   </div>
                                 </td>
                               </tr>
@@ -309,18 +326,32 @@ const DocumentScrutiny = (props) => {
                                     <button className="btn btn-sm col-md-6">
                                       <FileDownloadIcon color="primary" />
                                     </button> */}
-                                     <div className="btn btn-sm col-md-6">
+                                     <div className="btn btn-sm col-md-4">
                                      <IconButton 
                                     //  onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}
                                      >
                                       <VisibilityIcon color="info" className="icon" /></IconButton>
                                 </div>
-                                <div className="btn btn-sm col-md-6">
+                                <div className="btn btn-sm col-md-4">
                                   <IconButton 
                                   // onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}
                                   >
                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
                                       </div>
+                                      <div className="btn btn-sm col-md-4">
+                                      <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.IdentityProof
+                      }}
+                      onClick={() => {
+                        setOpennedModal("IdentityProof")
+                        setLabelValue("Identity Proof"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(item?.boardDoc || null);
+                      }}
+                    ></ReportProblemIcon>
+                    </div>
                                   </div>
                                 </td>
                               </tr>
@@ -333,18 +364,32 @@ const DocumentScrutiny = (props) => {
                                 </td>
                                 <td>
                                   <div className="row">
-                                  <div className="btn btn-sm col-md-6">
+                                  <div className="btn btn-sm col-md-4">
                                      <IconButton 
                                     //  onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}
                                      >
                                       <VisibilityIcon color="info" className="icon" /></IconButton>
                                       </div>
-                                      <div className="btn btn-sm col-md-6">
+                                      <div className="btn btn-sm col-md-4">
                                   <IconButton 
                                   // onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}
                                   >
                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
                                       </div>
+                                      <div className="btn btn-sm col-md-4">
+                                      <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.IdentityProof
+                      }}
+                      onClick={() => {
+                        setOpennedModal("IdentityProof")
+                        setLabelValue("Identity Proof"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(item?.boardDoc || null);
+                      }}
+                    ></ReportProblemIcon>
+                    </div>
                                   </div>
                                 </td>
                               </tr>
@@ -357,19 +402,33 @@ const DocumentScrutiny = (props) => {
                                 </td>
                                 <td>
                                   <div className="row">
-                                  <div className="btn btn-sm col-md-6">
+                                  <div className="btn btn-sm col-md-4">
                                      <IconButton 
                                     //  onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}
                                      >
                                       <VisibilityIcon color="info" className="icon" /></IconButton>
                                       </div>
-                                      <div className="btn btn-sm col-md-6">
+                                      <div className="btn btn-sm col-md-4">
                                 
                                   <IconButton 
                                   // onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}
                                   >
                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
                                       </div>
+                                      <div className="btn btn-sm col-md-4">
+                                      <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.IdentityProof
+                      }}
+                      onClick={() => {
+                        setOpennedModal("IdentityProof")
+                        setLabelValue("Identity Proof"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(item?.boardDoc || null);
+                      }}
+                    ></ReportProblemIcon>
+                    </div>
                                   </div>
                                 </td>
                               </tr>
@@ -382,19 +441,33 @@ const DocumentScrutiny = (props) => {
                                 </td>
                                 <td>
                                   <div className="row">
-                                  <div className="btn btn-sm col-md-6">
+                                  <div className="btn btn-sm col-md-4">
                                      <IconButton 
                                     //  onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}
                                      >
                                       <VisibilityIcon color="info" className="icon" /></IconButton>
                                       </div>
-                                      <div className="btn btn-sm col-md-6">
+                                      <div className="btn btn-sm col-md-4">
                                 
                                   <IconButton 
                                   // onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}
                                   >
                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
                                       </div>
+                                      <div className="btn btn-sm col-md-4">
+                                      <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.IdentityProof
+                      }}
+                      onClick={() => {
+                        setOpennedModal("IdentityProof")
+                        setLabelValue("Identity Proof"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(item?.boardDoc || null);
+                      }}
+                    ></ReportProblemIcon>
+                    </div>
                                   </div>
                                 </td>
                               </tr>
@@ -406,18 +479,32 @@ const DocumentScrutiny = (props) => {
                                 </td>
                                 <td>
                                   <div className="row">
-                                  <div className="btn btn-sm col-md-6">
+                                  <div className="btn btn-sm col-md-4">
                                      <IconButton 
                                     //  onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}
                                      >
                                       <VisibilityIcon color="info" className="icon" /></IconButton>
                                       </div>
-                                      <div className="btn btn-sm col-md-6">
+                                      <div className="btn btn-sm col-md-4">
                                   <IconButton 
                                   // onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}
                                   >
                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
                                       </div>
+                                      <div className="btn btn-sm col-md-4">
+                                      <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.IdentityProof
+                      }}
+                      onClick={() => {
+                        setOpennedModal("IdentityProof")
+                        setLabelValue("Identity Proof"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(item?.boardDoc || null);
+                      }}
+                    ></ReportProblemIcon>
+                    </div>
                                   </div>
                                 </td>
                               </tr>
@@ -430,18 +517,32 @@ const DocumentScrutiny = (props) => {
                                 </td>
                                 <td>
                                   <div className="row">
-                                  <div className="btn btn-sm col-md-6">
+                                  <div className="btn btn-sm col-md-4">
                                      <IconButton 
                                     //  onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}
                                      >
                                       <VisibilityIcon color="info" className="icon" /></IconButton>
                                       </div>
-                                      <div className="btn btn-sm col-md-6">
+                                      <div className="btn btn-sm col-md-4">
                                   <IconButton 
                                   // onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}
                                   >
                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
                                   </div>
+                                  <div className="btn btn-sm col-md-4">
+                                      <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.IdentityProof
+                      }}
+                      onClick={() => {
+                        setOpennedModal("IdentityProof")
+                        setLabelValue("Identity Proof"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(item?.boardDoc || null);
+                      }}
+                    ></ReportProblemIcon>
+                    </div>
                                   </div>
                                 </td>
                               </tr>
