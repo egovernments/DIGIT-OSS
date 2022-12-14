@@ -284,7 +284,8 @@ class AmendmentRepositoryTest {
         MissingNode additionalDetails = MissingNode.getInstance();
         ProcessInstance workflow = new ProcessInstance();
         AmendmentUpdate amendmentUpdate = new AmendmentUpdate("42", "42", "42", auditDetails, additionalDetails, workflow,
-                AmendmentStatus.ACTIVE, new ArrayList<>());
+                AmendmentStatus.ACTIVE, new ArrayList<>(), AmendmentReason.COURT_CASE_SETTLEMENT, "123456",
+                Long.parseLong("16710091300"), Long.parseLong("16710091300"));
         amendmentUpdate.setStatus(AmendmentStatus.ACTIVE);
         ArrayList<AmendmentUpdate> amendmentUpdateList = new ArrayList<>();
         amendmentUpdateList.add(amendmentUpdate);
@@ -307,7 +308,8 @@ class AmendmentRepositoryTest {
         ProcessInstance workflow = new ProcessInstance();
 
         AmendmentUpdate amendmentUpdate = new AmendmentUpdate("42", "42", "42", auditDetails, additionalDetails, workflow,
-                AmendmentStatus.ACTIVE, new ArrayList<>());
+                AmendmentStatus.ACTIVE, new ArrayList<>(), AmendmentReason.COURT_CASE_SETTLEMENT, "123456",
+                Long.parseLong("16710091300"), Long.parseLong("16710091300"));
         amendmentUpdate.setStatus(AmendmentStatus.ACTIVE);
 
         ArrayList<AmendmentUpdate> amendmentUpdateList = new ArrayList<>();

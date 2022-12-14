@@ -186,6 +186,10 @@ public class AmendmentService {
 					.status(AmendmentStatus.CONSUMED)
 					.amendedDemandId(demand.getId())
 					.auditDetails(auditDetails)
+					.amendmentReason(amendment.getAmendmentReason())
+					.reasonDocumentNumber(amendment.getReasonDocumentNumber())
+					.effectiveFrom(amendment.getEffectiveFrom())
+					.effectiveTill(amendment.getEffectiveTill())
 					.build();
 			
 			amendmentRepository.updateAmendment(Arrays.asList(amendmentUpdate));
