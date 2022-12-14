@@ -65,7 +65,6 @@ const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => 
     setDisplayCheckedPersonalList(data.data);
     console.log("checked parent personal info data", data);
   };
-  // g
 
   // const getUncheckedLicenseDetailsInfo = (data) => {
   //   setDisplayLicenseDetailsInfo(data.data);
@@ -307,7 +306,7 @@ const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => 
           <Row style={{ top: 25, padding: 5 }}>
         <div className="ml-auto">
         {/* applicationNumber: "HR-TL-2022-12-06-000450" */}
-          {/* <h2>Application : 
+          {/* <h2>Application : h
         {apiResppnse.newServiceInfoData !== undefined ? apiResppnse.applicationNumber:null}
           </h2> */}
 
@@ -321,8 +320,7 @@ const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => 
               passUncheckedList={getUncheckedPersonalinfos}
               passCheckedList={getCheckedPersonalInfoValue}
               onClick={() => setOpen(!open)}
-              ApiResponseData={apiResppnse.newServiceInfoData !== undefined ? apiResppnse.newServiceInfoData[0].ApplicantInfo : null}
-              // remarkData={remarksResponse.egScrutiny !== undefined ? remarksResponse.egScrutiny : null}
+              ApiResponseData={apiResponse !== undefined ? apiResponse?.ApplicantInfo : null}
               showTable={curentDataPersonal}
               dataForIcons={iconStates}
             ></Personalinfo>
