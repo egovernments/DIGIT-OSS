@@ -4,6 +4,7 @@ import { useForm, useFieldArray } from "react-hook-form";
 import DDJAYForm from "../Step4/DdjayForm";
 import ResidentialPlottedForm from "./ResidentialPlotted";
 import IndustrialPlottedForm from "./IndustrialPlotted";
+import CommercialPlottedForm from "./CommercialPlotted";
 import LayoutPlan from "./LayoutPlan";
 import DemarcationPlan from "./DemarcationPlan";
 import { Form } from "react-bootstrap";
@@ -877,6 +878,7 @@ const AppliedDetailForm = (props) => {
                   <div>{Purpose === "DDJAY_APHP" && <DDJAYForm watch={watch} register={register} />}</div>
                   <div>{Purpose === "RPL" && <ResidentialPlottedForm register={register} />}</div>
                   <div>{Purpose === "IPL" && <IndustrialPlottedForm register={register} />}</div>
+                  <div>{Purpose === "CPL" && <CommercialPlottedForm register={register} />}</div>
                   <h5 className="text-black">NILP </h5>
                   <br></br>
                   <div className="table table-bordered table-responsive">

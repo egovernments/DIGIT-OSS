@@ -134,7 +134,6 @@ const ApllicantPuropseForm = (props) => {
       dataIndex: "registeringAuthority",
     },
     {
-      // key: "action",
       title: "Action",
       dataIndex: "",
       render: (data) => (
@@ -142,8 +141,10 @@ const ApllicantPuropseForm = (props) => {
           <EditIcon
             style={{ cursor: "pointer" }}
             onClick={() => {
-              setmodal(true);
+              console.log("data", data);
               setSpecificTableData(data);
+              setmodal(true);
+              setEdit(true);
             }}
             color="primary"
           />
@@ -175,6 +176,7 @@ const ApllicantPuropseForm = (props) => {
   const [docId, setDocId] = useState(null);
   const [loader, setLoader] = useState(false);
   const [getKhewats, setKhewats] = useState("");
+  const [getEdit, setEdit] = useState(false);
 
   const resetValues = () => {
     resetField("tehsil");
@@ -193,19 +195,18 @@ const ApllicantPuropseForm = (props) => {
     resetField("authSignature");
     resetField("collaboration");
     resetField("developerCompany");
+    resetField("validitydate");
     resetField("landOwner");
     resetField("nameAuthSign");
     resetField("registeringAuthority");
     resetField("consolidationType");
+    resetField("agreementIrrevocialble");
   };
 
   useEffect(() => {
     console.log("specificTableData", specificTableData);
     if (specificTableData) {
-      setValue("tehsil", specificTableData?.tehsil);
-      setValue("revenueEstate", specificTableData?.revenueEstate);
       setValue("hadbastNo", specificTableData?.hadbastNo);
-      setValue("rectangleNo", specificTableData?.rectangleNo);
       setValue("khewats", specificTableData?.khewats);
       setValue("consolidationType", specificTableData?.consolidationType);
       setValue("kanal", specificTableData?.kanal);
@@ -216,8 +217,21 @@ const ApllicantPuropseForm = (props) => {
       setValue("biswa", specificTableData?.biswa);
       setValue("collaboration", specificTableData?.collaboration);
       setValue("landOwner", specificTableData?.landOwner);
+      setValue("developerCompany", specificTableData?.developerCompany);
+      setValue("agreementValidFrom", specificTableData?.agreementValidFrom);
+      setValue("validitydate", specificTableData?.validitydate);
+      setValue("agreementIrrevocialble", specificTableData?.agreementIrrevocialble);
+      setValue("authSignature", specificTableData?.authSignature);
+      setValue("nameAuthSign", specificTableData?.nameAuthSign);
+      setValue("registeringAuthority", specificTableData?.registeringAuthority);
+      const tehsilValue = tehsilDataLabels?.data?.filter((item) => item?.value === specificTableData?.tehsil);
+      setValue("tehsil", { label: tehsilValue?.[0]?.label, value: tehsilValue?.[0]?.value });
+      const revenueValue = revenueDataLabels?.data?.filter((item) => item?.value === specificTableData?.revenueEstate);
+      setValue("revenueEstate", { label: revenueValue?.[0]?.label, value: revenueValue?.[0]?.value });
+      const mustilValue = mustilDataLabels?.data?.filter((item) => item?.value === specificTableData?.rectangleNo);
+      setValue("rectangleNo", { label: mustilValue?.[0]?.label, value: mustilValue?.[0]?.value });
     }
-  }, [specificTableData]);
+  }, [specificTableData, tehsilDataLabels, revenueDataLabels, mustilDataLabels]);
 
   const {
     register,
@@ -337,6 +351,9 @@ const ApllicantPuropseForm = (props) => {
   }, []);
 
   const ApplicantPurposeModalData = (modaldata) => {
+    console.log("specificTableData", specificTableData?.rowid);
+    const test = modalData?.filter((item) => item?.rowid === specificTableData?.rowid);
+    console.log("test", test);
     modaldata["tehsil"] = modaldata?.tehsil?.value;
     modaldata["revenueEstate"] = modaldata?.revenueEstate?.value;
     modaldata["rectangleNo"] = modaldata?.rectangleNo?.value;
@@ -358,9 +375,14 @@ const ApllicantPuropseForm = (props) => {
     }
     const length = modalData?.length + 1;
     modaldata["rowid"] = length.toString();
-    setModalData((prev) => [...prev, modaldata]);
+    if (specificTableData?.rowid) {
+      const filteredRowData = modalData?.filter((item) => item?.rowid !== specificTableData?.rowid);
+      setModalData([...filteredRowData, modaldata]);
+    } else {
+      setModalData((prev) => [...prev, modaldata]);
+    }
     setSpecificTableData(null);
-    resetValues();
+    // resetValues();
     setmodal(false);
   };
 
@@ -472,16 +494,13 @@ const ApllicantPuropseForm = (props) => {
 
   let delay;
 
-  // const setLandVal = () => {
-  //   if (delay) clearTimeout(delay);
-  //   delay = setTimeout(() => {
-  //     if (watch("khewats")) getLandOwnerStateData(watch("khewats"));
-  //   }, 300);
-  // };
-
   useEffect(() => {
+    console.log("here");
     delay = setTimeout(() => {
-      if (watch("khewats")) getLandOwnerStateData(watch("khewats"));
+      if (getKhewats) {
+        console.log("here", getKhewats);
+        getLandOwnerStateData(getKhewats);
+      }
     }, 500);
     return () => clearTimeout(delay);
   }, [getKhewats]);
@@ -602,7 +621,11 @@ const ApllicantPuropseForm = (props) => {
                   variant="primary"
                   onClick={() => {
                     if (!getValues()?.district) alert("Please Select District First To Proceed Further");
-                    else setmodal(true);
+                    else {
+                      resetValues();
+                      setSpecificTableData(null);
+                      setmodal(true);
+                    }
                   }}
                 >
                   Enter Details
@@ -638,7 +661,7 @@ const ApllicantPuropseForm = (props) => {
         <div style={{ padding: "4px", textAlign: "right" }}>
           <span
             onClick={() => {
-              resetValues();
+              // if (!getEdit) resetValues();
               setmodal(!modal);
             }}
             style={{ cursor: "pointer" }}

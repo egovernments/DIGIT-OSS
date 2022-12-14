@@ -224,6 +224,9 @@ const LandScheduleForm = (props) => {
                             <input {...register("licenseApplied")} type="radio" value="N" id="licenseApplied" />
                             &nbsp; No &nbsp;&nbsp;
                           </label>
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.licenseApplied && errors?.licenseApplied?.message}
+                          </h3>
                         </h2>
                       </div>
 
@@ -422,6 +425,9 @@ const LandScheduleForm = (props) => {
                             <input {...register("migrationLic")} type="radio" value="N" id="migrationLic" />
                             &nbsp; No &nbsp;&nbsp;
                           </label>
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.migrationLic && errors?.migrationLic?.message}
+                          </h3>
                         </h2>
                       </div>
                       {watch("migrationLic") === "Y" && (
@@ -586,6 +592,9 @@ const LandScheduleForm = (props) => {
                       <input {...register("encumburance")} type="radio" value="gair/marusi" id="encumburance" />
                       &nbsp;&nbsp; Gair/Marusi &nbsp;&nbsp;
                     </label>
+                    <h3 className="error-message" style={{ color: "red" }}>
+                      {errors?.encumburance && errors?.encumburance?.message}
+                    </h3>
                   </div>
                   <div className="row">
                     <div className="col col-4">
@@ -610,6 +619,9 @@ const LandScheduleForm = (props) => {
                         <input {...register("litigation")} type="radio" value="N" id="litigation" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.litigation && errors?.litigation?.message}
+                      </h3>
                     </h6>
                   </div>
                   <div className="row">
@@ -658,6 +670,9 @@ const LandScheduleForm = (props) => {
                         <input {...register("court")} type="radio" value="N" id="court" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.court && errors?.court?.message}
+                      </h3>
                     </h6>
                   </div>
                   <div className="row">
@@ -707,6 +722,9 @@ const LandScheduleForm = (props) => {
                         <input {...register("insolvency")} type="radio" value="N" id="insolvency" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.insolvency && errors?.insolvency?.message}
+                      </h3>
                     </h6>
                   </div>
                   <div className="row">
@@ -761,6 +779,9 @@ const LandScheduleForm = (props) => {
                         <input {...register("appliedLand")} type="radio" value="N" id="appliedLand" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.appliedLand && errors?.appliedLand?.message}
+                      </h3>
                       {watch("appliedLand") === "Y" && (
                         <div className="row ">
                           <div className="col col-12">
@@ -795,6 +816,9 @@ const LandScheduleForm = (props) => {
                         <input {...register("revenueRasta")} type="radio" value="N" id="revenueRasta" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.revenueRasta && errors?.revenueRasta?.message}
+                      </h3>
                       {watch("revenueRasta") === "Y" && (
                         <div className="row ">
                           <div className="col col">
@@ -823,6 +847,9 @@ const LandScheduleForm = (props) => {
                         <input {...register("waterCourse")} type="radio" value="N" id="waterCourse" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.waterCourse && errors?.waterCourse?.message}
+                      </h3>
                       {watch("waterCourse") === "Y" && (
                         <div className="row ">
                           <div className="col col">
@@ -839,7 +866,10 @@ const LandScheduleForm = (props) => {
                     </div>
 
                     <div className="col col-3 ">
-                      <h2>(d) &nbsp;Whether in Compact Block.</h2> <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;&nbsp;&nbsp;
+                      <h2>
+                        (d) &nbsp;Whether in Compact Block.<span style={{ color: "red" }}>*</span>
+                      </h2>{" "}
+                      &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="compactBlock">
                         <input {...register("compactBlock")} type="radio" value="Y" id="compactBlock" />
                         &nbsp; Yes &nbsp;&nbsp;
@@ -848,6 +878,9 @@ const LandScheduleForm = (props) => {
                         <input {...register("compactBlock")} type="radio" value="N" id="compactBlock" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.compactBlock && errors?.compactBlock?.message}
+                      </h3>
                       {watch("compactBlock") === "Y" && (
                         <div className="row ">
                           <div className="col col">
@@ -877,6 +910,9 @@ const LandScheduleForm = (props) => {
                         <input {...register("landSandwiched")} type="radio" value="N" id="landSandwiched" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.landSandwiched && errors?.landSandwiched?.message}
+                      </h3>
                       {watch("landSandwiched") === "Y" && (
                         <div className="row ">
                           <div className="col col-12">
@@ -903,6 +939,9 @@ const LandScheduleForm = (props) => {
                         <input {...register("acquistion")} type="radio" value="N" id="acquistion" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.acquistion && errors?.acquistion?.message}
+                      </h3>
                       {watch("acquistion") === "Y" && (
                         <div className="row ">
                           <div className="col col-12">
@@ -921,7 +960,9 @@ const LandScheduleForm = (props) => {
                         </h2>{" "}
                       </label>
                       <input type="date" {...register("sectionFour")} className="form-control" />
-                      <div className="invalid-feedback">{errors?.sectionFour?.message}</div>
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.sectionFour && errors?.sectionFour?.message}
+                      </h3>
                     </div>
                     <div className="col col-3">
                       <label>
@@ -930,7 +971,9 @@ const LandScheduleForm = (props) => {
                         </h2>
                       </label>
                       <input type="date" className="form-control" {...register("sectionSix")} />
-                      <div className="invalid-feedback">{errors?.sectionSix?.message}</div>
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.sectionSix && errors?.sectionSix?.message}
+                      </h3>
                     </div>
                   </div>{" "}
                   <br></br>
@@ -950,6 +993,9 @@ const LandScheduleForm = (props) => {
                         <input {...register("orderUpload")} type="radio" value="N" id="orderUpload" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.orderUpload && errors?.orderUpload?.message}
+                      </h3>
                       {watch("orderUpload") === "Y" && (
                         <div className="row ">
                           <div className="col col-3 ">
@@ -1027,6 +1073,9 @@ const LandScheduleForm = (props) => {
                           <input {...register("siteApproachable")} type="radio" value="N" id="siteApproachable" />
                           &nbsp; No &nbsp;&nbsp;
                         </label>
+                        <h3 className="error-message" style={{ color: "red" }}>
+                          {errors?.siteApproachable && errors?.siteApproachable?.message}
+                        </h3>
                       </h2>
                     </div>
                   </div>
@@ -1049,6 +1098,9 @@ const LandScheduleForm = (props) => {
                         <input {...register("vacant")} type="radio" value="N" id="vacant" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.vacant && errors?.vacant?.message}
+                      </h3>
                       {watch("vacant") === "Y" && (
                         <div className="row ">
                           <div className="col col">
@@ -1087,6 +1139,9 @@ const LandScheduleForm = (props) => {
                         <input {...register("construction")} type="radio" value="N" id="construction" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.construction && errors?.construction?.message}
+                      </h3>
                       {watch("construction") === "Y" && (
                         <div className="row ">
                           <div className="col col">
@@ -1123,6 +1178,9 @@ const LandScheduleForm = (props) => {
                         <input {...register("ht")} type="radio" value="N" id="HTLine" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.ht && errors?.ht?.message}
+                      </h3>
                       {watch("ht") === "Y" && (
                         <div className="row ">
                           <div className="col col">
@@ -1162,6 +1220,9 @@ const LandScheduleForm = (props) => {
                         <input {...register("gas")} type="radio" value="N" id="IOCGasPipeline" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.gas && errors?.gas?.message}
+                      </h3>
                       {watch("gas") === "Y" && (
                         <div className="row ">
                           <div className="col col">
@@ -1199,6 +1260,9 @@ const LandScheduleForm = (props) => {
                         <input {...register("nallah")} type="radio" value="N" id="nallah" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.nallah && errors?.nallah?.message}
+                      </h3>
                       {watch("nallah") === "Y" && (
                         <div className="row ">
                           <div className="col col">
@@ -1233,6 +1297,9 @@ const LandScheduleForm = (props) => {
                         <input {...register("road")} type="radio" value="N" id="road" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.road && errors?.road?.message}
+                      </h3>
                       {watch("road") === "Y" && (
                         <div className="row ">
                           <div className="col col-12">
@@ -1280,6 +1347,9 @@ const LandScheduleForm = (props) => {
                         <input {...register("marginalLand")} type="radio" value="N" id="marginalLand" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.marginalLand && errors?.marginalLand?.message}
+                      </h3>
                       {watch("marginalLand") === "Y" && (
                         <div className="row ">
                           <div className="col col">
@@ -1322,6 +1392,9 @@ const LandScheduleForm = (props) => {
                         <input {...register("utilityLine")} type="radio" value="N" id="utilityLine" />
                         &nbsp; No &nbsp;&nbsp;
                       </label>
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.utilityLine && errors?.utilityLine?.message}
+                      </h3>
                       {watch("utilityLine") === "Y" && (
                         <div className="row ">
                           <div className="col col-12">
@@ -1381,7 +1454,11 @@ const LandScheduleForm = (props) => {
                         // {...register("landSchedule")}
                         onChange={(e) => getDocumentData(e?.target?.files[0], "landSchedule")}
                       />
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.landSchedule && errors?.landSchedule?.message}
+                      </h3>
                     </div>
+
                     <div className="col col-3">
                       <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                         Copy of Mutation <span style={{ color: "red" }}>*</span>{" "}
@@ -1398,7 +1475,11 @@ const LandScheduleForm = (props) => {
                         // {...register("mutation")}
                         onChange={(e) => getDocumentData(e?.target?.files[0], "mutation")}
                       />
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.mutation && errors?.mutation?.message}
+                      </h3>
                     </div>
+
                     <div className="col col-3">
                       <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                         Copy of Jamabandi <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -1414,6 +1495,9 @@ const LandScheduleForm = (props) => {
                         // {...register("jambandhi")}
                         onChange={(e) => getDocumentData(e?.target?.files[0], "jambandhi")}
                       />
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.jambandhi && errors?.jambandhi?.message}
+                      </h3>
                     </div>
                     <div className="col col-3">
                       <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
@@ -1430,6 +1514,9 @@ const LandScheduleForm = (props) => {
                         // {...register("detailsOfLease")}
                         onChange={(e) => getDocumentData(e?.target?.files[0], "detailsOfLease")}
                       />
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.detailsOfLease && errors?.detailsOfLease?.message}
+                      </h3>
                     </div>
                   </div>
                   <br></br>
@@ -1453,6 +1540,9 @@ const LandScheduleForm = (props) => {
                         // {...register("addSalesDeed")}
                         onChange={(e) => getDocumentData(e?.target?.files[0], "addSalesDeed")}
                       />
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.addSalesDeed && errors?.addSalesDeed?.message}
+                      </h3>
                     </div>
                     <div className="col col-3">
                       <h2
@@ -1473,6 +1563,9 @@ const LandScheduleForm = (props) => {
                         // {...register("copyofSpaBoard")}
                         onChange={(e) => getDocumentData(e?.target?.files[0], "copyofSpaBoard")}
                       />
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.copyofSpaBoard && errors?.copyofSpaBoard?.message}
+                      </h3>
                     </div>
                     <div className="col col-3">
                       <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
@@ -1488,6 +1581,9 @@ const LandScheduleForm = (props) => {
                         // {...register("revisedLansSchedule")}
                         onChange={(e) => getDocumentData(e?.target?.files[0], "revisedLanSchedule")}
                       />
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.revisedLanSchedule && errors?.revisedLanSchedule?.message}
+                      </h3>
                     </div>
                     <div className="col col-3">
                       <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
@@ -1503,6 +1599,9 @@ const LandScheduleForm = (props) => {
                         // {...register("copyOfShajraPlan")}
                         onChange={(e) => getDocumentData(e?.target?.files[0], "copyOfShajraPlan")}
                       />
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.copyOfShajraPlan && errors?.copyOfShajraPlan?.message}
+                      </h3>
                     </div>
                   </div>
                   <div class="row">
