@@ -23,7 +23,7 @@ const MODAL_VALIDATION_SCHEMA = Yup.object().shape({
     value: Yup.string().required("This field is required"),
   }),
   hadbastNo: Yup.string().required("This field is required."),
-  khewats: Yup.string().required("This field is required."),
+  khewats: Yup.string().max(20).required("This field is required."),
   landOwner: Yup.string().required("This field is required."),
   consolidationType: Yup.string().nullable().required("This field is required."),
   collaboration: Yup.string().nullable().required("This field is required."),
