@@ -23,6 +23,7 @@ export const SelectPaymentType = (props) => {
   const { state = {} } = useLocation();
   const userInfo = Digit.UserService.getUser();
   const [showToast, setShowToast] = useState(null);
+  const [bankValue, setBankValue] = useState("");
   const { tenantId: __tenantId, authorization, workflow: wrkflow } = Digit.Hooks.useQueryParams();
   const paymentAmount = state?.paymentAmount;
   const { t } = useTranslation();
@@ -47,23 +48,40 @@ export const SelectPaymentType = (props) => {
     {}
   );
   const [selected, setSelected] = React.useState("");
-  const changeSelectOptionHandler = (event) => {
-    setSelected(event.target.value);
-  };
-  const netBanking = ["IDBI", "PNB"];
-  const onlineNeft = ["IDBI"];
-  const offlineChallan = ["IDBI", "PNB", "CBI"];
+  const changeSelectOptionHandler = (event) => setSelected(event.target.value);
+
+  const netBanking = [
+    { name: "Choose...", value: "" },
+    { name: "IDBI", value: "0300997" },
+    { name: "PNB", value: "0300999" },
+  ];
+  const onlineNeft = [
+    { name: "Choose...", value: "" },
+    { name: "IDBI", value: "0300997" },
+  ];
+  const offlineChallan = [
+    { name: "Choose...", value: "" },
+    { name: "IDBI", value: "1603" },
+    ,
+    { name: "PNB", value: "1600" },
+    ,
+    { name: "CBI", value: "1604" },
+  ];
   let type = null;
   let options = null;
-  if (selected === "Net banking/Debit card/Credit card") {
+  if (selected === "101") {
     type = netBanking;
-  } else if (selected === "Online NEFT/RTGS") {
+  } else if (selected === "102") {
     type = onlineNeft;
-  } else if (selected === "Offline Challan") {
+  } else if (selected === "103") {
     type = offlineChallan;
   }
   if (type) {
-    options = type.map((el) => <option key={el}>{el}</option>);
+    options = type.map((el) => (
+      <option value={el?.value} key={el}>
+        {el?.name}
+      </option>
+    ));
   }
   useEffect(() => {
     if (paymentdetails?.Bill && paymentdetails.Bill.length == 0) {
@@ -84,6 +102,8 @@ export const SelectPaymentType = (props) => {
       Transaction: {
         tenantId: tenantId,
         txnAmount: paymentAmount || billDetails.totalAmount,
+        bank: bankValue,
+        ptype: selected,
         module: businessService,
         billId: billDetails.id,
         consumerCode: wrkflow === "WNS" ? stringReplaceAll(consumerCode, "+", "/") : consumerCode,
@@ -113,7 +133,10 @@ export const SelectPaymentType = (props) => {
     try {
       const data = await Digit.PaymentService.createCitizenReciept(tenantId, filterData);
       const redirectUrl = data?.Transaction?.redirectUrl;
-      window.location = redirectUrl;
+      console.log("data====", data);
+      // window.location.replace(redirectUrl);
+      console.log("redirectUrl", redirectUrl);
+      // window.location = redirectUrl;
     } catch (error) {
       let messageToShow = "CS_PAYMENT_UNKNOWN_ERROR_ON_SERVER";
       if (error.response?.data?.Errors?.[0]) {
@@ -150,11 +173,11 @@ export const SelectPaymentType = (props) => {
                 <Form.Label>
                   <h2>Payment mode</h2>
                 </Form.Label>
-                <select className="form-control" onChange={changeSelectOptionHandler} {...register("PaymentMode")}>
+                <select className="form-control" onChange={changeSelectOptionHandler} {...register("pmode")}>
                   <option>Choose...</option>
-                  <option>Net banking/Debit card/Credit card</option>
-                  <option>Online NEFT/RTGS</option>
-                  <option>Offline Challan</option>
+                  <option value="101">Net banking/Debit card/Credit card</option>
+                  <option value="102">Online NEFT/RTGS</option>
+                  <option value="103">Offline Challan</option>
                 </select>
               </div>
             </div>
@@ -163,7 +186,7 @@ export const SelectPaymentType = (props) => {
                 <Form.Label>
                   <h2>Payment Aggregator</h2>
                 </Form.Label>
-                <select className="form-control" {...register("PaymentAggregator")}>
+                <select className="form-control" onChange={(e) => setBankValue(e?.target?.value)} id="submit" {...register("bank")}>
                   {
                     /** This is where we have used our options variable */
                     options
@@ -186,8 +209,9 @@ export const SelectPaymentType = (props) => {
             <div>
               {/* <Button style={{ textAlign: "right" }}> Generate LOI</Button> */}
 
-              {!showToast && <SubmitBar label={t("PAYMENT_CS_BUTTON_LABEL")} submit={true} />}
+              {!showToast && bankValue && selected && <SubmitBar label={t("PAYMENT_CS_BUTTON_LABEL")} submit={true} />}
             </div>
+            {/* )} */}
           </div>
         </Card>
       </form>
