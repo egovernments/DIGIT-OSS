@@ -34,9 +34,11 @@ export const SelectPaymentType = (props) => {
     handleSubmit,
     formState: { errors },
     control,
-    watch,
-    setValue,
-  } = useForm();
+  } = useForm({
+    mode: "onChange",
+    reValidateMode: "onChange",
+    shouldFocusError: true,
+  });
   const { pathname, search } = useLocation();
   // const menu = ["AXIS"];
   const { consumerCode, businessService } = useParams();
@@ -48,6 +50,7 @@ export const SelectPaymentType = (props) => {
     {}
   );
   const [selected, setSelected] = React.useState("");
+  const [getRemarks, setRemarks] = React.useState("");
   const changeSelectOptionHandler = (event) => setSelected(event.target.value);
 
   const netBanking = [
@@ -77,8 +80,8 @@ export const SelectPaymentType = (props) => {
     type = offlineChallan;
   }
   if (type) {
-    options = type.map((el) => (
-      <option value={el?.value} key={el}>
+    options = type.map((el, index) => (
+      <option key={`key${index}`} value={el?.value}>
         {el?.name}
       </option>
     ));
@@ -98,12 +101,16 @@ export const SelectPaymentType = (props) => {
   const billDetails = paymentdetails?.Bill ? paymentdetails?.Bill[0] : {};
 
   const onSubmit = async (d) => {
+    console.log("userInfo", userInfo);
+    console.log(d);
     const filterData = {
       Transaction: {
         tenantId: tenantId,
         txnAmount: paymentAmount || billDetails.totalAmount,
         bank: bankValue,
         ptype: selected,
+        remarks: getRemarks,
+        address: "haryana",
         module: businessService,
         billId: billDetails.id,
         consumerCode: wrkflow === "WNS" ? stringReplaceAll(consumerCode, "+", "/") : consumerCode,
@@ -207,9 +214,24 @@ export const SelectPaymentType = (props) => {
               />
             )}
             <div>
+              <div>
+                <label>
+                  <h2>Enter Remarks</h2>
+                </label>
+              </div>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Enter remarks"
+                {...register("remarks")}
+                onChange={(e) => setRemarks(e?.target?.value)}
+              />
+              {errors?.remarks && errors?.remarks?.message}
+            </div>
+            <div style={{ marginTop: "5px" }}>
               {/* <Button style={{ textAlign: "right" }}> Generate LOI</Button> */}
 
-              {!showToast && bankValue && selected && <SubmitBar label={t("PAYMENT_CS_BUTTON_LABEL")} submit={true} />}
+              {!showToast && bankValue && selected && <SubmitBar type="submit" label={t("PAYMENT_CS_BUTTON_LABEL")} submit={true} />}
             </div>
             {/* )} */}
           </div>
