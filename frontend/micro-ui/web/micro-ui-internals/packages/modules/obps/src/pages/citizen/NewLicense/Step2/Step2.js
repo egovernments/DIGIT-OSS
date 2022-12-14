@@ -1,41 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { Button, Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import { Modal, ModalHeader, ModalBody, ModalFooter, CloseButton } from "reactstrap";
 import axios from "axios";
 import { yupResolver } from "@hookform/resolvers/yup";
 import WorkingTable from "../../../../components/Table";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { VALIDATION_SCHEMA } from "../../../../utils/schema/step2";
+import { VALIDATION_SCHEMA, MODAL_VALIDATION_SCHEMA } from "../../../../utils/schema/step2";
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
 import Spinner from "../../../../components/Loader";
 import { getDocShareholding } from "../docView/docView.help";
 
 const ApllicantPuropseForm = (props) => {
-  const resetFields = {
-    tehsil: "",
-    revenueEstate: "",
-    rectangleNo: "",
-    kanal: "",
-    marla: "",
-    sarsai: "",
-    bigha: "",
-    biswa: "",
-    biswansi: "",
-    agreementIrrevocialble: "",
-    agreementValidFrom: "",
-    agreementValidTill: "",
-    authSignature: "",
-    collaboration: "",
-    developerCompany: "",
-    landOwner: "",
-    nameAuthSign: "",
-    registeringAuthority: "",
-  };
   const datapost = {
     RequestInfo: {
       apiId: "Rainmaker",
@@ -154,16 +134,23 @@ const ApllicantPuropseForm = (props) => {
       dataIndex: "",
       render: (data) => (
         <div>
-          <h6
+          <EditIcon
+            style={{ cursor: "pointer" }}
             onClick={() => {
               setmodal(true);
               setSpecificTableData(data);
             }}
-          >
-            <EditIcon color="primary" />
+            color="primary"
+          />
 
-            <DeleteIcon color="error" />
-          </h6>
+          <DeleteIcon
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              const filteredData = modalData?.filter((item) => item?.rowid !== data?.rowid);
+              setModalData(filteredData);
+            }}
+            color="error"
+          />
         </div>
       ),
     },
@@ -182,18 +169,47 @@ const ApllicantPuropseForm = (props) => {
   const [potentialOptons, setPotentialOptions] = useState({ data: [], isLoading: true });
   const [docId, setDocId] = useState(null);
   const [loader, setLoader] = useState(false);
+  const [getKhewats, setKhewats] = useState("");
+
+  const resetValues = () => {
+    resetField("tehsil");
+    resetField("revenueEstate");
+    resetField("rectangleNo");
+    resetField("hadbastNo");
+    resetField("khewats");
+    resetField("kanal");
+    resetField("marla");
+    resetField("sarsai");
+    resetField("bigha");
+    resetField("biswa");
+    resetField("biswansi");
+    resetField("agreementValidFrom");
+    resetField("agreementValidTill");
+    resetField("authSignature");
+    resetField("collaboration");
+    resetField("developerCompany");
+    resetField("landOwner");
+    resetField("nameAuthSign");
+    resetField("registeringAuthority");
+    resetField("consolidationType");
+  };
 
   useEffect(() => {
+    console.log("specificTableData", specificTableData);
     if (specificTableData) {
       setValue("tehsil", specificTableData?.tehsil);
       setValue("revenueEstate", specificTableData?.revenueEstate);
+      setValue("hadbastNo", specificTableData?.hadbastNo);
       setValue("rectangleNo", specificTableData?.rectangleNo);
+      setValue("khewats", specificTableData?.khewats);
+      setValue("consolidationType", specificTableData?.consolidationType);
       setValue("kanal", specificTableData?.kanal);
       setValue("marla", specificTableData?.marla);
       setValue("sarsai", specificTableData?.sarsai);
       setValue("bigha", specificTableData?.bigha);
       setValue("biswansi", specificTableData?.biswansi);
       setValue("biswa", specificTableData?.biswa);
+      setValue("collaboration", specificTableData?.collaboration);
       setValue("landOwner", specificTableData?.landOwner);
     }
   }, [specificTableData]);
@@ -207,13 +223,11 @@ const ApllicantPuropseForm = (props) => {
     reset,
     getValues,
     watch,
+    resetField,
   } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
-    resolver: yupResolver(VALIDATION_SCHEMA),
-    defaultValues: {
-      consolidationType: "consolidated",
-    },
+    resolver: yupResolver(modal ? MODAL_VALIDATION_SCHEMA : VALIDATION_SCHEMA),
     shouldFocusError: true,
   });
 
@@ -317,31 +331,32 @@ const ApllicantPuropseForm = (props) => {
     DistrictApiCall();
   }, []);
 
-  const ApplicantPurposeModalData = (modalData) => {
-    modalData["tehsil"] = modalData?.tehsil?.value;
-    modalData["revenueEstate"] = modalData?.revenueEstate?.value;
-    modalData["rectangleNo"] = modalData?.rectangleNo?.value;
-    modalData["registeringAuthorityDoc"] = docId;
-    delete modalData?.district;
-    delete modalData?.potential;
-    delete modalData?.purpose;
-    delete modalData?.state;
+  const ApplicantPurposeModalData = (modaldata) => {
+    modaldata["tehsil"] = modaldata?.tehsil?.value;
+    modaldata["revenueEstate"] = modaldata?.revenueEstate?.value;
+    modaldata["rectangleNo"] = modaldata?.rectangleNo?.value;
+    modaldata["registeringAuthorityDoc"] = docId;
+    delete modaldata?.district;
+    delete modaldata?.potential;
+    delete modaldata?.purpose;
+    delete modaldata?.state;
 
-    if (modalData?.consolidationType === "consolidated") {
-      delete modalData?.bigha;
-      delete modalData?.biswa;
-      delete modalData?.biswansi;
+    if (modaldata?.consolidationType === "consolidated") {
+      delete modaldata?.bigha;
+      delete modaldata?.biswa;
+      delete modaldata?.biswansi;
     }
-    if (modalData?.consolidationType === "non-consolidated") {
-      delete modalData?.marla;
-      delete modalData?.kanal;
-      delete modalData?.sarsai;
+    if (modaldata?.consolidationType === "non-consolidated") {
+      delete modaldata?.marla;
+      delete modaldata?.kanal;
+      delete modaldata?.sarsai;
     }
-    modalData["rowid"] = "1";
-
-    setModalData((prev) => [...prev, modalData]);
+    const length = modalData?.length + 1;
+    modaldata["rowid"] = length.toString();
+    setModalData((prev) => [...prev, modaldata]);
+    setSpecificTableData(null);
+    resetValues();
     setmodal(false);
-    // reset(resetFields);
   };
 
   const PurposeFormSubmitHandler = async (data) => {
@@ -452,12 +467,19 @@ const ApllicantPuropseForm = (props) => {
 
   let delay;
 
+  // const setLandVal = () => {
+  //   if (delay) clearTimeout(delay);
+  //   delay = setTimeout(() => {
+  //     if (watch("khewats")) getLandOwnerStateData(watch("khewats"));
+  //   }, 300);
+  // };
+
   useEffect(() => {
     delay = setTimeout(() => {
       if (watch("khewats")) getLandOwnerStateData(watch("khewats"));
     }, 500);
     return () => clearTimeout(delay);
-  }, [watch("khewats")]);
+  }, [getKhewats]);
 
   return (
     <div>
@@ -607,20 +629,18 @@ const ApllicantPuropseForm = (props) => {
         </Card>
       </form>
 
-      <Modal
-        size="xl"
-        isOpen={modal}
-        toggle={() => {
-          // reset(resetFields);
-          setmodal(!modal);
-        }}
-      >
-        <ModalHeader
-          toggle={() => {
-            setmodal(!modal);
-            // reset(resetFields);
-          }}
-        ></ModalHeader>
+      <Modal size="xl" isOpen={modal} toggle={() => setmodal(!modal)}>
+        <div style={{ padding: "4px", textAlign: "right" }}>
+          <span
+            onClick={() => {
+              resetValues();
+              setmodal(!modal);
+            }}
+            style={{ cursor: "pointer" }}
+          >
+            X
+          </span>
+        </div>
         <ModalBody>
           <form onSubmit={handleSubmit(ApplicantPurposeModalData)}>
             <Row className="ml-auto mb-3">
@@ -643,8 +663,9 @@ const ApllicantPuropseForm = (props) => {
                     setTehsilCode(e.value);
                   }}
                 />
+
                 <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.tehsil && errors?.tehsil?.message}
+                  {errors?.tehsil?.value && errors?.tehsil?.value?.message}
                 </h3>
               </Col>
               <Col md={4} xxl lg="4">
@@ -665,7 +686,7 @@ const ApllicantPuropseForm = (props) => {
                 />
 
                 <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.revenueEstate && errors?.revenueEstate?.message}
+                  {errors?.revenueEstate?.value && errors?.revenueEstate?.value?.message}
                 </h3>
               </Col>
               <Col md={4} xxl lg="4">
@@ -677,9 +698,9 @@ const ApllicantPuropseForm = (props) => {
                   </Form.Label>
                 </div>
                 <input type="number" className="form-control" placeholder="" {...register("hadbastNo")} />
-                {/* <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.revenueEstate && errors?.revenueEstate?.message}
-                </h3> */}
+                <h3 className="error-message" style={{ color: "red" }}>
+                  {errors?.hadbastNo && errors?.hadbastNo?.message}
+                </h3>
               </Col>
             </Row>
 
@@ -699,8 +720,9 @@ const ApllicantPuropseForm = (props) => {
                   labels="Rectangle No."
                   {...register("rectangleNo")}
                 />
+
                 <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.mustil && errors?.mustil?.message}
+                  {errors?.rectangleNo?.value && errors?.rectangleNo?.value?.message}
                 </h3>
               </Col>
 
@@ -712,9 +734,15 @@ const ApllicantPuropseForm = (props) => {
                     </h2>
                   </label>
                 </div>
-                <input type="text" className="form-control" placeholder="Enter Khewat" {...register("khewats")} />
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Enter Khewat"
+                  {...register("khewats")}
+                  onChange={(e) => setKhewats(e?.target?.value)}
+                />
                 <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.khewats?.value && errors?.khewats?.value?.message}
+                  {errors?.khewats && errors?.khewats?.message}
                 </h3>
               </Col>
               <Col md={4} xxl lg="4">
@@ -738,14 +766,7 @@ const ApllicantPuropseForm = (props) => {
                   <h2>
                     Consolidation Type<span style={{ color: "red" }}>*</span> &nbsp;&nbsp;&nbsp;&nbsp;
                     <label htmlFor="consolidated">
-                      <input
-                        {...register("consolidationType")}
-                        type="radio"
-                        value="consolidated"
-                        defaultChecked={true}
-                        defaultValue="consolidated"
-                        id="consolidated"
-                      />
+                      <input {...register("consolidationType")} type="radio" value="consolidated" defaultValue="consolidated" id="consolidated" />
                       &nbsp; Consolidated &nbsp;&nbsp;
                     </label>
                     <label htmlFor="non-consolidated">
@@ -753,6 +774,9 @@ const ApllicantPuropseForm = (props) => {
                       &nbsp; Non-Consolidated &nbsp;&nbsp;
                     </label>
                   </h2>
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.consolidationType && errors?.consolidationType?.message}
+                  </h3>
                 </div>
 
                 {watch("consolidationType") == "consolidated" && (
@@ -852,6 +876,9 @@ const ApllicantPuropseForm = (props) => {
                     <input {...register("collaboration")} type="radio" value="N" id="no" />
                     &nbsp;&nbsp; No &nbsp;&nbsp;
                   </label>
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.collaboration && errors?.collaboration?.message}
+                  </h3>
                 </h2>
                 {watch("collaboration") === "Y" && (
                   <div>

@@ -43,6 +43,8 @@ const ApllicantFormStep1 = (props) => {
   });
 
   const ApplicantFormSubmitHandlerForm = async (data) => {
+    props.Step1Continue("6", "userInfo", "licData");
+
     const token = window?.localStorage?.getItem("token");
     data["notSigned"] = data?.notSigned?.value;
     const postDistrict = {
