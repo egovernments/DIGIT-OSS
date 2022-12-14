@@ -254,7 +254,7 @@ const ApllicantPuropseForm = (props) => {
     });
     setPotentialOptions({ data: potential, isLoading: false });
   }, [PotentialType]);
-
+ 
   const DistrictApiCall = async () => {
     try {
       const Resp = await axios.post("/egov-mdms-service/v1/_district", datapost);
