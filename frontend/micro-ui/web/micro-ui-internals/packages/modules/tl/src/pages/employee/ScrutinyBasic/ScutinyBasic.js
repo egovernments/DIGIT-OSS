@@ -65,7 +65,6 @@ const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => 
     setDisplayCheckedPersonalList(data.data);
     console.log("checked parent personal info data", data);
   };
-  // g
 
   // const getUncheckedLicenseDetailsInfo = (data) => {
   //   setDisplayLicenseDetailsInfo(data.data);
@@ -321,8 +320,7 @@ const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => 
               passUncheckedList={getUncheckedPersonalinfos}
               passCheckedList={getCheckedPersonalInfoValue}
               onClick={() => setOpen(!open)}
-              ApiResponseData={apiResppnse.newServiceInfoData !== undefined ? apiResppnse.newServiceInfoData[0].ApplicantInfo : null}
-              // remarkData={remarksResponse.egScrutiny !== undefined ? remarksResponse.egScrutiny : null}
+              ApiResponseData={apiResponse !== undefined ? apiResponse?.ApplicantInfo : null}
               showTable={curentDataPersonal}
               dataForIcons={iconStates}
             ></Personalinfo>
