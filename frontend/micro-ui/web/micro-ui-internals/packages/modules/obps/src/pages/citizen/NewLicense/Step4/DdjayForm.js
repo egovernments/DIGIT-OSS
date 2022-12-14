@@ -22,7 +22,9 @@ const DDJAYForm = ({ register, watch }) => {
             <tr>
               <td>
                 <div className="px-2">
-                  <p className="mb-2">Details of frozen plots (50%)</p>
+                  <p className="mb-2">
+                    Details of frozen plots (50%) <span style={{ color: "red" }}>*</span>
+                  </p>
                 </div>
               </td>
               <td align="right">
@@ -41,7 +43,8 @@ const DDJAYForm = ({ register, watch }) => {
           <div className="col col-12">
             <h6>
               {" "}
-              Whether one organizes open space/pocket of min area 0.3 acre proposed in the layout plan (Yes/No)&nbsp;&nbsp;
+              Whether one organizes open space/pocket of min area 0.3 acre proposed in the layout plan (Yes/No){" "}
+              <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
               <input type="radio" value="Y" id="Yes" {...register("organize")} name="Yes" />
               &nbsp;&nbsp;
               <label className="m-0  mx-2" for="Yes">

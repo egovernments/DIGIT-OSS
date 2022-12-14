@@ -2,21 +2,35 @@ import React, { useState, useEffect } from "react";
 import { Card, Row, Col, Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { getDocShareholding } from "../NewLicense/docView/docView.help";
 
 const ServicePlanService = () => {
-  const { register, handleSubmit } = useForm();
   const [file, setFile] = useState(null);
   const [LOCNumber, setLOCNumber] = useState("");
   const [submitDataLabel, setSubmitDataLabel] = useState([]);
   const [ServicePlanDataLabel, setServicePlanDataLabel] = useState([]);
   const [docUpload, setDocuploadData] = useState([]);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+    setValue,
+    watch,
+  } = useForm({
+    mode: "onChange",
+
+    shouldFocusError: true,
+  });
 
   const servicePlan = async (data) => {
+    const token = window?.localStorage?.getItem("token");
     console.log(data);
     try {
       const postDistrict = {
         requestInfo: {
-          api_id: "1",
+          api_id: "Rainmaker",
           ver: "1",
           ts: null,
           action: "create",
@@ -24,19 +38,11 @@ const ServicePlanService = () => {
           key: "",
           msg_id: "",
           requester_id: "",
-          auth_token: null,
+          authToken: token,
         },
 
-        servicePlanRequest: {
+        ServicePlanRequest: {
           ...data,
-          //   loiNumber: data?.loiNumber,
-          //   undertaking: data?.undertaking,
-          //   selfCertifiedDrawingsFromCharetedEng: data?.selfCertifiedDrawingsFromCharetedEng,
-          //   selfCertifiedDrawingFromEmpaneledDoc: data?.selfCertifiedDrawingFromEmpaneledDoc?.[0]?.name,
-          //   environmentalClearance: data?.environmentalClearance?.[0]?.name,
-          //   shapeFileAsPerTemplate: data?.shapeFileAsPerTemplate?.[0]?.name,
-          //   autoCadFile: data?.autoCadFile?.[0]?.name,
-          //   certifieadCopyOfThePlan: data?.certifieadCopyOfThePlan?.[0]?.name,
         },
       };
       const Resp = await axios.post("/land-services/serviceplan/_create", postDistrict);
@@ -45,37 +51,27 @@ const ServicePlanService = () => {
       console.log(error.message);
     }
   };
-  console.log("uu", ServicePlanDataLabel);
-
-  const getDocumentData = async () => {
-    if (file === null) {
-      return;
-    }
+  const [fileStoreId, setFileStoreId] = useState({});
+  const getDocumentData = async (file, fieldName) => {
     const formData = new FormData();
-    formData.append("file", file.file);
+    formData.append("file", file);
     formData.append("tenantId", "hr");
     formData.append("module", "property-upload");
     formData.append("tag", "tag-property");
-
+    // setLoader(true);
     try {
-      const Resp = await axios
-        .post("/filestore/v1/files", formData, {
-          headers: {
-            "content-type": "multipart/form-data",
-          },
-        })
-        .then((response) => {
-          return response;
-        });
-
-      setDocuploadData(Resp.data);
+      const Resp = await axios.post("/filestore/v1/files", formData, {});
+      setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
+      setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
+      // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
+      console.log("getval======", getValues());
+      // setLoader(false);
     } catch (error) {
+      // setLoader(false);
       console.log(error.message);
     }
   };
-  useEffect(() => {
-    getDocumentData();
-  }, [file]);
+
   // const getSubmitDataLabel = async () => {
   //   try {
   //     const postDistrict = {
@@ -92,7 +88,7 @@ const ServicePlanService = () => {
   //       },
   //     };
 
-  //     const Resp = await axios.post(`http://10.1.1.18:8443/land-services/serviceplan/_get?loiNumber=123`, postDistrict);
+  //     const Resp = await axios.post(`http://10.1.1.18:80/land-services/serviceplan/_get?loiNumber=123`, postDistrict);
   //   } catch (error) {
   //     console.log(error.message);
   //   }
@@ -183,9 +179,11 @@ const ServicePlanService = () => {
                   <input
                     type="file"
                     className="form-control"
-                    {...register("selfCertifiedDrawingFromEmpaneledDoc")}
-                    onChange1={(e) => setFile({ file: e.target.files[0] })}
+                    onChange={(e) => getDocumentData(e?.target?.files[0], "selfCertifiedDrawingFromEmpaneledDoc")}
                   />
+                  <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.selfCertifiedDrawingFromEmpaneledDoc)}>
+                    {" "}
+                  </VisibilityIcon>
                 </td>
               </tr>
               <tr>
@@ -201,9 +199,12 @@ const ServicePlanService = () => {
                   <input
                     type="file"
                     className="form-control"
-                    {...register("environmentalClearance")}
-                    onChange1={(e) => setFile({ file: e.target.files[0] })}
+                    // {...register("environmentalClearance")}
+                    onChange={(e) => getDocumentData(e?.target?.files[0], "environmentalClearance")}
                   />
+                  <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.environmentalClearance)}>
+                    {" "}
+                  </VisibilityIcon>
                 </td>
               </tr>
               <tr>
@@ -219,9 +220,12 @@ const ServicePlanService = () => {
                   <input
                     type="file"
                     className="form-control"
-                    {...register("shapeFileAsPerTemplate")}
-                    onChange1={(e) => setFile({ file: e.target.files[0] })}
+                    // {...register("shapeFileAsPerTemplate")}
+                    onChange={(e) => getDocumentData(e?.target?.files[0], "shapeFileAsPerTemplate")}
                   />
+                  <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.shapeFileAsPerTemplate)}>
+                    {" "}
+                  </VisibilityIcon>
                 </td>
               </tr>
               <tr>
@@ -234,7 +238,15 @@ const ServicePlanService = () => {
                   <h2>AutoCAD (DXF) file.</h2>
                 </td>
                 <td component="th" scope="row">
-                  <input type="file" className="form-control" {...register("autoCadFile")} onChange1={(e) => setFile({ file: e.target.files[0] })} />
+                  <input
+                    type="file"
+                    className="form-control"
+                    // {...register("autoCadFile")}
+                    onChange={(e) => getDocumentData(e?.target?.files[0], "autoCadFile")}
+                  />
+                  <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.autoCadFile)}>
+                    {" "}
+                  </VisibilityIcon>
                 </td>
               </tr>
               <tr>
@@ -250,9 +262,12 @@ const ServicePlanService = () => {
                   <input
                     type="file"
                     className="form-control"
-                    {...register("certifieadCopyOfThePlan")}
-                    onChange1={(e) => setFile({ file: e.target.files[0] })}
+                    // {...register("certifieadCopyOfThePlan")}
+                    onChange={(e) => getDocumentData(e?.target?.files[0], "certifieadCopyOfThePlan")}
                   />
+                  <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.certifieadCopyOfThePlan)}>
+                    {" "}
+                  </VisibilityIcon>
                 </td>
               </tr>
             </tbody>

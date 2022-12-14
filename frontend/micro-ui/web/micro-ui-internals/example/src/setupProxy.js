@@ -88,6 +88,9 @@ module.exports = function (app) {
     "/filestore/v1/files",
     "/land-services/_calculate",
     "/user/developer/_getAuthorizedUser",
+    "/land-services/new/licenses/_get",
+    "/land-services/electric/plan/_create",
+    "/land-services/serviceplan/_create",
     "/land-services/new/licenses/_get"
   ].forEach((location) => app.use(location, createProxy));
   ["/pb-egov-assets"].forEach((location) => app.use(location, assetsProxy));
