@@ -796,58 +796,36 @@ const PersonalinfoChild = (props) => {
         </Col>
         <Col md={4} xxl lg="4">
           <div>
-            <Form.Label
-              data-toggle="tooltip"
-              data-placement="top"
-              title="If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)"
-            >
-              {/* <b> LC-I is not signed</b> */}
-              <h5 className={classes.formLabel} >LC-I is not signed &nbsp;</h5>
-              {/* <InfoIcon /> */}
+            <Form.Label>
+              {/* <b>Address for communication</b> */}
+              <h5 className={classes.formLabel} >Address for communication &nbsp;</h5>
             </Form.Label>
           </div>
-          {/* <Form.Check
-          value="If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)"
-          type="radio"
-          id="default-radio"
-          label={<AiFillCheckCircle class="fa fa-check text-success" size={18}></AiFillCheckCircle>}
-          label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-          name="group14"
-          inline
-        ></Form.Check>
-        <Form.Check
-          onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-          value="If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)"
-          type="radio"
-          id="default-radio"
-           label={<AiFillCloseCircle class="fa fa-times text-danger" size={18}></AiFillCloseCircle>}
-          label={<CancelIcon color="error" />}
-          name="group14"
-          inline
-        ></Form.Check> */}
           <div className={classes.fieldContainer}>
             <Form.Control
               className={classes.formControl}
-              placeholder={personalinfo !== null ? personalinfo.LC : null}
+              placeholder={personalinfo !== null ? personalinfo.permanentAddress : null}
               disabled
             ></Form.Control>
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
-                color: fieldIconColors.lciNotSigned }}
+                color: fieldIconColors.addressForCommunication }}
               onClick={() => {
-                setOpennedModal("lciNotSigned")
-                setLabelValue("If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)"),
+                setOpennedModal("addressForCommunication")
+                setLabelValue("Address for communication"),
                   setSmShow(true),
                   console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.LC : null);
+                  setFieldValue(personalinfo !== null ? personalinfo.permanentAddress : null);
               }}
             ></ReportProblemIcon>
           </div>
         </Col>
+        
+        
       </Row>
       <Row className={[classes.row,"ms-auto"]}>
-        <Col md={4} xxl lg="4">
+      <Col md={4} xxl lg="4">
           <div>
             <Form.Label
               data-toggle="tooltip"
@@ -900,60 +878,55 @@ const PersonalinfoChild = (props) => {
         </Col>
         <Col md={4} xxl lg="4">
           <div>
-            <Form.Label>
-              {/* <b>Address for communication</b> */}
-              <h5 className={classes.formLabel} >Address for communication &nbsp;</h5>
+            <Form.Label
+              data-toggle="tooltip"
+              data-placement="top"
+              title="If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)"
+            >
+              {/* <b> LC-I is not signed</b> */}
+              <h5 className={classes.formLabel} >LC-I is not signed &nbsp;</h5>
+              {/* <InfoIcon /> */}
             </Form.Label>
           </div>
+          {/* <Form.Check
+          value="If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)"
+          type="radio"
+          id="default-radio"
+          label={<AiFillCheckCircle class="fa fa-check text-success" size={18}></AiFillCheckCircle>}
+          label={<CheckCircleIcon color="success"></CheckCircleIcon>}
+          name="group14"
+          inline
+        ></Form.Check>
+        <Form.Check
+          onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
+          value="If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)"
+          type="radio"
+          id="default-radio"
+           label={<AiFillCloseCircle class="fa fa-times text-danger" size={18}></AiFillCloseCircle>}
+          label={<CancelIcon color="error" />}
+          name="group14"
+          inline
+        ></Form.Check> */}
           <div className={classes.fieldContainer}>
             <Form.Control
               className={classes.formControl}
-              placeholder={personalinfo !== null ? personalinfo.permanentAddress : null}
+              placeholder={personalinfo !== null ? personalinfo.LC : null}
               disabled
             ></Form.Control>
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
-                color: fieldIconColors.addressForCommunication }}
+                color: fieldIconColors.lciNotSigned }}
               onClick={() => {
-                setOpennedModal("addressForCommunication")
-                setLabelValue("Address for communication"),
+                setOpennedModal("lciNotSigned")
+                setLabelValue("If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)"),
                   setSmShow(true),
                   console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.permanentAddress : null);
+                  setFieldValue(personalinfo !== null ? personalinfo.LC : null);
               }}
             ></ReportProblemIcon>
           </div>
         </Col>
-        <Col md={4} xxl lg="4">
-          <div>
-            <Form.Label data-toggle="tooltip" data-placement="top" title="Name of the authorized person to sign the application">
-              <h5 className={classes.formLabel} >Authorized person &nbsp;</h5>
-            </Form.Label>
-          </div>
-
-          <div className={classes.fieldContainer}>
-            <Form.Control
-              className={classes.formControl}
-              placeholder={personalinfo !== null ? personalinfo.notSigned : null}
-              disabled
-            ></Form.Control>
-            &nbsp;&nbsp;
-            <ReportProblemIcon
-              style={{
-                color: fieldIconColors.authPerson }}
-              onClick={() => {
-                setOpennedModal("authPerson")
-                setLabelValue("Name of the authorized person to sign the application"),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.notSigned : null);
-              }}
-            ></ReportProblemIcon>
-          </div>
-        </Col>
-      </Row>
-      <Row className={[classes.row,"ms-auto"]}>
         <Col md={4} xxl lg="4">
           <div>
             <Form.Label>
@@ -978,6 +951,37 @@ const PersonalinfoChild = (props) => {
                   setSmShow(true),
                   console.log("modal open"),
                   setFieldValue(personalinfo !== null ? personalinfo.email : null);
+              }}
+            ></ReportProblemIcon>
+          </div>
+        </Col>
+        
+      </Row>
+      <Row className={[classes.row,"ms-auto"]}>
+      
+        <Col md={4} xxl lg="4">
+          <div>
+            <Form.Label data-toggle="tooltip" data-placement="top" title="Name of the authorized person to sign the application">
+              <h5 className={classes.formLabel} >Authorized person &nbsp;</h5>
+            </Form.Label>
+          </div>
+
+          <div className={classes.fieldContainer}>
+            <Form.Control
+              className={classes.formControl}
+              placeholder={personalinfo !== null ? personalinfo.notSigned : null}
+              disabled
+            ></Form.Control>
+            &nbsp;&nbsp;
+            <ReportProblemIcon
+              style={{
+                color: fieldIconColors.authPerson }}
+              onClick={() => {
+                setOpennedModal("authPerson")
+                setLabelValue("Name of the authorized person to sign the application"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.notSigned : null);
               }}
             ></ReportProblemIcon>
           </div>

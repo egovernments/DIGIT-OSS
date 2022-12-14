@@ -1,4 +1,3 @@
-
 const { createProxyMiddleware } = require("http-proxy-middleware");
 
 const createProxy = createProxyMiddleware({
@@ -94,11 +93,7 @@ module.exports = function (app) {
     "/land-services/new/licenses/_get"
   ].forEach((location) => app.use(location, createProxy));
   ["/pb-egov-assets"].forEach((location) => app.use(location, assetsProxy));
-  [
-    "/mca/v1/companies",
-    "/mca-directors/v1/companies",
-    "/certificate/v3/pan/pancr"
-  ].forEach((location) => app.use(location, apiSetuProxy));
+  ["/mca/v1/companies", "/mca-directors/v1/companies", "/certificate/v3/pan/pancr"].forEach((location) => app.use(location, apiSetuProxy));
   // ["/egov-mdms-service/v1"].forEach((location) => app.use(location, LicProxy));
   // ["/filestore/v1"].forEach((location) => app.use(location, docUploadProxy));
   // ["/user/developer"].forEach((location) => app.use(location, devRegistration));
@@ -106,4 +101,3 @@ module.exports = function (app) {
    "/land-services/new/licenses"
   ].forEach((location) => app.use(location, EgScrutinyProxy));
 };
-

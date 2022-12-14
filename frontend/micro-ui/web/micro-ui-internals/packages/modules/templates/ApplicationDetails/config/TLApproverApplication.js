@@ -1,4 +1,4 @@
-import { Dropdown, UploadFile } from "@egovernments/digit-ui-react-components";
+import { Dropdown, MultiSelectDropdown, UploadFile } from "@egovernments/digit-ui-react-components";
 import React from "react";
 
 export const configTLApproverApplication = ({
@@ -32,14 +32,23 @@ export const configTLApproverApplication = ({
             // isMandatory: false,
             type: "dropdown",
             populators: !checkCondtions ? null : (
-              <Dropdown
-                option={approvers}
-                autoComplete="off"
-                optionKey="name"
-                id="fieldInspector"
-                select={setSelectedApprover}
-                selected={selectedApprover}
-              />
+              // <Dropdown
+              //   option={approvers}
+              //   autoComplete="off"
+              //   optionKey="name"
+              //   id="fieldInspector"
+              //   select={setSelectedApprover}
+              //   selected={selectedApprover}
+              // />
+              
+              <MultiSelectDropdown
+              options={approvers}
+              autoComplete="off"
+              optionKey="name"
+              id="fieldInspector"
+              onSelect={setSelectedApprover}
+              selected={selectedApprover}
+            />
             ),
           },
           {
