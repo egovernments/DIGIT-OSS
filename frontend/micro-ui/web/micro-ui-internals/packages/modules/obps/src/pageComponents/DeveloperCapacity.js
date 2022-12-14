@@ -124,10 +124,10 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
             setTechnicalCapacityOutsideHaryana(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.technicalCapacityOutsideHaryana);
             setTechnicalCapacityOutsideHaryanaDetails(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.technicalCapacityOutsideHaryanaDetails || technicalCapacityOutsideHaryanaDetails)
             setTechnicalCapacitySoughtFromAnyColonizer({
-                licNo: developerDataGet?.devDetail[0]?.capacityDevelopAColony?.obtainedLicense?.licNo || "",
-                dateOfGrantingLic: developerDataGet?.devDetail[0]?.capacityDevelopAColony?.obtainedLicense?.dateOfGrantingLic || "",
-                licValidity: developerDataGet?.devDetail[0]?.capacityDevelopAColony?.obtainedLicense?.licValidity || "",
-                purpose: developerDataGet?.devDetail[0]?.capacityDevelopAColony?.obtainedLicense?.purpose || ""
+                licNo: developerDataGet?.devDetail[0]?.capacityDevelopAColony?.obtainedLicense[0]?.licNo || "",
+                dateOfGrantingLic: developerDataGet?.devDetail[0]?.capacityDevelopAColony?.obtainedLicense[0]?.dateOfGrantingLic || "",
+                licValidity: developerDataGet?.devDetail[0]?.capacityDevelopAColony?.obtainedLicense[0]?.licValidity || "",
+                purpose: developerDataGet?.devDetail[0]?.capacityDevelopAColony?.obtainedLicense[0]?.purpose || ""
             })
             setDocumentsData(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.documents)
         } catch (error) {
@@ -264,7 +264,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
         purpose: ""
     })
 
-
+    // console.log("LIC NO...",technicalCapacitySoughtFromAnyColonizer.licNo)
     const { data: PurposeType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
 
     useEffect(() => {
@@ -2059,7 +2059,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                             <a
                                                                                 onClick={() => getDocShareholding(DevelopersAllData?.agreementDocY)}
                                                                             >
-                                                                                <VisibilityIcon />
+                                                                                <VisibilityIcon color="info" className="icon" />
                                                                             </a> : <p></p>
                                                                         }
                                                                     </td>
@@ -2084,7 +2084,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                             <a
                                                                                 onClick={() => getDocShareholding(DevelopersAllData?.boardDocX)}
                                                                             >
-                                                                                <VisibilityIcon />
+                                                                                <VisibilityIcon color="info" className="icon" />
                                                                             </a> : <p></p>
                                                                         }
                                                                     </td>
@@ -2105,7 +2105,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                         {DevelopersAllData?.registeredDoc !== "" ?
                                                                             <a 
                                                                                 onClick={() => getDocShareholding(DevelopersAllData?.registeredDoc)} >
-                                                                                <VisibilityIcon />
+                                                                                <VisibilityIcon color="info" className="icon" />
                                                                             </a> : <p></p>
                                                                         }
                                                                     </td>
@@ -2129,7 +2129,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                         {DevelopersAllData?.boardDocY !== "" ?
                                                                             <a 
                                                                                 onClick={() => getDocShareholding(DevelopersAllData?.boardDocY)}  >
-                                                                                <VisibilityIcon />
+                                                                                <VisibilityIcon color="info" className="icon" />
                                                                             </a> : <p></p>
                                                                         }
                                                                     </td>
