@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button, Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Modal, ModalHeader, ModalBody, ModalFooter, CloseButton } from "reactstrap";
@@ -16,28 +16,6 @@ import Spinner from "../../../../components/Loader";
 import { getDocShareholding } from "../docView/docView.help";
 
 const ApllicantPuropseForm = (props) => {
-  const resetFields = {
-    tehsil: "",
-    revenueEstate: "",
-    rectangleNo: "",
-    hadbastNo: "",
-    khewats: "",
-    kanal: "",
-    marla: "",
-    sarsai: "",
-    bigha: "",
-    biswa: "",
-    biswansi: "",
-    agreementIrrevocialble: "",
-    agreementValidFrom: "",
-    agreementValidTill: "",
-    authSignature: "",
-    collaboration: "",
-    developerCompany: "",
-    landOwner: "",
-    nameAuthSign: "",
-    registeringAuthority: "",
-  };
   const datapost = {
     RequestInfo: {
       apiId: "Rainmaker",
@@ -191,6 +169,7 @@ const ApllicantPuropseForm = (props) => {
   const [potentialOptons, setPotentialOptions] = useState({ data: [], isLoading: true });
   const [docId, setDocId] = useState(null);
   const [loader, setLoader] = useState(false);
+  const [getKhewats, setKhewats] = useState("");
 
   const resetValues = () => {
     resetField("tehsil");
@@ -488,21 +467,19 @@ const ApllicantPuropseForm = (props) => {
 
   let delay;
 
-  const setLandVal = () => {
-    if (delay) clearTimeout(delay);
-    delay = setTimeout(() => {
-      if (watch("khewats")) getLandOwnerStateData(watch("khewats"));
-    }, 300);
-  };
-
-  // useEffect(() => {
+  // const setLandVal = () => {
   //   if (delay) clearTimeout(delay);
-
   //   delay = setTimeout(() => {
   //     if (watch("khewats")) getLandOwnerStateData(watch("khewats"));
-  //   }, 500);
-  //   return () => clearTimeout(delay);
-  // }, [watch("khewats")]);
+  //   }, 300);
+  // };
+
+  useEffect(() => {
+    delay = setTimeout(() => {
+      if (watch("khewats")) getLandOwnerStateData(watch("khewats"));
+    }, 500);
+    return () => clearTimeout(delay);
+  }, [getKhewats]);
 
   return (
     <div>
@@ -757,7 +734,13 @@ const ApllicantPuropseForm = (props) => {
                     </h2>
                   </label>
                 </div>
-                <input onChange={() => setLandVal()} type="text" className="form-control" placeholder="Enter Khewat" {...register("khewats")} />
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Enter Khewat"
+                  {...register("khewats")}
+                  onChange={(e) => setKhewats(e?.target?.value)}
+                />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.khewats && errors?.khewats?.message}
                 </h3>
