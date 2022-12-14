@@ -81,7 +81,7 @@ const {id} = useParams();
     config:{EditRenewalApplastModifiedTime:EditRenewalApplastModifiedTime},
   });
   
-  const { isLoading, isError, data: applicationDetailsTemp, error } = Digit.Hooks.tl.useApplicationDetail(t, tenantId, id);
+  const applicationDetailsTemp = Digit.Hooks.tl.useApplicationDetail(t, tenantId, id);
   
 
 
@@ -128,7 +128,6 @@ const {id} = useParams();
   }
 
   const submitAction = async (data, nocData = false, isOBPS = {}) => {
-    console.log("log123...upDate",data,nocData,isOBPS)
     setIsEnableLoader(true);
     if (typeof data?.customFunctionToExecute === "function") {
       data?.customFunctionToExecute({ ...data });
@@ -155,7 +154,6 @@ const {id} = useParams();
     }
     if (mutate) {
       setIsEnableLoader(true);
-      console.log("log123...mutate",mutate)
       mutate(data, {
         onError: (error, variables) => {
           setIsEnableLoader(false);
@@ -187,15 +185,15 @@ const {id} = useParams();
   };
 
   useEffect(()=>{
-    console.log("log123...",applicationDetailsTemp)
-    if(applicationDetailsTemp){
-      setApplicationDetails(applicationDetailsTemp)
+    console.log("log123...applicationDetailsAPI",applicationDetailsTemp)
+    if(applicationDetailsTemp?.data){
+      setApplicationDetails(applicationDetailsTemp?.data)
     }
-  },[applicationDetailsTemp])
+  },[applicationDetailsTemp?.data])
 
 
   useEffect(() => {
-    console.log("log123...",id,workflowDetailsTemp,scrutinyDetails,applicationDetails)
+    console.log("log123...wrkflw",id,workflowDetailsTemp,scrutinyDetails,applicationDetails)
     if (workflowDetailsTemp?.data?.applicationBusinessService) {
       setWorkflowDetails(workflowDetailsTemp);
       setBusinessService(workflowDetailsTemp?.data?.applicationBusinessService);
@@ -212,7 +210,7 @@ const {id} = useParams();
     <Card>
       <Row style={{ top: 25, padding: 5 }}>
         <div className="ml-auto">
-          <h2>Application : 181</h2>
+          <h2>Application : {id}</h2>
         </div>
       </Row>
       <Row style={{ top: 30, padding: 10 }}>

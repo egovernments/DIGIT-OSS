@@ -54,6 +54,7 @@ const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => 
   const [urlGetShareHoldingDoc,setDocShareHoldingUrl] = useState("")
 
   const userInfo = Digit.UserService.getUser()?.info || {};
+  const authToken = Digit.UserService.getUser()?.access_token || null;
 
 
   const getUncheckedPersonalinfos = (data) => {
@@ -120,7 +121,7 @@ const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => 
   // };
   const handleGetFiledsStatesById=async()=>{
       const dataToPass={
-        "requestInfo": {
+        "RequestInfo": {
             "api_id": "1",
             "ver": "1",
             "ts": null,
@@ -129,7 +130,8 @@ const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => 
             "key": "",
             "msg_id": "",
             "requester_id": "",
-            "auth_token": null
+            "auth_token": authToken,
+            "authToken": authToken
         }
     };
     try {
@@ -147,7 +149,7 @@ const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => 
   }
   const handleGetDisapprovalList = async () => {
     const dataToPass = {
-      requestInfo: {
+      RequestInfo: {
         api_id: "1",
         ver: "1",
         ts: null,
@@ -156,7 +158,8 @@ const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => 
         key: "",
         msg_id: "",
         requester_id: "",
-        auth_token: null,
+        auth_token: authToken,
+        // authToken: authToken
       },
     };
     try {
@@ -181,7 +184,7 @@ const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => 
         msgId: "20170310130900|en_IN",
         ts: 0,
         ver: ".01",
-        authToken: "80458c19-3b48-4aa8-b86e-e2e195e6753a",
+        authToken: authToken,
         userInfo: userInfo,
       },
     };

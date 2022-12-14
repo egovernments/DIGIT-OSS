@@ -50,8 +50,8 @@ export const TLSearch = {
     const filter = { applicationNumber };
     const response = await TLSearch.application(tenantId, filter);
     const propertyDetails =
-      response?.tradeLicenseDetail?.additionalDetail?.propertyId &&
-      (await Digit.PTService.search({ tenantId, filters: { propertyIds: response?.tradeLicenseDetail?.additionalDetail?.propertyId } }));
+    response?.tradeLicenseDetail?.additionalDetail?.propertyId &&
+    (await Digit.PTService.search({ tenantId, filters: { propertyIds: response?.tradeLicenseDetail?.additionalDetail?.propertyId } }));
     let numOfApplications = [];
     if (response?.licenseNumber) {
       const licenseNumbers = response?.licenseNumber;
@@ -75,13 +75,13 @@ export const TLSearch = {
           value: response?.tradeLicenseDetail?.structureType
             ? `COMMON_MASTERS_STRUCTURETYPE_${response?.tradeLicenseDetail?.structureType?.split(".")[0]}`
             : "NA",
-        },
-        {
+          },
+          {
           title: "TL_NEW_TRADE_DETAILS_STRUCT_SUB_TYPE_LABEL",
           value: response?.tradeLicenseDetail?.structureType
-            ? `TL_${response?.tradeLicenseDetail?.tradeType}`
+          ? `TL_${response?.tradeLicenseDetail?.tradeType}`
             : "NA",
-        },
+          },
         {
           title: "TL_NEW_TRADE_DETAILS_TRADE_COMM_DATE_LABEL",
           value: response?.commencementDate ? convertEpochToDate(response?.commencementDate) : "NA",
@@ -152,7 +152,7 @@ export const TLSearch = {
         },
       ],
     };
-
+    
     const cityOfApp = cloneDeep(response?.tradeLicenseDetail?.address?.city);
     const localityCode = cloneDeep(response?.tradeLicenseDetail?.address?.locality?.code);
     const tradeAddress = {
@@ -165,9 +165,9 @@ export const TLSearch = {
         { title: "TL_LOCALIZATION_STREET_NAME", value: response?.tradeLicenseDetail?.address?.street || "NA" },
       ],
     };
-
+    
     const checkOwnerLength = response?.tradeLicenseDetail?.owners?.length || 1;
-    const owners = response?.tradeLicenseDetail?.subOwnerShipCategory.includes("INSTITUTIONAL")
+    const owners = response?.tradeLicenseDetail?.subOwnerShipCategory?.includes("INSTITUTIONAL")
       ? {
           title: "ES_NEW_APPLICATION_OWNERSHIP_DETAILS",
           additionalDetails: {
@@ -246,6 +246,8 @@ export const TLSearch = {
             ],
           },
         };
+
+        // return console.log("log123,application Hook log",response,response?.tradeLicenseDetail?.subOwnerShipCategory,response?.tradeLicenseDetail?.subOwnerShipCategory?.includes("INSTITUTIONAL"))
 
     if (response?.workflowCode == "NewTL" && response?.status !== "APPROVED") {
       const details = {
