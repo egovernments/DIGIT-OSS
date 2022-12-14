@@ -346,6 +346,9 @@ const ApllicantPuropseForm = (props) => {
   }, []);
 
   const ApplicantPurposeModalData = (modaldata) => {
+    console.log("specificTableData", specificTableData?.rowid);
+    const test = modalData?.filter((item) => item?.rowid === specificTableData?.rowid);
+    console.log("test", test);
     modaldata["tehsil"] = modaldata?.tehsil?.value;
     modaldata["revenueEstate"] = modaldata?.revenueEstate?.value;
     modaldata["rectangleNo"] = modaldata?.rectangleNo?.value;
@@ -367,7 +370,12 @@ const ApllicantPuropseForm = (props) => {
     }
     const length = modalData?.length + 1;
     modaldata["rowid"] = length.toString();
-    setModalData((prev) => [...prev, modaldata]);
+    if (specificTableData?.rowid) {
+      const filteredRowData = modalData?.filter((item) => item?.rowid !== specificTableData?.rowid);
+      setModalData([...filteredRowData, modaldata]);
+    } else {
+      setModalData((prev) => [...prev, modaldata]);
+    }
     setSpecificTableData(null);
     // resetValues();
     setmodal(false);
