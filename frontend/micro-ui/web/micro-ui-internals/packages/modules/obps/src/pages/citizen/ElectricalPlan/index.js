@@ -25,7 +25,7 @@ const electricalPlanService = () => {
     try {
       const postDistrict = {
         requestInfo: {
-          api_id: "Rainmaker",
+          api_id: "1",
           ver: "1",
           ts: null,
           action: "create",
@@ -33,7 +33,7 @@ const electricalPlanService = () => {
           key: "",
           msg_id: "",
           requester_id: "",
-          auth_token: token,
+          authToken: token,
         },
 
         ElectricPlanRequest: {
