@@ -250,7 +250,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   const [file, setFile] = useState(null);
   const [cinValError, setCINValError] = useState("")
   const [showDevTypeFieldsValue, setShowDevTypeFieldsValue] = useState("")
-  const [remainingStakeholderPercentage, setRemainingStakeholderPercentage] = useState();
+  const [remainingStakeholderPercentage, setRemainingStakeholderPercentage] = useState(100);
   const [show, setShow] = useState(false);
   const [showStake, setShowStakeholder] = useState(false);
 
