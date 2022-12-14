@@ -65,6 +65,7 @@ const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => 
     setDisplayCheckedPersonalList(data.data);
     console.log("checked parent personal info data", data);
   };
+  // g
 
   // const getUncheckedLicenseDetailsInfo = (data) => {
   //   setDisplayLicenseDetailsInfo(data.data);
