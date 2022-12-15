@@ -564,8 +564,6 @@ class Property extends Component {
           }
         }
       });
-      console.log("latestPropertyDetails", latestPropertyDetails && latestPropertyDetails.status);
-      console.log("propertyItems", this.props.propertyItems);
       return flag;
     };
 
