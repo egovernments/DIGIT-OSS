@@ -1035,7 +1035,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                             <input
                                                                 id="individualCertificateCA"
                                                                 type="file"
-                                                                accept="application/pdf"
+                                                                // accept="application/pdf"
                                                                 style={{ display: "none" }}
                                                                 onChange={(e) => getDocumentData(e?.target?.files[0], "individualCertificateCA")}
                                                             />
@@ -1892,7 +1892,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                 /> */}
                                                             </td>
                                                             <td>
-                                                                {Documents?.agreementDoc !== "" ?
+                                                                {Documents?.agreementDoc ?
                                                                     <a  onClick={() => getDocShareholding(Documents?.agreementDoc)} className="btn btn-sm col-md-6">
                                                                         <VisibilityIcon color="info" className="icon" />
                                                                     </a> : <p></p>
@@ -1923,7 +1923,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                 /> */}
                                                             </td>
                                                             <td>
-                                                                {Documents?.boardDoc !== "" ?
+                                                                {Documents?.boardDoc ?
                                                                     <a  onClick={() => getDocShareholding(Documents?.boardDoc)} className="btn btn-sm col-md-6">
                                                                         <VisibilityIcon color="info" className="icon" />
                                                                     </a> : <p></p>
@@ -2080,7 +2080,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                         /> */}
                                                                     </td>
                                                                     <td>
-                                                                        {Documents?.agreementDocY !== "" ?
+                                                                        {Documents?.agreementDocY ?
                                                                             <a
                                                                                 onClick={() => getDocShareholding(Documents?.agreementDocY)}
                                                                             >
@@ -2113,7 +2113,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                         /> */}
                                                                     </td>
                                                                     <td>
-                                                                        {Documents?.boardDocX !== "" ?
+                                                                        {Documents?.boardDocX ?
                                                                             <a
                                                                                 onClick={() => getDocShareholding(Documents?.boardDocX)}
                                                                             >
@@ -2143,7 +2143,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                         /> */}
                                                                     </td>
                                                                     <td>
-                                                                        {Documents?.registeredDoc !== "" ?
+                                                                        {Documents?.registeredDoc ?
                                                                             <a 
                                                                                 onClick={() => getDocShareholding(Documents?.registeredDoc)} >
                                                                                 <VisibilityIcon color="info" className="icon" />
@@ -2175,7 +2175,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                         /> */}
                                                                     </td>
                                                                     <td>
-                                                                        {Documents?.boardDocY !== "" ?
+                                                                        {Documents?.boardDocY ?
                                                                             <a 
                                                                                 onClick={() => getDocShareholding(Documents?.boardDocY)}  >
                                                                                 <VisibilityIcon color="info" className="icon" />
@@ -2391,14 +2391,21 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                             </td>
 
                                                             <td>
+                                                                <label for="engineerSignId"> <FileUpload color="primary" /></label>
                                                                 <input
+                                                                    id="engineerSignId"
                                                                     type="file"
                                                                     name="engineerSign"
-                                                                    // onChange={(e) => setEngineerSign(e.target.value)}
+                                                                    style={{ display: "none" }}
+                                                                    onChange={(e) => getDocumentData(e?.target?.files[0], "engineerSign")}
+                                                                />
+                                                                {/* <input
+                                                                    type="file"
+                                                                    name="engineerSign"
                                                                     onChange={(e) => getDocumentData(e?.target?.files[0], "engineerSign")}
                                                                     placeholder=""
                                                                     class="employee-card-input"
-                                                                />
+                                                                /> */}
                                                             </td>
                                                             <td align="center" size="large">
                                                                 {Documents?.engineerSign ?
@@ -2431,13 +2438,20 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                             </td>
 
                                                             <td>
+                                                                <label for="architectSignId"> <FileUpload color="primary" /></label>
                                                                 <input
+                                                                    id="architectSignId"
                                                                     type="file"
-                                                                    // onChange={((e) => setArchitectSign(e.target.value))}
+                                                                    name="architectSign"
+                                                                    style={{ display: "none" }}
+                                                                    onChange={(e) => getDocumentData(e?.target?.files[0], "architectSign")}
+                                                                />
+                                                                {/* <input
+                                                                    type="file"
                                                                     onChange={(e) => getDocumentData(e?.target?.files[0], "architectSign")}
                                                                     placeholder=""
                                                                     class="employee-card-input"
-                                                                />
+                                                                /> */}
                                                             </td>
                                                             <td align="center" size="large">
                                                                 {Documents?.architectSign ?
@@ -2470,13 +2484,20 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                             </td>
 
                                                             <td>
+                                                                <label for="townPlannerSignId"> <FileUpload color="primary" /></label>
                                                                 <input
+                                                                    id="townPlannerSignId"
                                                                     type="file"
-                                                                    // onChange={((e) => setTownPlannerSign(e.target.value))}
+                                                                    name="townPlannerSign"
+                                                                    style={{ display: "none" }}
+                                                                    onChange={(e) => getDocumentData(e?.target?.files[0], "townPlannerSign")}
+                                                                />
+                                                                {/* <input
+                                                                    type="file"
                                                                     onChange={(e) => getDocumentData(e?.target?.files[0], "townPlannerSign")}
                                                                     placeholder=""
                                                                     class="employee-card-input"
-                                                                />
+                                                                /> */}
                                                             </td>
                                                             <td align="center" size="large">
                                                                 {Documents?.townPlannerSign ?
