@@ -177,7 +177,7 @@ components:
           type: object
           description: Key-value pairs of metric_names to metric_values
           example: '{
-            "snoForMuninipalCorporation": "1",
+            "snoForMunicipalCorporation": "1",
             "ulbName": "Amritsar",
             "budgetProposedForMunicipalCorporation": 10000000
           }'
