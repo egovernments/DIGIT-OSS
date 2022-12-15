@@ -87,7 +87,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       setIncorporation(developerDataGet?.devDetail[0]?.addInfo?.incorporationDate);
       setRegistered(developerDataGet?.devDetail[0]?.addInfo?.registeredAddress);
       setUserEmail(developerDataGet?.devDetail[0]?.addInfo?.email);
-      setUserEmailInd(developerDataGet?.devDetail[0]?.addInfo?.emailId);
+      setUserEmailInd(developerDataGet?.devDetail[0]?.licenceDetails?.email);
       // setMobile(developerDataGet?.devDetail[0]?.addInfo?.mobileNumber);
       setGST(developerDataGet?.devDetail[0]?.addInfo?.gst_Number);
       setTbName(developerDataGet?.devDetail[0]?.addInfo?.sharName);
@@ -100,7 +100,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       setModalNAme(developerDataGet?.devDetail[0]?.addInfo?.modalNAme);
       setModaldesignition(developerDataGet?.devDetail[0]?.addInfo?.modaldesignition);
       setModalPercentage(developerDataGet?.devDetail[0]?.addInfo?.modalPercentage);
-      setModalValuesArray(developerDataGet?.devDetail[0]?.addInfo?.shareHoldingPatterens || "");
+      setModalValuesArray(developerDataGet?.devDetail[0]?.addInfo?.shareHoldingPatterens || []);
       setOthersArray(developerDataGet?.devDetail[0]?.addInfo?.othersDetails || othersArray)
       setExistingColonizerDetails(developerDataGet?.devDetail[0]?.addInfo?.existingColonizerData || existingColonizerDetails)
       setExistingColonizer(developerDataGet?.devDetail[0]?.addInfo?.existingColonizer || "")
@@ -136,7 +136,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   const [mobileNumberUser, setMobileNumber] = useState((!isOpenLinkFlow ? userInfo?.info?.mobileNumber : "") ||
     formData?.LicneseDetails?.mobileNumberUser || formData?.formData?.LicneseDetails?.mobileNumberUser || ""
   );
-  const [emailId, setUserEmailInd] = useState((!isOpenLinkFlow ? userInfo?.info?.emailId : "") || formData?.LicneseDetails?.emailId || formData?.formData?.LicneseDetails?.emailId || "")
+  const [emailId, setUserEmailInd] = useState( formData?.LicneseDetails?.emailId || formData?.formData?.LicneseDetails?.emailId || "")
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
   const [developerTypeOptions, setDevTypeOptions] = useState({ data: [], isLoading: true })
@@ -239,7 +239,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   const [modalPercentage, setModalPercentage] = useState("");
   // const dispatch = useDispatch();
 
-  const [modalValuesArray, setModalValuesArray] = useState([] || developerDataGet?.devDetail[0]?.addInfo?.shareHoldingPatterens);
+  const [modalValuesArray, setModalValuesArray] = useState([]);
   const [modalDirectorValuesArray, setModalDirectorValuesArray] = useState([]);
   const [modalDIN, setModalDIN] = useState("")
   const [modalDirectorName, setModalDirectorName] = useState("")
@@ -623,7 +623,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   return (
     <div>
       <div className={isOpenLinkFlow ? "OpenlinkContainer" : ""}>
-        {JSON.stringify(showDevTypeFields)}efewfewfef
+        {/* {JSON.stringify(showDevTypeFields)}efewfewfef */}
         {isOpenLinkFlow && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
         <Timeline currentStep={2} flow="STAKEHOLDER" />
         {!isLoading ?
@@ -724,7 +724,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             value={emailId}
                             placeholder={emailId}
                             name="emailId"
-                            onChange={(e) => setUserEmailInd(e.target.value)}
+                            onChange={(e) => setUserEmailIndVal(e.target.value)}
                             // disabled="disabled"
                             className="employee-card-input"
                           // name="email"
