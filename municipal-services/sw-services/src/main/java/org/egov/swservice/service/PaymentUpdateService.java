@@ -269,13 +269,24 @@ public class PaymentUpdateService {
 	 */
 	private EventRequest getEventRequest(SewerageConnectionRequest request, Property property, PaymentDetail paymentDetail) {
 
-		//Return without sending notifs for disconnection payment since payment is managed in workflow notifs
-		if(request.isDisconnectRequest())
-			return null;
-
 		String localizationMessage = notificationUtil
 				.getLocalizationMessages(property.getTenantId(), request.getRequestInfo());
-		String message = notificationUtil.getMessageTemplate(SWConstants.PAYMENT_NOTIFICATION_APP, localizationMessage);
+
+		String applicationStatus = request.getSewerageConnection().getApplicationStatus();
+		String notificationTemplate = SWConstants.PAYMENT_NOTIFICATION_APP;
+		ProcessInstance workflow = request.getSewerageConnection().getProcessInstance();
+		StringBuilder builder = new StringBuilder();
+		int reqType;
+
+		//Condition to assign Disconnection application Payment Notification code
+		if ((!workflow.getAction().equalsIgnoreCase(SWConstants.ACTIVATE_CONNECTION)) &&
+				(!workflow.getAction().equalsIgnoreCase(APPROVE_CONNECTION)) && sewerageServicesUtil.isDisconnectConnectionRequest(request)) {
+			reqType = DISCONNECT_CONNECTION;
+			notificationTemplate = notificationUtil.getCustomizedMsgForInAppForPayment(workflow.getAction(), applicationStatus, reqType);
+		}
+
+		String message = notificationUtil.getMessageTemplate(notificationTemplate, localizationMessage);
+
 		if (message == null) {
 			log.info("No message template found for, {} " + SWConstants.PAYMENT_NOTIFICATION_APP);
 			return null;
@@ -357,13 +368,24 @@ public class PaymentUpdateService {
 	private List<SMSRequest> getSmsRequest(SewerageConnectionRequest sewerageConnectionRequest,
 										   Property property, PaymentDetail paymentDetail) {
 
-		//Return without sending notifs for disconnection payment since payment is managed in workflow notifs
-		if(sewerageConnectionRequest.isDisconnectRequest())
-			return null;
-
 		String localizationMessage = notificationUtil.getLocalizationMessages(property.getTenantId(),
 				sewerageConnectionRequest.getRequestInfo());
-		String message = notificationUtil.getMessageTemplate(SWConstants.PAYMENT_NOTIFICATION_SMS, localizationMessage);
+
+		String applicationStatus = sewerageConnectionRequest.getSewerageConnection().getApplicationStatus();
+		String notificationTemplate = SWConstants.PAYMENT_NOTIFICATION_APP;
+		ProcessInstance workflow = sewerageConnectionRequest.getSewerageConnection().getProcessInstance();
+		StringBuilder builder = new StringBuilder();
+		int reqType;
+
+		//Condition to assign Disconnection application Payment Notification code
+		if ((!workflow.getAction().equalsIgnoreCase(SWConstants.ACTIVATE_CONNECTION)) &&
+				(!workflow.getAction().equalsIgnoreCase(APPROVE_CONNECTION)) && sewerageServicesUtil.isDisconnectConnectionRequest(sewerageConnectionRequest)) {
+			reqType = DISCONNECT_CONNECTION;
+			notificationTemplate = notificationUtil.getCustomizedMsgForSMSForPayment(workflow.getAction(), applicationStatus, reqType);
+		}
+
+		String message = notificationUtil.getMessageTemplate(notificationTemplate, localizationMessage);
+
 		if (message == null) {
 			log.info("No message template found for, {} " + SWConstants.PAYMENT_NOTIFICATION_SMS);
 			return Collections.emptyList();
@@ -410,13 +432,24 @@ public class PaymentUpdateService {
 	private List<EmailRequest> getEmailRequest(SewerageConnectionRequest sewerageConnectionRequest,
 											   Property property, PaymentDetail paymentDetail) {
 
-		//Return without sending notifs for disconnection payment since payment is managed in workflow notifs
-		if(sewerageConnectionRequest.isDisconnectRequest())
-			return null;
-
 		String localizationMessage = notificationUtil.getLocalizationMessages(property.getTenantId(),
 				sewerageConnectionRequest.getRequestInfo());
-		String message = notificationUtil.getMessageTemplate(SWConstants.PAYMENT_NOTIFICATION_EMAIL, localizationMessage);
+
+		String applicationStatus = sewerageConnectionRequest.getSewerageConnection().getApplicationStatus();
+		String notificationTemplate = SWConstants.PAYMENT_NOTIFICATION_APP;
+		ProcessInstance workflow = sewerageConnectionRequest.getSewerageConnection().getProcessInstance();
+		StringBuilder builder = new StringBuilder();
+		int reqType;
+
+		//Condition to assign Disconnection application Payment Notification code
+		if ((!workflow.getAction().equalsIgnoreCase(SWConstants.ACTIVATE_CONNECTION)) &&
+				(!workflow.getAction().equalsIgnoreCase(APPROVE_CONNECTION)) && sewerageServicesUtil.isDisconnectConnectionRequest(sewerageConnectionRequest)) {
+			reqType = DISCONNECT_CONNECTION;
+			notificationTemplate = notificationUtil.getCustomizedMsgForEmailForPayment(workflow.getAction(), applicationStatus, reqType);
+		}
+
+		String message = notificationUtil.getMessageTemplate(notificationTemplate, localizationMessage);
+
 		if (message == null) {
 			log.info("No message template found for, {} " + SWConstants.PAYMENT_NOTIFICATION_EMAIL);
 			return Collections.emptyList();

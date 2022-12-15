@@ -274,13 +274,25 @@ public class PaymentUpdateService {
 	 * @return
 	 */
 	private EventRequest getEventRequest(WaterConnectionRequest request, Property property, PaymentDetail paymentDetail) {
-		//Return without sending notifs for disconnection payment since payment is managed in workflow notifs
-		if(request.isDisconnectRequest())
-			return null;
 
 		String localizationMessage = notificationUtil
 				.getLocalizationMessages(property.getTenantId(), request.getRequestInfo());
-		String message = notificationUtil.getMessageTemplate(WCConstants.PAYMENT_NOTIFICATION_APP, localizationMessage);
+
+		String applicationStatus = request.getWaterConnection().getApplicationStatus();
+		String notificationTemplate = WCConstants.PAYMENT_NOTIFICATION_APP;
+		ProcessInstance workflow = request.getWaterConnection().getProcessInstance();
+		StringBuilder builder = new StringBuilder();
+		int reqType;
+
+		//Condition to assign Disconnection application Payment Notification code
+		if ((!workflow.getAction().equalsIgnoreCase(WCConstants.ACTIVATE_CONNECTION)) &&
+				(!workflow.getAction().equalsIgnoreCase(APPROVE_CONNECTION)) && waterServiceUtil.isDisconnectConnectionRequest(request)) {
+			reqType = DISCONNECT_CONNECTION;
+			notificationTemplate = notificationUtil.getCustomizedMsgForInAppForPayment(workflow.getAction(), applicationStatus, reqType);
+		}
+
+		String message = notificationUtil.getMessageTemplate(notificationTemplate, localizationMessage);
+
 		if (message == null) {
 			log.info("No message template found for, {} " + WCConstants.PAYMENT_NOTIFICATION_APP);
 			return null;
@@ -359,13 +371,25 @@ public class PaymentUpdateService {
 	 */
 	private List<SMSRequest> getSmsRequest(WaterConnectionRequest waterConnectionRequest,
 										   Property property, PaymentDetail paymentDetail) {
-		//Return without sending notifs for disconnection payment since payment is managed in workflow notifs
-		if(waterConnectionRequest.isDisconnectRequest())
-			return null;
 
 		String localizationMessage = notificationUtil.getLocalizationMessages(property.getTenantId(),
 				waterConnectionRequest.getRequestInfo());
-		String message = notificationUtil.getMessageTemplate(WCConstants.PAYMENT_NOTIFICATION_SMS, localizationMessage);
+
+		String applicationStatus = waterConnectionRequest.getWaterConnection().getApplicationStatus();
+		String notificationTemplate = WCConstants.PAYMENT_NOTIFICATION_SMS;
+		ProcessInstance workflow = waterConnectionRequest.getWaterConnection().getProcessInstance();
+		StringBuilder builder = new StringBuilder();
+		int reqType;
+
+		//Condition to assign Disconnection application Payment Notification code
+		if ((!workflow.getAction().equalsIgnoreCase(WCConstants.ACTIVATE_CONNECTION)) &&
+				(!workflow.getAction().equalsIgnoreCase(APPROVE_CONNECTION)) && waterServiceUtil.isDisconnectConnectionRequest(waterConnectionRequest)) {
+			reqType = DISCONNECT_CONNECTION;
+			notificationTemplate = notificationUtil.getCustomizedMsgForSMSForPayment(workflow.getAction(), applicationStatus, reqType);
+		}
+
+		String message = notificationUtil.getMessageTemplate(notificationTemplate, localizationMessage);
+
 		if (message == null) {
 			log.info("No message template found for, {} " + WCConstants.PAYMENT_NOTIFICATION_SMS);
 			return Collections.emptyList();
@@ -413,13 +437,24 @@ public class PaymentUpdateService {
 	private List<EmailRequest> getEmailRequest(WaterConnectionRequest waterConnectionRequest,
 											   Property property, PaymentDetail paymentDetail) {
 
-		//Return without sending notifs for disconnection payment since payment is managed in workflow notifs
-		if(waterConnectionRequest.isDisconnectRequest())
-			return null;
-
 		String localizationMessage = notificationUtil.getLocalizationMessages(property.getTenantId(),
 				waterConnectionRequest.getRequestInfo());
-		String message = notificationUtil.getMessageTemplate(WCConstants.PAYMENT_NOTIFICATION_EMAIL, localizationMessage);
+
+		String applicationStatus = waterConnectionRequest.getWaterConnection().getApplicationStatus();
+		String notificationTemplate = WCConstants.PAYMENT_NOTIFICATION_SMS;
+		ProcessInstance workflow = waterConnectionRequest.getWaterConnection().getProcessInstance();
+		StringBuilder builder = new StringBuilder();
+		int reqType;
+
+		//Condition to assign Disconnection application Payment Notification code
+		if ((!workflow.getAction().equalsIgnoreCase(WCConstants.ACTIVATE_CONNECTION)) &&
+				(!workflow.getAction().equalsIgnoreCase(APPROVE_CONNECTION)) && waterServiceUtil.isDisconnectConnectionRequest(waterConnectionRequest)) {
+			reqType = DISCONNECT_CONNECTION;
+			notificationTemplate = notificationUtil.getCustomizedMsgForEmailForPayment(workflow.getAction(), applicationStatus, reqType);
+		}
+
+		String message = notificationUtil.getMessageTemplate(notificationTemplate, localizationMessage);
+
 		if (message == null) {
 			log.info("No message template found for, {} " + WCConstants.PAYMENT_NOTIFICATION_EMAIL);
 			return Collections.emptyList();

@@ -259,6 +259,10 @@ public class NotificationUtil {
 		StringBuilder uri = new StringBuilder();
 		uri.append(config.getUserHost()).append(config.getUserSearchEndpoint());
 		Map<String, Object> userSearchRequest = new HashMap<>();
+		User userInfoCopy = requestInfo.getUserInfo();
+		User userInfo = getInternalMicroserviceUser(tenantId);
+		requestInfo.setUserInfo(userInfo);
+
 		userSearchRequest.put("RequestInfo", requestInfo);
 		userSearchRequest.put("tenantId", tenantId);
 		userSearchRequest.put("userType", "CITIZEN");
@@ -279,6 +283,8 @@ public class NotificationUtil {
 				log.error("Exception trace: ",e);
 				continue;
 			}
+
+			requestInfo.setUserInfo(userInfoCopy);
 		}
 		return mapOfPhnoAndEmailIds;
 	}
@@ -346,6 +352,60 @@ public class NotificationUtil {
 				.roles(Collections.singletonList(role)).id(0L).build();
 
 		return userInfo;
+	}
+
+	/**
+	 * @param applicationStatus
+	 * @return In app message code
+	 */
+	public String getCustomizedMsgForInAppForPayment(String action, String applicationStatus, int reqType) {
+		StringBuilder builder = new StringBuilder();
+		if (reqType == WCConstants.UPDATE_APPLICATION) {
+			builder.append("WS_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append(APP_MESSAGE);
+		}
+		if (reqType == WCConstants.MODIFY_CONNECTION) {
+			builder.append("WS_MODIFY_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append(APP_MESSAGE);
+		}
+		if (reqType == DISCONNECT_CONNECTION) {
+			builder.append("WS_DISCONNECT_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append(APP_MESSAGE);
+		}
+		return builder.toString();
+	}
+
+	/**
+	 * @param applicationStatus
+	 * @return message code
+	 */
+	public String getCustomizedMsgForSMSForPayment(String action, String applicationStatus, int reqType) {
+		StringBuilder builder = new StringBuilder();
+		if (reqType == WCConstants.UPDATE_APPLICATION) {
+			builder.append("WS_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append(SMS_MESSAGE);
+		}
+		if (reqType == WCConstants.MODIFY_CONNECTION) {
+			builder.append("WS_MODIFY_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append(SMS_MESSAGE);
+		}
+		if (reqType == DISCONNECT_CONNECTION) {
+			builder.append("WS_DISCONNECT_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append(SMS_MESSAGE);
+		}
+		return builder.toString();
+	}
+
+	/**
+	 * @param applicationStatus
+	 * @return Email message code
+	 */
+	public String getCustomizedMsgForEmailForPayment(String action, String applicationStatus, int reqType) {
+		StringBuilder builder = new StringBuilder();
+		if (reqType == WCConstants.UPDATE_APPLICATION) {
+			builder.append("WS_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append(EMAIL_MESSAGE);
+		}
+		if (reqType == WCConstants.MODIFY_CONNECTION) {
+			builder.append("WS_MODIFY_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append(EMAIL_MESSAGE);
+		}
+		if (reqType == DISCONNECT_CONNECTION) {
+			builder.append("WS_DISCONNECT_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append(EMAIL_MESSAGE);
+		}
+		return builder.toString();
 	}
 
 }
