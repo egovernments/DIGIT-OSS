@@ -1,0 +1,116 @@
+swagger: "2.0"
+info:
+  title: Task Management System
+  description: API Specs for task management system
+  contact:
+    name: eGov Foundation
+    url: https://core.digit.org
+  version: 1.0.0
+paths:
+  /task/_create:
+    post:
+      summary: Operation to create a new task on the server
+      parameters:
+        - name: TaskRequest
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/TaskRequest'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Task creation failed
+        '403':
+          description: Forbidden
+  /task/_search:
+    post:
+      summary: Operation to search created tasks on the server
+      parameters:
+        - name: id
+          type: string
+          in: query
+        - name: title
+          type: string
+          in: query
+        - name: status
+          type: string
+          in: query
+        - name: businessService
+          type: string
+          in: query
+        - name: assignee
+          type: string
+          in: query
+        - name: reporter
+          type: string
+          in: query
+      responses:
+        '200':
+          description: Application(s) fetched successfully
+        '403':
+          description: Forbidden
+  /task/_update:
+    post:
+      summary: Operation to update task on the server
+      parameters:
+        - name: TaskRequest
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/TaskRequest'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Task creation failed
+        '403':
+          description: Forbidden
+      
+definitions:
+  TaskRequest:
+    type: object
+    properties:
+      id:
+        type: string
+        example: "1a12a98a-7a51-48c1-8c03-225d819f1ee9"
+      parentid:
+        type: string
+        example: "1a12a98a-7a51-48c1-8c03-225d819f1ee9"
+      title:
+        type: string
+        example: "Create Task Management Application"
+      description:
+        type: string
+        example: "Create a task management application which exposes create, update and search APIs"
+      status:
+        type: string
+        example: "InProgress"
+      businessService:
+        type: string
+        example: "DPG.CORE"
+      assignee:
+        type: string
+        example: "47babcd6-2823-43c2-a64f-bf146b6c408d"
+      reporter:
+        type: string
+        example: "47babcd6-2823-43c2-a64f-bf146b6c408d"
+      isChildTaskComplete:
+        type: boolean
+        example: true
+      actualStartDate:
+        type: integer
+        format: int64
+        example: 1657714210113
+      actualEndDate:
+        type: integer
+        format: int64
+        example: 1657714210118
+      taskStartDate:
+        type: integer
+        format: int64
+        example: 1657714210113
+      taskEndDate:
+        type: integer
+        format: int64
+        example: 1657714210119
