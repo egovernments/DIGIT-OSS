@@ -564,7 +564,8 @@ class Property extends Component {
           }
         }
       });
-      console.log("hereeeeeee", flag);
+      console.log("latestPropertyDetails", latestPropertyDetails && latestPropertyDetails.status);
+      console.log("propertyItems", this.props.propertyItems);
       return flag;
     };
 
@@ -601,7 +602,7 @@ class Property extends Component {
 
                       
         {((isMigratedProperty && !isCitizen) && (isRoleAdmin() || (Payments.length<=0 || Payments && Payments.length === 1 && Payments[0].instrumentStatus === "CANCELLED"  
-              || !payLen )) ||  ifUserRoleExists("PTADMIN") ) && 
+              || !payLen )) ||  ifUserRoleExists("PTADMIN") ) && (latestPropertyDetails && latestPropertyDetails.status !== "INWORKFLOW") &&
            <Button
               label={
                 <Label buttonLabel={true}
@@ -616,7 +617,7 @@ class Property extends Component {
              />   
             }
               {isMigratedProperty && !isCitizen && (Payments.length<=0 || Payments && Payments.length === 1 && Payments[0].instrumentStatus === "CANCELLED"  
-              || !payLen || ifUserRoleExists("PTADMIN")) &&
+              || !payLen || ifUserRoleExists("PTADMIN")) && (latestPropertyDetails && latestPropertyDetails.status !== "INWORKFLOW") &&
                 
               <Button
               onClick={() => this.editDemand()}
