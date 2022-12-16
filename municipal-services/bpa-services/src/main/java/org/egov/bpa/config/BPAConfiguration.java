@@ -343,4 +343,8 @@ public class BPAConfiguration {
 
 	@Value("${egov.shortener.url}")
 	private String shortenerURL;
+
+	@Value("${egov.bpa.application.details.link}")
+	private String applicationDetailsLink;
+
 }

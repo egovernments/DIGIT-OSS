@@ -304,7 +304,7 @@ public class NotificationUtil {
 		for (Map.Entry<String, String> entryset : mobileNumberToOwner.entrySet()) {
 			String customizedMsg = message.replace("{1}", entryset.getValue());
 			if (customizedMsg.contains("{RECEIPT_LINK}")) {
-				String linkToReplace = getRecepitDownloadLink(bpaRequest, entryset.getKey());
+				String linkToReplace = getApplicationDetailsPageLink(bpaRequest, entryset.getKey());
 //				log.info("Link to replace - "+linkToReplace);
 				customizedMsg = customizedMsg.replace("{RECEIPT_LINK}",linkToReplace);
 			}
@@ -407,7 +407,7 @@ public class NotificationUtil {
 			String customizedMsg = message.replace("{1}",mobileNumberToOwner.get(entryset.getKey()));
 			customizedMsg = customizedMsg.replace("{MOBILE_NUMBER}",entryset.getKey());
 			if (customizedMsg.contains("{RECEIPT_LINK}")) {
-				String linkToReplace = getRecepitDownloadLink(bpaRequest, entryset.getKey());
+				String linkToReplace = getApplicationDetailsPageLink(bpaRequest, entryset.getKey());
 //				log.info("Link to replace - "+linkToReplace);
 				customizedMsg = customizedMsg.replace("{RECEIPT_LINK}",linkToReplace);
 			}
@@ -549,4 +549,17 @@ public class NotificationUtil {
 
 		return message;
 	}
+
+	public String getApplicationDetailsPageLink(BPARequest bpaRequest, String mobileno) {
+
+		String receiptNumber = getReceiptNumber(bpaRequest);
+		String applicationNo;
+		applicationNo = bpaRequest.getBPA().getApplicationNo();
+		String link = config.getUiAppHost() + config.getApplicationDetailsLink();
+		link = link.replace("$applicationNo", applicationNo);
+		link = getShortnerURL(link);
+		log.info(link);
+		return link;
+	}
+
 }

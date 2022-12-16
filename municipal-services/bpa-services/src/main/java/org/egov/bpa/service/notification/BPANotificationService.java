@@ -182,7 +182,7 @@ public class BPANotificationService {
 			if(actionStatus.equals(ACTION_STATUS_DOC_VERIFICATION))
 			{
 				List<ActionItem> items = new ArrayList<>();
-				String actionLink = util.getRecepitDownloadLink(bpaRequest, mobile);
+				String actionLink = util.getApplicationDetailsPageLink(bpaRequest, mobile);
 				ActionItem item = ActionItem.builder().actionUrl(actionLink).code(USREVENTS_EVENT_DOWNLOAD_RECEIPT_CODE).build();
 				items.add(item);
 				action = Action.builder().actionUrls(items).build();
