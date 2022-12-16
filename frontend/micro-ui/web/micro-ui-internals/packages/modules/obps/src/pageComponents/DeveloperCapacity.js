@@ -1989,7 +1989,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                             {technicalCapacityOutsideHaryana === "Y" && (
                                 <Row>
                                     <Col md={4} xxl lg="4">
-                                        <label htmlFor="project" className="text"> Project </label>
+                                        <label htmlFor="project" className="text"> Project <span className="text-danger font-weight-bold">*</span></label>
                                         <input
                                             type="text"
                                             name="project"
@@ -2002,7 +2002,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                     </Col>
 
                                     <Col md={4} xxl lg="4">
-                                        <label htmlFor="authority" className="text"> Authority </label>
+                                        <label htmlFor="authority" className="text"> Authority <span className="text-danger font-weight-bold">*</span></label>
                                         <input
                                             type="text"
                                             name="authority"
@@ -2015,7 +2015,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                     </Col>
 
                                     <Col md={4} xxl lg="4">
-                                        <label htmlFor="statusOfDevelopment" className="text"> (iii) Status of Development </label>
+                                        <label htmlFor="statusOfDevelopment" className="text">Status of Development <span className="text-danger font-weight-bold">*</span></label>
                                         <input
                                             type="text"
                                             name="statusOfDevelopment"
