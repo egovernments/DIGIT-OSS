@@ -117,23 +117,27 @@ const EditApplication = () => {
     let convertAppData = await convertEditApplicationDetails(data, details, actionData);
     const reqDetails = data?.ConnectionDetails?.[0]?.serviceName == "WATER" ? { WaterConnection: convertAppData } : { SewerageConnection: convertAppData }
     setSubmitValve(false);
-    sessionStorage.setItem("redirectedfromEDIT", true);
-    sessionStorage.setItem("WS_SESSION_APPLICATION_DETAILS", JSON.stringify(convertAppData));
-    window.location.assign(`${window.location.origin}${state?.url}`);
-    // if (mutate) {
-    //   mutate(reqDetails, {
-    //     onError: (error, variables) => {
-    //       setShowToast({ key: "error", message: error?.message ? error.message : error });
-    //       setTimeout(closeToastOfError, 5000);
-    //       setSubmitValve(true);
-    //     },
-    //     onSuccess: (data, variables) => {
-    //       setShowToast({ key: false, message: "WS_APPLICATION_SUBMITTED_SUCCESSFULLY_LABEL" });
-    //       setIsAppDetailsPage(true);
-    //       // setTimeout(closeToast(), 5000);
-    //     },
-    //   });
-    // }
+    
+    if (details?.processInstancesDetails?.[0]?.state?.applicationStatus?.includes("CITIZEN_ACTION")) {
+      if (mutate) {
+        mutate(reqDetails, {
+          onError: (error, variables) => {
+            setShowToast({ key: "error", message: error?.message ? error.message : error });
+            setTimeout(closeToastOfError, 5000);
+            setSubmitValve(true);
+          },
+          onSuccess: (data, variables) => {
+            setShowToast({ key: false, message: "WS_APPLICATION_SUBMITTED_SUCCESSFULLY_LABEL" });
+            setIsAppDetailsPage(true);
+            // setTimeout(closeToast(), 5000);
+          },
+        });
+      }
+    } else {
+      sessionStorage.setItem("redirectedfromEDIT", true);
+      sessionStorage.setItem("WS_SESSION_APPLICATION_DETAILS", JSON.stringify(convertAppData));
+      window.location.assign(`${window.location.origin}${state?.url}`);
+    }
     }
   };
 
