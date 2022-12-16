@@ -254,6 +254,7 @@ const ApplicationDetails = () => {
                 options={dowloadOptions}
                 downloadBtnClassName={"employee-download-btn-className"}
                 optionsClassName={"employee-options-btn-className"}
+                optionStyle={{padding: "10px"}}
         />
       </div>
       <ApplicationDetailsTemplate
