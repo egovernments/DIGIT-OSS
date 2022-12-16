@@ -54,8 +54,9 @@ function ModalChild(props) {
       } catch (error) {
         console.log(error);
       }
-      props.remarksUpdate({ data: RemarksDeveloper.data });
+      props.remarksUpdate({ data: RemarksDeveloper.data }); 
       console.log("response from API", Resp);
+      // props.getRemarkData()
     } else {
       props.passmodalData();
     }

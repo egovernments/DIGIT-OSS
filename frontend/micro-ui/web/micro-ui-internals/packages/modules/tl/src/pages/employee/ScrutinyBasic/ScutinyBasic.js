@@ -323,6 +323,7 @@ const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => 
               ApiResponseData={apiResponse !== undefined ? apiResponse?.ApplicantInfo : null}
               showTable={curentDataPersonal}
               dataForIcons={iconStates}
+              getRemarkData = {handleGetRemarkssValues}
             ></Personalinfo>
           </div>
           <div>
@@ -333,6 +334,7 @@ const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => 
               onClick={() => setOpen(!open)}
               ApiResponseData={apiResponse !== undefined ? apiResponse?.ApplicantPurpose : null}
               dataForIcons={iconStates}
+              getRemarkData = {handleGetRemarkssValues}
             ></Genarelinfo>
             {/* </Col> */}
           </div>
@@ -346,6 +348,7 @@ const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => 
               ApiResponseData={apiResponse !== undefined ? apiResponse?.LandSchedule
                 : null}
               dataForIcons={iconStates}
+              getRemarkData = {handleGetRemarkssValues}
             ></Developerinfo>
             {/* </Col> */}
           </div>
@@ -359,6 +362,7 @@ const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => 
                 : null}
               heightApplied={defaultheightApplied}
               dataForIcons={iconStates}
+              getRemarkData = {handleGetRemarkssValues}
             ></AppliedLandinfo>
             {/* </Col> */}
           </div>
@@ -369,6 +373,7 @@ const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => 
               heightFee={defaultheightFee}
               ApiResponseData={apiResponse !== undefined ? apiResponse?.FeesAndCharges
                 : null}
+                getRemarkData = {handleGetRemarkssValues}
             ></Feeandcharges>
             {/* </Col> */}
           </div>

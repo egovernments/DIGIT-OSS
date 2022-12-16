@@ -135,6 +135,7 @@ const LicenseDetailsScrutiny = (props) => {
 
   const currentRemarks = (data) => {
     props.showTable({ data: data.data });
+    props.getRemarkData();
   };
 
   // console.log("color for the deeloper", developerInputFiledColor);
@@ -184,9 +185,12 @@ const LicenseDetailsScrutiny = (props) => {
               <Card style={{ margin: 2 }}>
                 <div className="card-body">
                   <h5 className={[classes.formLabel, "d-flex flex-row align-items-center"]}>Developer's type <div className="d-flex flex-row align-items-center ml-2">
+                    {/* {JSON.stringify(addInfo)} */}
                     <Form.Control
                       className={classes.formControl}
-                      placeholder={addInfo?.showDevTypeFields === "01" ? "Individual" : addInfo?.showDevTypeFields === "Company" ? "Company" : addInfo?.showDevTypeFields === "03" ? "LLP" : addInfo?.showDevTypeFields === "04" ? "Society" : ""}
+                      placeholder={addInfo?.showDevTypeFields 
+                        // === "Individual" ? "Individual" : addInfo?.showDevTypeFields === "Company" ? "Company" : addInfo?.showDevTypeFields === "03" ? "LLP" : addInfo?.showDevTypeFields === "04" ? "Society" : ""
+                      }
                       disabled
                     ></Form.Control>
                     &nbsp;&nbsp;
@@ -239,7 +243,7 @@ const LicenseDetailsScrutiny = (props) => {
                 </div>
               </Card>
 
-              {addInfo?.showDevTypeFields === "01" &&
+              {addInfo?.showDevTypeFields === "Individual" &&
                 <div>
                   <Card style={{ margin: 5 }}>
                     <h5>Developer Details</h5>

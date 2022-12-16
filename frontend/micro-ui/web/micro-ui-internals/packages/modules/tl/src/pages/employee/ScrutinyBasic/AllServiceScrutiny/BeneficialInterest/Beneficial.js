@@ -13,6 +13,10 @@ import Collapse from "react-bootstrap/Collapse";
 import { useStyles } from "../../css/personalInfoChild.style";
 import '../../css/personalInfoChild.style.js'
 
+import { IconButton } from "@mui/material";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
+
 function Beneficialscrutiny() {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
@@ -112,7 +116,9 @@ function Beneficialscrutiny() {
       </div>
       <Collapse in={open2}>
         <div id="example-collapse-text">
-      <Card style={{ width: "126%", border: "5px solid #1266af" }}>
+      <Card 
+      // style={{ width: "126%", border: "5px solid #1266af" }}
+      >
         <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>CHANGE IN BENEFICIAL INTEREST</h4>
         <div className="card">
           <Row className="col-12">
@@ -242,8 +248,32 @@ function Beneficialscrutiny() {
                       <Form.Label>
                         <h2> Area in Acres</h2>
                       </Form.Label>
-                      <input type="number" className="form-control" placeholder="" {...register("areaInAcres")} />
-                    </div>
+                      {/* <input type="number" className="form-control" placeholder="" {...register("areaInAcres")} /> */}
+                    
+                           
+                      <div className={classes.fieldContainer}>
+            <Form.Control
+              className={classes.formControl}
+              placeholder=""
+              disabled
+            ></Form.Control>
+                
+                <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Amount")
+                  setLabelValue("Amount"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+             
+             </div>
+                                       </div>
+                                      
+                    
                   )}
                 </div>
               </Form.Group>
@@ -273,21 +303,96 @@ function Beneficialscrutiny() {
                               change/assignmen
                             </td>
                             <td>
-                              <input type="file" className="fom-control" placeholder="" {...register("objectionCertificate")}></input>
+                              {/* <input type="file" className="fom-control" placeholder="" {...register("objectionCertificate")}></input> */}
+                              <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Amount")
+                  setLabelValue("Amount"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                       </div>
                             </td>
                           </tr>
                           <tr>
                              <th class="fw-normal">2</th>
                             <td> A consent letter from the ‘new entity for the proposed change </td>
                             <td>
-                              <input type="file" className="fom-control" placeholder="" {...register("consentLetter")}></input>
+                              {/* <input type="file" className="fom-control" placeholder="" {...register("consentLetter")}></input> */}
+                              <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Amount")
+                  setLabelValue("Amount"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                       </div>
                             </td>
                           </tr>
                           <tr>
                              <th class="fw-normal">3</th>
                             <td> Justification for such request. </td>
                             <td>
-                              <input type="file" className="fom-control" placeholder="" {...register("justification")}></input>
+                              {/* <input type="file" className="fom-control" placeholder="" {...register("justification")}></input> */}
+                              <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Amount")
+                  setLabelValue("Amount"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                       </div>
                             </td>
                           </tr>
                           <tr>
@@ -298,7 +403,32 @@ function Beneficialscrutiny() {
                               been created in the colony, an affidavit to the said effect be also submitted by the existing developer{" "}
                             </td>
                             <td>
-                              <input type="file" className="fom-control" placeholder="" {...register("thirdPartyRights")}></input>
+                              {/* <input type="file" className="fom-control" placeholder="" {...register("thirdPartyRights")}></input> */}
+                              <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Amount")
+                  setLabelValue("Amount"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                       </div>
                             </td>
                           </tr>
                           <tr>
@@ -309,28 +439,128 @@ function Beneficialscrutiny() {
                               ‘shareholder(s)’ as per prescribed policy parameters for grant of license.
                             </td>
                             <td>
-                              <input type="file" className="fom-control" placeholder="" {...register("fiancialCapacity")}></input>
+                              {/* <input type="file" className="fom-control" placeholder="" {...register("fiancialCapacity")}></input> */}
+                              <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Amount")
+                  setLabelValue("Amount"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                       </div>
                             </td>
                           </tr>
                           <tr>
                              <th class="fw-normal">6</th>
                             <td> An undertaking to pay the balance administrative charges before final approval.</td>
                             <td>
-                              <input type="file" className="fom-control" placeholder="" {...register("administrativeCharges")}></input>
+                              {/* <input type="file" className="fom-control" placeholder="" {...register("administrativeCharges")}></input> */}
+                              <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Amount")
+                  setLabelValue("Amount"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                       </div>
                             </td>
                           </tr>
                           <tr>
                              <th class="fw-normal">7</th>
                             <td> Status of RERA registration of project of non registered,then affidavit to this effect.</td>
                             <td>
-                              <input type="file" className="fom-control" placeholder="" {...register("reraRegistration")}></input>
+                              {/* <input type="file" className="fom-control" placeholder="" {...register("reraRegistration")}></input> */}
+                              <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Amount")
+                  setLabelValue("Amount"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                       </div>
                             </td>
                           </tr>
                           <tr>
                              <th class="fw-normal">8</th>
                             <td> Board resolution of authorised signatory of “existing developer </td>
                             <td>
-                              <input type="file" className="fom-control" placeholder="" {...register("boardResolution")}></input>
+                              {/* <input type="file" className="fom-control" placeholder="" {...register("boardResolution")}></input> */}
+                              <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Amount")
+                  setLabelValue("Amount"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                       </div>
                             </td>
                           </tr>
                           <tr>
@@ -340,7 +570,32 @@ function Beneficialscrutiny() {
                               Board resolution of authorised signatory of “new entity ”<span style={{ color: "red" }}>*</span>
                             </td>
                             <td>
-                              <input type="file" className="fom-control" placeholder="" {...register("boardResolutionNewEntity")}></input>
+                              {/* <input type="file" className="fom-control" placeholder="" {...register("boardResolutionNewEntity")}></input> */}
+                              <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Amount")
+                  setLabelValue("Amount"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                       </div>
                             </td>
                           </tr>
                         </tbody>
@@ -371,21 +626,96 @@ function Beneficialscrutiny() {
                               change/assignment
                             </td>
                             <td>
-                              <input type="file" className="fom-control" placeholder="" {...register("noObjectionCertificate")}></input>
+                              {/* <input type="file" className="fom-control" placeholder="" {...register("noObjectionCertificate")}></input> */}
+                              <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Amount")
+                  setLabelValue("Amount"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                       </div>
                             </td>
                           </tr>
                           <tr>
                              <th class="fw-normal">2</th>
                             <td> A consent letter from the ‘new entity for the proposed change. </td>
                             <td>
-                              <input type="file" className="fom-control" placeholder="" {...register("consentLetterProposedChanges")}></input>
+                              {/* <input type="file" className="fom-control" placeholder="" {...register("consentLetterProposedChanges")}></input> */}
+                              <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Amount")
+                  setLabelValue("Amount"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                       </div>
                             </td>
                           </tr>
                           <tr>
                              <th class="fw-normal">3</th>
                             <td> Justification for such request.</td>
                             <td>
-                              <input type="file" className="fom-control" placeholder="" {...register("justificationRequest")}></input>
+                              {/* <input type="file" className="fom-control" placeholder="" {...register("justificationRequest")}></input> */}
+                              <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Amount")
+                  setLabelValue("Amount"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                       </div>
                             </td>
                           </tr>
                           <tr>
@@ -396,35 +726,160 @@ function Beneficialscrutiny() {
                               been created in the colony, an affidavit to the said effect be also submitted by the existing developer{" "}
                             </td>
                             <td>
-                              <input type="file" className="fom-control" placeholder="" {...register("thirdPartyclaimed")}></input>
+                              {/* <input type="file" className="fom-control" placeholder="" {...register("thirdPartyclaimed")}></input> */}
+                              <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Amount")
+                  setLabelValue("Amount"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                       </div>
                             </td>
                           </tr>
                           <tr>
                              <th class="fw-normal">5</th>
                             <td> Details of the applied area where joint development and /or marketing rights are to be assigned</td>
                             <td>
-                              <input type="file" className="fom-control" placeholder="" {...register("jointDevelopment")}></input>
+                              {/* <input type="file" className="fom-control" placeholder="" {...register("jointDevelopment")}></input> */}
+                              <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Amount")
+                  setLabelValue("Amount"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                       </div>
                             </td>
                           </tr>
                           <tr>
                              <th class="fw-normal">6</th>
                             <td> An undertaking to pay the balance administrative charges before final approval.</td>
                             <td>
-                              <input type="file" className="fom-control" placeholder="" {...register("balanceAministrative")}></input>
+                              {/* <input type="file" className="fom-control" placeholder="" {...register("balanceAministrative")}></input> */}
+                              <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Amount")
+                  setLabelValue("Amount"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                       </div>
                             </td>
                           </tr>
                           <tr>
                              <th class="fw-normal">7</th>
                             <td> Board resolution of authorised signatory of “existing developer”.</td>
                             <td>
-                              <input type="file" className="fom-control" placeholder="" {...register("boardResolutionDeveloper")}></input>
+                              {/* <input type="file" className="fom-control" placeholder="" {...register("boardResolutionDeveloper")}></input> */}
+                              <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Amount")
+                  setLabelValue("Amount"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                       </div>
                             </td>
                           </tr>
                           <tr>
                              <th class="fw-normal">8</th>
                             <td> Board resolution of authorised signatory of “new entity ”</td>
                             <td>
-                              <input type="file" className="fom-control" placeholder="" {...register("boardResolutionEntity")}></input>
+                              {/* <input type="file" className="fom-control" placeholder="" {...register("boardResolutionEntity")}></input> */}
+                              <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Amount")
+                  setLabelValue("Amount"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                       </div>
                             </td>
                           </tr>
                         </tbody>
@@ -455,14 +910,64 @@ function Beneficialscrutiny() {
                               change/assignment
                             </td>
                             <td>
-                              <input type="file" className="fom-control" placeholder="" {...register("proposedAssigment")}></input>
+                              {/* <input type="file" className="fom-control" placeholder="" {...register("proposedAssigment")}></input> */}
+                              <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Amount")
+                  setLabelValue("Amount"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                       </div>
                             </td>
                           </tr>
                           <tr>
                              <th class="fw-normal">2</th>
                             <td> Justification for such request </td>
                             <td>
-                              <input type="file" className="fom-control" placeholder="" {...register("justificationRequest")}></input>
+                              {/* <input type="file" className="fom-control" placeholder="" {...register("justificationRequest")}></input> */}
+                              <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Amount")
+                  setLabelValue("Amount"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                       </div>
                             </td>
                           </tr>
                           <tr>
@@ -473,7 +978,32 @@ function Beneficialscrutiny() {
                               been created in the colony, an affidavit to the said effect be also submitted by the existing developer{" "}
                             </td>
                             <td>
-                              <input type="file" className="fom-control" placeholder="" {...register("creationThirdParty")}></input>
+                              {/* <input type="file" className="fom-control" placeholder="" {...register("creationThirdParty")}></input> */}
+                              <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Amount")
+                  setLabelValue("Amount"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                       </div>
                             </td>
                           </tr>
                           <tr>
@@ -484,35 +1014,160 @@ function Beneficialscrutiny() {
                               ‘shareholder(s)’ as per prescribed policy parameters for grant of license
                             </td>
                             <td>
-                              <input type="file" className="fom-control" placeholder="" {...register("technicalAndFinancial")}></input>
+                              {/* <input type="file" className="fom-control" placeholder="" {...register("technicalAndFinancial")}></input> */}
+                              <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Amount")
+                  setLabelValue("Amount"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                       </div>
                             </td>
                           </tr>
                           <tr>
                              <th class="fw-normal">5</th>
                             <td> An undertaking to pay the balance administrative charges before final approval </td>
                             <td>
-                              <input type="file" className="fom-control" placeholder="" {...register("administrativeChargesApproval")}></input>
+                              {/* <input type="file" className="fom-control" placeholder="" {...register("administrativeChargesApproval")}></input> */}
+                              <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Amount")
+                  setLabelValue("Amount"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                       </div>
                             </td>
                           </tr>
                           <tr>
                              <th class="fw-normal">6</th>
                             <td> Proposed Shareholding Pattern of the developer company.</td>
                             <td>
-                              <input type="file" className="fom-control" placeholder="" {...register("shareholdingPattern")}></input>
+                              {/* <input type="file" className="fom-control" placeholder="" {...register("shareholdingPattern")}></input> */}
+                              <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Amount")
+                  setLabelValue("Amount"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                       </div>
                             </td>
                           </tr>
                           <tr>
                              <th class="fw-normal">7</th>
                             <td> Status of RERA registration of project of non registered,then affidavit to this effect.</td>
                             <td>
-                              <input type="file" className="fom-control" placeholder="" {...register("statusOfRera")}></input>
+                              {/* <input type="file" className="fom-control" placeholder="" {...register("statusOfRera")}></input> */}
+                              <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Amount")
+                  setLabelValue("Amount"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                       </div>
                             </td>
                           </tr>
                           <tr>
                              <th class="fw-normal">8</th>
                             <td> Board resolution of authorised signatory of “existing developer” </td>
                             <td>
-                              <input type="file" className="fom-control" placeholder="" {...register("boardResolutionAuthorized")}></input>
+                              {/* <input type="file" className="fom-control" placeholder="" {...register("boardResolutionAuthorized")}></input> */}
+                              <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Amount")
+                  setLabelValue("Amount"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                       </div>
                             </td>
                           </tr>
                           <tr>
@@ -522,7 +1177,32 @@ function Beneficialscrutiny() {
                               Board resolution of authorised signatory of “new entity ”<span style={{ color: "red" }}>*</span>
                             </td>
                             <td>
-                              <input type="file" className="fom-control" placeholder="" {...register("boardResolutionSignatory")}></input>
+                              {/* <input type="file" className="fom-control" placeholder="" {...register("boardResolutionSignatory")}></input> */}
+                              <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Amount")
+                  setLabelValue("Amount"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                       </div>
                             </td>
                           </tr>
                         </tbody>
@@ -535,14 +1215,14 @@ function Beneficialscrutiny() {
           </Row>
 
       
-          <Row className="justify-content-end">
+          {/* <Row className="justify-content-end">
               <Button variant="outline-primary" className="col-md-2 my-2 mx-2" type="save" aria-label="right-end">
                 Save as Draft
               </Button>
               <Button variant="outline-primary" className="col-md-2 my-2 mx-2" type="submit" aria-label="right-end">
                 Submit
               </Button>
-            </Row>
+            </Row> */}
          
         </div>
       </Card>
