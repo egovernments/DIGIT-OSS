@@ -84,6 +84,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
                     <RadioOrSelect
                       t={t}
                       optionKey="i18nKey"
+                      placeholder="Select License type"
                       isMandatory={config.isMandatory}
                       options={getLicenseType() || {}}
                       selectedOption={LicenseType}
