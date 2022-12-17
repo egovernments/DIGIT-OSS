@@ -22,7 +22,7 @@ const ZoningPlan = () => {
                 License No . <span style={{ color: "red" }}>*</span>
               </label>
 
-              <input type="number" className="form-control" {...register("LicenseNo")} />
+              <input type="number" className="form-control" {...register("licenseNo")} />
             </Col>
 
             <Col className="col-4">
@@ -31,14 +31,14 @@ const ZoningPlan = () => {
                 Case Number . <span style={{ color: "red" }}>*</span>
               </label>
 
-              <input type="number" name="Case Number" className="form-control" {...register("Case Number")} />
+              <input type="number" name="Case Number" className="form-control" {...register("caseNumber")} />
             </Col>
             <Col className="col-4">
               <label>
                 Layout Plan <span style={{ color: "red" }}>*</span>
               </label>
 
-              <input type="text" className="form-control" {...register("Layout Plan")} />
+              <input type="text" className="form-control" {...register("layoutPlan")} />
             </Col>
             <br></br>
 
@@ -47,7 +47,7 @@ const ZoningPlan = () => {
                 {" "}
                 Any other Document <span style={{ color: "red" }}>*</span>
               </label>{" "}
-              <input type="file" className="form-control" {...register("Any other Document")} />
+              <input type="file" className="form-control" {...register("anyOtherDocument")} />
             </Col>
 
             <Col className="col-4">
@@ -56,7 +56,7 @@ const ZoningPlan = () => {
                 Amount <span style={{ color: "red" }}>*</span>
               </label>
 
-              <input type="number" name="Amount" className="form-control" {...register("Amount")} />
+              <input type="number" name="Amount" className="form-control" {...register("amount")} />
             </Col>
             <Col className="col-4">
               <div className="col-4">

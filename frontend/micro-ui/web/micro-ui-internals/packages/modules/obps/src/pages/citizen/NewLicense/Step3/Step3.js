@@ -6,6 +6,7 @@ import { Card, Row, Col } from "react-bootstrap";
 // import { Checkbox } from "@mui/material";
 import CalculateIcon from "@mui/icons-material/Calculate";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
+import FileUpload from "@mui/icons-material/FileUpload";
 import axios from "axios";
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
 import Spinner from "../../../../components/Loader";
@@ -239,7 +240,7 @@ const LandScheduleForm = (props) => {
                                   Licence No. of Parent Licence <span style={{ color: "red" }}>*</span>
                                 </h2>
                               </label>
-                              <input type="text" className="form-control" {...register("licenseNumber")} />
+                              <input type="text" className="form-control" {...register("licenseNumber"),required("This field is required"), maxLength=20, pattern=(/^[^\s][a-zA-Z0-9\s]+$/, "Please enter valid input")} />
                               <h3 className="error-message" style={{ color: "red" }}>
                                 {errors?.licenseNumber && errors?.licenseNumber?.message}
                               </h3>
@@ -1438,22 +1439,19 @@ const LandScheduleForm = (props) => {
                   <div className="row">
                     <div className="col col-3">
                       <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
-                        Land schedule <span style={{ color: "red" }}>*</span>{" "}
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>&nbsp;&nbsp;&nbsp;&nbsp;
-                        <VisibilityIcon
-                          classNmae="text-right"
-                          color="primary"
-                          onClick={() => getDocShareholding(fileStoreId?.landSchedule)}
-                        ></VisibilityIcon>
+                        Land schedule <span style={{ color: "red" }}>*</span>
+                        {fileStoreId?.landSchedule ? (
+                          <a onClick={() => getDocShareholding(fileStoreId?.landSchedule)} className="btn btn-sm col-md-6">
+                            <VisibilityIcon color="info" className="icon" />
+                          </a>
+                        ) : (
+                          <p></p>
+                        )}
                       </h2>
+                      <div>
+                        <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "landSchedule")} />
+                      </div>
 
-                      <input
-                        type="file"
-                        className="form-control"
-                        // {...register("landSchedule")}
-                        onChange={(e) => getDocumentData(e?.target?.files[0], "landSchedule")}
-                      />
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.landSchedule && errors?.landSchedule?.message}
                       </h3>
@@ -1462,19 +1460,18 @@ const LandScheduleForm = (props) => {
                     <div className="col col-3">
                       <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                         Copy of Mutation <span style={{ color: "red" }}>*</span>{" "}
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>&nbsp;&nbsp;&nbsp;&nbsp;
-                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.mutation)}>
-                          {" "}
-                        </VisibilityIcon>
+                        {fileStoreId?.mutation ? (
+                          <a onClick={() => getDocShareholding(fileStoreId?.mutation)} className="btn btn-sm col-md-6">
+                            <VisibilityIcon color="info" className="icon" />
+                          </a>
+                        ) : (
+                          <p></p>
+                        )}
                       </h2>
+                      <div>
+                        <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "mutation")} />
+                      </div>
 
-                      <input
-                        type="file"
-                        className="form-control"
-                        // {...register("mutation")}
-                        onChange={(e) => getDocumentData(e?.target?.files[0], "mutation")}
-                      />
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.mutation && errors?.mutation?.message}
                       </h3>
@@ -1482,19 +1479,19 @@ const LandScheduleForm = (props) => {
 
                     <div className="col col-3">
                       <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
-                        Copy of Jamabandi <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>&nbsp;&nbsp;&nbsp;&nbsp;
-                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.jambandhi)}>
-                          {" "}
-                        </VisibilityIcon>
+                        Copy of Jamabandi <span style={{ color: "red" }}>*</span>
+                        {fileStoreId?.jambandhi ? (
+                          <a onClick={() => getDocShareholding(fileStoreId?.jambandhi)} className="btn btn-sm col-md-6">
+                            <VisibilityIcon color="info" className="icon" />
+                          </a>
+                        ) : (
+                          <p></p>
+                        )}
                       </h2>
+                      <div>
+                        <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "jambandhi")} />
+                      </div>
 
-                      <input
-                        type="file"
-                        className="form-control"
-                        // {...register("jambandhi")}
-                        onChange={(e) => getDocumentData(e?.target?.files[0], "jambandhi")}
-                      />
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.jambandhi && errors?.jambandhi?.message}
                       </h3>
@@ -1502,18 +1499,18 @@ const LandScheduleForm = (props) => {
                     <div className="col col-3">
                       <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                         Details of lease / patta <span style={{ color: "red" }}>*</span>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>&nbsp;&nbsp;&nbsp;&nbsp;
-                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.detailsOfLease)}>
-                          {" "}
-                        </VisibilityIcon>
+                        {fileStoreId?.detailsOfLease ? (
+                          <a onClick={() => getDocShareholding(fileStoreId?.detailsOfLease)} className="btn btn-sm col-md-6">
+                            <VisibilityIcon color="info" className="icon" />
+                          </a>
+                        ) : (
+                          <p></p>
+                        )}
                       </h2>
-                      <input
-                        type="file"
-                        className="form-control"
-                        // {...register("detailsOfLease")}
-                        onChange={(e) => getDocumentData(e?.target?.files[0], "detailsOfLease")}
-                      />
+                      <div>
+                        <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "detailsOfLease")} />
+                      </div>
+
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.detailsOfLease && errors?.detailsOfLease?.message}
                       </h3>
@@ -1529,17 +1526,18 @@ const LandScheduleForm = (props) => {
                         title=" Add sales/Deed/exchange/gift deed, mutation, lease/Patta"
                       >
                         Add sales/Deed/exchange <span style={{ color: "red" }}>*</span>
-                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>&nbsp;&nbsp;&nbsp;
-                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.addSalesDeed)}>
-                          {" "}
-                        </VisibilityIcon>
+                        {fileStoreId?.addSalesDeed ? (
+                          <a onClick={() => getDocShareholding(fileStoreId?.addSalesDeed)} className="btn btn-sm col-md-6">
+                            <VisibilityIcon color="info" className="icon" />
+                          </a>
+                        ) : (
+                          <p></p>
+                        )}
                       </h2>
-                      <input
-                        type="file"
-                        className="form-control"
-                        // {...register("addSalesDeed")}
-                        onChange={(e) => getDocumentData(e?.target?.files[0], "addSalesDeed")}
-                      />
+                      <div>
+                        <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "addSalesDeed")} />
+                      </div>
+
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.addSalesDeed && errors?.addSalesDeed?.message}
                       </h3>
@@ -1551,54 +1549,58 @@ const LandScheduleForm = (props) => {
                         data-placement="top"
                         title="Copy of spa/GPA/board resolution to sign collaboration agrrement"
                       >
-                        Copy of spa/GPA/board. <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>&nbsp;&nbsp;&nbsp;&nbsp;
-                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.copyofSpaBoard)}>
-                          {" "}
-                        </VisibilityIcon>
+                        Copy of spa/GPA/board. <span style={{ color: "red" }}>*</span>
+                        {fileStoreId?.copyofSpaBoard ? (
+                          <a onClick={() => getDocShareholding(fileStoreId?.copyofSpaBoard)} className="btn btn-sm col-md-6">
+                            <VisibilityIcon color="info" className="icon" />
+                          </a>
+                        ) : (
+                          <p></p>
+                        )}
                       </h2>
-                      <input
-                        type="file"
-                        className="form-control"
-                        // {...register("copyofSpaBoard")}
-                        onChange={(e) => getDocumentData(e?.target?.files[0], "copyofSpaBoard")}
-                      />
+                      <div>
+                        <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "copyofSpaBoard")} />
+                      </div>
+
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.copyofSpaBoard && errors?.copyofSpaBoard?.message}
                       </h3>
                     </div>
                     <div className="col col-3">
                       <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
-                        Revised Land Schedule <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>&nbsp;&nbsp;&nbsp;&nbsp;
-                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.revisedLanSchedule)}>
-                          {" "}
-                        </VisibilityIcon>
+                        Revised Land Schedule <span style={{ color: "red" }}>*</span>
+                        {fileStoreId?.revisedLanSchedule ? (
+                          <a onClick={() => getDocShareholding(fileStoreId?.revisedLanSchedule)} className="btn btn-sm col-md-6">
+                            <VisibilityIcon color="info" className="icon" />
+                          </a>
+                        ) : (
+                          <p></p>
+                        )}
                       </h2>
-                      <input
-                        type="file"
-                        className="form-control"
-                        // {...register("revisedLansSchedule")}
-                        onChange={(e) => getDocumentData(e?.target?.files[0], "revisedLanSchedule")}
-                      />
+                      <div>
+                        <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "revisedLanSchedule")} />
+                      </div>
+
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.revisedLanSchedule && errors?.revisedLanSchedule?.message}
                       </h3>
                     </div>
+
                     <div className="col col-3">
                       <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
-                        Copy of Shajra Plan <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;&nbsp;&nbsp;
-                        <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>&nbsp;&nbsp;&nbsp;&nbsp;
-                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.copyOfShajraPlan)}>
-                          {" "}
-                        </VisibilityIcon>
+                        Copy of Shajra Plan <span style={{ color: "red" }}>*</span>
+                        {fileStoreId?.copyOfShajraPlan ? (
+                          <a onClick={() => getDocShareholding(fileStoreId?.copyOfShajraPlan)} className="btn btn-sm col-md-6">
+                            <VisibilityIcon color="info" className="icon" />
+                          </a>
+                        ) : (
+                          <p></p>
+                        )}
                       </h2>
-                      <input
-                        type="file"
-                        className="form-control"
-                        // {...register("copyOfShajraPlan")}
-                        onChange={(e) => getDocumentData(e?.target?.files[0], "copyOfShajraPlan")}
-                      />
+                      <div>
+                        <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "copyOfShajraPlan")} />
+                      </div>
+
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.copyOfShajraPlan && errors?.copyOfShajraPlan?.message}
                       </h3>
