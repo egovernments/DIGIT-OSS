@@ -50,11 +50,6 @@ const ApllicantPuropseForm = (props) => {
       title: "Rectangle No.",
       dataIndex: "rectangleNo",
     },
-    {
-      key: "landOwner",
-      title: "Land Owner",
-      dataIndex: "landOwner",
-    },
 
     {
       key: "consolidationType",
@@ -268,7 +263,7 @@ const ApllicantPuropseForm = (props) => {
     });
     setPotentialOptions({ data: potential, isLoading: false });
   }, [PotentialType]);
- 
+
   const DistrictApiCall = async () => {
     try {
       const Resp = await axios.post("/egov-mdms-service/v1/_district", datapost);
@@ -415,7 +410,7 @@ const ApllicantPuropseForm = (props) => {
     delete data?.rowid;
 
     const token = window?.localStorage?.getItem("token");
-    if (!modalData?.length) alert("Please enter atleast one record");
+    if (!modalData?.length && !props?.getLicData?.ApplicantPurpose?.AppliedLandDetails) alert("Please enter atleast one record");
     else {
       const postDistrict = {
         pageName: "ApplicantPurpose",
@@ -462,6 +457,7 @@ const ApllicantPuropseForm = (props) => {
       setValue("purpose", { label: data?.[0]?.label, value: data?.[0]?.value });
       setValue("potential", { label: potientialData?.[0]?.label, value: potientialData?.[0]?.value });
       setValue("district", { label: districtData?.[0]?.label, value: districtData?.[0]?.value });
+      if (districtData?.[0]?.value) getTehslidata(districtData?.[0]?.value);
     }
   }, [props?.getLicData, purposeOptions, potentialOptons, districtDataLabels]);
 
@@ -832,7 +828,7 @@ const ApllicantPuropseForm = (props) => {
                     <tbody>
                       <tr>
                         <td>
-                          <input type="text" className="form-control" {...register("kanal")} id="kanal" minLength={1} maxLength={20} />
+                          <input type="text" className="form-control" {...register("kanal")} id="kanal" />
                           <label htmlFor="sum">Total: {watch("kanal") * 0.125}</label>&nbsp;&nbsp;
                           <h3 className="error-message" style={{ color: "red" }}>
                             {errors?.kanal?.value && errors?.kanal?.value?.message}

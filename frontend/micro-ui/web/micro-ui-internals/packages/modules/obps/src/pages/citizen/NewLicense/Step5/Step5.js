@@ -6,11 +6,15 @@ import { Button, Form } from "react-bootstrap";
 // import Typography from '@material-ui/core/Typography'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { Card, Row, Col } from "react-bootstrap";
+import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import { getDocShareholding } from "../docView/docView.help";
 import axios from "axios";
 import { round } from "lodash";
 import { useHistory } from "react-router-dom";
 import Spinner from "../../../../components/Loader";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { VALIDATION_SCHEMA } from "../../../../utils/schema/step4";
 // import Pdf from "../Documents/Document.pdf";
 
 // import InfoIcon from '@mui/icons-material/Info';
@@ -27,8 +31,6 @@ const style = {
   p: 4,
 };
 
-
-
 const FeesChargesForm = (props) => {
   const history = useHistory();
   const [purpose, setPurpose] = useState("");
@@ -39,7 +41,7 @@ const FeesChargesForm = (props) => {
   const [modal, setmodal] = useState(false);
   const [modal1, setmodal1] = useState(false);
   const [loader, setLoader] = useState(false);
-
+  const [scrutinyFeeCharge, setScrutinyFeeCharge] = useState("");
   const {
     register,
     handleSubmit,
@@ -47,11 +49,10 @@ const FeesChargesForm = (props) => {
     control,
     setValue,
     watch,
-    reset,
   } = useForm({
-    mode: "onSubmit",
-    reValidateMode: "onBlur",
-    // resolver: yupResolver(VALIDATION_SCHEMA),
+    mode: "onChange",
+    reValidateMode: "onChange",
+    resolver: yupResolver(VALIDATION_SCHEMA),
     shouldFocusError: true,
   });
   const [submitDataLabel, setSubmitDataLabel] = useState([]);
@@ -88,7 +89,7 @@ const FeesChargesForm = (props) => {
     try {
       const Resp = await axios.post("/tl-services/new/_create", postDistrict);
       props.Step5Continue(data, Resp?.data?.NewServiceInfo?.[0]?.id);
-      SetFeesChargesFormSubmitted(Resp.data);
+      // SetFeesChargesFormSubmitted(Resp.data);
     } catch (error) {
       return error?.message;
     }
@@ -166,7 +167,7 @@ const FeesChargesForm = (props) => {
       setValue("scrutinyFee", charges?.scrutinyFeeCharges);
       setValue("licenseFee", charges?.licenseFeeCharges);
       setValue("conversionCharges", charges?.conversionCharges);
-      // setCalculateData(Resp.data);
+      setValue("amountPayable", charges?.scrutinyFeeCharges + (charges?.licenseFeeCharges * 25) / 100);
     } catch (error) {
       return error;
     }
@@ -228,6 +229,25 @@ const FeesChargesForm = (props) => {
   useEffect(() => {
     getSubmitDataLabel();
   }, []);
+  const [fileStoreId, setFileStoreId] = useState({});
+  const getDocumentData = async (file, fieldName) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("tenantId", "hr");
+    formData.append("module", "property-upload");
+    formData.append("tag", "tag-property");
+    setLoader(true);
+    try {
+      const Resp = await axios.post("/filestore/v1/files", formData, {});
+      setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
+      setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
+      // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
+      setLoader(false);
+    } catch (error) {
+      setLoader(false);
+      return error.message;
+    }
+  };
 
   const handleChangePurpose = (data) => {
     const purposeSelected = data.data;
@@ -256,10 +276,6 @@ const FeesChargesForm = (props) => {
   const dataAreaBiswansi = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.biswansi;
   const totalAreaAcre =
     dataArea * 0.125 + dataAreaMarla * 0.0062 + dataAreaSarai * 0.00069 + dataAreaBigha * 0.33 + dataAreaBiswa * 0.0309 + dataAreaBiswansi * 0.619;
-
-  const dataScrutiny = props?.getLicData?.FeesAndCharges?.scrutinyFee;
-  const dataLicence = props?.getLicData?.FeesAndCharges?.licenseFee;
-  const data = dataLicence + (25 % dataScrutiny);
 
   return (
     <div>
@@ -347,18 +363,8 @@ const FeesChargesForm = (props) => {
                       <h6 data-toggle="tooltip" data-placement="top" title="Total Fees (License fee 25% + Scrutiny Fees)">
                         (i)&nbsp;Amount Payable <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
                       </h6>
+                      <input type="text" className="form-control" disabled {...register("amountPayable")} />
 
-                      <input
-                        type="text"
-                        className="form-control"
-                        disabled
-                        minLength={1}
-                        maxLength={20}
-                        pattern="[0-9]*"
-                        onChange1={handleTotalFeesChange}
-                        onChange={(e) => setPayableNow(e.target.value)}
-                        value={payableNow}
-                      />
                       {errors.totalFee && <p></p>}
                     </div>
 
@@ -383,6 +389,9 @@ const FeesChargesForm = (props) => {
                       <label for="Yes">Yes</label>&nbsp;&nbsp;
                       <input type="radio" value="No" id="No" onChange={handleChange} name="Yes" onClick={handleshow0} />
                       <label for="No">No</label>
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.licNumber && errors?.licNumber?.message}
+                      </h3>
                       {showhide0 === "Yes" && (
                         <div className="row ">
                           <div className="col col-12">
@@ -408,9 +417,26 @@ const FeesChargesForm = (props) => {
                                         <h2>
                                           Consent letter in case of Another Developer (verified by the Department)
                                           <span style={{ color: "red" }}>*</span>
+                                          {fileStoreId?.consentLetter ? (
+                                            <a onClick={() => getDocShareholding(fileStoreId?.consentLetter)} className="btn btn-sm col-md-6">
+                                              <VisibilityIcon color="info" className="icon" />
+                                            </a>
+                                          ) : (
+                                            <p></p>
+                                          )}
                                         </h2>
                                       </label>
-                                      <input type="file" className="form-control" {...register("consentLetter")} />
+                                      <div>
+                                        <input
+                                          type="file"
+                                          className="form-control"
+                                          onChange={(e) => getDocumentData(e?.target?.files[0], "consentLetter")}
+                                        />
+                                      </div>
+
+                                      <h3 className="error-message" style={{ color: "red" }}>
+                                        {errors?.consentLetter && errors?.consentLetter?.message}
+                                      </h3>
                                     </div>
                                   </div>
                                 </div>

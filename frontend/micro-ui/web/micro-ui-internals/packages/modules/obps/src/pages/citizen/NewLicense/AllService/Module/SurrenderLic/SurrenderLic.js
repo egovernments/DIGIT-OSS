@@ -7,8 +7,6 @@ import { Card } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 
 function SurrenderLic() {
-
-
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
 
@@ -48,7 +46,7 @@ function SurrenderLic() {
                   Licence No . <span style={{ color: "red" }}>*</span>
                 </Form.Label>
 
-                <input type="number" placeholder="" className="form-control" {...register("LicenseNo")} />
+                <input type="number" placeholder="" className="form-control" {...register("licenseNo")} />
               </Form.Group>
             </Col>
             <Col className="col-4">
@@ -76,9 +74,9 @@ function SurrenderLic() {
                       type="radio"
                       value="true"
                       label="Yes"
-                      name="AreaFallingUnder"
-                      id="AreaFallingUnder"
-                      {...register(" AreaFallingUnder")}
+                      name="areaFalling"
+                      id="areaFalling"
+                      {...register(" areaFalling")}
                       onChange={(e) => handleselects(e)}
                     />
                   </Col>
@@ -87,9 +85,9 @@ function SurrenderLic() {
                       type="radio"
                       value="false"
                       label="No"
-                      name="AreaFallingUnder"
-                      id="AreaFallingUnder"
-                      {...register(" AreaFallingUnder")}
+                      name="areaFalling"
+                      id="areaFalling"
+                      {...register(" areaFalling")}
                       onChange={(e) => handleselects(e)}
                     />
                   </Col>
@@ -107,10 +105,10 @@ function SurrenderLic() {
                     <Form.Check
                       type="radio"
                       label="Yes"
-                      name="RERAregistration"
-                      id="RERAregistration"
+                      name="reraRegistration"
+                      id="reraRegistration"
                       value="true"
-                      {...register("ReraRegistration")}
+                      {...register("reraRegistration")}
                       onChange={(e) => handleselects(e)}
                     />
                   </Col>
@@ -118,10 +116,10 @@ function SurrenderLic() {
                     <Form.Check
                       type="radio"
                       label="No"
-                      name="RERAregistration"
-                      id="RERAregistration"
+                      name="reraRegistration"
+                      id="reraRegistration"
                       value="false"
-                      {...register("ReraRegistration")}
+                      {...register("reraRegistration")}
                       onChange={(e) => handleselects(e)}
                     />
                   </Col>
@@ -140,7 +138,7 @@ function SurrenderLic() {
                         Area in Acres <span style={{ color: "red" }}>*</span>
                       </Form.Label>
                       {/* <Form.Control type="number" placeholder="Enter Area" /> */}
-                      <input type="number" placeholder="" className="form-control" {...register("AreainAcres")} />
+                      <input type="number" placeholder="" className="form-control" {...register("areainAcres")} />
                     </div>
                   )}
                 </div>
@@ -175,7 +173,7 @@ function SurrenderLic() {
                       </td>
                       <td>
                         {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan ")}></input> */}
-                        <input type="file" placeholder="" className="form-control" {...register("Third-PartyRights")}></input>
+                        <input type="file" placeholder="" className="form-control" {...register("thirdPartyRights")}></input>
                       </td>
                     </tr>
                     <tr>
@@ -185,7 +183,7 @@ function SurrenderLic() {
                         Declaration IDW Works Approved Scanned Copy of Zoning/Layout Plan <span style={{ color: "red" }}>*</span>
                       </td>
                       <td>
-                        <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan ")}></input>
+                        <input type="file" placeholder="" className="form-control" {...register("oningLayoutPlan ")}></input>
                         {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan ")}></input> */}
                       </td>
                     </tr>
@@ -196,7 +194,7 @@ function SurrenderLic() {
                         License Copy <span style={{ color: "red" }}>*</span>
                       </td>
                       <td>
-                        <input type="file" placeholder="" className="form-control" {...register("LicenseCopy ")}></input>
+                        <input type="file" placeholder="" className="form-control" {...register("licenseCopy ")}></input>
                       </td>
                     </tr>
                     <tr>
@@ -206,7 +204,7 @@ function SurrenderLic() {
                         EDC availed or not e.g. surrounding roads are constructed or not <span style={{ color: "red" }}>*</span>
                       </td>
                       <td>
-                        <input type="file" placeholder="" className="form-control" {...register("EDCavailed ")}></input>
+                        <input type="file" placeholder="" className="form-control" {...register("edcaVailed ")}></input>
                       </td>
                     </tr>
                     <tr>
@@ -258,7 +256,7 @@ function SurrenderLic() {
                           <span style={{ color: "red" }}>*</span>
                         </td>
                         <td>
-                          <input type="file" placeholder="" className="form-control" {...register("GiftDeed")}></input>
+                          <input type="file" placeholder="" className="form-control" {...register("giftDeed")}></input>
                         </td>
                       </tr>
                       <tr>
@@ -269,7 +267,7 @@ function SurrenderLic() {
                           <span style={{ color: "red" }}>*</span>
                         </td>
                         <td>
-                          <input type="file" placeholder="" className="form-control" {...register("Mutation")}></input>
+                          <input type="file" placeholder="" className="form-control" {...register("mutation")}></input>
                         </td>
                       </tr>
                       <tr>
@@ -279,7 +277,7 @@ function SurrenderLic() {
                           Jamabandhi <span style={{ color: "red" }}>*</span>
                         </td>
                         <td>
-                          <input type="file" placeholder="" className="form-control" {...register("Jamabandhi")}></input>
+                          <input type="file" placeholder="" className="form-control" {...register("jamabandhi")}></input>
                         </td>
                       </tr>
                     </tbody>
@@ -310,7 +308,7 @@ function SurrenderLic() {
                         <span style={{ color: "red" }}>*</span>
                       </td>
                       <td>
-                        <input type="file" placeholder="" className="form-control" {...register("Third-PartyRights")}></input>
+                        <input type="file" placeholder="" className="form-control" {...register("partyRights")}></input>
                       </td>
                     </tr>
                     <tr>
@@ -320,7 +318,7 @@ function SurrenderLic() {
                         Declaration IDW Works <span style={{ color: "red" }}>*</span>
                       </td>
                       <td>
-                        <input type="file" placeholder="" className="form-control" {...register("DeclarationIDWWorks")}></input>
+                        <input type="file" placeholder="" className="form-control" {...register("declarationIDWWorks")}></input>
                       </td>
                     </tr>
                     <tr>
@@ -331,7 +329,7 @@ function SurrenderLic() {
                         <span style={{ color: "red" }}>*</span>
                       </td>
                       <td>
-                        <input type="file" placeholder="" className="form-control" {...register("RevisedLayoutPlan")}></input>
+                        <input type="file" placeholder="" className="form-control" {...register("revisedLayoutPlan")}></input>
                       </td>
                     </tr>
                     <tr>
@@ -341,7 +339,7 @@ function SurrenderLic() {
                         EDC availed or not e.g. surrounding roads are constructed or not <span style={{ color: "red" }}>*</span>
                       </td>
                       <td>
-                        <input type="file" placeholder="" className="form-control" {...register("EDCavailed")}></input>
+                        <input type="file" placeholder="" className="form-control" {...register("availedEdc")}></input>
                       </td>
                     </tr>
                     <tr>
@@ -351,7 +349,7 @@ function SurrenderLic() {
                         Area falling under 24m road /service road or sector dividing road <span style={{ color: "red" }}>*</span>
                       </td>
                       <td>
-                        <input type="file" placeholder="" className="form-control" {...register("AreaFallingUnder")}></input>
+                        <input type="file" placeholder="" className="form-control" {...register("areaFallingUnder")}></input>
                       </td>
                     </tr>
                     <tr>
@@ -402,7 +400,7 @@ function SurrenderLic() {
                           <span style={{ color: "red" }}>*</span>
                         </td>
                         <td>
-                          <input type="file" placeholder="" className="form-control" {...register("GiftDeed")}></input>
+                          <input type="file" placeholder="" className="form-control" {...register("deedGift")}></input>
                         </td>
                       </tr>
                       <tr>
@@ -413,7 +411,7 @@ function SurrenderLic() {
                           <span style={{ color: "red" }}>*</span>
                         </td>
                         <td>
-                          <input type="file" placeholder="" className="form-control" {...register("Mutation")}></input>
+                          <input type="file" placeholder="" className="form-control" {...register("mutaDoc")}></input>
                         </td>
                       </tr>
                       <tr>
@@ -423,7 +421,7 @@ function SurrenderLic() {
                           Jamabandhi <span style={{ color: "red" }}>*</span>
                         </td>
                         <td>
-                          <input type="file" placeholder="" className="form-control" {...register("Jamabandhi")}></input>
+                          <input type="file" placeholder="" className="form-control" {...register("jamabandhiDoc")}></input>
                         </td>
                       </tr>
                     </tbody>
