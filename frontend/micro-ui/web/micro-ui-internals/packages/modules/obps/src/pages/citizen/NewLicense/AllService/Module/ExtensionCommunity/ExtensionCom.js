@@ -256,7 +256,7 @@ function ExtensionCom() {
                       <input type="file" className="form-control" placeholder="" {...register("extensionTimePeriod")}></input>
                     </td>
                   </tr>
-                  <tr>
+                  {/* <tr>
                     <th scope="row">3</th>
                     <td>
                       {" "}
@@ -266,9 +266,9 @@ function ExtensionCom() {
                     <td>
                       <input type="file" className="form-control" placeholder="" {...register("ownershipCommunitySite")}></input>
                     </td>
-                  </tr>
+                  </tr> */}
                   <tr>
-                    <th scope="row">4</th>
+                    <th scope="row">3</th>
                     <td>
                       {" "}
                       Proof of online payment of extension fees at the rates provided in Schedule-C to these Rules.{" "}
@@ -279,7 +279,7 @@ function ExtensionCom() {
                     </td>
                   </tr>
                   <tr>
-                    <th scope="row">5</th>
+                    <th scope="row">4</th>
                     <td>
                       {" "}
                       An explanatory note indicating the details of progress made about the construction of such a community site{" "}
@@ -290,7 +290,7 @@ function ExtensionCom() {
                     </td>
                   </tr>
                   <tr>
-                    <th scope="row">6</th>
+                    <th scope="row">5</th>
                     <td>
                       {" "}
                       In case of other than licensee/developer, upload renewed license copy.
@@ -301,13 +301,23 @@ function ExtensionCom() {
                     </td>
                   </tr>
                   <tr>
-                    <th scope="row">7</th>
+                    <th scope="row">6</th>
                     <td>
                       {" "}
                       Any other document as demanded by Director at any time.<span style={{ color: "red" }}>*</span>
                     </td>
                     <td>
                       <input type="file" className="form-control" placeholder="" {...register("demandedDirector")}></input>
+                    </td>
+                  </tr>
+                  <tr>
+                  <th scope="row">7</th>
+                    <td>
+                      {" "}
+                      Any other document which the director may require for the said purpose. <span style={{ color: "red" }}>*</span>
+                    </td>
+                    <td>
+                      <input type="file" className="form-control" placeholder="" {...register("documentdirector")}></input>
                     </td>
                   </tr>
                 </tbody>

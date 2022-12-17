@@ -6,6 +6,7 @@ import ApplicationTable from "./ApplicationTable";
 import SearchApplication from "./search";
 import { Link } from "react-router-dom";
 import { convertEpochToDateDMY } from "../../utils";
+// import Records from "../../pages/employee/ApplicationRecord/Record";
 // import { getActionButton } from "../../utils";
 
 const DesktopInbox = ({ tableConfig, filterComponent,columns, isLoading, setSearchFieldsBackToOriginalState, setSetSearchFieldsBackToOriginalState, ...props }) => {
@@ -114,7 +115,7 @@ const DesktopInbox = ({ tableConfig, filterComponent,columns, isLoading, setSear
         pageSizeLimit={props.pageSizeLimit}
         onSort={props.onSort}
         disableSort={props.disableSort}
-        onPageSizeChange={props.onPageSizeChange}
+        // onPageSizeChange={props.onPageSizeChange}
         sortParams={props.sortParams}
         totalRecords={props.totalRecords}
       />
@@ -184,6 +185,9 @@ const DesktopInbox = ({ tableConfig, filterComponent,columns, isLoading, setSear
         />
         <div className="result" style={{ marginLeft: !props?.isSearch ? "24px" : "", flex: 1 }}>
           {result}
+          {/* <p></p> */}
+          {/* <Link to={"/digit-ui/employee/tl/scrutiny"}>APPLICATION HERE</Link>
+          <Records></Records> */}
         </div>
       </div>
     </div>

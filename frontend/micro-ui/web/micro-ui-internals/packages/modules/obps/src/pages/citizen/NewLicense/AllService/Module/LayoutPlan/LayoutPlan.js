@@ -80,6 +80,7 @@ function LayoutPlanClu() {
                       </Col>
                     </Row>
                   </Form.Group>
+                 
                 </fieldset>
               </Col>
               <Col className="col-4">
@@ -150,7 +151,8 @@ function LayoutPlanClu() {
               </Button>
             </Row>
           </div>
-        </div>
+          </div>
+        
       </Card>
     </form>
   );

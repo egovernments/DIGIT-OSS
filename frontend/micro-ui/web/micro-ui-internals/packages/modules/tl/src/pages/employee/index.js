@@ -8,6 +8,21 @@ import Inbox from "./Inbox";
 // import Response from "../Response";
 import ApplicationDetails from "./ApplicationDetails";
 //import ReNewApplication from "./ReNewApplication";
+import ScrutinyFormcontainer from "../employee/ScrutinyContainer/ScrutinyFormContainer";
+import Loi from "../employee/ScrutinyContainer/Loi";
+import Records from "../employee/ApplicationRecord/Record";
+import renewalClu from "../employee/ScrutinyBasic/AllServiceScrutiny/Renewal/Renewal";
+import Beneficial from "../employee/ScrutinyBasic/AllServiceScrutiny/BeneficialInterest/Beneficial";
+import TransferLic from "../employee/ScrutinyBasic/AllServiceScrutiny/TransferLic/TransferLicense";
+import SurrenderLic from "../employee/ScrutinyBasic/AllServiceScrutiny/SurrenderLic/SurrenderLic";
+import ExtensionClu from "../employee/ScrutinyBasic/AllServiceScrutiny/ExtensionClu/ExtensionClu";
+import LayoutPlanClu from "../employee/ScrutinyBasic/AllServiceScrutiny/LayoutPlan/LayoutPlan";
+import ExtensionCom from "../employee/ScrutinyBasic/AllServiceScrutiny/ExtensionCommunity/ExtensionCom";
+import StandardDesign from "../employee/ScrutinyBasic/AllServiceScrutiny/StandardDesign/StandardDesign";
+import CompositionClu from "../employee/ScrutinyBasic/AllServiceScrutiny/CompositionClu/CompositionClu";
+import CompletionLic from "../employee/ScrutinyBasic/AllServiceScrutiny/CompletionLic/CompletionLic";
+import ServicePlanService from "../employee/ScrutinyBasic/ServicePlanScrutniy/ServicePlan";
+
 
 const TLBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
@@ -194,7 +209,22 @@ const EmployeeApp = ({ path, url, userType }) => {
           <PrivateRoute path={`${path}/edit-application-details/:id`} component={(props) => <ReNewApplication {...props} header={t("TL_ACTION_RESUBMIT")} parentRoute={path} />} />
           <PrivateRoute path={`${path}/response`} component={(props) => <Response {...props} parentRoute={path} />} />
           <PrivateRoute path={`${path}/search/:variant`} component={(props) => <Search {...props} parentRoute={path} />} />
-          
+          <PrivateRoute path={`${path}/scrutiny/:id`} component={ScrutinyFormcontainer} />
+          <PrivateRoute path={`${path}/Loi`} component={Loi} />
+          <PrivateRoute path={`${path}/Records`} component={Records} /> 
+          <PrivateRoute path={`${path}/renewalClu`} component={renewalClu} />
+          <PrivateRoute path={`${path}/Beneficial`} component={Beneficial} />
+          <PrivateRoute path={`${path}/TransferLic`} component={TransferLic} />
+          <PrivateRoute path={`${path}/SurrenderLic`} component={SurrenderLic} />
+          <PrivateRoute path={`${path}/ExtensionClu`} component={ExtensionClu} />
+          <PrivateRoute path={`${path}/ExtensionCom`} component={ExtensionCom} />
+          <PrivateRoute path={`${path}/LayoutPlanClu`} component={LayoutPlanClu} />
+          <PrivateRoute path={`${path}/StandardDesign`} component={StandardDesign} />
+          <PrivateRoute path={`${path}/CompositionClu`} component={CompositionClu} />
+          <PrivateRoute path={`${path}/CompletionLic`} component={CompletionLic} />
+          <PrivateRoute path={`${path}/ServicePlanService`} component={ServicePlanService} />
+
+         
         </div>
       </React.Fragment>
     </Switch>

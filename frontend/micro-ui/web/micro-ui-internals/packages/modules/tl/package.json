@@ -21,16 +21,27 @@
   "dependencies": {
     "@egovernments/digit-ui-libraries": "1.5.2",
     "@egovernments/digit-ui-react-components": "1.5.2",
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@hookform/resolvers": "^2.9.10",
+    "@material-ui/styles": "^4.11.5",
+    "@material-ui/utils": "^4.11.3",
+    "@mui/icons-material": "^5.10.15",
+    "@mui/material": "^5.10.15",
+    "@mui/styled-engine-sc": "^5.10.14",
+    "@mui/utils": "^5.10.16",
     "lodash.merge": "^4.6.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "react-hook-form": "6.15.8",
+    "react-hook-form": "^7.39.5",
     "react-i18next": "11.16.2",
     "react-query": "3.6.1",
     "react-redux": "7.2.8",
     "react-router-dom": "5.3.0",
     "react-table": "7.7.0",
     "redux": "4.1.2",
-    "redux-thunk": "2.4.1"
+    "redux-thunk": "2.4.1",
+    "styled-components": "^5.3.6",
+    "yup": "^0.32.11"
   }
 }

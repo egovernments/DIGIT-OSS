@@ -7,7 +7,15 @@ import { useForm } from "react-hook-form";
 import { Card } from "react-bootstrap";
 
 function TransferLicense() {
-  const { register, handleSubmit } = useForm();
+ 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+    setValue,
+  } = useForm({});
+
   const transferLic = (data) => console.log(data);
 
   const [selects, setSelects] = useState();
@@ -27,10 +35,10 @@ function TransferLicense() {
   return (
     <form onSubmit={handleSubmit(transferLic)}>
       <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Approval of demarcation cum zoning plan in CLU</h4>
+        <h4 style={{ fontSize: "25px", marginLeft: "21px" }} className="text-center">Transfer of License</h4>
         <div className="card">
-          <Form>
-            <h4 className="text-center">Transfer of License</h4>
+      
+          {/* <h4 className="text-center">Transfer of License</h4> */}
             <Row className="col-12">
               <Form.Group as={Col} controlId="formGridLicence">
                 <Form.Label>
@@ -54,8 +62,8 @@ function TransferLicense() {
                 <div>
                   {showhide === "5" ||
                     (showhide === "2" && (
-                      <div className="col-md-12 form-group">
-                        <Form.Label>
+                      <div className="col-md-12 ">
+                        <Form.Label className="fw-normal">
                           Area in Acres <span style={{ color: "red" }}>*</span>
                         </Form.Label>
                         <input type="number" placeholder="" className="form-control" {...register("araeInAcres")} />
@@ -115,7 +123,7 @@ function TransferLicense() {
                             </thead>
                             <tbody>
                               <tr>
-                                <th scope="row">1</th>
+                                 <th class="fw-normal">1</th>
                                 <td>
                                   Undertaking regarding the creation of 3rd party right on the licensed area
                                   <span style={{ color: "red" }}>*</span>
@@ -125,7 +133,7 @@ function TransferLicense() {
                                 </td>
                               </tr>
                               <tr>
-                                <th scope="row">2</th>
+                                 <th class="fw-normal">2</th>
                                 <td>
                                   {" "}
                                   The colonizer seeking transfer of whole license/part license shall submit self-certification along with a
@@ -137,7 +145,7 @@ function TransferLicense() {
                                 </td>
                               </tr>
                               <tr>
-                                <th scope="row">3</th>
+                                 <th class="fw-normal">3</th>
                                 <td>
                                   {" "}
                                   A consent letter from the ‘new entity for the proposed change along with justification
@@ -148,7 +156,7 @@ function TransferLicense() {
                                 </td>
                               </tr>
                               <tr>
-                                <th scope="row">4</th>
+                                 <th class="fw-normal">4</th>
                                 <td>
                                   {" "}
                                   Board resolution of authorized signatory <span style={{ color: "red" }}>*</span>
@@ -158,7 +166,7 @@ function TransferLicense() {
                                 </td>
                               </tr>
                               <tr>
-                                <th scope="row">5</th>
+                                 <th class="fw-normal">5</th>
                                 <td>
                                   No objection certificate from the existing ‘Developer, filed through its authorized signatory, specifically
                                   designated for the purpose; as well as from the ‘land owner licensees’, in person (not through GPA/SPA assignees),
@@ -170,7 +178,7 @@ function TransferLicense() {
                                 </td>
                               </tr>
                               <tr>
-                                <th scope="row">6</th>
+                                 <th class="fw-normal">6</th>
                                 <td>
                                   Documents about the Technical and Financial Capacity of the ‘new entity’ proposed to be inducted as a ‘Developer’ or
                                   ‘shareholder(s)’ as per prescribed policy parameters for grant of a license l<span style={{ color: "red" }}>*</span>
@@ -180,7 +188,7 @@ function TransferLicense() {
                                 </td>
                               </tr>
                               <tr>
-                                <th scope="row">7</th>
+                                 <th class="fw-normal">7</th>
                                 <td>
                                   An undertaking to pay the balance administrative charges before final approval{" "}
                                   <span style={{ color: "red" }}>*</span>
@@ -190,7 +198,7 @@ function TransferLicense() {
                                 </td>
                               </tr>
                               <tr>
-                                <th scope="row">8</th>
+                                 <th class="fw-normal">8</th>
                                 <td>
                                   Justification for request
                                   <span style={{ color: "red" }}>*</span>
@@ -200,7 +208,7 @@ function TransferLicense() {
                                 </td>
                               </tr>
                               <tr>
-                                <th scope="row">9</th>
+                                 <th class="fw-normal">9</th>
                                 <td>
                                   An undertaking to the effect that in case the administrative charges for such cases are fixed in act and rules at a
                                   rate higher than that been recovered, the applicant shall be liable to pay the difference as and when demanded by
@@ -212,7 +220,7 @@ function TransferLicense() {
                                 </td>
                               </tr>
                               <tr>
-                                <th scope="row">10</th>
+                                 <th class="fw-normal">10</th>
                                 <td>
                                   The status regarding the creation of third-party rights in the colony. In case no third-party rights are claimed to
                                   have been created in the colony, an affidavit to the said effect be also submitted by the existing developer
@@ -223,7 +231,7 @@ function TransferLicense() {
                                 </td>
                               </tr>
                               <tr>
-                                <th scope="row">11</th>
+                                 <th class="fw-normal">11</th>
                                 <td>
                                   {" "}
                                   Status regarding registration of project in RERA
@@ -234,7 +242,7 @@ function TransferLicense() {
                                 </td>
                               </tr>
                               <tr>
-                                <th scope="row">12</th>
+                                 <th class="fw-normal">12</th>
                                 <td>
                                   {" "}
                                   Any Other Document <span style={{ color: "red" }}>*</span>
@@ -267,7 +275,7 @@ function TransferLicense() {
                             </thead>
                             <tbody>
                               <tr>
-                                <th scope="row">1</th>
+                                 <th class="fw-normal">1</th>
                                 <td>
                                   Undertaking regarding the creation of 3rd party right on the licensed area
                                   <span style={{ color: "red" }}>*</span>
@@ -277,7 +285,7 @@ function TransferLicense() {
                                 </td>
                               </tr>
                               <tr>
-                                <th scope="row">2</th>
+                                 <th class="fw-normal">2</th>
                                 <td>
                                   {" "}
                                   The colonizer seeking transfer of whole license/part license shall submit self-certification along with a
@@ -289,7 +297,7 @@ function TransferLicense() {
                                 </td>
                               </tr>
                               <tr>
-                                <th scope="row">3</th>
+                                 <th class="fw-normal">3</th>
                                 <td>
                                   A consent letter from the ‘new entity for the proposed change along with justification
                                   <span style={{ color: "red" }}>*</span>
@@ -299,7 +307,7 @@ function TransferLicense() {
                                 </td>
                               </tr>
                               <tr>
-                                <th scope="row">4</th>
+                                 <th class="fw-normal">4</th>
                                 <td>
                                   Board resolution of authorized signatory
                                   <span style={{ color: "red" }}>*</span>
@@ -309,7 +317,7 @@ function TransferLicense() {
                                 </td>
                               </tr>
                               <tr>
-                                <th scope="row">5</th>
+                                 <th class="fw-normal">5</th>
                                 <td>
                                   Status regarding registration of project in RERA
                                   <span style={{ color: "red" }}>*</span>
@@ -319,7 +327,7 @@ function TransferLicense() {
                                 </td>
                               </tr>
                               <tr>
-                                <th scope="row">6</th>
+                                 <th class="fw-normal">6</th>
                                 <td>
                                   Any Other Document
                                   <span style={{ color: "red" }}>*</span>
@@ -352,7 +360,7 @@ function TransferLicense() {
                             </thead>
                             <tbody>
                               <tr>
-                                <th scope="row">1</th>
+                                 <th class="fw-normal">1</th>
                                 <td>
                                   Undertaking regarding the creation of 3rd party right on the licensed area
                                   <span style={{ color: "red" }}>*</span>
@@ -362,7 +370,7 @@ function TransferLicense() {
                                 </td>
                               </tr>
                               <tr>
-                                <th scope="row">2</th>
+                                 <th class="fw-normal">2</th>
                                 <td>
                                   A consent letter from the ‘new entity for the proposed change along with justification
                                   <span style={{ color: "red" }}>*</span>
@@ -372,7 +380,7 @@ function TransferLicense() {
                                 </td>
                               </tr>
                               <tr>
-                                <th scope="row">3</th>
+                                 <th class="fw-normal">3</th>
                                 <td>
                                   {" "}
                                   Board resolution of authorized signatory<span style={{ color: "red" }}>*</span>
@@ -382,7 +390,7 @@ function TransferLicense() {
                                 </td>
                               </tr>
                               <tr>
-                                <th scope="row">4</th>
+                                 <th class="fw-normal">4</th>
                                 <td>
                                   No objection certificate from the existing ‘Developer, filed through its authorized signatory, specifically
                                   designated for the purpose; as well as from the ‘land owner licensees’, in person (not through GPA/SPA assignees),
@@ -394,7 +402,7 @@ function TransferLicense() {
                                 </td>
                               </tr>
                               <tr>
-                                <th scope="row">5</th>
+                                 <th class="fw-normal">5</th>
                                 <td>
                                   Documents about the Technical and Financial Capacity of the ‘new entity’ proposed to be inducted as a ‘Developer’ or
                                   ‘shareholder(s)’ as per prescribed policy parameters for grant of a license
@@ -405,7 +413,7 @@ function TransferLicense() {
                                 </td>
                               </tr>
                               <tr>
-                                <th scope="row">6</th>
+                                 <th class="fw-normal">6</th>
                                 <td>
                                   An undertaking to pay the balance administrative charges before final approval
                                   <span style={{ color: "red" }}>*</span>
@@ -415,7 +423,7 @@ function TransferLicense() {
                                 </td>
                               </tr>
                               <tr>
-                                <th scope="row">7</th>
+                                 <th class="fw-normal">7</th>
                                 <td>
                                   A consent letter from the ‘new entity for the proposed change along with justification
                                   <span style={{ color: "red" }}>*</span>
@@ -425,7 +433,7 @@ function TransferLicense() {
                                 </td>
                               </tr>
                               <tr>
-                                <th scope="row">8</th>
+                                 <th class="fw-normal">8</th>
                                 <td>
                                   Justification for request
                                   <span style={{ color: "red" }}>*</span>
@@ -435,7 +443,7 @@ function TransferLicense() {
                                 </td>
                               </tr>
                               <tr>
-                                <th scope="row">9</th>
+                                 <th class="fw-normal">9</th>
                                 <td>
                                   An undertaking to the effect that in case the administrative charges for such cases are fixed in act and rules at a
                                   rate higher than that been recovered, the applicant shall be liable to pay the difference as and when demanded by
@@ -447,7 +455,7 @@ function TransferLicense() {
                                 </td>
                               </tr>
                               <tr>
-                                <th scope="row">10</th>
+                                 <th class="fw-normal">10</th>
                                 <td>
                                   {" "}
                                   Status regarding registration of project in RERA
@@ -458,7 +466,7 @@ function TransferLicense() {
                                 </td>
                               </tr>
                               <tr>
-                                <th scope="row">11</th>
+                                 <th class="fw-normal">11</th>
                                 <td>
                                   {" "}
                                   Any Other Document <span style={{ color: "red" }}>*</span>
@@ -490,7 +498,7 @@ function TransferLicense() {
                             </thead>
                             <tbody>
                               <tr>
-                                <th scope="row">1</th>
+                                 <th class="fw-normal">1</th>
                                 <td>
                                   Undertaking regarding the creation of 3rd party right on the licensed area
                                   <span style={{ color: "red" }}>*</span>
@@ -500,7 +508,7 @@ function TransferLicense() {
                                 </td>
                               </tr>
                               <tr>
-                                <th scope="row">2</th>
+                                 <th class="fw-normal">2</th>
                                 <td>
                                   A consent letter from the ‘new entity for the proposed change along with justification
                                   <span style={{ color: "red" }}>*</span>
@@ -510,7 +518,7 @@ function TransferLicense() {
                                 </td>
                               </tr>
                               <tr>
-                                <th scope="row">3</th>
+                                 <th class="fw-normal">3</th>
                                 <td>
                                   Board resolution of authorized signatory
                                   <span style={{ color: "red" }}>*</span>
@@ -520,7 +528,7 @@ function TransferLicense() {
                                 </td>
                               </tr>
                               <tr>
-                                <th scope="row">4</th>
+                                 <th class="fw-normal">4</th>
                                 <td>
                                   Status regarding registration of project in RERA
                                   <span style={{ color: "red" }}>*</span>
@@ -530,7 +538,7 @@ function TransferLicense() {
                                 </td>
                               </tr>
                               <tr>
-                                <th scope="row">5</th>
+                                 <th class="fw-normal">5</th>
                                 <td>
                                   Any Other Document
                                   <span style={{ color: "red" }}>*</span>
@@ -548,10 +556,19 @@ function TransferLicense() {
               </div>
             </Row>
 
-            <Button variant="primary" type="submit">
+            <div class="row">
+          <div class="col-sm-12 text-right">
+            <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
               Submit
-            </Button>
-          </Form>
+            </button>
+          </div>
+          <div class="col-sm-12 text-right">
+            <button id="btnSearch" class="btn btn-primary btn-md center-block" style={{ marginTop: "-58px", marginRight: "97px" }}>
+              Save as Draft
+            </button>
+          </div>
+        </div>
+        
         </div>
       </Card>
     </form>

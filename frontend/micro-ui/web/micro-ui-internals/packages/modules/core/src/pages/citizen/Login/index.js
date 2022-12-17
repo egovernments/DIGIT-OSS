@@ -92,7 +92,9 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
 
   const handleMobileChange = (event) => {
     const { value } = event.target;
-    setParmas({ ...params, mobileNumber: value });
+    if(value.length <= 10){
+      setParmas({ ...params, mobileNumber: value });
+    }
   };
 
   const selectMobileNumber = async (mobileNumber) => {

@@ -4,7 +4,8 @@ import { Card, Row, Col } from "react-bootstrap";
 import ModalChild from "./Remarks/ModalChild";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import './css/personalInfoChild.style.js'
-import { useStyles } from "./css/personalInfoChild.style.js";
+import { useStyles } from "./css/personalInfoChild.style.js"
+
 
 
 

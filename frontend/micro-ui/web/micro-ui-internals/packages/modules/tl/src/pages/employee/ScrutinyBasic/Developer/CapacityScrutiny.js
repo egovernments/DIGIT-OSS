@@ -106,9 +106,6 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
   const [isyesOrNochecked, setYesorNochecked] = useState(true);
   // const [fieldValue1, setFieldValue1] = useState("");
 
-
-
-
   const handleYesOrNochecked = (data) => {
     setYesorNochecked(data.data);
   };
@@ -193,7 +190,6 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
     return obj.label === "the proposed developer company/firm";
   });
 
-  ////////////////////////////////////////////
   const {
     register,
     handleSubmit,
@@ -321,10 +317,6 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
   const [noofRow1, setNoOfRow1] = useState(1);
   const onSkip = () => onSelect();
 
-
-
-
-
   const classes = useStyles();
 
   const [smShow, setSmShow] = useState(false);
@@ -332,57 +324,65 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
   const Colors = {
     approved: "#09cb3d",
     disapproved: "#ff0000",
-    info: "#FFB602"
-  }
+    info: "#FFB602",
+  };
   const [selectedFieldData, setSelectedFieldData] = useState();
   const [fieldValue, setFieldValue] = useState("");
-  const [openedModal, setOpennedModal] = useState("")
+  const [openedModal, setOpennedModal] = useState("");
   const [fieldIconColors, setFieldIconColors] = useState({
     caution1: Colors.info,
     caution2: Colors.info,
     caution3: Colors.info,
     caution4: Colors.info,
     caution5: Colors.info,
-  })
+  });
 
-  const fieldIdList = [{ label: "Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975", key: "caution1" },{ label: "Licences/permissions granted to Developer/ group company for development of colony under any other law/Act as", key: "caution2" },{ label: "Whether any technical expert(s) engaged", key: "caution3" },{ label: "If director/partner of the proposed developer company/firm also holds designation of director/partner in any other company/firm who has already obtained license(s) under act of 1975", key: "caution4" },{ label: "In case of technical capacity sought from another company/firm who has already obtained license(s) under act of 1975 or outside Haryana", key: "caution5" },]
-
+  const fieldIdList = [
+    { label: "Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975", key: "caution1" },
+    { label: "Licences/permissions granted to Developer/ group company for development of colony under any other law/Act as", key: "caution2" },
+    { label: "Whether any technical expert(s) engaged", key: "caution3" },
+    {
+      label:
+        "If director/partner of the proposed developer company/firm also holds designation of director/partner in any other company/firm who has already obtained license(s) under act of 1975",
+      key: "caution4",
+    },
+    {
+      label:
+        "In case of technical capacity sought from another company/firm who has already obtained license(s) under act of 1975 or outside Haryana",
+      key: "caution5",
+    },
+  ];
 
   const getColorofFieldIcon = () => {
     let tempFieldColorState = fieldIconColors;
-    fieldIdList.forEach((item) => { 
+    fieldIdList.forEach((item) => {
       if (iconColorState !== null && iconColorState !== undefined) {
         console.log("color method called");
-        const fieldPresent = iconColorState.egScrutiny.filter(ele => (ele.fieldIdL === item.label));
+        const fieldPresent = iconColorState.egScrutiny.filter((ele) => ele.fieldIdL === item.label);
         console.log("filteration value", fieldPresent, fieldPresent[0]?.isApproved);
         if (fieldPresent && fieldPresent.length) {
           console.log("filteration value1", fieldPresent, fieldPresent[0]?.isApproved);
-          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved ? Colors.approved : Colors.disapproved }
-
+          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved ? Colors.approved : Colors.disapproved };
         }
       }
-    })
+    });
 
     setFieldIconColors(tempFieldColorState);
-
   };
-
 
   useEffect(() => {
     getColorofFieldIcon();
-    console.log("repeating1...",)
-  }, [iconColorState])
+    console.log("repeating1...");
+  }, [iconColorState]);
 
   useEffect(() => {
     if (labelValue) {
-      const fieldPresent = iconColorState.egScrutiny.filter(ele => (ele.fieldIdL === labelValue));
+      const fieldPresent = iconColorState.egScrutiny.filter((ele) => ele.fieldIdL === labelValue);
       setSelectedFieldData(fieldPresent[0]);
     } else {
       setSelectedFieldData(null);
     }
-  }, [labelValue])
-
-
+  }, [labelValue]);
 
   const currentRemarks = (data) => {
     props.showTable({ data: data.data });
@@ -393,16 +393,11 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
     setSmShow(false);
     console.log("here", openedModal, data);
     if (openedModal && data) {
-      setFieldIconColors({ ...fieldIconColors, [openedModal]: data.data.isApproved ? Colors.approved : Colors.disapproved })
+      setFieldIconColors({ ...fieldIconColors, [openedModal]: data.data.isApproved ? Colors.approved : Colors.disapproved });
     }
     setOpennedModal("");
     setLabelValue("");
   };
-
-
-
-
-
 
   return (
     <div>
@@ -557,26 +552,28 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                 (i) Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975: *{" "}
               </p>
               <div className="d-flex flex-row align-items-center ml-4">
-                <input type="radio" value="Yes" checked={capacityScrutinyInfo?.permissionGrantedHRDU === "Y"?true:false}  disabled />
-                <label className="m-0  mx-1" for="Yes">Yes</label>
-                <input type="radio" value="No"  checked={capacityScrutinyInfo?.permissionGrantedHRDU === "N"?true:false} disabled />
-                <label className="m-0 mx-2" for="No">No</label>
+                <input type="radio" value="Yes" checked={capacityScrutinyInfo?.permissionGrantedHRDU === "Y" ? true : false} disabled />
+                <label className="m-0  mx-1" for="Yes">
+                  Yes
+                </label>
+                <input type="radio" value="No" checked={capacityScrutinyInfo?.permissionGrantedHRDU === "N" ? true : false} disabled />
+                <label className="m-0 mx-2" for="No">
+                  No
+                </label>
                 <ReportProblemIcon
                   style={{
-                    color: fieldIconColors.caution1
+                    color: fieldIconColors.caution1,
                   }}
                   onClick={() => {
-                    setOpennedModal("caution1")
+                    setOpennedModal("caution1");
                     setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
                       setSmShow(true),
                       console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1 : null);
                   }}
                 ></ReportProblemIcon>
-
               </div>
               <div>
-
                 {/* {showhide0 === "Yes" && ( */}
                 <div className="card-body">
                   {/* <h5 className="card-h">Add/Remove Authorized Users</h5> */}
@@ -598,11 +595,9 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                           ? capacityDevelopColonyHdruAct.map((elementInArray, input) => {
                               return ( */}
 
-                        {
-                          capacityScrutinyInfo?.capacityDevelopColonyHdruAct?.map((item,index)=>(
-
-                            <tr>
-                            <td>{index+1}</td>
+                        {capacityScrutinyInfo?.capacityDevelopColonyHdruAct?.map((item, index) => (
+                          <tr>
+                            <td>{index + 1}</td>
                             <td>
                               <input
                                 type="text"
@@ -635,17 +630,19 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                                 {/* <button className="btn btn-sm col-md-6">
                                   <VisibilityIcon color="info" className="icon" />
                                 </button> */}
-                                 <div className="btn btn-sm col-md-6">
-                                 <IconButton onClick={()=>getDocShareholding(item?.sectorAndDevelopmentPlan)}>
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
-                                 </div>
-                                 <div className="btn btn-sm col-md-6">
-                                {/* <button className="btn btn-sm col-md-6">
+                                <div className="btn btn-sm col-md-6">
+                                  <IconButton onClick={() => getDocShareholding(item?.sectorAndDevelopmentPlan)}>
+                                    <VisibilityIcon color="info" className="icon" />
+                                  </IconButton>
+                                </div>
+                                <div className="btn btn-sm col-md-6">
+                                  {/* <button className="btn btn-sm col-md-6">
                                   <FileDownloadIcon color="primary" />
                                 </button> */}
-                                 <IconButton onClick={()=>getDocShareholding(item?.sectorAndDevelopmentPlan)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
+                                  <IconButton onClick={() => getDocShareholding(item?.sectorAndDevelopmentPlan)}>
+                                    <FileDownloadIcon color="info" className="icon" />
+                                  </IconButton>
+                                </div>
                               </div>
                             </td>
                             <td>
@@ -653,27 +650,24 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                                 {/* <button className="btn btn-sm col-md-6">
                                   <VisibilityIcon color="info" className="icon" />
                                 </button> */}
-                               
-                                 <div className="btn btn-sm col-md-6">
-                                <IconButton onClick={()=>getDocShareholding(item?.validatingLicence)}>
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 <div className="btn btn-sm col-md-6">
-                                {/* <button className="btn btn-sm col-md-6">
+
+                                <div className="btn btn-sm col-md-6">
+                                  <IconButton onClick={() => getDocShareholding(item?.validatingLicence)}>
+                                    <VisibilityIcon color="info" className="icon" />
+                                  </IconButton>
+                                </div>
+                                <div className="btn btn-sm col-md-6">
+                                  {/* <button className="btn btn-sm col-md-6">
                                   <FileDownloadIcon color="primary" />
                                 </button> */}
-                                 <IconButton onClick={()=>getDocShareholding(item?.validatingLicence)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 
+                                  <IconButton onClick={() => getDocShareholding(item?.validatingLicence)}>
+                                    <FileDownloadIcon color="info" className="icon" />
+                                  </IconButton>
+                                </div>
                               </div>
                             </td>
                           </tr>
-
-                          ))
-                        }
-
-                       
+                        ))}
                       </tbody>
                     </Table>
                     <div>
@@ -767,14 +761,14 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                 (ii) Licences/permissions granted to Developer/ group company for development of colony under any other law/Act as .
                 <ReportProblemIcon
                   style={{
-                    color: fieldIconColors.caution2
+                    color: fieldIconColors.caution2,
                   }}
                   onClick={() => {
-                    setOpennedModal("caution2")
+                    setOpennedModal("caution2");
                     setLabelValue("Licences/permissions granted to Developer/ group company for development of colony under any other law/Act as"),
-                    setSmShow(true),
-                    console.log("modal open"),
-                    setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution2: null);
+                      setSmShow(true),
+                      console.log("modal open"),
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution2 : null);
                   }}
                 ></ReportProblemIcon>
               </p>
@@ -801,80 +795,79 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                           capacityDevelopColonyLawAct.map((elementInArray, input) => {
                             return ( */}
 
-                        {
-                          capacityScrutinyInfo?.capacityDevelopColonyLawAct?.map((item,index)=>(
-                        <tr>
-                          <td>{index + 1}</td>
-                          <td>
-                            <input
-                              type="text"
-                              // value={elementInArray.licenceNumber}
-                              placeholder={item?.coloniesDeveloped}
-                              class="employee-card-input"
-                              disabled
-                            />
-                          </td>
-                          <td>
-                            <input
-                              type="text"
-                              // value={elementInArray.area} placeholder={elementInArray.area}
-                              placeholder={item?.area}
-                              class="employee-card-input"
-                              disabled
-                            />
-                          </td>
-                          <td>
-                            <input
-                              type="text"
-                              // value={elementInArray.licenceNumber}
-                              placeholder={item?.purpose}
-                              class="employee-card-input"
-                              disabled
-                            />
-                          </td>
-                          <td>
-                            <div className="row">
-                              {/* <button className="btn btn-sm col-md-6">
+                        {capacityScrutinyInfo?.capacityDevelopColonyLawAct?.map((item, index) => (
+                          <tr>
+                            <td>{index + 1}</td>
+                            <td>
+                              <input
+                                type="text"
+                                // value={elementInArray.licenceNumber}
+                                placeholder={item?.coloniesDeveloped}
+                                class="employee-card-input"
+                                disabled
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="text"
+                                // value={elementInArray.area} placeholder={elementInArray.area}
+                                placeholder={item?.area}
+                                class="employee-card-input"
+                                disabled
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="text"
+                                // value={elementInArray.licenceNumber}
+                                placeholder={item?.purpose}
+                                class="employee-card-input"
+                                disabled
+                              />
+                            </td>
+                            <td>
+                              <div className="row">
+                                {/* <button className="btn btn-sm col-md-6">
                                 <VisibilityIcon color="info" className="icon" />
                               </button> */}
-                            
-                                 <div className="btn btn-sm col-md-6">
-                              <IconButton onClick={()=>getDocShareholding(item?.statusOfDevelopment)}>
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
-                              {/* <button className="btn btn-sm col-md-6">
-                                <FileDownloadIcon color="primary" />
-                              </button> */}
-                              </div>
-                                 <div className="btn btn-sm col-md-6">
-                               <IconButton onClick={()=>getDocShareholding(item?.statusOfDevelopment)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 
-                            </div>
-                          </td>
-                          <td>
-                            <div className="row">
-                           
-                                 <div className="btn btn-sm col-md-6">
-                            <IconButton onClick={()=>getDocShareholding(item?.outstandingDues)}>
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 <div className="btn btn-sm col-md-6">
-                              {/* <button className="btn btn-sm col-md-6">
-                                <VisibilityIcon color="info" className="icon" />
-                              </button> */}
-                              {/* <button className="btn btn-sm col-md-6">
-                                <FileDownloadIcon color="primary" />
-                              </button> */}
-                              <IconButton onClick={()=>getDocShareholding(item?.outstandingDues)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                            </div>
-                          </td>
-                        </tr>
 
-                          ))
-                        }
+                                <div className="btn btn-sm col-md-6">
+                                  <IconButton onClick={() => getDocShareholding(item?.statusOfDevelopment)}>
+                                    <VisibilityIcon color="info" className="icon" />
+                                  </IconButton>
+                                  {/* <button className="btn btn-sm col-md-6">
+                                <FileDownloadIcon color="primary" />
+                              </button> */}
+                                </div>
+                                <div className="btn btn-sm col-md-6">
+                                  <IconButton onClick={() => getDocShareholding(item?.statusOfDevelopment)}>
+                                    <FileDownloadIcon color="info" className="icon" />
+                                  </IconButton>
+                                </div>
+                              </div>
+                            </td>
+                            <td>
+                              <div className="row">
+                                <div className="btn btn-sm col-md-6">
+                                  <IconButton onClick={() => getDocShareholding(item?.outstandingDues)}>
+                                    <VisibilityIcon color="info" className="icon" />
+                                  </IconButton>
+                                </div>
+                                <div className="btn btn-sm col-md-6">
+                                  {/* <button className="btn btn-sm col-md-6">
+                                <VisibilityIcon color="info" className="icon" />
+                              </button> */}
+                                  {/* <button className="btn btn-sm col-md-6">
+                                <FileDownloadIcon color="primary" />
+                              </button> */}
+                                  <IconButton onClick={() => getDocShareholding(item?.outstandingDues)}>
+                                    <FileDownloadIcon color="info" className="icon" />
+                                  </IconButton>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
                         {/* );
                           })
                         ) : (
@@ -980,22 +973,39 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
               </div>
 
               <div className="hl"></div>
-              <p className="ml-3 d-flex flex-row mb-4">(iii) Whether any technical expert(s) engaged   &nbsp;&nbsp;&nbsp;
+              <p className="ml-3 d-flex flex-row mb-4">
+                (iii) Whether any technical expert(s) engaged &nbsp;&nbsp;&nbsp;
                 <div className="d-flex flex-row align-items-center ml-2">
-                  <input type="radio" value="Yes"  className="mx-2 mt-1" checked={capacityScrutinyInfo?.technicalExpert === "Y" ? true : false} disabled />
-                  <label className="m-0  mx-1" for="Yes">Yes</label>
-                  <input type="radio" value="No"  className="mx-2 mt-1" checked={capacityScrutinyInfo?.technicalExpert === "N" ? true : false} disabled />
-                  <label className="m-0 mx-2" for="No">No</label>
+                  <input
+                    type="radio"
+                    value="Yes"
+                    className="mx-2 mt-1"
+                    checked={capacityScrutinyInfo?.technicalExpert === "Y" ? true : false}
+                    disabled
+                  />
+                  <label className="m-0  mx-1" for="Yes">
+                    Yes
+                  </label>
+                  <input
+                    type="radio"
+                    value="No"
+                    className="mx-2 mt-1"
+                    checked={capacityScrutinyInfo?.technicalExpert === "N" ? true : false}
+                    disabled
+                  />
+                  <label className="m-0 mx-2" for="No">
+                    No
+                  </label>
                   <ReportProblemIcon
                     style={{
-                      color: fieldIconColors.caution3
+                      color: fieldIconColors.caution3,
                     }}
                     onClick={() => {
-                      setOpennedModal("caution3")
-                    setLabelValue("Whether any technical expert(s) engaged"),
-                    setSmShow(true),
-                    console.log("modal open"),
-                    setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution3: null);
+                      setOpennedModal("caution3");
+                      setLabelValue("Whether any technical expert(s) engaged"),
+                        setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution3 : null);
                     }}
                   ></ReportProblemIcon>
                 </div>
@@ -1049,18 +1059,20 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                                   {/* <button className="btn btn-sm col-md-6">
                                     <VisibilityIcon color="info" className="icon" />
                                   </button> */}
-                                
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.engineerSign)}>
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
-                                  {/* <button className="btn btn-sm col-md-6">
+
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(item?.engineerSign)}>
+                                      <VisibilityIcon color="info" className="icon" />
+                                    </IconButton>
+                                    {/* <button className="btn btn-sm col-md-6">
                                     <FileDownloadIcon color="primary" />
                                   </button> */}
-                                    </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.engineerSign)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
+                                  </div>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(item?.engineerSign)}>
+                                      <FileDownloadIcon color="info" className="icon" />
+                                    </IconButton>
+                                  </div>
                                 </div>
                               </td>
                               <td align="center" size="large">
@@ -1068,18 +1080,20 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                                   {/* <button className="btn btn-sm col-md-6">
                                     <VisibilityIcon color="info" className="icon" />
                                   </button> */}
-                                   
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.engineerDegree)}>
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  {/* <button className="btn btn-sm col-md-6">
+
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(item?.engineerDegree)}>
+                                      <VisibilityIcon color="info" className="icon" />
+                                    </IconButton>
+                                  </div>
+                                  <div className="btn btn-sm col-md-6">
+                                    {/* <button className="btn btn-sm col-md-6">
                                     <FileDownloadIcon color="primary" />
                                   </button> */}
-                                  <IconButton onClick={()=>getDocShareholding(item?.engineerDegree)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
+                                    <IconButton onClick={() => getDocShareholding(item?.engineerDegree)}>
+                                      <FileDownloadIcon color="info" className="icon" />
+                                    </IconButton>
+                                  </div>
                                 </div>
                               </td>
                             </tr>
@@ -1110,19 +1124,20 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                                   {/* <button className="btn btn-sm col-md-6">
                                     <VisibilityIcon color="info" className="icon" />
                                   </button> */}
-                                   
-                                 <div className="btn btn-sm col-md-6">
-                                   <IconButton onClick={()=>getDocShareholding(item?.architectSign)}>
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  
-                                  {/* <button className="btn btn-sm col-md-6">
+
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(item?.architectSign)}>
+                                      <VisibilityIcon color="info" className="icon" />
+                                    </IconButton>
+                                  </div>
+                                  <div className="btn btn-sm col-md-6">
+                                    {/* <button className="btn btn-sm col-md-6">
                                     <FileDownloadIcon color="primary" />
                                   </button> */}
-                                  <IconButton onClick={()=>getDocShareholding(item?.architectSign)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
+                                    <IconButton onClick={() => getDocShareholding(item?.architectSign)}>
+                                      <FileDownloadIcon color="info" className="icon" />
+                                    </IconButton>
+                                  </div>
                                 </div>
                               </td>
                               <td align="center" size="large">
@@ -1130,18 +1145,20 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                                   {/* <button className="btn btn-sm col-md-6">
                                     <VisibilityIcon color="info" className="icon" />
                                   </button> */}
-                               
-                                 <div className="btn btn-sm col-md-6">
-                                   <IconButton onClick={()=>getDocShareholding(item?.architectDegree)}>
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  {/* <button className="btn btn-sm col-md-6">
+
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(item?.architectDegree)}>
+                                      <VisibilityIcon color="info" className="icon" />
+                                    </IconButton>
+                                  </div>
+                                  <div className="btn btn-sm col-md-6">
+                                    {/* <button className="btn btn-sm col-md-6">
                                     <FileDownloadIcon color="primary" />
                                   </button> */}
-                                  <IconButton onClick={()=>getDocShareholding(item?.architectDegree)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
+                                    <IconButton onClick={() => getDocShareholding(item?.architectDegree)}>
+                                      <FileDownloadIcon color="info" className="icon" />
+                                    </IconButton>
+                                  </div>
                                 </div>
                               </td>
                             </tr>
@@ -1172,21 +1189,22 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                                   {/* <button className="btn btn-sm col-md-6">
                                     <VisibilityIcon color="info" className="icon" />
                                   </button> */}
-                                   
-                                 <div className="btn btn-sm col-md-6">
-                                      <IconButton onClick={()=>getDocShareholding(item?.townPlannerSign)}>
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 
-                                  
+
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(item?.townPlannerSign)}>
+                                      <VisibilityIcon color="info" className="icon" />
+                                    </IconButton>
+                                  </div>
+
                                   {/* <button className="btn btn-sm col-md-6">
                                     <FileDownloadIcon color="primary" />
                                   </button> */}
-                                 
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.townPlannerSign)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
+
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(item?.townPlannerSign)}>
+                                      <FileDownloadIcon color="info" className="icon" />
+                                    </IconButton>
+                                  </div>
                                 </div>
                               </td>
                               <td align="center" size="large">
@@ -1194,18 +1212,20 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                                   {/* <button className="btn btn-sm col-md-6">
                                     <VisibilityIcon color="info" className="icon" />
                                   </button> */}
-                                    
-                                 <div className="btn btn-sm col-md-6">
-                                   <IconButton onClick={()=>getDocShareholding(item?.townPlannerDegree)}>
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  {/* <button className="btn btn-sm col-md-6">
+
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(item?.townPlannerDegree)}>
+                                      <VisibilityIcon color="info" className="icon" />
+                                    </IconButton>
+                                  </div>
+                                  <div className="btn btn-sm col-md-6">
+                                    {/* <button className="btn btn-sm col-md-6">
                                     <FileDownloadIcon color="primary" />
                                   </button> */}
-                                  <IconButton onClick={()=>getDocShareholding(item?.townPlannerDegree)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
+                                    <IconButton onClick={() => getDocShareholding(item?.townPlannerDegree)}>
+                                      <FileDownloadIcon color="info" className="icon" />
+                                    </IconButton>
+                                  </div>
                                 </div>
                               </td>
                             </tr>
@@ -1235,12 +1255,13 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                                 <td>Agreement with existing colonizer/developer who has already developed a colony</td>
                                 <td align="center" size="large">
                                   {/* <input type="file" onChange={(e) => setExistingDevDoc(e.target.value)} placeholder="" class="employee-card-input" /> */}
-                                  
-                                 <div className="btn btn-sm col-md-6"></div>
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.existingDeveloperAgreementDoc)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
+
+                                  <div className="btn btn-sm col-md-6"></div>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(item?.existingDeveloperAgreementDoc)}>
+                                      <FileDownloadIcon color="info" className="icon" />
+                                    </IconButton>
+                                  </div>
                                 </td>
                               </tr>
                               <tr>
@@ -1259,13 +1280,14 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                                     onChange={(e) => setTechnicalCapacityDoc(e.target.value)}
                                     placeholder=""
                                     class="employee-card-input"
-                                  /> */}  
-                                 <div className="btn btn-sm col-md-6"></div>
-                                    
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.technicalCapacityDoc)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
+                                  /> */}
+                                  <div className="btn btn-sm col-md-6"></div>
+
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(item?.technicalCapacityDoc)}>
+                                      <FileDownloadIcon color="info" className="icon" />
+                                    </IconButton>
+                                  </div>
                                 </td>
                               </tr>
                               <tr>
@@ -1281,13 +1303,13 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                                 </td>
                                 <td align="center" size="large">
                                   {/* <input type="file" onChange={(e) => setEngineerDocN(e.target.value)} placeholder="" class="employee-card-input" /> */}
-                                  
-                                 <div className="btn btn-sm col-md-6">
+
+                                  <div className="btn btn-sm col-md-6"></div>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(item?.engineerDocN)}>
+                                      <FileDownloadIcon color="info" className="icon" />
+                                    </IconButton>
                                   </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.engineerDocN)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
                                 </td>
                               </tr>
                               <tr>
@@ -1302,13 +1324,13 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                                 </td>
                                 <td align="center" size="large">
                                   {/* <input type="file" onChange={(e) => setArchitectDocN(e.target.value)} placeholder="" class="employee-card-input" /> */}
-                                
-                                 <div className="btn btn-sm col-md-6">
+
+                                  <div className="btn btn-sm col-md-6"></div>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(item?.architectDocN)}>
+                                      <FileDownloadIcon color="info" className="icon" />
+                                    </IconButton>
                                   </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.architectDocN)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
                                 </td>
                               </tr>
                               <tr>
@@ -1316,13 +1338,13 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                                 <td>Upload SPA/GPA/ Board Resolution to sign collaboration agreement on behalf of land owner(s)</td>
                                 <td align="center" size="large">
                                   {/* <input type="file" class="employee-card-input" onChange={(e) => setUplaodSpaBoardDoc(e.target.value)} /> */}
-                               
-                                 <div className="btn btn-sm col-md-6">
+
+                                  <div className="btn btn-sm col-md-6"></div>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(item?.architectNameN)}>
+                                      <FileDownloadIcon color="info" className="icon" />
+                                    </IconButton>
                                   </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.architectNameN)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
                                 </td>
                               </tr>
                             </tbody>
@@ -1336,51 +1358,54 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
 
               <div className="hl"></div>
               <p className="ml-3 d-flex mb-3">
-                (iv) If director/partner of the proposed developer company/firm also holds designation of director/partner in any
-                other company/firm who has already obtained license(s) under act of 1975:
+                (iv) If director/partner of the proposed developer company/firm also holds designation of director/partner in any other company/firm
+                who has already obtained license(s) under act of 1975:
                 <div className="d-flex flex-row align-items-center ml-4 mt-1 mb-3">
                   <input
                     type="radio"
                     value="Yes"
-                    
                     className="mx-2 mt-1"
-                    checked={capacityScrutinyInfo?.designatedDirectors === "Y" ?true:false}
+                    checked={capacityScrutinyInfo?.designatedDirectors === "Y" ? true : false}
                     // onChange={(e) => handleChange(e.target.value)}
-                    // 
+                    //
                     // onClick={handleshow}
                     disabled
                   />
-                  <label className="m-0  mx-1" for="Yes">Yes</label>
+                  <label className="m-0  mx-1" for="Yes">
+                    Yes
+                  </label>
 
                   <input
                     type="radio"
                     value="No"
-                    
                     className="mx-2 mt-1"
-                    checked={capacityScrutinyInfo?.designatedDirectors === "N" ?true:false}
+                    checked={capacityScrutinyInfo?.designatedDirectors === "N" ? true : false}
                     // onChange={(e) => handleChange(e.target.value)}
-                    // 
+                    //
                     // onClick={handleshow}
                     disabled
                   />
-                  <label className="m-0 mx-2" for="No">No</label>
+                  <label className="m-0 mx-2" for="No">
+                    No
+                  </label>
                   <ReportProblemIcon
                     style={{
-                      color:fieldIconColors.caution4
+                      color: fieldIconColors.caution4,
                     }}
                     onClick={() => {
-                      setOpennedModal("caution4")
-                      setLabelValue("If director/partner of the proposed developer company/firm also holds designation of director/partner in any other company/firm who has already obtained license(s) under act of 1975"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution4: null);
+                      setOpennedModal("caution4");
+                      setLabelValue(
+                        "If director/partner of the proposed developer company/firm also holds designation of director/partner in any other company/firm who has already obtained license(s) under act of 1975"
+                      ),
+                        setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution4 : null);
                     }}
                   ></ReportProblemIcon>
                 </div>
               </p>
 
               <div>
-
                 {/* {showhide === "Yes" && ( */}
                 <div className="row ">
                   <div className="form-group row">
@@ -1406,15 +1431,17 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                                   <button className="btn btn-sm col-md-6">
                                     <FileDownloadIcon color="primary" />
                                   </button> */}
-                                  
-                                 <div className="btn btn-sm col-md-6">
-                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
+
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                      <VisibilityIcon color="info" className="icon" />
+                                    </IconButton>
+                                  </div>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                      <FileDownloadIcon color="info" className="icon" />
+                                    </IconButton>
+                                  </div>
                                 </div>
                               </td>
                             </tr>
@@ -1423,21 +1450,22 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                               <td>Board resolutions of authorized signatory of firm/company provided technical assistance</td>
                               <td align="center" size="large">
                                 <div className="row">
-                               
-                                 <div className="btn btn-sm col-md-6">
-                                <IconButton onClick={()=>getDocShareholding(item?.boardDoc)}>
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  {/* <button className="btn btn-sm col-md-6">
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                      <VisibilityIcon color="info" className="icon" />
+                                    </IconButton>
+                                  </div>
+                                  <div className="btn btn-sm col-md-6">
+                                    {/* <button className="btn btn-sm col-md-6">
                                     <VisibilityIcon color="info" className="icon" />
                                   </button> */}
-                                  {/* <button className="btn btn-sm col-md-6">
+                                    {/* <button className="btn btn-sm col-md-6">
                                     <FileDownloadIcon color="primary" />
                                   </button> */}
-                                  <IconButton onClick={()=>getDocShareholding(item?.boardDoc)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
+                                    <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                      <FileDownloadIcon color="info" className="icon" />
+                                    </IconButton>
+                                  </div>
                                 </div>
                               </td>
                             </tr>
@@ -1455,21 +1483,39 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                 2. In case of technical capacity sought from another company/firm who has already obtained license(s) under act of 1975 or outside
                 Haryana:
                 <div className="d-flex flex-row align-items-center ml-2">
-                  <input type="radio" value="Yes"  className="mx-2 mt-1" disabled checked={capacityScrutinyInfo?.alreadtObtainedLic === "Y" ? true : false} />
-                  <label className="m-0  mx-1" for="Yes">Yes</label>
-                  <input type="radio" value="No"  className="mx-2 mt-1" disabled checked={capacityScrutinyInfo?.alreadtObtainedLic === "N" ? true : false} />
-                  <label className="m-0 mx-2" for="No">No</label>
+                  <input
+                    type="radio"
+                    value="Yes"
+                    className="mx-2 mt-1"
+                    disabled
+                    checked={capacityScrutinyInfo?.alreadtObtainedLic === "Y" ? true : false}
+                  />
+                  <label className="m-0  mx-1" for="Yes">
+                    Yes
+                  </label>
+                  <input
+                    type="radio"
+                    value="No"
+                    className="mx-2 mt-1"
+                    disabled
+                    checked={capacityScrutinyInfo?.alreadtObtainedLic === "N" ? true : false}
+                  />
+                  <label className="m-0 mx-2" for="No">
+                    No
+                  </label>
 
                   <ReportProblemIcon
                     style={{
-                      color: fieldIconColors.caution5
+                      color: fieldIconColors.caution5,
                     }}
                     onClick={() => {
-                      setOpennedModal("caution5")
-                      setLabelValue("In case of technical capacity sought from another company/firm who has already obtained license(s) under act of 1975 or outside Haryana"),
-                      setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution5: null);
+                      setOpennedModal("caution5");
+                      setLabelValue(
+                        "In case of technical capacity sought from another company/firm who has already obtained license(s) under act of 1975 or outside Haryana"
+                      ),
+                        setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution5 : null);
                     }}
                   ></ReportProblemIcon>
                 </div>
@@ -1506,15 +1552,16 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                                       <button className="btn btn-sm col-md-6">
                                         <FileDownloadIcon color="primary" />
                                       </button> */}
-                                      
-                                 <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={()=>getDocShareholding(item?.earlierDocY)}>
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
+
+                                      <div className="btn btn-sm col-md-6">
+                                        <IconButton onClick={() => getDocShareholding(item?.earlierDocY)}>
+                                          <VisibilityIcon color="info" className="icon" />
+                                        </IconButton>
                                       </div>
-                                 <div className="btn btn-sm col-md-6">
-                                 
-                                  <IconButton onClick={()=>getDocShareholding(item?.earlierDocY)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                      <div className="btn btn-sm col-md-6">
+                                        <IconButton onClick={() => getDocShareholding(item?.earlierDocY)}>
+                                          <FileDownloadIcon color="info" className="icon" />
+                                        </IconButton>
                                       </div>
                                     </div>
                                   </td>
@@ -1531,14 +1578,16 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                                       <button className="btn btn-sm col-md-6">
                                         <FileDownloadIcon color="primary" />
                                       </button> */}
-                                      
-                                 <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={()=>getDocShareholding(item?.boardDocY)}>
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
+
+                                      <div className="btn btn-sm col-md-6">
+                                        <IconButton onClick={() => getDocShareholding(item?.boardDocY)}>
+                                          <VisibilityIcon color="info" className="icon" />
+                                        </IconButton>
                                       </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.boardDocY)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                      <div className="btn btn-sm col-md-6">
+                                        <IconButton onClick={() => getDocShareholding(item?.boardDocY)}>
+                                          <FileDownloadIcon color="info" className="icon" />
+                                        </IconButton>
                                       </div>
                                     </div>
                                   </td>
@@ -1552,18 +1601,17 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                                   </td>
                                   <td align="center" size="large">
                                     <div className="row">
-                                      
-                                        
-                                 <div className="btn btn-sm col-md-6">
-                                       <IconButton onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}>
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
+                                      <div className="btn btn-sm col-md-6">
+                                        <IconButton onClick={() => getDocShareholding(item?.permissionGrantedLawAct)}>
+                                          <VisibilityIcon color="info" className="icon" />
+                                        </IconButton>
                                       </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                      <div className="btn btn-sm col-md-6">
+                                        <IconButton onClick={() => getDocShareholding(item?.permissionGrantedLawAct)}>
+                                          <FileDownloadIcon color="info" className="icon" />
+                                        </IconButton>
                                       </div>
-                                      </div>
-                                  
+                                    </div>
                                   </td>
                                 </tr>
                               </tbody>{" "}
@@ -1599,15 +1647,17 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                                     <button className="btn btn-sm col-md-6">
                                       <FileDownloadIcon color="primary" />
                                     </button> */}
-                                     
-                                 <div className="btn btn-sm col-md-6">
-                                     <IconButton onClick={()=>getDocShareholding(item?.boardDoc)}>
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.boardDoc)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
+
+                                    <div className="btn btn-sm col-md-6">
+                                      <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </IconButton>
+                                    </div>
+                                    <div className="btn btn-sm col-md-6">
+                                      <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                        <FileDownloadIcon color="info" className="icon" />
+                                      </IconButton>
+                                    </div>
                                   </div>
                                 </td>
                               </tr>
@@ -1623,15 +1673,17 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                                     <button className="btn btn-sm col-md-6">
                                       <FileDownloadIcon color="primary" />
                                     </button> */}
-                                      
-                                 <div className="btn btn-sm col-md-6">
-                                     <IconButton onClick={()=>getDocShareholding(item?.boardDocN)}>
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.boardDocN)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
+
+                                    <div className="btn btn-sm col-md-6">
+                                      <IconButton onClick={() => getDocShareholding(item?.boardDocN)}>
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </IconButton>
+                                    </div>
+                                    <div className="btn btn-sm col-md-6">
+                                      <IconButton onClick={() => getDocShareholding(item?.boardDocN)}>
+                                        <FileDownloadIcon color="info" className="icon" />
+                                      </IconButton>
+                                    </div>
                                   </div>
                                 </td>
                               </tr>
@@ -1650,15 +1702,17 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                                     <button className="btn btn-sm col-md-6">
                                       <FileDownloadIcon color="primary" />
                                     </button> */}
-                                    
-                                 <div className="btn btn-sm col-md-6">
-                                     <IconButton onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}>
-                                      <VisibilityIcon color="info" className="icon" /></IconButton>
-                                      </div>
-                                 <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}>
-                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
-                                      </div>
+
+                                    <div className="btn btn-sm col-md-6">
+                                      <IconButton onClick={() => getDocShareholding(item?.permissionGrantedLawAct)}>
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </IconButton>
+                                    </div>
+                                    <div className="btn btn-sm col-md-6">
+                                      <IconButton onClick={() => getDocShareholding(item?.permissionGrantedLawAct)}>
+                                        <FileDownloadIcon color="info" className="icon" />
+                                      </IconButton>
+                                    </div>
                                   </div>
                                 </td>
                               </tr>

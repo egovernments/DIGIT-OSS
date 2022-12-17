@@ -15,12 +15,12 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   React.useEffect(async () => {
     const uuid = userInfo?.info?.uuid;
     const usersResponse = await Digit.UserService.userSearch(tenantId, { uuid: [uuid] }, {});
-    console.log("USERID",usersResponse?.user[0]?.parentId)
+    // console.log("USERID",usersResponse?.user[0]?.parentId)
     setParentId(usersResponse?.user[0]?.parentId);
     setGenderMF(usersResponse?.user[0]?.gender);
   },[userInfo?.info?.uuid])
   
-  
+  console.log("FORMDATA VAL",formData)
   let validation = {};
   const devRegId = localStorage.getItem('devRegId');
   let isOpenLinkFlow = window.location.href.includes("openlink");
@@ -61,6 +61,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
       setTehsil(licenseDataList?.devDetail[0]?.licenceDetails?.tehsil);
       setState(licenseDataList?.devDetail[0]?.licenceDetails?.state);
       setDistrict(licenseDataList?.devDetail[0]?.licenceDetails?.district);
+      setisAddressSame(licenseDataList?.devDetail[0]?.licenceDetails?.isAddressSame);
       setAddressLineOneCorrespondence(licenseDataList?.devDetail[0]?.licenceDetails?.addressLineOneCorrespondence);
       setAddressLineTwoCorrespondence(licenseDataList?.devDetail[0]?.licenceDetails?.addressLineTwoCorrespondence);
       setAddressLineThreeCorrespondence(licenseDataList?.devDetail[0]?.licenceDetails?.addressLineThreeCorrespondence);
@@ -162,7 +163,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
           "PANFullName": name,
           "FullName": name,
           "DOB": dob,
-          "GENDER": gender.value
+          "GENDER": gender
         },
         "consentArtifact": {
           "consent": {
@@ -244,7 +245,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     setDOB(e.target.value);
   }
   function selectPanNumber(e) {
-    setPanNumber(e.target.value);
+    setPanNumber(e.target.value.toUpperCase());
     if(e.target.value === 10){
       panVerification();
     }
@@ -253,58 +254,117 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     setPermanentAddress(e.target.value);
   }
   function selectHouseNumber(e) {
-    setAddressLineOne(e.target.value);
+    if (isAddressSame == true) {
+      setAddressLineOne(e.target.value);
+      setAddressLineOneCorrespondence(e.target.value);
+    } else {
+      setAddressLineOne(e.target.value);
+    }
   }
   function selectColonyName(e) {
-    setAddressLineTwo(e.target.value);
+    if (isAddressSame == true) {
+      setAddressLineTwo(e.target.value);
+      setAddressLineTwoCorrespondence(e.target.value);
+    } else {
+      setAddressLineTwo(e.target.value);
+    }
   }
   function selectStreetName(e) {
-    setAddressLineThree(e.target.value);
+    if (isAddressSame == true) {
+      setAddressLineThree(e.target.value);
+      setAddressLineThreeCorrespondence(e.target.value);
+    } else {
+      setAddressLineThree(e.target.value);
+    }
+    
   }
   function selectLocality(e) {
-    setAddressLineFour(e.target.value);
+    if (isAddressSame == true) {
+      setAddressLineFour(e.target.value);
+      setAddressLineFourCorrespondence(e.target.value);
+    } else {
+      setAddressLineFour(e.target.value);
+    }
   }
   function selectCity(e) {
-    setCity(e.target.value);
+    if(!e.target.value || e.target.value.match("^[a-zA-Z]*$")){
+      if (isAddressSame == true) {
+        setCity(e.target.value);
+        setCityCorrespondence(e.target.value);
+      } else {
+        setCity(e.target.value);
+      }
+    }
   }
-  function selectPincode(e) {
-    setPincode(e.target.value);
+  function selectPincode(value) {
+    if (isAddressSame == true) {
+      setPincode(value);
+      setPincodeCorrespondence(value);
+    } else {
+      setPincode(value);
+    }
   }
   function selectVillage(e) {
-    setVillage(e.target.value);
+    if(!e.target.value || e.target.value.match("^[a-zA-Z]*$")){
+      if (isAddressSame == true) {
+        setVillage(e.target.value);
+        setVillageCorrespondence(e.target.value);
+      } else {
+        setVillage(e.target.value);
+      }
+    }
   }
   function selectTehsil(e) {
-    setTehsil(e.target.value);
+    if(!e.target.value || e.target.value.match("^[a-zA-Z]*$")){
+      if (isAddressSame == true) {
+        setTehsil(e.target.value);
+        setTehsilCorrespondence(e.target.value)
+      } else {
+        setTehsil(e.target.value);
+      }
+    }
   }
   function selectDistrict(e) {
-    setDistrict(e.target.value);
+    if(!e.target.value || e.target.value.match("^[a-zA-Z]*$")){
+      if (isAddressSame == true) {
+        setDistrict(e.target.value);
+        setDistrictCorrespondence(e.target.value);
+      } else {
+        setDistrict(e.target.value);
+      }
+    }
   }
   function selectState(e) {
-    setState(e.target.value);
+    if(!e.target.value || e.target.value.match("^[a-zA-Z]*$")){
+      if (isAddressSame == true) {
+        setState(e.target.value);
+        setStateCorrespondence(e.target.value);
+      } else {
+        setState(e.target.value);
+      }
+    }
   }
   function selectChecked(e) {
-    // console.log(e.target.value);
-    setSelectedChecked(e.target.value);
     if (isAddressSame == false) {
       setisAddressSame(true);
       // setSelectedChecked(formData?.LicenseDetails?.addressSameAsPermanent ? formData?.LicenseDetails?.addressSameAsPermanent : formData?.LicenseDetails?.addressSameAsPermanent)
       setCorrespondenceaddress(formData?.LicneseDetails?.PermanentAddress ? formData?.LicneseDetails?.PermanentAddress : formData?.formData?.LicneseDetails?.PermanentAddress);
-      setAddressLineOneCorrespondence(formData?.LicneseDetails?.addressLineOneCorrespondence ? formData?.LicneseDetails?.addressLineOneCorrespondence : formData?.LicneseDetails?.addressLineOne);
-      setAddressLineTwoCorrespondence(formData?.LicneseDetails?.addressLineTwoCorrespondence ? formData?.LicneseDetails?.addressLineTwoCorrespondence : formData?.formData?.LicneseDetails?.addressLineTwo);
-      setAddressLineThreeCorrespondence(formData?.LicneseDetails?.addressLineThreeCorrespondence ? formData?.LicneseDetails?.addressLineThreeCorrespondence : formData?.formData?.LicneseDetails?.addressLineThree);
-      setAddressLineFourCorrespondence(formData?.LicneseDetails?.addressLineFourCorrespondence ? formData?.LicneseDetails?.addressLineFourCorrespondence : formData?.formData?.LicneseDetails?.addressLineFour);
-      setCityCorrespondence(formData?.LicneseDetails?.cityCorrespondence ? formData?.LicneseDetails?.cityCorrespondence : formData?.formData?.LicneseDetails?.city);
-      setPincodeCorrespondence(formData?.LicneseDetails?.pincodeCorrespondence ? formData?.LicneseDetails?.pincodeCorrespondence : formData?.formData?.LicneseDetails?.pincode);
-      setVillageCorrespondence(formData?.LicneseDetails?.villageCorrespondence ? formData?.LicneseDetails?.villageCorrespondence : formData?.formData?.LicneseDetails?.village);
-      setTehsilCorrespondence(formData?.LicneseDetails?.tehsilCorrespondence ? formData?.LicneseDetails?.tehsilCorrespondence : formData?.formData?.LicneseDetails?.tehsil);
-      setStateCorrespondence(formData?.LicneseDetails?.stateCorrespondence ? formData?.LicneseDetails?.stateCorrespondence : formData?.formData?.LicneseDetails?.state);
-      setDistrictCorrespondence(formData?.LicneseDetails?.districtCorrespondence ? formData?.LicneseDetails?.districtCorrespondence : formData?.formData?.LicneseDetails?.district);
+      setAddressLineOneCorrespondence(addressLineOne);
+      setAddressLineTwoCorrespondence(addressLineTwo);
+      setAddressLineThreeCorrespondence(addressLineThree);
+      setAddressLineFourCorrespondence(addressLineFour);
+      setCityCorrespondence(city);
+      setPincodeCorrespondence(pincode);
+      setVillageCorrespondence(village);
+      setTehsilCorrespondence(tehsil);
+      setStateCorrespondence(state);
+      setDistrictCorrespondence(district);
     }
     else {
       Array.from(document.querySelectorAll("input")).forEach((input) => (input.value = ""));
       setisAddressSame(false);
       setCorrespondenceaddress("");
-      setAddressLineOneCorrespondence(formData?.LicneseDetails?.addressLineOneCorrespondence || "");
+      setAddressLineOneCorrespondence("");
       setAddressLineTwoCorrespondence("");
       setAddressLineThreeCorrespondence("");
       setAddressLineFourCorrespondence("");
@@ -332,22 +392,32 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     setAddressLineFourCorrespondence(e.target.value);
   }
   function selectCityCorrespondence(e) {
-    setCityCorrespondence(e.target.value);
+    if(!e.target.value || e.target.value.match("^[a-zA-Z]*$")){
+      setCityCorrespondence(e.target.value);
+    }
   }
-  function selectPincodeCorrespondence(e) {
-    setPincodeCorrespondence(e.target.value);
+  function selectPincodeCorrespondence(value) {
+    setPincodeCorrespondence(value);
   }
   function selectVillageCorrespondence(e) {
-    setVillageCorrespondence(e.target.value);
+    if(!e.target.value || e.target.value.match("^[a-zA-Z]*$")){
+      setVillageCorrespondence(e.target.value);
+    }
   }
   function selectTehsilCorrespondence(e) {
-    setTehsilCorrespondence(e.target.value);
+    if(!e.target.value || e.target.value.match("^[a-zA-Z]*$")){
+      setTehsilCorrespondence(e.target.value);
+    }
   }
   function selectStateCorrespondence(e) {
-    setStateCorrespondence(e.target.value);
+    if(!e.target.value || e.target.value.match("^[a-zA-Z]*$")){
+      setStateCorrespondence(e.target.value);
+    }
   }
   function selectDistrictCorrespondence(e) {
-    setDistrictCorrespondence(e.target.value);
+    if(!e.target.value || e.target.value.match("^[a-zA-Z]*$")){
+      setDistrictCorrespondence(e.target.value);
+    }
   }
       
       
@@ -454,7 +524,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
           "licenceDetails": {
             name: name,
             mobileNumber: mobileNumber,
-            gender: [{gender}],
+            gender: gender.value,
             email: email,
             dob: dob,
             PanNumber: PanNumber,
@@ -468,6 +538,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
             tehsil: tehsil,
             state: state,
             district: district,
+            isAddressSame:isAddressSame,
             addressLineOneCorrespondence: addressLineOneCorrespondence,
             addressLineTwoCorrespondence: addressLineTwoCorrespondence,
             addressLineThreeCorrespondence: addressLineThreeCorrespondence,
@@ -511,12 +582,12 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
 
     }
     else {
-      let data = formData?.formData;
-      data.LicneseDetails.name = name;
-      data.LicneseDetails.mobileNumber = mobileNumber;
-      data.LicneseDetails.gender = gender;
-      data.LicneseDetails.email = email;
-      data.LicneseDetails.PanNumber = PanNumber;
+      // let data = formData?.formData;
+      formData.name = name;
+      formData.mobileNumber = mobileNumber;
+      formData.gender = gender;
+      formData.email = email;
+      formData.PanNumber = PanNumber;
       formData.Correspondenceaddress = Correspondenceaddress;
       formData.addressLineOneCorrespondence = addressLineOneCorrespondence;
       formData.addressSameAsPermanent = addressSameAsPermanent;
@@ -540,7 +611,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
             onSelect={goNext}
             onSkip={onSkip}
             t={t}
-            isDisabled={!name || !mobileNumber || !gender || !dob || !email || !PanNumber}
+            isDisabled={!name || !mobileNumber || !mobileNumber.match(Digit.Utils.getPattern("MobileNo")) || !gender || !dob || !email || !email.match(Digit.Utils.getPattern("Email")) || !PanNumber || !PanNumber.match(Digit.Utils.getPattern("PAN")) || !pincode?.match(Digit.Utils.getPattern('Pincode') || !city || !addressLineOne)}
           >
             <Card className="mb-3">
               {/* <h4></h4> */}
@@ -571,10 +642,11 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                       style={{ width: "100%" }}
                       className="form-field"
                       selected={gender?.length === 1 ? gender[0] : gender}
-                      // disable={gender?.length === 1 || editScreen}
+                      disable={gender?.length === 1 || editScreen}
                       option={menu}
                       select={setGenderName}
                       value={gender}
+                      placeholder={gender}
                       optionKey="code"
                       t={t}
                       name="gender"
@@ -654,8 +726,9 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                     placeholder={PanNumber}
                     onChange={selectPanNumber}
                     className="text-uppercase"
+                    max={10}
                     // onChange={(e) => setPanNumber(e.target.value)}
-                    {...{ required: true, pattern: "[A-Z]{5}[0-9]{4}[A-Z]{1}", title: t("BPA_INVALID_PAN_NO") }}
+                    {...{ required: true,maxlength:"10", title: t("BPA_INVALID_PAN_NO") }}
                   />
                   {PanNumber && PanNumber.length > 0 && !PanNumber.match(Digit.Utils.getPattern('PAN')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_PAN_NO")}</CardLabelError>}
                   <h3 className="error-message" style={{ color: "red" }}>{PanValError}</h3>
@@ -756,7 +829,17 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                 </Form.Group>
                 <Form.Group className="col-md-4">
                   <CardLabel>{`${"Pincode"}*`}</CardLabel>
-                  <TextInput
+                  <MobileNumber
+                      value={pincode}
+                      name="pincode"
+                      maxlength={"6"}
+                      hideSpan="true"
+                      // onChange={(e) => setModalDIN(e.target.value)}
+                      onChange={selectPincode}
+                      // disable={mobileNumber && !isOpenLinkFlow ? true : false}
+                      {...{ required: true, pattern: "[1-9][0-9]{5}", type: "tel"}}
+                    />
+                  {/* <TextInput
                     t={t}
                     type={"text"}
                     isMandatory={false}
@@ -771,7 +854,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                       type: "text",
                       title: ("Please Enter Pincode"),
                     })}
-                  />
+                  /> */}
                   {pincode && pincode.length > 0 && !pincode.match(Digit.Utils.getPattern('Pincode')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid Pincode")}</CardLabelError>}
                 </Form.Group>
                 <Form.Group className="col-md-4">
@@ -857,6 +940,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                     onChange={(e) => selectChecked(e)}
                     value={isAddressSame}
                     checked={isAddressSame}
+                    name={isAddressSame}
                     style={{ paddingBottom: "10px", paddingTop: "10px" }}
                   />
                 </Form.Group>
@@ -945,7 +1029,18 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                 </Form.Group>
                 <Form.Group className="col-md-4">
                   <CardLabel>{`${"Pincode"}*`}</CardLabel>
-                  <TextInput
+                  <MobileNumber
+                      value={pincodeCorrespondence}
+                      name="pincodeCorrespondence"
+                      maxlength={"6"}
+                      hideSpan="true"
+                      disable={isAddressSame}
+                      // onChange={(e) => setModalDIN(e.target.value)}
+                      onChange={selectPincodeCorrespondence}
+                      // disable={mobileNumber && !isOpenLinkFlow ? true : false}
+                      {...{ required: true, pattern: "[1-9][0-9]{5}", type: "tel"}}
+                    />
+                  {/* <TextInput
                     t={t}
                     type={"text"}
                     isMandatory={true}
@@ -955,7 +1050,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                     placeholder={pincodeCorrespondence}
                     onChange={selectPincodeCorrespondence}
                     disable={isAddressSame}
-                  />
+                  /> */}
                 </Form.Group>
                 <Form.Group className="col-md-4">
                   <CardLabel>{`${"Village"}`}</CardLabel>

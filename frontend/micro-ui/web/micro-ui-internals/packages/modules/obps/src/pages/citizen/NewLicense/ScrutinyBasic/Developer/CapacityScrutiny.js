@@ -555,9 +555,9 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                 (i) Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975: *{" "}
               </p>
               <div className="d-flex flex-row align-items-center ml-4">
-                <input type="radio" value="Yes" checked={capacityScrutinyInfo?.permissionGrantedHRDU === "Y"?true:false} id="Yes" disabled />
+                <input type="radio" value="Yes" checked={capacityScrutinyInfo?.permissionGrantedHRDU === "Y"?true:false}  disabled />
                 <label className="m-0  mx-1" for="Yes">Yes</label>
-                <input type="radio" value="No" id="No" checked={capacityScrutinyInfo?.permissionGrantedHRDU === "N"?true:false} disabled />
+                <input type="radio" value="No"  checked={capacityScrutinyInfo?.permissionGrantedHRDU === "N"?true:false} disabled />
                 <label className="m-0 mx-2" for="No">No</label>
                 <ReportProblemIcon
                   style={{
@@ -943,9 +943,9 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
               <div className="hl"></div>
               <p className="ml-3 d-flex flex-row mb-4">(iii) Whether any technical expert(s) engaged   &nbsp;&nbsp;&nbsp;
                 <div className="d-flex flex-row align-items-center ml-2">
-                  <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" checked={capacityScrutinyInfo?.technicalExpert === "Y" ? true : false} disabled />
+                  <input type="radio" value="Yes"  className="mx-2 mt-1" checked={capacityScrutinyInfo?.technicalExpert === "Y" ? true : false} disabled />
                   <label className="m-0  mx-1" for="Yes">Yes</label>
-                  <input type="radio" value="No" id="No" className="mx-2 mt-1" checked={capacityScrutinyInfo?.technicalExpert === "N" ? true : false} disabled />
+                  <input type="radio" value="No"  className="mx-2 mt-1" checked={capacityScrutinyInfo?.technicalExpert === "N" ? true : false} disabled />
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
@@ -962,10 +962,10 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                 </div>
               </p>
               <div>
-                {/* <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" onChange={handleChange} name="Yes" onClick={handleshow1} />
+                {/* <input type="radio" value="Yes"  className="mx-2 mt-1" onChange={handleChange}  onClick={handleshow1} />
                 <label className="m-0  mx-1" for="Yes">Yes</label>
                 
-                <input type="radio" value="No" id="No" className="mx-2 mt-1" onChange={handleChange} name="Yes" onClick={handleshow1} />
+                <input type="radio" value="No"  className="mx-2 mt-1" onChange={handleChange}  onClick={handleshow1} />
               <label className="m-0 mx-2" for="No">No</label> */}
 
                 {/* {showhide1 === "Yes" && ( */}
@@ -1212,11 +1212,11 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                   <input
                     type="radio"
                     value="Yes"
-                    id="Yes"
+                    
                     className="mx-2 mt-1"
                     checked={capacityScrutinyInfo?.designatedDirectors === "Y" ?true:false}
                     // onChange={(e) => handleChange(e.target.value)}
-                    // name="Yes"
+                    // 
                     // onClick={handleshow}
                     disabled
                   />
@@ -1225,11 +1225,11 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                   <input
                     type="radio"
                     value="No"
-                    id="No"
+                    
                     className="mx-2 mt-1"
                     checked={capacityScrutinyInfo?.designatedDirectors === "N" ?true:false}
                     // onChange={(e) => handleChange(e.target.value)}
-                    // name="Yes"
+                    // 
                     // onClick={handleshow}
                     disabled
                   />
@@ -1307,9 +1307,9 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                 2. In case of technical capacity sought from another company/firm who has already obtained license(s) under act of 1975 or outside
                 Haryana:
                 <div className="d-flex flex-row align-items-center ml-2">
-                  <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" disabled checked={capacityScrutinyInfo?.alreadtObtainedLic === "Y" ? true : false} />
+                  <input type="radio" value="Yes"  className="mx-2 mt-1" disabled checked={capacityScrutinyInfo?.alreadtObtainedLic === "Y" ? true : false} />
                   <label className="m-0  mx-1" for="Yes">Yes</label>
-                  <input type="radio" value="No" id="No" className="mx-2 mt-1" disabled checked={capacityScrutinyInfo?.alreadtObtainedLic === "N" ? true : false} />
+                  <input type="radio" value="No"  className="mx-2 mt-1" disabled checked={capacityScrutinyInfo?.alreadtObtainedLic === "N" ? true : false} />
                   <label className="m-0 mx-2" for="No">No</label>
 
                   <ReportProblemIcon
@@ -1327,10 +1327,10 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                 </div>
               </p>
               <div>
-                {/* <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" disabled />
+                {/* <input type="radio" value="Yes"  className="mx-2 mt-1" disabled />
                 <label className="m-0  mx-1" for="Yes">Yes</label>
 
-                <input type="radio" value="No" id="No" className="mx-2 mt-1" disabled />
+                <input type="radio" value="No"  className="mx-2 mt-1" disabled />
                 <label className="m-0 mx-2" for="No">No</label> */}
                 {showhide6 === "Yes" && (
                   <div className="row ">

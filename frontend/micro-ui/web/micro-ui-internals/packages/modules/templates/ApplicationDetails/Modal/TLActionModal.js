@@ -48,7 +48,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   const [config, setConfig] = useState({});
   const [defaultValues, setDefaultValues] = useState({});
   const [approvers, setApprovers] = useState([]);
-  const [selectedApprover, setSelectedApprover] = useState({});
+  const [selectedApprover, setSelectedApprover] = useState([]);
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
   const [error, setError] = useState(null);
@@ -109,6 +109,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
           ]
         : null,
     };
+    console.log("log123...submit",applicationData);
     submitAction({
       Licenses: [applicationData],
     });

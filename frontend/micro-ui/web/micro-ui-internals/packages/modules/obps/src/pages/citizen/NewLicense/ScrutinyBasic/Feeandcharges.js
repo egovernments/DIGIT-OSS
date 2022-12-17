@@ -28,6 +28,9 @@ const style = {
 };
 
 const Feeandcharges = (props) => {
+
+  const feeAndChargesData = props.ApiResponseData
+
   const [form, setForm] = useState([]);
   const [feeDetail, setFeeDetail] = useState("");
   const [licenseFee, setLicenseFee] = useState("");
@@ -154,7 +157,7 @@ const Feeandcharges = (props) => {
                         <tr>
                           <th>Total Area</th>
                           <td>
-                            <input type="text" className="form-control" disabled />
+                            <input type="text" className="form-control" disabled placeholder={feeAndChargesData?.totalArea}/>
                           </td>
                         </tr>
                       </thead>
@@ -162,31 +165,31 @@ const Feeandcharges = (props) => {
                         <tr>
                           <th>Purpose</th>
                           <td>
-                            <input type="text" className="form-control" disabled />
+                            <input type="text" className="form-control" disabled placeholder={feeAndChargesData?.pupose}/>
                           </td>
                         </tr>
                         <tr>
                           <th>Dev Plan</th>
                           <td>
-                            <input type="text" className="form-control" disabled />
+                            <input type="text" className="form-control" disabled placeholder={feeAndChargesData?.devPlan}/>
                           </td>
                         </tr>
                         <tr>
                           <th>Scrutiny Fees</th>
                           <td>
-                            <input type="text" className="form-control" disabled />
+                            <input type="text" className="form-control" disabled placeholder={feeAndChargesData?.scrutinyFee}/>
                           </td>
                         </tr>
                         <tr>
                           <th>License Fees</th>
                           <td>
-                            <input type="text" className="form-control" disabled />
+                            <input type="text" className="form-control" disabled placeholder={feeAndChargesData?.licenseFee} />
                           </td>
                         </tr>
                         <tr>
                           <th>Conversion Charges</th>
                           <td>
-                            <input type="text" className="form-control" disabled />
+                            <input type="text" className="form-control" disabled placeholder={feeAndChargesData?.conversionCharges}/>
                           </td>
                         </tr>
                       </tbody>
@@ -198,13 +201,13 @@ const Feeandcharges = (props) => {
                           (i)&nbsp;Amount Payable at the time of Application
                         </h6>
 
-                        <input type="text" className="form-control" minLength={1} maxLength={20} pattern="[0-9]*" />
+                        <input type="text" className="form-control" minLength={1} maxLength={20} pattern="[0-9]*" disabled placeholder={feeAndChargesData?.payableNow} />
                         {errors.totalFee && <p></p>}
                       </div>
 
                       <div className="col col-5">
                         <h6>(ii)Remark (If any)</h6>
-                        <input type="text" className="form-control" minLength={2} maxLength={100} />
+                        <input type="text" className="form-control" minLength={2} maxLength={100} disabled placeholder={feeAndChargesData?.remark} />
                         {errors.remark && <p></p>}
                       </div>
 
@@ -213,25 +216,29 @@ const Feeandcharges = (props) => {
                           (iii)&nbsp;Adjust Fees
                         </h6>
                         <div className="mt-2 ml-1">
-                        <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow0} />
+                        <input type="radio" value="Yes" disabled checked={feeAndChargesData?.adjustFee==="Y"?true:false} />
                         <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                        <input type="radio" value="No" id="No" onChange={handleChange} name="Yes" onClick={handleshow0} />
+                        <input type="radio" value="No" disabled checked={feeAndChargesData?.adjustFee==="N"?true:false} />
                         <label className="m-0 mx-2" for="No">No</label>
-                        {showhide0 === "Yes" && (
-                          <div className="row ">
-                            <div className="col col-12">
-                              <label>Enter License Number/LOI number</label>
-                              <input type="text" className="form-control" />
-                              <label>Amount (previous)</label>
-                              <input type="text" className="form-control" disabled />
-                              <label>Amount to be paid after adjustment</label>
-                              <input type="text" className="form-control" />
-                            </div>
-                          </div>
-                        )}
                         </div>
                       </div>
                     </div>
+                        {feeAndChargesData?.adjustFee === "Y" && (
+                          <div className="row mt-3">
+                              <div className="col col-4">
+                              <label>Enter License Number/LOI number</label>
+                              <input type="text" className="form-control" disabled placeholder={feeAndChargesData?.licNo} />
+                              </div>
+                              <div className="col col-4">
+                              <label>Amount (previous)</label>
+                              <input type="text" className="form-control" disabled placeholder={feeAndChargesData?.amount}/>
+                              </div>
+                              <div className="col col-4">
+                              <label>Amount to be paid after adjustment</label>
+                              <input type="text" className="form-control" disabled placeholder={feeAndChargesData?.amountAfterAdjustment} />
+                              </div>
+                            </div>
+                        )}
                     <br></br>
                     <hr />
                     <br></br>

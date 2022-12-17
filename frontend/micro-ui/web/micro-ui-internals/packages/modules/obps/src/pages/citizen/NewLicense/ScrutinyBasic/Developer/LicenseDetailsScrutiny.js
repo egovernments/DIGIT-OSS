@@ -12,6 +12,8 @@ import ModalChild from "../Remarks/ModalChild";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { useStyles } from "../css/personalInfoChild.style";
+import Visibility from "@mui/icons-material/Visibility";
+import FileDownload from "@mui/icons-material/FileDownload";
 
 const LicenseDetailsScrutiny = (props) => {
   const [uncheckedValue, setUncheckedVlue] = useState([]);
@@ -162,7 +164,7 @@ const LicenseDetailsScrutiny = (props) => {
                   <h5 className={[classes.formLabel, "d-flex flex-row align-items-center"]}>Developer's type <div className="d-flex flex-row align-items-center ml-2">
                     <Form.Control
                       className={classes.formControl}
-                      placeholder={addInfo?.showDevTypeFields}
+                      placeholder={addInfo?.showDevTypeFields === "01" ? "Individual" : addInfo?.showDevTypeFields === "Company" ? "Company" : addInfo?.showDevTypeFields === "03" ? "LLP" : addInfo?.showDevTypeFields === "04" ? "Society" : ""}
                       disabled
                     ></Form.Control>
                     &nbsp;&nbsp;
@@ -215,7 +217,7 @@ const LicenseDetailsScrutiny = (props) => {
                 </div>
               </Card>
 
-              {showhide9 === "01" && (
+              {addInfo?.showDevTypeFields === "01" &&
                 <div>
                   <Card style={{ margin: 5 }}>
                     <h5>Developer Details</h5>
@@ -290,7 +292,7 @@ const LicenseDetailsScrutiny = (props) => {
 
                         <div style={{ display: "flex" }}>
                           <Form.Control className={classes.formControl}
-                            placeholder={ addInfo !== null ? addInfo?.developerMobileNo : null }
+                            placeholder={addInfo !== null ? addInfo?.developerMobileNo : null}
                             disabled ></Form.Control>
                           &nbsp;&nbsp;
                           <ReportProblemIcon
@@ -310,9 +312,9 @@ const LicenseDetailsScrutiny = (props) => {
                     </Row>
                   </Card>
                 </div>
-              )}
+              }
 
-              {showhide9 === "02" && (
+              {addInfo?.showDevTypeFields === "Company" &&
                 <div>
                   <Card style={{ margin: 5 }}>
                     <h5>Developer Details</h5>
@@ -328,7 +330,7 @@ const LicenseDetailsScrutiny = (props) => {
 
                         <div style={{ display: "flex" }}>
                           <Form.Control className={classes.formControl}
-                            placeholder={ addInfo !== null ? addInfo?.cinNo : null }
+                            placeholder={addInfo !== null ? addInfo?.cin_Number : null}
                             disabled ></Form.Control>
                           &nbsp;&nbsp;
                           <ReportProblemIcon
@@ -340,7 +342,7 @@ const LicenseDetailsScrutiny = (props) => {
                               setLabelValue("CIN No."),
                                 setSmShow(true),
                                 console.log("modal open"),
-                                setFieldValue(addInfo !== null ? addInfo?.developerMobileNo : null);
+                                setFieldValue(addInfo !== null ? addInfo?.cin_Number : null);
                             }}
                           ></ReportProblemIcon>
                         </div>
@@ -356,7 +358,7 @@ const LicenseDetailsScrutiny = (props) => {
 
                         <div style={{ display: "flex" }}>
                           <Form.Control className={classes.formControl}
-                            placeholder={ addInfo !== null ? addInfo?.companyName : null }
+                            placeholder={addInfo !== null ? addInfo?.companyName : null}
                             disabled></Form.Control>
                           &nbsp;&nbsp;
                           <ReportProblemIcon
@@ -384,7 +386,7 @@ const LicenseDetailsScrutiny = (props) => {
 
                         <div style={{ display: "flex" }}>
                           <Form.Control className={classes.formControl}
-                            placeholder={ addInfo !== null ? addInfo?.dateOfIncorporation : null }
+                            placeholder={addInfo !== null ? addInfo?.incorporationDate : null}
                             disabled ></Form.Control>
                           &nbsp;&nbsp;
                           <ReportProblemIcon
@@ -396,7 +398,7 @@ const LicenseDetailsScrutiny = (props) => {
                               setLabelValue("Date of Incorporation"),
                                 setSmShow(true),
                                 console.log("modal open"),
-                                setFieldValue(addInfo !== null ? addInfo?.dateOfIncorporation : null);
+                                setFieldValue(addInfo !== null ? addInfo?.incorporationDate : null);
                             }}
                           ></ReportProblemIcon>
                         </div>
@@ -412,7 +414,7 @@ const LicenseDetailsScrutiny = (props) => {
 
                         <div style={{ display: "flex" }}>
                           <Form.Control className={classes.formControl}
-                            placeholder={ addInfo !== null ? addInfo?.regAddress : null }
+                            placeholder={addInfo !== null ? addInfo?.registeredAddress : null}
                             disabled ></Form.Control>
                           &nbsp;&nbsp;
                           <ReportProblemIcon
@@ -422,9 +424,9 @@ const LicenseDetailsScrutiny = (props) => {
                             onClick={() => {
                               setOpennedModal("regAddress")
                               setLabelValue("Registered Address"),
-                              setSmShow(true),
-                              console.log("modal open"),
-                              setFieldValue(addInfo !== null ? addInfo?.regAddress : null);
+                                setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(addInfo !== null ? addInfo?.registeredAddress : null);
                             }}
                           ></ReportProblemIcon>
                         </div>
@@ -440,7 +442,7 @@ const LicenseDetailsScrutiny = (props) => {
 
                         <div style={{ display: "flex" }}>
                           <Form.Control className={classes.formControl}
-                            placeholder={ addInfo !== null ? addInfo?.email : null }
+                            placeholder={addInfo !== null ? addInfo?.email : null}
                             disabled ></Form.Control>
                           &nbsp;&nbsp;
                           <ReportProblemIcon
@@ -450,9 +452,9 @@ const LicenseDetailsScrutiny = (props) => {
                             onClick={() => {
                               setOpennedModal("email")
                               setLabelValue("Email"),
-                              setSmShow(true),
-                              console.log("modal open"),
-                              setFieldValue(addInfo !== null ? addInfo?.email : null);
+                                setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(addInfo !== null ? addInfo?.email : null);
                             }}
                           ></ReportProblemIcon>
                         </div>
@@ -468,7 +470,7 @@ const LicenseDetailsScrutiny = (props) => {
 
                         <div style={{ display: "flex" }}>
                           <Form.Control className={classes.formControl}
-                            placeholder={ addInfo !== null ? addInfo?.mobileNo : null }
+                            placeholder={addInfo !== null ? addInfo?.registeredContactNo : null}
                             disabled></Form.Control>
                           &nbsp;&nbsp;
                           <ReportProblemIcon
@@ -478,9 +480,9 @@ const LicenseDetailsScrutiny = (props) => {
                             onClick={() => {
                               setOpennedModal("mobileNo")
                               setLabelValue("Mobile No."),
-                              setSmShow(true),
-                              console.log("modal open"),
-                              setFieldValue(addInfo !== null ? addInfo?.mobileNo : null);
+                                setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(addInfo !== null ? addInfo?.registeredContactNo : null);
                             }}
                           ></ReportProblemIcon>
                         </div>
@@ -496,7 +498,7 @@ const LicenseDetailsScrutiny = (props) => {
 
                         <div style={{ display: "flex" }}>
                           <Form.Control className={classes.formControl}
-                            placeholder={ addInfo !== null ? addInfo?.gstNo : null }
+                            placeholder={addInfo !== null ? addInfo?.gst_Number : null}
                             disabled ></Form.Control>
                           &nbsp;&nbsp;
                           <ReportProblemIcon
@@ -506,15 +508,18 @@ const LicenseDetailsScrutiny = (props) => {
                             onClick={() => {
                               setOpennedModal("gstNo")
                               setLabelValue("GST No."),
-                              setSmShow(true),
-                              console.log("modal open"),
-                              setFieldValue(addInfo !== null ? addInfo?.gstNo : null);
+                                setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(addInfo !== null ? addInfo?.gst_Number : null);
                             }}
                           ></ReportProblemIcon>
                         </div>
                       </Col>
                     </Row>
                   </Card>
+
+
+
                   <Card style={{ margin: 5 }}>
                     <div className="table-bd">
                       <table className="table table-bordered">
@@ -528,60 +533,33 @@ const LicenseDetailsScrutiny = (props) => {
                           </tr>
                         </thead>
                         <tbody>
-                          {/* {modalValuesArray.length > 0 ? (
-                              modalValuesArray.map((elementInArray, input) => {
-                                return ( */}
-                          <tr>
-                            <td>{/* {input + 1} */}</td>
-                            <td>
-                              {/* <input
-                                      type="text"
-                                      value={elementInArray.name}
-                                      placeholder={elementInArray.name}
-                                      disabled
-                                      disabled="disabled"
-                                      class="employee-card-input"
-                                    /> */}
-                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
-                            </td>
-                            <td>
-                              {/* <input
-                                      type="text"
-                                      value={elementInArray.designition}
-                                      placeholder={elementInArray.designition}
-                                      disabled
-                                      disabled="disabled"
-                                      class="employee-card-input"
-                                    /> */}
-                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
-                            </td>
-                            <td>
-                              {/* <input
-                                      type="text"
-                                      value={elementInArray.percentage}
-                                      placeholder={elementInArray.percentage}
-                                      disabled
-                                      disabled="disabled"
-                                      class="employee-card-input"
-                                   /> */}
-                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
-                            </td>
-                            <td>
-                              {/* <div className="row">
-                                        <button className="btn btn-sm col-md-6">
-                                          <VisibilityIcon color="info" className="icon" />
-                                        </button>
-                                        <button className="btn btn-sm col-md-6">
-                                          <FileDownloadIcon color="primary" />
-                                        </button>
-                                      </div> */}
-                            </td>
-                          </tr>
-                          {/* );
-                              })
-                            ) : (
-                              <p className="text-danger text-center">Click on the Add More Button</p>
-                            )} */}
+                          {
+                            addInfo?.shareHoldingPatterens?.map((item, index) => (
+
+                              <tr>
+                                <td>{item?.serialNumber || index + 1}</td>
+                                <td>
+                                  <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} placeholder={item?.name} disabled></Form.Control>
+                                </td>
+                                <td>
+                                  <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} placeholder={item?.designition} disabled></Form.Control>
+                                </td>
+                                <td>
+                                  <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} placeholder={item?.percentage} disabled></Form.Control>
+                                </td>
+                                <td>
+                                  <div className="row">
+                                    <button className="btn btn-sm col-md-6" onClick={() => window.open(item?.uploadPdf)} >
+                                      <Visibility color="info" className="icon" />
+                                    </button>
+                                    <button className="btn btn-sm col-md-6" onClick={() => window.open(item?.uploadPdf)} >
+                                      <FileDownload color="primary" />
+                                    </button>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))
+                          }
                         </tbody>
                       </table>
                     </div>
@@ -602,43 +580,34 @@ const LicenseDetailsScrutiny = (props) => {
                         </tr>
                       </thead>
                       <tbody>
-                        {/* {DirectorData.map((elementInArray, input) => {
-                              return ( */}
-                        <tr
-                        // key={input}
-                        >
-                          <td>{/* {input + 1} */}</td>
-                          <td>
-                            {/* <input
-                                      type="text"
-                                      disabled="disabled"
-                                      value={elementInArray.din}
-                                      placeholder={elementInArray.din}
-                                      class="employee-card-input"
-                                    /> */}
-                            <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
-                          </td>
-                          <td>
-                            {/* <input
-                                      type="text"
-                                      disabled="disabled"
-                                      value={elementInArray.name}
-                                      placeholder={elementInArray.name}
-                                      class="employee-card-input"
-                                    /> */}
-                            <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
-                          </td>
-                          <td>
-                            {/* <input
-                                      type="text"
-                                      value={elementInArray.contactNumber}
-                                      placeholder={elementInArray.contactNumber}
-                                      class="employee-card-input"
-                                    /> */}
-                            <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
-                          </td>
-                          <td>{/* <input type="file" value={uploadPdf} placeholder="" class="employee-card-input" /> */}</td>
-                        </tr>
+                        {
+                          addInfo?.directorsInformation?.map((item, index) => (
+
+                            <tr
+                            >
+                              <td>{index + 1}</td>
+                              <td>
+                                <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} placeholder={item?.din} disabled></Form.Control>
+                              </td>
+                              <td>
+                                <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} placeholder={item?.name} disabled></Form.Control>
+                              </td>
+                              <td>
+                                <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} placeholder={item?.pan} disabled></Form.Control>
+                              </td>
+                              <td>
+                                <div className="row">
+                                  <button className="btn btn-sm col-md-6" onClick={() => window.open(item?.uploadPdf)} >
+                                    <Visibility color="info" className="icon" />
+                                  </button>
+                                  <button className="btn btn-sm col-md-6" onClick={() => window.open(item?.uploadPdf)} >
+                                    <FileDownload color="primary" />
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))
+                        }
                         {/* );
                             })} */}
                       </tbody>
@@ -649,7 +618,7 @@ const LicenseDetailsScrutiny = (props) => {
                 )} */}
                   {/* <Card style={{ margin: 5 }}></Card> */}
                 </div>
-              )}
+              }
             </div>
             {/* </Row> */}
 
