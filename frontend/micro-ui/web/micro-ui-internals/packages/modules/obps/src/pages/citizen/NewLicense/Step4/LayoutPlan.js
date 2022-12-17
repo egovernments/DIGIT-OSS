@@ -10,13 +10,26 @@ const LayoutPlan = ({ register }) => {
     <Row className="ml-auto" style={{ marginBottom: 5 }}>
       <div className="col col-12">
         <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
-          Upload Layout Plan. <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;&nbsp;&nbsp;
-          <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon> &nbsp;&nbsp;
-          <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.uploadLayoutPlan)}>
-            {" "}
-          </VisibilityIcon>
+          Upload Layout Plan. <span style={{ color: "red" }}>*</span>
         </h6>
-        <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "uploadLayoutPlan")} />
+        <div>
+          <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "uploadLayoutPlan")} />
+        </div>
+        {/* {fileStoreId?.uploadLayoutPlan ? (
+            <a onClick={() => getDocShareholding(fileStoreId?.uploadLayoutPlan)} className="btn btn-sm col-md-6">
+              <VisibilityIcon color="info" className="icon" />
+            </a>
+          ) : (
+            <p></p>
+          )}
+        </h6>
+        <div>
+          <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "uploadLayoutPlan")} />
+        </div>
+
+        <h3 className="error-message" style={{ color: "red" }}>
+          {errors?.uploadLayoutPlan && errors?.uploadLayoutPlan?.message}
+        </h3> */}
       </div>
     </Row>
   );

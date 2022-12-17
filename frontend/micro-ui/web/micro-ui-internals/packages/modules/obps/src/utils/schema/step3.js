@@ -3,6 +3,7 @@ import * as Yup from "yup";
 const VALIDATION_SCHEMA = Yup.object().shape({
   licenseApplied: Yup.string().nullable().required("This field is required."),
   //   licenseNumber: Yup.string()
+  //     .nullable(true)
   //     .max(20)
   //     .matches(/^[^\s][a-zA-Z0-9\s]+$/, "Please enter valid input")
   //     .required("This field is required."),

@@ -11,17 +11,15 @@ function ModalChild(props) {
   const [RemarksDeveloper, setDeveloperRemarks] = useState("");
   const [RemarksEntered, setRemarksEntered] = useState("");
   const [yesOrNoClicked, setIsYesorNoClicked] = useState();
-  const [status,setStatus] = useState("");
+  const [status, setStatus] = useState("");
   const inputFieldValue = props.fieldValue;
   const inputFieldLabel = props.labelValue;
   const dateTime = new Date();
-  const authToken = Digit.UserService.getUser()?.access_token || null;
-
 
   const handlemodalsubmit = async () => {
-    if(status){
-      console.log("log",props.labelmodal)
-      props.passmodalData({ data: { label: props.labelmodal, Remarks: RemarksDeveloper.data, isApproved:status==="approved"?true:false } });
+    if (status) {
+      console.log("log", props.labelmodal);
+      props.passmodalData({ data: { label: props.labelmodal, Remarks: RemarksDeveloper.data, isApproved: status === "approved" ? true : false } });
       const postData = {
         requestInfo: {
           api_id: "1",
@@ -32,21 +30,21 @@ function ModalChild(props) {
           key: "",
           msg_id: "",
           requester_id: "",
-          authToken: authToken,
+          auth_token: null,
         },
         egScrutiny: {
           applicationId: "123",
           comment: RemarksDeveloper.data,
           fieldValue: inputFieldValue,
           fieldIdL: props.labelmodal,
-          isApproved: status==="approved"?true:false,
+          isApproved: status === "approved" ? true : false,
           userid: "123",
           serviceId: "123",
           documentId: null,
           ts: dateTime.toUTCString(),
         },
       };
-  
+
       try {
         const Resp = await axios.post("/land-services/egscrutiny/_create?status=submit", postData, {}).then((response) => {
           return response.data;
@@ -62,19 +60,19 @@ function ModalChild(props) {
   };
   console.log("smshow", smShow);
 
-  useEffect(()=>{
-    console.log("loggg",props.selectedFieldData)
-    if(props.selectedFieldData){
-      console.log("loggg changing123...",props.selectedFieldData);
-      setStatus(props.selectedFieldData.isApproved?"approved":"disapproved");
-      setDeveloperRemarks({data:props.selectedFieldData.comment?props.selectedFieldData.comment:""});
+  useEffect(() => {
+    console.log("loggg", props.selectedFieldData);
+    if (props.selectedFieldData) {
+      console.log("loggg changing123...", props.selectedFieldData);
+      setStatus(props.selectedFieldData.isApproved ? "approved" : "disapproved");
+      setDeveloperRemarks({ data: props.selectedFieldData.comment ? props.selectedFieldData.comment : "" });
       // setDeveloperRemarks({data:props.selectedFieldData.isApproved?"approved":"disapproved"});
-    }else {
-      console.log("loggg setting null...",props.selectedFieldData)
+    } else {
+      console.log("loggg setting null...", props.selectedFieldData);
       setStatus(null);
-      setDeveloperRemarks({data:""})
+      setDeveloperRemarks({ data: "" });
     }
-  },[props.selectedFieldData])
+  }, [props.selectedFieldData]);
 
   return (
     <Modal
@@ -89,10 +87,10 @@ function ModalChild(props) {
     >
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-sm">
-            <div>
-              <h3>{props.labelmodal}</h3>
-              <p className={classes.subHead}>{inputFieldValue}</p>
-            </div>
+          <div>
+            <h3>{props.labelmodal}</h3>
+            <p className={classes.subHead}>{inputFieldValue}</p>
+          </div>
 
           {/* <Row>
             <Col xs={4} md={4}>
@@ -112,7 +110,7 @@ function ModalChild(props) {
         <Form.Check
           checked={status === "approved"}
           onChange={() => {
-            setStatus("approved")
+            setStatus("approved");
           }}
           type="radio"
           id="default-radio"
@@ -122,9 +120,9 @@ function ModalChild(props) {
           inline
         ></Form.Check>
         <Form.Check
-         checked={status === "disapproved"}
+          checked={status === "disapproved"}
           onChange={(e) => {
-            setStatus("disapproved")
+            setStatus("disapproved");
           }}
           type="radio"
           id="default-radio"
