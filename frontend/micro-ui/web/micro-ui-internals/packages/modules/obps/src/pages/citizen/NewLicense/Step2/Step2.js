@@ -268,7 +268,7 @@ const ApllicantPuropseForm = (props) => {
     });
     setPotentialOptions({ data: potential, isLoading: false });
   }, [PotentialType]);
- 
+
   const DistrictApiCall = async () => {
     try {
       const Resp = await axios.post("/egov-mdms-service/v1/_district", datapost);
@@ -833,7 +833,7 @@ const ApllicantPuropseForm = (props) => {
                     <tbody>
                       <tr>
                         <td>
-                          <input type="text" className="form-control" {...register("kanal"),required("This field is required"), maxLength=20, pattern=(/^[0-9]+$/, "Please enter valid input")}  id="kanal"  />
+                          <input type="text" className="form-control" {...register("kanal")} id="kanal" />
                           <label htmlFor="sum">Total: {watch("kanal") * 0.125}</label>&nbsp;&nbsp;
                           <h3 className="error-message" style={{ color: "red" }}>
                             {errors?.kanal?.value && errors?.kanal?.value?.message}

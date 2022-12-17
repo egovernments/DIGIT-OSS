@@ -240,7 +240,7 @@ const LandScheduleForm = (props) => {
                                   Licence No. of Parent Licence <span style={{ color: "red" }}>*</span>
                                 </h2>
                               </label>
-                              <input type="text" className="form-control" {...register("licenseNumber"),required("This field is required"), maxLength=20, pattern=(/^[^\s][a-zA-Z0-9\s]+$/, "Please enter valid input")} />
+                              <input type="text" className="form-control" {...register("licenseNumber")} />
                               <h3 className="error-message" style={{ color: "red" }}>
                                 {errors?.licenseNumber && errors?.licenseNumber?.message}
                               </h3>
