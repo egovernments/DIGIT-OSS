@@ -31,8 +31,6 @@ const style = {
   p: 4,
 };
 
-
-
 const FeesChargesForm = (props) => {
   const history = useHistory();
   const [purpose, setPurpose] = useState("");
@@ -366,6 +364,17 @@ const FeesChargesForm = (props) => {
                         (i)&nbsp;Amount Payable <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
                       </h6>
                       <input type="text" className="form-control" disabled {...register("amountPayable")} />
+                      {/* <input
+                        type="text"
+                        className="form-control"
+                        disabled
+                        minLength={1}
+                        maxLength={20}
+                        pattern="[0-9]*"
+                        onChange1={handleTotalFeesChange}
+                        onChange={(e) => setPayableNow(e.target.value)}
+                        value={payableNow}
+                      /> */}
 
                       {errors.totalFee && <p></p>}
                     </div>

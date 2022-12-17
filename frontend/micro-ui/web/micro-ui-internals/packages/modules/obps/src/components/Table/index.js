@@ -12,16 +12,7 @@ const rowSelection = {
 const WorkingTable = ({ columns, data }) => {
   return (
     <div>
-      <Table
-        className="table table-bordered"
-        rowSelection={{
-          type: "checkbox",
-          ...rowSelection,
-        }}
-        columns={columns}
-        dataSource={data}
-        pagination={false}
-      />
+      <Table className="table table-bordered" columns={columns} dataSource={data} pagination={false} />
     </div>
   );
 };
