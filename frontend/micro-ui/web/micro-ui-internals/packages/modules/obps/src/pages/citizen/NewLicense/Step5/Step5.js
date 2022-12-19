@@ -167,7 +167,7 @@ const FeesChargesForm = (props) => {
       setValue("scrutinyFee", charges?.scrutinyFeeCharges);
       setValue("licenseFee", charges?.licenseFeeCharges);
       setValue("conversionCharges", charges?.conversionCharges);
-      setValue("amountPayable", charges?.scrutinyFeeCharges + (charges?.licenseFeeCharges * 25) / 100);
+      setValue("payableNow", charges?.scrutinyFeeCharges + (charges?.licenseFeeCharges * 25) / 100);
     } catch (error) {
       return error;
     }
@@ -180,7 +180,7 @@ const FeesChargesForm = (props) => {
     setLoader(true);
     try {
       const Resp = await axios
-        .get(`http://103.166.62.118:8443/tl-services/new/license/report?id=${props.getId}`, {
+        .get(`http://103.166.62.118:80/tl-services/new/license/report?id=${props.getId}`, {
           responseType: "blob",
         })
         .then((response) => {
@@ -200,7 +200,7 @@ const FeesChargesForm = (props) => {
 
   const getSubmitDataLabel = async () => {
     try {
-      const Resp = await axios.get(`http://103.166.62.118:8443/land-services/new/licenses/_get?id=${props.getId}`).then((response) => {
+      const Resp = await axios.get(`http://103.166.62.118:80/land-services/new/licenses/_get?id=${props.getId}`).then((response) => {
         return response;
       });
       setSubmitDataLabel(Resp?.data);
@@ -211,7 +211,7 @@ const FeesChargesForm = (props) => {
 
   const getWholeData = async () => {
     try {
-      const Resp = await axios.get(`http://103.166.62.118:8443/tl-services/new/licenses/object/_get?id=${props.getId}`);
+      const Resp = await axios.get(`http://103.166.62.118:80/tl-services/new/licenses/object/_get?id=${props.getId}`);
       // let temp = {};
       // Object.keys(Resp?.data).forEach((el) => {
       //   const newKey = el?.replace(/"/g, "");
@@ -363,7 +363,7 @@ const FeesChargesForm = (props) => {
                       <h6 data-toggle="tooltip" data-placement="top" title="Total Fees (License fee 25% + Scrutiny Fees)">
                         (i)&nbsp;Amount Payable <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
                       </h6>
-                      <input type="text" className="form-control" disabled {...register("amountPayable")} />
+                      <input type="text" className="form-control" disabled {...register("payableNow")} />
                       {/* <input
                         type="text"
                         className="form-control"
@@ -441,6 +441,7 @@ const FeesChargesForm = (props) => {
                                         <input
                                           type="file"
                                           className="form-control"
+                                          required
                                           onChange={(e) => getDocumentData(e?.target?.files[0], "consentLetter")}
                                         />
                                       </div>
@@ -502,7 +503,7 @@ const FeesChargesForm = (props) => {
                   </Modal>
                   <div className="">
                     <div className="form-check">
-                      <input className="form-check-input" formControlName="agreeCheck" type="checkbox" value="" id="flexCheckDefault" />
+                      <input className="form-check-input" formControlName="agreeCheck" type="checkbox" value="" id="flexCheckDefault" required />
                       <label className="checkbox" for="flexCheckDefault">
                         I agree and accept the terms and conditions.
                         <span className="text-danger">
@@ -550,7 +551,7 @@ const FeesChargesForm = (props) => {
                     <div class="col-sm-12 text-right">
                       {/* <button id="btnSearch" class="btn btn-primary btn-md ">
                       {" "} */}
-                      {/* <a href="http://103.166.62.118:8443/tl-services/new/license/report?id=875" target="_blank"> */}
+                      {/* <a href="http://103.166.62.118:80/tl-services/new/license/report?id=875" target="_blank"> */}
                       <div onClick={() => showPdf()} id="btnSearch" class="btn btn-primary btn-md">
                         View as PDF &nbsp;&nbsp; <VisibilityIcon color="white" />
                       </div>

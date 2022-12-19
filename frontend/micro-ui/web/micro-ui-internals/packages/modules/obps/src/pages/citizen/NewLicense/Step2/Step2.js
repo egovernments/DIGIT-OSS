@@ -357,7 +357,7 @@ const ApllicantPuropseForm = (props) => {
     modaldata["tehsil"] = modaldata?.tehsil?.value;
     modaldata["revenueEstate"] = modaldata?.revenueEstate?.value;
     modaldata["rectangleNo"] = modaldata?.rectangleNo?.value;
-    modaldata["registeringAuthorityDoc"] = docId;
+    // modaldata["registeringAuthorityDoc"] = docId;
     delete modaldata?.district;
     delete modaldata?.potential;
     delete modaldata?.purpose;
@@ -474,8 +474,7 @@ const ApllicantPuropseForm = (props) => {
     const potentialSelected = data?.value;
     window?.localStorage.setItem("potential", JSON.stringify(potentialSelected));
   };
-  const [fileStoreId, setFileStoreId] = useState({});
-  const getDocumentData = async (file) => {
+  const getDocumentData = async (file, fieldName) => {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("tenantId", "hr");
@@ -486,10 +485,11 @@ const ApllicantPuropseForm = (props) => {
       const Resp = await axios.post("/filestore/v1/files", formData, {});
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
+      // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
       setLoader(false);
     } catch (error) {
       setLoader(false);
-      return error;
+      return error.message;
     }
   };
 
@@ -833,26 +833,16 @@ const ApllicantPuropseForm = (props) => {
                     <tbody>
                       <tr>
                         <td>
-                          <input type="text" className="form-control " {...register("kanal")} id="kanal" required maxLength={20} />
+                          <input type="text" className="form-control  " {...register("kanal")} id="kanal" required maxLength={20} />
                           <label htmlFor="sum">Total: {watch("kanal") * 0.125}</label>&nbsp;&nbsp;
-                          <div class="valid-feedback">Valid.</div>
-                          <div id="kanal" class="invalid-feedback">
-                            This is required Field.
-                          </div>
                         </td>
                         <td>
-                          <input type="text" className="form-control is-invalid" {...register("marla")} id="marla" required maxLength={20} />
+                          <input type="text" className="form-control " {...register("marla")} id="marla" required maxLength={20} />
                           <label htmlFor="summarla">Total: {watch("marla") * 0.0062}</label>&nbsp;&nbsp;
-                          <div id="kanal" class="invalid-feedback">
-                            This is required Field.
-                          </div>
                         </td>
                         <td>
-                          <input type="text" className="form-control is-invalid" {...register("sarsai")} id="sarsai" required maxLength={20} />
+                          <input type="text" className="form-control " {...register("sarsai")} id="sarsai" required maxLength={20} />
                           <label htmlFor="sumsarsai">Total: {watch("sarsai") * 0.00069}</label>&nbsp;&nbsp;
-                          <div id="kanal" class="invalid-feedback">
-                            This is required Field.
-                          </div>
                         </td>
                       </tr>
                     </tbody>
@@ -1035,6 +1025,7 @@ const ApllicantPuropseForm = (props) => {
                           type="file"
                           style={{ marginTop: "-6px" }}
                           className="form-control"
+                          accept="application/pdf"
                           required
                           onChange={(e) => getDocumentData(e?.target?.files[0], registeringAuthorityDoc)}
                         />
