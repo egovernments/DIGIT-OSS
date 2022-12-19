@@ -209,7 +209,7 @@ const TradeUnitForm = (_props) => {
     let ckeckingLocation = window.location.href.includes("renew-application-details");
     if (window.location.href.includes("edit-application-details")) ckeckingLocation = true;
     useEffect(() => {
-        if (tradeTypeMdmsData?.length > 0 && ckeckingLocation && !isLoading && !isbillingSlabLoading) {
+        if (tradeTypeMdmsData?.length > 0 && (ckeckingLocation || unit?.tradeCategory && (tradeTypeOptionsList && tradeTypeOptionsList?.length == 0)) && !isLoading && !isbillingSlabLoading) {
             let tradeType = cloneDeep(tradeTypeMdmsData);
             let filteredTradeType = tradeType.filter(data => data?.tradeType?.split('.')[0] === unit?.tradeCategory?.code)
             let tradeTypeOptions = [];
@@ -224,7 +224,7 @@ const TradeUnitForm = (_props) => {
     }, [tradeTypeMdmsData, !isLoading, billingSlabTradeTypeData]);
 
     useEffect(() => {
-        if (tradeTypeMdmsData?.length > 0 && ckeckingLocation && !isLoading && !isbillingSlabLoading) {
+        if (tradeTypeMdmsData?.length > 0 && (ckeckingLocation || unit?.tradeType && (tradeSubTypeOptionsList && tradeSubTypeOptionsList?.length == 0))  && !isLoading && !isbillingSlabLoading) {
             let tradeType = cloneDeep(tradeTypeMdmsData);
             let filteredTradeSubType = tradeType.filter(data => data?.tradeType?.split('.')[1] === unit?.tradeType?.code)
             let tradeSubTypeOptions = [];
@@ -265,10 +265,12 @@ function getUomRange(type){
 }
 
 function checkBillingSlab(value){
-    if(value && billingSlabTradeTypeData?.filter((ob) => ob?.tradeType === value?.code && (ob?.structureType === formData?.tradedetils?.[0]?.structureSubType?.code))?.length <= 0)
+    if(value && (billingSlabTradeTypeData?.filter((ob) => ob?.tradeType === value?.code && (ob?.structureType === formData?.tradedetils?.[0]?.structureSubType?.code))?.length <= 0 || billingSlabTradeTypeData?.filter((ob) => ob?.tradeType === value?.code && (ob?.structureType === formData?.tradedetils?.[0]?.structureSubType?.code)) == undefined))
     {
-      return false
+        sessionStorage.setItem("isBillingSlabError",true);
+      return false;
     }
+    sessionStorage.removeItem("isBillingSlabError")
     return true;
 }
 
@@ -385,7 +387,7 @@ function checkBillingSlab(value){
                             control={control}
                             name={"tradeSubType"}
                             defaultValue={unit?.tradeSubType}
-                            rules={{ required: t("REQUIRED_FIELD"), validate: { pattern: (val) => (/*/^(0)*[1-9][0-9]{0,5}$/.test(val)*/ checkBillingSlab(val)?true:t("TL_BILLING_SLAB_NOT_FOUND_FOR_COMB")) } }}
+                            rules={{ required: t("REQUIRED_FIELD"), validate: { pattern: (val) => (/*/^(0)*[1-9][0-9]{0,5}$/.test(val)*/ checkBillingSlab(val || unit?.tradeSubType)?true:t("TL_BILLING_SLAB_NOT_FOUND_FOR_COMB")) } }}
                             render={(props) => (
                                 <Dropdown
                                     className="form-field"
@@ -407,7 +409,7 @@ function checkBillingSlab(value){
                             )}
                         />
                     </LabelFieldPair>
-                    <CardLabelError style={errorStyle}> {localFormState.touched.tradeSubType ? errors?.tradeSubType?.message : ""} </CardLabelError>
+                    <CardLabelError style={errorStyle}> {localFormState.touched.tradeSubType || localFormState.touched.uomValue || isRenewal ? errors?.tradeSubType?.message : ""} </CardLabelError>
                     <LabelFieldPair>
                         <CardLabel className="card-label-smaller">{unit?.tradeSubType?.uom ? `${t("TL_NEW_TRADE_DETAILS_UOM_UOM_PLACEHOLDER")} * ` : `${t("TL_NEW_TRADE_DETAILS_UOM_UOM_PLACEHOLDER")}`}</CardLabel>
                         <div className="field">

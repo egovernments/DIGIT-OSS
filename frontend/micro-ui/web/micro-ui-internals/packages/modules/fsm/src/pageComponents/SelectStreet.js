@@ -100,7 +100,7 @@ const SelectStreet = ({ t, config, onSelect, userType, formData, formState, setE
           <div className="field">
             <Controller
               control={control}
-              defaultValue={formData?.address?.[input.name]}
+              defaultValue={formData?.address?.[input.name] || formData?.cpt?.details?.address?.[input.name]}
               name={input.name}
               rules={{ validate: convertValidationToRules(input) }}
               render={(_props) => (
