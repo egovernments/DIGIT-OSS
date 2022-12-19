@@ -5,7 +5,7 @@ import { Upload } from "react-bootstrap-icons";
 
 // const data = [];
 
-const ElecticalPlan = () => {
+const ElectricalPlanScrutiny = () => {
   const [LOCNumber, setLOCNumber] = useState("");
   const [getData, setData] = useState([
     { name: "Add Layout Plan in case of Plotted colonies/ add demarcation plan in case of other than plotted", image: null },
@@ -484,4 +484,4 @@ const ElecticalPlan = () => {
   );
 };
 
-export default ElecticalPlan;
+export default ElectricalPlanScrutiny;
