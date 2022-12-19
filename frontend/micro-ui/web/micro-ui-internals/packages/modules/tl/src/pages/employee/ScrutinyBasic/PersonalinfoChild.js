@@ -94,6 +94,8 @@ const PersonalinfoChild = (props) => {
   
   const currentRemarks = (data) => {
     props.showTable({ data: data.data });
+    props.getRemarkData();
+    console.log("Apply", JSON.stringify(props), JSON.stringify(getRemarkData));
   };
 
   const handlemodaldData = (data) => {

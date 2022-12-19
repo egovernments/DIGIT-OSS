@@ -136,6 +136,7 @@ const LicenseDetailsScrutiny = (props) => {
 
   const currentRemarks = (data) => {
     props.showTable({ data: data.data });
+    props.getRemarkData();
   };
 
   // console.log("color for the deeloper", developerInputFiledColor);
