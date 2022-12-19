@@ -9,9 +9,13 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import Collapse from "react-bootstrap/Collapse";
 
+// import { getDocShareholding } from "../ScrutinyDevelopment/docview.helper";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import ModalChild from "../../Remarks/ModalChild";
-import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
+import { IconButton } from "@mui/material";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
+// import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
 import { useStyles } from "../../css/personalInfoChild.style";
 import '../../css/personalInfoChild.style.js'
 
@@ -116,7 +120,9 @@ function Completionscrutiny() {
       <Collapse in={open2}>
         <div id="example-collapse-text">
         
-            <Card style={{ width: "126%", border: "5px solid #1266af" }}>
+            <Card
+            //  style={{ width: "126%", border: "5px solid #1266af" }}
+            >
             <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Completion Certificate In Licence Colony</h4>
             <div className="card">
        
@@ -130,12 +136,12 @@ function Completionscrutiny() {
             <span className={classes.required}>*</span> &nbsp;&nbsp;
           </div>
             <div className={classes.fieldContainer}>
-            {/* <Form.Control
+            <Form.Control
               className={classes.formControl}
               placeholder=""
               disabled
-            ></Form.Control> */}
-            <input type="number" className={classes.formControl} placeholder="" {...register("licNo")} disabled />
+            ></Form.Control>
+            {/* <input type="number" className={classes.formControl} placeholder="" {...register("licNo")} disabled /> */}
                 
                 <ReportProblemIcon
               style={{
@@ -168,12 +174,12 @@ function Completionscrutiny() {
             <span className={classes.required}>*</span> &nbsp;&nbsp;
           </div>
             <div className={classes.fieldContainer}>
-            {/* <Form.Control
+            <Form.Control
               className={classes.formControl}
               placeholder=""
               disabled
-            ></Form.Control> */}
-             <input type="text" className={classes.formControl} placeholder="" {...register("completionCertificate")}  disabled/>
+            ></Form.Control>
+             {/* <input type="text" className={classes.formControl} placeholder="" {...register("completionCertificate")}  disabled/> */}
                 
                 <ReportProblemIcon
               style={{
@@ -203,12 +209,12 @@ function Completionscrutiny() {
             <span className={classes.required}>*</span> &nbsp;&nbsp;
           </div>
             <div className={classes.fieldContainer}>
-            {/* <Form.Control
+            <Form.Control
               className={classes.formControl}
               placeholder=""
               disabled
-            ></Form.Control> */}
-                <input type="text" className={classes.formControl} placeholder="" {...register("edcFullypaid")} disabled />
+            ></Form.Control>
+                {/* <input type="text" className={classes.formControl} placeholder="" {...register("edcFullypaid")} disabled /> */}
                 <ReportProblemIcon
               style={{
                 color:fieldIconColors.developer}}
@@ -238,12 +244,12 @@ function Completionscrutiny() {
             <span className={classes.required}>*</span> &nbsp;&nbsp;
           </div>
             <div className={classes.fieldContainer}>
-            {/* <Form.Control
+            <Form.Control
               className={classes.formControl}
               placeholder=""
               disabled
-            ></Form.Control> */}
-                <input type="text" className={classes.formControl} placeholder="" {...register("statusOfComplaint")} disabled />
+            ></Form.Control>
+                {/* <input type="text" className={classes.formControl} placeholder="" {...register("statusOfComplaint")} disabled /> */}
                 <ReportProblemIcon
               style={{
                 color:fieldIconColors.developer}}
@@ -280,12 +286,12 @@ function Completionscrutiny() {
             <span className={classes.required}>*</span> &nbsp;&nbsp;
           </div>
             <div className={classes.fieldContainer}>
-            {/* <Form.Control
+            <Form.Control
               className={classes.formControl}
               placeholder=""
               disabled
-            ></Form.Control> */}
-                <input type="text" className={classes.formControl} placeholder="" {...register("occupationCertificate")} disabled />
+            ></Form.Control>
+                {/* <input type="text" className={classes.formControl} placeholder="" {...register("occupationCertificate")} disabled /> */}
                 <ReportProblemIcon
               style={{
                 color:fieldIconColors.developer}}
@@ -321,12 +327,12 @@ function Completionscrutiny() {
             <span className={classes.required}>*</span> &nbsp;&nbsp;
           </div>
             <div className={classes.fieldContainer}>
-            {/* <Form.Control
+            <Form.Control
               className={classes.formControl}
               placeholder=""
               disabled
-            ></Form.Control> */}
-                 <input type="text" className={classes.formControl} placeholder="" {...register("statusNpnlPlot")}  disabled/>
+            ></Form.Control>
+                 {/* <input type="text" className={classes.formControl} placeholder="" {...register("statusNpnlPlot")}  disabled/> */}
                 <ReportProblemIcon
               style={{
                 color:fieldIconColors.developer}}
@@ -355,12 +361,12 @@ function Completionscrutiny() {
             <span className={classes.required}>*</span> &nbsp;&nbsp;
           </div>
             <div className={classes.fieldContainer}>
-            {/* <Form.Control
+            <Form.Control
               className={classes.formControl}
               placeholder=""
               disabled
-            ></Form.Control> */}
-                <input type="text"  className={classes.formControl} placeholder="" {...register("housingBoard")} disabled/>
+            ></Form.Control>
+                {/* <input type="text"  className={classes.formControl} placeholder="" {...register("housingBoard")} disabled/> */}
                 <ReportProblemIcon
               style={{
                 color:fieldIconColors.developer}}
@@ -396,12 +402,12 @@ function Completionscrutiny() {
             <span className={classes.required}>*</span> &nbsp;&nbsp;
           </div>
             <div className={classes.fieldContainer}>
-            {/* <Form.Control
+            <Form.Control
               className={classes.formControl}
               placeholder=""
               disabled
-            ></Form.Control> */}
-                 <input type="text"   className={classes.formControl} placeholder="" {...register("concernedAuthority")}  disabled/>
+            ></Form.Control>
+                 {/* <input type="text"   className={classes.formControl} placeholder="" {...register("concernedAuthority")}  disabled/> */}
                 <ReportProblemIcon
               style={{
                 color:fieldIconColors.developer}}
@@ -437,12 +443,12 @@ function Completionscrutiny() {
             <span className={classes.required}>*</span> &nbsp;&nbsp;
           </div>
             <div className={classes.fieldContainer}>
-            {/* <Form.Control
+            <Form.Control
               className={classes.formControl}
               placeholder=""
               disabled
-            ></Form.Control> */}
-            <input type="text" className={classes.formControl} placeholder="" {...register("handleCommunitySites")} disabled />
+            ></Form.Control>
+            {/* <input type="text" className={classes.formControl} placeholder="" {...register("handleCommunitySites")} disabled /> */}
                 
                 <ReportProblemIcon
               style={{
@@ -479,7 +485,32 @@ function Completionscrutiny() {
                       </td>
                       <td>
                         {/* <input type="file" className="form-control" placeholder="" {...register("servicePlanApproved")}></input> */}
-                        <DownloadForOfflineIcon color="primary" className="mx-1" />
+                        {/* <DownloadForOfflineIcon color="primary" className="mx-1" /> */}
+                        <div className="row">
+                                  
+                                  
+                                 <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                      <VisibilityIcon color="info" className="icon" /></IconButton>
+                                      </div>
+                                 <div className="btn btn-sm col-md-4">
+                                  <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                      <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                      </div>
+                                      <div className="btn btn-sm col-md-4">
+                                      <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("The service plan/estimate copy of approved "),
+                  setLabelValue("The service plan/estimate copy of approved "),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                      </div>
+                                </div>
                       </td>
                     </tr>
                     <tr>
@@ -489,7 +520,32 @@ function Completionscrutiny() {
                         <h2>The electrical Service plan is approved and verification of service is laid as per the approval.</h2>{" "}
                       </td>
                       <td>
-                        <input type="file" className="form-control" placeholder="" {...register("electricalServicePlan")}></input>
+                        {/* <input type="file" className="form-control" placeholder="" {...register("electricalServicePlan")}></input> */}
+                        <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+               style={{
+                 color:fieldIconColors.developer}}
+               onClick={() => {
+                   setOpennedModal("The service plan/estimate copy of approved "),
+                   setLabelValue("The service plan/estimate copy of approved "),
+                   setSmShow(true),
+                   console.log("modal open"),
+                   setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+               }}
+             ></ReportProblemIcon>
+                                       </div>
+                                 </div>
                       </td>
                     </tr>
                     <tr>
@@ -499,7 +555,32 @@ function Completionscrutiny() {
                         <h2>Transfer of licensed land to the Government agency falling under 18/24 mtr. Road/green belt/sector road.</h2>{" "}
                       </td>
                       <td>
-                        <input type="file" className="form-control" placeholder="" {...register("transferLicensedLand")}></input>
+                        {/* <input type="file" className="form-control" placeholder="" {...register("transferLicensedLand")}></input> */}
+                        <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+               style={{
+                 color:fieldIconColors.developer}}
+               onClick={() => {
+                   setOpennedModal("The service plan/estimate copy of approved "),
+                   setLabelValue("The service plan/estimate copy of approved "),
+                   setSmShow(true),
+                   console.log("modal open"),
+                   setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+               }}
+             ></ReportProblemIcon>
+                                       </div>
+                                 </div>
                       </td>
                     </tr>
                     <tr>
@@ -509,7 +590,32 @@ function Completionscrutiny() {
                         <h2>Occupation certificate In case of (Group Housing, Commercial, IT Colony)</h2>{" "}
                       </td>
                       <td>
-                        <input type="file" className="form-control" placeholder="" {...register("occupationCertificateCommercial")}></input>
+                        {/* <input type="file" className="form-control" placeholder="" {...register("occupationCertificateCommercial")}></input> */}
+                        <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+               style={{
+                 color:fieldIconColors.developer}}
+               onClick={() => {
+                   setOpennedModal("The service plan/estimate copy of approved "),
+                   setLabelValue("The service plan/estimate copy of approved "),
+                   setSmShow(true),
+                   console.log("modal open"),
+                   setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+               }}
+             ></ReportProblemIcon>
+                                       </div>
+                                 </div>
                       </td>
                     </tr>
                     <tr>
@@ -519,7 +625,32 @@ function Completionscrutiny() {
                         <h2>Updated compliance with Rules 24, 26(2), 27 & 28.</h2>{" "}
                       </td>
                       <td>
-                        <input type="file" className="form-control" placeholder="" {...register("updatedCompliance")}></input>
+                        {/* <input type="file" className="form-control" placeholder="" {...register("updatedCompliance")}></input> */}
+                        <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+               style={{
+                 color:fieldIconColors.developer}}
+               onClick={() => {
+                   setOpennedModal("The service plan/estimate copy of approved "),
+                   setLabelValue("The service plan/estimate copy of approved "),
+                   setSmShow(true),
+                   console.log("modal open"),
+                   setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+               }}
+             ></ReportProblemIcon>
+                                       </div>
+                                 </div>
                       </td>
                     </tr>
                     <tr>
@@ -529,7 +660,32 @@ function Completionscrutiny() {
                         <h2>Submit a report regarding infrastructure augmentation charges.</h2>
                       </td>
                       <td>
-                        <input type="file" className="form-control" placeholder="" {...register("reportInfrastructure")}></input>
+                        {/* <input type="file" className="form-control" placeholder="" {...register("reportInfrastructure")}></input> */}
+                        <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+               style={{
+                 color:fieldIconColors.developer}}
+               onClick={() => {
+                   setOpennedModal("The service plan/estimate copy of approved "),
+                   setLabelValue("The service plan/estimate copy of approved "),
+                   setSmShow(true),
+                   console.log("modal open"),
+                   setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+               }}
+             ></ReportProblemIcon>
+                                       </div>
+                                 </div>
                       </td>
                     </tr>
                     <tr>
@@ -539,7 +695,32 @@ function Completionscrutiny() {
                         <h2>Third-party audit on 15% profitability and CA certificate regarding 15% profit.</h2>
                       </td>
                       <td>
-                        <input type="file" className="form-control" placeholder="" {...register("thirdPartyAudit")}></input>
+                        {/* <input type="file" className="form-control" placeholder="" {...register("thirdPartyAudit")}></input> */}
+                        <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+               style={{
+                 color:fieldIconColors.developer}}
+               onClick={() => {
+                   setOpennedModal("The service plan/estimate copy of approved "),
+                   setLabelValue("The service plan/estimate copy of approved "),
+                   setSmShow(true),
+                   console.log("modal open"),
+                   setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+               }}
+             ></ReportProblemIcon>
+                                       </div>
+                                 </div>
                       </td>
                     </tr>
                     <tr>
@@ -552,7 +733,32 @@ function Completionscrutiny() {
                         </h2>{" "}
                       </td>
                       <td>
-                        <input type="file" className="form-control" placeholder="" {...register("statusDevelopment")}></input>
+                        {/* <input type="file" className="form-control" placeholder="" {...register("statusDevelopment")}></input> */}
+                        <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+               style={{
+                 color:fieldIconColors.developer}}
+               onClick={() => {
+                   setOpennedModal("The service plan/estimate copy of approved "),
+                   setLabelValue("The service plan/estimate copy of approved "),
+                   setSmShow(true),
+                   console.log("modal open"),
+                   setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+               }}
+             ></ReportProblemIcon>
+                                       </div>
+                                 </div>
                       </td>
                     </tr>
                     <tr>
@@ -562,7 +768,32 @@ function Completionscrutiny() {
                         <h2>Report regarding functional of internal services and connection of external services of HUDA/MC. </h2>
                       </td>
                       <td>
-                        <input type="file" className="form-control" placeholder="" {...register("functionalServices")}></input>
+                        {/* <input type="file" className="form-control" placeholder="" {...register("functionalServices")}></input> */}
+                        <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+               style={{
+                 color:fieldIconColors.developer}}
+               onClick={() => {
+                   setOpennedModal("The service plan/estimate copy of approved "),
+                   setLabelValue("The service plan/estimate copy of approved "),
+                   setSmShow(true),
+                   console.log("modal open"),
+                   setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+               }}
+             ></ReportProblemIcon>
+                                       </div>
+                                 </div>
                       </td>
                     </tr>
                     <tr>
@@ -572,7 +803,32 @@ function Completionscrutiny() {
                         <h2>Affidavit of no unauthorized construction/addition/ alteration after the issuance of completion certificate.</h2>
                       </td>
                       <td>
-                        <input type="file" className="form-control" placeholder="" {...register("affidavitUnauthorized")}></input>
+                        {/* <input type="file" className="form-control" placeholder="" {...register("affidavitUnauthorized")}></input> */}
+                        <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+               style={{
+                 color:fieldIconColors.developer}}
+               onClick={() => {
+                   setOpennedModal("The service plan/estimate copy of approved "),
+                   setLabelValue("The service plan/estimate copy of approved "),
+                   setSmShow(true),
+                   console.log("modal open"),
+                   setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+               }}
+             ></ReportProblemIcon>
+                                       </div>
+                                 </div>
                       </td>
                     </tr>
                     <tr>
@@ -582,7 +838,32 @@ function Completionscrutiny() {
                         <h2>NOC from MOEF required.</h2>{" "}
                       </td>
                       <td>
-                        <input type="file" className="form-control" placeholder="" {...register("nocRequired")}></input>
+                        {/* <input type="file" className="form-control" placeholder="" {...register("nocRequired")}></input> */}
+                        <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+               style={{
+                 color:fieldIconColors.developer}}
+               onClick={() => {
+                   setOpennedModal("The service plan/estimate copy of approved "),
+                   setLabelValue("The service plan/estimate copy of approved "),
+                   setSmShow(true),
+                   console.log("modal open"),
+                   setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+               }}
+             ></ReportProblemIcon>
+                                       </div>
+                                 </div>
                       </td>
                     </tr>
                     <tr>
@@ -592,7 +873,32 @@ function Completionscrutiny() {
                         <h2>NOC from fire safety and certificate from structural stability.</h2>
                       </td>
                       <td>
-                        <input type="file" className="form-control" placeholder="" {...register("fireSafetyCertificate")}></input>
+                        {/* <input type="file" className="form-control" placeholder="" {...register("fireSafetyCertificate")}></input> */}
+                        <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+               style={{
+                 color:fieldIconColors.developer}}
+               onClick={() => {
+                   setOpennedModal("The service plan/estimate copy of approved "),
+                   setLabelValue("The service plan/estimate copy of approved "),
+                   setSmShow(true),
+                   console.log("modal open"),
+                   setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+               }}
+             ></ReportProblemIcon>
+                                       </div>
+                                 </div>
                       </td>
                     </tr>
                     <tr>
@@ -605,7 +911,32 @@ function Completionscrutiny() {
                         </h2>{" "}
                       </td>
                       <td>
-                        <input type="file" className="form-control" placeholder="" {...register("accessPermission")}></input>
+                        {/* <input type="file" className="form-control" placeholder="" {...register("accessPermission")}></input> */}
+                        <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+               style={{
+                 color:fieldIconColors.developer}}
+               onClick={() => {
+                   setOpennedModal("The service plan/estimate copy of approved "),
+                   setLabelValue("The service plan/estimate copy of approved "),
+                   setSmShow(true),
+                   console.log("modal open"),
+                   setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+               }}
+             ></ReportProblemIcon>
+                                       </div>
+                                 </div>
                       </td>
                     </tr>
                   </tbody>
@@ -613,14 +944,14 @@ function Completionscrutiny() {
               </div>
            
 
-            <Row className="justify-content-end">
+            {/* <Row className="justify-content-end">
               <Button variant="outline-primary" className="col-md-2 my-2 mx-2" type="save" aria-label="right-end">
                 Save as Draft
               </Button>
               <Button variant="outline-primary" className="col-md-2 my-2 mx-2" type="submit" aria-label="right-end">
                 Submit
               </Button>
-            </Row>
+            </Row> */}
             </div>
             </Card>
             </div>

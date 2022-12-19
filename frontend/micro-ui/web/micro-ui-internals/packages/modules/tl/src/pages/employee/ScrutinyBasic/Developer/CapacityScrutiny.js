@@ -21,7 +21,7 @@ import ModalChild from "../Remarks/ModalChild";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import { useStyles } from "../css/personalInfoChild.style";
 
-const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data, capacityScrutinyInfo, iconColorState }) => {
+const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataValue, data, capacityScrutinyInfo, iconColorState ,developerType,getRemarkData}) => {
   const { pathname: url } = useLocation();
   const userInfo = Digit.UserService.getUser();
   let validation = {};
@@ -385,7 +385,11 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
   }, [labelValue]);
 
   const currentRemarks = (data) => {
-    props.showTable({ data: data.data });
+    // props.
+    showTable({ data: data.data });
+    // props.
+    getRemarkData()
+
   };
 
   const handlemodaldData = (data) => {
@@ -409,6 +413,7 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
         selectedFieldData={selectedFieldData}
         fieldValue={fieldValue}
         remarksUpdate={currentRemarks}
+        // getRemarkData={props.getRemarkData}
       ></ModalChild>
 
       <div
@@ -1010,6 +1015,7 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                   ></ReportProblemIcon>
                 </div>
               </p>
+              <br></br>
               <div>
                 {/* <input type="radio" value="Yes"  className="mx-2 mt-1" onChange={handleChange}  onClick={handleshow1} />
                 <label className="m-0  mx-1" for="Yes">Yes</label>

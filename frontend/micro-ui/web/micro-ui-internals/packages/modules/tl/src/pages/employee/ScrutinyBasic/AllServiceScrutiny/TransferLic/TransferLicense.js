@@ -57,7 +57,7 @@ function TransferLicense() {
         }}
       >
         <span style={{ color: "#817f7f" }} className="">
-        Approval of Standard Design
+        Transfer of License
         </span>
         {open2 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       </div>
