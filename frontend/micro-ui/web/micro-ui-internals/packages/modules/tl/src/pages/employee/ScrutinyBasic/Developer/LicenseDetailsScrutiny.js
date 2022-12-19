@@ -4,9 +4,6 @@ import { Card, Row, Col } from "react-bootstrap";
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import AddIcon from "@mui/icons-material/Add";
-import Table from "react-bootstrap/Table";
-// import Col from 'react-bootstrap/Col';
-// import Row from 'react-bootstrap/Row';
 // import InfoIcon from "@mui/icons-material/Info";
 
 import Collapse from "react-bootstrap/Collapse";
@@ -30,11 +27,11 @@ const LicenseDetailsScrutiny = (props) => {
   const Colors = {
     approved: "#09cb3d",
     disapproved: "#ff0000",
-    info: "#FFB602"
-  }
+    info: "#FFB602",
+  };
   const [selectedFieldData, setSelectedFieldData] = useState();
   const [fieldValue, setFieldValue] = useState("");
-  const [openedModal, setOpennedModal] = useState("")
+  const [openedModal, setOpennedModal] = useState("");
 
   const [noChecked, setNochecked] = useState(true);
   const [warningOrred, setwarningOrred] = useState("#ffcf33");
@@ -54,8 +51,8 @@ const LicenseDetailsScrutiny = (props) => {
     licValidity: "",
     licPurpose: "",
     aggreementBtw: "",
-    boardResolution: ""
-  })
+    boardResolution: "",
+  });
 
   const [fieldIconColors, setFieldIconColors] = useState({
     developerType: Colors.info,
@@ -69,12 +66,21 @@ const LicenseDetailsScrutiny = (props) => {
     email: Colors.info,
     mobileNo: Colors.info,
     gstNo: Colors.info,
-    existingColonizerDoc: Colors.info
+  });
 
-  })
-
-  const fieldIdList = [{ label: "Developer's Type", key: "developerType" }, { label: "Developer's Name", key: "developerName" }, { label: "Developer's Email", key: "developerEmail" }, { label: "Developer's Mobile No.", key: "developerMobileNo" }, { label: "CIN No.", key: "cinNo" }, { label: "Company's Name", key: "companyName" }, { label: "Date of Incorporation", key: "dateOfIncorporation" }, { label: "Registered Address", key: "regAddress" }, { label: "Email", key: "email" }, { label: "Mobile No.", key: "mobileNo" }, { label: "GST No.", key: "gstNo" },
-{label: "Agreement between the proposed developer and existing colonizer", key: "existingColonizerDoc"}]
+  const fieldIdList = [
+    { label: "Developer's Type", key: "developerType" },
+    { label: "Developer's Name", key: "developerName" },
+    { label: "Developer's Email", key: "developerEmail" },
+    { label: "Developer's Mobile No.", key: "developerMobileNo" },
+    { label: "CIN No.", key: "cinNo" },
+    { label: "Company's Name", key: "companyName" },
+    { label: "Date of Incorporation", key: "dateOfIncorporation" },
+    { label: "Registered Address", key: "regAddress" },
+    { label: "Email", key: "email" },
+    { label: "Mobile No.", key: "mobileNo" },
+    { label: "GST No.", key: "gstNo" },
+  ];
 
   const addInfo = props.addInfo;
   const iconStates = props.iconColorState;
@@ -86,46 +92,41 @@ const LicenseDetailsScrutiny = (props) => {
     fieldIdList.forEach((item) => {
       if (iconStates !== null && iconStates !== undefined) {
         console.log("color method called");
-        const fieldPresent = iconStates.egScrutiny.filter(ele => (ele.fieldIdL === item.label));
+        const fieldPresent = iconStates.egScrutiny.filter((ele) => ele.fieldIdL === item.label);
         console.log("filteration value", fieldPresent, fieldPresent[0]?.isApproved);
         if (fieldPresent && fieldPresent.length) {
           console.log("filteration value1", fieldPresent, fieldPresent[0]?.isApproved);
-          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved ? Colors.approved : Colors.disapproved }
-
+          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved ? Colors.approved : Colors.disapproved };
         }
       }
-    })
+    });
 
     setFieldIconColors(tempFieldColorState);
-
   };
-
 
   useEffect(() => {
     getColorofFieldIcon();
-    console.log("repeating1...",)
-  }, [iconStates])
+    console.log("repeating1...");
+  }, [iconStates]);
 
   useEffect(() => {
     if (labelValue) {
-      const fieldPresent = iconStates.egScrutiny.filter(ele => (ele.fieldIdL === labelValue));
+      const fieldPresent = iconStates.egScrutiny.filter((ele) => ele.fieldIdL === labelValue);
       setSelectedFieldData(fieldPresent[0]);
     } else {
       setSelectedFieldData(null);
     }
-  }, [labelValue])
-
+  }, [labelValue]);
 
   const handlemodaldData = (data) => {
     setSmShow(false);
     console.log("here", openedModal, data);
     if (openedModal && data) {
-      setFieldIconColors({ ...fieldIconColors, [openedModal]: data.data.isApproved ? Colors.approved : Colors.disapproved })
+      setFieldIconColors({ ...fieldIconColors, [openedModal]: data.data.isApproved ? Colors.approved : Colors.disapproved });
     }
     setOpennedModal("");
     setLabelValue("");
   };
-
 
   const [showhide9, setShowhide9] = useState("0");
   const handleshow9 = (e) => {
@@ -142,15 +143,15 @@ const LicenseDetailsScrutiny = (props) => {
   return (
     <Form
       ref={props.licenseDetailsInfoRef}
-    // style={{
-    //   width: "100%",
-    //   height: props.heightPersonal,
-    //   overflow: "hidden",
-    //   marginBottom: 20,
-    //   borderColor: "#C3C3C3",
-    //   borderStyle: "solid",
-    //   borderWidth: 2,
-    // }}
+      // style={{
+      //   width: "100%",
+      //   height: props.heightPersonal,
+      //   overflow: "hidden",
+      //   marginBottom: 20,
+      //   borderColor: "#C3C3C3",
+      //   borderStyle: "solid",
+      //   borderWidth: 2,
+      // }}
     >
       {/* <Alert variant="warning">{messege}</Alert> */}
 
@@ -183,37 +184,48 @@ const LicenseDetailsScrutiny = (props) => {
             <div>
               <Card style={{ margin: 2 }}>
                 <div className="card-body">
-                  <h5 className={[classes.formLabel, "d-flex flex-row align-items-center"]}>Developer's type <div className="d-flex flex-row align-items-center ml-2">
-                    <Form.Control
-                      className={classes.formControl}
-                      placeholder={addInfo?.showDevTypeFields === "01" ? "Individual" : addInfo?.showDevTypeFields === "Company" ? "Company" : addInfo?.showDevTypeFields === "03" ? "LLP" : addInfo?.showDevTypeFields === "04" ? "Society" : ""}
-                      disabled
-                    ></Form.Control>
-                    &nbsp;&nbsp;
-                    <ReportProblemIcon
-                      style={{
-                        color: fieldIconColors.developerType
-                      }}
-                      onClick={() => {
-                        setOpennedModal("developerType")
-                        setLabelValue("Developer's type"),
-                          setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(addInfo?.showDevTypeFields || null);
-                      }}
-                    ></ReportProblemIcon>
-
-                    <ModalChild
-                      labelmodal={labelValue}
-                      passmodalData={handlemodaldData}
-                      displaymodal={smShow}
-                      onClose={() => setSmShow(false)}
-                      selectedFieldData={selectedFieldData}
-                      fieldValue={fieldValue}
-                      remarksUpdate={currentRemarks}
-                    ></ModalChild>
-
-                  </div></h5>
+                  <h5 className={[classes.formLabel, "d-flex flex-row align-items-center"]}>
+                    Developer's type{" "}
+                    <div className="d-flex flex-row align-items-center ml-2">
+                      <Form.Control
+                        className={classes.formControl}
+                        placeholder={
+                          addInfo?.showDevTypeFields === "01"
+                            ? "Individual"
+                            : addInfo?.showDevTypeFields === "Company"
+                            ? "Company"
+                            : addInfo?.showDevTypeFields === "03"
+                            ? "LLP"
+                            : addInfo?.showDevTypeFields === "04"
+                            ? "Society"
+                            : ""
+                        }
+                        disabled
+                      ></Form.Control>
+                      &nbsp;&nbsp;
+                      <ReportProblemIcon
+                        style={{
+                          color: fieldIconColors.developerType,
+                        }}
+                        onClick={() => {
+                          setOpennedModal("developerType");
+                          setLabelValue("Developer's type"),
+                            setSmShow(true),
+                            console.log("modal open"),
+                            setFieldValue(addInfo?.showDevTypeFields || null);
+                        }}
+                      ></ReportProblemIcon>
+                      <ModalChild
+                        labelmodal={labelValue}
+                        passmodalData={handlemodaldData}
+                        displaymodal={smShow}
+                        onClose={() => setSmShow(false)}
+                        selectedFieldData={selectedFieldData}
+                        fieldValue={fieldValue}
+                        remarksUpdate={currentRemarks}
+                      ></ModalChild>
+                    </div>
+                  </h5>
                   <div className="row">
                     <div className="col-sm-12">
                       {/* <div className="form-group row"> */}
@@ -232,14 +244,13 @@ const LicenseDetailsScrutiny = (props) => {
                           <option value="03">LLP</option>
                           <option value="04">Society</option>
                         </Form.Select> */}
-
                       </div>
                     </div>
                   </div>
                 </div>
               </Card>
 
-              {addInfo?.showDevTypeFields === "01" &&
+              {addInfo?.showDevTypeFields === "01" && (
                 <div>
                   <Card style={{ margin: 5 }}>
                     <h5>Developer Details</h5>
@@ -254,25 +265,24 @@ const LicenseDetailsScrutiny = (props) => {
                         </div>
 
                         <div style={{ display: "flex" }}>
-                          <Form.Control className={classes.formControl}
+                          <Form.Control
+                            className={classes.formControl}
                             placeholder={addInfo !== null ? addInfo?.developerName : null}
-                            disabled></Form.Control>
+                            disabled
+                          ></Form.Control>
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              color: fieldIconColors.developerName
+                              color: fieldIconColors.developerName,
                             }}
                             onClick={() => {
-                              setOpennedModal("developerName")
+                              setOpennedModal("developerName");
                               setLabelValue("Developer's Name"),
                                 setSmShow(true),
                                 console.log("modal open"),
                                 setFieldValue(addInfo !== null ? addInfo?.developerName : null);
                             }}
                           ></ReportProblemIcon>
-
-
-
                         </div>
                       </Col>
                       <Col md={4} xxl lg="4">
@@ -285,16 +295,18 @@ const LicenseDetailsScrutiny = (props) => {
                         </div>
 
                         <div style={{ display: "flex" }}>
-                          <Form.Control className={classes.formControl}
+                          <Form.Control
+                            className={classes.formControl}
                             placeholder={addInfo !== null ? addInfo?.developerEmail : null}
-                            disabled></Form.Control>
+                            disabled
+                          ></Form.Control>
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              color: fieldIconColors.developerEmail
+                              color: fieldIconColors.developerEmail,
                             }}
                             onClick={() => {
-                              setOpennedModal("developerEmail")
+                              setOpennedModal("developerEmail");
                               setLabelValue("Developer's Email"),
                                 setSmShow(true),
                                 console.log("modal open"),
@@ -313,16 +325,18 @@ const LicenseDetailsScrutiny = (props) => {
                         </div>
 
                         <div style={{ display: "flex" }}>
-                          <Form.Control className={classes.formControl}
+                          <Form.Control
+                            className={classes.formControl}
                             placeholder={addInfo !== null ? addInfo?.developerMobileNo : null}
-                            disabled ></Form.Control>
+                            disabled
+                          ></Form.Control>
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              color: fieldIconColors.developerMobileNo
+                              color: fieldIconColors.developerMobileNo,
                             }}
                             onClick={() => {
-                              setOpennedModal("developerMobileNo")
+                              setOpennedModal("developerMobileNo");
                               setLabelValue("Developer's Mobile No."),
                                 setSmShow(true),
                                 console.log("modal open"),
@@ -334,9 +348,9 @@ const LicenseDetailsScrutiny = (props) => {
                     </Row>
                   </Card>
                 </div>
-              }
+              )}
 
-              {addInfo?.showDevTypeFields === "Company" &&
+              {addInfo?.showDevTypeFields === "Company" && (
                 <div>
                   <Card style={{ margin: 5 }}>
                     <h5>Developer Details</h5>
@@ -351,16 +365,18 @@ const LicenseDetailsScrutiny = (props) => {
                         </div>
 
                         <div style={{ display: "flex" }}>
-                          <Form.Control className={classes.formControl}
+                          <Form.Control
+                            className={classes.formControl}
                             placeholder={addInfo !== null ? addInfo?.cin_Number : null}
-                            disabled ></Form.Control>
+                            disabled
+                          ></Form.Control>
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              color: fieldIconColors.cinNo
+                              color: fieldIconColors.cinNo,
                             }}
                             onClick={() => {
-                              setOpennedModal("cinNo")
+                              setOpennedModal("cinNo");
                               setLabelValue("CIN No."),
                                 setSmShow(true),
                                 console.log("modal open"),
@@ -379,16 +395,18 @@ const LicenseDetailsScrutiny = (props) => {
                         </div>
 
                         <div style={{ display: "flex" }}>
-                          <Form.Control className={classes.formControl}
+                          <Form.Control
+                            className={classes.formControl}
                             placeholder={addInfo !== null ? addInfo?.companyName : null}
-                            disabled></Form.Control>
+                            disabled
+                          ></Form.Control>
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              color: fieldIconColors.companyName
+                              color: fieldIconColors.companyName,
                             }}
                             onClick={() => {
-                              setOpennedModal("companyName")
+                              setOpennedModal("companyName");
                               setLabelValue("Company's Name"),
                                 setSmShow(true),
                                 console.log("modal open"),
@@ -407,16 +425,18 @@ const LicenseDetailsScrutiny = (props) => {
                         </div>
 
                         <div style={{ display: "flex" }}>
-                          <Form.Control className={classes.formControl}
+                          <Form.Control
+                            className={classes.formControl}
                             placeholder={addInfo !== null ? addInfo?.incorporationDate : null}
-                            disabled ></Form.Control>
+                            disabled
+                          ></Form.Control>
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              color: fieldIconColors.dateOfIncorporation
+                              color: fieldIconColors.dateOfIncorporation,
                             }}
                             onClick={() => {
-                              setOpennedModal("dateOfIncorporation")
+                              setOpennedModal("dateOfIncorporation");
                               setLabelValue("Date of Incorporation"),
                                 setSmShow(true),
                                 console.log("modal open"),
@@ -435,16 +455,18 @@ const LicenseDetailsScrutiny = (props) => {
                         </div>
 
                         <div style={{ display: "flex" }}>
-                          <Form.Control className={classes.formControl}
+                          <Form.Control
+                            className={classes.formControl}
                             placeholder={addInfo !== null ? addInfo?.registeredAddress : null}
-                            disabled ></Form.Control>
+                            disabled
+                          ></Form.Control>
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              color: fieldIconColors.regAddress
+                              color: fieldIconColors.regAddress,
                             }}
                             onClick={() => {
-                              setOpennedModal("regAddress")
+                              setOpennedModal("regAddress");
                               setLabelValue("Registered Address"),
                                 setSmShow(true),
                                 console.log("modal open"),
@@ -463,16 +485,18 @@ const LicenseDetailsScrutiny = (props) => {
                         </div>
 
                         <div style={{ display: "flex" }}>
-                          <Form.Control className={classes.formControl}
+                          <Form.Control
+                            className={classes.formControl}
                             placeholder={addInfo !== null ? addInfo?.email : null}
-                            disabled ></Form.Control>
+                            disabled
+                          ></Form.Control>
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              color: fieldIconColors.email
+                              color: fieldIconColors.email,
                             }}
                             onClick={() => {
-                              setOpennedModal("email")
+                              setOpennedModal("email");
                               setLabelValue("Email"),
                                 setSmShow(true),
                                 console.log("modal open"),
@@ -491,16 +515,18 @@ const LicenseDetailsScrutiny = (props) => {
                         </div>
 
                         <div style={{ display: "flex" }}>
-                          <Form.Control className={classes.formControl}
+                          <Form.Control
+                            className={classes.formControl}
                             placeholder={addInfo !== null ? addInfo?.registeredContactNo : null}
-                            disabled></Form.Control>
+                            disabled
+                          ></Form.Control>
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              color: fieldIconColors.mobileNo
+                              color: fieldIconColors.mobileNo,
                             }}
                             onClick={() => {
-                              setOpennedModal("mobileNo")
+                              setOpennedModal("mobileNo");
                               setLabelValue("Mobile No."),
                                 setSmShow(true),
                                 console.log("modal open"),
@@ -519,16 +545,18 @@ const LicenseDetailsScrutiny = (props) => {
                         </div>
 
                         <div style={{ display: "flex" }}>
-                          <Form.Control className={classes.formControl}
+                          <Form.Control
+                            className={classes.formControl}
                             placeholder={addInfo !== null ? addInfo?.gst_Number : null}
-                            disabled ></Form.Control>
+                            disabled
+                          ></Form.Control>
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              color: fieldIconColors.gstNo
+                              color: fieldIconColors.gstNo,
                             }}
                             onClick={() => {
-                              setOpennedModal("gstNo")
+                              setOpennedModal("gstNo");
                               setLabelValue("GST No."),
                                 setSmShow(true),
                                 console.log("modal open"),
@@ -540,10 +568,8 @@ const LicenseDetailsScrutiny = (props) => {
                     </Row>
                   </Card>
 
-
-
                   <Card style={{ margin: 5 }}>
-                  <h5 className="card-title fw-bold">Shareholding Patterns</h5>
+                    <h5 className="card-title fw-bold">Shareholding Patterns</h5>
                     <div className="table-bd">
                       <table className="table table-bordered">
                         <thead>
@@ -556,41 +582,47 @@ const LicenseDetailsScrutiny = (props) => {
                           </tr>
                         </thead>
                         <tbody>
-                          {
-                            addInfo?.shareHoldingPatterens?.map((item, index) => (
-
-                              <tr>
-                                <td>{item?.serialNumber || index + 1}</td>
-                                <td>
-                                  <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} placeholder={item?.name} disabled></Form.Control>
-                                </td>
-                                <td>
-                                  <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} placeholder={item?.designition} disabled></Form.Control>
-                                </td>
-                                <td>
-                                  <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} placeholder={item?.percentage} disabled></Form.Control>
-                                </td>
-                                <td>
-                                  <div className="row">
-                                    {/* <button className="btn btn-sm col-md-6" onClick={()=>getDocShareholding(item?.uploadPdf)} > */}
-                                    <div className="btn btn-sm col-md-6">
-                                    <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}>
-                                      <Visibility color="info" className="icon" /></IconButton>
-                                      </div>
-                                    {/* </button> */}
-                                    {/* <button className="btn btn-sm col-md-6" onClick={() => window.open(item?.uploadPdf)} >
-                                      <FileDownload color="primary" /> */}
-                                      <div className="btn btn-sm col-md-6">
-                                      <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}>
-                                <FileDownload color="primary" className="mx-1" />
-                        </IconButton>
-                        </div>
-                                    {/* </button> */}
+                          {addInfo?.shareHoldingPatterens?.map((item, index) => (
+                            <tr>
+                              <td>{item?.serialNumber || index + 1}</td>
+                              <td>
+                                <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} placeholder={item?.name} disabled></Form.Control>
+                              </td>
+                              <td>
+                                <Form.Control
+                                  style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+                                  placeholder={item?.designition}
+                                  disabled
+                                ></Form.Control>
+                              </td>
+                              <td>
+                                <Form.Control
+                                  style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+                                  placeholder={item?.percentage}
+                                  disabled
+                                ></Form.Control>
+                              </td>
+                              <td>
+                                <div className="row">
+                                  {/* <button className="btn btn-sm col-md-6" onClick={()=>getDocShareholding(item?.uploadPdf)} > */}
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(item?.uploadPdf)}>
+                                      <Visibility color="info" className="icon" />
+                                    </IconButton>
                                   </div>
-                                </td>
-                              </tr>
-                            ))
-                          }
+                                  {/* </button> */}
+                                  {/* <button className="btn btn-sm col-md-6" onClick={() => window.open(item?.uploadPdf)} >
+                                      <FileDownload color="primary" /> */}
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={() => getDocShareholding(item?.uploadPdf)}>
+                                      <FileDownload color="primary" className="mx-1" />
+                                    </IconButton>
+                                  </div>
+                                  {/* </button> */}
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
                         </tbody>
                       </table>
                     </div>
@@ -599,26 +631,23 @@ const LicenseDetailsScrutiny = (props) => {
                   <div className="card mb-3">
                     <h5 className="card-title fw-bold">Directors Information</h5>
                     <div className="card-body"> */}
-                    <Card style={{ margin:5}}>
+                  <Card style={{ margin: 5 }}>
                     <h5 className="card-title fw-bold">Directors Information</h5>
-               
-                  <div className="table-bd">
-                    <table className="table table-bordered">
-                      <thead>
-                        <tr>
-                          <th>Sr. No</th>
-                          <th>DIN Number</th>
-                          <th>Name</th>
-                          <th>Contact Number</th>
-                          <th>View PDF</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {
-                          addInfo?.directorsInformation?.map((item, index) => (
 
-                            <tr
-                            >
+                    <div className="table-bd">
+                      <table className="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th>Sr. No</th>
+                            <th>DIN Number</th>
+                            <th>Name</th>
+                            <th>Contact Number</th>
+                            <th>View PDF</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {addInfo?.directorsInformation?.map((item, index) => (
+                            <tr>
                               <td>{index + 1}</td>
                               <td>
                                 <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} placeholder={item?.din} disabled></Form.Control>
@@ -635,178 +664,132 @@ const LicenseDetailsScrutiny = (props) => {
                                     <Visibility color="info" className="icon" />
                                   </button> */}
                                   <div className="btn btn-sm col-md-6">
-                                    <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}>
-                                      <Visibility color="info" className="icon" /></IconButton>
-                                  {/* <button className="btn btn-sm col-md-6" onClick={() => window.open(item?.uploadPdf)} >
+                                    <IconButton onClick={() => getDocShareholding(item?.uploadPdf)}>
+                                      <Visibility color="info" className="icon" />
+                                    </IconButton>
+                                    {/* <button className="btn btn-sm col-md-6" onClick={() => window.open(item?.uploadPdf)} >
                                     <FileDownload color="primary" />
                                   </button> */}
                                   </div>
                                   <div className="btn btn-sm col-md-6">
-                                    <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}>
-                                <FileDownload color="primary" className="mx-1" />
-                        </IconButton>
-                        </div>
+                                    <IconButton onClick={() => getDocShareholding(item?.uploadPdf)}>
+                                      <FileDownload color="primary" className="mx-1" />
+                                    </IconButton>
+                                  </div>
                                 </div>
                               </td>
                             </tr>
-                          ))
-                        }
-                        {/* );
+                          ))}
+                          {/* );
                             })} */}
-                      </tbody>
-                    </table>
-                  </div>
-                  </Card>
-                 
-                  <Card style={{ margin: 5 }}>
-                  <p className="ml-1">
-                    In case the Partner/director of the applicant firm/company is common with any existing colonizer who has been granted a license under the 1975 act Yes/No.
-
-                  </p>
-                            <div>
-                  <div className="form-group ml-2">
-                    <input
-                      type="radio"
-                      value="Y"
-                      id="existingColonizer"
-                      className="mx-2 mt-1"
-                      onChange={(e) => setExistingColonizer(e.target.value)}
-                      name="existingColonizer"
-                    />
-                    <label for="Yes">Yes</label>
-
-                    <input
-                      type="radio"
-                      value="N"
-                      id="existingColonizerN"
-                      className="mx-2 mt-1"
-                      onChange={(e) => setExistingColonizer(e.target.value)}
-                      name="existingColonizer"
-                    />
-                    <label for="No">No</label>
+                        </tbody>
+                      </table>
                     </div>
+                  </Card>
 
-                    {existingColonizer === "Y" && (
-                      <div>
-                        <div className="row ">
-                          <div className="form-group row">
-                            <div className="col-sm-12">
-                              <Col xs="12" md="12" sm="12">
-                                <Table className="table table-bordered" size="sm">
-                                  <thead>
-                                    <tr>
-                                      <th>S.No.</th>
-                                      <th>Document Name </th>
-                                      {/* <th> Upload Documents</th> */}
-                                      <th> Annexure</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    <tr>
-                                      <td> 1 &nbsp;&nbsp;</td>
-                                      <td>
-                                        {" "}
-                                        Agreement between the proposed developer and existing colonizer
-                                      </td>
-                                      <td align="center" size="large">
-                                        {/* <input
+                  <Card style={{ margin: 5 }}>
+                    <p className="ml-1">
+                      In case the Partner/director of the applicant firm/company is common with any existing colonizer who has been granted a license
+                      under the 1975 act Yes/No.
+                    </p>
+                    <div className="form-group ml-2">
+                      <input
+                        type="radio"
+                        value="Y"
+                        id="existingColonizer"
+                        className="mx-2 mt-1"
+                        // onChange={(e) => setExistingColonizer(e.target.value)}
+                        name="existingColonizer"
+                      />
+                      <label for="Yes">Yes</label>
+
+                      <input
+                        type="radio"
+                        value="N"
+                        id="existingColonizerN"
+                        className="mx-2 mt-1"
+                        // onChange={(e) => setExistingColonizer(e.target.value)}
+                        name="existingColonizer"
+                      />
+                      <label for="No">No</label>
+                      {existingColonizer === "Y" && (
+                        <div>
+                          <div className="row ">
+                            <div className="form-group row">
+                              <div className="col-sm-12">
+                                <Col xs="12" md="12" sm="12">
+                                  <Table className="table table-bordered" size="sm">
+                                    <thead>
+                                      <tr>
+                                        <th>S.No.</th>
+                                        <th>Document Name </th>
+                                        <th> Upload Documents</th>
+                                        <th> Annexure</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr>
+                                        <td> 1 &nbsp;&nbsp;</td>
+                                        <td> Agreement between the proposed developer and existing colonizer</td>
+                                        <td align="center" size="large">
+                                          {/* <input
                                           type="file"
                                           accept="application/pdf"
                                           name="agreementDoc"
                                           onChange={(e) => getDocumentData(e?.target?.files[0], "aggreementBtw", "existingColonizer")}
                                           class="employee-card-input"
                                         /> */}
-                                          <div className="btn btn-sm col-md-4">
-                                    {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
-                                      <Visibility color="info" className="icon" />
-                                      {/* </IconButton> */}
-                                      </div>
-                                   
-                                      <div className="btn btn-sm col-md-4">
-                                      {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
-                                <FileDownload color="primary" className="mx-1" />
-                        {/* </IconButton> */}
-                        </div>
-                        <div className="btn btn-sm col-md-4">
-                  <ReportProblemIcon
-              style={{
-                color:fieldIconColors.existingColonizerDoc}}
-              onClick={() => {
-                  setOpennedModal("Agreement between the proposed developer and existing colonizer")
-                  setLabelValue("Agreement between the proposed developer and existing colonizer"),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-              }}
-            ></ReportProblemIcon>
-            </div>
-                                      </td>
-                                      {/* <td>
-                                 
-                                        <div className="btn btn-sm col-md-6">
-                                          <button type="button" 
-                                       
-                                          className="btn btn-sm col-md-6">
-                                            <Visibility color="info" className="icon" />
-                                          </button> : <p></p>
+                                        </td>
+                                        <td>
+                                          {/* {existingColonizerDetails.aggreementBtw? */}
+                                          <div className="btn btn-sm col-md-6">
+                                            <button type="button" className="btn btn-sm col-md-6">
+                                              <Visibility color="info" className="icon" />
+                                            </button>{" "}
+                                            : <p></p>
                                           </div>
-                                       
-                                      </td> */}
-                                    </tr>
-                                    <tr>
-                                      <td> 2&nbsp;&nbsp; </td>
-                                      <td>
-                                        Board resolution of authorised signatory of the existing colonizer
-                                      </td>
-                                      <td align="center" size="large">
-                                        {/* <input
+                                          {/* // } */}
+                                        </td>
+                                      </tr>
+                                      <tr>
+                                        <td> 2&nbsp;&nbsp; </td>
+                                        <td>Board resolution of authorised signatory of the existing colonizer</td>
+                                        <td align="center" size="large">
+                                          {/* <input
                                           type="file"
                                           accept="application/pdf"
                                           name="boardDoc"
                                           onChange={(e) => getDocumentData(e?.target?.files[0], "boardResolution", "existingColonizer")}
                                           class="employee-card-input"
                                         /> */}
-                                          <div className="btn btn-sm col-md-4">
-                                    {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
-                                      <Visibility color="info" className="icon" />
-                                      {/* </IconButton> */}
-                                      </div>
-                                   
-                                      <div className="btn btn-sm col-md-4">
-                                      {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
-                                <FileDownload color="primary" className="mx-1" />
-                        {/* </IconButton> */}
-                        </div>
-                        <div className="btn btn-sm col-md-4">
-                        <ReportProblemIcon
-              style={{
-                color:fieldIconColors.existingColonizerDoc}}
-              onClick={() => {
-                  setOpennedModal("Agreement between the proposed developer and existing colonizer")
-                  setLabelValue("Agreement between the proposed developer and existing colonizer"),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-              }}
-            ></ReportProblemIcon>
-            </div>
-                                      </td>
-                                      
-                                    </tr>
-                                  </tbody>
-                                </Table>
-                              </Col>
+                                        </td>
+                                        <td>
+                                          {/* {existingColonizerDetails.boardResolution ? */}
+                                          <div className="btn btn-sm col-md-6">
+                                            <button
+                                              type="button"
+                                              // onClick={() => getDocShareholding(existingColonizerDetails.boardResolution)}
+                                              className="btn btn-sm col-md-6"
+                                            >
+                                              <Visibility color="info" className="icon" />
+                                            </button>{" "}
+                                            : <p></p>
+                                          </div>
+                                          {/* } */}
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </Table>
+                                </Col>
+                              </div>
                             </div>
                           </div>
-                        </div>
 
-                        <div className="row mx-2">
-
-
-                          <div className="col col-4">
-                            <div >
-                              <label htmlFor="dob">DOB</label>
-                              {/* <input
+                          <div className="row mx-2">
+                            <div className="col col-4">
+                              <div className="form-group">
+                                <label htmlFor="dob">DOB</label>
+                                {/* <input
                                 type="date"
                                 value={existingColonizerDetails.dob}
                                 name="dob"
@@ -814,31 +797,13 @@ const LicenseDetailsScrutiny = (props) => {
                                 onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, dob: e.target.value })}
                                 className="employee-card-input"
                               /> */}
-                              <div className={classes.fieldContainer}>
-
-                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
-                              //  placeholder={item?.din} 
-                               disabled></Form.Control>
-                               &nbsp;&nbsp;
-                                     <ReportProblemIcon
-              style={{
-                color:fieldIconColors.existingColonizerDoc}}
-              onClick={() => {
-                  setOpennedModal("Agreement between the proposed developer and existing colonizer")
-                  setLabelValue("Agreement between the proposed developer and existing colonizer"),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-              }}
-            ></ReportProblemIcon>
-            </div>
+                              </div>
                             </div>
-                          </div>
 
-                          <div className="col col-4">
-                            <div >
-                              <label htmlFor="pan">PAN Number</label>
-                              {/* <input
+                            <div className="col col-4">
+                              <div className="form-group">
+                                <label htmlFor="pan">PAN Number</label>
+                                {/* <input
                                 type="pan"
                                 value={existingColonizerDetails.pan}
                                 name="dob"
@@ -847,30 +812,13 @@ const LicenseDetailsScrutiny = (props) => {
                                 className="employee-card-input"
                                 maxLength={10}
                               /> */}
-                              <div className={classes.fieldContainer}>
-                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} 
-                              // placeholder={item?.din} 
-                              disabled></Form.Control>
-                              &nbsp;&nbsp;
-                                    <ReportProblemIcon
-              style={{
-                color:fieldIconColors.existingColonizerDoc}}
-              onClick={() => {
-                  setOpennedModal("Agreement between the proposed developer and existing colonizer")
-                  setLabelValue("Agreement between the proposed developer and existing colonizer"),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-              }}
-            ></ReportProblemIcon>
-            </div>
+                              </div>
                             </div>
-                          </div>
 
-                          <div className="col col-4">
-                            <div >
-                              <label htmlFor="licNo">License No.</label>
-                              {/* <input
+                            <div className="col col-4">
+                              <div className="form-group">
+                                <label htmlFor="licNo">License No.</label>
+                                {/* <input
                                 type="text"
                                 value={existingColonizerDetails.licNo}
                                 name="licNo"
@@ -879,30 +827,13 @@ const LicenseDetailsScrutiny = (props) => {
                                 className="employee-card-input"
                                 maxLength={10}
                               /> */}
-                              <div className={classes.fieldContainer}>
-                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
-                              //  placeholder={item?.din} 
-                               disabled></Form.Control>
-                               &nbsp;&nbsp;
-                                     <ReportProblemIcon
-              style={{
-                color:fieldIconColors.existingColonizerDoc}}
-              onClick={() => {
-                  setOpennedModal("Agreement between the proposed developer and existing colonizer")
-                  setLabelValue("Agreement between the proposed developer and existing colonizer"),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-              }}
-            ></ReportProblemIcon>
-            </div>
+                              </div>
                             </div>
-                          </div>
 
-                          <div className="col col-4">
-                            <div >
-                              <label htmlFor="licDate">Date</label>
-                              {/* <input
+                            <div className="col col-4">
+                              <div className="form-group">
+                                <label htmlFor="licDate">Date</label>
+                                {/* <input
                                 type="date"
                                 value={existingColonizerDetails.licDate}
                                 name="licDate"
@@ -911,30 +842,13 @@ const LicenseDetailsScrutiny = (props) => {
                                 className="employee-card-input"
                                 maxLength={10}
                               /> */}
-                              <div className={classes.fieldContainer}>
-                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
-                              //  placeholder={item?.din}
-                                disabled></Form.Control>
-                                &nbsp;&nbsp;
-                                      <ReportProblemIcon
-              style={{
-                color:fieldIconColors.existingColonizerDoc}}
-              onClick={() => {
-                  setOpennedModal("Agreement between the proposed developer and existing colonizer")
-                  setLabelValue("Agreement between the proposed developer and existing colonizer"),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-              }}
-            ></ReportProblemIcon>
-            </div>
+                              </div>
                             </div>
-                          </div>
 
-                          <div className="col col-4">
-                            <div >
-                              <label htmlFor="licValidity">Validity</label>
-                              {/* <input
+                            <div className="col col-4">
+                              <div className="form-group">
+                                <label htmlFor="licValidity">Validity</label>
+                                {/* <input
                                 type="date"
                                 value={existingColonizerDetails.licValidity}
                                 name="licValidity"
@@ -943,30 +857,13 @@ const LicenseDetailsScrutiny = (props) => {
                                 className="employee-card-input"
                              
                               /> */}
-                              <div className={classes.fieldContainer}>
-                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
-                              //  placeholder={item?.din} 
-                               disabled></Form.Control>
-                               &nbsp;&nbsp;
-                                     <ReportProblemIcon
-              style={{
-                color:fieldIconColors.existingColonizerDoc}}
-              onClick={() => {
-                  setOpennedModal("Agreement between the proposed developer and existing colonizer")
-                  setLabelValue("Agreement between the proposed developer and existing colonizer"),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-              }}
-            ></ReportProblemIcon>
-            </div>
+                              </div>
                             </div>
-                          </div>
 
-                          <div className="col col-4">
-                            <div >
-                              <label >Purpose</label>
-                              {/* <Select
+                            <div className="col col-4">
+                              <div className="form-group">
+                                <label htmlFor="licValidity">Purpose</label>
+                                {/* <Select
                                 onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, licPurpose: e.target.value })}
                                 value={existingColonizerDetails.licPurpose}
                                 className="w-100"
@@ -978,36 +875,15 @@ const LicenseDetailsScrutiny = (props) => {
                                   ))
                                 }
                               </Select> */}
-                              <div className={classes.fieldContainer}>
-                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
-                              //  placeholder={item?.din} 
-                               disabled></Form.Control>
-                               &nbsp;&nbsp;
-                                     <ReportProblemIcon
-              style={{
-                color:fieldIconColors.existingColonizerDoc}}
-              onClick={() => {
-                  setOpennedModal("Agreement between the proposed developer and existing colonizer")
-                  setLabelValue("Agreement between the proposed developer and existing colonizer"),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-              }}
-            ></ReportProblemIcon>
-            </div>
-
+                              </div>
                             </div>
                           </div>
-
-
                         </div>
-                      </div>
-                    )}
-                  </div>
-                  
+                      )}
+                    </div>
                   </Card>
                 </div>
-              }
+              )}
             </div>
             {/* </Row> */}
 

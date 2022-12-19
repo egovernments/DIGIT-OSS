@@ -85,7 +85,7 @@ const CardNewLicence = (props) => {
             <Card style={{ height: "85px", marginTop: "40px", borderLeft: "2px solid #1266af" }}>
               <h2 style={{ textAlign: "center" }}>
                 {" "}
-                <a href="digit-ui/citizen/obps/CompletionLic">Compositions of Urban Area Violation</a>
+                <a href="/digit-ui/citizen/obps/CompositionClu">Compositions of Urban Area Violation </a>
               </h2>
             </Card>
           </div>

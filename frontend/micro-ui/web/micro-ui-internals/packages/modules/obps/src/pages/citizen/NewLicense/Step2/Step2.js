@@ -352,7 +352,7 @@ const ApllicantPuropseForm = (props) => {
     modaldata["tehsil"] = modaldata?.tehsil?.value;
     modaldata["revenueEstate"] = modaldata?.revenueEstate?.value;
     modaldata["rectangleNo"] = modaldata?.rectangleNo?.value;
-    modaldata["registeringAuthorityDoc"] = docId;
+    // modaldata["registeringAuthorityDoc"] = docId;
     delete modaldata?.district;
     delete modaldata?.potential;
     delete modaldata?.purpose;
@@ -469,8 +469,7 @@ const ApllicantPuropseForm = (props) => {
     const potentialSelected = data?.value;
     window?.localStorage.setItem("potential", JSON.stringify(potentialSelected));
   };
-  const [fileStoreId, setFileStoreId] = useState({});
-  const getDocumentData = async (file) => {
+  const getDocumentData = async (file, fieldName) => {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("tenantId", "hr");
@@ -481,10 +480,11 @@ const ApllicantPuropseForm = (props) => {
       const Resp = await axios.post("/filestore/v1/files", formData, {});
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
+      // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
       setLoader(false);
     } catch (error) {
       setLoader(false);
-      return error;
+      return error.message;
     }
   };
 
@@ -828,18 +828,15 @@ const ApllicantPuropseForm = (props) => {
                     <tbody>
                       <tr>
                         <td>
-                          <input type="text" className="form-control" {...register("kanal")} id="kanal" />
+                          <input type="text" className="form-control  " {...register("kanal")} id="kanal" required maxLength={20} />
                           <label htmlFor="sum">Total: {watch("kanal") * 0.125}</label>&nbsp;&nbsp;
-                          <h3 className="error-message" style={{ color: "red" }}>
-                            {errors?.kanal?.value && errors?.kanal?.value?.message}
-                          </h3>
                         </td>
                         <td>
-                          <input type="text" className="form-control" {...register("marla")} id="marla" />
+                          <input type="text" className="form-control " {...register("marla")} id="marla" required maxLength={20} />
                           <label htmlFor="summarla">Total: {watch("marla") * 0.0062}</label>&nbsp;&nbsp;
                         </td>
                         <td>
-                          <input type="text" className="form-control" {...register("sarsai")} id="sarsai" />
+                          <input type="text" className="form-control " {...register("sarsai")} id="sarsai" required maxLength={20} />
                           <label htmlFor="sumsarsai">Total: {watch("sarsai") * 0.00069}</label>&nbsp;&nbsp;
                         </td>
                       </tr>
@@ -871,15 +868,15 @@ const ApllicantPuropseForm = (props) => {
                     <tbody>
                       <tr>
                         <td>
-                          <input type="text" className="form-control" {...register("bigha")} id="bigha" />
+                          <input type="text" className="form-control" {...register("bigha")} id="bigha" required maxLength={20} />
                           <label htmlFor="sumBigha">Total: {watch("bigha") * 0.33}</label>&nbsp;&nbsp;
                         </td>
                         <td>
-                          <input type="text" className="form-control" {...register("biswa")} id="biswa" />
+                          <input type="text" className="form-control" {...register("biswa")} id="biswa" required maxLength={20} />
                           <label htmlFor="sumBiswa">Total: {watch("biswa") * 0.0309}</label>&nbsp;&nbsp;
                         </td>
                         <td>
-                          <input type="text" className="form-control" {...register("biswansi")} id="biswansi" />
+                          <input type="text" className="form-control" {...register("biswansi")} id="biswansi" required maxLength={20} />
                           <label htmlFor="sumBiswansi">Total: {watch("biswansi") * 0.619}</label>&nbsp;&nbsp;
                         </td>
                       </tr>
@@ -917,7 +914,15 @@ const ApllicantPuropseForm = (props) => {
                             Name of the developer company .<span style={{ color: "red" }}>*</span>
                           </h2>
                         </label>
-                        <Form.Control type="text" className="form-control" placeholder="" {...register("developerCompany")} />
+                        <Form.Control
+                          type="text"
+                          className="form-control"
+                          placeholder=""
+                          {...register("developerCompany")}
+                          required
+                          minlength={2}
+                          maxLength={99}
+                        />
                       </div>
                       <div className="col col-4">
                         <label>
@@ -958,7 +963,15 @@ const ApllicantPuropseForm = (props) => {
                             Name of authorized signatory on behalf of land owner(s)<span style={{ color: "red" }}>*</span>
                           </h2>
                         </label>
-                        <Form.Control type="text" className="form-control" placeholder="" {...register("authSignature")} />
+                        <Form.Control
+                          type="text"
+                          className="form-control"
+                          placeholder=""
+                          {...register("authSignature")}
+                          required
+                          minlength={4}
+                          maxLength={99}
+                        />
                       </div>
                       <div className="col col-4">
                         <label>
@@ -970,7 +983,15 @@ const ApllicantPuropseForm = (props) => {
                             Name of authorized signatory on behalf of developer.<span style={{ color: "red" }}>*</span>
                           </h2>
                         </label>
-                        <Form.Control type="text" className="form-control" placeholder="" {...register("nameAuthSign")} />
+                        <Form.Control
+                          type="text"
+                          className="form-control"
+                          placeholder=""
+                          {...register("nameAuthSign")}
+                          required
+                          minlength={4}
+                          maxLength={99}
+                        />
                       </div>
                     </div>
                     <br></br>
@@ -982,7 +1003,7 @@ const ApllicantPuropseForm = (props) => {
                             Registering Authority<span style={{ color: "red" }}>*</span>
                           </h2>
                         </label>
-                        <Form.Control type="text" className="form-control" placeholder="" {...register("registeringAuthority")} />
+                        <Form.Control type="text" className="form-control" placeholder="" {...register("registeringAuthority")} required />
                       </div>
                       <div className="col col-4">
                         <label>
@@ -999,6 +1020,8 @@ const ApllicantPuropseForm = (props) => {
                           type="file"
                           style={{ marginTop: "-6px" }}
                           className="form-control"
+                          accept="application/pdf"
+                          required
                           onChange={(e) => getDocumentData(e?.target?.files[0], registeringAuthorityDoc)}
                         />
                       </div>
