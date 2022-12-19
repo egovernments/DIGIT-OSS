@@ -374,7 +374,7 @@ const AppliedDetailForm = (props) => {
                             Width in mtr <CalculateIcon color="primary" />
                           </td>
                           <td>
-                            Area in sqmtr <CalculateIcon color="primary" />
+                            Area (in sqm) <CalculateIcon color="primary" />
                           </td>
                         </tr>
                       </thead>
@@ -744,7 +744,7 @@ const AppliedDetailForm = (props) => {
                             <td>
                               Dimensions (in mtrs) <CalculateIcon color="primary" />
                             </td>
-                            <td>Enter Area</td>
+                            <td>Enter Area (in sqm)</td>
                           </tr>
                         </thead>
                         <tbody>
@@ -802,7 +802,7 @@ const AppliedDetailForm = (props) => {
                             <td>
                               Dimension (in mtrs) <CalculateIcon color="primary" />
                             </td>
-                            <td>Enter Area</td>
+                            <td>Enter Area (in sqm)</td>
                           </tr>
                         </thead>
                         <tbody>
