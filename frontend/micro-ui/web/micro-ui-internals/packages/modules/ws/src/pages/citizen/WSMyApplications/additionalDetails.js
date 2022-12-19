@@ -8,7 +8,7 @@ import { stringReplaceAll } from "../../../utils";
 const WSAdditionalDetails = () => {
   const { t } = useTranslation();
   const user = Digit.UserService.getUser();
-  const tenantId = user?.info?.permanentCity || Digit.ULBService.getCurrentTenantId();
+  const tenantId = Digit.ULBService.getCurrentTenantId() || user?.info?.permanentCity;
   const applicationNobyData = window.location.href.includes("SW_")
     ? window.location.href.substring(window.location.href.indexOf("SW_"))
     : window.location.href.substring(window.location.href.indexOf("WS_"));
