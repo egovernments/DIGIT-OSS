@@ -158,7 +158,9 @@ function SurrenderLic() {
       </div>
       <Collapse in={open2}>
         <div id="example-collapse-text">
-      <Card style={{ width: "126%", border: "5px solid #1266af" }}>
+      <Card 
+      // style={{ width: "126%", border: "5px solid #1266af" }}
+      >
         <h4 style={{ fontSize: "25px", marginLeft: "21px" }} className="text-center">Surrender of License</h4>
         <div className="card">
      
@@ -213,12 +215,32 @@ function SurrenderLic() {
                   <Form.Label>
                     Select Type (Complete or Partial) <span style={{ color: "red" }}>*</span>
                   </Form.Label>
-                  
+                  <div className={classes.fieldContainer}>
                   <select className="form-control" {...register("selectType")} onChange={(e) => handleshowhide(e)}>
                     <option value=" ">----Select value-----</option>
                     <option value="1">(a)Complete</option>
                     <option value="2">(b) Partial</option>
                   </select>
+                  
+            {/* <Form.Control
+              className={classes.formControl}
+              placeholder=""
+              disabled
+            ></Form.Control> */}
+                
+                <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Licence No")
+                  setLabelValue("Licence No"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+           
+             </div>
                 </Form.Group>
               </Col>
               <Col className="col-4">
@@ -299,7 +321,27 @@ function SurrenderLic() {
                           Area in Acres <span style={{ color: "red" }}>*</span>
                         </Form.Label>
                         {/* <Form.Control type="number" placeholder="Enter Area" /> */}
-                        <input type="number" placeholder="" className="form-control" {...register("AreainAcres")} />
+                        {/* <input type="number" placeholder="" className="form-control" {...register("AreainAcres")} /> */}
+                        <div className={classes.fieldContainer}>
+            <Form.Control
+              className={classes.formControl}
+              placeholder=""
+              disabled
+            ></Form.Control>
+                
+                <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Licence No")
+                  setLabelValue("Licence No"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+           
+             </div>
                       </div>
                     )}
                   </div>
@@ -332,7 +374,32 @@ function SurrenderLic() {
                           </td>
                           <td>
                             {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan ")}></input> */}
-                            <input type="file" placeholder="" className="form-control" {...register("Third-PartyRights")}></input>
+                            {/* <input type="file" placeholder="" className="form-control" {...register("Third-PartyRights")}></input> */}
+                            <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Licence No")
+                  setLabelValue("Licence No"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                 </div>
                           </td>
                         </tr>
                         <tr>
@@ -342,8 +409,33 @@ function SurrenderLic() {
                             Declaration IDW Works Approved Scanned Copy of Zoning/Layout Plan <span style={{ color: "red" }}>*</span>
                           </td>
                           <td>
-                          <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan ")}></input>
+                          {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan ")}></input> */}
                             {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan ")}></input> */}
+                            <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Licence No")
+                  setLabelValue("Licence No"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                 </div>
                           </td>
                         </tr>
                         <tr>
@@ -353,7 +445,32 @@ function SurrenderLic() {
                             License Copy <span style={{ color: "red" }}>*</span>
                           </td>
                           <td>
-                            <input type="file" placeholder="" className="form-control" {...register("LicenseCopy ")}></input>
+                            {/* <input type="file" placeholder="" className="form-control" {...register("LicenseCopy ")}></input> */}
+                            <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Licence No")
+                  setLabelValue("Licence No"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                 </div>
                           </td>
                         </tr>
                         <tr>
@@ -363,7 +480,32 @@ function SurrenderLic() {
                             EDC availed or not e.g. surrounding roads are constructed or not <span style={{ color: "red" }}>*</span>
                           </td>
                           <td>
-                            <input type="file" placeholder="" className="form-control" {...register("EDCavailed ")}></input>
+                            {/* <input type="file" placeholder="" className="form-control" {...register("EDCavailed ")}></input> */}
+                            <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Licence No")
+                  setLabelValue("Licence No"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                 </div>
                           </td>
                         </tr>
                         <tr>
@@ -416,7 +558,32 @@ function SurrenderLic() {
                               <span style={{ color: "red" }}>*</span>
                             </td>
                             <td>
-                              <input type="file" placeholder="" className="form-control" {...register("GiftDeed")}></input>
+                              {/* <input type="file" placeholder="" className="form-control" {...register("GiftDeed")}></input> */}
+                              <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Licence No")
+                  setLabelValue("Licence No"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                 </div>
                             </td>
                           </tr>
                           <tr>
@@ -427,7 +594,32 @@ function SurrenderLic() {
                               <span style={{ color: "red" }}>*</span>
                             </td>
                             <td>
-                              <input type="file" placeholder="" className="form-control" {...register("Mutation")}></input>
+                              {/* <input type="file" placeholder="" className="form-control" {...register("Mutation")}></input> */}
+                              <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Licence No")
+                  setLabelValue("Licence No"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                 </div>
                             </td>
                           </tr>
                           <tr>
@@ -437,7 +629,32 @@ function SurrenderLic() {
                               Jamabandhi <span style={{ color: "red" }}>*</span>
                             </td>
                             <td>
-                              <input type="file" placeholder="" className="form-control" {...register("Jamabandhi")}></input>
+                              {/* <input type="file" placeholder="" className="form-control" {...register("Jamabandhi")}></input> */}
+                              <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Licence No")
+                  setLabelValue("Licence No"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                 </div>
                             </td>
                           </tr>
                         </tbody>
@@ -469,7 +686,32 @@ function SurrenderLic() {
                             <span style={{ color: "red" }}>*</span>
                           </td>
                           <td>
-                            <input type="file" placeholder="" className="form-control" {...register("Third-PartyRights")}></input>
+                            {/* <input type="file" placeholder="" className="form-control" {...register("Third-PartyRights")}></input> */}
+                            <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Licence No")
+                  setLabelValue("Licence No"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                 </div>
                           </td>
                         </tr>
                         <tr>
@@ -479,7 +721,32 @@ function SurrenderLic() {
                             Declaration IDW Works <span style={{ color: "red" }}>*</span>
                           </td>
                           <td>
-                            <input type="file" placeholder="" className="form-control" {...register("DeclarationIDWWorks")}></input>
+                            {/* <input type="file" placeholder="" className="form-control" {...register("DeclarationIDWWorks")}></input> */}
+                            <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Licence No")
+                  setLabelValue("Licence No"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                 </div>
                           </td>
                         </tr>
                         <tr>
@@ -490,7 +757,32 @@ function SurrenderLic() {
                             <span style={{ color: "red" }}>*</span>
                           </td>
                           <td>
-                            <input type="file" placeholder="" className="form-control" {...register("RevisedLayoutPlan")}></input>
+                            {/* <input type="file" placeholder="" className="form-control" {...register("RevisedLayoutPlan")}></input> */}
+                            <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Licence No")
+                  setLabelValue("Licence No"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                 </div>
                           </td>
                         </tr>
                         <tr>
@@ -500,7 +792,32 @@ function SurrenderLic() {
                             EDC availed or not e.g. surrounding roads are constructed or not <span style={{ color: "red" }}>*</span>
                           </td>
                           <td>
-                            <input type="file" placeholder="" className="form-control" {...register("EDCavailed")}></input>
+                            {/* <input type="file" placeholder="" className="form-control" {...register("EDCavailed")}></input> */}
+                            <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Licence No")
+                  setLabelValue("Licence No"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                 </div>
                           </td>
                         </tr>
                         <tr>
@@ -510,7 +827,32 @@ function SurrenderLic() {
                             Area falling under 24m road /service road or sector dividing road <span style={{ color: "red" }}>*</span>
                           </td>
                           <td>
-                            <input type="file" placeholder="" className="form-control" {...register("AreaFallingUnder")}></input>
+                            {/* <input type="file" placeholder="" className="form-control" {...register("AreaFallingUnder")}></input> */}
+                            <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Licence No")
+                  setLabelValue("Licence No"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                 </div>
                           </td>
                         </tr>
                         <tr>
@@ -564,7 +906,32 @@ function SurrenderLic() {
                               <span style={{ color: "red" }}>*</span>
                             </td>
                             <td>
-                             <input type="file" placeholder="" className="form-control" {...register("GiftDeed")}></input>
+                             {/* <input type="file" placeholder="" className="form-control" {...register("GiftDeed")}></input> */}
+                             <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Licence No")
+                  setLabelValue("Licence No"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                 </div>
                             </td>
                           </tr>
                           <tr>
@@ -575,7 +942,32 @@ function SurrenderLic() {
                               <span style={{ color: "red" }}>*</span>
                             </td>
                             <td>
-                              <input type="file" placeholder="" className="form-control" {...register("Mutation")}></input>
+                              {/* <input type="file" placeholder="" className="form-control" {...register("Mutation")}></input> */}
+                              <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Licence No")
+                  setLabelValue("Licence No"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                 </div>
                             </td>
                           </tr>
                           <tr>
@@ -585,7 +977,32 @@ function SurrenderLic() {
                               Jamabandhi <span style={{ color: "red" }}>*</span>
                             </td>
                             <td>
-                              <input type="file" placeholder="" className="form-control" {...register("Jamabandhi")}></input>
+                              {/* <input type="file" placeholder="" className="form-control" {...register("Jamabandhi")}></input> */}
+                              <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Licence No")
+                  setLabelValue("Licence No"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                 </div>
                             </td>
                           </tr>
                         </tbody>
@@ -601,7 +1018,7 @@ function SurrenderLic() {
         </Row>
       
         
-<div class="row">
+{/* <div class="row">
           <div class="col-sm-12 text-right">
             <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
               Submit
@@ -612,7 +1029,7 @@ function SurrenderLic() {
               Save as Draft
             </button>
           </div>
-        </div>
+        </div> */}
         
         </div>
         </Card>
