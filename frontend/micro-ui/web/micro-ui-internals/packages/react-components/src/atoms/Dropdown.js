@@ -175,7 +175,7 @@ const Dropdown = (props) => {
               selectedOption
                 ? props.t
                   ? props.isMultiSelectEmp
-                    ? `${selectedOption} ${t("BPA_SELECTED_TEXT")}`
+                    ? `${selectedOption} ${t("BPA_SELECTED_TEXT")}`: props?.pipeSeparator ? selectedOption[props.optionKey]?.split("|")?.[0]
                     : props.t(props.optionKey ? selectedOption[props.optionKey] : selectedOption)
                   : props.optionKey
                   ? selectedOption[props.optionKey]
@@ -189,7 +189,7 @@ const Dropdown = (props) => {
             disable={props.disable}
             freeze={props.freeze ? true : false}
             autoFocus={props.autoFocus}
-            placeholder={props.placeholder}
+            placeholder={props.placeholder || "Select"}
             onBlur={props?.onBlur}
             inputRef={props.ref}
           />
@@ -221,7 +221,7 @@ const Dropdown = (props) => {
                     onClick={() => onSelect(option)}
                   >
                     {option.icon && <span className="icon"> {option.icon} </span>}
-                    {props.isPropertyAssess? <div>{props.t ? props.t(option[props.optionKey]) : option[props.optionKey]}</div>:
+                    {props.isPropertyAssess? <div>{props.t ? props.t(option[props.optionKey]) : option[props.optionKey]}</div>: props?.pipeSeparator ? <span>{option[props.optionKey]?.split("|")?.[0]}</span> :
                     <span> {props.t ? props.t(option[props.optionKey]) : option[props.optionKey]}</span>} 
                   </div>
                 );
