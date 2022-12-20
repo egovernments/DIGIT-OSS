@@ -50,11 +50,6 @@ const ApllicantPuropseForm = (props) => {
       title: "Rectangle No.",
       dataIndex: "rectangleNo",
     },
-    {
-      key: "landOwner",
-      title: "Land Owner",
-      dataIndex: "landOwner",
-    },
 
     {
       key: "consolidationType",
