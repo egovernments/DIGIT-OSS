@@ -35,36 +35,34 @@ function Beneficialscrutiny() {
     setValue,
   } = useForm({});
 
-
   const beneficialNew = (data) => console.log(data);
-   
+
   const classes = useStyles();
   const currentRemarks = (data) => {
     props.showTable({ data: data.data });
   };
 
-  
   const [smShow, setSmShow] = useState(false);
   const [labelValue, setLabelValue] = useState("");
   const Colors = {
-    approved:"#09cb3d",
-    disapproved:"#ff0000",
-    info:"#FFB602"
-  }
+    approved: "#09cb3d",
+    disapproved: "#ff0000",
+    info: "#FFB602",
+  };
 
   const handlemodaldData = (data) => {
     // setmodaldData(data.data);
     setSmShow(false);
-    console.log("here",openedModal,data);
-    if(openedModal && data){
-      setFieldIconColors({...fieldIconColors,[openedModal]:data.data.isApproved?Colors.approved:Colors.disapproved})
+    console.log("here", openedModal, data);
+    if (openedModal && data) {
+      setFieldIconColors({ ...fieldIconColors, [openedModal]: data.data.isApproved ? Colors.approved : Colors.disapproved });
     }
-      setOpennedModal("");
-      setLabelValue("");
+    setOpennedModal("");
+    setLabelValue("");
   };
-  const [selectedFieldData,setSelectedFieldData] = useState();
+  const [selectedFieldData, setSelectedFieldData] = useState();
   const [fieldValue, setFieldValue] = useState("");
-  const [openedModal, setOpennedModal] = useState("")
+  const [openedModal, setOpennedModal] = useState("");
   const [fieldIconColors, setFieldIconColors] = useState({
     developer: Colors.info,
     authPersonName: Colors.info,
@@ -84,15 +82,34 @@ function Beneficialscrutiny() {
     parmanentAddress: Colors.info,
     addressForCommunication: Colors.info,
     authPerson: Colors.info,
-    emailForCommunication: Colors.info
-  })
+    emailForCommunication: Colors.info,
+  });
 
-  const fieldIdList = [{label:"Developer",key:"developer"},{label:"Authorized Person Name",key:"authPersonName"},{label:"Autrhoized Mobile No",key:"authMobileNo1"},{label:"Authorized MobileNo. 2 ",key:"authMobileNo2"},{label:"Email ID",key:"emailId"},{label:"PAN No.",key:"pan"},{label:"Address  1",key:"address"},{label:"Village/City",key:"city"},{label:"Pincode",key:"pin"},{label:"Tehsil",key:"tehsil"},{label:"District",key:"district"},{label:"State",key:"state"},{label:"Status (Individual/ Company/ Firm/ LLP etc.)",key:"type"},{label:"LC-I signed by",key:"lciSignedBy"},{label:"If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)",key:"lciNotSigned"},{label: "Permanent address in case of individual/ registered office address in case other than individual", key:"parmanentAddress"},{label:"Address for communication",key:"addressForCommunication"},{label:"Name of the authorized person to sign the application",key:"authPerson"},{label:"Email ID for communication",key:"emailForCommunication"}]
-
+  const fieldIdList = [
+    { label: "Developer", key: "developer" },
+    { label: "Authorized Person Name", key: "authPersonName" },
+    { label: "Autrhoized Mobile No", key: "authMobileNo1" },
+    { label: "Authorized MobileNo. 2 ", key: "authMobileNo2" },
+    { label: "Email ID", key: "emailId" },
+    { label: "PAN No.", key: "pan" },
+    { label: "Address  1", key: "address" },
+    { label: "Village/City", key: "city" },
+    { label: "Pincode", key: "pin" },
+    { label: "Tehsil", key: "tehsil" },
+    { label: "District", key: "district" },
+    { label: "State", key: "state" },
+    { label: "Status (Individual/ Company/ Firm/ LLP etc.)", key: "type" },
+    { label: "LC-I signed by", key: "lciSignedBy" },
+    { label: "If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)", key: "lciNotSigned" },
+    { label: "Permanent address in case of individual/ registered office address in case other than individual", key: "parmanentAddress" },
+    { label: "Address for communication", key: "addressForCommunication" },
+    { label: "Name of the authorized person to sign the application", key: "authPerson" },
+    { label: "Email ID for communication", key: "emailForCommunication" },
+  ];
 
   return (
     <form onSubmit={handleSubmit(beneficialNew)}>
-       <div
+      <div
         className="collapse-header"
         onClick={() => setOpen2(!open2)}
         aria-controls="example-collapse-text"
@@ -110,7 +127,7 @@ function Beneficialscrutiny() {
         }}
       >
         <span style={{ color: "#817f7f" }} className="">
-        CHANGE IN BENEFICIAL INTEREST
+          CHANGE IN BENEFICIAL INTEREST
         </span>
         {open2 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       </div>
@@ -172,78 +189,61 @@ function Beneficialscrutiny() {
                   <option value="3">(c)Change in Share Holding Pattern</option>
                 </select>
               </Form.Group> */}
-                <div>
-                <Form.Label>
-              <h5 className={classes.formLabel}>Select Service &nbsp;</h5>
-            </Form.Label>
-            <span className={classes.required}>*</span> &nbsp;&nbsp;
-          </div>
-            <div className={classes.fieldContainer}>
-            <Form.Control
-              className={classes.formControl}
-              placeholder=""
-              disabled
-            ></Form.Control>
-                
-                <ReportProblemIcon
-              style={{
-                color:fieldIconColors.developer}}
-              onClick={() => {
-                  setOpennedModal("Select Service")
-                  setLabelValue("Select Service"),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-              }}
-            ></ReportProblemIcon>
-             
-             </div>
-            </Col>
-            <Col className="col-4">
-              
-                
-                 
-                  
-                    <div>
-                <Form.Label>
-              <h5 className={classes.formLabel}>Amount &nbsp;</h5>
-            </Form.Label>
-            <span className={classes.required}>*</span> &nbsp;&nbsp;
-          </div>
-            <div className={classes.fieldContainer}>
-            <Form.Control
-              className={classes.formControl}
-              placeholder=""
-              disabled
-            ></Form.Control>
-                
-                <ReportProblemIcon
-              style={{
-                color:fieldIconColors.developer}}
-              onClick={() => {
-                  setOpennedModal("Amount")
-                  setLabelValue("Amount"),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-              }}
-            ></ReportProblemIcon>
-             
-             </div>
-                  
-                  
-                
-                {/* <Col className="col-4">
+                  <div>
+                    <Form.Label>
+                      <h5 className={classes.formLabel}>Select Service &nbsp;</h5>
+                    </Form.Label>
+                    <span className={classes.required}>*</span> &nbsp;&nbsp;
+                  </div>
+                  <div className={classes.fieldContainer}>
+                    <Form.Control className={classes.formControl} placeholder="" disabled></Form.Control>
+
+                    <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.developer,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("Select Service");
+                        setLabelValue("Select Service"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                      }}
+                    ></ReportProblemIcon>
+                  </div>
+                </Col>
+                <Col className="col-4">
+                  <div>
+                    <Form.Label>
+                      <h5 className={classes.formLabel}>Amount &nbsp;</h5>
+                    </Form.Label>
+                    <span className={classes.required}>*</span> &nbsp;&nbsp;
+                  </div>
+                  <div className={classes.fieldContainer}>
+                    <Form.Control className={classes.formControl} placeholder="" disabled></Form.Control>
+
+                    <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.developer,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("Amount");
+                        setLabelValue("Amount"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                      }}
+                    ></ReportProblemIcon>
+                  </div>
+
+                  {/* <Col className="col-4">
                   <Button variant="success" className="col my-4" type="submit" aria-label="right-end">
                     Pay
                   </Button>
                 </Col> */}
-              
-            </Col>
-            <Col className="col-4">
-              <Form.Group as={Col} controlId="formGridArea">
-               <div>
-                  {showhide === "2" && (
+                </Col>
+                <Col className="col-4">
+                  <Form.Group as={Col} controlId="formGridArea">
                     <div>
                       <Form.Label>
                         <h2> Area in Acres</h2>
@@ -1225,8 +1225,6 @@ function Beneficialscrutiny() {
             </Row> */}
          
         </div>
-      </Card>
-      </div>
       </Collapse>
     </form>
   );

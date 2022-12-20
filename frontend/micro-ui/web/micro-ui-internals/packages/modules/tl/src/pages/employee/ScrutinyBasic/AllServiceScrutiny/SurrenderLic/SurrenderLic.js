@@ -36,6 +36,19 @@ function SurrenderLic() {
   const [showhide, setShowhide] = useState("");
   const [open2, setOpen2] = useState(false);
 
+   
+
+  // const handleshowhide = (event) => {
+  //   const getuser = event.target.value;
+
+  //   setShowhide(getuser);
+  // };
+  const handleselects = (event) => {
+    const getu = event.target.value;
+
+    setSelects(getu);
+  };
+
   const handleshowhide = (event) => {
     const getuser = event.target.value;
 
@@ -274,6 +287,19 @@ function SurrenderLic() {
                         onChange={(e) => handleselects(e)}
                         />
                     </Col>
+                    <Col className="col-6">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Licence No")
+                  setLabelValue("Licence No"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </Col>
                   </Row>
                 </Form.Group>
               </Col>
@@ -306,6 +332,19 @@ function SurrenderLic() {
                         onChange={(e) => handleselects(e)}
                        />
                     </Col>
+                    <Col className="col-6">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Licence No")
+                  setLabelValue("Licence No"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </Col>
                   </Row>
                 </Form.Group>
               </Col>
@@ -350,7 +389,7 @@ function SurrenderLic() {
             </Row>
       
        
-
+<br></br>
         <Row>
           <div>
             {showhide === "1" && (
@@ -538,6 +577,19 @@ function SurrenderLic() {
                                       value="9"
                                       onChange={(e) => handleselects(e)}
                                     />
+                                  </Col>
+                                  <Col className="col-4">
+                                   <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Licence No")
+                  setLabelValue("Licence No"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
                                   </Col>
                                 </Row>
                               </Form.Group>
@@ -885,7 +937,19 @@ function SurrenderLic() {
                                       value="10"
                                       onChange={(e) => handleselects(e)}
                                     />
-                                
+                                    </Col>
+                                    <Col className="col-4">
+                                   <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Licence No")
+                  setLabelValue("Licence No"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
                                   </Col>
                                 </Row>
                               </Form.Group>
