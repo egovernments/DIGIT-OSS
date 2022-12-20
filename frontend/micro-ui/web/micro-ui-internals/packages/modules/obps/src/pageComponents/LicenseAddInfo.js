@@ -337,13 +337,13 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         console.log("entered into shareholding case");
         let temp = modalValuesArray;
         temp[index].uploadPdf = Resp?.data?.files?.[0]?.fileStoreId;
-        setModalValuesArray(temp)
+        setModalValuesArray([...temp])
         console.log("set into shareholding case",temp,modalValuesArray);
       } else if ( type === "directorInfoPdf" ){
         console.log("entered into directorInfo case");
         let temp = DirectorData;
         temp[index].uploadPdf = Resp?.data?.files?.[0]?.fileStoreId;
-        setDirectorData(temp)
+        setDirectorData([...temp])
         console.log("set into directorInfo case",temp,DirectorData);
       } else {
         setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
@@ -461,6 +461,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         "serialNumber": null
       }
       setModalValuesArray((prev) => [...prev, values]);
+      setDocumentsData([]);
       handleCloseStakeholder();
     }
   }
@@ -491,7 +492,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         "uploadPdf": Documents?.directorInfoPdf,
         "serialNumber": null
       }
+
       setDirectorData((prev) => [...prev, values]);
+      setDocumentsData([]);
       // getDocDirector();
       handleClose();
     }
@@ -641,7 +644,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
             // isDisabled={
             //   !showDevTypeFields || (showDevTypeFields === "Individual" && (!name || !mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) || !emailId?.match(Digit.Utils.getPattern('Email')))) || (showDevTypeFields === "Others" && othersArray.length) || (showDevTypeFields === "Proprietorship Firm") || (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others" && (!cin_Number?.match(Digit.Utils.getPattern('CIN')) || !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) || !gst_Number?.match(Digit.Utils.getPattern('GSTNo')) || !((existingColonizer === "N") || (existingColonizer === "Y" && existingColonizerDetails.aggreementBtw && existingColonizerDetails.boardResolution && existingColonizerDetails.dob && existingColonizerDetails.pan && existingColonizerDetails.pan.match(Digit.Utils.getPattern('PAN')) && existingColonizerDetails.licNo && existingColonizerDetails.licDate && existingColonizerDetails.licValidity && existingColonizerDetails.licPurpose))))
             // }
-            isDisabled={showDevTypeFields === "Individual" ? !(name && mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) && emailId?.match(Digit.Utils.getPattern('Email'))) : (showDevTypeFields === "Others") ? (!othersArray.length) : (showDevTypeFields === "Proprietorship Firm") ? false : (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others") ? (!cin_Number?.match(Digit.Utils.getPattern('CIN')) || !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) || !gst_Number?.match(Digit.Utils.getPattern('GSTNo')) || !((existingColonizer === "N") || (existingColonizer === "Y" && existingColonizerDetails.aggreementBtw && existingColonizerDetails.boardResolution && existingColonizerDetails.dob && existingColonizerDetails.pan && existingColonizerDetails.pan.match(Digit.Utils.getPattern('PAN')) && existingColonizerDetails.licNo && existingColonizerDetails.licDate && existingColonizerDetails.licValidity && existingColonizerDetails.licPurpose))) : true}
+            isDisabled={ ( showDevTypeFields === "Individual" || showDevTypeFields === "Proprietorship Firm" ) ? !(name && mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) && emailId?.match(Digit.Utils.getPattern('Email'))) : (showDevTypeFields === "Others") ? (!othersArray.length) : (showDevTypeFields === "Proprietorship Firm") ? false : (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others") ? (!cin_Number?.match(Digit.Utils.getPattern('CIN')) || !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) || !gst_Number?.match(Digit.Utils.getPattern('GSTNo')) || !((existingColonizer === "N") || (existingColonizer === "Y" && existingColonizerDetails.aggreementBtw && existingColonizerDetails.boardResolution && existingColonizerDetails.dob && existingColonizerDetails.pan && existingColonizerDetails.pan.match(Digit.Utils.getPattern('PAN')) && existingColonizerDetails.licNo && existingColonizerDetails.licDate && existingColonizerDetails.licValidity && existingColonizerDetails.licPurpose))) : true}
             t={t}
           >
             <div className="happy">
@@ -691,7 +694,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
               </div>
 
               {/* FOR INDIVIDUAL */}
-              {showDevTypeFields === "Individual" && (
+              { ( showDevTypeFields === "Individual" || showDevTypeFields === "Proprietorship Firm" ) && (
                 <div className="card mb-3">
                   {/* <div className="card-header">
               <h5 className="card-title"> Developer</h5>
@@ -710,7 +713,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             name="name"
                             // onChange={SelectName}
                             onChange={(e) => setName(e.target.value)}
-                            // disabled="disabled"
+                            disabled
                             className="employee-card-input"
 
                           />
@@ -749,7 +752,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             placeholder={mobileNumberUser}
                             name="mobileNumberUser"
                             onChange={(e) => setMobileNumber(e.target.value)}
-                            // disabled="disabled"
+                            disabled
                             className="employee-card-input"
                           // name="name"
                           // className={`employee-card-input`}
@@ -1270,12 +1273,12 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                     </td>
                                     <td>
                                       <div className="row">
-                                        {/* {(elementInArray.uploadPdf) ? */}
+                                        {(elementInArray.uploadPdf) ?
                                           <button type="button" onClick={()=>getDocShareholding(elementInArray?.uploadPdf)} className="btn btn-sm col-md-6">
                                             <VisibilityIcon color="info" className="icon" />
                                           </button> 
-                                          {/* : <p></p> */}
-                                        {/* } */}
+                                          : <p></p>
+                                        }
                                         <div className="btn btn-sm col-md-6">
                                           <label for={"uploadshareholdingPattern"+input}> <FileUpload color="primary" for={"uploadshareholdingPattern"+input} /></label>
                                           <input
@@ -1794,6 +1797,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                 className="employee-card-input"
                                 maxLength={10}
                               />
+                              {existingColonizerDetails.pan && existingColonizerDetails.pan.length > 0 && !existingColonizerDetails.pan.match(Digit.Utils.getPattern('PAN')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_PAN_NO")}</CardLabelError>}
                             </div>
                           </div>
 
