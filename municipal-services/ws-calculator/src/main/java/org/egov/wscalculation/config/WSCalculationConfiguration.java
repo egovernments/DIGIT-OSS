@@ -213,4 +213,7 @@ public class WSCalculationConfiguration {
 	@Value("${egov.ws.view.history.link}")
 	private String viewHistoryLink;
 
+	@Value("${egov.bill.details.sms.link}")
+	private String billDetailsLink;
+
 }

@@ -463,12 +463,12 @@ public class DemandService {
 		url.append(StringUtils.join(consumerCodes, ','));
 		if (taxPeriodFrom != null) {
 			url.append("&");
-			url.append("taxPeriodFrom=");
+			url.append("periodFrom=");
 			url.append(taxPeriodFrom.toString());
 		}
 		if (taxPeriodTo != null) {
 			url.append("&");
-			url.append("taxPeriodTo=");
+			url.append("periodTo=");
 			url.append(taxPeriodTo.toString());
 		}
 		if (isDemandPaid != null) {

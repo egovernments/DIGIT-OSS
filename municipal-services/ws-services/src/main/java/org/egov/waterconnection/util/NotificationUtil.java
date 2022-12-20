@@ -227,7 +227,7 @@ public class NotificationUtil {
 //				customizedMsg = customizedMsg.replace("{RECEIPT_DOWNLOAD_LINK}",linkToReplace);
 //			}
 			String subject = customizedMsg.substring(customizedMsg.indexOf("<h2>")+4,customizedMsg.indexOf("</h2>"));
-			String body = customizedMsg.substring(customizedMsg.indexOf("</h2>")+4);
+			String body = customizedMsg.substring(customizedMsg.indexOf("</h2>")+5);
 			Email emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(true).body(body).subject(subject).build();
 			EmailRequest email = new EmailRequest(waterConnectionRequest.getRequestInfo(),emailobj);
 			emailRequest.add(email);

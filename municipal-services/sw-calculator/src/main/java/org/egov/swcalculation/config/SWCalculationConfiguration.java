@@ -194,4 +194,7 @@ public class SWCalculationConfiguration {
 	@Value("${egov.sw.view.history.link}")
 	private String viewHistoryLink;
 
+	@Value("${egov.bill.details.sms.link}")
+	private String billDetailsLink;
+
 }

@@ -167,11 +167,14 @@ public class PaymentNotificationService {
 		Map<String, String> mobileNumberAndMessage = getMessageForMobileNumber(mobileNumbersAndNames, mappedRecord,
 				message);
 		List<SMSRequest> smsRequest = new ArrayList<>();
+		String connectionNo = sewerageConnectionRequest.getSewerageConnection().getConnectionNo();
+
 		mobileNumberAndMessage.forEach((mobileNumber, msg) -> {
 			if (msg.contains("{Link to Bill}")) {
-				String actionLink = config.getSmsNotificationLink()
-						.replace("$consumerCode", sewerageConnectionRequest.getSewerageConnection().getConnectionNo())
-						.replace("$tenantId", property.getTenantId());
+				String actionLink = config.getBillDetailsLink()
+						.replace("$consumerCode", connectionNo.replace("/", "+"))
+						.replace("$tenantId", property.getTenantId())
+						.replace("$consumerName", mobileNumbersAndNames.get(mobileNumber));
 				actionLink = config.getNotificationUrl() + actionLink;
 				msg = msg.replace("{Link to Bill}", actionLink);
 			}
@@ -249,8 +252,12 @@ public class PaymentNotificationService {
 			// Arrays.asList(config.getPayTriggers().split("[,]"));
 			Action action;
 			List<ActionItem> items = new ArrayList<>();
-			String actionLink = config.getViewHistoryLink();
-			actionLink = actionLink.replace(applicationNumberReplacer, sewerageConnectionRequest.getSewerageConnection().getApplicationNo());
+
+			String connectionNo = sewerageConnectionRequest.getSewerageConnection().getConnectionNo();
+			String actionLink = config.getBillDetailsLink()
+					.replace("$consumerCode", connectionNo.replace("/", "+"))
+					.replace("$tenantId", property.getTenantId())
+					.replace("$consumerName", mobileNumbersAndNames.get(mobile));
 
 			actionLink = config.getNotificationUrl() + actionLink;
 			ActionItem item = ActionItem.builder().actionUrl(actionLink).code(config.getPayCode()).build();

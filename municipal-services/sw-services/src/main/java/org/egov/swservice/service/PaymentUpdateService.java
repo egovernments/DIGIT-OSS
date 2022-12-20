@@ -269,6 +269,9 @@ public class PaymentUpdateService {
 	 */
 	private EventRequest getEventRequest(SewerageConnectionRequest request, Property property, PaymentDetail paymentDetail) {
 
+		if(paymentDetail.getTotalAmountPaid().intValue() == 0)
+			return null;
+
 		String localizationMessage = notificationUtil
 				.getLocalizationMessages(property.getTenantId(), request.getRequestInfo());
 
@@ -368,6 +371,9 @@ public class PaymentUpdateService {
 	private List<SMSRequest> getSmsRequest(SewerageConnectionRequest sewerageConnectionRequest,
 										   Property property, PaymentDetail paymentDetail) {
 
+		if(paymentDetail.getTotalAmountPaid().intValue() == 0)
+			return null;
+
 		String localizationMessage = notificationUtil.getLocalizationMessages(property.getTenantId(),
 				sewerageConnectionRequest.getRequestInfo());
 
@@ -432,11 +438,14 @@ public class PaymentUpdateService {
 	private List<EmailRequest> getEmailRequest(SewerageConnectionRequest sewerageConnectionRequest,
 											   Property property, PaymentDetail paymentDetail) {
 
+		if(paymentDetail.getTotalAmountPaid().intValue() == 0)
+			return null;
+		
 		String localizationMessage = notificationUtil.getLocalizationMessages(property.getTenantId(),
 				sewerageConnectionRequest.getRequestInfo());
 
 		String applicationStatus = sewerageConnectionRequest.getSewerageConnection().getApplicationStatus();
-		String notificationTemplate = SWConstants.PAYMENT_NOTIFICATION_APP;
+		String notificationTemplate = PAYMENT_NOTIFICATION_EMAIL;
 		ProcessInstance workflow = sewerageConnectionRequest.getSewerageConnection().getProcessInstance();
 		StringBuilder builder = new StringBuilder();
 		int reqType;
@@ -491,7 +500,7 @@ public class PaymentUpdateService {
 		for (Map.Entry<String, String> entryset : mobileNumberAndEmailId.entrySet()) {
 			String customizedMsg = mobileNumberAndMessage.get(entryset.getKey());
 			String subject = customizedMsg.substring(customizedMsg.indexOf("<h2>")+4,customizedMsg.indexOf("</h2>"));
-			String body = customizedMsg.substring(customizedMsg.indexOf("</h2>")+4);
+			String body = customizedMsg.substring(customizedMsg.indexOf("</h2>")+5);
 			Email emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(true).body(body).subject(subject).build();
 			EmailRequest email = new EmailRequest(sewerageConnectionRequest.getRequestInfo(),emailobj);
 			emailRequest.add(email);
@@ -530,7 +539,7 @@ public class PaymentUpdateService {
 				message = message.replace("{Billing Period}", billingPeriod);
 			}
 			if (message.contains("{receipt download link}")){
-				String link = config.getNotificationUrl() + config.getReceiptDownloadLink();
+				String link = config.getNotificationUrl() + config.getMyPaymentsLink();
 				link = link.replace("$consumerCode", paymentDetail.getBill().getConsumerCode());
 				link = link.replace("$tenantId", paymentDetail.getTenantId());
 				link = link.replace("$businessService",paymentDetail.getBusinessService());

@@ -480,7 +480,7 @@ public class WorkflowNotificationService {
 		for (Map.Entry<String, String> entryset : mobileNumberAndEmailId.entrySet()) {
 			String customizedMsg = mobileNumberAndMessage.get(entryset.getKey());
 			String subject = customizedMsg.substring(customizedMsg.indexOf("<h2>")+4,customizedMsg.indexOf("</h2>"));
-			String body = customizedMsg.substring(customizedMsg.indexOf("</h2>")+4);
+			String body = customizedMsg.substring(customizedMsg.indexOf("</h2>")+5);
 			Email emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(true).body(body).subject(subject).build();
 			EmailRequest email = new EmailRequest(sewerageConnectionRequest.getRequestInfo(),emailobj);
 			emailRequest.add(email);
@@ -509,10 +509,11 @@ public class WorkflowNotificationService {
 			if(messageToReplace.contains("{Reason for Rejection}"))
 				messageToReplace = messageToReplace.replace("{Reason for Rejection}",  sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getComment());
 
-			if (messageToReplace.contains("{Application download link}"))
-				messageToReplace = messageToReplace.replace("{Application download link}",
-						sewerageServicesUtil.getShortenedURL(
-								getApplicationDownloaderLink(sewerageConnectionRequest, property)));
+			if (messageToReplace.contains("{Application download link}")) {
+				String actionLink = config.getNotificationUrl() + config.getViewHistoryLink();
+				actionLink = actionLink.replace(applicationNumberReplacer, sewerageConnectionRequest.getSewerageConnection().getApplicationNo());
+				messageToReplace = messageToReplace.replace("{Application download link}", sewerageServicesUtil.getShortenedURL(actionLink));
+			}
 
 			if (messageToReplace.contains("{mseva URL}"))
 				messageToReplace = messageToReplace.replace("{mseva URL}",

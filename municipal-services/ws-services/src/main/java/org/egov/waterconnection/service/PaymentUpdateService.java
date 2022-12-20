@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -275,6 +276,9 @@ public class PaymentUpdateService {
 	 */
 	private EventRequest getEventRequest(WaterConnectionRequest request, Property property, PaymentDetail paymentDetail) {
 
+		if(paymentDetail.getTotalAmountPaid().intValue() == 0)
+			return null;
+
 		String localizationMessage = notificationUtil
 				.getLocalizationMessages(property.getTenantId(), request.getRequestInfo());
 
@@ -372,6 +376,9 @@ public class PaymentUpdateService {
 	private List<SMSRequest> getSmsRequest(WaterConnectionRequest waterConnectionRequest,
 										   Property property, PaymentDetail paymentDetail) {
 
+		if(paymentDetail.getTotalAmountPaid().intValue() == 0)
+			return null;
+
 		String localizationMessage = notificationUtil.getLocalizationMessages(property.getTenantId(),
 				waterConnectionRequest.getRequestInfo());
 
@@ -437,11 +444,14 @@ public class PaymentUpdateService {
 	private List<EmailRequest> getEmailRequest(WaterConnectionRequest waterConnectionRequest,
 											   Property property, PaymentDetail paymentDetail) {
 
+		if(paymentDetail.getTotalAmountPaid().intValue() == 0)
+			return null;
+
 		String localizationMessage = notificationUtil.getLocalizationMessages(property.getTenantId(),
 				waterConnectionRequest.getRequestInfo());
 
 		String applicationStatus = waterConnectionRequest.getWaterConnection().getApplicationStatus();
-		String notificationTemplate = WCConstants.PAYMENT_NOTIFICATION_SMS;
+		String notificationTemplate = PAYMENT_NOTIFICATION_EMAIL;
 		ProcessInstance workflow = waterConnectionRequest.getWaterConnection().getProcessInstance();
 		StringBuilder builder = new StringBuilder();
 		int reqType;
@@ -497,7 +507,7 @@ public class PaymentUpdateService {
 		for (Map.Entry<String, String> entryset : mobileNumberAndEmailId.entrySet()) {
 			String customizedMsg = mobileNumberAndMessage.get(entryset.getKey());
 			String subject = customizedMsg.substring(customizedMsg.indexOf("<h2>")+4,customizedMsg.indexOf("</h2>"));
-			String body = customizedMsg.substring(customizedMsg.indexOf("</h2>")+4);
+			String body = customizedMsg.substring(customizedMsg.indexOf("</h2>")+5);
 			Email emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(true).body(body).subject(subject).build();
 			EmailRequest email = new EmailRequest(waterConnectionRequest.getRequestInfo(),emailobj);
 			emailRequest.add(email);
@@ -537,7 +547,7 @@ public class PaymentUpdateService {
 			}
 
 			if (message.contains("{receipt download link}")){
-				String link = config.getNotificationUrl() + config.getReceiptDownloadLink();
+				String link = config.getNotificationUrl() + config.getMyPaymentsLink();
 				link = link.replace("$consumerCode", paymentDetail.getBill().getConsumerCode());
 				link = link.replace("$tenantId", paymentDetail.getTenantId());
 				link = link.replace("$businessService",paymentDetail.getBusinessService());
