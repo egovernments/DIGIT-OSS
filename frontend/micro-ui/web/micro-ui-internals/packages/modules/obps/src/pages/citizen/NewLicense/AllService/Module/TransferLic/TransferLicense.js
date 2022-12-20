@@ -18,8 +18,10 @@ function TransferLicense() {
 
   const transferLic = (data) => console.log(data);
 
-  const [selects, setSelects] = useState();
+  const [selects, setSelects] = useState("");
   const [showhide, setShowhide] = useState("");
+  // const [ changeDev, setChangeDev ] = useState("");
+  // const [ type, setType ] = useState("");
 
   const handleshowhide = (event) => {
     const getuser = event.target.value;
@@ -51,24 +53,24 @@ function TransferLicense() {
                 <Form.Label>
                   Select Type (Complete or Partial) <span style={{ color: "red" }}>*</span>
                 </Form.Label>
-                <select className="form-control" {...register("selectType")} onChange={(e) => handleshowhide(e)}>
+                <select className="form-control" {...register("selectType")} onChange={(e) => handleselects(e)}>
                   <option value=" 6">----Select value-----</option>
                   <option value="1">Complete</option>
-                  <option value="2">Partia</option>
+                  <option value="2">Partial</option>
                 </select>
               </Form.Group>
 
               <Form.Group as={Col} controlId="formGridArea">
                 <div>
-                  {showhide === "5" ||
-                    (showhide === "2" && (
+                  {
+                    selects === "2" && (
                       <div className="col-md-12 ">
                         <Form.Label className="fw-normal">
                           Area in Acres <span style={{ color: "red" }}>*</span>
                         </Form.Label>
                         <input type="number" placeholder="" className="form-control" {...register("araeInAcres")} />
                       </div>
-                    ))}
+                    )}
                 </div>
               </Form.Group>
             </Row>
@@ -108,7 +110,7 @@ function TransferLicense() {
             </fieldset>
             <Row>
               <div>
-                {showhide === "1" ||
+                {selects === "1" ||
                   (showhide === "4" && (
                     <div className="card">
                       <div class="bordere">
@@ -260,7 +262,7 @@ function TransferLicense() {
               </div>
 
               <div>
-                {showhide === "1" ||
+                {selects === "1" ||
                   (showhide === "5" && (
                     <div className="card">
                       <div class="bordere">
@@ -345,7 +347,7 @@ function TransferLicense() {
               </div>
 
               <div>
-                {showhide === "2" ||
+                {selects === "2" ||
                   (showhide === "4" && (
                     <div className="card">
                       <div class="bordere">
@@ -483,7 +485,7 @@ function TransferLicense() {
                   ))}
               </div>
               <div>
-                {showhide === "2" ||
+                {selects === "2" ||
                   (showhide === "5" && (
                     <div className="card">
                       <div class="bordere">

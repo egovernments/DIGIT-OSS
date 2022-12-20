@@ -45,6 +45,7 @@ import ZoningPlan from "../citizen/NewLicense/AllService/Module/ZoningPlan/Zonin
 import CardNewLicence from "./NewLicense/CardNewLicence/CadNewLicence";
 import Beneficial from "./NewLicense/AllService/Module/BeneficialInterest/Beneficial";
 import CompletionLic from "./NewLicense/AllService/Module/CompositionClu/CompositionClu";
+import TransferLicense from "./NewLicense/AllService/Module/TransferLic/TransferLicense";
 const App = ({ path }) => {
   const location = useLocation();
   const { t } = useTranslation();
@@ -110,7 +111,7 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/Beneficial`} component={Beneficial} />
         <PrivateRoute path={`${path}/CompletionLic`} component={CompletionLic} />
         <PrivateRoute path={`${path}/zoningPlan`} component={ZoningPlan} />
-        
+        <PrivateRoute path={`${path}/TransferLicense`} component={TransferLicense} />
         {/* .............................................................................. */}
 
 
