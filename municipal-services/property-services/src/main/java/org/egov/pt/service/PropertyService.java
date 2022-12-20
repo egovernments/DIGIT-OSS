@@ -407,7 +407,7 @@ public class PropertyService {
 		/* Decrypt here */
 		 if(criteria.getIsSearchInternal())
 			return encryptionDecryptionUtil.decryptObject(properties, "PropertyDecrypDisabled", Property.class, requestInfo);
-		else if(!criteria.getIsRequestForOldDataEncryption())
+		else if(!criteria.getIsRequestForOldDataEncryption() && !criteria.isAudit())
 			return encryptionDecryptionUtil.decryptObject(properties, "Property", Property.class, requestInfo);
 
 		return properties;
