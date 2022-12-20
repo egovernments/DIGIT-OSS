@@ -244,7 +244,8 @@ const LicenseDetailsScrutiny = (props) => {
                           <option value="02">Company</option>
                           <option value="03">LLP</option>
                           <option value="04">Society</option>
-                        </Form.Select> */}
+                        </Form.Select>vvvv */}
+
                       </div>
                     </div>
                   </div>
