@@ -11,6 +11,7 @@ const TopBar = ({ img, isMobile, logoUrl, onLogout, toggleSidebar, ulb, userDeta
       <div className="center-container">
      
       {isMobile && <Hamburger handleClick={toggleSidebar} />}
+        <a href="/digit-ui/citizen">
         <img
           className="city"
           id="topbar-logo" 
@@ -18,6 +19,7 @@ const TopBar = ({ img, isMobile, logoUrl, onLogout, toggleSidebar, ulb, userDeta
           height="100px"
           alt="TCP"
         />
+        </a>
         <div className="RightMostTopBarOptions">
         <h3 className="mx-2 fw-bold">{userInfo?.info?.name}</h3>
           {!hideNotificationIconOnSomeUrlsWhenNotLoggedIn ? <span className="EventNotificationWrapper" onClick={onNotificationIconClick}>
