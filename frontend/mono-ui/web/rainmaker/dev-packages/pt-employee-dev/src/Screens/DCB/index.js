@@ -270,13 +270,10 @@ class FormWizardDataEntry extends Component {
                   ) {
                     finalYear = 
                     generalMDMSDataById.TaxPeriod[item].financialYear;
-                  }PT_
+                  }
                             
                 }
               );  
-                     
-              
-
 
                prepareFinalObject(
                 `DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandData.order}].PT_TAXHEAD`, 
