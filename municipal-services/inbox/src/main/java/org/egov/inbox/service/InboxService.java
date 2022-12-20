@@ -598,8 +598,13 @@ public class InboxService {
             }
             
             List<ProcessInstance> processInstances = processInstanceResponse.getProcessInstances();
-            Map<String, ProcessInstance> processInstanceMap = processInstances.stream()
-                    .collect(Collectors.toMap(ProcessInstance::getBusinessId, Function.identity()));
+
+            Map<String, ProcessInstance> processInstanceMap = new HashMap<>();
+            if(!CollectionUtils.isEmpty(processInstances)) {
+                for (ProcessInstance processInstance : processInstances) {
+                    processInstanceMap.put(processInstance.getBusinessId(), processInstance);
+                }
+            }
 
             //Adding searched Items in Inbox result object for WS and SW
             if (moduleName.equals(WS) || moduleName.equals(SW)) {
