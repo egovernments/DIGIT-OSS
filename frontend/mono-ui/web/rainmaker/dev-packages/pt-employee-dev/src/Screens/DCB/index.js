@@ -6,6 +6,9 @@ import {
   updateForms,
   handleFieldChange
 } from "egov-ui-kit/redux/form/actions";
+import {
+  fetchAssessments,
+} from "egov-ui-kit/redux/properties/actions";
 import PTHeader from "egov-ui-kit/common/common/PTHeader";
 import Label from "egov-ui-kit/utils/translationNode";
 import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
@@ -271,9 +274,6 @@ class FormWizardDataEntry extends Component {
                             
                 }
               );  
-                     
-              
-
 
                prepareFinalObject(
                 `DemandProperties[0].propertyDetails[0].demand[${yearKey}].demand[${finalYear}][${demandData.order}].PT_TAXHEAD`, 
@@ -667,7 +667,8 @@ class FormWizardDataEntry extends Component {
       fetchGeneralMDMSData,
       history,
       cities,
-      finalData
+      finalData,
+      fetchAssessments
     } = this.props;
     let { search } = location;
     let { resetForm } = this;
@@ -748,6 +749,12 @@ class FormWizardDataEntry extends Component {
       ]
     }
   };
+
+  fetchAssessments([
+    { key: "propertyIds", value: propertyId },
+    { key: "tenantId", value: tenantId },
+  ]);
+
   try {
     showSpinner();
     const payload =  await httpRequestnew(
@@ -2229,10 +2236,6 @@ class FormWizardDataEntry extends Component {
 
     hideSpinner();
     const propertyMethodAction = demandResponsenew.Demands.length>0? "_update" : "_create";
-
-
-
-
     const demandData = [];
     const demandDetails = [];
     const finalyears = getFinalData();
@@ -2401,8 +2404,11 @@ class FormWizardDataEntry extends Component {
     //showSpinner();     
     let fY = localStorage.getItem('finalData')
     fY = fY && JSON.parse(fY);
+    let assessmentsData = this.props.Assessments;
    let assessment = {
       tenantId: getTenantId(),
+      id: assessmentsData[0].id,
+      assessmentNumber: assessmentsData[0].assessmentNumber,
       propertyId: propertyId,
       financialYear:fY && fY[0].financialYear,
       assessmentDate: new Date().getTime() - 60000,
@@ -2410,9 +2416,9 @@ class FormWizardDataEntry extends Component {
       channel: "CFC_COUNTER",
       status: "ACTIVE",
       additionalDetails :{"RequestInfo": {"tt":"tt"},
-      "Demands": demandData,
-      "reassement": getQueryValue(search, "assessment")? true: false
-     }
+        "Demands": demandData,
+        "reassement": getQueryValue(search, "assessment")? true: false,
+      }
     } 
    //let  propertyMethodAction ="_create";
     try {
@@ -2861,7 +2867,7 @@ const mapStateToProps = state => {
   const { generalMDMSDataById } = common;
   const yeardataInfo =
     (generalMDMSDataById && generalMDMSDataById.TaxPeriod) || {};
-
+  let { Assessments = [] } = state.properties || {}; 
 
   const getYearList = yeardataInfo && Object.values(yeardataInfo);
 
@@ -2906,7 +2912,8 @@ const mapStateToProps = state => {
     generalMDMSDataById,
     DemandProperties,
     DemandPropertiesResponse,
-    cities
+    cities,
+    Assessments
   };
 };
 
@@ -2942,7 +2949,9 @@ const mapDispatchToProps = dispatch => {
     prepareFormDataAction: (path, value) =>
       dispatch(prepareFormDataAction(path, value)),
     prepareFinalObject: (jsonPath, value) =>
-      dispatch(prepareFinalObject(jsonPath, value))
+      dispatch(prepareFinalObject(jsonPath, value)),
+    fetchAssessments: (fetchAssessmentsQueryObject) => 
+      dispatch(fetchAssessments(fetchAssessmentsQueryObject)),
   };
 };
 
