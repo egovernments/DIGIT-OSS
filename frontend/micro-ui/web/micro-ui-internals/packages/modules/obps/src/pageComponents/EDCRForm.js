@@ -300,6 +300,145 @@ const EDCRForm = ({ t, config, onSelect, userType, formData, ownerIndex = 0, add
 
 
 
+            <div className="row">
+                <div className="col col-lg-4 col-md-6 col-sm-12" >
+                    <CardLabel>{`${t("EDCR_SCRUTINY_LAND_TYPE")} *`}</CardLabel>
+                    <Dropdown
+                        t={t}
+                        isMandatory={false}
+                        option={typeList}
+                        selected={type}
+                        optionKey="i18nKey"
+                        select={(value) => {
+                            setType(value);
+                            setLicenseNo();
+                            setSearch("");
+                            setSearchData();
+                            setLicenses([]);
+                        }}
+                    // uploadMessage={uploadMessage}
+                    />
+                </div>
+            </div>
+
+            <div className="row">
+
+                {
+                    type &&
+                    (
+                        <div className="col col-lg-4 col-md-6 col-sm-12 d-flex flex-row align-items-center">
+                            <div className="w-100">
+                                <CardLabel>{`${type?.i18nKey === "License" ? t("EDCR_SCRUTINY_CASE_NO") : t("EDCR_SCRUTINY_CLU_NO")} *`}</CardLabel>
+                                <TextInput
+                                    isMandatory={false}
+                                    optionKey="i18nKey"
+                                    t={t}
+                                    placeholder={type?.i18nKey === "License" ? "LC_XXXXX" : "CL-XXXXX"}
+                                    name="search"
+                                    onChange={(e) => setSearch(e.target.value)}
+                                    // uploadMessage={uploadMessage}
+                                    value={search}
+                                />
+                            </div>
+                            <Button className="ml-3"
+                                // disabled={search === "" || subType === ""}
+                                onClick={onSearch}
+                            >Go</Button>
+                        </div>
+                    )
+                }
+
+                {
+                    (type.i18nKey === "License" && searchData) && (
+                        <div className="col col-lg-4 col-md-6 col-sm-12 d-flex flex-row align-items-center">
+                            <div className="w-100">
+                                <CardLabel>{`${t("EDCR_SCRUTINY_LICENSE_NO")} *`}</CardLabel>
+                                <Dropdown
+                                    t={t}
+                                    isMandatory={false}
+                                    option={searchData}
+                                    // selected={licenseNo}
+                                    optionKey="Text"
+                                    select={setLicenseNo}
+                                    pipeSeparator={true}
+                                    optionCardStyles={{
+                                        height: "200px",
+                                        overflow: "auto"
+                                    }}
+                                />
+                            </div>
+                            <Button className="ml-3"
+                                color="success"
+                                onClick={onAddLicense}
+                            >Add</Button>
+                        </div>
+                    )
+                }
+
+
+            </div>
+
+
+            {
+                Licences?.map((item, index) => (
+                    <div className="row" key={index}>
+                        <div className="col-sm-12">
+                            <CardLabel>{t("LICENSE_NO")}</CardLabel>
+                            <TextInput
+                                value={item.Text?.split("|")?.[0]}
+                                disabled
+                            />
+                        </div>
+                        <div className="col col-lg-4 col-md-6 col-sm-12">
+                            <CardLabel>{t("DISTRICT")}</CardLabel>
+                            <TextInput
+                                value={item.Text?.split("|")?.[3]}
+                                disabled
+                            />
+                        </div>
+                        <div className="col col-lg-4 col-md-6 col-sm-12">
+                            <CardLabel>{t("PURPOSE")}</CardLabel>
+                            <TextInput
+                                value={item.Text?.split("|")?.[4]}
+                                disabled
+                            />
+                            {/* bfcndfvgbhff */}
+                        </div>
+                        <div className="col col-lg-4 col-md-6 col-sm-12">
+                            <CardLabel>{t("DEVELOPER_NAME")}</CardLabel>
+                            <TextInput
+                                value={item.Text?.split("|")?.[5]}
+                                disabled
+                            />
+                        </div>
+                        <div className="col col-lg-4 col-md-6 col-sm-12">
+                            <CardLabel>{t("TOWN")}</CardLabel>
+                            <TextInput
+                                value={item.Text?.split("|")?.[6]}
+                                disabled
+                            />
+                        </div>
+                        <div className="col col-lg-4 col-md-6 col-sm-12">
+                            <CardLabel>{t("SECTOR")}</CardLabel>
+                            <TextInput
+                                value={item.Text?.split("|")?.[7]}
+                                disabled
+                            />
+                        </div>
+                        <div className="col col-lg-4 col-md-6 col-sm-12">
+                            <CardLabel>{t("COLONY")}</CardLabel>
+                            <TextInput
+                                value={item.Text?.split("|")?.[8]}
+                                disabled
+                            />
+                        </div>
+
+                    </div>
+                ))
+            }
+
+
+
             <CardLabel>{`${t("EDCR_SCRUTINY_CITY")} *`}</CardLabel>
             <Dropdown
                 t={t}
