@@ -454,7 +454,7 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                   <div className="col-sm-12">
                     <textarea type="text" className="employee-card-input" id="details" placeholder="Enter Details" />
                     <table className="table table-bordered" size="sm">
-                      <thead>
+                      <thead>vvvvv
                         <tr>
                           <th class="fw-normal">S.No.</th>
                           <th class="fw-normal">Particulars of document</th>
