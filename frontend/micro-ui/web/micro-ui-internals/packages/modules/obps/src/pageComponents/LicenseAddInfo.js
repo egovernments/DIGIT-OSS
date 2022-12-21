@@ -691,7 +691,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
               </div>
 
               {/* FOR INDIVIDUAL */}
-              {showDevTypeFields === "Individual" && (
+              {(showDevTypeFields === "Individual" || showDevTypeFields == "Proprietorship Firm") && (
                 <div className="card mb-3">
                   {/* <div className="card-header">
               <h5 className="card-title"> Developer</h5>
