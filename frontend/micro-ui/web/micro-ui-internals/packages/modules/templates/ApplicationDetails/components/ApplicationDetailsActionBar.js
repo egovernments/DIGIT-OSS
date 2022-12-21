@@ -15,9 +15,9 @@ function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSel
   let isSingleButton = false;
   let isMenuBotton = false;
   let actions = workflowDetails?.data?.actionState?.nextActions?.filter((e) => {
-    return userRoles.some((role) => e.roles?.includes(role)) || !e.roles;
+    return userRoles?.some((role) => e.roles?.includes(role)) || !e.roles;
   }) || workflowDetails?.data?.nextActions?.filter((e) => {
-    return userRoles.some((role) => e.roles?.includes(role)) || !e.roles;
+    return userRoles?.some((role) => e.roles?.includes(role)) || !e.roles;
   });
 
     const closeMenu = () => {

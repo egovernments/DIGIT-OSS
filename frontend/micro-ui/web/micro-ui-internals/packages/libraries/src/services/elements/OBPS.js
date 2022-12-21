@@ -74,7 +74,7 @@ export const OBPSService = {
   BPAREGSearch:(tenantId, details, params) =>
     Request({
       url: Urls.obps.bpaRegSearch,
-      params: { ...params },
+      params: { tenantId, ...params },
       auth: true,
       userService: true,
       method: "POST",

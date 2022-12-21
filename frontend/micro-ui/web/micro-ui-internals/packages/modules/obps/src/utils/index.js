@@ -362,7 +362,7 @@ export const convertToBPAObject = (data, isOCBPA = false, isSendBackTOCitizen = 
 
     data.landInfo.address.landmark = data?.address?.landmark;
     data.landInfo.address.street = data?.address?.street ? data?.address?.street : null;
-    data.landInfo.address.city = data?.landInfo?.address?.city?.code;
+    data.landInfo.address.city = data?.landInfo?.address?.city?.code || data?.landInfo?.address?.tenantId;
 
     data.landInfo.unit =
       data?.landInfo?.unit && data?.landInfo?.unit.length > 0
