@@ -313,7 +313,7 @@ public class BPANotificationService {
 						&& bpaRequest.getBPA().getStatus().equals("INPROGRESS"))) {
 			
 			bpaRequest.getBPA().getLandInfo().getOwners().forEach(owner -> {
-					if (owner.getMobileNumber() != null) {
+					if (owner.getMobileNumber() != null && owner.getIsPrimaryOwner()) {
 						mobileNumberToOwner.put(owner.getMobileNumber(), owner.getName());
 					}
 			});
