@@ -185,48 +185,40 @@ const LicenseDetailsScrutiny = (props) => {
             <div>
               <Card style={{ margin: 2 }}>
                 <div className="card-body">
-                  <h5 className={[classes.formLabel, "d-flex flex-row align-items-center"]}>
-                    Developer's type{" "}
-                    <div className="d-flex flex-row align-items-center ml-2">
-                      <Form.Control
-                        className={classes.formControl}
-                        placeholder={
-                          addInfo?.showDevTypeFields === "01"
-                            ? "Individual"
-                            : addInfo?.showDevTypeFields === "Company"
-                            ? "Company"
-                            : addInfo?.showDevTypeFields === "03"
-                            ? "LLP"
-                            : addInfo?.showDevTypeFields === "04"
-                            ? "Society"
-                            : ""
-                        }
-                        disabled
-                      ></Form.Control>
-                      &nbsp;&nbsp;
-                      <ReportProblemIcon
-                        style={{
-                          color: fieldIconColors.developerType,
-                        }}
-                        onClick={() => {
-                          setOpennedModal("developerType");
-                          setLabelValue("Developer's type"),
-                            setSmShow(true),
-                            console.log("modal open"),
-                            setFieldValue(addInfo?.showDevTypeFields || null);
-                        }}
-                      ></ReportProblemIcon>
-                      <ModalChild
-                        labelmodal={labelValue}
-                        passmodalData={handlemodaldData}
-                        displaymodal={smShow}
-                        onClose={() => setSmShow(false)}
-                        selectedFieldData={selectedFieldData}
-                        fieldValue={fieldValue}
-                        remarksUpdate={currentRemarks}
-                      ></ModalChild>
-                    </div>
-                  </h5>
+                  <h5 className={[classes.formLabel, "d-flex flex-row align-items-center"]}>Developer's type <div className="d-flex flex-row align-items-center ml-2">
+                    {/* {JSON.stringify(addInfo)} */}
+                    <Form.Control
+                      className={classes.formControl}
+                      placeholder={addInfo?.showDevTypeFields 
+                        // === "Individual" ? "Individual" : addInfo?.showDevTypeFields === "Company" ? "Company" : addInfo?.showDevTypeFields === "LLP" ? "LLP" : addInfo?.showDevTypeFields === "04" ? "Society" : ""
+                      }
+                      disabled
+                    ></Form.Control>
+                    &nbsp;&nbsp;
+                    <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.developerType
+                      }}
+                      onClick={() => {
+                        setOpennedModal("developerType")
+                        setLabelValue("Developer's type"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(addInfo?.showDevTypeFields || null);
+                      }}
+                    ></ReportProblemIcon>
+
+                    <ModalChild
+                      labelmodal={labelValue}
+                      passmodalData={handlemodaldData}
+                      displaymodal={smShow}
+                      onClose={() => setSmShow(false)}
+                      selectedFieldData={selectedFieldData}
+                      fieldValue={fieldValue}
+                      remarksUpdate={currentRemarks}
+                    ></ModalChild>
+
+                  </div></h5>
                   <div className="row">
                     <div className="col-sm-12">
                       {/* <div className="form-group row"> */}
