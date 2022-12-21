@@ -58,6 +58,9 @@ public class UserController {
 
     @Value("${egov.user.search.default.size}")
     private Integer defaultSearchSize;
+    
+    @Value("${egov.user.internal.search.default.size}")
+    private Integer defaultInternalSearchSize;
 
 
     @Autowired
@@ -197,7 +200,8 @@ public class UserController {
             if ((isEmpty(searchCriteria.getId()) && isEmpty(searchCriteria.getUuid())) && (searchCriteria.getLimit() > defaultSearchSize
                     || searchCriteria.getLimit() == 0))
                 searchCriteria.setLimit(defaultSearchSize);
-        }
+        } else if ((searchCriteria.getLimit() > defaultInternalSearchSize || searchCriteria.getLimit() == 0))
+            searchCriteria.setLimit(defaultInternalSearchSize);
 
         List<User> userModels = userService.searchUsers(searchCriteria, isInterServiceCall(headers), request.getRequestInfo());
         List<UserSearchResponseContent> userContracts = userModels.stream().map(UserSearchResponseContent::new)
