@@ -2407,8 +2407,8 @@ class FormWizardDataEntry extends Component {
     let assessmentsData = this.props.Assessments;
    let assessment = {
       tenantId: getTenantId(),
-      id: assessmentsData[0].id,
-      assessmentNumber: assessmentsData[0].assessmentNumber,
+      id:assessmentsData && assessmentsData[0] && assessmentsData[0].id,
+      assessmentNumber:assessmentsData && assessmentsData[0] && assessmentsData[0].assessmentNumber,
       propertyId: propertyId,
       financialYear:fY && fY[0].financialYear,
       assessmentDate: new Date().getTime() - 60000,
