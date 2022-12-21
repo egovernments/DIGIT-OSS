@@ -152,8 +152,8 @@ const NewApplication = () => {
     let licenseType = data?.tradedetils?.["0"]?.licenseType?.code || "PERMANENT";
 
     let formData = {
-      action: "INITIATE",
-      applicationType: "NEW",
+      action: "APPROVE",
+      applicationType: "RENEWAL",
       workflowCode: "NewTL",
       commencementDate,
       financialYear,

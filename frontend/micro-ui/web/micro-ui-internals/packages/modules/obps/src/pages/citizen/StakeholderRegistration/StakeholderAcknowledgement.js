@@ -56,6 +56,7 @@ const StakeholderAcknowledgement = ({ data, onSuccess }) => {
       data.tenantId = tenantId;
       let formdata = {};
       formdata = convertToStakeholderObject(data);
+      
       mutation.mutate(formdata, {
         onSuccess,
       });
@@ -82,13 +83,13 @@ const StakeholderAcknowledgement = ({ data, onSuccess }) => {
         {isOpenLinkFlow && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
         <Card>
           <BannerPicker t={t} data={mutation.data} isSuccess={mutation.isSuccess} isLoading={mutation.isIdle || mutation.isLoading} />
-          {mutation.isSuccess && <CardText>{`${t(`TRADELICENSE_TRADETYPE_${licenseType}`)}${t(`CS_FILE_STAKEHOLDER_RESPONSE`)}`}</CardText>}
+          {mutation.isSuccess && <CardText>{`${t(`CS_FILE_STAKEHOLDER_RESPONSE`)}`}</CardText>}
           {!mutation.isSuccess && <CardText>{t("CS_FILE_PROPERTY_FAILED_RESPONSE")}</CardText>}
           {(mutation.isSuccess && !isOpenLinkFlow) && <Link to={{
             pathname: `/digit-ui/citizen/payment/collect/${mutation.data.Licenses[0].businessService}/${mutation.data.Licenses[0].applicationNumber}/${mutation.data.Licenses[0].tenantId}?tenantId=${mutation.data.Licenses[0].tenantId}`,
             state: { tenantId: mutation.data.Licenses[0].tenantId },
           }}>
-            <SubmitBar label={t("COMMON_MAKE_PAYMENT")} />
+            {/* <SubmitBar label={t("COMMON_MAKE_PAYMENT")} /> */}
           </Link>}
           {!isOpenLinkFlow && <Link to={`/digit-ui/citizen`}>
             <LinkButton label={t("CORE_COMMON_GO_TO_HOME")} />
