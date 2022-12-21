@@ -295,8 +295,8 @@ export const convertToTrade = (data = {}) => {
   const formdata = {
     Licenses: [
       {
-        action: "INITIATE",
-        applicationType: "NEW",
+        action: "APPROVE",
+        applicationType: "RENEWAL",
         commencementDate: Date.parse(data?.TradeDetails?.CommencementDate),
         financialYear: Financialyear ? Financialyear : "2021-22",
         licenseType: "PERMANENT",
@@ -538,9 +538,9 @@ export const convertToEditTrade = (data, fy = []) => {
         financialYear: nextFinancialYearForRenewal || "2020-21",
         validFrom: data?.validFrom,
         validTo: data?.validTo,
-        action: "INITIATE",
+        action: "APPROVE",
         wfDocuments: data?.wfDocuments,
-        status: data?.status,
+        status: "INITIATED",
         tradeLicenseDetail: {
           address: data.tradeLicenseDetail.address,
           applicationDocuments: data.tradeLicenseDetail.applicationDocuments,
