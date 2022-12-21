@@ -189,7 +189,7 @@ const LicenseDetailsScrutiny = (props) => {
                     <Form.Control
                       className={classes.formControl}
                       placeholder={addInfo?.showDevTypeFields 
-                        // === "Individual" ? "Individual" : addInfo?.showDevTypeFields === "Company" ? "Company" : addInfo?.showDevTypeFields === "03" ? "LLP" : addInfo?.showDevTypeFields === "04" ? "Society" : ""
+                        // === "Individual" ? "Individual" : addInfo?.showDevTypeFields === "Company" ? "Company" : addInfo?.showDevTypeFields === "LLP" ? "LLP" : addInfo?.showDevTypeFields === "04" ? "Society" : ""
                       }
                       disabled
                     ></Form.Control>
