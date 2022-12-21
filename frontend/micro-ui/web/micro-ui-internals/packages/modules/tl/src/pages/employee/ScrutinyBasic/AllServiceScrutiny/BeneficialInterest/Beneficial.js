@@ -1222,7 +1222,7 @@ function Beneficialscrutiny() {
               <Button variant="outline-primary" className="col-md-2 my-2 mx-2" type="submit" aria-label="right-end">
                 Submit
               </Button>
-            </Row> */}
+            </Row> gf*/}
          
         </div>
       </Collapse>

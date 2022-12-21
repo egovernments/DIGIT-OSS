@@ -551,7 +551,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                   <th>Gender</th>
                   {/* <th>Date of Birth</th> */}
                   <th>PAN No.</th>
-                  <th>View Aadhar PDF</th>
+                  <th>View Board Resolution PDF</th>
                   <th>View Digital Signature PDF</th>
                   <th>Action</th>
                 </tr>
@@ -794,7 +794,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                         />
                       </Col>
                       <Col md={3} xxl lg="3">
-                        <label htmlFor="name" className="text">PAN No.</label>
+                        <label htmlFor="name" className="text">PAN No</label>
                         {/* <input
                                 type="text"
                                 name="name[]"
@@ -818,7 +818,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                         <h3 className="error-message" style={{ color: "red" }}>{PanValError}</h3>
                       </Col>
                       <Col md={3} xxl lg="3">
-                        <label htmlFor="name" className="text">Upload Aadhar PDF</label>
+                        <label htmlFor="name" className="text">Upload Board Resolution</label>
                         <input
                           type="file"
                           name="uploadAadharPdf"
