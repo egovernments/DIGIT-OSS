@@ -261,12 +261,12 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
                     value={field.accessorycount}
                     onChange={(e) => selectAccessoryCount(index, e)}
                     disable={(isEditTrade || isRenewTrade) && (formData?.TradeDetails?.accessories.length - 1 < index ? false : field.accessorycount)}
-                    /* {...(validation = {
-            isRequired: true,
-            pattern: "^[a-zA-Z-.`' ]*$",
-            type: "text",
-            title: t("PT_NAME_ERROR_MESSAGE"),
-          })} */
+                    {...(validation = {
+                      isRequired: true,
+                      pattern: "[0-9]+",
+                      type: "text",
+                      title: t("TL_WRONG_UOM_COUNT_ERROR"),
+                    })}
                   />
                   <CardLabel>{`${t("TL_UNIT_OF_MEASURE_LABEL")}`}</CardLabel>
                   <TextInput

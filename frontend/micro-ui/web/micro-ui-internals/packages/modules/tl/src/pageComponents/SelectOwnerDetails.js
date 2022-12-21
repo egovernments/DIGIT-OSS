@@ -102,7 +102,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
       case "REMOVE_THIS_OWNER":
         return state.filter((e, i) => i !== action?.payload?.index);
       case "SET_PRIMARY_OWNER":
-        if (action?.payload?.index) {
+        if (action?.payload?.index >= 0) {
           return state.map((ownerData, i) => {
             if (i === action?.payload?.index) {
               return { ...ownerData, isprimaryowner: true };
@@ -413,7 +413,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                   {...{
                     validation: {
                       isRequired: true,
-                      pattern: "^[a-z0-9]+( [a-z0-9]+)*$",
+                      pattern: "[a-zA-Z][a-zA-Z ]+[a-zA-Z]$",
                       type: "text",
                       title: t("TL_NAME_ERROR_MESSAGE"),
                     },
@@ -475,7 +475,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                   {...{
                     validation: {
                       isRequired: true,
-                      pattern: "^[a-z0-9]+( [a-z0-9]+)*$",
+                      pattern: "[a-zA-Z][a-zA-Z ]+[a-zA-Z]$",
                       type: "text",
                       title: t("TL_NAME_ERROR_MESSAGE"),
                     },

@@ -1,5 +1,5 @@
 import { CardLabel, Dropdown, FormStep, LinkButton, Loader, RadioButtons, TextInput } from "@egovernments/digit-ui-react-components";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Timeline from "../components/TLTimeline";
 import { sortDropdownNames } from "../utils/index";
@@ -144,6 +144,7 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
     setTradeCategory(value);
     selectTradeType(i, null);
     selectTradeSubType(i, null);
+    selectUomValue(i,"");
     setFeilds(units);
   }
   function selectTradeType(i, value) {
@@ -151,12 +152,14 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
     units[i].tradetype = value;
     setTradeType(value);
     selectTradeSubType(i, null);
+    selectUomValue(i,"");
     setFeilds(units);
   }
   function selectTradeSubType(i, value) {
     let units = [...fields];
     units[i].tradesubtype = value;
     setTradeSubType(value);
+    selectUomValue(i,"");
     setError(null);
     // if(){
     //   setError("TL_UOM_VALUE_GREATER_O")
@@ -170,12 +173,14 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
       setUnitOfMeasure(null);
     }
     Array.from(document.querySelectorAll("input")).forEach((input) => (input.value = ""));
+    let uomFound = false;
     value &&
     billingSlabTradeTypeData &&
     billingSlabTradeTypeData?.length > 0 &&
     billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.BuildingType?.code.toString() ).map((ob) => {
         if (value.code === ob.tradeType) {
           units[i].unit = ob.uom;
+          uomFound = true;
           setUnitOfMeasure(ob.uom);
           // setFeilds(units);
         }
@@ -187,10 +192,17 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
     billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.VehicleType?.code.toString() ).map((ob) => {
         if (value.code === ob.tradeType) {
           units[i].unit = ob.uom;
+          uomFound = true;
           setUnitOfMeasure(ob.uom);
           // setFeilds(units);
         }
       });
+
+    if(!uomFound)
+    {
+      units[i].unit = null;
+      setUnitOfMeasure(null);
+    }
     setFeilds(units);
   }
   function selectUnitOfMeasure(i, e) {
@@ -201,26 +213,26 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
   }
   function selectUomValue(i, e) {
     let units = [...fields];
-    units[i].uom = e.target.value;
+    units[i].uom = e == "" ? e : e.target.value;
     setError(null);
     
     let selectedtradesubType = billingSlabTradeTypeData?.filter((ob) => ob?.tradeType === units[i]?.tradesubtype?.code && (ob?.structureType === formData?.TradeDetails?.BuildingType?.code || ob?.structureType === formData?.TradeDetails?.VehicleType?.code))
-    if(!(e.target.value && parseFloat(e.target.value) > 0)){
+    if(e && !(e?.target?.value && parseFloat(e?.target?.value) > 0)){
       setError("TL_UOM_VALUE_GREATER_O")
     }
     else{
     if(Number.isInteger(selectedtradesubType?.[0]?.fromUom)){
-     if(!(e.target.value && parseInt(e.target.value) >= selectedtradesubType?.[0]?.fromUom)){
+     if(e && !(e?.target?.value && parseInt(e.target.value) >= selectedtradesubType?.[0]?.fromUom)){
      setError(`${t("TL_FILL_CORRECT_UOM_VALUE")} ${selectedtradesubType?.[0]?.fromUom} - ${selectedtradesubType?.[0]?.toUom}`);
      }
     }
     if(Number.isInteger(selectedtradesubType?.[0]?.toUom)){
-    if(!(e.target.value && parseInt(e.target.value) <= selectedtradesubType?.[0]?.toUom)){
+    if(e && !(e?.target?.value && parseInt(e.target.value) <= selectedtradesubType?.[0]?.toUom)){
       setError(`${t("TL_FILL_CORRECT_UOM_VALUE")} ${selectedtradesubType?.[0]?.fromUom} - ${selectedtradesubType?.[0]?.toUom}`);
       }
     }
   }
-      setUomValue(e.target.value);
+      setUomValue(e == "" ? e : e.target.value);
       setFeilds(units);
 }
 
@@ -234,6 +246,18 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
     onSelect(config.key, unitsdata);
     }
   };
+
+  useEffect(() => {
+    if(window.location.href.includes("renew-trade") && fields)
+    {
+      fields.map((value) => {
+        if(value && billingSlabTradeTypeData?.filter((ob) => ob?.tradeType === value?.code && (ob?.structureType === formData?.TradeDetails?.VehicleType?.code || ob?.structureType === formData?.TradeDetails?.BuildingType?.code))?.length <= 0)
+          {
+            setError("TL_BILLING_SLAB_NOT_FOUND_FOR_COMB");
+          }
+      })
+    }
+  },[])
 
   const onSkip = () => onSelect();
   return (

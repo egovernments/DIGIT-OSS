@@ -10,8 +10,9 @@ import {
   Row,
   StatusTable,
   SubmitBar,
+  Toast,
 } from "@egovernments/digit-ui-react-components";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory, useRouteMatch, Link } from "react-router-dom";
 import TLDocument from "../../../pageComponents/TLDocumets";
@@ -37,7 +38,14 @@ const WrapCheckPage = ({ onSubmit, value }) => {
   const { t } = useTranslation();
   const history = useHistory();
   const match = useRouteMatch();
+  const [toast, setToast] = useState(null);
   const { TradeDetails, address, owners, propertyType, subtype, pitType, pitDetail, isEditProperty, cpt } = value;
+
+  const { data: billingSlabTradeTypeData, isLoading : isBillingSlabLoading } = Digit.Hooks.tl.useTradeLicenseBillingslab({ tenantId: value?.tenantId || Digit.ULBService.getCurrentTenantId(), filters: {} }, {
+    select: (data) => {
+    return data?.billingSlab.filter((e) => e.tradeType && e.applicationType === "NEW" && e.licenseType === "PERMANENT" && e.uom);
+    }});
+
   function getdate(date) {
     let newdate = Date.parse(date);
     return `${
@@ -65,6 +73,17 @@ const WrapCheckPage = ({ onSubmit, value }) => {
     sessionStorage.removeItem("isCreateEnabledEmployee");
 
   })
+
+  const CheckForBillingSlab = () => {
+    if(window.location.href.includes("renew-trade") && value && billingSlabTradeTypeData?.filter((ob) => ob?.tradeType === value?.code && (ob?.structureType === formData?.TradeDetails?.VehicleType?.code || ob?.structureType === formData?.TradeDetails?.BuildingType?.code))?.length <= 0)
+    {
+      setToast({ key: "error", message:"TL_BILLING_SLAB_NOT_FOUND_FOR_COMB" });
+    }
+    else
+    onSubmit();
+  }
+
+  
 
   const typeOfApplication = !isEditProperty ? `new-application` : `renew-trade`;
   let routeLink = `/digit-ui/citizen/tl/tradelicence/${typeOfApplication}`;
@@ -224,7 +243,16 @@ const WrapCheckPage = ({ onSubmit, value }) => {
             )}
           </div>
         </StatusTable>
-        <SubmitBar label={t("CS_COMMON_SUBMIT")} onSubmit={onSubmit} />
+        {toast && (
+        <Toast
+          error={toast.key === "error"}
+          label={t(toast.message)}
+          onClose={() => setToast(null)}
+          style={{ maxWidth: "670px" }}
+          isDleteBtn={true}
+        />
+      )}
+        <SubmitBar label={t("CS_COMMON_SUBMIT")} onSubmit={CheckForBillingSlab} />
       </Card>
     </React.Fragment>
   );
