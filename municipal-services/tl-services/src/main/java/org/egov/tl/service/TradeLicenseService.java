@@ -109,14 +109,14 @@ public class TradeLicenseService {
        Object mdmsData = util.mDMSCall(tradeLicenseRequest.getRequestInfo(), tradeLicenseRequest.getLicenses().get(0).getTenantId());
        Object billingSlabs = util.getBillingSlabs(tradeLicenseRequest.getRequestInfo(), tradeLicenseRequest.getLicenses().get(0).getTenantId());
        actionValidator.validateCreateRequest(tradeLicenseRequest);
+        switch(businessServicefromPath)
+        {
+            case businessService_BPA:
+                validateMobileNumberUniqueness(tradeLicenseRequest);
+                break;
+        }
        enrichmentService.enrichTLCreateRequest(tradeLicenseRequest, mdmsData);
        tlValidator.validateCreate(tradeLicenseRequest, mdmsData, billingSlabs);
-       switch(businessServicefromPath)
-       {
-           case businessService_BPA:
-               validateMobileNumberUniqueness(tradeLicenseRequest);
-               break;
-       }
        userService.createUser(tradeLicenseRequest, false);
        calculationService.addCalculation(tradeLicenseRequest);
 
