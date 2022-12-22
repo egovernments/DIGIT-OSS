@@ -15,6 +15,7 @@ const ApplicationDetails = () => {
   const { id: appNumber } = useParams();
   const params = { applicationNumber: appNumber };
   const stateCode = Digit.ULBService.getStateId();
+  const isMobile = window.Digit.Utils.browser.isMobile();
   const { data: LicenseData, isLoading } = Digit.Hooks.obps.useBPAREGSearch(stateCode, {}, params);
   let License = LicenseData?.Licenses?.[0];
   const { data: mdmsRes, isLoading: mdmsResIsLoading } = Digit.Hooks.obps.useMDMS(stateCode, "StakeholderRegistraition", "TradeTypetoRoleMapping");
@@ -70,7 +71,7 @@ const ApplicationDetails = () => {
 
   return (
     <Fragment>
-      <div className="cardHeaderWithOptions">
+      <div className="cardHeaderWithOptions" style={isMobile ? {} : {maxWidth:"980px"}}>
         <Header styles={{ fontSize: "32px", marginLeft: "10px" }}>{t("BPA_TASK_DETAILS_HEADER")}</Header>
         {reciept_data?.Payments?.length > 0 && (
           // <div style={{right: "3%", top: "20px", position: "absolute"}}>
