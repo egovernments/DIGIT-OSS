@@ -302,7 +302,6 @@ const Genarelinfo = (props) => {
 
   const currentRemarks = (data) => {
     props.showTable({ data: data.data });
-    props.getRemarkData();
   };
 
   const handlemodaldData = (data) => {

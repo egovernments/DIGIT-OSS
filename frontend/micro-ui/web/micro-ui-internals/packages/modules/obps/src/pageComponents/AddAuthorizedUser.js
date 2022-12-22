@@ -163,11 +163,9 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
     setGender(value);
   }
   function selectPanNumber(e) {
-    if (!e.target.value || /^\w+$/.test(e.target.value)){
-      setAurthorizedPan(e.target.value.toUpperCase());
-      if(e.target.value === 10){
-        panVerification();
-      }
+    setAurthorizedPan(e.target.value.toUpperCase());
+    if(e.target.value === 10){
+      panVerification();
     }
   }
   function selectAurthorizedMobileNumber(value){
@@ -305,7 +303,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
         console.log("log1",fieldName, fromTable , index)
         let temp = aurthorizedUserInfoArray;
         temp[index][fieldName] = Resp?.data?.files?.[0]?.fileStoreId;
-        setAurthorizedUserInfoArray([...temp]);
+        setAurthorizedUserInfoArray(temp);
         console.log("log2",temp,Resp?.data?.files?.[0]?.fileStoreId)
       } else {
         setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
@@ -363,32 +361,9 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
   //   getAdhaarPdf();
   // }, [Documents?.uploadAadharPdf]);
 
-  const handleUserNameChange = (e) => {
-    if(!e.target.value || e.target.value.match("^[a-zA-Z]*$")){
-      setAurtorizedUserName(e.target.value);
-    }
-  }
-
-
-  const validateUser = (pan, mobile, email) => {
-    // Iterate through the array of users and check if any of them have the same PAN, mobile number, or email address
-    for (const user of aurthorizedUserInfoArray) {
-      if (user.pan === pan || user.mobileNumber === mobile || user.emailId === email) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-
   const [noofRows, setNoOfRows] = useState(1);
   const handleSubmitFormdata = () => {
-
-    if(validateUser(aurthorizedPan,aurthorizedMobileNumber,aurthorizedEmail)){
-      return alert("PLease Enter Unique PAN, Email and Mobile Number for every user") ;
-    }
-
-    // if(aurthorizedMobileNumber!=="" && aurthorizedUserName!=="" && aurthorizedMobileNumber!=="" && aurthorizedEmail!==""){
+    if(aurthorizedMobileNumber!=="" && aurthorizedUserName!=="" && aurthorizedMobileNumber!=="" && aurthorizedEmail!==""){
       const user = {
           userName: aurthorizedMobileNumber,
           name: aurthorizedUserName,
@@ -425,8 +400,6 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
 
       setAurthorizedUserInfoArray([...aurthorizedUserInfoArray,user]);
  
-      setDocumentsData({});
-
     try {
       const requestResp = {          
         "RequestInfo": {
@@ -453,7 +426,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
     // getAdhaarPdf();
     // getDigitalSignPdf();
     handleCloseAuthuser();
-  // }
+  }
 
   };
 
@@ -551,9 +524,9 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                   <th>Gender</th>
                   {/* <th>Date of Birth</th> */}
                   <th>PAN No.</th>
-                  <th>View Board Resolution PDF</th>
+                  <th>View Aadhar PDF</th>
                   <th>View Digital Signature PDF</th>
-                  <th>Action</th>
+                  {/* <th>Action</th> */}
                 </tr>
               </thead>
               <tbody>
@@ -621,12 +594,12 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                           </td>
                           <td>
                             <div className="row">
-                            {(elementInArray.uploadAadharPdf !== "")?
+                            {/* {(elementInArray.uploadAadharPdf !== "")? */}
                               <button type="button" onClick={()=>getDocShareholding(elementInArray?.uploadAadharPdf)} className="btn btn-sm col-md-6">
                                 <VisibilityIcon color="info" className="icon" />
                               </button>
-                              :<p></p>
-                            }
+                              {/* :<p></p>
+                            } */}
                               <div className="btn btn-sm col-md-6">
                                 <label for={"uploadAdhaarDoc"+input}> <FileUpload color="primary" /></label>
                                 <input 
@@ -642,12 +615,12 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                           </td>
                           <td>
                             <div className="row">
-                            {(elementInArray.uploadDigitalSignaturePdf)?
+                            {/* {(elementInArray.uploadDigitalSignaturePdf)? */}
                               <button type="button" onClick={()=>getDocShareholding(elementInArray?.uploadDigitalSignaturePdf)} className="btn btn-sm col-md-6">
                                 <VisibilityIcon color="info" className="icon" />
                               </button>
-                              :<p></p>
-                            }
+                              {/* :<p></p>
+                            } */}
                              <div className="btn btn-sm col-md-6">
                                 <label for={"uploadSignDoc"+input}> <FileUpload color="primary" /></label>
                                 <input 
@@ -661,13 +634,13 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
 
                             </div>
                           </td>
-                          <td>
+                          {/* <td>
                             <button
                               onClick={()=>(deleteTableRows(-1))}
                             >
                               <RemoveIcon />
                             </button>
-                          </td>
+                          </td> */}
                         </tr>
                       );
                     })
@@ -713,10 +686,9 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                           type={"text"}
                           isMandatory={false}
                           optionKey="i18nKey"
-                          value={aurthorizedUserName}
                           name="aurthorizedUserName"
                           // value={aurthorizedUserName}
-                          onChange={handleUserNameChange}
+                          onChange={(e) => setAurtorizedUserName(e.target.value)}
                           {...(validation = {
                             isRequired: true,
                             type: "text",
@@ -779,7 +751,6 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                           optionKey="code"
                           t={t}
                           name="gender"
-                          placeholder = "Select Gender"
                         />
                       </Col>
                       <Col md={3} xxl lg="3">
@@ -794,7 +765,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                         />
                       </Col>
                       <Col md={3} xxl lg="3">
-                        <label htmlFor="name" className="text">PAN No</label>
+                        <label htmlFor="name" className="text">PAN No.</label>
                         {/* <input
                                 type="text"
                                 name="name[]"
@@ -808,7 +779,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                           isMandatory={false}
                           optionKey="i18nKey"
                           name="aurthorizedPan"
-                          value={aurthorizedPan}
+                          // value={aurthorizedPan}
                           placeholder=""
                           // onChange={(e) => setAurthorizedPan(e.target.value.toUpperCase())}
                           onChange={selectPanNumber}
@@ -818,7 +789,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                         <h3 className="error-message" style={{ color: "red" }}>{PanValError}</h3>
                       </Col>
                       <Col md={3} xxl lg="3">
-                        <label htmlFor="name" className="text">Upload Board Resolution</label>
+                        <label htmlFor="name" className="text">Upload Aadhar PDF</label>
                         <input
                           type="file"
                           name="uploadAadharPdf"
@@ -846,9 +817,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                   <Button variant="secondary" onClick={handleCloseAuthuser}>
                     Close
                   </Button>
-                  <Button 
-                    disabled = { !aurthorizedUserName || !aurthorizedDob || !aurthorizedEmail || !aurthorizedMobileNumber || !aurthorizedPan || !aurthorizedEmail.match(Digit.Utils.getPattern("Email")) || !aurthorizedPan.match(Digit.Utils.getPattern("PAN")) || !aurthorizedMobileNumber.match(Digit.Utils.getPattern("MobileNo")) || !Documents?.uploadAadharPdf || !Documents?.uploadDigitalSignaturePdf }
-                  variant="primary" onClick={handleSubmitFormdata}>
+                  <Button variant="primary" onClick={handleSubmitFormdata}>
                     Submit
                   </Button>
                 </Modal.Footer>

@@ -136,7 +136,6 @@ const LicenseDetailsScrutiny = (props) => {
 
   const currentRemarks = (data) => {
     props.showTable({ data: data.data });
-    props.getRemarkData();
   };
 
   // console.log("color for the deeloper", developerInputFiledColor);
@@ -244,8 +243,7 @@ const LicenseDetailsScrutiny = (props) => {
                           <option value="02">Company</option>
                           <option value="03">LLP</option>
                           <option value="04">Society</option>
-                        </Form.Select>vvvv */}
-
+                        </Form.Select> */}
                       </div>
                     </div>
                   </div>

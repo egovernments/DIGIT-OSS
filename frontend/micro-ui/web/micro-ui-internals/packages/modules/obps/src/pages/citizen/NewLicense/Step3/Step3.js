@@ -529,24 +529,31 @@ const LandScheduleForm = (props) => {
                                 <div className="col col-6">
                                   <label>
                                     <h2>
-                                      Number of Renewal Fees to be deposited{" "}
                                       <span className="text-primary"> (Kindly avail for renewal of Licence)</span>{" "}
                                       <span style={{ color: "red" }}>*</span>
                                     </h2>
                                   </label>
                                   <input type="text" className="form-control" {...register("renewalFee")} required />
                                 </div>
-                                <div className="col col-6">
+                                {/* <div className="col col-6">
                                   <label>
                                     <h2>
                                       Freshly applied area,other than migration <span style={{ color: "red" }}>*</span>
                                     </h2>{" "}
                                   </label>
                                   <input type="text" className="form-control" {...register("freshlyApplied")} required minLength={2} maxLength={20} />
-                                </div>
+                                </div> */}
                               </div>
                             )}
                             <br></br>
+                            <div className="col col-6">
+                              <label>
+                                <h2>
+                                  Freshly applied area,other than migration <span style={{ color: "red" }}>*</span>
+                                </h2>{" "}
+                              </label>
+                              <input type="text" className="form-control" {...register("freshlyApplied")} required minLength={2} maxLength={20} />
+                            </div>
                             <div className="col col-3">
                               <h2
                                 data-toggle="tooltip"

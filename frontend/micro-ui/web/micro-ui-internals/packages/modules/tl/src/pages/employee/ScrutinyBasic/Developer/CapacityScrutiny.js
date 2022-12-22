@@ -21,7 +21,7 @@ import ModalChild from "../Remarks/ModalChild";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import { useStyles } from "../css/personalInfoChild.style";
 
-const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataValue, data, capacityScrutinyInfo, iconColorState ,developerType,getRemarkData}) => {
+const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data, capacityScrutinyInfo, iconColorState }) => {
   const { pathname: url } = useLocation();
   const userInfo = Digit.UserService.getUser();
   let validation = {};
@@ -385,11 +385,7 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
   }, [labelValue]);
 
   const currentRemarks = (data) => {
-    // props.
-    showTable({ data: data.data });
-    // props.
-    getRemarkData()
-
+    props.showTable({ data: data.data });
   };
 
   const handlemodaldData = (data) => {
@@ -413,7 +409,6 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
         selectedFieldData={selectedFieldData}
         fieldValue={fieldValue}
         remarksUpdate={currentRemarks}
-        // getRemarkData={props.getRemarkData}
       ></ModalChild>
 
       <div
@@ -449,7 +444,7 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                   <div className="col-sm-12">
                     {/* <textarea type="text" className="employee-card-input" id="details" placeholder="Enter Details" /> */}
                     <table className="table table-bordered" size="sm">
-                      <thead>vvvvv
+                      <thead>
                         <tr>
                           <th class="fw-normal">S.No.</th>
                           <th class="fw-normal">Particulars of document</th>
@@ -1015,7 +1010,6 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                   ></ReportProblemIcon>
                 </div>
               </p>
-              <br></br>
               <div>
                 {/* <input type="radio" value="Yes"  className="mx-2 mt-1" onChange={handleChange}  onClick={handleshow1} />
                 <label className="m-0  mx-1" for="Yes">Yes</label>
