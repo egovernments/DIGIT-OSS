@@ -40,8 +40,8 @@ const VALIDATION_SCHEMA = Yup.object().shape({
   proposedColony: Yup.string().required("This field is required."),
   reportObjection: Yup.string().required("This field is required."),
   undertaking: Yup.string().required("This field is required."),
-  uploadLayoutPlan: Yup.string().required("This field is required."),
-  demarcationPlan: Yup.string().required("This field is required."),
+  // uploadLayoutPlan: Yup.string().required("This field is required."),
+  // demarcationPlan: Yup.string().required("This field is required."),
 });
 
 export { VALIDATION_SCHEMA };
