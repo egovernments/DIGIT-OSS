@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import { useForm } from "react-hook-form";
@@ -2199,3 +2200,5 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
   );
 };
 export default DeveloperCapacity;
+=======
+>>>>>>> 5de712f548769ce51666c509c72f321a23205508
