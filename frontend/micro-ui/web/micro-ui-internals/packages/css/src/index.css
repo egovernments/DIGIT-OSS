@@ -12545,7 +12545,7 @@ body {
 
 @media (min-width: 780px) {
   .success-wrap {
-    width: 100%!important;
+    width: calc(100% + 284px);
   }
 
   .success-wrap header {

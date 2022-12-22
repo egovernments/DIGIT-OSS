@@ -907,7 +907,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                 />
                               </Col>
                               <Col md={3} xxl lg="4">
-                                <label htmlFor="designation" className="text">	Designition <span className="text-danger font-weight-bold">*</span></label>
+                                <label htmlFor="designation" className="text">  Designition <span className="text-danger font-weight-bold">*</span></label>
                                 <TextInput
                                   type="text"
                                   isMandatory={false}
@@ -951,7 +951,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                               </Col>
 
                               <Col md={3} xxl lg="4">
-                                <label htmlFor="pan" className="text">	Pan Number <span className="text-danger font-weight-bold">*</span></label>
+                                <label htmlFor="pan" className="text">  Pan Number <span className="text-danger font-weight-bold">*</span></label>
                                 <TextInput
                                   type="text"
                                   isMandatory={false}
@@ -967,7 +967,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                               </Col>
 
                               <Col md={3} xxl lg="4">
-                                <label htmlFor="dob" className="text">	Date of Birth (DOB) <span className="text-danger font-weight-bold">*</span></label>
+                                <label htmlFor="dob" className="text">  Date of Birth (DOB) <span className="text-danger font-weight-bold">*</span></label>
                                 <input
                                   type="date"
                                   required
@@ -1361,7 +1361,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                 />
                               </Col>
                               <Col md={3} xxl lg="4">
-                                <label htmlFor="name" className="text">	Designition <span className="text-danger font-weight-bold">*</span></label>
+                                <label htmlFor="name" className="text"> Designition <span className="text-danger font-weight-bold">*</span></label>
                                 <TextInput
                                   type="text"
                                   isMandatory={false}
@@ -1591,7 +1591,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                 />
                               </Col>
                               <Col md={3} xxl lg="4">
-                                <label htmlFor="name" className="text">	Contact Number <span className="text-danger font-weight-bold">*</span></label>
+                                <label htmlFor="name" className="text"> Contact Number <span className="text-danger font-weight-bold">*</span></label>
 
                                 <MobileNumber
                                   value={modalDirectorContact}
@@ -2239,7 +2239,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                   />
                                 </Col>
                                 <Col md={3} xxl lg="4">
-                                  <label htmlFor="name" className="text">	Designition *</label>
+                                  <label htmlFor="name" className="text"> Designition *</label>
                                   <input
                                     type="text"
                                     
