@@ -43,7 +43,7 @@ const WrapCheckPage = ({ onSubmit, value }) => {
 
   const { data: billingSlabTradeTypeData, isLoading : isBillingSlabLoading } = Digit.Hooks.tl.useTradeLicenseBillingslab({ tenantId: value?.tenantId || Digit.ULBService.getCurrentTenantId(), filters: {} }, {
     select: (data) => {
-    return data?.billingSlab.filter((e) => e.tradeType && e.applicationType === "NEW" && e.licenseType === "PERMANENT" && e.uom);
+    return data?.billingSlab.filter((e) => e.tradeType && e.applicationType === (window.location.href.includes("renew-trade") ? "RENEWAL" : "NEW") && e.licenseType === "PERMANENT" && e.uom);
     }});
 
   function getdate(date) {
@@ -75,9 +75,18 @@ const WrapCheckPage = ({ onSubmit, value }) => {
   })
 
   const CheckForBillingSlab = () => {
-    if(window.location.href.includes("renew-trade") && value && billingSlabTradeTypeData?.filter((ob) => ob?.tradeType === value?.code && (ob?.structureType === formData?.TradeDetails?.VehicleType?.code || ob?.structureType === formData?.TradeDetails?.BuildingType?.code))?.length <= 0)
+    if(window.location.href.includes("renew-trade") && value)
     {
-      setToast({ key: "error", message:"TL_BILLING_SLAB_NOT_FOUND_FOR_COMB" });
+      let flag = true;
+      value?.TradeDetails?.units?.map((val) => {
+        if(val && billingSlabTradeTypeData?.filter((ob) => ob?.tradeType === val?.tradesubtype?.code && (ob?.structureType === value?.TradeDetails?.VehicleType?.code || ob?.structureType === value?.TradeDetails?.BuildingType?.code))?.length <= 0)
+          {
+            flag = false;
+            setToast({ key: "error", message:"TL_BILLING_SLAB_NOT_FOUND_FOR_COMB" });
+          }
+      })
+      if(flag)
+      onSubmit();
     }
     else
     onSubmit();

@@ -118,6 +118,15 @@ const WSAdditionalDetails = () => {
                     label={t("WS_PLUMBER_MOB_NO")}
                     text={data?.WaterConnection?.[0]?.plumberInfo?.[0]?.mobileNumber || data?.SewerageConnections?.[0]?.plumberInfo?.mobileNumber || "NA"}
                     textStyle={{ whiteSpace: "pre" }}
+                    privacy={{ uuid: applicationNobyData, fieldName: ["plumberInfoMobileNumber"], model: "WnSConnectionPlumber",showValue: false,
+                    loadData: {
+                      serviceName: applicationNobyData?.includes("WS") ? "/ws-services/wc/_search" : "/sw-services/swc/_search",
+                      requestBody: {},
+                      requestParam: { tenantId, applicationNumber : applicationNobyData },
+                      jsonPath: applicationNobyData?.includes("WS")? "WaterConnection[0].plumberInfo[0].mobileNumber" : "SewerageConnections[0].plumberInfo[0].mobileNumber",
+                      isArray: false,
+                    }, }
+                  }
                   />
                 </div>
               )}

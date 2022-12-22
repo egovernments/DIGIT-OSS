@@ -34,7 +34,7 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
   const [accessories, SetAccessories] = useState([]);
   const { data: billingSlabData } = Digit.Hooks.tl.useTradeLicenseBillingslab({ tenantId: TenantId, filters: {} }, {
     select: (data) => {
-    return data?.billingSlab.filter((e) => e.accessoryCategory && e.applicationType === "NEW" && e.uom);
+    return data?.billingSlab.filter((e) => e.accessoryCategory && (window.location.href.includes("renew-trade") ? "RENEWAL" : "NEW") && e.uom);
     }});
 
   useEffect(() => {

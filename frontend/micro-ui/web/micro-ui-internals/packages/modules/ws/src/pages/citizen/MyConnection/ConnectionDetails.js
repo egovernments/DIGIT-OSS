@@ -38,7 +38,7 @@ const ConnectionDetails = () => {
   const [showOptions, setShowOptions] = useState(false);
   const applicationNobyData = window.location.href.includes("SW_") ? window.location.href.substring(window.location.href.indexOf("SW_")) : window.location.href.substring(window.location.href.indexOf("WS_"));
   // window.location.href.substring(window.location.href.indexOf("WS_"));
-  const { state = {} } = useLocation();
+  let { state = {} } = useLocation();
   const [showModal, setshowModal] = useState(false);
   const [showActionToast, setshowActionToast] = useState(null);
   const mobileView = Digit.Utils.browser.isMobile();
@@ -55,6 +55,7 @@ const ConnectionDetails = () => {
   var { isLoading, isError, error, data } = Digit.Hooks.ws.useMyApplicationSearch({ filters: filter1, BusinessService: applicationNobyData?.includes("SW") ? "SW" : "WS" }, { filters: filter1, privacy: Digit.Utils.getPrivacyObject()  }, true);
   let filter2 = { tenantId: tenantId, connectionNumber: applicationNobyData?.includes("SW") ? data?.SewerageConnections?.[0]?.connectionNo : data?.WaterConnection?.[0]?.connectionNo }
   var { isLoading : isconnectionLoading, data : connectionData } = Digit.Hooks.ws.useMyApplicationSearch({ filters: filter2, BusinessService: applicationNobyData?.includes("SW") ? "SW" : "WS" }, { filters: filter2, privacy: Digit.Utils.getPrivacyObject(), enabled : filter2?.connectionNumber ? true : false  }, true);
+  state = Object.keys(state)?.length>0 ? state : (applicationNobyData?.includes("WS") ? connectionData?.WaterConnection?.[0] : connectionData?.SewerageConnections?.[0])
   //this code hampering all Sewerage functionality thatswhy removed
   // if(data && data["SewerageConnections"]){
   //   isSewerageConnections = true;

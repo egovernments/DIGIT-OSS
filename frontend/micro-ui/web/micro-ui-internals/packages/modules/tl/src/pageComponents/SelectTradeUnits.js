@@ -36,7 +36,7 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
   const { isLoading, data: Data = {} } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "TradeLicense", "TradeUnits", "[?(@.type=='TL')]");
   const { data: billingSlabTradeTypeData, isLoading : isBillingSlabLoading } = Digit.Hooks.tl.useTradeLicenseBillingslab({ tenantId: tenantId, filters: {} }, {
     select: (data) => {
-    return data?.billingSlab.filter((e) => e.tradeType && e.applicationType === "NEW" && e.licenseType === "PERMANENT" && e.uom);
+    return data?.billingSlab.filter((e) => e.tradeType && (e.applicationType === (window.location.href.includes("renew-trade") ? "RENEWAL" : "NEW")) && e.licenseType === "PERMANENT" && e.uom);
     }});
   let TradeCategoryMenu = [];
   let TradeCategoryMenu2 = [];
@@ -251,7 +251,7 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
     if(window.location.href.includes("renew-trade") && fields)
     {
       fields.map((value) => {
-        if(value && billingSlabTradeTypeData?.filter((ob) => ob?.tradeType === value?.code && (ob?.structureType === formData?.TradeDetails?.VehicleType?.code || ob?.structureType === formData?.TradeDetails?.BuildingType?.code))?.length <= 0)
+        if(value && billingSlabTradeTypeData?.filter((ob) => ob?.tradeType === value?.tradesubtype?.code && (ob?.structureType === formData?.TradeDetails?.VehicleType?.code || ob?.structureType === formData?.TradeDetails?.BuildingType?.code))?.length <= 0)
           {
             setError("TL_BILLING_SLAB_NOT_FOUND_FOR_COMB");
           }
