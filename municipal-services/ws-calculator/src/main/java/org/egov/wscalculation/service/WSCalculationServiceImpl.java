@@ -109,7 +109,7 @@ public class WSCalculationServiceImpl implements WSCalculationService {
 			calculations = getFeeCalculation(request, masterMap);
 			connectionRequest = request.getIsconnectionCalculation();
 		}
-		demandService.generateDemand(request.getRequestInfo(), calculations, masterMap, connectionRequest);
+		demandService.generateDemand(request, calculations, masterMap, connectionRequest);
 		unsetWaterConnection(calculations);
 		return calculations;
 	}
@@ -170,7 +170,7 @@ public class WSCalculationServiceImpl implements WSCalculationService {
 				List<WaterConnection> waterConnectionList = calculatorUtil.getWaterConnection(requestInfo, criteria.getConnectionNo(), requestInfo.getUserInfo().getTenantId());
 				for (WaterConnection connection : waterConnectionList) {
 					if (connection.getApplicationType().equalsIgnoreCase(NEW_WATER_CONNECTION)) {
-						List<Demand> demandsList = demandService.searchDemand(requestInfo.getUserInfo().getTenantId(), Collections.singleton(connection.getConnectionNo()), fromDate, toDate, requestInfo, null);
+						List<Demand> demandsList = demandService.searchDemandForDisconnection(requestInfo.getUserInfo().getTenantId(), Collections.singleton(connection.getConnectionNo()), fromDate, toDate, requestInfo, null);
 						if(!CollectionUtils.isEmpty(demandsList)) {
 							BigDecimal totalTaxAmount = BigDecimal.ZERO;
 							for(Demand demands : demandsList) {

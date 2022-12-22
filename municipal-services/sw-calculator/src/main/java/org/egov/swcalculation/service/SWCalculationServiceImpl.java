@@ -67,14 +67,14 @@ public class SWCalculationServiceImpl implements SWCalculationService {
 			Map<String, Object> masterMap = mDataService.loadMasterData(request.getRequestInfo(),
 					request.getCalculationCriteria().get(0).getTenantId());
 			calculations = getCalculations(request, masterMap);
-			demandService.generateDemand(request.getRequestInfo(), calculations, masterMap, connectionRequest);
+			demandService.generateDemand(request, calculations, masterMap, connectionRequest);
 			unsetSewerageConnection(calculations);
 		} else if (request.getIsconnectionCalculation()) {
 			connectionRequest = request.getIsconnectionCalculation();
 			Map<String, Object> masterMap = mDataService.loadMasterData(request.getRequestInfo(),
 					request.getCalculationCriteria().get(0).getTenantId());
 			calculations = getCalculations(request, masterMap);
-			demandService.generateDemand(request.getRequestInfo(), calculations, masterMap, connectionRequest);
+			demandService.generateDemand(request, calculations, masterMap, connectionRequest);
 			unsetSewerageConnection(calculations);
 
 		} else {
@@ -82,7 +82,7 @@ public class SWCalculationServiceImpl implements SWCalculationService {
 			Map<String, Object> masterData = mDataService.loadExemptionMaster(request.getRequestInfo(),
 					request.getCalculationCriteria().get(0).getTenantId());
 			calculations = getFeeCalculation(request, masterData);
-			demandService.generateDemand(request.getRequestInfo(), calculations, masterData,
+			demandService.generateDemand(request, calculations, masterData,
 					request.getIsconnectionCalculation());
 			unsetSewerageConnection(calculations);
 		}
@@ -137,7 +137,7 @@ public class SWCalculationServiceImpl implements SWCalculationService {
 				List<SewerageConnection> sewerageConnectionList = util.getSewerageConnection(requestInfo, criteria.getConnectionNo(), requestInfo.getUserInfo().getTenantId());
 				for (SewerageConnection connection : sewerageConnectionList) {
 					if (connection.getApplicationType().equalsIgnoreCase(NEW_SEWERAGE_CONNECTION)) {
-						List<Demand> demandsList = demandService.searchDemand(requestInfo.getUserInfo().getTenantId(), Collections.singleton(connection.getConnectionNo()), fromDate, toDate, requestInfo, null);
+						List<Demand> demandsList = demandService.searchDemandForDisconnection(requestInfo.getUserInfo().getTenantId(), Collections.singleton(connection.getConnectionNo()), fromDate, toDate, requestInfo, null);
 						if(!CollectionUtils.isEmpty(demandsList)) {
 							BigDecimal totalTaxAmount = BigDecimal.ZERO;
 							for(Demand demands : demandsList) {
@@ -275,7 +275,7 @@ public class SWCalculationServiceImpl implements SWCalculationService {
 	 */
 	public List<Calculation> bulkDemandGeneration(CalculationReq request, Map<String, Object> masterMap) {
 		List<Calculation> calculations = getCalculations(request, masterMap);
-		demandService.generateDemand(request.getRequestInfo(), calculations, masterMap, true);
+		demandService.generateDemand(request, calculations, masterMap, true);
 		return calculations;
 	}
 
