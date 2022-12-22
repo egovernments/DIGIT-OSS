@@ -122,7 +122,7 @@ const LandScheduleForm = (props) => {
     const postDistrict = {
       pageName: "LandSchedule",
       ApplicationStatus: "DRAFT",
-      id: props?.getId,
+      applicationNumber: props?.getId,
       createdBy: props?.userData?.id,
       updatedBy: props?.userData?.id,
       LicenseDetails: {
@@ -511,7 +511,7 @@ const LandScheduleForm = (props) => {
                             <div className="col col-3">
                               <label>
                                 <h2>
-                                  Validity of Parent Licence <span style={{ color: "red" }}>*</span>
+                                  Validity of Parent Licence.<span style={{ color: "red" }}>*</span>
                                 </h2>{" "}
                               </label>
                               &nbsp;&nbsp;<br></br>

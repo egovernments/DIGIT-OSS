@@ -50,7 +50,7 @@ const ApllicantFormStep1 = (props) => {
     const postDistrict = {
       pageName: "ApplicantInfo",
       ApplicationStatus: "DRAFT",
-      id: applicantId,
+      applicationNumber: applicantId,
       createdBy: userInfo?.id,
       updatedBy: userInfo?.id,
 
@@ -76,7 +76,8 @@ const ApllicantFormStep1 = (props) => {
     try {
       const Resp = await axios.post("/tl-services/new/_create", postDistrict);
       const licData = Resp?.data?.LicenseServiceResponseInfo?.[0]?.newServiceInfoData?.[0];
-      props.Step1Continue(Resp?.data?.LicenseServiceResponseInfo?.[0]?.id?.toString(), userInfo, licData);
+      console.log("gg", Resp?.data);
+      props.Step1Continue(Resp?.data?.LicenseServiceResponseInfo?.[0]?.applicationNumber, userInfo, licData);
     } catch (error) {
       return error;
     }

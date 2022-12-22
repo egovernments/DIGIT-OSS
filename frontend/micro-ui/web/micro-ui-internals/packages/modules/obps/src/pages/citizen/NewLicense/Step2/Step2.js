@@ -415,7 +415,7 @@ const ApllicantPuropseForm = (props) => {
       const postDistrict = {
         pageName: "ApplicantPurpose",
         ApplicationStatus: "DRAFT",
-        id: props.getId,
+        applicationNumber: props.getId,
         createdBy: props?.userData?.id,
         updatedBy: props?.userData?.id,
         LicenseDetails: {
