@@ -191,7 +191,7 @@ const CheckPage = ({ onSubmit, value }) => {
             </StatusTable>
             <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} />
             <CardHeader styles={{ fontSize: "24px" }}>{t("BPA_COMMON_TOTAL_AMT")}</CardHeader>
-            <CardHeader>₹ {paymentDetails?.billResponse?.Bill?.[0]?.billDetails[0]?.amount}</CardHeader> */}
+            <CardHeader>₹ {paymentDetails?.billResponse?.Bill?.[0]?.billDetails[0]?.amount}</CardHeader>
             {/* <SubmitBar label={t("CS_COMMON_SUBMIT")} onSubmit={onSubmit} /> */}
           </Card>
             <SubmitBar label={t("CS_COMMON_SUBMIT")} onSubmit={onSubmit} disabled={paymentDetails?.billResponse?.Bill?.[0]?.billDetails[0]?.amount ? false : true} />
