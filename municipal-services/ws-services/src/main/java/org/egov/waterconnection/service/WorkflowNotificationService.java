@@ -282,7 +282,7 @@ public class WorkflowNotificationService {
             }
             if (code.equalsIgnoreCase("Connection Detail Page")) {
                 actionLink = config.getNotificationUrl() + config.getConnectionDetailsLink();
-                actionLink = actionLink.replace(connectionNoReplacer, connectionRequest.getWaterConnection().getConnectionNo());
+                actionLink = actionLink.replace(applicationNumberReplacer, connectionRequest.getWaterConnection().getApplicationNo());
             }
             ActionItem item = ActionItem.builder().actionUrl(actionLink).code(code).build();
             items.add(item);
@@ -545,8 +545,8 @@ public class WorkflowNotificationService {
 			}*/
             if (messageToReplace.contains("{connection details page}")) {
                 String connectionDetaislLink = config.getNotificationUrl() + config.getConnectionDetailsLink();
-                connectionDetaislLink = connectionDetaislLink.replace(connectionNoReplacer,
-                        waterConnectionRequest.getWaterConnection().getConnectionNo());
+                connectionDetaislLink = connectionDetaislLink.replace(applicationNumberReplacer,
+                        waterConnectionRequest.getWaterConnection().getApplicationNo());
                 messageToReplace = messageToReplace.replace("{connection details page}",
                         waterServiceUtil.getShortnerURL(connectionDetaislLink));
             }

@@ -185,11 +185,11 @@ public class EditNotificationService {
 		String code = SWConstants.SW_EDIT_SMS;
 		if ((!workflow.getAction().equalsIgnoreCase(SWConstants.ACTIVATE_CONNECTION))
 				&& servicesUtil.isModifyConnectionRequestForNotification(sewerageConnectionRequest)) {
-			code = SWConstants.SW_MODIFY_IN_APP;
+			code = SW_MODIFY_SMS;
 		}
 		if ((!workflow.getAction().equalsIgnoreCase(SWConstants.ACTIVATE_CONNECTION)) &&
 				(!workflow.getAction().equalsIgnoreCase(APPROVE_CONNECTION)) && servicesUtil.isDisconnectConnectionRequest(sewerageConnectionRequest)) {
-			code = SW_DISCONNECT_EDIT_INAPP;
+			code = SW_DISCONNECT_EDIT_SMS;
 		}
 
 		String message = notificationUtil.getCustomizedMsg(code, localizationMessage);

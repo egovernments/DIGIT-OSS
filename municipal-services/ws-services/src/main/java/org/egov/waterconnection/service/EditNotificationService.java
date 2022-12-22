@@ -174,11 +174,11 @@ public class EditNotificationService {
 		String code = WCConstants.WS_EDIT_SMS;
 		if ((!workflow.getAction().equalsIgnoreCase(WCConstants.ACTIVATE_CONNECTION))
 				&& waterServicesUtil.isModifyConnectionRequestForNotification(waterConnectionRequest)) {
-			code = WCConstants.WS_MODIFY_IN_APP;
+			code = WS_MODIFY_SMS;
 		}
 		if ((!workflow.getAction().equalsIgnoreCase(WCConstants.ACTIVATE_CONNECTION)) &&
 				(!workflow.getAction().equalsIgnoreCase(APPROVE_CONNECTION)) && waterServicesUtil.isDisconnectConnectionRequest(waterConnectionRequest)) {
-			code = WS_DISCONNECT_EDIT_INAPP;
+			code = WS_DISCONNECT_EDIT_SMS;
 		}
 		
 		String message = notificationUtil.getCustomizedMsg(code, localizationMessage);

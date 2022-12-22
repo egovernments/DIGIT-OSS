@@ -141,6 +141,12 @@ public class PaymentNotificationService {
 	 */
 	private EventRequest getEventRequest(HashMap<String, String> mappedRecord, WaterConnectionRequest waterConnectionRequest, String topic,
 										 Property property) {
+
+		//If bill amount is 0 then do not send any notification
+		Double zero = Double.valueOf(0);
+		if(Double.parseDouble(mappedRecord.get(totalBillAmount)) == zero)
+			return null;
+
 		String localizationMessage = notificationUtil.getLocalizationMessages(mappedRecord.get(tenantId), waterConnectionRequest.getRequestInfo());
 		String message = notificationUtil.getCustomizedMsgForInApp(topic, localizationMessage);
 		if (message == null) {
@@ -217,6 +223,12 @@ public class PaymentNotificationService {
 	 */
 	private List<SMSRequest> getSmsRequest(HashMap<String, String> mappedRecord, WaterConnectionRequest waterConnectionRequest, String topic,
 										   Property property) {
+
+		//If bill amount is 0 then do not send any notification
+		Double zero = Double.valueOf(0);
+		if(Double.parseDouble(mappedRecord.get(totalBillAmount)) == zero)
+			return null;
+
 		String localizationMessage = notificationUtil.getLocalizationMessages(mappedRecord.get(tenantId), waterConnectionRequest.getRequestInfo());
 		String message = notificationUtil.getCustomizedMsgForSMS(topic, localizationMessage);
 		if (message == null) {
