@@ -137,7 +137,7 @@ public class SWCalculationServiceImpl implements SWCalculationService {
 				List<SewerageConnection> sewerageConnectionList = util.getSewerageConnection(requestInfo, criteria.getConnectionNo(), requestInfo.getUserInfo().getTenantId());
 				for (SewerageConnection connection : sewerageConnectionList) {
 					if (connection.getApplicationType().equalsIgnoreCase(NEW_SEWERAGE_CONNECTION)) {
-						List<Demand> demandsList = demandService.searchDemandForDisconnection(requestInfo.getUserInfo().getTenantId(), Collections.singleton(connection.getConnectionNo()), fromDate, toDate, requestInfo, null);
+						List<Demand> demandsList = demandService.searchDemand(requestInfo.getUserInfo().getTenantId(), Collections.singleton(connection.getConnectionNo()), fromDate, toDate, requestInfo, null);
 						if(!CollectionUtils.isEmpty(demandsList)) {
 							BigDecimal totalTaxAmount = BigDecimal.ZERO;
 							for(Demand demands : demandsList) {
@@ -150,6 +150,10 @@ public class SWCalculationServiceImpl implements SWCalculationService {
 							Long daysOfUsage = Math.round(Math.abs(Double.parseDouble(toDate.toString()) - sewerageConnection.getDateEffectiveFrom())/86400000);
 							BigDecimal finalSewerageCharge = sewerageCharge.add(BigDecimal.valueOf(
 									(Double.parseDouble(totalTaxAmount.toString()) * daysOfUsage) / taxPeriod));
+
+							criteria.setTo(sewerageConnection.getDateEffectiveFrom());
+							criteria.setFrom(toDate);
+
 							estimates.stream().forEach(estimate -> {
 								if (taxHeadCategoryMap.get(estimate.getTaxHeadCode()).equals(CHARGES)) {
 									estimate.setEstimateAmount(finalSewerageCharge);

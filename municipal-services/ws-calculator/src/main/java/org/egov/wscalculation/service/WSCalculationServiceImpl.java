@@ -86,9 +86,9 @@ public class WSCalculationServiceImpl implements WSCalculationService {
 				String dates[] = meterreadingList.get(0).getBillingPeriod().split("-");
 				try {
 					Date startDate = f.parse(dates[0]);
-					request.getCalculationCriteria().get(0).setFrom(startDate.getTime());
+					request.getCalculationCriteria().get(0).setFrom(startDate.getTime() + ONE_DAY_ADDON);
 					Date endDate = f.parse(dates[1]);
-					request.getCalculationCriteria().get(0).setTo(endDate.getTime());
+					request.getCalculationCriteria().get(0).setTo(endDate.getTime() + ONE_DAY_ADDON);
 				} catch (ParseException e) {
 					throw new RuntimeException(e);
 				}
@@ -170,7 +170,7 @@ public class WSCalculationServiceImpl implements WSCalculationService {
 				List<WaterConnection> waterConnectionList = calculatorUtil.getWaterConnection(requestInfo, criteria.getConnectionNo(), requestInfo.getUserInfo().getTenantId());
 				for (WaterConnection connection : waterConnectionList) {
 					if (connection.getApplicationType().equalsIgnoreCase(NEW_WATER_CONNECTION)) {
-						List<Demand> demandsList = demandService.searchDemandForDisconnection(requestInfo.getUserInfo().getTenantId(), Collections.singleton(connection.getConnectionNo()), fromDate, toDate, requestInfo, null);
+						List<Demand> demandsList = demandService.searchDemand(requestInfo.getUserInfo().getTenantId(), Collections.singleton(connection.getConnectionNo()), fromDate, toDate, requestInfo, null);
 						if(!CollectionUtils.isEmpty(demandsList)) {
 							BigDecimal totalTaxAmount = BigDecimal.ZERO;
 							for(Demand demands : demandsList) {
@@ -183,6 +183,10 @@ public class WSCalculationServiceImpl implements WSCalculationService {
 							Long daysOfUsage = Math.round(Math.abs(Double.parseDouble(toDate.toString()) - waterConnection.getDateEffectiveFrom())/86400000);
 							BigDecimal finalWaterCharge = waterCharge.add(BigDecimal.valueOf(
 									(Double.parseDouble(totalTaxAmount.toString()) * daysOfUsage) / taxPeriod));
+
+							criteria.setTo(waterConnection.getDateEffectiveFrom());
+							criteria.setFrom(toDate);
+
 							estimates.stream().forEach(estimate -> {
 								if (taxHeadCategoryMap.get(estimate.getTaxHeadCode()).equals(CHARGES)) {
 									estimate.setEstimateAmount(finalWaterCharge);

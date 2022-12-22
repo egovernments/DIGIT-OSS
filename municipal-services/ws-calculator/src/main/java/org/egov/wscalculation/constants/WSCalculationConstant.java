@@ -342,4 +342,6 @@ public class WSCalculationConstant {
 
 	public static final String DISCONNECTION_EXECUTED = "DISCONNECTION_EXECUTED";
 
+	public static final Long ONE_DAY_ADDON = Long.valueOf(66599000);
+
 }

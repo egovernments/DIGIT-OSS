@@ -948,47 +948,4 @@ public class DemandService {
 			return calculations;
 		}
 
-	public List<Demand> searchDemandForDisconnection(String tenantId, Set<String> consumerCodes, Long taxPeriodFrom, Long taxPeriodTo,
-													 RequestInfo requestInfo, Boolean isDemandPaid) {
-		Object result = serviceRequestRepository.fetchResult(
-				getDemandSearchForDisconnection(tenantId, consumerCodes, taxPeriodFrom, taxPeriodTo, isDemandPaid),
-				RequestInfoWrapper.builder().requestInfo(requestInfo).build());
-		try {
-			return mapper.convertValue(result, DemandResponse.class).getDemands();
-		} catch (IllegalArgumentException e) {
-			throw new CustomException("EG_WS_PARSING_ERROR", "Failed to parse response from Demand Search");
-		}
-
-	}
-	public StringBuilder getDemandSearchForDisconnection(String tenantId, Set<String> consumerCodes, Long taxPeriodFrom, Long taxPeriodTo, Boolean isDemandPaid) {
-		StringBuilder url = new StringBuilder(configs.getBillingServiceHost());
-		String businessService = taxPeriodFrom == null  ? ONE_TIME_FEE_SERVICE_FIELD : configs.getBusinessService();
-		url.append(configs.getDemandSearchEndPoint());
-		url.append("?");
-		url.append("tenantId=");
-		url.append(tenantId);
-		url.append("&");
-		url.append("businessService=");
-		url.append(businessService);
-		url.append("&");
-		url.append("consumerCode=");
-		url.append(StringUtils.join(consumerCodes, ','));
-		if (taxPeriodFrom != null) {
-			url.append("&");
-			url.append("taxPeriodFrom=");
-			url.append(taxPeriodFrom.toString());
-		}
-		if (taxPeriodTo != null) {
-			url.append("&");
-			url.append("taxPeriodTo=");
-			url.append(taxPeriodTo.toString());
-		}
-		if (isDemandPaid != null) {
-			url.append("&");
-			url.append("isPaymentCompleted=");
-			url.append(isDemandPaid);
-		}
-		return url;
-	}
-
 }
