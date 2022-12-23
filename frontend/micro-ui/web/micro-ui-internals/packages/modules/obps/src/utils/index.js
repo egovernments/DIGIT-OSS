@@ -424,31 +424,27 @@ export const getapplicationdocstakeholder = (initial) => {
 };
 
 export const convertToStakeholderObject = (data) => {
-  let userInfo = Digit.UserService.getUser();
   let formData = {
     Licenses: [
       {
         ...data?.result?.Licenses[0],
-        action: "INITIATE",
-        applicationType:"RENEWAL",
-        status:"INITIATED",
+        action: "APPLY",
         tradeLicenseDetail: {
           ...data?.result?.Licenses[0]?.tradeLicenseDetail,
           additionalDetail: { counsilForArchNo: data?.formData?.LicneseType?.ArchitectNo },
-          tradeType: data?.formData?.LicneseType?.LicenseType?.tradeType,
-          // tradeUnits: [
-          //   {
-          //     ...data?.result?.Licenses[0]?.tradeLicenseDetail?.tradeUnits?.[0],
-             
-          //     id: data?.result?.Licenses[0]?.tradeLicenseDetail?.tradeUnits?.[0]?.id,
-          //   },
-          // ],
+          tradeUnits: [
+            {
+              ...data?.result?.Licenses[0]?.tradeLicenseDetail?.tradeUnits?.[0],
+              tradeType: data?.formData?.LicneseType?.LicenseType?.tradeType,
+              id: data?.result?.Licenses[0]?.tradeLicenseDetail?.tradeUnits?.[0]?.id,
+            },
+          ],
           owners: [
             {
               ...data?.result?.Licenses[0]?.tradeLicenseDetail?.owners?.[0],
               gender: data?.formData?.LicneseDetails?.gender?.code,
-              mobileNumber: userInfo?.info?.mobileNumber,
-              name: userInfo?.info?.name,
+              mobileNumber: data?.formData?.LicneseDetails?.mobileNumber,
+              name: data?.formData?.LicneseDetails?.name,
               dob: null,
               emailId: data?.formData?.LicneseDetails?.email,
               permanentAddress: data?.formData?.LicneseDetails?.PermanentAddress,

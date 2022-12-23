@@ -65,7 +65,7 @@ const FeesChargesForm = (props) => {
     const postDistrict = {
       pageName: "FeesAndCharges",
       ApplicationStatus: "DRAFT",
-      id: props?.getId,
+      applicationNumber: props?.getId,
       createdBy: props?.userData?.id,
       updatedBy: props?.userData?.id,
       LicenseDetails: {

@@ -87,7 +87,7 @@ const AppliedDetailForm = (props) => {
     const postDistrict = {
       pageName: "DetailsofAppliedLand",
       ApplicationStatus: "INITIATE",
-      id: props.getId,
+      applicationNumber: props.getId,
       createdBy: props?.userData?.id,
       updatedBy: props?.userData?.id,
       LicenseDetails: {
