@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import { useForm } from "react-hook-form";
 import { Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
+import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 // import { Checkbox } from "@mui/material";
 import CalculateIcon from "@mui/icons-material/Calculate";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
@@ -63,7 +64,8 @@ const LandScheduleForm = (props) => {
   const [getPotentialOptons, setPotentialOptions] = useState({ data: [], isLoading: true });
   const [typeOfLand, setYypeOfLand] = useState({ data: [], isLoading: true });
   const [loader, setLoader] = useState(false);
-
+  const [modal, setmodal] = useState(false);
+  const [modal1, setmodal1] = useState(false);
   const stateId = Digit.ULBService.getStateId();
   const { data: PurposeType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
 
@@ -122,7 +124,7 @@ const LandScheduleForm = (props) => {
     const postDistrict = {
       pageName: "LandSchedule",
       ApplicationStatus: "DRAFT",
-      applicationNumber: props?.getId,
+      id: props?.getId,
       createdBy: props?.userData?.id,
       updatedBy: props?.userData?.id,
       LicenseDetails: {
@@ -315,47 +317,19 @@ const LandScheduleForm = (props) => {
                             <div className="col col-3">
                               <label>
                                 <h2>
-                                  Approach Road Width <span style={{ color: "red" }}>*</span>
-                                  <CalculateIcon color="primary" />
-                                </h2>{" "}
+                                  Area of Parent Licence <span style={{ color: "red" }}>*</span>
+                                </h2>
                               </label>
-                              <input
-                                type="number"
-                                className="form-control"
-                                {...register("approachRoadWidth")}
-                                required
-                                minLength={10}
-                                maxLength={20}
-                              ></input>
+                              <input type="text" className="form-control" {...register("areaofParentLic")} required minLength={1} maxLength={20} />
                             </div>
+
                             <div className="col col-3">
                               <label>
                                 <h2>Specify Others</h2>
                               </label>
                               <input type="text" {...register("specify")} className="form-control" />
                             </div>
-                            <div className="col col-3">
-                              <label>
-                                <h2>
-                                  Type of land<span style={{ color: "red" }}>*</span>
-                                </h2>
-                              </label>
-                              <ReactMultiSelect
-                                control={control}
-                                name="typeLand"
-                                placeholder="Type of Land"
-                                data={typeOfLand?.data}
-                                labels="typeland"
-                                required
-                              />
 
-                              {/* <select className="form-control" id="typeLand" {...register("typeLand")}>
-                            <option value="">Type of Land</option>
-                            <option value="">Chahi/nehri</option>
-                            <option>Gair Mumkins</option>
-                            <option>Others</option>
-                          </select> */}
-                            </div>
                             <div className="col col-3 ">
                               <h2>
                                 Third-party right created<span style={{ color: "red" }}>*</span>&nbsp; &nbsp;&nbsp;
@@ -511,7 +485,7 @@ const LandScheduleForm = (props) => {
                             <div className="col col-3">
                               <label>
                                 <h2>
-                                  Validity of Parent Licence.<span style={{ color: "red" }}>*</span>
+                                  Validity of Parent Licence <span style={{ color: "red" }}>*</span>
                                 </h2>{" "}
                               </label>
                               &nbsp;&nbsp;<br></br>
@@ -526,14 +500,37 @@ const LandScheduleForm = (props) => {
                             </div>
                             {watch("validityOfParentLic") === "N" && (
                               <div className="row ">
-                                <div className="col col-6">
+                                <div className="col col-12">
                                   <label>
                                     <h2>
-                                      <span className="text-primary"> (Kindly avail for renewal of Licence)</span>{" "}
+                                      <span className="text-primary" onClick={() => setmodal1(true)}>
+                                        {" "}
+                                        (Kindly avail for renewal of Licence)
+                                      </span>{" "}
                                       <span style={{ color: "red" }}>*</span>
                                     </h2>
+                                    <Modal
+                                      size="lg"
+                                      isOpen={modal1}
+                                      toggle={() => setmodal(!modal1)}
+                                      style={{ width: "500px", height: "200px" }}
+                                      aria-labelledby="contained-modal-title-vcenter"
+                                      centered
+                                    >
+                                      <ModalHeader toggle={() => setmodal1(!modal1)}></ModalHeader>
+                                      <ModalBody style={{ fontSize: 20 }}>
+                                        <h2>
+                                          {" "}
+                                          I hereby declare that the details furnished above are true and correct to the best of my knowledge and
+                                          belief and I undertake to inform you of any changes therein, immediately. In case any of the above
+                                          information is found to be false or untrue or misleading or misrepresenting, I am aware that I may be held
+                                          liable for it.
+                                        </h2>
+                                      </ModalBody>
+                                      <ModalFooter toggle={() => setmodal(!modal1)}></ModalFooter>
+                                    </Modal>
                                   </label>
-                                  <input type="text" className="form-control" {...register("renewalFee")} required />
+                                  {/* <input type="text" className="form-control" {...register("renewalFee")} required /> */}
                                 </div>
                                 {/* <div className="col col-6">
                                   <label>
@@ -546,10 +543,48 @@ const LandScheduleForm = (props) => {
                               </div>
                             )}
                             <br></br>
-                            <div className="col col-6">
+                            <div className="col col-3">
                               <label>
                                 <h2>
-                                  Freshly applied area,other than migration <span style={{ color: "red" }}>*</span>
+                                  Type of land<span style={{ color: "red" }}>*</span>
+                                </h2>
+                              </label>
+                              <ReactMultiSelect
+                                control={control}
+                                name="typeLand"
+                                placeholder="Type of Land"
+                                data={typeOfLand?.data}
+                                labels="typeland"
+                                required
+                              />
+
+                              {/* <select className="form-control" id="typeLand" {...register("typeLand")}>
+                            <option value="">Type of Land</option>
+                            <option value="">Chahi/nehri</option>
+                            <option>Gair Mumkins</option>
+                            <option>Others</option>
+                          </select> */}
+                            </div>
+                            <div className="col col-3">
+                              <label>
+                                <h2>
+                                  Approach Road Width <span style={{ color: "red" }}>*</span>
+                                  <CalculateIcon color="primary" />
+                                </h2>{" "}
+                              </label>
+                              <input
+                                type="number"
+                                className="form-control"
+                                {...register("approachRoadWidth")}
+                                required
+                                minLength={10}
+                                maxLength={20}
+                              ></input>
+                            </div>
+                            <div className="col col-3">
+                              <label>
+                                <h2 data-toggle="tooltip" data-placement="top" title=" Freshly applied area other than migration.">
+                                  Area other than migration <span style={{ color: "red" }}>*</span>
                                 </h2>{" "}
                               </label>
                               <input type="text" className="form-control" {...register("freshlyApplied")} required minLength={2} maxLength={20} />
@@ -1266,7 +1301,7 @@ const LandScheduleForm = (props) => {
                                 HT Remark <span style={{ color: "red" }}>*</span>
                               </h2>
                             </label>
-                            <input type="text" className="form-control" {...register("htRemark")} required />
+                            <input type="text" className="form-control" {...register("htRemark")} />
                           </div>
                         </div>
                       )}
@@ -1278,7 +1313,7 @@ const LandScheduleForm = (props) => {
                                 HT Remark <span style={{ color: "red" }}>*</span>
                               </h2>
                             </label>
-                            <input type="text" className="form-control" {...register("htRemark")} required />
+                            <input type="text" className="form-control" {...register("htRemark")} />
                           </div>
                         </div>
                       )}
@@ -1306,7 +1341,7 @@ const LandScheduleForm = (props) => {
                             <label>
                               IOC Remark <span style={{ color: "red" }}>*</span>
                             </label>
-                            <input type="text" className="form-control" {...register("gasRemark")} required />
+                            <input type="text" className="form-control" {...register("gasRemark")} />
                           </div>
                         </div>
                       )}
@@ -1316,7 +1351,7 @@ const LandScheduleForm = (props) => {
                             <label>
                               IOC Remark <span style={{ color: "red" }}>*</span>
                             </label>
-                            <input type="text" className="form-control" {...register("gasRemark")} required />
+                            <input type="text" className="form-control" {...register("gasRemark")} />
                           </div>
                         </div>
                       )}
@@ -1346,7 +1381,7 @@ const LandScheduleForm = (props) => {
                             <label>
                               Nallah Remark <span style={{ color: "red" }}>*</span>
                             </label>
-                            <input type="text" className="form-control" {...register("nallahRemark")} required />
+                            <input type="text" className="form-control" {...register("nallahRemark")} />
                           </div>
                         </div>
                       )}
@@ -1356,7 +1391,7 @@ const LandScheduleForm = (props) => {
                             <label>
                               Nallah Remark <span style={{ color: "red" }}>*</span>
                             </label>
-                            <input type="text" className="form-control" {...register("nallahRemark")} required />
+                            <input type="text" className="form-control" {...register("nallahRemark")} />
                           </div>
                         </div>
                       )}
@@ -1386,7 +1421,7 @@ const LandScheduleForm = (props) => {
                                 <CalculateIcon color="primary" />
                               </h2>
                             </label>
-                            <input type="text" className="form-control" {...register("roadWidth")} required minLength={2} maxLength={20} />
+                            <input type="number" className="form-control" {...register("roadWidth")} required minLength={2} maxLength={20} />
                           </div>
                           <div className="col col-12">
                             <label>
@@ -1394,7 +1429,7 @@ const LandScheduleForm = (props) => {
                                 Remark <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
                               </h2>
                             </label>
-                            <input type="text" className="form-control" {...register("roadRemark")} />
+                            <input type="text" className="form-control" {...register("roadRemark")} required />
                           </div>
                         </div>
                       )}
@@ -1406,7 +1441,7 @@ const LandScheduleForm = (props) => {
                                 Remark <span style={{ color: "red" }}>*</span>
                               </h2>
                             </label>
-                            <input type="text" className="form-control" {...register("roadRemark")} required />
+                            <input type="text" className="form-control" {...register("roadRemark")} />
                           </div>
                         </div>
                       )}
@@ -1481,7 +1516,7 @@ const LandScheduleForm = (props) => {
                                 <CalculateIcon color="primary" />
                               </h2>
                             </label>
-                            <input type="text" className="form-control" {...register("utilityWidth")} required minLength={2} maxLength={99} />
+                            <input type="number" className="form-control" {...register("utilityWidth")} required minLength={2} maxLength={99} />
                           </div>
                           <div className="col col-12">
                             <label>
@@ -1489,7 +1524,7 @@ const LandScheduleForm = (props) => {
                                 Remark <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
                               </h2>
                             </label>
-                            <input type="text" className="form-control" {...register("utilityRemark")} />
+                            <input type="text" className="form-control" {...register("utilityRemark")} required />
                           </div>
                         </div>
                       )}
@@ -1501,7 +1536,7 @@ const LandScheduleForm = (props) => {
                                 Remark <span style={{ color: "red" }}>*</span>
                               </h2>
                             </label>
-                            <input type="text" className="form-control" {...register("utilityRemark")} required />
+                            <input type="text" className="form-control" {...register("utilityRemark")} />
                           </div>
                         </div>
                       )}

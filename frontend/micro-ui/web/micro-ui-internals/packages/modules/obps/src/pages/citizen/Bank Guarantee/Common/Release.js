@@ -3,7 +3,14 @@ import { Card, Row, Col } from "react-bootstrap";
 import { Button, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 const ReleaseNew = (props) => {
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+    watch,
+    setValue,
+  } = useForm({});
   const bankRelease = (data) => console.log(data);
 
   const handleChange = (e) => {
@@ -35,45 +42,67 @@ const ReleaseNew = (props) => {
                 </Form.Label>
               </div>
               <select className="form-control" placeholder="" {...register("bgTypes")}>
-                <option> IDW</option>
-                <option>EDC</option>
+                <option value="1"> IDW</option>
+                <option value="2">EDC</option>
               </select>
             </Col>
-          </Row>
-          <Row className="ml-auto" style={{ marginBottom: 5 }}>
-            <Col md={4} xxl lg="3">
-              <input type="radio" value="Full" id="Yes" onChange={handleChange} name="Yes" onClick={handleshow} />
-              &nbsp;&nbsp;
-              <label for="Full">
-                <h6>Full</h6>
-              </label>
-              &nbsp;&nbsp;
-              <input type="radio" value="Partial" id="No" onChange={handleChange} name="Yes" onClick={handleshow} />
-              &nbsp;&nbsp;
-              <label for="Partial">
-                <h6>Partial</h6>
-              </label>
-              {showhide === "Full" && (
-                <div className="row ">
-                  <div className="col col-12">
-                    <label for="parentLicense" className="font-weight-bold">
-                      Upload Full Certificate
+            {watch("bgTypes") === "1" && (
+              <div>
+                <div className="row">
+                  <div className="col col-3">
+                    <label>
+                      <h2>
+                        Upload Full Completion Certificate.
+                        <span style={{ color: "red" }}>*</span>
+                      </h2>
                     </label>
-                    <input type="file" className="form-control" placeholder="" {...register("uploadFull")} />
+                    <div>
+                      <input type="file" className="form-control" required onChange={(e) => getDocumentData(e?.target?.files[0], "consentLetter")} />
+                    </div>
+
+                    <h3 className="error-message" style={{ color: "red" }}>
+                      {errors?.consentLetter && errors?.consentLetter?.message}
+                    </h3>
                   </div>
                 </div>
-              )}
-              {showhide === "Partial" && (
-                <div className="row ">
-                  <div className="col col-12">
-                    <label for="parentLicense" className="font-weight-bold">
-                      Upload Partial Certificate
+              </div>
+            )}
+            {watch("bgTypes") === "2" && (
+              <div>
+                <div className="row">
+                  <div className="col col-3">
+                    <label>
+                      <h2>
+                        Amount.
+                        <span style={{ color: "red" }}>*</span>
+                      </h2>
                     </label>
-                    <input type="file" className="form-control" placeholder="" {...register("uploadPartial")} />
+                    <div>
+                      <input type="text" className="form-control" />
+                    </div>
+
+                    <h3 className="error-message" style={{ color: "red" }}>
+                      {errors?.consentLetter && errors?.consentLetter?.message}
+                    </h3>
+                  </div>
+                  <div className="col col-3 ">
+                    <label>
+                      <h2>
+                        Upload Partial Completion Certificate.
+                        <span style={{ color: "red" }}>*</span>
+                      </h2>
+                    </label>
+                    <div>
+                      <input type="file" className="form-control" required onChange={(e) => getDocumentData(e?.target?.files[0], "consentLetter")} />
+                    </div>
+
+                    <h3 className="error-message" style={{ color: "red" }}>
+                      {errors?.consentLetter && errors?.consentLetter?.message}
+                    </h3>
                   </div>
                 </div>
-              )}
-            </Col>
+              </div>
+            )}
           </Row>
         </Form.Group>
         <div class="row">

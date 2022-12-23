@@ -81,7 +81,7 @@ const SubmitNew = () => {
                   <h2>Amount (in words)</h2>
                 </Form.Label>
               </div>
-              <input type="text" className="form-control" disabled placeholder="" {...register("amountInWords")} />
+              <input type="text" className="form-control" placeholder="" {...register("amountInWords")} />
             </Col>
             <Col md={4} xxl lg="3">
               <div>
