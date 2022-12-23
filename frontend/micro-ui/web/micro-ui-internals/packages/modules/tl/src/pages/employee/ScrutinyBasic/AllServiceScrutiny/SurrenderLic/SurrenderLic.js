@@ -63,7 +63,7 @@ function SurrenderLic() {
   } = useForm({});
 
 
-  const beneficialNew = (data) => console.log(data);
+  const SurrenderLic = (data) => console.log(data);
    
   const classes = useStyles();
   const currentRemarks = (data) => {
