@@ -39,6 +39,88 @@ function SurrenderLic() {
   const SurrenderLic = (data) => console.log(data);
   const [open2, setOpen2] = useState(false);
 
+  const SurrenderLic = (data) => console.log(data);
+   
+  const classes = useStyles();
+  const currentRemarks = (data) => {
+    props.showTable({ data: data.data });
+  };
+
+  
+  const [smShow, setSmShow] = useState(false);
+  const [labelValue, setLabelValue] = useState("");
+  const Colors = {
+    approved:"#09cb3d",
+    disapproved:"#ff0000",
+    info:"#FFB602"
+  }
+
+  const handlemodaldData = (data) => {
+    // setmodaldData(data.data);
+    setSmShow(false);
+    console.log("here",openedModal,data);
+    if(openedModal && data){
+      setFieldIconColors({...fieldIconColors,[openedModal]:data.data.isApproved?Colors.approved:Colors.disapproved})
+    }
+      setOpennedModal("");
+      setLabelValue("");
+  };
+  const [selectedFieldData,setSelectedFieldData] = useState();
+  const [fieldValue, setFieldValue] = useState("");
+  const [openedModal, setOpennedModal] = useState("")
+  const [fieldIconColors, setFieldIconColors] = useState({
+    developer: Colors.info,
+    authPersonName: Colors.info,
+    authMobileNo1: Colors.info,
+    authMobileNo2: Colors.info,
+    emailId: Colors.info,
+    pan: Colors.info,
+    address: Colors.info,
+    city: Colors.info,
+    pin: Colors.info,
+    tehsil: Colors.info,
+    district: Colors.info,
+    state: Colors.info,
+    type: Colors.info,
+    lciSignedBy: Colors.info,
+    lciNotSigned: Colors.info,
+    parmanentAddress: Colors.info,
+    addressForCommunication: Colors.info,
+    authPerson: Colors.info,
+    emailForCommunication: Colors.info
+  })
+
+  const fieldIdList = [{label:"Developer",key:"developer"},{label:"Authorized Person Name",key:"authPersonName"},{label:"Autrhoized Mobile No",key:"authMobileNo1"},{label:"Authorized MobileNo. 2 ",key:"authMobileNo2"},{label:"Email ID",key:"emailId"},{label:"PAN No.",key:"pan"},{label:"Address  1",key:"address"},{label:"Village/City",key:"city"},{label:"Pincode",key:"pin"},{label:"Tehsil",key:"tehsil"},{label:"District",key:"district"},{label:"State",key:"state"},{label:"Status (Individual/ Company/ Firm/ LLP etc.)",key:"type"},{label:"LC-I signed by",key:"lciSignedBy"},{label:"If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)",key:"lciNotSigned"},{label: "Permanent address in case of individual/ registered office address in case other than individual", key:"parmanentAddress"},{label:"Address for communication",key:"addressForCommunication"},{label:"Name of the authorized person to sign the application",key:"authPerson"},{label:"Email ID for communication",key:"emailForCommunication"}]
+
+
+
+
+
+  // const [selects, setSelects] = useState();
+  // const [showhide, setShowhide] = useState("");
+
+  // const handleshowhide = (event) => {
+  //   const getuser = event.target.value;
+
+  //   setShowhide(getuser);
+  // };
+  // const handleselects = (event) => {
+  //   const getu = event.target.value;
+
+  //   setSelects(getu);
+  // };
+
+  // const {
+  //   register,
+  //   handleSubmit,
+  //   formState: { errors },
+  //   control,
+  //   setValue,
+  // } = useForm({});
+
+  // const SurrenderLic = (data) => console.log(data);
+  // const [open2, setOpen2] = useState(false);
+
   return (
     <form onSubmit={handleSubmit(SurrenderLic)}>
       <div
