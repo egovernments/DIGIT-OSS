@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.egov.tracer.model.CustomException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -187,7 +188,14 @@ public class MetricChartResponseHandler implements IResponseHandler{
        
         try{
             Data data = new Data(chartName, action.equals(PERCENTAGE) && aggrsPaths.size()==2? percentageValue(percentageList, isRoundOff) : (totalValues==null || totalValues.isEmpty())? 0.0 :totalValues.stream().reduce(0.0, Double::sum), symbol);
-            data.setPlots( Arrays.asList(latestDateplot,lastUpdatedTime));
+			//Logic to perform DIVISION action
+			if (action.equals(DIVISION)){
+				if (totalValues.size() == 2)
+					data.setHeaderValue(totalValues.get(0) / totalValues.get(1));
+				else
+					throw new CustomException("INVALID_NUMBER_OF_OPERANDS", "Division operation can be performed only with 2 operands.");
+			}
+			data.setPlots( Arrays.asList(latestDateplot,lastUpdatedTime));
             request.getResponseRecorder().put(visualizationCode, request.getModuleLevel(), data);
             dataList.add(data);
             if(chartNode.get(POST_AGGREGATION_THEORY) != null) { 
