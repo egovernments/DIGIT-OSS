@@ -15,9 +15,16 @@ const MyApplication = () => {
   const [finalData, setFinalData] = useState([]);
   const [labelMessage, setLableMessage] = useState(false);
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const userInfo = Digit.UserService.getUser();
+  // const userInfo = Digit.UserService.getUser();
+  // const requestor = userInfo?.info?.mobileNumber;
+
+  const userInfos = sessionStorage.getItem("Digit.citizen.userRequestObject");
+  const userInfoData = userInfos ? JSON.parse(userInfos) : {};
+  const userInfo = userInfoData?.value;
   const requestor = userInfo?.info?.mobileNumber;
-  const { data, isLoading, revalidate } = Digit.Hooks.obps.useBPAREGSearch(tenantId);
+
+
+  const { data, isLoading, revalidate } = Digit.Hooks.obps.useBPAREGSearch(tenantId, {}, {mobileNumber: requestor});
   const { data: bpaData, isLoading: isBpaSearchLoading, revalidate: bpaRevalidate } = Digit.Hooks.obps.useBPASearch(tenantId, {
     requestor,
     limit: -1,

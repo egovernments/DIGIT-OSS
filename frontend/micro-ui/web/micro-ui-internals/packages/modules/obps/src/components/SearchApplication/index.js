@@ -165,24 +165,25 @@ const OBPSSearchApplication = ({ tenantId, t, onSubmit, data, error, searchData,
   const searchFormFieldsComponentProps = { formState, Controller, register, control, t, reset, previousPage };
 
   const getRedirectionLink = (bService) => {
-    let redirectBS = bService === "BPAREG" ? "search/application/stakeholder" : "search/application/bpa";
+    const businessService = data?.[0]?.businessService == "BPAREG" ?  "BPAREG" : bService;
+    let redirectBS = businessService === "BPAREG" ? "search/application/stakeholder" : "search/application/bpa";
     if (window.location.href.includes("/citizen")) {
-      redirectBS = bService === "BPAREG"?"stakeholder":"bpa";
+      redirectBS = businessService === "BPAREG"?"stakeholder":"bpa";
     }
     return redirectBS;
   };
   const propsMobileInboxCards = useMemo(
     () =>
-      data?.map((data) => ({
-        [t("BPA_APPLICATION_NUMBER_LABEL")]: data.applicationNo,
-        [t("BPA_COMMON_TABLE_COL_APP_DATE_LABEL")]: convertEpochToDateDMY(data.auditDetails?.createdTime) || "",
-        [t("BPA_SEARCH_APPLICATION_TYPE_LABEL")]: data.additionalDetails?.applicationType
-          ? t(`WF_BPA_${data.additionalDetails?.applicationType}`)
-          : "-",
-        [t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL")]: data.additionalDetails?.serviceType ? t(data.additionalDetails?.serviceType) : "-",
-        [t("BPA_CURRENT_OWNER_HEAD")]: data.landInfo?.owners.map((o) => o.name).join(",") || "-",
-        [t("BPA_STATUS_LABEL")]: data.state ? t(`WF_BPA_${data.state}`) : "NA",
-      })),
+      data?.map((data) => {
+        return {
+          [t("BPA_APPLICATION_NUMBER_LABEL")]: data.applicationNo || data.applicationNumber,
+          [t("BPA_COMMON_TABLE_COL_APP_DATE_LABEL")]: convertEpochToDateDMY(data.auditDetails?.createdTime) || "",
+          [t("BPA_SEARCH_APPLICATION_TYPE_LABEL")]: data?.additionalDetails?.applicationType ? t(`WF_BPA_${data?.additionalDetails?.applicationType}`) : data?.businessService ? t(`BPA_APPLICATIONTYPE_${data?.businessService}`) : t("CS_NA"),
+          [t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL")]: t(data.additionalDetails?.serviceType || t(`TRADELICENSE_TRADETYPE_${data?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType?.split(".")[0]}`) || t("CS_NA")),
+          [t("BPA_CURRENT_OWNER_HEAD")]: data?.assignee || t("CS_NA"),//data.landInfo?.owners.map((o) => o.name).join(",") || "-",
+          [t("BPA_STATUS_LABEL")]: t(data?.state&&`WF_BPA_${data.state}` || data?.state&&`WF_BPA_${data.status}`|| t("CS_NA"))
+        }
+      }),
     [data]
   );
 
