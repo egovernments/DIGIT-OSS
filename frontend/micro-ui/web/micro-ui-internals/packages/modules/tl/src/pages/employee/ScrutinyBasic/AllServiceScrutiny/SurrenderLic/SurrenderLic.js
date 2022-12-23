@@ -229,17 +229,17 @@ function SurrenderLic() {
                     Select Type (Complete or Partial) <span style={{ color: "red" }}>*</span>
                   </Form.Label>
                   <div className={classes.fieldContainer}>
-                  <select className="form-control" {...register("selectType")} onChange={(e) => handleshowhide(e)}>
+                  {/* <select className="form-control" {...register("selectType")} onChange={(e) => handleshowhide(e)}>
                     <option value=" ">----Select value-----</option>
                     <option value="1">(a)Complete</option>
                     <option value="2">(b) Partial</option>
-                  </select>
+                  </select> */}
                   
-            {/* <Form.Control
+            <Form.Control
               className={classes.formControl}
               placeholder=""
               disabled
-            ></Form.Control> */}
+            ></Form.Control>
                 
                 <ReportProblemIcon
               style={{
@@ -257,13 +257,14 @@ function SurrenderLic() {
                 </Form.Group>
               </Col>
               <Col className="col-4">
-                <Form.Group as={Row} className="mb-12">
+                {/* <Form.Group as={Row} className="mb-12"> */}
                   <Form.Label>
                     Area falling under 24m road /service road or sector dividing road (Yes/no)
                     <span style={{ color: "red" }}>*</span>
                   </Form.Label>
                   <Row>
-                    <Col className="col-3">
+                    {/* <Col className="col-3">
+
                       <Form.Check
                         type="radio"
                         value="true"
@@ -286,9 +287,33 @@ function SurrenderLic() {
                     {...register(" AreaFallingUnder")}
                         onChange={(e) => handleselects(e)}
                         />
-                    </Col>
-                    <Col className="col-6">
-                                       <ReportProblemIcon
+                    </Col> */}
+                   <div >
+                            <input
+                                type="radio"
+                                value="Y"
+                                // checked={capacityScrutinyInfo?.technicalCapacityOutsideHaryana === "Y" ? true : false}
+                                id="technicalCapacityOutsideHaryana"
+                                className="mx-2 mt-1"
+                                // onChange={(e) => setTechnicalCapacityOutsideHaryana(e.target.value)}
+                                name="technicalCapacityOutsideHaryana"
+                                disabled
+                            />
+                            <label for="Yes">Yes</label>
+
+                            <input
+                                type="radio"
+                                value="N"
+                                // checked={capacityScrutinyInfo?.technicalCapacityOutsideHaryana=== "N" ? true : false}
+                                id="technicalCapacityOutsideHaryanaN"
+                                className="mx-2 mt-1"
+                                // onChange={(e) => setTechnicalCapacityOutsideHaryana(e.target.value)}
+                                name="technicalCapacityOutsideHaryana"
+                                disabled
+                            />
+                            <label for="No">No</label>
+
+                            <ReportProblemIcon
               style={{
                 color:fieldIconColors.developer}}
               onClick={() => {
@@ -299,9 +324,9 @@ function SurrenderLic() {
                   setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
               }}
             ></ReportProblemIcon>
-                                       </Col>
+                            </div>
                   </Row>
-                </Form.Group>
+                {/* </Form.Group> */}
               </Col>
               <Col className="col-4">
                 <Form.Group as={Row} className="mb-12">
@@ -310,7 +335,7 @@ function SurrenderLic() {
                     <span style={{ color: "red" }}>*</span>
                   </Form.Label>
                   <Row>
-                    <Col className="col-3">
+                    {/* <Col className="col-3">
                       <Form.Check
                         type="radio"
                         label="Yes"
@@ -331,9 +356,33 @@ function SurrenderLic() {
                    {...register("ReraRegistration")}
                         onChange={(e) => handleselects(e)}
                        />
-                    </Col>
-                    <Col className="col-6">
-                                       <ReportProblemIcon
+                    </Col> */}
+            <div >
+                            <input
+                                type="radio"
+                                value="Y"
+                                // checked={capacityScrutinyInfo?.technicalCapacityOutsideHaryana === "Y" ? true : false}
+                                id="technicalCapacityOutsideHaryana"
+                                className="mx-2 mt-1"
+                                // onChange={(e) => setTechnicalCapacityOutsideHaryana(e.target.value)}
+                                name="technicalCapacityOutsideHaryana"
+                                disabled
+                            />
+                            <label for="Yes">Yes</label>
+
+                            <input
+                                type="radio"
+                                value="N"
+                                // checked={capacityScrutinyInfo?.technicalCapacityOutsideHaryana=== "N" ? true : false}
+                                id="technicalCapacityOutsideHaryanaN"
+                                className="mx-2 mt-1"
+                                // onChange={(e) => setTechnicalCapacityOutsideHaryana(e.target.value)}
+                                name="technicalCapacityOutsideHaryana"
+                                disabled
+                            />
+                            <label for="No">No</label>
+
+                            <ReportProblemIcon
               style={{
                 color:fieldIconColors.developer}}
               onClick={() => {
@@ -344,7 +393,8 @@ function SurrenderLic() {
                   setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
               }}
             ></ReportProblemIcon>
-                                       </Col>
+                            </div>
+                                       
                   </Row>
                 </Form.Group>
               </Col>
