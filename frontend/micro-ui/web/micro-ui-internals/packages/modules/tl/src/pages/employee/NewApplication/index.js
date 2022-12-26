@@ -140,8 +140,8 @@ const NewApplication = () => {
     if (data?.cpt?.details?.address) {
       address.city = data?.cpt?.details?.address?.city || null;
       address.locality = { code: data?.cpt?.details?.address?.locality?.code || null };
-      if (data?.cpt?.details?.address?.doorNo) address.doorNo = data?.cpt?.details?.address?.doorNo || null;
-      if (data?.cpt?.details?.address?.street) address.street = data?.cpt?.details?.address?.street || null;
+      if (data?.cpt?.details?.address?.doorNo || data?.address?.doorNo) address.doorNo = data?.cpt?.details?.address?.doorNo || data?.address?.doorNo || null;
+      if (data?.cpt?.details?.address?.street || data?.address?.street) address.street = data?.cpt?.details?.address?.street || data?.address?.street || null;
       if (data?.cpt?.details?.address?.pincode) address.pincode = data?.cpt?.details?.address?.pincode;
     } else if (data?.address) {
       address.city = data?.address?.city?.code || null;

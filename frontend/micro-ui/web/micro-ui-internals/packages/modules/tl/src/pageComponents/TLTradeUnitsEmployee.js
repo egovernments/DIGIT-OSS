@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { CardLabel, LabelFieldPair, Dropdown, TextInput, LinkButton, CardLabelError, MobileNumber } from "@egovernments/digit-ui-react-components";
+import { CardLabel, LabelFieldPair, Dropdown, TextInput, LinkButton, CardLabelError, MobileNumber, Loader } from "@egovernments/digit-ui-react-components";
 import { useForm, Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import _ from "lodash";
@@ -238,6 +238,11 @@ const TradeUnitForm = (_props) => {
             setTradeSubTypeOptionsList(filterTradeSubTypeList);
         }
     }, [tradeTypeMdmsData, !isLoading, billingSlabTradeTypeData]);
+
+    if(isLoading || isbillingSlabLoading)
+    {
+        return <Loader />
+    }
 
 function checkRangeForUomValue(e, fromUom, toUom){
     let selectedtradesubType = billingSlabTradeTypeData?.filter((ob) => ob?.tradeType === unit?.tradeSubType?.code && (ob?.structureType === formData?.tradedetils?.[0]?.structureSubType?.code))?.[0];
