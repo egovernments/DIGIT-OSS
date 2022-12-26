@@ -1649,7 +1649,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                     <form className="text1">
                                                         <Row>
                                                             <Col md={4} xxl lg="4">
-                                                                <label htmlFor="name" className="text">Licence No.</label>
+                                                                <label htmlFor="name" className="text">Licence No. <span className="text-danger font-weight-bold">*</span></label>
                                                                 <input
                                                                     type="text"
                                                                     value={hrduModalData.licNo}
@@ -1660,7 +1660,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                 />
                                                             </Col>
                                                             <Col md={4} xxl lg="4">
-                                                                <label htmlFor="name" className="text">Date of grant of a license</label>
+                                                                <label htmlFor="name" className="text">Date of grant of a license <span className="text-danger font-weight-bold">*</span></label>
                                                                 <input
                                                                     type="date"
                                                                     value={hrduModalData.dateOfGrantingLic}
@@ -1723,7 +1723,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                 />
                                                             </Col> */}
                                                             <Col md={4} xxl lg="4">
-                                                                <label htmlFor="name" className="text">Validity of licence </label>
+                                                                <label htmlFor="name" className="text">Validity of licence <span className="text-danger font-weight-bold">*</span></label>
                                                                 <input
                                                                     type="date"
                                                                     name="validatingLicence"

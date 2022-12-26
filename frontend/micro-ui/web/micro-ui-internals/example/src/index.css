@@ -1180,7 +1180,7 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
 .emp-error-wrap, .emp-success-wrap, .error-wrap, .success-wrap {
   display: block;
   --bg-opacity:1;
-  width: 100%;
+  width: 100%!important;
   text-align: center;
   --text-opacity:1;
   color: #fff;
@@ -1218,7 +1218,7 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
 
 @media (min-width: 780px) {
   .success-wrap {
-    width: calc(100% + 284px); }
+    width: 100%!important; }
     .success-wrap header {
       font-size: 48px;
       line-height: 56px; }
@@ -1228,7 +1228,7 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
       font-size: 48px;
       line-height: 56px; }
   .error-wrap {
-    width: calc(100% + 284px); }
+    width: 100%!important; }
     .error-wrap header {
       font-size: 48px;
       line-height: 56px; }
@@ -5857,7 +5857,7 @@ input::-ms-input-placeholder, .checkbox-wrap .input-emp::-ms-input-placeholder, 
   font-weight: 700; }
 
 .emp-error-wrap, .emp-success-wrap, .error-wrap, .success-wrap {
-  width: 100%;
+  width: 100%!important;
   text-align: center;
   --text-opacity:1;
   color: #fff;
@@ -5873,7 +5873,7 @@ input::-ms-input-placeholder, .checkbox-wrap .input-emp::-ms-input-placeholder, 
 
 @media (min-width: 780px) {
   .success-wrap {
-    width: calc(100% + 284px); }
+    width: 100%!important; }
   .success-wrap header {
     font-size: 48px;
     line-height: 56px; }
@@ -9086,7 +9086,7 @@ img, video {
   --bg-opacity:1;
   background-color: #00703c;
   background-color: rgba(0, 112, 60, var(--bg-opacity));
-  width: 100%;
+  width: 100%!important;
   text-align: center;
   --text-opacity:1;
   color: #fff;
@@ -9174,7 +9174,7 @@ img, video {
 
 @media (min-width: 780px) {
   .success-wrap {
-    width: calc(100% + 284px); }
+    width: 100%!important; }
   .success-wrap header {
     font-size: 24px;
     line-height: 56px; }
@@ -9184,7 +9184,7 @@ img, video {
     font-size: 24px;
     line-height: 56px; }
   .error-wrap {
-    width: calc(100% + 284px); }
+    width: 100%!important; }
   .error-wrap header {
     font-size: 24px;
     line-height: 56px; }
