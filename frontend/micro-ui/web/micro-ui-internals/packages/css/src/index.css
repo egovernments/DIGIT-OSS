@@ -1514,7 +1514,7 @@ body {
 .success-wrap {
   display: block;
   --bg-opacity: 1;
-  width: 100%;
+  width: 100%!important;
   text-align: center;
   --text-opacity: 1;
   color: #fff;
@@ -1553,7 +1553,7 @@ body {
 
 @media (min-width: 780px) {
   .success-wrap {
-    width: calc(100% + 284px);
+    width: 100%!important;
   }
 
   .success-wrap header {
@@ -7900,7 +7900,7 @@ textarea {
 .emp-success-wrap,
 .error-wrap,
 .success-wrap {
-  width: 100%;
+  width: 100%!important;
   text-align: center;
   --text-opacity: 1;
   color: #fff;
@@ -7917,7 +7917,7 @@ textarea {
 
 @media (min-width: 780px) {
   .success-wrap {
-    width: calc(100% + 284px);
+    width: 100%!important;
   }
 
   .success-wrap header {
@@ -12432,7 +12432,7 @@ body {
   --bg-opacity: 1;
   background-color: #00703c;
   background-color: rgba(0, 112, 60, var(--bg-opacity));
-  width: 100%;
+  width: 100%!important;
   text-align: center;
   --text-opacity: 1;
   color: #fff;
@@ -12545,7 +12545,7 @@ body {
 
 @media (min-width: 780px) {
   .success-wrap {
-    width: calc(100% + 284px);
+    width: 100%!important;
   }
 
   .success-wrap header {
