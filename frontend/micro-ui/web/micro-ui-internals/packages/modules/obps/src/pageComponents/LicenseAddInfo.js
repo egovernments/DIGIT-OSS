@@ -728,18 +728,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             placeholder={emailId}
                             name="emailId"
                             onChange={(e) => setUserEmailIndVal(e.target.value)}
-                            // disabled="disabled"
+                            disabled
                             className="employee-card-input"
-                          // name="email"
-                          // className={`employee-card-input`}
-                          // placeholder=""
-                          // {...register("email", {
-                          //   required: "Email is required",
-                          //   pattern: {
-                          //     value: /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/,
-                          //     message: "Email must be a valid email address",
-                          //   },
-                          // })}
                           />
                           {emailId && emailId.length > 0 && !emailId.match(Digit.Utils.getPattern('Email')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{("Invalid Email Address")}</CardLabelError>}
                         </div>
@@ -754,26 +744,6 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             onChange={(e) => setMobileNumber(e.target.value)}
                             disabled
                             className="employee-card-input"
-                          // name="name"
-                          // className={`employee-card-input`}
-                          // placeholder=""
-                          // {...register("name", {
-                          //   required: "Name is required",
-                          //   pattern: {
-                          //     value: /^[a-zA-Z]+$/,
-                          //     message: "Name must be a valid string",
-                          //   },
-                          //   minLength: {
-                          //     value: 3,
-                          //     message:
-                          //       "Name should be greater than 3 characters",
-                          //   },
-                          //   maxLength: {
-                          //     value: 20,
-                          //     message:
-                          //       "Name shouldn't be greater than 20 characters",
-                          //   },
-                          // })}
                           />
                           {mobileNumberUser && mobileNumberUser.length > 0 && !mobileNumberUser.match(Digit.Utils.getPattern('MobileNo')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID")}</CardLabelError>}
                         </div>
