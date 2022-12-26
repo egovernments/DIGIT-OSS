@@ -723,7 +723,7 @@ const LicenseDetailsScrutiny = (props) => {
                                           class="employee-card-input"
                                         /> */}
                                           <div className="btn btn-sm col-md-4">
-                                    <IconButton onClick={()=>getDocShareholding(item?.aggreementBtw)}>
+                                    <IconButton onClick={()=>getDocShareholding(addInfo?.existingColonizerData?.aggreementBtw)}>
                                       <Visibility color="info" className="icon" />
                                       </IconButton>
                                       </div>
@@ -773,9 +773,9 @@ const LicenseDetailsScrutiny = (props) => {
                                           class="employee-card-input"
                                         /> */}
                                           <div className="btn btn-sm col-md-4">
-                                    {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
+                                    <IconButton onClick={()=>getDocShareholding(addInfo?.existingColonizerData?.boardResolution)}>
                                       <Visibility color="info" className="icon" />
-                                      {/* </IconButton> */}
+                                      </IconButton>
                                       </div>
                                    
                                       <div className="btn btn-sm col-md-4">
@@ -823,7 +823,7 @@ const LicenseDetailsScrutiny = (props) => {
                               <div className={classes.fieldContainer}>
 
                               <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
-                              //  placeholder={item?.din} 
+                               placeholder={addInfo?.existingColonizerData?.dob} 
                                disabled></Form.Control>
                                &nbsp;&nbsp;
                                      <ReportProblemIcon
@@ -855,7 +855,7 @@ const LicenseDetailsScrutiny = (props) => {
                               /> */}
                               <div className={classes.fieldContainer}>
                               <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} 
-                              // placeholder={item?.din} 
+                              placeholder={addInfo?.existingColonizerData?.pan} 
                               disabled></Form.Control>
                               &nbsp;&nbsp;
                                     <ReportProblemIcon
@@ -887,7 +887,7 @@ const LicenseDetailsScrutiny = (props) => {
                               /> */}
                               <div className={classes.fieldContainer}>
                               <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
-                              //  placeholder={item?.din} 
+                               placeholder={addInfo?.existingColonizerData?.licNo} 
                                disabled></Form.Control>
                                &nbsp;&nbsp;
                                      <ReportProblemIcon
@@ -919,7 +919,7 @@ const LicenseDetailsScrutiny = (props) => {
                               /> */}
                               <div className={classes.fieldContainer}>
                               <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
-                              //  placeholder={item?.din}
+                               placeholder={addInfo?.existingColonizerData?.licDate}
                                 disabled></Form.Control>
                                 &nbsp;&nbsp;
                                       <ReportProblemIcon
@@ -951,7 +951,7 @@ const LicenseDetailsScrutiny = (props) => {
                               /> */}
                               <div className={classes.fieldContainer}>
                               <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
-                              //  placeholder={item?.din} 
+                               placeholder={addInfo?.existingColonizerData?.licValidity} 
                                disabled></Form.Control>
                                &nbsp;&nbsp;
                                      <ReportProblemIcon
@@ -986,7 +986,7 @@ const LicenseDetailsScrutiny = (props) => {
                               </Select> */}
                               <div className={classes.fieldContainer}>
                               <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
-                              //  placeholder={item?.din} 
+                               placeholder={addInfo?.existingColonizerData?.licPurpose} 
                                disabled></Form.Control>
                                &nbsp;&nbsp;
                                      <ReportProblemIcon
