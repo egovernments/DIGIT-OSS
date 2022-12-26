@@ -59,6 +59,7 @@ public class SmsNotificationListener {
             topics = "${kafka.topics.notification.sms.name}"
     )
     public void process(HashMap<String, Object> consumerRecord) {
+    	log.info("******listening sms topic********* {}", consumerRecord);
         RequestContext.setId(UUID.randomUUID().toString());
         SMSRequest request = null;
         try {
@@ -66,14 +67,17 @@ public class SmsNotificationListener {
             if (request.getExpiryTime() != null && request.getCategory() == Category.OTP) {
                 Long expiryTime = request.getExpiryTime();
                 Long currentTime = System.currentTimeMillis();
+                log.info("*****Calling send OTP sms******");
                 if (expiryTime < currentTime) {
                     log.info("OTP Expired");
                     if (!StringUtils.isEmpty(expiredSmsTopic))
                         kafkaTemplate.send(expiredSmsTopic, request);
                 } else {
+                	log.info("*******Calling sendSMS method from OTP**********");
         smsService.sendSMS(request.toDomain());
     }
             } else {
+            	log.info("*******Calling sendSMS method**********");
                 smsService.sendSMS(request.toDomain());
             }
         } catch (RestClientException rx) {
