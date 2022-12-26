@@ -59,6 +59,7 @@ const WrapCheckPage = ({ onSubmit, value }) => {
   }, []);
 
   function routeTo(jumpTo) {
+    sessionStorage.getItem("isDirectRenewal") ? sessionStorage.removeItem("isDirectRenewal") : "";
     history.push(jumpTo);
     //location.href = jumpTo;
   }

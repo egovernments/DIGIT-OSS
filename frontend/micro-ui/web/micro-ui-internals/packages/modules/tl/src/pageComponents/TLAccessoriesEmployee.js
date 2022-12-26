@@ -28,6 +28,7 @@ const TLAccessoriesEmployee = ({ config, onSelect, userType, formData, setError,
     const [isErrors, setIsErrors] = useState(false);
     const [flag, setFlag] = useState(true);
     const [uomvalues, setUomvalues] = useState("");
+    const [enableUOM, setenableUOM] = useState(false);
     let isRenewal = window.location.href.includes("renew-application-details");
     if(window.location.href.includes("edit-application-details")) isRenewal = true;
 
@@ -99,7 +100,9 @@ const TLAccessoriesEmployee = ({ config, onSelect, userType, formData, setError,
         billingSlabData,
         setUomvalues,
         uomvalues,
-        isRenewal
+        isRenewal,
+        enableUOM,
+        setenableUOM
     };
 
 
@@ -139,7 +142,9 @@ const AccessoriersForm = (_props) => {
         billingSlabData,
         setUomvalues,
         uomvalues,
-        isRenewal
+        isRenewal,
+        enableUOM,
+        setenableUOM
     } = _props;
 
     const { control, formState: localFormState, watch, setError: setLocalError, clearErrors: clearLocalErrors, setValue, trigger, getValues } = useForm();
@@ -303,6 +308,9 @@ const AccessoriersForm = (_props) => {
                                         if (e?.uom !== accessor?.accessoryCategory?.uom) setValue("uomValue", "");
                                         props.onChange(e);
                                         setUomvalues(accessor?.accessoryCategory?.uom);
+                                        setenableUOM(true);
+                                        setValue("uomValue","");
+                                        setValue("count","");
                                     }}
                                     onBlur={props.onBlur}
                                     option={sortDropdownNames(accessories,"i18nKey",t) || []}
@@ -359,7 +367,8 @@ const AccessoriersForm = (_props) => {
                                             props.onChange(e.target.value);
                                             setFocusIndex({ index: accessor.key, type: "uomValue" });
                                         }}
-                                        disable={getValues("uomValue")?!(accessor?.accessoryCategory?.uom) || accessor?.id:!(accessor?.accessoryCategory?.uom) }
+                                       // disable={/*getValues("uomValue")?!(accessor?.accessoryCategory?.uom) || accessor?.id:*/!(accessor?.accessoryCategory?.uom) }
+                                        disable={!enableUOM}
                                         onBlur={props.onBlur}
                                         style={{ background: "#FAFAFA" }}
                                     />
@@ -387,7 +396,8 @@ const AccessoriersForm = (_props) => {
                                             setFocusIndex({ index: accessor.key, type: "count" });
                                         }}
                                         onBlur={props.onBlur}
-                                        disable={accessor?.id}
+                                        disable={isRenewal ? !enableUOM : false}
+                                        //disable={accessor?.id}
                                         style={{ background: "#FAFAFA" }}
                                     />
                                 )}

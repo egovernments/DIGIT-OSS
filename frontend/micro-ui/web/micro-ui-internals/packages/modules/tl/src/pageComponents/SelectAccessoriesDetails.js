@@ -19,6 +19,7 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
   );
   const [AccCountError, setAccCountError] = useState(null);
   const [AccUOMError, setAccUOMError] = useState(null);
+  const [enableUOM, setenableUOM] = useState(false);
   const TenantId = Digit.ULBService.getCitizenCurrentTenant();
 
   //const isUpdateProperty = formData?.isUpdateProperty || false;
@@ -120,6 +121,7 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
     setFeilds(acc);
     acc[i].accessorycount = "";
     acc[i].uom = "";
+    setenableUOM(true);
     acc[i].unit = value?.uom != null ?  value.uom : "";
     Array.from(document.querySelectorAll("input")).forEach((input) => (input.value = ""));
     setUnitOfMeasure(value?.uom != null ? value.uom : null);
@@ -148,7 +150,7 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
     setAccUOMError(null);
     if (isNaN(e.target.value)) setAccUOMError("TL_ONLY_NUM_ALLOWED");
     if(!(e.target.value && parseFloat(e.target.value) > 0)){
-      setAccUOMError("TL_UOM_VALUE_GREATER_O")
+      setAccUOMError(t("TL_UOM_VALUE_GREATER_O"))
     }
     else{
     if(fields?.[i]?.accessory && Number.isInteger(fields?.[i]?.accessory?.fromUom)){
@@ -260,7 +262,8 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
                     name="AccessoryCount"
                     value={field.accessorycount}
                     onChange={(e) => selectAccessoryCount(index, e)}
-                    disable={(isEditTrade || isRenewTrade) && (formData?.TradeDetails?.accessories.length - 1 < index ? false : field.accessorycount)}
+                    //disable={(isEditTrade || isRenewTrade) && (formData?.TradeDetails?.accessories.length - 1 < index ? false : field.accessorycount)}
+                    disable={isRenewTrade ? !enableUOM : false}
                     {...(validation = {
                       isRequired: true,
                       pattern: "[0-9]+",
@@ -296,12 +299,13 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
                     name="UomValue"
                     value={field.uom}
                     onChange={(e) => selectUomValue(index, e)}
-                    disable={
-                      isEditTrade || isRenewTrade
-                        ? (isEditTrade || isRenewTrade) && (formData?.TradeDetails?.accessories.length - 1 < index ? false : field.uom)
-                        : !field.unit
-                    }
+                    // disable={
+                    //   isEditTrade || isRenewTrade
+                    //     ? (isEditTrade || isRenewTrade) && (formData?.TradeDetails?.accessories.length - 1 < index ? false : field.uom)
+                    //     : !field.unit
+                    // }
                     //disable={isUpdateProperty || isEditProperty}
+                    disable={!enableUOM}
                     {...(validation = {
                       isRequired: true,
                       pattern: "[0-9]+",
