@@ -86,7 +86,12 @@ const TLApplicationDetails = () => {
   let workflowDocs = [];
   if (wfdata) {
     wfdata?.timeline?.map((ob) => {
-      if (ob?.wfDocuments?.length > 0) workflowDocs.push(ob?.wfDocuments?.[0]);
+      if (ob?.wfDocuments?.length > 0)
+      {
+        ob?.wfDocuments?.map((doc) => {
+          workflowDocs.push(doc)
+        })
+      }
     });
   }
 

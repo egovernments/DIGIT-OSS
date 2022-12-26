@@ -179,7 +179,7 @@ const SelectTradeUnitsInitial = ({ t, config, onSelect, userType, formData }) =>
     
     let selectedtradesubType = billingSlabTradeTypeData?.filter((ob) => ob?.tradeType === units[i]?.tradesubtype?.code && (ob?.structureType === formData?.TradeDetails?.BuildingType?.code || ob?.structureType === formData?.TradeDetails?.VehicleType?.code))
     if(!(e.target.value && parseFloat(e.target.value) > 0)){
-      setError("TL_UOM_VALUE_GREATER_O")
+      setError(t("TL_UOM_VALUE_GREATER_O"))
     }
     else{
     if(Number.isInteger(selectedtradesubType?.[0]?.fromUom)){

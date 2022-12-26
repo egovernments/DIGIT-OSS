@@ -47,6 +47,7 @@ const CheckPage = ({ onSubmit, value = {} }) => {
     propertyArea,
     selfOccupied,
     Owners,
+    owners,
     isEditProperty,
     isUpdateProperty,
     searchResult,
@@ -163,23 +164,23 @@ const CheckPage = ({ onSubmit, value = {} }) => {
       {
         ownershipCategory?.code?.includes("INSTITUTIONAL") ? (
           <div>
-            {Array.isArray(Owners) &&
-              Owners.map((owner, index) => (
+            {Array.isArray(owners) &&
+              owners.map((transferorInstitution, index) => (
                 <div key={index}>
-                    {Owners.length != 1 && (
+                    {owners.length != 1 && (
                       <span>
                         {t("PT_OWNER_SUB_HEADER")} - {index + 1}{" "}
                       </span>
                     )}
                   <StatusTable>
-                    <Row className="border-none" label={t("PT_INSTITUTION_NAME")} text={transferorInstitution?.name || t("CS_NA")} />
-                    <Row className="border-none" label={t("PT_TYPE_OF_INSTITUTION")} text={`${t(transferorInstitution?.type)}` || t("CS_NA")} />
-                    <Row className="border-none" label={t("PT_NAME_AUTHORIZED_PERSON")} text={transferorInstitution?.nameOfAuthorizedPerson || t("CS_NA")} />
-                    <Row className="border-none" label={t("PT_LANDLINE_NUMBER")} text={owner?.altContactNumber || t("CS_NA")} />
-                    <Row className="border-none" label={t("PT_FORM3_MOBILE_NUMBER")} text={owner?.mobileNumber || t("CS_NA")} />
+                    <Row className="border-none" label={t("PT_INSTITUTION_NAME")} text={transferorInstitution?.inistitutionName || t("CS_NA")} />
+                    <Row className="border-none" label={t("PT_TYPE_OF_INSTITUTION")} text={`${t(transferorInstitution?.inistitutetype?.value)}` || t("CS_NA")} />
+                    <Row className="border-none" label={t("PT_NAME_AUTHORIZED_PERSON")} text={transferorInstitution?.name || t("CS_NA")} />
+                    <Row className="border-none" label={t("PT_LANDLINE_NUMBER")} text={transferorInstitution?.altContactNumber || t("CS_NA")} />
+                    <Row className="border-none" label={t("PT_FORM3_MOBILE_NUMBER")} text={transferorInstitution?.mobileNumber || t("CS_NA")} />
                     <Row className="border-none" label={t("PT_INSTITUTION_DESIGNATION")} text={transferorInstitution?.designation || t("CS_NA")} />
-                    <Row className="border-none" label={t("PT_MUTATION_AUTHORISED_EMAIL")} text={owner?.emailId || t("CS_NA")} />
-                    <Row className="border-none" label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={owner?.correspondenceAddress || t("CS_NA")} />
+                    <Row className="border-none" label={t("PT_MUTATION_AUTHORISED_EMAIL")} text={transferorInstitution?.emailId || t("CS_NA")} />
+                    <Row className="border-none" label={t("PT_OWNERSHIP_INFO_CORR_ADDR")} text={transferorInstitution?.correspondenceAddress || t("CS_NA")} />
                   </StatusTable>
                 </div>
               ))}

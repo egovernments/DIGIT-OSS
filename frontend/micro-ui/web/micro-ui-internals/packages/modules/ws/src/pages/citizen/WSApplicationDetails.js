@@ -625,7 +625,7 @@ let serviceType = data && data?.WaterConnection?.[0] ? "WATER" : "SEWERAGE";
                 }/${applicationNobyData?.includes("DC") ? (stringReplaceAll(data?.WaterConnection?.[0]?.connectionNo, "/", "+") || stringReplaceAll(data?.SewerageConnections?.[0]?.connectionNo, "/", "+")) :
                   (stringReplaceAll(data?.WaterConnection?.[0]?.applicationNo, "/", "+") ||
                   stringReplaceAll(data?.SewerageConnections?.[0]?.applicationNo, "/", "+"))
-                }?workflow=WNS&tenantId=${data?.WaterConnection?.[0]?.tenantId || data?.SewerageConnections?.[0]?.tenantId}&ConsumerName=${data?.WaterConnection?.[0]?.connectionHolders?.map((owner) => owner.name).join(",") || data?.SewerageConnections?.[0]?.connectionHolders?.map((owner) => owner.name).join(",") || PTData?.Properties?.[0]?.owners?.map((owner) => owner.name).join(",")}`,
+                }?workflow=WNS&tenantId=${data?.WaterConnection?.[0]?.tenantId || data?.SewerageConnections?.[0]?.tenantId}&ConsumerName=${data?.WaterConnection?.[0]?.connectionHolders?.map((owner) => owner.name).join(",") || data?.SewerageConnections?.[0]?.connectionHolders?.map((owner) => owner.name).join(",") || PTData?.Properties?.[0]?.owners?.map((owner) => owner.name).join(",")}&isDisoconnectFlow=${applicationNobyData?.includes("DC")?true : false}`,
                 state: {},
               }}
             >
