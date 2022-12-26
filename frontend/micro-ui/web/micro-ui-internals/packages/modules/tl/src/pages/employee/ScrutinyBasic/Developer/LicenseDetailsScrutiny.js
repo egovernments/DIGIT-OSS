@@ -674,7 +674,8 @@ const LicenseDetailsScrutiny = (props) => {
                       value="Y"
                       id="existingColonizer"
                       className="mx-2 mt-1"
-                      onChange={(e) => setExistingColonizer(e.target.value)}
+                      checked={addInfo?.existingColonizer === "Y" ? true : false}
+                      // onChange={(e) => setExistingColonizer(e.target.value)}
                       name="existingColonizer"
                     />
                     <label for="Yes">Yes</label>
@@ -684,13 +685,14 @@ const LicenseDetailsScrutiny = (props) => {
                       value="N"
                       id="existingColonizerN"
                       className="mx-2 mt-1"
-                      onChange={(e) => setExistingColonizer(e.target.value)}
+                      checked={addInfo?.existingColonizer === "N" ? true : false}
+                      // onChange={(e) => setExistingColonizer(e.target.value)}
                       name="existingColonizer"
                     />
                     <label for="No">No</label>
                     </div>
 
-                    {existingColonizer === "Y" && (
+                    {addInfo?.existingColonizer === "Y"  && (
                       <div>
                         <div className="row ">
                           <div className="form-group row">
@@ -721,9 +723,9 @@ const LicenseDetailsScrutiny = (props) => {
                                           class="employee-card-input"
                                         /> */}
                                           <div className="btn btn-sm col-md-4">
-                                    {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
+                                    <IconButton onClick={()=>getDocShareholding(item?.aggreementBtw)}>
                                       <Visibility color="info" className="icon" />
-                                      {/* </IconButton> */}
+                                      </IconButton>
                                       </div>
                                    
                                       <div className="btn btn-sm col-md-4">
