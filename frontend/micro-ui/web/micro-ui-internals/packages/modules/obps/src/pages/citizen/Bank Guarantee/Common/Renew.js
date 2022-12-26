@@ -3,19 +3,25 @@ import { Card, Row, Col } from "react-bootstrap";
 import { Button, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-const RenewNew = (props) => {
+function RenewNew() {
+  const [selects, setSelects] = useState();
+  const [showhide, setShowhide] = useState("");
+
+  const handleshowhide = (event) => {
+    const getuser = event.target.value;
+
+    setShowhide(getuser);
+  };
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
-    watch,
     setValue,
+    watch,
   } = useForm({});
 
   const bankRenew = (data) => console.log(data);
-  const [modal, setmodal] = useState(false);
-  const [modal1, setmodal1] = useState(false);
   return (
     <form onSubmit={handleSubmit(bankRenew)}>
       <Card style={{ width: "126%", marginLeft: "19px", paddingRight: "10px" }}>
@@ -126,12 +132,7 @@ const RenewNew = (props) => {
                         </h2>
                       </label>
                       <div>
-                        <input
-                          type="file"
-                          className="form-control"
-                          required
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "consentLetter")}
-                        />
+                        <input type="file" placeholder="" className="form-control" {...register("consentLetter")}></input>
                       </div>
 
                       <h3 className="error-message" style={{ color: "red" }}>
@@ -162,23 +163,17 @@ const RenewNew = (props) => {
             </div>
           </div>
         </Form.Group>
-        <div class="row">
-          <div class="col-sm-12 text-right">
-            <button type="submit" id="btnClear" class="btn btn-primary btn-md center-block" style={{ marginBottom: "-44px" }}>
-              Submit
-            </button>
-          </div>
-          <div class="row">
-            <div class="col-sm-12 text-right">
-              <button id="btnSearch" class="btn btn-danger btn-md center-block" style={{ marginRight: "66px", marginTop: "-6px" }}>
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
+        <Row className="col-sm-12 text-right">
+          <Button variant="outline-primary" className="btn btn-primary btn-md center-block" type="submit" style={{ marginBottom: "-44px" }}>
+            Submit
+          </Button>
+          <Button variant="outline-primary" className="btn btn-danger btn-md center-block" style={{ marginRight: "66px", marginTop: "-6px" }}>
+            Cancel
+          </Button>
+        </Row>
       </Card>
     </form>
   );
-};
+}
 
 export default RenewNew;

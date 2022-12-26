@@ -2,25 +2,25 @@ import React, { useState, useEffect } from "react";
 import { Card, Row, Col } from "react-bootstrap";
 import { Button, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-const ReleaseNew = (props) => {
+function ReleaseNew() {
+  const [selects, setSelects] = useState();
+  const [showhide, setShowhide] = useState("");
+
+  const handleshowhide = (event) => {
+    const getuser = event.target.value;
+
+    setShowhide(getuser);
+  };
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
-    watch,
     setValue,
+    watch,
   } = useForm({});
-  const bankRelease = (data) => console.log(data);
 
-  const handleChange = (e) => {
-    this.setState({ isRadioSelected: true });
-  };
-  const [showhide, setShowhide] = useState("No");
-  const handleshow = (e) => {
-    const getshow = e.target.value;
-    setShowhide(getshow);
-  };
+  const bankRelease = (data) => console.log(data);
 
   return (
     <form onSubmit={handleSubmit(bankRelease)}>
@@ -57,11 +57,16 @@ const ReleaseNew = (props) => {
                       </h2>
                     </label>
                     <div>
-                      <input type="file" className="form-control" required onChange={(e) => getDocumentData(e?.target?.files[0], "consentLetter")} />
+                      <input
+                        type="file"
+                        className="form-control"
+                        required
+                        onChange={(e) => getDocumentData(e?.target?.files[0], "fullCertificate")}
+                      />
                     </div>
 
                     <h3 className="error-message" style={{ color: "red" }}>
-                      {errors?.consentLetter && errors?.consentLetter?.message}
+                      {errors?.fullCertificate && errors?.fullCertificate?.message}
                     </h3>
                   </div>
                 </div>
@@ -78,7 +83,7 @@ const ReleaseNew = (props) => {
                       </h2>
                     </label>
                     <div>
-                      <input type="text" className="form-control" />
+                      <input type="text" className="form-control" placeholder="" {...register("amount")} />
                     </div>
 
                     <h3 className="error-message" style={{ color: "red" }}>
@@ -93,11 +98,16 @@ const ReleaseNew = (props) => {
                       </h2>
                     </label>
                     <div>
-                      <input type="file" className="form-control" required onChange={(e) => getDocumentData(e?.target?.files[0], "consentLetter")} />
+                      <input
+                        type="file"
+                        className="form-control"
+                        required
+                        onChange={(e) => getDocumentData(e?.target?.files[0], "partialCertificate")}
+                      />
                     </div>
 
                     <h3 className="error-message" style={{ color: "red" }}>
-                      {errors?.consentLetter && errors?.consentLetter?.message}
+                      {errors?.partialCertificate && errors?.partialCertificate?.message}
                     </h3>
                   </div>
                 </div>
@@ -105,23 +115,17 @@ const ReleaseNew = (props) => {
             )}
           </Row>
         </Form.Group>
-        <div class="row">
-          <div class="col-sm-12 text-right">
-            <button type="submit" id="btnClear" class="btn btn-primary btn-md center-block" style={{ marginBottom: "-44px" }}>
-              Submit
-            </button>
-          </div>
-          <div class="row">
-            <div class="col-sm-12 text-right">
-              <button id="btnSearch" class="btn btn-danger btn-md center-block" style={{ marginRight: "66px", marginTop: "-6px" }}>
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
+        <Row className="col-sm-12 text-right">
+          <Button variant="outline-primary" className="btn btn-primary btn-md center-block" type="submit" style={{ marginBottom: "-44px" }}>
+            Submit
+          </Button>
+          <Button variant="outline-primary" className="btn btn-danger btn-md center-block" style={{ marginRight: "66px", marginTop: "-6px" }}>
+            Cancel
+          </Button>
+        </Row>
       </Card>
     </form>
   );
-};
+}
 
 export default ReleaseNew;

@@ -18,92 +18,14 @@ const CardNewLicence = (props) => {
           <div className="col col-3">
             <Card style={{ height: "85px", marginTop: "40px", borderLeft: "2px solid #1266af" }}>
               <h2 style={{ textAlign: "center" }}>
-                <a href="/digit-ui/citizen/obps/renewalClu">Renewal of Licence</a>
-              </h2>
-            </Card>
-          </div>
-          <div className="col col-3">
-            <Card style={{ height: "85px", marginTop: "40px", borderLeft: "2px solid #1266af" }}>
-              {" "}
-              <h2 style={{ textAlign: "center" }}>
-                <a href="/digit-ui/citizen/obps/ZoningPlan">Demarcation-cum-zoning plan</a>
-              </h2>
-            </Card>
-          </div>
-          <div className="col col-3">
-            <Card style={{ height: "85px", marginTop: "40px", borderLeft: "2px solid #1266af" }}>
-              <h2 style={{ textAlign: "center" }}>Building Plan for Low/Medium/High risk category</h2>
-            </Card>
-          </div>
-        </Row>
-        <Row>
-          <div className="col col-3">
-            <Card style={{ height: "85px", marginTop: "40px", borderLeft: "2px solid #1266af" }}>
-              {" "}
-              <h2 style={{ textAlign: "center" }}>
-                <a href="/digit-ui/citizen/obps/LayoutPlanClu">Revised layout Plan</a>
-              </h2>
-            </Card>
-          </div>
-          <div className="col col-3">
-            <Card style={{ height: "85px", marginTop: "40px", borderLeft: "2px solid #1266af" }}>
-              <h2 style={{ textAlign: "center" }}>Revalidation of BPL</h2>
-            </Card>
-          </div>
-          <div className="col col-3">
-            <Card style={{ height: "85px", marginTop: "40px", borderLeft: "2px solid #1266af" }}>
-              <h2 style={{ textAlign: "center" }}>Occupation Certficate</h2>
-            </Card>
-          </div>
-          <div className="col col-3">
-            <Card style={{ height: "85px", marginTop: "40px", borderLeft: "2px solid #1266af" }}>
-              {" "}
-              <h2 style={{ textAlign: "center" }}>
-                <a href="/digit-ui/citizen/obps/Beneficial">Change in Beneficial Interest</a>
-              </h2>
-            </Card>
-          </div>
-        </Row>
-        <Row>
-          <div className="col col-3">
-            <Card style={{ height: "85px", marginTop: "40px", borderLeft: "2px solid #1266af" }}>
-              {" "}
-              <h2 style={{ textAlign: "center" }}>
-                <a href="/digit-ui/citizen/obps/TransferLicense">Transfer Licence</a>
-              </h2>
-            </Card>
-          </div>
-          <div className="col col-3">
-            <Card style={{ height: "85px", marginTop: "40px", borderLeft: "2px solid #1266af" }}>
-              {" "}
-              <h2 style={{ textAlign: "center" }}>
-                <a href="/digit-ui/citizen/obps/SurrenderLic">Surreder Licence </a>
+                <a href="/digit-ui/citizen/obps/servicePlan">Service Plan</a>
               </h2>
             </Card>
           </div>
           <div className="col col-3">
             <Card style={{ height: "85px", marginTop: "40px", borderLeft: "2px solid #1266af" }}>
               <h2 style={{ textAlign: "center" }}>
-                {" "}
-                <a href="/digit-ui/citizen/obps/CompositionClu">Compositions of Urban Area Violation </a>
-              </h2>
-            </Card>
-          </div>
-          <div className="col col-3">
-            <Card style={{ height: "85px", marginTop: "40px", borderLeft: "2px solid #1266af" }}>
-              {" "}
-              <h2 style={{ textAlign: "center" }}>
-                <a href="/digit-ui/citizen/obps/Standard">Approval of standard designs</a>
-              </h2>
-            </Card>
-          </div>
-        </Row>
-        <Row>
-          <div className="col col-3">
-            <Card style={{ height: "85px", marginTop: "40px", borderLeft: "2px solid #1266af" }}>
-              {" "}
-              <h2 style={{ textAlign: "center" }}>
-                <a href="/digit-ui/citizen/obps/ExtensionCom"> Extension of time for construction of community sites </a>
+                <a href="/digit-ui/citizen/obps/electricalPlan">Electrical Plan</a>
               </h2>
             </Card>
           </div>
@@ -117,18 +39,92 @@ const CardNewLicence = (props) => {
           <div className="col col-3">
             <Card style={{ height: "85px", marginTop: "40px", borderLeft: "2px solid #1266af" }}>
               <h2 style={{ textAlign: "center" }}>
-                <a href="/digit-ui/citizen/obps/servicePlan">Service Plan</a>
+                <a href="/digit-ui/citizen/obps/renewalClu">Renewal of Licence</a>
               </h2>
             </Card>
           </div>
           <div className="col col-3">
             <Card style={{ height: "85px", marginTop: "40px", borderLeft: "2px solid #1266af" }}>
+              {" "}
               <h2 style={{ textAlign: "center" }}>
-                <a href="/digit-ui/citizen/obps/electricalPlan">Electrical Plan</a>
+                <a href="/digit-ui/citizen/obps/TransferLicense">Transfer Licence</a>
+              </h2>
+            </Card>
+          </div>
+          <div className="col col-3">
+            <Card style={{ height: "85px", marginTop: "40px", borderLeft: "2px solid #1266af" }}>
+              {" "}
+              <h2 style={{ textAlign: "center" }}>
+                <a href="/digit-ui/citizen/obps/SurrenderLic">Surrender Licence </a>
+              </h2>
+            </Card>
+          </div>
+          <div className="col col-3">
+            <Card style={{ height: "85px", marginTop: "40px", borderLeft: "2px solid #1266af" }}>
+              {" "}
+              <h2 style={{ textAlign: "center" }}>
+                <a href="/digit-ui/citizen/obps/Standard">Approval of standard designs</a>
+              </h2>
+            </Card>
+          </div>
+          <div className="col col-3">
+            <Card style={{ height: "85px", marginTop: "40px", borderLeft: "2px solid #1266af" }}>
+              {" "}
+              <h2 style={{ textAlign: "center" }}>
+                <a href="/digit-ui/citizen/obps/ZoningPlan">Demarcation-cum-zoning plan</a>
+              </h2>
+            </Card>
+          </div>
+
+          <div className="col col-3">
+            <Card style={{ height: "85px", marginTop: "40px", borderLeft: "2px solid #1266af" }}>
+              {" "}
+              <h2 style={{ textAlign: "center" }}>
+                <a href="/digit-ui/citizen/obps/LayoutPlanClu">Revised layout Plan</a>
+              </h2>
+            </Card>
+          </div>
+          <div className="col col-3">
+            <Card style={{ height: "85px", marginTop: "40px", borderLeft: "2px solid #1266af" }}>
+              {" "}
+              <h2 style={{ textAlign: "center" }}>
+                <a href="/digit-ui/citizen/obps/ExtensionCom"> Extension of time for construction of community sites </a>
+              </h2>
+            </Card>
+          </div>
+
+          <div className="col col-3">
+            <Card style={{ height: "85px", marginTop: "40px", borderLeft: "2px solid #1266af" }}>
+              <h2 style={{ textAlign: "center" }}>Extension of CLU permission</h2>
+            </Card>
+          </div>
+        </Row>
+        <Row>
+          <div className="col col-3">
+            <Card style={{ height: "85px", marginTop: "40px", borderLeft: "2px solid #1266af" }}>
+              <h2 style={{ textAlign: "center" }}>
+                {" "}
+                <a href="/digit-ui/citizen/obps/CompositionClu">Compositions of Urban Area Violation </a>
+              </h2>
+            </Card>
+          </div>
+          <div className="col col-3">
+            <Card style={{ height: "85px", marginTop: "40px", borderLeft: "2px solid #1266af" }}>
+              <h2 style={{ textAlign: "center" }}>Completion Certificate In Licence Colony</h2>
+            </Card>
+          </div>
+
+          <div className="col col-3">
+            <Card style={{ height: "85px", marginTop: "40px", borderLeft: "2px solid #1266af" }}>
+              {" "}
+              <h2 style={{ textAlign: "center" }}>
+                <a href="/digit-ui/citizen/obps/Beneficial">Change in Beneficial Interest</a>
               </h2>
             </Card>
           </div>
         </Row>
+        <Row></Row>
+        <Row></Row>
       </Card>
     </form>
   );

@@ -124,7 +124,7 @@ const LandScheduleForm = (props) => {
     const postDistrict = {
       pageName: "LandSchedule",
       ApplicationStatus: "DRAFT",
-      id: props?.getId,
+      applicationNumber: props?.getId,
       createdBy: props?.userData?.id,
       updatedBy: props?.userData?.id,
       LicenseDetails: {
@@ -320,7 +320,14 @@ const LandScheduleForm = (props) => {
                                   Area of Parent Licence <span style={{ color: "red" }}>*</span>
                                 </h2>
                               </label>
-                              <input type="text" className="form-control" {...register("areaofParentLic")} required minLength={1} maxLength={20} />
+                              <input
+                                type="text"
+                                className="form-control"
+                                {...register("areaOfParentLicence")}
+                                required
+                                minLength={1}
+                                maxLength={20}
+                              />
                             </div>
 
                             <div className="col col-3">
