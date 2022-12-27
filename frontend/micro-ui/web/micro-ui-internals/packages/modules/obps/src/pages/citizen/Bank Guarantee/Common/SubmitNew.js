@@ -183,17 +183,17 @@ function SubmitNew() {
           </Row>
 
           {/* <div class="row">
-            <Row className="col-sm-4 text-right">
-              <Button type="submit" class="btn btn-primary btn-md center-block" style={{ marginBottom: "-44px" }}>
+            <div class="col-sm-12 text-right">
+              <button type="submit" id="btnClear" class="btn btn-primary btn-md center-block" style={{ marginBottom: "-44px" }}>
                 Submit
-              </Button>
-            </Row>
+              </button>
+            </div>
             <div class="row">
-              <Row className="col-sm-4 text-right">
-                <Button id="btnSearch" class="btn btn-danger btn-md center-block" style={{ marginRight: "66px", marginTop: "-6px" }}>
+              <div class="col-sm-12 text-right">
+                <button id="btnSearch" class="btn btn-danger btn-md center-block" style={{ marginRight: "66px", marginTop: "-6px" }}>
                   Cancel
-                </Button>
-              </Row>
+                </button>
+              </div>
             </div>
           </div> */}
         </div>

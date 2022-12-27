@@ -117,19 +117,20 @@ const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData })
   //     console.log(error);
   //   }
   // };
-  const handleGetFiledsStatesById = async () => {
-    const dataToPass = {
-      requestInfo: {
-        api_id: "1",
-        ver: "1",
-        ts: null,
-        action: "create",
-        did: "",
-        key: "",
-        msg_id: "",
-        requester_id: "",
-        auth_token: null,
-      },
+  const handleGetFiledsStatesById=async()=>{
+      const dataToPass={
+        "RequestInfo": {
+            "api_id": "1",
+            "ver": "1",
+            "ts": null,
+            "action": "create",
+            "did": "",
+            "key": "",
+            "msg_id": "",
+            "requester_id": "",
+            // "auth_token": authToken,
+            "authToken": authToken
+        }
     };
     try {
       const Resp = await axios
@@ -147,18 +148,30 @@ const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData })
   };
   const handleGetDisapprovalList = async () => {
     const dataToPass = {
-      requestInfo: {
-        api_id: "1",
-        ver: "1",
-        ts: null,
-        action: "create",
-        did: "",
-        key: "",
-        msg_id: "",
-        requester_id: "",
-        auth_token: null,
-      },
-    };
+    //   RequestInfo: {
+    //     api_id: "1",
+    //     ver: "1",
+    //     ts: null,
+    //     action: "create",
+    //     did: "",
+    //     key: "",
+    //     msg_id: "",
+    //     requester_id: "",
+    //     auth_token: authToken,
+    //     // authToken: authToken
+    //   },
+    // };{
+    RequestInfo: {
+      apiId: "Rainmaker",
+      action: "_create",
+      did: 1,
+      key: "",
+      msgId: "20170310130900|en_IN",
+      ts: 0,
+      ver: ".01",
+      authToken: authToken
+  }
+}
     try {
       const Resp = await axios
         .post(`/land-services/egscrutiny/_searchbylogin?applicationId=${apiResponse?.id}&userid=${userInfo?.id}`, dataToPass)

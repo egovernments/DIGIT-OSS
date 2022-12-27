@@ -4,6 +4,7 @@ import Modal from "react-bootstrap/Modal";
 import { Form, Col, Row } from "react-bootstrap";
 import axios from "axios";
 import { useStyles } from "./styles/modalChild.style";
+import { useParams } from "react-router-dom";
 
 function ModalChild(props) {
   const classes = useStyles();
@@ -15,6 +16,9 @@ function ModalChild(props) {
   const inputFieldValue = props.fieldValue;
   const inputFieldLabel = props.labelValue;
   const dateTime = new Date();
+  const authToken = Digit.UserService.getUser()?.access_token || null;
+  const {id} = useParams();
+
 
   const handlemodalsubmit = async () => {
     if (status) {
@@ -33,18 +37,18 @@ function ModalChild(props) {
           auth_token: null,
         },
         egScrutiny: {
-          applicationId: "123",
+          applicationNumber: id,
           comment: RemarksDeveloper.data,
           fieldValue: inputFieldValue,
           fieldIdL: props.labelmodal,
-          isApproved: status === "approved" ? true : false,
-          userid: "123",
+          isApproved: status==="approved"?true:false,
+          userid: "433",
           serviceId: "123",
           documentId: null,
           ts: dateTime.toUTCString(),
         },
       };
-
+      
       try {
         const Resp = await axios.post("/land-services/egscrutiny/_create?status=submit", postData, {}).then((response) => {
           return response.data;
