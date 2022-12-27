@@ -99,9 +99,9 @@ const ApllicantPuropseForm = (props) => {
       dataIndex: "agreementValidFrom",
     },
     {
-      key: "agreementValidTill",
+      key: "validitydate",
       title: "Date of validity of collaboration agreement",
-      dataIndex: "agreementValidTill",
+      dataIndex: "validitydate",
     },
     {
       key: "authSignature",
@@ -186,7 +186,7 @@ const ApllicantPuropseForm = (props) => {
     resetField("biswa");
     resetField("biswansi");
     resetField("agreementValidFrom");
-    resetField("agreementValidTill");
+    resetField("validitydate");
     resetField("authSignature");
     resetField("collaboration");
     resetField("developerCompany");
@@ -213,7 +213,7 @@ const ApllicantPuropseForm = (props) => {
       setValue("collaboration", specificTableData?.collaboration);
       setValue("landOwner", specificTableData?.landOwner);
       setValue("developerCompany", specificTableData?.developerCompany);
-      setValue("agreementValidFrom", specificTableData?.agreementValidFrom);
+      setValue("validitydate", specificTableData?.validitydate);
       setValue("validitydate", specificTableData?.validitydate);
       setValue("agreementIrrevocialble", specificTableData?.agreementIrrevocialble);
       setValue("authSignature", specificTableData?.authSignature);
@@ -397,7 +397,7 @@ const ApllicantPuropseForm = (props) => {
     delete data?.biswansi;
     delete data?.agreementIrrevocialble;
     delete data?.agreementValidFrom;
-    delete data?.agreementValidTill;
+    delete data?.validitydate;
     delete data?.authSignature;
     delete data?.collaboration;
     delete data?.developerCompany;
