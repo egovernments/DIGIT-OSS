@@ -1259,7 +1259,7 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                                         /> */}
                                          <div className={classes.fieldContainer}>
                               <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
-                              //  placeholder={item?.din} 
+                               placeholder={capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.project} 
                                disabled></Form.Control>
                                &nbsp;&nbsp;
                                <ReportProblemIcon
@@ -1290,7 +1290,7 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                                         /> */}
                                            <div className={classes.fieldContainer}>
                               <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
-                              //  placeholder={item?.din} 
+                               placeholder={capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.authority} 
                                disabled></Form.Control>
                                &nbsp;&nbsp;
                                <ReportProblemIcon
@@ -1321,7 +1321,7 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                                         /> */}
                                            <div className={classes.fieldContainer}>
                               <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
-                              //  placeholder={item?.din} 
+                               placeholder={capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.statusOfDevelopment} 
                                disabled></Form.Control>
                                &nbsp;&nbsp;
                                <ReportProblemIcon
