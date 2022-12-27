@@ -130,7 +130,7 @@ const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => 
             "key": "",
             "msg_id": "",
             "requester_id": "",
-            "auth_token": authToken,
+            // "auth_token": authToken,
             "authToken": authToken
         }
     };
@@ -149,19 +149,30 @@ const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => 
   }
   const handleGetDisapprovalList = async () => {
     const dataToPass = {
-      RequestInfo: {
-        api_id: "1",
-        ver: "1",
-        ts: null,
-        action: "create",
-        did: "",
-        key: "",
-        msg_id: "",
-        requester_id: "",
-        auth_token: authToken,
-        // authToken: authToken
-      },
-    };
+    //   RequestInfo: {
+    //     api_id: "1",
+    //     ver: "1",
+    //     ts: null,
+    //     action: "create",
+    //     did: "",
+    //     key: "",
+    //     msg_id: "",
+    //     requester_id: "",
+    //     auth_token: authToken,
+    //     // authToken: authToken
+    //   },
+    // };{
+    RequestInfo: {
+      apiId: "Rainmaker",
+      action: "_create",
+      did: 1,
+      key: "",
+      msgId: "20170310130900|en_IN",
+      ts: 0,
+      ver: ".01",
+      authToken: authToken
+  }
+}
     try {
       const Resp = await axios.post(`/land-services/egscrutiny/_searchbylogin?applicationId=${apiResponse?.id}&userid=${userInfo?.id}`, dataToPass).then((response) => {
         return response.data;
