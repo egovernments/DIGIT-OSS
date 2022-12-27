@@ -12,6 +12,9 @@ import ModalChild from "../../Remarks/ModalChild";
 import Collapse from "react-bootstrap/Collapse";
 import { useStyles } from "../../css/personalInfoChild.style";
 import "../../css/personalInfoChild.style.js";
+import { IconButton } from "@mui/material";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
 
 function SubmitNew() {
   const [selects, setSelects] = useState();
@@ -29,6 +32,7 @@ function SubmitNew() {
     handleSubmit,
     formState: { errors },
     control,
+    watch,
     setValue,
   } = useForm({});
 
@@ -130,15 +134,14 @@ function SubmitNew() {
       <Collapse in={open2}>
         <div id="example-collapse-text">
           <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-            <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Submit New</h4>
+            <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Submit </h4>
             <div className="card">
-              <Row className="ml-auto" style={{ marginBottom: 5 }}>
-                <Col md={4} xxl lg="3">
-                  <div>
-                    <Form.Label>
-                      <h2>Enter LOI No.</h2>{" "}
-                    </Form.Label>
-                  </div>
+              <Row className="col-12">
+                <Form.Group as={Col} controlId="formGridLicence">
+                  <Form.Label>
+                    <h2>Enter LOI No.</h2>{" "}
+                  </Form.Label>
+
                   <div className={classes.fieldContainer}>
                     <Form.Control className={classes.formControl} placeholder="" disabled></Form.Control>
 
@@ -165,8 +168,8 @@ function SubmitNew() {
                     ></ModalChild>
                   </div>
                   {/* <input type="text" className="form-control" placeholder="" {...register("enterLoiNumber")} /> */}
-                </Col>
-                <Col md={4} xxl lg="3">
+                </Form.Group>
+                <Form.Group as={Col} controlId="formGridLicence">
                   <div>
                     <Form.Label>
                       <h2>Enter Memo No. </h2>
@@ -198,8 +201,8 @@ function SubmitNew() {
                     ></ModalChild>
                   </div>
                   {/* <input type="text" className="form-control" placeholder="" {...register("enterMemoNumber")} /> */}
-                </Col>
-                <Col md={4} xxl lg="3">
+                </Form.Group>
+                <Form.Group as={Col} controlId="formGridLicence">
                   <div>
                     <Form.Label>
                       <h2>Type of B.G</h2>
@@ -234,20 +237,20 @@ function SubmitNew() {
                     <option> IDW</option>
                     <option>EDC</option>
                   </select> */}
-                </Col>
-                <Col md={4} xxl lg="3">
+                </Form.Group>
+                <Form.Group as={Col} controlId="formGridLicence">
                   <div>
                     <Form.Label>
                       <h2>Upload B.G. </h2>
                     </Form.Label>
                   </div>
                   <div className="row">
-                    <div className="btn btn-sm col-md-4">
+                    <div className="btn btn-sm col-md-3">
                       <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
                         <VisibilityIcon color="info" className="icon" />
                       </IconButton>
                     </div>
-                    <div className="btn btn-sm col-md-4">
+                    <div className="btn btn-sm col-md-3">
                       <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
                         <FileDownloadIcon color="info" className="icon" />
                       </IconButton>
@@ -268,52 +271,151 @@ function SubmitNew() {
                     </div>
                   </div>
                   {/* <input type="file" className="form-control" placeholder="" {...register("uploadBg")} /> */}
-                </Col>
+                </Form.Group>
               </Row>
 
-              <Row className="ml-auto" style={{ marginBottom: 5 }}>
-                <Col md={4} xxl lg="3">
+              <Row className="col-12">
+                <Form.Group as={Col} controlId="formGridLicence">
                   <div>
                     <Form.Label>
                       <h2>Bank Name </h2>
                     </Form.Label>
                   </div>
-                  <input type="text" className="form-control" placeholder="" {...register("bankName")} />
-                </Col>
-                <Col md={4} xxl lg="3">
+                  <div className={classes.fieldContainer}>
+                    <Form.Control className={classes.formControl} placeholder="" disabled></Form.Control>
+
+                    <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.developer,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("Licence No");
+                        setLabelValue("Licence No"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                      }}
+                    ></ReportProblemIcon>
+                    <ModalChild
+                      labelmodal={labelValue}
+                      passmodalData={handlemodaldData}
+                      displaymodal={smShow}
+                      onClose={() => setSmShow(false)}
+                      selectedFieldData={selectedFieldData}
+                      fieldValue={fieldValue}
+                      remarksUpdate={currentRemarks}
+                    ></ModalChild>
+                  </div>
+                  {/* <input type="text" className="form-control" placeholder="" {...register("bankName")} /> */}
+                </Form.Group>
+                <Form.Group as={Col} controlId="formGridLicence">
                   <div>
                     <Form.Label>
                       <h2>Amount (in fig)</h2>
                     </Form.Label>
                   </div>
-                  <input type="text" className="form-control" placeholder="" {...register("amountInFig")} />
-                </Col>
-                <Col md={4} xxl lg="3">
+                  <div className={classes.fieldContainer}>
+                    <Form.Control className={classes.formControl} placeholder="" disabled></Form.Control>
+
+                    <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.developer,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("Licence No");
+                        setLabelValue("Licence No"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                      }}
+                    ></ReportProblemIcon>
+                    <ModalChild
+                      labelmodal={labelValue}
+                      passmodalData={handlemodaldData}
+                      displaymodal={smShow}
+                      onClose={() => setSmShow(false)}
+                      selectedFieldData={selectedFieldData}
+                      fieldValue={fieldValue}
+                      remarksUpdate={currentRemarks}
+                    ></ModalChild>
+                  </div>
+                  {/* <input type="text" className="form-control" placeholder="" {...register("amountInFig")} /> */}
+                </Form.Group>
+                <Form.Group as={Col} controlId="formGridLicence">
                   <div>
                     <Form.Label>
                       <h2>Amount (in words)</h2>
                     </Form.Label>
                   </div>
-                  <input type="text" className="form-control" placeholder="" {...register("amountInWords")} />
-                </Col>
-                <Col md={4} xxl lg="3">
+                  <div className={classes.fieldContainer}>
+                    <Form.Control className={classes.formControl} placeholder="" disabled></Form.Control>
+
+                    <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.developer,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("Licence No");
+                        setLabelValue("Licence No"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                      }}
+                    ></ReportProblemIcon>
+                    <ModalChild
+                      labelmodal={labelValue}
+                      passmodalData={handlemodaldData}
+                      displaymodal={smShow}
+                      onClose={() => setSmShow(false)}
+                      selectedFieldData={selectedFieldData}
+                      fieldValue={fieldValue}
+                      remarksUpdate={currentRemarks}
+                    ></ModalChild>
+                  </div>
+                  {/* <input type="text" className="form-control" placeholder="" {...register("amountInWords")} /> */}
+                </Form.Group>
+                <Form.Group as={Col} controlId="formGridLicence">
                   <div>
                     <Form.Label>
                       <h2>Valid Upto </h2>
                     </Form.Label>
                   </div>
-                  <input type="date" className="form-control" placeholder="" {...register("validity")} />
-                </Col>
+                  <div className={classes.fieldContainer}>
+                    <Form.Control className={classes.formControl} placeholder="" disabled></Form.Control>
+
+                    <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.developer,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("Licence No");
+                        setLabelValue("Licence No"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                      }}
+                    ></ReportProblemIcon>
+                    <ModalChild
+                      labelmodal={labelValue}
+                      passmodalData={handlemodaldData}
+                      displaymodal={smShow}
+                      onClose={() => setSmShow(false)}
+                      selectedFieldData={selectedFieldData}
+                      fieldValue={fieldValue}
+                      remarksUpdate={currentRemarks}
+                    ></ModalChild>
+                  </div>
+                  {/* <input type="date" className="form-control" placeholder="" {...register("validity")} /> */}
+                </Form.Group>
               </Row>
               <div className="row">
                 <div className="col col-12 ">
                   <div>
                     <div className="form-check">
-                      <input className="form-check-input" formControlName="agreeCheck" type="checkbox" value="" id="flexCheckDefault" required />
-                      <label className="checkbox" for="flexCheckDefault">
+                      <label>
                         Hardcopy Submitted at TCP office.{" "}
                         <label htmlFor="licenseApplied">
-                          <input {...register("licenseApplied")} type="radio" value="Y" id="licenseApplied" />
+                          <input {...register("licenseApplied")} type="radio" value="Y" id="licenseApplied" disabled />
                           &nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="licenseApplied">
@@ -324,9 +426,35 @@ function SubmitNew() {
                             id="licenseApplied"
                             className="btn btn-primary"
                             onClick={() => setmodal1(true)}
+                            disabled
                           />
                           &nbsp; No &nbsp;&nbsp;
                         </label>
+                        <div className={classes.fieldContainer}>
+                          <Form.Control className={classes.formControl} placeholder="" disabled></Form.Control>
+
+                          <ReportProblemIcon
+                            style={{
+                              color: fieldIconColors.developer,
+                            }}
+                            onClick={() => {
+                              setOpennedModal("Licence No");
+                              setLabelValue("Licence No"),
+                                setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                            }}
+                          ></ReportProblemIcon>
+                          <ModalChild
+                            labelmodal={labelValue}
+                            passmodalData={handlemodaldData}
+                            displaymodal={smShow}
+                            onClose={() => setSmShow(false)}
+                            selectedFieldData={selectedFieldData}
+                            fieldValue={fieldValue}
+                            remarksUpdate={currentRemarks}
+                          ></ModalChild>
+                        </div>
                         <h3 className="error-message" style={{ color: "red" }}>
                           {errors?.licenseApplied && errors?.licenseApplied?.message}
                         </h3>
@@ -345,12 +473,38 @@ function SubmitNew() {
                             </h2>
                           </label>
                           <div>
-                            <input
+                            <div className="row">
+                              <div className="btn btn-sm col-md-4">
+                                <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                  <VisibilityIcon color="info" className="icon" />
+                                </IconButton>
+                              </div>
+                              <div className="btn btn-sm col-md-4">
+                                <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                  <FileDownloadIcon color="info" className="icon" />
+                                </IconButton>
+                              </div>
+                              <div className="btn btn-sm col-md-4">
+                                <ReportProblemIcon
+                                  style={{
+                                    color: fieldIconColors.developer,
+                                  }}
+                                  onClick={() => {
+                                    setOpennedModal("Amount");
+                                    setLabelValue("Amount"),
+                                      setSmShow(true),
+                                      console.log("modal open"),
+                                      setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                                  }}
+                                ></ReportProblemIcon>
+                              </div>
+                            </div>
+                            {/* <input
                               type="file"
                               className="form-control"
                               required
                               onChange={(e) => getDocumentData(e?.target?.files[0], "consentLetter")}
-                            />
+                            /> */}
                           </div>
 
                           <h3 className="error-message" style={{ color: "red" }}>
