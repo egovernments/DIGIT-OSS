@@ -16,8 +16,6 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
         {},
         { enabled: uuid ? true : false }
       );
-  console.log(userDetails,"rrrr");
-  console.log({code : userDetails?.user?.[0]?.gender, i18nKey:`COMMON_GENDER_${userDetails?.user?.[0]?.gender}`,value:userDetails?.user?.[0]?.gender})
   const [name, setName] = useState((!isOpenLinkFlow ? userInfo?.info?.name: "") || formData?.LicneseDetails?.name || formData?.formData?.LicneseDetails?.name || "");
   const [email, setEmail] = useState((!isOpenLinkFlow ? userInfo?.info?.emailId: "") ||formData?.LicneseDetails?.email || formData?.formData?.LicneseDetails?.email || "");
   const [gender, setGender] = useState((!isOpenLinkFlow && userDetails ? {i18nKey: `COMMON_GENDER_${userDetails?.user?.[0]?.gender}`, code: userDetails?.user?.[0]?.gender, value: userDetails?.user?.[0]?.gender}: "") || formData?.LicneseDetails?.gender || formData?.formData?.LicneseDetails?.gender);
