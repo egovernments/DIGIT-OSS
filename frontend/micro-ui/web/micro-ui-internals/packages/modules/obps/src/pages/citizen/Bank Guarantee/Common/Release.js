@@ -2,18 +2,26 @@ import React, { useState, useEffect } from "react";
 import { Card, Row, Col } from "react-bootstrap";
 import { Button, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-const ReleaseNew = (props) => {
-  const { register, handleSubmit } = useForm();
-  const bankRelease = (data) => console.log(data);
+function ReleaseNew() {
+  const [selects, setSelects] = useState();
+  const [showhide, setShowhide] = useState("");
+  const [modal, setmodal] = useState(false);
+  const [modal1, setmodal1] = useState(false);
+  const handleshowhide = (event) => {
+    const getuser = event.target.value;
 
-  const handleChange = (e) => {
-    this.setState({ isRadioSelected: true });
+    setShowhide(getuser);
   };
-  const [showhide, setShowhide] = useState("No");
-  const handleshow = (e) => {
-    const getshow = e.target.value;
-    setShowhide(getshow);
-  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+    setValue,
+    watch,
+  } = useForm({});
+
+  const bankRelease = (data) => console.log(data);
 
   return (
     <form onSubmit={handleSubmit(bankRelease)}>
@@ -35,64 +43,90 @@ const ReleaseNew = (props) => {
                 </Form.Label>
               </div>
               <select className="form-control" placeholder="" {...register("bgTypes")}>
-                <option> IDW</option>
-                <option>EDC</option>
+                <option value="1"> IDW</option>
+                <option value="2">EDC</option>
               </select>
             </Col>
-          </Row>
-          <Row className="ml-auto" style={{ marginBottom: 5 }}>
-            <Col md={4} xxl lg="3">
-              <input type="radio" value="Full" id="Yes" onChange={handleChange} name="Yes" onClick={handleshow} />
-              &nbsp;&nbsp;
-              <label for="Full">
-                <h6>Full</h6>
-              </label>
-              &nbsp;&nbsp;
-              <input type="radio" value="Partial" id="No" onChange={handleChange} name="Yes" onClick={handleshow} />
-              &nbsp;&nbsp;
-              <label for="Partial">
-                <h6>Partial</h6>
-              </label>
-              {showhide === "Full" && (
-                <div className="row ">
-                  <div className="col col-12">
-                    <label for="parentLicense" className="font-weight-bold">
-                      Upload Full Certificate
+            {watch("bgTypes") === "1" && (
+              <div>
+                <div className="row">
+                  <div className="col col-3">
+                    <label>
+                      <h2>
+                        Upload Full Completion Certificate.
+                        <span style={{ color: "red" }}>*</span>
+                      </h2>
                     </label>
-                    <input type="file" className="form-control" placeholder="" {...register("uploadFull")} />
+                    <div>
+                      <input
+                        type="file"
+                        className="form-control"
+                        required
+                        onChange={(e) => getDocumentData(e?.target?.files[0], "fullCertificate")}
+                      />
+                    </div>
+
+                    <h3 className="error-message" style={{ color: "red" }}>
+                      {errors?.fullCertificate && errors?.fullCertificate?.message}
+                    </h3>
                   </div>
                 </div>
-              )}
-              {showhide === "Partial" && (
-                <div className="row ">
-                  <div className="col col-12">
-                    <label for="parentLicense" className="font-weight-bold">
-                      Upload Partial Certificate
+              </div>
+            )}
+            {watch("bgTypes") === "2" && (
+              <div>
+                <div className="row">
+                  <div className="col col-3">
+                    <label>
+                      <h2>
+                        Amount.
+                        <span style={{ color: "red" }}>*</span>
+                      </h2>
                     </label>
-                    <input type="file" className="form-control" placeholder="" {...register("uploadPartial")} />
+                    <div>
+                      <input type="text" className="form-control" placeholder="" {...register("amount")} />
+                    </div>
+
+                    <h3 className="error-message" style={{ color: "red" }}>
+                      {errors?.consentLetter && errors?.consentLetter?.message}
+                    </h3>
+                  </div>
+                  <div className="col col-3 ">
+                    <label>
+                      <h2>
+                        Upload Partial Completion Certificate.
+                        <span style={{ color: "red" }}>*</span>
+                      </h2>
+                    </label>
+                    <div>
+                      <input
+                        type="file"
+                        className="form-control"
+                        required
+                        onChange={(e) => getDocumentData(e?.target?.files[0], "partialCertificate")}
+                      />
+                    </div>
+
+                    <h3 className="error-message" style={{ color: "red" }}>
+                      {errors?.partialCertificate && errors?.partialCertificate?.message}
+                    </h3>
                   </div>
                 </div>
-              )}
-            </Col>
+              </div>
+            )}
           </Row>
         </Form.Group>
-        <div class="row">
-          <div class="col-sm-12 text-right">
-            <button type="submit" id="btnClear" class="btn btn-primary btn-md center-block" style={{ marginBottom: "-44px" }}>
-              Submit
-            </button>
-          </div>
-          <div class="row">
-            <div class="col-sm-12 text-right">
-              <button id="btnSearch" class="btn btn-danger btn-md center-block" style={{ marginRight: "66px", marginTop: "-6px" }}>
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
+        <Row className="justify-content-end">
+          <Button variant="outline-primary" className="col-md-2 my-2 mx-2" aria-label="right-end">
+            Cancel
+          </Button>
+          <Button variant="outline-primary" className="col-md-2 my-2 mx-2" type="submit" aria-label="right-end">
+            Submit
+          </Button>
+        </Row>
       </Card>
     </form>
   );
-};
+}
 
 export default ReleaseNew;
