@@ -4,6 +4,7 @@ import org.egov.web.notification.sms.config.SMSProperties;
 import org.egov.web.notification.sms.models.Sms;
 import org.egov.web.notification.sms.service.SMSBodyBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
+@Primary
 public class CommonBodyBuilder implements SMSBodyBuilder {
 
 	@Autowired
