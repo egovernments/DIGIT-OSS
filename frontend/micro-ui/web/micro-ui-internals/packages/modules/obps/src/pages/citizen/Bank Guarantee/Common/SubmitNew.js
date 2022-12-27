@@ -7,7 +7,8 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 function SubmitNew() {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
-
+  const [modal, setmodal] = useState(false);
+  const [modal1, setmodal1] = useState(false);
   const handleshowhide = (event) => {
     const getuser = event.target.value;
 
@@ -172,16 +173,16 @@ function SubmitNew() {
               )}
             </div>
           </Row>
-          {/* <Row className="col-sm-4 text-right">
-            <Button className="btn btn-primary btn-md center-block" type="submit" style={{ marginBottom: "-44px" }}>
-              Submit
-            </Button>
-            <Button className="btn btn-danger btn-md center-block" style={{ marginRight: "66px", marginTop: "-6px" }}>
+          <Row className="justify-content-end">
+            <Button variant="outline-primary" className="col-md-2 my-2 mx-2" aria-label="right-end">
               Cancel
             </Button>
-          </Row> */}
+            <Button variant="outline-primary" className="col-md-2 my-2 mx-2" type="submit" aria-label="right-end">
+              Submit
+            </Button>
+          </Row>
 
-          <div class="row">
+          {/* <div class="row">
             <Row className="col-sm-4 text-right">
               <Button type="submit" class="btn btn-primary btn-md center-block" style={{ marginBottom: "-44px" }}>
                 Submit
@@ -194,7 +195,7 @@ function SubmitNew() {
                 </Button>
               </Row>
             </div>
-          </div>
+          </div> */}
         </div>
       </Card>
     </form>

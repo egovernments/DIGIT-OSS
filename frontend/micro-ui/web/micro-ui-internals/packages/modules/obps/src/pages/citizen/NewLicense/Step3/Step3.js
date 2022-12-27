@@ -706,7 +706,7 @@ const LandScheduleForm = (props) => {
                       <label>
                         <h2>Any other, please specify:</h2>
                       </label>
-                      <input type="text" className="form-control" {...register("encumburanceOther")} required minLength={2} maxLength={100} />
+                      <input type="text" className="form-control" {...register("encumburanceOther")} minLength={2} maxLength={100} />
                     </div>
                   </div>
                   <br></br>
@@ -1168,7 +1168,7 @@ const LandScheduleForm = (props) => {
                           <div className="col col-3">
                             <label htmlFor="siteDetail">
                               <h2>
-                                Site Details <span style={{ color: "red" }}>*</span>{" "}
+                                Site Details <span style={{ color: "red" }}>*</span>
                               </h2>
                             </label>
                             <input type="text" {...register("siteDetail")} className="form-control" required minLength={2} maxLength={99} />

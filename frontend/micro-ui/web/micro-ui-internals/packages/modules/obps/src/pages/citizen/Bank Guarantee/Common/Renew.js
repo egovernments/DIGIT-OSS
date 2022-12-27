@@ -6,7 +6,8 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 function RenewNew() {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
-
+  const [modal, setmodal] = useState(false);
+  const [modal1, setmodal1] = useState(false);
   const handleshowhide = (event) => {
     const getuser = event.target.value;
 
@@ -163,12 +164,12 @@ function RenewNew() {
             </div>
           </div>
         </Form.Group>
-        <Row className="col-sm-12 text-right">
-          <Button variant="outline-primary" className="btn btn-primary btn-md center-block" type="submit" style={{ marginBottom: "-44px" }}>
-            Submit
-          </Button>
-          <Button variant="outline-primary" className="btn btn-danger btn-md center-block" style={{ marginRight: "66px", marginTop: "-6px" }}>
+        <Row className="justify-content-end">
+          <Button variant="outline-primary" className="col-md-2 my-2 mx-2" aria-label="right-end">
             Cancel
+          </Button>
+          <Button variant="outline-primary" className="col-md-2 my-2 mx-2" type="submit" aria-label="right-end">
+            Submit
           </Button>
         </Row>
       </Card>

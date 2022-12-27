@@ -32,7 +32,7 @@ function SubmitNew() {
     setValue,
   } = useForm({});
 
-  const bankSubmitNew = (data) => console.log(data);
+  const SubmitNew = (data) => console.log(data);
 
   const classes = useStyles();
   const currentRemarks = (data) => {
@@ -104,7 +104,7 @@ function SubmitNew() {
     { label: "Email ID for communication", key: "emailForCommunication" },
   ];
   return (
-    <form onSubmit={handleSubmit(bankSubmitNew)}>
+    <form onSubmit={handleSubmit(SubmitNew)}>
       <div
         className="collapse-header"
         onClick={() => setOpen2(!open2)}
