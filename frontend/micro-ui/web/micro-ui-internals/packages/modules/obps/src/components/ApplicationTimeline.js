@@ -15,23 +15,33 @@ const ApplicationTimeline = ({ id, tenantId }) => {
     return <Loader />;
   }
 
+  function OpenImage(imageSource, index,thumbnailsToShow){
+    window.open(thumbnailsToShow?.fullImage?.[0],"_blank");
+  }
+
   const getTimelineCaptions = (checkpoint) => {
-    if (checkpoint.state === "INITIATE") {
+    // if (checkpoint.state === "INITIATE") {
+    //   const caption = {
+    //     date: Digit.DateUtils.ConvertTimestampToDate(props.application?.auditDetails?.createdTime),
+    //     source: props.application?.tradeLicenseDetail?.channel || "",
+    //   };
+    //   return <BPACaption data={caption} />;
+    // }  
+    // else {
       const caption = {
-        date: Digit.DateUtils.ConvertTimestampToDate(props.application?.auditDetails?.createdTime),
-        source: props.application?.tradeLicenseDetail?.channel || "",
-      };
-      return <BPACaption data={caption} />;
-    }  
-    else {
-      const caption = {
+        // date: checkpoint?.auditDetails?.lastModified,
+        // name: checkpoint?.assignes?.[0]?.name,
+        // mobileNumber: checkpoint?.assignes?.[0]?.mobileNumber,
+        // comment: t(checkpoint?.comment),
         date: checkpoint?.auditDetails?.lastModified,
         name: checkpoint?.assignes?.[0]?.name,
         mobileNumber: checkpoint?.assignes?.[0]?.mobileNumber,
         comment: t(checkpoint?.comment),
+        wfComment : checkpoint.wfComment,
+        thumbnailsToShow : checkpoint?.thumbnailsToShow,
       };
-      return <BPACaption data={caption} />;
-    }
+    //}
+  return <BPACaption data={caption} OpenImage={OpenImage} />;
   };
 
   const showNextActions = (nextAction) => {

@@ -151,7 +151,7 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
             return e.businessservice === value
           } )?.map( (status, index) => {
             return <CheckBox
-              style={{marginTop: "10px"}}
+              //style={{marginTop: "10px"}}
               key={index}
               onChange={(e) => e.target.checked ? changeItemCheckStatus([...props?.value, status?.statusid]) : changeItemCheckStatus(props?.value?.filter( id => id !== status?.statusid)) }
               checked={props?.value?.includes(status?.statusid)}
