@@ -1132,7 +1132,7 @@ const AppliedDetailForm = (props) => {
                               </div>
                               <div className="col col-12">
                                 <label>Enter Area</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" className="form-control" {...register("area")} />
                               </div>
                             </div>
                           )}
