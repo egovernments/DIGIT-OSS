@@ -937,7 +937,7 @@ const Genarelinfo = (props) => {
                       <input type="text" className="form-control" placeholder={item?.revenueEstate} disabled />
                     </td>
                     <td>
-                      <input type="text" className="form-control" placeholder={item?.rectangle} disabled />
+                      <input type="text" className="form-control" placeholder={item?.hadbastNo} disabled />
                     </td>
                     <td>
                       <input type="text" className="form-control" placeholder={item?.rectangleNo} disabled />
@@ -959,7 +959,7 @@ const Genarelinfo = (props) => {
                       <input type="text" className="form-control" placeholder={item?.marla} disabled />
                     </td>
                     <td class="text-center">
-                      <input type="text" className="form-control" placeholder={item?.srasai} disabled />
+                      <input type="text" className="form-control" placeholder={item?.sarsai} disabled />
                     </td>
                     <td class="text-center">
                       <input type="text" className="form-control" placeholder={item?.bigha} disabled />

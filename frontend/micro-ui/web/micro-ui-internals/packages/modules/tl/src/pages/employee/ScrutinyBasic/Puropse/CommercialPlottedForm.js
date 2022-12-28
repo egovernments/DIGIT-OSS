@@ -116,13 +116,13 @@ const CommercialPlottedForm  = (props) => {
         <div className="col col-12">
           <h6>
             Number of Plots/SCOs (saleable area) &nbsp;&nbsp;
-            <input type="radio" value="Y" id="Yes" name="Yes" />
+            <input type="radio" value="Y" id="Yes" name="Yes" placeholder={CommercialPlotted?.noOfPlotsSealableOneFifty} />
             &nbsp;&nbsp;
             <label className="m-0  mx-2" for="Yes">
               150%
             </label>
             &nbsp;&nbsp;
-            <input type="radio" value="N" id="No"  name="Yes" />
+            <input type="radio" value="N" id="No"  name="Yes" placeholder={CommercialPlotted?.noOfPlotsSealableOneSeventyfive} />
             &nbsp;&nbsp;
             <label className="m-0 mx-2" for="No">
               175%
@@ -168,7 +168,7 @@ const CommercialPlottedForm  = (props) => {
                         ></ReportProblemIcon>
                     </div> */}
                   <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.scoPlotno}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -185,7 +185,7 @@ const CommercialPlottedForm  = (props) => {
                 </td>
                 <td component="th" scope="row">
                    <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.scoLength}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -202,7 +202,7 @@ const CommercialPlottedForm  = (props) => {
                 </td>
                 <td component="th" scope="row">
                    <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.scoWidth}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -219,7 +219,7 @@ const CommercialPlottedForm  = (props) => {
                 </td>
                 <td component="th" scope="row">
                    <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.scoArea}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -236,7 +236,7 @@ const CommercialPlottedForm  = (props) => {
                 </td>
                 <td component="th" scope="row">
                    <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.scoSimilarShape}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -261,7 +261,7 @@ const CommercialPlottedForm  = (props) => {
                 <td align="right">
                   {" "}
                    <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.boothPlotno}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -278,7 +278,7 @@ const CommercialPlottedForm  = (props) => {
                 </td>
                 <td component="th" scope="row">
                    <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.boothLength}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -295,7 +295,7 @@ const CommercialPlottedForm  = (props) => {
                 </td>
                 <td component="th" scope="row">
                    <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.boothWidth}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -312,7 +312,7 @@ const CommercialPlottedForm  = (props) => {
                 </td>
                 <td component="th" scope="row">
                   <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.boothArea}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -329,7 +329,7 @@ const CommercialPlottedForm  = (props) => {
                 </td>
                 <td component="th" scope="row">
                    <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.boothSimilarShape}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -351,11 +351,11 @@ const CommercialPlottedForm  = (props) => {
                     <p className="mb-2">Public Utilities </p>
                   </div>
                 </td>
+                {/* <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
-                <td></td>
+                <td></td> */}
               </tr>
               <tr>
                 <td>
@@ -366,7 +366,7 @@ const CommercialPlottedForm  = (props) => {
                 <td align="right">
                   {" "}
                    <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.stpPlotno}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -383,7 +383,7 @@ const CommercialPlottedForm  = (props) => {
                 </td>
                 <td component="th" scope="row">
                    <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.stpLength}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -401,7 +401,7 @@ const CommercialPlottedForm  = (props) => {
                 <td align="right">
                   {" "}
                    <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.stpWidth}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -419,7 +419,7 @@ const CommercialPlottedForm  = (props) => {
                 <td align="right">
                   {" "}
                   <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.stpArea}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -436,7 +436,7 @@ const CommercialPlottedForm  = (props) => {
                 </td>
                 <td component="th" scope="row">
                    <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.stpSimilarShape}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -461,7 +461,7 @@ const CommercialPlottedForm  = (props) => {
                 <td align="right">
                   {" "}
                   <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.wtpPlotno}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -478,7 +478,7 @@ const CommercialPlottedForm  = (props) => {
                 </td>
                 <td component="th" scope="row">
                    <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.wtpLength}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -495,7 +495,7 @@ const CommercialPlottedForm  = (props) => {
                 </td>
                 <td component="th" scope="row">
                    <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.wtpWidth}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -512,7 +512,7 @@ const CommercialPlottedForm  = (props) => {
                 </td>
                 <td component="th" scope="row">
                   <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.wtpArea}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -529,7 +529,7 @@ const CommercialPlottedForm  = (props) => {
                 </td>
                 <td component="th" scope="row">
                   <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.wtpSimilarShape}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -554,7 +554,7 @@ const CommercialPlottedForm  = (props) => {
                 <td align="right">
                   {" "}
                    <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.ugtPlotno}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -571,7 +571,7 @@ const CommercialPlottedForm  = (props) => {
                 </td>
                 <td component="th" scope="row">
                    <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.ugtLength}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -589,7 +589,7 @@ const CommercialPlottedForm  = (props) => {
                 <td align="right">
                   {" "}
                    <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.ugtWidth}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -607,7 +607,7 @@ const CommercialPlottedForm  = (props) => {
                 <td align="right">
                   {" "}
                   <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.ugtArea}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -624,7 +624,7 @@ const CommercialPlottedForm  = (props) => {
                 </td>
                 <td component="th" scope="row">
                    <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.ugtSimilarShape}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -649,7 +649,7 @@ const CommercialPlottedForm  = (props) => {
                 <td align="right">
                   {" "}
                   <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.milkPlotno}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -666,7 +666,7 @@ const CommercialPlottedForm  = (props) => {
                 </td>
                 <td component="th" scope="row">
                    <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.milkLength}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -684,7 +684,7 @@ const CommercialPlottedForm  = (props) => {
                 <td align="right">
                   {" "}
                   <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.milkWidth}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -702,7 +702,7 @@ const CommercialPlottedForm  = (props) => {
                 <td align="right">
                   {" "}
                   <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.milkArea}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -719,7 +719,7 @@ const CommercialPlottedForm  = (props) => {
                 </td>
                 <td component="th" scope="row">
                   <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.milkSimilarShape}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -744,7 +744,7 @@ const CommercialPlottedForm  = (props) => {
                 <td align="right">
                   {" "}
                    <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.gssPlotno}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -761,7 +761,7 @@ const CommercialPlottedForm  = (props) => {
                 </td>
                 <td component="th" scope="row">
                   <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.gssLength}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -779,7 +779,7 @@ const CommercialPlottedForm  = (props) => {
                 <td align="right">
                   {" "}
                   <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.gssWidth}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -797,7 +797,7 @@ const CommercialPlottedForm  = (props) => {
                 <td align="right">
                   {" "}
                   <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.gssArea}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -814,7 +814,7 @@ const CommercialPlottedForm  = (props) => {
                 </td>
                 <td component="th" scope="row">
                    <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.gssSimilarShape}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -855,7 +855,7 @@ const CommercialPlottedForm  = (props) => {
                 </td>
                 <td component="th" scope="row">
                   <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.etcDim}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -872,7 +872,7 @@ const CommercialPlottedForm  = (props) => {
                 </td>
                 <td component="th" scope="row">
                 <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.frozenNo}/>
+                    <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.etcArea}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
