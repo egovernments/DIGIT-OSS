@@ -19,6 +19,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import { useStyles } from "./css/personalInfoChild.style";
 import { IconButton } from "@mui/material";
 import { getDocShareholding } from "./ScrutinyDevelopment/docview.helper";
+import CommercialColonyInResidential from "../ScrutinyBasic/Puropse/CommercialColonyResidential"
 
 const Developerinfo = (props) => {
 
@@ -39,6 +40,9 @@ const Developerinfo = (props) => {
   const [land, setLand] = useState("");
   const [landRemark, setLandRemark] = useState("");
   const [layoutPlan, setLayoutPlan] = useState("");
+  const Purpose = props.purpose;
+  console.log("yjsgjwneje", Purpose);
+
   const [open, setOpen] = useState(false);
   const handleChange = (e) => {
     this.setState({ isRadioSelected: true });
@@ -457,7 +461,8 @@ const Developerinfo = (props) => {
   });
 
 
-
+  
+  
   const classes = useStyles();
 
   const [smShow, setSmShow] = useState(false);
@@ -771,9 +776,9 @@ const Developerinfo = (props) => {
                 </Col>
                 {/* </Row>
               <Row className="ms-auto" style={{ marginBottom: 20 }}> */}
-                <Col className="ms-auto" md={4} xxl lg="4">
+                {/* <Col className="ms-auto" md={4} xxl lg="4">
                   <label>
-                    {/* Approach Type (Type of Policy) */}
+                    
                     <h5>Approach Type (Type of Policy) &nbsp;</h5>
                   </label>
 
@@ -792,7 +797,45 @@ const Developerinfo = (props) => {
                       }}
                     ></ReportProblemIcon>
                   </div>
-                </Col>
+                </Col> */}
+                <div className="col col-12">
+                              {/* {Purpose === "DDJAY_APHP" && <CommercialColonyInResidential watch={watch} register={register} />}
+                              {Purpose === "RPL" && <CommercialColonyInResidential watch={watch} register={register} />}
+                              {Purpose === "NILPC" && <CommercialColonyInResidential watch={watch} register={register} />}
+                              {Purpose === "AHP" && <CommercialColonyInResidential watch={watch} register={register} />}
+                              {Purpose === "CIC" && <CommercialLicense watch={watch} register={register} />}
+                              {Purpose === "LDEF" && <LowDensityEco watch={watch} register={register} />}
+                              {Purpose === "IPL" && <CyberPark watch={watch} register={register} />}
+                              {Purpose === "ITP" && <CyberPark watch={watch} register={register} />}
+                              {Purpose === "ITC" && <CyberPark watch={watch} register={register} />}
+                              {Purpose === "RHP" && <RetirementHousing watch={watch} register={register} />} */}
+{/* 
+                              <div>
+                  <CommercialColonyInResidential displayDdjay={Purpose === "DDJAY_APHP" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandDdjay} dataForIcons={dataIcons}></CommercialColonyInResidential>
+                </div>
+                <div>
+                  <CommercialColonyInResidential displayResidential={Purpose === "RPL" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandResidential} dataForIcons={dataIcons} ></CommercialColonyInResidential>
+                </div> */}
+                {/* <div>
+                  <IndustrialPlottedForm displayIndustrial={Purpose === "IPL" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandIndustrial} dataForIcons={dataIcons} ></IndustrialPlottedForm>
+                </div>
+                <div>
+                  <CommercialPlottedForm displayCommercialPlottedData={Purpose === "CPL" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandCommercial} dataForIcons={dataIcons} ></CommercialPlottedForm>
+                </div> */}
+
+                              {/* <ReactMultiSelect
+                              control={control}
+                              name="approachType"
+                              placeholder="Approach"
+                              data={potentialOptons}
+                              labels="Potential"
+                            /> */}
+                              {/* <select className="form-control" id="approachType" {...register("approachType")}>
+                                <option>{Purpose === "DDJAY_APHP" && <CommercialColonyInResidential watch={watch} register={register} />}</option> */}
+                              {/* <option value="potential 2">(a) Existing ser-vice road along with sector di-viding road.</option> */}
+                              {/* <option value="potential 2">(c) Constructed sector road or internal circula-tion road of min. 18m/24m (licenced) part of the approved sectoral plan and further leadup up to at least 4 karam wide public ras-ta.</option> */}
+                              {/* </select> */}
+                            </div>
                 <Col className="ms-auto" md={4} xxl lg="4">
                   <label>
                     <h6>Approach Road Width&nbsp;&nbsp;</h6>{" "}

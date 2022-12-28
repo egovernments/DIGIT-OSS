@@ -7,6 +7,9 @@ import { useStyles } from "./styles/modalChild.style";
 import { useParams } from "react-router-dom";
 
 function ModalChild(props) {
+
+
+ const userInfo = Digit.UserService.getUser()?.info || {};
   const classes = useStyles();
   const smShow = props.displaymodal;
   const [RemarksDeveloper, setDeveloperRemarks] = useState("");
@@ -34,15 +37,15 @@ function ModalChild(props) {
           key: "",
           msg_id: "",
           requester_id: "",
-          auth_token: null,
+          authToken: authToken,
         },
         egScrutiny: {
-          applicationNumber: id,
+          applicationId: id,
           comment: RemarksDeveloper.data,
           fieldValue: inputFieldValue,
           fieldIdL: props.labelmodal,
           isApproved: status==="approved"?true:false,
-          userid: "433",
+          userid: userInfo?.id || null,
           serviceId: "123",
           documentId: null,
           ts: dateTime.toUTCString(),
@@ -65,6 +68,7 @@ function ModalChild(props) {
   console.log("smshow", smShow);
 
   useEffect(() => {
+    console.log("userInfoLog123",userInfo)
     console.log("loggg", props.selectedFieldData);
     if (props.selectedFieldData) {
       console.log("loggg changing123...", props.selectedFieldData);
