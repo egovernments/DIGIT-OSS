@@ -313,7 +313,7 @@ let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && 
       let propertyData = finalResponse.Properties.map(item => ({
         ["PT_MUTATION_PID"]:
           item.propertyId || "-",
-        ["PT_COMMON_TABLE_COL_OWNER_NAME"]: item.owners[getIndexofActive(item)].name || "-",
+        ["PT_COMMON_TABLE_COL_OWNER_NAME"]: item.owners[getIndexofActive(item)] && item.owners[getIndexofActive(item)].name || "-",
         ["PT_COMMON_COL_ADDRESS"]:
           getAddress(item) || "-",
         ["TENANT_ID"]: item.tenantId,
