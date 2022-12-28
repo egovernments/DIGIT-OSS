@@ -97,7 +97,8 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       ...applicationData,
       action: action?.action,
       comment: data?.comments,
-      assignee: !selectedApprover?.uuid ? null : [selectedApprover?.uuid],
+      // assignee: !selectedApprover?.uuid ? null : [selectedApprover?.uuid],
+      assignee: selectedApprover?.length ? selectedApprover.map((ele)=>ele[1]?.uuid):[],
       // assignee: action?.isTerminateState ? [] : [selectedApprover?.uuid],
       wfDocuments: uploadedFile
         ? [
@@ -109,7 +110,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
           ]
         : null,
     };
-    console.log("log123...submit",applicationData);
+    console.log("log123...submit",applicationData,selectedApprover, selectedApprover.map((ele)=>ele[1]?.uuid));
     submitAction({
       Licenses: [applicationData],
     });
@@ -117,6 +118,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
 
   useEffect(() => {
     if (action) {
+      console.log("log123Approvers",approvers)
       setConfig(
         configTLApproverApplication({
           t,
