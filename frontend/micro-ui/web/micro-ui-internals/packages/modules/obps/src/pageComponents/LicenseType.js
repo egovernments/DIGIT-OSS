@@ -88,7 +88,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
                       options={getLicenseType() || {}}
                       selectedOption={LicenseType}
                       onSelect={selectLicenseType}
-                      // placeholder={"Select"}
+                      placeholder="Select option"
                     />
                   </div>
                 )}

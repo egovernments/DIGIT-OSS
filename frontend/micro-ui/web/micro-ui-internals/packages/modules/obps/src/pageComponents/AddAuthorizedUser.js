@@ -2,7 +2,7 @@ import { FormStep,TextInput, MobileNumber, CardLabel, CardLabelError, Dropdown, 
 import React, { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Table from "react-bootstrap/Table";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 // import "../Developer/AddInfo.css";
 // import DashboardScreen from "../../src/Screens/DashboardScreen/DashboardScreen";
 import { useForm } from "react-hook-form";
@@ -47,7 +47,8 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
   const [Documents, setDocumentsData] = useState({});
 
   const DevelopersAllData = getValues();
-  console.log("DEVEDATAGEGT",DevelopersAllData);
+  // console.log("DEVEDATAGEGT",DevelopersAllData);
+  const [userDelete, setUserDelete] = useState([]);
   const [aurthorizedUserInfoArray, setAurthorizedUserInfoArray] = useState([]);
   const getDeveloperData = async ()=>{
     try {
@@ -70,7 +71,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
       });
       const developerDataGet = getDevDetails?.data; 
       console.log("ADDAUTHUSER",getDevDetails?.data?.devDetail[0]?.aurthorizedUserInfoArray);
-      setAurthorizedUserInfoArray(getDevDetails?.data?.devDetail[0]?.aurthorizedUserInfoArray);
+      // setAurthorizedUserInfoArray(getDevDetails?.data?.devDetail[0]?.aurthorizedUserInfoArray);
     } catch (error) {
       console.log(error);
     }
@@ -99,7 +100,9 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
 
       });
       const developerDataGet = getAuthUserDetails?.data; 
-      console.log("U",developerDataGet);
+      // const filterAuthUser = [...getAuthUserDetails?.data.map(user => user.active.includes('true'))];
+      
+      // console.log("UAU",filterAuthUser);
       setAurthorizedUserInfoArray(developerDataGet?.user);
     } catch (error) {
       console.log(error);
@@ -173,25 +176,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
   function selectAurthorizedMobileNumber(value){
     setAurthorizedMobileNumber(value);
   }
-  // const handleMobileChange = async (event) => {
-  //   const { value } = event.target;
-  //   setParmas({ ...params, aurthorizedMobileNumber: value });
-  //   const data = {
-  //     ...aurthorizedMobileNumber,
-  //     tenantId: "hr",
-  //     userType: getUserType(),
-  //   };
-  //   if (isUserRegistered) {
-  //     const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_LOGIN } });
-  //     if (!err) {
-  //       alert("please Enter Login",res)
-  //       return;
-  //     } 
-  //   } else {
-  //     const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_REGISTER } });
-  //     alert("Please register yourself",res)
-  //   }
-  // };
+  
   
   
 
@@ -320,49 +305,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
       console.log(error.message);
     }
   };
-  // useEffect(() => {
-  //   getDocumentData();
-  // }, [file]);
-
-  // const getDigitalSignPdf = async () => {
-  //   if ((Documents?.uploadDigitalSignaturePdf !== null || Documents?.uploadDigitalSignaturePdf !== undefined) && (uploadDigitalSignaturePdf!==null || uploadDigitalSignaturePdf!=="")) {
-        
-  //       try {
-  //           const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${Documents?.uploadDigitalSignaturePdf}`, {
-
-  //           });
-  //           const FILDATA = response.data?.fileStoreIds[0]?.url;
-  //           setDigitalSignPdfUrl(FILDATA)
-  //       } catch (error) {
-  //           console.log(error.message);
-  //       }
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   getDigitalSignPdf();
-  // }, [Documents?.uploadDigitalSignaturePdf]);
   
-  
-  // const getAdhaarPdf = async () => {
-  //   if ((Documents?.uploadAadharPdf !== null || Documents?.uploadAadharPdf !== undefined) && (uploadAadharPdf!==null || uploadAadharPdf!=="")) {
-        
-  //       try {
-  //           const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${Documents?.uploadAadharPdf}`, {
-
-  //           });
-  //           const FILDATA = response.data?.fileStoreIds[0]?.url;
-  //           setAdhaarPdfUrl(FILDATA)
-  //       } catch (error) {
-  //           console.log(error.message);
-  //       }
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   getAdhaarPdf();
-  // }, [Documents?.uploadAadharPdf]);
-
   const handleUserNameChange = (e) => {
     if(!e.target.value || e.target.value.match("^[a-zA-Z]*$")){
       setAurtorizedUserName(e.target.value);
@@ -461,6 +404,25 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
     const rows = [...aurthorizedUserInfoArray];
     rows.splice(i, 1);
     setAurthorizedUserInfoArray(rows);
+
+  }
+  // const {id} = useParams();
+  const viewRecord = (elementInArray) => {
+    setUserDelete(elementInArray);
+    console.log(userDelete);
+    const removedData = {
+      "user": userDelete
+    }
+
+    
+    Digit.OBPSService.UpdateDeveloper(removedData, tenantId)
+    .then((result,err)=>{
+      console.log(result);
+    })
+    .catch((error)=>{
+      console.log(error);
+    })
+    
   }
 
   const goNext = async (e) => {
@@ -485,7 +447,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
       }
       Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
       .then((result, err) => {
-        console.log("DATA",result?.id);
+        // console.log("DATA",result?.id);
         // localStorage.setItem('devRegId',JSON.stringify(result?.id));
         setIsDisableForNext(false);
         let data = { 
@@ -561,7 +523,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                   (aurthorizedUserInfoArray?.length > 0  ) ?
                     aurthorizedUserInfoArray.map((elementInArray, input) => {
                       return (
-                        <tr>
+                        <tr key={elementInArray.id}>
                           <td>{input + 1}</td>
                           <td>
                             <input
@@ -662,11 +624,12 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                             </div>
                           </td>
                           <td>
-                            <button
-                              onClick={()=>(deleteTableRows(-1))}
+                            <a
+                              // onClick={()=>(viewRecord(elementInArray.id))}
+                              onClick={() => viewRecord(elementInArray)}
                             >
                               <RemoveIcon />
-                            </button>
+                            </a>
                           </td>
                         </tr>
                       );

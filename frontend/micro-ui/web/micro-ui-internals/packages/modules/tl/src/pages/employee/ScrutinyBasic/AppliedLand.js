@@ -1140,7 +1140,7 @@ const AppliedLandinfo = (props) => {
                   <CommercialPlottedForm displayCommercialPlottedData={Purpose === "CPL" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandCommercial} dataForIcons={dataIcons} ></CommercialPlottedForm>
                 </div>
 
-                <CommercialPlottedForm></CommercialPlottedForm>
+                {/* <CommercialPlottedForm></CommercialPlottedForm> */}
                 {/* <div>
                   <DDJAYForm displayDdjay={Purpose === "08" ? "block" : "none"} data={DetailsofAppliedLand?.ddjay}></DDJAYForm>
                   <DDJAYForm displayDdjay={Purpose !== "DDJAY" ? "block" : "none"} data={DetailsofAppliedLand?.ddjay} dataForIcons={dataIcons}></DDJAYForm>

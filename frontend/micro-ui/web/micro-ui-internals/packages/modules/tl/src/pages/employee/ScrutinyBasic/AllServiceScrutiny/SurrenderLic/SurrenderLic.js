@@ -39,7 +39,7 @@ function SurrenderLic() {
   const SurrenderLic = (data) => console.log(data);
   const [open2, setOpen2] = useState(false);
 
-  const SurrenderLic = (data) => console.log(data);
+
    
   const classes = useStyles();
   const currentRemarks = (data) => {
