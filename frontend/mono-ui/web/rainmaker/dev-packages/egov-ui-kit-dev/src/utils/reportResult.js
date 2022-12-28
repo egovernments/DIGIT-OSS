@@ -961,7 +961,7 @@ class ShowField extends Component {
           if(details == null || details == undefined || details == "") {
             reportDataArray.push("NA")
           } else {
-            if (typeof details == "string" && details.includes("_")) {
+            if ((details && typeof details == "string") || (details && typeof details == "string" && details.includes("_"))) {
               let localisedData = getLocaleLabels(details, details);
               reportDataArray.push(localisedData);
             } else {
@@ -1052,7 +1052,7 @@ class ShowField extends Component {
   };
 
   renderFooter = () => {
-    let { reportResult } = this.props;
+    let { reportResult, metaData } = this.props;
     let reportHeaderObj = reportResult.reportHeader;
     if (reportResult && reportResult.reportData && reportResult.reportData.length > 0) {
       footerexist = true;
@@ -1108,8 +1108,20 @@ class ShowField extends Component {
         }
       }
     }
+    
+    const getIsFooterexist = () => {
+      let isFooterexist = footerexist;
+      if (metaData &&
+        metaData.reportDetails &&
+        (metaData.reportDetails.reportName == "TLApplicationStatusReport" ||
+          metaData.reportDetails.reportName == "TLRegistryReport" ||
+          metaData.reportDetails.reportName == "TLRenewalPendingReport")) {
+        isFooterexist = false;
+      }
+      return isFooterexist;
+    }
 
-    if (footerexist) {
+    if (getIsFooterexist()) {
       return (
         <tfoot>
           <tr className="total">

@@ -244,7 +244,22 @@ export default class ShowField extends Component {
               }
               value={typeof obj.value == "undefined" ? "" : obj.value}
               onChange={(event, key, value) => {
+                const dataValue = value[value.length-1]
                 let e = { target: { value } };
+                if (dataValue == "All") {
+                  e = { target: { value: [dataValue] } };
+                }
+
+                const allValuePresent = value && value.length > 1 && value.includes("All");
+                if (allValuePresent && value.length > 1 && dataValue != "All") {
+                  let finalData = [];
+                  value.forEach(value => {
+                    if (value != "All") {
+                      finalData.push(value)
+                    }
+                  })
+                  e = { target: { value: finalData } };
+                }
                 this.props.handler(e, obj.name, obj.isMandatory ? true : false, "");
               }}
               maxHeight={200}
