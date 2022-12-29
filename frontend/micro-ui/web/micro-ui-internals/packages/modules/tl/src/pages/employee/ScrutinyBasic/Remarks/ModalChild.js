@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { Form, Col, Row } from "react-bootstrap";
 import axios from "axios";
 import { useStyles } from "./styles/modalChild.style";
 import { useParams } from "react-router-dom";
+import { ScrutinyRemarksContext } from "../../../../../context/remarks-data-context";
 
 function ModalChild(props) {
 
-
+  const { handleGetFiledsStatesById, handleGetRemarkssValues } = useContext(ScrutinyRemarksContext);
  const userInfo = Digit.UserService.getUser()?.info || {};
   const classes = useStyles();
   const smShow = props.displaymodal;
@@ -60,6 +61,8 @@ function ModalChild(props) {
         console.log(error);
       }
       props.remarksUpdate({ data: RemarksDeveloper.data });
+      handleGetFiledsStatesById(id);
+      handleGetRemarkssValues(id);
       console.log("response from API", Resp);
     } else {
       props.passmodalData();

@@ -222,7 +222,7 @@ const {id} = useParams();
       </Row>
       <Row style={{ top: 30, padding: "10px 22px" }}>
 
-        
+
 
         {/* <Form.Group className="mb-3" controlId="exampleForm.ControlInput1"> */}
           {/* <Card>
@@ -275,7 +275,7 @@ const {id} = useParams();
               state={state}
               id={id}
               applicationDetails={applicationDetails}
-              applicationData={applicationDetails?.applicationData}
+              applicationData={{...applicationDetails?.applicationData,workflowCode:applicationDetails?.applicationData?.workflowCode || "NewTL"}}
               closeModal={closeModal}
               submitAction={submitAction}
               actionData={workflowDetails?.data?.timeline}
