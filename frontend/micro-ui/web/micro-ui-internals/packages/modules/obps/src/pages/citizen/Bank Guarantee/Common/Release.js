@@ -25,9 +25,10 @@ function ReleaseNew() {
 
   return (
     <form onSubmit={handleSubmit(bankRelease)}>
-      <Card style={{ width: "126%", marginLeft: "19px", paddingRight: "10px" }}>
-        <Form.Group className="justify-content-center" controlId="formBasicEmail">
-          <Row className="ml-auto" style={{ marginBottom: 5 }}>
+      <Card style={{ width: "126%", border: "5px solid #1266af" }}>
+        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Release</h4>
+        <div className="card">
+          <Row className="col-12">
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
@@ -115,7 +116,7 @@ function ReleaseNew() {
               </div>
             )}
           </Row>
-        </Form.Group>
+        </div>
         <Row className="justify-content-end">
           <Button variant="outline-primary" className="col-md-2 my-2 mx-2" aria-label="right-end">
             Cancel

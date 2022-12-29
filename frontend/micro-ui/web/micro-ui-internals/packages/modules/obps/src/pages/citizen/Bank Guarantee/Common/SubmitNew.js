@@ -28,10 +28,10 @@ function SubmitNew() {
   return (
     <form onSubmit={handleSubmit(bankSubmitNew)}>
       <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Submit</h4>
+        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Submission</h4>
         <div className="card">
           <Row className="col-12">
-            <Col className="col-3">
+            <Col md={4} xxl lg="3">
               <Form.Group as={Col} controlId="formGridLicence">
                 <Form.Label>
                   <h2>Enter LOI No.</h2>{" "}
@@ -40,14 +40,7 @@ function SubmitNew() {
                 <input type="text" className="form-control" placeholder="" {...register("enterLoiNumber")} />
               </Form.Group>
             </Col>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>Enter Memo No. </h2>
-                </Form.Label>
-              </div>
-              <input type="text" className="form-control" placeholder="" {...register("enterMemoNumber")} />
-            </Col>
+
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
@@ -58,25 +51,6 @@ function SubmitNew() {
                 <option> IDW</option>
                 <option>EDC</option>
               </select>
-            </Col>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>Upload B.G. </h2>
-                </Form.Label>
-              </div>
-              <input type="file" className="form-control" placeholder="" {...register("uploadBg")} />
-            </Col>
-          </Row>
-
-          <Row className="col-12">
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>Bank Name </h2>
-                </Form.Label>
-              </div>
-              <input type="text" className="form-control" placeholder="" {...register("bankName")} />
             </Col>
             <Col md={4} xxl lg="3">
               <div>
@@ -94,6 +68,24 @@ function SubmitNew() {
               </div>
               <input type="text" className="form-control" placeholder="" {...register("amountInWords")} />
             </Col>
+          </Row>
+          <Row className="col-12">
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>Bank Name </h2>
+                </Form.Label>
+              </div>
+              <input type="text" className="form-control" placeholder="" {...register("bankName")} />
+            </Col>
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>Enter Memo No. </h2>
+                </Form.Label>
+              </div>
+              <input type="text" className="form-control" placeholder="" {...register("enterMemoNumber")} />
+            </Col>
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
@@ -102,34 +94,40 @@ function SubmitNew() {
               </div>
               <input type="date" className="form-control" placeholder="" {...register("validity")} />
             </Col>
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>Upload B.G. </h2>
+                </Form.Label>
+              </div>
+              <input type="file" className="form-control" placeholder="" {...register("uploadBg")} />
+            </Col>
           </Row>
+
           <Row className="col-12">
             <div className="col col-12 ">
               <div>
-                <div className="form-check">
-                  <input className="form-check-input" formControlName="agreeCheck" type="checkbox" value="" id="flexCheckDefault" required />
-                  <label className="checkbox" for="flexCheckDefault">
-                    Hardcopy Submitted at TCP office.{" "}
-                    <label htmlFor="licenseApplied">
-                      <input {...register("licenseApplied")} type="radio" value="Y" id="licenseApplied" />
-                      &nbsp; Yes &nbsp;&nbsp;
-                    </label>
-                    <label htmlFor="licenseApplied">
-                      <input
-                        {...register("licenseApplied")}
-                        type="radio"
-                        value="N"
-                        id="licenseApplied"
-                        className="btn btn-primary"
-                        onClick={() => setmodal1(true)}
-                      />
-                      &nbsp; No &nbsp;&nbsp;
-                    </label>
-                    <h3 className="error-message" style={{ color: "red" }}>
-                      {errors?.licenseApplied && errors?.licenseApplied?.message}
-                    </h3>
+                <label>
+                  Hardcopy Submitted at TCP office.{" "}
+                  <label htmlFor="licenseApplied">
+                    <input {...register("licenseApplied")} type="radio" value="Y" id="licenseApplied" />
+                    &nbsp; Yes &nbsp;&nbsp;
                   </label>
-                </div>
+                  <label htmlFor="licenseApplied">
+                    <input
+                      {...register("licenseApplied")}
+                      type="radio"
+                      value="N"
+                      id="licenseApplied"
+                      className="btn btn-primary"
+                      onClick={() => setmodal1(true)}
+                    />
+                    &nbsp; No &nbsp;&nbsp;
+                  </label>
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.licenseApplied && errors?.licenseApplied?.message}
+                  </h3>
+                </label>
               </div>
 
               {watch("licenseApplied") === "Y" && (
