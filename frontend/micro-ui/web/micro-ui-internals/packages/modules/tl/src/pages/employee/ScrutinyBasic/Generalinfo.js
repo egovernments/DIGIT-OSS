@@ -219,6 +219,7 @@ const Genarelinfo = (props) => {
   });
 
   console.log("color for the deeloper", developerInputFiledColor);
+  console.log("AccessInfortech1", purpose);
 
   const classes = useStyles();
 
