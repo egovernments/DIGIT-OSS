@@ -110,7 +110,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
           ]
         : null,
     };
-    console.log("log123...submit",applicationData,selectedApprover, selectedApprover.map((ele)=>ele[1]?.uuid));
+    console.log("log123...submitted updated",applicationData,selectedApprover, selectedApprover.map((ele)=>ele[1]?.uuid));
     submitAction({
       Licenses: [applicationData],
     });

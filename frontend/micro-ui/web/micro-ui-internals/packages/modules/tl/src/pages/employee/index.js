@@ -26,6 +26,7 @@ import ServicePlanService from "../employee/ScrutinyBasic/ServicePlanScrutniy/Se
 import TransferLicense from "../employee/ScrutinyBasic/AllServiceScrutiny/TransferLic/TransferLicense";
 import SubmitNew from "../employee/ScrutinyBasic/AllServiceScrutiny/BankGuarantee/SubmitNew";
 import Release from "../employee/ScrutinyBasic/AllServiceScrutiny/BankGuarantee/Release";
+import { TLContextProvider } from "../../../context";
 
 
 const TLBreadCrumb = ({ location }) => {
@@ -177,6 +178,7 @@ const EmployeeApp = ({ path, url, userType }) => {
   const Search = Digit?.ComponentRegistryService?.getComponent('TLSearch');
 
   return (
+    <TLContextProvider>
     <Switch>
       <React.Fragment>
         <div className="ground-container" style={locationCheck ? {width: "100%"} : {}}>
@@ -234,6 +236,7 @@ const EmployeeApp = ({ path, url, userType }) => {
         </div>
       </React.Fragment>
     </Switch>
+    </TLContextProvider>
   );
 };
 
