@@ -64,7 +64,7 @@ const FeesChargesForm = (props) => {
     const token = window?.localStorage?.getItem("token");
     const postDistrict = {
       pageName: "FeesAndCharges",
-      ApplicationStatus: "DRAFT",
+      action: "FEESANDCHARGES",
       applicationNumber: props?.getId,
       createdBy: props?.userData?.id,
       updatedBy: props?.userData?.id,
