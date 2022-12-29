@@ -5,7 +5,7 @@ import axios from "axios";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step1";
-import { useHistory, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
 
 const LcNotSigned = [
@@ -41,15 +41,15 @@ const ApllicantFormStep1 = (props) => {
     resolver: yupResolver(VALIDATION_SCHEMA),
     shouldFocusError: true,
   });
-
+  const token = window?.localStorage?.getItem("token");
   const ApplicantFormSubmitHandlerForm = async (data) => {
     // props.Step1Continue("6", "userInfo", "licData");
 
-    const token = window?.localStorage?.getItem("token");
     data["notSigned"] = data?.notSigned?.value;
     const postDistrict = {
       pageName: "ApplicantInfo",
-      ApplicationStatus: "DRAFT",
+      // ApplicationStatus: "DRAFT",
+      action: "INITIATE",
       applicationNumber: applicantId,
       createdBy: userInfo?.id,
       updatedBy: userInfo?.id,
@@ -142,10 +142,17 @@ const ApllicantFormStep1 = (props) => {
   }, [developerDataLabel]);
 
   const getApplicantUserData = async (id) => {
+    // http://103.166.62.118:80
+    const payload = {
+      apiId: "Rainmaker",
+      msgId: "1669293303096|en_IN",
+      authToken: token,
+    };
     try {
-      const Resp = await axios.get(`http://103.166.62.118:80/tl-services/new/licenses/_get?id=${id}`);
+      const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${id}`, payload);
+      console.log(Resp);
       const userData = Resp?.data?.newServiceInfoData[0]?.ApplicantInfo;
-      setValue("notSigned", userData?.notSigned);
+      setValue("notSigned", { label: userData?.notSigned, value: userData?.notSigned });
       setValue("LC", userData?.LC);
     } catch (error) {
       return error;

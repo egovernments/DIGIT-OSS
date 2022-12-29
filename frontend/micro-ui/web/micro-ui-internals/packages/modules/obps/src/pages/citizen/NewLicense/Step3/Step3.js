@@ -121,7 +121,7 @@ const LandScheduleForm = (props) => {
     data["releaseStatus"] = data?.releaseStatus?.value;
     const postDistrict = {
       pageName: "LandSchedule",
-      ApplicationStatus: "DRAFT",
+      action: "LANDSCHEDULE",
       applicationNumber: props?.getId,
       createdBy: props?.userData?.id,
       updatedBy: props?.userData?.id,

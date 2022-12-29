@@ -86,7 +86,7 @@ const AppliedDetailForm = (props) => {
     const token = window?.localStorage?.getItem("token");
     const postDistrict = {
       pageName: "DetailsofAppliedLand",
-      ApplicationStatus: "INITIATE",
+      action: "LANDDETAILS",
       applicationNumber: props.getId,
       createdBy: props?.userData?.id,
       updatedBy: props?.userData?.id,

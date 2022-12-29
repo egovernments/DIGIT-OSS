@@ -380,7 +380,7 @@ const ApllicantPuropseForm = (props) => {
     // resetValues();
     setmodal(false);
   };
-
+  const token = window?.localStorage?.getItem("token");
   const PurposeFormSubmitHandler = async (data) => {
     data["purpose"] = data?.purpose?.value;
     data["potential"] = data?.potential?.value;
@@ -408,13 +408,11 @@ const ApllicantPuropseForm = (props) => {
     delete data?.consolidationType;
     delete data?.khewats;
     delete data?.rowid;
-
-    const token = window?.localStorage?.getItem("token");
     if (!modalData?.length && !props?.getLicData?.ApplicantPurpose?.AppliedLandDetails) alert("Please enter atleast one record");
     else {
       const postDistrict = {
         pageName: "ApplicantPurpose",
-        ApplicationStatus: "DRAFT",
+        action: "PURPOSE",
         applicationNumber: props.getId,
         createdBy: props?.userData?.id,
         updatedBy: props?.userData?.id,
@@ -500,6 +498,29 @@ const ApllicantPuropseForm = (props) => {
     }, 500);
     return () => clearTimeout(delay);
   }, [getKhewats]);
+
+  const getApplicantUserData = async (id) => {
+    // http://103.166.62.118:80
+    const payload = {
+      apiId: "Rainmaker",
+      msgId: "1669293303096|en_IN",
+      authToken: token,
+    };
+    try {
+      const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${id}`, payload);
+      console.log(Resp);
+      // const userData = Resp?.data?.newServiceInfoData[0]?.ApplicantInfo;
+    } catch (error) {
+      return error;
+    }
+  };
+
+  useEffect(() => {
+    const search = location?.search;
+    const params = new URLSearchParams(search);
+    const id = params.get("id");
+    if (id) getApplicantUserData(id);
+  }, []);
 
   return (
     <div>
