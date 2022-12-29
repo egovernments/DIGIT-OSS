@@ -880,15 +880,25 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                               </Col>
                               <Col md={3} xxl lg="4">
                                 <label htmlFor="designation" className="text">  Designition <span className="text-danger font-weight-bold">*</span></label>
-                                <TextInput
+                                {/* <TextInput
                                   type="text"
                                   isMandatory={false}
                                   onChange={(e) => setOthersDetails({ ...othersDetails, designation: e.target.value })}
                                   placeholder=""
                                   class="employee-card-input"
                                   value={othersDetails.designation}
-                                  maxlength={"2"}
+                                  maxlength={"30"}
+                                /> */}
+                                <input
+                                  type="text"
+                                  isMandatory={false}
+                                  onChange={(e) => setOthersDetails({ ...othersDetails, designation: e.target.value })}
+                                  placeholder=""
+                                  class="employee-card-input"
+                                  value={othersDetails.designation}
+                                  maxlength={"30"}
                                 />
+                                {othersDetails.designation && othersDetails.designation?.length > 0 && !othersDetails.designation.match(Digit.Utils.getPattern('onlyAlphabets')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("No Numbers and Alphabets allowed ")}</CardLabelError>}
                               </Col>
 
                               <Col md={3} xxl lg="4">
@@ -927,7 +937,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                 <TextInput
                                   type="text"
                                   isMandatory={false}
-                                  onChange={(e) => setOthersDetails({ ...othersDetails, panNumber: e.target.value })}
+                                  onChange={(e) => setOthersDetails({ ...othersDetails, panNumber: e.target.value.toUpperCase() })}
                                   placeholder=""
                                   class="employee-card-input"
                                   value={othersDetails.panNumber}
