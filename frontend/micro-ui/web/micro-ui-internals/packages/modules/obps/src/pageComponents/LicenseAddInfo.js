@@ -903,7 +903,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
                               <Col md={3} xxl lg="4">
                                 <label htmlFor="name" className="text"> Aadhar Number <span className="text-danger font-weight-bold">*</span></label>
-                                <input
+                                <TextInput
                                   type="number"
                                   isMandatory={false}
                                   value={othersDetails.aadharNumber}
