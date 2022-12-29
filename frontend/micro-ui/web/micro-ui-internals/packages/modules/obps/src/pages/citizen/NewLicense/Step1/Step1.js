@@ -49,7 +49,7 @@ const ApllicantFormStep1 = (props) => {
     data["notSigned"] = data?.notSigned?.value;
     const postDistrict = {
       pageName: "ApplicantInfo",
-      ApplicationStatus: "DRAFT",
+      action: "INITIATE",
       applicationNumber: applicantId,
       createdBy: userInfo?.id,
       updatedBy: userInfo?.id,

@@ -49,7 +49,12 @@ const LayoutPlan = (props) => {
           Upload Layout Plan. <span style={{ color: "red" }}>*</span>
         </h6>
         <div>
-          <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "uploadLayoutPlan")} />
+          <input
+            type="file"
+            className="form-control"
+            accept="application/pdf"
+            onChange={(e) => getDocumentData(e?.target?.files[0], "uploadLayoutPlan")}
+          />
         </div>
       </div>
       {/* {fileStoreId?.uploadLayoutPlan ? (
