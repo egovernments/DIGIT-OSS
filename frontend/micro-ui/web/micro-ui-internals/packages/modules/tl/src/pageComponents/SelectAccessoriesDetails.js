@@ -308,7 +308,7 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
                     //     : !field.unit
                     // }
                     //disable={isUpdateProperty || isEditProperty}
-                    disable={!enableUOM}
+                    disable={isRenewTrade ? !enableUOM : false}
                     {...(validation = {
                       isRequired: true,
                       pattern: "[0-9]+",

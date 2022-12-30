@@ -222,7 +222,7 @@ const ReNewApplication = (props) => {
 
     if (data?.tradeUnits?.length > 0) {
       data?.tradeUnits.forEach((data) => {
-        (data.tradeType = data?.tradeSubType?.code || null),
+          (data.tradeType = data?.tradeSubType?.code || null),
           (data.uom = data?.tradeSubType?.uom || null),
           (data.uomValue = Number(data?.uomValue) || null);
       });
@@ -353,7 +353,7 @@ const ReNewApplication = (props) => {
       if (noOfEmployees) formData.tradeLicenseDetail.noOfEmployees = noOfEmployees;
       if (operationalArea) formData.tradeLicenseDetail.operationalArea = operationalArea;
       if (data?.accessories?.length > 0) formData.tradeLicenseDetail.accessories = data?.accessories;
-      if (data?.tradeUnits?.length > 0) formData.tradeLicenseDetail.tradeUnits = data?.tradeUnits;
+      if (data?.tradeUnits?.length > 0) formData.tradeLicenseDetail.tradeUnits = data?.tradeUnits?.filter((ob) => ob?.active !== false);
       if (data?.owners?.length > 0) formData.tradeLicenseDetail.owners = data?.owners;
       if (data?.address) formData.tradeLicenseDetail.address = data?.address;
       if (data?.cpt?.details?.address||propertyDetails) {

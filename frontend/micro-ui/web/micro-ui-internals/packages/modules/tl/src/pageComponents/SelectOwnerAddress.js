@@ -30,6 +30,26 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData }) => {
       setPermanentAddress(addressDetails);
     }
   }, [formData]);
+
+  useEffect(() => {
+    if(formData?.cpt?.details && permanentAddress && isCorrespondenceAddress && window.location.href.includes("/tl/tradelicence/new-application"))
+    {
+      let obj = {
+        doorNo: formData?.cpt?.details?.address?.doorNo,
+        street: formData?.cpt?.details?.address?.street || formData?.cpt?.details?.address?.buildingName,
+        landmark: formData?.cpt?.details?.address?.landmark,
+        locality: formData?.cpt?.details?.address?.locality?.name,
+        city: formData?.cpt?.details?.address?.city || t(formData?.cpt?.details?.address?.tenantId),
+        pincode: formData?.address?.pincode,
+      };
+      let addressDetails = "";
+      for (const key in obj) {
+        if (key == "pincode" || (!obj["pincode"] && key =="city")) addressDetails += obj[key] ? obj[key] : "";
+        else if(obj[key]) addressDetails += obj[key] ? t(`${obj[key]}`) + ", " : "";
+      }
+      setPermanentAddress(addressDetails);
+    }
+  },[formData?.cpt?.details?.propertyId])
   function setOwnerPermanentAddress(e) {
     setPermanentAddress(e.target.value);
   }

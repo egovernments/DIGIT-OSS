@@ -262,9 +262,14 @@ export const gettradeupdateaccessories = (data) => {
     data.TradeDetails.accessories.map((newunit) => {
       if(oldunit.id === newunit.id)
       {
-        if (oldunit.accessoryCategory !== newunit.accessory.code)
+        if (oldunit.accessoryCategory !== newunit.accessory.code || oldunit.count !== newunit.accessorycount || oldunit.uomValue !== newunit.uom)
         {
-          oldunit.accessoryCategory = newunit.accessory.code;
+          if(oldunit.accessoryCategory !== newunit.accessory.code)
+            oldunit.accessoryCategory = newunit.accessory.code;
+          if(oldunit.count !== newunit.accessorycount)
+            oldunit.count = newunit.accessorycount;
+          if(oldunit.uomValue !== newunit.uom)
+            oldunit.uomValue = newunit.uom;
           TLaccessories.push(oldunit);
         }
         else
