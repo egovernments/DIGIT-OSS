@@ -53,6 +53,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     aggreementBtw: "",
     boardResolution: ""
   })
+  const [llpNumber, setLLPNumber] = useState("");
+  const [csrNumber, setCSRNumber] = useState("");
 
   let isOpenLinkFlow = window.location.href.includes("openlink");
 
@@ -99,6 +101,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       setSerialNumber(developerDataGet?.devDetail[0]?.addInfo?.serialNumber);
       setDirectorData(developerDataGet?.devDetail[0]?.addInfo?.directorsInformation || []);
       setCinNo(developerDataGet?.devDetail[0]?.addInfo?.cin_Number);
+      setLLPNumber(developerDataGet?.devDetail[0]?.addInfo?.llp_Number);
+      setCSRNumber(developerDataGet?.devDetail[0]?.addInfo?.csr_Number);
       setModalNAme(developerDataGet?.devDetail[0]?.addInfo?.modalNAme);
       setModaldesignition(developerDataGet?.devDetail[0]?.addInfo?.modaldesignition);
       setModalPercentage(developerDataGet?.devDetail[0]?.addInfo?.modalPercentage);
@@ -301,6 +305,12 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   function selectCinNumber(e) {
     setCinNo(e.target.value.toUpperCase())
   }
+  function selectLlpNumber(e) {
+    setLLPNumber(e.target.value.toUpperCase())
+  }
+  function selectCsrNumber(e) {
+    setCSRNumber(e.target.value.toUpperCase())
+  }
   function selectDinNumber(value) {
     setModalDIN(value)
   }
@@ -312,6 +322,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
   const resetForm = () => {
     setCinNo("")
+    setLLPNumber("")
+    setCSRNumber("")
     setCompanyName("");
     setIncorporation("")
     setRegistered("")
@@ -319,6 +331,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     setRegisteredMobileNumber("")
     setGST("")
     setModalValuesArray([]);
+    setRemainingStakeholderPercentage(100);
     setDirectorData([]);
     setExistingColonizer();
     setExistingColonizerDetails({
@@ -570,6 +583,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         name: name,
         mobileNumberUser: mobileNumberUser,
         cin_Number: cin_Number,
+        llp_Number: llpNumber,
+        csr_Number: csrNumber,
         companyName: companyName,
         incorporationDate: incorporationDate,
         registeredAddress: registeredAddress,
@@ -675,7 +690,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
             // isDisabled={
             //   !showDevTypeFields || (showDevTypeFields === "Individual" && (!name || !mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) || !emailId?.match(Digit.Utils.getPattern('Email')))) || (showDevTypeFields === "Others" && othersArray.length) || (showDevTypeFields === "Proprietorship Firm") || (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others" && (!cin_Number?.match(Digit.Utils.getPattern('CIN')) || !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) || !gst_Number?.match(Digit.Utils.getPattern('GSTNo')) || !((existingColonizer === "N") || (existingColonizer === "Y" && existingColonizerDetails.aggreementBtw && existingColonizerDetails.boardResolution && existingColonizerDetails.dob && existingColonizerDetails.pan && existingColonizerDetails.pan.match(Digit.Utils.getPattern('PAN')) && existingColonizerDetails.licNo && existingColonizerDetails.licDate && existingColonizerDetails.licValidity && existingColonizerDetails.licPurpose))))
             // }
-            isDisabled={(showDevTypeFields === "Individual" || showDevTypeFields === "Proprietorship Firm") ? !(name && mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) && emailId?.match(Digit.Utils.getPattern('Email'))) : (showDevTypeFields === "Others") ? (!othersArray.length) : (showDevTypeFields === "Proprietorship Firm") ? false : (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others") ? (!cin_Number?.match(Digit.Utils.getPattern('CIN')) || !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) || !gst_Number?.match(Digit.Utils.getPattern('GSTNo')) || !registeredAddress.match(Digit.Utils.getPattern('Address')) || !((existingColonizer === "N") || (existingColonizer === "Y" && existingColonizerDetails.aggreementBtw && existingColonizerDetails.boardResolution && existingColonizerDetails.dob && existingColonizerDetails.pan && existingColonizerDetails.pan.match(Digit.Utils.getPattern('PAN')) && existingColonizerDetails.licNo && existingColonizerDetails.licDate && existingColonizerDetails.licValidity && existingColonizerDetails.licPurpose))) : true}
+            isDisabled={(showDevTypeFields === "Individual" || showDevTypeFields === "Proprietorship Firm") ? !(name && mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) && emailId?.match(Digit.Utils.getPattern('Email'))) : (showDevTypeFields === "Others") ? (!othersArray.length) : (showDevTypeFields === "Proprietorship Firm") ? false : (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others") ? (((showDevTypeFields === "Limited Liability Partnership" || showDevTypeFields === "Trust") ? ( showDevTypeFields === "Trust" ? !csrNumber?.match(Digit.Utils.getPattern('CSR')) : !llpNumber?.match(Digit.Utils.getPattern('LLP'))) : ( showDevTypeFields === "Hindu Undivided Family" ) ? false : !cin_Number?.match(Digit.Utils.getPattern('CIN')) ) || !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) || (showDevTypeFields === "Trust" ? false : !gst_Number?.match(Digit.Utils.getPattern('GSTNo'))) || !registeredAddress.match(Digit.Utils.getPattern('Address')) || !(modalValuesArray?.length) || !((existingColonizer === "N") || (existingColonizer === "Y" && existingColonizerDetails.aggreementBtw && existingColonizerDetails.boardResolution && existingColonizerDetails.dob && existingColonizerDetails.pan && existingColonizerDetails.pan.match(Digit.Utils.getPattern('PAN')) && existingColonizerDetails.licNo && existingColonizerDetails.licDate && existingColonizerDetails.licValidity && existingColonizerDetails.licPurpose))) : true}
             t={t}
           >
             <div className="happy">
@@ -1016,35 +1031,102 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                   <h5 className="card-title fw-bold">Developer Details</h5>
                   <div className="card-body">
                     <div className="row">
-                      <div className="col col-4">
-                        <div className="form-group">
-                          <label htmlFor="name">CIN Number <span className="text-danger font-weight-bold">*</span></label>
-                          <TextInput
-                            type="text"
-                            onChange={selectCinNumber}
-                            // onChange={(e) => setCinNo(e.target.value)}
-                            value={cin_Number}
-                            name="cin_Number"
-                            // isMendatory={false}
-                            placeholder={cin_Number}
-                            className="employee-card-input text-uppercase"
-                            max={"21"}
-                            {...(validation = {
-                              // isRequired: true,
-                              pattern: "^[A-Z0-9]*$",
-                              type: "text",
-                              maxlength: "21",
-                              title: "Please Enter CIN Number"
-                            })}
-                          />
-                          {cin_Number && cin_Number.length > 0 && !cin_Number.match(Digit.Utils.getPattern('CIN')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_CIN_NO")}</CardLabelError>}
-                          <h3 className="error-message" style={{ color: "red" }}>{cinValError}</h3>
-                        </div>
-                      </div>
+                        {
+                          showDevTypeFields !== "Hindu Undivided Family" &&
+                          <div className="col col-4">
+                          {/* {JSON.stringify(showDevTypeFields)}rgergerg */}
+                          {
+                            (() => {
+                              switch (showDevTypeFields) {
+                                case "Trust":
+                                  return (
+                                    <div className="form-group">
+                                      <label htmlFor="name">CSR Number <span className="text-danger font-weight-bold">*</span></label>
+                                      <TextInput
+                                        type="text"
+                                        onChange={selectCsrNumber}
+                                        // onChange={(e) => setCinNo(e.target.value)}
+                                        value={csrNumber}
+                                        name="csr_Number"
+                                        // isMendatory={false}
+                                        placeholder={csrNumber}
+                                        className="employee-card-input text-uppercase"
+                                        max={"21"}
+                                        {...(validation = {
+                                          // isRequired: true,
+                                          pattern: "^[A-Z0-9]*$",
+                                          type: "text",
+                                          maxlength: "21",
+                                          title: "Please Enter CSR Number"
+                                        })}
+                                      />
+                                      {csrNumber && csrNumber.length > 0 && !csrNumber.match(Digit.Utils.getPattern('CSR')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_CSR_NO")}</CardLabelError>}
+                                      <h3 className="error-message" style={{ color: "red" }}>{cinValError}</h3>
+                                    </div>
+                                  )
+                                case "Limited Liability Partnership":
+                                  return (
+                                    <div className="form-group">
+                                      <label htmlFor="name">LLP Number <span className="text-danger font-weight-bold">*</span></label>
+                                      <TextInput
+                                        type="text"
+                                        onChange={selectLlpNumber}
+                                        // onChange={(e) => setCinNo(e.target.value)}
+                                        value={llpNumber}
+                                        name="llp_Number"
+                                        // isMendatory={false}
+                                        placeholder={llpNumber}
+                                        className="employee-card-input text-uppercase"
+                                        max={"21"}
+                                        {...(validation = {
+                                          // isRequired: true,
+                                          pattern: "^[A-Z0-9]*$",
+                                          type: "text",
+                                          maxlength: "21",
+                                          title: "Please Enter LLP Number"
+                                        })}
+                                      />
+                                      {llpNumber && llpNumber.length > 0 && !llpNumber.match(Digit.Utils.getPattern('LLP')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_LLP_NO")}</CardLabelError>}
+                                      <h3 className="error-message" style={{ color: "red" }}>{cinValError}</h3>
+                                    </div>
+                                  )
+                                default:
+                                  return (
+                                    <div className="form-group">
+                                      <label htmlFor="name">CIN Number <span className="text-danger font-weight-bold">*</span></label>
+                                      <TextInput
+                                        type="text"
+                                        onChange={selectCinNumber}
+                                        // onChange={(e) => setCinNo(e.target.value)}
+                                        value={cin_Number}
+                                        name="cin_Number"
+                                        // isMendatory={false}
+                                        placeholder={cin_Number}
+                                        className="employee-card-input text-uppercase"
+                                        max={"21"}
+                                        {...(validation = {
+                                          // isRequired: true,
+                                          pattern: "^[A-Z0-9]*$",
+                                          type: "text",
+                                          maxlength: "21",
+                                          title: "Please Enter CIN Number"
+                                        })}
+                                      />
+                                      {cin_Number && cin_Number.length > 0 && !cin_Number.match(Digit.Utils.getPattern('CIN')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_CIN_NO")}</CardLabelError>}
+                                      <h3 className="error-message" style={{ color: "red" }}>{cinValError}</h3>
+                                    </div>
+                                  )
+                              }
+                            })()
+                          }
+                        </div> 
+                        }
                       <div className="col col-4">
                         <div className="form-group">
 
-                          <label htmlFor="name">Company Name <span className="text-danger font-weight-bold">*</span></label>
+                          <label htmlFor="name"> {
+                            showDevTypeFields === "Trust" ? "Trust Name" : "Company Name"
+                          } <span className="text-danger font-weight-bold">*</span></label>
 
                           <TextInput
                             type="text"
@@ -1189,7 +1271,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                       </div>
                       <div className="col col-4">
                         <div className="form-group">
-                          <label htmlFor="name">GST No. <span className="text-danger font-weight-bold">*</span></label>
+                          <label htmlFor="name">GST No. {showDevTypeFields !== "Trust" && <span className="text-danger font-weight-bold">*</span>}</label>
                           <TextInput
                             type="text"
 

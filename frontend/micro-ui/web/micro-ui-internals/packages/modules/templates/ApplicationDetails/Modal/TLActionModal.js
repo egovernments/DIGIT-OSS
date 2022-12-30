@@ -62,7 +62,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   }, [financialYearsData]);
 
   useEffect(() => {
-    setApprovers(approverData?.Employees?.map((employee) => ({ uuid: employee?.uuid, name: employee?.user?.name })));
+    setApprovers(approverData?.Employees?.map((employee) => ({ uuid: employee?.uuid, name: employee?.user?.name })) || []);
   }, [approverData]);
 
   function selectFile(e) {

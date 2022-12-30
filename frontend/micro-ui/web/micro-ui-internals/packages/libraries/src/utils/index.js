@@ -4,7 +4,7 @@ import * as dss from "./dss";
 import * as locale from "./locale";
 import * as obps from "./obps";
 import * as pt from "./pt";
-import PDFUtil, { downloadReceipt ,downloadPDFFromLink,downloadBill ,getFileUrl} from "./pdf";
+import PDFUtil, { downloadReceipt, downloadPDFFromLink, downloadBill, getFileUrl } from "./pdf";
 import getFileTypeFromFileStoreURL from "./fileType";
 
 const GetParamFromUrl = (key, fallback, search) => {
@@ -47,6 +47,10 @@ const getPattern = type => {
     case "NoOfEmp":
       return /^(0)*[1-9][0-9]{0,6}$/i;
     case "CIN":
+      return /^[L|U]{1}\d{5}[A-Z]{2}\d{4}[A-Z]{3}\d{6}$/i;
+    case "CSR":
+      return /^[L|U]{1}\d{5}[A-Z]{2}\d{4}[A-Z]{3}\d{6}$/i;
+    case "LLP":
       return /^[L|U]{1}\d{5}[A-Z]{2}\d{4}[A-Z]{3}\d{6}$/i;
     case "DIN":
       return /^[1-9][0-9]{7}$/i;
@@ -156,7 +160,7 @@ const NOCAccess = () => {
   const userInfo = Digit.UserService.getUser();
   const userRoles = userInfo?.info?.roles?.map((roleData) => roleData.code);
 
-  const NOC_ROLES =  ["NOC_CEMP","NOC_DOC_VERIFIER","NOC_FIELD_INSPECTOR","NOC_APPROVER","BPA_NOC_VERIFIER", "AIRPORT_AUTHORITY_APPROVER", "FIRE_NOC_APPROVER", "NOC_DEPT_APPROVER"]
+  const NOC_ROLES = ["NOC_CEMP", "NOC_DOC_VERIFIER", "NOC_FIELD_INSPECTOR", "NOC_APPROVER", "BPA_NOC_VERIFIER", "AIRPORT_AUTHORITY_APPROVER", "FIRE_NOC_APPROVER", "NOC_DEPT_APPROVER"]
 
   const NOC_ACCESS = userRoles?.filter((role) => NOC_ROLES.includes(role));
 
@@ -167,7 +171,7 @@ const BPAREGAccess = () => {
   const userInfo = Digit.UserService.getUser();
   const userRoles = userInfo?.info?.roles?.map((roleData) => roleData.code);
 
-  const BPAREG_ROLES =["BPAREG_APPROVER","BPAREG_DOC_VERIFIER"]
+  const BPAREG_ROLES = ["BPAREG_APPROVER", "BPAREG_DOC_VERIFIER"]
 
   const BPAREG_ACCESS = userRoles?.filter((role) => BPAREG_ROLES.includes(role));
 
