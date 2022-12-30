@@ -13,6 +13,9 @@ const PersonalinfoChild = (props) => {
 
 
   const classes = useStyles();
+  let user = Digit.UserService.getUser();
+  const userRoles = user?.info?.roles?.map((e) => e.code) || [];
+  const hideRemarks = userRoles.some((item)=>item === "CTP_HR" || item === "CTP_HQ" || item === "DTP_HR" || item === "DTP_HQ")
 
   const [smShow, setSmShow] = useState(false);
   const [labelValue, setLabelValue] = useState("");
@@ -43,10 +46,11 @@ const PersonalinfoChild = (props) => {
     parmanentAddress: Colors.info,
     addressForCommunication: Colors.info,
     authPerson: Colors.info,
-    emailForCommunication: Colors.info
+    emailForCommunication: Colors.info,
+    authorized : Colors.info
   })
 
-  const fieldIdList = [{label:"Developer",key:"developer"},{label:"Authorized Person Name",key:"authPersonName"},{label:"Autrhoized Mobile No",key:"authMobileNo1"},{label:"Authorized MobileNo. 2 ",key:"authMobileNo2"},{label:"Email ID",key:"emailId"},{label:"PAN No.",key:"pan"},{label:"Address  1",key:"address"},{label:"Village/City",key:"city"},{label:"Pincode",key:"pin"},{label:"Tehsil",key:"tehsil"},{label:"District",key:"district"},{label:"State",key:"state"},{label:"Status (Individual/ Company/ Firm/ LLP etc.)",key:"type"},{label:"LC-I signed by",key:"lciSignedBy"},{label:"If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)",key:"lciNotSigned"},{label: "Permanent address in case of individual/ registered office address in case other than individual", key:"parmanentAddress"},{label:"Address for communication",key:"addressForCommunication"},{label:"Name of the authorized person to sign the application",key:"authPerson"},{label:"Email ID for communication",key:"emailForCommunication"}]
+  const fieldIdList = [{label:"Developer",key:"developer"},{label:"Authorized Person Name",key:"authPersonName"},{label:"Autrhoized Mobile No",key:"authMobileNo1"},{label:"Alternate MobileNo. 2 ",key:"authMobileNo2"},{label:"Email ID",key:"emailId"},{label:"PAN No.",key:"pan"},{label:"Address  1",key:"address"},{label:"Village/City",key:"city"},{label:"Pincode",key:"pin"},{label:"Tehsil",key:"tehsil"},{label:"District",key:"district"},{label:"State",key:"state"},{label:"Status (Individual/ Company/ Firm/ LLP etc.)",key:"type"},{label:"LC-I signed by",key:"lciSignedBy"},{label:"If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)",key:"lciNotSigned"},{label: "Permanent address in case of individual/ registered office address in case other than individual", key:"parmanentAddress"},{label:"Address for communication",key:"addressForCommunication"},{label:"Name of the authorized person to sign the application",key:"authorized"},{label:"Email ID for communication",key:"emailForCommunication"}]
 
 
 
@@ -125,8 +129,11 @@ const PersonalinfoChild = (props) => {
               disabled
             ></Form.Control>
             &nbsp;&nbsp;
+            {/* {JSON.stringify(userRoles)}
+          {JSON.stringify(hideRemarks)}  */}
             <ReportProblemIcon
               style={{
+                display: hideRemarks?"none":"block",
                 color:fieldIconColors.developer}}
               onClick={() => {
                   setOpennedModal("developer")
@@ -163,6 +170,7 @@ const PersonalinfoChild = (props) => {
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
+                display: hideRemarks?"none":"block",
                 color: fieldIconColors.authPersonName
               }}
               onClick={() => {
@@ -212,6 +220,7 @@ const PersonalinfoChild = (props) => {
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
+                display: hideRemarks?"none":"block",
                 color: fieldIconColors.authMobileNo1
               }}
               onClick={() => {
@@ -233,7 +242,7 @@ const PersonalinfoChild = (props) => {
           <div>
             <Form.Label>
               {/* <b>Authorized MobileNo. 2 </b> */}
-              <h5 className={classes.formLabel} >Authorized Mobile No. 2 &nbsp;</h5>
+              <h5 className={classes.formLabel} >Alternate Mobile No. 2 &nbsp;</h5>
             </Form.Label>
 
             <span className={classes.required}>*</span>
@@ -310,11 +319,12 @@ const PersonalinfoChild = (props) => {
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
+                display: hideRemarks?"none":"block",
                 color: fieldIconColors.authMobileNo2  
               }}
               onClick={() => {
                 setOpennedModal("authMobileNo2")
-                setLabelValue("Authorized MobileNo. 2 "),
+                setLabelValue("Alternate MobileNo. 2 "),
                   setSmShow(true),
                   console.log("modal open"),
                   setFieldValue(personalinfo !== null ? personalinfo.alternatemobile : null);
@@ -359,6 +369,7 @@ const PersonalinfoChild = (props) => {
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
+                display: hideRemarks?"none":"block",
                 color: fieldIconColors.emailId}}
               onClick={() => {
                 setOpennedModal("emailId")
@@ -406,6 +417,7 @@ const PersonalinfoChild = (props) => {
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
+                display: hideRemarks?"none":"block",
                 color: fieldIconColors.pan
               }}
               onClick={() => {
@@ -456,6 +468,7 @@ const PersonalinfoChild = (props) => {
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
+                display: hideRemarks?"none":"block",
                 color: fieldIconColors.address}}
               onClick={() => {
                 setOpennedModal("address")
@@ -503,6 +516,7 @@ const PersonalinfoChild = (props) => {
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
+                display: hideRemarks?"none":"block",
                 color: fieldIconColors.city}}
               onClick={() => {
                 setOpennedModal("city")
@@ -550,6 +564,7 @@ const PersonalinfoChild = (props) => {
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
+                display: hideRemarks?"none":"block",
                 color: fieldIconColors.pin}}
               onClick={() => {
                 setOpennedModal("pin")
@@ -599,6 +614,7 @@ const PersonalinfoChild = (props) => {
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
+                display: hideRemarks?"none":"block",
                 color: fieldIconColors.tehsil}}
               onClick={() => {
                 setOpennedModal("tehsil")
@@ -646,8 +662,10 @@ const PersonalinfoChild = (props) => {
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
+                display: hideRemarks?"none":"block",
                 color: fieldIconColors.district}}
               onClick={() => {
+                display: hideRemarks?"none":"block",
                 setOpennedModal("district")
                 setLabelValue("District"),
                   setSmShow(true),
@@ -693,6 +711,7 @@ const PersonalinfoChild = (props) => {
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
+                display: hideRemarks?"none":"block",
                 color: fieldIconColors.state}}
               onClick={() => {
                 setOpennedModal("state")
@@ -739,6 +758,7 @@ const PersonalinfoChild = (props) => {
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
+                display: hideRemarks?"none":"block",
                 color: fieldIconColors.type }}
               onClick={() => {
                 setOpennedModal("type")
@@ -753,29 +773,10 @@ const PersonalinfoChild = (props) => {
         <Col md={4} xxl lg="4">
           <div>
             <Form.Label>
-              {/* <b>LC-I signed by</b>{" "} */}
+       
               <h5 className={classes.formLabel} >LC-I signed by &nbsp;</h5>
             </Form.Label>
           </div>
-          {/* <Form.Check
-          value="LC-I signed by"
-          type="radio"
-          id="default-radio"
-          label={<AiFillCheckCircle class="fa fa-check text-success" size={18}></AiFillCheckCircle>}
-          label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-          name="group13"
-          inline
-        ></Form.Check>
-        <Form.Check
-          onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-          value="LC-I signed by"
-          type="radio"
-          id="default-radio"
-           label={<AiFillCloseCircle class="fa fa-times text-danger" size={18}></AiFillCloseCircle>}
-          label={<CancelIcon color="error" />}
-          name="group13"
-          inline
-        ></Form.Check> */}
           <div className={classes.fieldContainer}>
             <Form.Control
               className={classes.formControl}
@@ -785,11 +786,12 @@ const PersonalinfoChild = (props) => {
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
+                display: hideRemarks?"none":"block",
                 color: fieldIconColors.lciSignedBy }}
               onClick={() => {
                 setOpennedModal("lciSignedBy")
                 setLabelValue("LC-I signed by"), setSmShow(true), console.log("modal open");
-                // setFieldValue(personalinfo !== null ? personalinfo.status : null);
+               
               }}
             ></ReportProblemIcon>
           </div>
@@ -810,6 +812,7 @@ const PersonalinfoChild = (props) => {
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
+                display: hideRemarks?"none":"block",
                 color: fieldIconColors.addressForCommunication }}
               onClick={() => {
                 setOpennedModal("addressForCommunication")
@@ -823,8 +826,8 @@ const PersonalinfoChild = (props) => {
         </Col>
         
         
-      </Row>
-      <Row className={[classes.row,"ms-auto"]}>
+      {/* </Row>
+      <Row className={[classes.row,"ms-auto"]}> */}
       <Col md={4} xxl lg="4">
           <div>
             <Form.Label
@@ -833,7 +836,7 @@ const PersonalinfoChild = (props) => {
               title="Permanent address in case of individual/ registered office address in case other than individual"
             >
               {/* <b>Permanent Address </b> */}
-              <h5 className={classes.formLabel} >Permanent Address &nbsp;</h5>
+              <h5 className={classes.formLabel} >Permanent Address/registered</h5>
               {/* <InfoIcon /> */}
             </Form.Label>
           </div>
@@ -865,6 +868,7 @@ const PersonalinfoChild = (props) => {
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
+                display: hideRemarks?"none":"block",
                 color: fieldIconColors.parmanentAddress }}
               onClick={() => {
                 setOpennedModal("parmanentAddress")
@@ -876,37 +880,19 @@ const PersonalinfoChild = (props) => {
             ></ReportProblemIcon>
           </div>
         </Col>
-        <Col md={4} xxl lg="4">
+        {/* <Col md={4} xxl lg="4">
           <div>
             <Form.Label
               data-toggle="tooltip"
               data-placement="top"
               title="If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)"
             >
-              {/* <b> LC-I is not signed</b> */}
+             
               <h5 className={classes.formLabel} >LC-I is not signed &nbsp;</h5>
-              {/* <InfoIcon /> */}
+       
             </Form.Label>
           </div>
-          {/* <Form.Check
-          value="If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)"
-          type="radio"
-          id="default-radio"
-          label={<AiFillCheckCircle class="fa fa-check text-success" size={18}></AiFillCheckCircle>}
-          label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-          name="group14"
-          inline
-        ></Form.Check>
-        <Form.Check
-          onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-          value="If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)"
-          type="radio"
-          id="default-radio"
-           label={<AiFillCloseCircle class="fa fa-times text-danger" size={18}></AiFillCloseCircle>}
-          label={<CancelIcon color="error" />}
-          name="group14"
-          inline
-        ></Form.Check> */}
+          
           <div className={classes.fieldContainer}>
             <Form.Control
               className={classes.formControl}
@@ -916,6 +902,7 @@ const PersonalinfoChild = (props) => {
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
+                display: hideRemarks?"none":"block",
                 color: fieldIconColors.lciNotSigned }}
               onClick={() => {
                 setOpennedModal("lciNotSigned")
@@ -926,12 +913,12 @@ const PersonalinfoChild = (props) => {
               }}
             ></ReportProblemIcon>
           </div>
-        </Col>
+        </Col> */}
         <Col md={4} xxl lg="4">
           <div>
             <Form.Label>
               {/* <b>Email ID for communication</b> */}
-              <h5 className={classes.formLabel} >Email ID for communication &nbsp;</h5>
+              <h5 className={classes.formLabel} >EmailId for communication &nbsp;</h5>
             </Form.Label>
           </div>
 
@@ -944,6 +931,7 @@ const PersonalinfoChild = (props) => {
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
+                display: hideRemarks?"none":"block",
                 color: fieldIconColors.emailForCommunication  }}
               onClick={() => {
                 setOpennedModal("emailForCommunication")
@@ -956,32 +944,33 @@ const PersonalinfoChild = (props) => {
           </div>
         </Col>
         
-      </Row>
-      <Row className={[classes.row,"ms-auto"]}>
+      {/* </Row>
+      <Row className={[classes.row,"ms-auto"]}> */}
       
         <Col md={4} xxl lg="4">
           <div>
             <Form.Label data-toggle="tooltip" data-placement="top" title="Name of the authorized person to sign the application">
-              <h5 className={classes.formLabel} >Authorized person &nbsp;</h5>
+              <h5 className={classes.formLabel} >Name of Authorized person</h5>
             </Form.Label>
           </div>
 
           <div className={classes.fieldContainer}>
             <Form.Control
               className={classes.formControl}
-              placeholder={personalinfo !== null ? personalinfo.notSigned : null}
+              placeholder={personalinfo !== null ? personalinfo.authorized : null}
               disabled
             ></Form.Control>
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
-                color: fieldIconColors.authPerson }}
+                display: hideRemarks?"none":"block",
+                color: fieldIconColors.authorized }}
               onClick={() => {
                 setOpennedModal("authPerson")
                 setLabelValue("Name of the authorized person to sign the application"),
                   setSmShow(true),
                   console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.notSigned : null);
+                  setFieldValue(personalinfo !== null ? personalinfo.authorized : null);
               }}
             ></ReportProblemIcon>
           </div>

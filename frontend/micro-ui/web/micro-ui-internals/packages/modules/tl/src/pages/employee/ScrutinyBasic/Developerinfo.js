@@ -31,6 +31,9 @@ const Developerinfo = (props) => {
   const dataIcons = props.dataForIcons;
   const landScheduleData = props.ApiResponseData;
   const Purpose = props.purpose;
+  let user = Digit.UserService.getUser();
+  const userRoles = user?.info?.roles?.map((e) => e.code) || [];
+  const hideRemarks = userRoles.some((item)=>item === "CTP_HR" || item === "CTP_HQ" || item === "DTP_HR" || item === "DTP_HQ")
 
 
   const [vacant, setVacant] = useState("");
@@ -654,6 +657,8 @@ const Developerinfo = (props) => {
                 <Form.Label
                 // placeholder={personalinfo !== null ? personalinfo.authorizedDeveloper : null}
                 >
+                  {JSON.stringify(userRoles)}
+                    {JSON.stringify(hideRemarks)}
 
                   (i)Whether licence applied for additional area ?
 
@@ -665,6 +670,7 @@ const Developerinfo = (props) => {
                     {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks?"none":"block",
                         color: fieldIconColors.licenceApplied
                       }}
                       onClick={() => {
