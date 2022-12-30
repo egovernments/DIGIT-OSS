@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import Personalinfo from "./Personalinfo";
 import Genarelinfo from "./Generalinfo";
 import Developerinfo from "./Developerinfo";
@@ -12,6 +12,7 @@ import { Button, Row, Col } from "react-bootstrap";
 // import LicenseDetailsScrutiny from "../ScrutinyBasic/Developer/LicenseDetailsScrutiny";
 import { useForkRef } from "@mui/material";
 import axios from "axios";
+import { ScrutinyRemarksContext } from "../../../../context/remarks-data-context";
 // import AddIcon from "@mui/icons-material/Add";
 
 const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => {
@@ -35,6 +36,7 @@ const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => 
   const [displayFeeandCharges, setDisplayFeeandChargesInfo] = useState([]);
   // const [displayLicenseDetails, setDisplayLicenseDetailsInfo] = useState([]);
   // const [displayLicenseDetailsCheckedlist, setDisplayCheckedLicenseDetailsList] = useState([]);
+  const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues } = useContext(ScrutinyRemarksContext);
   const [displayJeLand, setDisplayJeLand] = useState([]);
   const [ActiveKey, setActiveKey] = useState(1);
   const [defaultHeightPersonal, setDefaultHeightPersonal] = useState(0);
@@ -44,13 +46,13 @@ const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => 
   const [defaultheightFee, setDefaultheightFee] = useState(0);
   const [open, setOpen] = useState(false);
   // const [apiResponse, setApiResponse] = useState({});
-  const [remarksResponse, setRemarksResponse] = useState({});
+  // const [remarksResponse, setRemarksResponse] = useState({});
   const [sumrol, setSumrol] = useState({});
   const [uncheckedValue, setUncheckedVlue] = useState([]);
   const [remarksChanges, setRemarksChanges] = useState("");
   const [disapprovalData, setDisapprovalData] = useState({});
   const [applictaionNo, setApplicationNO] = useState(null);
-  const [iconStates,setIconState]= useState(null)
+  // const [iconStates,setIconState]= useState(null)
   const [urlGetShareHoldingDoc,setDocShareHoldingUrl] = useState("")
 
   const userInfo = Digit.UserService.getUser()?.info || {};
@@ -120,34 +122,34 @@ const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => 
   //     console.log(error);
   //   }
   // };
-  const handleGetFiledsStatesById=async()=>{
-      const dataToPass={
-        "RequestInfo": {
-            "api_id": "1",
-            "ver": "1",
-            "ts": null,
-            "action": "create",
-            "did": "",
-            "key": "",
-            "msg_id": "",
-            "requester_id": "",
-            "auth_token": authToken,
-            "authToken": authToken
-        }
-    };
-    try {
-      const Resp = await axios.post(`/land-services/egscrutiny/_search?applicationNumber=${applicationNumber}&userId=${userInfo?.id}`, dataToPass).then((response) => {
-        return response.data;
-      });
+  // const handleGetFiledsStatesById=async()=>{
+  //     const dataToPass={
+  //       "RequestInfo": {
+  //           "api_id": "1",
+  //           "ver": "1",
+  //           "ts": null,
+  //           "action": "create",
+  //           "did": "",
+  //           "key": "",
+  //           "msg_id": "",
+  //           "requester_id": "",
+  //           "auth_token": authToken,
+  //           "authToken": authToken
+  //       }
+  //   };
+  //   try {
+  //     const Resp = await axios.post(`/land-services/egscrutiny/_search?applicationNumber=${applicationNumber}&userId=${userInfo?.id}`, dataToPass).then((response) => {
+  //       return response.data;
+  //     });
 
-      console.log("Response From API", Resp);
-      setIconState(Resp);
-      // setApiResponse(Resp);
-    } catch (error) {
-      console.log(error);
-    }
+  //     console.log("Response From API", Resp);
+  //     setIconState(Resp);
+  //     // setApiResponse(Resp);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
 
-  }
+  // }
   const handleGetDisapprovalList = async () => {
     const dataToPass = {
       RequestInfo: {
@@ -175,31 +177,31 @@ const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => 
       console.log(error);
     }
   };
-  const handleGetRemarkssValues = async () => {
-    const dataToSend = {
-      RequestInfo: {
-        apiId: "Rainmaker",
-        action: "_create",
-        did: 1,
-        key: "",
-        msgId: "20170310130900|en_IN",
-        ts: 0,
-        ver: ".01",
-        authToken: authToken,
-        userInfo: userInfo,
-      },
-    };
-    try {
-      const Resp = await axios.post(`/land-services/egscrutiny/_search?applicationNumber=${applicationNumber}&userId=${userInfo?.id}`, dataToSend).then((response) => {
-        return response.data;
-      });
+  // const handleGetRemarkssValues = async () => {
+  //   const dataToSend = {
+  //     RequestInfo: {
+  //       apiId: "Rainmaker",
+  //       action: "_create",
+  //       did: 1,
+  //       key: "",
+  //       msgId: "20170310130900|en_IN",
+  //       ts: 0,
+  //       ver: ".01",
+  //       authToken: authToken,
+  //       userInfo: userInfo,
+  //     },
+  //   };
+  //   try {
+  //     const Resp = await axios.post(`/land-services/egscrutiny/_search?applicationNumber=${applicationNumber}&userId=${userInfo?.id}`, dataToSend).then((response) => {
+  //       return response.data;
+  //     });
 
-      console.log("Response From API", Resp);
-      setRemarksResponse(Resp);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //     console.log("Response From API", Resp);
+  //     setRemarksResponse(Resp);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   useEffect(() => {
     if(apiResponse?.id){
@@ -213,13 +215,13 @@ const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => 
   useEffect(() => {
     if(applicationNumber){
       // console.log("log123...",userInfo)
-      handleGetRemarkssValues();
+      handleGetRemarkssValues(applicationNumber);
     }
   }, [applicationNumber]);
 
   useEffect(()=>{
     if(applicationNumber){
-      handleGetFiledsStatesById();
+      handleGetFiledsStatesById(applicationNumber);
     }
   },[applicationNumber]);
 
@@ -291,7 +293,7 @@ const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => 
     apiResponse !== undefined ? apiResponse?.ApplicantPurpose : apiResponse
   );
   // console.log("scrutiny form api get2", apiResponse !== undefined ? apiResponse?.LandSchedule : apiResponse);
-  console.log("remarks api", remarksResponse.egScrutiny !== undefined ? remarksResponse.egScrutiny : null);
+  console.log("remarks api", remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null);
 
   console.log("remakes data parsnalinfo", remarksChanges);
 
@@ -329,6 +331,7 @@ const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => 
           <div>
             <Developerinfo
               developerInfoRef={developerInfoRef}
+              purpose={apiResponse?apiResponse?.ApplicantPurpose?.purpose:null}
               passUncheckedList={getUncheckedPurposeinfos}
               passCheckedList={getCheckedPurposeInfoValue}
               onClick={() => setOpen(!open)}
@@ -383,7 +386,7 @@ const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => 
 
       <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
         <ScrutinyDevelopment
-          remarkData={remarksResponse.egScrutiny !== undefined ? remarksResponse.egScrutiny : null}
+          remarkData={remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null}
           // remarksum={sumrol.egScrutiny !== undefined ? sumrol.egScrutiny : null}
         ></ScrutinyDevelopment>
       </div>
