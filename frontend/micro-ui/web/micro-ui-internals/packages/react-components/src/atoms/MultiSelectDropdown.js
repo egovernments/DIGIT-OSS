@@ -2,7 +2,7 @@ import React, { useEffect, useReducer, useRef, useState } from "react";
 import { ArrowDown, CheckSvg } from "./svgindex";
 import { useTranslation } from "react-i18next";
 
-const MultiSelectDropdown = ({ options, optionsKey, selected = [], onSelect, defaultLabel = "", defaultUnit = "",BlockNumber=1,isOBPSMultiple=false,props={},isPropsNeeded=false,ServerStyle={}}) => {
+const MultiSelectDropdown = ({ options, optionsKey, selected = [], onSelect, defaultLabel = "", defaultUnit = "",BlockNumber=1,isOBPSMultiple=false,props={},isPropsNeeded=false,ServerStyle={}, showSelectedValue=false}) => {
   const [active, setActive] = useState(false);
   const [searchQuery, setSearchQuery] = useState();
   const [optionIndex, setOptionIndex] = useState(-1);
@@ -34,7 +34,9 @@ const MultiSelectDropdown = ({ options, optionsKey, selected = [], onSelect, def
   
   useEffect(()=> {
     if(!active){
-      onSelect(alreadyQueuedSelectedState?.map( e => e.propsData))
+      const tempArray = alreadyQueuedSelectedState?.map( e => e.propsData) || [];
+      console.log("logDev123... ",selected,tempArray,alreadyQueuedSelectedState)
+      onSelect([...tempArray])
     }
   },[active])
 
@@ -114,6 +116,16 @@ const MultiSelectDropdown = ({ options, optionsKey, selected = [], onSelect, def
           <ArrowDown />
         </div>
       </div>
+      {
+        showSelectedValue &&
+        <p className="my-2">
+          {
+            alreadyQueuedSelectedState.map((ele)=>(
+              <span>{ele.name} ,</span>
+            ))
+          }
+          </p>
+      }
       {active ? (
         <div className="server" id="jk-dropdown-unique" style={ServerStyle?ServerStyle:{}}>
           <Menu />
