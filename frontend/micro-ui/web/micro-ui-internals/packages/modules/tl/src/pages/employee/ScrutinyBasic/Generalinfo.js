@@ -24,6 +24,9 @@ const Genarelinfo = (props) => {
   const [uncheckedValue, setUncheckedVlue] = useState([]);
   const [checkValue, setCheckedVAlue] = useState([]);
   // const [fieldValue, setFieldValue] = useState("");
+  let user = Digit.UserService.getUser();
+  const userRoles = user?.info?.roles?.map((e) => e.code) || [];
+  const hideRemarks = userRoles.some((item)=>item === "CTP_HR" || item === "CTP_HQ" || item === "DTP_HR" || item === "DTP_HQ")
 
   const genarelinfo = props.genarelinfo;
   const dataIcons = props.dataForIcons;
@@ -260,9 +263,10 @@ const Genarelinfo = (props) => {
     nameOfAuthSignatory : Colors.info,
     nameOfAuthSignatoryDeveloper : Colors.info,
     registeringAuthority : Colors.info,
+    hadbastNo : Colors.info,
   })
 
-  const fieldIdList = [{ label: "Purpose Of License", key: "purpose" }, { label: "Potential Zone", key: "potential" }, { label: "District", key: "district" }, { label: "State", key: "state" }, { label: "Tehsil", key: "tehsil" }, { label: "Revenue estate", key: "revenue" }, { label: "Rectangle No.", key: "rectangleNo" }, { label: "Killa", key: "killa" }, { label: "Land Owner", key: "landOwner" }, { label: "Consolidation Type", key: "consolidationType" }, { label: "Kanal", key: "kanal" }, { label: "Marla", key: "marla" }, { label: "Sarsai", key: "sarsai" }, { label: "Bigha", key: "bigha" }, { label: "Biswa", key: "biswa" }, { label: "Biswansi", key: "biswansi" }, { label: "Collaboration Agreement", key: "collabrationAgreement" }, { label: "Developer Company", key: "developerCompany" }, { label: "Date of Registering", key: "dateOfRegistering" }, { label: "Date of Validity", key: "dateOfValidity" }, { label: "Collaboration Agreement Irrevociable", key: "agreementIrrevocialble" }, { label: "Name of Authorized Signatory Developer", key: "nameOfAuthSignatory" }, { label: "Name of Authorized Signatory Developer", key: "nameOfAuthSignatoryDeveloper" }, { label: "Registering Authority", key: "registeringAuthority" }];
+  const fieldIdList = [{ label: "Purpose Of License", key: "purpose" }, { label: "Potential Zone", key: "potential" }, { label: "District", key: "district" }, { label: "State", key: "state" }, { label: "Tehsil", key: "tehsil" }, { label: "Revenue estate", key: "revenue" }, { label: "Rectangle No.", key: "rectangleNo" }, { label: "Killa", key: "killa" }, { label: "Land Owner", key: "landOwner" }, { label: "Consolidation Type", key: "consolidationType" }, { label: "Kanal", key: "kanal" }, { label: "Marla", key: "marla" }, { label: "Sarsai", key: "sarsai" }, { label: "Bigha", key: "bigha" }, { label: "Biswa", key: "biswa" }, { label: "Biswansi", key: "biswansi" }, { label: "Collaboration Agreement", key: "collabrationAgreement" }, { label: "Developer Company", key: "developerCompany" }, { label: "Date of Registering", key: "dateOfRegistering" }, { label: "Date of Validity", key: "dateOfValidity" }, { label: "Collaboration Agreement Irrevociable", key: "agreementIrrevocialble" }, { label: "Name of Authorized Signatory Developer", key: "nameOfAuthSignatory" }, { label: "Name of Authorized Signatory Developer", key: "nameOfAuthSignatoryDeveloper" }, { label: "Registering Authority", key: "registeringAuthority" }, { label: "Hadbast Number", key: "hadbastNo" } ];
 
 
   const getColorofFieldIcon = () => {
@@ -383,8 +387,11 @@ const Genarelinfo = (props) => {
                     <option value="12">TOD Group housing</option> */}
                     {/* </select> */}
                   </Form.Control>
+                  {/* {JSON.stringify(userRoles)}
+                    {JSON.stringify(hideRemarks)} */}
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks?"none":"block",
                       color: fieldIconColors.purpose
                     }}
                     onClick={() => {
@@ -441,6 +448,7 @@ const Genarelinfo = (props) => {
                   {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks?"none":"block",
                       color: fieldIconColors.potential
                     }}
                     onClick={() => {
@@ -475,6 +483,7 @@ const Genarelinfo = (props) => {
                     </Form.Control>
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks?"none":"block",
                         color: fieldIconColors.district
                       }}
                       onClick={() => {
@@ -508,6 +517,7 @@ const Genarelinfo = (props) => {
                     ></Form.Control>
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks?"none":"block",
                         color: fieldIconColors.state
                       }}
                       onClick={() => {
@@ -621,6 +631,7 @@ const Genarelinfo = (props) => {
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
+                          display: hideRemarks?"none":"block",
                           color: fieldIconColors.tehsil
                         }}
                         onClick={() => {
@@ -635,6 +646,7 @@ const Genarelinfo = (props) => {
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
+                          display: hideRemarks?"none":"block",
                           color: fieldIconColors.revenue
                         }}
                         onClick={() => {
@@ -649,20 +661,22 @@ const Genarelinfo = (props) => {
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          color: fieldIconColors.rectangle
+                          display: hideRemarks?"none":"block",
+                          color: fieldIconColors.hadbastNo
                         }}
                         onClick={() => {
-                          setLabelValue("Rectangle No."),
-                          setOpennedModal("rectangeNo")
+                          setLabelValue(" Hadbast Number"),
+                          setOpennedModal("hadbastNo")
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.rectangle : null);
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.hadbastNo : null);
                         }}
                       ></ReportProblemIcon>
                     </th>
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
+                          display: hideRemarks?"none":"block",
                           color: fieldIconColors.rectangleNo
                         }}
                         onClick={() => {
@@ -677,6 +691,7 @@ const Genarelinfo = (props) => {
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
+                          display: hideRemarks?"none":"block",
                           color: fieldIconColors.rectaNo
                         }}
                         onClick={() => {
@@ -691,6 +706,7 @@ const Genarelinfo = (props) => {
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
+                          display: hideRemarks?"none":"block",
                           color: fieldIconColors.landOwner
                         }}
                         onClick={() => {
@@ -705,6 +721,7 @@ const Genarelinfo = (props) => {
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
+                          display: hideRemarks?"none":"block",
                           color: fieldIconColors.consolidationType
                         }}
                         onClick={() => {
@@ -719,6 +736,7 @@ const Genarelinfo = (props) => {
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
+                          display: hideRemarks?"none":"block", 
                           color: fieldIconColors.kanal
                         }}
                         onClick={() => {
@@ -734,6 +752,7 @@ const Genarelinfo = (props) => {
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
+                          display: hideRemarks?"none":"block",
                           color: fieldIconColors.marla
                         }}
                         onClick={() => {
@@ -748,6 +767,7 @@ const Genarelinfo = (props) => {
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
+                          display: hideRemarks?"none":"block",
                           color: fieldIconColors.sarsai
                         }}
                         onClick={() => {
@@ -764,6 +784,7 @@ const Genarelinfo = (props) => {
                       {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
                       <ReportProblemIcon
                         style={{
+                          display: hideRemarks?"none":"block",
                           color: fieldIconColors.bigha
                         }}
                         onClick={() => {
@@ -779,6 +800,7 @@ const Genarelinfo = (props) => {
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
+                          display: hideRemarks?"none":"block",
                           color: fieldIconColors.biswa
                         }}
                         onClick={() => {
@@ -793,6 +815,7 @@ const Genarelinfo = (props) => {
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
+                          display: hideRemarks?"none":"block",
                           color: fieldIconColors.biswansi
                         }}
                         onClick={() => {
@@ -808,6 +831,7 @@ const Genarelinfo = (props) => {
                       {" "}
                       <ReportProblemIcon
                         style={{
+                          display: hideRemarks?"none":"block",
                           color: fieldIconColors.collabrationAgreement
                         }}
                         onClick={() => {
@@ -823,6 +847,7 @@ const Genarelinfo = (props) => {
                       {" "}
                       <ReportProblemIcon
                         style={{
+                          display: hideRemarks?"none":"block",
                           color: fieldIconColors.developerCompany
                         }}
                         onClick={() => {
@@ -838,6 +863,7 @@ const Genarelinfo = (props) => {
                       {" "}
                       <ReportProblemIcon
                         style={{
+                          display: hideRemarks?"none":"block",
                           color: fieldIconColors.dateOfRegistering
                         }}
                         onClick={() => {
@@ -853,6 +879,7 @@ const Genarelinfo = (props) => {
                       {" "}
                       <ReportProblemIcon
                         style={{
+                          display: hideRemarks?"none":"block",
                           color: fieldIconColors.dateOfValidity
                         }}
                         onClick={() => {
@@ -868,6 +895,7 @@ const Genarelinfo = (props) => {
                       {" "}
                       <ReportProblemIcon
                         style={{
+                          display: hideRemarks?"none":"block",
                           color: fieldIconColors.agreementIrrevocialble
                         }}
                         onClick={() => {
@@ -883,6 +911,7 @@ const Genarelinfo = (props) => {
                       {" "}
                       <ReportProblemIcon
                         style={{
+                          display: hideRemarks?"none":"block",
                           color: fieldIconColors.nameOfAuthSignatory
                         }}
                         onClick={() => {
@@ -898,6 +927,7 @@ const Genarelinfo = (props) => {
                       {" "}
                       <ReportProblemIcon
                         style={{
+                          display: hideRemarks?"none":"block",
                           color: fieldIconColors.nameOfAuthSignatoryDeveloper
                         }}
                         onClick={() => {
@@ -913,6 +943,7 @@ const Genarelinfo = (props) => {
                       {" "}
                       <ReportProblemIcon
                         style={{
+                          display: hideRemarks?"none":"block",
                           color: fieldIconColors.registeringAuthority
                         }}
                         onClick={() => {
