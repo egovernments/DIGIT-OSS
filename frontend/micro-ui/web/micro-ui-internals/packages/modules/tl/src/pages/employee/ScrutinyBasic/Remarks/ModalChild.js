@@ -4,8 +4,12 @@ import Modal from "react-bootstrap/Modal";
 import { Form, Col, Row } from "react-bootstrap";
 import axios from "axios";
 import { useStyles } from "./styles/modalChild.style";
+import { useParams } from "react-router-dom";
 
 function ModalChild(props) {
+
+
+ const userInfo = Digit.UserService.getUser()?.info || {};
   const classes = useStyles();
   const smShow = props.displaymodal;
   const [RemarksDeveloper, setDeveloperRemarks] = useState("");
@@ -15,6 +19,9 @@ function ModalChild(props) {
   const inputFieldValue = props.fieldValue;
   const inputFieldLabel = props.labelValue;
   const dateTime = new Date();
+  const authToken = Digit.UserService.getUser()?.access_token || null;
+  const {id} = useParams();
+
 
   const handlemodalsubmit = async () => {
     if (status) {
@@ -30,21 +37,21 @@ function ModalChild(props) {
           key: "",
           msg_id: "",
           requester_id: "",
-          auth_token: null,
+          authToken: authToken,
         },
         egScrutiny: {
-          applicationId: "123",
+          applicationId: id,
           comment: RemarksDeveloper.data,
           fieldValue: inputFieldValue,
           fieldIdL: props.labelmodal,
-          isApproved: status === "approved" ? true : false,
-          userid: "123",
+          isApproved: status==="approved"?true:false,
+          userid: userInfo?.id || null,
           serviceId: "123",
           documentId: null,
           ts: dateTime.toUTCString(),
         },
       };
-
+      
       try {
         const Resp = await axios.post("/land-services/egscrutiny/_create?status=submit", postData, {}).then((response) => {
           return response.data;
@@ -61,6 +68,7 @@ function ModalChild(props) {
   console.log("smshow", smShow);
 
   useEffect(() => {
+    console.log("userInfoLog123",userInfo)
     console.log("loggg", props.selectedFieldData);
     if (props.selectedFieldData) {
       console.log("loggg changing123...", props.selectedFieldData);

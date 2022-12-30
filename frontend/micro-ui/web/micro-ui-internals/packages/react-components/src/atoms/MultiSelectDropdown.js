@@ -34,7 +34,7 @@ const MultiSelectDropdown = ({ options, optionsKey, selected = [], onSelect, def
   
   useEffect(()=> {
     if(!active){
-      onSelect(alreadyQueuedSelectedState?.map( e => e.propsData), props)
+      onSelect(alreadyQueuedSelectedState?.map( e => e.propsData))
     }
   },[active])
 
@@ -103,6 +103,7 @@ const MultiSelectDropdown = ({ options, optionsKey, selected = [], onSelect, def
       searchQuery?.length > 0 ? options.filter((option) => t(option[optionsKey]&&typeof option[optionsKey]=="string" && option[optionsKey].toUpperCase()).toLowerCase().indexOf(searchQuery.toLowerCase()) >= 0) : options;
     return filteredOptions?.map((option, index) => <MenuItem option={option} key={index} index={index} />);
   };
+
 
   return (
     <div className="multi-select-dropdown-wrap" ref={dropdownRef}>

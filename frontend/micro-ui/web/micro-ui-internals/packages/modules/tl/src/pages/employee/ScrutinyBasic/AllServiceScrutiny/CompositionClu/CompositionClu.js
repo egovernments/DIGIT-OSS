@@ -169,7 +169,9 @@ function CompositionClu() {
       </div>
       <Collapse in={open2}>
         <div id="example-collapse-text">
-      <Card style={{ width: "126%", border: "5px solid #1266af" }}>
+      <Card
+      //  style={{ width: "126%", border: "5px solid #1266af" }}
+       >
         <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Composition of urban Area Violation in CLU</h4>
         <div className="card">
           <Row>
@@ -222,7 +224,27 @@ function CompositionClu() {
                 <Form.Label>
                   <h2> Land holding of above </h2>{" "}
                 </Form.Label>
-                <input type="text" placeholder="" className="form-control" {...register("landHolding")} />
+                {/* <input type="text" placeholder="" className="form-control" {...register("landHolding")} /> */}
+                <div className={classes.fieldContainer}>
+            <Form.Control
+              className={classes.formControl}
+              placeholder=""
+              disabled
+            ></Form.Control>
+                
+                <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Licence No")
+                  setLabelValue("Licence No"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+           
+             </div>
               </Form.Group>
             </Col>
           </Row>
@@ -252,19 +274,99 @@ function CompositionClu() {
                   <tr>
                     <th className="fw-normal">1</th>
                     <td>
-                      <input type="text" placeholder="" className="form-control" {...register("areaParts")} />
+                      {/* <input type="text" placeholder="" className="form-control" {...register("areaParts")} /> */}
+                      <div className={classes.fieldContainer}>
+            <Form.Control
+              className={classes.formControl}
+              placeholder=""
+              disabled
+            ></Form.Control>
+                
+                <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Licence No")
+                  setLabelValue("Licence No"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+           
+             </div>
                     </td>
                     <td>
-                      <input type="text" placeholder="" className="form-control" {...register("srNo")} />
+                      {/* <input type="text" placeholder="" className="form-control" {...register("srNo")} /> */}
+                      <div className={classes.fieldContainer}>
+            <Form.Control
+              className={classes.formControl}
+              placeholder=""
+              disabled
+            ></Form.Control>
+                
+                <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Licence No")
+                  setLabelValue("Licence No"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+           
+             </div>
                     </td>
                   </tr>
                   <tr>
                     <th className="fw-normal">2</th>
                     <td>
-                      <input type="text" placeholder="" className="form-control" {...register("khasraNo")} />
+                      {/* <input type="text" placeholder="" className="form-control" {...register("khasraNo")} /> */}
+                      <div className={classes.fieldContainer}>
+            <Form.Control
+              className={classes.formControl}
+              placeholder=""
+              disabled
+            ></Form.Control>
+                
+                <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Licence No")
+                  setLabelValue("Licence No"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+           
+             </div>
                     </td>
                     <td>
-                      <input type="text" placeholder="" className="form-control" {...register("area")} />
+                      {/* <input type="text" placeholder="" className="form-control" {...register("area")} /> */}
+                      <div className={classes.fieldContainer}>
+            <Form.Control
+              className={classes.formControl}
+              placeholder=""
+              disabled
+            ></Form.Control>
+                
+                <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Licence No")
+                  setLabelValue("Licence No"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+           
+             </div>
                     </td>
                   </tr>
                   {[...Array(noofRows)].map((elementInArray, input) => {
@@ -272,25 +374,65 @@ function CompositionClu() {
                       <tr>
                         <th className="fw-normal">{input + 1}</th>
                         <td>
-                          <input type="text" placeholder="" />
+                          {/* <input type="text" placeholder="" /> */}
+                          <div className={classes.fieldContainer}>
+            <Form.Control
+              className={classes.formControl}
+              placeholder=""
+              disabled
+            ></Form.Control>
+                
+                <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Licence No")
+                  setLabelValue("Licence No"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+           
+             </div>
                         </td>
                         <td>
-                          <input type="text" placeholder="" />
-                        </td>
+                          {/* <input type="text" placeholder="" /> */}
+                          <div className={classes.fieldContainer}>
+            <Form.Control
+              className={classes.formControl}
+              placeholder=""
+              disabled
+            ></Form.Control>
+                
+                <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Licence No")
+                  setLabelValue("Licence No"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+           
+             </div>
+                         </td>
                       </tr>
                     );
                   })}
                 </tbody>
               </div>
             </div>
-            <div>
+            {/* <div>
               <button type="button" style={{ float: "left" }} className="btn btn-primary" onClick={() => setNoOfRows(noofRows + 1)}>
                 Add more
               </button>
               <button type="button" style={{ float: "right" }} className="btn btn-danger" onClick={() => setNoOfRows(noofRows - 1)}>
                 Delete
               </button>
-            </div>
+            </div> */}
           </Row>
           <br></br>
           <Row>
@@ -299,7 +441,27 @@ function CompositionClu() {
                 <Form.Label>
                   <h2> Total Area in Sq. meter</h2>{" "}
                 </Form.Label>
-                <input type="number" className="form-control" placeholder="" {...register("totalArea")} />
+                {/* <input type="number" className="form-control" placeholder="" {...register("totalArea")} /> */}
+                <div className={classes.fieldContainer}>
+            <Form.Control
+              className={classes.formControl}
+              placeholder=""
+              disabled
+            ></Form.Control>
+                
+                <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Licence No")
+                  setLabelValue("Licence No"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+           
+             </div>
               </Form.Group>
             </Col>
 
@@ -308,7 +470,27 @@ function CompositionClu() {
                 <Form.Label>
                   <h2> Explain the reason for the violation</h2>{" "}
                 </Form.Label>
-                <input type="number" className="form-control" placeholder="" rows="3" {...register("violationReason")} />
+                {/* <input type="number" className="form-control" placeholder="" rows="3" {...register("violationReason")} /> */}
+                <div className={classes.fieldContainer}>
+            <Form.Control
+              className={classes.formControl}
+              placeholder=""
+              disabled
+            ></Form.Control>
+                
+                <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Licence No")
+                  setLabelValue("Licence No"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+           
+             </div>
               </Form.Group>
             </Col>
           </Row>
@@ -326,7 +508,32 @@ function CompositionClu() {
                 <th className="fw-normal">1</th>
                 <td>Date of sale deeds.</td>
                 <td>
-                  <input type="file" className="form-control" placeholder="" {...register("dateOfSaleDeed")} />
+                  {/* <input type="file" className="form-control" placeholder="" {...register("dateOfSaleDeed")} /> */}
+                  <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Licence No")
+                  setLabelValue("Licence No"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                 </div>
                 </td>
               </tr>
 
@@ -336,13 +543,38 @@ function CompositionClu() {
                   Any other.<span style={{ color: "red" }}>*</span>
                 </td>
                 <td>
-                  <input type="file" className="form-control" placeholder="" {...register("anyOther")} />
+                  {/* <input type="file" className="form-control" placeholder="" {...register("anyOther")} /> */}
+                  <div className="row">
+                                  
+                                  
+                                  <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <VisibilityIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                  <div className="btn btn-sm col-md-4">
+                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
+                                       </div>
+                                       <div className="btn btn-sm col-md-4">
+                                       <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Licence No")
+                  setLabelValue("Licence No"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                                       </div>
+                                 </div>
                 </td>
               </tr>
             </tbody>
           </div>
 
-          <div class="row">
+          {/* <div class="row">
             <div class="col-sm-12 text-right">
               <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
                 Submit
@@ -353,7 +585,7 @@ function CompositionClu() {
                 Save as Draft
               </button>
             </div>
-          </div>
+          </div> */}
         </div>
       </Card>
       </div>

@@ -43,9 +43,10 @@ export const configTLApproverApplication = ({
               
               <MultiSelectDropdown
               options={approvers}
+              // options={[{name:"dtp"},{name:"ctp"},{name:"acp"}]}
               autoComplete="off"
-              optionKey="name"
-              id="fieldInspector"
+              optionsKey="name"
+              // id="fieldInspector"
               onSelect={setSelectedApprover}
               selected={selectedApprover}
             />
