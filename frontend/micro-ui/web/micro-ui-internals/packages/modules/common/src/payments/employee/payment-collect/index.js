@@ -73,6 +73,7 @@ export const CollectPayment = (props) => {
     { code: "OTHER", name: t("COMMON_OTHER") },
   ];
   const [selectedPaymentMode, setPaymentMode] = useState(formState?.selectedPaymentMode || getPaymentModes()[0]);
+  const [selectedPaidBy, setselectedPaidBy] = useState(formState?.paidBy || { code: "OWNER", name: t("COMMON_OWNER") });
 
   const onSubmit = async (data) => {
     bill.totalAmount = Math.round(bill.totalAmount);
@@ -190,7 +191,7 @@ export const CollectPayment = (props) => {
     document?.querySelector("#paymentInfo + .label-field-pair input")?.focus();
   }, [selectedPaymentMode]);
 
-  const config = [
+  let config = [
     {
       head: !ModuleWorkflow && businessService !== "TL" ? t("COMMON_PAYMENT_HEAD") : "",
       body: [
@@ -223,6 +224,7 @@ export const CollectPayment = (props) => {
                     props.setValue("payerMobile", "");
                   }
                   props.onChange(d);
+                  setselectedPaidBy(d);
                 }}
               />
             ),
@@ -232,6 +234,7 @@ export const CollectPayment = (props) => {
         {
           label: t("PAYMENT_PAYER_NAME_LABEL"),
           isMandatory: true,
+          disable : selectedPaidBy?.code === "OWNER" ? true : false,
           type: "text",
           populators: {
             name: "payerName",

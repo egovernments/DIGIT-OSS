@@ -151,16 +151,19 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
     if (isNaN(e.target.value)) setAccUOMError("TL_ONLY_NUM_ALLOWED");
     if(!(e.target.value && parseFloat(e.target.value) > 0)){
       setAccUOMError(t("TL_UOM_VALUE_GREATER_O"))
+      window.scroll(0,0)
     }
     else{
     if(fields?.[i]?.accessory && Number.isInteger(fields?.[i]?.accessory?.fromUom)){
       if(!(e.target.value && parseInt(e.target.value) >= fields?.[i]?.accessory?.fromUom)){
         setAccUOMError(`${t("TL_FILL_CORRECT_UOM_VALUE")} ${fields?.[i]?.accessory?.fromUom} - ${fields?.[i]?.accessory?.toUom}`);
+        window.scroll(0,0)
       }
      }
      if(fields?.[i]?.accessory && Number.isInteger(fields?.[i]?.accessory?.toUom)){
      if(!(e.target.value && parseInt(e.target.value) <= fields?.[i]?.accessory?.toUom)){
       setAccUOMError(`${t("TL_FILL_CORRECT_UOM_VALUE")} ${fields?.[i]?.accessory?.fromUom} - ${fields?.[i]?.accessory?.toUom}`);
+      window.scroll(0,0)
        }
      }
     }

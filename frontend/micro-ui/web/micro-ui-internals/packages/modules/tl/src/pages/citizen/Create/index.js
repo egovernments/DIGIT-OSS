@@ -65,7 +65,7 @@ const CreateTradeLicence = ({ parentRoute }) => {
     {
       nextStep = "owner-ship-details";
     }
-    if(nextStep === "owner-details" && (params?.ownershipCategory?.isSameAsPropertyOwner === true || sessionStorage.getItem("isSameAsPropertyOwner") === "true"))
+    if(nextStep === "owner-details" && (sessionStorage.getItem("isSameAsPropertyOwner") === "true"))
     {
       nextStep = "proof-of-identity"
     }
@@ -97,6 +97,9 @@ const CreateTradeLicence = ({ parentRoute }) => {
   };
 
   function handleSelect(key, data, skipStep, index, isAddMultiple = false) {
+    if(key === "formData")
+    setParams({...data})
+    else{
     setParams({ ...params, ...{ [key]: { ...params[key], ...data } } });
     if(key === "isSkip" && data === true)
     {
@@ -106,6 +109,7 @@ const CreateTradeLicence = ({ parentRoute }) => {
     {
       goNext(skipStep, index, isAddMultiple, key);
     }
+  }
   }
 
   const handleSkip = () => {};

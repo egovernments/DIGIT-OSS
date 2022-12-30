@@ -142,7 +142,7 @@ const WrapCheckPage = ({ onSubmit, value }) => {
               <Row className="border-none" label={t("TL_NEW_TRADE_DETAILS_UOM_VALUE_LABEL")} text={`${unit?.uom ? t(unit?.uom) : t("CS_NA")}`} />
             </div>
           ))}
-          {TradeDetails?.accessories &&
+          {TradeDetails?.accessories && TradeDetails?.isAccessories?.i18nKey?.includes("YES") &&
             TradeDetails?.accessories.map((acc, index) => (
               <div key={index}>
                 <CardSubHeader>

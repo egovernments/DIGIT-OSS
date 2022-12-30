@@ -322,7 +322,7 @@ export const convertToTrade = (data = {}) => {
           noOfEmployees: data?.TradeDetails?.NumberOfEmployees || null,
           operationalArea : data?.TradeDetails?.OperationalSqFtArea || null,
           applicationDocuments: null,
-          accessories: data?.TradeDetails?.accessories ? getaccessories(data) : null,
+          accessories: data?.TradeDetails?.accessories && data?.TradeDetails?.isAccessories?.i18nKey?.includes("YES") ? getaccessories(data) : null,
           owners: getownerarray(data),
           ...(data?.ownershipCategory?.code.includes("INSTITUTIONAL") && {institution: {
             designation: data?.owners?.owners?.[0]?.designation,

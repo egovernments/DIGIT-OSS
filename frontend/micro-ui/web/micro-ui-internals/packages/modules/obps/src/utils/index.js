@@ -360,6 +360,7 @@ export const convertToBPAObject = (data, isOCBPA = false, isSendBackTOCitizen = 
       data.landInfo.owners[index].gender = owner?.gender?.code;
     });
 
+    data.landInfo.address.pincode = data?.address?.pincode;
     data.landInfo.address.city = data?.address?.city?.code;
     data.landInfo.address.locality = data?.address?.locality;
     data.landInfo.address.landmark = data?.address?.landmark;

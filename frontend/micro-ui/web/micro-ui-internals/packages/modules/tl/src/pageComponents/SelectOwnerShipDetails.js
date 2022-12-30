@@ -54,6 +54,11 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlu
         label: undefined,
         value: "",
       });
+      if(formData?.owners?.owners)
+      {
+        delete formData?.owners;
+        onSelect("formData",formData)
+      }
     }
   }
 
@@ -74,7 +79,7 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlu
   function goNext() {
     sessionStorage.setItem("ownershipCategory", ownershipCategory?.value);
     sessionStorage.setItem("isSameAsPropertyOwner", isSameAsPropertyOwner);
-    onSelect(config.key, {...ownershipCategory,isSameAsPropertyOwner});
+    onSelect(config.key, {...ownershipCategory,isSameAsPropertyOwner : isSameAsPropertyOwner});
   }
 
   useEffect(() => {
@@ -139,7 +144,7 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlu
   return (
     <React.Fragment>
     {window.location.href.includes("/citizen") ? <Timeline currentStep={2}/> : null}
-    <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!ownershipCategory}>
+    <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!ownershipCategory?.code}>
       { !(formData?.TradeDetails?.StructureType?.code === "MOVABLE") && formData?.cpt?.details &&<CheckBox
           label={t("TL_COMMON_SAME_AS_PROPERTY_OWNERS")}
           onChange={selectisSameAsPropertyOwner}
