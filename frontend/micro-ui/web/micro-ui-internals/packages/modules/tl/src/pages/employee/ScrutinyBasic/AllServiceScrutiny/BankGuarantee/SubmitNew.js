@@ -134,7 +134,7 @@ function SubmitNew() {
       <Collapse in={open2}>
         <div id="example-collapse-text">
           <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-            <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Submit </h4>
+            <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Submission </h4>
             <div className="card">
               <Row className="col-12">
                 <Form.Group as={Col} controlId="formGridLicence">
@@ -172,39 +172,6 @@ function SubmitNew() {
                 <Form.Group as={Col} controlId="formGridLicence">
                   <div>
                     <Form.Label>
-                      <h2>Enter Memo No. </h2>
-                    </Form.Label>
-                  </div>
-                  <div className={classes.fieldContainer}>
-                    <Form.Control className={classes.formControl} placeholder="" disabled></Form.Control>
-
-                    <ReportProblemIcon
-                      style={{
-                        color: fieldIconColors.developer,
-                      }}
-                      onClick={() => {
-                        setOpennedModal("Licence No");
-                        setLabelValue("Licence No"),
-                          setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-                      }}
-                    ></ReportProblemIcon>
-                    <ModalChild
-                      labelmodal={labelValue}
-                      passmodalData={handlemodaldData}
-                      displaymodal={smShow}
-                      onClose={() => setSmShow(false)}
-                      selectedFieldData={selectedFieldData}
-                      fieldValue={fieldValue}
-                      remarksUpdate={currentRemarks}
-                    ></ModalChild>
-                  </div>
-                  {/* <input type="text" className="form-control" placeholder="" {...register("enterMemoNumber")} /> */}
-                </Form.Group>
-                <Form.Group as={Col} controlId="formGridLicence">
-                  <div>
-                    <Form.Label>
                       <h2>Type of B.G</h2>
                     </Form.Label>
                   </div>
@@ -237,76 +204,6 @@ function SubmitNew() {
                     <option> IDW</option>
                     <option>EDC</option>
                   </select> */}
-                </Form.Group>
-                <Form.Group as={Col} controlId="formGridLicence">
-                  <div>
-                    <Form.Label>
-                      <h2>Upload B.G. </h2>
-                    </Form.Label>
-                  </div>
-                  <div className="row">
-                    <div className="btn btn-sm col-md-3">
-                      <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
-                        <VisibilityIcon color="info" className="icon" />
-                      </IconButton>
-                    </div>
-                    <div className="btn btn-sm col-md-3">
-                      <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
-                        <FileDownloadIcon color="info" className="icon" />
-                      </IconButton>
-                    </div>
-                    <div className="btn btn-sm col-md-4">
-                      <ReportProblemIcon
-                        style={{
-                          color: fieldIconColors.developer,
-                        }}
-                        onClick={() => {
-                          setOpennedModal("Amount");
-                          setLabelValue("Amount"),
-                            setSmShow(true),
-                            console.log("modal open"),
-                            setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </div>
-                  </div>
-                  {/* <input type="file" className="form-control" placeholder="" {...register("uploadBg")} /> */}
-                </Form.Group>
-              </Row>
-
-              <Row className="col-12">
-                <Form.Group as={Col} controlId="formGridLicence">
-                  <div>
-                    <Form.Label>
-                      <h2>Bank Name </h2>
-                    </Form.Label>
-                  </div>
-                  <div className={classes.fieldContainer}>
-                    <Form.Control className={classes.formControl} placeholder="" disabled></Form.Control>
-
-                    <ReportProblemIcon
-                      style={{
-                        color: fieldIconColors.developer,
-                      }}
-                      onClick={() => {
-                        setOpennedModal("Licence No");
-                        setLabelValue("Licence No"),
-                          setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-                      }}
-                    ></ReportProblemIcon>
-                    <ModalChild
-                      labelmodal={labelValue}
-                      passmodalData={handlemodaldData}
-                      displaymodal={smShow}
-                      onClose={() => setSmShow(false)}
-                      selectedFieldData={selectedFieldData}
-                      fieldValue={fieldValue}
-                      remarksUpdate={currentRemarks}
-                    ></ModalChild>
-                  </div>
-                  {/* <input type="text" className="form-control" placeholder="" {...register("bankName")} /> */}
                 </Form.Group>
                 <Form.Group as={Col} controlId="formGridLicence">
                   <div>
@@ -373,6 +270,107 @@ function SubmitNew() {
                     ></ModalChild>
                   </div>
                   {/* <input type="text" className="form-control" placeholder="" {...register("amountInWords")} /> */}
+                </Form.Group>
+                <Form.Group as={Col} controlId="formGridLicence">
+                  <div>
+                    <Form.Label>
+                      <h2>Bank Name </h2>
+                    </Form.Label>
+                  </div>
+                  <div className={classes.fieldContainer}>
+                    <Form.Control className={classes.formControl} placeholder="" disabled></Form.Control>
+
+                    <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.developer,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("Licence No");
+                        setLabelValue("Licence No"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                      }}
+                    ></ReportProblemIcon>
+                    <ModalChild
+                      labelmodal={labelValue}
+                      passmodalData={handlemodaldData}
+                      displaymodal={smShow}
+                      onClose={() => setSmShow(false)}
+                      selectedFieldData={selectedFieldData}
+                      fieldValue={fieldValue}
+                      remarksUpdate={currentRemarks}
+                    ></ModalChild>
+                  </div>
+                  {/* <input type="text" className="form-control" placeholder="" {...register("bankName")} /> */}
+                </Form.Group>
+                <Form.Group as={Col} controlId="formGridLicence">
+                  <div>
+                    <Form.Label>
+                      <h2>Enter Memo No. </h2>
+                    </Form.Label>
+                  </div>
+                  <div className={classes.fieldContainer}>
+                    <Form.Control className={classes.formControl} placeholder="" disabled></Form.Control>
+
+                    <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.developer,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("Licence No");
+                        setLabelValue("Licence No"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                      }}
+                    ></ReportProblemIcon>
+                    <ModalChild
+                      labelmodal={labelValue}
+                      passmodalData={handlemodaldData}
+                      displaymodal={smShow}
+                      onClose={() => setSmShow(false)}
+                      selectedFieldData={selectedFieldData}
+                      fieldValue={fieldValue}
+                      remarksUpdate={currentRemarks}
+                    ></ModalChild>
+                  </div>
+                  {/* <input type="text" className="form-control" placeholder="" {...register("enterMemoNumber")} /> */}
+                </Form.Group>
+
+                <Form.Group as={Col} controlId="formGridLicence">
+                  <div>
+                    <Form.Label>
+                      <h2>Upload B.G. </h2>
+                    </Form.Label>
+                  </div>
+                  <div className="row">
+                    <div className="btn btn-sm col-md-3">
+                      <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                        <VisibilityIcon color="info" className="icon" />
+                      </IconButton>
+                    </div>
+                    <div className="btn btn-sm col-md-3">
+                      <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                        <FileDownloadIcon color="info" className="icon" />
+                      </IconButton>
+                    </div>
+                    <div className="btn btn-sm col-md-4">
+                      <ReportProblemIcon
+                        style={{
+                          color: fieldIconColors.developer,
+                        }}
+                        onClick={() => {
+                          setOpennedModal("Amount");
+                          setLabelValue("Amount"),
+                            setSmShow(true),
+                            console.log("modal open"),
+                            setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                        }}
+                      ></ReportProblemIcon>
+                    </div>
+                  </div>
+                  {/* <input type="file" className="form-control" placeholder="" {...register("uploadBg")} /> */}
                 </Form.Group>
                 <Form.Group as={Col} controlId="formGridLicence">
                   <div>

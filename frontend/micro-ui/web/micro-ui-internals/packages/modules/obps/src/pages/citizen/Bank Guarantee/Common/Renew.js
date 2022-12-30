@@ -68,7 +68,7 @@ function RenewNew() {
                   <h2>Extended time </h2>
                 </Form.Label>
               </div>
-              <input type="date" className="form-control" placeholder="" {...register("validity")} />
+              <input type="date" className="form-control" placeholder="" {...register("extendedTime")} />
             </Col>
             <Col md={4} xxl lg="3">
               <div>
@@ -116,28 +116,28 @@ function RenewNew() {
             <div>
               <label>
                 Hardcopy Submitted at TCP office.{" "}
-                <label htmlFor="licenseApplied">
-                  <input {...register("licenseApplied")} type="radio" value="Y" id="licenseApplied" />
+                <label htmlFor="hardcopySubmitted">
+                  <input {...register("hardcopySubmitted")} type="radio" value="Y" id="hardcopySubmitted" />
                   &nbsp; Yes &nbsp;&nbsp;
                 </label>
-                <label htmlFor="licenseApplied">
+                <label htmlFor="hardcopySubmitted">
                   <input
-                    {...register("licenseApplied")}
+                    {...register("hardcopySubmitted")}
                     type="radio"
                     value="N"
-                    id="licenseApplied"
+                    id="hardcopySubmitted"
                     className="btn btn-primary"
                     onClick={() => setmodal1(true)}
                   />
                   &nbsp; No &nbsp;&nbsp;
                 </label>
                 <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.licenseApplied && errors?.licenseApplied?.message}
+                  {errors?.hardcopySubmitted && errors?.hardcopySubmitted?.message}
                 </h3>
               </label>
             </div>
 
-            {watch("licenseApplied") === "Y" && (
+            {watch("hardcopySubmitted") === "Y" && (
               <div>
                 <div className="row">
                   <div className="col col-4">
@@ -158,7 +158,7 @@ function RenewNew() {
                 </div>
               </div>
             )}
-            {watch("licenseApplied") === "N" && (
+            {watch("hardcopySubmitted") === "N" && (
               <div>
                 <Modal
                   size="lg"
