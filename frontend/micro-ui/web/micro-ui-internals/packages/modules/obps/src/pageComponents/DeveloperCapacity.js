@@ -16,6 +16,7 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { getDocShareholding } from "../../../tl/src/pages/employee/ScrutinyBasic/ScrutinyDevelopment/docview.helper";
 import { MenuItem, Select } from "@mui/material";
+import { convertEpochToDate } from "../utils/index";
 const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) => {
     const { pathname: url } = useLocation();
     let validation = {};
@@ -1639,7 +1640,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                 // onClick={() => setNoOfRows(noofRows + 1)}
                                                 onClick={handleShowCapacityDevelopColony}
                                             >
-                                                Add More
+                                                Add More 
                                             </button>
                                             <Modal show={showCapacityDevelopColony} onHide={handleCloseCapacityDevelopColony} animation={false}>
                                                 <Modal.Header closeButton>
@@ -1672,6 +1673,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                         isRequired: true,
                                                                         title: "Please enter Name"
                                                                     })}
+                                                                    max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
                                                                 />
                                                             </Col>
                                                             <Col md={3} xxl lg="4">
@@ -1694,6 +1696,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     onChange={(e) => setShowPurposeType(e.target.value)}
                                                                     className="w-100"
                                                                     variant="standard"
+                                                                    
                                                                 >
                                                                     {
                                                                         purposeOptions?.data?.map((item, index) => (
@@ -1731,6 +1734,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     onChange={(e) => setHrduModalData({ ...hrduModalData, licValidity: e.target.value })}
                                                                     placeholder=""
                                                                     class="employee-card-input"
+                                                                    min={convertEpochToDate(new Date().setFullYear(new Date().getFullYear() - hrduModalData.dateOfGrantingLic))}
                                                                 />
 
                                                             </Col>
@@ -2241,6 +2245,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                         onChange={(e) => setTechnicalCapacitySoughtFromAnyColonizer({ ...technicalCapacitySoughtFromAnyColonizer, dateOfGrantingLic: e.target.value })}
                                                         className="employee-card-input"
                                                         maxLength={10}
+                                                        max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
                                                     />
                                                 </div>
                                             </div>
@@ -2254,7 +2259,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                         value={technicalCapacitySoughtFromAnyColonizer.licValidity}
                                                         onChange={(e) => setTechnicalCapacitySoughtFromAnyColonizer({ ...technicalCapacitySoughtFromAnyColonizer, licValidity: e.target.value })}
                                                         className="employee-card-input"
-                                                    // maxLength={10}
+                                                        min={convertEpochToDate(new Date().setFullYear(new Date().getFullYear() - technicalCapacitySoughtFromAnyColonizer.dateOfGrantingLic))}
                                                     />
                                                 </div>
                                             </div>
@@ -2267,6 +2272,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                         onChange={(e) => setTechnicalCapacitySoughtFromAnyColonizer({ ...technicalCapacitySoughtFromAnyColonizer, purpose: e.target.value })}
                                                         className="w-100"
                                                         variant="standard"
+                                                        placeholder="Select purpose"
                                                     >
                                                         {
                                                             purposeOptions?.data?.map((item, index) => (

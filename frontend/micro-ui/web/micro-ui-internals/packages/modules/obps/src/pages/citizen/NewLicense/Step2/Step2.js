@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import { useForm, Controller } from "react-hook-form";
+import FileUpload from "@mui/icons-material/FileUpload";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Modal, ModalHeader, ModalBody, ModalFooter, CloseButton } from "reactstrap";
@@ -14,6 +15,7 @@ import { VALIDATION_SCHEMA, MODAL_VALIDATION_SCHEMA } from "../../../../utils/sc
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
 import Spinner from "../../../../components/Loader";
 import { getDocShareholding } from "../docView/docView.help";
+import { convertEpochToDate } from "../../../../../../tl/src/utils";
 
 const ApllicantPuropseForm = (props) => {
   const datapost = {
@@ -129,6 +131,22 @@ const ApllicantPuropseForm = (props) => {
       dataIndex: "registeringAuthority",
     },
     {
+      key: "registeringAuthorityDoc",
+      title: "Document",
+      dataIndex: "",
+      render: (data) => (
+        <div>
+          {fileStoreId?.registeringAuthorityDoc ? (
+            <a onClick={() => getDocShareholding(fileStoreId?.registeringAuthorityDoc)} className="btn btn-sm col-md-6">
+              <VisibilityIcon color="info" className="icon" />
+            </a>
+          ) : (
+            <p></p>
+          )}
+        </div>
+      ),
+    },
+    {
       title: "Action",
       dataIndex: "",
       render: (data) => (
@@ -172,6 +190,7 @@ const ApllicantPuropseForm = (props) => {
   const [loader, setLoader] = useState(false);
   const [getKhewats, setKhewats] = useState("");
   const [getEdit, setEdit] = useState(false);
+  const [fileStoreId, setFileStoreId] = useState({});
 
   const resetValues = () => {
     resetField("tehsil");
@@ -196,6 +215,7 @@ const ApllicantPuropseForm = (props) => {
     resetField("registeringAuthority");
     resetField("consolidationType");
     resetField("agreementIrrevocialble");
+    resetField("registeringAuthorityDoc");
   };
 
   useEffect(() => {
@@ -219,6 +239,7 @@ const ApllicantPuropseForm = (props) => {
       setValue("authSignature", specificTableData?.authSignature);
       setValue("nameAuthSign", specificTableData?.nameAuthSign);
       setValue("registeringAuthority", specificTableData?.registeringAuthority);
+      setValue("registeringAuthorityDoc", specificTableData?.registeringAuthorityDoc);
       const tehsilValue = tehsilDataLabels?.data?.filter((item) => item?.value === specificTableData?.tehsil);
       setValue("tehsil", { label: tehsilValue?.[0]?.label, value: tehsilValue?.[0]?.value });
       const revenueValue = revenueDataLabels?.data?.filter((item) => item?.value === specificTableData?.revenueEstate);
@@ -373,6 +394,8 @@ const ApllicantPuropseForm = (props) => {
     if (specificTableData?.rowid) {
       const filteredRowData = modalData?.filter((item) => item?.rowid !== specificTableData?.rowid);
       setModalData([...filteredRowData, modaldata]);
+    } else if (props?.getLicData?.ApplicantPurpose?.AppliedLandDetails) {
+      setModalData([...props?.getLicData?.ApplicantPurpose?.AppliedLandDetails, modaldata]);
     } else {
       setModalData((prev) => [...prev, modaldata]);
     }
@@ -380,6 +403,11 @@ const ApllicantPuropseForm = (props) => {
     // resetValues();
     setmodal(false);
   };
+  const token = window?.localStorage?.getItem("token");
+
+  useEffect(() => {
+    if (props?.getLicData?.ApplicantPurpose?.AppliedLandDetails) setModalData(props?.getLicData?.ApplicantPurpose?.AppliedLandDetails);
+  }, [props?.getLicData?.ApplicantPurpose?.AppliedLandDetails]);
 
   const PurposeFormSubmitHandler = async (data) => {
     data["purpose"] = data?.purpose?.value;
@@ -408,13 +436,11 @@ const ApllicantPuropseForm = (props) => {
     delete data?.consolidationType;
     delete data?.khewats;
     delete data?.rowid;
-
-    const token = window?.localStorage?.getItem("token");
     if (!modalData?.length && !props?.getLicData?.ApplicantPurpose?.AppliedLandDetails) alert("Please enter atleast one record");
     else {
       const postDistrict = {
         pageName: "ApplicantPurpose",
-        ApplicationStatus: "DRAFT",
+        action: "PURPOSE",
         applicationNumber: props.getId,
         createdBy: props?.userData?.id,
         updatedBy: props?.userData?.id,
@@ -457,6 +483,7 @@ const ApllicantPuropseForm = (props) => {
       setValue("purpose", { label: data?.[0]?.label, value: data?.[0]?.value });
       setValue("potential", { label: potientialData?.[0]?.label, value: potientialData?.[0]?.value });
       setValue("district", { label: districtData?.[0]?.label, value: districtData?.[0]?.value });
+      setDistrict(districtData?.[0]?.value);
       if (districtData?.[0]?.value) getTehslidata(districtData?.[0]?.value);
     }
   }, [props?.getLicData, purposeOptions, potentialOptons, districtDataLabels]);
@@ -500,6 +527,37 @@ const ApllicantPuropseForm = (props) => {
     }, 500);
     return () => clearTimeout(delay);
   }, [getKhewats]);
+  const dataArea = props?.ApplicantPurpose?.AppliedLandDetails?.[0]?.kanal;
+  const dataAreaMarla = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.marla;
+  const dataAreaSarai = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.sarsai;
+  const dataAreaBigha = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.bigha;
+  const dataAreaBiswa = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.biswa;
+  const dataAreaBiswansi = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.biswansi;
+  const totalAreaAcre = dataArea * 0.125 + dataAreaMarla * 0.0062 + dataAreaSarai * 0.00069;
+  console.log("grt", dataArea);
+
+  const getApplicantUserData = async (id) => {
+    // http://103.166.62.118:80
+    const payload = {
+      apiId: "Rainmaker",
+      msgId: "1669293303096|en_IN",
+      authToken: token,
+    };
+    try {
+      const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${id}`, payload);
+      console.log(Resp);
+      // const userData = Resp?.data?.newServiceInfoData[0]?.ApplicantInfo;
+    } catch (error) {
+      return error;
+    }
+  };
+
+  useEffect(() => {
+    const search = location?.search;
+    const params = new URLSearchParams(search);
+    const id = params.get("id");
+    if (id) getApplicantUserData(id);
+  }, []);
 
   return (
     <div>
@@ -629,12 +687,11 @@ const ApllicantPuropseForm = (props) => {
               </div>
               <br></br>
 
-              <div className="applt" style={{ overflow: "auto" }}>
-                <WorkingTable
-                  columns={columns}
-                  data={props?.getLicData?.ApplicantPurpose?.AppliedLandDetails ? props?.getLicData?.ApplicantPurpose?.AppliedLandDetails : modalData}
-                />
-              </div>
+              {modalData.length > 0 && (
+                <div className="applt" style={{ overflow: "auto" }}>
+                  <WorkingTable columns={columns} data={modalData} />
+                </div>
+              )}
             </Form.Group>
 
             <div class="row">
@@ -777,7 +834,7 @@ const ApllicantPuropseForm = (props) => {
                     </h2>
                   </label>
                 </div>
-                <Form.Control type="text" className="form-control" placeholder="" {...register("landOwner")} />
+                <Form.Control type="text" className="form-control" placeholder="" {...register("landOwner")} disabled />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.landOwner && errors?.landOwner?.message}
                 </h3>
@@ -823,21 +880,30 @@ const ApllicantPuropseForm = (props) => {
                           </h2>
                           &nbsp;&nbsp;
                         </th>
+                        <th>
+                          <h2>
+                            Total Area <span style={{ color: "red" }}>*</span>
+                          </h2>
+                          &nbsp;&nbsp;
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
                         <td>
-                          <input type="text" className="form-control  " {...register("kanal")} id="kanal" required maxLength={20} />
+                          <input type="number" className="form-control  " {...register("kanal")} id="kanal" required maxLength={20} />
                           <label htmlFor="sum">Total: {watch("kanal") * 0.125}</label>&nbsp;&nbsp;
                         </td>
                         <td>
-                          <input type="text" className="form-control " {...register("marla")} id="marla" required maxLength={20} />
+                          <input type="number" className="form-control " {...register("marla")} id="marla" required maxLength={20} />
                           <label htmlFor="summarla">Total: {watch("marla") * 0.0062}</label>&nbsp;&nbsp;
                         </td>
                         <td>
-                          <input type="text" className="form-control " {...register("sarsai")} id="sarsai" required maxLength={20} />
+                          <input type="number" className="form-control " {...register("sarsai")} id="sarsai" required maxLength={20} />
                           <label htmlFor="sumsarsai">Total: {watch("sarsai") * 0.00069}</label>&nbsp;&nbsp;
+                        </td>
+                        <td>
+                          <input type="number" className="form-control " placeholder={totalAreaAcre} disabled />
                         </td>
                       </tr>
                     </tbody>
@@ -863,20 +929,26 @@ const ApllicantPuropseForm = (props) => {
                           </h2>
                           &nbsp;&nbsp;
                         </th>
+                        <th>
+                          <h2>
+                            Total Area <span style={{ color: "red" }}>*</span>
+                          </h2>
+                          &nbsp;&nbsp;
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
                         <td>
-                          <input type="text" className="form-control" {...register("bigha")} id="bigha" required maxLength={20} />
+                          <input type="number" className="form-control" {...register("bigha")} id="bigha" required maxLength={20} />
                           <label htmlFor="sumBigha">Total: {watch("bigha") * 0.33}</label>&nbsp;&nbsp;
                         </td>
                         <td>
-                          <input type="text" className="form-control" {...register("biswa")} id="biswa" required maxLength={20} />
+                          <input type="number" className="form-control" {...register("biswa")} id="biswa" required maxLength={20} />
                           <label htmlFor="sumBiswa">Total: {watch("biswa") * 0.0309}</label>&nbsp;&nbsp;
                         </td>
                         <td>
-                          <input type="text" className="form-control" {...register("biswansi")} id="biswansi" required maxLength={20} />
+                          <input type="number" className="form-control" {...register("biswansi")} id="biswansi" required maxLength={20} />
                           <label htmlFor="sumBiswansi">Total: {watch("biswansi") * 0.619}</label>&nbsp;&nbsp;
                         </td>
                       </tr>
@@ -930,7 +1002,7 @@ const ApllicantPuropseForm = (props) => {
                             Date of registering collaboration agreement<span style={{ color: "red" }}>*</span>
                           </h2>
                         </label>
-                        <Form.Control type="date" className="form-control" placeholder="" {...register("agreementValidFrom")} />
+                        <Form.Control type="date" className="form-control" required placeholder="" {...register("agreementValidFrom")} />
                       </div>
                       <div className="col col-4">
                         <label>
@@ -938,7 +1010,14 @@ const ApllicantPuropseForm = (props) => {
                             Date of validity of collaboration agreement<span style={{ color: "red" }}>*</span>
                           </h2>
                         </label>
-                        <Form.Control type="date" className="form-control" placeholder="" {...register("validitydate")} />
+                        <Form.Control
+                          type="date"
+                          className="form-control"
+                          placeholder=""
+                          required
+                          {...register("validitydate")}
+                          min={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
+                        />
                       </div>
                     </div>
                     <br></br>
@@ -1008,22 +1087,23 @@ const ApllicantPuropseForm = (props) => {
                       <div className="col col-4">
                         <label>
                           <h2 data-toggle="tooltip" data-placement="top" title="Upload Document" style={{ marginTop: "-4px" }}>
-                            Registering Authority document <span style={{ color: "red" }}>*</span>
-                            <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                            <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.registeringAuthorityDoc)}>
-                              {" "}
-                            </VisibilityIcon>
+                            Registering Authority document <span style={{ color: "red" }}>*</span> <FileUpload color="primary" />
+                            <input
+                              type="file"
+                              style={{ display: "none" }}
+                              onChange={(e) => getDocumentData(e?.target?.files[0], "registeringAuthorityDoc")}
+                            />
                           </h2>
                         </label>
-                        <br></br>
-                        <input
+
+                        {/* <input
                           type="file"
                           style={{ marginTop: "-6px" }}
                           className="form-control"
                           accept="application/pdf"
                           required
-                          onChange={(e) => getDocumentData(e?.target?.files[0], registeringAuthorityDoc)}
-                        />
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "registeringAuthorityDoc")}
+                        /> */}
                       </div>
                     </div>
                   </div>

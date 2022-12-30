@@ -14,7 +14,7 @@ const CommonBank = (props) => {
           <Col md={4} xxl lg="3">
             <Card style={{ width: "50%", marginLeft: "19px", paddingRight: "10px" }}>
               <h2 style={{ textAlign: "center" }}>
-                <Link to="./SubmitNew">Submit New </Link>
+                <Link to="./SubmitNew">Submission </Link>
               </h2>
             </Card>
           </Col>
@@ -22,7 +22,7 @@ const CommonBank = (props) => {
           <Col md={4} xxl lg="3">
             <Card style={{ width: "50%", marginLeft: "19px", paddingRight: "10px" }}>
               <h2 style={{ textAlign: "center" }}>
-                <Link to="./renew">Renew</Link>
+                <Link to="./renew">Extension </Link>
               </h2>
             </Card>
           </Col>
@@ -30,7 +30,7 @@ const CommonBank = (props) => {
           <Col md={4} xxl lg="3">
             <Card style={{ width: "50%", marginLeft: "19px", paddingRight: "10px" }}>
               <h2 style={{ textAlign: "center" }}>
-                <Link to="./replace">Replace</Link>
+                <Link to="./replace">Replace/Renew </Link>
               </h2>
             </Card>
           </Col>

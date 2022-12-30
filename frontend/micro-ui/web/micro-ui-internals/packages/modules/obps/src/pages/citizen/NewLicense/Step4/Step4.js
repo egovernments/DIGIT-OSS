@@ -86,7 +86,7 @@ const AppliedDetailForm = (props) => {
     const token = window?.localStorage?.getItem("token");
     const postDistrict = {
       pageName: "DetailsofAppliedLand",
-      ApplicationStatus: "INITIATE",
+      action: "LANDDETAILS",
       applicationNumber: props.getId,
       createdBy: props?.userData?.id,
       updatedBy: props?.userData?.id,
@@ -1132,7 +1132,7 @@ const AppliedDetailForm = (props) => {
                               </div>
                               <div className="col col-12">
                                 <label>Enter Area</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" className="form-control" {...register("area")} />
                               </div>
                             </div>
                           )}
@@ -1162,7 +1162,12 @@ const AppliedDetailForm = (props) => {
                         )}
                       </h6>
                       <div>
-                        <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "hostedLayoutPlan")} />
+                        <input
+                          type="file"
+                          className="form-control"
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "hostedLayoutPlan")}
+                          required
+                        />
                       </div>
 
                       <h3 className="error-message" style={{ color: "red" }}>
@@ -1187,7 +1192,13 @@ const AppliedDetailForm = (props) => {
                         )}
                       </h6>
                       <div>
-                        <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "consentRera")} />
+                        <input
+                          type="file"
+                          className="form-control"
+                          accept="application/pdf"
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "consentRera")}
+                          required
+                        />
                       </div>
 
                       <h3 className="error-message" style={{ color: "red" }}>
@@ -1206,7 +1217,13 @@ const AppliedDetailForm = (props) => {
                         )}
                       </h6>
                       <div>
-                        <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "sectoralPlan")} />
+                        <input
+                          type="file"
+                          className="form-control"
+                          accept="application/pdf"
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "sectoralPlan")}
+                          required
+                        />
                       </div>
 
                       <h3 className="error-message" style={{ color: "red" }}>
@@ -1233,7 +1250,9 @@ const AppliedDetailForm = (props) => {
                         <input
                           type="file"
                           className="form-control"
+                          accept="application/pdf"
                           onChange={(e) => getDocumentData(e?.target?.files[0], "detailedElectricSupply")}
+                          required
                         />
                       </div>
 
@@ -1261,7 +1280,13 @@ const AppliedDetailForm = (props) => {
                         )}
                       </h6>
                       <div>
-                        <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "planCrossSection")} />
+                        <input
+                          type="file"
+                          className="form-control"
+                          accept="application/pdf"
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "planCrossSection")}
+                          required
+                        />
                       </div>
 
                       <h3 className="error-message" style={{ color: "red" }}>
@@ -1286,7 +1311,13 @@ const AppliedDetailForm = (props) => {
                         )}
                       </h6>
                       <div>
-                        <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "publicHealthServices")} />
+                        <input
+                          type="file"
+                          className="form-control"
+                          accept="application/pdf"
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "publicHealthServices")}
+                          required
+                        />
                       </div>
 
                       <h3 className="error-message" style={{ color: "red" }}>
@@ -1310,7 +1341,13 @@ const AppliedDetailForm = (props) => {
                         )}
                       </h6>
                       <div>
-                        <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "designRoad")} />
+                        <input
+                          type="file"
+                          className="form-control"
+                          accept="application/pdf"
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "designRoad")}
+                          required
+                        />
                       </div>
 
                       <h3 className="error-message" style={{ color: "red" }}>
@@ -1334,7 +1371,13 @@ const AppliedDetailForm = (props) => {
                         )}
                       </h6>
                       <div>
-                        <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "designSewarage")} />
+                        <input
+                          type="file"
+                          className="form-control"
+                          accept="application/pdf"
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "designSewarage")}
+                          required
+                        />
                       </div>
 
                       <h3 className="error-message" style={{ color: "red" }}>
@@ -1361,7 +1404,13 @@ const AppliedDetailForm = (props) => {
                         )}
                       </h6>
                       <div>
-                        <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "designDisposal")} />
+                        <input
+                          type="file"
+                          className="form-control"
+                          accept="application/pdf"
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "designDisposal")}
+                          required
+                        />
                       </div>
 
                       <h3 className="error-message" style={{ color: "red" }}>
@@ -1386,7 +1435,13 @@ const AppliedDetailForm = (props) => {
                         )}
                       </h6>
                       <div>
-                        <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "undertakingChange")} />
+                        <input
+                          type="file"
+                          className="form-control"
+                          accept="application/pdf"
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "undertakingChange")}
+                          required
+                        />
                       </div>
 
                       <h3 className="error-message" style={{ color: "red" }}>
@@ -1411,7 +1466,13 @@ const AppliedDetailForm = (props) => {
                         )}
                       </h6>
                       <div>
-                        <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "proposedColony")} />
+                        <input
+                          type="file"
+                          className="form-control"
+                          accept="application/pdf"
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "proposedColony")}
+                          required
+                        />
                       </div>
 
                       <h3 className="error-message" style={{ color: "red" }}>
@@ -1431,7 +1492,13 @@ const AppliedDetailForm = (props) => {
                         )}
                       </h6>
                       <div>
-                        <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "reportObjection")} />
+                        <input
+                          type="file"
+                          className="form-control"
+                          accept="application/pdf"
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "reportObjection")}
+                          required
+                        />
                       </div>
 
                       <h3 className="error-message" style={{ color: "red" }}>
@@ -1458,7 +1525,13 @@ const AppliedDetailForm = (props) => {
                         )}
                       </h6>
                       <div>
-                        <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "undertaking")} />
+                        <input
+                          type="file"
+                          className="form-control"
+                          accept="application/pdf"
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "undertaking")}
+                          required
+                        />
                       </div>
 
                       <h3 className="error-message" style={{ color: "red" }}>

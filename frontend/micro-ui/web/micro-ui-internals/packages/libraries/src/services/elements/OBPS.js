@@ -42,6 +42,15 @@ export const OBPSService = {
       method: "POST",
       auth: true,
     }),
+    UpdateDeveloper: (details, tenantId) =>
+    Request({
+      url: Urls.obps.updateAuthuser,
+      data: details,
+      setTimeParam: false,
+      userService: false,
+      method: "POST",
+      auth: true,
+    }),
   CREATEAuthuser: (details, tenantId) =>
     Request({
       url: Urls.obps.createAuthUser,
