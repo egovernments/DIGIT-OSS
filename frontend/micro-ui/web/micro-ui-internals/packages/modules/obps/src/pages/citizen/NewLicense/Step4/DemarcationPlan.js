@@ -51,7 +51,12 @@ const DemarcationPlan = (props) => {
           Demarcation plan.<span style={{ color: "red" }}>*</span>
         </h6>
         <div>
-          <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "demarcationPlan")} />
+          <input
+            type="file"
+            className="form-control"
+            accept="application/pdf"
+            onChange={(e) => getDocumentData(e?.target?.files[0], "demarcationPlan")}
+          />
         </div>
         {/* {fileStoreId?.demarcationPlan ? (
             <a onClick={() => getDocShareholding(fileStoreId?.demarcationPlan)} className="btn btn-sm col-md-6">

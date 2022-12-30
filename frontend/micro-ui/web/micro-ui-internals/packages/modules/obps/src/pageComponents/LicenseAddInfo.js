@@ -27,6 +27,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Delete from "@mui/icons-material/Delete";
 import { getDocShareholding } from "../../../tl/src/pages/employee/ScrutinyBasic/ScrutinyDevelopment/docview.helper";
 import { MenuItem, Select } from "@mui/material";
+import { convertEpochToDate } from "../utils/index";
+
 const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
   let validation = {};
   const { pathname: url } = useLocation();
@@ -644,7 +646,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
             // isDisabled={
             //   !showDevTypeFields || (showDevTypeFields === "Individual" && (!name || !mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) || !emailId?.match(Digit.Utils.getPattern('Email')))) || (showDevTypeFields === "Others" && othersArray.length) || (showDevTypeFields === "Proprietorship Firm") || (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others" && (!cin_Number?.match(Digit.Utils.getPattern('CIN')) || !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) || !gst_Number?.match(Digit.Utils.getPattern('GSTNo')) || !((existingColonizer === "N") || (existingColonizer === "Y" && existingColonizerDetails.aggreementBtw && existingColonizerDetails.boardResolution && existingColonizerDetails.dob && existingColonizerDetails.pan && existingColonizerDetails.pan.match(Digit.Utils.getPattern('PAN')) && existingColonizerDetails.licNo && existingColonizerDetails.licDate && existingColonizerDetails.licValidity && existingColonizerDetails.licPurpose))))
             // }
-            isDisabled={ ( showDevTypeFields === "Individual" || showDevTypeFields === "Proprietorship Firm" ) ? !(name && mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) && emailId?.match(Digit.Utils.getPattern('Email'))) : (showDevTypeFields === "Others") ? (!othersArray.length) : (showDevTypeFields === "Proprietorship Firm") ? false : (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others") ? (!cin_Number?.match(Digit.Utils.getPattern('CIN')) || !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) || !gst_Number?.match(Digit.Utils.getPattern('GSTNo')) || !((existingColonizer === "N") || (existingColonizer === "Y" && existingColonizerDetails.aggreementBtw && existingColonizerDetails.boardResolution && existingColonizerDetails.dob && existingColonizerDetails.pan && existingColonizerDetails.pan.match(Digit.Utils.getPattern('PAN')) && existingColonizerDetails.licNo && existingColonizerDetails.licDate && existingColonizerDetails.licValidity && existingColonizerDetails.licPurpose))) : true}
+            isDisabled={ ( showDevTypeFields === "Individual" || showDevTypeFields === "Proprietorship Firm" ) ? !(name && mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) && emailId?.match(Digit.Utils.getPattern('Email'))) : (showDevTypeFields === "Others") ? (!othersArray.length) : (showDevTypeFields === "Proprietorship Firm") ? false : (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others") ? (!cin_Number?.match(Digit.Utils.getPattern('CIN')) || !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) || !gst_Number?.match(Digit.Utils.getPattern('GSTNo')) || !registeredAddress.match(Digit.Utils.getPattern('Address')) || !((existingColonizer === "N") || (existingColonizer === "Y" && existingColonizerDetails.aggreementBtw && existingColonizerDetails.boardResolution && existingColonizerDetails.dob && existingColonizerDetails.pan && existingColonizerDetails.pan.match(Digit.Utils.getPattern('PAN')) && existingColonizerDetails.licNo && existingColonizerDetails.licDate && existingColonizerDetails.licValidity && existingColonizerDetails.licPurpose))) : true}
             t={t}
           >
             <div className="happy">
@@ -728,18 +730,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             placeholder={emailId}
                             name="emailId"
                             onChange={(e) => setUserEmailIndVal(e.target.value)}
-                            // disabled="disabled"
+                            disabled
                             className="employee-card-input"
-                          // name="email"
-                          // className={`employee-card-input`}
-                          // placeholder=""
-                          // {...register("email", {
-                          //   required: "Email is required",
-                          //   pattern: {
-                          //     value: /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/,
-                          //     message: "Email must be a valid email address",
-                          //   },
-                          // })}
                           />
                           {emailId && emailId.length > 0 && !emailId.match(Digit.Utils.getPattern('Email')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{("Invalid Email Address")}</CardLabelError>}
                         </div>
@@ -754,26 +746,6 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             onChange={(e) => setMobileNumber(e.target.value)}
                             disabled
                             className="employee-card-input"
-                          // name="name"
-                          // className={`employee-card-input`}
-                          // placeholder=""
-                          // {...register("name", {
-                          //   required: "Name is required",
-                          //   pattern: {
-                          //     value: /^[a-zA-Z]+$/,
-                          //     message: "Name must be a valid string",
-                          //   },
-                          //   minLength: {
-                          //     value: 3,
-                          //     message:
-                          //       "Name should be greater than 3 characters",
-                          //   },
-                          //   maxLength: {
-                          //     value: 20,
-                          //     message:
-                          //       "Name shouldn't be greater than 20 characters",
-                          //   },
-                          // })}
                           />
                           {mobileNumberUser && mobileNumberUser.length > 0 && !mobileNumberUser.match(Digit.Utils.getPattern('MobileNo')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID")}</CardLabelError>}
                         </div>
@@ -908,15 +880,25 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                               </Col>
                               <Col md={3} xxl lg="4">
                                 <label htmlFor="designation" className="text">  Designition <span className="text-danger font-weight-bold">*</span></label>
-                                <TextInput
+                                {/* <TextInput
                                   type="text"
                                   isMandatory={false}
                                   onChange={(e) => setOthersDetails({ ...othersDetails, designation: e.target.value })}
                                   placeholder=""
                                   class="employee-card-input"
                                   value={othersDetails.designation}
-                                  maxlength={"2"}
+                                  maxlength={"30"}
+                                /> */}
+                                <input
+                                  type="text"
+                                  isMandatory={false}
+                                  onChange={(e) => setOthersDetails({ ...othersDetails, designation: e.target.value })}
+                                  placeholder=""
+                                  class="employee-card-input"
+                                  value={othersDetails.designation}
+                                  maxlength={"30"}
                                 />
+                                {othersDetails.designation && othersDetails.designation?.length > 0 && !othersDetails.designation.match(Digit.Utils.getPattern('onlyAlphabets')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("No Numbers and Alphabets allowed ")}</CardLabelError>}
                               </Col>
 
                               <Col md={3} xxl lg="4">
@@ -955,7 +937,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                 <TextInput
                                   type="text"
                                   isMandatory={false}
-                                  onChange={(e) => setOthersDetails({ ...othersDetails, panNumber: e.target.value })}
+                                  onChange={(e) => setOthersDetails({ ...othersDetails, panNumber: e.target.value.toUpperCase() })}
                                   placeholder=""
                                   class="employee-card-input"
                                   value={othersDetails.panNumber}
@@ -1118,7 +1100,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                               error: "Address is required"
                             })}
                           />
-                          {registeredAddress && !registeredAddress.length > 0 && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_CIN_NO")}</CardLabelError>}
+                          {registeredAddress && !registeredAddress.length > 0 && !registeredAddress.match(Digit.Utils.getPattern('Address')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Invalid Address")}</CardLabelError>} 
                         </div>
                       </div>
                       <div className="col col-4">
@@ -1773,7 +1755,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
                           <div className="col col-4">
                             <div className="form-group">
-                              <label htmlFor="dob">DOB</label>
+                              <label htmlFor="dob">DOB <span className="text-danger font-weight-bold">*</span></label>
                               <input
                                 type="date"
                                 value={existingColonizerDetails.dob}
@@ -1787,7 +1769,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
                           <div className="col col-4">
                             <div className="form-group">
-                              <label htmlFor="pan">PAN Number</label>
+                              <label htmlFor="pan">PAN Number <span className="text-danger font-weight-bold">*</span></label>
                               <input
                                 type="pan"
                                 value={existingColonizerDetails.pan}
@@ -1803,7 +1785,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
                           <div className="col col-4">
                             <div className="form-group">
-                              <label htmlFor="licNo">License No.</label>
+                              <label htmlFor="licNo">License No. <span className="text-danger font-weight-bold">*</span></label>
                               <input
                                 type="text"
                                 value={existingColonizerDetails.licNo}
@@ -1818,7 +1800,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
                           <div className="col col-4">
                             <div className="form-group">
-                              <label htmlFor="licDate">Date</label>
+                              <label htmlFor="licDate">Date <span className="text-danger font-weight-bold">*</span></label>
                               <input
                                 type="date"
                                 value={existingColonizerDetails.licDate}
@@ -1826,14 +1808,15 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                 // onChange={SelectName}
                                 onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, licDate: e.target.value })}
                                 className="employee-card-input"
-                                maxLength={10}
+                                
+                                max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
                               />
                             </div>
                           </div>
 
                           <div className="col col-4">
                             <div className="form-group">
-                              <label htmlFor="licValidity">Validity</label>
+                              <label htmlFor="licValidity">Validity <span className="text-danger font-weight-bold">*</span></label>
                               <input
                                 type="date"
                                 value={existingColonizerDetails.licValidity}
@@ -1841,7 +1824,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                 // onChange={SelectName}
                                 onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, licValidity: e.target.value })}
                                 className="employee-card-input"
-                              // maxLength={10}
+                                min={convertEpochToDate(new Date().setFullYear(new Date().getFullYear() - existingColonizerDetails.licDate))}
                               />
                             </div>
                           </div>

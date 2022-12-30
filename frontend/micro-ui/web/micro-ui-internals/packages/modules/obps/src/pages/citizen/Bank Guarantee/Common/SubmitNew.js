@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, Row, Col } from "react-bootstrap";
 import { Button, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-const SubmitNew = () => {
+
+function SubmitNew() {
+  const [modal, setmodal] = useState(false);
+  const [modal1, setmodal1] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -14,29 +18,22 @@ const SubmitNew = () => {
   } = useForm({});
 
   const bankSubmitNew = (data) => console.log(data);
-  const [modal, setmodal] = useState(false);
-  const [modal1, setmodal1] = useState(false);
   return (
-    <form on submit={handleSubmit(bankSubmitNew)}>
-      <Card style={{ width: "126%", marginLeft: "19px", paddingRight: "10px" }}>
-        <Form.Group className="justify-content-center" controlId="formBasicEmail">
-          <Row className="ml-auto" style={{ marginBottom: 5 }}>
+    <form onSubmit={handleSubmit(bankSubmitNew)}>
+      <Card style={{ width: "126%", border: "5px solid #1266af" }}>
+        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Submission</h4>
+        <div className="card">
+          <Row className="col-12">
             <Col md={4} xxl lg="3">
-              <div>
+              <Form.Group as={Col} controlId="formGridLicence">
                 <Form.Label>
                   <h2>Enter LOI No.</h2>{" "}
                 </Form.Label>
-              </div>
-              <input type="text" className="form-control" placeholder="" {...register("enterLoiNumber")} />
+
+                <input type="text" className="form-control" placeholder="" {...register("enterLoiNumber")} />
+              </Form.Group>
             </Col>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>Enter Memo No. </h2>
-                </Form.Label>
-              </div>
-              <input type="text" className="form-control" placeholder="" {...register("enterMemoNumber")} />
-            </Col>
+
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
@@ -47,25 +44,6 @@ const SubmitNew = () => {
                 <option> IDW</option>
                 <option>EDC</option>
               </select>
-            </Col>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>Upload B.G. </h2>
-                </Form.Label>
-              </div>
-              <input type="file" className="form-control" placeholder="" {...register("uploadBg")} />
-            </Col>
-          </Row>
-
-          <Row className="ml-auto" style={{ marginBottom: 5 }}>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>Bank Name </h2>
-                </Form.Label>
-              </div>
-              <input type="text" className="form-control" placeholder="" {...register("bankName")} />
             </Col>
             <Col md={4} xxl lg="3">
               <div>
@@ -81,7 +59,25 @@ const SubmitNew = () => {
                   <h2>Amount (in words)</h2>
                 </Form.Label>
               </div>
-              <input type="text" className="form-control" disabled placeholder="" {...register("amountInWords")} />
+              <input type="text" className="form-control" placeholder="" {...register("amountInWords")} />
+            </Col>
+          </Row>
+          <Row className="col-12">
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>Bank Name </h2>
+                </Form.Label>
+              </div>
+              <input type="text" className="form-control" placeholder="" {...register("bankName")} />
+            </Col>
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>Enter Memo No. </h2>
+                </Form.Label>
+              </div>
+              <input type="text" className="form-control" placeholder="" {...register("enterMemoNumber")} />
             </Col>
             <Col md={4} xxl lg="3">
               <div>
@@ -91,34 +87,40 @@ const SubmitNew = () => {
               </div>
               <input type="date" className="form-control" placeholder="" {...register("validity")} />
             </Col>
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>Upload B.G. </h2>
+                </Form.Label>
+              </div>
+              <input type="file" className="form-control" placeholder="" {...register("uploadBg")} />
+            </Col>
           </Row>
-          <div className="row">
+
+          <Row className="col-12">
             <div className="col col-12 ">
               <div>
-                <div className="form-check">
-                  <input className="form-check-input" formControlName="agreeCheck" type="checkbox" value="" id="flexCheckDefault" required />
-                  <label className="checkbox" for="flexCheckDefault">
-                    Hardcopy Submitted at TCP office.{" "}
-                    <label htmlFor="licenseApplied">
-                      <input {...register("licenseApplied")} type="radio" value="Y" id="licenseApplied" />
-                      &nbsp; Yes &nbsp;&nbsp;
-                    </label>
-                    <label htmlFor="licenseApplied">
-                      <input
-                        {...register("licenseApplied")}
-                        type="radio"
-                        value="N"
-                        id="licenseApplied"
-                        className="btn btn-primary"
-                        onClick={() => setmodal1(true)}
-                      />
-                      &nbsp; No &nbsp;&nbsp;
-                    </label>
-                    <h3 className="error-message" style={{ color: "red" }}>
-                      {errors?.licenseApplied && errors?.licenseApplied?.message}
-                    </h3>
+                <label>
+                  Hardcopy Submitted at TCP office.{" "}
+                  <label htmlFor="licenseApplied">
+                    <input {...register("licenseApplied")} type="radio" value="Y" id="licenseApplied" />
+                    &nbsp; Yes &nbsp;&nbsp;
                   </label>
-                </div>
+                  <label htmlFor="licenseApplied">
+                    <input
+                      {...register("licenseApplied")}
+                      type="radio"
+                      value="N"
+                      id="licenseApplied"
+                      className="btn btn-primary"
+                      onClick={() => setmodal1(true)}
+                    />
+                    &nbsp; No &nbsp;&nbsp;
+                  </label>
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.licenseApplied && errors?.licenseApplied?.message}
+                  </h3>
+                </label>
               </div>
 
               {watch("licenseApplied") === "Y" && (
@@ -132,12 +134,7 @@ const SubmitNew = () => {
                         </h2>
                       </label>
                       <div>
-                        <input
-                          type="file"
-                          className="form-control"
-                          required
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "consentLetter")}
-                        />
+                        <input type="file" placeholder="" className="form-control" {...register("consentLetter")}></input>
                       </div>
 
                       <h3 className="error-message" style={{ color: "red" }}>
@@ -166,25 +163,34 @@ const SubmitNew = () => {
                 </div>
               )}
             </div>
-          </div>
-        </Form.Group>
-        <div class="row">
-          <div class="col-sm-12 text-right">
-            <button type="submit" id="btnClear" class="btn btn-primary btn-md center-block" style={{ marginBottom: "-44px" }}>
+          </Row>
+          <Row className="justify-content-end">
+            <Button variant="outline-primary" className="col-md-2 my-2 mx-2" aria-label="right-end">
+              Cancel
+            </Button>
+            <Button variant="outline-primary" className="col-md-2 my-2 mx-2" type="submit" aria-label="right-end">
               Submit
-            </button>
-          </div>
-          <div class="row">
+            </Button>
+          </Row>
+
+          {/* <div class="row">
             <div class="col-sm-12 text-right">
-              <button id="btnSearch" class="btn btn-danger btn-md center-block" style={{ marginRight: "66px", marginTop: "-6px" }}>
-                Cancel
+              <button type="submit" id="btnClear" class="btn btn-primary btn-md center-block" style={{ marginBottom: "-44px" }}>
+                Submit
               </button>
             </div>
-          </div>
+            <div class="row">
+              <div class="col-sm-12 text-right">
+                <button id="btnSearch" class="btn btn-danger btn-md center-block" style={{ marginRight: "66px", marginTop: "-6px" }}>
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div> */}
         </div>
       </Card>
     </form>
   );
-};
+}
 
 export default SubmitNew;

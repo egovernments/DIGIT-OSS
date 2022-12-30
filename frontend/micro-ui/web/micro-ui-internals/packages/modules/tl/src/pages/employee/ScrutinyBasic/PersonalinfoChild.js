@@ -779,7 +779,7 @@ const PersonalinfoChild = (props) => {
           <div className={classes.fieldContainer}>
             <Form.Control
               className={classes.formControl}
-              // placeholder={personalinfo !== null ? personalinfo.status : null}
+              placeholder={personalinfo !== null ? personalinfo.LC : null}
               disabled
             ></Form.Control>
             &nbsp;&nbsp;
@@ -804,7 +804,7 @@ const PersonalinfoChild = (props) => {
           <div className={classes.fieldContainer}>
             <Form.Control
               className={classes.formControl}
-              placeholder={personalinfo !== null ? personalinfo.permanentAddress : null}
+              placeholder={personalinfo !== null ? personalinfo.address : null}
               disabled
             ></Form.Control>
             &nbsp;&nbsp;
@@ -816,7 +816,7 @@ const PersonalinfoChild = (props) => {
                 setLabelValue("Address for communication"),
                   setSmShow(true),
                   console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.permanentAddress : null);
+                  setFieldValue(personalinfo !== null ? personalinfo.address : null);
               }}
             ></ReportProblemIcon>
           </div>
@@ -859,7 +859,7 @@ const PersonalinfoChild = (props) => {
           <div className={classes.fieldContainer}>
             <Form.Control
               className={classes.formControl}
-              placeholder={personalinfo !== null ? personalinfo.address : null}
+              placeholder={personalinfo !== null ? personalinfo.permanentAddress : null}
               disabled
             ></Form.Control>
             &nbsp;&nbsp;
@@ -910,7 +910,7 @@ const PersonalinfoChild = (props) => {
           <div className={classes.fieldContainer}>
             <Form.Control
               className={classes.formControl}
-              placeholder={personalinfo !== null ? personalinfo.LC : null}
+              placeholder={personalinfo !== null ? personalinfo.notSigned : null}
               disabled
             ></Form.Control>
             &nbsp;&nbsp;
