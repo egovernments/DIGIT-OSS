@@ -785,6 +785,8 @@ const Developerinfo = (props) => {
                         ></ReportProblemIcon>
                       </div>
                     </Col>
+                    </Row>
+
                     {/* </Row>
               <Row className="ms-auto" style={{ marginBottom: 20 }}> */}
                     {/* <Col className="ms-auto" md={4} xxl lg="4">
@@ -808,7 +810,7 @@ const Developerinfo = (props) => {
                       }}
                     ></ReportProblemIcon>
                   </div>
-                </Col> */}
+                </Col> */}<Row className="ms-auto" style={{ marginBottom: 20 }}>
                     <div className="col col-12">
                       {/* {Purpose === "DDJAY_APHP" && <CommercialColonyInResidential watch={watch} register={register} />}
                               {Purpose === "RPL" && <CommercialColonyInResidential watch={watch} register={register} />}
@@ -881,6 +883,8 @@ const Developerinfo = (props) => {
                       {/* <option value="potential 2">(c) Constructed sector road or internal circula-tion road of min. 18m/24m (licenced) part of the approved sectoral plan and further leadup up to at least 4 karam wide public ras-ta.</option> */}
                       {/* </select> */}
                     </div>
+                    </Row >
+                    <Row className="ms-auto" style={{ marginBottom: 20 }}>
                     <Col className="ms-auto" md={4} xxl lg="4">
                       <label>
                         <h6>Area of Parent Licence &nbsp;&nbsp;</h6>{" "}
@@ -921,8 +925,11 @@ const Developerinfo = (props) => {
                         ></ReportProblemIcon>
                       </div>
                     </Col>
-                  </Row>
-                  <Row className="ms-auto" style={{ marginBottom: 20 }}>
+                    <Col className="ms-auto" md={4} xxl lg="4">
+                     
+                    
+                    {/* </Row> */}
+                  {/* <Row className="ms-auto" style={{ marginBottom: 20 }}> */}
                     {/* <div className="col col-4">
                       <h6>Type of land</h6>{" "}
                       <div className="d-flex flex-row  align-items-center">
@@ -1005,6 +1012,7 @@ const Developerinfo = (props) => {
                         </div>
                       )}
                     </div>
+                    </Col>
                   </Row>
                 </div>
               )}
