@@ -945,6 +945,16 @@ class ShowField extends Component {
     let { reportResult, metaData } = this.props;
     let { drillDown, checkIfDate } = this;
     let elapsedTimeValue = [];
+    let localityIndex = "";
+
+    let metaDataResults = metaData && metaData.reportDetails && metaData.reportDetails.reportHeader;
+    if (metaDataResults && metaDataResults?.length > 0) {
+      localityIndex = metaDataResults.findIndex(checkLocality);
+      function checkLocality(column) {
+        return column && column.label && column.label.includes("locality");
+      }
+    }
+    
 
     if (
       metaData && 
@@ -962,8 +972,12 @@ class ShowField extends Component {
             reportDataArray.push("NA")
           } else {
             if ((details && typeof details == "string") || (details && typeof details == "string" && details.includes("_"))) {
-              let localisedData = getLocaleLabels(details, details);
-              reportDataArray.push(localisedData);
+              if (localityIndex !== index) {
+                let localisedData = getLocaleLabels(details, details);
+                reportDataArray.push(localisedData);
+              } else {
+                reportDataArray.push(details)
+              }
             } else {
               if ( metaData && 
                 metaData.reportDetails &&
