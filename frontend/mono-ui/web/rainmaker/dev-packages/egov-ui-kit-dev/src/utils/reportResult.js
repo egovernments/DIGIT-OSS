@@ -948,7 +948,7 @@ class ShowField extends Component {
     let localityIndex = "";
 
     let metaDataResults = metaData && metaData.reportDetails && metaData.reportDetails.reportHeader;
-    if (metaDataResults && metaDataResults?.length > 0) {
+    if (metaDataResults && metaDataResults.length > 0) {
       localityIndex = metaDataResults.findIndex(checkLocality);
       function checkLocality(column) {
         return column && column.label && column.label.includes("locality");
