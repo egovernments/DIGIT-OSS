@@ -58,10 +58,10 @@ const FeesChargesForm = (props) => {
   const [submitDataLabel, setSubmitDataLabel] = useState([]);
 
   const [FeesChargesFormSubmitted, SetFeesChargesFormSubmitted] = useState(false);
-
   const FeesChrgesFormSubmitHandler = async (data) => {
-    setLoader(true);
     const token = window?.localStorage?.getItem("token");
+    setLoader(true);
+
     const postDistrict = {
       pageName: "FeesAndCharges",
       action: "FEESANDCHARGES",
@@ -88,10 +88,11 @@ const FeesChargesForm = (props) => {
     };
     try {
       const Resp = await axios.post("/tl-services/new/_create", postDistrict);
-      props.Step5Continue(data, Resp?.data?.NewServiceInfo?.[0]?.id);
-      // SetFeesChargesFormSubmitted(Resp.data);
+      setLoader(false);
+      props.Step5Continue(Resp?.data?.LicenseServiceResponseInfo?.[0]?.newServiceInfoData?.[0]);
     } catch (error) {
-      return error?.message;
+      setLoader(false);
+      return error.message;
     }
   };
 
@@ -108,9 +109,9 @@ const FeesChargesForm = (props) => {
     setRemark(event.target.value);
   };
 
-  const handleChange = (e) => {
-    this.setState({ isRadioSelected: true });
-  };
+  // const handleChange = (e) => {
+  //   this.setState({ isRadioSelected: true });
+  // };
 
   const Purpose = localStorage.getItem("purpose");
   const potential = JSON.parse(localStorage.getItem("potential"));
@@ -396,14 +397,14 @@ const FeesChargesForm = (props) => {
                       <h6 data-toggle="tooltip" data-placement="top" title="Do you want to adjust the fee from any previous licence (Yes/No)">
                         (iii)&nbsp;Adjust Fees <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
                       </h6>
-                      <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow0} />
+                      <input {...register("adjustFee")} type="radio" value="Y" id="adjustFee" />
                       <label for="Yes">Yes</label>&nbsp;&nbsp;
-                      <input type="radio" value="No" id="No" onChange={handleChange} name="Yes" onClick={handleshow0} />
+                      <input {...register("adjustFee")} type="radio" value="N" id="adjustFee" />
                       <label for="No">No</label>
                       <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.licNumber && errors?.licNumber?.message}
+                        {errors?.adjustFee && errors?.adjustFee?.message}
                       </h3>
-                      {showhide0 === "Yes" && (
+                      {watch("adjustFee") === "Y" && (
                         <div className="row ">
                           <div className="col col-12">
                             <label>
@@ -511,18 +512,7 @@ const FeesChargesForm = (props) => {
                         </span>
                       </label>
                     </div>
-                    <div class="my-2">
-                      .
-                      <button
-                        className="btn btn-primary"
-                        onClick={() => {
-                          history.push(`/digit-ui/citizen/payment/collect/TL/${props?.securedData?.applicationNumber}`, {});
-                          setmodal(true);
-                        }}
-                      >
-                        Pay Now
-                      </button>
-                    </div>
+
                     {/* <div>
                     <Modal
                       size="lg"
@@ -548,18 +538,30 @@ const FeesChargesForm = (props) => {
                   </div> */}
                   </div>
                   <div class="row">
-                    <div class="col-sm-12 text-right">
-                      {/* <button id="btnSearch" class="btn btn-primary btn-md ">
+                    {/* <button id="btnSearch" class="btn btn-primary btn-md ">
                       {" "} */}
-                      {/* <a href="http://103.166.62.118:80/tl-services/new/license/report?id=875" target="_blank"> */}
-                      <div onClick={() => showPdf()} id="btnSearch" class="btn btn-primary btn-md">
+                    {/* <a href="http://103.166.62.118:80/tl-services/new/license/report?id=875" target="_blank"> */}
+                    <div class="col-sm-12 text-right">
+                      {/* <div onClick={() => showPdf()} id="btnSearch" class="btn btn-primary btn-md">
                         View as PDF &nbsp;&nbsp; <VisibilityIcon color="white" />
-                      </div>
+                      </div> */}
                       {/* </a> */}
-                      &nbsp;&nbsp;
+                      {/* &nbsp;&nbsp; */}
                       <button type="submit" id="btnClear" class="btn btn-primary btn-md ">
                         Submit
                       </button>
+                      <div class="my-2">
+                        .
+                        <button
+                          className="btn btn-primary"
+                          onClick={() => {
+                            history.push(`/digit-ui/citizen/payment/collect/TL/${props?.securedData?.applicationNumber}`, {});
+                            setmodal(true);
+                          }}
+                        >
+                          Pay Now
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </Col>

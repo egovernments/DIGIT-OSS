@@ -16,7 +16,7 @@ import { IconButton } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 
-function SubmitNew() {
+function Replace() {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
   const [open2, setOpen2] = useState(false);
@@ -36,7 +36,7 @@ function SubmitNew() {
     setValue,
   } = useForm({});
 
-  const SubmitNew = (data) => console.log(data);
+  const Replace = (data) => console.log(data);
 
   const classes = useStyles();
   const currentRemarks = (data) => {
@@ -108,7 +108,7 @@ function SubmitNew() {
     { label: "Email ID for communication", key: "emailForCommunication" },
   ];
   return (
-    <form onSubmit={handleSubmit(SubmitNew)}>
+    <form onSubmit={handleSubmit(Replace)}>
       <div
         className="collapse-header"
         onClick={() => setOpen2(!open2)}
@@ -127,19 +127,19 @@ function SubmitNew() {
         }}
       >
         <span style={{ color: "#817f7f" }} className="">
-          Submission
+          Replace/Renew
         </span>
         {open2 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       </div>
       <Collapse in={open2}>
         <div id="example-collapse-text">
           <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-            <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Submission </h4>
+            <h4 style={{ fontSize: "25px", marginLeft: "21px" }}> Replace/Renew </h4>
             <div className="card">
               <Row className="col-12">
                 <Form.Group as={Col} controlId="formGridLicence">
                   <Form.Label>
-                    <h2>Enter LOI No.</h2>{" "}
+                    <h2>Enter Licence No.</h2>{" "}
                   </Form.Label>
 
                   <div className={classes.fieldContainer}>
@@ -169,42 +169,7 @@ function SubmitNew() {
                   </div>
                   {/* <input type="text" className="form-control" placeholder="" {...register("enterLoiNumber")} /> */}
                 </Form.Group>
-                <Form.Group as={Col} controlId="formGridLicence">
-                  <div>
-                    <Form.Label>
-                      <h2>Type of B.G</h2>
-                    </Form.Label>
-                  </div>
-                  <div className={classes.fieldContainer}>
-                    <Form.Control className={classes.formControl} placeholder="" disabled></Form.Control>
 
-                    <ReportProblemIcon
-                      style={{
-                        color: fieldIconColors.developer,
-                      }}
-                      onClick={() => {
-                        setOpennedModal("Licence No");
-                        setLabelValue("Licence No"),
-                          setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-                      }}
-                    ></ReportProblemIcon>
-                    <ModalChild
-                      labelmodal={labelValue}
-                      passmodalData={handlemodaldData}
-                      displaymodal={smShow}
-                      onClose={() => setSmShow(false)}
-                      selectedFieldData={selectedFieldData}
-                      fieldValue={fieldValue}
-                      remarksUpdate={currentRemarks}
-                    ></ModalChild>
-                  </div>
-                  {/* <select className="form-control" {...register("typeOfBg")}>
-                    <option> IDW</option>
-                    <option>EDC</option>
-                  </select> */}
-                </Form.Group>
                 <Form.Group as={Col} controlId="formGridLicence">
                   <div>
                     <Form.Label>
@@ -271,8 +236,6 @@ function SubmitNew() {
                   </div>
                   {/* <input type="text" className="form-control" placeholder="" {...register("amountInWords")} /> */}
                 </Form.Group>
-              </Row>
-              <Row className="col-12">
                 <Form.Group as={Col} controlId="formGridLicence">
                   <div>
                     <Form.Label>
@@ -306,6 +269,8 @@ function SubmitNew() {
                   </div>
                   {/* <input type="text" className="form-control" placeholder="" {...register("bankName")} /> */}
                 </Form.Group>
+              </Row>
+              <Row className="col-12">
                 <Form.Group as={Col} controlId="formGridLicence">
                   <div>
                     <Form.Label>
@@ -342,7 +307,7 @@ function SubmitNew() {
                 <Form.Group as={Col} controlId="formGridLicence">
                   <div>
                     <Form.Label>
-                      <h2>Valid Upto </h2>
+                      <h2>Date of validity </h2>
                     </Form.Label>
                   </div>
                   <div className={classes.fieldContainer}>
@@ -372,6 +337,43 @@ function SubmitNew() {
                   </div>
                   {/* <input type="date" className="form-control" placeholder="" {...register("validity")} /> */}
                 </Form.Group>
+                <Form.Group as={Col} controlId="formGridLicence">
+                  <div>
+                    <Form.Label>
+                      <h2>Extended time</h2>
+                    </Form.Label>
+                  </div>
+                  <div className={classes.fieldContainer}>
+                    <Form.Control className={classes.formControl} placeholder="" disabled></Form.Control>
+
+                    <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.developer,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("Licence No");
+                        setLabelValue("Licence No"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                      }}
+                    ></ReportProblemIcon>
+                    <ModalChild
+                      labelmodal={labelValue}
+                      passmodalData={handlemodaldData}
+                      displaymodal={smShow}
+                      onClose={() => setSmShow(false)}
+                      selectedFieldData={selectedFieldData}
+                      fieldValue={fieldValue}
+                      remarksUpdate={currentRemarks}
+                    ></ModalChild>
+                  </div>
+                  {/* <select className="form-control" {...register("typeOfBg")}>
+                    <option> IDW</option>
+                    <option>EDC</option>
+                  </select> */}
+                </Form.Group>
+
                 <Form.Group as={Col} controlId="formGridLicence">
                   <div>
                     <Form.Label>
@@ -556,4 +558,4 @@ function SubmitNew() {
   );
 }
 
-export default SubmitNew;
+export default Replace;
