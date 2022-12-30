@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import { useForm, Controller } from "react-hook-form";
+import FileUpload from "@mui/icons-material/FileUpload";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Modal, ModalHeader, ModalBody, ModalFooter, CloseButton } from "reactstrap";
@@ -527,6 +528,14 @@ const ApllicantPuropseForm = (props) => {
     }, 500);
     return () => clearTimeout(delay);
   }, [getKhewats]);
+  const dataArea = props?.ApplicantPurpose?.AppliedLandDetails?.[0]?.kanal;
+  const dataAreaMarla = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.marla;
+  const dataAreaSarai = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.sarsai;
+  const dataAreaBigha = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.bigha;
+  const dataAreaBiswa = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.biswa;
+  const dataAreaBiswansi = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.biswansi;
+  const totalAreaAcre = dataArea * 0.125 + dataAreaMarla * 0.0062 + dataAreaSarai * 0.00069;
+  console.log("grt", dataArea);
 
   return (
     <div>
@@ -849,6 +858,12 @@ const ApllicantPuropseForm = (props) => {
                           </h2>
                           &nbsp;&nbsp;
                         </th>
+                        <th>
+                          <h2>
+                            Total Area <span style={{ color: "red" }}>*</span>
+                          </h2>
+                          &nbsp;&nbsp;
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -864,6 +879,9 @@ const ApllicantPuropseForm = (props) => {
                         <td>
                           <input type="number" className="form-control " {...register("sarsai")} id="sarsai" required maxLength={20} />
                           <label htmlFor="sumsarsai">Total: {watch("sarsai") * 0.00069}</label>&nbsp;&nbsp;
+                        </td>
+                        <td>
+                          <input type="number" className="form-control " placeholder={totalAreaAcre} disabled />
                         </td>
                       </tr>
                     </tbody>
@@ -886,6 +904,12 @@ const ApllicantPuropseForm = (props) => {
                         <th>
                           <h2>
                             Biswansi <span style={{ color: "red" }}>*</span>
+                          </h2>
+                          &nbsp;&nbsp;
+                        </th>
+                        <th>
+                          <h2>
+                            Total Area <span style={{ color: "red" }}>*</span>
                           </h2>
                           &nbsp;&nbsp;
                         </th>
@@ -1041,18 +1065,23 @@ const ApllicantPuropseForm = (props) => {
                       <div className="col col-4">
                         <label>
                           <h2 data-toggle="tooltip" data-placement="top" title="Upload Document" style={{ marginTop: "-4px" }}>
-                            Registering Authority document <span style={{ color: "red" }}>*</span>
+                            Registering Authority document <span style={{ color: "red" }}>*</span> <FileUpload color="primary" />
+                            <input
+                              type="file"
+                              style={{ display: "none" }}
+                              onChange={(e) => getDocumentData(e?.target?.files[0], "registeringAuthorityDoc")}
+                            />
                           </h2>
                         </label>
-                        <br></br>
-                        <input
+
+                        {/* <input
                           type="file"
                           style={{ marginTop: "-6px" }}
                           className="form-control"
                           accept="application/pdf"
                           required
                           onChange={(e) => getDocumentData(e?.target?.files[0], "registeringAuthorityDoc")}
-                        />
+                        /> */}
                       </div>
                     </div>
                   </div>
