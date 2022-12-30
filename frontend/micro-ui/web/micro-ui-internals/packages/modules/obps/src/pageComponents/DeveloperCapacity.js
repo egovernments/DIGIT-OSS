@@ -331,7 +331,10 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
 
     const changeValueHrdu = (e) => {
         console.log(e.target.value);
-        setValueHrdu(e.target.value)
+        setValueHrdu(e.target.value);
+        setValueDesignatedDirectors("");
+        setDocumentsData({...Documents,agreementDoc:"",boardDoc:""});
+        setModalCapacityDevelopColonyHdruAct([])
     }
     const changeTechnicalExpert = (e) => {
         console.log(e.target.value);
@@ -340,10 +343,11 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
     const changeDesignatedDirectors = (e) => {
         console.log(e.target.value);
         setValueDesignatedDirectors(e.target.value)
+        setDocumentsData({...Documents,agreementDoc:"",boardDoc:""});
     }
     const changeAlreadyObtainedLic = (e) => {
         console.log(e.target.value);
-        setValueAlreadyObtainedLic(e.target.value)
+        setValueAlreadyObtainedLic(e.target.value);
     }
 
     const handleshow = (e) => {
@@ -971,8 +975,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                     onSelect={goNext}
                     onSkip={onSkip}
                     t={t}
+                    
                     isDisabled={
-                        ((data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm") ? (!Documents?.companyBalanceSheet || !Documents?.individualCertificateCA) : (data?.devDetail[0]?.addInfo?.showDevTypeFields === "Company" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Society" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Trust" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Institution") ? (!Documents?.companyBalanceSheet || !Documents?.paidUpCapital) : (data?.devDetail[0]?.addInfo?.showDevTypeFields === "Limited Liability Partnership" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Firm" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm") ? (!Documents?.netWorthOfPartners || !Documents?.netWorthOfFirm) : true) || ((permissionGrantedHRDU === "Y" && capacityDevelopColonyHdruAct.length) ? false : permissionGrantedHRDU === "N" ? false : true) || ((technicalCapacityOutsideHaryana === "Y" && technicalCapacityOutsideHaryanaDetails.authority && technicalCapacityOutsideHaryanaDetails.project && technicalCapacityOutsideHaryanaDetails.statusOfDevelopment) ? false : technicalCapacityOutsideHaryana === "N" ? false : true) ||  ((technicalExpert === "Y" && engineerName && engineerQualification && architectName && architectQualification && townPlannerName && townPlannerQualification) ? false : true || (!Documents?.engineerSign && !Documents?.architectSign && !Documents?.townPlannerSign ? true : false) || ( technicalExpert === "N" ? false : true))
+                        ((data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm") ? (!Documents?.companyBalanceSheet || !Documents?.individualCertificateCA) : (data?.devDetail[0]?.addInfo?.showDevTypeFields === "Company" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Society" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Trust" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Institution") ? (!Documents?.companyBalanceSheet || !Documents?.paidUpCapital) : (data?.devDetail[0]?.addInfo?.showDevTypeFields === "Limited Liability Partnership" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Firm" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm") ? (!Documents?.netWorthOfPartners || !Documents?.netWorthOfFirm) : true) || ((permissionGrantedHRDU === "Y" && capacityDevelopColonyHdruAct.length) ? false : permissionGrantedHRDU === "N" ? false : true) || ((technicalCapacityOutsideHaryana === "Y" && technicalCapacityOutsideHaryanaDetails.authority && technicalCapacityOutsideHaryanaDetails.project && technicalCapacityOutsideHaryanaDetails.statusOfDevelopment) ? false : technicalCapacityOutsideHaryana === "N" ? false : true) || ((alreadtObtainedLic === "Y" && Documents?.agreementDocY && Documents?.boardDocX && Documents?.registeredDoc && Documents?.boardDocY && technicalCapacitySoughtFromAnyColonizer.licNo && technicalCapacitySoughtFromAnyColonizer.dateOfGrantingLic && technicalCapacitySoughtFromAnyColonizer.licValidity && technicalCapacitySoughtFromAnyColonizer.purpose) ? false : alreadtObtainedLic === "N" ? false : true) || ((designatedDirectors === "Y" && Documents?.agreementDoc && Documents?.boardDoc) ? false : designatedDirectors === "N" ? false : permissionGrantedHRDU === "Y" ? false : true) || ((technicalExpert === "Y" && engineerName && engineerQualification && Documents?.engineerSign && Documents?.architectSign && Documents?.townPlannerSign && architectName && architectQualification && townPlannerName && townPlannerQualification) ? false : (technicalExpert === "N") ? false : true)
                     }
                 >
                     {/* <CheckBox
@@ -1731,10 +1736,11 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     type="date"
                                                                     name="validatingLicence"
                                                                     value={hrduModalData.licValidity}
+                                                                    disabled={!hrduModalData.dateOfGrantingLic}
                                                                     onChange={(e) => setHrduModalData({ ...hrduModalData, licValidity: e.target.value })}
                                                                     placeholder=""
                                                                     class="employee-card-input"
-                                                                    min={convertEpochToDate(new Date().setFullYear(new Date().getFullYear() - hrduModalData.dateOfGrantingLic))}
+                                                                    min={hrduModalData.dateOfGrantingLic}
                                                                 />
 
                                                             </Col>
@@ -2256,10 +2262,11 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                     <input
                                                         type="date"
                                                         name="licValidity"
+                                                        disabled={!technicalCapacitySoughtFromAnyColonizer.dateOfGrantingLic}
                                                         value={technicalCapacitySoughtFromAnyColonizer.licValidity}
                                                         onChange={(e) => setTechnicalCapacitySoughtFromAnyColonizer({ ...technicalCapacitySoughtFromAnyColonizer, licValidity: e.target.value })}
                                                         className="employee-card-input"
-                                                        min={convertEpochToDate(new Date().setFullYear(new Date().getFullYear() - technicalCapacitySoughtFromAnyColonizer.dateOfGrantingLic))}
+                                                        min={technicalCapacitySoughtFromAnyColonizer.dateOfGrantingLic}
                                                     />
                                                 </div>
                                             </div>

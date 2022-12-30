@@ -41,7 +41,7 @@ export const configTLApproverApplication = ({
               //   selected={selectedApprover}
               // />
               
-             <>
+            //  <React.Fragment>
                  <MultiSelectDropdown
               options={approvers}
               // options={[{name:"dtp"},{name:"ctp"},{name:"acp"}]}
@@ -50,9 +50,11 @@ export const configTLApproverApplication = ({
               // id="fieldInspector"
               onSelect={setSelectedApprover}
               selected={selectedApprover}
+              showSelectedValue={true}
             />
-            <p>{JSON.stringify(selectedApprover)}</p>
-             </>
+            // <p>{JSON.stringify(selectedApprover)}</p>
+            // {/* <p>{JSON.stringify(approvers)}</p> */}
+            //  </React.Fragment>
             ),
           },
           {
