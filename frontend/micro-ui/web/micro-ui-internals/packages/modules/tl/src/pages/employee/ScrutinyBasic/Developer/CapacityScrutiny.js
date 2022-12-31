@@ -83,6 +83,11 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
     formDataValue?.DeveloperCapacity?.technicalAssistanceAgreementDoc || ""
   );
 
+  let user = Digit.UserService.getUser();
+  const userRoles = user?.info?.roles?.map((e) => e.code) || [];
+  const hideRemarks = userRoles.some((item)=>item === "CTP_HR" || item === "CTP_HQ" || item === "DTP_HR" || item === "DTP_HQ")
+  
+
   // console.log("AUTHNAME", authUserName);
 
   // const dispatch = useDispatch();
@@ -487,9 +492,12 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                                 </div>
                           </td>
                           <td align="center" size="large">
+                             {JSON.stringify(hideRemarks)} 
+                  {/* display: hideRemarks?"none":"block", */}
                           <div>
                             <ReportProblemIcon
                   style={{
+                    display: hideRemarks?"none":"block",
                     color: fieldIconColors.caution1
                   }}
                   onClick={() => {
@@ -594,6 +602,7 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                           <div>
                             <ReportProblemIcon
                   style={{
+                    display: hideRemarks?"none":"block",
                     color: fieldIconColors.caution1
                   }}
                   onClick={() => {
@@ -634,6 +643,7 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                           <div>
                             <ReportProblemIcon
                   style={{
+                    display: hideRemarks?"none":"block",
                     color: fieldIconColors.caution1
                   }}
                   onClick={() => {
@@ -674,6 +684,7 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                           <div>
                             <ReportProblemIcon
                   style={{
+                    display: hideRemarks?"none":"block",
                     color: fieldIconColors.caution1
                   }}
                   onClick={() => {
@@ -714,6 +725,7 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                           <div>
                             <ReportProblemIcon
                   style={{
+                    display: hideRemarks?"none":"block",
                     color: fieldIconColors.caution1
                   }}
                   onClick={() => {
@@ -789,6 +801,7 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                 <label className="m-0 mx-2" for="No">No</label>
                 <ReportProblemIcon
                   style={{
+                    display: hideRemarks?"none":"block",
                     color: fieldIconColors.caution1
                   }}
                   onClick={() => {
@@ -947,6 +960,7 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                             <div className="btn btn-sm col-md-6">
                             <ReportProblemIcon
                   style={{
+                    display: hideRemarks?"none":"block",
                     color: fieldIconColors.caution1
                   }}
                   onClick={() => {
@@ -1091,6 +1105,7 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks?"none":"block",
                       color:fieldIconColors.caution4
                     }}
                     onClick={() => {
@@ -1234,6 +1249,7 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
 
                             <ReportProblemIcon
                   style={{
+                    display: hideRemarks?"none":"block",
                     color: fieldIconColors.caution1
                   }}
                   onClick={() => {
@@ -1264,6 +1280,7 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                                &nbsp;&nbsp;
                                <ReportProblemIcon
                   style={{
+                    display: hideRemarks?"none":"block",
                     color: fieldIconColors.caution1
                   }}
                   onClick={() => {
@@ -1295,6 +1312,7 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                                &nbsp;&nbsp;
                                <ReportProblemIcon
                   style={{
+                    display: hideRemarks?"none":"block",
                     color: fieldIconColors.caution1
                   }}
                   onClick={() => {
@@ -1326,6 +1344,7 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                                &nbsp;&nbsp;
                                <ReportProblemIcon
                   style={{
+                    display: hideRemarks?"none":"block",
                     color: fieldIconColors.caution1
                   }}
                   onClick={() => {
@@ -1420,7 +1439,7 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                                                                         <div className="row">
                                
                                <div className="btn btn-sm col-md-6">
-                              <IconButton onClick={()=>getDocShareholding(item?.boardDoc)}>
+                              <IconButton onClick={()=>getDocShareholding(capacityScrutinyInfo?.obtainedLicense?.boardDoc)}>
                                     <VisibilityIcon color="info" className="icon" /></IconButton>
                                     </div>
                                <div className="btn btn-sm col-md-6">
@@ -1452,6 +1471,7 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                                &nbsp;&nbsp;
                                <ReportProblemIcon
                   style={{
+                    display: hideRemarks?"none":"block",
                     color: fieldIconColors.caution1
                   }}
                   onClick={() => {
@@ -1514,6 +1534,7 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                                &nbsp;&nbsp;
                                <ReportProblemIcon
                   style={{
+                    display: hideRemarks?"none":"block",
                     color: fieldIconColors.caution1
                   }}
                   onClick={() => {
@@ -1569,6 +1590,7 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                                &nbsp;&nbsp;
                                <ReportProblemIcon
                   style={{
+                    display: hideRemarks?"none":"block",
                     color: fieldIconColors.caution1
                   }}
                   onClick={() => {
@@ -1627,6 +1649,7 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                                &nbsp;&nbsp;
                                <ReportProblemIcon
                   style={{
+                    display: hideRemarks?"none":"block",
                     color: fieldIconColors.caution1
                   }}
                   onClick={() => {
@@ -1664,11 +1687,13 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                                                 /> */}
                                                    <div className={classes.fieldContainer}>
                               <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
-                              //  placeholder={item?.din} 
+                               placeholder={capacityScrutinyInfo?.obtainedLicense?.[0]?.licNo} 
+                              //  placeholder={capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.project}
                                disabled></Form.Control>
                                &nbsp;&nbsp;
                                <ReportProblemIcon
                   style={{
+                    display: hideRemarks?"none":"block",
                     color: fieldIconColors.caution1
                   }}
                   onClick={() => {
@@ -1696,11 +1721,12 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                                                 /> */}
                                                    <div className={classes.fieldContainer}>
                               <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
-                              //  placeholder={item?.din} 
+                               placeholder={capacityScrutinyInfo?.obtainedLicense?.[0]?.dateOfGrantingLic} 
                                disabled></Form.Control>
                                &nbsp;&nbsp;
                                <ReportProblemIcon
                   style={{
+                    display: hideRemarks?"none":"block",
                     color: fieldIconColors.caution1
                   }}
                   onClick={() => {
@@ -1728,11 +1754,12 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                                                 /> */}
                                                    <div className={classes.fieldContainer}>
                               <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
-                              //  placeholder={item?.din} 
+                               placeholder={capacityScrutinyInfo?.obtainedLicense?.[0]?.licValidity} 
                                disabled></Form.Control>
                                &nbsp;&nbsp;
                                <ReportProblemIcon
                   style={{
+                    display: hideRemarks?"none":"block",
                     color: fieldIconColors.caution1
                   }}
                   onClick={() => {
@@ -1764,11 +1791,12 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                                                 </Select> */}
                                                    <div className={classes.fieldContainer}>
                               <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
-                              //  placeholder={item?.din} 
+                               placeholder={capacityScrutinyInfo?.obtainedLicense?.[0]?.purpose} 
                                disabled></Form.Control>
                                &nbsp;&nbsp;
                                <ReportProblemIcon
                   style={{
+                    display: hideRemarks?"none":"block",
                     color: fieldIconColors.caution1
                   }}
                   onClick={() => {
@@ -1870,6 +1898,7 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks?"none":"block",
                       color: fieldIconColors.caution3
                     }}
                     onClick={() => {
@@ -1949,6 +1978,7 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                               <td align="center" size="large">
                               <ReportProblemIcon
                     style={{
+                      display: hideRemarks?"none":"block",
                       color: fieldIconColors.caution3
                     }}
                     onClick={() => {
@@ -2006,6 +2036,7 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                               <td align="center" size="large">
                               <ReportProblemIcon
                     style={{
+                      display: hideRemarks?"none":"block",
                       color: fieldIconColors.caution3
                     }}
                     onClick={() => {
@@ -2065,6 +2096,7 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                               <td align="center" size="large">
                               <ReportProblemIcon
                     style={{
+                      display: hideRemarks?"none":"block",
                       color: fieldIconColors.caution3
                     }}
                     onClick={() => {

@@ -657,8 +657,8 @@ const Developerinfo = (props) => {
                 <Form.Label
                 // placeholder={personalinfo !== null ? personalinfo.authorizedDeveloper : null}
                 >
-                  {JSON.stringify(userRoles)}
-                    {JSON.stringify(hideRemarks)}
+                  {/* {JSON.stringify(userRoles)}
+                    {JSON.stringify(hideRemarks)} */}
 
                   (i)Whether licence applied for additional area ?
 
@@ -709,6 +709,7 @@ const Developerinfo = (props) => {
                         ></Form.Control>
                         <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.licenceNo
                           }}
                           onClick={() => {
@@ -758,6 +759,7 @@ const Developerinfo = (props) => {
                         {/* </Form.Select> */}
                         <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.potentialZone
                           }}
                           onClick={() => {
@@ -779,6 +781,7 @@ const Developerinfo = (props) => {
                         <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.siteLoc : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                         <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.siteLocationPurpose
                           }}
                           onClick={() => {
@@ -805,6 +808,7 @@ const Developerinfo = (props) => {
                     <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.approach : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks?"none":"block",
                         color: fieldIconColors.approachType
                       }}
                       onClick={() => {
@@ -899,6 +903,7 @@ const Developerinfo = (props) => {
                         <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.areaOfParentLicence : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                         <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.approachRoadWidth
                           }}
                           onClick={() => {
@@ -919,6 +924,7 @@ const Developerinfo = (props) => {
                         <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.specify : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                         <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.specifyOthers
                           }}
                           onClick={() => {
@@ -960,6 +966,7 @@ const Developerinfo = (props) => {
 
                         <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.thirdPartyRightCreated
                           }}
                           onClick={() => {
@@ -1037,6 +1044,7 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks?"none":"block",
                       color: fieldIconColors.migrationPolicy
                     }}
                     onClick={() => {
@@ -1069,6 +1077,7 @@ const Developerinfo = (props) => {
                           ></Form.Control>
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks?"none":"block",
                               color: fieldIconColors.areaAppliedUnderMigration
                             }}
                             onClick={() => {
@@ -1099,6 +1108,7 @@ const Developerinfo = (props) => {
                           ></Form.Control>
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks?"none":"block",
                               color: fieldIconColors.purposeOfParentLicence
                             }}
                             onClick={() => {
@@ -1120,6 +1130,7 @@ const Developerinfo = (props) => {
                           <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.licNo : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks?"none":"block",
                               color: fieldIconColors.licenceNo
                             }}
                             onClick={() => {
@@ -1144,6 +1155,7 @@ const Developerinfo = (props) => {
                           <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.areaofParentLic : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks?"none":"block",
                               color: fieldIconColors.areaOfParentLicence
                             }}
                             onClick={() => {
@@ -1168,6 +1180,7 @@ const Developerinfo = (props) => {
                           <label className="m-0 mx-2" for="No">No</label>
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks?"none":"block",
                               color: fieldIconColors.validityOfParentLicence
                             }}
                             onClick={() => {
@@ -1187,6 +1200,7 @@ const Developerinfo = (props) => {
                         <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.typeLand : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                         <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.typeOfLand
                           }}
                           onClick={() => {
@@ -1208,6 +1222,7 @@ const Developerinfo = (props) => {
                         <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.approachRoadWidth : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                         <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.approachRoadWidth
                           }}
                           onClick={() => {
@@ -1228,6 +1243,7 @@ const Developerinfo = (props) => {
                         <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.approachRoadWidth : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                         <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.approachRoadWidth
                           }}
                           onClick={() => {
@@ -1250,6 +1266,7 @@ const Developerinfo = (props) => {
 
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks?"none":"block",
                               color: fieldIconColors.approvedLayoutOfPlan
                             }}
                             onClick={() => {
@@ -1275,6 +1292,7 @@ const Developerinfo = (props) => {
 
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks?"none":"block",
                               color: fieldIconColors.proposedLayoutOfPlan
                             }}
                             onClick={() => {
@@ -1299,6 +1317,7 @@ const Developerinfo = (props) => {
 
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks?"none":"block",
                               color: fieldIconColors.uploadPreviouslyLayoutPlan
                             }}
                             onClick={() => {
@@ -1330,6 +1349,7 @@ const Developerinfo = (props) => {
                 <ReportProblemIcon
                   className="m-0 mx-2"
                   style={{
+                    display: hideRemarks?"none":"block",
                     color: fieldIconColors.encumbrance
                   }}
                   onClick={() => {
@@ -1363,6 +1383,7 @@ const Developerinfo = (props) => {
                 <label className="m-0 mx-2" for="No">No</label>
                 <ReportProblemIcon
                   style={{
+                    display: hideRemarks?"none":"block",
                     color: fieldIconColors.existinglitigation
                   }}
                   onClick={() => {
@@ -1415,6 +1436,7 @@ const Developerinfo = (props) => {
                 <label className="m-0 mx-2" for="No">No</label>
                 <ReportProblemIcon
                   style={{
+                    display: hideRemarks?"none":"block",
                     color: fieldIconColors.courtOrders
                   }}
                   onClick={() => {
@@ -1465,6 +1487,7 @@ const Developerinfo = (props) => {
                 <label className="m-0 mx-2" for="No">No</label>
                 <ReportProblemIcon
                   style={{
+                    display: hideRemarks?"none":"block",
                     color: fieldIconColors.anyInsolvency
                   }}
                   onClick={() => {
@@ -1521,6 +1544,7 @@ const Developerinfo = (props) => {
                     <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks?"none":"block",
                         color: fieldIconColors.asPerAppliedLand
                       }}
                       onClick={() => {
@@ -1566,6 +1590,7 @@ const Developerinfo = (props) => {
                     <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks?"none":"block",
                         color: fieldIconColors.revenueRasta
                       }}
                       onClick={() => {
@@ -1603,6 +1628,7 @@ const Developerinfo = (props) => {
                     <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks?"none":"block",
                         color: fieldIconColors.waterCourseRunning
                       }}
                       onClick={() => {
@@ -1637,6 +1663,7 @@ const Developerinfo = (props) => {
                     <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks?"none":"block",
                         color: fieldIconColors.whetherInCompactBlock
                       }}
                       onClick={() => {
@@ -1679,6 +1706,7 @@ const Developerinfo = (props) => {
                     <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks?"none":"block",
                         color: fieldIconColors.landSandwiche
                       }}
                       onClick={() => {
@@ -1711,6 +1739,7 @@ const Developerinfo = (props) => {
                     <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks?"none":"block",
                         color: fieldIconColors.acquisitionStatus
                       }}
                       onClick={() => {
@@ -1741,6 +1770,7 @@ const Developerinfo = (props) => {
                     <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.sectionFour} ></Form.Control>
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks?"none":"block",
                         color: fieldIconColors.dateOfSection4Notification
                       }}
                       onClick={() => {
@@ -1762,6 +1792,7 @@ const Developerinfo = (props) => {
                     <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.sectionSix} ></Form.Control>
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks?"none":"block",
                         color: fieldIconColors.dateOfSection6Notification
                       }}
                       onClick={() => {
@@ -1791,6 +1822,7 @@ const Developerinfo = (props) => {
                     <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks?"none":"block",
                         color: fieldIconColors.ordersUpload
                       }}
                       onClick={() => {
@@ -1819,6 +1851,7 @@ const Developerinfo = (props) => {
 
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks?"none":"block",
                               color: fieldIconColors.landCompensationReceived
                             }}
                             onClick={() => {
@@ -1844,6 +1877,7 @@ const Developerinfo = (props) => {
 
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks?"none":"block",
                               color: fieldIconColors.statusOfRelease
                             }}
                             onClick={() => {
@@ -1867,6 +1901,7 @@ const Developerinfo = (props) => {
                           <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.awardDate}></Form.Control>
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks?"none":"block",
                               color: fieldIconColors.dateOfAward
                             }}
                             onClick={() => {
@@ -1891,6 +1926,7 @@ const Developerinfo = (props) => {
                           <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.releaseDate}></Form.Control>
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks?"none":"block",
                               color: fieldIconColors.dateOfRelease
                             }}
                             onClick={() => {
@@ -1913,6 +1949,7 @@ const Developerinfo = (props) => {
                           <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.siteDetail}></Form.Control>
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks?"none":"block",
                               color: fieldIconColors.siteDetails
                             }}
                             onClick={() => {
@@ -1946,6 +1983,7 @@ const Developerinfo = (props) => {
                     <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks?"none":"block",
                         color: fieldIconColors.internalSectoralPlan
                       }}
                       onClick={() => {
@@ -1978,6 +2016,7 @@ const Developerinfo = (props) => {
                     <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks?"none":"block",
                         color: fieldIconColors.vacant
                       }}
                       onClick={() => {
@@ -1998,16 +2037,16 @@ const Developerinfo = (props) => {
                     </div>
                   </div>
                 )}
-                {landScheduleData?.vacant === "N" && (
-                  <div className="row ml-1 mr-2">
-                    <div className="col col p-1">
-                      <label> Vacant Remark </label>
-                      <input type="number" className="form-control" disabled placeholder={landScheduleData?.vacantRemark} />
-                    </div>
-                  </div>
-                )}
+              
               </div>
-              <div className="col col-3 p-1">
+              {landScheduleData?.vacant === "N" && (
+                  // <div className="row ml-1 mr-2">
+                  //   <div className="col col p-1">
+                  //     <label> Vacant Remark </label>
+                  //     <input type="number" className="form-control" disabled placeholder={landScheduleData?.vacantRemark} />
+                  //   </div>
+                  // </div>
+                  <div className="col col-3 p-1">
                 <h6 onChange={(e) => setConstruction(e.target.value)} value={construction}>
                   (b) Construction: (Yes/No)
                 </h6>
@@ -2020,6 +2059,7 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks?"none":"block",
                       color: fieldIconColors.construction
                     }}
                     onClick={() => {
@@ -2049,6 +2089,8 @@ const Developerinfo = (props) => {
                   </div>
                 )}
               </div>
+                )}
+              
               <div className="col col-3 p-1">
                 <h6 onChange={(e) => setHt(e.target.value)} value={ht}>
                   (c) HT line
@@ -2062,6 +2104,7 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks?"none":"block",
                       color: fieldIconColors.htLine
                     }}
                     onClick={() => {
@@ -2103,6 +2146,7 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks?"none":"block",
                       color: fieldIconColors.iocGasPipeline
                     }}
                     onClick={() => {
@@ -2150,6 +2194,7 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks?"none":"block",
                       color: fieldIconColors.nallah
                     }}
                     onClick={() => {
@@ -2190,6 +2235,7 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks?"none":"block",
                       color: fieldIconColors.anyRevenueRasta
                     }}
                     onClick={() => {
@@ -2233,6 +2279,7 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks?"none":"block",
                       color: fieldIconColors.anyMarginalLand
                     }}
                     onClick={() => {
@@ -2277,6 +2324,7 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks?"none":"block",
                       color: fieldIconColors.utilityLine
                     }}
                     onClick={() => {
@@ -2317,6 +2365,7 @@ const Developerinfo = (props) => {
                 {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.documentsAsAnnexures}></Form.Control> */}
                 <ReportProblemIcon
                   style={{
+                    display: hideRemarks?"none":"block",
                     color: fieldIconColors.documentsAsAnnexures
                   }}
                   onClick={() => {
@@ -2338,6 +2387,7 @@ const Developerinfo = (props) => {
                   </IconButton>
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks?"none":"block",
                       color: fieldIconColors.landSchedule
                     }}
                     onClick={() => {
@@ -2358,6 +2408,7 @@ const Developerinfo = (props) => {
                   </IconButton>
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks?"none":"block",
                       color: fieldIconColors.copyOfMutation
                     }}
                     onClick={() => {
@@ -2378,6 +2429,7 @@ const Developerinfo = (props) => {
                   </IconButton>
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks?"none":"block",
                       color: fieldIconColors.copyOfJamabandi
                     }}
                     onClick={() => {
@@ -2398,6 +2450,7 @@ const Developerinfo = (props) => {
                   </IconButton>
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks?"none":"block",
                       color: fieldIconColors.detailsOfLease
                     }}
                     onClick={() => {
@@ -2424,6 +2477,7 @@ const Developerinfo = (props) => {
 
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks?"none":"block",
                       color: fieldIconColors.addSalesDeed
                     }}
                     onClick={() => {
@@ -2444,6 +2498,7 @@ const Developerinfo = (props) => {
                   </IconButton>
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks?"none":"block",
                       color: fieldIconColors.copyofSpaBoard
                     }}
                     onClick={() => {
@@ -2467,6 +2522,7 @@ const Developerinfo = (props) => {
                   </IconButton>
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks?"none":"block",
                       color: fieldIconColors.revisedLansSchedule
                     }}
                     onClick={() => {
@@ -2489,6 +2545,7 @@ const Developerinfo = (props) => {
                   </IconButton>
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks?"none":"block",
                       color: fieldIconColors.copyOfShajraPlan
                     }}
                     onClick={() => {

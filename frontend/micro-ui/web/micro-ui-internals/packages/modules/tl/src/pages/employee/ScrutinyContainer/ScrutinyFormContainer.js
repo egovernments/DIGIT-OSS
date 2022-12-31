@@ -212,6 +212,9 @@ const {id} = useParams();
         <div className="ml-auto">
           <h2>Application : {id}</h2>
         </div>
+        <div className="ml-auto">
+          <h2>Service Id : {businessService}</h2>
+        </div>
       </Row>
       <Row style={{ top: 30, padding: 10 }}>
         <ScrutitnyForms
