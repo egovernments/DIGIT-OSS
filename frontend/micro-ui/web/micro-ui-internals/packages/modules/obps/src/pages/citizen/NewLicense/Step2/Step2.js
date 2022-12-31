@@ -155,7 +155,6 @@ const ApllicantPuropseForm = (props) => {
           <EditIcon
             style={{ cursor: "pointer" }}
             onClick={() => {
-              console.log("data", data);
               setSpecificTableData(data);
               setmodal(true);
               setEdit(true);
@@ -176,6 +175,7 @@ const ApllicantPuropseForm = (props) => {
     },
   ];
   const location = useLocation();
+  const userInfo = Digit.UserService.getUser()?.info || {};
   const [district, setDistrict] = useState("");
   const [modalData, setModalData] = useState([]);
   const [specificTableData, setSpecificTableData] = useState(null);
@@ -222,7 +222,6 @@ const ApllicantPuropseForm = (props) => {
   };
 
   useEffect(() => {
-    console.log("specificTableData", specificTableData);
     if (specificTableData) {
       setValue("hadbastNo", specificTableData?.hadbastNo);
       setValue("khewats", specificTableData?.khewats);
@@ -370,9 +369,7 @@ const ApllicantPuropseForm = (props) => {
   }, []);
 
   const ApplicantPurposeModalData = (modaldata) => {
-    console.log("specificTableData", specificTableData?.rowid);
     const test = modalData?.filter((item) => item?.rowid === specificTableData?.rowid);
-    console.log("test", test);
     modaldata["tehsil"] = modaldata?.tehsil?.value;
     modaldata["revenueEstate"] = modaldata?.revenueEstate?.value;
     modaldata["rectangleNo"] = modaldata?.rectangleNo?.value;
@@ -449,8 +446,8 @@ const ApllicantPuropseForm = (props) => {
         pageName: "ApplicantPurpose",
         action: "PURPOSE",
         applicationNumber: applicantId,
-        createdBy: props?.userData?.id,
-        updatedBy: props?.userData?.id,
+        createdBy: userInfo?.id,
+        updatedBy: userInfo?.id,
         LicenseDetails: {
           ApplicantPurpose: {
             ...data,
@@ -467,7 +464,7 @@ const ApllicantPuropseForm = (props) => {
           msgId: "090909",
           requesterId: "",
           authToken: token,
-          userInfo: props?.userData,
+          userInfo: userInfo,
         },
       };
       setLoader(true);
@@ -475,7 +472,6 @@ const ApllicantPuropseForm = (props) => {
         const Resp = await axios.post("/tl-services/new/_create", postDistrict);
         setLoader(false);
         const useData = Resp?.data?.LicenseServiceResponseInfo?.[0]?.LicenseDetails?.[0];
-        console.log(useData);
         props.Step2Continue(useData);
       } catch (error) {
         setLoader(false);
@@ -528,10 +524,7 @@ const ApllicantPuropseForm = (props) => {
 
   useEffect(() => {
     delay = setTimeout(() => {
-      if (getKhewats) {
-        console.log("here", getKhewats);
-        getLandOwnerStateData(getKhewats);
-      }
+      if (getKhewats) getLandOwnerStateData(getKhewats);
     }, 500);
     return () => clearTimeout(delay);
   }, [getKhewats]);
@@ -545,7 +538,6 @@ const ApllicantPuropseForm = (props) => {
 
   const getApplicantUserData = async (id) => {
     const token = window?.localStorage?.getItem("token");
-    console.log("here data");
     const payload = {
       apiId: "Rainmaker",
       msgId: "1669293303096|en_IN",
@@ -555,7 +547,6 @@ const ApllicantPuropseForm = (props) => {
       const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${id}`, payload);
       const userData = Resp?.data?.LicenseDetails[0]?.ApplicantPurpose;
       setStepData(userData);
-      console.log("userData", userData);
     } catch (error) {
       return error;
     }

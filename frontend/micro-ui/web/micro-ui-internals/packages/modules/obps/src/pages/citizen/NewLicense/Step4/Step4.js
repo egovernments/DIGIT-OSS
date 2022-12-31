@@ -26,6 +26,7 @@ const AppliedDetailForm = (props) => {
   const [loader, setLoader] = useState(false);
   const [stepData, setStepData] = useState(null);
   const [fileStoreId, setFileStoreId] = useState({});
+  const userInfo = Digit.UserService.getUser()?.info || {};
   const {
     watch,
     register,
@@ -73,8 +74,8 @@ const AppliedDetailForm = (props) => {
       pageName: "DetailsofAppliedLand",
       action: "LANDDETAILS",
       applicationNumber: props.getId,
-      createdBy: props?.userData?.id,
-      updatedBy: props?.userData?.id,
+      createdBy: userInfo?.id,
+      updatedBy: userInfo?.id,
       LicenseDetails: {
         DetailsofAppliedLand: {
           dgpsDetails: data?.dgpsDetails,
@@ -268,7 +269,7 @@ const AppliedDetailForm = (props) => {
         msgId: "090909",
         requesterId: "",
         authToken: token,
-        userInfo: props?.userData,
+        userInfo: userInfo,
       },
     };
     try {
@@ -287,7 +288,7 @@ const AppliedDetailForm = (props) => {
     if (valueData) {
       Object?.keys(valueData?.DetailsAppliedLandPlot)?.map((item) => setValue(item, valueData?.DetailsAppliedLandPlot[item]));
       Object?.keys(valueData?.DetailsAppliedLandNILP)?.map((item) => setValue(item, valueData?.DetailsAppliedLandNILP[item]));
-      stepData?.DetailsofAppliedLand?.dgpsDetails.map((item, index) => {
+      valueData?.dgpsDetails.map((item, index) => {
         setValue(`dgpsDetails.${index}.longitude`, item?.longitude), setValue(`dgpsDetails.${index}.latitude`, item?.latitude);
       });
     }

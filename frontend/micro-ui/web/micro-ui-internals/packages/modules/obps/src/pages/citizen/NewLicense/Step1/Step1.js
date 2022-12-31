@@ -8,17 +8,6 @@ import { VALIDATION_SCHEMA } from "../../../../utils/schema/step1";
 import { useLocation, useHistory } from "react-router-dom";
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
 
-// const LcNotSigned = [
-//   {
-//     label: "GPA",
-//     value: "GPA",
-//   },
-//   {
-//     label: "SPA",
-//     value: "SPA",
-//   },
-// ];
-
 const ApllicantFormStep1 = (props) => {
   const history = useHistory();
   const location = useLocation();
