@@ -21,6 +21,7 @@ import { getDocShareholding } from "../docView/docView.help";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step3";
 import FileUpload from "@mui/icons-material/FileUpload";
+import { useLocation } from "react-router-dom";
 
 const potentialOptons = [
   {
@@ -61,6 +62,7 @@ const releaseStatus = [
 ];
 
 const LandScheduleForm = (props) => {
+  const location = useLocation();
   const [purposeOptions, setPurposeOptions] = useState({ data: [], isLoading: true });
   const [getPotentialOptons, setPotentialOptions] = useState({ data: [], isLoading: true });
   const [typeOfLand, setYypeOfLand] = useState({ data: [], isLoading: true });
@@ -150,7 +152,8 @@ const LandScheduleForm = (props) => {
     try {
       const Resp = await axios.post("/tl-services/new/_create", postDistrict);
       setLoader(false);
-      props.Step3Continue(Resp?.data?.LicenseServiceResponseInfo?.[0]?.LicenseDetails?.[0]);
+      const useData = Resp?.data?.LicenseServiceResponseInfo?.[0]?.LicenseDetails?.[0];
+      props.Step3Continue(useData);
     } catch (error) {
       setLoader(false);
       return error.message;
@@ -183,6 +186,7 @@ const LandScheduleForm = (props) => {
       return error.message;
     }
   };
+
   useEffect(() => {
     getSubmitDataLabel();
   }, []);

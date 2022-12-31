@@ -5,7 +5,7 @@ import { useForm, Controller } from "react-hook-form";
 import FileUpload from "@mui/icons-material/FileUpload";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { Modal, ModalHeader, ModalBody, ModalFooter, CloseButton } from "reactstrap";
+import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import axios from "axios";
 import { yupResolver } from "@hookform/resolvers/yup";
 import WorkingTable from "../../../../components/Table";
@@ -16,6 +16,7 @@ import ReactMultiSelect from "../../../../../../../react-components/src/atoms/Re
 import Spinner from "../../../../components/Loader";
 import { getDocShareholding } from "../docView/docView.help";
 import { convertEpochToDate } from "../../../../../../tl/src/utils";
+import { useLocation } from "react-router-dom";
 
 const ApllicantPuropseForm = (props) => {
   const datapost = {
@@ -174,7 +175,7 @@ const ApllicantPuropseForm = (props) => {
       ),
     },
   ];
-
+  const location = useLocation();
   const [district, setDistrict] = useState("");
   const [modalData, setModalData] = useState([]);
   const [specificTableData, setSpecificTableData] = useState(null);
