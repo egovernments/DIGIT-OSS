@@ -189,7 +189,7 @@ const Dropdown = (props) => {
             disable={props.disable}
             freeze={props.freeze ? true : false}
             autoFocus={props.autoFocus}
-            placeholder={props.placeholder}
+            placeholder={props.placeholder || "Select"}
             onBlur={props?.onBlur}
             inputRef={props.ref}
           />

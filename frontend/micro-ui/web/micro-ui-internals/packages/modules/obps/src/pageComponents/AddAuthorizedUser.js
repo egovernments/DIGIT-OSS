@@ -28,6 +28,7 @@ import axios from "axios";
 import { getDocShareholding } from "../../../tl/src/pages/employee/ScrutinyBasic/ScrutinyDevelopment/docview.helper";
 const TYPE_REGISTER = { type: "register" };
 const TYPE_LOGIN = { type: "login" };
+import Spinner from "../components/Loader/index";
 // const tenantId = Digit.ULBService.getCurrentTenantId();
 
 //for Redux use only
@@ -49,6 +50,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
   const DevelopersAllData = getValues();
   // console.log("DEVEDATAGEGT",DevelopersAllData);
   const [userDelete, setUserDelete] = useState([]);
+  const [loader, setLoading] = useState(false);
   const [aurthorizedUserInfoArray, setAurthorizedUserInfoArray] = useState([]);
   const getDeveloperData = async ()=>{
     try {
@@ -71,7 +73,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
       });
       const developerDataGet = getDevDetails?.data; 
       console.log("ADDAUTHUSER",getDevDetails?.data?.devDetail[0]?.aurthorizedUserInfoArray);
-      // setAurthorizedUserInfoArray(getDevDetails?.data?.devDetail[0]?.aurthorizedUserInfoArray);
+      setAurthorizedUserInfoArray(getDevDetails?.data?.devDetail[0]?.aurthorizedUserInfoArray || []);
     } catch (error) {
       console.log(error);
     }
@@ -103,7 +105,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
       // const filterAuthUser = [...getAuthUserDetails?.data.map(user => user.active.includes('true'))];
       
       // console.log("UAU",filterAuthUser);
-      setAurthorizedUserInfoArray(developerDataGet?.user);
+      // setAurthorizedUserInfoArray(developerDataGet?.user);
     } catch (error) {
       console.log(error);
     }
@@ -281,9 +283,11 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
     formData.append("tag", "tag-property");
     // setLoader(true);
     try {
+      setLoading(true);
       const Resp = await axios.post("/filestore/v1/files", formData, {}).then((response) => {
         return response;
       });
+      setLoading(false);
       console.log(Resp?.data?.files);
 
       if(fromTable){
@@ -301,7 +305,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
     //   setLoader(false);
     
     } catch (error) {
-    //   setLoader(false);
+      setLoading(false);
       console.log(error.message);
     }
   };
@@ -357,11 +361,11 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                   "name": "BPA BUILDER",
                   "tenantId": tenantId
               },
-              // {
-              //     "code": "BPA_ARCHITECT",
-              //     "name": "BPA ARCHITECT",
-              //     "tenantId": tenantId
-              // }
+              {
+                  "code": "BPA_DEVELOPER",
+                  "name": "BPA DEVELOPER",
+                  "tenantId": tenantId
+              }
           ],
           "tenantId": "hr",
       }
@@ -407,17 +411,23 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
 
   }
   // const {id} = useParams();
-  const viewRecord = (elementInArray) => {
-    setUserDelete(elementInArray);
-    console.log(userDelete);
+  const viewRecord = (elementInArray,index) => {
+    // setUserDelete(elementInArray);
+    console.log("dev0",index,elementInArray);
     const removedData = {
-      "user": userDelete
+      user: {...elementInArray,active:false},
+      RequestInfo: {
+        active: true,
+        tenantId: tenantId,
+        permanentCity: null
+      }
     }
 
     
     Digit.OBPSService.UpdateDeveloper(removedData, tenantId)
     .then((result,err)=>{
-      console.log(result);
+      console.log( "dev123",result);
+      deleteTableRows(index);
     })
     .catch((error)=>{
       console.log(error);
@@ -480,6 +490,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
   return (
 
     <div className={isOpenLinkFlow ? "OpenlinkContainer" : ""}>
+      {loader && <Spinner />}
       {/* {JSON.stringify(aurthorizedUserInfoArray)} */}
       <Timeline currentStep={3} flow="STAKEHOLDER" />
       <FormStep
@@ -626,7 +637,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                           <td>
                             <a
                               // onClick={()=>(viewRecord(elementInArray.id))}
-                              onClick={() => viewRecord(elementInArray)}
+                              onClick={() => viewRecord(elementInArray,input)}
                             >
                               <RemoveIcon />
                             </a>
@@ -664,28 +675,27 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                     <Row>
                       <Col md={3} xxl lg="3">
                         <label htmlFor="name" className="text">Name  <span className="text-danger font-weight-bold">*</span></label>
-                        {/* <input
-                                type="text"
-                                name="name[]"
-                                placeholder=""
-                                class="employee-card-input"
-                                onChange={(e) => setAurtorizedUserName(e.target.value)}
-                              /> */}
-                        <TextInput
+                        <input
+                          type="text"
+                          value={aurthorizedUserName}
+                          name="aurthorizedUserName"
+                          class="employee-card-input"
+                          onChange={handleUserNameChange}
+                        />
+                        {/* <TextInput
                           t={t}
                           type={"text"}
                           isMandatory={false}
                           optionKey="i18nKey"
                           value={aurthorizedUserName}
                           name="aurthorizedUserName"
-                          // value={aurthorizedUserName}
                           onChange={handleUserNameChange}
                           {...(validation = {
                             isRequired: true,
                             type: "text",
-                            title: "Please enter Name",
                           })}
-                        />
+                        /> */}
+                        {aurthorizedUserName && aurthorizedUserName.length > 0 && !aurthorizedUserName.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid Name")}</CardLabelError>}
                       </Col>
                       <Col md={3} xxl lg="3">
                         <label htmlFor="name" className="text">Mobile Number  <span className="text-danger font-weight-bold">*</span></label>
@@ -696,7 +706,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                           required
                           onChange={selectAurthorizedMobileNumber}
                           // disable={mobileNumber && !isOpenLinkFlow ? true : false}
-                          {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
+                          {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel" }}
                         />
                         {aurthorizedMobileNumber && aurthorizedMobileNumber.length > 0 && !aurthorizedMobileNumber.match(Digit.Utils.getPattern('MobileNo')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID")}</CardLabelError>}
                         
@@ -757,7 +767,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                         />
                       </Col>
                       <Col md={3} xxl lg="3">
-                        <label htmlFor="name" className="text">PAN No</label>
+                        <label htmlFor="name" className="text">PAN No <span className="text-danger font-weight-bold">*</span></label>
                         {/* <input
                                 type="text"
                                 name="name[]"
@@ -775,13 +785,13 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                           placeholder=""
                           // onChange={(e) => setAurthorizedPan(e.target.value.toUpperCase())}
                           onChange={selectPanNumber}
-                          {...{ required: true, maxlength: "10", title: t("BPA_INVALID_PAN_NO") }}
+                          {...{ required: true, maxlength: "10" }}
                         />
                         {aurthorizedPan && aurthorizedPan.length > 0 && !aurthorizedPan.match(Digit.Utils.getPattern('PAN')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px' }}>{t("BPA_INVALID_PAN_NO")}</CardLabelError>}
                         <h3 className="error-message" style={{ color: "red" }}>{PanValError}</h3>
                       </Col>
                       <Col md={3} xxl lg="3">
-                        <label htmlFor="name" className="text">Upload Board Resolution</label>
+                        <label htmlFor="name" className="text">Upload Board Resolution <span className="text-danger font-weight-bold">*</span></label>
                         <input
                           type="file"
                           name="uploadAadharPdf"
@@ -792,7 +802,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                         />
                       </Col>
                       <Col md={3} xxl lg="3">
-                        <label htmlFor="name" className="text">Upload Digital Signature PDF</label>
+                        <label htmlFor="name" className="text">Upload Digital Signature PDF <span className="text-danger font-weight-bold">*</span></label>
                         <input
                           type="file"
                           name="uploadDigitalSignaturePdf"
@@ -810,7 +820,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                     Close
                   </Button>
                   <Button 
-                    disabled = { !aurthorizedUserName || !aurthorizedDob || !aurthorizedEmail || !aurthorizedMobileNumber || !aurthorizedPan || !aurthorizedEmail.match(Digit.Utils.getPattern("Email")) || !aurthorizedPan.match(Digit.Utils.getPattern("PAN")) || !aurthorizedMobileNumber.match(Digit.Utils.getPattern("MobileNo")) || !Documents?.uploadAadharPdf || !Documents?.uploadDigitalSignaturePdf }
+                    disabled = { !aurthorizedUserName || !aurthorizedDob || !aurthorizedEmail || !aurthorizedMobileNumber || !aurthorizedPan || !aurthorizedEmail.match(Digit.Utils.getPattern("Email")) || !aurthorizedUserName.match(Digit.Utils.getPattern('Name')) || !aurthorizedPan.match(Digit.Utils.getPattern("PAN")) || !aurthorizedMobileNumber.match(Digit.Utils.getPattern("MobileNo")) || !Documents?.uploadAadharPdf || !Documents?.uploadDigitalSignaturePdf }
                   variant="primary" onClick={handleSubmitFormdata}>
                     Submit
                   </Button>
