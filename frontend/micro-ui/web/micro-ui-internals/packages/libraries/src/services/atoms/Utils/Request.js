@@ -52,7 +52,7 @@ export const Request = async ({
   if (method.toUpperCase() === "POST") {
     const ts = new Date().getTime()
     data.RequestInfo = {
-      ...data?.RequestInfo || ...{},
+      ...data?.RequestInfo || {},
       apiId: "Rainmaker",
     };
     if (auth) {
