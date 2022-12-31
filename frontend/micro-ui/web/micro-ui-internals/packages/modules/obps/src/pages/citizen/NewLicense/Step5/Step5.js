@@ -547,7 +547,7 @@ const FeesChargesForm = (props) => {
                       </div> */}
                       {/* </a> */}
                       {/* &nbsp;&nbsp; */}
-                      <button type="submit" id="btnClear" class="btn btn-primary btn-md ">
+                      <button type="submit" class="btn btn-primary btn-md ">
                         Submit
                       </button>
                       <div class="my-2">
