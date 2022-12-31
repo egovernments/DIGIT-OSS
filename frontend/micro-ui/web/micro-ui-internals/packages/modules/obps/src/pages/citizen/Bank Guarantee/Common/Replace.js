@@ -101,28 +101,21 @@ function Replace() {
             <div>
               <label>
                 Hardcopy Submitted at TCP office.{" "}
-                <label htmlFor="licenseApplied">
-                  <input {...register("licenseApplied")} type="radio" value="Y" id="licenseApplied" />
+                <label htmlFor="hardcopy">
+                  <input {...register("hardcopy")} type="radio" value="Y" id="hardcopy" />
                   &nbsp; Yes &nbsp;&nbsp;
                 </label>
-                <label htmlFor="licenseApplied">
-                  <input
-                    {...register("licenseApplied")}
-                    type="radio"
-                    value="N"
-                    id="licenseApplied"
-                    className="btn btn-primary"
-                    onClick={() => setmodal1(true)}
-                  />
+                <label htmlFor="hardcopy">
+                  <input {...register("hardcopy")} type="radio" value="N" id="hardcopy" className="btn btn-primary" onClick={() => setmodal1(true)} />
                   &nbsp; No &nbsp;&nbsp;
                 </label>
                 <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.licenseApplied && errors?.licenseApplied?.message}
+                  {errors?.hardcopy && errors?.hardcopy?.message}
                 </h3>
               </label>
             </div>
 
-            {watch("licenseApplied") === "Y" && (
+            {watch("hardcopy") === "Y" && (
               <div>
                 <div className="row">
                   <div className="col col-4">
@@ -143,7 +136,7 @@ function Replace() {
                 </div>
               </div>
             )}
-            {watch("licenseApplied") === "N" && (
+            {watch("hardcopy") === "N" && (
               <div>
                 <Modal
                   size="lg"

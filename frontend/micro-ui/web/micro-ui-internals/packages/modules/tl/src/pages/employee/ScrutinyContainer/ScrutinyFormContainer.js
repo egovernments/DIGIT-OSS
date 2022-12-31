@@ -208,11 +208,11 @@ const {id} = useParams();
 
   return (
     <Card>
-      {/* <Row style={{ top: 25, padding: 5 }}>
+      <Row style={{ top: 25, padding: 5 }}>
         <div className="ml-auto">
           <h2>Application : {id}</h2>
         </div>
-      </Row> */}
+      </Row>
       <Row style={{ top: 30, padding: 10 }}>
         <ScrutitnyForms
           apiResponse={scrutinyDetails}

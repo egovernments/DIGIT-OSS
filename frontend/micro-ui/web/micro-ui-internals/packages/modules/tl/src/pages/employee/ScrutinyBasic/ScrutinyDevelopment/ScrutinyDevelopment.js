@@ -4,6 +4,11 @@ import { Row, Col, Card, Container, Form, Button } from "react-bootstrap";
 
 const windowHeight = window !== undefined ? window.innerHeight : null;
 const ScrutinyDevelopment = (props) => {
+
+  let user = Digit.UserService.getUser();
+  const userRoles = user?.info?.roles?.map((e) => e.code);
+  const showRemarksSection = userRoles.includes("DTCP_HR")
+
   const [approval, setDisapproval] = useState(false);
   const [disapprovedList, setDisapprovedList] = useState([]);
 
@@ -110,36 +115,39 @@ const ScrutinyDevelopment = (props) => {
         </div>
       </Row>
 
-      {/* {JSON.stringify(disapprovedList)} */}
+      {/* {JSON.stringify(userRoles)}
+      {JSON.stringify(showRemarksSection)} */}
 
-
-      <TableContainer component={Paper} style={{marginTop:20}}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Field</TableCell>
-              <TableCell align="right">Remark</TableCell>
-              <TableCell align="right">Action</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {disapprovedList.map((row) => (
-            <TableRow
-              key={row?.fieldIdL}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row.fieldIdL}
-              </TableCell>
-              <TableCell align="right">{row.comment}</TableCell>
-              <TableCell align="right">
-                <Checkbox/>
-              </TableCell>
-            </TableRow>
-          ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            {
+              showRemarksSection &&
+              <TableContainer component={Paper} style={{marginTop:20}}>
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Field</TableCell>
+                    <TableCell align="right">Remark</TableCell>
+                    <TableCell align="right">Action</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {disapprovedList.map((row) => (
+                  <TableRow
+                    key={row?.fieldIdL}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {row.fieldIdL}
+                    </TableCell>
+                    <TableCell align="right">{row.comment}</TableCell>
+                    <TableCell align="right">
+                      <Checkbox/>
+                    </TableCell>
+                  </TableRow>
+                ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            }
 
 
     </Container>

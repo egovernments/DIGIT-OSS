@@ -5,19 +5,19 @@ import axios from "axios";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step1";
-import { useHistory, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
 
-const LcNotSigned = [
-  {
-    label: "GPA",
-    value: "GPA",
-  },
-  {
-    label: "SPA",
-    value: "SPA",
-  },
-];
+// const LcNotSigned = [
+//   {
+//     label: "GPA",
+//     value: "GPA",
+//   },
+//   {
+//     label: "SPA",
+//     value: "SPA",
+//   },
+// ];
 
 const ApllicantFormStep1 = (props) => {
   const location = useLocation();
@@ -41,11 +41,10 @@ const ApllicantFormStep1 = (props) => {
     resolver: yupResolver(VALIDATION_SCHEMA),
     shouldFocusError: true,
   });
-
+  const token = window?.localStorage?.getItem("token");
   const ApplicantFormSubmitHandlerForm = async (data) => {
     // props.Step1Continue("6", "userInfo", "licData");
 
-    const token = window?.localStorage?.getItem("token");
     data["notSigned"] = data?.notSigned?.value;
     const postDistrict = {
       pageName: "ApplicantInfo",
@@ -97,6 +96,7 @@ const ApllicantFormStep1 = (props) => {
         const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [uuid] }, {});
         const userData = usersResponse?.user[0];
         setValue("authorized", userData?.name);
+        setValue("LC", userData?.name);
         getDeveloperDataLabel(userData?.parentId);
       } catch (error) {
         return error;
@@ -142,10 +142,17 @@ const ApllicantFormStep1 = (props) => {
   }, [developerDataLabel]);
 
   const getApplicantUserData = async (id) => {
+    // http://103.166.62.118:80
+    const payload = {
+      apiId: "Rainmaker",
+      msgId: "1669293303096|en_IN",
+      authToken: token,
+    };
     try {
-      const Resp = await axios.get(`http://103.166.62.118:80/tl-services/new/licenses/_get?id=${id}`);
+      const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${id}`, payload);
+      console.log(Resp);
       const userData = Resp?.data?.newServiceInfoData[0]?.ApplicantInfo;
-      setValue("notSigned", userData?.notSigned);
+      setValue("notSigned", { label: userData?.notSigned, value: userData?.notSigned });
       setValue("LC", userData?.LC);
     } catch (error) {
       return error;
@@ -422,11 +429,18 @@ const ApllicantFormStep1 = (props) => {
                     </h2>
                   </Form.Label>
                 </div>
-                <Form.Control type="text" placeholder="" {...register("LC")} />
+                <Controller
+                  control={control}
+                  name="LC"
+                  render={({ field: { onChange, value } }) => (
+                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="LC" />
+                  )}
+                />
+                {/* <Form.Control type="text" placeholder="" {...register("LC")} disabled />
 
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.LC && errors?.LC?.message}
-                </h3>
+                </h3> */}
               </Col>
               <Col md={4} xxl lg="4">
                 <div>
@@ -468,7 +482,7 @@ const ApllicantFormStep1 = (props) => {
                   )}
                 />
               </Col>
-              <Col md={4} xxl lg="4">
+              {/* <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
                     <h2
@@ -482,12 +496,12 @@ const ApllicantFormStep1 = (props) => {
                   </Form.Label>
                 </div>
                 <ReactMultiSelect control={control} name="notSigned" placeholder="LC Not Signed" data={LcNotSigned} labels="LcNotSigned" />
-                {/* <Form.Control type="text" placeholder="" {...register("notSigned")} /> */}
+               
 
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.notSigned?.value && errors?.notSigned?.value?.message}
                 </h3>
-              </Col>
+              </Col> */}
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
@@ -504,14 +518,12 @@ const ApllicantFormStep1 = (props) => {
                   )}
                 />
               </Col>
-            </Row>
-            <br></br>
-            <Row className="ml-auto" style={{ marginBottom: 5 }}>
+
               <div className="col col-4">
                 <div>
                   <Form.Label>
                     <h2>
-                      Name of the authorized person to sign the application <span style={{ color: "red" }}>*</span>
+                      Name of the authorized person to sign application <span style={{ color: "red" }}>*</span>
                     </h2>
                     <i className="fa fa-info-circle-fill" />
                   </Form.Label>

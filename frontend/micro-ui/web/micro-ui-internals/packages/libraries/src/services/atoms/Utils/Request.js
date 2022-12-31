@@ -52,10 +52,13 @@ export const Request = async ({
   if (method.toUpperCase() === "POST") {
     const ts = new Date().getTime()
     data.RequestInfo = {
+      ...data?.RequestInfo || {},
       apiId: "Rainmaker",
     };
     if (auth) {
+      console.log("dev1",data.RequestInfo,data)
       data.RequestInfo = { ...data.RequestInfo, ...requestInfo() };
+      console.log("dev12",data.RequestInfo,data)
     }
     if (userService) {
       data.RequestInfo = { ...data.RequestInfo, ...userServiceData() };
