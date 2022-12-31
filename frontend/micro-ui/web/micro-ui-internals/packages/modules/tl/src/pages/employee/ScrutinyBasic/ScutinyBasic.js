@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import Personalinfo from "./Personalinfo";
 import Genarelinfo from "./Generalinfo";
 import Developerinfo from "./Developerinfo";
@@ -12,9 +12,10 @@ import { Button, Row, Col } from "react-bootstrap";
 // import LicenseDetailsScrutiny from "../ScrutinyBasic/Developer/LicenseDetailsScrutiny";
 import { useForkRef } from "@mui/material";
 import axios from "axios";
+import { ScrutinyRemarksContext } from "../../../../context/remarks-data-context";
 // import AddIcon from "@mui/icons-material/Add";
 
-const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData }) => {
+const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => {
   const personalInfoRef = useRef();
   const generalInfoRef = useRef();
   const developerInfoRef = useRef();
@@ -35,6 +36,7 @@ const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData })
   const [displayFeeandCharges, setDisplayFeeandChargesInfo] = useState([]);
   // const [displayLicenseDetails, setDisplayLicenseDetailsInfo] = useState([]);
   // const [displayLicenseDetailsCheckedlist, setDisplayCheckedLicenseDetailsList] = useState([]);
+  const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues } = useContext(ScrutinyRemarksContext);
   const [displayJeLand, setDisplayJeLand] = useState([]);
   const [ActiveKey, setActiveKey] = useState(1);
   const [defaultHeightPersonal, setDefaultHeightPersonal] = useState(0);
@@ -44,16 +46,18 @@ const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData })
   const [defaultheightFee, setDefaultheightFee] = useState(0);
   const [open, setOpen] = useState(false);
   // const [apiResponse, setApiResponse] = useState({});
-  const [remarksResponse, setRemarksResponse] = useState({});
+  // const [remarksResponse, setRemarksResponse] = useState({});
   const [sumrol, setSumrol] = useState({});
   const [uncheckedValue, setUncheckedVlue] = useState([]);
   const [remarksChanges, setRemarksChanges] = useState("");
   const [disapprovalData, setDisapprovalData] = useState({});
   const [applictaionNo, setApplicationNO] = useState(null);
-  const [iconStates, setIconState] = useState(null);
-  const [urlGetShareHoldingDoc, setDocShareHoldingUrl] = useState("");
+  // const [iconStates,setIconState]= useState(null)
+  const [urlGetShareHoldingDoc,setDocShareHoldingUrl] = useState("")
 
   const userInfo = Digit.UserService.getUser()?.info || {};
+  const authToken = Digit.UserService.getUser()?.access_token || null;
+
 
   const getUncheckedPersonalinfos = (data) => {
     setDisplayPersonalInfo(data.data);
@@ -63,6 +67,7 @@ const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData })
     setDisplayCheckedPersonalList(data.data);
     console.log("checked parent personal info data", data);
   };
+  // g
 
   // const getUncheckedLicenseDetailsInfo = (data) => {
   //   setDisplayLicenseDetailsInfo(data.data);
@@ -117,67 +122,53 @@ const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData })
   //     console.log(error);
   //   }
   // };
-  const handleGetFiledsStatesById=async()=>{
-      const dataToPass={
-        "RequestInfo": {
-            "api_id": "1",
-            "ver": "1",
-            "ts": null,
-            "action": "create",
-            "did": "",
-            "key": "",
-            "msg_id": "",
-            "requester_id": "",
-            // "auth_token": authToken,
-            "authToken": authToken
-        }
-    };
-    try {
-      const Resp = await axios
-        .post(`/land-services/egscrutiny/_search?applicationNumber=${applicationNumber}&userId=${userInfo?.id}`, dataToPass)
-        .then((response) => {
-          return response.data;
-        });
+  // const handleGetFiledsStatesById=async()=>{
+  //     const dataToPass={
+  //       "RequestInfo": {
+  //           "api_id": "1",
+  //           "ver": "1",
+  //           "ts": null,
+  //           "action": "create",
+  //           "did": "",
+  //           "key": "",
+  //           "msg_id": "",
+  //           "requester_id": "",
+  //           "auth_token": authToken,
+  //           "authToken": authToken
+  //       }
+  //   };
+  //   try {
+  //     const Resp = await axios.post(`/land-services/egscrutiny/_search?applicationNumber=${applicationNumber}&userId=${userInfo?.id}`, dataToPass).then((response) => {
+  //       return response.data;
+  //     });
 
-      console.log("Response From API", Resp);
-      setIconState(Resp);
-      // setApiResponse(Resp);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //     console.log("Response From API", Resp);
+  //     setIconState(Resp);
+  //     // setApiResponse(Resp);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+
+  // }
   const handleGetDisapprovalList = async () => {
     const dataToPass = {
-    //   RequestInfo: {
-    //     api_id: "1",
-    //     ver: "1",
-    //     ts: null,
-    //     action: "create",
-    //     did: "",
-    //     key: "",
-    //     msg_id: "",
-    //     requester_id: "",
-    //     auth_token: authToken,
-    //     // authToken: authToken
-    //   },
-    // };{
-    RequestInfo: {
-      apiId: "Rainmaker",
-      action: "_create",
-      did: 1,
-      key: "",
-      msgId: "20170310130900|en_IN",
-      ts: 0,
-      ver: ".01",
-      authToken: authToken
-  }
-}
+      RequestInfo: {
+        api_id: "1",
+        ver: "1",
+        ts: null,
+        action: "create",
+        did: "",
+        key: "",
+        msg_id: "",
+        requester_id: "",
+        auth_token: authToken,
+        // authToken: authToken
+      },
+    };
     try {
-      const Resp = await axios
-        .post(`/land-services/egscrutiny/_searchbylogin?applicationId=${apiResponse?.id}&userid=${userInfo?.id}`, dataToPass)
-        .then((response) => {
-          return response.data;
-        });
+      const Resp = await axios.post(`/land-services/egscrutiny/_searchbylogin?applicationId=${apiResponse?.id}&userid=${userInfo?.id}`, dataToPass).then((response) => {
+        return response.data;
+      });
 
       console.log("Response From API", Resp);
       setDisapprovalData(Resp);
@@ -186,61 +177,58 @@ const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData })
       console.log(error);
     }
   };
-  const handleGetRemarkssValues = async () => {
-    const dataToSend = {
-      RequestInfo: {
-        apiId: "Rainmaker",
-        action: "_create",
-        did: 1,
-        key: "",
-        msgId: "20170310130900|en_IN",
-        ts: 0,
-        ver: ".01",
-        authToken: "80458c19-3b48-4aa8-b86e-e2e195e6753a",
-        userInfo: userInfo,
-      },
-    };
-    try {
-      const Resp = await axios
-        .post(`/land-services/egscrutiny/_search?applicationNumber=${applicationNumber}&userId=${userInfo?.id}`, dataToSend)
-        .then((response) => {
-          return response.data;
-        });
+  // const handleGetRemarkssValues = async () => {
+  //   const dataToSend = {
+  //     RequestInfo: {
+  //       apiId: "Rainmaker",
+  //       action: "_create",
+  //       did: 1,
+  //       key: "",
+  //       msgId: "20170310130900|en_IN",
+  //       ts: 0,
+  //       ver: ".01",
+  //       authToken: authToken,
+  //       userInfo: userInfo,
+  //     },
+  //   };
+  //   try {
+  //     const Resp = await axios.post(`/land-services/egscrutiny/_search?applicationNumber=${applicationNumber}&userId=${userInfo?.id}`, dataToSend).then((response) => {
+  //       return response.data;
+  //     });
 
-      console.log("Response From API", Resp);
-      setRemarksResponse(Resp);
-    } catch (error) {
-      console.log(error);
-    }
-    // console.log("MdMS123",remarksResponse)
-  };
+  //     console.log("Response From API", Resp);
+  //     setRemarksResponse(Resp);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   useEffect(() => {
-    if (apiResponse?.id) {
+    if(apiResponse?.id){
       handleGetDisapprovalList();
     }
-  }, [remarksChanges, apiResponse]);
+  }, [remarksChanges,apiResponse]);
 
   // useEffect(() => {
   //   handleGetInputFieldsValues();
   // }, []);
   useEffect(() => {
-    if (applicationNumber) {
+    if(applicationNumber){
       // console.log("log123...",userInfo)
-      handleGetRemarkssValues();
+      handleGetRemarkssValues(applicationNumber);
     }
   }, [applicationNumber]);
 
-  useEffect(() => {
-    if (applicationNumber) {
-      handleGetFiledsStatesById();
+  useEffect(()=>{
+    if(applicationNumber){
+      handleGetFiledsStatesById(applicationNumber);
     }
-  }, [applicationNumber]);
+  },[applicationNumber]);
 
   const curentDataPersonal = (data) => {
     setRemarksChanges(data.data);
   };
-
+  
   console.log(uncheckedValue);
   console.log("React", purpose);
 
@@ -299,31 +287,23 @@ const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData })
       setDefaultheightFee(0);
     }
   };
-  console.log(
-    "scrutiny form api get",
-    apiResponse?.newServiceInfoData !== undefined ? apiResponse?.newServiceInfoData[0]?.ApplicantInfo : apiResponse
-  );
+  console.log("scrutiny form api get", apiResponse !== undefined ? apiResponse?.ApplicantInfo : apiResponse);
   console.log(
     "scrutiny form api get1",
-    apiResponse?.newServiceInfoData !== undefined ? apiResponse?.newServiceInfoData[0]?.ApplicantPurpose : apiResponse
+    apiResponse !== undefined ? apiResponse?.ApplicantPurpose : apiResponse
   );
-  // console.log("scrutiny form api get2", apiResponse?.newServiceInfoData !== undefined ? apiResponse?.newServiceInfoData[0].LandSchedule : apiResponse);
-  console.log("remarks api", remarksResponse.egScrutiny !== undefined ? remarksResponse.egScrutiny : null);
+  // console.log("scrutiny form api get2", apiResponse !== undefined ? apiResponse?.LandSchedule : apiResponse);
+  console.log("remarks api", remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null);
 
   console.log("remakes data parsnalinfo", remarksChanges);
+
+
+
+
 
   return (
     <div>
       <div style={{ position: "relative", maxWidth: "100%", padding: 2 }}>
-        {/* <b>Application : {remarksResponse?.egScrutiny?.[0]?.applicationId} </b> */}
-        <Row style={{ top: 25, padding: 5 }}>
-          <div className="ml-auto">
-            {/* applicationNumber: "HR-TL-2022-12-06-000450" */}
-            {/* <h2>Application : 
-        {apiResppnse.newServiceInfoData !== undefined ? apiResppnse.applicationNumber:null}
-          </h2> */}
-          </div>
-        </Row>
         <div>
           <div>
             <Personalinfo
@@ -331,7 +311,7 @@ const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData })
               passUncheckedList={getUncheckedPersonalinfos}
               passCheckedList={getCheckedPersonalInfoValue}
               onClick={() => setOpen(!open)}
-              ApiResponseData={apiResponse?.newServiceInfoData !== undefined ? apiResponse?.newServiceInfoData[0].ApplicantInfo : null}
+              ApiResponseData={apiResponse !== undefined ? apiResponse?.ApplicantInfo : null}
               showTable={curentDataPersonal}
               dataForIcons={iconStates}
             ></Personalinfo>
@@ -342,7 +322,7 @@ const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData })
               passUncheckedList={getUncheckedGeneralinfos}
               passCheckedList={getCheckedGeneralInfoValue}
               onClick={() => setOpen(!open)}
-              ApiResponseData={apiResponse?.newServiceInfoData !== undefined ? apiResponse?.newServiceInfoData[0].ApplicantPurpose : null}
+              ApiResponseData={apiResponse !== undefined ? apiResponse?.ApplicantPurpose : null}
               dataForIcons={iconStates}
             ></Genarelinfo>
             {/* </Col> */}
@@ -351,10 +331,12 @@ const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData })
           <div>
             <Developerinfo
               developerInfoRef={developerInfoRef}
+              purpose={apiResponse?apiResponse?.ApplicantPurpose?.purpose:null}
               passUncheckedList={getUncheckedPurposeinfos}
               passCheckedList={getCheckedPurposeInfoValue}
               onClick={() => setOpen(!open)}
-              ApiResponseData={apiResponse?.newServiceInfoData !== undefined ? apiResponse?.newServiceInfoData[0].LandSchedule : null}
+              ApiResponseData={apiResponse !== undefined ? apiResponse?.LandSchedule
+                : null}
               dataForIcons={iconStates}
             ></Developerinfo>
             {/* </Col> */}
@@ -362,10 +344,11 @@ const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData })
           <div>
             <AppliedLandinfo
               appliedInfoRef={appliedInfoRef}
-              purpose={apiResponse?.newServiceInfoData ? apiResponse?.newServiceInfoData[0]?.ApplicantPurpose?.purpose : null}
+              purpose={apiResponse?apiResponse?.ApplicantPurpose?.purpose:null}
               passUncheckedList={getUncheckedAppliedLandInfo}
               passCheckedList={getCheckedAppliedInfoValue}
-              ApiResponseData={apiResponse?.newServiceInfoData !== undefined ? apiResponse?.newServiceInfoData[0].DetailsofAppliedLand : null}
+              ApiResponseData={apiResponse !== undefined ? apiResponse?.DetailsofAppliedLand
+                : null}
               heightApplied={defaultheightApplied}
               dataForIcons={iconStates}
             ></AppliedLandinfo>
@@ -376,7 +359,8 @@ const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData })
               feeandchargesInfoRef={feeandchargesInfoRef}
               passUncheckedList={getUncheckedFeeandChargesInfo}
               heightFee={defaultheightFee}
-              ApiResponseData={apiResponse?.newServiceInfoData !== undefined ? apiResponse?.newServiceInfoData[0].FeesAndCharges : null}
+              ApiResponseData={apiResponse !== undefined ? apiResponse?.FeesAndCharges
+                : null}
             ></Feeandcharges>
             {/* </Col> */}
           </div>
@@ -402,7 +386,7 @@ const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData })
 
       <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
         <ScrutinyDevelopment
-          remarkData={remarksResponse.egScrutiny !== undefined ? remarksResponse.egScrutiny : null}
+          remarkData={remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null}
           // remarksum={sumrol.egScrutiny !== undefined ? sumrol.egScrutiny : null}
         ></ScrutinyDevelopment>
       </div>

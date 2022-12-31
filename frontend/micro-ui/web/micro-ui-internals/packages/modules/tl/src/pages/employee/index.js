@@ -22,10 +22,11 @@ import StandardDesign from "../employee/ScrutinyBasic/AllServiceScrutiny/Standar
 import CompositionClu from "../employee/ScrutinyBasic/AllServiceScrutiny/CompositionClu/CompositionClu";
 import CompletionLic from "../employee/ScrutinyBasic/AllServiceScrutiny/CompletionLic/CompletionLic";
 import ServicePlanService from "../employee/ScrutinyBasic/ServicePlanScrutniy/ServicePlan";
-import electricalPlanService from "../employee/ScrutinyBasic/ElectricalPlan/ElectricalPlanScrutiny";
+// import electricalPlanService from "../employee/ScrutinyBasic/ElectricalPlan/ElectricalPlanScrutiny";
 import TransferLicense from "../employee/ScrutinyBasic/AllServiceScrutiny/TransferLic/TransferLicense";
 import SubmitNew from "../employee/ScrutinyBasic/AllServiceScrutiny/BankGuarantee/SubmitNew";
 import Release from "../employee/ScrutinyBasic/AllServiceScrutiny/BankGuarantee/Release";
+import { TLContextProvider } from "../../../context";
 
 
 const TLBreadCrumb = ({ location }) => {
@@ -177,6 +178,7 @@ const EmployeeApp = ({ path, url, userType }) => {
   const Search = Digit?.ComponentRegistryService?.getComponent('TLSearch');
 
   return (
+    <TLContextProvider>
     <Switch>
       <React.Fragment>
         <div className="ground-container" style={locationCheck ? {width: "100%"} : {}}>
@@ -227,13 +229,14 @@ const EmployeeApp = ({ path, url, userType }) => {
           <PrivateRoute path={`${path}/CompositionClu`} component={CompositionClu} />
           <PrivateRoute path={`${path}/CompletionLic`} component={CompletionLic} />
           <PrivateRoute path={`${path}/ServicePlanService`} component={ServicePlanService} />
-          <PrivateRoute path={`${path}/electricalPlanService`} component={electricalPlanService} />
+          {/* <PrivateRoute path={`${path}/electricalPlanService`} component={electricalPlanService} /> */}
           <PrivateRoute path={`${path}/SubmitNew`} component={SubmitNew} />
           <PrivateRoute path={`${path}/Release`} component={Release} />
           
         </div>
       </React.Fragment>
     </Switch>
+    </TLContextProvider>
   );
 };
 

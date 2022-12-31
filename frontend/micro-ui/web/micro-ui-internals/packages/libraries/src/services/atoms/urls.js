@@ -111,6 +111,7 @@ const Urls = {
     comparisionReport: "/edcr/rest/dcr/occomparison",
     create: "/bpa-services/v1/bpa/_create",
     createDev: "/user/developer/registration",
+    updateAuthuser: "/user/users/_updatenovalidate",
     nocSearch: "/noc-services/v1/noc/_search",
     getDeveloperData: "/user/developer/_getDeveloperById",
     updateNOC: "/noc-services/v1/noc/_update",

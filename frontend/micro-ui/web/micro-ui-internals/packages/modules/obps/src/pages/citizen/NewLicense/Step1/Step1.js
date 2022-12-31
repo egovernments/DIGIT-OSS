@@ -5,7 +5,7 @@ import axios from "axios";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step1";
-import { useHistory, useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
 
 // const LcNotSigned = [
@@ -20,6 +20,7 @@ import ReactMultiSelect from "../../../../../../../react-components/src/atoms/Re
 // ];
 
 const ApllicantFormStep1 = (props) => {
+  const history = useHistory();
   const location = useLocation();
   const userInfo = Digit.UserService.getUser()?.info || {};
   const tenant = Digit.ULBService.getCurrentTenantId();
@@ -41,12 +42,11 @@ const ApllicantFormStep1 = (props) => {
     resolver: yupResolver(VALIDATION_SCHEMA),
     shouldFocusError: true,
   });
-
+  const token = window?.localStorage?.getItem("token");
   const ApplicantFormSubmitHandlerForm = async (data) => {
     // props.Step1Continue("6", "userInfo", "licData");
 
-    const token = window?.localStorage?.getItem("token");
-    data["notSigned"] = data?.notSigned?.value;
+    // data["notSigned"] = data?.notSigned?.value;
     const postDistrict = {
       pageName: "ApplicantInfo",
       action: "INITIATE",
@@ -75,20 +75,16 @@ const ApllicantFormStep1 = (props) => {
     };
     try {
       const Resp = await axios.post("/tl-services/new/_create", postDistrict);
-      const licData = Resp?.data?.LicenseServiceResponseInfo?.[0]?.newServiceInfoData?.[0];
-      console.log("gg", Resp?.data);
+      const licData = Resp?.data?.LicenseServiceResponseInfo?.[0]?.LicenseDetails?.[0];
+      history.push({
+        pathname: window.location.pathname,
+        search: `?id=${Resp?.data?.LicenseServiceResponseInfo?.[0]?.applicationNumber}`,
+      });
       props.Step1Continue(Resp?.data?.LicenseServiceResponseInfo?.[0]?.applicationNumber, userInfo, licData);
     } catch (error) {
       return error;
     }
   };
-
-  useEffect(() => {
-    if (props?.getLicData?.ApplicantInfo) {
-      setValue("notSigned", { label: props?.getLicData?.ApplicantInfo?.notSigned, value: props?.getLicData?.ApplicantInfo?.notSigned });
-      setValue("LC", props?.getLicData?.ApplicantInfo?.LC);
-    }
-  }, [props?.getLicData]);
 
   const getUserInfo = async () => {
     const uuid = userInfo?.uuid;
@@ -142,22 +138,29 @@ const ApllicantFormStep1 = (props) => {
     }
   }, [developerDataLabel]);
 
-  const getApplicantUserData = async (id) => {
-    try {
-      const Resp = await axios.get(`http://103.166.62.118:80/tl-services/new/licenses/_get?id=${id}`);
-      const userData = Resp?.data?.newServiceInfoData[0]?.ApplicantInfo;
-      setValue("notSigned", userData?.notSigned);
-      setValue("LC", userData?.LC);
-    } catch (error) {
-      return error;
-    }
-  };
+  // const getApplicantUserData = async (id) => {
+  //   // http://103.166.62.118:80
+  //   const payload = {
+  //     apiId: "Rainmaker",
+  //     msgId: "1669293303096|en_IN",
+  //     authToken: token,
+  //   };
+  //   try {
+  //     const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${id}`, payload);
+  //     console.log(Resp);
+  //     const userData = Resp?.data?.newServiceInfoData[0]?.ApplicantInfo;
+  //     // setValue("notSigned", { label: userData?.notSigned, value: userData?.notSigned });
+  //     setValue("LC", userData?.LC);
+  //   } catch (error) {
+  //     return error;
+  //   }
+  // };
   useEffect(() => {
     const search = location?.search;
     const params = new URLSearchParams(search);
     const id = params.get("id");
     setApplicantId(id?.toString());
-    if (id) getApplicantUserData(id);
+    // if (id) getApplicantUserData(id);
   }, []);
 
   return (

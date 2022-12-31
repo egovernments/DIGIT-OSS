@@ -5,9 +5,11 @@ import ApllicantPuropseForm from "../Step2/Step2";
 import LandScheduleForm from "../Step3/Step3";
 import AppliedDetailForm from "../Step4/Step4";
 import FeesChargesForm from "../Step5/Step5";
+import { useLocation } from "react-router-dom";
 import _ from "lodash";
 
 const CommonForm = () => {
+  const location = useLocation();
   const [isStep1, setIsStep1] = useState(false);
   const [isStep2, setIsStep2] = useState(false);
   const [isStep3, setIsStep3] = useState(false);
@@ -130,6 +132,45 @@ const CommonForm = () => {
     if (!_.isEmpty(getLicData?.LandSchedule)) setStepActive({ step1: true, step2: true, step3: true, step4: true, step5: false });
     if (!_.isEmpty(getLicData?.DetailsofAppliedLand)) setStepActive({ step1: true, step2: true, step3: true, step4: true, step5: true });
   }, [getLicData]);
+
+  useEffect(() => {
+    const search = location?.search;
+    const params = new URLSearchParams(search);
+    const id = params.get("id");
+    const checkStatus = window.localStorage.getItem("ApplicationStatus");
+    setId(id?.toString());
+    if (id) {
+      if (checkStatus === "INITIATED") {
+        setIsStep1(true);
+        setIsStep2(false);
+        setIsStep3(false);
+        setIsStep4(false);
+        setIsStep5(false);
+        setStep(2);
+        setStepActive({ step1: true, step2: true, step3: false, step4: false, step5: false });
+      }
+      if (checkStatus === "PURPOSE") {
+        setIsStep2(true);
+        setIsStep1(false);
+        setIsStep3(false);
+        setIsStep4(false);
+        setIsStep5(false);
+        setStep(3);
+        setStepActive({ step1: true, step2: true, step3: true, step4: false, step5: false });
+      }
+      if (checkStatus === "LANDSCHEDULE") {
+        setIsStep3(true);
+        setIsStep1(false);
+        setIsStep2(false);
+        setIsStep4(false);
+        setStep(4);
+        setStepActive({ step1: true, step2: true, step3: true, step4: true, step5: false });
+      }
+    }
+    // if(checkStatus === 'LANDSCHEDULE')
+    // if(checkStatus === 'LANDDETAILS')
+    // if(checkStatus === 'FEESANDCHARGES')
+  }, []);
 
   return (
     <div>

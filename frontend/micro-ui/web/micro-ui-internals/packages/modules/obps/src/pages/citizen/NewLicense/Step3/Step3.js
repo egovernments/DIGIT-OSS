@@ -68,6 +68,7 @@ const LandScheduleForm = (props) => {
   const [modal, setmodal] = useState(false);
   const [modal1, setmodal1] = useState(false);
   const stateId = Digit.ULBService.getStateId();
+  const [stepData, setStepData] = useState(null);
   const { data: PurposeType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
 
   const { data: LandData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["LandType"]);
@@ -149,7 +150,7 @@ const LandScheduleForm = (props) => {
     try {
       const Resp = await axios.post("/tl-services/new/_create", postDistrict);
       setLoader(false);
-      props.Step3Continue(Resp?.data?.LicenseServiceResponseInfo?.[0]?.newServiceInfoData?.[0]);
+      props.Step3Continue(Resp?.data?.LicenseServiceResponseInfo?.[0]?.LicenseDetails?.[0]);
     } catch (error) {
       setLoader(false);
       return error.message;
@@ -157,22 +158,22 @@ const LandScheduleForm = (props) => {
   };
 
   useEffect(() => {
-    console.log("props?.getLicData?.ApplicantInfo", props?.getLicData?.LandSchedule);
-    const valueData = props?.getLicData?.LandSchedule;
+    console.log("stepData?.ApplicantInfo", stepData?.LandSchedule);
+    const valueData = stepData?.LandSchedule;
     if (valueData) {
       Object?.keys(valueData)?.map((item) => {
         if (item === "purpose" || item === "potential") return null;
         else setValue(item, valueData[item]);
       });
-      const data = purposeOptions?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.purpose);
-      const potientialData = getPotentialOptons?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.potential);
-      const typeLandData = typeOfLand?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.typeLand);
+      const data = purposeOptions?.data?.filter((item) => item?.value === stepData?.ApplicantPurpose?.purpose);
+      const potientialData = getPotentialOptons?.data?.filter((item) => item?.value === stepData?.ApplicantPurpose?.potential);
+      const typeLandData = typeOfLand?.data?.filter((item) => item?.value === stepData?.ApplicantPurpose?.typeLand);
 
       setValue("purpose", { label: data?.[0]?.label, value: data?.[0]?.value });
       setValue("potential", { label: potientialData?.[0]?.label, value: potientialData?.[0]?.value });
       setValue("typeLand", { label: typeLandData?.[0]?.label, value: typeLandData?.[0]?.value });
     }
-  }, [props?.getLicData, purposeOptions, getPotentialOptons, typeOfLand]);
+  }, [stepData, purposeOptions, getPotentialOptons, typeOfLand]);
 
   const getSubmitDataLabel = async () => {
     try {
@@ -206,6 +207,31 @@ const LandScheduleForm = (props) => {
       return error.message;
     }
   };
+
+  const getApplicantUserData = async (id) => {
+    const token = window?.localStorage?.getItem("token");
+    console.log("here data");
+    const payload = {
+      apiId: "Rainmaker",
+      msgId: "1669293303096|en_IN",
+      authToken: token,
+    };
+    try {
+      const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${id}`, payload);
+      const userData = Resp?.data?.LicenseDetails?.[0];
+      setStepData(userData);
+      console.log("userData", userData);
+    } catch (error) {
+      return error;
+    }
+  };
+
+  useEffect(() => {
+    const search = location?.search;
+    const params = new URLSearchParams(search);
+    const id = params.get("id");
+    if (id) getApplicantUserData(id);
+  }, []);
 
   return (
     <div>

@@ -39,7 +39,7 @@ const AppliedLandinfo = (props) => {
 
 
   const [uncheckedValue, setUncheckedVlue] = useState([]);
-  console.log(uncheckedValue);
+  console.log("abcd1",uncheckedValue);
   const [migrationApllied, setMigrationApplied] = useState(true);
   // const DdjayFormDisplay = useSelector(selectDdjayFormShowDisplay);
   const [resplotno, setResPlotno] = useState("");
@@ -243,9 +243,9 @@ const AppliedLandinfo = (props) => {
   // const developerInputCheckedFiledColor19 = checkValue.filter((obj) => {
   //   return obj.label === "Name of individual Land owner/ land-owning company/ firm/ LLP etc.";
   // });
-  console.log("Akash", Purpose);
+  // console.log("Akash", Purpose);
 
-
+console.log("AccessInfortech", Purpose);
   const classes = useStyles();
 
   const [smShow, setSmShow] = useState(false);
@@ -453,6 +453,7 @@ const AppliedLandinfo = (props) => {
                 {/* </h5> */}
 
                 <div className="px-2">
+                {Purpose}
                   (i)Add point 1 &nbsp;
                   <div className="row ">
                     <br></br>
@@ -1140,7 +1141,7 @@ const AppliedLandinfo = (props) => {
                   <CommercialPlottedForm displayCommercialPlottedData={Purpose === "CPL" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandCommercial} dataForIcons={dataIcons} ></CommercialPlottedForm>
                 </div>
 
-                <CommercialPlottedForm></CommercialPlottedForm>
+                {/* <CommercialPlottedForm></CommercialPlottedForm> */}
                 {/* <div>
                   <DDJAYForm displayDdjay={Purpose === "08" ? "block" : "none"} data={DetailsofAppliedLand?.ddjay}></DDJAYForm>
                   <DDJAYForm displayDdjay={Purpose !== "DDJAY" ? "block" : "none"} data={DetailsofAppliedLand?.ddjay} dataForIcons={dataIcons}></DDJAYForm>

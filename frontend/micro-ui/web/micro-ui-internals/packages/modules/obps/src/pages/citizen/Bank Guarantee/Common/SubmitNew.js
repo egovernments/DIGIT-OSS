@@ -1,30 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, Row, Col } from "react-bootstrap";
 import { Button, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
 function SubmitNew() {
-  const [selects, setSelects] = useState();
-  const [showhide, setShowhide] = useState("");
   const [modal, setmodal] = useState(false);
   const [modal1, setmodal1] = useState(false);
-  const handleshowhide = (event) => {
-    const getuser = event.target.value;
 
-    setShowhide(getuser);
-  };
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
-    setValue,
     watch,
+    setValue,
   } = useForm({});
 
   const bankSubmitNew = (data) => console.log(data);
-
   return (
     <form onSubmit={handleSubmit(bankSubmitNew)}>
       <Card style={{ width: "126%", border: "5px solid #1266af" }}>
