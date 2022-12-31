@@ -17,6 +17,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { getDocShareholding } from "../../../tl/src/pages/employee/ScrutinyBasic/ScrutinyDevelopment/docview.helper";
 import { MenuItem, Select } from "@mui/material";
 import { convertEpochToDate } from "../utils/index";
+import Spinner from "../components/Loader/index";
+
 const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) => {
     const { pathname: url } = useLocation();
     let validation = {};
@@ -27,7 +29,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const stateId = Digit.ULBService.getStateId();
     const [data, setData] = useState();
-
+    const [loader, setLoading] = useState(false);
     React.useEffect(async () => {
         const uuid = userInfo?.info?.uuid;
         const usersResponse = await Digit.UserService.userSearch(tenantId, { uuid: [uuid] }, {});
@@ -405,9 +407,11 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
         formData.append("tag", "tag-property");
         // setLoader(true);
         try {
+            setLoading(true);
             const Resp = await axios.post("/filestore/v1/files", formData, {}).then((response) => {
                 return response;
             });
+            setLoading(false);
             console.log(Resp?.data?.files);
             setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
             // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
@@ -416,7 +420,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
             //   setLoader(false);
 
         } catch (error) {
-            //   setLoader(false);
+            setLoading(false);
             console.log(error.message);
         }
     };
@@ -966,6 +970,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
     return (
         <React.Fragment>
             <div className={isopenlink ? "OpenlinkContainer" : ""}>
+            {loader && <Spinner />}
                 {/* {JSON.stringify(data?.devDetail[0]?.addInfo?.showDevTypeFields)}efwefewfewf
                 {JSON.stringify(data)}efewfewf */}
                 {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
@@ -2262,7 +2267,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                             type="text"
                                                             name="licNo"
                                                             value={technicalCapacitySoughtFromAnyColonizer.licNo}
-                                                            onChange={(e) => setTechnicalCapacitySoughtFromAnyColonizer({ ...technicalCapacitySoughtFromAnyColonizer, licNo: e.target.value })}
+                                                            onChange={(e) => setTechnicalCapacitySoughtFromAnyColonizer({ ...technicalCapacitySoughtFromAnyColonizer, licNo: e.target.value.toUpperCase() })}
                                                             className="employee-card-input"
                                                             maxLength={10}
                                                         />

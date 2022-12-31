@@ -100,7 +100,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       setPercetage(developerDataGet?.devDetail[0]?.addInfo?.percentage);
       setUploadPDF(developerDataGet?.devDetail[0]?.addInfo?.uploadPdf);
       setSerialNumber(developerDataGet?.devDetail[0]?.addInfo?.serialNumber);
-      setDirectorData(developerDataGet?.devDetail[0]?.addInfo?.directorsInformation || []);
+      setDirectorData(developerDataGet?.devDetail[0]?.addInfo?.DirectorsInformation || []);
       setCinNo(developerDataGet?.devDetail[0]?.addInfo?.cin_Number);
       setLLPNumber(developerDataGet?.devDetail[0]?.addInfo?.llp_Number);
       setCSRNumber(developerDataGet?.devDetail[0]?.addInfo?.csr_Number);
@@ -598,7 +598,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         emailId: emailId,
         registeredContactNo: registeredContactNo,
         gst_Number: gst_Number,
-        directorsInformation: DirectorData || modalDirectorValuesArray,
+        DirectorsInformation: DirectorData,
         shareHoldingPatterens: modalValuesArray,
         othersDetails: othersArray,
         existingColonizerData: existingColonizerDetails,
@@ -653,7 +653,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
         data.LicneseDetails.registeredContactNo = registeredContactNo,
         data.LicneseDetails.gst_Number = gst_Number,
-        data.LicneseDetails.directorsInformation = DirectorData,
+        data.LicneseDetails.DirectorsInformation = DirectorData,
         data.LicneseDetails.shareHoldingPatterens = modalValuesArray
       data.LicneseDetails.othersDetails = othersArray
 
@@ -1684,7 +1684,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                 {modalDIN && modalDIN.length > 0 && !modalDIN.match(Digit.Utils.getPattern('DIN')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_DIN_NO")}</CardLabelError>}
                               </Col>
                               <Col md={3} xxl lg="4">
-                                <label htmlFor="name" className="text">Name</label>
+                                <label htmlFor="name" className="text">Name </label>
                                 <input
                                   type="text"
 
@@ -1693,11 +1693,11 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                   class="employee-card-input"
                                   {...(validation = {
                                     isRequired: true,
-                                    pattern: "^[a-zA-Z]*$",
+                                    pattern: "^[a-zA-Z ]*$",
                                     type: "text",
-                                    title: "Please Enter Name"
                                   })}
                                 />
+                                {modalDirectorName && modalDirectorName.length > 0 &&!modalDirectorName.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid Name")}</CardLabelError>}
                               </Col>
                               <Col md={3} xxl lg="4">
                                 <label htmlFor="name" className="text"> Contact Number <span className="text-danger font-weight-bold">*</span></label>
