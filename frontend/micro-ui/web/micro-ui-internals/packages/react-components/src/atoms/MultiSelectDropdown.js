@@ -117,14 +117,15 @@ const MultiSelectDropdown = ({ options, optionsKey, selected = [], onSelect, def
         </div>
       </div>
       {
-        showSelectedValue &&
+        showSelectedValue ?
         <p className="my-2">
           {
             alreadyQueuedSelectedState.map((ele)=>(
               <span>{ele.name} ,</span>
             ))
           }
-          </p>
+          </p> :
+          null
       }
       {active ? (
         <div className="server" id="jk-dropdown-unique" style={ServerStyle?ServerStyle:{}}>
