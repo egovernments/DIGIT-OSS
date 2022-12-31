@@ -885,6 +885,8 @@ export const getPattern = type => {
       return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,50}$/i;
     case "OldLicenceNo":
       return /^[L]{1}[C]{1}[-]{1}[0-9]{0,5}[A-Z]{1}$/;
+    case "architectNumber":
+      return /^([A-Z0-9 /])$/;
   }
 };
 

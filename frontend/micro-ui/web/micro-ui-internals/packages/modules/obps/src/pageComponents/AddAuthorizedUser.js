@@ -668,7 +668,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
 
               <Modal show={showAuthuser} onHide={handleCloseAuthuser} animation={false}>
                 <Modal.Header closeButton>
-                  <Modal.Title>Add Authorised user</Modal.Title>
+                  <Modal.Title>Add Authorised User</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                   <form className="text1">
@@ -678,7 +678,6 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                         <input
                           type="text"
                           value={aurthorizedUserName}
-                          name="aurthorizedUserName"
                           class="employee-card-input"
                           onChange={handleUserNameChange}
                         />

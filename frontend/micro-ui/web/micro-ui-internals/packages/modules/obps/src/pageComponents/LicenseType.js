@@ -1,4 +1,4 @@
-import { CardLabel, FormStep, RadioOrSelect, TextInput, OpenLinkContainer, BackButton } from "@egovernments/digit-ui-react-components";
+import { CardLabel, FormStep, RadioOrSelect, TextInput, OpenLinkContainer, CardLabelError, BackButton } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { stringReplaceAll } from "../utils";
 import Timeline from "../components/Timeline";
@@ -77,7 +77,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
         <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={LicenseType && LicenseType?.i18nKey.includes("ARCHITECT") ? !LicenseType || !ArchitectNo : !LicenseType}>
           <Row className="justify-content-between">
             <Form.Group className="col-md-5">
-              <CardLabel>{t("BPA_LICENSE_TYPE")}*</CardLabel>
+              <CardLabel>{t("BPA_LICENSE_TYPE")} <span className="font-weight-bold text-danger">*</span></CardLabel>
               <div className={"form-pt-dropdown-only"}>
                 {data && (
                   <div>
@@ -96,7 +96,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
             </Form.Group>
 
             <Form.Group className="col-md-5">
-              {LicenseType && LicenseType?.i18nKey.includes("ARCHITECT") && <div><CardLabel>{`${t("BPA_COUNCIL_NUMBER")}*`}</CardLabel>
+              {LicenseType && LicenseType?.i18nKey.includes("ARCHITECT") && <div><CardLabel>{`${t("BPA_COUNCIL_NUMBER")}`} <span className="font-weight-bold text-danger">*</span></CardLabel>
                 <TextInput
                   t={t}
                   type={"text"}
@@ -106,6 +106,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
                   value={ArchitectNo}
                   onChange={selectArchitectNo}
                 />
+                {ArchitectNo && ArchitectNo.length > 0 && !ArchitectNo.match(Digit.Utils.getPattern('architectNumber')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Invalid Architect Number")}</CardLabelError>}
               </div>}
             </Form.Group>
 
