@@ -844,7 +844,7 @@ const ApllicantPuropseForm = (props) => {
                     </h2>
                   </label>
                 </div>
-                <Form.Control as="textarea" rows={3} type="text" className="form-control" placeholder="" {...register("landOwner")} disabled />
+                <Form.Control as="textarea" rows={2} type="text" className="form-control" placeholder="" {...register("landOwner")} disabled />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.landOwner && errors?.landOwner?.message}
                 </h3>
@@ -1105,6 +1105,7 @@ const ApllicantPuropseForm = (props) => {
                             Registering Authority document <span style={{ color: "red" }}>*</span> <FileUpload color="primary" />
                             <input
                               type="file"
+                              accept="application/pdf/jpeg"
                               style={{ display: "none" }}
                               onChange={(e) => getDocumentData(e?.target?.files[0], "registeringAuthorityDoc")}
                             />

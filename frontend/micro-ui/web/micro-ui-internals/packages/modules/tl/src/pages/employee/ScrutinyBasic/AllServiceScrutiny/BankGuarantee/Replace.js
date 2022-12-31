@@ -126,14 +126,19 @@ function Replace() {
           alignContent: "center",
         }}
       >
-        <span style={{ color: "#817f7f" }} className="">
+        {/* <span style={{ color: "#817f7f" }} className="">
           Replace/Renew
+        </span> */}
+        <span style={{ color: "#817f7f", fontSize: 14 }} className="">
+          - Replace/Renew
         </span>
         {open2 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       </div>
       <Collapse in={open2}>
         <div id="example-collapse-text">
-          <Card style={{ width: "126%", border: "5px solid #1266af" }}>
+          <Card
+          //   style={{ width: "126%", border: "5px solid #1266af" }}
+          >
             <h4 style={{ fontSize: "25px", marginLeft: "21px" }}> Replace/Renew </h4>
             <div className="card">
               <Row className="col-12">
@@ -536,7 +541,7 @@ function Replace() {
                 </div>
               </div>
 
-              <div class="row">
+              {/* <div class="row">
                 <div class="col-sm-12 text-right">
                   <button type="submit" id="btnClear" class="btn btn-primary btn-md center-block" style={{ marginBottom: "-44px" }}>
                     Submit
@@ -549,7 +554,7 @@ function Replace() {
                     </button>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </Card>
         </div>

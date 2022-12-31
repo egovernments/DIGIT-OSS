@@ -126,14 +126,16 @@ function SubmitNew() {
           alignContent: "center",
         }}
       >
-        <span style={{ color: "#817f7f" }} className="">
-          Submission
+        <span style={{ color: "#817f7f", fontSize: 14 }} className="">
+          - Submission
         </span>
         {open2 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       </div>
       <Collapse in={open2}>
         <div id="example-collapse-text">
-          <Card style={{ width: "126%", border: "5px solid #1266af" }}>
+          <Card
+          // style={{ width: "126%", border: "5px solid #1266af" }}
+          >
             <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Submission </h4>
             <div className="card">
               <Row className="col-12">
@@ -534,7 +536,7 @@ function SubmitNew() {
                 </div>
               </div>
 
-              <div class="row">
+              {/* <div class="row">
                 <div class="col-sm-12 text-right">
                   <button type="submit" id="btnClear" class="btn btn-primary btn-md center-block" style={{ marginBottom: "-44px" }}>
                     Submit
@@ -547,7 +549,7 @@ function SubmitNew() {
                     </button>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </Card>
         </div>
