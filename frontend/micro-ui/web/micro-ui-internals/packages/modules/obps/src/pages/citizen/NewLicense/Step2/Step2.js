@@ -528,14 +528,6 @@ const ApllicantPuropseForm = (props) => {
     }, 500);
     return () => clearTimeout(delay);
   }, [getKhewats]);
-  const dataArea = props?.ApplicantPurpose?.AppliedLandDetails?.[0]?.kanal;
-  const dataAreaMarla = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.marla;
-  const dataAreaSarai = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.sarsai;
-  const dataAreaBigha = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.bigha;
-  const dataAreaBiswa = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.biswa;
-  const dataAreaBiswansi = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.biswansi;
-  const totalAreaAcre = dataArea * 0.125 + dataAreaMarla * 0.0062 + dataAreaSarai * 0.00069;
-  console.log("grt", dataArea);
 
   return (
     <div>
@@ -881,7 +873,8 @@ const ApllicantPuropseForm = (props) => {
                           <label htmlFor="sumsarsai">Total: {watch("sarsai") * 0.00069}</label>&nbsp;&nbsp;
                         </td>
                         <td>
-                          <input type="number" className="form-control " placeholder={totalAreaAcre} disabled />
+                          <input type="number" className="form-control " {...register("total")} />
+                          <label htmlFor="sumsarsai">Total: {watch("kanal") * 0.125 + "marla" * 0.0062 + "sarsai" * 0.00069}</label>&nbsp;&nbsp;
                         </td>
                       </tr>
                     </tbody>
@@ -928,6 +921,10 @@ const ApllicantPuropseForm = (props) => {
                         <td>
                           <input type="number" className="form-control" {...register("biswansi")} id="biswansi" required maxLength={20} />
                           <label htmlFor="sumBiswansi">Total: {watch("biswansi") * 0.619}</label>&nbsp;&nbsp;
+                        </td>
+                        <td>
+                          <input type="number" className="form-control " {...register("total")} />
+                          <label htmlFor="sumsarsai">Total: {watch("kanal") * 0.125 + "marla" * 0.0062 + "sarsai" * 0.00069}</label>&nbsp;&nbsp;
                         </td>
                       </tr>
                     </tbody>

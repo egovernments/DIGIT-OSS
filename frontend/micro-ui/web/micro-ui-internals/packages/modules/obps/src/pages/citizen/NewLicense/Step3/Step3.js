@@ -370,23 +370,26 @@ const LandScheduleForm = (props) => {
                                       <h2>
                                         Document Upload <span style={{ color: "red" }}>*</span>
                                         <FileUpload color="primary" />
-                                        {fileStoreId?.thirdPartyDoc ? (
-                                          <a onClick={() => getDocShareholding(fileStoreId?.thirdPartyDoc)} className="btn btn-sm col-md-6">
-                                            <VisibilityIcon color="info" className="icon" />
-                                          </a>
-                                        ) : (
-                                          <p></p>
-                                        )}
-                                        <div>
-                                          <input
-                                            type="file"
-                                            className="form-control"
-                                            accept="application/pdf"
-                                            onChange={(e) => getDocumentData(e?.target?.files[0], "thirdPartyDoc")}
-                                          />
-                                        </div>
+                                        <input
+                                          type="file"
+                                          style={{ display: "none" }}
+                                          onChange={(e) => getDocumentData(e?.target?.files[0], "thirdPartyDoc")}
+                                        />
                                       </h2>
                                     </label>
+                                    {fileStoreId?.thirdPartyDoc ? (
+                                      <a onClick={() => getDocShareholding(fileStoreId?.thirdPartyDoc)} className="btn btn-sm ">
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </a>
+                                    ) : (
+                                      <p></p>
+                                    )}
+                                    {/* <input
+                                          type="file"
+                                          className="form-control"
+                                          accept="application/pdf"
+                                          onChange={(e) => getDocumentData(e?.target?.files[0], "thirdPartyDoc")}
+                                        /> */}
 
                                     <h3 className="error-message" style={{ color: "red" }}>
                                       {errors?.thirdPartyDoc && errors?.thirdPartyDoc?.message}
@@ -401,23 +404,30 @@ const LandScheduleForm = (props) => {
                                       {" "}
                                       <h2>
                                         Document Upload <span style={{ color: "red" }}>*</span>
-                                        {fileStoreId?.thirdPartyDoc ? (
-                                          <a onClick={() => getDocShareholding(fileStoreId?.thirdPartyDoc)} className="btn btn-sm col-md-6">
-                                            <VisibilityIcon color="info" className="icon" />
-                                          </a>
-                                        ) : (
-                                          <p></p>
-                                        )}
+                                        <FileUpload color="primary" />
+                                        <input
+                                          type="file"
+                                          style={{ display: "none" }}
+                                          onChange={(e) => getDocumentData(e?.target?.files[0], "thirdPartyDoc")}
+                                        />
                                       </h2>
                                     </label>
-                                    <div>
+                                    {fileStoreId?.thirdPartyDoc ? (
+                                      <a onClick={() => getDocShareholding(fileStoreId?.thirdPartyDoc)} className="btn btn-sm ">
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </a>
+                                    ) : (
+                                      <p></p>
+                                    )}
+
+                                    {/* <div>
                                       <input
                                         type="file"
                                         className="form-control"
                                         accept="application/pdf"
                                         onChange={(e) => getDocumentData(e?.target?.files[0], "thirdPartyDoc")}
                                       />
-                                    </div>
+                                    </div> */}
 
                                     <h3 className="error-message" style={{ color: "red" }}>
                                       {errors?.thirdPartyDoc && errors?.thirdPartyDoc?.message}
@@ -607,25 +617,45 @@ const LandScheduleForm = (props) => {
                                 data-toggle="tooltip"
                                 data-placement="top"
                                 title=" Approved Layout of Plan/ Site plan for(GH)Showing Area(s)/Proposed migration."
-                              >
-                                Approved Layout of Plan.<span style={{ color: "red" }}>*</span>
-                                {fileStoreId?.approvedLayoutPlan ? (
-                                  <a onClick={() => getDocShareholding(fileStoreId?.approvedLayoutPlan)} className="btn btn-sm col-md-6">
-                                    <VisibilityIcon color="info" className="icon" />
-                                  </a>
-                                ) : (
-                                  <p></p>
-                                )}
+                              ></h2>
+                              Approved Layout of Plan.<span style={{ color: "red" }}>*</span>
+                              <label>
+                                <FileUpload color="primary" />
+                                <input
+                                  type="file"
+                                  style={{ display: "none" }}
+                                  onChange={(e) => getDocumentData(e?.target?.files[0], "approvedLayoutPlan")}
+                                />
+                              </label>
+                              {fileStoreId?.approvedLayoutPlan ? (
+                                <a onClick={() => getDocShareholding(fileStoreId?.approvedLayoutPlan)} className="btn btn-sm ">
+                                  <VisibilityIcon color="info" className="icon" />
+                                </a>
+                              ) : (
+                                <p></p>
+                              )}
+                              {/* <FileUpload color="primary" />
+                                <input
+                                  type="file"
+                                  style={{ display: "none" }}
+                                  onChange={(e) => getDocumentData(e?.target?.files[0], "approvedLayoutPlan")}
+                                />
                               </h2>
-                              <div>
+                              {fileStoreId?.approvedLayoutPlan ? (
+                                <a onClick={() => getDocShareholding(fileStoreId?.approvedLayoutPlan)} className="btn btn-sm ">
+                                  <VisibilityIcon color="info" className="icon" />
+                                </a>
+                              ) : (
+                                <p></p>
+                              )} */}
+                              {/* <div>
                                 <input
                                   type="file"
                                   className="form-control"
                                   accept="application/pdf"
                                   onChange={(e) => getDocumentData(e?.target?.files[0], "approvedLayoutPlan")}
                                 />
-                              </div>
-
+                              </div> */}
                               <h3 className="error-message" style={{ color: "red" }}>
                                 {errors?.approvedLayoutPlan && errors?.approvedLayoutPlan?.message}
                               </h3>
@@ -637,22 +667,28 @@ const LandScheduleForm = (props) => {
                                 title="Proposed Layout of Plan /site plan for area applied for migration."
                               >
                                 Proposed Layout of Plan.<span style={{ color: "red" }}>*</span>
-                                {fileStoreId?.proposedLayoutPlan ? (
-                                  <a onClick={() => getDocShareholding(fileStoreId?.proposedLayoutPlan)} className="btn btn-sm col-md-6">
-                                    <VisibilityIcon color="info" className="icon" />
-                                  </a>
-                                ) : (
-                                  <p></p>
-                                )}
+                                <FileUpload color="primary" />
+                                <input
+                                  type="file"
+                                  style={{ display: "none" }}
+                                  onChange={(e) => getDocumentData(e?.target?.files[0], "proposedLayoutPlan")}
+                                />
                               </h2>
-                              <div>
+                              {fileStoreId?.proposedLayoutPlan ? (
+                                <a onClick={() => getDocShareholding(fileStoreId?.proposedLayoutPlan)} className="btn btn-sm ">
+                                  <VisibilityIcon color="info" className="icon" />
+                                </a>
+                              ) : (
+                                <p></p>
+                              )}
+                              {/* <div>
                                 <input
                                   type="file"
                                   className="form-control"
                                   accept="application/pdf"
                                   onChange={(e) => getDocumentData(e?.target?.files[0], "proposedLayoutPlan")}
                                 />
-                              </div>
+                              </div> */}
 
                               <h3 className="error-message" style={{ color: "red" }}>
                                 {errors?.proposedLayoutPlan && errors?.proposedLayoutPlan?.message}
@@ -661,22 +697,28 @@ const LandScheduleForm = (props) => {
                             <div className="col col-3">
                               <h2 data-toggle="tooltip" data-placement="top" title="Upload Previously approved Layout Plan.">
                                 Upload Previously approved.<span style={{ color: "red" }}>*</span>
-                                {fileStoreId?.uploadPreviouslyLayoutPlan ? (
-                                  <a onClick={() => getDocShareholding(fileStoreId?.uploadPreviouslyLayoutPlan)} className="btn btn-sm col-md-6">
-                                    <VisibilityIcon color="info" className="icon" />
-                                  </a>
-                                ) : (
-                                  <p></p>
-                                )}
+                                <FileUpload color="primary" />
+                                <input
+                                  type="file"
+                                  style={{ display: "none" }}
+                                  onChange={(e) => getDocumentData(e?.target?.files[0], "uploadPreviouslyLayoutPlan")}
+                                />
                               </h2>
-                              <div>
+                              {fileStoreId?.uploadPreviouslyLayoutPlan ? (
+                                <a onClick={() => getDocShareholding(fileStoreId?.uploadPreviouslyLayoutPlan)} className="btn btn-sm ">
+                                  <VisibilityIcon color="info" className="icon" />
+                                </a>
+                              ) : (
+                                <p></p>
+                              )}
+                              {/* <div>
                                 <input
                                   type="file"
                                   className="form-control"
                                   accept="application/pdf"
                                   onChange={(e) => getDocumentData(e?.target?.files[0], "uploadPreviouslyLayoutPlan")}
                                 />
-                              </div>
+                              </div> */}
 
                               <h3 className="error-message" style={{ color: "red" }}>
                                 {errors?.uploadPreviouslyLayoutPlan && errors?.uploadPreviouslyLayoutPlan?.message}
@@ -1262,51 +1304,53 @@ const LandScheduleForm = (props) => {
                         </div>
                       )}
                       {watch("vacant") === "N" && (
-                        <div className="col col-3">
-                          <h2>
-                            (b) &nbsp;Construction: (Yes/No) <span style={{ color: "red" }}>*</span>
-                          </h2>{" "}
-                          &nbsp;&nbsp;&nbsp;&nbsp;
-                          <label htmlFor="construction">
-                            <input {...register("construction")} type="radio" value="Y" id="construction" />
-                            &nbsp; Yes &nbsp;&nbsp;
-                          </label>
-                          <label htmlFor="construction">
-                            <input {...register("construction")} type="radio" value="N" id="construction" />
-                            &nbsp; No &nbsp;&nbsp;
-                          </label>
-                          <h3 className="error-message" style={{ color: "red" }}>
-                            {errors?.construction && errors?.construction?.message}
-                          </h3>
-                          {watch("construction") === "Y" && (
-                            <div className="row ">
-                              <div className="col col">
-                                <label>
-                                  Type of Construction <span style={{ color: "red" }}>*</span>
-                                </label>
-                                <input type="text" className="form-control" {...register("typeOfConstruction")} required />
+                        <div className="row ">
+                          <div className="col col">
+                            <h2>
+                              Construction: (Yes/No) <span style={{ color: "red" }}>*</span>
+                            </h2>{" "}
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <label htmlFor="construction">
+                              <input {...register("construction")} type="radio" value="Y" id="construction" />
+                              &nbsp; Yes &nbsp;&nbsp;
+                            </label>
+                            <label htmlFor="construction">
+                              <input {...register("construction")} type="radio" value="N" id="construction" />
+                              &nbsp; No &nbsp;&nbsp;
+                            </label>
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.construction && errors?.construction?.message}
+                            </h3>
+                            {watch("construction") === "Y" && (
+                              <div className="row ">
+                                <div className="col col">
+                                  <label>
+                                    Type of Construction <span style={{ color: "red" }}>*</span>
+                                  </label>
+                                  <input type="text" className="form-control" {...register("typeOfConstruction")} required />
+                                </div>
                               </div>
-                            </div>
-                          )}
-                          {watch("construction") === "N" && (
-                            <div className="row ">
-                              <div className="col col">
-                                <label>
-                                  <h2>
-                                    Remark <span style={{ color: "red" }}>*</span>
-                                  </h2>
-                                </label>
-                                <input type="text" className="form-control" {...register("constructionRemark")} />
+                            )}
+                            {watch("construction") === "N" && (
+                              <div className="row ">
+                                <div className="col col">
+                                  <label>
+                                    <h2>
+                                      Remark <span style={{ color: "red" }}>*</span>
+                                    </h2>
+                                  </label>
+                                  <input type="text" className="form-control" {...register("constructionRemark")} />
+                                </div>
                               </div>
-                            </div>
-                          )}
+                            )}
+                          </div>
                         </div>
                       )}
                     </div>
 
                     <div className="col col-3">
                       <h2>
-                        (c) &nbsp;HT line:(Yes/No) <span style={{ color: "red" }}>*</span>
+                        (b) &nbsp;HT line:(Yes/No) <span style={{ color: "red" }}>*</span>
                       </h2>{" "}
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="HTLine">
@@ -1348,7 +1392,7 @@ const LandScheduleForm = (props) => {
 
                     <div className="col col-3">
                       <h2>
-                        (d)&nbsp;IOC Gas Pipeline:(Yes/No) <span style={{ color: "red" }}>*</span>
+                        (c)&nbsp;IOC Gas Pipeline:(Yes/No) <span style={{ color: "red" }}>*</span>
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="IOCGasPipeline">
@@ -1383,12 +1427,9 @@ const LandScheduleForm = (props) => {
                         </div>
                       )}
                     </div>
-                  </div>
-                  <br></br>
-                  <div className="row ">
                     <div className="col col-3">
                       <h2>
-                        (e) &nbsp;Nallah:(Yes/No) <span style={{ color: "red" }}>*</span>
+                        (d) &nbsp;Nallah:(Yes/No) <span style={{ color: "red" }}>*</span>
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="nallah">
@@ -1423,9 +1464,12 @@ const LandScheduleForm = (props) => {
                         </div>
                       )}
                     </div>
+                  </div>
+                  <br></br>
+                  <div className="row ">
                     <div className="col col-3">
                       <h2>
-                        (f) &nbsp;Any revenue rasta/road:(Yes/No) <span style={{ color: "red" }}>*</span>
+                        (e) &nbsp;Any revenue rasta/road:(Yes/No)<span style={{ color: "red" }}>*</span>
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="road">
@@ -1475,7 +1519,7 @@ const LandScheduleForm = (props) => {
                     </div>
                     <div className="col col-3">
                       <h2>
-                        (g) &nbsp;Any marginal land:(Yes/No) <span style={{ color: "red" }}>*</span>
+                        (f) &nbsp;Any marginal land:(Yes/No) <span style={{ color: "red" }}>*</span>
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="marginalLand">
@@ -1520,7 +1564,7 @@ const LandScheduleForm = (props) => {
                         data-placement="top"
                         title="Whether any utility line passing through the site is incorporated/adjusted in the layout plan (Yes/No)"
                       >
-                        (h)&nbsp;Utility Line <span style={{ color: "red" }}>*</span>
+                        (g)&nbsp;Utility Line <span style={{ color: "red" }}>*</span>
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="utilityLine">
