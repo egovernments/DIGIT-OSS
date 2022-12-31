@@ -34,6 +34,10 @@ const EgScrutinyProxy = createProxyMiddleware({
 	target: process.env.REACT_APP_PROXY_SCRUTINY_EG || "http://tcp.abm.com:80",
   changeOrigin: true,
 });
+const GetCluDetails = createProxyMiddleware({
+	target: process.env.REACT_APP_PROXY_SCRUTINY_EG || "http://182.79.97.53:81",
+  changeOrigin: true,
+});
 module.exports = function (app) {
   [
     "/egov-mdms-service",
@@ -100,4 +104,7 @@ module.exports = function (app) {
   ["/land-services/egscrutiny",
    "/land-services/new/licenses"
   ].forEach((location) => app.use(location, EgScrutinyProxy));
+	[ "/api/cis/GetCluDetails",
+  "/api/cis/GetLicenceDetails"
+ ].forEach((location) => app.use(location, GetCluDetails));
 };
