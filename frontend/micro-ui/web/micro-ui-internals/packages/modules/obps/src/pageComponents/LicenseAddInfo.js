@@ -807,7 +807,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
               {/* FOR PROPR */}
 
-              {showDevTypeFields === "Others" && (
+              {showDevTypeFields === "Otherss" && (
                 <div className="card mb-3">
                   {/* <div className="card-header">
               <h5 className="card-title"> Developer</h5>
@@ -1040,7 +1040,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
 
               {/* FOR COMPANY */}
-              {(showDevTypeFields && showDevTypeFields !== "Individual" && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Others") && (
+              {(showDevTypeFields && showDevTypeFields !== "Individual" && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Others" && showDevTypeFields !== "Society" && showDevTypeFields !== "Firm") && (
                 <div className="card mb-3">
                   {/* <div className="card-header">
               <h5 className="card-title"> Developer</h5>
@@ -1328,7 +1328,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                   </div>
                 </div>
               )}
-              {(showDevTypeFields && showDevTypeFields !== "Individual" && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Others") && (
+              {(showDevTypeFields && showDevTypeFields !== "Individual" && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Others" && showDevTypeFields !== "Society" && showDevTypeFields !== "Firm") && (
                 <div className="card mb-3">
                   <h5 className="card-title fw-bold">Shareholding Patterns <span className="text-danger font-weight-bold">*</span></h5>
                   {/* {JSON.stringify(modalValuesArray)} */}
@@ -1495,7 +1495,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                   isMandatory={false}
                                   value={modalPercentage}
                                   onChange={(e) => setModalPercentage(e.target.value)}
-                                  placeholder=""
+                                  maxlength={4}
                                   class="employee-card-input"
                                   {...(validation = {
                                     isRequired: true,
@@ -1519,7 +1519,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
                               </Col>
                               <Col md={3} xxl lg="4">
-                                <label htmlFor="name" className="text">Upload Document</label>
+                                <label htmlFor="name" className="text">Any Supportive Document</label>
                                 <input
                                   type="file"
                                   // value={file}
@@ -1549,7 +1549,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                   </div>
                 </div>
               )}
-              {(showDevTypeFields && showDevTypeFields !== "Individual" && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Others") && (
+              {(showDevTypeFields && showDevTypeFields !== "Individual" && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Others" && showDevTypeFields !== "Society" && showDevTypeFields !== "Firm") && (
                 <div className="card mb-3">
                   <h5 className="card-title fw-bold">Directors Information</h5>
                   <div className="card-body">
@@ -1656,7 +1656,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                           <form className="text1">
                             <Row>
                               <Col md={3} xxl lg="4">
-                                <label htmlFor="name" className="text">DIN Number</label>
+                                <label htmlFor="name" className="text">DIN Number <span className="text-danger font-weight-bold">*</span></label>
                                 <MobileNumber
                                   value={modalDIN}
                                   name="modalDIN"
@@ -1665,7 +1665,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                   // onChange={(e) => setModalDIN(e.target.value)}
                                   onChange={selectDinNumber}
                                   // disable={mobileNumber && !isOpenLinkFlow ? true : false}
-                                  {...{ required: true, pattern: "[1-9][0-9]{7}", type: "tel", title: t("Enter Valid DIN") }}
+                                  {...{ required: true, pattern: "[1-9][0-9]{7}", type: "tel"}}
                                 />
                                 {/* <MobileNumber
                               
@@ -1684,7 +1684,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                 {modalDIN && modalDIN.length > 0 && !modalDIN.match(Digit.Utils.getPattern('DIN')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_DIN_NO")}</CardLabelError>}
                               </Col>
                               <Col md={3} xxl lg="4">
-                                <label htmlFor="name" className="text">Name </label>
+                                <label htmlFor="name" className="text">Name <span className="text-danger font-weight-bold">*</span></label>
                                 <input
                                   type="text"
 
@@ -1732,7 +1732,11 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                           <Button variant="secondary" onClick={handleClose}>
                             Close
                           </Button>
-                          <Button variant="primary" onClick={handleDirectorsArrayValues}>
+                          <Button 
+                            variant="primary" 
+                            onClick={handleDirectorsArrayValues}
+                            disabled={!modalDIN || !modalDIN.match(Digit.Utils.getPattern('DIN')) || !modalDirectorName.match(Digit.Utils.getPattern('Name')) || !modalDirectorContact || !modalDirectorContact.match(Digit.Utils.getPattern('MobileNo'))}
+                          >
                             Save Changes
                           </Button>
                         </Modal.Footer>
@@ -2246,296 +2250,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                   </div>
                 </div>
               )}
-              {/* {showDevTypeFields === "LLP" && (
-            <div className="card mb-3">
-            <h5 className="card-title fw-bold">Shareholding Patterns</h5>
-              <div className="card-body">
-                <div className="table-bd">
-                  <table className="table table-bordered">
-                    <thead>
-                      <tr>
-                        <th>Sr. No</th>
-                        <th>Name</th>
-                        <th>Designition</th>
-                        <th>Percentage</th>
-                        <th>View PDF</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {
-                        ( modalValuesArray.length>0)?
-                        modalValuesArray.map((elementInArray, input) => {
-                          return (
-                            <tr>
-                              <td>{input+ 1}</td>
-                              <td>
-                                <input
-                                  type="text"
-                                  value={elementInArray.name}
-                                  placeholder={elementInArray.name}
-                                  readOnly
-                                  disabled="disabled"
-                                  class="employee-card-input"
-                                />
-                              </td>
-                              <td>
-                                <input
-                                  type="text"
-                                  value={elementInArray.designition}
-                                  placeholder={elementInArray.designition}
-                                  readOnly
-                                  disabled="disabled"
-                                  class="employee-card-input"
-                                />
-                              </td>
-                              <td>
-                                <input
-                                  type="text"
-                                  value={elementInArray.percentage}
-                                  placeholder={elementInArray.percentage}
-                                  readOnly
-                                  disabled="disabled"
-                                  class="employee-card-input"
-                                />
-                              </td>
-                              <td>
-                                <div className="text-center">
-                                  <button className="btn btn-success btn-sm">View</button>
-                                </div>
-                              </td>
-                            </tr>
-                          );
-                        })
-                        :
-                        <p className="text-danger text-center">Click on the Add More Button</p>
-                      }
-                    </tbody>
-                  </table>
-                </div> */}
-              {/* <div className="form-group col-md2 mt-4">
-                      <button  className="btn btn-success" >Add More
-                        
-                      </button>
-                    </div> */}
-
-              {/* <button
-                    type="button"
-                    style={{ float: "left" }}
-                    className="btn btn-primary"
-                    onClick={() => setNoOfRows(noofRows + 1)}
-                  >
-                    Add More
-                  </button> */}
-              {/* <div>
-                  <button
-                    type="button"
-                    style={{
-                      color: "white",
-                    }}
-                    className="btn btn-primary mt-3"
-                    // onClick={() => setNoOfRows(noofRows + 1)}
-                    onClick={() => setmodal(true)}
-                  >
-                    Add More
-                  </button>
-
-                  <div>
-                    <Modal
-                      size="lg"
-                      isOpen={modal}
-                      toggle={() => setmodal(!modal)}
-                    >
-                      <ModalHeader
-                        toggle={() => setmodal(!modal)}
-                      ></ModalHeader>
-
-                      <ModalBody>
-                        <div className="card2">
-                          <div className="popupcard">
-                            
-                            <form className="text1">
-                              <Row>
-                                <Col md={3} xxl lg="4">
-                                  <label htmlFor="name" className="text">Name *</label>
-                                  <input
-                                    type="text"
-                                    
-                                    onChange={(e)=>setModalNAme(e.target.value)}
-                                    placeholder=""
-                                    class="employee-card-input"
-                                    {...(validation = {
-                                      isRequired: true,
-                                      pattern: "^[a-zA-Z]*$",
-                                      type: "text",
-                                      title: "Please Enter Name"
-                                    })}
-                                  />
-                                </Col>
-                                <Col md={3} xxl lg="4">
-                                  <label htmlFor="name" className="text"> Designition *</label>
-                                  <input
-                                    type="text"
-                                    
-                                    onChange={(e)=>setModaldesignition(e.target.value)}
-                                    placeholder=""
-                                    class="employee-card-input"
-                                    {...(validation = {
-                                      isRequired: true,
-                                      pattern: "^[a-zA-Z]*$",
-                                      type: "text",
-                                      title: "Please Enter Designition"
-                                    })}
-                                  />
-                                </Col>
-
-                                <Col md={3} xxl lg="4">
-                                  <label htmlFor="name" className="text">Percentage *</label>
-                                  <input
-                                    type="flot"
-                                    
-                                    onChange={(e)=>setModalPercentage(e.target.value)}
-                                    placeholder=""
-                                    class="employee-card-input"
-                                    {...(validation = {
-                                      isRequired: true,
-                                      pattern: "^[a-zA-Z]*$",
-                                      type: "text",
-                                      title: "Please Enter Percentage"
-                                    })}
-                                  />
-                                </Col>
-                                <Col md={3} xxl lg="4">
-                                  <label htmlFor="name" className="text">Upload PDF</label>
-                                  <input
-                                    type="file"
-                                    value={uploadPdf}
-                                    placeholder=""
-                                    class="employee-card-input"
-                                    {...(validation = {
-                                      isRequired: true,
-                                      pattern: "^[a-zA-Z]*$",
-                                      type: "text",
-                                      title: "Please upload document"
-                                    })}
-                                  />
-                                </Col>
-
-                              </Row>
-                            </form>
-
-                          </div>
-                          <div className="submit-btn">
-                            <div className="form-group col-md6 mt-6">
-                              <button
-                                type="button"
-                                style={{ float: "right" }}
-                                className="btn btn-success"
-                                onClick={handleArrayValues}
-                              >
-                                Submit
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </ModalBody>
-                      <ModalFooter
-                        toggle={() => setmodal(!modal)}
-                      ></ModalFooter>
-                    </Modal>
-                  </div>
-                </div> */}
-              {/* <button
-                    type="button"
-                    style={{ float: "right" }}
-                    className="btn btn-danger"
-                    onClick={() => setNoOfRows(noofRows - 1)}
-                  >
-                    Remove
-                  </button> */}
-
-              {/* <div className="form-group">
-                      <button type="submit" className="btn btn-success">
-                        {" "}
-                        Save{" "}
-                      </button>
-                    </div> */}
-              {/* </div>
-            </div>
-             )}
-            {showDevTypeFields === "LLP" && (
-            <div className="card mb-3">
-            <h5 className="card-title fw-bold">Directors Information</h5>
-              <div className="card-body">
-                <div className="table-bd">
-                  <table className="table table-bordered">
-                    <thead>
-                      <tr>
-                        <th>Sr. No</th>
-                        <th>DIN Number</th>
-                        <th>Name</th>
-                        <th>Contact Number</th>
-                        <th>Upload PDF</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {
-                      (DirectorData.length>0)?
-                      DirectorData.map((elementInArray, input) => {
-                        return (
-                          <tr key={input}>
-                            <td>{input}</td>
-                            <td>
-                              <input
-                                type="text"
-                                disabled="disabled"
-                                value={elementInArray.din}
-                                placeholder={elementInArray.din}
-                                class="employee-card-input"
-                              />
-                            </td>
-                            <td>
-                              <input
-                                type="text"
-                                disabled="disabled"
-                                value={elementInArray.name}
-                                placeholder={elementInArray.name}
-                                class="employee-card-input"
-                              />
-                            </td>
-                            <td>
-                              <input
-                                type="text"
-                                disabled="disabled"
-                                value={elementInArray.contactNumber}
-                                placeholder={elementInArray.contactNumber}
-                                class="employee-card-input"
-                              />
-                            </td>
-                            <td>
-                              <input
-                                type="file"
-                                value={uploadPdf}
-                                placeholder=""
-                                class="employee-card-input"
-                              />
-                            </td>
-                          </tr>
-                        );
-                      }):<p></p>}
-                    </tbody>
-                  </table>
-                </div>
-                
-              </div>
-            </div>
-            )} */}
-              {/* <div className="col-md-12 text-end">
-              <button
-                className="btn btn-success"
-              >
-                Save and Continue
-              </button>
-            </div> */}
+              
 
 
             </div>
