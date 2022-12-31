@@ -208,11 +208,11 @@ const {id} = useParams();
 
   return (
     <Card>
-      {/* <Row style={{ top: 25, padding: 5 }}>
+      <Row style={{ top: 25, padding: 5 }}>
         <div className="ml-auto">
           <h2>Application : {id}</h2>
         </div>
-      </Row> */}
+      </Row>
       <Row style={{ top: 30, padding: 10 }}>
         <ScrutitnyForms
           apiResponse={scrutinyDetails}
@@ -221,8 +221,11 @@ const {id} = useParams();
         ></ScrutitnyForms>
       </Row>
       <Row style={{ top: 30, padding: "10px 22px" }}>
-        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-          <Card>
+
+
+
+        {/* <Form.Group className="mb-3" controlId="exampleForm.ControlInput1"> */}
+          {/* <Card>
             <Card.Header style={{ fontSize: "17px", lineHeight: "18px", margin: "0px 15px" }}>
               <Card.Title className="m-0" style={{ fontFamily: "Roboto", fontSize: 20, fontWeight: "bold", textAlign: "center" }}>Summary</Card.Title>
             </Card.Header>
@@ -233,14 +236,14 @@ const {id} = useParams();
                 id="exampleFormControlTextarea1"
                 placeholder="Enter the Final Comments"
                 autoFocus
-                // onChange={(e) => {
-                //   setDeveloperRemarks({ data: e.target.value });
+                onChange={(e) => {
+                  setDeveloperRemarks({ data: e.target.value });
 
-                // }}
+                }}
                 rows="3"
               />
             </Col>
-          </Card>
+          </Card> */}
           {/* <div class="card">
             <h5 class="card-header">Featured</h5>
             <div class="card-body">
@@ -251,15 +254,15 @@ const {id} = useParams();
               </a>
             </div>
           </div> */}
-        </Form.Group>
+        {/* </Form.Group> */}
         {/* <div class="col-md-6 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
           <Button style={{ textAlign: "right" }}>Submit</Button>
         </div> */}
         <Row>
-          <div class="col-md-2 bg-light text-left" style={{ position: "relative", marginBottom: 30 }}>
+          {/* <div class="col-md-2 bg-light text-left" style={{ position: "relative", marginBottom: 30 }}>
             <Button style={{ textAlign: "right" }}>Attach Documents</Button>
            
-          </div>
+          </div> */}
           <div class="col-md-10 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
           {/* <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}>Submit</Button> */}
 
@@ -272,7 +275,7 @@ const {id} = useParams();
               state={state}
               id={id}
               applicationDetails={applicationDetails}
-              applicationData={applicationDetails?.applicationData}
+              applicationData={{...applicationDetails?.applicationData,workflowCode:applicationDetails?.applicationData?.workflowCode || "NewTL"}}
               closeModal={closeModal}
               submitAction={submitAction}
               actionData={workflowDetails?.data?.timeline}
