@@ -884,7 +884,7 @@ export const getPattern = type => {
     case "Comments":
       return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,50}$/i;
     case "OldLicenceNo":
-      return /^[a-zA-Z0-9-/]{0,64}$/;
+      return /^[L]{1}[C]{1}[-]{1}[0-9]{0,5}[A-Z]{1}$/;
   }
 };
 

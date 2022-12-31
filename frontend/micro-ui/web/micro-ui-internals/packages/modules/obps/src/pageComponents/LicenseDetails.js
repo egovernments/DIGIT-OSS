@@ -219,12 +219,12 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
       setPanValError(error?.response?.data?.errorDescription)
     }
   }
-  // console.log(panValidation);
-  // useEffect(() => {
-  //   if (PanNumber) {
-      
-  //   }
-  // }, [PanNumber]);
+  console.log(panValidation);
+  useEffect(() => {
+    if (PanNumber.length === 10) {
+      panVerification
+    }
+  }, [PanNumber]);
 
  
   function SelectName(e) {
@@ -245,9 +245,16 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     setDOB(e.target.value);
   }
   function selectPanNumber(e) {
-    setPanNumber(e.target.value.toUpperCase());
-    if(e.target.value === 10){
-      panVerification();
+    // setPanNumber(e.target.value.toUpperCase());
+    // if(e.target.value === 10){
+    //   panVerification();
+    // }
+    if (!e.target.value || /^\w+$/.test(e.target.value)){
+      setPanNumber(e.target.value.toUpperCase());
+      if(e.target.value === 10){
+        alert("HEY")
+        panVerification();
+      }
     }
   }
   function selectPermanentAddress(e) {
@@ -631,7 +638,6 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                       isRequired: true,
                       pattern: "^[a-zA-Z-.`' ]*$",
                       type: "text",
-                      title: t("PT_NAME_ERROR_MESSAGE"),
                     })}
                   />
                 </Form.Group>
@@ -642,7 +648,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                       style={{ width: "100%" }}
                       className="form-field"
                       selected={gender?.length === 1 ? gender[0] : gender}
-                      disable={gender?.length === 1 || editScreen}
+                      // disable={gender}
                       option={menu}
                       select={setGenderName}
                       value={gender}
@@ -671,21 +677,12 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                     name="mobileNumber"
                     onChange={(value) => setMobileNo({ target: { value } })}
                     disable={mobileNumber && !isOpenLinkFlow ? true : false}
-                    {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
+                    {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel" }}
                   />
                 </Form.Group>
                 {inputs?.map((input, index) => (
                   <Form.Group className="col-md-4">
                     <CardLabel>{`${"Enter Date of Birth"}`}<span class="text-danger font-weight-bold mx-2">*</span></CardLabel>
-                    {/* <DatePicker 
-                  t={t}
-                  type="date"
-                  isMandatory={false}
-                  optionKey="i18nKey"
-                  value={dob}
-                  name="dob"
-                  onChange={setDateofBirth}
-                /> */}
                     <DatePicker
                       isMandatory={true}
                       date={dob}
@@ -728,7 +725,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                     className="text-uppercase"
                     max={10}
                     // onChange={(e) => setPanNumber(e.target.value)}
-                    {...{ required: true,maxlength:"10", title: t("BPA_INVALID_PAN_NO") }}
+                    {...{ required: true,maxlength:"10" }}
                   />
                   {PanNumber && PanNumber.length > 0 && !PanNumber.match(Digit.Utils.getPattern('PAN')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_PAN_NO")}</CardLabelError>}
                   <h3 className="error-message" style={{ color: "red" }}>{PanValError}</h3>
@@ -764,7 +761,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                     {...(validation = {
                       isRequired: true,
                       type: "text",
-                      title: ("Please Enter Address line 1"),
+                      
                     })}
                   />
                   {/* <Form.Control type="text" placeholder="N/A" {...register("addressLineOne")}   onChange={(e) => setAddressLineOne(e.target.value)} value={addressLineOne}/>
@@ -823,7 +820,6 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                     {...(validation = {
                       isRequired: true,
                       type: "text",
-                      title: ("Please Enter City"),
                     })}
                   />
                 </Form.Group>
@@ -871,7 +867,6 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                     {...(validation = {
                       isRequired: false,
                       type: "text",
-                      title: ("Please Enter VIllage"),
                     })}
                   />
                 </Form.Group>
@@ -889,7 +884,6 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                     {...(validation = {
                       isRequired: false,
                       type: "text",
-                      title: ("Please Enter Tehsil"),
                     })}
                   />
                 </Form.Group>
@@ -907,7 +901,6 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                     {...(validation = {
                       isRequired: false,
                       type: "text",
-                      title: ("Please Enter State"),
                     })}
                   />
                 </Form.Group>
@@ -925,7 +918,6 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                     {...(validation = {
                       isRequired: false,
                       type: "text",
-                      title: ("Please Enter District"),
                     })}
                   />
                 </Form.Group>
@@ -1067,7 +1059,6 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                     {...(validation = {
                       isRequired: false,
                       type: "text",
-                      title: ("Please Enter VIllage"),
                     })}
                   />
                 </Form.Group>
@@ -1086,7 +1077,6 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                     {...(validation = {
                       isRequired: false,
                       type: "text",
-                      title: ("Please Enter Tehsil"),
                     })}
                   />
                 </Form.Group>
@@ -1105,7 +1095,6 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                     {...(validation = {
                       isRequired: false,
                       type: "text",
-                      title: ("Please Enter State"),
                     })}
                   />
                 </Form.Group>
@@ -1124,7 +1113,6 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                     {...(validation = {
                       isRequired: false,
                       type: "text",
-                      title: ("Please Enter District"),
                     })}
                   />
                 </Form.Group>

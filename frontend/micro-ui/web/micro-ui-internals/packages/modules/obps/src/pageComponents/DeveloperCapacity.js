@@ -1,4 +1,4 @@
-import { BackButton, CardLabel, CheckBox, FormStep, TextArea, TextInput, Dropdown, Toast, RemoveIcon, UploadFile } from "@egovernments/digit-ui-react-components";
+import { BackButton, CardLabel, CheckBox, FormStep, CardLabelError, TextArea, TextInput, Dropdown, Toast, RemoveIcon, UploadFile } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import Timeline from "../components/Timeline";
 import { useForm } from "react-hook-form";
@@ -977,7 +977,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                     t={t}
                     
                     isDisabled={
-                        ((data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm") ? (!Documents?.companyBalanceSheet || !Documents?.individualCertificateCA) : (data?.devDetail[0]?.addInfo?.showDevTypeFields === "Company" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Society" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Trust" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Institution") ? (!Documents?.companyBalanceSheet || !Documents?.paidUpCapital) : (data?.devDetail[0]?.addInfo?.showDevTypeFields === "Limited Liability Partnership" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Firm" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm") ? (!Documents?.netWorthOfPartners || !Documents?.netWorthOfFirm) : true) || ((permissionGrantedHRDU === "Y" && capacityDevelopColonyHdruAct.length) ? false : permissionGrantedHRDU === "N" ? false : true) || ((technicalCapacityOutsideHaryana === "Y" && technicalCapacityOutsideHaryanaDetails.authority && technicalCapacityOutsideHaryanaDetails.project && technicalCapacityOutsideHaryanaDetails.statusOfDevelopment) ? false : technicalCapacityOutsideHaryana === "N" ? false : true) || ((alreadtObtainedLic === "Y" && Documents?.agreementDocY && Documents?.boardDocX && Documents?.registeredDoc && Documents?.boardDocY && technicalCapacitySoughtFromAnyColonizer.licNo && technicalCapacitySoughtFromAnyColonizer.dateOfGrantingLic && technicalCapacitySoughtFromAnyColonizer.licValidity && technicalCapacitySoughtFromAnyColonizer.purpose) ? false : alreadtObtainedLic === "N" ? false : true) || ((designatedDirectors === "Y" && Documents?.agreementDoc && Documents?.boardDoc) ? false : designatedDirectors === "N" ? false : permissionGrantedHRDU === "Y" ? false : true) || ((technicalExpert === "Y" && engineerName && engineerQualification && Documents?.engineerSign && Documents?.architectSign && Documents?.townPlannerSign && architectName && architectQualification && townPlannerName && townPlannerQualification) ? false : (technicalExpert === "N") ? false : true)
+                        ((data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm") ? (!Documents?.companyBalanceSheet || !Documents?.individualCertificateCA) : (data?.devDetail[0]?.addInfo?.showDevTypeFields === "Company" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Society" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Trust" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Institution") ? (!Documents?.companyBalanceSheet || !Documents?.paidUpCapital) : (data?.devDetail[0]?.addInfo?.showDevTypeFields === "Limited Liability Partnership" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Firm" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm") ? (!Documents?.netWorthOfPartners || !Documents?.netWorthOfFirm) : true) || ((permissionGrantedHRDU === "Y" && capacityDevelopColonyHdruAct.length) ? false : permissionGrantedHRDU === "N" ? false : true) || ((technicalCapacityOutsideHaryana === "Y" && technicalCapacityOutsideHaryanaDetails.authority && technicalCapacityOutsideHaryanaDetails.project && technicalCapacityOutsideHaryanaDetails.statusOfDevelopment) ? false : technicalCapacityOutsideHaryana === "N" ? false : true) || ((alreadtObtainedLic === "Y" && Documents?.agreementDocY && Documents?.boardDocX && Documents?.registeredDoc && Documents?.boardDocY && technicalCapacitySoughtFromAnyColonizer.licNo && technicalCapacitySoughtFromAnyColonizer.dateOfGrantingLic && technicalCapacitySoughtFromAnyColonizer.licValidity && technicalCapacitySoughtFromAnyColonizer.purpose) ? false : alreadtObtainedLic === "N" ? false : true) || ((designatedDirectors === "Y" && Documents?.agreementDoc && Documents?.boardDoc) ? false : designatedDirectors === "N" ? false : permissionGrantedHRDU === "Y" ? false : true) || (!technicalCapacityOutsideHaryanaDetails.authority.match(Digit.Utils.getPattern('Name'))) || ((technicalExpert === "Y" && engineerName && engineerQualification && Documents?.engineerSign && Documents?.architectSign && Documents?.townPlannerSign && architectName && architectQualification && townPlannerName && townPlannerQualification) ? false : (technicalExpert === "N") ? false : true)
                     }
                 >
                     {/* <CheckBox
@@ -1497,7 +1497,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                             earlier been granted permission to set up a colony under HDRU
                             Act, 1975: <span className="text-danger font-weight-bold">*</span>
                         </p>)}
-                        {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Company" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Society" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Trust" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Institution" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Limited Liability Partnership" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Firm" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm") && (
+                        {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Company" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Society" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Trust" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Institution" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Limited Liability Partnership" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Firm" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm" || data?.devDetail[0]?.addInfo.showDevTypeFields === "Hindu Undivided Family") && (
                         <p className="ml-1">(i) Whether the Developer/ group company has
                             earlier been granted permission to set up a colony under HDRU
                             Act, 1975: <span className="text-danger font-weight-bold">*</span>
@@ -1649,7 +1649,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                             </button>
                                             <Modal show={showCapacityDevelopColony} onHide={handleCloseCapacityDevelopColony} animation={false}>
                                                 <Modal.Header closeButton>
-                                                    <Modal.Title>Add</Modal.Title>
+                                                    <Modal.Title>Add Details</Modal.Title>
                                                 </Modal.Header>
                                                 <Modal.Body>
                                                     <form className="text1">
@@ -1659,11 +1659,13 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                 <input
                                                                     type="text"
                                                                     value={hrduModalData.licNo}
-                                                                    onChange={(e) => setHrduModalData({ ...hrduModalData, licNo: e.target.value })}
+                                                                    onChange={(e) => setHrduModalData({ ...hrduModalData, licNo: e.target.value.toUpperCase() })}
                                                                     placeholder=""
                                                                     class="employee-card-input"
                                                                     required="required"
+                                                                    maxLength={10}
                                                                 />
+                                                                {hrduModalData.licNo && hrduModalData.licNo.length > 0 && !hrduModalData.licNo.match(Digit.Utils.getPattern('OldLicenceNo')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Invalid Licence No.")}</CardLabelError>}
                                                             </Col>
                                                             <Col md={4} xxl lg="4">
                                                                 <label htmlFor="name" className="text">Date of grant of a license <span className="text-danger font-weight-bold">*</span></label>
@@ -1701,7 +1703,10 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     onChange={(e) => setShowPurposeType(e.target.value)}
                                                                     className="w-100"
                                                                     variant="standard"
-                                                                    
+                                                                    displayEmpty
+                                                                    renderValue={
+                                                                        purposeOfColony !== "" ? undefined : () => <p>Select Purpose</p>
+                                                                    }
                                                                 >
                                                                     {
                                                                         purposeOptions?.data?.map((item, index) => (
@@ -1820,7 +1825,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                         Close
                                                     </Button>
                                                     <Button
-                                                        disabled={!(hrduModalData.licNo && hrduModalData.licValidity && hrduModalData.dateOfGrantingLic && purposeOfColony && hrduModalData.technicalExpertEngaged)}
+                                                        disabled={!(hrduModalData.licNo && hrduModalData.licValidity && hrduModalData.dateOfGrantingLic && purposeOfColony && hrduModalData.technicalExpertEngaged && hrduModalData.licNo.match(Digit.Utils.getPattern('OldLicenceNo')))}
                                                         variant="primary" onClick={handleArrayValues}>
                                                         Submit
                                                     </Button>
@@ -1845,7 +1850,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                 director/partner in any other company/firm who has already
                                 obtained license(s) under act of 1975: <span className="text-danger font-weight-bold">*</span>
                             </p>)}
-                            {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Company" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Society" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Trust" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Institution" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Limited Liability Partnership" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Firm" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm") && (
+                            {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Company" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Society" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Trust" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Institution" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Limited Liability Partnership" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Firm" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm" || data?.devDetail[0]?.addInfo.showDevTypeFields === "Hindu Undivided Family") && (
                             <p>
                                 (ii) If director/partner of the proposed
                                 developer company/firm also holds designation of
@@ -1969,7 +1974,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                         <p>
                             (iii) Have you developed project in case of technical capacity of company/firm developed projects outside Haryana:- <span className="text-danger font-weight-bold">*</span>
                         </p>)}
-                        {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Company" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Society" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Trust" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Institution" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Limited Liability Partnership" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Firm" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm") && (
+                        {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Company" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Society" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Trust" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Institution" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Limited Liability Partnership" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Firm" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm" || data?.devDetail[0]?.addInfo.showDevTypeFields === "Hindu Undivided Family") && (
                         <p>
                             (iii) In case of technical capacity of company/firm developed projects outside Haryana:- <span className="text-danger font-weight-bold">*</span>
                         </p>)}
@@ -2008,7 +2013,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                             placeholder=""
                                             class="employee-card-input"
                                         />
-
+                                        {technicalCapacityOutsideHaryanaDetails.project && technicalCapacityOutsideHaryanaDetails.project.length > 0 &&!technicalCapacityOutsideHaryanaDetails.project.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid details")}</CardLabelError>}
                                     </Col>
 
                                     <Col md={4} xxl lg="4">
@@ -2021,7 +2026,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                             placeholder=""
                                             class="employee-card-input"
                                         />
-
+                                        {technicalCapacityOutsideHaryanaDetails.authority && technicalCapacityOutsideHaryanaDetails.authority.length > 0 && !technicalCapacityOutsideHaryanaDetails.authority.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid details")}</CardLabelError>}
                                     </Col>
 
                                     <Col md={4} xxl lg="4">
@@ -2034,14 +2039,14 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                             placeholder=""
                                             class="employee-card-input"
                                         />
-
+                                        {technicalCapacityOutsideHaryanaDetails.statusOfDevelopment && technicalCapacityOutsideHaryanaDetails.statusOfDevelopment.length > 0 && !technicalCapacityOutsideHaryanaDetails.statusOfDevelopment.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid details")}</CardLabelError>}
                                     </Col>
                                 </Row>
                             )}
                         </div>
 
                         <div className="hl"></div>
-                        {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Company" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Society" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Trust" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Institution" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Limited Liability Partnership" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Firm" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm") && (
+                        {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Company" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Society" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Trust" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Institution" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Limited Liability Partnership" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Firm" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm" || data?.devDetail[0]?.addInfo.showDevTypeFields === "Hindu Undivided Family") && (
                         <div>
 
                         
@@ -2238,6 +2243,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                         className="employee-card-input"
                                                         maxLength={10}
                                                     />
+                                                    {technicalCapacitySoughtFromAnyColonizer.licNo && technicalCapacitySoughtFromAnyColonizer.licNo.length > 0 && !technicalCapacitySoughtFromAnyColonizer.licNo.match(Digit.Utils.getPattern('OldLicenceNo')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Invalid Licence No.")}</CardLabelError>}
                                                 </div>
                                             </div>
 
@@ -2279,7 +2285,10 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                         onChange={(e) => setTechnicalCapacitySoughtFromAnyColonizer({ ...technicalCapacitySoughtFromAnyColonizer, purpose: e.target.value })}
                                                         className="w-100"
                                                         variant="standard"
-                                                        placeholder="Select purpose"
+                                                        displayEmpty
+                                                        renderValue={
+                                                            purpose !== "" ? undefined : () => <p>Select Purpose</p>
+                                                        }
                                                     >
                                                         {
                                                             purposeOptions?.data?.map((item, index) => (
@@ -2302,7 +2311,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                         <p>(iv) Whether any technical expert(s) engaged <span className="text-danger font-weight-bold">*</span></p>
                         )}
 
-                        {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Company" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Society" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Trust" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Institution" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Limited Liability Partnership" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Firm" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm") && (
+                        {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Company" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Society" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Trust" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Institution" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Limited Liability Partnership" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Firm" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm" || data?.devDetail[0]?.addInfo.showDevTypeFields === "Hindu Undivided Family") && (
                             <p>(v) Whether any technical expert(s) engaged <span className="text-danger font-weight-bold">*</span></p>
                         )}
 

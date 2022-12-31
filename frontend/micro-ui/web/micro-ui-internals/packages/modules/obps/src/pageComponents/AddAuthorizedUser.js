@@ -357,11 +357,11 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                   "name": "BPA BUILDER",
                   "tenantId": tenantId
               },
-              // {
-              //     "code": "BPA_ARCHITECT",
-              //     "name": "BPA ARCHITECT",
-              //     "tenantId": tenantId
-              // }
+              {
+                  "code": "BPA_DEVELOPER",
+                  "name": "BPA DEVELOPER",
+                  "tenantId": tenantId
+              }
           ],
           "tenantId": "hr",
       }
@@ -757,7 +757,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                         />
                       </Col>
                       <Col md={3} xxl lg="3">
-                        <label htmlFor="name" className="text">PAN No</label>
+                        <label htmlFor="name" className="text">PAN No <span className="text-danger font-weight-bold">*</span></label>
                         {/* <input
                                 type="text"
                                 name="name[]"
@@ -775,13 +775,13 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                           placeholder=""
                           // onChange={(e) => setAurthorizedPan(e.target.value.toUpperCase())}
                           onChange={selectPanNumber}
-                          {...{ required: true, maxlength: "10", title: t("BPA_INVALID_PAN_NO") }}
+                          {...{ required: true, maxlength: "10" }}
                         />
                         {aurthorizedPan && aurthorizedPan.length > 0 && !aurthorizedPan.match(Digit.Utils.getPattern('PAN')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px' }}>{t("BPA_INVALID_PAN_NO")}</CardLabelError>}
                         <h3 className="error-message" style={{ color: "red" }}>{PanValError}</h3>
                       </Col>
                       <Col md={3} xxl lg="3">
-                        <label htmlFor="name" className="text">Upload Board Resolution</label>
+                        <label htmlFor="name" className="text">Upload Board Resolution <span className="text-danger font-weight-bold">*</span></label>
                         <input
                           type="file"
                           name="uploadAadharPdf"
@@ -792,7 +792,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                         />
                       </Col>
                       <Col md={3} xxl lg="3">
-                        <label htmlFor="name" className="text">Upload Digital Signature PDF</label>
+                        <label htmlFor="name" className="text">Upload Digital Signature PDF <span className="text-danger font-weight-bold">*</span></label>
                         <input
                           type="file"
                           name="uploadDigitalSignaturePdf"

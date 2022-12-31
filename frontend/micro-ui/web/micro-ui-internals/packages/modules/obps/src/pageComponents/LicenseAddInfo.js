@@ -28,6 +28,7 @@ import Delete from "@mui/icons-material/Delete";
 import { getDocShareholding } from "../../../tl/src/pages/employee/ScrutinyBasic/ScrutinyDevelopment/docview.helper";
 import { MenuItem, Select } from "@mui/material";
 import { convertEpochToDate } from "../utils/index";
+import Spinner from "../components/Loader/index"
 
 const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
   let validation = {};
@@ -56,7 +57,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
   let isOpenLinkFlow = window.location.href.includes("openlink");
 
-
+  const [loader, setLoading] = useState(false);
   const getDeveloperData = async () => {
 
     try {
@@ -189,6 +190,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   const [purposeOptions, setPurposeOptions] = useState({ data: [], isLoading: true });
 
   const { data: PurposeType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
+
+  
 
   useEffect(() => {
     const purpose = PurposeType?.["common-masters"]?.Purpose?.map(function (data) {
@@ -356,9 +359,11 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     formData.append("tag", "tag-property");
     // setLoader(true);
     try {
+      setLoading(true);
       const Resp = await axios.post("/filestore/v1/files", formData, {}).then((response) => {
         return response;
       });
+      setLoading(false);
       console.log(Resp?.data?.files?.[0]?.fileStoreId, fieldName, type, index);
 
       if (type === "existingColonizer") {
@@ -384,6 +389,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       }
 
     } catch (error) {
+      setLoading(false);
       //   setLoader(false);
       console.log(error.message);
     }
@@ -656,6 +662,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
   return (
     <div>
+      {loader && <Spinner />}
       <div className={isOpenLinkFlow ? "OpenlinkContainer" : ""}>
         {/* {JSON.stringify(showDevTypeFields)}efewfewfef */}
         {isOpenLinkFlow && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
@@ -675,7 +682,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
             // isDisabled={
             //   !showDevTypeFields || (showDevTypeFields === "Individual" && (!name || !mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) || !emailId?.match(Digit.Utils.getPattern('Email')))) || (showDevTypeFields === "Others" && othersArray.length) || (showDevTypeFields === "Proprietorship Firm") || (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others" && (!cin_Number?.match(Digit.Utils.getPattern('CIN')) || !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) || !gst_Number?.match(Digit.Utils.getPattern('GSTNo')) || !((existingColonizer === "N") || (existingColonizer === "Y" && existingColonizerDetails.aggreementBtw && existingColonizerDetails.boardResolution && existingColonizerDetails.dob && existingColonizerDetails.pan && existingColonizerDetails.pan.match(Digit.Utils.getPattern('PAN')) && existingColonizerDetails.licNo && existingColonizerDetails.licDate && existingColonizerDetails.licValidity && existingColonizerDetails.licPurpose))))
             // }
-            isDisabled={(showDevTypeFields === "Individual" || showDevTypeFields === "Proprietorship Firm") ? !(name && mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) && emailId?.match(Digit.Utils.getPattern('Email'))) : (showDevTypeFields === "Others") ? (!othersArray.length) : (showDevTypeFields === "Proprietorship Firm") ? false : (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others") ? (!cin_Number?.match(Digit.Utils.getPattern('CIN')) || !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) || !gst_Number?.match(Digit.Utils.getPattern('GSTNo')) || !registeredAddress.match(Digit.Utils.getPattern('Address')) || !((existingColonizer === "N") || (existingColonizer === "Y" && existingColonizerDetails.aggreementBtw && existingColonizerDetails.boardResolution && existingColonizerDetails.dob && existingColonizerDetails.pan && existingColonizerDetails.pan.match(Digit.Utils.getPattern('PAN')) && existingColonizerDetails.licNo && existingColonizerDetails.licDate && existingColonizerDetails.licValidity && existingColonizerDetails.licPurpose))) : true}
+            isDisabled={(showDevTypeFields === "Individual" || showDevTypeFields === "Proprietorship Firm") ? !(name && mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) && emailId?.match(Digit.Utils.getPattern('Email'))) : (showDevTypeFields === "Others") ? (!othersArray.length) : (showDevTypeFields === "Proprietorship Firm") ? false : (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others") ? (!cin_Number?.match(Digit.Utils.getPattern('CIN')) || !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) || !gst_Number?.match(Digit.Utils.getPattern('GSTNo')) || !registeredAddress.match(Digit.Utils.getPattern('Address')) || !existingColonizerDetails.licNo.match(Digit.Utils.getPattern('OldLicenceNo')) || !((existingColonizer === "N") || (existingColonizer === "Y" && existingColonizerDetails.aggreementBtw && existingColonizerDetails.boardResolution && existingColonizerDetails.dob && existingColonizerDetails.pan && existingColonizerDetails.pan.match(Digit.Utils.getPattern('PAN')) && existingColonizerDetails.licNo && existingColonizerDetails.licDate && existingColonizerDetails.licValidity && existingColonizerDetails.licPurpose))) : true}
             t={t}
           >
             <div className="happy">
@@ -686,7 +693,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                     <div className="col-sm-12">
                       <div className="form-group row">
                         <div className="col-sm-4">
-                          <CardLabel class="required">{`${t("Select Developer's Type")}`}<span class="text-danger font-weight-bold mx-2">*</span></CardLabel>
+                          <label htmlFor="name">{`${t("Select Developer's Type")}`} <span className="text-danger font-weight-bold">*</span></label>
                           <Dropdown
                             labels="Select Type"
                             className="form-field"
@@ -1241,7 +1248,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
               )}
               {(showDevTypeFields && showDevTypeFields !== "Individual" && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Others") && (
                 <div className="card mb-3">
-                  <h5 className="card-title fw-bold">Shareholding Patterns</h5>
+                  <h5 className="card-title fw-bold">Shareholding Patterns <span className="text-danger font-weight-bold">*</span></h5>
                   {/* {JSON.stringify(modalValuesArray)} */}
                   <div className="card-body">
                     <div className="table-bd">
@@ -1376,11 +1383,11 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                   class="employee-card-input"
                                   {...(validation = {
                                     isRequired: true,
-                                    pattern: "^[a-zA-Z]*$",
+                                    pattern: "^[a-zA-Z ]*$",
                                     type: "text",
-                                    title: "Please Enter Name"
                                   })}
                                 />
+                                {modalNAme && modalNAme.length > 0 && !modalNAme.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter a valid Name")}</CardLabelError>}
                               </Col>
                               <Col md={3} xxl lg="4">
                                 <label htmlFor="name" className="text"> Designition <span className="text-danger font-weight-bold">*</span></label>
@@ -1392,11 +1399,11 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                   class="employee-card-input"
                                   {...(validation = {
                                     isRequired: true,
-                                    pattern: "^[a-z A-Z]*$",
+                                    pattern: "^[a-z A-Z ]*$",
                                     type: "text",
-                                    title: "Please Enter Designition"
                                   })}
                                 />
+                                {modaldesignition && modaldesignition.length > 0 && !modaldesignition.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter a valid Designition")}</CardLabelError>}
                               </Col>
 
                               <Col md={3} xxl lg="4">
@@ -1410,7 +1417,6 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                   class="employee-card-input"
                                   {...(validation = {
                                     isRequired: true,
-                                    title: "Please Enter Percentage"
                                   })}
                                 />
 
@@ -1441,7 +1447,6 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                   onChange={(e) => getDocumentData(e?.target?.files[0], "uploadPdf")}
                                   {...(validation = {
                                     isRequired: true,
-                                    title: "Please upload document"
                                   })}
                                 />
                               </Col>
@@ -1453,7 +1458,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                           <Button variant="secondary" onClick={handleCloseStakeholder}>
                             Close
                           </Button>
-                          <Button variant="primary" disabled={!modalNAme || !modaldesignition || !modalPercentage || (remainingStakeholderPercentage < modalPercentage || modalPercentage <= 0)} onClick={handleArrayValues}>
+                          <Button variant="primary" disabled={!modalNAme || !modalNAme.match(Digit.Utils.getPattern('Name')) || !modaldesignition.match(Digit.Utils.getPattern('Name')) || !modaldesignition || !modalPercentage || (remainingStakeholderPercentage < modalPercentage || modalPercentage <= 0)} onClick={handleArrayValues}>
                             Save Changes
                           </Button>
                         </Modal.Footer>
@@ -1703,16 +1708,26 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                         {" "}
                                         Agreement between the proposed developer and existing colonizer
                                       </td>
-                                      <td align="center" size="large">
-                                        <input
+                                      <td align="center" style={{textAlign:'center'}} size="large">
+                                          <label for="aggreementBtwId">
+                                            <FileUpload color="primary" for="aggreementBtwId" />
+                                          </label>
+                                          <input
+                                            id="aggreementBtwId"
+                                            type="file"
+                                            accept="application/pdf"
+                                            style={{ display: "none" }}
+                                            onChange={(e) => getDocumentData(e?.target?.files[0], "aggreementBtw", "existingColonizer")}
+                                          />
+                                        {/* <input
                                           type="file"
                                           accept="application/pdf"
                                           name="agreementDoc"
                                           onChange={(e) => getDocumentData(e?.target?.files[0], "aggreementBtw", "existingColonizer")}
                                           class="employee-card-input"
-                                        />
+                                        /> */}
                                       </td>
-                                      <td>
+                                      <td style={{textAlign:'center'}}>
                                         {existingColonizerDetails.aggreementBtw ?
                                           <button type="button" onClick={() => getDocShareholding(existingColonizerDetails.aggreementBtw)} className="btn btn-sm col-md-6">
                                             <VisibilityIcon color="info" className="icon" />
@@ -1725,16 +1740,21 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                       <td>
                                         Board resolution of authorised signatory of the existing colonizer
                                       </td>
-                                      <td align="center" size="large">
+                                      <td align="center" style={{textAlign:'center'}} size="large">
+                                        <label for="boardResolutionId">
+                                          <FileUpload color="primary" for="boardResolutionId" />
+                                        </label>
                                         <input
+                                          id="boardResolutionId"
                                           type="file"
                                           accept="application/pdf"
                                           name="boardDoc"
+                                          style={{ display: "none" }}
                                           onChange={(e) => getDocumentData(e?.target?.files[0], "boardResolution", "existingColonizer")}
                                           class="employee-card-input"
                                         />
                                       </td>
-                                      <td>
+                                      <td style={{textAlign:'center'}}>
                                         {existingColonizerDetails.boardResolution ?
                                           <button type="button" onClick={() => getDocShareholding(existingColonizerDetails.boardResolution)} className="btn btn-sm col-md-6">
                                             <VisibilityIcon color="info" className="icon" />
@@ -1832,10 +1852,11 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                 value={existingColonizerDetails.licNo}
                                 name="licNo"
                                 // onChange={SelectName}
-                                onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, licNo: e.target.value })}
+                                onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, licNo: e.target.value.toUpperCase() })}
                                 className="employee-card-input"
                                 maxLength={10}
                               />
+                              {existingColonizerDetails.licNo && existingColonizerDetails.licNo.length > 0 && !existingColonizerDetails.licNo.match(Digit.Utils.getPattern('OldLicenceNo')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Invalid Licence No.")}</CardLabelError>}
                             </div>
                           </div>
 
