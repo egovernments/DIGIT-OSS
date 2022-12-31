@@ -20,7 +20,10 @@ const CommercialPlottedForm  = (props) => {
 
   const CommercialPlotted = props.data;
   const dataIcons = props.dataForIcons;
-
+  let user = Digit.UserService.getUser();
+  const userRoles = user?.info?.roles?.map((e) => e.code) || [];
+  const hideRemarks = userRoles.some((item)=>item === "CTP_HR" || item === "CTP_HQ" || item === "DTP_HR" || item === "DTP_HQ")
+  
   const classes = useStyles();
 
   const [smShow, setSmShow] = useState(false);
@@ -205,6 +208,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.scoWidth}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
@@ -222,6 +226,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.scoArea}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
@@ -239,6 +244,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.scoSimilarShape}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
@@ -264,6 +270,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.boothPlotno}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
@@ -281,6 +288,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.boothLength}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
@@ -298,6 +306,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.boothWidth}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
@@ -315,6 +324,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.boothArea}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
@@ -332,6 +342,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.boothSimilarShape}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
@@ -369,6 +380,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.stpPlotno}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
@@ -386,6 +398,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.stpLength}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
@@ -404,6 +417,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.stpWidth}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
@@ -422,6 +436,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.stpArea}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
@@ -439,6 +454,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.stpSimilarShape}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
@@ -464,6 +480,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.wtpPlotno}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
@@ -481,6 +498,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.wtpLength}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
@@ -498,6 +516,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.wtpWidth}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
@@ -515,6 +534,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.wtpArea}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
@@ -532,6 +552,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.wtpSimilarShape}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
@@ -557,6 +578,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.ugtPlotno}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
@@ -574,6 +596,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.ugtLength}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
@@ -592,6 +615,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.ugtWidth}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
@@ -610,6 +634,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.ugtArea}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
@@ -627,6 +652,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.ugtSimilarShape}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
@@ -652,6 +678,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.milkPlotno}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
@@ -669,6 +696,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.milkLength}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
@@ -687,6 +715,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.milkWidth}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
@@ -705,6 +734,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.milkArea}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
@@ -722,6 +752,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.milkSimilarShape}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
@@ -747,6 +778,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.gssPlotno}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
@@ -764,6 +796,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.gssLength}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
@@ -782,6 +815,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.gssWidth}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
@@ -800,6 +834,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.gssArea}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
@@ -817,6 +852,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.gssSimilarShape}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
@@ -858,6 +894,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.etcDim}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
@@ -875,6 +912,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.etcArea}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
