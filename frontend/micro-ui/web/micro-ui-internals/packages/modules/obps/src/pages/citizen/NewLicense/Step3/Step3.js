@@ -21,6 +21,7 @@ import { getDocShareholding } from "../docView/docView.help";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step3";
 import FileUpload from "@mui/icons-material/FileUpload";
+import { useLocation } from "react-router-dom";
 
 const potentialOptons = [
   {
@@ -61,6 +62,7 @@ const releaseStatus = [
 ];
 
 const LandScheduleForm = (props) => {
+  const location = useLocation();
   const [purposeOptions, setPurposeOptions] = useState({ data: [], isLoading: true });
   const [getPotentialOptons, setPotentialOptions] = useState({ data: [], isLoading: true });
   const [typeOfLand, setYypeOfLand] = useState({ data: [], isLoading: true });
@@ -91,7 +93,6 @@ const LandScheduleForm = (props) => {
 
   useEffect(() => {
     const landType = LandData?.["common-masters"]?.LandType?.map(function (data) {
-      console.log("data===", data);
       return { value: data?.landId, label: data?.land };
     });
     setYypeOfLand({ data: landType, isLoading: false });
@@ -114,6 +115,7 @@ const LandScheduleForm = (props) => {
   const [fileStoreId, setFileStoreId] = useState({});
 
   const Purpose = localStorage.getItem("purpose");
+  const userInfo = Digit.UserService.getUser()?.info || {};
 
   const landScheduleFormSubmitHandler = async (data) => {
     const token = window?.localStorage?.getItem("token");
@@ -127,8 +129,8 @@ const LandScheduleForm = (props) => {
       pageName: "LandSchedule",
       action: "LANDSCHEDULE",
       applicationNumber: props?.getId,
-      createdBy: props?.userData?.id,
-      updatedBy: props?.userData?.id,
+      createdBy: userInfo?.id,
+      updatedBy: userInfo?.id,
       LicenseDetails: {
         LandSchedule: {
           ...data,
@@ -144,13 +146,14 @@ const LandScheduleForm = (props) => {
         msgId: "090909",
         requesterId: "",
         authToken: token,
-        userInfo: props?.userData,
+        userInfo: userInfo,
       },
     };
     try {
       const Resp = await axios.post("/tl-services/new/_create", postDistrict);
       setLoader(false);
-      props.Step3Continue(Resp?.data?.LicenseServiceResponseInfo?.[0]?.LicenseDetails?.[0]);
+      const useData = Resp?.data?.LicenseServiceResponseInfo?.[0]?.LicenseDetails?.[0];
+      props.Step3Continue(useData);
     } catch (error) {
       setLoader(false);
       return error.message;
@@ -158,7 +161,6 @@ const LandScheduleForm = (props) => {
   };
 
   useEffect(() => {
-    console.log("stepData?.ApplicantInfo", stepData?.LandSchedule);
     const valueData = stepData?.LandSchedule;
     if (valueData) {
       Object?.keys(valueData)?.map((item) => {
@@ -183,6 +185,7 @@ const LandScheduleForm = (props) => {
       return error.message;
     }
   };
+
   useEffect(() => {
     getSubmitDataLabel();
   }, []);
@@ -200,8 +203,6 @@ const LandScheduleForm = (props) => {
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
       // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
       setLoader(false);
-
-      console.log(Resp?.data?.files?.[0]?.fileStoreId, fieldName);
     } catch (error) {
       setLoader(false);
       return error.message;
@@ -210,7 +211,6 @@ const LandScheduleForm = (props) => {
 
   const getApplicantUserData = async (id) => {
     const token = window?.localStorage?.getItem("token");
-    console.log("here data");
     const payload = {
       apiId: "Rainmaker",
       msgId: "1669293303096|en_IN",
@@ -220,7 +220,6 @@ const LandScheduleForm = (props) => {
       const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${id}`, payload);
       const userData = Resp?.data?.LicenseDetails?.[0];
       setStepData(userData);
-      console.log("userData", userData);
     } catch (error) {
       return error;
     }

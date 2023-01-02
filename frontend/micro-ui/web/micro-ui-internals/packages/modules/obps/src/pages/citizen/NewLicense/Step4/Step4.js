@@ -17,15 +17,16 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { getDocShareholding } from "../docView/docView.help";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step4";
-import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-import FileUpload from "@mui/icons-material/FileUpload";
+import { useLocation } from "react-router-dom";
+
 const AppliedDetailForm = (props) => {
-  // console.log("DD", props);
+  const location = useLocation();
   const Purpose = localStorage.getItem("purpose");
   const [file, setFile] = useState(null);
   const [loader, setLoader] = useState(false);
-  const [modal, setmodal] = useState(false);
-  const [modal1, setmodal1] = useState(false);
+  const [stepData, setStepData] = useState(null);
+  const [fileStoreId, setFileStoreId] = useState({});
+  const userInfo = Digit.UserService.getUser()?.info || {};
   const {
     watch,
     register,
@@ -42,42 +43,24 @@ const AppliedDetailForm = (props) => {
     defaultValues: {
       dgpsDetails: [
         {
-          longitude: props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[0]?.longitude
-            ? props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[0]?.longitude
-            : "",
-          latitude: props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[0]?.latitude
-            ? props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[0]?.latitude
-            : "",
+          longitude: "",
+          latitude: "",
         },
         {
-          longitude: props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[1]?.longitude
-            ? props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[1]?.longitude
-            : "",
-          latitude: props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[1]?.latitude
-            ? props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[1]?.latitude
-            : "",
+          longitude: "",
+          latitude: "",
         },
         {
-          longitude: props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[2]?.longitude
-            ? props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[2]?.longitude
-            : "",
-          latitude: props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[2]?.latitude
-            ? props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[2]?.latitude
-            : "",
+          longitude: "",
+          latitude: "",
         },
         {
-          longitude: props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[3]?.longitude
-            ? props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[3]?.longitude
-            : "",
-          latitude: props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[3]?.latitude
-            ? props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[3]?.latitude
-            : "",
+          longitude: "",
+          latitude: "",
         },
       ],
     },
   });
-
-  const [fileStoreId, setFileStoreId] = useState({});
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -91,8 +74,8 @@ const AppliedDetailForm = (props) => {
       pageName: "DetailsofAppliedLand",
       action: "LANDDETAILS",
       applicationNumber: props.getId,
-      createdBy: props?.userData?.id,
-      updatedBy: props?.userData?.id,
+      createdBy: userInfo?.id,
+      updatedBy: userInfo?.id,
       LicenseDetails: {
         DetailsofAppliedLand: {
           dgpsDetails: data?.dgpsDetails,
@@ -286,13 +269,14 @@ const AppliedDetailForm = (props) => {
         msgId: "090909",
         requesterId: "",
         authToken: token,
-        userInfo: props?.userData,
+        userInfo: userInfo,
       },
     };
     try {
       const Resp = await axios.post("/tl-services/new/_create", postDistrict);
+      const useData = Resp?.data?.LicenseServiceResponseInfo?.[0]?.LicenseDetails?.[0];
       setLoader(false);
-      props.Step4Continue(Resp?.data?.LicenseServiceResponseInfo?.[0]?.newServiceInfoData?.[0], Resp?.data?.LicenseServiceResponseInfo?.[0]);
+      props.Step4Continue(useData, Resp?.data?.LicenseServiceResponseInfo?.[0]);
     } catch (error) {
       setLoader(false);
       return error?.message;
@@ -300,17 +284,15 @@ const AppliedDetailForm = (props) => {
   };
 
   useEffect(() => {
-    console.log("props?.getLicData?.ApplicantInfo", props?.getLicData);
-    const valueData = props?.getLicData?.DetailsofAppliedLand;
+    const valueData = stepData?.DetailsofAppliedLand;
     if (valueData) {
       Object?.keys(valueData?.DetailsAppliedLandPlot)?.map((item) => setValue(item, valueData?.DetailsAppliedLandPlot[item]));
       Object?.keys(valueData?.DetailsAppliedLandNILP)?.map((item) => setValue(item, valueData?.DetailsAppliedLandNILP[item]));
-      // const data = purposeOptions?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.purpose);
-      // const potientialData = getPotentialOptons?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.potential);
-      // setValue("purpose", { label: data?.[0]?.label, value: data?.[0]?.value });
-      // setValue("potential", { label: potientialData?.[0]?.label, value: potientialData?.[0]?.value });
+      valueData?.dgpsDetails.map((item, index) => {
+        setValue(`dgpsDetails.${index}.longitude`, item?.longitude), setValue(`dgpsDetails.${index}.latitude`, item?.latitude);
+      });
     }
-  }, [props?.getLicData]);
+  }, [stepData]);
 
   const getSubmitDataLabel = async () => {
     try {
@@ -318,7 +300,7 @@ const AppliedDetailForm = (props) => {
         return response;
       });
     } catch (error) {
-      console.log(error.message);
+      return error;
     }
   };
   useEffect(() => {
@@ -337,13 +319,35 @@ const AppliedDetailForm = (props) => {
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
       // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
-      console.log("getval======", getValues());
       setLoader(false);
     } catch (error) {
       setLoader(false);
-      console.log(error.message);
+      return error;
     }
   };
+
+  const getApplicantUserData = async (id) => {
+    const token = window?.localStorage?.getItem("token");
+    const payload = {
+      apiId: "Rainmaker",
+      msgId: "1669293303096|en_IN",
+      authToken: token,
+    };
+    try {
+      const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${id}`, payload);
+      const userData = Resp?.data?.LicenseDetails?.[0];
+      setStepData(userData);
+    } catch (error) {
+      return error;
+    }
+  };
+
+  useEffect(() => {
+    const search = location?.search;
+    const params = new URLSearchParams(search);
+    const id = params.get("id");
+    if (id) getApplicantUserData(id);
+  }, []);
 
   return (
     <div>
