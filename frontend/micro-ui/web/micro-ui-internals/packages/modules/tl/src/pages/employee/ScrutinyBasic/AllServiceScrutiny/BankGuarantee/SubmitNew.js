@@ -16,7 +16,7 @@ import { IconButton } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 
-function SubmitNew() {
+const SubmitNew = (props) => {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
   const [open2, setOpen2] = useState(false);
@@ -84,6 +84,7 @@ function SubmitNew() {
     addressForCommunication: Colors.info,
     authPerson: Colors.info,
     emailForCommunication: Colors.info,
+    lOI: Colors.info,
   });
 
   const fieldIdList = [
@@ -106,6 +107,7 @@ function SubmitNew() {
     { label: "Address for communication", key: "addressForCommunication" },
     { label: "Name of the authorized person to sign the application", key: "authPerson" },
     { label: "Email ID for communication", key: "emailForCommunication" },
+    { lablel: "Enter LOI No", key: "lOI" },
   ];
   return (
     <form onSubmit={handleSubmit(SubmitNew)}>
@@ -152,8 +154,8 @@ function SubmitNew() {
                         color: fieldIconColors.developer,
                       }}
                       onClick={() => {
-                        setOpennedModal("Licence No");
-                        setLabelValue("Licence No"),
+                        setOpennedModal("lOI");
+                        setLabelValue("Enter LOI No"),
                           setSmShow(true),
                           console.log("modal open"),
                           setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -556,6 +558,6 @@ function SubmitNew() {
       </Collapse>
     </form>
   );
-}
+};
 
 export default SubmitNew;

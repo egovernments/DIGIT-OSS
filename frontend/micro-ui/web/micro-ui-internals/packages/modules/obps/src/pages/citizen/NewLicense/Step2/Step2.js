@@ -1009,7 +1009,15 @@ const ApllicantPuropseForm = (props) => {
                             Date of registering collaboration agreement<span style={{ color: "red" }}>*</span>
                           </h2>
                         </label>
-                        <Form.Control type="date" className="form-control" required placeholder="" {...register("agreementValidFrom")} />
+                        <Form.Control
+                          type="date"
+                          value={modalData.agreementValidFrom}
+                          className="form-control"
+                          required
+                          placeholder=""
+                          {...register("agreementValidFrom")}
+                          max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
+                        />
                       </div>
                       <div className="col col-4">
                         <label>
@@ -1023,7 +1031,7 @@ const ApllicantPuropseForm = (props) => {
                           placeholder=""
                           required
                           {...register("validitydate")}
-                          min={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
+                          min={modalData?.agreementValidFrom}
                         />
                       </div>
                     </div>
@@ -1099,10 +1107,14 @@ const ApllicantPuropseForm = (props) => {
                               type="file"
                               accept="application/pdf/jpeg"
                               style={{ display: "none" }}
+                              required
                               onChange={(e) => getDocumentData(e?.target?.files[0], "registeringAuthorityDoc")}
                             />
                           </h2>
                         </label>
+                        <h3 className="error-message" style={{ color: "red" }}>
+                          {errors?.registeringAuthorityDoc && errors?.registeringAuthorityDoc?.message}
+                        </h3>
 
                         {/* <input
                           type="file"
