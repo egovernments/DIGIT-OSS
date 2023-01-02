@@ -17,7 +17,7 @@ const getAction = (flow) => {
       ];
   }
 };
-const Timeline = ({ currentStep = 1, flow = "", setCheck, changeSteps }) => {
+const Timeline = ({ currentStep = 1, flow = "", changeSteps }) => {
   const { t } = useTranslation();
   const isMobile = window.Digit.Utils.browser.isMobile();
   getAction(flow);

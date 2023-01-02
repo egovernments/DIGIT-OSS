@@ -38,7 +38,6 @@ const MyApplications = ({ view }) => {
     };
     try {
       const Resp = await axios.post("/tl-services/v1/_search", data);
-      console.log("Resp===", Resp?.data);
       setData(Resp?.data);
     } catch (error) {
       return error.message;

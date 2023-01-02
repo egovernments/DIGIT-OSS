@@ -21,6 +21,7 @@ const FeesChargesForm = (props) => {
   const [loader, setLoader] = useState(false);
   const [stepData, setStepData] = useState(null);
   const [applicantId, setApplicantId] = useState("");
+  const [getShow, setShow] = useState({ submit: false, payNow: false });
   const {
     register,
     handleSubmit,
@@ -64,7 +65,7 @@ const FeesChargesForm = (props) => {
     try {
       const Resp = await axios.post("/tl-services/new/_create", postDistrict);
       setLoader(false);
-      props.Step5Continue(Resp?.data?.LicenseServiceResponseInfo?.[0]?.newServiceInfoData?.[0]);
+      setShow({ payNow: true, submit: false });
     } catch (error) {
       setLoader(false);
       return error.message;
@@ -108,20 +109,30 @@ const FeesChargesForm = (props) => {
   }, [applicantId, stepData]);
 
   const showPdf = async () => {
+    const token = window?.localStorage?.getItem("token");
     setLoader(true);
+    const payload = {
+      requestInfo: {
+        api_id: "1",
+        action: "create",
+        authToken: token,
+      },
+    };
     try {
       const Resp = await axios
-        .get(`http://103.166.62.118:80/tl-services/new/license/report?id=${props.getId}`, {
+        .post(`/tl-services/loi/report/_create?applicationNumber=${props.getId}`, payload, {
           responseType: "blob",
         })
         .then((response) => {
+          console.log("response", response);
           setLoader(false);
           //Create a Blob from the PDF Stream
           const file = new Blob([response?.data], { type: "application/pdf" });
           //Build a URL from the file
+          console.log("file", file);
           const fileURL = URL.createObjectURL(file);
           //Open the URL on new Window
-          window.open(fileURL);
+          // window.open(fileURL);
         });
     } catch (error) {
       setLoader(false);
@@ -383,7 +394,7 @@ const FeesChargesForm = (props) => {
                   <div className="px-2">
                     <p className="text-black">The following is undertaken: </p>
                     <ul className="Undertakings">
-                      <li>I hereby declare that the details furnished above are true and correct to the best of my knowledge</li>.
+                      <li>I hereby declare that the details furnished above are true and correct to the best of my knowledge.</li>
                       <button className="btn btn-primary" onClick={() => setmodal1(true)}>
                         Read More
                       </button>
@@ -410,7 +421,20 @@ const FeesChargesForm = (props) => {
                   </Modal>
                   <div className="">
                     <div className="form-check">
-                      <input className="form-check-input" formControlName="agreeCheck" type="checkbox" value="" id="flexCheckDefault" required />
+                      <input
+                        onClick={(e) => {
+                          if (e.target.checked) {
+                            setShow({ payNow: false, submit: true });
+                            showPdf();
+                          }
+                        }}
+                        className="form-check-input"
+                        formControlName="agreeCheck"
+                        type="checkbox"
+                        value=""
+                        id="flexCheckDefault"
+                        required
+                      />
                       <label className="checkbox" for="flexCheckDefault">
                         I agree and accept the terms and conditions.
                         <span className="text-danger">
@@ -453,21 +477,24 @@ const FeesChargesForm = (props) => {
                       </div> */}
                       {/* </a> */}
                       {/* &nbsp;&nbsp; */}
-                      <button type="submit" id="btnClear" class="btn btn-primary btn-md ">
-                        Submit
-                      </button>
-                      <div class="my-2">
-                        .
-                        <button
-                          className="btn btn-primary"
-                          onClick={() => {
-                            history.push(`/digit-ui/citizen/payment/collect/TL/${applicantId}`, {});
-                            setmodal(true);
-                          }}
-                        >
-                          Pay Now
+                      {getShow?.submit && (
+                        <button type="submit" id="btnClear" class="btn btn-primary btn-md ">
+                          Submit
                         </button>
-                      </div>
+                      )}
+                      {getShow?.payNow && (
+                        <div class="my-2">
+                          <button
+                            className="btn btn-primary"
+                            onClick={() => {
+                              history.push(`/digit-ui/citizen/payment/collect/TL/${applicantId}`, {});
+                              setmodal(true);
+                            }}
+                          >
+                            Pay Now
+                          </button>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </Col>

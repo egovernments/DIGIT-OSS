@@ -225,6 +225,7 @@ const AppliedDetailForm = (props) => {
           },
           DetailsAppliedLandNILP: {
             surrenderArea: data?.surrenderArea,
+            surrender: data?.surrender,
             pocketAreaEnter: data?.pocketAreaEnter,
             pocketProposed: data?.pocketProposed,
             pocketDim: data?.pocketDim,
@@ -907,7 +908,7 @@ const AppliedDetailForm = (props) => {
                             </td>
                             <td align="right">
                               {" "}
-                              <input type="number" className="form-control" {...register("greenBeltDim ")} />
+                              <input type="number" className="form-control" {...register("greenBeltDim")} />
                             </td>
                             <td align="right">
                               {" "}
@@ -927,7 +928,7 @@ const AppliedDetailForm = (props) => {
                             </td>
                             <td align="right">
                               {" "}
-                              <input type="number" className="form-control" {...register("internalPlot ")} />
+                              <input type="number" className="form-control" {...register("internalPlot")} />
                             </td>
                             <td component="th" scope="row">
                               <input type="text" className="form-control" {...register("internalLength")} />
