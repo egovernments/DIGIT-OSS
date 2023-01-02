@@ -16,7 +16,7 @@ import { IconButton } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 
-function Extension() {
+const Extension = (props) => {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
   const [open2, setOpen2] = useState(false);
@@ -558,6 +558,6 @@ function Extension() {
       </Collapse>
     </form>
   );
-}
+};
 
 export default Extension;

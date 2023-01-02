@@ -166,9 +166,15 @@ const CommonForm = () => {
         setStep(4);
         setStepActive({ step1: true, step2: true, step3: true, step4: true, step5: false });
       }
+      if (checkStatus === "LANDDETAILS") {
+        setIsStep4(true);
+        setIsStep1(false);
+        setIsStep2(false);
+        setIsStep3(false);
+        setStep(5);
+        setStepActive({ step1: true, step2: true, step3: true, step4: true, step5: true });
+      }
     }
-    // if(checkStatus === 'LANDSCHEDULE')
-    // if(checkStatus === 'LANDDETAILS')
     // if(checkStatus === 'FEESANDCHARGES')
   }, []);
 

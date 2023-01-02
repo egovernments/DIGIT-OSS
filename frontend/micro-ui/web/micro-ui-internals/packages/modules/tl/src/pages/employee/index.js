@@ -24,9 +24,10 @@ import CompletionLic from "../employee/ScrutinyBasic/AllServiceScrutiny/Completi
 import ServicePlanService from "../employee/ScrutinyBasic/ServicePlanScrutniy/ServicePlan";
 // import electricalPlanService from "../employee/ScrutinyBasic/ElectricalPlan/ElectricalPlanScrutiny";
 import TransferLicense from "../employee/ScrutinyBasic/AllServiceScrutiny/TransferLic/TransferLicense";
-import SubmitNew from "../employee/ScrutinyBasic/AllServiceScrutiny/BankGuarantee/SubmitNew";
-import basicScrutiny from "../employee/ScrutinyBasic/AllServiceScrutiny/BankScrutiny/basicScrutiny";
-import FormBank from "./FormBankScrutniy/FormBank";
+// import SubmitNew from "../employee/ScrutinyBasic/AllServiceScrutiny/BankGuarantee/SubmitNew";
+// import basicScrutiny from "../employee/ScrutinyBasic/AllServiceScrutiny/BankScrutiny/basicScrutiny";
+// import FormBank from "../employee/ScrutinyBasic/AllServiceScrutiny/BankGuarantee/FormBankScrutniy/FormBank";
+import ScrutinyForm from "./ScrutinyBasic/AllServiceScrutiny/BankGuarantee/FormBankScrutniy/cardBank";
 import { TLContextProvider } from "../../../context";
 
 const TLBreadCrumb = ({ location }) => {
@@ -233,9 +234,10 @@ const EmployeeApp = ({ path, url, userType }) => {
             <PrivateRoute path={`${path}/CompletionLic`} component={CompletionLic} />
             <PrivateRoute path={`${path}/ServicePlanService`} component={ServicePlanService} />
             {/* <PrivateRoute path={`${path}/electricalPlanService`} component={electricalPlanService} /> */}
-            <PrivateRoute path={`${path}/SubmitNew`} component={SubmitNew} />
-            <PrivateRoute path={`${path}/basicScrutiny`} component={basicScrutiny} />
-            <PrivateRoute path={`${path}/FormBank`} component={FormBank} />
+            {/* <PrivateRoute path={`${path}/SubmitNew`} component={SubmitNew} /> */}
+            {/* <PrivateRoute path={`${path}/basicScrutiny`} component={basicScrutiny} /> */}
+            {/* <PrivateRoute path={`${path}/FormBank`} component={FormBank} /> */}
+            <PrivateRoute path={`${path}/ScrutinyForm`} component={ScrutinyForm} />
           </div>
         </React.Fragment>
       </Switch>

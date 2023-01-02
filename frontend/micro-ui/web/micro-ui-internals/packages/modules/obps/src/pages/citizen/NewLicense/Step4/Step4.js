@@ -11,21 +11,23 @@ import { Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import CalculateIcon from "@mui/icons-material/Calculate";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
+import FileUpload from "@mui/icons-material/FileUpload";
 import axios from "axios";
 import Spinner from "../../../../components/Loader";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { getDocShareholding } from "../docView/docView.help";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step4";
+import { useLocation } from "react-router-dom";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-import FileUpload from "@mui/icons-material/FileUpload";
 const AppliedDetailForm = (props) => {
-  // console.log("DD", props);
+  const location = useLocation();
   const Purpose = localStorage.getItem("purpose");
   const [file, setFile] = useState(null);
   const [loader, setLoader] = useState(false);
-  const [modal, setmodal] = useState(false);
-  const [modal1, setmodal1] = useState(false);
+  const [stepData, setStepData] = useState(null);
+  const [fileStoreId, setFileStoreId] = useState({});
+  const userInfo = Digit.UserService.getUser()?.info || {};
   const {
     watch,
     register,
@@ -42,42 +44,24 @@ const AppliedDetailForm = (props) => {
     defaultValues: {
       dgpsDetails: [
         {
-          longitude: props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[0]?.longitude
-            ? props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[0]?.longitude
-            : "",
-          latitude: props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[0]?.latitude
-            ? props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[0]?.latitude
-            : "",
+          longitude: "",
+          latitude: "",
         },
         {
-          longitude: props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[1]?.longitude
-            ? props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[1]?.longitude
-            : "",
-          latitude: props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[1]?.latitude
-            ? props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[1]?.latitude
-            : "",
+          longitude: "",
+          latitude: "",
         },
         {
-          longitude: props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[2]?.longitude
-            ? props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[2]?.longitude
-            : "",
-          latitude: props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[2]?.latitude
-            ? props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[2]?.latitude
-            : "",
+          longitude: "",
+          latitude: "",
         },
         {
-          longitude: props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[3]?.longitude
-            ? props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[3]?.longitude
-            : "",
-          latitude: props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[3]?.latitude
-            ? props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[3]?.latitude
-            : "",
+          longitude: "",
+          latitude: "",
         },
       ],
     },
   });
-
-  const [fileStoreId, setFileStoreId] = useState({});
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -91,8 +75,8 @@ const AppliedDetailForm = (props) => {
       pageName: "DetailsofAppliedLand",
       action: "LANDDETAILS",
       applicationNumber: props.getId,
-      createdBy: props?.userData?.id,
-      updatedBy: props?.userData?.id,
+      createdBy: userInfo?.id,
+      updatedBy: userInfo?.id,
       LicenseDetails: {
         DetailsofAppliedLand: {
           dgpsDetails: data?.dgpsDetails,
@@ -286,13 +270,14 @@ const AppliedDetailForm = (props) => {
         msgId: "090909",
         requesterId: "",
         authToken: token,
-        userInfo: props?.userData,
+        userInfo: userInfo,
       },
     };
     try {
       const Resp = await axios.post("/tl-services/new/_create", postDistrict);
+      const useData = Resp?.data?.LicenseServiceResponseInfo?.[0]?.LicenseDetails?.[0];
       setLoader(false);
-      props.Step4Continue(Resp?.data?.LicenseServiceResponseInfo?.[0]?.newServiceInfoData?.[0], Resp?.data?.LicenseServiceResponseInfo?.[0]);
+      props.Step4Continue(useData, Resp?.data?.LicenseServiceResponseInfo?.[0]);
     } catch (error) {
       setLoader(false);
       return error?.message;
@@ -300,17 +285,15 @@ const AppliedDetailForm = (props) => {
   };
 
   useEffect(() => {
-    console.log("props?.getLicData?.ApplicantInfo", props?.getLicData);
-    const valueData = props?.getLicData?.DetailsofAppliedLand;
+    const valueData = stepData?.DetailsofAppliedLand;
     if (valueData) {
       Object?.keys(valueData?.DetailsAppliedLandPlot)?.map((item) => setValue(item, valueData?.DetailsAppliedLandPlot[item]));
       Object?.keys(valueData?.DetailsAppliedLandNILP)?.map((item) => setValue(item, valueData?.DetailsAppliedLandNILP[item]));
-      // const data = purposeOptions?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.purpose);
-      // const potientialData = getPotentialOptons?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.potential);
-      // setValue("purpose", { label: data?.[0]?.label, value: data?.[0]?.value });
-      // setValue("potential", { label: potientialData?.[0]?.label, value: potientialData?.[0]?.value });
+      valueData?.dgpsDetails.map((item, index) => {
+        setValue(`dgpsDetails.${index}.longitude`, item?.longitude), setValue(`dgpsDetails.${index}.latitude`, item?.latitude);
+      });
     }
-  }, [props?.getLicData]);
+  }, [stepData]);
 
   const getSubmitDataLabel = async () => {
     try {
@@ -318,7 +301,7 @@ const AppliedDetailForm = (props) => {
         return response;
       });
     } catch (error) {
-      console.log(error.message);
+      return error;
     }
   };
   useEffect(() => {
@@ -337,14 +320,37 @@ const AppliedDetailForm = (props) => {
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
       // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
-      console.log("getval======", getValues());
       setLoader(false);
     } catch (error) {
       setLoader(false);
-      console.log(error.message);
+      return error;
     }
   };
 
+  const getApplicantUserData = async (id) => {
+    const token = window?.localStorage?.getItem("token");
+    const payload = {
+      apiId: "Rainmaker",
+      msgId: "1669293303096|en_IN",
+      authToken: token,
+    };
+    try {
+      const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${id}`, payload);
+      const userData = Resp?.data?.LicenseDetails?.[0];
+      setStepData(userData);
+    } catch (error) {
+      return error;
+    }
+  };
+
+  useEffect(() => {
+    const search = location?.search;
+    const params = new URLSearchParams(search);
+    const id = params.get("id");
+    if (id) getApplicantUserData(id);
+  }, []);
+  const [modal, setmodal] = useState(false);
+  const [modal1, setmodal1] = useState(false);
   return (
     <div>
       {loader && <Spinner />}
@@ -377,12 +383,13 @@ const AppliedDetailForm = (props) => {
                         <ModalBody style={{ fontSize: 20 }}>
                           <h2>
                             {" "}
-                            A. Applicant level Information: DGPS-based survey to be executed at the applicant level to collect coordinate points of
-                            the colony boundary. • DGPS Coordinate points to be collected for each divergent/edge of the colony boundary. • DGPS
-                            Coordinate Points to be entered by the applicant in e-License application in Web Form. B. Web Form Fields at applicant
-                            level: Input Fields to be added in the web-form for entering the DGPS points. • Input Fields for entering number of DGPS
-                            Points • Input Fields for each DGPS Point: o Add Point 1 as Point 1: (X: Longitude, Y: Latitude) o Add Point 2 as Point 2:
-                            (X: Longitude, Y: Latitude) o Add Point XX as Point XX: (X: Longitude, Y: Latitude)
+                            <b> A.</b> Applicant level Information: DGPS-based survey to be executed at the applicant level to collect coordinate
+                            points of the colony boundary. <br></br>• DGPS Coordinate points to be collected for each divergent/edge of the colony
+                            boundary.<br></br> • DGPS Coordinate Points to be entered by the applicant in e-License application in Web Form.<br></br>
+                            <b> B.</b> Web Form Fields at applicant level: Input Fields to be added in the web-form for entering the DGPS points.
+                            <br></br> • Input Fields for entering number of DGPS Points <br></br>• Input Fields for each DGPS Point: <br></br>o Add
+                            Point 1 as Point 1: (X: Longitude, Y: Latitude) <br></br>o Add Point 2 as Point 2: (X: Longitude, Y: Latitude) <br></br>o
+                            Add Point XX as Point XX: (X: Longitude, Y: Latitude)
                           </h2>
                         </ModalBody>
                         <ModalFooter toggle={() => setmodal(!modal1)}></ModalFooter>
@@ -397,11 +404,26 @@ const AppliedDetailForm = (props) => {
                         <div className="row ">
                           <div className="col col-4">
                             <label>X:Longitude</label>
-                            <input type="number" className="form-control" {...register(`dgpsDetails.${index}.longitude`)} />
+                            <input
+                              type="number"
+                              className="form-control"
+                              {...register(`dgpsDetails.${index}.longitude`)}
+                              required
+                              minLength={432100.0}
+                              maxLength={751900.0}
+                              pattern="([0-9/^\d+(\.\d{1,2,3})?$/]+$"
+                            />
                           </div>
                           <div className="col col-4">
                             <label>Y:Latitude</label>
-                            <input type="number" className="form-control" {...register(`dgpsDetails.${index}.latitude`)} />
+                            <input
+                              type="number"
+                              className="form-control"
+                              {...register(`dgpsDetails.${index}.latitude`)}
+                              required
+                              minLength={3054400.0}
+                              maxLength={3425500.0}
+                            />
                           </div>
                         </div>
                         {index > 3 && (
@@ -1184,11 +1206,18 @@ const AppliedDetailForm = (props) => {
                         data-toggle="tooltip"
                         data-placement="top"
                         title="Whether you hosted the existing approved layout plan & in-principle approved layout on the website of your company/organization Yes/No if yes upload"
-                      ></h6>
-                      Hosted approved layout plan.<span style={{ color: "red" }}>*</span>
+                      >
+                        Hosted layout plan.<span style={{ color: "red" }}>*</span>
+                      </h6>
                       <label>
                         <FileUpload color="primary" />
-                        <input type="file" style={{ display: "none" }} onChange={(e) => getDocumentData(e?.target?.files[0], "hostedLayoutPlan")} />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "hostedLayoutPlan")}
+                          accept="application/pdf/jpeg"
+                          required
+                        />
                       </label>
                       {fileStoreId?.hostedLayoutPlan ? (
                         <a onClick={() => getDocShareholding(fileStoreId?.hostedLayoutPlan)} className="btn btn-sm ">
@@ -1216,11 +1245,18 @@ const AppliedDetailForm = (props) => {
                         data-toggle="tooltip"
                         data-placement="top"
                         title="Consent of RERA if there is any change in the phasing ."
-                      ></h6>
-                      Consent of RERA. <span style={{ color: "red" }}>*</span>
+                      >
+                        Consent of RERA. <span style={{ color: "red" }}>*</span>
+                      </h6>
                       <label>
                         <FileUpload color="primary" />
-                        <input type="file" style={{ display: "none" }} onChange={(e) => getDocumentData(e?.target?.files[0], "consentRera")} />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "consentRera")}
+                          accept="application/pdf/jpeg"
+                          required
+                        />
                       </label>
                       {fileStoreId?.consentRera ? (
                         <a onClick={() => getDocShareholding(fileStoreId?.consentRera)} className="btn btn-sm ">
@@ -1243,11 +1279,18 @@ const AppliedDetailForm = (props) => {
                       </h3>
                     </div>
                     <div className="col col-3">
-                      <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document"></h6>
-                      Sectoral Plan.<span style={{ color: "red" }}>*</span>
+                      <h6 style={{ display: "flex" }}>
+                        Sectoral Plan.<span style={{ color: "red" }}>*</span>
+                      </h6>
                       <label>
                         <FileUpload color="primary" />
-                        <input type="file" style={{ display: "none" }} onChange={(e) => getDocumentData(e?.target?.files[0], "sectoralPlan")} />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "sectoralPlan")}
+                          accept="application/pdf/jpeg"
+                          required
+                        />
                       </label>
                       {fileStoreId?.sectoralPlan ? (
                         <a onClick={() => getDocShareholding(fileStoreId?.sectoralPlan)} className="btn btn-sm ">
@@ -1275,14 +1318,17 @@ const AppliedDetailForm = (props) => {
                         data-toggle="tooltip"
                         data-placement="top"
                         title="Copy of detailed specifications and designs for electric supply including street lighting"
-                      ></h6>
-                      Designs for electric supply.<span style={{ color: "red" }}>*</span>
+                      >
+                        Designs for electric supply.<span style={{ color: "red" }}>*</span>
+                      </h6>
                       <label>
                         <FileUpload color="primary" />
                         <input
                           type="file"
                           style={{ display: "none" }}
                           onChange={(e) => getDocumentData(e?.target?.files[0], "detailedElectricSupply")}
+                          accept="application/pdf/jpeg"
+                          required
                         />
                       </label>
                       {fileStoreId?.detailedElectricSupply ? (
@@ -1314,11 +1360,18 @@ const AppliedDetailForm = (props) => {
                         data-toggle="tooltip"
                         data-placement="top"
                         title="Copy of plans showing cross sections of proposed roads indicating, in particular, the width of proposed carriage ways cycle tracks and footpaths etc"
-                      ></h6>
-                      Plans showing cross sections.<span style={{ color: "red" }}>*</span>
+                      >
+                        Plans showing cross sections.<span style={{ color: "red" }}>*</span>
+                      </h6>
                       <label>
                         <FileUpload color="primary" />
-                        <input type="file" style={{ display: "none" }} onChange={(e) => getDocumentData(e?.target?.files[0], "planCrossSection")} />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "planCrossSection")}
+                          accept="application/pdf/jpeg"
+                          required
+                        />
                       </label>
                       {fileStoreId?.planCrossSection ? (
                         <a onClick={() => getDocShareholding(fileStoreId?.planCrossSection)} className="btn btn-sm ">
@@ -1347,13 +1400,16 @@ const AppliedDetailForm = (props) => {
                         data-toggle="tooltip"
                         data-placement="top"
                         title="Copy of plans indicating, in addition, the position of sewers, stormwater channels, water supply and any other public health services."
-                      ></h6>
-                      Plans indicating position of public.<span style={{ color: "red" }}>*</span>
+                      >
+                        Plans indicating position of public.<span style={{ color: "red" }}>*</span>
+                      </h6>
                       <label>
                         <FileUpload color="primary" />
                         <input
                           type="file"
                           style={{ display: "none" }}
+                          accept="application/pdf/jpeg"
+                          required
                           onChange={(e) => getDocumentData(e?.target?.files[0], "publicHealthServices")}
                         />
                       </label>
@@ -1383,11 +1439,18 @@ const AppliedDetailForm = (props) => {
                         data-toggle="tooltip"
                         data-placement="top"
                         title="Copy of detailed specifications and designs of road works and estimated costs thereof"
-                      ></h6>
-                      Specifications and designs.<span style={{ color: "red" }}>*</span>
+                      >
+                        Specifications and designs.<span style={{ color: "red" }}>*</span>
+                      </h6>
                       <label>
                         <FileUpload color="primary" />
-                        <input type="file" style={{ display: "none" }} onChange={(e) => getDocumentData(e?.target?.files[0], "designRoad")} />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "designRoad")}
+                          accept="application/pdf/jpeg"
+                          required
+                        />
                       </label>
                       {fileStoreId?.designRoad ? (
                         <a onClick={() => getDocShareholding(fileStoreId?.designRoad)} className="btn btn-sm ">
@@ -1415,11 +1478,18 @@ const AppliedDetailForm = (props) => {
                         data-toggle="tooltip"
                         data-placement="top"
                         title="Copy of detailed specifications and designs of sewerage, storm, water and water supply works and estimated costs thereof"
-                      ></h6>
-                      Designs of sewerage and storm. <span style={{ color: "red" }}>*</span>
+                      >
+                        Designs of sewerage and storm. <span style={{ color: "red" }}>*</span>
+                      </h6>
                       <label>
                         <FileUpload color="primary" />
-                        <input type="file" style={{ display: "none" }} onChange={(e) => getDocumentData(e?.target?.files[0], "designSewarage")} />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "designSewarage")}
+                          accept="application/pdf/jpeg"
+                          required
+                        />
                       </label>
                       {fileStoreId?.designSewarage ? (
                         <a onClick={() => getDocShareholding(fileStoreId?.designSewarage)} className="btn btn-sm ">
@@ -1450,11 +1520,18 @@ const AppliedDetailForm = (props) => {
                         data-toggle="tooltip"
                         data-placement="top"
                         title="Copy of detailed specifications and designs for disposal and treatment of storm and sullage water and estimated costs of works."
-                      ></h6>
-                      Disposal treatment.<span style={{ color: "red" }}>*</span>
+                      >
+                        Disposal treatment.<span style={{ color: "red" }}>*</span>
+                      </h6>
                       <label>
                         <FileUpload color="primary" />
-                        <input type="file" style={{ display: "none" }} onChange={(e) => getDocumentData(e?.target?.files[0], "designDisposal")} />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "designDisposal")}
+                          accept="application/pdf/jpeg"
+                          required
+                        />
                       </label>
                       {fileStoreId?.designDisposal ? (
                         <a onClick={() => getDocShareholding(fileStoreId?.designDisposal)} className="btn btn-sm ">
@@ -1483,11 +1560,18 @@ const AppliedDetailForm = (props) => {
                         data-toggle="tooltip"
                         data-placement="top"
                         title="Whether intimated each of the allottees through registered post regarding the proposed changes in the layout plan: - If yes selected upload"
-                      ></h6>
-                      Undertaking that no change. <span style={{ color: "red" }}>*</span>
+                      >
+                        Undertaking that no change. <span style={{ color: "red" }}>*</span>
+                      </h6>
                       <label>
                         <FileUpload color="primary" />
-                        <input type="file" style={{ display: "none" }} onChange={(e) => getDocumentData(e?.target?.files[0], "undertakingChange")} />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "undertakingChange")}
+                          accept="application/pdf/jpeg"
+                          required
+                        />
                       </label>
                       {fileStoreId?.undertakingChange ? (
                         <a onClick={() => getDocShareholding(fileStoreId?.undertakingChange)} className="btn btn-sm ">
@@ -1516,11 +1600,18 @@ const AppliedDetailForm = (props) => {
                         data-toggle="tooltip"
                         data-placement="top"
                         title="Explanatory note regarding the salient feature of the proposed colony."
-                      ></h6>
-                      Salient feature of the colony. <span style={{ color: "red" }}>*</span>
+                      >
+                        Salient feature of the colony. <span style={{ color: "red" }}>*</span>
+                      </h6>
                       <label>
                         <FileUpload color="primary" />
-                        <input type="file" style={{ display: "none" }} onChange={(e) => getDocumentData(e?.target?.files[0], "proposedColony")} />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "proposedColony")}
+                          accept="application/pdf/jpeg"
+                          required
+                        />
                       </label>
                       {fileStoreId?.proposedColony ? (
                         <a onClick={() => getDocShareholding(fileStoreId?.proposedColony)} className="btn btn-sm ">
@@ -1544,11 +1635,18 @@ const AppliedDetailForm = (props) => {
                     </div>
 
                     <div className="col col-3">
-                      <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document"></h6>
-                      Report any objection. <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;&nbsp;
+                      <h6 style={{ display: "flex" }}>
+                        Report any objection. <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;&nbsp;
+                      </h6>{" "}
                       <label>
                         <FileUpload color="primary" />
-                        <input type="file" style={{ display: "none" }} onChange={(e) => getDocumentData(e?.target?.files[0], "reportObjection")} />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "reportObjection")}
+                          accept="application/pdf/jpeg"
+                          required
+                        />
                       </label>
                       {fileStoreId?.reportObjection ? (
                         <a onClick={() => getDocShareholding(fileStoreId?.reportObjection)} className="btn btn-sm ">
@@ -1579,11 +1677,18 @@ const AppliedDetailForm = (props) => {
                         data-toggle="tooltip"
                         data-placement="top"
                         title="Undertaking that no change has been made in the phasing "
-                      ></h6>
-                      Undertaking.<span style={{ color: "red" }}>*</span>
+                      >
+                        Undertaking.<span style={{ color: "red" }}>*</span>
+                      </h6>{" "}
                       <label>
                         <FileUpload color="primary" />
-                        <input type="file" style={{ display: "none" }} onChange={(e) => getDocumentData(e?.target?.files[0], "undertaking")} />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "undertaking")}
+                          accept="application/pdf/jpeg"
+                          required
+                        />
                       </label>
                       {fileStoreId?.undertaking ? (
                         <a onClick={() => getDocShareholding(fileStoreId?.undertaking)} className="btn btn-sm ">
@@ -1605,7 +1710,7 @@ const AppliedDetailForm = (props) => {
                         {errors?.undertaking && errors?.undertaking?.message}
                       </h3>
                     </div>
-                    <div className="col col-3">
+                    <div className="col col-9">
                       {Purpose === "RPL" && <LayoutPlan watch={watch} register={register} />}
                       {Purpose === "IPL" && <LayoutPlan watch={watch} register={register} />}
                       {Purpose === "IPA" && <LayoutPlan watch={watch} register={register} />}

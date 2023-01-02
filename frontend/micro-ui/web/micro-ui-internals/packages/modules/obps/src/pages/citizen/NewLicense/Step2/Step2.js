@@ -5,7 +5,7 @@ import { useForm, Controller } from "react-hook-form";
 import FileUpload from "@mui/icons-material/FileUpload";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { Modal, ModalHeader, ModalBody, ModalFooter, CloseButton } from "reactstrap";
+import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import axios from "axios";
 import { yupResolver } from "@hookform/resolvers/yup";
 import WorkingTable from "../../../../components/Table";
@@ -16,6 +16,7 @@ import ReactMultiSelect from "../../../../../../../react-components/src/atoms/Re
 import Spinner from "../../../../components/Loader";
 import { getDocShareholding } from "../docView/docView.help";
 import { convertEpochToDate } from "../../../../../../tl/src/utils";
+import { useLocation } from "react-router-dom";
 
 const ApllicantPuropseForm = (props) => {
   const datapost = {
@@ -154,7 +155,6 @@ const ApllicantPuropseForm = (props) => {
           <EditIcon
             style={{ cursor: "pointer" }}
             onClick={() => {
-              console.log("data", data);
               setSpecificTableData(data);
               setmodal(true);
               setEdit(true);
@@ -174,7 +174,8 @@ const ApllicantPuropseForm = (props) => {
       ),
     },
   ];
-
+  const location = useLocation();
+  const userInfo = Digit.UserService.getUser()?.info || {};
   const [district, setDistrict] = useState("");
   const [modalData, setModalData] = useState([]);
   const [specificTableData, setSpecificTableData] = useState(null);
@@ -221,7 +222,6 @@ const ApllicantPuropseForm = (props) => {
   };
 
   useEffect(() => {
-    console.log("specificTableData", specificTableData);
     if (specificTableData) {
       setValue("hadbastNo", specificTableData?.hadbastNo);
       setValue("khewats", specificTableData?.khewats);
@@ -369,9 +369,7 @@ const ApllicantPuropseForm = (props) => {
   }, []);
 
   const ApplicantPurposeModalData = (modaldata) => {
-    console.log("specificTableData", specificTableData?.rowid);
     const test = modalData?.filter((item) => item?.rowid === specificTableData?.rowid);
-    console.log("test", test);
     modaldata["tehsil"] = modaldata?.tehsil?.value;
     modaldata["revenueEstate"] = modaldata?.revenueEstate?.value;
     modaldata["rectangleNo"] = modaldata?.rectangleNo?.value;
@@ -448,8 +446,8 @@ const ApllicantPuropseForm = (props) => {
         pageName: "ApplicantPurpose",
         action: "PURPOSE",
         applicationNumber: applicantId,
-        createdBy: props?.userData?.id,
-        updatedBy: props?.userData?.id,
+        createdBy: userInfo?.id,
+        updatedBy: userInfo?.id,
         LicenseDetails: {
           ApplicantPurpose: {
             ...data,
@@ -466,7 +464,7 @@ const ApllicantPuropseForm = (props) => {
           msgId: "090909",
           requesterId: "",
           authToken: token,
-          userInfo: props?.userData,
+          userInfo: userInfo,
         },
       };
       setLoader(true);
@@ -474,7 +472,6 @@ const ApllicantPuropseForm = (props) => {
         const Resp = await axios.post("/tl-services/new/_create", postDistrict);
         setLoader(false);
         const useData = Resp?.data?.LicenseServiceResponseInfo?.[0]?.LicenseDetails?.[0];
-        console.log(useData);
         props.Step2Continue(useData);
       } catch (error) {
         setLoader(false);
@@ -527,10 +524,7 @@ const ApllicantPuropseForm = (props) => {
 
   useEffect(() => {
     delay = setTimeout(() => {
-      if (getKhewats) {
-        console.log("here", getKhewats);
-        getLandOwnerStateData(getKhewats);
-      }
+      if (getKhewats) getLandOwnerStateData(getKhewats);
     }, 500);
     return () => clearTimeout(delay);
   }, [getKhewats]);
@@ -544,7 +538,6 @@ const ApllicantPuropseForm = (props) => {
 
   const getApplicantUserData = async (id) => {
     const token = window?.localStorage?.getItem("token");
-    console.log("here data");
     const payload = {
       apiId: "Rainmaker",
       msgId: "1669293303096|en_IN",
@@ -554,7 +547,6 @@ const ApllicantPuropseForm = (props) => {
       const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${id}`, payload);
       const userData = Resp?.data?.LicenseDetails[0]?.ApplicantPurpose;
       setStepData(userData);
-      console.log("userData", userData);
     } catch (error) {
       return error;
     }
@@ -1017,7 +1009,15 @@ const ApllicantPuropseForm = (props) => {
                             Date of registering collaboration agreement<span style={{ color: "red" }}>*</span>
                           </h2>
                         </label>
-                        <Form.Control type="date" className="form-control" required placeholder="" {...register("agreementValidFrom")} />
+                        <Form.Control
+                          type="date"
+                          value={modalData.agreementValidFrom}
+                          className="form-control"
+                          required
+                          placeholder=""
+                          {...register("agreementValidFrom")}
+                          max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
+                        />
                       </div>
                       <div className="col col-4">
                         <label>
@@ -1031,7 +1031,7 @@ const ApllicantPuropseForm = (props) => {
                           placeholder=""
                           required
                           {...register("validitydate")}
-                          min={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
+                          min={modalData?.agreementValidFrom}
                         />
                       </div>
                     </div>
@@ -1107,10 +1107,14 @@ const ApllicantPuropseForm = (props) => {
                               type="file"
                               accept="application/pdf/jpeg"
                               style={{ display: "none" }}
+                              required
                               onChange={(e) => getDocumentData(e?.target?.files[0], "registeringAuthorityDoc")}
                             />
                           </h2>
                         </label>
+                        <h3 className="error-message" style={{ color: "red" }}>
+                          {errors?.registeringAuthorityDoc && errors?.registeringAuthorityDoc?.message}
+                        </h3>
 
                         {/* <input
                           type="file"
