@@ -34,7 +34,7 @@ const Developerinfo = (props) => {
   let user = Digit.UserService.getUser();
   const userRoles = user?.info?.roles?.map((e) => e.code) || [];
   const hideRemarks = userRoles.some((item)=>item === "CTP_HR" || item === "CTP_HQ" || item === "DTP_HR" || item === "DTP_HQ")
-
+  const hideRemarksPatwari = userRoles.some((item)=>item ==="Patwari_HQ")
 
   const [vacant, setVacant] = useState("");
   const [construction, setConstruction] = useState("");
@@ -671,6 +671,7 @@ const Developerinfo = (props) => {
                     <ReportProblemIcon
                       style={{
                         display: hideRemarks?"none":"block",
+                        display: hideRemarksPatwari?"none":"block",
                         color: fieldIconColors.licenceApplied
                       }}
                       onClick={() => {
@@ -710,6 +711,7 @@ const Developerinfo = (props) => {
                         <ReportProblemIcon
                           style={{
                             display: hideRemarks?"none":"block",
+                            display: hideRemarksPatwari?"none":"block",
                             color: fieldIconColors.licenceNo
                           }}
                           onClick={() => {
@@ -760,6 +762,7 @@ const Developerinfo = (props) => {
                         <ReportProblemIcon
                           style={{
                             display: hideRemarks?"none":"block",
+                            display: hideRemarksPatwari?"none":"block",
                             color: fieldIconColors.potentialZone
                           }}
                           onClick={() => {
@@ -782,6 +785,7 @@ const Developerinfo = (props) => {
                         <ReportProblemIcon
                           style={{
                             display: hideRemarks?"none":"block",
+                            display: hideRemarksPatwari?"none":"block",
                             color: fieldIconColors.siteLocationPurpose
                           }}
                           onClick={() => {
@@ -904,6 +908,7 @@ const Developerinfo = (props) => {
                         <ReportProblemIcon
                           style={{
                             display: hideRemarks?"none":"block",
+                            display: hideRemarksPatwari?"none":"block",
                             color: fieldIconColors.approachRoadWidth
                           }}
                           onClick={() => {
@@ -925,6 +930,7 @@ const Developerinfo = (props) => {
                         <ReportProblemIcon
                           style={{
                             display: hideRemarks?"none":"block",
+                            display: hideRemarksPatwari?"none":"block",
                             color: fieldIconColors.specifyOthers
                           }}
                           onClick={() => {
@@ -967,6 +973,7 @@ const Developerinfo = (props) => {
                         <ReportProblemIcon
                           style={{
                             display: hideRemarks?"none":"block",
+                            display: hideRemarksPatwari?"none":"block",
                             color: fieldIconColors.thirdPartyRightCreated
                           }}
                           onClick={() => {
@@ -1045,6 +1052,7 @@ const Developerinfo = (props) => {
                   <ReportProblemIcon
                     style={{
                       display: hideRemarks?"none":"block",
+                       display: hideRemarksPatwari?"none":"block",
                       color: fieldIconColors.migrationPolicy
                     }}
                     onClick={() => {

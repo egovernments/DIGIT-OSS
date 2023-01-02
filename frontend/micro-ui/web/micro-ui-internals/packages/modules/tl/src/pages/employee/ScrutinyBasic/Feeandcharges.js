@@ -165,13 +165,13 @@ const Feeandcharges = (props) => {
                         <tr>
                           <th>Purpose</th>
                           <td>
-                            <input type="text" className="form-control" disabled placeholder={feeAndChargesData?.pupose}/>
+                            <input type="text" className="form-control" disabled placeholder={feeAndChargesData?.purpose}/>
                           </td>
                         </tr>
                         <tr>
                           <th>Dev Plan</th>
                           <td>
-                            <input type="text" className="form-control" disabled placeholder={feeAndChargesData?.devPlan}/>
+                            <input type="text" className="form-control" disabled placeholder={feeAndChargesData?.potential}/>
                           </td>
                         </tr>
                         <tr>

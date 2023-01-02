@@ -27,6 +27,7 @@ const Genarelinfo = (props) => {
   let user = Digit.UserService.getUser();
   const userRoles = user?.info?.roles?.map((e) => e.code) || [];
   const hideRemarks = userRoles.some((item)=>item === "CTP_HR" || item === "CTP_HQ" || item === "DTP_HR" || item === "DTP_HQ")
+  const hideRemarksPatwari = userRoles.some((item)=>item ==="Patwari_HQ")
 
   const genarelinfo = props.genarelinfo;
   const dataIcons = props.dataForIcons;
@@ -389,9 +390,11 @@ const Genarelinfo = (props) => {
                   </Form.Control>
                   {/* {JSON.stringify(userRoles)}
                     {JSON.stringify(hideRemarks)} */}
+                    {/* display: hideRemarks?"none":"block", */}
                   <ReportProblemIcon
                     style={{
                       display: hideRemarks?"none":"block",
+                      display: hideRemarksPatwari?"none":"block",
                       color: fieldIconColors.purpose
                     }}
                     onClick={() => {
@@ -449,6 +452,7 @@ const Genarelinfo = (props) => {
                   <ReportProblemIcon
                     style={{
                       display: hideRemarks?"none":"block",
+                      display: hideRemarksPatwari?"none":"block",
                       color: fieldIconColors.potential
                     }}
                     onClick={() => {
@@ -484,6 +488,7 @@ const Genarelinfo = (props) => {
                     <ReportProblemIcon
                       style={{
                         display: hideRemarks?"none":"block",
+                        display: hideRemarksPatwari?"none":"block",
                         color: fieldIconColors.district
                       }}
                       onClick={() => {
@@ -518,6 +523,7 @@ const Genarelinfo = (props) => {
                     <ReportProblemIcon
                       style={{
                         display: hideRemarks?"none":"block",
+                        display: hideRemarksPatwari?"none":"block",
                         color: fieldIconColors.state
                       }}
                       onClick={() => {
@@ -632,6 +638,7 @@ const Genarelinfo = (props) => {
                       <ReportProblemIcon
                         style={{
                           display: hideRemarks?"none":"block",
+                          display: hideRemarksPatwari?"none":"block",
                           color: fieldIconColors.tehsil
                         }}
                         onClick={() => {
@@ -662,6 +669,7 @@ const Genarelinfo = (props) => {
                       <ReportProblemIcon
                         style={{
                           display: hideRemarks?"none":"block",
+                           display: hideRemarksPatwari?"none":"block",
                           color: fieldIconColors.hadbastNo
                         }}
                         onClick={() => {
@@ -978,7 +986,7 @@ const Genarelinfo = (props) => {
                       <input type="text" className="form-control" placeholder={item?.rectaNo} disabled />
                     </td>
                     <td class="text-center">
-                      <input type="text" className="form-control" placeholder={item?.landOwner} disabled />
+                      <input type="text" className="form-control" title={item?.landOwner} placeholder={item?.landOwner} disabled />
                     </td>
                     <td class="text-center">
                       <input type="text" className="form-control" placeholder={item?.consolidationType} disabled />
