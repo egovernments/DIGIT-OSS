@@ -51,7 +51,7 @@ const getPattern = type => {
     case "CSR":
       return /^[L|U]{1}\d{5}[A-Z]{2}\d{4}[A-Z]{3}\d{6}$/i;
     case "LLP":
-      return /^[L|U]{1}\d{5}[A-Z]{2}\d{4}[A-Z]{3}\d{6}$/i;
+      return /^LLP[0-9]{6}$/;
     case "DIN":
       return /^[1-9][0-9]{7}$/i;
     case "GSTNo":
