@@ -963,16 +963,7 @@ const LicenseDetailsScrutiny = (props) => {
                           <div className="col col-4">
                             <div >
                               <label htmlFor="licValidity">Validity</label>
-                              {/* <input
-                                type="date"
-                                value={existingColonizerDetails.licValidity}
-                                name="licValidity"
-                               
-                                onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, licValidity: e.target.value })}
-                                className="employee-card-input"
-                             
-                              /> */}
-                              <div className={classes.fieldContainer}>
+                             <div className={classes.fieldContainer}>
                               <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
                                placeholder={addInfo?.existingColonizerData?.licValidity} 
                                disabled></Form.Control>
@@ -996,19 +987,1343 @@ const LicenseDetailsScrutiny = (props) => {
                           <div className="col col-4">
                             <div >
                               <label >Purpose</label>
-                              {/* <Select
-                                onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, licPurpose: e.target.value })}
-                                value={existingColonizerDetails.licPurpose}
-                                className="w-100"
-                                variant="standard"
-                              >
-                                {
-                                  purposeOptions?.data.map((item, index) => (
-                                    <MenuItem value={item.value} >{item?.label}</MenuItem>
-                                  ))
-                                }
-                              </Select> */}
+                      <div className={classes.fieldContainer}>
+                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+                               placeholder={addInfo?.existingColonizerData?.licPurpose} 
+                               disabled></Form.Control>
+                               &nbsp;&nbsp;
+                                     <ReportProblemIcon
+              style={{
+                display: hideRemarks?"none":"block",
+                color:fieldIconColors.existingColonizerDoc}}
+              onClick={() => {
+                  setOpennedModal("Agreement between the proposed developer and existing colonizer")
+                  setLabelValue("Agreement between the proposed developer and existing colonizer"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+            </div>
+
+                            </div>
+                          </div>
+
+
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  
+                  </Card>
+                </div>
+              }
+                {addInfo?.showDevTypeFields === "Trust" &&
+                <div>
+                  <Card style={{ margin: 5 }}>
+                    <h5>Developer Details </h5>
+                    <Row>
+                      <Col md={4} xxl lg="4">
+                        <div>
+                          <Form.Label>
+                            {/* <b>individual Land owner</b> */}
+                            <h5>CSR Number &nbsp;</h5>
+                          </Form.Label>
+                          <span style={{ color: "red" }}>*</span>
+                        </div>
+
+                        <div style={{ display: "flex" }}>
+                          <Form.Control className={classes.formControl}
+                            placeholder={addInfo !== null ? addInfo?.csr_Number : null}
+                            disabled ></Form.Control>
+                          &nbsp;&nbsp;
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks?"none":"block",
+                              color: fieldIconColors.cinNo
+                            }}
+                            onClick={() => {
+                              setOpennedModal("cinNo")
+                              setLabelValue("CSR Number"),
+                                setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(addInfo !== null ? addInfo?.csr_Number : null);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </Col>
+                      <Col md={4} xxl lg="4">
+                        <div>
+                          <Form.Label>
+                            {/* <b>individual Land owner</b> */}
+                            <h5 className={classes.formLabel}>Trust Name  &nbsp;</h5>
+                          </Form.Label>
+                          <span style={{ color: "red" }}>*</span>
+                        </div>
+
+                        <div style={{ display: "flex" }}>
+                          <Form.Control className={classes.formControl}
+                            placeholder={addInfo !== null ? addInfo?.companyName : null}
+                            disabled></Form.Control>
+                          &nbsp;&nbsp;
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks?"none":"block",
+                              color: fieldIconColors.companyName
+                            }}
+                            onClick={() => {
+                              setOpennedModal("companyName")
+                              setLabelValue("Trust Name "),
+                                setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(addInfo !== null ? addInfo?.companyName : null);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </Col>
+                      <Col md={4} xxl lg="4">
+                        <div>
+                          <Form.Label>
+                            {/* <b>individual Land owner</b> */}
+                            <h5 className={classes.formLabel}>Date of Incorporation &nbsp;</h5>
+                          </Form.Label>
+                          <span style={{ color: "red" }}>*</span>
+                        </div>
+
+                        <div style={{ display: "flex" }}>
+                          <Form.Control className={classes.formControl}
+                            placeholder={addInfo !== null ? addInfo?.incorporationDate : null}
+                            disabled ></Form.Control>
+                          &nbsp;&nbsp;
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks?"none":"block",
+                              color: fieldIconColors.dateOfIncorporation
+                            }}
+                            onClick={() => {
+                              setOpennedModal("dateOfIncorporation")
+                              setLabelValue("Date of Incorporation"),
+                                setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(addInfo !== null ? addInfo?.incorporationDate : null);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </Col>
+                      <Col md={4} xxl lg="4">
+                        <div>
+                          <Form.Label>
+                            {/* <b>individual Land owner</b> */}
+                            <h5 className={classes.formLabel}>Registered Address &nbsp;</h5>
+                          </Form.Label>
+                          <span style={{ color: "red" }}>*</span>
+                        </div>
+
+                        <div style={{ display: "flex" }}>
+                          <Form.Control className={classes.formControl}
+                            placeholder={addInfo !== null ? addInfo?.registeredAddress : null}
+                            disabled ></Form.Control>
+                          &nbsp;&nbsp;
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks?"none":"block",
+                              color: fieldIconColors.regAddress
+                            }}
+                            onClick={() => {
+                              setOpennedModal("regAddress")
+                              setLabelValue("Registered Address"),
+                                setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(addInfo !== null ? addInfo?.registeredAddress : null);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </Col>
+                      <Col md={4} xxl lg="4">
+                        <div>
+                          <Form.Label>
+                            {/* <b>individual Land owner</b> */}
+                            <h5 className={classes.formLabel}>Email &nbsp;</h5>
+                          </Form.Label>
+                          <span style={{ color: "red" }}>*</span>
+                        </div>
+
+                        <div style={{ display: "flex" }}>
+                          <Form.Control className={classes.formControl}
+                            placeholder={addInfo !== null ? addInfo?.email : null}
+                            disabled ></Form.Control>
+                          &nbsp;&nbsp;
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks?"none":"block",
+                              color: fieldIconColors.email
+                            }}
+                            onClick={() => {
+                              setOpennedModal("email")
+                              setLabelValue("Email"),
+                                setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(addInfo !== null ? addInfo?.email : null);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </Col>
+                      <Col md={4} xxl lg="4">
+                        <div>
+                          <Form.Label>
+                            {/* <b>individual Land owner</b> */}
+                            <h5 className={classes.formLabel}>Mobile No. &nbsp;</h5>
+                          </Form.Label>
+                          <span style={{ color: "red" }}>*</span>
+                        </div>
+
+                        <div style={{ display: "flex" }}>
+                          <Form.Control className={classes.formControl}
+                            placeholder={addInfo !== null ? addInfo?.registeredContactNo : null}
+                            disabled></Form.Control>
+                          &nbsp;&nbsp;
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks?"none":"block",
+                              color: fieldIconColors.mobileNo
+                            }}
+                            onClick={() => {
+                              setOpennedModal("mobileNo")
+                              setLabelValue("Mobile No."),
+                                setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(addInfo !== null ? addInfo?.registeredContactNo : null);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </Col>
+                      <Col md={4} xxl lg="4">
+                        <div>
+                          <Form.Label>
+                            {/* <b>individual Land owner</b> */}
+                            <h5 className={classes.formLabel}>GST No. &nbsp;</h5>
+                          </Form.Label>
+                          <span style={{ color: "red" }}>*</span>
+                        </div>
+
+                        <div style={{ display: "flex" }}>
+                          <Form.Control className={classes.formControl}
+                            placeholder={addInfo !== null ? addInfo?.gst_Number : null}
+                            disabled ></Form.Control>
+                          &nbsp;&nbsp;
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks?"none":"block",
+                              color: fieldIconColors.gstNo
+                            }}
+                            onClick={() => {
+                              setOpennedModal("gstNo")
+                              setLabelValue("GST No."),
+                                setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(addInfo !== null ? addInfo?.gst_Number : null);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </Col>
+                    </Row>
+                  </Card>
+
+
+
+                  <Card style={{ margin: 5 }}>
+                  <h5 className="card-title fw-bold">Shareholding Patterns</h5>
+                    <div className="table-bd">
+                      <table className="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th>Sr. No</th>
+                            <th>Name</th>
+                            <th>Designition</th>
+                            <th>Percentage</th>
+                            <th>View PDF</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {
+                            addInfo?.shareHoldingPatterens?.map((item, index) => (
+
+                              <tr>
+                                <td>{item?.serialNumber || index + 1}</td>
+                                <td>
+                                  <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} placeholder={item?.name} disabled></Form.Control>
+                                </td>
+                                <td>
+                                  <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} placeholder={item?.designition} disabled></Form.Control>
+                                </td>
+                                <td>
+                                  <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} placeholder={item?.percentage} disabled></Form.Control>
+                                </td>
+                                <td>
+                                  <div className="row">
+                                    {/* <button className="btn btn-sm col-md-6" onClick={()=>getDocShareholding(item?.uploadPdf)} > */}
+                                    <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}>
+                                      <Visibility color="info" className="icon" /></IconButton>
+                                      </div>
+                                    {/* </button> */}
+                                    {/* <button className="btn btn-sm col-md-6" onClick={() => window.open(item?.uploadPdf)} >
+                                      <FileDownload color="primary" /> */}
+                                      <div className="btn btn-sm col-md-6">
+                                      <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}>
+                                <FileDownload color="primary" className="mx-1" />
+                        </IconButton>
+                        </div>
+                                    {/* </button> */}
+                                  </div>
+                                </td>
+                              </tr>
+                            ))
+                          }
+                        </tbody>
+                      </table>
+                    </div>
+                  </Card>
+                  {/* {showDevTypeFields === "02" && (
+                  <div className="card mb-3">
+                    <h5 className="card-title fw-bold">Directors Information</h5>
+                    <div className="card-body"> */}
+                    <Card style={{ margin:5}}>
+                    <h5 className="card-title fw-bold">Directors Information</h5>
+               
+                  <div className="table-bd">
+                    <table className="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>Sr. No</th>
+                          <th>DIN Number</th>
+                          <th>Name</th>
+                          <th>Contact Number</th>
+                          <th>View PDF</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {
+                          addInfo?.DirectorsInformation?.map((item, index) => (
+
+                            <tr
+                            >
+                              <td>{index + 1}</td>
+                              <td>
+                                <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} placeholder={item?.din} disabled></Form.Control>
+                              </td>
+                              <td>
+                                <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} placeholder={item?.name} disabled></Form.Control>
+                              </td>
+                              <td>
+                                <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} placeholder={item?.contactNumber} disabled></Form.Control>
+                              </td>
+                              <td>
+                                <div className="row">
+                                  {/* <button className="btn btn-sm col-md-6" onClick={()=>getDocShareholding(item?.uploadPdf)}>
+                                    <Visibility color="info" className="icon" />
+                                  </button> */}
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}>
+                                      <Visibility color="info" className="icon" /></IconButton>
+                                  {/* <button className="btn btn-sm col-md-6" onClick={() => window.open(item?.uploadPdf)} >
+                                    <FileDownload color="primary" />
+                                  </button> */}
+                                  </div>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}>
+                                <FileDownload color="primary" className="mx-1" />
+                        </IconButton>
+                        </div>
+                                </div>
+                              </td>
+                            </tr>
+                          ))
+                        }
+                        {/* );
+                            })} */}
+                      </tbody>
+                    </table>
+                  </div>
+                  </Card>
+                 
+                  <Card style={{ margin: 5 }}>
+                  <p className="ml-1">
+                    In case the Partner/director of the applicant firm/company is common with any existing colonizer who has been granted a license under the 1975 act Yes/No.
+
+                  </p>
+                            <div>
+                  <div className="form-group ml-2">
+                    <input
+                      type="radio"
+                      value="Y"
+                      id="existingColonizer"
+                      className="mx-2 mt-1"
+                      checked={addInfo?.existingColonizer === "Y" ? true : false}
+                      // onChange={(e) => setExistingColonizer(e.target.value)}
+                      name="existingColonizer"
+                    />
+                    <label for="Yes">Yes</label>
+
+                    <input
+                      type="radio"
+                      value="N"
+                      id="existingColonizerN"
+                      className="mx-2 mt-1"
+                      checked={addInfo?.existingColonizer === "N" ? true : false}
+                      // onChange={(e) => setExistingColonizer(e.target.value)}
+                      name="existingColonizer"
+                    />
+                    <label for="No">No</label>
+                    </div>
+
+                    {addInfo?.existingColonizer === "Y"  && (
+                      <div>
+                        <div className="row ">
+                          <div className="form-group row">
+                            <div className="col-sm-12">
+                              <Col xs="12" md="12" sm="12">
+                                <Table className="table table-bordered" size="sm">
+                                  <thead>
+                                    <tr>
+                                      <th>S.No.</th>
+                                      <th>Document Name </th>
+                                      {/* <th> Upload Documents</th> */}
+                                      <th> Annexure</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr>
+                                      <td> 1 &nbsp;&nbsp;</td>
+                                      <td>
+                                        {" "}
+                                        Agreement between the proposed developer and existing colonizer
+                                      </td>
+                                      <td align="center" size="large">
+                                        {/* <input
+                                          type="file"
+                                          accept="application/pdf"
+                                          name="agreementDoc"
+                                          onChange={(e) => getDocumentData(e?.target?.files[0], "aggreementBtw", "existingColonizer")}
+                                          class="employee-card-input"
+                                        /> */}
+                                          <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(addInfo?.existingColonizerData?.aggreementBtw)}>
+                                      <Visibility color="info" className="icon" />
+                                      </IconButton>
+                                      </div>
+                                   
+                                      <div className="btn btn-sm col-md-4">
+                                      {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
+                                <FileDownload color="primary" className="mx-1" />
+                        {/* </IconButton> */}
+                        </div>
+                        <div className="btn btn-sm col-md-4">
+                  <ReportProblemIcon
+              style={{
+                  display: hideRemarks?"none":"block",
+                color:fieldIconColors.existingColonizerDoc}}
+              onClick={() => {
+                  setOpennedModal("Agreement between the proposed developer and existing colonizer")
+                  setLabelValue("Agreement between the proposed developer and existing colonizer"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+            </div>
+                                      </td>
+                                      {/* <td>
+                                 
+                                        <div className="btn btn-sm col-md-6">
+                                          <button type="button" 
+                                       
+                                          className="btn btn-sm col-md-6">
+                                            <Visibility color="info" className="icon" />
+                                          </button> : <p></p>
+                                          </div>
+                                       
+                                      </td> */}
+                                    </tr>
+                                    <tr>
+                                      <td> 2&nbsp;&nbsp; </td>
+                                      <td>
+                                        Board resolution of authorised signatory of the existing colonizer
+                                      </td>
+                                      <td align="center" size="large">
+                                        {/* <input
+                                          type="file"
+                                          accept="application/pdf"
+                                          name="boardDoc"
+                                          onChange={(e) => getDocumentData(e?.target?.files[0], "boardResolution", "existingColonizer")}
+                                          class="employee-card-input"
+                                        /> */}
+                                          <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(addInfo?.existingColonizerData?.boardResolution)}>
+                                      <Visibility color="info" className="icon" />
+                                      </IconButton>
+                                      </div>
+                                   
+                                      <div className="btn btn-sm col-md-4">
+                                      {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
+                                <FileDownload color="primary" className="mx-1" />
+                        {/* </IconButton> */}
+                        </div>
+                        <div className="btn btn-sm col-md-4">
+                        <ReportProblemIcon
+              style={{
+                display: hideRemarks?"none":"block",
+                color:fieldIconColors.existingColonizerDoc}}
+              onClick={() => {
+                  setOpennedModal("Agreement between the proposed developer and existing colonizer")
+                  setLabelValue("Agreement between the proposed developer and existing colonizer"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+            </div>
+                                      </td>
+                                      
+                                    </tr>
+                                  </tbody>
+                                </Table>
+                              </Col>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="row mx-2">
+
+
+                          <div className="col col-4">
+                            <div >
+                              <label htmlFor="dob">DOB</label>
+                              {/* <input
+                                type="date"
+                                value={existingColonizerDetails.dob}
+                                name="dob"
+                               
+                                onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, dob: e.target.value })}
+                                className="employee-card-input"
+                              /> */}
                               <div className={classes.fieldContainer}>
+
+                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+                               placeholder={addInfo?.existingColonizerData?.dob} 
+                               disabled></Form.Control>
+                               &nbsp;&nbsp;
+                                     <ReportProblemIcon
+              style={{
+                display: hideRemarks?"none":"block",
+                color:fieldIconColors.existingColonizerDoc}}
+              onClick={() => {
+                  setOpennedModal("Agreement between the proposed developer and existing colonizer")
+                  setLabelValue("Agreement between the proposed developer and existing colonizer"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+            </div>
+                            </div>
+                          </div>
+
+                          <div className="col col-4">
+                            <div >
+                              <label htmlFor="pan">PAN Number</label>
+                              {/* <input
+                                type="pan"
+                                value={existingColonizerDetails.pan}
+                                name="dob"
+                               
+                                onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, pan: e.target.value })}
+                                className="employee-card-input"
+                                maxLength={10}
+                              /> */}
+                              <div className={classes.fieldContainer}>
+                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} 
+                              placeholder={addInfo?.existingColonizerData?.pan} 
+                              disabled></Form.Control>
+                              &nbsp;&nbsp;
+                                    <ReportProblemIcon
+              style={{
+                display: hideRemarks?"none":"block",
+                color:fieldIconColors.existingColonizerDoc}}
+              onClick={() => {
+                  setOpennedModal("Agreement between the proposed developer and existing colonizer")
+                  setLabelValue("Agreement between the proposed developer and existing colonizer"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+            </div>
+                            </div>
+                          </div>
+
+                          <div className="col col-4">
+                            <div >
+                              <label htmlFor="licNo">License No.</label>
+                              {/* <input
+                                type="text"
+                                value={existingColonizerDetails.licNo}
+                                name="licNo"
+                                
+                                onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, licNo: e.target.value })}
+                                className="employee-card-input"
+                                maxLength={10}
+                              /> */}
+                              <div className={classes.fieldContainer}>
+                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+                               placeholder={addInfo?.existingColonizerData?.licNo} 
+                               disabled></Form.Control>
+                               &nbsp;&nbsp;
+                                     <ReportProblemIcon
+              style={{
+                display: hideRemarks?"none":"block",
+                color:fieldIconColors.existingColonizerDoc}}
+              onClick={() => {
+                  setOpennedModal("Agreement between the proposed developer and existing colonizer")
+                  setLabelValue("Agreement between the proposed developer and existing colonizer"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+            </div>
+                            </div>
+                          </div>
+
+                          <div className="col col-4">
+                            <div >
+                              <label htmlFor="licDate">Date</label>
+                              {/* <input
+                                type="date"
+                                value={existingColonizerDetails.licDate}
+                                name="licDate"
+                               
+                                onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, licDate: e.target.value })}
+                                className="employee-card-input"
+                                maxLength={10}
+                              /> */}
+                              <div className={classes.fieldContainer}>
+                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+                               placeholder={addInfo?.existingColonizerData?.licDate}
+                                disabled></Form.Control>
+                                &nbsp;&nbsp;
+                                      <ReportProblemIcon
+              style={{
+                display: hideRemarks?"none":"block",
+                color:fieldIconColors.existingColonizerDoc}}
+              onClick={() => {
+                  setOpennedModal("Agreement between the proposed developer and existing colonizer")
+                  setLabelValue("Agreement between the proposed developer and existing colonizer"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+            </div>
+                            </div>
+                          </div>
+
+                          <div className="col col-4">
+                            <div >
+                              <label htmlFor="licValidity">Validity</label>
+                             <div className={classes.fieldContainer}>
+                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+                               placeholder={addInfo?.existingColonizerData?.licValidity} 
+                               disabled></Form.Control>
+                               &nbsp;&nbsp;
+                                     <ReportProblemIcon
+              style={{
+                display: hideRemarks?"none":"block",
+                color:fieldIconColors.existingColonizerDoc}}
+              onClick={() => {
+                  setOpennedModal("Agreement between the proposed developer and existing colonizer")
+                  setLabelValue("Agreement between the proposed developer and existing colonizer"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+            </div>
+                            </div>
+                          </div>
+
+                          <div className="col col-4">
+                            <div >
+                              <label >Purpose</label>
+                      <div className={classes.fieldContainer}>
+                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+                               placeholder={addInfo?.existingColonizerData?.licPurpose} 
+                               disabled></Form.Control>
+                               &nbsp;&nbsp;
+                                     <ReportProblemIcon
+              style={{
+                display: hideRemarks?"none":"block",
+                color:fieldIconColors.existingColonizerDoc}}
+              onClick={() => {
+                  setOpennedModal("Agreement between the proposed developer and existing colonizer")
+                  setLabelValue("Agreement between the proposed developer and existing colonizer"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+            </div>
+
+                            </div>
+                          </div>
+
+
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  
+                  </Card>
+                </div>
+              }
+                {addInfo?.showDevTypeFields === "Hindu Undivided Family" &&
+                <div>
+                  <Card style={{ margin: 5 }}>
+                    <h5>Developer Details </h5>
+                    <Row>
+                      {/* <Col md={4} xxl lg="4">
+                        <div>
+                          <Form.Label>
+                        
+                            <h5>CSR Number &nbsp;</h5>
+                          </Form.Label>
+                          <span style={{ color: "red" }}>*</span>
+                        </div>
+
+                        <div style={{ display: "flex" }}>
+                          <Form.Control className={classes.formControl}
+                            placeholder={addInfo !== null ? addInfo?.csr_Number : null}
+                            disabled ></Form.Control>
+                          &nbsp;&nbsp;
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks?"none":"block",
+                              color: fieldIconColors.cinNo
+                            }}
+                            onClick={() => {
+                              setOpennedModal("cinNo")
+                              setLabelValue("CSR Number"),
+                                setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(addInfo !== null ? addInfo?.csr_Number : null);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </Col> */}
+                      <Col md={4} xxl lg="4">
+                        <div>
+                          <Form.Label>
+                            {/* <b>individual Land owner</b> */}
+                            <h5 className={classes.formLabel}>Company Name  &nbsp;</h5>
+                          </Form.Label>
+                          <span style={{ color: "red" }}>*</span>
+                        </div>
+
+                        <div style={{ display: "flex" }}>
+                          <Form.Control className={classes.formControl}
+                            placeholder={addInfo !== null ? addInfo?.companyName : null}
+                            disabled></Form.Control>
+                          &nbsp;&nbsp;
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks?"none":"block",
+                              color: fieldIconColors.companyName
+                            }}
+                            onClick={() => {
+                              setOpennedModal("companyName")
+                              setLabelValue("Trust Name "),
+                                setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(addInfo !== null ? addInfo?.companyName : null);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </Col>
+                      <Col md={4} xxl lg="4">
+                        <div>
+                          <Form.Label>
+                            {/* <b>individual Land owner</b> */}
+                            <h5 className={classes.formLabel}>Date of Incorporation &nbsp;</h5>
+                          </Form.Label>
+                          <span style={{ color: "red" }}>*</span>
+                        </div>
+
+                        <div style={{ display: "flex" }}>
+                          <Form.Control className={classes.formControl}
+                            placeholder={addInfo !== null ? addInfo?.incorporationDate : null}
+                            disabled ></Form.Control>
+                          &nbsp;&nbsp;
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks?"none":"block",
+                              color: fieldIconColors.dateOfIncorporation
+                            }}
+                            onClick={() => {
+                              setOpennedModal("dateOfIncorporation")
+                              setLabelValue("Date of Incorporation"),
+                                setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(addInfo !== null ? addInfo?.incorporationDate : null);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </Col>
+                      <Col md={4} xxl lg="4">
+                        <div>
+                          <Form.Label>
+                            {/* <b>individual Land owner</b> */}
+                            <h5 className={classes.formLabel}>Registered Address &nbsp;</h5>
+                          </Form.Label>
+                          <span style={{ color: "red" }}>*</span>
+                        </div>
+
+                        <div style={{ display: "flex" }}>
+                          <Form.Control className={classes.formControl}
+                            placeholder={addInfo !== null ? addInfo?.registeredAddress : null}
+                            disabled ></Form.Control>
+                          &nbsp;&nbsp;
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks?"none":"block",
+                              color: fieldIconColors.regAddress
+                            }}
+                            onClick={() => {
+                              setOpennedModal("regAddress")
+                              setLabelValue("Registered Address"),
+                                setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(addInfo !== null ? addInfo?.registeredAddress : null);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </Col>
+                      <Col md={4} xxl lg="4">
+                        <div>
+                          <Form.Label>
+                            {/* <b>individual Land owner</b> */}
+                            <h5 className={classes.formLabel}>Email &nbsp;</h5>
+                          </Form.Label>
+                          <span style={{ color: "red" }}>*</span>
+                        </div>
+
+                        <div style={{ display: "flex" }}>
+                          <Form.Control className={classes.formControl}
+                            placeholder={addInfo !== null ? addInfo?.email : null}
+                            disabled ></Form.Control>
+                          &nbsp;&nbsp;
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks?"none":"block",
+                              color: fieldIconColors.email
+                            }}
+                            onClick={() => {
+                              setOpennedModal("email")
+                              setLabelValue("Email"),
+                                setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(addInfo !== null ? addInfo?.email : null);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </Col>
+                      <Col md={4} xxl lg="4">
+                        <div>
+                          <Form.Label>
+                            {/* <b>individual Land owner</b> */}
+                            <h5 className={classes.formLabel}>Mobile No. &nbsp;</h5>
+                          </Form.Label>
+                          <span style={{ color: "red" }}>*</span>
+                        </div>
+
+                        <div style={{ display: "flex" }}>
+                          <Form.Control className={classes.formControl}
+                            placeholder={addInfo !== null ? addInfo?.registeredContactNo : null}
+                            disabled></Form.Control>
+                          &nbsp;&nbsp;
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks?"none":"block",
+                              color: fieldIconColors.mobileNo
+                            }}
+                            onClick={() => {
+                              setOpennedModal("mobileNo")
+                              setLabelValue("Mobile No."),
+                                setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(addInfo !== null ? addInfo?.registeredContactNo : null);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </Col>
+                      <Col md={4} xxl lg="4">
+                        <div>
+                          <Form.Label>
+                            {/* <b>individual Land owner</b> */}
+                            <h5 className={classes.formLabel}>GST No. &nbsp;</h5>
+                          </Form.Label>
+                          <span style={{ color: "red" }}>*</span>
+                        </div>
+
+                        <div style={{ display: "flex" }}>
+                          <Form.Control className={classes.formControl}
+                            placeholder={addInfo !== null ? addInfo?.gst_Number : null}
+                            disabled ></Form.Control>
+                          &nbsp;&nbsp;
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks?"none":"block",
+                              color: fieldIconColors.gstNo
+                            }}
+                            onClick={() => {
+                              setOpennedModal("gstNo")
+                              setLabelValue("GST No."),
+                                setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(addInfo !== null ? addInfo?.gst_Number : null);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </Col>
+                    </Row>
+                  </Card>
+
+
+
+                  <Card style={{ margin: 5 }}>
+                  <h5 className="card-title fw-bold">Shareholding Patterns</h5>
+                    <div className="table-bd">
+                      <table className="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th>Sr. No</th>
+                            <th>Name</th>
+                            <th>Designition</th>
+                            <th>Percentage</th>
+                            <th>View PDF</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {
+                            addInfo?.shareHoldingPatterens?.map((item, index) => (
+
+                              <tr>
+                                <td>{item?.serialNumber || index + 1}</td>
+                                <td>
+                                  <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} placeholder={item?.name} disabled></Form.Control>
+                                </td>
+                                <td>
+                                  <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} placeholder={item?.designition} disabled></Form.Control>
+                                </td>
+                                <td>
+                                  <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} placeholder={item?.percentage} disabled></Form.Control>
+                                </td>
+                                <td>
+                                  <div className="row">
+                                    {/* <button className="btn btn-sm col-md-6" onClick={()=>getDocShareholding(item?.uploadPdf)} > */}
+                                    <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}>
+                                      <Visibility color="info" className="icon" /></IconButton>
+                                      </div>
+                                    {/* </button> */}
+                                    {/* <button className="btn btn-sm col-md-6" onClick={() => window.open(item?.uploadPdf)} >
+                                      <FileDownload color="primary" /> */}
+                                      <div className="btn btn-sm col-md-6">
+                                      <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}>
+                                <FileDownload color="primary" className="mx-1" />
+                        </IconButton>
+                        </div>
+                                    {/* </button> */}
+                                  </div>
+                                </td>
+                              </tr>
+                            ))
+                          }
+                        </tbody>
+                      </table>
+                    </div>
+                  </Card>
+                  {/* {showDevTypeFields === "02" && (
+                  <div className="card mb-3">
+                    <h5 className="card-title fw-bold">Directors Information</h5>
+                    <div className="card-body"> */}
+                    <Card style={{ margin:5}}>
+                    <h5 className="card-title fw-bold">Directors Information</h5>
+               
+                  <div className="table-bd">
+                    <table className="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>Sr. No</th>
+                          <th>DIN Number</th>
+                          <th>Name</th>
+                          <th>Contact Number</th>
+                          <th>View PDF</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {
+                          addInfo?.DirectorsInformation?.map((item, index) => (
+
+                            <tr
+                            >
+                              <td>{index + 1}</td>
+                              <td>
+                                <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} placeholder={item?.din} disabled></Form.Control>
+                              </td>
+                              <td>
+                                <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} placeholder={item?.name} disabled></Form.Control>
+                              </td>
+                              <td>
+                                <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} placeholder={item?.contactNumber} disabled></Form.Control>
+                              </td>
+                              <td>
+                                <div className="row">
+                                  {/* <button className="btn btn-sm col-md-6" onClick={()=>getDocShareholding(item?.uploadPdf)}>
+                                    <Visibility color="info" className="icon" />
+                                  </button> */}
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}>
+                                      <Visibility color="info" className="icon" /></IconButton>
+                                  {/* <button className="btn btn-sm col-md-6" onClick={() => window.open(item?.uploadPdf)} >
+                                    <FileDownload color="primary" />
+                                  </button> */}
+                                  </div>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}>
+                                <FileDownload color="primary" className="mx-1" />
+                        </IconButton>
+                        </div>
+                                </div>
+                              </td>
+                            </tr>
+                          ))
+                        }
+                        {/* );
+                            })} */}
+                      </tbody>
+                    </table>
+                  </div>
+                  </Card>
+                 
+                  <Card style={{ margin: 5 }}>
+                  <p className="ml-1">
+                    In case the Partner/director of the applicant firm/company is common with any existing colonizer who has been granted a license under the 1975 act Yes/No.
+
+                  </p>
+                            <div>
+                  <div className="form-group ml-2">
+                    <input
+                      type="radio"
+                      value="Y"
+                      id="existingColonizer"
+                      className="mx-2 mt-1"
+                      checked={addInfo?.existingColonizer === "Y" ? true : false}
+                      // onChange={(e) => setExistingColonizer(e.target.value)}
+                      name="existingColonizer"
+                    />
+                    <label for="Yes">Yes</label>
+
+                    <input
+                      type="radio"
+                      value="N"
+                      id="existingColonizerN"
+                      className="mx-2 mt-1"
+                      checked={addInfo?.existingColonizer === "N" ? true : false}
+                      // onChange={(e) => setExistingColonizer(e.target.value)}
+                      name="existingColonizer"
+                    />
+                    <label for="No">No</label>
+                    </div>
+
+                    {addInfo?.existingColonizer === "Y"  && (
+                      <div>
+                        <div className="row ">
+                          <div className="form-group row">
+                            <div className="col-sm-12">
+                              <Col xs="12" md="12" sm="12">
+                                <Table className="table table-bordered" size="sm">
+                                  <thead>
+                                    <tr>
+                                      <th>S.No.</th>
+                                      <th>Document Name </th>
+                                      {/* <th> Upload Documents</th> */}
+                                      <th> Annexure</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr>
+                                      <td> 1 &nbsp;&nbsp;</td>
+                                      <td>
+                                        {" "}
+                                        Agreement between the proposed developer and existing colonizer
+                                      </td>
+                                      <td align="center" size="large">
+                                        {/* <input
+                                          type="file"
+                                          accept="application/pdf"
+                                          name="agreementDoc"
+                                          onChange={(e) => getDocumentData(e?.target?.files[0], "aggreementBtw", "existingColonizer")}
+                                          class="employee-card-input"
+                                        /> */}
+                                          <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(addInfo?.existingColonizerData?.aggreementBtw)}>
+                                      <Visibility color="info" className="icon" />
+                                      </IconButton>
+                                      </div>
+                                   
+                                      <div className="btn btn-sm col-md-4">
+                                      {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
+                                <FileDownload color="primary" className="mx-1" />
+                        {/* </IconButton> */}
+                        </div>
+                        <div className="btn btn-sm col-md-4">
+                  <ReportProblemIcon
+              style={{
+                  display: hideRemarks?"none":"block",
+                color:fieldIconColors.existingColonizerDoc}}
+              onClick={() => {
+                  setOpennedModal("Agreement between the proposed developer and existing colonizer")
+                  setLabelValue("Agreement between the proposed developer and existing colonizer"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+            </div>
+                                      </td>
+                                      {/* <td>
+                                 
+                                        <div className="btn btn-sm col-md-6">
+                                          <button type="button" 
+                                       
+                                          className="btn btn-sm col-md-6">
+                                            <Visibility color="info" className="icon" />
+                                          </button> : <p></p>
+                                          </div>
+                                       
+                                      </td> */}
+                                    </tr>
+                                    <tr>
+                                      <td> 2&nbsp;&nbsp; </td>
+                                      <td>
+                                        Board resolution of authorised signatory of the existing colonizer
+                                      </td>
+                                      <td align="center" size="large">
+                                        {/* <input
+                                          type="file"
+                                          accept="application/pdf"
+                                          name="boardDoc"
+                                          onChange={(e) => getDocumentData(e?.target?.files[0], "boardResolution", "existingColonizer")}
+                                          class="employee-card-input"
+                                        /> */}
+                                          <div className="btn btn-sm col-md-4">
+                                    <IconButton onClick={()=>getDocShareholding(addInfo?.existingColonizerData?.boardResolution)}>
+                                      <Visibility color="info" className="icon" />
+                                      </IconButton>
+                                      </div>
+                                   
+                                      <div className="btn btn-sm col-md-4">
+                                      {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
+                                <FileDownload color="primary" className="mx-1" />
+                        {/* </IconButton> */}
+                        </div>
+                        <div className="btn btn-sm col-md-4">
+                        <ReportProblemIcon
+              style={{
+                display: hideRemarks?"none":"block",
+                color:fieldIconColors.existingColonizerDoc}}
+              onClick={() => {
+                  setOpennedModal("Agreement between the proposed developer and existing colonizer")
+                  setLabelValue("Agreement between the proposed developer and existing colonizer"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+            </div>
+                                      </td>
+                                      
+                                    </tr>
+                                  </tbody>
+                                </Table>
+                              </Col>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="row mx-2">
+
+
+                          <div className="col col-4">
+                            <div >
+                              <label htmlFor="dob">DOB</label>
+                              {/* <input
+                                type="date"
+                                value={existingColonizerDetails.dob}
+                                name="dob"
+                               
+                                onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, dob: e.target.value })}
+                                className="employee-card-input"
+                              /> */}
+                              <div className={classes.fieldContainer}>
+
+                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+                               placeholder={addInfo?.existingColonizerData?.dob} 
+                               disabled></Form.Control>
+                               &nbsp;&nbsp;
+                                     <ReportProblemIcon
+              style={{
+                display: hideRemarks?"none":"block",
+                color:fieldIconColors.existingColonizerDoc}}
+              onClick={() => {
+                  setOpennedModal("Agreement between the proposed developer and existing colonizer")
+                  setLabelValue("Agreement between the proposed developer and existing colonizer"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+            </div>
+                            </div>
+                          </div>
+
+                          <div className="col col-4">
+                            <div >
+                              <label htmlFor="pan">PAN Number</label>
+                              {/* <input
+                                type="pan"
+                                value={existingColonizerDetails.pan}
+                                name="dob"
+                               
+                                onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, pan: e.target.value })}
+                                className="employee-card-input"
+                                maxLength={10}
+                              /> */}
+                              <div className={classes.fieldContainer}>
+                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} 
+                              placeholder={addInfo?.existingColonizerData?.pan} 
+                              disabled></Form.Control>
+                              &nbsp;&nbsp;
+                                    <ReportProblemIcon
+              style={{
+                display: hideRemarks?"none":"block",
+                color:fieldIconColors.existingColonizerDoc}}
+              onClick={() => {
+                  setOpennedModal("Agreement between the proposed developer and existing colonizer")
+                  setLabelValue("Agreement between the proposed developer and existing colonizer"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+            </div>
+                            </div>
+                          </div>
+
+                          <div className="col col-4">
+                            <div >
+                              <label htmlFor="licNo">License No.</label>
+                              {/* <input
+                                type="text"
+                                value={existingColonizerDetails.licNo}
+                                name="licNo"
+                                
+                                onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, licNo: e.target.value })}
+                                className="employee-card-input"
+                                maxLength={10}
+                              /> */}
+                              <div className={classes.fieldContainer}>
+                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+                               placeholder={addInfo?.existingColonizerData?.licNo} 
+                               disabled></Form.Control>
+                               &nbsp;&nbsp;
+                                     <ReportProblemIcon
+              style={{
+                display: hideRemarks?"none":"block",
+                color:fieldIconColors.existingColonizerDoc}}
+              onClick={() => {
+                  setOpennedModal("Agreement between the proposed developer and existing colonizer")
+                  setLabelValue("Agreement between the proposed developer and existing colonizer"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+            </div>
+                            </div>
+                          </div>
+
+                          <div className="col col-4">
+                            <div >
+                              <label htmlFor="licDate">Date</label>
+                              {/* <input
+                                type="date"
+                                value={existingColonizerDetails.licDate}
+                                name="licDate"
+                               
+                                onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, licDate: e.target.value })}
+                                className="employee-card-input"
+                                maxLength={10}
+                              /> */}
+                              <div className={classes.fieldContainer}>
+                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+                               placeholder={addInfo?.existingColonizerData?.licDate}
+                                disabled></Form.Control>
+                                &nbsp;&nbsp;
+                                      <ReportProblemIcon
+              style={{
+                display: hideRemarks?"none":"block",
+                color:fieldIconColors.existingColonizerDoc}}
+              onClick={() => {
+                  setOpennedModal("Agreement between the proposed developer and existing colonizer")
+                  setLabelValue("Agreement between the proposed developer and existing colonizer"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+            </div>
+                            </div>
+                          </div>
+
+                          <div className="col col-4">
+                            <div >
+                              <label htmlFor="licValidity">Validity</label>
+                             <div className={classes.fieldContainer}>
+                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+                               placeholder={addInfo?.existingColonizerData?.licValidity} 
+                               disabled></Form.Control>
+                               &nbsp;&nbsp;
+                                     <ReportProblemIcon
+              style={{
+                display: hideRemarks?"none":"block",
+                color:fieldIconColors.existingColonizerDoc}}
+              onClick={() => {
+                  setOpennedModal("Agreement between the proposed developer and existing colonizer")
+                  setLabelValue("Agreement between the proposed developer and existing colonizer"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+            </div>
+                            </div>
+                          </div>
+
+                          <div className="col col-4">
+                            <div >
+                              <label >Purpose</label>
+                      <div className={classes.fieldContainer}>
                               <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
                                placeholder={addInfo?.existingColonizerData?.licPurpose} 
                                disabled></Form.Control>

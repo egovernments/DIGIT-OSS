@@ -15,7 +15,11 @@ const PersonalinfoChild = (props) => {
   const classes = useStyles();
   let user = Digit.UserService.getUser();
   const userRoles = user?.info?.roles?.map((e) => e.code) || [];
-  const hideRemarks = userRoles.some((item)=>item === "CTP_HR" || item === "CTP_HQ" || item === "DTP_HR" || item === "DTP_HQ")
+  const hideRemarks = userRoles.some((item)=>item === "CTP_HR" || item === "CTP_HQ" || item === "DTP_HR" || item === "DTP_HQ" )
+
+  // let users = Digit.UserService.getUser();
+  // const userRole = users?.info?.roles?.map((e) => e.code) || [];
+  const hideRemarksPatwari = userRoles.some((item)=>item ==="Patwari_HQ")
 
   const [smShow, setSmShow] = useState(false);
   const [labelValue, setLabelValue] = useState("");
@@ -129,11 +133,12 @@ const PersonalinfoChild = (props) => {
               disabled
             ></Form.Control>
             &nbsp;&nbsp;
-            {/* {JSON.stringify(userRoles)}
-          {JSON.stringify(hideRemarks)}  */}
+            {/* {JSON.stringify(userRoles)} */}
+          {/* {JSON.stringify(hideRemarksPatwari)}  */}
             <ReportProblemIcon
               style={{
                 display: hideRemarks?"none":"block",
+                display: hideRemarksPatwari?"none":"block",
                 color:fieldIconColors.developer}}
               onClick={() => {
                   setOpennedModal("developer")
@@ -171,6 +176,7 @@ const PersonalinfoChild = (props) => {
             <ReportProblemIcon
               style={{
                 display: hideRemarks?"none":"block",
+                display: hideRemarksPatwari?"none":"block",
                 color: fieldIconColors.authPersonName
               }}
               onClick={() => {
@@ -221,6 +227,7 @@ const PersonalinfoChild = (props) => {
             <ReportProblemIcon
               style={{
                 display: hideRemarks?"none":"block",
+                display: hideRemarksPatwari?"none":"block",
                 color: fieldIconColors.authMobileNo1
               }}
               onClick={() => {
@@ -320,6 +327,7 @@ const PersonalinfoChild = (props) => {
             <ReportProblemIcon
               style={{
                 display: hideRemarks?"none":"block",
+                display: hideRemarksPatwari?"none":"block",
                 color: fieldIconColors.authMobileNo2  
               }}
               onClick={() => {
@@ -370,6 +378,7 @@ const PersonalinfoChild = (props) => {
             <ReportProblemIcon
               style={{
                 display: hideRemarks?"none":"block",
+                display: hideRemarksPatwari?"none":"block",
                 color: fieldIconColors.emailId}}
               onClick={() => {
                 setOpennedModal("emailId")
@@ -418,6 +427,7 @@ const PersonalinfoChild = (props) => {
             <ReportProblemIcon
               style={{
                 display: hideRemarks?"none":"block",
+                display: hideRemarksPatwari?"none":"block",
                 color: fieldIconColors.pan
               }}
               onClick={() => {
@@ -469,6 +479,7 @@ const PersonalinfoChild = (props) => {
             <ReportProblemIcon
               style={{
                 display: hideRemarks?"none":"block",
+                display: hideRemarksPatwari?"none":"block",
                 color: fieldIconColors.address}}
               onClick={() => {
                 setOpennedModal("address")
@@ -517,6 +528,7 @@ const PersonalinfoChild = (props) => {
             <ReportProblemIcon
               style={{
                 display: hideRemarks?"none":"block",
+                display: hideRemarksPatwari?"none":"block",
                 color: fieldIconColors.city}}
               onClick={() => {
                 setOpennedModal("city")
@@ -565,6 +577,7 @@ const PersonalinfoChild = (props) => {
             <ReportProblemIcon
               style={{
                 display: hideRemarks?"none":"block",
+                display: hideRemarksPatwari?"none":"block",
                 color: fieldIconColors.pin}}
               onClick={() => {
                 setOpennedModal("pin")
@@ -615,6 +628,7 @@ const PersonalinfoChild = (props) => {
             <ReportProblemIcon
               style={{
                 display: hideRemarks?"none":"block",
+                display: hideRemarksPatwari?"none":"block",
                 color: fieldIconColors.tehsil}}
               onClick={() => {
                 setOpennedModal("tehsil")
@@ -663,9 +677,9 @@ const PersonalinfoChild = (props) => {
             <ReportProblemIcon
               style={{
                 display: hideRemarks?"none":"block",
+                display: hideRemarksPatwari?"none":"block",
                 color: fieldIconColors.district}}
               onClick={() => {
-                display: hideRemarks?"none":"block",
                 setOpennedModal("district")
                 setLabelValue("District"),
                   setSmShow(true),
@@ -712,6 +726,7 @@ const PersonalinfoChild = (props) => {
             <ReportProblemIcon
               style={{
                 display: hideRemarks?"none":"block",
+                display: hideRemarksPatwari?"none":"block",
                 color: fieldIconColors.state}}
               onClick={() => {
                 setOpennedModal("state")
@@ -787,6 +802,7 @@ const PersonalinfoChild = (props) => {
             <ReportProblemIcon
               style={{
                 display: hideRemarks?"none":"block",
+                display: hideRemarksPatwari?"none":"block",
                 color: fieldIconColors.lciSignedBy }}
               onClick={() => {
                 setOpennedModal("lciSignedBy")
@@ -813,6 +829,7 @@ const PersonalinfoChild = (props) => {
             <ReportProblemIcon
               style={{
                 display: hideRemarks?"none":"block",
+                display: hideRemarksPatwari?"none":"block",
                 color: fieldIconColors.addressForCommunication }}
               onClick={() => {
                 setOpennedModal("addressForCommunication")
@@ -869,6 +886,7 @@ const PersonalinfoChild = (props) => {
             <ReportProblemIcon
               style={{
                 display: hideRemarks?"none":"block",
+                display: hideRemarksPatwari?"none":"block",
                 color: fieldIconColors.parmanentAddress }}
               onClick={() => {
                 setOpennedModal("parmanentAddress")
@@ -932,6 +950,7 @@ const PersonalinfoChild = (props) => {
             <ReportProblemIcon
               style={{
                 display: hideRemarks?"none":"block",
+                display: hideRemarksPatwari?"none":"block",
                 color: fieldIconColors.emailForCommunication  }}
               onClick={() => {
                 setOpennedModal("emailForCommunication")
@@ -964,6 +983,7 @@ const PersonalinfoChild = (props) => {
             <ReportProblemIcon
               style={{
                 display: hideRemarks?"none":"block",
+                display: hideRemarksPatwari?"none":"block",
                 color: fieldIconColors.authorized }}
               onClick={() => {
                 setOpennedModal("authPerson")

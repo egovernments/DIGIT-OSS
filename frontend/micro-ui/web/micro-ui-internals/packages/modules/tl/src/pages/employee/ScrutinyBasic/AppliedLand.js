@@ -441,7 +441,8 @@ console.log("AccessInfortech", Purpose);
               <Col col-12>
                 <div style={{ display: "flex" }}>
                   {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
-                  1. DGPS points <span className="text-primary"> (Click here for instructions to capture DGPS points)</span>
+                  1. DGPS points 
+                  {/* <span className="text-primary"> (Click here for instructions to capture DGPS points)</span> */}
                   <ReportProblemIcon
                     style={{
                       display: hideRemarks?"none":"block",
@@ -457,9 +458,9 @@ console.log("AccessInfortech", Purpose);
                   ></ReportProblemIcon>
                 </div>
                 {/* </h5> */}
-
-                <div className="px-2">
-                {Purpose}
+ {/* {Purpose} */}
+                {/* <div className="px-2">
+               
                   (i)Add point 1 &nbsp;
                   <div className="row ">
                     <br></br>
@@ -472,8 +473,8 @@ console.log("AccessInfortech", Purpose);
                       <input type="number" name="YLatitude" className="form-control" disabled placeholder={DetailsofAppliedLand?.dgpsDetails?.[0]?.longitude} />
                     </div>
                   </div>
-                </div>
-                <div className="px-2">
+                </div> */}
+                {/* <div className="px-2">
                   (ii)Add point 2 &nbsp;
                   <div className="row ">
                     <br></br>
@@ -486,9 +487,9 @@ console.log("AccessInfortech", Purpose);
                       <input type="number" name="YLatitude" className="form-control" disabled placeholder={DetailsofAppliedLand?.dgpsDetails?.[1]?.longitude} />
                     </div>
                   </div>
-                </div>
+                </div> */}
 
-                <div className="px-2">
+                {/* <div className="px-2">
                   <div className="text-black">
                     (iii)Add point 3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <br></br>
@@ -503,9 +504,9 @@ console.log("AccessInfortech", Purpose);
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
                 <div className="px-2">
-                  <div className="text-black">
+                  {/* <div className="text-black">
                     (iv)Add point 4 &nbsp;
                     <div className="row ">
                       <br></br>
@@ -519,22 +520,29 @@ console.log("AccessInfortech", Purpose);
                       </div>
                     </div>
                     &nbsp;&nbsp;&nbsp;
-                  </div>
-
-                  {[...Array(noOfRows)].map((elementInArray, index) => {
-                    return (
-                      <div className="row ">
+                  </div> */}
+ {DetailsofAppliedLand?.dgpsPoint?.map((item,index)=>(
+                      
+                  // <tr key={index}></tr>
+                  // {[...Array(noOfRows)].map((elementInArray, index) => {
+                  //   return (
+                    // (iv)Add point key={index} &nbsp;
+                    
+                      <div className="row " key={index}>
                         <div className="col col-6">
                           <label className={classes.formLabel} htmlFor="pitentialZone">X:Longiude</label>
-                          <input type="number" name="XLongitude" className="form-control" disabled placeholder={elementInArray?.dgpsDetails?.latitude} />
+                          <input type="number" name="XLongitude" className="form-control" disabled placeholder={item?.latitude} />
                         </div>
                         <div className="col col-6">
                           <label className={classes.formLabel} htmlFor="pitentialZone">Y:Latitude</label>
-                          <input type="number" name="YLatitude" className="form-control" disabled placeholder={elementInArray?.dgpsDetails?.longitude} />
+                          <input type="number" name="YLatitude" className="form-control" disabled placeholder={item?.longitude} />
                         </div>
                       </div>
-                    );
-                  })}
+                  //   );
+                  // })}
+                 
+                    ))
+                  }
                 </div>
 
                 <hr className="my-3" />
