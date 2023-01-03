@@ -6,10 +6,12 @@ import ApplicationTable from "./ApplicationTable";
 import SearchApplication from "./search";
 import { Link } from "react-router-dom";
 import { convertEpochToDateDMY } from "../../utils";
+import Visibility from "@mui/icons-material/Visibility";
 // import Records from "../../pages/employee/ApplicationRecord/Record";
 // import { getActionButton } from "../../utils";
 
-const DesktopInbox = ({ tableConfig, filterComponent,columns, isLoading, setSearchFieldsBackToOriginalState, setSetSearchFieldsBackToOriginalState, ...props }) => {
+const DesktopInbox = ({ tableConfig, filterComponent, columns, isLoading, setSearchFieldsBackToOriginalState, setSetSearchFieldsBackToOriginalState,
+  viewOptionKey, ...props }) => {
   const { data } = props;
   const { t } = useTranslation();
   const [FilterComponent, setComp] = useState(() => Digit.ComponentRegistryService?.getComponent(filterComponent));
@@ -36,33 +38,40 @@ const DesktopInbox = ({ tableConfig, filterComponent,columns, isLoading, setSear
         return (
           <div>
             <span className="link">
-            <Link to={"/digit-ui/employee/tl/scrutiny/" + row.original["applicationId"]}>{row.original["applicationId"]}</Link>
+              <Link to={"/digit-ui/employee/tl/scrutiny/" + row.original["applicationId"]}>{row.original["applicationId"]}</Link>
             </span>
           </div>
         );
       }
-    },{
+    }, {
       Header: t("TL_COMMON_TABLE_COL_APP_DATE"),
       accessor: "applicationDate",
       Cell: ({ row }) => {
         const date = convertEpochToDateDMY(row.original.date);
         return GetCell(date)
       }
-    },{
+    }, {
       Header: t("TL_COMMON_TABLE_COL_APP_TYPE"),
       Cell: ({ row }) => {
-        return GetCell(t(row.original["businessService"]?`CS_COMMON_INBOX_${row.original["businessService"]?.toUpperCase()}`:"NA"));
+        return GetCell(t(row.original["businessService"] ? `CS_COMMON_INBOX_${row.original["businessService"]?.toUpperCase()}` : "NA"));
       },
-    },{
-      Header: t("WF_INBOX_HEADER_LOCALITY"),
+    }, 
+    // {
+    //   Header: t("WF_INBOX_HEADER_LOCALITY"),
+    //   Cell: ({ row }) => {
+    //     return GetCell(t(Digit.Utils.locale.getRevenueLocalityCode(row.original["locality"], row.original["tenantId"])));
+    //   },
+    // },
+    {
+      Header: t("WF_INBOX_HEADER_DIARY_NO"),
       Cell: ({ row }) => {
-        return GetCell(t(Digit.Utils.locale.getRevenueLocalityCode(row.original["locality"], row.original["tenantId"])));
+        return GetCell(row.original["dairyNo"]);
       },
     },
     {
       Header: t("WF_INBOX_HEADER_STATUS"),
       Cell: ({ row }) => {
-        return GetCell(t(row.original["businessService"]?`WF_${row.original["businessService"]?.toUpperCase()}_${row.original?.["status"]}`:`NA`));
+        return GetCell(t(row.original["businessService"] ? `WF_${row.original["businessService"]?.toUpperCase()}_${row.original?.["status"]}` : `NA`));
       },
     },
     {
@@ -70,13 +79,46 @@ const DesktopInbox = ({ tableConfig, filterComponent,columns, isLoading, setSear
       Cell: ({ row }) => {
         return GetCell(t(`${row.original?.owner}`));
       }
-    },{
-    Header: t("WF_INBOX_HEADER_SLA_DAYS_REMAINING"),
-    Cell: ({ row }) => {
-      return GetSlaCell(row.original["sla"])
+    }, {
+      Header: t("WF_INBOX_HEADER_SLA_DAYS_REMAINING"),
+      Cell: ({ row }) => {
+        return GetSlaCell(row.original["sla"])
+      },
     },
-  }
+    {
+      Header: t("WF_INBOX_HEADER_AGING"),
+      Cell: ({ row }) => {
+        const date = elapsedTime(row.original.date,new Date().getTime());
+        return GetCell(`${date.days} Days ${date.hours} Hours ${date.hours} Minutes`)
+      },
+    },
+    {
+      Header: t("WF_INBOX_HEADER_ACTION"),
+      Cell: ({ row }) => {
+        return (
+          <div>
+            <div className="w-100 text-center link">
+              <Link to={"/digit-ui/employee/tl/scrutiny/" + row.original["applicationId"]}>
+                <Visibility/>
+              </Link>
+            </div>
+          </div>
+        );
+      }
+    },
   ];
+
+  function elapsedTime(startTime, endTime) {
+    const elapsedTime = endTime - startTime;
+    const elapsedDays = Math.floor(elapsedTime / (1000 * 60 * 60 * 24)); // number of whole days
+    const elapsedHours = Math.floor((elapsedTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); // number of whole hours
+    const elapsedMinutes = Math.floor((elapsedTime % (1000 * 60 * 60)) / (1000 * 60)); // number of whole minutes
+    return {
+      days: elapsedDays,
+      hours: elapsedHours,
+      minutes: elapsedMinutes
+    };
+  }
 
   let result;
   if (props.isLoading) {
@@ -138,13 +180,13 @@ const DesktopInbox = ({ tableConfig, filterComponent,columns, isLoading, setSear
                 text: "TL_SEARCH_APPLICATIONS",
                 link: "/digit-ui/employee/tl/search/application",
                 businessService: "TL",
-                roles: ["TL_FIELD_INSPECTOR","TL_APPROVER", "TL_DOC_VERIFIER","TL_CEMP"],
+                roles: ["TL_FIELD_INSPECTOR", "TL_APPROVER", "TL_DOC_VERIFIER", "TL_CEMP"],
               },
               {
                 text: "TL_SEARCH_LICENSE",
                 link: "/digit-ui/employee/tl/search/license",
                 businessService: "TL",
-                roles: ["TL_APPROVER", "TL_DOC_VERIFIER","TL_FIELD_INSPECTOR"],
+                roles: ["TL_APPROVER", "TL_DOC_VERIFIER", "TL_FIELD_INSPECTOR"],
               },
               {
                 text: "TL_RENEWAL_HEADER",
@@ -161,7 +203,7 @@ const DesktopInbox = ({ tableConfig, filterComponent,columns, isLoading, setSear
             ]}
             headerText={t("ACTION_TEST_TRADELICENSE")} businessService={props.businessService} />
           <div>
-            {isLoading ? <Loader /> : 
+            {isLoading ? <Loader /> :
               <FilterComponent
                 defaultSearchParams={props.defaultSearchParams}
                 statuses={data?.statuses}
@@ -173,7 +215,7 @@ const DesktopInbox = ({ tableConfig, filterComponent,columns, isLoading, setSear
           </div>
         </div>
       )}
-      <div style={{ flex: 1 }}>
+      <div style={{ overflow: "hidden" }}>
         <SearchApplication
           defaultSearchParams={props.defaultSearchParams}
           onSearch={props.onSearch}
@@ -181,11 +223,13 @@ const DesktopInbox = ({ tableConfig, filterComponent,columns, isLoading, setSear
           searchFields={props.searchFields}
           isInboxPage={!props?.isSearch}
           searchParams={props.searchParams}
-          {...{setSearchFieldsBackToOriginalState, setSetSearchFieldsBackToOriginalState}}
+          {...{ setSearchFieldsBackToOriginalState, setSetSearchFieldsBackToOriginalState }}
         />
-        <div className="result" style={{ marginLeft: !props?.isSearch ? "24px" : "", flex: 1 }}>
+        <div className="result" style={{ marginLeft: !props?.isSearch ? "24px" : "", overflow: "auto" }}>
           {result}
-          {/* <p></p> */}
+          {/* <p>
+            {JSON.stringify(inboxColumns(data))}
+          </p> */}
           {/* <Link to={"/digit-ui/employee/tl/scrutiny"}>APPLICATION HERE</Link>
           <Records></Records> */}
         </div>

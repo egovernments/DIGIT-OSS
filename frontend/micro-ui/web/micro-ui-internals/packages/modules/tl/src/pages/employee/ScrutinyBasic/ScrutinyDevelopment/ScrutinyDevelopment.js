@@ -1,19 +1,62 @@
 import { Checkbox, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Row, Col, Card, Container, Form, Button } from "react-bootstrap";
+import axios from "axios";
+import { ScrutinyRemarksContext } from "../../../../../context/remarks-data-context";
+import { useParams } from "react-router-dom";
+
 
 const windowHeight = window !== undefined ? window.innerHeight : null;
 const ScrutinyDevelopment = (props) => {
 
+  const { handleGetFiledsStatesById, handleGetRemarkssValues } = useContext(ScrutinyRemarksContext);
+  const {id} = useParams();
   let user = Digit.UserService.getUser();
   const userRoles = user?.info?.roles?.map((e) => e.code);
   const showRemarksSection = userRoles.includes("DTCP_HR")
 
   const [approval, setDisapproval] = useState(false);
   const [disapprovedList, setDisapprovedList] = useState([]);
-
+  const dateTime = new Date();
   const remarkDataResp = props.remarkData;
+  const authToken = Digit.UserService.getUser()?.access_token || null;
 
+
+  const onAction = async (data,index,value) => {
+    console.log("DataDev123...",data,value);
+    let tempArray = disapprovedList;
+    tempArray[index] = {...tempArray[index],isLOIPart: value,}
+    setDisapprovedList([...tempArray]);
+      const postData = {
+        requestInfo: {
+          api_id: "1",
+          ver: "1",
+          ts: null,
+          action: "create",
+          did: "",
+          key: "",
+          msg_id: "",
+          requester_id: "",
+          authToken: authToken,
+        },
+        egScrutiny: {
+          ...data,
+          isLOIPart: value,
+          ts: dateTime.toUTCString(),
+        },
+      };
+      
+      try {
+        const Resp = await axios.post("/land-services/egscrutiny/_create?status=submit", postData, {}).then((response) => {
+          // handleGetRemarkssValues(id);
+          return response.data;
+        });
+      } catch (error) {
+        console.log(error);
+      }
+
+  }
+  
   useEffect(
     () => {
       if (remarkDataResp && remarkDataResp?.length) {
@@ -130,7 +173,7 @@ const ScrutinyDevelopment = (props) => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {disapprovedList.map((row) => (
+                  {disapprovedList.map((row,i) => (
                   <TableRow
                     key={row?.fieldIdL}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -140,7 +183,10 @@ const ScrutinyDevelopment = (props) => {
                     </TableCell>
                     <TableCell align="right">{row.comment}</TableCell>
                     <TableCell align="right">
-                      <Checkbox/>
+                      <Checkbox
+                        checked={row?.isLOIPart}
+                        onChange={(e)=>onAction(row,i,e.target.checked)}
+                      />
                     </TableCell>
                   </TableRow>
                 ))}

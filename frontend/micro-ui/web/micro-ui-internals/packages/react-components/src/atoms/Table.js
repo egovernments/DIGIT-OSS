@@ -1,6 +1,11 @@
+import { IconButton } from "@mui/material";
+import Button from "@mui/material/Button";
 import React, { useEffect } from "react";
+import { Eye } from "react-bootstrap-icons";
 import { useGlobalFilter, usePagination, useRowSelect, useSortBy, useTable } from "react-table";
 import { ArrowBack, ArrowForward, ArrowToFirst, ArrowToLast, SortDown, SortUp } from "./svgindex";
+// import VisibilityIcon from "@mui/icons-material/Visibility";
+
 
 const noop = () => {};
 
@@ -29,7 +34,8 @@ const Table = ({
   sortParams = [],
   showAutoSerialNo=false,
   customTableWrapperClassName="",
-  styles={}
+  styles={},
+
 }) => {
   const {
     getTableProps,
@@ -76,14 +82,19 @@ const Table = ({
     useRowSelect
   );
 
+
   useEffect(() => {
     onSort(sortBy);
   }, [onSort, sortBy]);
 
+  useEffect(()=>{
+    console.log("pageDev123",page)
+  },[page])
+
   useEffect(() => setGlobalFilter(onSearch), [onSearch, setGlobalFilter]);
   return (
     <React.Fragment>
-    <span className={customTableWrapperClassName}>
+    <div className={customTableWrapperClassName} style={{overflow:"auto"}}>
       <table className={className} {...getTableProps()} style={styles}>
         <thead>
           {headerGroups.map((headerGroup) => (
@@ -97,6 +108,13 @@ const Table = ({
                   <span>{column.isSorted ? column.isSortedDesc ? <SortDown /> : <SortUp /> : ""}</span>
                 </th>
               ))}
+              {/* {
+                viewAction && 
+                <th style={{ verticalAlign: "top" }}>
+                  Action
+                  </th>
+              } */}
+
             </tr>
           ))}
         </thead>
@@ -132,12 +150,21 @@ const Table = ({
                     </td>
                   );
                 })}
+                
+                {/* {
+                viewAction &&
+                <td>
+                  <a style={{ color: "#1D70B8" }} href={`/digit-ui/employee/tl/scrutiny/${row?.original?.[viewOptionKey]}`}>
+                    <Eye/>
+                  </a>
+                </td>
+          } */}
               </tr>
             );
           })}
         </tbody>
       </table>
-      </span>
+      </div>
       {isPaginationRequired && (
         <div className="pagination dss-white-pre" >
           {`${t("CS_COMMON_ROWS_PER_PAGE")} :`}
