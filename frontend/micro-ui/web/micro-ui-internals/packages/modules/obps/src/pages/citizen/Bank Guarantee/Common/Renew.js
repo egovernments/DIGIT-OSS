@@ -26,7 +26,7 @@ function RenewNew() {
   return (
     <form onSubmit={handleSubmit(bankRenew)}>
       <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Extension</h4>
+        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Extension of Bank Guarantee</h4>
         <div className="card">
           <Row className="col-12">
             <Col md={4} xxl lg="3">
@@ -35,7 +35,7 @@ function RenewNew() {
                   <h2>Enter License No. </h2>
                 </Form.Label>
               </div>
-              <input type="number" className="form-control" placeholder="" {...register("enterLicense")} />
+              <input type="number" className="form-control" placeholder="" {...register("licenceNumber")} />
             </Col>
 
             <Col md={4} xxl lg="3">
@@ -54,6 +54,17 @@ function RenewNew() {
               </div>
               <input type="text" className="form-control" disabled placeholder="" {...register("amountInWords")} />
             </Col>
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>Previous Memo No. </h2>
+                </Form.Label>
+              </div>
+              <input type="text" className="form-control" placeholder="" {...register("previousMemoNumber")} disabled />
+            </Col>
+          </Row>
+          <br></br>
+          <Row className="col-12">
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
@@ -84,24 +95,11 @@ function RenewNew() {
                   <h2>Enter Memo No. </h2>
                 </Form.Label>
               </div>
-              <input type="text" className="form-control" placeholder="" {...register("enterMemoNumber")} disabled />
+              <input type="text" className="form-control" placeholder="" {...register("memoNumber")} />
             </Col>
-            {/* <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>Validity date </h2>
-                </Form.Label>
-              </div>
-              <input type="date" className="form-control" placeholder="" {...register("dateExtededFrom")} />
-            </Col> */}
-            {/* <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>Date Extended To</h2>
-                </Form.Label>
-              </div>
-              <input type="date" className="form-control" placeholder="" {...register("dateExtendedTo")} />
-            </Col> */}
+          </Row>
+          <br></br>
+          <Row className="col-12">
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
@@ -111,7 +109,7 @@ function RenewNew() {
               <input type="file" className="form-control" placeholder="" {...register("uploadBg")} />
             </Col>
           </Row>
-
+          <br></br>
           <div className="col col-12 ">
             <div>
               <label>
@@ -177,15 +175,16 @@ function RenewNew() {
               </div>
             )}
           </div>
+
+          <Row className="justify-content-end">
+            <Button variant="outline-primary" className="col-md-2 my-2 mx-2" aria-label="right-end">
+              Cancel
+            </Button>
+            <Button variant="outline-primary" className="col-md-2 my-2 mx-2" type="submit" aria-label="right-end">
+              Submit
+            </Button>
+          </Row>
         </div>
-        <Row className="justify-content-end">
-          <Button variant="outline-primary" className="col-md-2 my-2 mx-2" aria-label="right-end">
-            Cancel
-          </Button>
-          <Button variant="outline-primary" className="col-md-2 my-2 mx-2" type="submit" aria-label="right-end">
-            Submit
-          </Button>
-        </Row>
       </Card>
     </form>
   );

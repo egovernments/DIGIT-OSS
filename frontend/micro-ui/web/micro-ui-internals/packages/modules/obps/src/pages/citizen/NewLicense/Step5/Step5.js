@@ -11,6 +11,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import Spinner from "../../../../components/Loader";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step5";
+import ScrollToTop from "@egovernments/digit-ui-react-components/src/atoms/ScrollToTop";
 
 const FeesChargesForm = (props) => {
   const location = useLocation();
@@ -212,6 +213,7 @@ const FeesChargesForm = (props) => {
 
   return (
     <div>
+      <ScrollToTop />
       {loader && <Spinner />}
       <form onSubmit={handleSubmit(FeesChrgesFormSubmitHandler)}>
         <Card style={{ width: "126%", border: "5px solid #1266af" }}>

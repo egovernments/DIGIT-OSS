@@ -8,10 +8,10 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import InfoIcon from "@mui/icons-material/Info";
 
-import Extension from "../BankGuarantee/Extension";
-import Release from "../BankGuarantee/Release";
-import Replace from "../BankGuarantee/Replace";
-import SubmitNew from "../BankGuarantee/SubmitNew";
+// import Extension from "../BankGuarantee/Extension";
+// import Release from "../BankGuarantee/Release";
+// import Replace from "../BankGuarantee/Replace";
+// import SubmitNew from "../BankGuarantee/SubmitNew";
 
 import Collapse from "react-bootstrap/Collapse";
 
@@ -51,10 +51,10 @@ const Scrutiny = (props) => {
 
       <Collapse in={open}>
         <div id="example-collapse-text">
-          <SubmitNew />
-          <Extension />
+          {/* <SubmitNew /> */}
+          {/* <Extension />
           <Replace />
-          <Release />
+          <Release /> */}
         </div>
       </Collapse>
     </Form>

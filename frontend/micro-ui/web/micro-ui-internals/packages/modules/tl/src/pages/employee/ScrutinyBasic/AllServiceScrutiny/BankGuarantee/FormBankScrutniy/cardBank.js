@@ -4,11 +4,15 @@ import React, { useState, useEffect } from "react";
 import { Card, Row, Col } from "react-bootstrap";
 import FormBank from "../FormBankScrutniy/FormBank";
 // import { useSearchParams } from "react-router-dom";
+import SubmitNew from "../SubmitNew";
 
 const ScrutinyForm = (props) => {
   return (
     <Card>
       <Row style={{ top: 30, padding: 10 }}>
+        <SubmitNew />
+      </Row>
+      <Row>
         <FormBank />
       </Row>
       <Row style={{ top: 30, padding: "10px 22px" }}>
