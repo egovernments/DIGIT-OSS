@@ -100,7 +100,7 @@ export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout, isEm
   const tenantId = Digit.ULBService.getCurrentTenantId();
 
   const showProfilePage = () => {
-    const redirectUrl = isEmployee ? "/digit-ui/employee/user/profile" : "/digit-ui/citizen/user/profile";
+    const redirectUrl = isEmployee ? "/digit-ui/employee/user/profile" : "/digit-ui/citizen/obps/stakeholder/apply/license-details";
     history.push(redirectUrl);
     closeSidebar();
   };
