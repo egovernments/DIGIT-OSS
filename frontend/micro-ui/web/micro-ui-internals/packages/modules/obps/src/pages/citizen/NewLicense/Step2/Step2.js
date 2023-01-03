@@ -49,6 +49,11 @@ const ApllicantPuropseForm = (props) => {
       dataIndex: "hadbastNo",
     },
     {
+      key: "khewats",
+      title: "Khewat No.",
+      dataIndex: "khewats",
+    },
+    {
       key: "rectangleNo",
       title: "Rectangle No.",
       dataIndex: "rectangleNo",
@@ -84,6 +89,11 @@ const ApllicantPuropseForm = (props) => {
       key: "biswansi",
       title: "Biswansi",
       dataIndex: "biswansi",
+    },
+    {
+      key: "totalArea",
+      title: "Total Area",
+      dataIndex: "totalArea",
     },
     {
       key: "landOwner",
@@ -294,6 +304,7 @@ const ApllicantPuropseForm = (props) => {
         return { label: el?.districtName, id: el?.districtCode, value: el?.districtCode };
       });
       setDistrictDataLabels({ data: distData, isLoading: false });
+      console.log("data", distData);
     } catch (error) {
       return error;
     }
@@ -528,13 +539,6 @@ const ApllicantPuropseForm = (props) => {
     }, 500);
     return () => clearTimeout(delay);
   }, [getKhewats]);
-  const dataArea = props?.ApplicantPurpose?.AppliedLandDetails?.[0]?.kanal;
-  const dataAreaMarla = stepData?.AppliedLandDetails?.[0]?.marla;
-  const dataAreaSarai = stepData?.AppliedLandDetails?.[0]?.sarsai;
-  const dataAreaBigha = stepData?.AppliedLandDetails?.[0]?.bigha;
-  const dataAreaBiswa = stepData?.AppliedLandDetails?.[0]?.biswa;
-  const dataAreaBiswansi = stepData?.AppliedLandDetails?.[0]?.biswansi;
-  const totalAreaAcre = dataArea * 0.125 + dataAreaMarla * 0.0062 + dataAreaSarai * 0.00069;
 
   const getApplicantUserData = async (id) => {
     const token = window?.localStorage?.getItem("token");
@@ -906,7 +910,7 @@ const ApllicantPuropseForm = (props) => {
                         </td>
                         <td>
                           <input type="number" className="form-control " {...register("total")} />
-                          <label htmlFor="sumsarsai">Total: {watch("kanal") * 0.125 + "marla" * 0.0062 + "sarsai" * 0.00069}</label>&nbsp;&nbsp;
+                          <label htmlFor="sumsarsai">Total: {watch("total")}</label>&nbsp;&nbsp;
                         </td>
                       </tr>
                     </tbody>
@@ -956,7 +960,7 @@ const ApllicantPuropseForm = (props) => {
                         </td>
                         <td>
                           <input type="number" className="form-control " {...register("total")} />
-                          <label htmlFor="sumsarsai">Total: {watch("kanal") * 0.125 + "marla" * 0.0062 + "sarsai" * 0.00069}</label>&nbsp;&nbsp;
+                          <label htmlFor="sumsarsai">Total: {watch("total")}</label>&nbsp;&nbsp;
                         </td>
                       </tr>
                     </tbody>
@@ -1105,7 +1109,7 @@ const ApllicantPuropseForm = (props) => {
                             Registering Authority document <span style={{ color: "red" }}>*</span> <FileUpload color="primary" />
                             <input
                               type="file"
-                              accept="application/pdf/jpeg"
+                              accept="application/pdf,application//jpeg"
                               style={{ display: "none" }}
                               required
                               onChange={(e) => getDocumentData(e?.target?.files[0], "registeringAuthorityDoc")}

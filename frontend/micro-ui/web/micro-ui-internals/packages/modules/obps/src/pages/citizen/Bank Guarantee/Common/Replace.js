@@ -26,7 +26,7 @@ function Replace() {
   return (
     <form onSubmit={handleSubmit(bankReplace)}>
       <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Replace/Renew</h4>
+        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Replace/Renew of Bank Guarantee</h4>
         <div className="card">
           <Row className="col-12">
             <Col md={4} xxl lg="3">
@@ -35,7 +35,7 @@ function Replace() {
                   <h2>Enter License No. </h2>
                 </Form.Label>
               </div>
-              <input type="text" className="form-control" placeholder="" {...register("enterLicNo")} />
+              <input type="text" className="form-control" placeholder="" {...register("licenceNumber")} />
             </Col>
 
             <Col md={4} xxl lg="3">
@@ -54,14 +54,24 @@ function Replace() {
               </div>
               <input type="text" className="form-control" disabled placeholder="" {...register("amountInWords")} />
             </Col>
-
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>Previous Memo No. </h2>
+                </Form.Label>
+              </div>
+              <input type="text" className="form-control" placeholder="" {...register("previousMemoNumber")} disabled />
+            </Col>
+          </Row>
+          <br></br>
+          <Row className="col-12">
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
                   <h2>Bank Name</h2>
                 </Form.Label>
               </div>
-              <input type="text" className="form-control" placeholder="" {...register("nameBank")} />
+              <input type="text" className="form-control" placeholder="" {...register("bankName")} />
             </Col>
             <Col md={4} xxl lg="3">
               <div>
@@ -69,7 +79,7 @@ function Replace() {
                   <h2>Enter Memo No. </h2>
                 </Form.Label>
               </div>
-              <input type="text" className="form-control" placeholder="" {...register("enterMemoNumber")} />
+              <input type="text" className="form-control" placeholder="" {...register("memoNumber")} />
             </Col>
             <Col md={4} xxl lg="3">
               <div>
@@ -87,6 +97,9 @@ function Replace() {
               </div>
               <input type="date" className="form-control" placeholder="" {...register("extendedTime")} />
             </Col>
+          </Row>
+          <br></br>
+          <Row className="col-12">
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
@@ -96,26 +109,33 @@ function Replace() {
               <input type="file" className="form-control" placeholder="" {...register("uploadBg")} />
             </Col>
           </Row>
-
+          <br></br>
           <div className="col col-12 ">
             <div>
               <label>
                 Hardcopy Submitted at TCP office.{" "}
-                <label htmlFor="hardcopy">
-                  <input {...register("hardcopy")} type="radio" value="Y" id="hardcopy" />
+                <label htmlFor="hardcopySubmitted">
+                  <input {...register("hardcopySubmitted")} type="radio" value="Y" id="hardcopySubmitted" />
                   &nbsp; Yes &nbsp;&nbsp;
                 </label>
-                <label htmlFor="hardcopy">
-                  <input {...register("hardcopy")} type="radio" value="N" id="hardcopy" className="btn btn-primary" onClick={() => setmodal1(true)} />
+                <label htmlFor="hardcopySubmitted">
+                  <input
+                    {...register("hardcopySubmitted")}
+                    type="radio"
+                    value="N"
+                    id="hardcopySubmitted"
+                    className="btn btn-primary"
+                    onClick={() => setmodal1(true)}
+                  />
                   &nbsp; No &nbsp;&nbsp;
                 </label>
                 <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.hardcopy && errors?.hardcopy?.message}
+                  {errors?.hardcopySubmitted && errors?.hardcopySubmitted?.message}
                 </h3>
               </label>
             </div>
 
-            {watch("hardcopy") === "Y" && (
+            {watch("hardcopySubmitted") === "Y" && (
               <div>
                 <div className="row">
                   <div className="col col-4">
@@ -136,7 +156,7 @@ function Replace() {
                 </div>
               </div>
             )}
-            {watch("hardcopy") === "N" && (
+            {watch("hardcopySubmitted") === "N" && (
               <div>
                 <Modal
                   size="lg"
@@ -155,15 +175,16 @@ function Replace() {
               </div>
             )}
           </div>
+
+          <Row className="justify-content-end">
+            <Button variant="outline-primary" className="col-md-2 my-2 mx-2" aria-label="right-end">
+              Cancel
+            </Button>
+            <Button variant="outline-primary" className="col-md-2 my-2 mx-2" type="submit" aria-label="right-end">
+              Submit
+            </Button>
+          </Row>
         </div>
-        <Row className="justify-content-end">
-          <Button variant="outline-primary" className="col-md-2 my-2 mx-2" aria-label="right-end">
-            Cancel
-          </Button>
-          <Button variant="outline-primary" className="col-md-2 my-2 mx-2" type="submit" aria-label="right-end">
-            Submit
-          </Button>
-        </Row>
       </Card>
     </form>
   );

@@ -20,6 +20,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step4";
 import { useLocation } from "react-router-dom";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import ScrollToTop from "@egovernments/digit-ui-react-components/src/atoms/ScrollToTop";
 const AppliedDetailForm = (props) => {
   const location = useLocation();
   const Purpose = localStorage.getItem("purpose");
@@ -353,6 +354,7 @@ const AppliedDetailForm = (props) => {
   const [modal1, setmodal1] = useState(false);
   return (
     <div>
+      <ScrollToTop />
       {loader && <Spinner />}
       <form onSubmit={handleSubmit(AppliedDetailFormSubmitHandler)}>
         <Card style={{ width: "126%", border: "5px solid #1266af" }}>
@@ -404,26 +406,11 @@ const AppliedDetailForm = (props) => {
                         <div className="row ">
                           <div className="col col-4">
                             <label>X:Longitude</label>
-                            <input
-                              type="number"
-                              className="form-control"
-                              {...register(`dgpsDetails.${index}.longitude`)}
-                              required
-                              minLength={432100.0}
-                              maxLength={751900.0}
-                              pattern="([0-9/^\d+(\.\d{1,2,3})?$/]+$"
-                            />
+                            <input type="number" className="form-control" {...register(`dgpsDetails.${index}.longitude`)} />
                           </div>
                           <div className="col col-4">
                             <label>Y:Latitude</label>
-                            <input
-                              type="number"
-                              className="form-control"
-                              {...register(`dgpsDetails.${index}.latitude`)}
-                              required
-                              minLength={3054400.0}
-                              maxLength={3425500.0}
-                            />
+                            <input type="number" className="form-control" {...register(`dgpsDetails.${index}.latitude`)} />
                           </div>
                         </div>
                         {index > 3 && (

@@ -7,7 +7,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 // import { Checkbox } from "@mui/material";
 import CalculateIcon from "@mui/icons-material/Calculate";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
-
+import ScrollToTop from "@egovernments/digit-ui-react-components/src/atoms/ScrollToTop";
 import axios from "axios";
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
 import Spinner from "../../../../components/Loader";
@@ -234,6 +234,7 @@ const LandScheduleForm = (props) => {
 
   return (
     <div>
+      <ScrollToTop />
       {loader && <Spinner />}
       <form onSubmit={handleSubmit(landScheduleFormSubmitHandler)}>
         <Card style={{ width: "126%", border: "5px solid #1266af" }}>
@@ -1941,7 +1942,7 @@ const LandScheduleForm = (props) => {
                       </h3>
                     </div>
 
-                    <div className="col col-3">
+                    <div className="col col-4">
                       <h2 style={{ display: "flex" }}>
                         Copy of Shajra Plan{" "}
                         <span className="text-primary">

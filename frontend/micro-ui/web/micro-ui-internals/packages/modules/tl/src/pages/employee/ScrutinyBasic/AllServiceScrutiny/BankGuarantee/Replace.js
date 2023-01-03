@@ -139,7 +139,7 @@ const Replace = (props) => {
           <Card
           //   style={{ width: "126%", border: "5px solid #1266af" }}
           >
-            <h4 style={{ fontSize: "25px", marginLeft: "21px" }}> Replace/Renew </h4>
+            <h4 style={{ fontSize: "25px", marginLeft: "21px" }}> Replace/Renew of Bank Guarantee</h4>
             <div className="card">
               <Row className="col-12">
                 <Form.Group as={Col} controlId="formGridLicence">
@@ -244,6 +244,41 @@ const Replace = (props) => {
                 <Form.Group as={Col} controlId="formGridLicence">
                   <div>
                     <Form.Label>
+                      <h2>Previous Memo No. </h2>
+                    </Form.Label>
+                  </div>
+                  <div className={classes.fieldContainer}>
+                    <Form.Control className={classes.formControl} placeholder="" disabled></Form.Control>
+
+                    <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.developer,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("Licence No");
+                        setLabelValue("Licence No"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                      }}
+                    ></ReportProblemIcon>
+                    <ModalChild
+                      labelmodal={labelValue}
+                      passmodalData={handlemodaldData}
+                      displaymodal={smShow}
+                      onClose={() => setSmShow(false)}
+                      selectedFieldData={selectedFieldData}
+                      fieldValue={fieldValue}
+                      remarksUpdate={currentRemarks}
+                    ></ModalChild>
+                  </div>
+                  {/* <input type="text" className="form-control" placeholder="" {...register("enterMemoNumber")} /> */}
+                </Form.Group>
+              </Row>
+              <Row className="col-12">
+                <Form.Group as={Col} controlId="formGridLicence">
+                  <div>
+                    <Form.Label>
                       <h2>Bank Name </h2>
                     </Form.Label>
                   </div>
@@ -274,8 +309,6 @@ const Replace = (props) => {
                   </div>
                   {/* <input type="text" className="form-control" placeholder="" {...register("bankName")} /> */}
                 </Form.Group>
-              </Row>
-              <Row className="col-12">
                 <Form.Group as={Col} controlId="formGridLicence">
                   <div>
                     <Form.Label>
@@ -378,7 +411,8 @@ const Replace = (props) => {
                     <option>EDC</option>
                   </select> */}
                 </Form.Group>
-
+              </Row>
+              <Row className="col-3">
                 <Form.Group as={Col} controlId="formGridLicence">
                   <div>
                     <Form.Label>

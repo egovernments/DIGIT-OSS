@@ -18,20 +18,48 @@ function SubmitNew() {
   } = useForm({});
 
   const bankSubmitNew = (data) => console.log(data);
+
+  const servicePlan = async (data) => {
+    const token = window?.localStorage?.getItem("token");
+    console.log(data);
+    try {
+      const postDistrict = {
+        requestInfo: {
+          api_id: "Rainmaker",
+          ver: "1",
+          ts: null,
+          action: "create",
+          did: "",
+          key: "",
+          msg_id: "",
+          requester_id: "",
+          authToken: token,
+        },
+
+        ServicePlanRequest: {
+          ...data,
+        },
+      };
+      const Resp = await axios.post("/land-services/serviceplan/_create", postDistrict);
+      setServicePlanDataLabel(Resp.data);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit(bankSubmitNew)}>
       <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Submission</h4>
+        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}> Bank Guarantee Submission</h4>
         <div className="card">
           <Row className="col-12">
             <Col md={4} xxl lg="3">
-              <Form.Group as={Col} controlId="formGridLicence">
+              <div>
                 <Form.Label>
-                  <h2>Enter LOI No.</h2>{" "}
+                  <h2>Enter LOI No. </h2>
                 </Form.Label>
-
-                <input type="text" className="form-control" placeholder="" {...register("enterLoiNumber")} />
-              </Form.Group>
+              </div>
+              <input type="text" className="form-control" placeholder="" {...register("loiNumber")} />
             </Col>
 
             <Col md={4} xxl lg="3">
@@ -62,6 +90,7 @@ function SubmitNew() {
               <input type="text" className="form-control" placeholder="" {...register("amountInWords")} />
             </Col>
           </Row>
+          <br></br>
           <Row className="col-12">
             <Col md={4} xxl lg="3">
               <div>
@@ -77,7 +106,7 @@ function SubmitNew() {
                   <h2>Enter Memo No. </h2>
                 </Form.Label>
               </div>
-              <input type="text" className="form-control" placeholder="" {...register("enterMemoNumber")} />
+              <input type="text" className="form-control" placeholder="" {...register("memoNumber")} />
             </Col>
             <Col md={4} xxl lg="3">
               <div>
@@ -96,7 +125,7 @@ function SubmitNew() {
               <input type="file" className="form-control" placeholder="" {...register("uploadBg")} />
             </Col>
           </Row>
-
+          <br></br>
           <Row className="col-12">
             <div className="col col-12 ">
               <div>
