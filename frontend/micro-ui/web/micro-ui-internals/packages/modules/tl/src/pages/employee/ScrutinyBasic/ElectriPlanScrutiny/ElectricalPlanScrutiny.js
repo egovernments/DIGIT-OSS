@@ -1,486 +1,780 @@
-import React, { useState } from "react";
-import { Form } from "react-bootstrap";
-import { TextInput } from "@egovernments/digit-ui-react-components";
-import { Upload } from "react-bootstrap-icons";
 
-// const data = [];
+import React, { useState, useEffect } from "react";
+import { Card, Row, Col, Form, Button } from "react-bootstrap";
+import { useForm } from "react-hook-form";
+// import axios from "axios";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+// import FileDownload from "@mui/icons-material/FileDownload";
+import Visibility from "@mui/icons-material/Visibility";
+import FileDownload from "@mui/icons-material/FileDownload";
+// import { getDocShareholding } from "../ScrutinyDevelopment/docview.helper";
+import ModalChild from "../Remarks/ModalChild/"
+import ReportProblemIcon from "@mui/icons-material/ReportProblem";
+import '../css/personalInfoChild.style.js'
+import { useStyles } from "../css/personalInfoChild.style.js"
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+import Collapse from "react-bootstrap/Collapse";
 
-const ElectricalPlanScrutiny = () => {
-  const [LOCNumber, setLOCNumber] = useState("");
-  const [getData, setData] = useState([
-    { name: "Add Layout Plan in case of Plotted colonies/ add demarcation plan in case of other than plotted", image: null },
-  ]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("data===", LOCNumber);
-  };
+const ElectricalPlanScrutiny = (props) => {
+
+    const [selects, setSelects] = useState();
+    const [showhide, setShowhide] = useState("");
+    const [open2, setOpen2] = useState(false);
+
+    const handleshowhide = (event) => {
+      const getuser = event.target.value;
+
+      setShowhide(getuser);
+    };
+    const {
+      register,
+      handleSubmit,
+      formState: { errors },
+      control,
+      setValue,
+    } = useForm({});
+
+
+    const servicePlan = (data) => console.log(data);
+
+    const classes = useStyles();
+    const currentRemarks = (data) => {
+      props.showTable({ data: data.data });
+    };
+
+
+    const [smShow, setSmShow] = useState(false);
+    const [labelValue, setLabelValue] = useState("");
+    const Colors = {
+      approved:"#09cb3d",
+      disapproved:"#ff0000",
+      info:"#FFB602"
+    }
+
+    const handlemodaldData = (data) => {
+      // setmodaldData(data.data);
+      setSmShow(false);
+      console.log("here",openedModal,data);
+      if(openedModal && data){
+        setFieldIconColors({...fieldIconColors,[openedModal]:data.data.isApproved?Colors.approved:Colors.disapproved})
+      }
+        setOpennedModal("");
+        setLabelValue("");
+    };
+    const [selectedFieldData,setSelectedFieldData] = useState();
+    const [fieldValue, setFieldValue] = useState("");
+    const [openedModal, setOpennedModal] = useState("")
+    const [fieldIconColors, setFieldIconColors] = useState({
+        loiNO: Colors.info,
+        UploadedYN: Colors.info,
+        Undertaking: Colors.info,
+        Selfcertified: Colors.info,
+        environmental : Colors.info,
+        template: Colors.info,
+        certified: Colors.info,
+        AutoCAD: Colors.info,
+      pin: Colors.info,
+      tehsil: Colors.info,
+      district: Colors.info,
+      state: Colors.info,
+      type: Colors.info,
+      lciSignedBy: Colors.info,
+      lciNotSigned: Colors.info,
+      parmanentAddress: Colors.info,
+      addressForCommunication: Colors.info,
+      authPerson: Colors.info,
+      emailForCommunication: Colors.info
+    })
+
+    const fieldIdList = [{label:"LOI Number",key:"loiNO"},{label:"Uploaded Service Plan",key:"UploadedYN"},
+    {label:"Undertaking Mobile No",key:"Undertaking"},
+    {label:"Self-certified drawings from empanelled/certified architects that conform to the standard approved template.",key:"Selfcertified"},
+    {label:"Environmental Clearance.",key:"environmental"}
+    ,{label:"PDF (OCR Compatible) + GIS format (shapefile as per the template uploaded on the department website).",key:"template"},
+    {label:"Certified copy of the plan verified by a third party",key:"certified"},
+    {label:"AutoCAD (DXF) file.",key:"AutoCAD"}
+    ]
+  //////////////////////////////////////////////////////////////
+  const getSubmitDataLabel = async () => {
+      try {
+        const postDistrict = {
+          requestInfo: {
+            api_id: "1",
+            ver: "1",
+            ts: null,
+            action: "create",
+            did: "",
+            key: "",
+            msg_id: "",
+            requester_id: "",
+            auth_token: null,
+          },
+        };
+
+        const Resp = await axios.post(`http://10.1.1.18:80/land-services/serviceplan/_get?loiNumber=123`, postDistrict);
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+    useEffect(() => {
+      getSubmitDataLabel();
+    }, []);
+
+
+
+
+
   return (
-    <div style={{ marginTop: 50 }}>
-      <div>
-        <form onSubmit={handleSubmit}>
-          <div>
-            <span className="surveyformfield">
-              <label>LOI Number</label>
-              <TextInput name="LOINumber" onChange={(e) => setLOCNumber(e.target.value)} type="text" value={LOCNumber} />
-            </span>
-            <div>
+    <form 
+    // onSubmit={handleSubmit(ElectricalPlanScrutiny)}
+    >
+    <div
+  className="collapse-header"
+  onClick={() => setOpen2(!open2)}
+  aria-controls="example-collapse-text"
+  aria-expanded={open2}
+  style={{
+    background: "#f1f1f1",
+    padding: "0.25rem 1.25rem",
+    borderRadius: "0.25rem",
+    fontWeight: "600",
+    display: "flex",
+    cursor: "pointer",
+    color: "#817f7f",
+    justifyContent: "space-between",
+    alignContent: "center",
+  }}
+>
+  <span style={{ color: "#817f7f" }} className="">
+  Electrical Plan Service
+  </span>
+  {open2 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+</div>
+<Collapse in={open2}>
+  <div id="example-collapse-text">
+      <Card 
+      // style={{ width: "126%", border: "5px solid #1266af" }}
+      >
+        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Electrical Plan </h4>
+        <Card  
+        style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}
+        >
+          <Row className="ml-auto" style={{ marginBottom: 5 }}>
+            {/* <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
-                  <b>As per the approved layout plan/building plans</b>
+                  <h2>
+                    LOI Number <span style={{ color: "red" }}>*</span>
+                  </h2>
                 </Form.Label>
-                <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
               </div>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="approvedLayoutPlan"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="approvedLayoutPlan"
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="approvedLayoutPlan"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="approvedLayoutPlan"
-                inline
-              ></Form.Check>
-            </div>
-            <div>
-              <div>
+              <input type="number" className="form-control" placeholder="" {...register("loiNumber")} />
+            </Col> */}
+            <Col className="col-4">
+              {/* <Form.Group as={Col} controlId="formGridLicence"> */}
+               <div>
                 <Form.Label>
-                  <b>Level of stormwater and sewer line in conformity with approved EDC infrastructure works</b>
-                </Form.Label>
-                <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-              </div>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="levelOfStormWater"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="levelOfStormWater"
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="levelOfStormWater"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="levelOfStormWater"
-                inline
-              ></Form.Check>
-            </div>
-            <div>
-              <div>
-                <Form.Label>
-                  <b>Showing the location of sewer line, and stormwater line to connect trunk water supply network</b>
-                </Form.Label>
-                <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-              </div>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="location"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="location"
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="location"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="location"
-                inline
-              ></Form.Check>
-            </div>
-            <div>
-              <div>
-                <Form.Label>
-                  <b>Provision of 33 Kv switching station for the electrical infrastructure as per the approved layout plan</b>
-                </Form.Label>
-                <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-              </div>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="provisionOf33Kv"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="provisionOf33Kv"
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="provisionOf33Kv"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="provisionOf33Kv"
-                inline
-              ></Form.Check>
-            </div>
-            <div>
-              <div>
-                <Form.Label>
-                  <b>Water supply, sewer, and stormwater network connected with proposed/existing master services</b>
-                </Form.Label>
-                <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-              </div>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="waterSupply"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="waterSupply"
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="waterSupply"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="waterSupply"
-                inline
-              ></Form.Check>
-            </div>
-            <div>
-              <div>
-                <Form.Label>
-                  <b>Proposed source of water supply The capacity of UGT as per population norms</b>
-                </Form.Label>
-                <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-              </div>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="proposedSourceOfWaterSupply"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="proposedSourceOfWaterSupply"
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="proposedSourceOfWaterSupply"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="proposedSourceOfWaterSupply"
-                inline
-              ></Form.Check>
-            </div>
-            <div>
-              <div>
-                <Form.Label>
-                  <b>The capacity of ST as per population norms</b>
-                </Form.Label>
-                <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-              </div>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="capacityOfST"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="capacityOfST"
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="capacityOfST"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="capacityOfST"
-                inline
-              ></Form.Check>
-            </div>
-            <div>
-              <div>
-                <Form.Label>
-                  <b>Specifications of the public health department</b>
-                </Form.Label>
-                <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-              </div>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="specificationsOfThePublicHealth"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="specificationsOfThePublicHealth"
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="specificationsOfThePublicHealth"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="specificationsOfThePublicHealth"
-                inline
-              ></Form.Check>
-            </div>
-            <div>
-              <div>
-                <Form.Label>
-                  <b>Water supply network</b>
-                </Form.Label>
-                <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-              </div>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="waterSupplyNetwork"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="waterSupplyNetwork"
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="waterSupplyNetwork"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="waterSupplyNetwork"
-                inline
-              ></Form.Check>
-            </div>
-            <div>
-              <div>
-                <Form.Label>
-                  <b>Sewer network</b>
-                </Form.Label>
-                <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-              </div>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="sewerNetwork"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="sewerNetwork"
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="sewerNetwork"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="sewerNetwork"
-                inline
-              ></Form.Check>
-            </div>
-            <div>
-              <div>
-                <Form.Label>
-                  <b>Stormwater drainage</b>
-                </Form.Label>
-                <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-              </div>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="stormwaterDrainage"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="stormwaterDrainage"
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="stormwaterDrainage"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="stormwaterDrainage"
-                inline
-              ></Form.Check>
-            </div>
-            <div>
-              <div>
-                <Form.Label>
-                  <b>Roads network</b>
-                </Form.Label>
-                <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-              </div>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="roadsNetwork"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="roadsNetwork"
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="roadsNetwork"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="roadsNetwork"
-                inline
-              ></Form.Check>
-            </div>
-            <div>
-              <div>
-                <Form.Label>
-                  <b>Horticulture</b>
-                </Form.Label>
-                <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-              </div>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="horticulture"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="horticulture"
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="horticulture"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="horticulture"
-                inline
-              ></Form.Check>
-            </div>
-            <div>
-              <div>
-                <Form.Label>
-                  <b>Street Lightening</b>
-                </Form.Label>
-                <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-              </div>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="streetLightening"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="streetLightening"
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="streetLightening"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="streetLightening"
-                inline
-              ></Form.Check>
-            </div>
-            <div>
-              <div>
-                <Form.Label>
-                  <b>Per acre cost of internal development works</b>
-                </Form.Label>
-                <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-              </div>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="perAcreCostOfInternalDevelopment"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="perAcreCostOfInternalDevelopment"
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="perAcreCostOfInternalDevelopment"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="perAcreCostOfInternalDevelopment"
-                inline
-              ></Form.Check>
-            </div>
-            <div>
-              <div>
-                <Form.Label>
-                  <b>Self-certified drawings from chartered engineers that it is by the standard approved template</b>
-                </Form.Label>
-                <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-              </div>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="drawings"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="drawings"
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="drawings"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="drawings"
-                inline
-              ></Form.Check>
-            </div>
+              <h5 className={classes.formLabel}>LOI Number &nbsp;</h5>
+            </Form.Label>
+            <span className={classes.required}>*</span> &nbsp;&nbsp;
           </div>
-          <div>
-            <table>
+            <div className={classes.fieldContainer}>
+            <Form.Control
+              className={classes.formControl}
+              placeholder=""
+              disabled
+            ></Form.Control>
+
+                <ReportProblemIcon
+              style={{
+                color:fieldIconColors.loiNO }}
+              onClick={() => {
+                  setOpennedModal("LOI Number")
+                  setLabelValue("LOI Number"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+             <ModalChild
+              labelmodal={labelValue}
+              passmodalData={handlemodaldData}
+              displaymodal={smShow}
+              onClose={()=>setSmShow(false)}
+              selectedFieldData={selectedFieldData}
+              fieldValue={fieldValue}
+              remarksUpdate={currentRemarks}
+            ></ModalChild>
+             </div>
+              {/* </Form.Group> */}
+            </Col>
+            <Col md={4} xxl lg="4">
+
+              <p className="ml-3">
+              Electrical infrastructure sufficient to cater for the electrical need of the project area <span style={{ color: "red" }}>*</span>{" "}
+              </p>
+              <div className="ml-3" >
+                  <input
+                    type="radio"
+                    value="Yes"
+
+                    className="mx-2 mt-1"
+                    // checked={capacityScrutinyInfo?.designatedDirectors === "Y" ?true:false}
+                    // onChange={(e) => handleChange(e.target.value)}
+                    // 
+                    // onClick={handleshow}
+                    disabled
+                  />
+                  <label className="m-0  mx-1" for="Yes">Yes</label>
+
+                  <input
+                    type="radio"
+                    value="No"
+
+                    className="mx-2 mt-1"
+                    // checked={capacityScrutinyInfo?.designatedDirectors === "N" ?true:false}
+                    // onChange={(e) => handleChange(e.target.value)}
+                    // 
+                    // onClick={handleshow}
+                    disabled
+                  />
+                  <label className="m-0 mx-2" for="No">No</label>
+                  <ReportProblemIcon
+              style={{
+                color:fieldIconColors.loiNO }}
+              onClick={() => {
+                  setOpennedModal("LOI Number")
+                  setLabelValue("LOI Number"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                </div>
+              {/* <div>
+                <Form.Label>
+                  <h2>
+                    Electrical infrastructure sufficient to cater for the electrical need of the project area <span style={{ color: "red" }}>*</span>{" "}
+                    &nbsp;&nbsp;
+                  </h2>
+                </Form.Label>
+                <Form.Check
+                  onChange={(e) => console.log(e)}
+                  value="true"
+                  type="radio"
+                  id="default-radio"
+                  label="Yes"
+                  name="true"
+                  {...register("electricInfra")}
+                  inline
+                ></Form.Check>
+                <Form.Check
+                  onChange={(e) => console.log(e)}
+                  value="false"
+                  type="radio"
+                  id="default-radio"
+                  label="No"
+                  name="false"
+                  {...register("electricInfra")}
+                  inline
+                ></Form.Check>
+              </div> */}
+            </Col>
+            <Col className="ms-auto" md={4} xxl lg="4">
+            <p className="ml-3">
+            Provision of the electricity distribution in the project area by the instructions of the DHBVN{" "}
+                  <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+              </p>
+              <div className="ml-3" >
+                  <input
+                    type="radio"
+                    value="Yes"
+
+                    className="mx-2 mt-1"
+                    // checked={capacityScrutinyInfo?.designatedDirectors === "Y" ?true:false}
+                    // onChange={(e) => handleChange(e.target.value)}
+                    // 
+                    // onClick={handleshow}
+                    disabled
+                  />
+                  <label className="m-0  mx-1" for="Yes">Yes</label>
+
+                  <input
+                    type="radio"
+                    value="No"
+
+                    className="mx-2 mt-1"
+                    // checked={capacityScrutinyInfo?.designatedDirectors === "N" ?true:false}
+                    // onChange={(e) => handleChange(e.target.value)}
+                    // 
+                    // onClick={handleshow}
+                    disabled
+                  />
+                  <label className="m-0 mx-2" for="No">No</label>
+                  <ReportProblemIcon
+              style={{
+                color:fieldIconColors.loiNO }}
+              onClick={() => {
+                  setOpennedModal("LOI Number")
+                  setLabelValue("LOI Number"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                </div>
+              {/* <div>
+                <Form.Label>
+                  Provision of the electricity distribution in the project area by the instructions of the DHBVN{" "}
+                  <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                </Form.Label>
+              </div>
+              <Form.Check
+                onChange={(e) => console.log(e)}
+                value="true"
+                type="radio"
+                id="default-radio"
+                label="Yes"
+                name="true"
+                {...register("electricDistribution")}
+                inline
+              ></Form.Check>
+              <Form.Check
+                onChange={(e) => console.log(e)}
+                value="false"
+                type="radio"
+                id="default-radio"
+                label="No"
+                name="false"
+                {...register("electricDistribution")}
+                inline
+              ></Form.Check> */}
+            </Col>
+            <Col className="ms-auto" md={4} xxl lg="4">
+            <p className="ml-3">
+            The capacity of the proposed electrical substation as per the requirement <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;{" "}
+
+              </p>
+              <div className="ml-3" >
+                  <input
+                    type="radio"
+                    value="Yes"
+
+                    className="mx-2 mt-1"
+                    // checked={capacityScrutinyInfo?.designatedDirectors === "Y" ?true:false}
+                    // onChange={(e) => handleChange(e.target.value)}
+                    // 
+                    // onClick={handleshow}
+                    disabled
+                  />
+                  <label className="m-0  mx-1" for="Yes">Yes</label>
+
+                  <input
+                    type="radio"
+                    value="No"
+
+                    className="mx-2 mt-1"
+                    // checked={capacityScrutinyInfo?.designatedDirectors === "N" ?true:false}
+                    // onChange={(e) => handleChange(e.target.value)}
+                    // 
+                    // onClick={handleshow}
+                    disabled
+                  />
+                  <label className="m-0 mx-2" for="No">No</label>
+                  <ReportProblemIcon
+              style={{
+                color:fieldIconColors.loiNO }}
+              onClick={() => {
+                  setOpennedModal("LOI Number")
+                  setLabelValue("LOI Number"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                </div>
+
+              {/* <div>
+                <Form.Label>
+                  The capacity of the proposed electrical substation as per the requirement <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                </Form.Label>
+              </div>
+              <Form.Check
+                onChange={(e) => console.log(e)}
+                value="true"
+                type="radio"
+                id="default-radio"
+                label="Yes"
+                name="true"
+                {...register("electricalCapacity")}
+                inline
+              ></Form.Check>
+              <Form.Check
+                onChange={(e) => console.log(e)}
+                value="false"
+                type="radio"
+                id="default-radio"
+                label="No"
+                name="false"
+                {...register("electricalCapacity")}
+                inline
+              ></Form.Check> */}
+            </Col>
+            <Col className="ms-auto" md={4} xxl lg="4">
+              {/* <div>
+                <Form.Label>
+                  Provision of 33 Kv switching station for the electrical infrastructure as per the approved layout plan
+                  <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                </Form.Label>
+              </div>
+              <Form.Check
+                onChange={(e) => console.log(e)}
+                value="true"
+                type="radio"
+                id="default-radio"
+                label="Yes"
+                name="true"
+                {...register("switchingStation")}
+                inline
+              ></Form.Check>
+              <Form.Check
+                onChange={(e) => console.log(e)}
+                value="false"
+                type="radio"
+                id="default-radio"
+                label="No"
+                name="false"
+                {...register("switchingStation")}
+                inline
+              ></Form.Check> */}
+                <p className="ml-3">
+                Provision of 33 Kv switching station for the electrical infrastructure as per the approved layout plan <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;{" "}
+
+              </p>
+              <div className="ml-3" >
+                  <input
+                    type="radio"
+                    value="Yes"
+
+                    className="mx-2 mt-1"
+                    // checked={capacityScrutinyInfo?.designatedDirectors === "Y" ?true:false}
+                    // onChange={(e) => handleChange(e.target.value)}
+                    // 
+                    // onClick={handleshow}
+                    disabled
+                  />
+                  <label className="m-0  mx-1" for="Yes">Yes</label>
+
+                  <input
+                    type="radio"
+                    value="No"
+
+                    className="mx-2 mt-1"
+                    // checked={capacityScrutinyInfo?.designatedDirectors === "N" ?true:false}
+                    // onChange={(e) => handleChange(e.target.value)}
+                    // 
+                    // onClick={handleshow}
+                    disabled
+                  />
+                  <label className="m-0 mx-2" for="No">No</label>
+                  <ReportProblemIcon
+              style={{
+                color:fieldIconColors.loiNO }}
+              onClick={() => {
+                  setOpennedModal("LOI Number")
+                  setLabelValue("LOI Number"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                </div>
+            </Col>
+            <Col className="ms-auto" md={4} xxl lg="4">
+              {/* <div>
+                <Form.Label>
+                  Load sanction approval as per the requirement <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                </Form.Label>
+              </div>
+              <Form.Check
+                onChange={(e) => console.log(e)}
+                value="true"
+                type="radio"
+                id="default-radio"
+                label="Yes"
+                name="true"
+                {...register("LoadSancation")}
+                inline
+              ></Form.Check>
+              <Form.Check
+                onChange={(e) => console.log(e)}
+                value="false"
+                type="radio"
+                id="default-radio"
+                label="No"
+                name="false"
+                {...register("LoadSancation")}
+                inline
+              ></Form.Check> */}
+                <p className="ml-3">
+                Load sanction approval as per the requirement <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+
+              </p>
+              <div className="ml-3" >
+                  <input
+                    type="radio"
+                    value="Yes"
+
+                    className="mx-2 mt-1"
+                    // checked={capacityScrutinyInfo?.designatedDirectors === "Y" ?true:false}
+                    // onChange={(e) => handleChange(e.target.value)}
+                    // 
+                    // onClick={handleshow}
+                    disabled
+                  />
+                  <label className="m-0  mx-1" for="Yes">Yes</label>
+
+                  <input
+                    type="radio"
+                    value="No"
+
+                    className="mx-2 mt-1"
+                    // checked={capacityScrutinyInfo?.designatedDirectors === "N" ?true:false}
+                    // onChange={(e) => handleChange(e.target.value)}
+                    // 
+                    // onClick={handleshow}
+                    disabled
+                  />
+                  <label className="m-0 mx-2" for="No">No</label>
+                  <ReportProblemIcon
+              style={{
+                color:fieldIconColors.loiNO }}
+              onClick={() => {
+                  setOpennedModal("LOI Number")
+                  setLabelValue("LOI Number"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+                </div>
+            </Col>
+            <Col className="ms-auto" md={4} xxl lg="4"></Col>
+          </Row>
+<br></br>
+          <div className="table table-bordered table-responsive">
+            <thead>
               <tr>
-                <th>Sr. No.</th>
-                <th>Type Of Map/Plan</th>
-                <th>Annexure</th>
+                <td style={{ textAlign: "center" }}> Sr.No.</td>
+                <td style={{ textAlign: "center" }}>Type Of Map/Plan</td>
+                <td style={{ textAlign: "center" }}>Annexure</td>
               </tr>
-              {getData?.map((item, index) => {
-                return (
-                  <tr key={index}>
-                    <td>{index + 1}</td>
-                    <td>{item?.name}</td>
-                    <td>
-                      <div class="mainWrapper">
-                        <div class="btnimg">
-                          <Upload class="text-success" />
-                        </div>
-                        <input
-                          type="file"
-                          name="file"
-                          onChange={(e) => {
-                            setData(
-                              getData?.map((tag, indi) => {
-                                return indi === index ? { ...tag, image: e.target.files[0] } : { ...tag };
-                              })
-                            );
-                          }}
-                        />
-                        {item?.image?.name}
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">1.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2>Self-certified drawings from empanelled/certified architects that conform to the standard approved template.</h2>
+                </td>
+                <td component="th" scope="row">
+                  {/* <input type="file" className="form-control" {...register("selfCenteredDrawings")} /> */}
+                  <div className="btn btn-sm col-md-4">
+                        {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
+                        <Visibility color="info" className="icon" />
+                        {/* </IconButton> */}
                       </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </table>
-          </div>
-          <input type="submit" />
-        </form>
+
+                      <div className="btn btn-sm col-md-4">
+                        {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
+                        <FileDownload color="primary" className="mx-1" />
+                        {/* </IconButton> */}
+                      </div>
+                      <div className="btn btn-sm col-md-4">
+                  <ReportProblemIcon
+              style={{
+                color:fieldIconColors.loiNO }}
+              onClick={() => {
+                  setOpennedModal("Selfcertified")
+                  setLabelValue("Self-certified drawings from empanelled/certified architects that conform to the standard approved template."),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
       </div>
-    </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">2.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2>Environmental Clearance.</h2>
+                </td>
+                <td component="th" scope="row">
+                  {/* <input type="file" className="form-control" {...register("environmentalClearance")} /> */}
+                  <div className="btn btn-sm col-md-4">
+                        {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
+                        <Visibility color="info" className="icon" />
+                        {/* </IconButton> */}
+                      </div>
+
+                      <div className="btn btn-sm col-md-4">
+                        {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
+                        <FileDownload color="primary" className="mx-1" />
+                        {/* </IconButton> */}
+                      </div>
+                      <div className="btn btn-sm col-md-4">
+                  <ReportProblemIcon
+              style={{
+                color:fieldIconColors.loiNO }}
+              onClick={() => {
+                  setOpennedModal("environmental")
+                  setLabelValue("Environmental Clearance."),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+            </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">3.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2>PDF (OCR Compatible) + GIS format (shapefile as per the template uploaded on the department website).</h2>
+
+                 </td>
+                <td component="th" scope="row">
+                  {/* <input type="file" className="form-control" {...register("pdfFormat")} /> */}
+                  <div className="btn btn-sm col-md-4">
+                        {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
+                        <Visibility color="info" className="icon" />
+                        {/* </IconButton> */}
+                      </div>
+
+                      <div className="btn btn-sm col-md-4">
+                        {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
+                        <FileDownload color="primary" className="mx-1" />
+                        {/* </IconButton> */}
+                      </div>
+                      <div className="btn btn-sm col-md-4">
+                  <ReportProblemIcon
+              style={{
+                color:fieldIconColors.loiNO }}
+              onClick={() => {
+                  setOpennedModal("template")
+                  setLabelValue("PDF (OCR Compatible) + GIS format (shapefile as per the template uploaded on the department website)."),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+      </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">4.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2>AutoCAD (DXF) file.</h2>
+                </td>
+                <td component="th" scope="row">
+                  {/* <input type="file" className="form-control" {...register("autoCad")} /> */}
+                  <div className="btn btn-sm col-md-4">
+                        {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
+                        <Visibility color="info" className="icon" />
+                        {/* </IconButton> */}
+                      </div>
+
+                      <div className="btn btn-sm col-md-4">
+                        {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
+                        <FileDownload color="primary" className="mx-1" />
+                        {/* </IconButton> */}
+                      </div>
+                      <div className="btn btn-sm col-md-4">
+
+                  <ReportProblemIcon
+              style={{
+                color:fieldIconColors.loiNO }}
+              onClick={() => {
+                  setOpennedModal("AutoCAD")
+                  setLabelValue("AutoCAD (DXF) file."),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+              </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">5.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2>Certified copy of the plan verified by a third party.</h2>
+                </td>
+                <td component="th" scope="row">
+                  {/* <input type="file" className="form-control" {...register("verifiedPlan")} /> */}
+                  <div className="btn btn-sm col-md-4">
+                        {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
+                        <Visibility color="info" className="icon" />
+                        {/* </IconButton> */}
+                      </div>
+
+                      <div className="btn btn-sm col-md-4">
+                        {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
+                        <FileDownload color="primary" className="mx-1" />
+                        {/* </IconButton> */}
+                      </div>
+                      <div className="btn btn-sm col-md-4">
+                 <ReportProblemIcon
+              style={{
+                color:fieldIconColors.loiNO }}
+              onClick={() => {
+                  setOpennedModal("certified")
+                  setLabelValue("Certified copy of the plan verified by a third party"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+            </div>
+                </td>
+              </tr>
+            </tbody>
+          </div>
+
+          {/* <div class="row">
+            <div class="col-sm-12 text-right">
+              <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
+                Submit
+              </button>
+            </div>
+          </div> */}
+        </Card>
+      </Card>
+      </div>
+      </Collapse>
+    </form>
   );
 };
 
