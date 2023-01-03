@@ -95,7 +95,7 @@ const SelectStreet = ({ t, config, onSelect, userType, formData, formState, setE
       inputs?.map((input) => {
         if(getValues(input.name) !== formData?.cpt?.details?.address?.[input.name])
         {
-          setValue(input.name,formData?.cpt?.details?.address?.[input.name] === null ? "" : formData?.cpt?.details?.address?.[input.name])
+          setValue(input.name,(formData?.cpt?.details?.address?.[input.name] === null || formData?.cpt?.details?.address?.[input.name] === "" ? (formData?.address?.[input.name] ? formData?.address?.[input.name] : "") : formData?.cpt?.details?.address?.[input.name]))
         }
       })
     }

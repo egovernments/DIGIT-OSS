@@ -10,7 +10,7 @@ const SelectCommencementDate = ({ t, config, onSelect, userType, formData }) => 
   const onSkip = () => onSelect();
   useEffect(() => {
 
-    if(window.location.href.includes("/tl/tradelicence/renew-trade") && formData?.TradeDetails?.CommencementDate)
+    if(window.location.href.includes("/tl/tradelicence/renew-trade") || window.location.href.includes("/tl/tradelicence/edit-application") && formData?.TradeDetails?.CommencementDate)
     {
       let newdate = Date.parse(CommencementDate);
       newdate =  new Date(newdate).getFullYear().toString() + "-"+`${new Date(newdate).getMonth() + 1>9 ? 1 : 0}` + (new Date(newdate).getMonth() + 1).toString() + "-"+`${new Date(newdate).getDate()>9 ? 1 : 0}` + new Date(newdate).getDate().toString() 

@@ -414,7 +414,7 @@ function checkBillingSlab(value){
                             )}
                         />
                     </LabelFieldPair>
-                    <CardLabelError style={errorStyle}> {localFormState.touched.tradeSubType || localFormState.touched.uomValue || isRenewal ? errors?.tradeSubType?.message : ""} </CardLabelError>
+                    <CardLabelError style={errorStyle}> {localFormState.touched.tradeSubType || localFormState.touched.uomValue || (isRenewal && getValues("tradeSubType")) ? errors?.tradeSubType?.message : ""} </CardLabelError>
                     <LabelFieldPair>
                         <CardLabel className="card-label-smaller">{unit?.tradeSubType?.uom ? `${t("TL_NEW_TRADE_DETAILS_UOM_UOM_PLACEHOLDER")} * ` : `${t("TL_NEW_TRADE_DETAILS_UOM_UOM_PLACEHOLDER")}`}</CardLabel>
                         <div className="field">

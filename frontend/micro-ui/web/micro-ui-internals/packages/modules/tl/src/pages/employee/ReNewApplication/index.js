@@ -108,7 +108,7 @@ const ReNewApplication = (props) => {
   }
   const ownershipCategory = {
     code: applicationData?.tradeLicenseDetail?.subOwnerShipCategory,
-    i18nKey: `COMMON_MASTERS_OWNERSHIPCATEGORY_INDIVIDUAL_${applicationData?.tradeLicenseDetail?.subOwnerShipCategory.includes("INSTITUTIONAL") ? (applicationData?.tradeLicenseDetail?.subOwnerShipCategory.includes("GOVERNMENT") ?"OTHERGOVERNMENTINSTITUITION":"OTHERSPRIVATEINSTITUITION"):applicationData?.tradeLicenseDetail?.subOwnerShipCategory?.split(".")[1]}`,
+    i18nKey: `COMMON_MASTERS_OWNERSHIPCATEGORY_INDIVIDUAL_${applicationData?.tradeLicenseDetail?.subOwnerShipCategory?.includes("INSTITUTIONAL") ? (applicationData?.tradeLicenseDetail?.subOwnerShipCategory?.includes("GOVERNMENT") ?"OTHERGOVERNMENTINSTITUITION":"OTHERSPRIVATEINSTITUITION"):applicationData?.tradeLicenseDetail?.subOwnerShipCategory?.split(".")[1]}`,
     isSameAsPropertyOwner: applicationData?.tradeLicenseDetail?.additionalDetail?.isSameAsPropertyOwner === "null" ? null : applicationData?.tradeLicenseDetail?.additionalDetail?.isSameAsPropertyOwner,
   };
 
@@ -128,7 +128,7 @@ const ReNewApplication = (props) => {
   clonedData.checkForRenewal = false;
 
   const getOwners = (application) => {
-    if(application?.tradeLicenseDetail?.subOwnerShipCategory.includes("INSTITUTIONAL"))
+    if(application?.tradeLicenseDetail?.subOwnerShipCategory?.includes("INSTITUTIONAL"))
     {
       let owner = [];
       owner.push({...application?.tradeLicenseDetail?.owners[0],
@@ -314,8 +314,8 @@ const ReNewApplication = (props) => {
       if (data?.tradeUnits?.length > 0) formData.tradeLicenseDetail.tradeUnits = data?.tradeUnits;
       if (data?.owners?.length > 0) formData.tradeLicenseDetail.owners = data?.owners;
       if (structureType) formData.tradeLicenseDetail.structureType = structureType;
-      if (subOwnerShipCategory|| data?.owners?.[0]?.subOwnerShipCategory?.code) formData.tradeLicenseDetail.subOwnerShipCategory = formData?.tradeLicenseDetail?.owners?.[0]?.subOwnerShipCategory?.code.includes("INSTITUTIONAL") ? data?.owners?.[0]?.subOwnerShipCategory.code : subOwnerShipCategory;
-      if (formData?.tradeLicenseDetail?.owners?.[0]?.subOwnerShipCategory?.code.includes("INSTITUTIONAL")) formData.tradeLicenseDetail.institution = {
+      if (subOwnerShipCategory|| data?.owners?.[0]?.subOwnerShipCategory?.code) formData.tradeLicenseDetail.subOwnerShipCategory = formData?.tradeLicenseDetail?.owners?.[0]?.subOwnerShipCategory?.code?.includes("INSTITUTIONAL") ? data?.owners?.[0]?.subOwnerShipCategory.code : subOwnerShipCategory;
+      if (formData?.tradeLicenseDetail?.owners?.[0]?.subOwnerShipCategory?.code?.includes("INSTITUTIONAL")) formData.tradeLicenseDetail.institution = {
         ...formData?.tradeLicenseDetail?.institution,
         contactNo: data?.owners?.[0]?.altContactNumber,
         designation: data?.owners?.[0]?.designation,
@@ -368,7 +368,7 @@ const ReNewApplication = (props) => {
         formData.tradeLicenseDetail.address = address;
       }
       if (structureType) formData.tradeLicenseDetail.structureType = structureType;
-      if (subOwnerShipCategory || data?.owners?.[0]?.subOwnerShipCategory?.code) formData.tradeLicenseDetail["subOwnerShipCategory"] = formData?.tradeLicenseDetail?.owners?.[0]?.subOwnerShipCategory?.code.includes("INSTITUTIONAL") ? data?.owners?.[0]?.subOwnerShipCategory?.code : subOwnerShipCategory;
+      if (subOwnerShipCategory || data?.owners?.[0]?.subOwnerShipCategory?.code) formData.tradeLicenseDetail["subOwnerShipCategory"] = formData?.tradeLicenseDetail?.owners?.[0]?.subOwnerShipCategory?.code?.includes("INSTITUTIONAL") ? data?.owners?.[0]?.subOwnerShipCategory?.code : subOwnerShipCategory;
       if (applicationDocuments) formData.tradeLicenseDetail.applicationDocuments = applicationDocuments;
       if (data?.cpt || propertyDetails){
         if(!formData?.tradeLicenseDetail?.additionalDetail?.propertyId){
@@ -376,7 +376,7 @@ const ReNewApplication = (props) => {
         }
         formData.tradeLicenseDetail.additionalDetail.propertyId = data?.cpt?.details?.propertyId||propertyDetails?.propertyId;
       }
-      if (formData?.tradeLicenseDetail?.owners?.[0]?.subOwnerShipCategory?.code.includes("INSTITUTIONAL")) formData.tradeLicenseDetail.institution = {
+      if (formData?.tradeLicenseDetail?.owners?.[0]?.subOwnerShipCategory?.code?.includes("INSTITUTIONAL")) formData.tradeLicenseDetail.institution = {
         ...formData?.tradeLicenseDetail?.institution,
         contactNo: data?.owners?.[0]?.altContactNumber,
         designation: data?.owners?.[0]?.designation,

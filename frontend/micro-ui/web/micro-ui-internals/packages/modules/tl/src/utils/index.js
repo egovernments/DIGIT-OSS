@@ -559,6 +559,8 @@ export const convertToEditTrade = (data, fy = []) => {
         tradeLicenseDetail: {
           address: data.tradeLicenseDetail.address,
           applicationDocuments: data.tradeLicenseDetail.applicationDocuments,
+          noOfEmployees: data?.TradeDetails?.NumberOfEmployees || null,
+          operationalArea : data?.TradeDetails?.OperationalSqFtArea || null,
           accessories: isDirectrenewal ? data.tradeLicenseDetail.accessories : gettradeupdateaccessories(data),
           owners: isDirectrenewal ? data.tradeLicenseDetail.owners : gettradeownerarray(data),
           structureType: isDirectrenewal ? data.tradeLicenseDetail.structureType : (data?.TradeDetails?.VehicleType ? data?.TradeDetails?.VehicleType.code : data?.TradeDetails?.BuildingType.code),
@@ -567,6 +569,7 @@ export const convertToEditTrade = (data, fy = []) => {
           additionalDetail: {
             ...data.tradeLicenseDetail.additionalDetail,
             isSameAsPropertyOwner : isSameAsPropertyOwner},
+            tradeGstNo: data?.TradeDetails?.TradeGSTNumber || null,
           auditDetails: data.tradeLicenseDetail.auditDetails,
           channel: data.tradeLicenseDetail.channel,
           id: data.tradeLicenseDetail.id,
@@ -617,6 +620,8 @@ export const convertToResubmitTrade = (data) => {
         status: data?.status,
         tradeLicenseDetail: {
           address: data.tradeLicenseDetail.address,
+          noOfEmployees: data?.TradeDetails?.NumberOfEmployees || null,
+          operationalArea : data?.TradeDetails?.OperationalSqFtArea || null,
           applicationDocuments: getEditTradeDocumentUpdate(data),
           accessories: gettradeupdateaccessories(data),
           owners: gettradeownerarray(data),

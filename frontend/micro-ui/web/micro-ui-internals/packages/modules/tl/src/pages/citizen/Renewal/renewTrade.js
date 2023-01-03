@@ -15,6 +15,22 @@ const getPath = (path, params) => {
   return path;
 };
 
+const gettradedocuments = (docs) => {
+  let documents = [];
+  docs &&
+    docs.map((ob) => {
+      if (ob.documentType.includes("OWNERPHOTO")) {
+        documents["OwnerPhotoProof"] = ob;
+      } else if (ob.documentType.includes("OWNERIDPROOF")) {
+        documents["ProofOfIdentity"] = ob;
+      } else if (ob.documentType.includes("OWNERSHIPPROOF")) {
+        documents["ProofOfOwnership"] = ob;
+      }
+    });
+  return documents;
+};
+
+
 const getTradeEditDetails = (data,t) => {
   const gettradeaccessories = (tradeacceserioies, t) => {
     let acc = [];
@@ -45,21 +61,6 @@ const getTradeEditDetails = (data,t) => {
         });
       });
     return units;
-  };
-
-  const gettradedocuments = (docs) => {
-    let documents = [];
-    docs &&
-      docs.map((ob) => {
-        if (ob.documentType.includes("OWNERPHOTO")) {
-          documents["OwnerPhotoProof"] = ob;
-        } else if (ob.documentType.includes("OWNERIDPROOF")) {
-          documents["ProofOfIdentity"] = ob;
-        } else if (ob.documentType.includes("OWNERSHIPPROOF")) {
-          documents["ProofOfOwnership"] = ob;
-        }
-      });
-    return documents;
   };
 
   const gettradeowners = (owner) => {
@@ -198,9 +199,13 @@ const RenewTrade = ({ parentRoute }) => {
       }
       sessionStorage.setItem("tradeInitialObject", JSON.stringify({ ...application }));
       let tradeEditDetails = getTradeEditDetails(application,t);
+      if(window.location.href.includes("property-details"))
+      {
+        tradeEditDetails = {...params, owners:{...params?.owners, documents:gettradedocuments(application?.tradeLicenseDetail?.applicationDocuments)}}
+      }
       setParams({ ...params, ...tradeEditDetails });
     }
-  }, [data]);
+  }, [data?.Licenses[0]?.applicationNumber]);
 
   const goNext = (skipStep, index, isAddMultiple, key, isPTCreateSkip) => {
     let currentPath = pathname.split("/").pop(),
@@ -221,7 +226,7 @@ const RenewTrade = ({ parentRoute }) => {
           nextStep[sessionStorage.getItem("isAccessories")] === "owner-ship-details" || 
           nextStep[sessionStorage.getItem("isAccessories")] === "know-your-property")
       ) {
-        if((isReneworEditTrade && !(params?.tradeLicenseDetail?.additionalDetail?.propertyId)  ) )
+        if((isReneworEditTrade && !(params?.tradeLicenseDetail?.additionalDetail?.propertyId) && params?.TradeDetails?.StructureType?.code === "MOVABLE" ) )
         nextStep = `map`
         else
         nextStep = `${nextStep[sessionStorage.getItem("isAccessories")]}`;

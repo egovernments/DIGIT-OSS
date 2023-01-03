@@ -7,8 +7,13 @@ import Timeline from "../../components/CPTTimeline";
 
 const PropertyDetails = ({ t, config, onSelect, userType, formData }) => {
   const tenantId = (formData?.knowyourproperty?.KnowProperty?.code === "YES" || sessionStorage.getItem("VisitedLightCreate") === "false" ? formData?.cptSearchQuery?.city : formData?.cpt?.details?.tenantId ) || Digit.ULBService.getCitizenCurrentTenant();
-  if (window.location.href.includes("/tl/tradelicence/edit-application/") || window.location.href.includes("/renew-trade/")) {
-    sessionStorage.setItem("EditFormData", JSON.stringify(formData));
+  // if (window.location.href.includes("/tl/tradelicence/edit-application/") || window.location.href.includes("/renew-trade/")) {
+  //   sessionStorage.setItem("EditFormData", JSON.stringify(formData));
+  // }
+  if(window.location.href.includes("/tl/tradelicence/edit-application/") || window.location.href.includes("/renew-trade/") && JSON.parse(sessionStorage.getItem("EditFormData") ))
+  {
+    let EditformData = JSON.parse(sessionStorage.getItem("EditFormData"));
+    formData = {...formData,...EditformData};
   }
   const { isLoading, isError, error, data: propertyDetails } = Digit.Hooks.pt.usePropertySearch(
     {
@@ -62,7 +67,9 @@ const PropertyDetails = ({ t, config, onSelect, userType, formData }) => {
     return `/digit-ui/citizen/ws/edit-application/${formData?.tenantId}/search-property`
     else if(window.location.href.includes("/ws/"))
     return `/digit-ui/citizen/ws/create-application/search-property`
-    else if(window.location.href.includes("/edit-application/") || window.location.href.includes("/renew-trade/"))
+    else if(window.location.href.includes("/renew-trade/"))
+    return `/digit-ui/citizen/tl/tradelicence/renew-trade/${formData?.applicationNumber}/${formData?.tenantId}/know-your-property`
+    else if(window.location.href.includes("/edit-application/"))
     return `/digit-ui/citizen/tl/tradelicence/edit-application/${formData?.applicationNumber}/${formData?.tenantId}/know-your-property`
     else
     return `/digit-ui/citizen/tl/tradelicence/new-application/know-your-property`
@@ -106,7 +113,7 @@ const PropertyDetails = ({ t, config, onSelect, userType, formData }) => {
                 <Link
                   to={getChangePropertyPath()}
                 >
-                  <LinkButton style={{ textAlign: "left" }} label={t("PT_CHANGE_PROPERTY")} onClick={() => sessionStorage.setItem("changePropertySelected", "yes")} />
+                  <LinkButton style={{ textAlign: "left" }} label={t("PT_CHANGE_PROPERTY")} onClick={() => {sessionStorage.setItem("changePropertySelected", "yes"); sessionStorage.setItem("EditFormData", JSON.stringify(formData))}} />
                 </Link>
               </div>
             </StatusTable>
