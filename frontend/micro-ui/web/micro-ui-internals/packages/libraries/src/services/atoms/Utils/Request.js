@@ -121,6 +121,7 @@ export const Request = async ({
   if (useCache && res?.data && Object.keys(returnData).length !== 0) {
     window.Digit.RequestCache[key] = returnData;
   }
+  
   return returnData;
 };
 

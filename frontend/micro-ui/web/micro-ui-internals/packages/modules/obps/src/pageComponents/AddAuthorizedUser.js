@@ -276,6 +276,12 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
   };
 
   const getDocumentData = async (file, fieldName, fromTable , index) => {
+
+    if(getValues("authorizedUserFiles")?.includes(file.name)){
+      alert("Duplicate file Selected");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("file", file);
     formData.append("tenantId", "hr");
@@ -301,6 +307,11 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
         // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
         console.log("getValues()=====", getValues());
         setDocumentsData(getValues())
+      }
+      if(getValues("authorizedUserFiles")) {
+        setValue("authorizedUserFiles",[...getValues("authorizedUserFiles"),file.name]);
+      } else {
+        setValue("authorizedUserFiles",[file.name]);
       }
     //   setLoader(false);
     

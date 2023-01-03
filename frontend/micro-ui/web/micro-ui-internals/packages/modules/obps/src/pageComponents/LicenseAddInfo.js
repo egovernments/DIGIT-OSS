@@ -365,6 +365,29 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   //   console.log(value);
   // }
   const getDocumentData = async (file, fieldName, type, index) => {
+    console.log("logFile",file)
+    if (type === "existingColonizer") { 
+      if(getValues("existingColonizerFiles")?.includes(file.name)){
+        alert("Duplicate file Selected");
+        return;
+      }
+    } else if (type === "shareholdingPattern") {
+      if(getValues("shareholdingPatternFiles")?.includes(file.name)){
+        alert("Duplicate file Selected");
+        return;
+      }
+    } else if (type === "directorInfoPdf") {
+      if(getValues("directorInfoPdfFiles")?.includes(file.name)){
+        alert("Duplicate file Selected");
+        return;
+      }
+    } else {
+      setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
+      // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
+      console.log("getValues()=====", getValues());
+      setDocumentsData(getValues())
+    }
+
     const formData = new FormData();
     formData.append("file", file);
     formData.append("tenantId", "hr");
@@ -382,18 +405,33 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       if (type === "existingColonizer") {
         console.log("log123 ====> ", fieldName, Resp?.data?.files?.[0]?.fileStoreId, Resp)
         setExistingColonizerDetails({ ...existingColonizerDetails, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId })
+        if(getValues("existingColonizerFiles")) {
+          setValue("existingColonizerFiles",[...getValues("existingColonizerFiles"),file.name]);
+        } else {
+          setValue("existingColonizerFiles",[file.name]);
+        }
       } else if (type === "shareholdingPattern") {
         console.log("entered into shareholding case");
         let temp = modalValuesArray;
         temp[index].uploadPdf = Resp?.data?.files?.[0]?.fileStoreId;
         setModalValuesArray([...temp])
         console.log("set into shareholding case", temp, modalValuesArray);
+        if(getValues("shareholdingPatternFiles")) {
+          setValue("shareholdingPatternFiles",[...getValues("shareholdingPatternFiles"),file.name]);
+        } else {
+          setValue("shareholdingPatternFiles",[file.name]);
+        }
       } else if (type === "directorInfoPdf") {
         console.log("entered into directorInfo case");
         let temp = DirectorData;
         temp[index].uploadPdf = Resp?.data?.files?.[0]?.fileStoreId;
         setDirectorData([...temp])
         console.log("set into directorInfo case", temp, DirectorData);
+        if(getValues("directorInfoPdfFiles")) {
+          setValue("directorInfoPdfFiles",[...getValues("directorInfoPdfFiles"),file.name]);
+        } else {
+          setValue("directorInfoPdfFiles",[file.name]);
+        }
       } else {
         setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
         // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
@@ -407,6 +445,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       console.log(error.message);
     }
   };
+  
+
   // useEffect(() => {
   //   getDocumentData();
   // }, [file]);
@@ -476,12 +516,12 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
         // console.log("CIN",Resp.data)
         // console.log(Directory.data);
-        if (DirectorData && DirectorData.length) {
-          console.log("log1", DirectorData, Directory.data)
-        } else {
-          console.log("log2", DirectorData, Directory.data)
-          setDirectorData(Directory.data);
-        }
+        // if (DirectorData && DirectorData.length) {
+        //   console.log("log1", DirectorData, Directory.data)
+        // } else {
+        //   console.log("log2", DirectorData, Directory.data)
+        // }
+        setDirectorData(Directory.data);
         setCompanyName(Resp.data.companyName)
         setIncorporation(Resp.data.incorporationDate)
         setUserEmail(Resp.data.email)
@@ -1068,13 +1108,11 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                         // isMendatory={false}
                                         placeholder={csrNumber}
                                         className="employee-card-input text-uppercase"
-                                        max={"21"}
+                                        max={"11"}
                                         {...(validation = {
                                           // isRequired: true,
-                                          pattern: "^[A-Z0-9]*$",
                                           type: "text",
-                                          maxlength: "21",
-                                          title: "Please Enter CSR Number"
+                                          maxlength: "11",
                                         })}
                                       />
                                       {csrNumber && csrNumber.length > 0 && !csrNumber.match(Digit.Utils.getPattern('CSR')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_CSR_NO")}</CardLabelError>}
@@ -1094,13 +1132,11 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                         // isMendatory={false}
                                         placeholder={llpNumber}
                                         className="employee-card-input text-uppercase"
-                                        max={"21"}
+                                        max={"8"}
                                         {...(validation = {
                                           // isRequired: true,
-                                          pattern: "^[A-Z0-9]*$",
                                           type: "text",
-                                          maxlength: "21",
-                                          title: "Please Enter LLP Number"
+                                          maxlength: "8",
                                         })}
                                       />
                                       {llpNumber && llpNumber.length > 0 && !llpNumber.match(Digit.Utils.getPattern('LLP')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_LLP_NO")}</CardLabelError>}

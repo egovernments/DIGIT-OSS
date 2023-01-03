@@ -65,7 +65,7 @@ const DesktopInbox = ({ tableConfig, filterComponent, columns, isLoading, setSea
     {
       Header: t("WF_INBOX_HEADER_DIARY_NO"),
       Cell: ({ row }) => {
-        return GetCell(row.original["diaryNo"]);
+        return GetCell(row.original["dairyNo"]);
       },
     },
     {
