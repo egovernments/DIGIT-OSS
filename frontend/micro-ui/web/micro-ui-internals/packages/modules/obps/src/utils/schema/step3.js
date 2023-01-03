@@ -30,14 +30,6 @@ const VALIDATION_SCHEMA = Yup.object().shape({
   // road: Yup.string().nullable().required("This field is required."),
   // marginalLand: Yup.string().nullable().required("This field is required."),
   // utilityLine: Yup.string().nullable().required("This field is required."),
-  // landSchedule: Yup.string().required("This field is required."),
-  // mutation: Yup.string().required("This field is required."),
-  // jambandhi: Yup.string().required("This field is required."),
-  // detailsOfLease: Yup.string().required("This field is required."),
-  // addSalesDeed: Yup.string().required("This field is required."),
-  // copyofSpaBoard: Yup.string().required("This field is required."),
-  // revisedLanSchedule: Yup.string().required("This field is required."),
-  // copyOfShajraPlan: Yup.string().required("This field is required."),
 });
 
 export { VALIDATION_SCHEMA };

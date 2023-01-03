@@ -11,6 +11,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import Spinner from "../../../../components/Loader";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step5";
+import ScrollToTop from "@egovernments/digit-ui-react-components/src/atoms/ScrollToTop";
 
 const FeesChargesForm = (props) => {
   const location = useLocation();
@@ -239,6 +240,7 @@ const FeesChargesForm = (props) => {
 
   return (
     <div>
+      <ScrollToTop />
       {loader && <Spinner />}
       <form onSubmit={handleSubmit(FeesChrgesFormSubmitHandler)}>
         <Card style={{ width: "126%", border: "5px solid #1266af" }}>
@@ -458,41 +460,9 @@ const FeesChargesForm = (props) => {
                         </span>
                       </label>
                     </div>
-
-                    {/* <div>
-                    <Modal
-                      size="lg"
-                      isOpen={modal}
-                      toggle={() => setmodal(!modal)}
-                      style={{ width: "500px", height: "200px" }}
-                      aria-labelledby="contained-modal-title-vcenter"
-                      centered
-                    >
-                      <ModalHeader toggle={() => setmodal(!modal)}></ModalHeader>
-                      <ModalBody style={{ fontWeight: "bold", fontSize: 20 }}>
-                        <p class="text-success font-weight-bold">Congratulations, Payment Successful!!</p>
-                        <p class="font-weight-bold">
-                          Your Application No. : <strong>2547893</strong>
-                        </p>
-                        <p class="font-weight-bold">
-                          Your Diary No. : <strong>5984785</strong>
-                        </p>
-                        <p class="font-weight-bold">The same has been sent to your mobile and email as well.</p>
-                      </ModalBody>
-                      <ModalFooter toggle={() => setmodal(!modal)}></ModalFooter>
-                    </Modal>
-                  </div> */}
                   </div>
                   <div class="row">
-                    {/* <button id="btnSearch" class="btn btn-primary btn-md ">
-                      {" "} */}
-                    {/* <a href="http://103.166.62.118:80/tl-services/new/license/report?id=875" target="_blank"> */}
                     <div class="col-sm-12 text-right">
-                      {/* <div onClick={() => showPdf()} id="btnSearch" class="btn btn-primary btn-md">
-                        View as PDF &nbsp;&nbsp; <VisibilityIcon color="white" />
-                      </div> */}
-                      {/* </a> */}
-                      {/* &nbsp;&nbsp; */}
                       {getShow?.submit && (
                         <button type="submit" id="btnClear" class="btn btn-primary btn-md ">
                           Submit

@@ -16,7 +16,7 @@ import { IconButton } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 
-function Extension() {
+const Extension = (props) => {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
   const [open2, setOpen2] = useState(false);
@@ -126,15 +126,17 @@ function Extension() {
           alignContent: "center",
         }}
       >
-        <span style={{ color: "#817f7f" }} className="">
-          Extension
+        <span style={{ color: "#817f7f", fontSize: 14 }} className="">
+          - Extension
         </span>
         {open2 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       </div>
       <Collapse in={open2}>
         <div id="example-collapse-text">
-          <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-            <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Extension </h4>
+          <Card
+          //   style={{ width: "126%", border: "5px solid #1266af" }}
+          >
+            <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Extension of Bank Guarantee</h4>
             <div className="card">
               <Row className="col-12">
                 <Form.Group as={Col} controlId="formGridLicence">
@@ -239,6 +241,41 @@ function Extension() {
                 <Form.Group as={Col} controlId="formGridLicence">
                   <div>
                     <Form.Label>
+                      <h2>Previous Memo No. </h2>
+                    </Form.Label>
+                  </div>
+                  <div className={classes.fieldContainer}>
+                    <Form.Control className={classes.formControl} placeholder="" disabled></Form.Control>
+
+                    <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.developer,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("Licence No");
+                        setLabelValue("Licence No"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                      }}
+                    ></ReportProblemIcon>
+                    <ModalChild
+                      labelmodal={labelValue}
+                      passmodalData={handlemodaldData}
+                      displaymodal={smShow}
+                      onClose={() => setSmShow(false)}
+                      selectedFieldData={selectedFieldData}
+                      fieldValue={fieldValue}
+                      remarksUpdate={currentRemarks}
+                    ></ModalChild>
+                  </div>
+                  {/* <input type="text" className="form-control" placeholder="" {...register("enterMemoNumber")} /> */}
+                </Form.Group>
+              </Row>
+              <Row className="col-12">
+                <Form.Group as={Col} controlId="formGridLicence">
+                  <div>
+                    <Form.Label>
                       <h2>Validity Date </h2>
                     </Form.Label>
                   </div>
@@ -269,8 +306,6 @@ function Extension() {
                   </div>
                   {/* <input type="date" className="form-control" placeholder="" {...register("validity")} /> */}
                 </Form.Group>
-              </Row>
-              <Row className="col-12">
                 <Form.Group as={Col} controlId="formGridLicence">
                   <div>
                     <Form.Label>
@@ -373,7 +408,8 @@ function Extension() {
                   </div>
                   {/* <input type="text" className="form-control" placeholder="" {...register("enterMemoNumber")} /> */}
                 </Form.Group>
-
+              </Row>
+              <Row className="col-3">
                 <Form.Group as={Col} controlId="formGridLicence">
                   <div>
                     <Form.Label>
@@ -536,7 +572,7 @@ function Extension() {
                 </div>
               </div>
 
-              <div class="row">
+              {/* <div class="row">
                 <div class="col-sm-12 text-right">
                   <button type="submit" id="btnClear" class="btn btn-primary btn-md center-block" style={{ marginBottom: "-44px" }}>
                     Submit
@@ -549,13 +585,13 @@ function Extension() {
                     </button>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </Card>
         </div>
       </Collapse>
     </form>
   );
-}
+};
 
 export default Extension;

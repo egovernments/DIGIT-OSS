@@ -16,7 +16,7 @@ import { IconButton } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 
-function SubmitNew() {
+const SubmitNew = (props) => {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
   const [open2, setOpen2] = useState(false);
@@ -84,6 +84,7 @@ function SubmitNew() {
     addressForCommunication: Colors.info,
     authPerson: Colors.info,
     emailForCommunication: Colors.info,
+    lOI: Colors.info,
   });
 
   const fieldIdList = [
@@ -106,6 +107,7 @@ function SubmitNew() {
     { label: "Address for communication", key: "addressForCommunication" },
     { label: "Name of the authorized person to sign the application", key: "authPerson" },
     { label: "Email ID for communication", key: "emailForCommunication" },
+    { lablel: "Enter LOI No", key: "lOI" },
   ];
   return (
     <form onSubmit={handleSubmit(SubmitNew)}>
@@ -126,15 +128,17 @@ function SubmitNew() {
           alignContent: "center",
         }}
       >
-        <span style={{ color: "#817f7f" }} className="">
-          Submission
+        <span style={{ color: "#817f7f", fontSize: 14 }} className="">
+          - Submission
         </span>
         {open2 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       </div>
       <Collapse in={open2}>
         <div id="example-collapse-text">
-          <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-            <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Submission </h4>
+          <Card
+          // style={{ width: "126%", border: "5px solid #1266af" }}
+          >
+            <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Bank Guarantee Submission </h4>
             <div className="card">
               <Row className="col-12">
                 <Form.Group as={Col} controlId="formGridLicence">
@@ -150,8 +154,8 @@ function SubmitNew() {
                         color: fieldIconColors.developer,
                       }}
                       onClick={() => {
-                        setOpennedModal("Licence No");
-                        setLabelValue("Licence No"),
+                        setOpennedModal("lOI");
+                        setLabelValue("Enter LOI No"),
                           setSmShow(true),
                           console.log("modal open"),
                           setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -534,7 +538,7 @@ function SubmitNew() {
                 </div>
               </div>
 
-              <div class="row">
+              {/* <div class="row">
                 <div class="col-sm-12 text-right">
                   <button type="submit" id="btnClear" class="btn btn-primary btn-md center-block" style={{ marginBottom: "-44px" }}>
                     Submit
@@ -547,13 +551,13 @@ function SubmitNew() {
                     </button>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </Card>
         </div>
       </Collapse>
     </form>
   );
-}
+};
 
 export default SubmitNew;

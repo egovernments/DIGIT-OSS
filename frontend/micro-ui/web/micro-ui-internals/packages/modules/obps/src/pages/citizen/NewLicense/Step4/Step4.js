@@ -11,6 +11,7 @@ import { Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import CalculateIcon from "@mui/icons-material/Calculate";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
+import FileUpload from "@mui/icons-material/FileUpload";
 import axios from "axios";
 import Spinner from "../../../../components/Loader";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -18,7 +19,8 @@ import { getDocShareholding } from "../docView/docView.help";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step4";
 import { useLocation } from "react-router-dom";
-
+import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import ScrollToTop from "@egovernments/digit-ui-react-components/src/atoms/ScrollToTop";
 const AppliedDetailForm = (props) => {
   const location = useLocation();
   const Purpose = localStorage.getItem("purpose");
@@ -349,9 +351,11 @@ const AppliedDetailForm = (props) => {
     const id = params.get("id");
     if (id) getApplicantUserData(id);
   }, []);
-
+  const [modal, setmodal] = useState(false);
+  const [modal1, setmodal1] = useState(false);
   return (
     <div>
+      <ScrollToTop />
       {loader && <Spinner />}
       <form onSubmit={handleSubmit(AppliedDetailFormSubmitHandler)}>
         <Card style={{ width: "126%", border: "5px solid #1266af" }}>
@@ -361,8 +365,39 @@ const AppliedDetailForm = (props) => {
               <Row className="ml-auto" style={{ marginBottom: 5 }}>
                 <Col col-12>
                   <h4>
-                    1. DGPS points <span className="text-primary"> (Click here for instructions to capture DGPS points)</span>
+                    1. DGPS points{" "}
+                    <span className="text-primary">
+                      {" "}
+                      <a onClick={() => setmodal1(true)}>
+                        (Click here for instructions to receive DGPS-based coordinate points of the colony boundary)
+                      </a>
+                    </span>
                     <span style={{ color: "red" }}>*</span>
+                    <div>
+                      <Modal
+                        size="lg"
+                        isOpen={modal1}
+                        toggle={() => setmodal(!modal1)}
+                        style={{ width: "500px", height: "200px" }}
+                        aria-labelledby="contained-modal-title-vcenter"
+                        centered
+                      >
+                        <ModalHeader toggle={() => setmodal1(!modal1)}></ModalHeader>
+                        <ModalBody style={{ fontSize: 20 }}>
+                          <h2>
+                            {" "}
+                            <b> A.</b> Applicant level Information: DGPS-based survey to be executed at the applicant level to collect coordinate
+                            points of the colony boundary. <br></br>• DGPS Coordinate points to be collected for each divergent/edge of the colony
+                            boundary.<br></br> • DGPS Coordinate Points to be entered by the applicant in e-License application in Web Form.<br></br>
+                            <b> B.</b> Web Form Fields at applicant level: Input Fields to be added in the web-form for entering the DGPS points.
+                            <br></br> • Input Fields for entering number of DGPS Points <br></br>• Input Fields for each DGPS Point: <br></br>o Add
+                            Point 1 as Point 1: (X: Longitude, Y: Latitude) <br></br>o Add Point 2 as Point 2: (X: Longitude, Y: Latitude) <br></br>o
+                            Add Point XX as Point XX: (X: Longitude, Y: Latitude)
+                          </h2>
+                        </ModalBody>
+                        <ModalFooter toggle={() => setmodal(!modal1)}></ModalFooter>
+                      </Modal>
+                    </div>
                   </h4>
                   <br></br>
                   <div className="px-2">
@@ -1160,24 +1195,33 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Whether you hosted the existing approved layout plan & in-principle approved layout on the website of your company/organization Yes/No if yes upload"
                       >
-                        Hosted approved layout plan.<span style={{ color: "red" }}>*</span>
-                        {fileStoreId?.hostedLayoutPlan ? (
-                          <a onClick={() => getDocShareholding(fileStoreId?.hostedLayoutPlan)} className="btn btn-sm col-md-6">
-                            <VisibilityIcon color="info" className="icon" />
-                          </a>
-                        ) : (
-                          <p></p>
-                        )}
+                        Hosted layout plan.<span style={{ color: "red" }}>*</span>
                       </h6>
-                      <div>
+                      <label>
+                        <FileUpload color="primary" />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "hostedLayoutPlan")}
+                          accept="application/pdf/jpeg"
+                          required
+                        />
+                      </label>
+                      {fileStoreId?.hostedLayoutPlan ? (
+                        <a onClick={() => getDocShareholding(fileStoreId?.hostedLayoutPlan)} className="btn btn-sm ">
+                          <VisibilityIcon color="info" className="icon" />
+                        </a>
+                      ) : (
+                        <p></p>
+                      )}
+                      {/* <div>
                         <input
                           type="file"
                           className="form-control"
                           onChange={(e) => getDocumentData(e?.target?.files[0], "hostedLayoutPlan")}
                           required
                         />
-                      </div>
-
+                      </div> */}
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.hostedLayoutPlan && errors?.hostedLayoutPlan?.message}
                       </h3>
@@ -1191,15 +1235,25 @@ const AppliedDetailForm = (props) => {
                         title="Consent of RERA if there is any change in the phasing ."
                       >
                         Consent of RERA. <span style={{ color: "red" }}>*</span>
-                        {fileStoreId?.consentRera ? (
-                          <a onClick={() => getDocShareholding(fileStoreId?.consentRera)} className="btn btn-sm col-md-6">
-                            <VisibilityIcon color="info" className="icon" />
-                          </a>
-                        ) : (
-                          <p></p>
-                        )}
                       </h6>
-                      <div>
+                      <label>
+                        <FileUpload color="primary" />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "consentRera")}
+                          accept="application/pdf/jpeg"
+                          required
+                        />
+                      </label>
+                      {fileStoreId?.consentRera ? (
+                        <a onClick={() => getDocShareholding(fileStoreId?.consentRera)} className="btn btn-sm ">
+                          <VisibilityIcon color="info" className="icon" />
+                        </a>
+                      ) : (
+                        <p></p>
+                      )}
+                      {/* <div>
                         <input
                           type="file"
                           className="form-control"
@@ -1207,24 +1261,33 @@ const AppliedDetailForm = (props) => {
                           onChange={(e) => getDocumentData(e?.target?.files[0], "consentRera")}
                           required
                         />
-                      </div>
-
+                      </div> */}
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.consentRera && errors?.consentRera?.message}
                       </h3>
                     </div>
                     <div className="col col-3">
-                      <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
+                      <h6 style={{ display: "flex" }}>
                         Sectoral Plan.<span style={{ color: "red" }}>*</span>
-                        {fileStoreId?.sectoralPlan ? (
-                          <a onClick={() => getDocShareholding(fileStoreId?.sectoralPlan)} className="btn btn-sm col-md-6">
-                            <VisibilityIcon color="info" className="icon" />
-                          </a>
-                        ) : (
-                          <p></p>
-                        )}
                       </h6>
-                      <div>
+                      <label>
+                        <FileUpload color="primary" />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "sectoralPlan")}
+                          accept="application/pdf/jpeg"
+                          required
+                        />
+                      </label>
+                      {fileStoreId?.sectoralPlan ? (
+                        <a onClick={() => getDocShareholding(fileStoreId?.sectoralPlan)} className="btn btn-sm ">
+                          <VisibilityIcon color="info" className="icon" />
+                        </a>
+                      ) : (
+                        <p></p>
+                      )}
+                      {/* <div>
                         <input
                           type="file"
                           className="form-control"
@@ -1232,8 +1295,7 @@ const AppliedDetailForm = (props) => {
                           onChange={(e) => getDocumentData(e?.target?.files[0], "sectoralPlan")}
                           required
                         />
-                      </div>
-
+                      </div> */}
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.sectoralPlan && errors?.sectoralPlan?.message}
                       </h3>
@@ -1246,15 +1308,25 @@ const AppliedDetailForm = (props) => {
                         title="Copy of detailed specifications and designs for electric supply including street lighting"
                       >
                         Designs for electric supply.<span style={{ color: "red" }}>*</span>
-                        {fileStoreId?.detailedElectricSupply ? (
-                          <a onClick={() => getDocShareholding(fileStoreId?.detailedElectricSupply)} className="btn btn-sm col-md-6">
-                            <VisibilityIcon color="info" className="icon" />
-                          </a>
-                        ) : (
-                          <p></p>
-                        )}
                       </h6>
-                      <div>
+                      <label>
+                        <FileUpload color="primary" />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "detailedElectricSupply")}
+                          accept="application/pdf/jpeg"
+                          required
+                        />
+                      </label>
+                      {fileStoreId?.detailedElectricSupply ? (
+                        <a onClick={() => getDocShareholding(fileStoreId?.detailedElectricSupply)} className="btn btn-sm ">
+                          <VisibilityIcon color="info" className="icon" />
+                        </a>
+                      ) : (
+                        <p></p>
+                      )}
+                      {/* <div>
                         <input
                           type="file"
                           className="form-control"
@@ -1262,8 +1334,7 @@ const AppliedDetailForm = (props) => {
                           onChange={(e) => getDocumentData(e?.target?.files[0], "detailedElectricSupply")}
                           required
                         />
-                      </div>
-
+                      </div> */}
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.detailedElectricSupply && errors?.detailedElectricSupply?.message}
                       </h3>
@@ -1279,15 +1350,25 @@ const AppliedDetailForm = (props) => {
                         title="Copy of plans showing cross sections of proposed roads indicating, in particular, the width of proposed carriage ways cycle tracks and footpaths etc"
                       >
                         Plans showing cross sections.<span style={{ color: "red" }}>*</span>
-                        {fileStoreId?.planCrossSection ? (
-                          <a onClick={() => getDocShareholding(fileStoreId?.planCrossSection)} className="btn btn-sm col-md-6">
-                            <VisibilityIcon color="info" className="icon" />
-                          </a>
-                        ) : (
-                          <p></p>
-                        )}
                       </h6>
-                      <div>
+                      <label>
+                        <FileUpload color="primary" />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "planCrossSection")}
+                          accept="application/pdf/jpeg"
+                          required
+                        />
+                      </label>
+                      {fileStoreId?.planCrossSection ? (
+                        <a onClick={() => getDocShareholding(fileStoreId?.planCrossSection)} className="btn btn-sm ">
+                          <VisibilityIcon color="info" className="icon" />
+                        </a>
+                      ) : (
+                        <p></p>
+                      )}
+                      {/* <div>
                         <input
                           type="file"
                           className="form-control"
@@ -1295,8 +1376,7 @@ const AppliedDetailForm = (props) => {
                           onChange={(e) => getDocumentData(e?.target?.files[0], "planCrossSection")}
                           required
                         />
-                      </div>
-
+                      </div> */}
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.planCrossSection && errors?.planCrossSection?.message}
                       </h3>
@@ -1310,15 +1390,25 @@ const AppliedDetailForm = (props) => {
                         title="Copy of plans indicating, in addition, the position of sewers, stormwater channels, water supply and any other public health services."
                       >
                         Plans indicating position of public.<span style={{ color: "red" }}>*</span>
-                        {fileStoreId?.publicHealthServices ? (
-                          <a onClick={() => getDocShareholding(fileStoreId?.publicHealthServices)} className="btn btn-sm col-md-6">
-                            <VisibilityIcon color="info" className="icon" />
-                          </a>
-                        ) : (
-                          <p></p>
-                        )}
                       </h6>
-                      <div>
+                      <label>
+                        <FileUpload color="primary" />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          accept="application/pdf/jpeg"
+                          required
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "publicHealthServices")}
+                        />
+                      </label>
+                      {fileStoreId?.publicHealthServices ? (
+                        <a onClick={() => getDocShareholding(fileStoreId?.publicHealthServices)} className="btn btn-sm ">
+                          <VisibilityIcon color="info" className="icon" />
+                        </a>
+                      ) : (
+                        <p></p>
+                      )}
+                      {/* <div>
                         <input
                           type="file"
                           className="form-control"
@@ -1326,8 +1416,7 @@ const AppliedDetailForm = (props) => {
                           onChange={(e) => getDocumentData(e?.target?.files[0], "publicHealthServices")}
                           required
                         />
-                      </div>
-
+                      </div> */}
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.publicHealthServices && errors?.publicHealthServices?.message}
                       </h3>
@@ -1340,15 +1429,25 @@ const AppliedDetailForm = (props) => {
                         title="Copy of detailed specifications and designs of road works and estimated costs thereof"
                       >
                         Specifications and designs.<span style={{ color: "red" }}>*</span>
-                        {fileStoreId?.designRoad ? (
-                          <a onClick={() => getDocShareholding(fileStoreId?.designRoad)} className="btn btn-sm col-md-6">
-                            <VisibilityIcon color="info" className="icon" />
-                          </a>
-                        ) : (
-                          <p></p>
-                        )}
                       </h6>
-                      <div>
+                      <label>
+                        <FileUpload color="primary" />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "designRoad")}
+                          accept="application/pdf/jpeg"
+                          required
+                        />
+                      </label>
+                      {fileStoreId?.designRoad ? (
+                        <a onClick={() => getDocShareholding(fileStoreId?.designRoad)} className="btn btn-sm ">
+                          <VisibilityIcon color="info" className="icon" />
+                        </a>
+                      ) : (
+                        <p></p>
+                      )}
+                      {/* <div>
                         <input
                           type="file"
                           className="form-control"
@@ -1356,8 +1455,7 @@ const AppliedDetailForm = (props) => {
                           onChange={(e) => getDocumentData(e?.target?.files[0], "designRoad")}
                           required
                         />
-                      </div>
-
+                      </div> */}
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.designRoad && errors?.designRoad?.message}
                       </h3>
@@ -1370,15 +1468,25 @@ const AppliedDetailForm = (props) => {
                         title="Copy of detailed specifications and designs of sewerage, storm, water and water supply works and estimated costs thereof"
                       >
                         Designs of sewerage and storm. <span style={{ color: "red" }}>*</span>
-                        {fileStoreId?.designSewarage ? (
-                          <a onClick={() => getDocShareholding(fileStoreId?.designSewarage)} className="btn btn-sm col-md-6">
-                            <VisibilityIcon color="info" className="icon" />
-                          </a>
-                        ) : (
-                          <p></p>
-                        )}
                       </h6>
-                      <div>
+                      <label>
+                        <FileUpload color="primary" />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "designSewarage")}
+                          accept="application/pdf/jpeg"
+                          required
+                        />
+                      </label>
+                      {fileStoreId?.designSewarage ? (
+                        <a onClick={() => getDocShareholding(fileStoreId?.designSewarage)} className="btn btn-sm ">
+                          <VisibilityIcon color="info" className="icon" />
+                        </a>
+                      ) : (
+                        <p></p>
+                      )}
+                      {/* <div>
                         <input
                           type="file"
                           className="form-control"
@@ -1386,8 +1494,7 @@ const AppliedDetailForm = (props) => {
                           onChange={(e) => getDocumentData(e?.target?.files[0], "designSewarage")}
                           required
                         />
-                      </div>
-
+                      </div> */}
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.designSewarage && errors?.designSewarage?.message}
                       </h3>
@@ -1403,15 +1510,25 @@ const AppliedDetailForm = (props) => {
                         title="Copy of detailed specifications and designs for disposal and treatment of storm and sullage water and estimated costs of works."
                       >
                         Disposal treatment.<span style={{ color: "red" }}>*</span>
-                        {fileStoreId?.designDisposal ? (
-                          <a onClick={() => getDocShareholding(fileStoreId?.designDisposal)} className="btn btn-sm col-md-6">
-                            <VisibilityIcon color="info" className="icon" />
-                          </a>
-                        ) : (
-                          <p></p>
-                        )}
                       </h6>
-                      <div>
+                      <label>
+                        <FileUpload color="primary" />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "designDisposal")}
+                          accept="application/pdf/jpeg"
+                          required
+                        />
+                      </label>
+                      {fileStoreId?.designDisposal ? (
+                        <a onClick={() => getDocShareholding(fileStoreId?.designDisposal)} className="btn btn-sm ">
+                          <VisibilityIcon color="info" className="icon" />
+                        </a>
+                      ) : (
+                        <p></p>
+                      )}
+                      {/* <div>
                         <input
                           type="file"
                           className="form-control"
@@ -1419,8 +1536,7 @@ const AppliedDetailForm = (props) => {
                           onChange={(e) => getDocumentData(e?.target?.files[0], "designDisposal")}
                           required
                         />
-                      </div>
-
+                      </div> */}
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.designDisposal && errors?.designDisposal?.message}
                       </h3>
@@ -1434,15 +1550,25 @@ const AppliedDetailForm = (props) => {
                         title="Whether intimated each of the allottees through registered post regarding the proposed changes in the layout plan: - If yes selected upload"
                       >
                         Undertaking that no change. <span style={{ color: "red" }}>*</span>
-                        {fileStoreId?.undertakingChange ? (
-                          <a onClick={() => getDocShareholding(fileStoreId?.undertakingChange)} className="btn btn-sm col-md-6">
-                            <VisibilityIcon color="info" className="icon" />
-                          </a>
-                        ) : (
-                          <p></p>
-                        )}
                       </h6>
-                      <div>
+                      <label>
+                        <FileUpload color="primary" />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "undertakingChange")}
+                          accept="application/pdf/jpeg"
+                          required
+                        />
+                      </label>
+                      {fileStoreId?.undertakingChange ? (
+                        <a onClick={() => getDocShareholding(fileStoreId?.undertakingChange)} className="btn btn-sm ">
+                          <VisibilityIcon color="info" className="icon" />
+                        </a>
+                      ) : (
+                        <p></p>
+                      )}
+                      {/* <div>
                         <input
                           type="file"
                           className="form-control"
@@ -1450,8 +1576,7 @@ const AppliedDetailForm = (props) => {
                           onChange={(e) => getDocumentData(e?.target?.files[0], "undertakingChange")}
                           required
                         />
-                      </div>
-
+                      </div> */}
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.undertakingChange && errors?.undertakingChange?.message}
                       </h3>
@@ -1465,15 +1590,25 @@ const AppliedDetailForm = (props) => {
                         title="Explanatory note regarding the salient feature of the proposed colony."
                       >
                         Salient feature of the colony. <span style={{ color: "red" }}>*</span>
-                        {fileStoreId?.proposedColony ? (
-                          <a onClick={() => getDocShareholding(fileStoreId?.proposedColony)} className="btn btn-sm col-md-6">
-                            <VisibilityIcon color="info" className="icon" />
-                          </a>
-                        ) : (
-                          <p></p>
-                        )}
                       </h6>
-                      <div>
+                      <label>
+                        <FileUpload color="primary" />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "proposedColony")}
+                          accept="application/pdf/jpeg"
+                          required
+                        />
+                      </label>
+                      {fileStoreId?.proposedColony ? (
+                        <a onClick={() => getDocShareholding(fileStoreId?.proposedColony)} className="btn btn-sm ">
+                          <VisibilityIcon color="info" className="icon" />
+                        </a>
+                      ) : (
+                        <p></p>
+                      )}
+                      {/* <div>
                         <input
                           type="file"
                           className="form-control"
@@ -1481,25 +1616,34 @@ const AppliedDetailForm = (props) => {
                           onChange={(e) => getDocumentData(e?.target?.files[0], "proposedColony")}
                           required
                         />
-                      </div>
-
+                      </div> */}
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.proposedColony && errors?.proposedColony?.message}
                       </h3>
                     </div>
 
                     <div className="col col-3">
-                      <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
+                      <h6 style={{ display: "flex" }}>
                         Report any objection. <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;&nbsp;
-                        {fileStoreId?.reportObjection ? (
-                          <a onClick={() => getDocShareholding(fileStoreId?.reportObjection)} className="btn btn-sm col-md-6">
-                            <VisibilityIcon color="info" className="icon" />
-                          </a>
-                        ) : (
-                          <p></p>
-                        )}
-                      </h6>
-                      <div>
+                      </h6>{" "}
+                      <label>
+                        <FileUpload color="primary" />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "reportObjection")}
+                          accept="application/pdf/jpeg"
+                          required
+                        />
+                      </label>
+                      {fileStoreId?.reportObjection ? (
+                        <a onClick={() => getDocShareholding(fileStoreId?.reportObjection)} className="btn btn-sm ">
+                          <VisibilityIcon color="info" className="icon" />
+                        </a>
+                      ) : (
+                        <p></p>
+                      )}
+                      {/* <div>
                         <input
                           type="file"
                           className="form-control"
@@ -1507,8 +1651,7 @@ const AppliedDetailForm = (props) => {
                           onChange={(e) => getDocumentData(e?.target?.files[0], "reportObjection")}
                           required
                         />
-                      </div>
-
+                      </div> */}
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.reportObjection && errors?.reportObjection?.message}
                       </h3>
@@ -1524,15 +1667,25 @@ const AppliedDetailForm = (props) => {
                         title="Undertaking that no change has been made in the phasing "
                       >
                         Undertaking.<span style={{ color: "red" }}>*</span>
-                        {fileStoreId?.undertaking ? (
-                          <a onClick={() => getDocShareholding(fileStoreId?.undertaking)} className="btn btn-sm col-md-6">
-                            <VisibilityIcon color="info" className="icon" />
-                          </a>
-                        ) : (
-                          <p></p>
-                        )}
-                      </h6>
-                      <div>
+                      </h6>{" "}
+                      <label>
+                        <FileUpload color="primary" />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "undertaking")}
+                          accept="application/pdf/jpeg"
+                          required
+                        />
+                      </label>
+                      {fileStoreId?.undertaking ? (
+                        <a onClick={() => getDocShareholding(fileStoreId?.undertaking)} className="btn btn-sm ">
+                          <VisibilityIcon color="info" className="icon" />
+                        </a>
+                      ) : (
+                        <p></p>
+                      )}
+                      {/* <div>
                         <input
                           type="file"
                           className="form-control"
@@ -1540,13 +1693,12 @@ const AppliedDetailForm = (props) => {
                           onChange={(e) => getDocumentData(e?.target?.files[0], "undertaking")}
                           required
                         />
-                      </div>
-
+                      </div> */}
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.undertaking && errors?.undertaking?.message}
                       </h3>
                     </div>
-                    <div className="col col-3">
+                    <div className="col col-9">
                       {Purpose === "RPL" && <LayoutPlan watch={watch} register={register} />}
                       {Purpose === "IPL" && <LayoutPlan watch={watch} register={register} />}
                       {Purpose === "IPA" && <LayoutPlan watch={watch} register={register} />}

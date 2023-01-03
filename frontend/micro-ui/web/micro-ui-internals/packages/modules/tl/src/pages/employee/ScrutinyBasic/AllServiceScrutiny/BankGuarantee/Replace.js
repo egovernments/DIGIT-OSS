@@ -16,7 +16,7 @@ import { IconButton } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 
-function Replace() {
+const Replace = (props) => {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
   const [open2, setOpen2] = useState(false);
@@ -126,15 +126,20 @@ function Replace() {
           alignContent: "center",
         }}
       >
-        <span style={{ color: "#817f7f" }} className="">
+        {/* <span style={{ color: "#817f7f" }} className="">
           Replace/Renew
+        </span> */}
+        <span style={{ color: "#817f7f", fontSize: 14 }} className="">
+          - Replace/Renew
         </span>
         {open2 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       </div>
       <Collapse in={open2}>
         <div id="example-collapse-text">
-          <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-            <h4 style={{ fontSize: "25px", marginLeft: "21px" }}> Replace/Renew </h4>
+          <Card
+          //   style={{ width: "126%", border: "5px solid #1266af" }}
+          >
+            <h4 style={{ fontSize: "25px", marginLeft: "21px" }}> Replace/Renew of Bank Guarantee</h4>
             <div className="card">
               <Row className="col-12">
                 <Form.Group as={Col} controlId="formGridLicence">
@@ -239,6 +244,41 @@ function Replace() {
                 <Form.Group as={Col} controlId="formGridLicence">
                   <div>
                     <Form.Label>
+                      <h2>Previous Memo No. </h2>
+                    </Form.Label>
+                  </div>
+                  <div className={classes.fieldContainer}>
+                    <Form.Control className={classes.formControl} placeholder="" disabled></Form.Control>
+
+                    <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.developer,
+                      }}
+                      onClick={() => {
+                        setOpennedModal("Licence No");
+                        setLabelValue("Licence No"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                      }}
+                    ></ReportProblemIcon>
+                    <ModalChild
+                      labelmodal={labelValue}
+                      passmodalData={handlemodaldData}
+                      displaymodal={smShow}
+                      onClose={() => setSmShow(false)}
+                      selectedFieldData={selectedFieldData}
+                      fieldValue={fieldValue}
+                      remarksUpdate={currentRemarks}
+                    ></ModalChild>
+                  </div>
+                  {/* <input type="text" className="form-control" placeholder="" {...register("enterMemoNumber")} /> */}
+                </Form.Group>
+              </Row>
+              <Row className="col-12">
+                <Form.Group as={Col} controlId="formGridLicence">
+                  <div>
+                    <Form.Label>
                       <h2>Bank Name </h2>
                     </Form.Label>
                   </div>
@@ -269,8 +309,6 @@ function Replace() {
                   </div>
                   {/* <input type="text" className="form-control" placeholder="" {...register("bankName")} /> */}
                 </Form.Group>
-              </Row>
-              <Row className="col-12">
                 <Form.Group as={Col} controlId="formGridLicence">
                   <div>
                     <Form.Label>
@@ -373,7 +411,8 @@ function Replace() {
                     <option>EDC</option>
                   </select> */}
                 </Form.Group>
-
+              </Row>
+              <Row className="col-3">
                 <Form.Group as={Col} controlId="formGridLicence">
                   <div>
                     <Form.Label>
@@ -536,7 +575,7 @@ function Replace() {
                 </div>
               </div>
 
-              <div class="row">
+              {/* <div class="row">
                 <div class="col-sm-12 text-right">
                   <button type="submit" id="btnClear" class="btn btn-primary btn-md center-block" style={{ marginBottom: "-44px" }}>
                     Submit
@@ -549,13 +588,13 @@ function Replace() {
                     </button>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </Card>
         </div>
       </Collapse>
     </form>
   );
-}
+};
 
 export default Replace;

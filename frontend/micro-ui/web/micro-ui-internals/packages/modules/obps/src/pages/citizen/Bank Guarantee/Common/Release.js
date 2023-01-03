@@ -26,7 +26,7 @@ function ReleaseNew() {
   return (
     <form onSubmit={handleSubmit(bankRelease)}>
       <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Release</h4>
+        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Release of Bank Guarantee</h4>
         <div className="card">
           <Row className="col-12">
             <Col md={4} xxl lg="3">
@@ -35,7 +35,7 @@ function ReleaseNew() {
                   <h2>Enter License No. </h2>
                 </Form.Label>
               </div>
-              <input type="text" className="form-control" placeholder="" {...register("licenseNo")} />
+              <input type="text" className="form-control" placeholder="" {...register("licenseNumber")} />
             </Col>
             <Col md={4} xxl lg="3">
               <div>
@@ -54,7 +54,7 @@ function ReleaseNew() {
                   <div className="col col-3">
                     <label>
                       <h2>
-                        Upload Full Completion Certificate.
+                        Full Completion Certificate.
                         <span style={{ color: "red" }}>*</span>
                       </h2>
                     </label>
@@ -92,10 +92,10 @@ function ReleaseNew() {
                       {errors?.consentLetter && errors?.consentLetter?.message}
                     </h3>
                   </div>
-                  <div className="col col-3 ">
+                  <div className="col col-3">
                     <label>
                       <h2>
-                        Upload Partial Completion Certificate.
+                        Partial Completion Certificate.
                         <span style={{ color: "red" }}>*</span>
                       </h2>
                     </label>
@@ -116,15 +116,16 @@ function ReleaseNew() {
               </div>
             )}
           </Row>
+
+          <Row className="justify-content-end">
+            <Button variant="outline-primary" className="col-md-2 my-2 mx-2" aria-label="right-end">
+              Cancel
+            </Button>
+            <Button variant="outline-primary" className="col-md-2 my-2 mx-2" type="submit" aria-label="right-end">
+              Submit
+            </Button>
+          </Row>
         </div>
-        <Row className="justify-content-end">
-          <Button variant="outline-primary" className="col-md-2 my-2 mx-2" aria-label="right-end">
-            Cancel
-          </Button>
-          <Button variant="outline-primary" className="col-md-2 my-2 mx-2" type="submit" aria-label="right-end">
-            Submit
-          </Button>
-        </Row>
       </Card>
     </form>
   );

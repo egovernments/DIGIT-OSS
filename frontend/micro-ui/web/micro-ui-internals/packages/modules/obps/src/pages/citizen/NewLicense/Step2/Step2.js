@@ -49,6 +49,11 @@ const ApllicantPuropseForm = (props) => {
       dataIndex: "hadbastNo",
     },
     {
+      key: "khewats",
+      title: "Khewat No.",
+      dataIndex: "khewats",
+    },
+    {
       key: "rectangleNo",
       title: "Rectangle No.",
       dataIndex: "rectangleNo",
@@ -83,6 +88,12 @@ const ApllicantPuropseForm = (props) => {
       key: "biswansi",
       title: "Biswansi",
       dataIndex: "biswansi",
+    },
+    {
+      // key: "totalArea",
+      title: "Total Area",
+      // dataIndex: "totalArea",
+      render: (data) => data?.nonConsolidatedTotal || data?.consolidatedTotal,
     },
     {
       key: "landOwner",
@@ -293,6 +304,7 @@ const ApllicantPuropseForm = (props) => {
         return { label: el?.districtName, id: el?.districtCode, value: el?.districtCode };
       });
       setDistrictDataLabels({ data: distData, isLoading: false });
+      console.log("data", distData);
     } catch (error) {
       return error;
     }
@@ -403,9 +415,9 @@ const ApllicantPuropseForm = (props) => {
     setmodal(false);
   };
 
-  // useEffect(() => {
-  //   if (stepData?.AppliedLandDetails) setModalData(stepData?.AppliedLandDetails);
-  // }, [stepData?.AppliedLandDetails]);
+  useEffect(() => {
+    console.log("modalData", modalData);
+  }, [modalData]);
 
   useEffect(() => {
     if (stepData?.AppliedLandDetails) setModalData(stepData?.AppliedLandDetails);
@@ -527,13 +539,6 @@ const ApllicantPuropseForm = (props) => {
     }, 500);
     return () => clearTimeout(delay);
   }, [getKhewats]);
-  const dataArea = props?.ApplicantPurpose?.AppliedLandDetails?.[0]?.kanal;
-  const dataAreaMarla = stepData?.AppliedLandDetails?.[0]?.marla;
-  const dataAreaSarai = stepData?.AppliedLandDetails?.[0]?.sarsai;
-  const dataAreaBigha = stepData?.AppliedLandDetails?.[0]?.bigha;
-  const dataAreaBiswa = stepData?.AppliedLandDetails?.[0]?.biswa;
-  const dataAreaBiswansi = stepData?.AppliedLandDetails?.[0]?.biswansi;
-  const totalAreaAcre = dataArea * 0.125 + dataAreaMarla * 0.0062 + dataAreaSarai * 0.00069;
 
   const getApplicantUserData = async (id) => {
     const token = window?.localStorage?.getItem("token");
@@ -558,6 +563,16 @@ const ApllicantPuropseForm = (props) => {
     setApplicantId(id?.toString());
     if (id) getApplicantUserData(id);
   }, []);
+
+  useEffect(() => {
+    console.log("nott", watch("marla") * 0.0062 + watch("sarsai") * 0.00069 + watch("kanal") * 0.125);
+    setValue("consolidatedTotal", watch("marla") * 0.0062 + watch("sarsai") * 0.00069 + watch("kanal") * 0.125);
+  }, [watch("sarsai"), watch("marla"), watch("kanal")]);
+
+  useEffect(() => {
+    console.log("test", watch("bigha") * 0.33 + watch("biswa") * 0.0309 + watch("biswansi") * 0.619);
+    setValue("nonConsolidatedTotal", watch("bigha") * 0.33 + watch("biswa") * 0.0309 + watch("biswansi") * 0.619);
+  }, [watch("bigha"), watch("biswa"), watch("biswansi")]);
 
   return (
     <div>
@@ -835,7 +850,7 @@ const ApllicantPuropseForm = (props) => {
                     </h2>
                   </label>
                 </div>
-                <Form.Control as="textarea" rows={3} type="text" className="form-control" placeholder="" {...register("landOwner")} disabled />
+                <Form.Control as="textarea" rows={2} type="text" className="form-control" placeholder="" {...register("landOwner")} disabled />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.landOwner && errors?.landOwner?.message}
                 </h3>
@@ -904,9 +919,8 @@ const ApllicantPuropseForm = (props) => {
                           <label htmlFor="sumsarsai">Total: {watch("sarsai") * 0.00069}</label>&nbsp;&nbsp;
                         </td>
                         <td>
-                          {console.log("here", watch("kanal") * 0.125 + watch("marla") * 0.0062 + watch("sarsai") * 0.00069)}
-                          {watch("kanal") * 0.125 + watch("marla") * 0.0062 + watch("sarsai") * 0.00069}
-                          {/* <input type="number" className="form-control " placeholder={totalAreaAcre} disabled /> */}
+                          <input step="any" type="number" className="form-control " {...register("consolidatedTotal")} />
+                          <label htmlFor="sumsarsai">Total: {watch("consolidatedTotal")}</label>&nbsp;&nbsp;
                         </td>
                       </tr>
                     </tbody>
@@ -953,6 +967,10 @@ const ApllicantPuropseForm = (props) => {
                         <td>
                           <input type="number" className="form-control" {...register("biswansi")} id="biswansi" required maxLength={20} />
                           <label htmlFor="sumBiswansi">Total: {watch("biswansi") * 0.619}</label>&nbsp;&nbsp;
+                        </td>
+                        <td>
+                          <input step="any" type="number" className="form-control " {...register("nonConsolidatedTotal")} />
+                          <label htmlFor="sumsarsai">Total: {watch("nonConsolidatedTotal")}</label>&nbsp;&nbsp;
                         </td>
                       </tr>
                     </tbody>
@@ -1005,7 +1023,15 @@ const ApllicantPuropseForm = (props) => {
                             Date of registering collaboration agreement<span style={{ color: "red" }}>*</span>
                           </h2>
                         </label>
-                        <Form.Control type="date" className="form-control" required placeholder="" {...register("agreementValidFrom")} />
+                        <Form.Control
+                          type="date"
+                          value={modalData.agreementValidFrom}
+                          className="form-control"
+                          required
+                          placeholder=""
+                          {...register("agreementValidFrom")}
+                          max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
+                        />
                       </div>
                       <div className="col col-4">
                         <label>
@@ -1019,7 +1045,7 @@ const ApllicantPuropseForm = (props) => {
                           placeholder=""
                           required
                           {...register("validitydate")}
-                          min={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
+                          min={modalData?.agreementValidFrom}
                         />
                       </div>
                     </div>
@@ -1093,11 +1119,16 @@ const ApllicantPuropseForm = (props) => {
                             Registering Authority document <span style={{ color: "red" }}>*</span> <FileUpload color="primary" />
                             <input
                               type="file"
+                              accept="application/pdf,application//jpeg"
                               style={{ display: "none" }}
+                              required
                               onChange={(e) => getDocumentData(e?.target?.files[0], "registeringAuthorityDoc")}
                             />
                           </h2>
                         </label>
+                        <h3 className="error-message" style={{ color: "red" }}>
+                          {errors?.registeringAuthorityDoc && errors?.registeringAuthorityDoc?.message}
+                        </h3>
 
                         {/* <input
                           type="file"
