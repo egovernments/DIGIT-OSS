@@ -102,7 +102,6 @@ export const SelectPaymentType = (props) => {
 
   const onSubmit = async (d) => {
     console.log("userInfo", userInfo);
-    console.log(d);
     const filterData = {
       Transaction: {
         tenantId: tenantId,
@@ -111,6 +110,8 @@ export const SelectPaymentType = (props) => {
         ptype: selected,
         remarks: getRemarks,
         address: "haryana",
+        PINCODE: "160005",
+        cityname: "Village",
         module: businessService,
         billId: billDetails.id,
         consumerCode: wrkflow === "WNS" ? stringReplaceAll(consumerCode, "+", "/") : consumerCode,
@@ -140,7 +141,6 @@ export const SelectPaymentType = (props) => {
     try {
       const data = await Digit.PaymentService.createCitizenReciept(tenantId, filterData);
       const redirectUrl = data?.Transaction?.redirectUrl;
-      console.log("data====", data);
       // window.location.replace(redirectUrl);
       console.log("redirectUrl", redirectUrl);
       // window.location = redirectUrl;

@@ -53,7 +53,6 @@ const ApllicantPuropseForm = (props) => {
       title: "Rectangle No.",
       dataIndex: "rectangleNo",
     },
-
     {
       key: "consolidationType",
       title: "Consolidation Type",
@@ -905,7 +904,9 @@ const ApllicantPuropseForm = (props) => {
                           <label htmlFor="sumsarsai">Total: {watch("sarsai") * 0.00069}</label>&nbsp;&nbsp;
                         </td>
                         <td>
-                          <input type="number" className="form-control " placeholder={totalAreaAcre} disabled />
+                          {console.log("here", watch("kanal") * 0.125 + watch("marla") * 0.0062 + watch("sarsai") * 0.00069)}
+                          {watch("kanal") * 0.125 + watch("marla") * 0.0062 + watch("sarsai") * 0.00069}
+                          {/* <input type="number" className="form-control " placeholder={totalAreaAcre} disabled /> */}
                         </td>
                       </tr>
                     </tbody>
