@@ -210,7 +210,7 @@ const ServicePlanService = () => {
                           color: fieldIconColors.UploadedYN,
                         }}
                         onClick={() => {
-                          setOpennedModal("Uploaded Service Plan");
+                          setOpennedModal("UploadedYN");
                           setLabelValue("Uploaded Service Plan"),
                             setSmShow(true),
                             console.log("modal open"),

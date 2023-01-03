@@ -81,7 +81,7 @@ const LicenseDetailsScrutiny = (props) => {
   let user = Digit.UserService.getUser();
   const userRoles = user?.info?.roles?.map((e) => e.code) || [];
   const hideRemarks = userRoles.some((item)=>item === "CTP_HR" || item === "CTP_HQ" || item === "DTP_HR" || item === "DTP_HQ")
-  
+  const hideRemarksPatwari = userRoles.some((item)=>item ==="Patwari_HQ")
 
   const classes = useStyles();
 
@@ -202,7 +202,7 @@ const LicenseDetailsScrutiny = (props) => {
                     
                     <ReportProblemIcon
                       style={{
-                        display: hideRemarks?"none":"block",
+                        display: hideRemarks || hideRemarksPatwari ?"none":"block",
                         color: fieldIconColors.developerType
                       }}
                       onClick={() => {
@@ -271,7 +271,7 @@ const LicenseDetailsScrutiny = (props) => {
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.developerName
                             }}
                             onClick={() => {
@@ -303,7 +303,7 @@ const LicenseDetailsScrutiny = (props) => {
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.developerEmail
                             }}
                             onClick={() => {
@@ -332,7 +332,7 @@ const LicenseDetailsScrutiny = (props) => {
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.developerMobileNo
                             }}
                             onClick={() => {
@@ -371,7 +371,7 @@ const LicenseDetailsScrutiny = (props) => {
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.cinNo
                             }}
                             onClick={() => {
@@ -400,7 +400,7 @@ const LicenseDetailsScrutiny = (props) => {
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.companyName
                             }}
                             onClick={() => {
@@ -429,7 +429,7 @@ const LicenseDetailsScrutiny = (props) => {
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.dateOfIncorporation
                             }}
                             onClick={() => {
@@ -458,7 +458,7 @@ const LicenseDetailsScrutiny = (props) => {
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.regAddress
                             }}
                             onClick={() => {
@@ -487,7 +487,7 @@ const LicenseDetailsScrutiny = (props) => {
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.email
                             }}
                             onClick={() => {
@@ -516,7 +516,7 @@ const LicenseDetailsScrutiny = (props) => {
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.mobileNo
                             }}
                             onClick={() => {
@@ -545,7 +545,7 @@ const LicenseDetailsScrutiny = (props) => {
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.gstNo
                             }}
                             onClick={() => {
@@ -753,7 +753,7 @@ const LicenseDetailsScrutiny = (props) => {
                         <div className="btn btn-sm col-md-4">
                   <ReportProblemIcon
               style={{
-                  display: hideRemarks?"none":"block",
+                  display: hideRemarks || hideRemarksPatwari ?"none":"block",
                 color:fieldIconColors.existingColonizerDoc}}
               onClick={() => {
                   setOpennedModal("Agreement between the proposed developer and existing colonizer")
@@ -804,7 +804,7 @@ const LicenseDetailsScrutiny = (props) => {
                         <div className="btn btn-sm col-md-4">
                         <ReportProblemIcon
               style={{
-                display: hideRemarks?"none":"block",
+                display: hideRemarks || hideRemarksPatwari ?"none":"block",
                 color:fieldIconColors.existingColonizerDoc}}
               onClick={() => {
                   setOpennedModal("Agreement between the proposed developer and existing colonizer")
@@ -847,7 +847,7 @@ const LicenseDetailsScrutiny = (props) => {
                                &nbsp;&nbsp;
                                      <ReportProblemIcon
               style={{
-                display: hideRemarks?"none":"block",
+                display: hideRemarks || hideRemarksPatwari ?"none":"block",
                 color:fieldIconColors.existingColonizerDoc}}
               onClick={() => {
                   setOpennedModal("Agreement between the proposed developer and existing colonizer")
@@ -880,7 +880,7 @@ const LicenseDetailsScrutiny = (props) => {
                               &nbsp;&nbsp;
                                     <ReportProblemIcon
               style={{
-                display: hideRemarks?"none":"block",
+                display: hideRemarks || hideRemarksPatwari ?"none":"block",
                 color:fieldIconColors.existingColonizerDoc}}
               onClick={() => {
                   setOpennedModal("Agreement between the proposed developer and existing colonizer")
@@ -913,7 +913,7 @@ const LicenseDetailsScrutiny = (props) => {
                                &nbsp;&nbsp;
                                      <ReportProblemIcon
               style={{
-                display: hideRemarks?"none":"block",
+                display: hideRemarks || hideRemarksPatwari ?"none":"block",
                 color:fieldIconColors.existingColonizerDoc}}
               onClick={() => {
                   setOpennedModal("Agreement between the proposed developer and existing colonizer")
@@ -946,7 +946,7 @@ const LicenseDetailsScrutiny = (props) => {
                                 &nbsp;&nbsp;
                                       <ReportProblemIcon
               style={{
-                display: hideRemarks?"none":"block",
+                display: hideRemarks || hideRemarksPatwari ?"none":"block",
                 color:fieldIconColors.existingColonizerDoc}}
               onClick={() => {
                   setOpennedModal("Agreement between the proposed developer and existing colonizer")
@@ -970,7 +970,7 @@ const LicenseDetailsScrutiny = (props) => {
                                &nbsp;&nbsp;
                                      <ReportProblemIcon
               style={{
-                display: hideRemarks?"none":"block",
+                display: hideRemarks || hideRemarksPatwari ?"none":"block",
                 color:fieldIconColors.existingColonizerDoc}}
               onClick={() => {
                   setOpennedModal("Agreement between the proposed developer and existing colonizer")
@@ -994,7 +994,7 @@ const LicenseDetailsScrutiny = (props) => {
                                &nbsp;&nbsp;
                                      <ReportProblemIcon
               style={{
-                display: hideRemarks?"none":"block",
+                display: hideRemarks || hideRemarksPatwari ?"none":"block",
                 color:fieldIconColors.existingColonizerDoc}}
               onClick={() => {
                   setOpennedModal("Agreement between the proposed developer and existing colonizer")
@@ -1039,7 +1039,7 @@ const LicenseDetailsScrutiny = (props) => {
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.cinNo
                             }}
                             onClick={() => {
@@ -1068,7 +1068,7 @@ const LicenseDetailsScrutiny = (props) => {
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.companyName
                             }}
                             onClick={() => {
@@ -1097,7 +1097,7 @@ const LicenseDetailsScrutiny = (props) => {
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.dateOfIncorporation
                             }}
                             onClick={() => {
@@ -1126,7 +1126,7 @@ const LicenseDetailsScrutiny = (props) => {
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.regAddress
                             }}
                             onClick={() => {
@@ -1155,7 +1155,7 @@ const LicenseDetailsScrutiny = (props) => {
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.email
                             }}
                             onClick={() => {
@@ -1184,7 +1184,7 @@ const LicenseDetailsScrutiny = (props) => {
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.mobileNo
                             }}
                             onClick={() => {
@@ -1213,7 +1213,7 @@ const LicenseDetailsScrutiny = (props) => {
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.gstNo
                             }}
                             onClick={() => {
@@ -1421,7 +1421,7 @@ const LicenseDetailsScrutiny = (props) => {
                         <div className="btn btn-sm col-md-4">
                   <ReportProblemIcon
               style={{
-                  display: hideRemarks?"none":"block",
+                  display: hideRemarks || hideRemarksPatwari ?"none":"block",
                 color:fieldIconColors.existingColonizerDoc}}
               onClick={() => {
                   setOpennedModal("Agreement between the proposed developer and existing colonizer")
@@ -1472,7 +1472,7 @@ const LicenseDetailsScrutiny = (props) => {
                         <div className="btn btn-sm col-md-4">
                         <ReportProblemIcon
               style={{
-                display: hideRemarks?"none":"block",
+                display: hideRemarks || hideRemarksPatwari ?"none":"block",
                 color:fieldIconColors.existingColonizerDoc}}
               onClick={() => {
                   setOpennedModal("Agreement between the proposed developer and existing colonizer")
@@ -1515,7 +1515,7 @@ const LicenseDetailsScrutiny = (props) => {
                                &nbsp;&nbsp;
                                      <ReportProblemIcon
               style={{
-                display: hideRemarks?"none":"block",
+                display: hideRemarks || hideRemarksPatwari ?"none":"block",
                 color:fieldIconColors.existingColonizerDoc}}
               onClick={() => {
                   setOpennedModal("Agreement between the proposed developer and existing colonizer")
@@ -1548,7 +1548,7 @@ const LicenseDetailsScrutiny = (props) => {
                               &nbsp;&nbsp;
                                     <ReportProblemIcon
               style={{
-                display: hideRemarks?"none":"block",
+                display: hideRemarks || hideRemarksPatwari ?"none":"block",
                 color:fieldIconColors.existingColonizerDoc}}
               onClick={() => {
                   setOpennedModal("Agreement between the proposed developer and existing colonizer")
@@ -1581,7 +1581,7 @@ const LicenseDetailsScrutiny = (props) => {
                                &nbsp;&nbsp;
                                      <ReportProblemIcon
               style={{
-                display: hideRemarks?"none":"block",
+                display: hideRemarks || hideRemarksPatwari ?"none":"block",
                 color:fieldIconColors.existingColonizerDoc}}
               onClick={() => {
                   setOpennedModal("Agreement between the proposed developer and existing colonizer")
@@ -1614,7 +1614,7 @@ const LicenseDetailsScrutiny = (props) => {
                                 &nbsp;&nbsp;
                                       <ReportProblemIcon
               style={{
-                display: hideRemarks?"none":"block",
+                display: hideRemarks || hideRemarksPatwari ?"none":"block",
                 color:fieldIconColors.existingColonizerDoc}}
               onClick={() => {
                   setOpennedModal("Agreement between the proposed developer and existing colonizer")
@@ -1638,7 +1638,7 @@ const LicenseDetailsScrutiny = (props) => {
                                &nbsp;&nbsp;
                                      <ReportProblemIcon
               style={{
-                display: hideRemarks?"none":"block",
+                display: hideRemarks || hideRemarksPatwari ?"none":"block",
                 color:fieldIconColors.existingColonizerDoc}}
               onClick={() => {
                   setOpennedModal("Agreement between the proposed developer and existing colonizer")
@@ -1662,7 +1662,7 @@ const LicenseDetailsScrutiny = (props) => {
                                &nbsp;&nbsp;
                                      <ReportProblemIcon
               style={{
-                display: hideRemarks?"none":"block",
+                display: hideRemarks || hideRemarksPatwari ?"none":"block",
                 color:fieldIconColors.existingColonizerDoc}}
               onClick={() => {
                   setOpennedModal("Agreement between the proposed developer and existing colonizer")
@@ -1707,7 +1707,7 @@ const LicenseDetailsScrutiny = (props) => {
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.cinNo
                             }}
                             onClick={() => {
@@ -1736,7 +1736,7 @@ const LicenseDetailsScrutiny = (props) => {
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.companyName
                             }}
                             onClick={() => {
@@ -1765,7 +1765,7 @@ const LicenseDetailsScrutiny = (props) => {
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.dateOfIncorporation
                             }}
                             onClick={() => {
@@ -1794,7 +1794,7 @@ const LicenseDetailsScrutiny = (props) => {
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.regAddress
                             }}
                             onClick={() => {
@@ -1823,7 +1823,7 @@ const LicenseDetailsScrutiny = (props) => {
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.email
                             }}
                             onClick={() => {
@@ -1852,7 +1852,7 @@ const LicenseDetailsScrutiny = (props) => {
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.mobileNo
                             }}
                             onClick={() => {
@@ -1881,7 +1881,7 @@ const LicenseDetailsScrutiny = (props) => {
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.gstNo
                             }}
                             onClick={() => {
@@ -2089,7 +2089,7 @@ const LicenseDetailsScrutiny = (props) => {
                         <div className="btn btn-sm col-md-4">
                   <ReportProblemIcon
               style={{
-                  display: hideRemarks?"none":"block",
+                  display: hideRemarks || hideRemarksPatwari ?"none":"block",
                 color:fieldIconColors.existingColonizerDoc}}
               onClick={() => {
                   setOpennedModal("Agreement between the proposed developer and existing colonizer")
@@ -2140,7 +2140,7 @@ const LicenseDetailsScrutiny = (props) => {
                         <div className="btn btn-sm col-md-4">
                         <ReportProblemIcon
               style={{
-                display: hideRemarks?"none":"block",
+                display: hideRemarks || hideRemarksPatwari ?"none":"block",
                 color:fieldIconColors.existingColonizerDoc}}
               onClick={() => {
                   setOpennedModal("Agreement between the proposed developer and existing colonizer")
@@ -2183,7 +2183,7 @@ const LicenseDetailsScrutiny = (props) => {
                                &nbsp;&nbsp;
                                      <ReportProblemIcon
               style={{
-                display: hideRemarks?"none":"block",
+                display: hideRemarks || hideRemarksPatwari ?"none":"block",
                 color:fieldIconColors.existingColonizerDoc}}
               onClick={() => {
                   setOpennedModal("Agreement between the proposed developer and existing colonizer")
@@ -2216,7 +2216,7 @@ const LicenseDetailsScrutiny = (props) => {
                               &nbsp;&nbsp;
                                     <ReportProblemIcon
               style={{
-                display: hideRemarks?"none":"block",
+                display: hideRemarks || hideRemarksPatwari ?"none":"block",
                 color:fieldIconColors.existingColonizerDoc}}
               onClick={() => {
                   setOpennedModal("Agreement between the proposed developer and existing colonizer")
@@ -2249,7 +2249,7 @@ const LicenseDetailsScrutiny = (props) => {
                                &nbsp;&nbsp;
                                      <ReportProblemIcon
               style={{
-                display: hideRemarks?"none":"block",
+                display: hideRemarks || hideRemarksPatwari ?"none":"block",
                 color:fieldIconColors.existingColonizerDoc}}
               onClick={() => {
                   setOpennedModal("Agreement between the proposed developer and existing colonizer")
@@ -2282,7 +2282,7 @@ const LicenseDetailsScrutiny = (props) => {
                                 &nbsp;&nbsp;
                                       <ReportProblemIcon
               style={{
-                display: hideRemarks?"none":"block",
+                display: hideRemarks || hideRemarksPatwari ?"none":"block",
                 color:fieldIconColors.existingColonizerDoc}}
               onClick={() => {
                   setOpennedModal("Agreement between the proposed developer and existing colonizer")
@@ -2306,7 +2306,7 @@ const LicenseDetailsScrutiny = (props) => {
                                &nbsp;&nbsp;
                                      <ReportProblemIcon
               style={{
-                display: hideRemarks?"none":"block",
+                display: hideRemarks || hideRemarksPatwari ?"none":"block",
                 color:fieldIconColors.existingColonizerDoc}}
               onClick={() => {
                   setOpennedModal("Agreement between the proposed developer and existing colonizer")
@@ -2330,7 +2330,7 @@ const LicenseDetailsScrutiny = (props) => {
                                &nbsp;&nbsp;
                                      <ReportProblemIcon
               style={{
-                display: hideRemarks?"none":"block",
+                display: hideRemarks || hideRemarksPatwari ?"none":"block",
                 color:fieldIconColors.existingColonizerDoc}}
               onClick={() => {
                   setOpennedModal("Agreement between the proposed developer and existing colonizer")

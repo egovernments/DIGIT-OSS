@@ -22,12 +22,16 @@ import StandardDesign from "../employee/ScrutinyBasic/AllServiceScrutiny/Standar
 import CompositionClu from "../employee/ScrutinyBasic/AllServiceScrutiny/CompositionClu/CompositionClu";
 import CompletionLic from "../employee/ScrutinyBasic/AllServiceScrutiny/CompletionLic/CompletionLic";
 import ServicePlanService from "../employee/ScrutinyBasic/ServicePlanScrutniy/ServicePlan";
-// import electricalPlanService from "../employee/ScrutinyBasic/ElectricalPlan/ElectricalPlanScrutiny";
+import ElectricalScrutiny from "./ScrutinyBasic/ElectriPlanScrutiny/ElectricalCard";
 import TransferLicense from "../employee/ScrutinyBasic/AllServiceScrutiny/TransferLic/TransferLicense";
 // import SubmitNew from "../employee/ScrutinyBasic/AllServiceScrutiny/BankGuarantee/SubmitNew";
 // import basicScrutiny from "../employee/ScrutinyBasic/AllServiceScrutiny/BankScrutiny/basicScrutiny";
 // import FormBank from "../employee/ScrutinyBasic/AllServiceScrutiny/BankGuarantee/FormBankScrutniy/FormBank";
+
 import ScrutinyForm from "./ScrutinyBasic/AllServiceScrutiny/BankGuarantee/FormBankScrutniy/cardBank";
+import ExtensionCard from "./ScrutinyBasic/AllServiceScrutiny/BankGuarantee/Extensionbank/Extensioncard";
+import ReplaceCard from "./ScrutinyBasic/AllServiceScrutiny/BankGuarantee/Replacebank/ReplaceCard";
+import ReleaseCard from "./ScrutinyBasic/AllServiceScrutiny/BankGuarantee/ReleaseBank/ReleaseCard";
 import { TLContextProvider } from "../../../context";
 
 const TLBreadCrumb = ({ location }) => {
@@ -233,11 +237,15 @@ const EmployeeApp = ({ path, url, userType }) => {
             <PrivateRoute path={`${path}/CompositionClu`} component={CompositionClu} />
             <PrivateRoute path={`${path}/CompletionLic`} component={CompletionLic} />
             <PrivateRoute path={`${path}/ServicePlanService`} component={ServicePlanService} />
-            {/* <PrivateRoute path={`${path}/electricalPlanService`} component={electricalPlanService} /> */}
+            <PrivateRoute path={`${path}/ScrutinyForm`} component={ScrutinyForm} />
             {/* <PrivateRoute path={`${path}/SubmitNew`} component={SubmitNew} /> */}
             {/* <PrivateRoute path={`${path}/basicScrutiny`} component={basicScrutiny} /> */}
             {/* <PrivateRoute path={`${path}/FormBank`} component={FormBank} /> */}
+            <PrivateRoute path={`${path}/ElectricalScrutiny`} component={ElectricalScrutiny} />
             <PrivateRoute path={`${path}/ScrutinyForm`} component={ScrutinyForm} />
+            <PrivateRoute path={`${path}/ExtensionCard`} component={ExtensionCard} />
+            <PrivateRoute path={`${path}/ReplaceCard`} component={ReplaceCard} />
+            <PrivateRoute path={`${path}/ReleaseCard`} component={ReleaseCard} />
           </div>
         </React.Fragment>
       </Switch>
