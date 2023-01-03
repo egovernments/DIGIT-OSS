@@ -128,7 +128,7 @@ const CommonForm = () => {
   useEffect(() => {
     if (_.isEmpty(getLicData)) setStepActive({ step1: true, step2: false, step3: false, step4: false, step5: false });
     if (!_.isEmpty(getLicData?.ApplicantInfo)) setStepActive({ step1: true, step2: true, step3: false, step4: false, step5: false });
-    if (!_.isEmpty(getLicData?.ApplicantPurpose)) setStepActive({ step1: false, step2: true, step3: true, step4: false, step5: false });
+    if (!_.isEmpty(getLicData?.ApplicantPurpose)) setStepActive({ step1: true, step2: true, step3: true, step4: false, step5: false });
     if (!_.isEmpty(getLicData?.LandSchedule)) setStepActive({ step1: true, step2: true, step3: true, step4: true, step5: false });
     if (!_.isEmpty(getLicData?.DetailsofAppliedLand)) setStepActive({ step1: true, step2: true, step3: true, step4: true, step5: true });
   }, [getLicData]);
@@ -161,7 +161,7 @@ const CommonForm = () => {
         setIsStep4(false);
         setIsStep5(false);
         setStep(3);
-        setStepActive({ step1: false, step2: true, step3: true, step4: false, step5: false });
+        setStepActive({ step1: true, step2: true, step3: true, step4: false, step5: false });
       }
       if (appNumber === "LANDSCHEDULE") {
         setIsStep3(true);
