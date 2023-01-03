@@ -99,7 +99,11 @@ const ApllicantPuropseForm = (props) => {
       key: "landOwner",
       title: "Name of Land Owner",
       dataIndex: "landOwner",
-      render: (data) => data?.split(" ")?.slice(0, 2)?.join(" "),
+      render: (data) => (
+        <h6 data-toggle="tooltip" data-placement="top" title={data}>
+          {data?.split(" ")?.slice(0, 2)?.join(" ")}
+        </h6>
+      ),
     },
     {
       key: "agreementIrrevocialble",
