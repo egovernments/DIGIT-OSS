@@ -671,7 +671,7 @@ const Developerinfo = (props) => {
                     <ReportProblemIcon
                       style={{
                         display: hideRemarks?"none":"block",
-                        display: hideRemarksPatwari?"none":"block",
+                        // display: hideRemarksPatwari?"none":"block",
                         color: fieldIconColors.licenceApplied
                       }}
                       onClick={() => {
@@ -711,7 +711,7 @@ const Developerinfo = (props) => {
                         <ReportProblemIcon
                           style={{
                             display: hideRemarks?"none":"block",
-                            display: hideRemarksPatwari?"none":"block",
+                            // display: hideRemarksPatwari?"none":"block",
                             color: fieldIconColors.licenceNo
                           }}
                           onClick={() => {
@@ -762,7 +762,7 @@ const Developerinfo = (props) => {
                         <ReportProblemIcon
                           style={{
                             display: hideRemarks?"none":"block",
-                            display: hideRemarksPatwari?"none":"block",
+                            // display: hideRemarksPatwari?"none":"block",
                             color: fieldIconColors.potentialZone
                           }}
                           onClick={() => {
@@ -785,7 +785,7 @@ const Developerinfo = (props) => {
                         <ReportProblemIcon
                           style={{
                             display: hideRemarks?"none":"block",
-                            display: hideRemarksPatwari?"none":"block",
+                            // display: hideRemarksPatwari?"none":"block",
                             color: fieldIconColors.siteLocationPurpose
                           }}
                           onClick={() => {
@@ -908,7 +908,7 @@ const Developerinfo = (props) => {
                         <ReportProblemIcon
                           style={{
                             display: hideRemarks?"none":"block",
-                            display: hideRemarksPatwari?"none":"block",
+                            // display: hideRemarksPatwari?"none":"block",
                             color: fieldIconColors.approachRoadWidth
                           }}
                           onClick={() => {
@@ -930,7 +930,7 @@ const Developerinfo = (props) => {
                         <ReportProblemIcon
                           style={{
                             display: hideRemarks?"none":"block",
-                            display: hideRemarksPatwari?"none":"block",
+                            // display: hideRemarksPatwari?"none":"block",
                             color: fieldIconColors.specifyOthers
                           }}
                           onClick={() => {
@@ -973,7 +973,7 @@ const Developerinfo = (props) => {
                         <ReportProblemIcon
                           style={{
                             display: hideRemarks?"none":"block",
-                            display: hideRemarksPatwari?"none":"block",
+                            // display: hideRemarksPatwari?"none":"block",
                             color: fieldIconColors.thirdPartyRightCreated
                           }}
                           onClick={() => {
@@ -1052,7 +1052,7 @@ const Developerinfo = (props) => {
                   <ReportProblemIcon
                     style={{
                       display: hideRemarks?"none":"block",
-                       display: hideRemarksPatwari?"none":"block",
+                       // display: hideRemarksPatwari?"none":"block",
                       color: fieldIconColors.migrationPolicy
                     }}
                     onClick={() => {
