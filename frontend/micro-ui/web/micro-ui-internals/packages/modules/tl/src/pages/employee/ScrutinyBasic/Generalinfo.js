@@ -394,7 +394,7 @@ const Genarelinfo = (props) => {
                   <ReportProblemIcon
                     style={{
                       display: hideRemarks?"none":"block",
-                      display: hideRemarksPatwari?"none":"block",
+                      // display: hideRemarksPatwari?"none":"block",
                       color: fieldIconColors.purpose
                     }}
                     onClick={() => {
@@ -452,7 +452,7 @@ const Genarelinfo = (props) => {
                   <ReportProblemIcon
                     style={{
                       display: hideRemarks?"none":"block",
-                      display: hideRemarksPatwari?"none":"block",
+                      // display: hideRemarksPatwari?"none":"block",
                       color: fieldIconColors.potential
                     }}
                     onClick={() => {
@@ -488,7 +488,7 @@ const Genarelinfo = (props) => {
                     <ReportProblemIcon
                       style={{
                         display: hideRemarks?"none":"block",
-                        display: hideRemarksPatwari?"none":"block",
+                        // display: hideRemarksPatwari?"none":"block",
                         color: fieldIconColors.district
                       }}
                       onClick={() => {
@@ -523,7 +523,7 @@ const Genarelinfo = (props) => {
                     <ReportProblemIcon
                       style={{
                         display: hideRemarks?"none":"block",
-                        display: hideRemarksPatwari?"none":"block",
+                        // display: hideRemarksPatwari?"none":"block",
                         color: fieldIconColors.state
                       }}
                       onClick={() => {
@@ -638,7 +638,7 @@ const Genarelinfo = (props) => {
                       <ReportProblemIcon
                         style={{
                           display: hideRemarks?"none":"block",
-                          display: hideRemarksPatwari?"none":"block",
+                          // display: hideRemarksPatwari?"none":"block",
                           color: fieldIconColors.tehsil
                         }}
                         onClick={() => {
@@ -669,7 +669,7 @@ const Genarelinfo = (props) => {
                       <ReportProblemIcon
                         style={{
                           display: hideRemarks?"none":"block",
-                           display: hideRemarksPatwari?"none":"block",
+                           // display: hideRemarksPatwari?"none":"block",
                           color: fieldIconColors.hadbastNo
                         }}
                         onClick={() => {
