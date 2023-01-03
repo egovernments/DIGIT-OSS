@@ -102,6 +102,34 @@ const OwnerForm = (_props) => {
   }, []);
 
   useEffect(() => {
+    if(window.location.href.includes("tl/renew-application-details") && formData?.cpt?.details)
+    { 
+      if(typeOfOwner === "INSTITUTIONAL")
+      {
+        setValue("instituionName",owner?.instituionName);
+        setValue("subOwnerShipCategory",owner?.subOwnerShipCategory);
+        setValue("name",owner?.name);
+        setValue("designation",owner?.designation);
+        setValue("mobileNumber",owner?.mobileNumber);
+        setValue("altContactNumber",owner?.altContactNumber);
+        setValue("emailId",owner?.emailId);
+        setValue("emailId",owner?.emailId); 
+      }
+      else
+      {
+        setValue("name",owner?.name);
+        setValue("mobileNumber",owner?.mobileNumber);
+        setValue("fatherOrHusbandName",owner?.fatherOrHusbandName);
+        setValue("relationship",owner?.relationship);
+        setValue("gender",owner?.gender);
+        setValue("emailId",owner?.emailId);
+        setValue("ownerType",owner?.ownerType);
+        setValue("permanentAddress",owner?.permanentAddress);
+      }
+    }
+  }, [formData?.cpt?.details?.propertyId, formData?.cptId?.Id, formData]);
+
+  useEffect(() => {
     if (!_.isEqual(formValue, part)) {
       setPart({...formValue});
 
@@ -621,7 +649,7 @@ const TLOwnerDetailsEmployee = ({ config, onSelect, userType, formData, setError
   const { t } = useTranslation();
   const { pathname } = useLocation();
   const isEditScreen = pathname.includes("/modify-application/");
-  const isSameAsPropertyOwner = formData?.ownershipCategory?.isSameAsPropertyOwner;
+  let isSameAsPropertyOwner = formData?.ownershipCategory?.isSameAsPropertyOwner;
   const [owners, setOwners] = useState((formData?.owners || [createOwnerDetails()] ));
   const [focusIndex, setFocusIndex] = useState({ index: -1, type: "" });
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -659,11 +687,11 @@ const TLOwnerDetailsEmployee = ({ config, onSelect, userType, formData, setError
   },[owners])
 
   useEffect(() => {
-    if(formData?.ownershipCategory?.isSameAsPropertyOwner == true && JSON.parse(sessionStorage.getItem("ownersFromProperty")) && !_.isEqual(owners,JSON.parse(sessionStorage.getItem("ownersFromProperty"))) )
+    if(formData?.ownershipCategory?.isSameAsPropertyOwner == true || formData?.ownershipCategory?.isSameAsPropertyOwner === "true" && JSON.parse(sessionStorage.getItem("ownersFromProperty")) && !(_.isEqual(owners,JSON.parse(sessionStorage.getItem("ownersFromProperty")))) )
     {
       setOwners([...JSON.parse(sessionStorage.getItem("ownersFromProperty"))]);
     }
-  },[formData])
+  },[formData, formData?.cpt?.details?.propertyId])
 
   useEffect(() => {
     if (formData?.ownershipCategory?.code == "INDIVIDUAL.MULTIPLEOWNERS" && owners.length > 1) clearErrors("mulipleOwnerError");

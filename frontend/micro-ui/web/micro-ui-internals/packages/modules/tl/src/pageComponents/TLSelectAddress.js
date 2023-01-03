@@ -190,7 +190,7 @@ const TLSelectAddress = ({ t, config, onSelect, userType, formData, setError, fo
             render={(props) => (
               <Dropdown
                 className="form-field"
-                selected={props.value || {...formData?.cpt?.details?.address?.locality, i18nkey:formData?.cpt?.details?.address?.locality?.name}}
+                selected={checkingLocationForRenew || formData?.cpt?.details ? ({...formData?.cpt?.details?.address?.locality, i18nkey:formData?.cpt?.details?.address?.locality?.name}) :(props.value || {...formData?.cpt?.details?.address?.locality, i18nkey:formData?.cpt?.details?.address?.locality?.name})}
                 option={localities}
                 select={props.onChange}
                 onBlur={props.onBlur}

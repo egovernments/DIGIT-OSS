@@ -155,7 +155,8 @@ const ReNewApplication = (props) => {
     ownershipCategory: ownershipCategory,
     owners:  getOwners(applicationData)|| [],
     documents: { documents: applicationData?.tradeLicenseDetail?.applicationDocuments || [] },
-    cptId: {id: propertyId}
+    cptId: {id: propertyId},
+    cpt: {details:propertyDetails?.Properties?.[0]}
     // applicationData: cloneDeep(props?.location?.state?.applicationData)
   };
 

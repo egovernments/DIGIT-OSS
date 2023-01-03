@@ -64,17 +64,17 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlu
 
 
   useEffect(() => {
-    if(formData?.ownershipCategory?.isSameAsPropertyOwner == true && formData?.cpt?.details)
+    if(formData?.ownershipCategory?.isSameAsPropertyOwner == true || formData?.ownershipCategory?.isSameAsPropertyOwner == "true" && formData?.cpt?.details)
     {
       sessionStorage.setItem("ownersFromProperty",JSON.stringify(getOwnersForNewApplication(formData,t))); 
     }
-    else if(formData?.ownershipCategory?.isSameAsPropertyOwner == false)
+    else if(formData?.ownershipCategory?.isSameAsPropertyOwner == false || formData?.ownershipCategory?.isSameAsPropertyOwner === "false")
     {
       if(sessionStorage.getItem("ownersFromProperty"))
       sessionStorage.removeItem("ownersFromProperty");
     }
 
-  },[formData?.ownershipCategory?.isSameAsPropertyOwner, isSameAsPropertyOwner])
+  },[formData?.ownershipCategory?.isSameAsPropertyOwner, isSameAsPropertyOwner, formData?.cpt?.details?.propertyId, formData?.cptId?.id])
   const onSkip = () => onSelect();
   function goNext() {
     sessionStorage.setItem("ownershipCategory", ownershipCategory?.value);

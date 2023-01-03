@@ -51,8 +51,15 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
   }, [propertyData]);
 
   useEffect(() => {
-    showToast && showToast?.label !== "ERR_PLEASE_REFINED_UR_SEARCH" && setShowToast(null);
+    showToast && showToast?.label !== "ERR_PLEASE_REFINED_UR_SEARCH" && showToast?.label !== "NO_PROPERTIES_FOUND" && setShowToast(null);
   }, [action, propertyDataLoading]);
+
+  useEffect(() => {
+    if(!propertyDataLoading && propertyData && searchData && propertyData?.Properties?.length <= 0)
+    {
+      setShowToast({ error: true, warning: true, label: "NO_PROPERTIES_FOUND" });
+    }
+  },[propertyData?.Properties?.[0]?.propertyId, propertyDataLoading])
 
   useLayoutEffect(() => {
     //Why do we need this? !!!!!
@@ -369,7 +376,8 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
       }
     }
 
-    if (showToast?.label !== "ERR_PLEASE_REFINED_UR_SEARCH") setShowToast(null);
+
+    if (showToast?.label !== "ERR_PLEASE_REFINED_UR_SEARCH" || showToast?.label !== "NO_PROPERTIES_FOUND") setShowToast(null);
     if (data?.doorNumber && data?.doorNumber !== "" && data?.propertyIds !== "") {
       data["propertyIds"] = "";
     }
@@ -382,6 +390,22 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
     delete tempObject.addParam;
     delete tempObject.addParam1;
     delete tempObject.city;
+    if(action === "0")
+    {
+      tempObject = { 
+        oldPropertyId : tempObject?.oldPropertyId,
+        mobileNumber : tempObject?.mobileNumber,
+        propertyIds : tempObject?.propertyIds,
+      }
+    }
+    else if(action === "1")
+    {
+      tempObject = {
+        name : tempObject?.name,
+        doorNo : tempObject?.doorNo,
+        locality : tempObject?.locality,
+      }
+    }
     setSearchData({ city: city, filters: tempObject });
 
     return;
@@ -471,7 +495,7 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
           oldPropertyIds : "", 
         }
         //onSelect('cptSearchQuery',{...SearchParams});
-        onSelect('cptSearchQuery', SearchParams, null, null, null, {
+        !propertyDataLoading && propertyData?.Properties?.length > 0 && onSelect('cptSearchQuery', SearchParams, null, null, null, {
           queryParams: { ...SearchParams },
         });
       }

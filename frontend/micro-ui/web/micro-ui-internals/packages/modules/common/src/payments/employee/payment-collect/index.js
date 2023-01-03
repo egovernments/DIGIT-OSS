@@ -234,7 +234,7 @@ export const CollectPayment = (props) => {
         {
           label: t("PAYMENT_PAYER_NAME_LABEL"),
           isMandatory: true,
-          disable : selectedPaidBy?.code === "OWNER" ? true : false,
+          disable : selectedPaidBy?.code === "OWNER" && (bill?.payerName || formState?.payerName) ? true : false,
           type: "text",
           populators: {
             name: "payerName",
