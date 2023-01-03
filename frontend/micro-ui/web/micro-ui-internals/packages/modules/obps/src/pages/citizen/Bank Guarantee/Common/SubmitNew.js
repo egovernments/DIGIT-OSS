@@ -56,7 +56,7 @@ function SubmitNew() {
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
-                  <h2>Enter License No. </h2>
+                  <h2>Enter LOI No. </h2>
                 </Form.Label>
               </div>
               <input type="text" className="form-control" placeholder="" {...register("loiNumber")} />

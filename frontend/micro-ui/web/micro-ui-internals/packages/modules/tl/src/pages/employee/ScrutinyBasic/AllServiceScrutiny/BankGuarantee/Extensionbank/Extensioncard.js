@@ -2,16 +2,16 @@ import axios from "axios";
 import { size } from "lodash";
 import React, { useState, useEffect } from "react";
 import { Card, Row, Col } from "react-bootstrap";
-import FormBank from "../FormBankScrutniy/FormBank";
+import ExtensionFormBank from "./ExtensionFormBank";
 // import { useSearchParams } from "react-router-dom";
 // import SubmitNew from "../SubmitNew";
 
-const ScrutinyForm = (props) => {
+const ExtensionCard = (props) => {
   return (
     <Card>
       {/* <Row style={{ top: 30, padding: 10 }}><SubmitNew /></Row> */}
       <Row>
-        <FormBank />
+        <ExtensionFormBank />
       </Row>
       <Row style={{ top: 30, padding: "10px 22px" }}>
         <Row>
@@ -24,4 +24,4 @@ const ScrutinyForm = (props) => {
   );
 };
 
-export default ScrutinyForm;
+export default ExtensionCard;

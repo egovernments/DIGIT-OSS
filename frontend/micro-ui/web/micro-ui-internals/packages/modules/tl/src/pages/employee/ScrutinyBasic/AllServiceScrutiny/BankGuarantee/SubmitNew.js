@@ -138,7 +138,7 @@ const SubmitNew = (props) => {
           <Card
           // style={{ width: "126%", border: "5px solid #1266af" }}
           >
-            <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Submission </h4>
+            <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Bank Guarantee Submission </h4>
             <div className="card">
               <Row className="col-12">
                 <Form.Group as={Col} controlId="formGridLicence">

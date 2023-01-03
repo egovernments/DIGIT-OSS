@@ -9,15 +9,13 @@ const ScrutinyDevelopment = (props) => {
 
   const remarkDataResp = props.remarkData;
 
-  useEffect(
-    () => {
-      if (remarkDataResp && remarkDataResp?.length) {
-        const tempArray = remarkDataResp.filter((ele) => ele.isApproved === false)
-        console.log("log123DisA", tempArray);
-        setDisapprovedList(tempArray);
-      }
-    }, [remarkDataResp]
-  )
+  useEffect(() => {
+    if (remarkDataResp && remarkDataResp?.length) {
+      const tempArray = remarkDataResp.filter((ele) => ele.isApproved === false);
+      console.log("log123DisA", tempArray);
+      setDisapprovedList(tempArray);
+    }
+  }, [remarkDataResp]);
   // const sumdataTime = props.remarksum;
   // const [applicationId, setApplicationId] = useState("");
   return (
@@ -31,17 +29,6 @@ const ScrutinyDevelopment = (props) => {
         minHeight: "40%",
       }}
     >
-      {/* <Row>
-      <Col>
-        {el.applicationId}
-      </Col>
-      <Col>
-        {el.serviceId}
-      </Col>
-      <Col>
-        {el.documentId}
-      </Col>
-        </Row> */}
       <Row>
         <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
           <Row>
@@ -99,7 +86,9 @@ const ScrutinyDevelopment = (props) => {
                   </Row>
 
                   <Row style={{ margin: 4 }}>
-                    <b style={{ textAlign: "right" }}>{new Date(el.ts).toLocaleDateString('en-GB')} {new Date(el.ts).toLocaleTimeString('en-US')}</b>
+                    <b style={{ textAlign: "right" }}>
+                      {new Date(el.ts).toLocaleDateString("en-GB")} {new Date(el.ts).toLocaleTimeString("en-US")}
+                    </b>
                   </Row>
                 </div>
               );
@@ -112,8 +101,7 @@ const ScrutinyDevelopment = (props) => {
 
       {/* {JSON.stringify(disapprovedList)} */}
 
-
-      <TableContainer component={Paper} style={{marginTop:20}}>
+      <TableContainer component={Paper} style={{ marginTop: 20 }}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
@@ -124,24 +112,19 @@ const ScrutinyDevelopment = (props) => {
           </TableHead>
           <TableBody>
             {disapprovedList.map((row) => (
-            <TableRow
-              key={row?.fieldIdL}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row.fieldIdL}
-              </TableCell>
-              <TableCell align="right">{row.comment}</TableCell>
-              <TableCell align="right">
-                <Checkbox/>
-              </TableCell>
-            </TableRow>
-          ))}
+              <TableRow key={row?.fieldIdL} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                <TableCell component="th" scope="row">
+                  {row.fieldIdL}
+                </TableCell>
+                <TableCell align="right">{row.comment}</TableCell>
+                <TableCell align="right">
+                  <Checkbox />
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
-
-
     </Container>
   );
 };
