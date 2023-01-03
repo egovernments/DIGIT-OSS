@@ -7,7 +7,11 @@ const createProxy = createProxyMiddleware({
   changeOrigin: true,
 });
 const assetsProxy = createProxyMiddleware({
+<<<<<<< HEAD
+  target: process.env.REACT_APP_PROXY_ASSETS || "tcp.abm.com:80",
+=======
   target: process.env.REACT_APP_PROXY_ASSETS || "http://103.166.62.118:80",
+>>>>>>> 9bf8799bbb2f68ff6107f1852d6efdd5ed0a496e
   changeOrigin: true,
 });
 const apiSetuProxy = createProxyMiddleware({
@@ -26,11 +30,23 @@ const devRegistration = createProxyMiddleware({
   target: process.env.REACT_APP_PROXY_DEV_REG || "http://103.166.62.118:80",
   changeOrigin: true,
 });
+<<<<<<< HEAD
 const EgScrutinyProxy = createProxyMiddleware({
-  target: process.env.REACT_APP_PROXY_SCRUTINY_EG || "http://103.166.62.118:80",
+  target: process.env.REACT_APP_PROXY_SCRUTINY_EG || "http://tcp.abm.com:80",
   changeOrigin: true,
 });
-
+const GetCluDetails = createProxyMiddleware({
+	target: process.env.REACT_APP_PROXY_SCRUTINY_EG || "http://182.79.97.53:81",
+=======
+const LicNewRegistration = createProxyMiddleware({
+  target: process.env.REACT_APP_PROXY_NEW_LIC || "http://103.166.62.118:80",
+  changeOrigin: true,
+});
+const EgScrutinyProxy = createProxyMiddleware({
+	target: process.env.REACT_APP_PROXY_SCRUTINY_EG || "http://103.166.62.118:80",
+>>>>>>> 9bf8799bbb2f68ff6107f1852d6efdd5ed0a496e
+  changeOrigin: true,
+});
 module.exports = function (app) {
   [
     "/egov-mdms-service",
@@ -93,5 +109,11 @@ module.exports = function (app) {
   // ["/egov-mdms-service/v1"].forEach((location) => app.use(location, LicProxy));
   ["/filestore/v1/files"].forEach((location) => app.use(location, docUploadProxy));
   ["/user/developer"].forEach((location) => app.use(location, devRegistration));
+  ["/land-services/egscrutiny",
+   "/land-services/new/licenses"
+  ].forEach((location) => app.use(location, EgScrutinyProxy));
+	[ "/api/cis/GetCluDetails",
+  "/api/cis/GetLicenceDetails"
+ ].forEach((location) => app.use(location, GetCluDetails));
   ["/land-services/egscrutiny", "/land-services/new/licenses"].forEach((location) => app.use(location, EgScrutinyProxy));
 };

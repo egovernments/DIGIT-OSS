@@ -91,7 +91,7 @@ const Inbox = ({
         pattern: Digit.Utils.getPattern("MobileNo"),
 
         type: "mobileNumber",
-   
+
 
         title: t("ES_SEARCH_APPLICATION_MOBILE_INVALID"),
         componentInFront: "+91",
@@ -122,47 +122,57 @@ const Inbox = ({
   //   config:{}
   // })
 
+ 
+
+  useEffect(() => {
+    console.log("dataDev123", data)
+  }, [data])
+
   if (isMobile) {
-    return <MobileInbox
-      data={data}
-      isLoading={hookLoading}
-      searchFields={getSearchFields()}
-      onFilterChange={handleFilterChange}
-      onSearch={handleFilterChange}
-      onSort={handleSort}
-      parentRoute={parentRoute}
-      searchParams={searchParams}
-      sortParams={sortParams}
-    />
-  } else {
-    return <div>
-      {isInbox && <Header>{t("ES_COMMON_INBOX")}</Header>}
-      <DesktopInbox
-        businessService={businessService}
+    return (
+      <MobileInbox
         data={data}
-        tableConfig={rest?.tableConfig}
         isLoading={hookLoading}
-        defaultSearchParams={initialStates.searchParams}
-        isSearch={!isInbox}
-        onFilterChange={handleFilterChange}
         searchFields={getSearchFields()}
-        setSearchFieldsBackToOriginalState={setSearchFieldsBackToOriginalState}
-        setSetSearchFieldsBackToOriginalState={setSetSearchFieldsBackToOriginalState}
+        onFilterChange={handleFilterChange}
         onSearch={handleFilterChange}
         onSort={handleSort}
-        onNextPage={fetchNextPage}
-        onPrevPage={fetchPrevPage}
-        currentPage={Math.floor(pageOffset / pageSize)}
-        pageSizeLimit={pageSize}
-        disableSort={false}
-        onPageSizeChange={handlePageSizeChange}
         parentRoute={parentRoute}
         searchParams={searchParams}
         sortParams={sortParams}
-        totalRecords={Number(data?.totalCount)}
-        filterComponent={filterComponent}
       />
-    </div>
+    )
+  } else {
+    return (
+      <div>
+        {isInbox && <Header>{t("ES_COMMON_INBOX")}</Header>}
+        <DesktopInbox
+          businessService={businessService}
+          data={data}
+          tableConfig={rest?.tableConfig}
+          isLoading={hookLoading}
+          defaultSearchParams={initialStates.searchParams}
+          isSearch={!isInbox}
+          onFilterChange={handleFilterChange}
+          searchFields={getSearchFields()}
+          setSearchFieldsBackToOriginalState={setSearchFieldsBackToOriginalState}
+          setSetSearchFieldsBackToOriginalState={setSetSearchFieldsBackToOriginalState}
+          onSearch={handleFilterChange}
+          onSort={handleSort}
+          onNextPage={fetchNextPage}
+          onPrevPage={fetchPrevPage}
+          currentPage={Math.floor(pageOffset / pageSize)}
+          pageSizeLimit={pageSize}
+          disableSort={false}
+          onPageSizeChange={handlePageSizeChange}
+          parentRoute={parentRoute}
+          searchParams={searchParams}
+          sortParams={sortParams}
+          totalRecords={Number(data?.totalCount)}
+          filterComponent={filterComponent}
+        />
+      </div>
+    )
   }
 };
 

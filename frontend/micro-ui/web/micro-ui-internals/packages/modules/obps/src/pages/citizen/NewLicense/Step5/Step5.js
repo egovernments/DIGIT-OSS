@@ -1,52 +1,30 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import { useForm } from "react-hook-form";
-// import Box from '@material-ui/core//Box';
-import { Button, Form } from "react-bootstrap";
-// import Typography from '@material-ui/core/Typography'
+import { Form } from "react-bootstrap";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { Card, Row, Col } from "react-bootstrap";
-import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { getDocShareholding } from "../docView/docView.help";
 import axios from "axios";
-import { round } from "lodash";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import Spinner from "../../../../components/Loader";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { VALIDATION_SCHEMA } from "../../../../utils/schema/step4";
-// import Pdf from "../Documents/Document.pdf";
-
-// import InfoIcon from '@mui/icons-material/Info';
-// import TextField from '@mui/material/TextField';
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 900,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
+import { VALIDATION_SCHEMA } from "../../../../utils/schema/step5";
 
 const FeesChargesForm = (props) => {
+  const location = useLocation();
   const history = useHistory();
-  const [purpose, setPurpose] = useState("");
-  const [totalFee, setTotalFee] = useState("");
-  const [remark, setRemark] = useState("");
-  const [payableNow, setPayableNow] = useState("");
-  const [calculateData, setCalculateData] = useState({});
+  const userInfo = Digit.UserService.getUser()?.info || {};
   const [modal, setmodal] = useState(false);
   const [modal1, setmodal1] = useState(false);
   const [loader, setLoader] = useState(false);
-  const [scrutinyFeeCharge, setScrutinyFeeCharge] = useState("");
+  const [stepData, setStepData] = useState(null);
+  const [applicantId, setApplicantId] = useState("");
   const {
     register,
     handleSubmit,
     formState: { errors },
-    control,
     setValue,
     watch,
   } = useForm({
@@ -55,19 +33,16 @@ const FeesChargesForm = (props) => {
     resolver: yupResolver(VALIDATION_SCHEMA),
     shouldFocusError: true,
   });
-  const [submitDataLabel, setSubmitDataLabel] = useState([]);
 
-  const [FeesChargesFormSubmitted, SetFeesChargesFormSubmitted] = useState(false);
   const FeesChrgesFormSubmitHandler = async (data) => {
     const token = window?.localStorage?.getItem("token");
     setLoader(true);
-
     const postDistrict = {
       pageName: "FeesAndCharges",
       action: "FEESANDCHARGES",
-      applicationNumber: props?.getId,
-      createdBy: props?.userData?.id,
-      updatedBy: props?.userData?.id,
+      applicationNumber: applicantId,
+      createdBy: userInfo?.id,
+      updatedBy: userInfo?.id,
       LicenseDetails: {
         FeesAndCharges: {
           ...data,
@@ -83,7 +58,7 @@ const FeesChargesForm = (props) => {
         msgId: "090909",
         requesterId: "",
         authToken: token,
-        userInfo: props?.userData,
+        userInfo: userInfo,
       },
     };
     try {
@@ -96,58 +71,14 @@ const FeesChargesForm = (props) => {
     }
   };
 
-  const [showhide0, setShowhide0] = useState("No");
-  const handleshow0 = (e) => {
-    const getshow = e.target.value;
-    setShowhide0(getshow);
-  };
-
-  const handleTotalFeesChange = (event) => {
-    setTotalFee(event.target.value);
-  };
-  const handleRemarkChange = (event) => {
-    setRemark(event.target.value);
-  };
-
-  // const handleChange = (e) => {
-  //   this.setState({ isRadioSelected: true });
-  // };
-
-  const Purpose = localStorage.getItem("purpose");
-  const potential = JSON.parse(localStorage.getItem("potential"));
-
   const CalculateApiCall = async () => {
     const token = window?.localStorage?.getItem("token");
     const payload = {
       RequestInfo: {
         apiId: "Rainmaker",
         msgId: "1669293303096|en_IN",
-        authToken: "8428d41b-01ff-4e90-a125-9af324bbf409",
-        userInfo: {
-          id: 330,
-          uuid: "36ea2b0e-52f5-4d16-96b2-4b3963eee30a",
-          userName: "9050784591",
-          name: "renuka",
-          mobileNumber: "9050784591",
-          emailId: "",
-          locale: null,
-          type: "CITIZEN",
-          roles: [
-            {
-              code: "DEVELOPER",
-              name: "Developer ",
-              tenantId: "hr",
-            },
-            {
-              name: "Citizen",
-              code: "CITIZEN",
-              tenantId: "hr",
-            },
-          ],
-          active: true,
-          tenantId: "hr",
-          permanentCity: null,
-        },
+        authToken: token,
+        userInfo: userInfo,
       },
       CalulationCriteria: [
         {
@@ -156,12 +87,11 @@ const FeesChargesForm = (props) => {
       ],
       CalculatorRequest: {
         totalLandSize: 1,
-        potenialZone: potential,
-        purposeCode: Purpose,
-        applicationNumber: props?.securedData?.applicationNumber,
+        potenialZone: stepData?.ApplicantPurpose?.potential,
+        purposeCode: stepData?.ApplicantPurpose?.purpose,
+        applicationNumber: applicantId,
       },
     };
-
     try {
       const Resp = await axios.post("/tl-calculator/v1/_calculator", payload);
       const charges = Resp.data?.Calculations?.[0]?.tradeTypeBillingIds;
@@ -175,7 +105,7 @@ const FeesChargesForm = (props) => {
   };
   useEffect(() => {
     CalculateApiCall();
-  }, []);
+  }, [applicantId, stepData]);
 
   const showPdf = async () => {
     setLoader(true);
@@ -204,7 +134,6 @@ const FeesChargesForm = (props) => {
       const Resp = await axios.get(`http://103.166.62.118:80/land-services/new/licenses/_get?id=${props.getId}`).then((response) => {
         return response;
       });
-      setSubmitDataLabel(Resp?.data);
     } catch (error) {
       return error;
     }
@@ -213,11 +142,6 @@ const FeesChargesForm = (props) => {
   const getWholeData = async () => {
     try {
       const Resp = await axios.get(`http://103.166.62.118:80/tl-services/new/licenses/object/_get?id=${props.getId}`);
-      // let temp = {};
-      // Object.keys(Resp?.data).forEach((el) => {
-      //   const newKey = el?.replace(/"/g, "");
-      //   temp[newKey] = Resp?.data[el];
-      // });
     } catch (error) {
       return error;
     }
@@ -230,6 +154,7 @@ const FeesChargesForm = (props) => {
   useEffect(() => {
     getSubmitDataLabel();
   }, []);
+
   const [fileStoreId, setFileStoreId] = useState({});
   const getDocumentData = async (file, fieldName) => {
     const formData = new FormData();
@@ -250,25 +175,6 @@ const FeesChargesForm = (props) => {
     }
   };
 
-  const handleChangePurpose = (data) => {
-    const purposeSelected = data.data;
-    setSelectPurpose(purposeSelected);
-  };
-
-  const handleChangePotential = (data) => {
-    const purposeSelected = data.data;
-    setSelectPurpose(purposeSelected);
-  };
-
-  const handleScrutiny = (event) => {
-    setCalculateData(event.target.value);
-  };
-  const handleLicense = (event) => {
-    setCalculateData(event.target.value);
-  };
-  const handleConversion = (event) => {
-    setCalculateData(event.target.value);
-  };
   const dataArea = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.kanal;
   const dataAreaMarla = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.marla;
   const dataAreaSarai = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.sarsai;
@@ -277,6 +183,32 @@ const FeesChargesForm = (props) => {
   const dataAreaBiswansi = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.biswansi;
   const totalAreaAcre =
     dataArea * 0.125 + dataAreaMarla * 0.0062 + dataAreaSarai * 0.00069 + dataAreaBigha * 0.33 + dataAreaBiswa * 0.0309 + dataAreaBiswansi * 0.619;
+
+  const getApplicantUserData = async (id) => {
+    const token = window?.localStorage?.getItem("token");
+    const payload = {
+      apiId: "Rainmaker",
+      msgId: "1669293303096|en_IN",
+      authToken: token,
+    };
+    try {
+      const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${id}`, payload);
+      const userData = Resp?.data?.LicenseDetails?.[0];
+      setValue("purpose", userData?.ApplicantPurpose?.purpose);
+      setValue("potential", userData?.ApplicantPurpose?.potential);
+      setStepData(userData);
+    } catch (error) {
+      return error;
+    }
+  };
+
+  useEffect(() => {
+    const search = location?.search;
+    const params = new URLSearchParams(search);
+    const id = params.get("id");
+    setApplicantId(id?.toString());
+    if (id) getApplicantUserData(id);
+  }, []);
 
   return (
     <div>
@@ -305,15 +237,7 @@ const FeesChargesForm = (props) => {
                           Purpose <span style={{ color: "red" }}>*</span>
                         </th>
                         <td>
-                          <input
-                            type="text"
-                            className="form-control"
-                            placeholder={Purpose}
-                            onChange1={handleChangePurpose}
-                            value={purpose}
-                            disabled
-                            {...register("purpose")}
-                          />
+                          <input type="text" className="form-control" placeholder="purpose" disabled {...register("purpose")} />
                         </td>
                       </tr>
                       <tr>
@@ -321,15 +245,7 @@ const FeesChargesForm = (props) => {
                           Dev Plan <span style={{ color: "red" }}>*</span>
                         </th>
                         <td>
-                          <input
-                            type="text"
-                            className="form-control"
-                            placeholder={potential}
-                            onChange1={handleChangePotential}
-                            value={potential}
-                            disabled
-                            {...register("potential")}
-                          />
+                          <input type="text" className="form-control" placeholder="potential" disabled {...register("potential")} />
                         </td>
                       </tr>
                       <tr>
@@ -376,21 +292,11 @@ const FeesChargesForm = (props) => {
                         onChange={(e) => setPayableNow(e.target.value)}
                         value={payableNow}
                       /> */}
-
-                      {errors.totalFee && <p></p>}
                     </div>
 
                     <div className="col col-4">
                       <h6>(ii)Remark (If any)</h6>
-                      <input
-                        type="text"
-                        className="form-control"
-                        minLength={2}
-                        maxLength={100}
-                        {...register("remark")}
-                        onChange1={handleRemarkChange}
-                      />
-                      {errors.remark && <p></p>}
+                      <input type="text" className="form-control" minLength={2} maxLength={100} {...register("remark")} />
                     </div>
 
                     <div className="col col-4">
@@ -547,7 +453,7 @@ const FeesChargesForm = (props) => {
                       </div> */}
                       {/* </a> */}
                       {/* &nbsp;&nbsp; */}
-                      <button type="submit" id="btnClear" class="btn btn-primary btn-md ">
+                      <button type="submit" class="btn btn-primary btn-md ">
                         Submit
                       </button>
                       <div class="my-2">
@@ -555,7 +461,7 @@ const FeesChargesForm = (props) => {
                         <button
                           className="btn btn-primary"
                           onClick={() => {
-                            history.push(`/digit-ui/citizen/payment/collect/TL/${props?.securedData?.applicationNumber}`, {});
+                            history.push(`/digit-ui/citizen/payment/collect/TL/${applicantId}`, {});
                             setmodal(true);
                           }}
                         >

@@ -17,6 +17,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { getDocShareholding } from "../../../tl/src/pages/employee/ScrutinyBasic/ScrutinyDevelopment/docview.helper";
 import { MenuItem, Select } from "@mui/material";
 import { convertEpochToDate } from "../utils/index";
+import Spinner from "../components/Loader/index";
+
 const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) => {
     const { pathname: url } = useLocation();
     let validation = {};
@@ -27,7 +29,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const stateId = Digit.ULBService.getStateId();
     const [data, setData] = useState();
-
+    const [loader, setLoading] = useState(false);
     React.useEffect(async () => {
         const uuid = userInfo?.info?.uuid;
         const usersResponse = await Digit.UserService.userSearch(tenantId, { uuid: [uuid] }, {});
@@ -405,9 +407,12 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
         formData.append("tag", "tag-property");
         // setLoader(true);
         try {
+            setLoading(true);
             const Resp = await axios.post("/filestore/v1/files", formData, {}).then((response) => {
                 return response;
             });
+            
+            setLoading(false);
             console.log(Resp?.data?.files);
             setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
             // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
@@ -416,7 +421,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
             //   setLoader(false);
 
         } catch (error) {
-            //   setLoader(false);
+            setLoading(false);
             console.log(error.message);
         }
     };
@@ -966,6 +971,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
     return (
         <React.Fragment>
             <div className={isopenlink ? "OpenlinkContainer" : ""}>
+            {loader && <Spinner />}
                 {/* {JSON.stringify(data?.devDetail[0]?.addInfo?.showDevTypeFields)}efwefewfewf
                 {JSON.stringify(data)}efewfewf */}
                 {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
@@ -978,7 +984,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
 
                     isDisabled={
                         ((data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm") ? (!Documents?.companyBalanceSheet || !Documents?.individualCertificateCA) : (data?.devDetail[0]?.addInfo?.showDevTypeFields === "Company" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Society" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Trust" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Institution") ? (!Documents?.companyBalanceSheet || !Documents?.paidUpCapital) : (data?.devDetail[0]?.addInfo?.showDevTypeFields === "Limited Liability Partnership" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Firm" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm") ? (!Documents?.netWorthOfPartners || !Documents?.netWorthOfFirm) : false) ||
-                        ((permissionGrantedHRDU === "Y" && capacityDevelopColonyHdruAct.length) ? false : permissionGrantedHRDU === "N" ? false : true) || ((technicalCapacityOutsideHaryana === "Y" && technicalCapacityOutsideHaryanaDetails.authority && technicalCapacityOutsideHaryanaDetails.project && technicalCapacityOutsideHaryanaDetails.statusOfDevelopment) ? false : technicalCapacityOutsideHaryana === "N" ? false : true) || ((alreadtObtainedLic === "Y" && Documents?.agreementDocY && Documents?.boardDocX && Documents?.registeredDoc && Documents?.boardDocY && technicalCapacitySoughtFromAnyColonizer.licNo && technicalCapacitySoughtFromAnyColonizer.dateOfGrantingLic && technicalCapacitySoughtFromAnyColonizer.licValidity && technicalCapacitySoughtFromAnyColonizer.purpose) ? false : alreadtObtainedLic === "N" ? false :  (data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm") ? false : true) || ((designatedDirectors === "Y" && Documents?.agreementDoc && Documents?.boardDoc) ? false : designatedDirectors === "N" ? false : permissionGrantedHRDU === "Y" ? false : true) || ((technicalExpert === "Y" && engineerName && engineerQualification && Documents?.engineerSign && Documents?.architectSign && Documents?.townPlannerSign && architectName && architectQualification && townPlannerName && townPlannerQualification) ? false : (technicalExpert === "N") ? false : true)
+                        ((permissionGrantedHRDU === "Y" && capacityDevelopColonyHdruAct.length) ? false : permissionGrantedHRDU === "N" ? false : true) || ((technicalCapacityOutsideHaryana === "Y" && technicalCapacityOutsideHaryanaDetails.authority && technicalCapacityOutsideHaryanaDetails.project && technicalCapacityOutsideHaryanaDetails.statusOfDevelopment) ? false : technicalCapacityOutsideHaryana === "N" ? false : true) || ((alreadtObtainedLic === "Y" && Documents?.agreementDocY && Documents?.boardDocX && Documents?.registeredDoc && Documents?.boardDocY && technicalCapacitySoughtFromAnyColonizer.licNo && technicalCapacitySoughtFromAnyColonizer.dateOfGrantingLic && technicalCapacitySoughtFromAnyColonizer.licValidity && technicalCapacitySoughtFromAnyColonizer.purpose) ? false : alreadtObtainedLic === "N" ? false :  (data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm") ? false : true) || ((designatedDirectors === "Y" && Documents?.agreementDoc && Documents?.boardDoc) ? false : designatedDirectors === "N" ? false : permissionGrantedHRDU === "Y" ? false : true) || ((technicalExpert === "Y" && engineerName && engineerQualification && Documents?.engineerSign && Documents?.architectSign && Documents?.townPlannerSign && architectName && architectQualification && townPlannerName && engineerName.match(Digit.Utils.getPattern('Name')) && engineerQualification.match(Digit.Utils.getPattern('Name')) && architectName.match(Digit.Utils.getPattern('Name')) && architectQualification.match(Digit.Utils.getPattern('Name')) && townPlannerQualification && townPlannerQualification.match(Digit.Utils.getPattern('Name')) && townPlannerName.match(Digit.Utils.getPattern('Name'))) ? false : (technicalExpert === "N") ? false : true)
                     }
                 >
                     {/* <CheckBox
@@ -1786,7 +1792,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                             hrduModalData.technicalExpertEngaged === "Y" &&
                                                             <Row>
                                                                 <Col md={4} xxl lg="4">
-                                                                    <label htmlFor="name" className="text"> Copy of degree of engineer </label>
+                                                                    <label htmlFor="name" className="text"> Copy of degree of engineer <span className="text-danger font-weight-bold">*</span></label>
                                                                     <input
                                                                         type="file"
                                                                         accept="application/pdf"
@@ -1798,7 +1804,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
 
                                                                 </Col>
                                                                 <Col md={4} xxl lg="4">
-                                                                    <label htmlFor="name" className="text"> Copy of degree of architect </label>
+                                                                    <label htmlFor="name" className="text"> Copy of degree of architect <span className="text-danger font-weight-bold">*</span></label>
                                                                     <input
                                                                         type="file"
                                                                         accept="application/pdf"
@@ -1810,7 +1816,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
 
                                                                 </Col>
                                                                 <Col md={4} xxl lg="4">
-                                                                    <label htmlFor="name" className="text"> Copy of degree of Town planer </label>
+                                                                    <label htmlFor="name" className="text"> Copy of degree of Town planer <span className="text-danger font-weight-bold">*</span></label>
                                                                     <input
                                                                         type="file"
                                                                         accept="application/pdf"
@@ -2262,7 +2268,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                             type="text"
                                                             name="licNo"
                                                             value={technicalCapacitySoughtFromAnyColonizer.licNo}
-                                                            onChange={(e) => setTechnicalCapacitySoughtFromAnyColonizer({ ...technicalCapacitySoughtFromAnyColonizer, licNo: e.target.value })}
+                                                            onChange={(e) => setTechnicalCapacitySoughtFromAnyColonizer({ ...technicalCapacitySoughtFromAnyColonizer, licNo: e.target.value.toUpperCase() })}
                                                             className="employee-card-input"
                                                             maxLength={10}
                                                         />
@@ -2386,6 +2392,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     placeholder="Name of Engineer"
                                                                     class="employee-card-input"
                                                                 />
+                                                                {engineerName && engineerName.length > 0 && !engineerName.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid details")}</CardLabelError>}
                                                             </td>
                                                             <td>
                                                                 <input
@@ -2395,6 +2402,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     placeholder=""
                                                                     class="employee-card-input"
                                                                 />
+                                                                {engineerQualification && engineerQualification.length > 0 && !engineerQualification.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid details")}</CardLabelError>}
                                                             </td>
 
                                                             <td>
@@ -2406,13 +2414,6 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     style={{ display: "none" }}
                                                                     onChange={(e) => getDocumentData(e?.target?.files[0], "engineerSign")}
                                                                 />
-                                                                {/* <input
-                                                                    type="file"
-                                                                    name="engineerSign"
-                                                                    onChange={(e) => getDocumentData(e?.target?.files[0], "engineerSign")}
-                                                                    placeholder=""
-                                                                    class="employee-card-input"
-                                                                /> */}
                                                             </td>
                                                             <td align="center" size="large">
                                                                 {Documents?.engineerSign ?
@@ -2433,6 +2434,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     placeholder="Name of Architect"
                                                                     class="employee-card-input"
                                                                 />
+                                                                {architectName && architectName.length > 0 && !architectName.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid details")}</CardLabelError>}
                                                             </td>
                                                             <td>
                                                                 <input
@@ -2442,6 +2444,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     placeholder=""
                                                                     class="employee-card-input"
                                                                 />
+                                                                {architectQualification && architectQualification.length > 0 && !architectQualification.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid details")}</CardLabelError>}
                                                             </td>
 
                                                             <td>
@@ -2479,6 +2482,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     placeholder="Name of Town Planner"
                                                                     class="employee-card-input"
                                                                 />
+                                                                {townPlannerName && townPlannerName.length > 0 && !townPlannerName.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid details")}</CardLabelError>}
                                                             </td>
                                                             <td>
                                                                 <input
@@ -2488,6 +2492,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     placeholder=""
                                                                     class="employee-card-input"
                                                                 />
+                                                                {townPlannerQualification && townPlannerQualification.length > 0 && !townPlannerQualification.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid details")}</CardLabelError>}
                                                             </td>
 
                                                             <td>

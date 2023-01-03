@@ -139,26 +139,42 @@ const CommonForm = () => {
     const id = params.get("id");
     const checkStatus = window.localStorage.getItem("ApplicationStatus");
     setId(id?.toString());
-    if (checkStatus === "INITIATED") {
-      setIsStep1(true);
-      setIsStep2(false);
-      setIsStep3(false);
-      setIsStep4(false);
-      setIsStep5(false);
-      setStep(2);
-      setStepActive({ step1: true, step2: true, step3: false, step4: false, step5: false });
+    if (id) {
+      if (checkStatus === "INITIATED") {
+        setIsStep1(true);
+        setIsStep2(false);
+        setIsStep3(false);
+        setIsStep4(false);
+        setIsStep5(false);
+        setStep(2);
+        setStepActive({ step1: true, step2: true, step3: false, step4: false, step5: false });
+      }
+      if (checkStatus === "PURPOSE") {
+        setIsStep2(true);
+        setIsStep1(false);
+        setIsStep3(false);
+        setIsStep4(false);
+        setIsStep5(false);
+        setStep(3);
+        setStepActive({ step1: true, step2: true, step3: true, step4: false, step5: false });
+      }
+      if (checkStatus === "LANDSCHEDULE") {
+        setIsStep3(true);
+        setIsStep1(false);
+        setIsStep2(false);
+        setIsStep4(false);
+        setStep(4);
+        setStepActive({ step1: true, step2: true, step3: true, step4: true, step5: false });
+      }
+      if (checkStatus === "LANDDETAILS") {
+        setIsStep4(true);
+        setIsStep1(false);
+        setIsStep2(false);
+        setIsStep3(false);
+        setStep(5);
+        setStepActive({ step1: true, step2: true, step3: true, step4: true, step5: true });
+      }
     }
-    if (checkStatus === "PURPOSE") {
-      setIsStep2(true);
-      setIsStep1(false);
-      setIsStep3(false);
-      setIsStep4(false);
-      setIsStep5(false);
-      setStep(3);
-      setStepActive({ step1: true, step2: true, step3: true, step4: false, step5: false });
-    }
-    // if(checkStatus === 'LANDSCHEDULE')
-    // if(checkStatus === 'LANDDETAILS')
     // if(checkStatus === 'FEESANDCHARGES')
   }, []);
 

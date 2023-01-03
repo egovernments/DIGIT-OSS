@@ -5,7 +5,7 @@ import { useForm, Controller } from "react-hook-form";
 import FileUpload from "@mui/icons-material/FileUpload";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { Modal, ModalHeader, ModalBody, ModalFooter, CloseButton } from "reactstrap";
+import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import axios from "axios";
 import { yupResolver } from "@hookform/resolvers/yup";
 import WorkingTable from "../../../../components/Table";
@@ -16,6 +16,7 @@ import ReactMultiSelect from "../../../../../../../react-components/src/atoms/Re
 import Spinner from "../../../../components/Loader";
 import { getDocShareholding } from "../docView/docView.help";
 import { convertEpochToDate } from "../../../../../../tl/src/utils";
+import { useLocation } from "react-router-dom";
 
 const ApllicantPuropseForm = (props) => {
   const datapost = {
@@ -154,7 +155,6 @@ const ApllicantPuropseForm = (props) => {
           <EditIcon
             style={{ cursor: "pointer" }}
             onClick={() => {
-              console.log("data", data);
               setSpecificTableData(data);
               setmodal(true);
               setEdit(true);
@@ -174,7 +174,8 @@ const ApllicantPuropseForm = (props) => {
       ),
     },
   ];
-
+  const location = useLocation();
+  const userInfo = Digit.UserService.getUser()?.info || {};
   const [district, setDistrict] = useState("");
   const [modalData, setModalData] = useState([]);
   const [specificTableData, setSpecificTableData] = useState(null);
@@ -191,6 +192,8 @@ const ApllicantPuropseForm = (props) => {
   const [getKhewats, setKhewats] = useState("");
   const [getEdit, setEdit] = useState(false);
   const [fileStoreId, setFileStoreId] = useState({});
+  const [stepData, setStepData] = useState(null);
+  const [applicantId, setApplicantId] = useState("");
 
   const resetValues = () => {
     resetField("tehsil");
@@ -219,7 +222,6 @@ const ApllicantPuropseForm = (props) => {
   };
 
   useEffect(() => {
-    console.log("specificTableData", specificTableData);
     if (specificTableData) {
       setValue("hadbastNo", specificTableData?.hadbastNo);
       setValue("khewats", specificTableData?.khewats);
@@ -367,9 +369,7 @@ const ApllicantPuropseForm = (props) => {
   }, []);
 
   const ApplicantPurposeModalData = (modaldata) => {
-    console.log("specificTableData", specificTableData?.rowid);
     const test = modalData?.filter((item) => item?.rowid === specificTableData?.rowid);
-    console.log("test", test);
     modaldata["tehsil"] = modaldata?.tehsil?.value;
     modaldata["revenueEstate"] = modaldata?.revenueEstate?.value;
     modaldata["rectangleNo"] = modaldata?.rectangleNo?.value;
@@ -394,8 +394,8 @@ const ApllicantPuropseForm = (props) => {
     if (specificTableData?.rowid) {
       const filteredRowData = modalData?.filter((item) => item?.rowid !== specificTableData?.rowid);
       setModalData([...filteredRowData, modaldata]);
-    } else if (props?.getLicData?.ApplicantPurpose?.AppliedLandDetails) {
-      setModalData([...props?.getLicData?.ApplicantPurpose?.AppliedLandDetails, modaldata]);
+    } else if (stepData?.AppliedLandDetails) {
+      setModalData([...stepData?.AppliedLandDetails, modaldata]);
     } else {
       setModalData((prev) => [...prev, modaldata]);
     }
@@ -403,13 +403,17 @@ const ApllicantPuropseForm = (props) => {
     // resetValues();
     setmodal(false);
   };
-  const token = window?.localStorage?.getItem("token");
+
+  // useEffect(() => {
+  //   if (stepData?.AppliedLandDetails) setModalData(stepData?.AppliedLandDetails);
+  // }, [stepData?.AppliedLandDetails]);
 
   useEffect(() => {
-    if (props?.getLicData?.ApplicantPurpose?.AppliedLandDetails) setModalData(props?.getLicData?.ApplicantPurpose?.AppliedLandDetails);
-  }, [props?.getLicData?.ApplicantPurpose?.AppliedLandDetails]);
+    if (stepData?.AppliedLandDetails) setModalData(stepData?.AppliedLandDetails);
+  }, [stepData?.AppliedLandDetails]);
 
   const PurposeFormSubmitHandler = async (data) => {
+    const token = window?.localStorage?.getItem("token");
     data["purpose"] = data?.purpose?.value;
     data["potential"] = data?.potential?.value;
     data["district"] = watch("district")?.value;
@@ -436,14 +440,14 @@ const ApllicantPuropseForm = (props) => {
     delete data?.consolidationType;
     delete data?.khewats;
     delete data?.rowid;
-    if (!modalData?.length && !props?.getLicData?.ApplicantPurpose?.AppliedLandDetails) alert("Please enter atleast one record");
+    if (!modalData?.length && !stepData?.AppliedLandDetails) alert("Please enter atleast one record");
     else {
       const postDistrict = {
         pageName: "ApplicantPurpose",
         action: "PURPOSE",
-        applicationNumber: props.getId,
-        createdBy: props?.userData?.id,
-        updatedBy: props?.userData?.id,
+        applicationNumber: applicantId,
+        createdBy: userInfo?.id,
+        updatedBy: userInfo?.id,
         LicenseDetails: {
           ApplicantPurpose: {
             ...data,
@@ -460,14 +464,15 @@ const ApllicantPuropseForm = (props) => {
           msgId: "090909",
           requesterId: "",
           authToken: token,
-          userInfo: props?.userData,
+          userInfo: userInfo,
         },
       };
       setLoader(true);
       try {
         const Resp = await axios.post("/tl-services/new/_create", postDistrict);
         setLoader(false);
-        props.Step2Continue(Resp?.data?.LicenseServiceResponseInfo?.[0]?.newServiceInfoData?.[0]);
+        const useData = Resp?.data?.LicenseServiceResponseInfo?.[0]?.LicenseDetails?.[0];
+        props.Step2Continue(useData);
       } catch (error) {
         setLoader(false);
         return error;
@@ -476,17 +481,17 @@ const ApllicantPuropseForm = (props) => {
   };
 
   useEffect(() => {
-    if (props?.getLicData?.ApplicantPurpose) {
-      const data = purposeOptions?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.purpose);
-      const potientialData = potentialOptons?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.potential);
-      const districtData = districtDataLabels?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.district);
+    if (stepData) {
+      const data = purposeOptions?.data?.filter((item) => item?.value === stepData?.purpose);
+      const potientialData = potentialOptons?.data?.filter((item) => item?.value === stepData?.potential);
+      const districtData = districtDataLabels?.data?.filter((item) => item?.value === stepData?.district);
       setValue("purpose", { label: data?.[0]?.label, value: data?.[0]?.value });
       setValue("potential", { label: potientialData?.[0]?.label, value: potientialData?.[0]?.value });
       setValue("district", { label: districtData?.[0]?.label, value: districtData?.[0]?.value });
       setDistrict(districtData?.[0]?.value);
       if (districtData?.[0]?.value) getTehslidata(districtData?.[0]?.value);
     }
-  }, [props?.getLicData, purposeOptions, potentialOptons, districtDataLabels]);
+  }, [stepData, purposeOptions, potentialOptons, districtDataLabels]);
 
   const handleChangePurpose = (data) => {
     const purposeSelected = data?.value;
@@ -518,26 +523,21 @@ const ApllicantPuropseForm = (props) => {
   let delay;
 
   useEffect(() => {
-    console.log("here");
     delay = setTimeout(() => {
-      if (getKhewats) {
-        console.log("here", getKhewats);
-        getLandOwnerStateData(getKhewats);
-      }
+      if (getKhewats) getLandOwnerStateData(getKhewats);
     }, 500);
     return () => clearTimeout(delay);
   }, [getKhewats]);
   const dataArea = props?.ApplicantPurpose?.AppliedLandDetails?.[0]?.kanal;
-  const dataAreaMarla = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.marla;
-  const dataAreaSarai = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.sarsai;
-  const dataAreaBigha = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.bigha;
-  const dataAreaBiswa = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.biswa;
-  const dataAreaBiswansi = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.biswansi;
+  const dataAreaMarla = stepData?.AppliedLandDetails?.[0]?.marla;
+  const dataAreaSarai = stepData?.AppliedLandDetails?.[0]?.sarsai;
+  const dataAreaBigha = stepData?.AppliedLandDetails?.[0]?.bigha;
+  const dataAreaBiswa = stepData?.AppliedLandDetails?.[0]?.biswa;
+  const dataAreaBiswansi = stepData?.AppliedLandDetails?.[0]?.biswansi;
   const totalAreaAcre = dataArea * 0.125 + dataAreaMarla * 0.0062 + dataAreaSarai * 0.00069;
-  console.log("grt", dataArea);
 
   const getApplicantUserData = async (id) => {
-    // http://103.166.62.118:80
+    const token = window?.localStorage?.getItem("token");
     const payload = {
       apiId: "Rainmaker",
       msgId: "1669293303096|en_IN",
@@ -545,8 +545,8 @@ const ApllicantPuropseForm = (props) => {
     };
     try {
       const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${id}`, payload);
-      console.log(Resp);
-      // const userData = Resp?.data?.newServiceInfoData[0]?.ApplicantInfo;
+      const userData = Resp?.data?.LicenseDetails[0]?.ApplicantPurpose;
+      setStepData(userData);
     } catch (error) {
       return error;
     }
@@ -556,6 +556,7 @@ const ApllicantPuropseForm = (props) => {
     const search = location?.search;
     const params = new URLSearchParams(search);
     const id = params.get("id");
+    setApplicantId(id?.toString());
     if (id) getApplicantUserData(id);
   }, []);
 
@@ -816,6 +817,7 @@ const ApllicantPuropseForm = (props) => {
                   </label>
                 </div>
                 <input
+                  autoComplete="off"
                   type="text"
                   className="form-control"
                   placeholder="Enter Khewat"
@@ -834,7 +836,7 @@ const ApllicantPuropseForm = (props) => {
                     </h2>
                   </label>
                 </div>
-                <Form.Control type="text" className="form-control" placeholder="" {...register("landOwner")} disabled />
+                <Form.Control as="textarea" rows={2} type="text" className="form-control" placeholder="" {...register("landOwner")} disabled />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.landOwner && errors?.landOwner?.message}
                 </h3>
@@ -903,7 +905,8 @@ const ApllicantPuropseForm = (props) => {
                           <label htmlFor="sumsarsai">Total: {watch("sarsai") * 0.00069}</label>&nbsp;&nbsp;
                         </td>
                         <td>
-                          <input type="number" className="form-control " placeholder={totalAreaAcre} disabled />
+                          <input type="number" className="form-control " {...register("total")} />
+                          <label htmlFor="sumsarsai">Total: {watch("kanal") * 0.125 + "marla" * 0.0062 + "sarsai" * 0.00069}</label>&nbsp;&nbsp;
                         </td>
                       </tr>
                     </tbody>
@@ -950,6 +953,10 @@ const ApllicantPuropseForm = (props) => {
                         <td>
                           <input type="number" className="form-control" {...register("biswansi")} id="biswansi" required maxLength={20} />
                           <label htmlFor="sumBiswansi">Total: {watch("biswansi") * 0.619}</label>&nbsp;&nbsp;
+                        </td>
+                        <td>
+                          <input type="number" className="form-control " {...register("total")} />
+                          <label htmlFor="sumsarsai">Total: {watch("kanal") * 0.125 + "marla" * 0.0062 + "sarsai" * 0.00069}</label>&nbsp;&nbsp;
                         </td>
                       </tr>
                     </tbody>
@@ -1002,7 +1009,15 @@ const ApllicantPuropseForm = (props) => {
                             Date of registering collaboration agreement<span style={{ color: "red" }}>*</span>
                           </h2>
                         </label>
-                        <Form.Control type="date" className="form-control" required placeholder="" {...register("agreementValidFrom")} />
+                        <Form.Control
+                          type="date"
+                          value={modalData.agreementValidFrom}
+                          className="form-control"
+                          required
+                          placeholder=""
+                          {...register("agreementValidFrom")}
+                          max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
+                        />
                       </div>
                       <div className="col col-4">
                         <label>
@@ -1016,7 +1031,7 @@ const ApllicantPuropseForm = (props) => {
                           placeholder=""
                           required
                           {...register("validitydate")}
-                          min={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
+                          min={modalData?.agreementValidFrom}
                         />
                       </div>
                     </div>
@@ -1090,11 +1105,16 @@ const ApllicantPuropseForm = (props) => {
                             Registering Authority document <span style={{ color: "red" }}>*</span> <FileUpload color="primary" />
                             <input
                               type="file"
+                              accept="application/pdf/jpeg"
                               style={{ display: "none" }}
+                              required
                               onChange={(e) => getDocumentData(e?.target?.files[0], "registeringAuthorityDoc")}
                             />
                           </h2>
                         </label>
+                        <h3 className="error-message" style={{ color: "red" }}>
+                          {errors?.registeringAuthorityDoc && errors?.registeringAuthorityDoc?.message}
+                        </h3>
 
                         {/* <input
                           type="file"
