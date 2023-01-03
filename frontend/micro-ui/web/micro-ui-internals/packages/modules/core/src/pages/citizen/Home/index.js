@@ -74,6 +74,32 @@ const Home = () => {
         Icon: <OBPSIcon />,
         onClick: () => history.push("/digit-ui/citizen/obps-home"),
       },
+      {
+        name: t("PROVIDE_LICENSE_TYPE"),
+        Icon: <CaseIcon className="fill-path-primary-main" />,
+        onClick: () => history.push("/digit-ui/citizen/obps/stakeholder/apply/provide-license-type"),
+      },
+      {
+        name: t("PROVIDE_LICENSE_DETAILS"),
+        Icon: <CaseIcon className="fill-path-primary-main" />,
+        onClick: () => history.push("/digit-ui/citizen/obps/stakeholder/apply/license-details"),
+      },
+      {
+        name: t("ADD_AUTHORIZED_USER"),
+        Icon: <CaseIcon className="fill-path-primary-main" />,
+        onClick: () => history.push("/digit-ui/citizen/obps/stakeholder/apply/add-authorized-user"),
+      },
+      {
+        name: t("DEVELOPER_CAPACITY"),
+        Icon: <CaseIcon className="fill-path-primary-main" />,
+        onClick: () => history.push("/digit-ui/citizen/obps/stakeholder/apply/developer-capacity"),
+      },
+      {
+        name: t("STAKEHOLDER_DOCUMENT_DETAILS"),
+        Icon: <CaseIcon className="fill-path-primary-main" />,
+        onClick: () => history.push("/digit-ui/citizen/obps/stakeholder/apply/stakeholder-document-details"),
+      },
+
     ],
     styles: { display: "flex", flexWrap: "wrap", justifyContent: "flex-start", width: "100%" },
   };
