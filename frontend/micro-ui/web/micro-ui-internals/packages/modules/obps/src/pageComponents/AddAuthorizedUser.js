@@ -311,7 +311,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
   };
   
   const handleUserNameChange = (e) => {
-    if(!e.target.value || e.target.value.match("^[a-zA-Z]*$")){
+    if(!e.target.value || e.target.value.match("^[a-zA-Z ]*$")){
       setAurtorizedUserName(e.target.value);
     }
   }
