@@ -1068,13 +1068,11 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                         // isMendatory={false}
                                         placeholder={csrNumber}
                                         className="employee-card-input text-uppercase"
-                                        max={"21"}
+                                        max={"11"}
                                         {...(validation = {
                                           // isRequired: true,
-                                          pattern: "^[A-Z0-9]*$",
                                           type: "text",
-                                          maxlength: "21",
-                                          title: "Please Enter CSR Number"
+                                          maxlength: "11",
                                         })}
                                       />
                                       {csrNumber && csrNumber.length > 0 && !csrNumber.match(Digit.Utils.getPattern('CSR')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_CSR_NO")}</CardLabelError>}
@@ -1094,13 +1092,11 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                         // isMendatory={false}
                                         placeholder={llpNumber}
                                         className="employee-card-input text-uppercase"
-                                        max={"21"}
+                                        max={"8"}
                                         {...(validation = {
                                           // isRequired: true,
-                                          pattern: "^[A-Z0-9]*$",
                                           type: "text",
-                                          maxlength: "21",
-                                          title: "Please Enter LLP Number"
+                                          maxlength: "8",
                                         })}
                                       />
                                       {llpNumber && llpNumber.length > 0 && !llpNumber.match(Digit.Utils.getPattern('LLP')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_LLP_NO")}</CardLabelError>}

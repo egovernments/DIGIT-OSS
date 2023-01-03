@@ -984,7 +984,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
 
                     isDisabled={
                         ((data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm") ? (!Documents?.companyBalanceSheet || !Documents?.individualCertificateCA) : (data?.devDetail[0]?.addInfo?.showDevTypeFields === "Company" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Society" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Trust" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Institution") ? (!Documents?.companyBalanceSheet || !Documents?.paidUpCapital) : (data?.devDetail[0]?.addInfo?.showDevTypeFields === "Limited Liability Partnership" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Firm" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm") ? (!Documents?.netWorthOfPartners || !Documents?.netWorthOfFirm) : false) ||
-                        ((permissionGrantedHRDU === "Y" && capacityDevelopColonyHdruAct.length) ? false : permissionGrantedHRDU === "N" ? false : true) || ((technicalCapacityOutsideHaryana === "Y" && technicalCapacityOutsideHaryanaDetails.authority && technicalCapacityOutsideHaryanaDetails.project && technicalCapacityOutsideHaryanaDetails.statusOfDevelopment) ? false : technicalCapacityOutsideHaryana === "N" ? false : true) || ((alreadtObtainedLic === "Y" && Documents?.agreementDocY && Documents?.boardDocX && Documents?.registeredDoc && Documents?.boardDocY && technicalCapacitySoughtFromAnyColonizer.licNo && technicalCapacitySoughtFromAnyColonizer.dateOfGrantingLic && technicalCapacitySoughtFromAnyColonizer.licValidity && technicalCapacitySoughtFromAnyColonizer.purpose) ? false : alreadtObtainedLic === "N" ? false :  (data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm") ? false : true) || ((designatedDirectors === "Y" && Documents?.agreementDoc && Documents?.boardDoc) ? false : designatedDirectors === "N" ? false : permissionGrantedHRDU === "Y" ? false : true) || ((technicalExpert === "Y" && engineerName && engineerQualification && Documents?.engineerSign && Documents?.architectSign && Documents?.townPlannerSign && architectName && architectQualification && townPlannerName && engineerName.match(Digit.Utils.getPattern('Name')) && engineerQualification.match(Digit.Utils.getPattern('Name')) && architectName.match(Digit.Utils.getPattern('Name')) && architectQualification.match(Digit.Utils.getPattern('Name')) && townPlannerQualification && townPlannerQualification.match(Digit.Utils.getPattern('Name')) && townPlannerName.match(Digit.Utils.getPattern('Name'))) ? false : (technicalExpert === "N") ? false : true)
+                        ((permissionGrantedHRDU === "Y" && capacityDevelopColonyHdruAct.length) ? false : permissionGrantedHRDU === "N" ? false : true) || ((technicalCapacityOutsideHaryana === "Y" && technicalCapacityOutsideHaryanaDetails.authority && technicalCapacityOutsideHaryanaDetails.project && technicalCapacityOutsideHaryanaDetails.statusOfDevelopment) ? false : technicalCapacityOutsideHaryana === "N" ? false : true) || ((alreadtObtainedLic === "Y" && Documents?.agreementDocY && Documents?.boardDocX && Documents?.registeredDoc && Documents?.boardDocY && technicalCapacitySoughtFromAnyColonizer.licNo && technicalCapacitySoughtFromAnyColonizer.licNo.match(Digit.Utils.getPattern('LicNumber')) && technicalCapacitySoughtFromAnyColonizer.dateOfGrantingLic && technicalCapacitySoughtFromAnyColonizer.licValidity && technicalCapacitySoughtFromAnyColonizer.purpose) ? false : alreadtObtainedLic === "N" ? false :  (data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm") ? false : true) || ((designatedDirectors === "Y" && Documents?.agreementDoc && Documents?.boardDoc) ? false : designatedDirectors === "N" ? false : permissionGrantedHRDU === "Y" ? false : true) || ((technicalExpert === "Y" && engineerName && engineerQualification && Documents?.engineerSign && Documents?.architectSign && Documents?.townPlannerSign && architectName && architectQualification && townPlannerName && engineerName.match(Digit.Utils.getPattern('Name')) && engineerQualification.match(Digit.Utils.getPattern('Name')) && architectName.match(Digit.Utils.getPattern('Name')) && architectQualification.match(Digit.Utils.getPattern('Name')) && townPlannerQualification && townPlannerQualification.match(Digit.Utils.getPattern('Name')) && townPlannerName.match(Digit.Utils.getPattern('Name'))) ? false : (technicalExpert === "N") ? false : true)
                     }
                 >
                     {/* <CheckBox
@@ -1994,12 +1994,12 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                         <div className="hl"></div>
                         {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm") ? (
                             <p>
-                                (ii) Have you developed project in case of technical capacity of company/firm developed projects outside Haryana:- <span className="text-danger font-weight-bold">*</span>
+                                (ii) Have you developed projects outside Haryana:- <span className="text-danger font-weight-bold">*</span>
                             </p>)
                             :
                             (
                                 <p>
-                                    (ii) In case of technical capacity of company/firm developed projects outside Haryana:- <span className="text-danger font-weight-bold">*</span>
+                                    (ii) Have your company/firm developed projects outside Haryana:- <span className="text-danger font-weight-bold">*</span>
                                 </p>
                             )
                         }
@@ -2082,7 +2082,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                 <p>
                                     (iii). In case of technical capacity sought from another
                                     company/firm who has already obtained license(s) under act of
-                                    1975 or outside Haryana:<span className="text-danger font-weight-bold">*</span>
+                                    1975 Haryana:<span className="text-danger font-weight-bold">*</span>
                                 </p>
 
                                 <div className="form-group">
@@ -2131,7 +2131,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                             <td>
                                                                                 Agreement between the proposed developer and existing colonizer <span className="text-danger font-weight-bold">*</span>
                                                                             </td>
-                                                                            <td align="center" size="large">
+                                                                            <td align="center" size="large" style={{textAlign: "center"}}>
                                                                                 <label for="agreementDocYId"> <FileUpload color="primary" /></label>
                                                                                 <input
                                                                                     id="agreementDocYId"
@@ -2164,7 +2164,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                             <td>
                                                                                 Board resolution of authorised signatory of the existing colonizer <span className="text-danger font-weight-bold">*</span>
                                                                             </td>
-                                                                            <td align="center" size="large">
+                                                                            <td align="center" size="large" style={{textAlign: "center"}}>
                                                                                 <label for="boardDocXId"> <FileUpload color="primary" /></label>
                                                                                 <input
                                                                                     id="boardDocXId"
@@ -2194,7 +2194,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                         <tr>
                                                                             <td> 3 </td>
                                                                             <td> Registered and Irrevocable Agreement <span className="text-danger font-weight-bold">*</span></td>
-                                                                            <td align="center" size="large">
+                                                                            <td align="center" size="large" style={{textAlign: "center"}}>
                                                                                 <label for="registeredDocId"> <FileUpload color="primary" /></label>
                                                                                 <input
                                                                                     id="registeredDocId"
@@ -2227,7 +2227,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                                 Board resolutions of authorized signatory of
                                                                                 firm/company provided technical assistance <span className="text-danger font-weight-bold">*</span>
                                                                             </td>
-                                                                            <td align="center" size="large">
+                                                                            <td align="center" size="large" style={{textAlign: "center"}}>
                                                                                 <label for="boardDocYId"> <FileUpload color="primary" /></label>
                                                                                 <input
                                                                                     id="boardDocYId"
@@ -2270,8 +2270,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                             value={technicalCapacitySoughtFromAnyColonizer.licNo}
                                                             onChange={(e) => setTechnicalCapacitySoughtFromAnyColonizer({ ...technicalCapacitySoughtFromAnyColonizer, licNo: e.target.value.toUpperCase() })}
                                                             className="employee-card-input"
-                                                            maxLength={10}
+                                                            maxLength={11}
                                                         />
+                                                        {technicalCapacitySoughtFromAnyColonizer.licNo && technicalCapacitySoughtFromAnyColonizer.licNo.length > 0 && !technicalCapacitySoughtFromAnyColonizer.licNo.match(Digit.Utils.getPattern('LicNumber')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid Licence Number")}</CardLabelError>}
                                                     </div>
                                                 </div>
 
@@ -2405,7 +2406,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                 {engineerQualification && engineerQualification.length > 0 && !engineerQualification.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid details")}</CardLabelError>}
                                                             </td>
 
-                                                            <td>
+                                                            <td style={{textAlign: "center"}}>
                                                                 <label for="engineerSignId"> <FileUpload color="primary" /></label>
                                                                 <input
                                                                     id="engineerSignId"
@@ -2447,7 +2448,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                 {architectQualification && architectQualification.length > 0 && !architectQualification.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid details")}</CardLabelError>}
                                                             </td>
 
-                                                            <td>
+                                                            <td style={{textAlign: "center"}}>
                                                                 <label for="architectSignId"> <FileUpload color="primary" /></label>
                                                                 <input
                                                                     id="architectSignId"
@@ -2495,7 +2496,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                 {townPlannerQualification && townPlannerQualification.length > 0 && !townPlannerQualification.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid details")}</CardLabelError>}
                                                             </td>
 
-                                                            <td>
+                                                            <td style={{textAlign: "center"}}>
                                                                 <label for="townPlannerSignId"> <FileUpload color="primary" /></label>
                                                                 <input
                                                                     id="townPlannerSignId"
