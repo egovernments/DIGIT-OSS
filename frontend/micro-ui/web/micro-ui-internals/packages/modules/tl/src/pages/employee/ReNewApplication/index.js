@@ -355,7 +355,7 @@ const ReNewApplication = (props) => {
       if (operationalArea) formData.tradeLicenseDetail.operationalArea = operationalArea;
       if (data?.accessories?.length > 0) formData.tradeLicenseDetail.accessories = data?.accessories;
       if (data?.tradeUnits?.length > 0) formData.tradeLicenseDetail.tradeUnits = data?.tradeUnits?.filter((ob) => ob?.active !== false);
-      if (data?.owners?.length > 0) formData.tradeLicenseDetail.owners = data?.owners;
+      if (data?.owners?.length > 0) formData.tradeLicenseDetail.owners = data?.owners?.filter((ob) => ob?.active !== false);
       if (data?.address) formData.tradeLicenseDetail.address = data?.address;
       if (data?.cpt?.details?.address||propertyDetails) {
         let address = {};

@@ -272,7 +272,7 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
                     value={field.accessorycount}
                     onChange={(e) => selectAccessoryCount(index, e)}
                     //disable={(isEditTrade || isRenewTrade) && (formData?.TradeDetails?.accessories.length - 1 < index ? false : field.accessorycount)}
-                    disable={isRenewTrade ? !enableUOM : false}
+                    disable={isRenewTrade || isEditTrade ? !enableUOM : false}
                     {...(validation = {
                       isRequired: true,
                       pattern: "[0-9]+",
@@ -314,7 +314,7 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
                     //     : !field.unit
                     // }
                     //disable={isUpdateProperty || isEditProperty}
-                    disable={isRenewTrade ? !enableUOM : false}
+                    disable={isRenewTrade || isEditTrade ? !enableUOM : false}
                     {...(validation = {
                       isRequired: true,
                       pattern: "[0-9]+",

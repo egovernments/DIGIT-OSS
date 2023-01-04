@@ -314,7 +314,7 @@ export const convertToTrade = (data = {}) => {
         tradeLicenseDetail: {
           channel:"CITIZEN",
           address: {
-            city:  !data?.cpt ? data?.address?.city?.code : data?.cpt?.details?.address?.city?.code,
+            city:  !data?.cpt ? (data?.address?.city?.code ? data?.address?.city?.code : data?.address?.city) : (data?.cpt?.details?.address?.city?.code ? data?.cpt?.details?.address?.city?.code : data?.cpt?.details?.address?.city),
             locality: {
               code: !data?.cpt ? data?.address?.locality?.code : data?.cpt?.details?.address?.locality?.code,
             },
@@ -425,6 +425,10 @@ export const getEditTradeDocumentUpdate = (data) => {
     }
   }
   });
+
+  if(data?.tradeLicenseDetail?.applicationDocuments?.filter((doc) => doc?.documentType === "OLDLICENCENO")?.length > 0)
+    updateddocuments.push(data?.tradeLicenseDetail?.applicationDocuments?.filter((doc) => doc?.documentType === "OLDLICENCENO")?.[0]);
+  
   return updateddocuments;
 }
 
