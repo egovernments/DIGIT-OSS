@@ -102,7 +102,6 @@ export const SelectPaymentType = (props) => {
 
   const onSubmit = async (d) => {
     console.log("userInfo", userInfo);
-    console.log(d);
     const filterData = {
       Transaction: {
         tenantId: tenantId,
@@ -111,6 +110,8 @@ export const SelectPaymentType = (props) => {
         ptype: selected,
         remarks: getRemarks,
         address: "haryana",
+        pinCode: "160005",
+        cityName: "Village",
         module: businessService,
         billId: billDetails.id,
         consumerCode: wrkflow === "WNS" ? stringReplaceAll(consumerCode, "+", "/") : consumerCode,
@@ -140,10 +141,9 @@ export const SelectPaymentType = (props) => {
     try {
       const data = await Digit.PaymentService.createCitizenReciept(tenantId, filterData);
       const redirectUrl = data?.Transaction?.redirectUrl;
-      console.log("data====", data);
       // window.location.replace(redirectUrl);
-      console.log("redirectUrl", redirectUrl);
-      // window.location = redirectUrl;
+      // console.log("redirectUrl", redirectUrl);
+      window.location = redirectUrl;
     } catch (error) {
       let messageToShow = "CS_PAYMENT_UNKNOWN_ERROR_ON_SERVER";
       if (error.response?.data?.Errors?.[0]) {

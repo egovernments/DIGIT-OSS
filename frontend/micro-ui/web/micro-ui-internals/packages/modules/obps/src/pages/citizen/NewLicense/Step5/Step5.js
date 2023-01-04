@@ -22,6 +22,7 @@ const FeesChargesForm = (props) => {
   const [loader, setLoader] = useState(false);
   const [stepData, setStepData] = useState(null);
   const [applicantId, setApplicantId] = useState("");
+  const [getShow, setShow] = useState({ submit: false, payNow: false });
   const {
     register,
     handleSubmit,
@@ -65,7 +66,7 @@ const FeesChargesForm = (props) => {
     try {
       const Resp = await axios.post("/tl-services/new/_create", postDistrict);
       setLoader(false);
-      props.Step5Continue(Resp?.data?.LicenseServiceResponseInfo?.[0]?.newServiceInfoData?.[0]);
+      setShow({ payNow: true, submit: false });
     } catch (error) {
       setLoader(false);
       return error.message;
@@ -109,26 +110,52 @@ const FeesChargesForm = (props) => {
   }, [applicantId, stepData]);
 
   const showPdf = async () => {
+    const token = window?.localStorage?.getItem("token");
     setLoader(true);
+    const payload = {
+      requestInfo: {
+        api_id: "1",
+        action: "create",
+        authToken: token,
+      },
+    };
     try {
-      const Resp = await axios
-        .get(`http://103.166.62.118:80/tl-services/new/license/report?id=${props.getId}`, {
-          responseType: "blob",
-        })
-        .then((response) => {
-          setLoader(false);
-          //Create a Blob from the PDF Stream
-          const file = new Blob([response?.data], { type: "application/pdf" });
-          //Build a URL from the file
-          const fileURL = URL.createObjectURL(file);
-          //Open the URL on new Window
-          window.open(fileURL);
-        });
+      const Resp = await axios.post(`/tl-services/loi/report/_create?applicationNumber=${props.getId}`, payload).then((response) => {
+        setLoader(false);
+        openBase64NewTab(response?.data?.data);
+      });
     } catch (error) {
       setLoader(false);
       return error;
     }
   };
+
+  function base64toBlob(base64Data) {
+    const sliceSize = 1024;
+    const byteCharacters = atob(base64Data);
+    const bytesLength = byteCharacters.length;
+    const slicesCount = Math.ceil(bytesLength / sliceSize);
+    const byteArrays = new Array(slicesCount);
+
+    for (let sliceIndex = 0; sliceIndex < slicesCount; ++sliceIndex) {
+      const begin = sliceIndex * sliceSize;
+      const end = Math.min(begin + sliceSize, bytesLength);
+
+      const bytes = new Array(end - begin);
+      for (let offset = begin, i = 0; offset < end; ++i, ++offset) {
+        bytes[i] = byteCharacters[offset].charCodeAt(0);
+      }
+      byteArrays[sliceIndex] = new Uint8Array(bytes);
+    }
+    return new Blob(byteArrays, { type: "application/pdf" });
+  }
+
+  function openBase64NewTab(base64Pdf) {
+    var blob = base64toBlob(base64Pdf);
+    const blobUrl = URL.createObjectURL(blob);
+    window.open(blobUrl);
+    // }
+  }
 
   const getSubmitDataLabel = async () => {
     try {
@@ -385,7 +412,7 @@ const FeesChargesForm = (props) => {
                   <div className="px-2">
                     <p className="text-black">The following is undertaken: </p>
                     <ul className="Undertakings">
-                      <li>I hereby declare that the details furnished above are true and correct to the best of my knowledge</li>.
+                      <li>I hereby declare that the details furnished above are true and correct to the best of my knowledge.</li>
                       <button className="btn btn-primary" onClick={() => setmodal1(true)}>
                         Read More
                       </button>
@@ -412,7 +439,20 @@ const FeesChargesForm = (props) => {
                   </Modal>
                   <div className="">
                     <div className="form-check">
-                      <input className="form-check-input" formControlName="agreeCheck" type="checkbox" value="" id="flexCheckDefault" required />
+                      <input
+                        onClick={(e) => {
+                          if (e.target.checked) {
+                            setShow({ payNow: false, submit: true });
+                            showPdf();
+                          }
+                        }}
+                        className="form-check-input"
+                        formControlName="agreeCheck"
+                        type="checkbox"
+                        value=""
+                        id="flexCheckDefault"
+                        required
+                      />
                       <label className="checkbox" for="flexCheckDefault">
                         I agree and accept the terms and conditions.
                         <span className="text-danger">
@@ -420,56 +460,27 @@ const FeesChargesForm = (props) => {
                         </span>
                       </label>
                     </div>
-
-                    {/* <div>
-                    <Modal
-                      size="lg"
-                      isOpen={modal}
-                      toggle={() => setmodal(!modal)}
-                      style={{ width: "500px", height: "200px" }}
-                      aria-labelledby="contained-modal-title-vcenter"
-                      centered
-                    >
-                      <ModalHeader toggle={() => setmodal(!modal)}></ModalHeader>
-                      <ModalBody style={{ fontWeight: "bold", fontSize: 20 }}>
-                        <p class="text-success font-weight-bold">Congratulations, Payment Successful!!</p>
-                        <p class="font-weight-bold">
-                          Your Application No. : <strong>2547893</strong>
-                        </p>
-                        <p class="font-weight-bold">
-                          Your Diary No. : <strong>5984785</strong>
-                        </p>
-                        <p class="font-weight-bold">The same has been sent to your mobile and email as well.</p>
-                      </ModalBody>
-                      <ModalFooter toggle={() => setmodal(!modal)}></ModalFooter>
-                    </Modal>
-                  </div> */}
                   </div>
                   <div class="row">
-                    {/* <button id="btnSearch" class="btn btn-primary btn-md ">
-                      {" "} */}
-                    {/* <a href="http://103.166.62.118:80/tl-services/new/license/report?id=875" target="_blank"> */}
                     <div class="col-sm-12 text-right">
-                      {/* <div onClick={() => showPdf()} id="btnSearch" class="btn btn-primary btn-md">
-                        View as PDF &nbsp;&nbsp; <VisibilityIcon color="white" />
-                      </div> */}
-                      {/* </a> */}
-                      {/* &nbsp;&nbsp; */}
-                      <button type="submit" class="btn btn-primary btn-md ">
-                        Submit
-                      </button>
-                      <div class="my-2">
-                        .
-                        <button
-                          className="btn btn-primary"
-                          onClick={() => {
-                            history.push(`/digit-ui/citizen/payment/collect/TL/${applicantId}`, {});
-                            setmodal(true);
-                          }}
-                        >
-                          Pay Now
+                      {getShow?.submit && (
+                        <button type="submit" id="btnClear" class="btn btn-primary btn-md ">
+                          Submit
                         </button>
-                      </div>
+                      )}
+                      {getShow?.payNow && (
+                        <div class="my-2">
+                          <button
+                            className="btn btn-primary"
+                            onClick={() => {
+                              history.push(`/digit-ui/citizen/payment/collect/TL/${applicantId}`, {});
+                              setmodal(true);
+                            }}
+                          >
+                            Pay Now
+                          </button>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </Col>

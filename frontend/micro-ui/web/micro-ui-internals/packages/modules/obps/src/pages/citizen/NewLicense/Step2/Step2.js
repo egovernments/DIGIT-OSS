@@ -58,7 +58,6 @@ const ApllicantPuropseForm = (props) => {
       title: "Rectangle No.",
       dataIndex: "rectangleNo",
     },
-
     {
       key: "consolidationType",
       title: "Consolidation Type",
@@ -91,15 +90,20 @@ const ApllicantPuropseForm = (props) => {
       dataIndex: "biswansi",
     },
     {
-      key: "totalArea",
+      // key: "totalArea",
       title: "Total Area",
-      dataIndex: "totalArea",
+      // dataIndex: "totalArea",
+      render: (data) => data?.nonConsolidatedTotal || data?.consolidatedTotal,
     },
     {
       key: "landOwner",
       title: "Name of Land Owner",
       dataIndex: "landOwner",
-      render: (data) => data?.split(" ")?.slice(0, 2)?.join(" "),
+      render: (data) => (
+        <h6 data-toggle="tooltip" data-placement="top" title={data}>
+          {data?.split(" ")?.slice(0, 2)?.join(" ")}
+        </h6>
+      ),
     },
     {
       key: "agreementIrrevocialble",
@@ -415,9 +419,9 @@ const ApllicantPuropseForm = (props) => {
     setmodal(false);
   };
 
-  // useEffect(() => {
-  //   if (stepData?.AppliedLandDetails) setModalData(stepData?.AppliedLandDetails);
-  // }, [stepData?.AppliedLandDetails]);
+  useEffect(() => {
+    console.log("modalData", modalData);
+  }, [modalData]);
 
   useEffect(() => {
     if (stepData?.AppliedLandDetails) setModalData(stepData?.AppliedLandDetails);
@@ -563,6 +567,16 @@ const ApllicantPuropseForm = (props) => {
     setApplicantId(id?.toString());
     if (id) getApplicantUserData(id);
   }, []);
+
+  useEffect(() => {
+    console.log("nott", watch("marla") * 0.0062 + watch("sarsai") * 0.00069 + watch("kanal") * 0.125);
+    setValue("consolidatedTotal", watch("marla") * 0.0062 + watch("sarsai") * 0.00069 + watch("kanal") * 0.125);
+  }, [watch("sarsai"), watch("marla"), watch("kanal")]);
+
+  useEffect(() => {
+    console.log("test", watch("bigha") * 0.33 + watch("biswa") * 0.0309 + watch("biswansi") * 0.619);
+    setValue("nonConsolidatedTotal", watch("bigha") * 0.33 + watch("biswa") * 0.0309 + watch("biswansi") * 0.619);
+  }, [watch("bigha"), watch("biswa"), watch("biswansi")]);
 
   return (
     <div>
@@ -909,8 +923,8 @@ const ApllicantPuropseForm = (props) => {
                           <label htmlFor="sumsarsai">Total: {watch("sarsai") * 0.00069}</label>&nbsp;&nbsp;
                         </td>
                         <td>
-                          <input type="number" className="form-control " {...register("total")} />
-                          <label htmlFor="sumsarsai">Total: {watch("total")}</label>&nbsp;&nbsp;
+                          <input step="any" type="number" className="form-control " {...register("consolidatedTotal")} />
+                          <label htmlFor="sumsarsai">Total: {watch("consolidatedTotal")}</label>&nbsp;&nbsp;
                         </td>
                       </tr>
                     </tbody>
@@ -959,8 +973,8 @@ const ApllicantPuropseForm = (props) => {
                           <label htmlFor="sumBiswansi">Total: {watch("biswansi") * 0.619}</label>&nbsp;&nbsp;
                         </td>
                         <td>
-                          <input type="number" className="form-control " {...register("total")} />
-                          <label htmlFor="sumsarsai">Total: {watch("total")}</label>&nbsp;&nbsp;
+                          <input step="any" type="number" className="form-control " {...register("nonConsolidatedTotal")} />
+                          <label htmlFor="sumsarsai">Total: {watch("nonConsolidatedTotal")}</label>&nbsp;&nbsp;
                         </td>
                       </tr>
                     </tbody>

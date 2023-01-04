@@ -2,11 +2,13 @@ import { Card, Header, KeyNote, Loader, SubmitBar } from "@egovernments/digit-ui
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
+import Spinner from "../../../components/Loader";
 import axios from "axios";
 
 const MyApplications = ({ view }) => {
   const { t } = useTranslation();
   const history = useHistory();
+  const [loader, setLoader] = useState(false);
   const [data, setData] = useState([]);
 
   // const { mobileNumber, tenantId } = Digit.UserService.getUser()?.info || {};
@@ -27,6 +29,7 @@ const MyApplications = ({ view }) => {
 
   const userInfo = Digit.UserService.getUser()?.info || {};
   const getApplications = async () => {
+    setLoader(true);
     const token = window?.localStorage?.getItem("token");
     const data = {
       RequestInfo: {
@@ -38,9 +41,10 @@ const MyApplications = ({ view }) => {
     };
     try {
       const Resp = await axios.post("/tl-services/v1/_search", data);
-      console.log("Resp===", Resp?.data);
+      setLoader(false);
       setData(Resp?.data);
     } catch (error) {
+      setLoader(false);
       return error.message;
     }
   };
@@ -50,7 +54,8 @@ const MyApplications = ({ view }) => {
   }, []);
 
   return (
-    <React.Fragment>
+    <div>
+      {loader && <Spinner></Spinner>}
       <Header>{`${t("TL_MY_APPLICATIONS_HEADER")}`}</Header>
       <table className="customers" id="customers" style={{ borderCollapse: "collapse", width: "100%" }}>
         <tr>
@@ -171,7 +176,7 @@ const MyApplications = ({ view }) => {
           );
         })}
       </table>
-    </React.Fragment>
+    </div>
 
     /* <Card>
               {Object.keys(application)
