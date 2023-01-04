@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Card, Row, Col, Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-// import axios from "axios";
+import axios from "axios";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 // import FileDownload from "@mui/icons-material/FileDownload";
 import Visibility from "@mui/icons-material/Visibility";
@@ -14,50 +14,27 @@ import { useStyles } from "../css/personalInfoChild.style.js";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import Collapse from "react-bootstrap/Collapse";
-
+import { useParams } from "react-router-dom";
+import ApplicationDetailsActionBar from '../../../../../../templates/ApplicationDetails/components/ApplicationDetailsActionBar'
 const ServicePlanService = () => {
-  const [selects, setSelects] = useState();
-  const [showhide, setShowhide] = useState("");
-  const [open2, setOpen2] = useState(false);
-
-  const handleshowhide = (event) => {
-    const getuser = event.target.value;
-
-    setShowhide(getuser);
-  };
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    control,
-    setValue,
-  } = useForm({});
-
-  const servicePlan = (data) => console.log(data);
-
-  const classes = useStyles();
-  const currentRemarks = (data) => {
-    props.showTable({ data: data.data });
-  };
-
-  const [smShow, setSmShow] = useState(false);
-  const [labelValue, setLabelValue] = useState("");
   const Colors = {
     approved: "#09cb3d",
     disapproved: "#ff0000",
     info: "#FFB602",
   };
-
-  const handlemodaldData = (data) => {
-    // setmodaldData(data.data);
-    setSmShow(false);
-    console.log("here", openedModal, data);
-    if (openedModal && data) {
-      setFieldIconColors({ ...fieldIconColors, [openedModal]: data.data.isApproved ? Colors.approved : Colors.disapproved });
-    }
-    setOpennedModal("");
-    setLabelValue("");
-  };
+  const [selects, setSelects] = useState();
+  const [showhide, setShowhide] = useState("");
+  const [open2, setOpen2] = useState(false);
+  const [scrutinyDetails, setScrutinyDetails] = useState();
+  const [applicationNumber, setApplicationNumber] = useState("");
+  const [businessService, setBusinessService] = useState("SP");
+  const [workflowDetails, setWorkflowDetails] = useState();
+  const [displayMenu, setDisplayMenu] = useState(false);
+  const [isWarningPop, setWarningPopUp] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedAction, setSelectedAction] = useState(null);
+  const [smShow, setSmShow] = useState(false);
+  const [labelValue, setLabelValue] = useState("");
   const [selectedFieldData, setSelectedFieldData] = useState();
   const [fieldValue, setFieldValue] = useState("");
   const [openedModal, setOpennedModal] = useState("");
@@ -83,6 +60,12 @@ const ServicePlanService = () => {
     emailForCommunication: Colors.info,
   });
 
+  const { id } = useParams();
+  const classes = useStyles();
+  const currentRemarks = (data) => {
+    props.showTable({ data: data.data });
+  };
+  
   const fieldIdList = [
     { label: "LOI Number", key: "loiNO" },
     { label: "Uploaded Service Plan", key: "UploadedYN" },
@@ -93,6 +76,98 @@ const ServicePlanService = () => {
     { label: "Certified copy of the plan verified by a third party", key: "certified" },
     { label: "AutoCAD (DXF) file.", key: "AutoCAD" },
   ];
+
+  const handleshowhide = (event) => {
+    const getuser = event.target.value;
+
+    setShowhide(getuser);
+  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+    setValue,
+  } = useForm({});
+
+  const servicePlan = (data) => console.log(data);
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+
+
+  const handlemodaldData = (data) => {
+    // setmodaldData(data.data);
+    setSmShow(false);
+    console.log("here", openedModal, data);
+    if (openedModal && data) {
+      setFieldIconColors({ ...fieldIconColors, [openedModal]: data.data.isApproved ? Colors.approved : Colors.disapproved });
+    }
+    setOpennedModal("");
+    setLabelValue("");
+  };
+  const authToken = Digit.UserService.getUser()?.access_token || null;
+  
+  const getScrutinyData = async () => {
+    let requestInfo = {
+      "RequestInfo": {
+        "apiId": "Rainmaker",
+        "msgId": "1669293303096|en_IN",
+        "authToken": authToken
+       
+    }
+    }
+    try {
+      const Resp = await axios.get(`/tl-services/v1/_search?tenantId=hr&applicationNumber=${id}`,requestInfo).then((response) => {
+        return response?.data;
+      });
+      console.log("Response From SEARCH_API", Resp, Resp?.Licenses[0]?.applicationNumber,Resp?.Licenses[0]?.tradeLicenseDetail?.additionalDetail[0])
+      setScrutinyDetails(Resp);
+      setApplicationNumber(Resp?.applicationNumber);
+      // setApplicationNumber("HR-TL-2022-12-07-000498");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getScrutinyData();
+  }, []);
+
+  let EditRenewalApplastModifiedTime = Digit.SessionStorage.get("EditRenewalApplastModifiedTime");
+
+  let workflowDetailsTemp = Digit.Hooks.useWorkflowDetails({
+    tenantId: tenantId,
+    id: applicationNumber,
+    moduleCode: businessService,
+    role: "TL_CEMP",
+    config: { EditRenewalApplastModifiedTime: EditRenewalApplastModifiedTime },
+  });
+
+  useEffect(() => {
+    //console.log("log123...", id, workflowDetailsTemp, applicationNumber, scrutinyDetails, applicationDetails);
+    if (workflowDetailsTemp?.data?.applicationBusinessService) {
+      setWorkflowDetails(workflowDetailsTemp);
+      setBusinessService(workflowDetailsTemp?.data?.applicationBusinessService);
+    }
+  }, [workflowDetailsTemp?.data]);
+
+  function onActionSelect(action) {
+    if (action) {
+      if (action?.isWarningPopUp) {
+        setWarningPopUp(true);
+      } else if (action?.redirectionUrll) {
+        window.location.assign(`${window.location.origin}/digit-ui/employee/payment/collect/${action?.redirectionUrll?.pathname}`);
+      } else if (!action?.redirectionUrl) {
+        setShowModal(true);
+      } else {
+        history.push({
+          pathname: action.redirectionUrl?.pathname,
+          state: { ...action.redirectionUrl?.state },
+        });
+      }
+    }
+    setSelectedAction(action);
+    setDisplayMenu(false);
+  }
 
   return (
     <form onSubmit={handleSubmit(servicePlan)}>
@@ -210,7 +285,7 @@ const ServicePlanService = () => {
                           color: fieldIconColors.UploadedYN,
                         }}
                         onClick={() => {
-                          setOpennedModal("UploadedYN");
+                          setOpennedModal("Uploaded Service Plan");
                           setLabelValue("Uploaded Service Plan"),
                             setSmShow(true),
                             console.log("modal open"),
@@ -494,6 +569,22 @@ const ServicePlanService = () => {
             </div>
           </div> */}
             </Card>
+            <Row style={{ top: 30, padding: "10px 22px" }}>
+        
+          <div class="col-md-10 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
+            <ApplicationDetailsActionBar
+              workflowDetails={workflowDetails}
+              displayMenu={displayMenu}
+              onActionSelect={onActionSelect}
+              setDisplayMenu={setDisplayMenu}
+              businessService={businessService}
+              // forcedActionPrefix={forcedActionPrefix}
+              ActionBarStyle={{}}
+              MenuStyle={{}}
+            />
+          </div>
+
+          </Row>
           </Card>
         </div>
       </Collapse>
