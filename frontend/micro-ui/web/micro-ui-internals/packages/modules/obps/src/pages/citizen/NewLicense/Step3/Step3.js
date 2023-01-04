@@ -1942,7 +1942,7 @@ const LandScheduleForm = (props) => {
                       </h3>
                     </div>
 
-                    <div className="col col-4">
+                    <div className="col col-3">
                       <h2 style={{ display: "flex" }}>
                         Copy of Shajra Plan{" "}
                         <span className="text-primary">
@@ -2003,15 +2003,7 @@ const LandScheduleForm = (props) => {
                       ) : (
                         <p></p>
                       )}
-                      {/* <div>
-                        <input
-                          type="file"
-                          className="form-control"
-                          accept="application/pdf"
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "copyOfShajraPlan")}
-                          required
-                        />
-                      </div> */}
+
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.copyOfShajraPlan && errors?.copyOfShajraPlan?.message}
                       </h3>
