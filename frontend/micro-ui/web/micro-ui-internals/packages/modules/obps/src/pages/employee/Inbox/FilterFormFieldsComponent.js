@@ -155,7 +155,7 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
               key={index}
               onChange={(e) => e.target.checked ? changeItemCheckStatus([...props?.value, status?.statusid]) : changeItemCheckStatus(props?.value?.filter( id => id !== status?.statusid)) }
               checked={props?.value?.includes(status?.statusid)}
-              label={`${t(`WF_STATE_${status.businessservice}_${status.applicationstatus}`)}`}
+              label={`${t(`WF_STATE_${status.businessservice}_${status.applicationstatus}`)} (${status.count})`}
               //Hidden due to RAIN-5010 percieved as wrong count here
               // (${status.count})`}
             />}),[props.value, statuses, selectedBusinessService])
