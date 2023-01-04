@@ -118,13 +118,13 @@ public class UnmaskingUtil {
 				&& ownerInfo.getCorrespondenceAddress().contains("*")) {
 			ownerInfo.setCorrespondenceAddress(unmaskedUser.getCorrespondenceAddress());
 		}
-		if (ownerInfo.getUserName().contains("*")) {
+		if (!StringUtils.isEmpty(ownerInfo.getUserName()) && ownerInfo.getUserName().contains("*")) {
 			ownerInfo.setUserName(unmaskedUser.getUserName());
 		}
-		if (ownerInfo.getName().contains("*")) {
+		if (!StringUtils.isEmpty(ownerInfo.getName()) &&  ownerInfo.getName().contains("*")) {
 			ownerInfo.setName(unmaskedUser.getName());
 		}
-		if (ownerInfo.getGender().contains("*")) {
+		if (!StringUtils.isEmpty(ownerInfo.getGender()) && ownerInfo.getGender().contains("*")) {
 			ownerInfo.setGender(unmaskedUser.getGender());
 		}
 	}
