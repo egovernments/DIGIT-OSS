@@ -1,4 +1,4 @@
-import { FormStep,TextInput, MobileNumber, CardLabel, CardLabelError, Dropdown, RemoveIcon  } from "@egovernments/digit-ui-react-components";
+import { FormStep,TextInput, MobileNumber, CardLabel, CardLabelError, Dropdown, Toast, RemoveIcon  } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Table from "react-bootstrap/Table";
@@ -43,7 +43,9 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
   // console.log(userInfo?.info?.id);
-
+  const [success, setError] = useState(null);
+  const [showToast, setShowToast] = useState(null);
+  const [showToastError, setShowToastError] = useState(null);
   const {setValue, getValues, watch} = useForm();
   const [Documents, setDocumentsData] = useState({});
 
@@ -278,7 +280,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
   const getDocumentData = async (file, fieldName, fromTable , index) => {
 
     if(getValues("authorizedUserFiles")?.includes(file.name)){
-      alert("Duplicate file Selected");
+      setShowToastError({ key: "error" });
       return;
     }
 
@@ -294,6 +296,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
         return response;
       });
       setLoading(false);
+      setShowToast({ key: "success" });
       console.log(Resp?.data?.files);
 
       if(fromTable){
@@ -867,6 +870,8 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                 Submit
                 </button>
             </div> */}
+            {showToast && <Toast success={showToast?.key === "success" ? true : false} label="Document Uploaded Successfully" isDleteBtn={true} onClose={() => { setShowToast(null); setError(null); }} />}
+            {showToastError && <Toast error={showToastError?.key === "error" ? true : false} label="Duplicate file Selected" isDleteBtn={true} onClose={() => { setShowToastError(null); setError(null); }} />}
       </FormStep>
     </div>
   );
