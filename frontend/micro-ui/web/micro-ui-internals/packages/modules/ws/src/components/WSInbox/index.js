@@ -17,6 +17,7 @@ const WSInbox = ({ parentRoute }) => {
   const searchFormDefaultValues = {
     mobileNumber: "",
     applicationNumber: "",
+    consumerNo: "",
   };
   const filterFormDefaultValues = {
     businessService: checkPathName ? ["NewWS1", "ModifyWSConnection", "DisconnectWSConnection"] : ["NewSW1", "ModifySWConnection", "DisconnectSWConnection"],
@@ -72,6 +73,7 @@ const WSInbox = ({ parentRoute }) => {
   const onSearchFormReset = (setSearchFormValue) => {
     setSearchFormValue("mobileNumber", null);
     setSearchFormValue("applicationNumber", null);
+    setSearchFormValue("consumerNo", null);
     dispatch({ action: "mutateSearchForm", data: searchFormDefaultValues });
   };
 
