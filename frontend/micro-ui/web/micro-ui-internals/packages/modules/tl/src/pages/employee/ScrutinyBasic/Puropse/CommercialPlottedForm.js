@@ -174,6 +174,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.scoPlotno}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
@@ -191,6 +192,7 @@ const CommercialPlottedForm  = (props) => {
                     <input type="number" className="form-control" disabled placeholder={CommercialPlotted?.scoLength}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {

@@ -521,7 +521,7 @@ console.log("AccessInfortech", Purpose);
                     </div>
                     &nbsp;&nbsp;&nbsp;
                   </div> */}
- {DetailsofAppliedLand?.dgpsPoint?.map((item,index)=>(
+ {DetailsofAppliedLand?.dgpsDetails?.map((item,index)=>(
                       
                   // <tr key={index}></tr>
                   // {[...Array(noOfRows)].map((elementInArray, index) => {
