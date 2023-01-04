@@ -23,10 +23,10 @@ const ServicePlanService = () => {
 
     shouldFocusError: true,
   });
-
+  const userInfo = Digit.UserService.getUser();
   const servicePlan = async (data) => {
     const token = window?.localStorage?.getItem("token");
-    console.log(data);
+    console.log(data, "service-service");
     try {
       const postDistrict = {
         requestInfo: {
@@ -39,13 +39,14 @@ const ServicePlanService = () => {
           msg_id: "",
           requester_id: "",
           authToken: token,
+          "userInfo": userInfo.info
         },
 
         ServicePlanRequest: {
           ...data,
         },
       };
-      const Resp = await axios.post("/land-services/serviceplan/_create", postDistrict);
+      const Resp = await axios.post("/tl-services/serviceplan/_create", postDistrict);
       setServicePlanDataLabel(Resp.data);
     } catch (error) {
       console.log(error.message);
