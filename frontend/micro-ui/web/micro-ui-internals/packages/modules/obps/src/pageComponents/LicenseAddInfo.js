@@ -1,4 +1,4 @@
-import { BackButton, CardLabel, CardLabelError, FormStep, Loader, MobileNumber, RadioButtons, TextInput, ViewsIcon, DownloadIcon, Dropdown, DatePicker, RemoveIcon } from "@egovernments/digit-ui-react-components";
+import { BackButton, CardLabel, CardLabelError, FormStep, Loader, MobileNumber, RadioButtons, Toast,TextInput, ViewsIcon, DownloadIcon, Dropdown, DatePicker, RemoveIcon } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Timeline from "../components/Timeline";
@@ -221,7 +221,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   } = useForm([
     { Sr: "", name: "", mobileNumber: "", email: "", PAN: "", Aadhar: "" },
   ]);
-
+  const [success, setError] = useState(null);
+  const [showToast, setShowToast] = useState(null);
+  const [showToastError, setShowToastError] = useState(null);
   const handleChange = (e) => {
     this.setState({ isRadioSelected: true });
   };
@@ -368,17 +370,17 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     console.log("logFile",file)
     if (type === "existingColonizer") { 
       if(getValues("existingColonizerFiles")?.includes(file.name)){
-        alert("Duplicate file Selected");
+        setShowToastError({ key: "error" });
         return;
       }
     } else if (type === "shareholdingPattern") {
       if(getValues("shareholdingPatternFiles")?.includes(file.name)){
-        alert("Duplicate file Selected");
+        setShowToastError({ key: "error" });
         return;
       }
     } else if (type === "directorInfoPdf") {
       if(getValues("directorInfoPdfFiles")?.includes(file.name)){
-        alert("Duplicate file Selected");
+        setShowToastError({ key: "error" });
         return;
       }
     } else {
@@ -400,6 +402,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         return response;
       });
       setLoading(false);
+      setShowToast({ key: "success" });
       console.log(Resp?.data?.files?.[0]?.fileStoreId, fieldName, type, index);
 
       if (type === "existingColonizer") {
@@ -446,52 +449,6 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     }
   };
   
-
-  // useEffect(() => {
-  //   getDocumentData();
-  // }, [file]);
-
-  // const getDocShareholding = async () => {
-  //   if ((Documents?.uploadPdf !== null || Documents?.uploadPdf !== undefined) && (uploadPdf !== null || uploadPdf !== "")) {
-
-  //     try {
-  //       const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${Documents?.uploadPdf}`, {
-
-  //       });
-  //       const FILDATA = response.data?.fileStoreIds[0]?.url;
-  //       setDocShareHoldingUrl(FILDATA)
-  //     } catch (error) {
-  //       console.log(error.message);
-  //     }
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   if ((Documents?.uploadPdf !== null || Documents?.uploadPdf !== undefined) && (uploadPdf !== null || uploadPdf !== "")) {
-  //     getDocShareholding(Documents?.uploadPdf);
-  //   }
-  // }, [Documents?.uploadPdf]);
-
-
-  // const getDocDirector = async () => {
-  //   if ((Documents?.uploadPdf !== null || Documents?.uploadPdf !== undefined) && (uploadPdf !== null || uploadPdf !== "")) {
-
-  //     try {
-  //       const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${Documents?.uploadPdf}`, {
-
-  //       });
-  //       const FILDATA = response.data?.fileStoreIds[0]?.url;
-  //       setDocDirectorUrl(FILDATA)
-  //     } catch (error) {
-  //       console.log(error.message);
-  //     }
-  //   }
-  // }
-
-  // useEffect(() => {
-  //     getDocDirector();
-  // }, [Documents?.uploadPdf]);
-
 
   const HandleGetMCNdata = async () => {
     try {
@@ -678,7 +635,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         })
         .catch((e) => {
           setIsDisableForNext(false);
-          setShowToast({ key: "error" });
+          // setShowToast({ key: "error" });
           setError(e?.response?.data?.Errors[0]?.message || null);
         });
     }
@@ -2290,7 +2247,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
 
             </div>
-
+            {showToast && <Toast success={showToast?.key === "success" ? true : false} label="Document Uploaded Successfully" isDleteBtn={true} onClose={() => { setShowToast(null); setError(null); }} />}
+            {showToastError && <Toast error={showToastError?.key === "error" ? true : false} label="Duplicate file Selected" isDleteBtn={true} onClose={() => { setShowToastError(null); setError(null); }} />}
           </FormStep> : <Loader />}
       </div>
     </div>
