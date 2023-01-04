@@ -381,10 +381,6 @@ public class WaterServiceImpl implements WaterService {
 		wfIntegrator.callWorkFlow(waterConnectionRequest, property);
 		//check for edit and send edit notification
 		waterDaoImpl.pushForEditNotification(waterConnectionRequest, isStateUpdatable);
-		//Enrich file store Id After payment
-		enrichmentService.enrichFileStoreIds(waterConnectionRequest);
-//		userService.createUser(waterConnectionRequest);
-		enrichmentService.postStatusEnrichment(waterConnectionRequest);
 
 		/* encrypt here */
 		waterConnectionRequest.setWaterConnection(encryptConnectionDetails(waterConnectionRequest.getWaterConnection()));
@@ -395,7 +391,7 @@ public class WaterServiceImpl implements WaterService {
 
 		// setting oldApplication Flag
 		markOldApplication(waterConnectionRequest);
-		enrichmentService.postForMeterReading(waterConnectionRequest,  WCConstants.DISCONNECT_CONNECTION);
+//		enrichmentService.postForMeterReading(waterConnectionRequest,  WCConstants.DISCONNECT_CONNECTION);
 		if (!StringUtils.isEmpty(waterConnectionRequest.getWaterConnection().getTenantId()))
 			criteria.setTenantId(waterConnectionRequest.getWaterConnection().getTenantId());
 		enrichmentService.enrichProcessInstance(Arrays.asList(waterConnectionRequest.getWaterConnection()), criteria, waterConnectionRequest.getRequestInfo());

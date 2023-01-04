@@ -9,11 +9,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.minidev.json.JSONArray;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.User;
 import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.tracer.model.CustomException;
 import org.egov.wscalculation.constants.WSCalculationConstant;
+import org.egov.wscalculation.util.WaterCessUtil;
 import org.egov.wscalculation.web.models.*;
 import org.egov.wscalculation.repository.ServiceRequestRepository;
 import org.egov.wscalculation.repository.WSCalculationDao;
@@ -63,6 +65,12 @@ public class WSCalculationServiceImpl implements WSCalculationService {
 
 	@Autowired
 	private ObjectMapper mapper;
+
+	@Autowired
+	private WaterCessUtil waterCessUtil;
+
+	@Autowired
+	private MasterDataService mDataService;
 
 
 	/**
@@ -163,33 +171,46 @@ public class WSCalculationServiceImpl implements WSCalculationService {
 		Long fromDate = (Long) financialYearMaster.get(WSCalculationConstant.STARTING_DATE_APPLICABLES);
 		Long toDate = (Long) financialYearMaster.get(WSCalculationConstant.ENDING_DATE_APPLICABLES);
 		if(isLastElementWithDisconnectionRequest) {
-			if (waterConnection.getApplicationStatus().equalsIgnoreCase(WSCalculationConstant.PENDING_APPROVAL_FOR_DISCONNECTION) ||
-					waterConnection.getApplicationStatus().equalsIgnoreCase(WSCalculationConstant.CONNECTION_INACTIVATED)) {
+			if (waterConnection.getApplicationStatus().equalsIgnoreCase(WSCalculationConstant.PENDING_APPROVAL_FOR_DISCONNECTION)) {
 
 				Map<String, Object> finalMap = new HashMap<>();
 				List<WaterConnection> waterConnectionList = calculatorUtil.getWaterConnection(requestInfo, criteria.getConnectionNo(), requestInfo.getUserInfo().getTenantId());
 				for (WaterConnection connection : waterConnectionList) {
 					if (connection.getApplicationType().equalsIgnoreCase(NEW_WATER_CONNECTION)) {
-						List<Demand> demandsList = demandService.searchDemand(requestInfo.getUserInfo().getTenantId(), Collections.singleton(connection.getConnectionNo()), fromDate, toDate, requestInfo, null);
-						if(!CollectionUtils.isEmpty(demandsList)) {
+						List<Demand> demandsList = demandService.searchDemandForDisconnectionRequest(requestInfo.getUserInfo().getTenantId(), Collections.singleton(connection.getConnectionNo()),
+								null,	toDate, requestInfo, null, isLastElementWithDisconnectionRequest);
+						Demand demand = null;
+						if (!CollectionUtils.isEmpty(demandsList)) {
+							demand = demandsList.get(0);
+							fromDate = (Long) demand.getTaxPeriodFrom();
+							toDate = (Long) demand.getTaxPeriodTo();
 							BigDecimal totalTaxAmount = BigDecimal.ZERO;
-							for(Demand demands : demandsList) {
-								List<DemandDetail> demandDetails = demands.getDemandDetails();
-								for (DemandDetail demandDetail : demandDetails) {
-									totalTaxAmount = totalTaxAmount.add(demandDetail.getTaxAmount());
-								}
+							List<DemandDetail> demandDetails = demand.getDemandDetails();
+							for (DemandDetail demandDetail : demandDetails) {
+								totalTaxAmount = totalTaxAmount.add(demandDetail.getTaxAmount());
 							}
-							Integer taxPeriod = Math.round((toDate - fromDate)/86400000);
-							Long daysOfUsage = Math.round(Math.abs(Double.parseDouble(toDate.toString()) - waterConnection.getDateEffectiveFrom())/86400000);
+							Integer taxPeriod = Math.round((toDate - fromDate) / 86400000);
+							Long daysOfUsage = Math.round(Math.abs(Double.parseDouble(toDate.toString()) - waterConnection.getDateEffectiveFrom()) / 86400000);
 							BigDecimal finalWaterCharge = waterCharge.add(BigDecimal.valueOf(
 									(Double.parseDouble(totalTaxAmount.toString()) * daysOfUsage) / taxPeriod));
-
 							criteria.setTo(waterConnection.getDateEffectiveFrom());
 							criteria.setFrom(toDate);
 
+							//Calculate water cess for disconnection charge
+							BigDecimal waterCess = getWaterCessForDisconnection(masterMap, finalWaterCharge);
+							for (TaxHeadEstimate estimate : estimates) {
+								if (estimate.getTaxHeadCode().equals(WS_WATER_CESS)) {
+									estimates.remove(estimate);
+									break;
+								}
+							}
+							estimates.add(TaxHeadEstimate.builder().taxHeadCode(WSCalculationConstant.WS_WATER_CESS)
+									.estimateAmount(waterCess.setScale(2, 2)).build());
 							estimates.stream().forEach(estimate -> {
-								if (taxHeadCategoryMap.get(estimate.getTaxHeadCode()).equals(CHARGES)) {
-									estimate.setEstimateAmount(finalWaterCharge);
+								if (taxHeadCategoryMap.containsKey(estimate.getTaxHeadCode())) {
+									if (taxHeadCategoryMap.get(estimate.getTaxHeadCode()).equals(CHARGES)) {
+										estimate.setEstimateAmount(finalWaterCharge);
+									}
 								}
 							});
 						}
@@ -404,6 +425,29 @@ public class WSCalculationServiceImpl implements WSCalculationService {
 				.connectionNo(adhocTaxReq.getConsumerCode()).taxHeadEstimates(estimates).build();
 		List<Calculation> calculations = Collections.singletonList(calculation);
 		return demandService.updateDemandForAdhocTax(adhocTaxReq.getRequestInfo(), calculations, businessService);
+	}
+
+	/**
+	 * Calculate WaterCess during Disconnection Application final Water charge calculation
+	 *
+	 * @param masterMap
+	 * @return waterCess - watercess amount
+	 */
+	private BigDecimal getWaterCessForDisconnection(Map<String, Object> masterMap, BigDecimal finalWaterCharge) {
+		BigDecimal waterCess = BigDecimal.ZERO;
+		Map<String, JSONArray> timeBasedExemptionMasterMap = new HashMap<>();
+		timeBasedExemptionMasterMap.put(WSCalculationConstant.WC_WATER_CESS_MASTER,
+				(JSONArray) (masterMap.getOrDefault(WSCalculationConstant.WC_WATER_CESS_MASTER, null)));
+
+		if (timeBasedExemptionMasterMap.get(WSCalculationConstant.WC_WATER_CESS_MASTER) != null) {
+			List<Object> waterCessMasterList = timeBasedExemptionMasterMap
+					.get(WSCalculationConstant.WC_WATER_CESS_MASTER);
+
+			Map<String, Object> CessMap = mDataService.getApplicableMaster(WSCalculationConstant.Assessment_Year, waterCessMasterList);
+			waterCess = waterCessUtil.calculateWaterCess(finalWaterCharge, CessMap);
+
+		}
+		return waterCess;
 	}
 	
 }

@@ -73,7 +73,7 @@ public class CalculationService {
 					.waterConnection(request.getWaterConnection())
 					.tenantId(property.getTenantId()).build();
 			CalculationReq calRequest = CalculationReq.builder().calculationCriteria(Arrays.asList(criteria))
-					.requestInfo(request.getRequestInfo()).isconnectionCalculation(false).build();
+					.requestInfo(request.getRequestInfo()).isconnectionCalculation(false).isDisconnectionRequest(false).build();
 			try {
 				Object response = serviceRequestRepository.fetchResult(waterServiceUtil.getCalculatorURL(), calRequest);
 				CalculationRes calResponse = mapper.convertValue(response, CalculationRes.class);

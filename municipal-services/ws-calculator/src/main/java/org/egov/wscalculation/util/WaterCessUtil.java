@@ -23,7 +23,7 @@ public class WaterCessUtil {
 		return calculateWaterCess(waterCharge, CessMap);
 	}
 
-	private BigDecimal calculateWaterCess(BigDecimal waterCharge, Object config) {
+	public BigDecimal calculateWaterCess(BigDecimal waterCharge, Object config) {
 
 		BigDecimal currentApplicable = BigDecimal.ZERO;
 

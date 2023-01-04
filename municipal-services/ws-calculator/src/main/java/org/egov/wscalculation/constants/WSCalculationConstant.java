@@ -344,4 +344,8 @@ public class WSCalculationConstant {
 
 	public static final Long ONE_DAY_ADDON = Long.valueOf(66599000);
 
+	public static final String MODIFY_WATER_CONNECTION = "MODIFY_WATER_CONNECTION";
+
+	public static final String DISCONNECT_WATER_CONNECTION = "DISCONNECT_WATER_CONNECTION";
+
 }

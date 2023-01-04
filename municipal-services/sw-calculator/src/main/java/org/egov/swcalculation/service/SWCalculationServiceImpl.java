@@ -7,9 +7,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.minidev.json.JSONArray;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.swcalculation.constants.SWCalculationConstant;
 import org.egov.swcalculation.util.CalculatorUtils;
+import org.egov.swcalculation.util.SewerageCessUtil;
 import org.egov.swcalculation.web.models.*;
 import org.egov.swcalculation.repository.SewerageCalculatorDao;
 import org.egov.swcalculation.util.SWCalculationUtil;
@@ -52,6 +54,8 @@ public class SWCalculationServiceImpl implements SWCalculationService {
 	@Autowired
 	private ObjectMapper mapper;
 
+	@Autowired
+	private SewerageCessUtil sewerageCessUtil;
 
 	/**
 	 * Get CalculationReq and Calculate the Tax Head on Sewerage Charge
@@ -131,32 +135,47 @@ public class SWCalculationServiceImpl implements SWCalculationService {
 		Long toDate = (Long) financialYearMaster.get(SWCalculationConstant.ENDING_DATE_APPLICABLES);
 
 		if(isLastElementWithDisconnectionRequest) {
-			if (sewerageConnection.getApplicationStatus().equalsIgnoreCase(SWCalculationConstant.PENDING_APPROVAL_FOR_DISCONNECTION) ||
-					sewerageConnection.getApplicationStatus().equalsIgnoreCase(SWCalculationConstant.CONNECTION_INACTIVATED)) {
+			if (sewerageConnection.getApplicationStatus().equalsIgnoreCase(SWCalculationConstant.PENDING_APPROVAL_FOR_DISCONNECTION)) {
 
 				List<SewerageConnection> sewerageConnectionList = util.getSewerageConnection(requestInfo, criteria.getConnectionNo(), requestInfo.getUserInfo().getTenantId());
 				for (SewerageConnection connection : sewerageConnectionList) {
 					if (connection.getApplicationType().equalsIgnoreCase(NEW_SEWERAGE_CONNECTION)) {
-						List<Demand> demandsList = demandService.searchDemand(requestInfo.getUserInfo().getTenantId(), Collections.singleton(connection.getConnectionNo()), fromDate, toDate, requestInfo, null);
-						if(!CollectionUtils.isEmpty(demandsList)) {
+						List<Demand> demandsList = demandService.searchDemand(requestInfo.getUserInfo().getTenantId(), Collections.singleton(connection.getConnectionNo()),
+								null, toDate, requestInfo, null, isLastElementWithDisconnectionRequest);
+						Demand demand = null;
+						if (!CollectionUtils.isEmpty(demandsList)) {
+							demand = demandsList.get(0);
+							fromDate = (Long) demand.getTaxPeriodFrom();
+							toDate = (Long) demand.getTaxPeriodTo();
 							BigDecimal totalTaxAmount = BigDecimal.ZERO;
-							for(Demand demands : demandsList) {
-								List<DemandDetail> demandDetails = demands.getDemandDetails();
-								for (DemandDetail demandDetail : demandDetails) {
-									totalTaxAmount = totalTaxAmount.add(demandDetail.getTaxAmount());
-								}
+							List<DemandDetail> demandDetails = demand.getDemandDetails();
+							for (DemandDetail demandDetail : demandDetails) {
+								totalTaxAmount = totalTaxAmount.add(demandDetail.getTaxAmount());
 							}
-							Integer taxPeriod = Math.round((toDate - fromDate)/86400000);
-							Long daysOfUsage = Math.round(Math.abs(Double.parseDouble(toDate.toString()) - sewerageConnection.getDateEffectiveFrom())/86400000);
+							Integer taxPeriod = Math.round((toDate - fromDate) / 86400000);
+							Long daysOfUsage = Math.round(Math.abs(Double.parseDouble(toDate.toString()) - sewerageConnection.getDateEffectiveFrom()) / 86400000);
 							BigDecimal finalSewerageCharge = sewerageCharge.add(BigDecimal.valueOf(
 									(Double.parseDouble(totalTaxAmount.toString()) * daysOfUsage) / taxPeriod));
 
 							criteria.setTo(sewerageConnection.getDateEffectiveFrom());
 							criteria.setFrom(toDate);
 
+							//Calculate sewerage cess for disconnection charge
+							BigDecimal sewerageCess = getSewerageCessForDisconnection(masterMap, finalSewerageCharge);
+							for (TaxHeadEstimate estimate : estimates) {
+								if (estimate.getTaxHeadCode().equals(SW_WATER_CESS)) {
+									estimates.remove(estimate);
+									break;
+								}
+							}
+							estimates.add(TaxHeadEstimate.builder().taxHeadCode(SWCalculationConstant.SW_WATER_CESS)
+									.estimateAmount(sewerageCess.setScale(2, 2)).build());
+
 							estimates.stream().forEach(estimate -> {
-								if (taxHeadCategoryMap.get(estimate.getTaxHeadCode()).equals(CHARGES)) {
-									estimate.setEstimateAmount(finalSewerageCharge);
+								if (taxHeadCategoryMap.containsKey(estimate.getTaxHeadCode())) {
+									if (taxHeadCategoryMap.get(estimate.getTaxHeadCode()).equals(CHARGES)) {
+										estimate.setEstimateAmount(finalSewerageCharge);
+									}
 								}
 							});
 						}
@@ -171,6 +190,7 @@ public class SWCalculationServiceImpl implements SWCalculationService {
 			TaxHeadCategory category = taxHeadCategoryMap.get(estimate.getTaxHeadCode());
 			estimate.setCategory(category);
 
+			if (category != null){
 			switch (category) {
 
 			case CHARGES:
@@ -197,7 +217,7 @@ public class SWCalculationServiceImpl implements SWCalculationService {
 				taxAmt = taxAmt.add(estimate.getEstimateAmount());
 				break;
 			}
-			
+		}
 		}
 
 		TaxHeadEstimate decimalEstimate = payService.roundOfDecimals(taxAmt.add(penalty).add(fee).add(sewerageCharge),
@@ -346,6 +366,29 @@ public class SWCalculationServiceImpl implements SWCalculationService {
 				.connectionNo(adhocTaxReq.getConsumerCode()).taxHeadEstimates(estimates).build();
 		List<Calculation> calculations = Collections.singletonList(calculation);
 		return demandService.updateDemandForAdhocTax(adhocTaxReq.getRequestInfo(), calculations, businessService);
+	}
+
+	/**
+	 * Calculate SewerageCess during Disconnection Application final Sewerage charge calculation
+	 *
+	 * @param masterMap
+	 * @return sewerageCess - SewerageCess amount
+	 */
+	private BigDecimal getSewerageCessForDisconnection(Map<String, Object> masterMap, BigDecimal finalSewerageCharge) {
+		BigDecimal sewerageCess = BigDecimal.ZERO;
+		Map<String, JSONArray> timeBasedExemptionMasterMap = new HashMap<>();
+		timeBasedExemptionMasterMap.put(SW_SEWERAGE_CESS_MASTER,
+				(JSONArray) (masterMap.getOrDefault(SWCalculationConstant.SW_SEWERAGE_CESS_MASTER, null)));
+
+		if (timeBasedExemptionMasterMap.get(SWCalculationConstant.SW_SEWERAGE_CESS_MASTER) != null) {
+			List<Object> sewerageCessMasterList = timeBasedExemptionMasterMap
+					.get(SWCalculationConstant.SW_SEWERAGE_CESS_MASTER);
+
+			Map<String, Object> CessMap = mDataService.getApplicableMaster(Assesment_Year, sewerageCessMasterList);
+			sewerageCess = sewerageCessUtil.calculateSewerageCess(finalSewerageCharge, CessMap);
+
+		}
+		return sewerageCess;
 	}
 
 }

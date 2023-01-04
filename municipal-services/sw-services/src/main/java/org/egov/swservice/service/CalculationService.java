@@ -76,7 +76,7 @@ public class CalculationService {
 					.tenantId(property.getTenantId()).build();
 			List<CalculationCriteria> calculationCriterias = Arrays.asList(criteria);
 			CalculationReq calRequest = CalculationReq.builder().calculationCriteria(calculationCriterias)
-					.requestInfo(request.getRequestInfo()).isconnectionCalculation(false).build();
+					.requestInfo(request.getRequestInfo()).isconnectionCalculation(false).disconnectRequest(false).build();
 			try {
 				Object response = serviceRequestRepository.fetchResult(uri, calRequest);
 				CalculationRes calResponse = mapper.convertValue(response, CalculationRes.class);
