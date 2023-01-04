@@ -378,12 +378,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         alert("Duplicate file Selected");
         return;
       }
-    } else {
-      setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
-      // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
-      console.log("getValues()=====", getValues());
-      setDocumentsData(getValues())
-    }
+    } 
 
     const formData = new FormData();
     formData.append("file", file);
@@ -436,7 +431,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
     } catch (error) {
       //   setLoader(false);
-      console.log(error.message);
+      alert(error?.response?.data?.Errors?.[0]?.description);
+      console.log(error);
     }
   };
   

@@ -315,7 +315,10 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
         // setGender("");
         // setAurthorizedPan("");
     };
-    const handleCloseCapacityDevelopColony = () => setShowCapacityDevelopColony(false);
+    const handleCloseCapacityDevelopColony = () => {
+        setValue("hrduModalActFile",[]);
+        setShowCapacityDevelopColony(false)
+    };
 
     const [showColoniesDeveloped, setShowColoniesDeveloped] = useState(false);
     const handleShowColoniesDeveloped = () => {
@@ -397,7 +400,35 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
     //     getDocData();
     // }
 
-    const getDocumentData = async (file, fieldName) => {
+    const getDocumentData = async (file, fieldName, formType) => {
+
+        if(formType==="devTypeDocument"){
+            if(getValues("devTypeDocument")?.includes(file.name)){
+              alert("Duplicate file Selected");
+              return;
+            }
+          } else if(formType==="hrduModalActFile") {
+            if(getValues("hrduModalActFile")?.includes(file.name)){
+              alert("Duplicate file Selected");
+              return;
+            }
+          } else if(formType==="designatedDirectorsFile") {
+            if(getValues("designatedDirectorsFile")?.includes(file.name)){
+              alert("Duplicate file Selected");
+              return;
+            }
+          } else if(formType==="alreadyObtaileLicFile") {
+            if(getValues("alreadyObtaileLicFile")?.includes(file.name)){
+              alert("Duplicate file Selected");
+              return;
+            }
+          } else if(formType==="techicalExpertFile") {
+            if(getValues("techicalExpertFile")?.includes(file.name)){
+              alert("Duplicate file Selected");
+              return;
+            }
+          }
+
         const formData = new FormData();
         formData.append("file", file);
         formData.append("tenantId", "hr");
@@ -414,6 +445,39 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
             console.log("getValues()=====", getValues(), { ...Documents, ...getValues() }, Documents);
             setDocumentsData({ ...Documents, ...getValues() });
             //   setLoader(false);
+
+            if(formType==="devTypeDocument"){
+                if(getValues("devTypeDocument")) {
+                    setValue("devTypeDocument",[...getValues("devTypeDocument"),file.name]);
+                  } else {
+                    setValue("devTypeDocument",[file.name]);
+                  }
+              } else if(formType==="hrduModalActFile") {
+                if(getValues("hrduModalActFile")) {
+                    setValue("hrduModalActFile",[...getValues("hrduModalActFile"),file.name]);
+                  } else {
+                    setValue("hrduModalActFile",[file.name]);
+                  }
+              } else if(formType==="designatedDirectorsFile") {
+                if(getValues("designatedDirectorsFile")) {
+                    setValue("designatedDirectorsFile",[...getValues("designatedDirectorsFile"),file.name]);
+                  } else {
+                    setValue("designatedDirectorsFile",[file.name]);
+                  }
+              } else if(formType==="alreadyObtaileLicFile") {
+                if(getValues("alreadyObtaileLicFile")) {
+                    setValue("alreadyObtaileLicFile",[...getValues("alreadyObtaileLicFile"),file.name]);
+                  } else {
+                    setValue("alreadyObtaileLicFile",[file.name]);
+                  }
+              } else if(formType==="techicalExpertFile") {
+                if(getValues("techicalExpertFile")) {
+                    setValue("techicalExpertFile",[...getValues("techicalExpertFile"),file.name]);
+                  } else {
+                    setValue("techicalExpertFile",[file.name]);
+                  }
+              }
+
 
         } catch (error) {
             //   setLoader(false);
@@ -1044,7 +1108,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                 type="file"
                                                                 // accept="application/pdf"
                                                                 style={{ display: "none" }}
-                                                                onChange={(e) => getDocumentData(e?.target?.files[0], "individualCertificateCA")}
+                                                                onChange={(e) => getDocumentData(e?.target?.files[0], "individualCertificateCA","devTypeDocument")}
                                                             />
                                                         </div>
                                                     </div>
@@ -1079,7 +1143,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                 type="file"
                                                                 accept="addplication/pdf"
                                                                 style={{ display: "none" }}
-                                                                onChange={(e) => getDocumentData(e?.target?.files[0], "companyBalanceSheet")}
+                                                                onChange={(e) => getDocumentData(e?.target?.files[0], "companyBalanceSheet","devTypeDocument")}
                                                             />
                                                         </div>
                                                     </div>
@@ -1294,7 +1358,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                 type="file"
                                                                 accept="application/pdf"
                                                                 style={{ display: "none" }}
-                                                                onChange={(e) => getDocumentData(e?.target?.files[0], "companyBalanceSheet")}
+                                                                onChange={(e) => getDocumentData(e?.target?.files[0], "companyBalanceSheet","devTypeDocument")}
                                                             />
                                                         </div>
                                                     </div>
@@ -1327,7 +1391,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                 type="file"
                                                                 accept="application/pdf"
                                                                 style={{ display: "none" }}
-                                                                onChange={(e) => getDocumentData(e?.target?.files[0], "paidUpCapital")}
+                                                                onChange={(e) => getDocumentData(e?.target?.files[0], "paidUpCapital","devTypeDocument")}
                                                             />
                                                         </div>
                                                     </div>
@@ -1362,7 +1426,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                 type="file"
                                                                 accept="application/pdf"
                                                                 style={{ display: "none" }}
-                                                                onChange={(e) => getDocumentData(e?.target?.files[0], "reservesAndSurplus")}
+                                                                onChange={(e) => getDocumentData(e?.target?.files[0], "reservesAndSurplus","devTypeDocument")}
                                                             />
                                                         </div>
                                                     </div>
@@ -1397,7 +1461,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                 type="file"
                                                                 accept="application/pdf"
                                                                 style={{ display: "none" }}
-                                                                onChange={(e) => getDocumentData(e?.target?.files[0], "anyOtherDoc")}
+                                                                onChange={(e) => getDocumentData(e?.target?.files[0], "anyOtherDoc","devTypeDocument")}
                                                             />
                                                         </div>
                                                     </div>
@@ -1445,7 +1509,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                 type="file"
                                                                 accept="application/pdf"
                                                                 style={{ display: "none" }}
-                                                                onChange={(e) => getDocumentData(e?.target?.files[0], "netWorthOfPartners")}
+                                                                onChange={(e) => getDocumentData(e?.target?.files[0], "netWorthOfPartners","devTypeDocument")}
                                                             />
                                                         </div>
                                                     </div>
@@ -1470,7 +1534,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                 type="file"
                                                                 accept="application/pdf"
                                                                 style={{ display: "none" }}
-                                                                onChange={(e) => getDocumentData(e?.target?.files[0], "netWorthOfFirm")}
+                                                                onChange={(e) => getDocumentData(e?.target?.files[0], "netWorthOfFirm","devTypeDocument")}
                                                             />
                                                         </div>
                                                     </div>
@@ -1789,7 +1853,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                         type="file"
                                                                         accept="application/pdf"
                                                                         name="validatingLicence"
-                                                                        onChange={(e) => getDocumentData(e?.target?.files[0], "engineerDegree")}
+                                                                        onChange={(e) => getDocumentData(e?.target?.files[0], "engineerDegree","hrduModalActFile")}
                                                                         placeholder=""
                                                                         class="employee-card-input"
                                                                     />
@@ -1801,7 +1865,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                         type="file"
                                                                         accept="application/pdf"
                                                                         name="validatingLicence"
-                                                                        onChange={(e) => getDocumentData(e?.target?.files[0], "architectDegree")}
+                                                                        onChange={(e) => getDocumentData(e?.target?.files[0], "architectDegree","hrduModalActFile")}
                                                                         placeholder=""
                                                                         class="employee-card-input"
                                                                     />
@@ -1813,7 +1877,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                         type="file"
                                                                         accept="application/pdf"
                                                                         name="validatingLicence"
-                                                                        onChange={(e) => getDocumentData(e?.target?.files[0], "townPlannerDegree")}
+                                                                        onChange={(e) => getDocumentData(e?.target?.files[0], "townPlannerDegree","hrduModalActFile")}
                                                                         placeholder=""
                                                                         class="employee-card-input"
                                                                     />
@@ -1924,7 +1988,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                             name="agreementDoc"
                                                                             // accept="addplication/pdf"
                                                                             style={{ display: "none" }}
-                                                                            onChange={(e) => getDocumentData(e?.target?.files[0], "agreementDoc")}
+                                                                            onChange={(e) => getDocumentData(e?.target?.files[0], "agreementDoc","designatedDirectorsFile")}
                                                                         />
                                                                         {/* <input
                                                                         type="file"
@@ -1955,7 +2019,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                             name="boardDoc"
                                                                             // accept="addplication/pdf"
                                                                             style={{ display: "none" }}
-                                                                            onChange={(e) => getDocumentData(e?.target?.files[0], "boardDoc")}
+                                                                            onChange={(e) => getDocumentData(e?.target?.files[0], "boardDoc","designatedDirectorsFile")}
                                                                         />
                                                                         {/* <input
                                                                         type="file"
@@ -2131,7 +2195,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                                     name="agreementDocY"
                                                                                     // accept="addplication/pdf"
                                                                                     style={{ display: "none" }}
-                                                                                    onChange={(e) => getDocumentData(e?.target?.files[0], "agreementDocY")}
+                                                                                    onChange={(e) => getDocumentData(e?.target?.files[0], "agreementDocY","alreadyObtaileLicFile")}
                                                                                 />
                                                                                 {/* <input
                                                                                 type="file"
@@ -2164,7 +2228,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                                     name="boardDocX"
                                                                                     // accept="addplication/pdf"
                                                                                     style={{ display: "none" }}
-                                                                                    onChange={(e) => getDocumentData(e?.target?.files[0], "boardDocX")}
+                                                                                    onChange={(e) => getDocumentData(e?.target?.files[0], "boardDocX","alreadyObtaileLicFile")}
                                                                                 />
                                                                                 {/* <input
                                                                                 type="file"
@@ -2194,7 +2258,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                                     name="registeredDoc"
                                                                                     // accept="addplication/pdf"
                                                                                     style={{ display: "none" }}
-                                                                                    onChange={(e) => getDocumentData(e?.target?.files[0], "registeredDoc")}
+                                                                                    onChange={(e) => getDocumentData(e?.target?.files[0], "registeredDoc","alreadyObtaileLicFile")}
                                                                                 />
                                                                                 {/* <input
                                                                                 type="file"
@@ -2227,7 +2291,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                                     name="boardDocY"
                                                                                     // accept="addplication/pdf"
                                                                                     style={{ display: "none" }}
-                                                                                    onChange={(e) => getDocumentData(e?.target?.files[0], "boardDocY")}
+                                                                                    onChange={(e) => getDocumentData(e?.target?.files[0], "boardDocY","alreadyObtaileLicFile")}
                                                                                 />
                                                                                 {/* <input
                                                                                 type="file"
@@ -2402,7 +2466,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     type="file"
                                                                     name="engineerSign"
                                                                     style={{ display: "none" }}
-                                                                    onChange={(e) => getDocumentData(e?.target?.files[0], "engineerSign")}
+                                                                    onChange={(e) => getDocumentData(e?.target?.files[0], "engineerSign","techicalExpertFile")}
                                                                 />
                                                                 {/* <input
                                                                     type="file"
@@ -2449,7 +2513,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     type="file"
                                                                     name="architectSign"
                                                                     style={{ display: "none" }}
-                                                                    onChange={(e) => getDocumentData(e?.target?.files[0], "architectSign")}
+                                                                    onChange={(e) => getDocumentData(e?.target?.files[0], "architectSign","techicalExpertFile")}
                                                                 />
                                                                 {/* <input
                                                                     type="file"
@@ -2495,7 +2559,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     type="file"
                                                                     name="townPlannerSign"
                                                                     style={{ display: "none" }}
-                                                                    onChange={(e) => getDocumentData(e?.target?.files[0], "townPlannerSign")}
+                                                                    onChange={(e) => getDocumentData(e?.target?.files[0], "townPlannerSign","techicalExpertFile")}
                                                                 />
                                                                 {/* <input
                                                                     type="file"

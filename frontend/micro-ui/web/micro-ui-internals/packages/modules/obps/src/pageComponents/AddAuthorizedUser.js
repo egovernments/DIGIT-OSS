@@ -144,7 +144,10 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
     setGender("");
     setAurthorizedPan("");
   };
-  const handleCloseAuthuser = () => setShowAuthuser(false);
+  const handleCloseAuthuser = () => {
+    setValue("modalFiles",[])
+    setShowAuthuser(false)
+  };
 
 
   const {
@@ -275,9 +278,16 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
 
   const getDocumentData = async (file, fieldName, fromTable , index) => {
 
-    if(getValues("authorizedUserFiles")?.includes(file.name)){
-      alert("Duplicate file Selected");
-      return;
+    if(fromTable){
+      if(getValues("authorizedUserFiles")?.includes(file.name)){
+        alert("Duplicate file Selected");
+        return;
+      }
+    } else {
+      if(getValues("modalFiles")?.includes(file.name)){
+        alert("Duplicate file Selected");
+        return;
+      }
     }
 
     const formData = new FormData();
@@ -298,22 +308,29 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
         temp[index][fieldName] = Resp?.data?.files?.[0]?.fileStoreId;
         setAurthorizedUserInfoArray([...temp]);
         console.log("log2",temp,Resp?.data?.files?.[0]?.fileStoreId)
+        if(getValues("authorizedUserFiles")) {
+          setValue("authorizedUserFiles",[...getValues("authorizedUserFiles"),file.name]);
+        } else {
+          setValue("authorizedUserFiles",[file.name]);
+        }
       } else {
         setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
         // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
         console.log("getValues()=====", getValues());
         setDocumentsData(getValues())
+        if(getValues("modalFiles")) {
+          setValue("modalFiles",[...getValues("modalFiles"),file.name]);
+        } else {
+          setValue("modalFiles",[file.name]);
+        }
       }
-      if(getValues("authorizedUserFiles")) {
-        setValue("authorizedUserFiles",[...getValues("authorizedUserFiles"),file.name]);
-      } else {
-        setValue("authorizedUserFiles",[file.name]);
-      }
+      
     //   setLoader(false);
     
     } catch (error) {
     //   setLoader(false);
-      console.log(error.message);
+      alert(error?.response?.data?.Errors?.[0]?.description);
+      console.log(error,error?.body,error?.response?.data?.Errors?.[0]?.description);
     }
   };
   
@@ -336,7 +353,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
 
 
   const [noofRows, setNoOfRows] = useState(1);
-  const handleSubmitFormdata = () => {
+  const handleSubmitFormdata = async () => {
 
     if(validateUser(aurthorizedPan,aurthorizedMobileNumber,aurthorizedEmail)){
       return alert("PLease Enter Unique PAN, Email and Mobile Number for every user") ;
@@ -377,32 +394,36 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
           "tenantId": "hr",
       }
 
-      setAurthorizedUserInfoArray([...aurthorizedUserInfoArray,user]);
- 
-      setDocumentsData({});
-
-    try {
-      const requestResp = {          
-        "RequestInfo": {
-          "apiId": "Rainmaker",
-          "msgId": "1669293303096|en_IN",
-          "authToken": "",
-          "active": true,
-          "tenantId": "hr",
-          "permanentCity": null
-        },
-        "user":user
+      
+      try {
+        const requestResp = {          
+          "RequestInfo": {
+            "apiId": "Rainmaker",
+            "msgId": "1669293303096|en_IN",
+            "authToken": "",
+            "active": true,
+            "tenantId": "hr",
+            "permanentCity": null
+          },
+          "user":user
           
+        }
+        const postDataAuthUser = await axios.post(`/user/users/_createnovalidate`,requestResp,{headers:{
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin':"*",
+        }})
+        console.log("erergregerg",postDataAuthUser);
+        setAurthorizedUserInfoArray([...aurthorizedUserInfoArray,{...user,uuid: postDataAuthUser?.data?.user?.[0]?.uuid}]);
+        if(getValues("authorizedUserFiles")){
+          setValue("authorizedUserFiles",[...getValues("authorizedUserFiles"),...getValues("modalFiles")]);
+        } else {
+          setValue("authorizedUserFiles",[...getValues("modalFiles")]);
+        }
+        setDocumentsData({});
       }
-      const postDataAuthUser = axios.post(`/user/users/_createnovalidate`,requestResp,{headers:{
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin':"*",
-      }})
-      // console.log(postDataAuthUser);
-    }
-    
-    catch(error){
-      console.log(error.message);
+      
+      catch(error){
+        console.log(error.message);
     }
     // getAdhaarPdf();
     // getDigitalSignPdf();
