@@ -13,6 +13,7 @@ import ActionModal from "../../../../../templates/ApplicationDetails/Modal";
 import ScrutitnyForms from "../ScrutinyBasic/ScutinyBasic";
 // import { useSearchParams } from "react-router-dom";
 
+
 const ScrutinyFormcontainer = (props) => {
 
   
@@ -44,8 +45,18 @@ const {id} = useParams();
   // const [applicationNumber,setApplicationNumber] = useState("");
   const [applicationDetails, setApplicationDetails] = useState();
   const [workflowDetails, setWorkflowDetails] = useState();
+  const [applicationData,setApplicationData] = useState();
 
   const authToken = Digit.UserService.getUser()?.access_token || null;
+
+  // const [showhide19, setShowhide19] = useState("true");
+  const handleshow19 = (e) => {
+    const getshow = e.target.value;
+    setShowhide19(getshow);
+  };
+  const handleChange = (e) => {
+    this.setState({ isRadioSelected: true });
+  };
 
 
   const getScrutinyData = async () => {
@@ -66,6 +77,8 @@ const {id} = useParams();
       setScrutinyDetails(Resp?.Licenses[0]?.tradeLicenseDetail?.additionalDetail[0]);
       // setApplicationNumber(Resp?.Licenses[0]?.applicationNumber);
       // setApplicationNumber("HR-TL-2022-12-07-000498");
+      console.log("devDel123",Resp?.Licenses[0])
+      setApplicationData(Resp?.Licenses[0]);
     } catch (error) {
       console.log(error);
     }
@@ -208,14 +221,30 @@ const {id} = useParams();
 
   return (
     <Card>
-      <Row style={{ top: 25, padding: 5 }}>
-        <div className="ml-auto">
-          <h2>Application : {id}</h2>
+      <Card.Header class="fw-normal" style={{ top: 5, padding: 5 , fontSize: 14 ,height:90, lineHeight:2 }}>
+        <div className="row">
+          <div className="col-md-3">
+            <p>Application Number:</p>
+            <p class="fw-normal">{id}</p>
+          </div>
+          <div className="col-md-2">
+            <p>Service Id: </p>
+            <p class="fw-normal">{applicationData?.businessService}</p>
+          </div>
+          <div className="col-md-3">
+            <p>TCP Application Number:</p>
+            <p class="fw-normal">{applicationData?.tcpApplicationNumber}</p>
+          </div>
+          <div className="col-md-2">
+            <p>TCP Case Number:</p>
+            <p class="fw-normal">{applicationData?.tcpCaseNumber}</p>
+          </div>
+          <div className="col-md-2">
+            <p>TCP Dairy Number: </p>
+            <p class="fw-normal">{applicationData?.tcpDairyNumber}</p>
+          </div>
         </div>
-        <div className="ml-auto">
-          <h2>Service Id : {businessService}</h2>
-        </div>
-      </Row>
+      </Card.Header>
       <Row style={{ top: 30, padding: 10 }}>
         <ScrutitnyForms
           apiResponse={scrutinyDetails}
