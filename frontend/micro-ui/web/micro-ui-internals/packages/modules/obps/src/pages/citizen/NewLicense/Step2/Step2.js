@@ -208,6 +208,7 @@ const ApllicantPuropseForm = (props) => {
   const [fileStoreId, setFileStoreId] = useState({});
   const [stepData, setStepData] = useState(null);
   const [applicantId, setApplicantId] = useState("");
+  const [selectedFiles, setSelectedFiles] = useState([]);
 
   const resetValues = () => {
     resetField("tehsil");
@@ -308,7 +309,6 @@ const ApllicantPuropseForm = (props) => {
         return { label: el?.districtName, id: el?.districtCode, value: el?.districtCode };
       });
       setDistrictDataLabels({ data: distData, isLoading: false });
-      console.log("data", distData);
     } catch (error) {
       return error;
     }
@@ -517,6 +517,10 @@ const ApllicantPuropseForm = (props) => {
     window?.localStorage.setItem("potential", JSON.stringify(potentialSelected));
   };
   const getDocumentData = async (file, fieldName) => {
+    if (selectedFiles.includes(file.name)) {
+      alert("Duplicate File Selected");
+      return;
+    }
     const formData = new FormData();
     formData.append("file", file);
     formData.append("tenantId", "hr");
@@ -528,6 +532,10 @@ const ApllicantPuropseForm = (props) => {
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
       // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
+      if (fieldName === "registeringAuthorityDoc") {
+        setValue("registeringAuthorityDocFileName", file.name);
+      }
+      setSelectedFiles([...selectedFiles, file.name]);
       setLoader(false);
     } catch (error) {
       setLoader(false);
@@ -1049,7 +1057,7 @@ const ApllicantPuropseForm = (props) => {
                           placeholder=""
                           required
                           {...register("validitydate")}
-                          min={modalData?.agreementValidFrom}
+                          min={watch("agreementValidFrom")}
                         />
                       </div>
                     </div>
@@ -1123,13 +1131,14 @@ const ApllicantPuropseForm = (props) => {
                             Registering Authority document <span style={{ color: "red" }}>*</span> <FileUpload color="primary" />
                             <input
                               type="file"
-                              accept="application/pdf,application//jpeg"
+                              accept="application/pdf/jpeg/png"
                               style={{ display: "none" }}
                               required
                               onChange={(e) => getDocumentData(e?.target?.files[0], "registeringAuthorityDoc")}
                             />
                           </h2>
                         </label>
+                        <h3 style={{}}>{watch("registeringAuthorityDocFileName") ? watch("registeringAuthorityDocFileName") : null}</h3>
                         <h3 className="error-message" style={{ color: "red" }}>
                           {errors?.registeringAuthorityDoc && errors?.registeringAuthorityDoc?.message}
                         </h3>

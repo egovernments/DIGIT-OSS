@@ -12,7 +12,7 @@ import Spinner from "../../../../components/Loader";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step5";
 import ScrollToTop from "@egovernments/digit-ui-react-components/src/atoms/ScrollToTop";
-
+import FileUpload from "@mui/icons-material/FileUpload";
 const FeesChargesForm = (props) => {
   const location = useLocation();
   const history = useHistory();
@@ -195,6 +195,9 @@ const FeesChargesForm = (props) => {
       const Resp = await axios.post("/filestore/v1/files", formData, {});
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
+      if (fieldName === "consentLetter") {
+        setValue("consentLetterFileName", file.name);
+      }
       // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
       setLoader(false);
     } catch (error) {
@@ -360,27 +363,28 @@ const FeesChargesForm = (props) => {
                                 <div>
                                   <div className="row">
                                     <div className="col col-12">
+                                      <h2>
+                                        Consent letter in case of Another Developer (verified by the Department)
+                                        <span style={{ color: "red" }}>*</span>
+                                      </h2>
                                       <label>
-                                        <h2>
-                                          Consent letter in case of Another Developer (verified by the Department)
-                                          <span style={{ color: "red" }}>*</span>
-                                          {fileStoreId?.consentLetter ? (
-                                            <a onClick={() => getDocShareholding(fileStoreId?.consentLetter)} className="btn btn-sm col-md-6">
-                                              <VisibilityIcon color="info" className="icon" />
-                                            </a>
-                                          ) : (
-                                            <p></p>
-                                          )}
-                                        </h2>
-                                      </label>
-                                      <div>
+                                        <FileUpload color="primary" />
                                         <input
                                           type="file"
-                                          className="form-control"
-                                          required
+                                          style={{ display: "none" }}
                                           onChange={(e) => getDocumentData(e?.target?.files[0], "consentLetter")}
+                                          accept="application/pdf/jpeg/png"
+                                          required
                                         />
-                                      </div>
+                                      </label>
+                                      {fileStoreId?.consentLetter ? (
+                                        <a onClick={() => getDocShareholding(fileStoreId?.consentLetter)} className="btn btn-sm ">
+                                          <VisibilityIcon color="info" className="icon" />
+                                        </a>
+                                      ) : (
+                                        <p></p>
+                                      )}
+                                      <h3 style={{}}>{watch("consentLetterFileName") ? watch("consentLetterFileName") : null}</h3>
 
                                       <h3 className="error-message" style={{ color: "red" }}>
                                         {errors?.consentLetter && errors?.consentLetter?.message}
