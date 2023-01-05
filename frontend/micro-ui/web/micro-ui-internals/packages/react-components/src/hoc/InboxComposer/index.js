@@ -162,11 +162,11 @@ const InboxComposer = ({
 
   const isEnabledCommonModules =
     window.location.href.includes("/obps/") ||
-    window.location.href.includes("/noc/") ||
-    window.location.href.includes("/ws/water/bill-amendment/inbox") ||
-    window.location.href.includes("/ws/sewerage/bill-amendment/inbox");
+    window.location.href.includes("/noc/") ;
 
-  const isEnabledWSCommonModules = window.location.href.includes("/ws/water/inbox") || window.location.href.includes("/ws/sewerage/inbox");
+  const isEnabledWSCommonModules = window.location.href.includes("/ws/water/inbox") || window.location.href.includes("/ws/sewerage/inbox") ||
+  window.location.href.includes("/ws/water/bill-amendment/inbox") ||
+  window.location.href.includes("/ws/sewerage/bill-amendment/inbox");
 
   if (isEnabledCommonModules) {
     return (

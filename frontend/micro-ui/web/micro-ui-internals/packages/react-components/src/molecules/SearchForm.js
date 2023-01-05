@@ -4,9 +4,7 @@ export const SearchField = ({ children, className }) => {
   const isMobile = window.Digit.Utils.browser.isMobile();
   const isEnabledCommonModules =
     window.location.href.includes("/obps/") ||
-    window.location.href.includes("/noc/") ||
-    window.location.href.includes("/ws/water/bill-amendment/inbox") ||
-    window.location.href.includes("/ws/sewerage/bill-amendment/inbox");
+    window.location.href.includes("/noc/")
 
   const disbaleModules = window.location.href.includes("obps/search") || window.location.href.includes("noc/search");
   if (isEnabledCommonModules && !isMobile && !disbaleModules) {
@@ -23,9 +21,7 @@ export const SearchForm = ({ children, onSubmit, handleSubmit, id, className = "
   const isMobile = window.Digit.Utils.browser.isMobile();
   const isEnabledCommonModules =
     window.location.href.includes("/obps/") ||
-    window.location.href.includes("/noc/") ||
-    window.location.href.includes("/ws/water/bill-amendment/inbox") ||
-    window.location.href.includes("/ws/sewerage/bill-amendment/inbox");
+    window.location.href.includes("/noc/");
 
   const disbaleModules = window.location.href.includes("obps/search") || window.location.href.includes("noc/search");
 

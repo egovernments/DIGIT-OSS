@@ -12,7 +12,7 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlu
   //let isEditProperty = formData?.isEditProperty || false;
   let isEdit = window.location.href.includes("edit-application")||window.location.href.includes("renew-trade");
   const [ownershipCategory, setOwnershipCategory] = useState(formData?.ownershipCategory);
-  const [isSameAsPropertyOwner, setisSameAsPropertyOwner] = useState(formData?.ownershipCategory?.isSameAsPropertyOwner || null);
+  const [isSameAsPropertyOwner, setisSameAsPropertyOwner] = useState((formData?.ownershipCategory?.isSameAsPropertyOwner === "false" ? false : formData?.ownershipCategory?.isSameAsPropertyOwner)  || null);
   const { data: dropdownData } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "common-masters", "TLOwnerTypeWithSubtypes",{userType});
   const isEmpNewApplication = window.location.href.includes("/employee/tl/new-application");
   const isEmpRenewLicense = window.location.href.includes("/employee/tl/renew-application-details");

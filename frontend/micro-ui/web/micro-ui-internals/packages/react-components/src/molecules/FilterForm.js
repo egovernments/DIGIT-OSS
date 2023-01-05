@@ -22,9 +22,7 @@ const FilterForm = ({
   const isMobile = window.Digit.Utils.browser.isMobile();
   const isEnabledCommonModules =
     window.location.href.includes("/obps/") ||
-    window.location.href.includes("/noc/") ||
-    window.location.href.includes("/ws/water/bill-amendment/inbox") ||
-    window.location.href.includes("/ws/sewerage/bill-amendment/inbox");
+    window.location.href.includes("/noc/");
 
   // min-height: calc(100% - 110
   // 	px

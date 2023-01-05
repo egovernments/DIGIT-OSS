@@ -184,8 +184,7 @@ const TradeUnitForm = (_props) => {
         keys.forEach((key) => (part[key] = unit[key]));
 
         let _ownerType = isIndividualTypeOwner ? {} : { ownerType: { code: "NONE" } };
-
-        if (!_.isEqual(formValue, part)) {
+        if (!(_.isEqual(formValue, part))) {
             Object.keys(formValue).map(data => {
                 if (data != "key" && formValue[data] != undefined && formValue[data] != "" && formValue[data] != null && !isErrors) {
                   setIsErrors(true); 

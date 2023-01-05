@@ -130,7 +130,7 @@ const OwnerForm = (_props) => {
   }, [formData?.cpt?.details?.propertyId, formData?.cptId?.Id, formData]);
 
   useEffect(() => {
-    if (!_.isEqual(formValue, part)) {
+    if (!(_.isEqual(formValue, part))) {
       setPart({...formValue});
 
       Object.keys(formValue).map((data) => {
@@ -687,7 +687,7 @@ const TLOwnerDetailsEmployee = ({ config, onSelect, userType, formData, setError
   },[owners])
 
   useEffect(() => {
-    if(formData?.ownershipCategory?.isSameAsPropertyOwner == true || formData?.ownershipCategory?.isSameAsPropertyOwner === "true" && JSON.parse(sessionStorage.getItem("ownersFromProperty")) && !(_.isEqual(owners,JSON.parse(sessionStorage.getItem("ownersFromProperty")))) )
+    if((formData?.ownershipCategory?.isSameAsPropertyOwner == true || formData?.ownershipCategory?.isSameAsPropertyOwner === "true") && JSON.parse(sessionStorage.getItem("ownersFromProperty")) && !(_.isEqual(owners,JSON.parse(sessionStorage.getItem("ownersFromProperty")))) )
     {
       setOwners([...JSON.parse(sessionStorage.getItem("ownersFromProperty"))]);
     }

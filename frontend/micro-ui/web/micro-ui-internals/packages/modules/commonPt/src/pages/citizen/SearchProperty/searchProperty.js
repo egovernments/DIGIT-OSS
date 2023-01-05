@@ -386,7 +386,7 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
       .filter((k) => data[k])
       .reduce((acc, key) => ({ ...acc, [key]: typeof data[key] === "object" ? data[key].code : data[key] }), {});
     let city = tempObject.city;
-    tempObject.doorNo = tempObject.doorNumber;
+    tempObject.doorNo = tempObject.doorNumber || tempObject?.doorNo;
     delete tempObject.addParam;
     delete tempObject.addParam1;
     delete tempObject.city;
@@ -402,7 +402,7 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
     {
       tempObject = {
         name : tempObject?.name,
-        doorNo : tempObject?.doorNo,
+        doorNo : tempObject?.doorNumber || tempObject?.doorNo,
         locality : tempObject?.locality,
       }
     }
@@ -488,7 +488,7 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
         SearchParams = {
           city : qs?.city,
           locality : qs?.locality || "",
-          doorNo : qs?.doorNumber || "",
+          doorNo : qs?.doorNumber || qs?.doorNo || "",
           name : qs?.name || "",
           mobileNumber : "",
           propertyIds : "",

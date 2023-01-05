@@ -15,6 +15,7 @@ const Inbox = ({ parentRoute }) => {
   const searchFormDefaultValues = {
     mobileNumber: "",
     applicationNumber: "",
+    consumerNo: "",
   };
 
   const filterFormDefaultValues = {
@@ -53,6 +54,7 @@ const Inbox = ({ parentRoute }) => {
   const onSearchFormReset = (setSearchFormValue) => {
     setSearchFormValue("mobileNumber", null);
     setSearchFormValue("applicationNo", null);
+    setSearchFormValue("consumerNo", null);
     dispatch({ action: "mutateSearchForm", data: searchFormDefaultValues });
   };
 
@@ -147,9 +149,7 @@ const Inbox = ({ parentRoute }) => {
   };
 
   const SearchFormFields = useCallback(
-    ({ registerRef, searchFormState, searchFieldComponents }) => (
-      <SearchFormFieldsComponents {...{ registerRef, searchFormState, searchFieldComponents }} />
-    ),
+    ({ registerRef, searchFormState }) => <SearchFormFieldsComponents {...{ registerRef, searchFormState }} className="search" />,
     []
   );
 
@@ -190,6 +190,7 @@ const Inbox = ({ parentRoute }) => {
     searchFormDefaultValues: formState?.searchForm,
     resetSearchFormDefaultValues: searchFormDefaultValues,
     onSearchFormReset,
+    className: "search-form-wns-inbox",
   };
 
   const propsForFilterForm = {
