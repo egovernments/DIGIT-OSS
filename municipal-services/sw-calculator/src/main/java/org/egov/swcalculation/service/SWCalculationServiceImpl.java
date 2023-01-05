@@ -160,17 +160,6 @@ public class SWCalculationServiceImpl implements SWCalculationService {
 							criteria.setTo(sewerageConnection.getDateEffectiveFrom());
 							criteria.setFrom(toDate);
 
-							//Calculate sewerage cess for disconnection charge
-							BigDecimal sewerageCess = getSewerageCessForDisconnection(masterMap, finalSewerageCharge);
-							for (TaxHeadEstimate estimate : estimates) {
-								if (estimate.getTaxHeadCode().equals(SW_WATER_CESS)) {
-									estimates.remove(estimate);
-									break;
-								}
-							}
-							estimates.add(TaxHeadEstimate.builder().taxHeadCode(SWCalculationConstant.SW_WATER_CESS)
-									.estimateAmount(sewerageCess.setScale(2, 2)).build());
-
 							estimates.stream().forEach(estimate -> {
 								if (taxHeadCategoryMap.containsKey(estimate.getTaxHeadCode())) {
 									if (taxHeadCategoryMap.get(estimate.getTaxHeadCode()).equals(CHARGES)) {
