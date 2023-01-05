@@ -12,7 +12,7 @@ const useBPAInbox = ({ tenantId, filters, config={} }) => {
       applicationNumber = applicationNo;
       tenantId = Digit.ULBService.getStateId();
     }
-    if(applicationType === "BUILDING_OC_PLAN_SCRUTINY" && (window.location.href.includes("obps/inbox") || window.location.href.includes("obps/bpa/inbox")) &&  businessService) {
+    if(applicationType === "BUILDING_OC_PLAN_SCRUTINY" && (window.location.href.includes("obps/inbox") || window.location.href.includes("obps/bpa/inbox"))) {
       businessService = "BPA_OC"
     }
 
