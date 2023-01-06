@@ -2,7 +2,7 @@ import { FormStep,TextInput, MobileNumber, CardLabel, CardLabelError, Dropdown, 
 import React, { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Table from "react-bootstrap/Table";
-import { useLocation, useParams } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 // import "../Developer/AddInfo.css";
 // import DashboardScreen from "../../src/Screens/DashboardScreen/DashboardScreen";
 import { useForm } from "react-hook-form";
@@ -515,11 +515,25 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
    
   }
   const onSkip = () => onSelect();
+
+  const navigate = useHistory();
+
+  const changeStep = (step) => {
+    switch (step) {
+      case 1 :
+        navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/license-details");
+        break;
+      case 2 :
+        navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/license-add-info");
+      break;
+    }
+  }
+
   return (
 
     <div className={isOpenLinkFlow ? "OpenlinkContainer" : ""}>
       {/* {JSON.stringify(aurthorizedUserInfoArray)} */}
-      <Timeline currentStep={3} flow="STAKEHOLDER" />
+      <Timeline currentStep={3} flow="STAKEHOLDER" onChangeStep={changeStep} />
       <FormStep
         className="card"
         // onSubmit={handleAurthorizedUserFormSubmit}

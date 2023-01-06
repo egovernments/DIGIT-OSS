@@ -11,6 +11,7 @@ import {
     BackButton
 } from "@egovernments/digit-ui-react-components";
 import Timeline from "../components/Timeline";
+import { useHistory } from "react-router-dom";
 
 const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setError: setFormError, clearErrors: clearFormErrors, formState }) => {
     const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -79,11 +80,31 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
     }, [documents, checkRequiredFields])
 
 
+    const navigate = useHistory();
+
+    const changeStep = (step) => {
+      switch (step) {
+        case 1 :
+          navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/license-details");
+          break;
+        case 2 :
+          navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/license-add-info");
+        break;
+        case 3 :
+          navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/add-authorized-user");
+        break;
+        case 4 :
+          navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/developer-capacity");
+        break;
+      }
+    }
+
+
     return (
         <div>
             <div className={isopenlink? "OpenlinkContainer":""}>
             {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
-            <Timeline currentStep={5} flow="STAKEHOLDER" />
+            <Timeline currentStep={5} flow="STAKEHOLDER" onChangeStep={changeStep}/>
             {!isLoading ?
                 <FormStep
                     t={t}

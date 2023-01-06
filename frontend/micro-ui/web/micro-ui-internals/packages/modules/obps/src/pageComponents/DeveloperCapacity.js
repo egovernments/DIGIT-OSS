@@ -9,7 +9,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { Modal, ModalHeader, ModalFooter, ModalBody } from 'react-bootstrap';
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import FileUpload from '@mui/icons-material/FileUpload';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
@@ -1027,13 +1027,29 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
         // onSelect(config.key, { TradeName });
     };
 
+    const navigate = useHistory();
+
+    const changeStep = (step) => {
+      switch (step) {
+        case 1 :
+          navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/license-details");
+          break;
+        case 2 :
+          navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/license-add-info");
+        break;
+        case 3 :
+          navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/add-authorized-user");
+        break;
+      }
+    }
+
     return (
         <React.Fragment>
             <div className={isopenlink ? "OpenlinkContainer" : ""}>
                 {/* {JSON.stringify(data?.devDetail[0]?.addInfo?.showDevTypeFields)}efwefewfewf
                 {JSON.stringify(data)}efewfewf */}
                 {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
-                <Timeline currentStep={4} flow="STAKEHOLDER" />
+                <Timeline currentStep={4} flow="STAKEHOLDER" onChangeStep={changeStep} />
                 <FormStep
                     config={config}
                     onSelect={goNext}
