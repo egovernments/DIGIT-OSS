@@ -17,7 +17,7 @@ const ResidentialPlottedForm = (props) => {
   let user = Digit.UserService.getUser();
   const userRoles = user?.info?.roles?.map((e) => e.code) || [];
   const hideRemarks = userRoles.some((item)=>item === "CTP_HR" || item === "CTP_HQ" || item === "DTP_HR" || item === "DTP_HQ")
-  
+  const hideRemarksPatwari = userRoles.some((item)=>item ==="Patwari_HQ")
 
   const { register, handleSubmit, formState: { errors } } = useForm([{ XLongitude: '', YLatitude: '' }]);
   const formSubmit = (data) => {
@@ -140,7 +140,7 @@ const ResidentialPlottedForm = (props) => {
                   <input type="number" className="form-control" disabled placeholder={residentialData?.npnlNo} />
                   <ReportProblemIcon
                           style={{
-                            display: hideRemarks?"none":"block",
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
                             color: fieldIconColors.npnlNo
                           }}
                           onClick={() => {
@@ -161,7 +161,7 @@ const ResidentialPlottedForm = (props) => {
                     <input type="text" className="form-control" disabled placeholder={residentialData?.npnlNo}/>
                     <ReportProblemIcon
                           style={{
-                            display: hideRemarks?"none":"block",
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
                             color: fieldIconColors.npnlArea
                           }}
                           onClick={() => {
@@ -188,7 +188,7 @@ const ResidentialPlottedForm = (props) => {
                   <input type="number" className="form-control" disabled placeholder={residentialData?.ewsNo}/>
                   <ReportProblemIcon
                           style={{
-                            display: hideRemarks?"none":"block",
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
                             color: fieldIconColors.ewsNo
                           }}
                           onClick={() => {
@@ -206,7 +206,7 @@ const ResidentialPlottedForm = (props) => {
                     <input type="text" className="form-control" disabled placeholder={residentialData?.ewsArea}/>
                     <ReportProblemIcon
                           style={{
-                            display: hideRemarks?"none":"block",
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
                             color: fieldIconColors.ewsArea
                           }}
                           onClick={() => {

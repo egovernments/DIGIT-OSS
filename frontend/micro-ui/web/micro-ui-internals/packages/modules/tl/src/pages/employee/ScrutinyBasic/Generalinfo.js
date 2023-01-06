@@ -393,7 +393,7 @@ const Genarelinfo = (props) => {
                     {/* display: hideRemarks?"none":"block", */}
                   <ReportProblemIcon
                     style={{
-                      display: hideRemarks?"none":"block",
+                      display: hideRemarks || hideRemarksPatwari ?"none":"block",
                       // display: hideRemarksPatwari?"none":"block",
                       color: fieldIconColors.purpose
                     }}
@@ -451,7 +451,7 @@ const Genarelinfo = (props) => {
                   {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
                   <ReportProblemIcon
                     style={{
-                      display: hideRemarks?"none":"block",
+                      display: hideRemarks || hideRemarksPatwari ?"none":"block",
                       // display: hideRemarksPatwari?"none":"block",
                       color: fieldIconColors.potential
                     }}
@@ -487,7 +487,7 @@ const Genarelinfo = (props) => {
                     </Form.Control>
                     <ReportProblemIcon
                       style={{
-                        display: hideRemarks?"none":"block",
+                        display: hideRemarks || hideRemarksPatwari ?"none":"block",
                         // display: hideRemarksPatwari?"none":"block",
                         color: fieldIconColors.district
                       }}
@@ -522,7 +522,7 @@ const Genarelinfo = (props) => {
                     ></Form.Control>
                     <ReportProblemIcon
                       style={{
-                        display: hideRemarks?"none":"block",
+                        display: hideRemarks || hideRemarksPatwari ?"none":"block",
                         // display: hideRemarksPatwari?"none":"block",
                         color: fieldIconColors.state
                       }}
@@ -637,8 +637,9 @@ const Genarelinfo = (props) => {
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks?"none":"block",
+                          // display: hideRemarks?"none":"block",
                           // display: hideRemarksPatwari?"none":"block",
+                          display: hideRemarks || hideRemarksPatwari ?"none":"block",
                           color: fieldIconColors.tehsil
                         }}
                         onClick={() => {
@@ -668,7 +669,7 @@ const Genarelinfo = (props) => {
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks?"none":"block",
+                          display: hideRemarks || hideRemarksPatwari ?"none":"block",
                            // display: hideRemarksPatwari?"none":"block",
                           color: fieldIconColors.hadbastNo
                         }}

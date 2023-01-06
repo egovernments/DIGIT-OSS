@@ -23,7 +23,7 @@ const DDJAYForm = (props) => {
   let user = Digit.UserService.getUser();
   const userRoles = user?.info?.roles?.map((e) => e.code) || [];
   const hideRemarks = userRoles.some((item)=>item === "CTP_HR" || item === "CTP_HQ" || item === "DTP_HR" || item === "DTP_HQ")
-  
+  const hideRemarksPatwari = userRoles.some((item)=>item ==="Patwari_HQ")
 
   const classes = useStyles();
 
@@ -136,7 +136,7 @@ const DDJAYForm = (props) => {
                     <input type="number" className="form-control" disabled placeholder={ddjayData?.frozenNo}/>
                     <ReportProblemIcon
                           style={{
-                            display: hideRemarks?"none":"block",
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
                             color: fieldIconColors.frozenPlotNo
                           }}
                           onClick={() => {
@@ -154,7 +154,7 @@ const DDJAYForm = (props) => {
                     <input type="number" className="form-control" disabled placeholder={ddjayData?.frozenArea}/>
                     <ReportProblemIcon
                           style={{
-                            display: hideRemarks?"none":"block",
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
                             color: fieldIconColors.frozenPlotArea
                           }}
                           onClick={() => {
@@ -186,7 +186,7 @@ const DDJAYForm = (props) => {
                           
                   <ReportProblemIcon
                           style={{
-                            display: hideRemarks?"none":"block",
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
                             color: fieldIconColors.layoutPlan
                           }}
                           onClick={() => {
@@ -209,7 +209,7 @@ const DDJAYForm = (props) => {
                         <input type="text" className="form-control" placeholder={data?.organizeArea}  disabled />
                         <ReportProblemIcon
                           style={{
-                            display: hideRemarks?"none":"block",
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
                             color: fieldIconColors.areaOfPocket
                           }}
                           onClick={() => {

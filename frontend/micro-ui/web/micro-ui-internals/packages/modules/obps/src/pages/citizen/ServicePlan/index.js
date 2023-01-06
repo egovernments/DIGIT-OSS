@@ -45,7 +45,7 @@ const ServicePlanService = () => {
           ...data,
         },
       };
-      const Resp = await axios.post("/land-services/serviceplan/_create", postDistrict);
+      const Resp = await axios.post("/tl-services/serviceplan/_create", postDistrict);
       setServicePlanDataLabel(Resp.data);
     } catch (error) {
       console.log(error.message);

@@ -21,7 +21,7 @@ import ExtensionCom from "../employee/ScrutinyBasic/AllServiceScrutiny/Extension
 import StandardDesign from "../employee/ScrutinyBasic/AllServiceScrutiny/StandardDesign/StandardDesign";
 import CompositionClu from "../employee/ScrutinyBasic/AllServiceScrutiny/CompositionClu/CompositionClu";
 import CompletionLic from "../employee/ScrutinyBasic/AllServiceScrutiny/CompletionLic/CompletionLic";
-import ServicePlanService from "../employee/ScrutinyBasic/ServicePlanScrutniy/ServicePlan";
+import ServiceScrutiny from "./ScrutinyBasic/ServicePlanScrutniy/ServiceCard";
 import ElectricalScrutiny from "./ScrutinyBasic/ElectriPlanScrutiny/ElectricalCard";
 import TransferLicense from "../employee/ScrutinyBasic/AllServiceScrutiny/TransferLic/TransferLicense";
 // import SubmitNew from "../employee/ScrutinyBasic/AllServiceScrutiny/BankGuarantee/SubmitNew";
@@ -236,7 +236,7 @@ const EmployeeApp = ({ path, url, userType }) => {
             <PrivateRoute path={`${path}/StandardDesign`} component={StandardDesign} />
             <PrivateRoute path={`${path}/CompositionClu`} component={CompositionClu} />
             <PrivateRoute path={`${path}/CompletionLic`} component={CompletionLic} />
-            <PrivateRoute path={`${path}/ServicePlanService`} component={ServicePlanService} />
+            <PrivateRoute path={`${path}/ServiceScrutiny/:id`} component={ServiceScrutiny} />
             <PrivateRoute path={`${path}/ScrutinyForm`} component={ScrutinyForm} />
             {/* <PrivateRoute path={`${path}/SubmitNew`} component={SubmitNew} /> */}
             {/* <PrivateRoute path={`${path}/basicScrutiny`} component={basicScrutiny} /> */}

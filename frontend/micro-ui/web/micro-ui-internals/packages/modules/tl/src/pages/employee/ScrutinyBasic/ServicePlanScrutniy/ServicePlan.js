@@ -6,7 +6,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 // import FileDownload from "@mui/icons-material/FileDownload";
 import Visibility from "@mui/icons-material/Visibility";
 import FileDownload from "@mui/icons-material/FileDownload";
-// import { getDocShareholding } from "../ScrutinyDevelopment/docview.helper";
+import { getDocShareholding } from "../ScrutinyDevelopment/docview.helper";
 import ModalChild from "../Remarks/ModalChild/";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import "../css/personalInfoChild.style.js";
@@ -14,8 +14,9 @@ import { useStyles } from "../css/personalInfoChild.style.js";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import Collapse from "react-bootstrap/Collapse";
+import { IconButton } from "@mui/material";
 
-const ServicePlanService = () => {
+const ServicePlanService = ({apiResponse,refreshScrutinyData, applicationNumber}) => {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
   const [open2, setOpen2] = useState(false);
@@ -94,6 +95,7 @@ const ServicePlanService = () => {
     { label: "AutoCAD (DXF) file.", key: "AutoCAD" },
   ];
 
+  console.log("Digit123", apiResponse );
   return (
     <form onSubmit={handleSubmit(servicePlan)}>
       <div
@@ -135,7 +137,7 @@ const ServicePlanService = () => {
                     <span className={classes.required}>*</span> &nbsp;&nbsp;
                   </div>
                   <div className={classes.fieldContainer}>
-                    <Form.Control className={classes.formControl} placeholder="" disabled></Form.Control>
+                    <Form.Control className={classes.formControl} placeholder={apiResponse?.loiNumber} disabled></Form.Control>
 
                     <ReportProblemIcon
                       style={{
@@ -146,7 +148,7 @@ const ServicePlanService = () => {
                         setLabelValue("LOI Number"),
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                          setFieldValue(apiResponse !== null ? apiResponse.loiNumber : null);
                       }}
                     ></ReportProblemIcon>
                     <ModalChild
@@ -178,7 +180,7 @@ const ServicePlanService = () => {
                         type="radio"
                         disabled
                         value="Yes"
-                        //  checked={landScheduleData?.licenseApplied === "Y" ? true : false}
+                         checked={apiResponse?.selfCertifiedDrawingsFromCharetedEng === "Y" ? true : false}
                       />
                       <label className="m-0  mx-2" for="Yes">
                         Yes
@@ -187,7 +189,7 @@ const ServicePlanService = () => {
                         type="radio"
                         disabled
                         value="No"
-                        //  checked={landScheduleData?.licenseApplied === "N" ? true : false}
+                         checked={apiResponse?.selfCertifiedDrawingsFromCharetedEng === "N" ? true : false}
                       />
                       <label className="m-0 mx-2" for="No">
                         No
@@ -214,7 +216,7 @@ const ServicePlanService = () => {
                           setLabelValue("Uploaded Service Plan"),
                             setSmShow(true),
                             console.log("modal open"),
-                            setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                            setFieldValue(apiResponse !== null ? apiResponse.selfCertifiedDrawingsFromCharetedEng : null);
                         }}
                       ></ReportProblemIcon>
                     </div>
@@ -235,7 +237,7 @@ const ServicePlanService = () => {
                         type="radio"
                         disabled
                         value="Yes"
-                        //  checked={landScheduleData?.licenseApplied === "Y" ? true : false}
+                         checked={apiResponse?.undertaking === "Y" ? true : false}
                       />
                       <label className="m-0  mx-2" for="Yes">
                         Yes
@@ -244,7 +246,7 @@ const ServicePlanService = () => {
                         type="radio"
                         disabled
                         value="No"
-                        //  checked={landScheduleData?.licenseApplied === "N" ? true : false}
+                         checked={apiResponse?.undertaking === "N" ? true : false}
                       />
                       <label className="m-0 mx-2" for="No">
                         No
@@ -271,7 +273,7 @@ const ServicePlanService = () => {
                           setLabelValue("Undertaking"),
                             setSmShow(true),
                             console.log("modal open"),
-                            setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                            setFieldValue(apiResponse !== null ? apiResponse.undertaking : null);
                         }}
                       ></ReportProblemIcon>
                     </div>
@@ -299,15 +301,15 @@ const ServicePlanService = () => {
                     </td>
                     <td component="th" scope="row">
                       <div className="btn btn-sm col-md-4">
-                        {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.selfCertifiedDrawingFromEmpaneledDoc)}>
                         <Visibility color="info" className="icon" />
-                        {/* </IconButton> */}
+                        </IconButton>
                       </div>
 
                       <div className="btn btn-sm col-md-4">
-                        {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.selfCertifiedDrawingFromEmpaneledDoc)}>
                         <FileDownload color="primary" className="mx-1" />
-                        {/* </IconButton> */}
+                        </IconButton>
                       </div>
                       <div className="btn btn-sm col-md-4">
                         <ReportProblemIcon
@@ -346,15 +348,15 @@ const ServicePlanService = () => {
                     onChange1={(e) => setFile({ file: e.target.files[0] })}
                   /> */}
                       <div className="btn btn-sm col-md-4">
-                        {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.environmentalClearance)}>
                         <Visibility color="info" className="icon" />
-                        {/* </IconButton> */}
+                        </IconButton>
                       </div>
 
                       <div className="btn btn-sm col-md-4">
-                        {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.environmentalClearance)}>
                         <FileDownload color="primary" className="mx-1" />
-                        {/* </IconButton> */}
+                        </IconButton>
                       </div>
                       <div className="btn btn-sm col-md-4">
                         <ReportProblemIcon
@@ -383,15 +385,15 @@ const ServicePlanService = () => {
                     </td>
                     <td component="th" scope="row">
                       <div className="btn btn-sm col-md-4">
-                        {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.shapeFileAsPerTemplate)}>
                         <Visibility color="info" className="icon" />
-                        {/* </IconButton> */}
+                        </IconButton>
                       </div>
 
                       <div className="btn btn-sm col-md-4">
-                        {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.shapeFileAsPerTemplate)}>
                         <FileDownload color="primary" className="mx-1" />
-                        {/* </IconButton> */}
+                        </IconButton>
                       </div>
                       <div className="btn btn-sm col-md-4">
                         <ReportProblemIcon
@@ -420,15 +422,15 @@ const ServicePlanService = () => {
                     </td>
                     <td component="th" scope="row">
                       <div className="btn btn-sm col-md-4">
-                        {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.autoCadFile)}>
                         <Visibility color="info" className="icon" />
-                        {/* </IconButton> */}
+                        </IconButton>
                       </div>
 
                       <div className="btn btn-sm col-md-4">
-                        {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.autoCadFile)}>
                         <FileDownload color="primary" className="mx-1" />
-                        {/* </IconButton> */}
+                        </IconButton>
                       </div>
                       <div className="btn btn-sm col-md-4">
                         <ReportProblemIcon
@@ -457,15 +459,15 @@ const ServicePlanService = () => {
                     </td>
                     <td component="th" scope="row">
                       <div className="btn btn-sm col-md-4">
-                        {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.certifieadCopyOfThePlan)}>
                         <Visibility color="info" className="icon" />
-                        {/* </IconButton> */}
+                        </IconButton>
                       </div>
 
                       <div className="btn btn-sm col-md-4">
-                        {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.certifieadCopyOfThePlan)}>
                         <FileDownload color="primary" className="mx-1" />
-                        {/* </IconButton> */}
+                        </IconButton>
                       </div>
                       <div className="btn btn-sm col-md-4">
                         <ReportProblemIcon

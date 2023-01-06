@@ -39,7 +39,7 @@ const AppliedLandinfo = (props) => {
   let user = Digit.UserService.getUser();
   const userRoles = user?.info?.roles?.map((e) => e.code) || [];
   const hideRemarks = userRoles.some((item)=>item === "CTP_HR" || item === "CTP_HQ" || item === "DTP_HR" || item === "DTP_HQ")
-
+  const hideRemarksPatwari = userRoles.some((item)=>item ==="Patwari_HQ")
 
   const [uncheckedValue, setUncheckedVlue] = useState([]);
   console.log("abcd1",uncheckedValue);
@@ -445,7 +445,7 @@ console.log("AccessInfortech", Purpose);
                   {/* <span className="text-primary"> (Click here for instructions to capture DGPS points)</span> */}
                   <ReportProblemIcon
                     style={{
-                      display: hideRemarks?"none":"block",
+                      display: hideRemarks || hideRemarksPatwari ?"none":"block",
                       color: fieldIconColors.dgpsPoint
                     }}
                     onClick={() => {
@@ -562,7 +562,7 @@ console.log("AccessInfortech", Purpose);
                     {" "}
                     <ReportProblemIcon
                       style={{
-                        display: hideRemarks?"none":"block",
+                        display: hideRemarks || hideRemarksPatwari ?"none":"block",
                         color: fieldIconColors.detailsOfPlots
                       }}
                       onClick={() => {
@@ -981,7 +981,7 @@ console.log("AccessInfortech", Purpose);
                         Area Under
                         <ReportProblemIcon
                           style={{
-                            display: hideRemarks?"none":"block",
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
                             color: fieldIconColors.areaUnder
                           }}
                           onClick={() => {
@@ -1186,7 +1186,7 @@ console.log("AccessInfortech", Purpose);
                     {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                     <ReportProblemIcon
                       style={{
-                        display: hideRemarks?"none":"block",
+                        display: hideRemarks || hideRemarksPatwari ?"none":"block",
                         color: fieldIconColors.nilp
                       }}
                       onClick={() => {
@@ -1404,7 +1404,7 @@ console.log("AccessInfortech", Purpose);
                         </IconButton>
                         <ReportProblemIcon
                           style={{
-                            display: hideRemarks?"none":"block",
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
                             color: fieldIconColors.demarcationPlan
                           }}
                           onClick={() => {
@@ -1432,7 +1432,7 @@ console.log("AccessInfortech", Purpose);
                         </IconButton>
                         <ReportProblemIcon
                           style={{
-                            display: hideRemarks?"none":"block",
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
                             color: fieldIconColors.democraticPlan
                           }}
                           onClick={() => {
@@ -1459,7 +1459,7 @@ console.log("AccessInfortech", Purpose);
                         </IconButton>
                         <ReportProblemIcon
                           style={{
-                            display: hideRemarks?"none":"block",
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
                             color: fieldIconColors.sectoralPlan
                           }}
                           onClick={() => {
@@ -1490,7 +1490,7 @@ console.log("AccessInfortech", Purpose);
                         </IconButton>
                             <ReportProblemIcon
                               style={{
-                                display: hideRemarks?"none":"block",
+                                display: hideRemarks || hideRemarksPatwari ?"none":"block",
                                 color: fieldIconColors.uploadLayoutPlan
                               }}
                               onClick={() => {
@@ -1521,7 +1521,7 @@ console.log("AccessInfortech", Purpose);
                         </IconButton>
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.planCrossSection
                             }}
                             onClick={() => {
@@ -1549,7 +1549,7 @@ console.log("AccessInfortech", Purpose);
                         </IconButton>
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.publicHealthServices
                             }}
                             onClick={() => {
@@ -1576,7 +1576,7 @@ console.log("AccessInfortech", Purpose);
                         </IconButton>
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.designRoad
                             }}
                             onClick={() => {
@@ -1603,7 +1603,7 @@ console.log("AccessInfortech", Purpose);
                         </IconButton>
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.designSewarage
                             }}
                             onClick={() => {
@@ -1634,7 +1634,7 @@ console.log("AccessInfortech", Purpose);
                         </IconButton>
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.designDisposal
                             }}
                             onClick={() => {
@@ -1662,7 +1662,7 @@ console.log("AccessInfortech", Purpose);
                         </IconButton>
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.undertakingChange
                             }}
                             onClick={() => {
@@ -1689,7 +1689,7 @@ console.log("AccessInfortech", Purpose);
                         </IconButton>
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.hostedLayoutPlan
                             }}
                             onClick={() => {
@@ -1717,7 +1717,7 @@ console.log("AccessInfortech", Purpose);
                         </IconButton>
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.reportObjection
                             }}
                             onClick={() => {
@@ -1748,7 +1748,7 @@ console.log("AccessInfortech", Purpose);
                         </IconButton>
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.consentRera
                             }}
                             onClick={() => {
@@ -1776,7 +1776,7 @@ console.log("AccessInfortech", Purpose);
                         </IconButton>
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.undertaking
                             }}
                             onClick={() => {
@@ -1804,7 +1804,7 @@ console.log("AccessInfortech", Purpose);
                         </IconButton>
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.designForElectricSupply
                             }}
                             onClick={() => {
@@ -1832,7 +1832,7 @@ console.log("AccessInfortech", Purpose);
                         </IconButton>
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.proposedColony
                             }}
                             onClick={() => {
