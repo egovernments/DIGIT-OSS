@@ -2,7 +2,7 @@ import { FormStep,TextInput, MobileNumber, CardLabel, CardLabelError, Dropdown, 
 import React, { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Table from "react-bootstrap/Table";
-import { useLocation, useParams } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 // import "../Developer/AddInfo.css";
 // import DashboardScreen from "../../src/Screens/DashboardScreen/DashboardScreen";
 import { useForm } from "react-hook-form";
@@ -35,7 +35,7 @@ import Spinner from "../components/Loader/index";
 // import { setAurthorizedUserData } from "../Redux/Slicer/Slicer";
 // import { useDispatch } from "react-redux";
 
-const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegistered = true }) => {
+const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = true }) => {
 
   const { pathname: url } = useLocation();
   const userInfo = Digit.UserService.getUser();
@@ -48,7 +48,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
   const [showToastError, setShowToastError] = useState(null);
   const {setValue, getValues, watch} = useForm();
   const [Documents, setDocumentsData] = useState({});
-
+  const [data, setData] = useState();
   const DevelopersAllData = getValues();
   // console.log("DEVEDATAGEGT",DevelopersAllData);
   const [userDelete, setUserDelete] = useState([]);
@@ -74,6 +74,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
 
       });
       const developerDataGet = getDevDetails?.data; 
+      setData(developerDataGet);
       console.log("ADDAUTHUSER",getDevDetails?.data?.devDetail[0]?.aurthorizedUserInfoArray);
       setAurthorizedUserInfoArray(getDevDetails?.data?.devDetail[0]?.aurthorizedUserInfoArray || []);
     } catch (error) {
@@ -148,7 +149,10 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
     setGender("");
     setAurthorizedPan("");
   };
-  const handleCloseAuthuser = () => setShowAuthuser(false);
+  const handleCloseAuthuser = () => {
+    setValue("modalFiles",[])
+    setShowAuthuser(false)
+  };
 
 
   const {
@@ -279,9 +283,16 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
 
   const getDocumentData = async (file, fieldName, fromTable , index) => {
 
-    if(getValues("authorizedUserFiles")?.includes(file.name)){
-      setShowToastError({ key: "error" });
-      return;
+    if(fromTable){
+      if(getValues("authorizedUserFiles")?.includes(file.name)){
+        setShowToastError({ key: "error" });
+        return;
+      }
+    } else {
+      if(getValues("modalFiles")?.includes(file.name)){
+        setShowToastError({ key: "error" });
+        return;
+      }
     }
 
     const formData = new FormData();
@@ -305,22 +316,29 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
         temp[index][fieldName] = Resp?.data?.files?.[0]?.fileStoreId;
         setAurthorizedUserInfoArray([...temp]);
         console.log("log2",temp,Resp?.data?.files?.[0]?.fileStoreId)
+        if(getValues("authorizedUserFiles")) {
+          setValue("authorizedUserFiles",[...getValues("authorizedUserFiles"),file.name]);
+        } else {
+          setValue("authorizedUserFiles",[file.name]);
+        }
       } else {
         setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
         // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
         console.log("getValues()=====", getValues());
         setDocumentsData(getValues())
+        if(getValues("modalFiles")) {
+          setValue("modalFiles",[...getValues("modalFiles"),file.name]);
+        } else {
+          setValue("modalFiles",[file.name]);
+        }
       }
-      if(getValues("authorizedUserFiles")) {
-        setValue("authorizedUserFiles",[...getValues("authorizedUserFiles"),file.name]);
-      } else {
-        setValue("authorizedUserFiles",[file.name]);
-      }
+      
     //   setLoader(false);
     
     } catch (error) {
-      setLoading(false);
-      console.log(error.message);
+    //   setLoader(false);
+      alert(error?.response?.data?.Errors?.[0]?.description);
+      console.log(error,error?.body,error?.response?.data?.Errors?.[0]?.description);
     }
   };
   
@@ -343,7 +361,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
 
 
   const [noofRows, setNoOfRows] = useState(1);
-  const handleSubmitFormdata = () => {
+  const handleSubmitFormdata = async () => {
 
     if(validateUser(aurthorizedPan,aurthorizedMobileNumber,aurthorizedEmail)){
       return alert("PLease Enter Unique PAN, Email and Mobile Number for every user") ;
@@ -384,32 +402,36 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
           "tenantId": "hr",
       }
 
-      setAurthorizedUserInfoArray([...aurthorizedUserInfoArray,user]);
- 
-      setDocumentsData({});
-
-    try {
-      const requestResp = {          
-        "RequestInfo": {
-          "apiId": "Rainmaker",
-          "msgId": "1669293303096|en_IN",
-          "authToken": "",
-          "active": true,
-          "tenantId": "hr",
-          "permanentCity": null
-        },
-        "user":user
+      
+      try {
+        const requestResp = {          
+          "RequestInfo": {
+            "apiId": "Rainmaker",
+            "msgId": "1669293303096|en_IN",
+            "authToken": "",
+            "active": true,
+            "tenantId": "hr",
+            "permanentCity": null
+          },
+          "user":user
           
+        }
+        const postDataAuthUser = await axios.post(`/user/users/_createnovalidate`,requestResp,{headers:{
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin':"*",
+        }})
+        console.log("erergregerg",postDataAuthUser);
+        setAurthorizedUserInfoArray([...aurthorizedUserInfoArray,{...user,uuid: postDataAuthUser?.data?.user?.[0]?.uuid}]);
+        if(getValues("authorizedUserFiles")){
+          setValue("authorizedUserFiles",[...getValues("authorizedUserFiles"),...getValues("modalFiles")]);
+        } else {
+          setValue("authorizedUserFiles",[...getValues("modalFiles")]);
+        }
+        setDocumentsData({});
       }
-      const postDataAuthUser = axios.post(`/user/users/_createnovalidate`,requestResp,{headers:{
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin':"*",
-      }})
-      // console.log(postDataAuthUser);
-    }
-    
-    catch(error){
-      console.log(error.message);
+      
+      catch(error){
+        console.log(error.message);
     }
     // getAdhaarPdf();
     // getDigitalSignPdf();
@@ -501,12 +523,26 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
    
   }
   const onSkip = () => onSelect();
+
+  const navigate = useHistory();
+
+  const changeStep = (step) => {
+    switch (step) {
+      case 1 :
+        navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/license-details");
+        break;
+      case 2 :
+        navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/license-add-info");
+      break;
+    }
+  }
+
   return (
 
     <div className={isOpenLinkFlow ? "OpenlinkContainer" : ""}>
       {loader && <Spinner />}
       {/* {JSON.stringify(aurthorizedUserInfoArray)} */}
-      <Timeline currentStep={3} flow="STAKEHOLDER" />
+      <Timeline currentStep={3} flow="STAKEHOLDER" onChangeStep={changeStep} />
       <FormStep
         className="card"
         // onSubmit={handleAurthorizedUserFormSubmit}
@@ -804,7 +840,13 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                         <h3 className="error-message" style={{ color: "red" }}>{PanValError}</h3>
                       </Col>
                       <Col md={3} xxl lg="3">
-                        <label htmlFor="name" className="text">Upload Board Resolution <span className="text-danger font-weight-bold">*</span></label>
+                      {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Hindu Undivided Family") ? (
+                            <label htmlFor="name" className="text">Upload Power of Attorney <span className="text-danger font-weight-bold">*</span></label>)
+                            :
+                            (
+                              <label htmlFor="name" className="text"> Upload Board Resolution<span className="text-danger font-weight-bold">*</span></label>
+                            )
+                        }
                         <input
                           type="file"
                           name="uploadAadharPdf"

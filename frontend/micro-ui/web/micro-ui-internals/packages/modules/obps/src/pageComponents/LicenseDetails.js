@@ -132,6 +132,60 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     },
   ];
 
+  const getDocumentData = async (file, fieldName , index) => {
+    if(getValues("authorizedUserFiles")?.includes(file.name)){
+      setShowToastError({ key: "error" });
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("tenantId", "hr");
+    formData.append("module", "property-upload");
+    formData.append("tag", "tag-property");
+    // setLoader(true);
+    try {
+      setLoading(true);
+      const Resp = await axios.post("/filestore/v1/files", formData, {}).then((response) => {
+        return response;
+      });
+      setLoading(false);
+      setShowToast({ key: "success" });
+      // console.log(Resp?.data?.files);
+
+      // if(fromTable){
+        console.log("log1",fieldName , index)
+        let temp = aurthorizedUserInfoArray;
+        temp[index][fieldName] = Resp?.data?.files?.[0]?.fileStoreId;
+        setAurthorizedUserInfoArray([...temp]);
+        console.log("log2",temp,Resp?.data?.files?.[0]?.fileStoreId)
+        if(getValues("authorizedUserFiles")) {
+          setValue("authorizedUserFiles",[...getValues("authorizedUserFiles"),file.name]);
+        } else {
+          setValue("authorizedUserFiles",[file.name]);
+        }
+      // }                                                                                                                                            
+      // else {
+        setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
+        // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
+        console.log("getValues()=====", getValues());
+        setDocumentsData(getValues())
+        if(getValues("modalFiles")) {
+          setValue("modalFiles",[...getValues("modalFiles"),file.name]);
+        } else {
+          setValue("modalFiles",[file.name]);
+        }
+      // }
+      
+    //   setLoader(false);
+    
+    } catch (error) {
+    //   setLoader(false);
+      alert(error?.response?.data?.Errors?.[0]?.description);
+      console.log(error,error?.body,error?.response?.data?.Errors?.[0]?.description);
+    }
+  };
+
   const [panValidation, setPanValidation] = useState("");
   const [PanValError, setPanValError] = useState("");
   // function setValue(value, input) {
@@ -312,7 +366,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     }
   }
   function selectVillage(e) {
-    if(!e.target.value || e.target.value.match("^[a-zA-Z]*$")){
+    if(!e.target.value || e.target.value.match("^[a-zA-Z ]*$")){
       if (isAddressSame == true) {
         setVillage(e.target.value);
         setVillageCorrespondence(e.target.value);
@@ -322,7 +376,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     }
   }
   function selectTehsil(e) {
-    if(!e.target.value || e.target.value.match("^[a-zA-Z]*$")){
+    if(!e.target.value || e.target.value.match("^[a-zA-Z ]*$")){
       if (isAddressSame == true) {
         setTehsil(e.target.value);
         setTehsilCorrespondence(e.target.value)
@@ -332,7 +386,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     }
   }
   function selectDistrict(e) {
-    if(!e.target.value || e.target.value.match("^[a-zA-Z]*$")){
+    if(!e.target.value || e.target.value.match("^[a-zA-Z ]*$")){
       if (isAddressSame == true) {
         setDistrict(e.target.value);
         setDistrictCorrespondence(e.target.value);
@@ -342,7 +396,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     }
   }
   function selectState(e) {
-    if(!e.target.value || e.target.value.match("^[a-zA-Z]*$")){
+    if(!e.target.value || e.target.value.match("^[a-zA-Z ]*$")){
       if (isAddressSame == true) {
         setState(e.target.value);
         setStateCorrespondence(e.target.value);
@@ -433,31 +487,6 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
 
     if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
       let licenseDet = {
-        
-        // name: name,
-        // mobileNumber: mobileNumber,
-        // gender: gender,
-        // email: email,
-        // dob: dob,
-        // PanNumber: PanNumber,
-        // addressLineOne: addressLineOne,
-        // addressLineTwo: addressLineTwo,
-        // addressLineThree: addressLineThree,
-        // addressLineFour: addressLineFour,
-        // city: city,
-        // pincode: pincode,
-        // addressSameAsPermanent: addressSameAsPermanent,
-        // addressLineOneCorrespondence: addressLineOneCorrespondence,
-        // addressLineTwoCorrespondence: addressLineTwoCorrespondence,
-        // addressLineThreeCorrespondence: addressLineThreeCorrespondence,
-        // addressLineFourCorrespondence: addressLineFourCorrespondence,
-        // cityCorrespondence: cityCorrespondence,
-        // villageCorrespondence:villageCorrespondence,
-        // tehsilCorrespondence: tehsilCorrespondence,
-        // stateCorrespondence: stateCorrespondence,
-        // districtCorrespondence: districtCorrespondence,
-        // pincodeCorrespondence: pincodeCorrespondence,
-
         "Licenses": [
           {
             "tradeLicenseDetail": {
@@ -535,6 +564,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
             email: email,
             dob: dob,
             PanNumber: PanNumber,
+            uploadBoardResolution:uploadBoardResolution,
             addressLineOne: addressLineOne,
             addressLineTwo: addressLineTwo,
             addressLineThree: addressLineThree,
@@ -604,6 +634,8 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     }
 
   };
+
+
   
 
   return (
@@ -729,6 +761,17 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   />
                   {PanNumber && PanNumber.length > 0 && !PanNumber.match(Digit.Utils.getPattern('PAN')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_PAN_NO")}</CardLabelError>}
                   <h3 className="error-message" style={{ color: "red" }}>{PanValError}</h3>
+                </Form.Group>
+                <Form.Group className="col-md-4">
+                    <label htmlFor="name" className="text">Upload Board Resolution <span className="text-danger font-weight-bold">*</span></label>
+                    <input
+                      type="file"
+                      name="uploadBoardResolution"
+                      accept="application/pdf"
+                      placeholder=""
+                      class="employee-card-input"
+                      // onChange={(e) => getDocumentData(e?.target?.files[0], "uploadAadharPdf")}
+                    />
                 </Form.Group>
               </Row>
             </Card>

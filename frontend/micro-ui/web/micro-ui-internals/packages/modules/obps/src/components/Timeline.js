@@ -31,14 +31,14 @@ const getAction = (flow) => {
     ]
  }
 }
-const Timeline = ({ currentStep = 1, flow="" }) => {
+const Timeline = ({ currentStep = 1, flow="", onChangeStep=()=>{console.log("change step function is not passed")} }) => {
   const { t } = useTranslation();
   const isMobile = window.Digit.Utils.browser.isMobile();
   getAction(flow);
   return (
     <div className="timeline-container" style={isMobile?{}:{marginRight:"auto"}} >
       {actions.map((action, index, arr) => (
-        <div className="timeline-checkpoint" key={index}>
+        <div className="timeline-checkpoint" style={{ cursor: index+1<currentStep ? "pointer" : "default" }} key={index} onClick={()=>onChangeStep(index+1)}>
           <div className="timeline-content">
             <span className={`circle ${index <= currentStep - 1 && 'active'}`}>{index < currentStep - 1 ? <TickMark /> : index + 1}</span>
             <span className="secondary-color">{t(action)}</span>
