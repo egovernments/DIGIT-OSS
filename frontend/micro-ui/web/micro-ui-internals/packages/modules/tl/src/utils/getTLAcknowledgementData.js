@@ -60,7 +60,7 @@ const getTradeDetails = (application, t) => {
 };
 const getAccessoriesDetails = (application, t) => {
   let values = [];
-  application.tradeLicenseDetail?.accessories?.map((accessory) => {
+  application.tradeLicenseDetail?.accessories?.filter((ob) => ob?.active !== false)?.map((accessory) => {
     let accessoryCategory = t("CS_NA");
     if (accessory?.accessoryCategory) {
       accessoryCategory = stringReplaceAll(accessory?.accessoryCategory, ".", "_");

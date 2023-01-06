@@ -8,9 +8,11 @@ const useWSInbox = ({ tenantId, filters, config = {} }) => {
   let { sortBy, limit, offset, sortOrder } = tableForm;
   let { moduleName, businessService, applicationStatus, locality, assignee, businessServiceArray, applicationType } = filterForm;
 
-  if (mobileNumber || applicationNumber || consumerNo) {
-    offset = 0;
-  }
+  useEffect(() => {
+    if (mobileNumber || applicationNumber || consumerNo) {
+      offset = 0;
+    }
+  },[filters?.searchForm?.applicationNumber,filters?.searchForm?.consumerNo,filters?.searchForm?.mobileNumber])
 
   if (!window.location.href.includes("digit-ui/employee/")) {
     moduleName = moduleName;

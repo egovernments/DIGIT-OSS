@@ -368,7 +368,7 @@ const AccessoriersForm = (_props) => {
                                             setFocusIndex({ index: accessor.key, type: "uomValue" });
                                         }}
                                        // disable={/*getValues("uomValue")?!(accessor?.accessoryCategory?.uom) || accessor?.id:*/!(accessor?.accessoryCategory?.uom) }
-                                        disable={!enableUOM}
+                                        disable={isRenewal ? !enableUOM : false}
                                         onBlur={props.onBlur}
                                         style={{ background: "#FAFAFA" }}
                                     />
