@@ -383,12 +383,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         setShowToastError({ key: "error" });
         return;
       }
-    } else {
-      setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
-      // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
-      console.log("getValues()=====", getValues());
-      setDocumentsData(getValues())
-    }
+    } 
 
     const formData = new FormData();
     formData.append("file", file);
@@ -445,7 +440,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     } catch (error) {
       setLoading(false);
       //   setLoader(false);
-      console.log(error.message);
+      alert(error?.response?.data?.Errors?.[0]?.description);
+      console.log(error);
     }
   };
   
@@ -453,6 +449,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   const HandleGetMCNdata = async () => {
     try {
       if (cin_Number.length === 21) {
+        setLoading(true);
         const Resp = await axios.get(`/mca/v1/companies/${cin_Number}`, {
           headers: {
             'Content-Type': 'application/json',
@@ -470,7 +467,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
             'Access-Control-Allow-Origin': "*",
           }
         })
-
+        setLoading(false);
         // console.log("CIN",Resp.data)
         // console.log(Directory.data);
         // if (DirectorData && DirectorData.length) {
@@ -489,7 +486,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
       }
     } catch (error) {
-
+      setLoading(false);
       console.log(error?.response?.data?.error_description);
       setCINValError(error?.response?.data?.error_description)
     }
