@@ -634,6 +634,8 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     }
 
   };
+
+
   
 
   return (
