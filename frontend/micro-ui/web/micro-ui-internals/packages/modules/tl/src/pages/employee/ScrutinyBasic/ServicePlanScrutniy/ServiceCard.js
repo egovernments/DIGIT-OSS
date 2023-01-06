@@ -1,35 +1,3 @@
-// import axios from "axios";
-// import { size } from "lodash";
-// import React, { useState, useEffect } from "react";
-// import { Card, Row, Col } from "react-bootstrap";
-// import ElecticalBase from "./ElectricalscrutinyBase";
-
-
-// const ElectricalScrutiny = (props) => {
-//   return (
-//     <Card>
-   
-//       <Row>
-//         <ElecticalBase/>
-//       </Row>
-//       <Row style={{ top: 30, padding: "10px 22px" }}>
-//         <Row>
-//           <div class="col-md-10 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
-            
-//           </div>
-//         </Row>
-        
-//       </Row>
-//     </Card>
-//   );
-// };
-
-// export default ElectricalScrutiny;
-
-
-
-
-//////////////////////////////////////////////////////////
 
 import axios from "axios";
 import { size } from "lodash";
@@ -43,11 +11,9 @@ import { useHistory, useParams } from "react-router-dom";
 import ApplicationDetailsActionBar from "../../../../../../templates/ApplicationDetails/components/ApplicationDetailsActionBar";
 import ActionModal from "../../../../../../templates/ApplicationDetails/Modal";
 // import ScrutitnyForms from "../ScrutinyBasic/ScutinyBasic";
-import ElecticalBase from "./ElectricalscrutinyBase";
+import ServiceBase from "./ServiceBase";
 
-
-
-const ElectricalScrutiny = (props) => {
+const ServiceScrutiny = (props) => {
 
   
   // const [ApplicantFormshow, SetApplicantForm] = useState(true);
@@ -58,6 +24,8 @@ const ElectricalScrutiny = (props) => {
 
 const {id} = useParams();
 
+const userInfo = Digit.UserService.getUser()?.info || {};
+const authToken = Digit.UserService.getUser()?.access_token || null;
   // const applicationNumber = "HR-TL-2022-12-07-000498"
 
   // let applicationNumber = "";
@@ -80,7 +48,7 @@ const {id} = useParams();
   const [workflowDetails, setWorkflowDetails] = useState();
   const [applicationData,setApplicationData] = useState();
 
-  // const authToken = Digit.UserService.getUser()?.access_token || null;
+//   const authToken = Digit.UserService.getUser()?.access_token || null;
 
   // const [showhide19, setShowhide19] = useState("true");
   const handleshow19 = (e) => {
@@ -92,29 +60,35 @@ const {id} = useParams();
   };
 
 
-  // const getScrutinyData = async () => {
-  //   console.log("log123... userInfo",authToken);
-  //   let requestInfo = {
-  //     "RequestInfo": {
-  //       "apiId": "Rainmaker",
-  //       "msgId": "1669293303096|en_IN",
-  //       "authToken": authToken
-       
-  //   }
-  //   }
-  //   try {
-  //     const Resp = await axios.post(`/tl-services/v1/_search?tenantId=hr&applicationNumber=${id}`,requestInfo).then((response) => {
-  //       return response?.data;
-  //     });
-  //     console.log("Response From API1", Resp, Resp?.Licenses[0]?.applicationNumber,Resp?.Licenses[0]?.tradeLicenseDetail?.additionalDetail[0]);
-  //     setScrutinyDetails(Resp?.Licenses[0]?.tradeLicenseDetail?.additionalDetail[0]);
+  const getScrutinyData = async () => {
+    console.log("log123... userInfo",authToken);
+    let requestInfo = {
+        
+        "RequestInfo": {
+            "api_id": "1",
+            "ver": "1",
+            "ts": null,
+            "action": "create",
+            "did": "",
+            "key": "",
+            "msg_id": "",
+            "requester_id": "",
+            "authToken": authToken
+        }
+    }
+    try {
+      const Resp = await axios.post(`/tl-services/serviceplan/_get?applicationNumber=${id}`,requestInfo).then((response) => {
+        return response?.data;
+      });
+    //   console.log("Response From API1", Resp, Resp?.Licenses[0]?.applicationNumber,Resp);
+      setScrutinyDetails(Resp?.servicePlanResponse?.[0]);
 
-  //     console.log("devDel123",Resp?.Licenses[0])
-  //     setApplicationData(Resp?.Licenses[0]);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+      console.log("devDel123",Resp?.servicePlanResponse?.[0]);
+      setApplicationData(Resp?.servicePlanResponse?.[0]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   let EditRenewalApplastModifiedTime = Digit.SessionStorage.get("EditRenewalApplastModifiedTime");
 
@@ -132,10 +106,10 @@ const {id} = useParams();
 
 
   const {
-    // isLoading: updatingApplication,
-    // isError: updateApplicationError,
-    // data: updateResponse,
-    // error: updateError,
+    isLoading: updatingApplication,
+    isError: updateApplicationError,
+    data: updateResponse,
+    error: updateError,
     mutate,
   } = Digit.Hooks.tl.useApplicationActions(tenantId);
 
@@ -246,9 +220,11 @@ const {id} = useParams();
   }, [workflowDetailsTemp?.data]);
   
  
-  // useEffect(()=>{
-  //   getScrutinyData();
-  // },[])
+
+  useEffect(()=>{
+    console.log("Akash123")
+    getScrutinyData();
+  },[])
 
 
   return (
@@ -283,7 +259,12 @@ const {id} = useParams();
           applicationNumber={id}
           refreshScrutinyData={getScrutinyData}
         ></ScrutitnyForms> */}
-         <ElecticalBase/>
+         {/* <ElecticalBase/> */}
+         <ServiceBase
+         apiResponse={scrutinyDetails}
+         applicationNumber={id}
+         refreshScrutinyData={getScrutinyData}
+         ></ServiceBase>
       </Row>
       <Row style={{ top: 10, padding: "10px 22px" }}>
 
@@ -354,4 +335,4 @@ const {id} = useParams();
   );
 };
 
-export default ElectricalScrutiny;
+export default ServiceScrutiny;
