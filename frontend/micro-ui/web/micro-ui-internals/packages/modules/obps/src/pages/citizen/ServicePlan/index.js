@@ -26,6 +26,7 @@ const ServicePlanService = () => {
   const userInfo = Digit.UserService.getUser();
   const servicePlan = async (data) => {
     const token = window?.localStorage?.getItem("token");
+    const tenantId = Digit.ULBService.getCurrentTenantId();
     console.log(data, "service-service");
     try {
       const postDistrict = {
@@ -44,6 +45,9 @@ const ServicePlanService = () => {
 
         ServicePlanRequest: {
           ...data,
+          "action": "APPLY",
+          "tenantId":  tenantId,
+          "businessService": "SERVICE_PLAN",
         },
       };
       const Resp = await axios.post("/tl-services/serviceplan/_create", postDistrict);
