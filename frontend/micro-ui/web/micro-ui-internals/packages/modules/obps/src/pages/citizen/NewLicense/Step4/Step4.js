@@ -22,6 +22,7 @@ import { useLocation } from "react-router-dom";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import ScrollToTop from "@egovernments/digit-ui-react-components/src/atoms/ScrollToTop";
 import { CardLabelError } from "@egovernments/digit-ui-react-components";
+import { Toast } from "@egovernments/digit-ui-react-components";
 const AppliedDetailForm = (props) => {
   const location = useLocation();
   const Purpose = localStorage.getItem("purpose");
@@ -31,6 +32,8 @@ const AppliedDetailForm = (props) => {
   const [fileStoreId, setFileStoreId] = useState({});
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [showError, setShowError] = useState({});
+  const [showToast, setShowToast] = useState(null);
+  const [showToastError, setShowToastError] = useState(null);
   const userInfo = Digit.UserService.getUser()?.info || {};
   const {
     watch,
@@ -337,7 +340,7 @@ const AppliedDetailForm = (props) => {
 
   const getDocumentData = async (file, fieldName) => {
     if (selectedFiles.includes(file.name)) {
-      alert("Duplicate File Selected");
+      setShowToastError({ key: "error" });
       return;
     }
     const formData = new FormData();
@@ -392,6 +395,7 @@ const AppliedDetailForm = (props) => {
       }
       setSelectedFiles([...selectedFiles, file.name]);
       setLoader(false);
+      setShowToast({ key: "success" });
     } catch (error) {
       setLoader(false);
       return error;
@@ -1748,6 +1752,28 @@ const AppliedDetailForm = (props) => {
                       </button>
                     </div>
                   </div>
+                  {showToast && (
+                    <Toast
+                      success={showToast?.key === "success" ? true : false}
+                      label="Document Uploaded Successfully"
+                      isDleteBtn={true}
+                      onClose={() => {
+                        setShowToast(null);
+                        setError(null);
+                      }}
+                    />
+                  )}
+                  {showToastError && (
+                    <Toast
+                      error={showToastError?.key === "error" ? true : false}
+                      label="Duplicate file Selected"
+                      isDleteBtn={true}
+                      onClose={() => {
+                        setShowToastError(null);
+                        setError(null);
+                      }}
+                    />
+                  )}
                 </Col>
               </Row>
             </Form.Group>

@@ -17,7 +17,7 @@ import Spinner from "../../../../components/Loader";
 import { getDocShareholding } from "../docView/docView.help";
 import { convertEpochToDate } from "../../../../../../tl/src/utils";
 import { useLocation } from "react-router-dom";
-
+import { Toast } from "@egovernments/digit-ui-react-components";
 const ApllicantPuropseForm = (props) => {
   const datapost = {
     RequestInfo: {
@@ -209,6 +209,8 @@ const ApllicantPuropseForm = (props) => {
   const [stepData, setStepData] = useState(null);
   const [applicantId, setApplicantId] = useState("");
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [showToast, setShowToast] = useState(null);
+  const [showToastError, setShowToastError] = useState(null);
 
   const resetValues = () => {
     resetField("tehsil");
@@ -518,7 +520,7 @@ const ApllicantPuropseForm = (props) => {
   };
   const getDocumentData = async (file, fieldName) => {
     if (selectedFiles.includes(file.name)) {
-      alert("Duplicate File Selected");
+      setShowToastError({ key: "error" });
       return;
     }
     const formData = new FormData();
@@ -537,6 +539,7 @@ const ApllicantPuropseForm = (props) => {
       }
       setSelectedFiles([...selectedFiles, file.name]);
       setLoader(false);
+      setShowToast({ key: "success" });
     } catch (error) {
       setLoader(false);
       return error.message;
@@ -561,7 +564,8 @@ const ApllicantPuropseForm = (props) => {
     };
     try {
       const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${id}`, payload);
-      const userData = Resp?.data?.LicenseDetails[0]?.ApplicantPurpose;
+      const userData = Resp?.data?.newBankGuaranteeList;
+      console.log("yg", userData);
       setStepData(userData);
     } catch (error) {
       return error;
@@ -1069,11 +1073,11 @@ const ApllicantPuropseForm = (props) => {
                           Whether collaboration agreement irrevocable (Yes/No)<span style={{ color: "red" }}>*</span>
                         </h2>
                         <label htmlFor="agreementIrrevocialble">
-                          <input {...register("agreementIrrevocialble")} type="radio" value="N" id="agreementIrrevocialble" />
+                          <input {...register("agreementIrrevocialble")} type="radio" value="Y" id="yes" />
                           &nbsp;&nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="agreementIrrevocialble">
-                          <input {...register("agreementIrrevocialble")} type="radio" value="Y" id="agreementIrrevocialble" />
+                          <input {...register("agreementIrrevocialble")} type="radio" value="N" id="no" />
                           &nbsp;&nbsp; No &nbsp;&nbsp;
                         </label>
                       </div>
@@ -1129,13 +1133,15 @@ const ApllicantPuropseForm = (props) => {
                         <label>
                           <h2 data-toggle="tooltip" data-placement="top" title="Upload Document" style={{ marginTop: "-4px" }}>
                             Registering Authority document <span style={{ color: "red" }}>*</span> <FileUpload color="primary" />
-                            <input
-                              type="file"
-                              accept="application/pdf/jpeg/png"
-                              style={{ display: "none" }}
-                              required
-                              onChange={(e) => getDocumentData(e?.target?.files[0], "registeringAuthorityDoc")}
-                            />
+                            <div>
+                              <input
+                                type="file"
+                                accept="application/pdf/jpeg/png"
+                                style={{ display: "none" }}
+                                required
+                                onChange={(e) => getDocumentData(e?.target?.files[0], "registeringAuthorityDoc")}
+                              />
+                            </div>
                           </h2>
                         </label>
                         <h3 style={{}}>{watch("registeringAuthorityDocFileName") ? watch("registeringAuthorityDocFileName") : null}</h3>
@@ -1165,6 +1171,28 @@ const ApllicantPuropseForm = (props) => {
         </ModalBody>
         <ModalFooter toggle={() => setmodal(!modal)}></ModalFooter>
       </Modal>
+      {showToast && (
+        <Toast
+          success={showToast?.key === "success" ? true : false}
+          label="Document Uploaded Successfully"
+          isDleteBtn={true}
+          onClose={() => {
+            setShowToast(null);
+            setError(null);
+          }}
+        />
+      )}
+      {showToastError && (
+        <Toast
+          error={showToastError?.key === "error" ? true : false}
+          label="Duplicate file Selected"
+          isDleteBtn={true}
+          onClose={() => {
+            setShowToastError(null);
+            setError(null);
+          }}
+        />
+      )}
     </div>
   );
 };

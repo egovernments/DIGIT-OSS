@@ -8,6 +8,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import FileUpload from "@mui/icons-material/FileUpload";
 import { getDocShareholding } from "../docView/docView.help";
+import { Toast } from "@egovernments/digit-ui-react-components";
 // import { yupResolver } from "@hookform/resolvers/yup";
 // import { VALIDATION_SCHEMA } from "../../../../utils/schema/step4";
 
@@ -27,7 +28,13 @@ const DemarcationPlan = (props) => {
     shouldFocusError: true,
   });
   const [loader, setLoader] = useState(false);
+  const [showToast, setShowToast] = useState(null);
+  const [showToastError, setShowToastError] = useState(null);
   const getDocumentData = async (file, fieldName) => {
+    if (selectedFiles.includes(file.name)) {
+      setShowToastError({ key: "error" });
+      return;
+    }
     const formData = new FormData();
     formData.append("file", file);
     formData.append("tenantId", "hr");
@@ -38,8 +45,12 @@ const DemarcationPlan = (props) => {
       const Resp = await axios.post("/filestore/v1/files", formData, {});
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
-      // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
+      if (fieldName === "demarcationPlan") {
+        setValue("demarcationPlanFileName", file.name);
+      }
+      setSelectedFiles([...selectedFiles, file.name]);
       setLoader(false);
+      setShowToast({ key: "success" });
     } catch (error) {
       setLoader(false);
       return error.message;
@@ -53,9 +64,14 @@ const DemarcationPlan = (props) => {
       <div className="col col-9">
         <h2 style={{ display: "flex" }}>
           Demarcation plan.{" "}
-          <span className="text-primary">
+          <span
+            className="text-primary"
+            data-toggle="tooltip"
+            data-placement="top"
+            title=" Click here for instructions to Upload Copy of Shajra Plan."
+          >
             {" "}
-            <a onClick={() => setmodal1(true)}>(Click here for instructions to Upload Demarcation plan. )</a>
+            <a onClick={() => setmodal1(true)}>(Click here )</a>
           </span>
           <span style={{ color: "red" }}>*</span>
         </h2>
@@ -99,7 +115,7 @@ const DemarcationPlan = (props) => {
             type="file"
             style={{ display: "none" }}
             onChange={(e) => getDocumentData(e?.target?.files[0], "demarcationPlan")}
-            accept="application/shp/zip/pdf"
+            accept="application/shp/zip"
             required
           />
         </label>
@@ -110,15 +126,7 @@ const DemarcationPlan = (props) => {
         ) : (
           <p></p>
         )}
-        {/* <div>
-                      <input
-                        type="file"
-                        className="form-control"
-                        accept="application/pdf"
-                        onChange={(e) => getDocumentData(e?.target?.files[0], "copyOfShajraPlan")}
-                        required
-                      />
-                    </div> */}
+        <h3 style={{}}>{watch("demarcationPlanFileName") ? watch("demarcationPlanFileName") : null}</h3>
         <h3 className="error-message" style={{ color: "red" }}>
           {errors?.demarcationPlan && errors?.demarcationPlan?.message}
         </h3>
