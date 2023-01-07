@@ -241,7 +241,7 @@ const EmployeeApp = ({ path, url, userType }) => {
             {/* <PrivateRoute path={`${path}/SubmitNew`} component={SubmitNew} /> */}
             {/* <PrivateRoute path={`${path}/basicScrutiny`} component={basicScrutiny} /> */}
             {/* <PrivateRoute path={`${path}/FormBank`} component={FormBank} /> */}
-            <PrivateRoute path={`${path}/ElectricalScrutiny`} component={ElectricalScrutiny} />
+            <PrivateRoute path={`${path}/ElectricalScrutiny/:id`} component={ElectricalScrutiny} />
             <PrivateRoute path={`${path}/ScrutinyForm`} component={ScrutinyForm} />
             <PrivateRoute path={`${path}/ExtensionCard`} component={ExtensionCard} />
             <PrivateRoute path={`${path}/ReplaceCard`} component={ReplaceCard} />

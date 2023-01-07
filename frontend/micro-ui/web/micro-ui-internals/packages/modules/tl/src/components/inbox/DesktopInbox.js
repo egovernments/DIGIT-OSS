@@ -38,7 +38,7 @@ const DesktopInbox = ({ tableConfig, filterComponent, columns, isLoading, setSea
         return (
           <div>
             <span className="link">
-              <Link to={"/digit-ui/employee/tl/scrutiny/" + row.original["applicationId"]}>{row.original["applicationId"]}</Link>
+              <Link to={`/digit-ui/employee/tl/${row.original["businessService"] === 'NewTL' || 'TL' ? 'scrutiny' : row.original["businessService"] === 'SERVICE_PLAN' ? 'ServiceScrutiny' : null }/` + row.original["applicationId"]}>{row.original["applicationId"]}</Link>
             </span>
           </div>
         );

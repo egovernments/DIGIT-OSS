@@ -73,6 +73,11 @@ const ServiceBase = ({apiResponse,refreshScrutinyData, applicationNumber}) => {
     console.log(data);
   };
 
+  useEffect(()=>{
+    handleGetFiledsStatesById(applicationNumber);
+    handleGetRemarkssValues(applicationNumber);
+  },[])
+
   return (
     <div>
       <div style={{ position: "relative", maxWidth: "100%", padding: 2 }}>
@@ -83,6 +88,7 @@ const ServiceBase = ({apiResponse,refreshScrutinyData, applicationNumber}) => {
            apiResponse={apiResponse}
            refreshScrutinyData={refreshScrutinyData}
            applicationNumber={applicationNumber}
+           iconStates={iconStates}
            ></ServicePlanService>
        </div>
 
@@ -104,7 +110,7 @@ const ServiceBase = ({apiResponse,refreshScrutinyData, applicationNumber}) => {
         ></DisApprovalList> */}
         {/* <HistoryList></HistoryList> */}
       </div>
-
+        {/* {JSON.stringify(remarksData)} */}
       <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
         <ScrutinyDevelopment remarkData={remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null}></ScrutinyDevelopment>
       </div>

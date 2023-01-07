@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Card, Row, Col, Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 // import axios from "axios";
@@ -15,11 +15,15 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import Collapse from "react-bootstrap/Collapse";
 import { IconButton } from "@mui/material";
+import { ScrutinyRemarksContext } from "../../../../../context/remarks-data-context";
 
 const ServicePlanService = ({apiResponse,refreshScrutinyData, applicationNumber}) => {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
   const [open2, setOpen2] = useState(false);
+  const {remarksData,iconStates} = useContext(ScrutinyRemarksContext);
+
+//  const dataIcons = props.dataForIcons;
 
   const handleshowhide = (event) => {
     const getuser = event.target.value;
@@ -144,7 +148,7 @@ const ServicePlanService = ({apiResponse,refreshScrutinyData, applicationNumber}
                         color: fieldIconColors.loiNO,
                       }}
                       onClick={() => {
-                        setOpennedModal("LOI Number");
+                        setOpennedModal("loiNO");
                         setLabelValue("LOI Number"),
                           setSmShow(true),
                           console.log("modal open"),
@@ -249,7 +253,7 @@ const ServicePlanService = ({apiResponse,refreshScrutinyData, applicationNumber}
                          checked={apiResponse?.undertaking === "N" ? true : false}
                       />
                       <label className="m-0 mx-2" for="No">
-                        No
+                        No 
                       </label>
                       {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
                       {/* <ReportProblemIcon
