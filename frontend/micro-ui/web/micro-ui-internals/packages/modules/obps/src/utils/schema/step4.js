@@ -25,6 +25,7 @@ const VALIDATION_SCHEMA = Yup.object().shape({
   pocketProposed: Yup.string().nullable().required("This field is required."),
   deposit: Yup.string().nullable().required("This field is required."),
   surrendered: Yup.string().nullable().required("This field is required."),
+
   // hostedLayoutPlan: Yup.string().required("This field is required."),
   // consentRera: Yup.string().required("This field is required."),
   // sectoralPlan: Yup.string().required("This field is required."),

@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, Row, Col } from "react-bootstrap";
 import { Button, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
+import { DatePicker } from "@egovernments/digit-ui-react-components";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-
+import axios from "axios";
 function SubmitNew() {
   const [modal, setmodal] = useState(false);
   const [modal1, setmodal1] = useState(false);
-
+  const [ServicePlanDataLabel, setServicePlanDataLabel] = useState([]);
+  const userInfo = Digit.UserService.getUser()?.info || {};
   const {
     register,
     handleSubmit,
@@ -17,35 +19,88 @@ function SubmitNew() {
     setValue,
   } = useForm({});
 
-  const bankSubmitNew = (data) => console.log(data);
-
-  const servicePlan = async (data) => {
+  const bankSubmitNew = async (data) => {
     const token = window?.localStorage?.getItem("token");
     console.log(data);
     try {
       const postDistrict = {
-        requestInfo: {
-          api_id: "Rainmaker",
-          ver: "1",
-          ts: null,
-          action: "create",
-          did: "",
+        RequestInfo: {
+          apiId: "Rainmaker",
+          action: "_create",
+          did: 1,
           key: "",
-          msg_id: "",
-          requester_id: "",
+          msgId: "20170310130900|en_IN",
+          ts: 0,
+          ver: ".01",
           authToken: token,
+          userInfo: userInfo,
         },
-
-        ServicePlanRequest: {
+        NewBankGuaranteeRequest: {
+          status: null,
+          tenantId: "hr",
+          additionalDetails: null,
+          workflowAction: "INITIATE",
+          workflowComment: null,
+          workflowAssignee: null,
           ...data,
         },
       };
-      const Resp = await axios.post("/land-services/serviceplan/_create", postDistrict);
+      const Resp = await axios.post("/tl-services/bank/guarantee/_create", postDistrict);
       setServicePlanDataLabel(Resp.data);
     } catch (error) {
       console.log(error.message);
     }
   };
+  const [fileStoreId, setFileStoreId] = useState({});
+  const getDocumentData = async (file, fieldName) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("tenantId", "hr");
+    formData.append("module", "property-upload");
+    formData.append("tag", "tag-property");
+    // setLoader(true);
+    try {
+      const Resp = await axios.post("/filestore/v1/files", formData, {});
+      setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
+      setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
+      // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
+      // setLoader(false);
+    } catch (error) {
+      setLoader(false);
+      return error;
+    }
+  };
+  const [applicantId, setApplicantId] = useState("");
+  const getApplicantUserData = async (id) => {
+    const token = window?.localStorage?.getItem("token");
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        action: "_create",
+        did: 1,
+        key: "",
+        msgId: "20170310130900|en_IN",
+        ts: 0,
+        ver: ".01",
+        authToken: token,
+      },
+    };
+    try {
+      const Resp = await axios.post(`http://103.166.62.118:80/tl-services/bank/guarantee/_search?applicationNumber=${id}`, payload);
+      const userData = Resp?.data?.LicenseDetails?.[0];
+      setStepData(userData);
+    } catch (error) {
+      return error;
+    }
+  };
+
+  useEffect(() => {
+    const search = location?.search;
+    const params = new URLSearchParams(search);
+    const id = params.get("id");
+    setApplicantId(id?.toString());
+    if (id) getApplicantUserData(id);
+  }, []);
 
   return (
     <form onSubmit={handleSubmit(bankSubmitNew)}>
@@ -114,7 +169,7 @@ function SubmitNew() {
                   <h2>Valid Upto </h2>
                 </Form.Label>
               </div>
-              <input type="date" className="form-control" placeholder="" {...register("validity")} />
+              <input type="datepicker" className="form-control" placeholder="" {...register("validity")} format="yyyy-MM-dd" />
             </Col>
             <Col md={4} xxl lg="3">
               <div>
@@ -122,7 +177,7 @@ function SubmitNew() {
                   <h2>Upload B.G. </h2>
                 </Form.Label>
               </div>
-              <input type="file" className="form-control" placeholder="" {...register("uploadBg")} />
+              <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBg")} />
             </Col>
           </Row>
           <br></br>
@@ -163,7 +218,7 @@ function SubmitNew() {
                         </h2>
                       </label>
                       <div>
-                        <input type="file" placeholder="" className="form-control" {...register("consentLetter")}></input>
+                        <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "consentLetter")}></input>
                       </div>
 
                       <h3 className="error-message" style={{ color: "red" }}>
