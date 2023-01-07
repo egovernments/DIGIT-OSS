@@ -564,7 +564,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                     const {}
                     })
                     } */}
-            <Table className="table table-bordered table-responsive">
+            <Table className="table table-bordered table-striped table-responsive">
               <thead>
                 <tr>
                   <th>Sr. No</th>
@@ -574,7 +574,15 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                   <th>Gender</th>
                   {/* <th>Date of Birth</th> */}
                   <th>PAN No.</th>
-                  <th>View Board Resolution PDF</th>
+                  <th>
+                    {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Hindu Undivided Family") ? (
+                        <label htmlFor="name" className="text">Upload Power of Attorney </label>)
+                        :
+                        (
+                          <label htmlFor="name" className="text"> Upload Board Resolution</label>
+                        )
+                    }
+                  </th>
                   <th>View Digital Signature PDF</th>
                   <th>Action</th>
                 </tr>
@@ -587,60 +595,19 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                         <tr key={elementInArray.id}>
                           <td>{input + 1}</td>
                           <td>
-                            <input
-                              type="text"
-                              name="name[]"
-                              placeholder={elementInArray.name}
-                              value={elementInArray.name}
-                              class="employee-card-input"
-                             
-                            />
+                            {elementInArray.name}
                           </td>
                           <td>
-                            <input
-                              type="text"
-                              name="mobile[]"
-                              placeholder={elementInArray.mobileNumber}
-                              value={elementInArray.mobileNumber}
-                              class="employee-card-input"
-                            />
+                            {elementInArray.mobileNumber}
                           </td>
                           <td>
-                            <input
-                              type="email"
-                              name="email[]"
-                              placeholder={elementInArray.emailId}
-                              value={elementInArray.emailId}
-                              class="employee-card-input"
-                              disabled={"disabled"}
-                            />
+                            {elementInArray.emailId}
                           </td>
                           <td>
-                            <input
-                              type="text"
-                              name="gender[]"
-                              placeholder={elementInArray.gender}
-                              value={elementInArray.gender}
-                              class="employee-card-input"
-                            />
+                            {elementInArray.gender}
                           </td>
-                          {/* <td>
-                            <input
-                              type="text"
-                              name="dob[]"
-                              placeholder={elementInArray.dob}
-                              value={elementInArray.dob || DD-MM-YYYY}
-                              class="employee-card-input"
-                            />
-                          </td> */}
                           <td>
-                            <input
-                              type="text"
-                              name="pan[]"
-                              placeholder={elementInArray.pan}
-                              value={elementInArray.pan}
-                              class="employee-card-input"
-                            />
+                            {elementInArray.pan}
                           </td>
                           <td>
                             <div className="row">
