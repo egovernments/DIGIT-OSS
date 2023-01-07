@@ -67,7 +67,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
   }
 
   function selectArchitectNo(e) {
-    setArchitectNo(e.target.value.toUpperCase());
+    setArchitectNo(e.target.value.toUpperCase()); 
   }
 
   function goNext() {
