@@ -362,8 +362,8 @@ const ReNewApplication = (props) => {
         let ptdet=data?.cpt?.details||propertyDetails;
         address.city = ptdet?.address?.city || null;
         address.locality = { code: ptdet?.address?.locality?.code || null };
-        if (ptdet?.address?.doorNo) address.doorNo = ptdet?.address?.doorNo || null;
-        if (ptdet?.address?.street) address.street = ptdet?.address?.street || null;
+        if (ptdet?.address?.doorNo || data?.address?.doorNo) address.doorNo = ptdet?.address?.doorNo || data?.address?.doorNo || null;
+        if (ptdet?.address?.street || data?.address?.street) address.street = ptdet?.address?.street || data?.address?.street || null;
         if (ptdet?.address?.pincode) address.pincode = ptdet?.address?.pincode;
         formData.tradeLicenseDetail.address = address;
       }

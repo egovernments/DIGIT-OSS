@@ -64,13 +64,18 @@ export const TLSearch = {
     }
     let employeeResponse = [];
 
-    const applicationNoAndChannel = {
+    let applicationNoAndChannel = {
       title: " ",
       asSectionHeader: false,
       values: [
         { title: "TL_LOCALIZATION_APPLICATION_NO", value: response?.applicationNumber ? `${response?.applicationNumber}` : "NA" },
         { title: "TL_APPLICATION_CHALLAN_LABEL", value: response?.tradeLicenseDetail?.channel ? `TL_CHANNEL_${response?.tradeLicenseDetail?.channel}` : "NA" },
       ]
+    }
+
+    if(response?.licenseNumber && applicationNoAndChannel?.values.filter((ob) => ob?.title === "TL_LOCALIZATION_LICENSE_NO")?.length <= 0)
+    {
+      applicationNoAndChannel?.values.push({ title: "TL_LOCALIZATION_LICENSE_NO", value: response?.licenseNumber ? `${response?.licenseNumber}` : "NA" })
     }
 
     const tradedetails = {

@@ -184,6 +184,12 @@ const TLApplicationDetails = () => {
                 // textStyle={{ border: "none", wordBreak:"break-word" }}
                 textStyle={{wordBreak:"break-word"}}
               />
+              {application?.licenseNumber && <Row
+                className="border-none"
+                label={t("TL_COMMON_TABLE_COL_LICENSE_NO")}
+                text={application?.licenseNumber}
+                textStyle={{wordBreak:"break-word"}}
+              />}
               <Row className="border-none" label={t("TL_APPLICATION_CATEGORY")} text={t("ACTION_TEST_TRADE_LICENSE")} textStyle={{ wordBreak:"break-word" }} />
               <Row
                 className="border-none"

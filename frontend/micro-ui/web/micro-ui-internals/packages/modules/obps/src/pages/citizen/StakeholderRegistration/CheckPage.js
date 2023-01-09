@@ -11,6 +11,7 @@ import {
   OpenLinkContainer,
   BackButton,
   EditIcon,
+  CardText,
 } from "@egovernments/digit-ui-react-components";
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
@@ -26,6 +27,7 @@ const CheckPage = ({ onSubmit, value }) => {
   const tenantId = user && user?.info && user?.info?.permanentCity ? user?.info?.permanentCity : Digit.ULBService.getCurrentTenantId();
   const tenant = Digit.ULBService.getStateId();
   let isopenlink = window.location.href.includes("/openlink/");
+  const isMobile = window.Digit.Utils.browser.isMobile();
   const isCitizenUrl = Digit.Utils.browser.isMobile() ? true : false;
 
   if (isopenlink)
@@ -117,7 +119,7 @@ const CheckPage = ({ onSubmit, value }) => {
               style={{ width: "100px", display: "inline" }}
               onClick={() => routeTo(`${routeLink}/Permanent-address`)}
             />
-            <Row className="border-none" text={t(formData?.LicneseDetails?.PermanentAddress)} />
+            <CardText style={isMobile ? {color:"black"} : {color:"black", fontSize:"16px"}}>{t(formData?.LicneseDetails?.PermanentAddress)}</CardText>
             </StatusTable>
           </Card>
           <Card style={{ paddingRight: "16px" }}>
@@ -130,7 +132,7 @@ const CheckPage = ({ onSubmit, value }) => {
               style={{ width: "100px", display: "inline" }}
               onClick={() => routeTo(`${routeLink}/correspondence-address`)}
             />
-            <Row className="border-none" text={t(value?.Correspondenceaddress)} />
+            <CardText style={isMobile ? {color:"black"} : {color:"black", fontSize:"16px"}}>{t(value?.Correspondenceaddress)}</CardText>
             </StatusTable>
           </Card>
           <Card style={{ paddingRight: "16px" }}>
