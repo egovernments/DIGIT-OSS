@@ -495,6 +495,11 @@ const ApllicantPuropseForm = (props) => {
     }
   };
 
+  const handleWorkflow = () => {
+    // props.Step2Back();
+    // http://103.166.62.118:80/egov-workflow-v2/egov-wf/process/_transition
+  };
+
   useEffect(() => {
     if (stepData) {
       const data = purposeOptions?.data?.filter((item) => item?.value === stepData?.purpose);
@@ -715,7 +720,7 @@ const ApllicantPuropseForm = (props) => {
 
             <div class="row">
               <div class="col-sm-12 text-left">
-                <div id="btnClear" class="btn btn-primary btn-md center-block" onClick={() => props.Step2Back()}>
+                <div id="btnClear" class="btn btn-primary btn-md center-block" onClick={() => handleWorkflow()}>
                   Back
                 </div>
               </div>
