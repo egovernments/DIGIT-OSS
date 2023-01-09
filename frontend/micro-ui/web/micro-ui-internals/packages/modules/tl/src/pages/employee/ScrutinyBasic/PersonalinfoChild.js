@@ -16,10 +16,11 @@ const PersonalinfoChild = (props) => {
   let user = Digit.UserService.getUser();
   const userRoles = user?.info?.roles?.map((e) => e.code) || [];
   const hideRemarks = userRoles.some((item)=>item === "CTP_HR" || item === "CTP_HQ" || item === "DTP_HR" || item === "DTP_HQ" )
+  const hideRemarksPatwari = userRoles.some((item)=>item ==="Patwari_HQ")
 
   // let users = Digit.UserService.getUser();
   // const userRole = users?.info?.roles?.map((e) => e.code) || [];
-  const hideRemarksPatwari = userRoles.some((item)=>item ==="Patwari_HQ")
+
 
   const [smShow, setSmShow] = useState(false);
   const [labelValue, setLabelValue] = useState("");

@@ -28,6 +28,7 @@ const Genarelinfo = (props) => {
   const userRoles = user?.info?.roles?.map((e) => e.code) || [];
   const hideRemarks = userRoles.some((item)=>item === "CTP_HR" || item === "CTP_HQ" || item === "DTP_HR" || item === "DTP_HQ")
   const hideRemarksPatwari = userRoles.some((item)=>item ==="Patwari_HQ")
+  const hideRemarksJE = userRoles.some((item)=>item ==="JE_HQ" || item === "JE_HR")
 
   const genarelinfo = props.genarelinfo;
   const dataIcons = props.dataForIcons;
@@ -685,7 +686,8 @@ const Genarelinfo = (props) => {
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks?"none":"block",
+                          // display: hideRemarks?"none":"block",
+                          display: hideRemarks || hideRemarksJE ?"none":"block",
                           color: fieldIconColors.rectangleNo
                         }}
                         onClick={() => {
@@ -700,7 +702,7 @@ const Genarelinfo = (props) => {
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks?"none":"block",
+                          display: hideRemarks || hideRemarksJE ?"none":"block",
                           color: fieldIconColors.rectaNo
                         }}
                         onClick={() => {
@@ -715,7 +717,7 @@ const Genarelinfo = (props) => {
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks?"none":"block",
+                          display: hideRemarks || hideRemarksJE ?"none":"block",
                           color: fieldIconColors.landOwner
                         }}
                         onClick={() => {
@@ -730,7 +732,7 @@ const Genarelinfo = (props) => {
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks?"none":"block",
+                          display: hideRemarks || hideRemarksJE ?"none":"block",
                           color: fieldIconColors.consolidationType
                         }}
                         onClick={() => {
@@ -745,7 +747,7 @@ const Genarelinfo = (props) => {
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks?"none":"block", 
+                          display: hideRemarks || hideRemarksJE ?"none":"block",
                           color: fieldIconColors.kanal
                         }}
                         onClick={() => {
@@ -761,7 +763,7 @@ const Genarelinfo = (props) => {
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks?"none":"block",
+                          display: hideRemarks || hideRemarksJE ?"none":"block",
                           color: fieldIconColors.marla
                         }}
                         onClick={() => {
@@ -776,7 +778,7 @@ const Genarelinfo = (props) => {
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks?"none":"block",
+                          display: hideRemarks || hideRemarksJE ?"none":"block",
                           color: fieldIconColors.sarsai
                         }}
                         onClick={() => {
@@ -793,7 +795,7 @@ const Genarelinfo = (props) => {
                       {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks?"none":"block",
+                          display: hideRemarks || hideRemarksJE ?"none":"block",
                           color: fieldIconColors.bigha
                         }}
                         onClick={() => {
@@ -809,7 +811,7 @@ const Genarelinfo = (props) => {
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks?"none":"block",
+                          display: hideRemarks || hideRemarksJE ?"none":"block",
                           color: fieldIconColors.biswa
                         }}
                         onClick={() => {
@@ -824,7 +826,7 @@ const Genarelinfo = (props) => {
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks?"none":"block",
+                          display: hideRemarks || hideRemarksJE ?"none":"block",
                           color: fieldIconColors.biswansi
                         }}
                         onClick={() => {
@@ -840,7 +842,7 @@ const Genarelinfo = (props) => {
                       {" "}
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks?"none":"block",
+                          display: hideRemarks || hideRemarksJE ?"none":"block",
                           color: fieldIconColors.collabrationAgreement
                         }}
                         onClick={() => {
@@ -856,7 +858,7 @@ const Genarelinfo = (props) => {
                       {" "}
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks?"none":"block",
+                          display: hideRemarks || hideRemarksJE ?"none":"block",
                           color: fieldIconColors.developerCompany
                         }}
                         onClick={() => {
@@ -872,7 +874,7 @@ const Genarelinfo = (props) => {
                       {" "}
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks?"none":"block",
+                          display: hideRemarks || hideRemarksJE ?"none":"block",
                           color: fieldIconColors.dateOfRegistering
                         }}
                         onClick={() => {
@@ -888,7 +890,7 @@ const Genarelinfo = (props) => {
                       {" "}
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks?"none":"block",
+                          display: hideRemarks || hideRemarksJE ?"none":"block",
                           color: fieldIconColors.dateOfValidity
                         }}
                         onClick={() => {
@@ -904,7 +906,7 @@ const Genarelinfo = (props) => {
                       {" "}
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks?"none":"block",
+                          display: hideRemarks || hideRemarksJE ?"none":"block",
                           color: fieldIconColors.agreementIrrevocialble
                         }}
                         onClick={() => {
@@ -920,7 +922,7 @@ const Genarelinfo = (props) => {
                       {" "}
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks?"none":"block",
+                          display: hideRemarks || hideRemarksJE ?"none":"block",
                           color: fieldIconColors.nameOfAuthSignatory
                         }}
                         onClick={() => {
@@ -936,7 +938,7 @@ const Genarelinfo = (props) => {
                       {" "}
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks?"none":"block",
+                          display: hideRemarks || hideRemarksJE ?"none":"block",
                           color: fieldIconColors.nameOfAuthSignatoryDeveloper
                         }}
                         onClick={() => {
@@ -952,7 +954,7 @@ const Genarelinfo = (props) => {
                       {" "}
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks?"none":"block",
+                          display: hideRemarks || hideRemarksJE ?"none":"block",
                           color: fieldIconColors.registeringAuthority
                         }}
                         onClick={() => {
