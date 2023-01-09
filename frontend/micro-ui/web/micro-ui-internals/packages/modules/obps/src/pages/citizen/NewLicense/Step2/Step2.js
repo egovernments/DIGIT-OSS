@@ -626,28 +626,6 @@ const ApllicantPuropseForm = (props) => {
                   <div>
                     <Form.Label>
                       <h2>
-                        Potential Zone<span style={{ color: "red" }}>*</span>
-                      </h2>
-                    </Form.Label>
-                  </div>
-                  <ReactMultiSelect
-                    control={control}
-                    name="potential"
-                    placeholder="Potential"
-                    data={potentialOptons?.data}
-                    labels="Potential"
-                    onChange={handleChangePotential}
-                    loading={potentialOptons?.isLoading}
-                  />
-                  <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.potential?.value && errors?.potential?.value?.message}
-                  </h3>
-                </Col>
-
-                <Col md={4} xxl lg="3">
-                  <div>
-                    <Form.Label>
-                      <h2>
                         District<span style={{ color: "red" }}>*</span>
                       </h2>
                     </Form.Label>
@@ -673,14 +651,74 @@ const ApllicantPuropseForm = (props) => {
                   <div>
                     <Form.Label>
                       <h2>
-                        State<span style={{ color: "red" }}>*</span>
+                        Development Plan<span style={{ color: "red" }}>*</span>
                       </h2>
                     </Form.Label>
                   </div>
 
-                  <input type="text" className="form-control" placeholder="N/A" {...register("state")} disabled defaultValue="Haryana" />
+                  <ReactMultiSelect
+                    control={control}
+                    name="purpose"
+                    placeholder="Purpose"
+                    // onChange={handleChangePurpose}
+
+                    // data={purposeOptions?.data}
+                    // labels="Purpose"
+                    // loading={purposeOptions?.isLoading}
+                  />
                   <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.state && errors?.state?.message}
+                    {errors?.purpose?.value && errors?.purpose?.value?.message}
+                  </h3>
+                </Col>
+                <Col md={4} xxl lg="3">
+                  <div>
+                    <Form.Label>
+                      <h2>
+                        Zone<span style={{ color: "red" }}>*</span>
+                      </h2>
+                    </Form.Label>
+                  </div>
+                  <input type="text" className="form-control" name="zone" placeholder="zone" diabled />
+
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.zone?.value && errors?.zone?.value?.message}
+                  </h3>
+                </Col>
+                {/* <Col md={4} xxl lg="3">
+                  <div>
+                    <Form.Label>
+                      <h2>
+                        Potential Zone<span style={{ color: "red" }}>*</span>
+                      </h2>
+                    </Form.Label>
+                  </div>
+                  <ReactMultiSelect
+                    control={control}
+                    name="potential"
+                    placeholder="Potential"
+                    data={potentialOptons?.data}
+                    labels="Potential"
+                    onChange={handleChangePotential}
+                    loading={potentialOptons?.isLoading}
+                  />
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.potential?.value && errors?.potential?.value?.message}
+                  </h3>
+                </Col> */}
+              </Row>
+              <Row className="ml-auto" style={{ marginBottom: 5 }}>
+                <Col md={4} xxl lg="3">
+                  <div>
+                    <Form.Label>
+                      <h2>
+                        Sector<span style={{ color: "red" }}>*</span>
+                      </h2>
+                    </Form.Label>
+                  </div>
+                  <ReactMultiSelect control={control} name="sector" placeholder="sector" diabled />
+
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.sector?.value && errors?.sector?.value?.message}
                   </h3>
                 </Col>
               </Row>
@@ -873,6 +911,7 @@ const ApllicantPuropseForm = (props) => {
               </Col>
             </Row>
             <br></br>
+
             <Row className="ml-auto mb-3">
               <Col md={4} xxl lg="12">
                 <div>
