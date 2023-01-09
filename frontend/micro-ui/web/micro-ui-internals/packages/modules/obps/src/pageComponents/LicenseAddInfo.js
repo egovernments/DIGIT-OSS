@@ -28,8 +28,9 @@ import Delete from "@mui/icons-material/Delete";
 import { getDocShareholding } from "../../../tl/src/pages/employee/ScrutinyBasic/ScrutinyDevelopment/docview.helper";
 import { MenuItem, Select } from "@mui/material";
 import { convertEpochToDate } from "../utils/index";
-import Spinner from "../components/Loader/index"
-
+import Spinner from "../components/Loader/index";
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
 const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
   let validation = {};
   const { pathname: url } = useLocation();
@@ -41,6 +42,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   const [dob, setDOB] = useState();
   const [developerDataAddinfo, setDeveloperDataAddinfo] = useState([]);
   const [existingColonizer, setExistingColonizer] = useState();
+  const [existingDirectors, setExistingDirectors] = useState();
   const [existingColonizerDetails, setExistingColonizerDetails] = useState({
     name: "",
     mobile: "",
@@ -111,6 +113,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       setOthersArray(developerDataGet?.devDetail[0]?.addInfo?.othersDetails || othersArray)
       setExistingColonizerDetails(developerDataGet?.devDetail[0]?.addInfo?.existingColonizerData || existingColonizerDetails)
       setExistingColonizer(developerDataGet?.devDetail[0]?.addInfo?.existingColonizer || "")
+      setExistingDirectors(developerDataGet?.devDetail[0]?.addInfo?.existingDirectors || "")
       setFinancialCapacity(developerDataGet?.devDetail[0]?.addInfo?.financialCapacity);
       setRegisteredMobileNumber(developerDataGet?.devDetail[0]?.addInfo?.registeredContactNo)
       // setShowDevTypeFields(valueOfDrop);
@@ -224,9 +227,11 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   const [success, setError] = useState(null);
   const [showToast, setShowToast] = useState(null);
   const [showToastError, setShowToastError] = useState(null);
-  const handleChange = (e) => {
-    this.setState({ isRadioSelected: true });
-  };
+  // const handleChange = (e) => {
+  //   this.setState({ isRadioSelected: true });
+  // };
+
+  const [checked, setChecked] = React.useState(false);
   const [showhide0, setShowhide0] = useState("No");
   const [showDevTypeFields, setShowDevTypeFields] = useState(formData?.LicneseDetails?.showDevTypeFields || formData?.formData?.LicneseDetails?.showDevTypeFields || "");
   const [FormSubmitted, setFormSubmitted] = useState(false);
@@ -338,6 +343,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     setModalValuesArray([]);
     setRemainingStakeholderPercentage(100);
     setDirectorData([]);
+    setExistingDirectors();
     setExistingColonizer();
     setExistingColonizerDetails({
       name: "",
@@ -548,10 +554,10 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     HandleGetMCNdata();
   }, [cin_Number])
 
+  const handleChange = () => {
+    setChecked(event.target.checked);
+  };
 
-
-  const [noofRows, setNoOfRows] = useState(1);
-  const [aoofRows, setAoOfRows] = useState(1);
 
 
   const deleteTableRows = (i) => {
@@ -658,15 +664,6 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
   };
 
-  var regNumber = /^\d+$/;
-  //   const handleStakeholderPercentageChange = (value) => {
-  //     console.log("loggg",value,value.split("%")[0],reg.test(value.split("%")[0]))
-  //     if(value && reg.test(value)){
-  //       setModalPercentage(value);
-  //     }
-  // }
-
-
   const onSkip = () => onSelect();
 
   const navigate = useHistory();
@@ -725,7 +722,6 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             style={{ width: "100%" }}
                             t={t}
                             required
-                            disable
                           />
                           {/* <Select
                             onChange={(e) => setDevType({showDevTypeFields: e.target.value })}
@@ -1567,8 +1563,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             <th>DIN Number</th>
                             <th>Name</th>
                             <th>Contact Number</th>
-                            <th>View Document</th>
-                            <th>Action</th>
+                            
                           </tr>
                         </thead>
                         <tbody>
@@ -1579,60 +1574,13 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                   <tr key={input}>
                                     <td>{input + 1}</td>
                                     <td>
-                                      <input
-                                        type="text"
-                                        disabled="disabled"
-                                        value={elementInArray.din}
-                                        placeholder={elementInArray.din}
-                                        class="employee-card-input"
-                                      />
+                                      {elementInArray.din}
                                     </td>
                                     <td>
-                                      <input
-                                        type="text"
-                                        disabled="disabled"
-                                        value={elementInArray.name}
-                                        placeholder={elementInArray.name}
-                                        class="employee-card-input"
-                                      />
+                                      {elementInArray.name}
                                     </td>
                                     <td>
-                                      <input
-                                        type="text"
-                                        disabled="disabled"
-                                        value={elementInArray.contactNumber}
-                                        placeholder={elementInArray.contactNumber}
-                                        class="employee-card-input"
-                                      />
-                                    </td>
-                                    <td>
-                                      <div className="row">
-                                        {/* {JSON.stringify(elementInArray?.uploadPdf)} */}
-                                        {(elementInArray?.uploadPdf) ?
-                                          <button type="button" onClick={() => getDocShareholding(elementInArray?.uploadPdf)} className="btn btn-sm col-md-6 text-center">
-                                            <VisibilityIcon color="info" className="icon" />
-                                          </button>
-                                          : <p></p>
-                                        }
-                                        <div className="btn btn-sm col-md-6">
-                                          <label for={"uploaddirectorInfoPdf" + input}>
-                                            <FileUpload color="primary" for={"uploaddirectorInfoPdf" + input} />
-                                          </label>
-                                          <input
-                                            id={"uploaddirectorInfoPdf" + input}
-                                            type="file"
-                                            style={{ display: "none" }}
-                                            onChange={(e) => getDocumentData(e?.target?.files[0], "directorInfoPdf", "directorInfoPdf", input)}
-                                          />
-                                        </div>
-                                      </div>
-                                    </td>
-                                    <td>
-                                      <a href="javascript:void(0)"
-                                        onClick={() => (deleteDirectorTableRows(-1))}
-                                      >
-                                        <DeleteIcon color="danger" className="icon" />
-                                      </a>
+                                      {elementInArray.contactNumber}
                                     </td>
                                   </tr>
                                 );
@@ -1640,115 +1588,218 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                         </tbody>
                       </table>
                     </div>
-                    <div>
-                      <button
-                        type="button"
-                        style={{
-                          color: "white",
-                        }}
-                        className="btn btn-primary mt-3"
-                        // onClick={() => setNoOfRows(noofRows + 1)}
-                        // onClick={() => setmodalDirector(true)}
-                        onClick={handleShow}
-                      >
-                        Add More
-                      </button>
-                      <Modal show={show} onHide={handleClose} animation={false}>
-                        <Modal.Header closeButton>
-                          <Modal.Title>Add Directors Info</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                          <form className="text1">
-                            <Row>
-                              <Col md={3} xxl lg="4">
-                                <label htmlFor="name" className="text">DIN Number <span className="text-danger font-weight-bold">*</span></label>
-                                <MobileNumber
-                                  value={modalDIN}
-                                  name="modalDIN"
-                                  maxlength={"8"}
-                                  hideSpan="true"
-                                  // onChange={(e) => setModalDIN(e.target.value)}
-                                  onChange={selectDinNumber}
-                                  // disable={mobileNumber && !isOpenLinkFlow ? true : false}
-                                  {...{ required: true, pattern: "[1-9][0-9]{7}", type: "tel"}}
-                                />
-                                {/* <MobileNumber
-                              
-                              isMandatory={false}
-                              onChange={(e) => setModalDIN(e.target.value.toUpperCase())}
-                              placeholder=""
-                              max= {8}
-                              class="employee-card-input"
-                              {...(validation = {
-                                isRequired: true,
-                                maxlength: "8",
-                                type: "tel",
-                                title: "Please Enter DIN No."
-                              })}
-                            /> */}
-                                {modalDIN && modalDIN.length > 0 && !modalDIN.match(Digit.Utils.getPattern('DIN')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_DIN_NO")}</CardLabelError>}
-                              </Col>
-                              <Col md={3} xxl lg="4">
-                                <label htmlFor="name" className="text">Name <span className="text-danger font-weight-bold">*</span></label>
-                                <input
-                                  type="text"
+                    <p className="ml-2">
+                      If the directors are in addition/modification to data fetched from the MCA portal, then the complete details of existing directors may be provided.
+                    </p>
+                    <div className="form-group ml-2">
+                      <input
+                        type="radio"
+                        value="Y"
+                        checked={existingDirectors === "Y" ? true : false}
+                        id="existingDirectors"
+                        className="mx-2 mt-1"
+                        onChange={(e) => setExistingDirectors(e.target.value)}
+                        name="existingDirectors"
+                      />
+                      <label for="Yes">Yes</label>
 
-                                  onChange={(e) => setModalDirectorName(e.target.value)}
-                                  placeholder=""
-                                  class="employee-card-input"
-                                  {...(validation = {
-                                    isRequired: true,
-                                    pattern: "^[a-zA-Z ]*$",
-                                    type: "text",
-                                  })}
-                                />
-                                {modalDirectorName && modalDirectorName.length > 0 &&!modalDirectorName.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid Name")}</CardLabelError>}
-                              </Col>
-                              <Col md={3} xxl lg="4">
-                                <label htmlFor="name" className="text"> Contact Number <span className="text-danger font-weight-bold">*</span></label>
-
-                                <MobileNumber
-                                  value={modalDirectorContact}
-                                  name="modalDirectorContact"
-                                  onChange={selectModalContactDirector}
-                                  // disable={modalDirectorContact && !isOpenLinkFlow ? true : false}
-                                  {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
-                                />
-                                {modalDirectorContact && modalDirectorContact.length > 0 && !modalDirectorContact.match(Digit.Utils.getPattern('MobileNo')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID")}</CardLabelError>}
-                              </Col>
-                              <Col md={3} xxl lg="4">
-                                <label htmlFor="name" className="text">Upload document</label>
-                                <input
-                                  type="file"
-                                  name="uploadPdf"
-                                  class="employee-card-input"
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "directorInfoPdf")}
-                                  {...(validation = {
-                                    isRequired: true,
-                                    title: "Please upload document"
-                                  })}
-                                />
-                              </Col>
-
-                            </Row>
-                          </form>
-                        </Modal.Body>
-                        <Modal.Footer>
-                          <Button variant="secondary" onClick={handleClose}>
-                            Close
-                          </Button>
-                          <Button 
-                            variant="primary" 
-                            onClick={handleDirectorsArrayValues}
-                            disabled={!modalDIN || !modalDIN.match(Digit.Utils.getPattern('DIN')) || !modalDirectorName.match(Digit.Utils.getPattern('Name')) || !modalDirectorContact || !modalDirectorContact.match(Digit.Utils.getPattern('MobileNo'))}
-                          >
-                            Save Changes
-                          </Button>
-                        </Modal.Footer>
-                      </Modal>
-
+                      <input
+                        type="radio"
+                        value="N"
+                        checked={existingDirectors === "N" ? true : false}
+                        id="existingDirectorsN"
+                        className="mx-2 mt-1"
+                        onChange={(e) => setExistingDirectors(e.target.value)}
+                        name="existingDirectors"
+                      />
+                      <label for="No">No</label>
+                      {existingDirectors === 'Y' && (
+                        <div>
+                           <div>
+                            <button
+                              type="button"
+                              style={{
+                                color: "white",
+                              }}
+                              className="btn btn-primary my-3"
+                              onClick={handleShow}
+                            >
+                              Enter Details
+                            </button>
+                            <Modal show={show} onHide={handleClose} animation={false}>
+                              <Modal.Header closeButton>
+                                <Modal.Title>Add Directors Info</Modal.Title>
+                              </Modal.Header>
+                              <Modal.Body>
+                                <form className="text1">
+                                  <Row>
+                                    <Col md={3} xxl lg="4">
+                                      <label htmlFor="name" className="text">DIN Number <span className="text-danger font-weight-bold">*</span></label>
+                                      <MobileNumber
+                                        value={modalDIN}
+                                        name="modalDIN"
+                                        maxlength={"8"}
+                                        hideSpan="true"
+                                        // onChange={(e) => setModalDIN(e.target.value)}
+                                        onChange={selectDinNumber}
+                                        // disable={mobileNumber && !isOpenLinkFlow ? true : false}
+                                        {...{ required: true, pattern: "[1-9][0-9]{7}", type: "tel"}}
+                                      />
+                                      {/* <MobileNumber
+                                    
+                                    isMandatory={false}
+                                    onChange={(e) => setModalDIN(e.target.value.toUpperCase())}
+                                    placeholder=""
+                                    max= {8}
+                                    class="employee-card-input"
+                                    {...(validation = {
+                                      isRequired: true,
+                                      maxlength: "8",
+                                      type: "tel",
+                                      title: "Please Enter DIN No."
+                                    })}
+                                  /> */}
+                                      {modalDIN && modalDIN.length > 0 && !modalDIN.match(Digit.Utils.getPattern('DIN')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_DIN_NO")}</CardLabelError>}
+                                    </Col>
+                                    <Col md={3} xxl lg="4">
+                                      <label htmlFor="name" className="text">Name <span className="text-danger font-weight-bold">*</span></label>
+                                      <input
+                                        type="text"
+      
+                                        onChange={(e) => setModalDirectorName(e.target.value)}
+                                        placeholder=""
+                                        class="form-control"
+                                        {...(validation = {
+                                          isRequired: true,
+                                          pattern: "^[a-zA-Z ]*$",
+                                          type: "text",
+                                        })}
+                                      />
+                                      {modalDirectorName && modalDirectorName.length > 0 &&!modalDirectorName.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid Name")}</CardLabelError>}
+                                    </Col>
+                                    <Col md={3} xxl lg="4">
+                                      <label htmlFor="name" className="text"> Contact Number <span className="text-danger font-weight-bold">*</span></label>
+      
+                                      <MobileNumber
+                                        value={modalDirectorContact}
+                                        name="modalDirectorContact"
+                                        onChange={selectModalContactDirector}
+                                        // disable={modalDirectorContact && !isOpenLinkFlow ? true : false}
+                                        {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
+                                      />
+                                      {modalDirectorContact && modalDirectorContact.length > 0 && !modalDirectorContact.match(Digit.Utils.getPattern('MobileNo')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID")}</CardLabelError>}
+                                    </Col>
+                                    <Col md={3} xxl lg="4">
+                                      <label htmlFor="name" className="text">Upload document</label>
+                                      <input
+                                        type="file"
+                                        name="uploadPdf"
+                                        class="form-control"
+                                        onChange={(e) => getDocumentData(e?.target?.files[0], "directorInfoPdf")}
+                                        {...(validation = {
+                                          isRequired: true,
+                                          title: "Please upload document"
+                                        })}
+                                      />
+                                    </Col>
+      
+                                  </Row>
+                                </form>
+                              </Modal.Body>
+                              <Modal.Footer>
+                                <Button variant="secondary" onClick={handleClose}>
+                                  Close
+                                </Button>
+                                <Button 
+                                  variant="primary" 
+                                  onClick={handleDirectorsArrayValues}
+                                  disabled={!modalDIN || !modalDIN.match(Digit.Utils.getPattern('DIN')) || !modalDirectorName.match(Digit.Utils.getPattern('Name')) || !modalDirectorContact || !modalDirectorContact.match(Digit.Utils.getPattern('MobileNo'))}
+                                >
+                                  Save Changes
+                                </Button>
+                              </Modal.Footer>
+                            </Modal>
+      
+                          </div>
+                          <div className="table-bd">
+                            <table className="table table-bordered">
+                              <thead>
+                                <tr>
+                                  <th>Sr. No</th>
+                                  <th>DIN Number</th>
+                                  <th>Name</th>
+                                  <th>Contact Number</th>
+                                  <th>View Document</th>
+                                  <th>Action</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {
+                                  (DirectorData?.length > 0) ?
+                                    DirectorData.map((elementInArray, input) => {
+                                      return (
+                                        <tr key={input}>
+                                          <td>{input + 1}</td>
+                                          <td>
+                                            {elementInArray.din}
+                                          </td>
+                                          <td>
+                                            {elementInArray.name}
+                                          </td>
+                                          <td>
+                                            {elementInArray.contactNumber}
+                                          </td>
+                                          <td>
+                                            <div className="row">
+                                              {/* {JSON.stringify(elementInArray?.uploadPdf)} */}
+                                              {(elementInArray?.uploadPdf) ?
+                                                <button type="button" onClick={() => getDocShareholding(elementInArray?.uploadPdf)} className="btn btn-sm col-md-6 text-center">
+                                                  <VisibilityIcon color="info" className="icon" />
+                                                </button>
+                                                : <p></p>
+                                              }
+                                              <div className="btn btn-sm col-md-6">
+                                                <label for={"uploaddirectorInfoPdf" + input}>
+                                                  <FileUpload color="primary" for={"uploaddirectorInfoPdf" + input} />
+                                                </label>
+                                                <input
+                                                  id={"uploaddirectorInfoPdf" + input}
+                                                  type="file"
+                                                  style={{ display: "none" }}
+                                                  onChange={(e) => getDocumentData(e?.target?.files[0], "directorInfoPdf", "directorInfoPdf", input)}
+                                                />
+                                              </div>
+                                            </div>
+                                          </td>
+                                          <td>
+                                            <a href="javascript:void(0)"
+                                              onClick={() => (deleteDirectorTableRows(-1))}
+                                            >
+                                              <DeleteIcon color="danger" className="icon" />
+                                            </a>
+                                          </td>
+                                        </tr>
+                                      );
+                                    }) : <p></p>}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
+
+                  <Col md={12} >
+                  <FormControlLabel
+                    label="It is undertaken that the above information is true and correct for all facts and purposes."
+                    control={
+                      <Checkbox
+                        onChange={handleChange}
+                        inputProps={{ 'aria-label': 'controlled' }}
+                      />
+                    }
+                  />
+                  </Col>
 
                   <p className="ml-1">
                     In case the Partner/director of the applicant firm/company is common with any existing colonizer who has been granted a license under the 1975 act Yes/No.
