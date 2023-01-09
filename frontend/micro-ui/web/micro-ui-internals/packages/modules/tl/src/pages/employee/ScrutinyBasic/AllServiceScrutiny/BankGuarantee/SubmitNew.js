@@ -20,6 +20,7 @@ const SubmitNew = (props) => {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
   const [open2, setOpen2] = useState(false);
+  const apiResponse = props.apiResponse;
 
   const handleshowhide = (event) => {
     const getuser = event.target.value;
@@ -65,50 +66,32 @@ const SubmitNew = (props) => {
   const [fieldValue, setFieldValue] = useState("");
   const [openedModal, setOpennedModal] = useState("");
   const [fieldIconColors, setFieldIconColors] = useState({
-    developer: Colors.info,
-    authPersonName: Colors.info,
-    authMobileNo1: Colors.info,
-    authMobileNo2: Colors.info,
-    emailId: Colors.info,
-    pan: Colors.info,
-    address: Colors.info,
-    city: Colors.info,
-    pin: Colors.info,
-    tehsil: Colors.info,
-    district: Colors.info,
-    state: Colors.info,
-    type: Colors.info,
-    lciSignedBy: Colors.info,
-    lciNotSigned: Colors.info,
-    parmanentAddress: Colors.info,
-    addressForCommunication: Colors.info,
-    authPerson: Colors.info,
-    emailForCommunication: Colors.info,
-    lOI: Colors.info,
+    loiNumber: Colors.info,
+    typeOfBg: Colors.info,
+    amountInFig: Colors.info,
+    amountInWords: Colors.info,
+    bankName: Colors.info,
+    memoNumber: Colors.info,
+    validity: Colors.info,
+    uploadBg: Colors.info,
+    licenseApplied: Colors.info,
+    consentLetter: Colors.info,
   });
 
   const fieldIdList = [
-    { label: "Developer", key: "developer" },
-    { label: "Authorized Person Name", key: "authPersonName" },
-    { label: "Autrhoized Mobile No", key: "authMobileNo1" },
-    { label: "Authorized MobileNo. 2 ", key: "authMobileNo2" },
-    { label: "Email ID", key: "emailId" },
-    { label: "PAN No.", key: "pan" },
-    { label: "Address  1", key: "address" },
-    { label: "Village/City", key: "city" },
-    { label: "Pincode", key: "pin" },
-    { label: "Tehsil", key: "tehsil" },
-    { label: "District", key: "district" },
-    { label: "State", key: "state" },
-    { label: "Status (Individual/ Company/ Firm/ LLP etc.)", key: "type" },
-    { label: "LC-I signed by", key: "lciSignedBy" },
-    { label: "If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)", key: "lciNotSigned" },
-    { label: "Permanent address in case of individual/ registered office address in case other than individual", key: "parmanentAddress" },
-    { label: "Address for communication", key: "addressForCommunication" },
-    { label: "Name of the authorized person to sign the application", key: "authPerson" },
-    { label: "Email ID for communication", key: "emailForCommunication" },
-    { lablel: "Enter LOI No", key: "lOI" },
+    { label: "Enter LOI No", key: "loiNumber" },
+    { label: "Type of B.G", key: "typeOfBg" },
+    { label: "Amount (in fig)", key: "amountInFig" },
+    { label: "Amount (in words) ", key: "amountInWords" },
+    { label: "Bank Name", key: "bankName" },
+    { label: "Enter Memo No.", key: "memoNumber" },
+    { label: "Valid Upto", key: "validity" },
+    { label: "Upload B.G.", key: "uploadBg" },
+    { label: "Hardcopy Submitted at TCP office.", key: "licenseApplied" },
+    { label: "Upload Receipt of Submission.", key: "consentLetter" },
   ];
+
+  console.log("digit2", apiResponse);
   return (
     <form onSubmit={handleSubmit(SubmitNew)}>
       <div
@@ -147,18 +130,15 @@ const SubmitNew = (props) => {
                   </Form.Label>
 
                   <div className={classes.fieldContainer}>
-                    <Form.Control className={classes.formControl} placeholder="" disabled></Form.Control>
+                    <Form.Control className={classes.formControl} placeholder={apiResponse?.loiNumber} disabled></Form.Control>
 
                     <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.developer,
+                        color: fieldIconColors.loiNumber,
                       }}
                       onClick={() => {
-                        setOpennedModal("lOI");
-                        setLabelValue("Enter LOI No"),
-                          setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                        setOpennedModal("loiNumber");
+                        setLabelValue("Enter LOI No"), setSmShow(true), console.log("modal open"), setFieldValue(loiNumber);
                       }}
                     ></ReportProblemIcon>
                     <ModalChild
@@ -171,7 +151,7 @@ const SubmitNew = (props) => {
                       remarksUpdate={currentRemarks}
                     ></ModalChild>
                   </div>
-                  {/* <input type="text" className="form-control" placeholder="" {...register("enterLoiNumber")} /> */}
+                  {/* <input type="text" className="form-control" placeholder="" {...register("enter")} /> */}
                 </Form.Group>
                 <Form.Group as={Col} controlId="formGridLicence">
                   <div>
@@ -180,18 +160,15 @@ const SubmitNew = (props) => {
                     </Form.Label>
                   </div>
                   <div className={classes.fieldContainer}>
-                    <Form.Control className={classes.formControl} placeholder="" disabled></Form.Control>
+                    <Form.Control className={classes.formControl} placeholder={apiResponse?.typeOfBg} disabled></Form.Control>
 
                     <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.developer,
+                        color: fieldIconColors.typeOfBg,
                       }}
                       onClick={() => {
-                        setOpennedModal("Licence No");
-                        setLabelValue("Licence No"),
-                          setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                        setOpennedModal("typeOfBg");
+                        setLabelValue("Type of B.G"), setSmShow(true), console.log("modal open"), setFieldValue(typeOfBg);
                       }}
                     ></ReportProblemIcon>
                     <ModalChild
@@ -216,18 +193,15 @@ const SubmitNew = (props) => {
                     </Form.Label>
                   </div>
                   <div className={classes.fieldContainer}>
-                    <Form.Control className={classes.formControl} placeholder="" disabled></Form.Control>
+                    <Form.Control className={classes.formControl} placeholder={apiResponse?.amountInFig} disabled></Form.Control>
 
                     <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.developer,
+                        color: fieldIconColors.amountInFig,
                       }}
                       onClick={() => {
-                        setOpennedModal("Licence No");
-                        setLabelValue("Licence No"),
-                          setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                        setOpennedModal("amountInFig");
+                        setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"), setFieldValue(amountInFig);
                       }}
                     ></ReportProblemIcon>
                     <ModalChild
@@ -249,18 +223,15 @@ const SubmitNew = (props) => {
                     </Form.Label>
                   </div>
                   <div className={classes.fieldContainer}>
-                    <Form.Control className={classes.formControl} placeholder="" disabled></Form.Control>
+                    <Form.Control className={classes.formControl} placeholder={apiResponse?.amountInWords} disabled></Form.Control>
 
                     <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.developer,
+                        color: fieldIconColors.amountInWords,
                       }}
                       onClick={() => {
-                        setOpennedModal("Licence No");
-                        setLabelValue("Licence No"),
-                          setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                        setOpennedModal("amountInWords");
+                        setLabelValue("Amount (in words)"), setSmShow(true), console.log("modal open"), setFieldValue(amountInWords);
                       }}
                     ></ReportProblemIcon>
                     <ModalChild
@@ -284,18 +255,15 @@ const SubmitNew = (props) => {
                     </Form.Label>
                   </div>
                   <div className={classes.fieldContainer}>
-                    <Form.Control className={classes.formControl} placeholder="" disabled></Form.Control>
+                    <Form.Control className={classes.formControl} placeholder={apiResponse?.bankName} disabled></Form.Control>
 
                     <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.developer,
+                        color: fieldIconColors.bankName,
                       }}
                       onClick={() => {
-                        setOpennedModal("Licence No");
-                        setLabelValue("Licence No"),
-                          setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                        setOpennedModal("bankName");
+                        setLabelValue("Bank Name"), setSmShow(true), console.log("modal open"), setFieldValue(bankName);
                       }}
                     ></ReportProblemIcon>
                     <ModalChild
@@ -317,18 +285,15 @@ const SubmitNew = (props) => {
                     </Form.Label>
                   </div>
                   <div className={classes.fieldContainer}>
-                    <Form.Control className={classes.formControl} placeholder="" disabled></Form.Control>
+                    <Form.Control className={classes.formControl} placeholder={apiResponse?.memoNumber} disabled></Form.Control>
 
                     <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.developer,
+                        color: fieldIconColors.memoNumber,
                       }}
                       onClick={() => {
-                        setOpennedModal("Licence No");
-                        setLabelValue("Licence No"),
-                          setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                        setOpennedModal("memoNumber");
+                        setLabelValue("Enter Memo No."), setSmShow(true), console.log("modal open"), setFieldValue(memoNumber);
                       }}
                     ></ReportProblemIcon>
                     <ModalChild
@@ -350,18 +315,15 @@ const SubmitNew = (props) => {
                     </Form.Label>
                   </div>
                   <div className={classes.fieldContainer}>
-                    <Form.Control className={classes.formControl} placeholder="" disabled></Form.Control>
+                    <Form.Control className={classes.formControl} placeholder={apiResponse?.validity} disabled></Form.Control>
 
                     <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.developer,
+                        color: fieldIconColors.validity,
                       }}
                       onClick={() => {
-                        setOpennedModal("Licence No");
-                        setLabelValue("Licence No"),
-                          setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                        setOpennedModal("validity");
+                        setLabelValue("Valid Upto"), setSmShow(true), console.log("modal open"), setFieldValue(validity);
                       }}
                     ></ReportProblemIcon>
                     <ModalChild
@@ -384,26 +346,23 @@ const SubmitNew = (props) => {
                   </div>
                   <div className="row">
                     <div className="btn btn-sm col-md-3">
-                      <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                      <IconButton onClick={() => getDocShareholding(item?.uploadBg)}>
                         <VisibilityIcon color="info" className="icon" />
                       </IconButton>
                     </div>
                     <div className="btn btn-sm col-md-3">
-                      <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                      <IconButton onClick={() => getDocShareholding(item?.uploadBg)}>
                         <FileDownloadIcon color="info" className="icon" />
                       </IconButton>
                     </div>
                     <div className="btn btn-sm col-md-4">
                       <ReportProblemIcon
                         style={{
-                          color: fieldIconColors.developer,
+                          color: fieldIconColors.uploadBg,
                         }}
                         onClick={() => {
-                          setOpennedModal("Amount");
-                          setLabelValue("Amount"),
-                            setSmShow(true),
-                            console.log("modal open"),
-                            setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                          setOpennedModal("uploadBg");
+                          setLabelValue("Upload B.G."), setSmShow(true), console.log("modal open"), setFieldValue(uploadBg);
                         }}
                       ></ReportProblemIcon>
                     </div>
@@ -434,18 +393,18 @@ const SubmitNew = (props) => {
                           &nbsp; No &nbsp;&nbsp;
                         </label>
                         <div className={classes.fieldContainer}>
-                          <Form.Control className={classes.formControl} placeholder="" disabled></Form.Control>
+                          <Form.Control className={classes.formControl} placeholder={apiResponse?.licenseApplied} disabled></Form.Control>
 
                           <ReportProblemIcon
                             style={{
-                              color: fieldIconColors.developer,
+                              color: fieldIconColors.licenseApplied,
                             }}
                             onClick={() => {
-                              setOpennedModal("Licence No");
-                              setLabelValue("Licence No"),
+                              setOpennedModal("licenseApplied");
+                              setLabelValue(" Hardcopy Submitted at TCP office."),
                                 setSmShow(true),
                                 console.log("modal open"),
-                                setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                                setFieldValue(licenseApplied);
                             }}
                           ></ReportProblemIcon>
                           <ModalChild
@@ -478,26 +437,26 @@ const SubmitNew = (props) => {
                           <div>
                             <div className="row">
                               <div className="btn btn-sm col-md-4">
-                                <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                <IconButton onClick={() => getDocShareholding(item?.consentLetter)}>
                                   <VisibilityIcon color="info" className="icon" />
                                 </IconButton>
                               </div>
                               <div className="btn btn-sm col-md-4">
-                                <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                                <IconButton onClick={() => getDocShareholding(item?.consentLetter)}>
                                   <FileDownloadIcon color="info" className="icon" />
                                 </IconButton>
                               </div>
                               <div className="btn btn-sm col-md-4">
                                 <ReportProblemIcon
                                   style={{
-                                    color: fieldIconColors.developer,
+                                    color: fieldIconColors.consentLetter,
                                   }}
                                   onClick={() => {
-                                    setOpennedModal("Amount");
-                                    setLabelValue("Amount"),
+                                    setOpennedModal("consentLetter");
+                                    setLabelValue("Upload Receipt of Submission."),
                                       setSmShow(true),
                                       console.log("modal open"),
-                                      setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                                      setFieldValue(consentLetter);
                                   }}
                                 ></ReportProblemIcon>
                               </div>

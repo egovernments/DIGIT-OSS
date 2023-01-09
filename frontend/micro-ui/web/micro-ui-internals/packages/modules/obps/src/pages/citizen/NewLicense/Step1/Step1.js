@@ -105,20 +105,24 @@ const ApllicantFormStep1 = (props) => {
 
   useEffect(() => {
     if (developerDataLabel) {
-      setValue("authorizedDeveloper", developerDataLabel?.licenceDetails?.name);
-      setValue("authorizedPerson", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.name);
-      setValue("authorizedmobile", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.mobileNumber);
-      setValue("alternatemobile", developerDataLabel?.licenceDetails?.mobileNumber);
-      setValue("authorizedEmail", developerDataLabel?.licenceDetails?.email);
-      setValue("authorizedPan", developerDataLabel?.licenceDetails?.panNumber);
-      setValue("authorizedAddress", developerDataLabel?.licenceDetails?.addressLineOne);
-      setValue("village", developerDataLabel?.licenceDetails?.village);
-      setValue("authorizedPinCode", developerDataLabel?.licenceDetails?.pincode);
-      setValue("tehsil", developerDataLabel?.licenceDetails?.tehsil);
-      setValue("district", developerDataLabel?.licenceDetails?.district);
-      setValue("state", developerDataLabel?.licenceDetails?.state);
-      setValue("status", developerDataLabel?.addInfo?.showDevTypeFields);
-      setValue("address", developerDataLabel?.addInfo?.registeredAddress);
+      setValue("developerName", developerDataLabel?.addInfo?.name);
+      setValue("developerAddress", developerDataLabel?.addInfo?.registeredAddress);
+      setValue("developerEmail", developerDataLabel?.addInfo?.emailId);
+      setValue("developerType", developerDataLabel?.addInfo?.showDevTypeFields);
+      setValue("developerCinNo", developerDataLabel?.addInfo?.cin_Number);
+      setValue("directorDinNo", developerDataLabel?.addInfo?.DirectorsInformation?.[0]?.din);
+      setValue("directorName", developerDataLabel?.addInfo?.DirectorsInformation?.[0]?.name);
+      setValue("directorContactNumber", developerDataLabel?.addInfo?.DirectorsInformation?.[0]?.contactNumber);
+      // setValue("directorDoc", developerDataLabel?.licenceDetails?.pincode);
+      setValue("shareholdingName", developerDataLabel?.addInfo?.shareHoldingPatterens?.[0]?.name);
+      setValue("shareholdingDesignition", developerDataLabel?.addInfo?.shareHoldingPatterens?.[0]?.designition);
+      setValue("shareholdingPercentage", developerDataLabel?.addInfo?.shareHoldingPatterens?.[0]?.percentage);
+      // setValue("shareholdingDoc", developerDataLabel?.addInfo?.showDevTypeFields);
+      setValue("authorizedName", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.name);
+      setValue("authorizedMobile", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.mobileNumber);
+      setValue("authorizedEmail", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.emailId);
+      setValue("authorizedPan", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.pan);
+      setValue("authorizedAddress", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.permaneneAddress);
       setValue(
         "permanentAddress",
         `${developerDataLabel?.licenceDetails?.addressLineOne} ${developerDataLabel?.licenceDetails?.addressLineTwo} ${developerDataLabel?.licenceDetails?.addressLineThree}`
@@ -187,7 +191,7 @@ const ApllicantFormStep1 = (props) => {
                   control={control}
                   name="developerEmail"
                   render={({ field: { onChange, value } }) => (
-                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="developerEmail" />
+                    <input type="text" value={value} className="form-control" disabled name="developerEmail" />
                   )}
                 />
                 <h3 className="error-message" style={{ color: "red" }}>
@@ -218,7 +222,7 @@ const ApllicantFormStep1 = (props) => {
                 <div>
                   <Form.Label>
                     <h2>
-                      CIN no.<span style={{ color: "red" }}>*</span>
+                      CIN No.<span style={{ color: "red" }}>*</span>
                     </h2>
                   </Form.Label>
                 </div>
@@ -292,19 +296,19 @@ const ApllicantFormStep1 = (props) => {
                     <tr>
                       <td>1.</td>
                       <td>
-                        <input type="text" readOnly disabled="disabled" class="employee-card-input" {...register("kanal")} />
+                        <input type="text" readOnly disabled="disabled" class="employee-card-input" {...register("shareholdingName")} />
                       </td>
                       <td>
-                        <input type="text" readOnly disabled="disabled" class="employee-card-input" {...register("kanal")} />
+                        <input type="text" readOnly disabled="disabled" class="employee-card-input" {...register("shareholdingDesignition")} />
                       </td>
                       <td>
-                        <input type="text" readOnly disabled="disabled" class="employee-card-input" {...register("kanal")} />
+                        <input type="text" readOnly disabled="disabled" class="employee-card-input" {...register("shareholdingPercentage")} />
                       </td>
                       <td>
-                        <input type="text" readOnly disabled="disabled" class="employee-card-input" {...register("kanal")} />
+                        <input type="text" readOnly disabled="disabled" class="employee-card-input" {...register("shareholdingDoc")} />
                       </td>
                       <td>
-                        <input type="text" readOnly disabled="disabled" class="employee-card-input" {...register("kanal")} />
+                        <input type="text" readOnly disabled="disabled" class="employee-card-input" />
                       </td>
                     </tr>
                   </tbody>
@@ -325,9 +329,9 @@ const ApllicantFormStep1 = (props) => {
                     </h2>
                   </Form.Label>
                 </div>
-                <input type="text" className="form-control" placeholder="N/A" disabled {...register("authorizedDeveloper")} />
+                <input type="text" className="form-control" placeholder="N/A" disabled {...register("authorizedName")} />
                 <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.authorizedDeveloper && errors?.authorizedDeveloper?.message}
+                  {errors?.authorizedName && errors?.authorizedName?.message}
                 </h3>
               </Col>
               <Col md={4} xxl lg="4">
@@ -342,11 +346,11 @@ const ApllicantFormStep1 = (props) => {
                   control={control}
                   name="authorizedPerson"
                   render={({ field: { onChange, value } }) => (
-                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="authorizedPerson" />
+                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled {...register("authorizedMobile")} />
                   )}
                 />
                 <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.authorizedPerson && errors?.authorizedPerson?.message}
+                  {errors?.authorizedMobile && errors?.authorizedMobile?.message}
                 </h3>
               </Col>
               <Col md={4} xxl lg="4">
@@ -359,13 +363,13 @@ const ApllicantFormStep1 = (props) => {
                 </div>
                 <Controller
                   control={control}
-                  name="authorizedmobile"
+                  name="authorizedEmail"
                   render={({ field: { onChange, value } }) => (
-                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="authorizedmobile" />
+                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="authorizedEmail" />
                   )}
                 />
                 <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.authorizedmobile && errors?.authorizedmobile?.message}
+                  {errors?.authorizedEmail && errors?.authorizedEmail?.message}
                 </h3>
               </Col>
             </Row>
@@ -379,13 +383,13 @@ const ApllicantFormStep1 = (props) => {
                 </div>
                 <Controller
                   control={control}
-                  name="alternatemobile"
+                  name="authorizedPan"
                   render={({ field: { onChange, value } }) => (
-                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="alternatemobile" />
+                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="authorizedPan" />
                   )}
                 />
                 <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.alternatemobile && errors?.alternatemobile?.message}
+                  {errors?.authorizedPan && errors?.authorizedPan?.message}
                 </h3>
               </Col>
               <Col md={4} xxl lg="4">
@@ -398,13 +402,13 @@ const ApllicantFormStep1 = (props) => {
                 </div>
                 <Controller
                   control={control}
-                  name="authorizedEmail"
+                  name="authorizedAddress"
                   render={({ field: { onChange, value } }) => (
-                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="authorizedEmail" />
+                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="authorizedAddress" />
                   )}
                 />
                 <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.authorizedEmail && errors?.authorizedEmail?.message}
+                  {errors?.authorizedAddress && errors?.authorizedAddress?.message}
                 </h3>
               </Col>
             </Row>
