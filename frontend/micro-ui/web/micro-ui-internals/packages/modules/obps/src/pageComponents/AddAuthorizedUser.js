@@ -133,7 +133,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
   const [aurthorizedPan, setAurthorizedPan] = useState(formData?.LicneseDetails?.aurthorizedPan || formData?.LicneseDetails?.aurthorizedPan || "");
  
   const [docUpload,setDocuploadData]=useState([]);
-  const [uploadAadharPdf,setAdhaarPdf] = useState( DevelopersAllData?.uploadAadharPdf || "");
+  const [uploadBoardResolution,setAdhaarPdf] = useState( DevelopersAllData?.uploadBoardResolution || "");
   const [uploadDigitalSignaturePdf,setDigitalSignPdf] = useState( DevelopersAllData?.uploadDigitalSignaturePdf || "");
   const [file,setFile]=useState(null);
   const [urlGetAdhaarPdf,setAdhaarPdfUrl] = useState("");
@@ -376,7 +376,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
           emailId: aurthorizedEmail,
           dob: aurthorizedDob,
           pan: aurthorizedPan,
-          uploadAadharPdf: Documents?.uploadAadharPdf,
+          uploadBoardResolution: Documents?.uploadBoardResolution,
           uploadDigitalSignaturePdf: Documents?.uploadDigitalSignaturePdf,
           "parentId": userInfo?.info?.id,
           "type": "CITIZEN",
@@ -611,8 +611,8 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                           </td>
                           <td>
                             <div className="row">
-                            {(elementInArray.uploadAadharPdf !== "")?
-                              <button type="button" onClick={()=>getDocShareholding(elementInArray?.uploadAadharPdf)} className="btn btn-sm col-md-6">
+                            {(elementInArray.uploadBoardResolution !== "")?
+                              <button type="button" onClick={()=>getDocShareholding(elementInArray?.uploadBoardResolution)} className="btn btn-sm col-md-6">
                                 <VisibilityIcon color="info" className="icon" />
                               </button>
                               :<p></p>
@@ -624,7 +624,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                                   type="file" 
                                   accept="application/pdf"
                                   style={{display: "none"}}
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "uploadAadharPdf",true,input)} 
+                                  onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBoardResolution",true,input)} 
                                 />
                               </div>
 
@@ -816,11 +816,11 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                         }
                         <input
                           type="file"
-                          name="uploadAadharPdf"
+                          name="uploadBoardResolution"
                           accept="application/pdf"
                           placeholder=""
                           class="employee-card-input"
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "uploadAadharPdf")}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBoardResolution")}
                         />
                       </Col>
                       <Col md={3} xxl lg="3">
@@ -842,7 +842,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                     Close
                   </Button>
                   <Button 
-                    disabled = { !aurthorizedUserName || !aurthorizedDob || !aurthorizedEmail || !aurthorizedMobileNumber || !aurthorizedPan || !aurthorizedEmail.match(Digit.Utils.getPattern("Email")) || !aurthorizedUserName.match(Digit.Utils.getPattern('Name')) || !aurthorizedPan.match(Digit.Utils.getPattern("PAN")) || !aurthorizedMobileNumber.match(Digit.Utils.getPattern("MobileNo")) || !Documents?.uploadAadharPdf || !Documents?.uploadDigitalSignaturePdf }
+                    disabled = { !aurthorizedUserName || !aurthorizedDob || !aurthorizedEmail || !aurthorizedMobileNumber || !aurthorizedPan || !aurthorizedEmail.match(Digit.Utils.getPattern("Email")) || !aurthorizedUserName.match(Digit.Utils.getPattern('Name')) || !aurthorizedPan.match(Digit.Utils.getPattern("PAN")) || !aurthorizedMobileNumber.match(Digit.Utils.getPattern("MobileNo")) || !Documents?.uploadBoardResolution || !Documents?.uploadDigitalSignaturePdf }
                   variant="primary" onClick={handleSubmitFormdata}>
                     Submit
                   </Button>

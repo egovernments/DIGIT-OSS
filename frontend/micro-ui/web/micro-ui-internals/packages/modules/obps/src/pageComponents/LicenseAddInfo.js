@@ -1,4 +1,4 @@
-import { BackButton, CardLabel, CardLabelError, FormStep, Loader, MobileNumber, RadioButtons, Toast,TextInput, ViewsIcon, DownloadIcon, Dropdown, DatePicker, RemoveIcon } from "@egovernments/digit-ui-react-components";
+import { BackButton, CardLabel, CheckBox, CardLabelError, FormStep, Loader, MobileNumber, RadioButtons, Toast,TextInput, ViewsIcon, DownloadIcon, Dropdown, DatePicker, RemoveIcon } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import Timeline from "../components/Timeline";
@@ -29,7 +29,6 @@ import { getDocShareholding } from "../../../tl/src/pages/employee/ScrutinyBasic
 import { MenuItem, Select } from "@mui/material";
 import { convertEpochToDate } from "../utils/index";
 import Spinner from "../components/Loader/index";
-import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
   let validation = {};
@@ -60,7 +59,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   const [csrNumber, setCSRNumber] = useState("");
 
   let isOpenLinkFlow = window.location.href.includes("openlink");
-
+  const [isUndertaken, setIsUndertaken] = useState(formData?.isUndertaken || formData?.formData?.isUndertaken || false);
   const [loader, setLoading] = useState(false);
   const getDeveloperData = async () => {
 
@@ -103,6 +102,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       setUploadPDF(developerDataGet?.devDetail[0]?.addInfo?.uploadPdf);
       setSerialNumber(developerDataGet?.devDetail[0]?.addInfo?.serialNumber);
       setDirectorData(developerDataGet?.devDetail[0]?.addInfo?.DirectorsInformation || []);
+      setDirectorDataMCA(developerDataGet?.devDetail[0]?.addInfo?.DirectorsInformationMCA || []);
       setCinNo(developerDataGet?.devDetail[0]?.addInfo?.cin_Number);
       setLLPNumber(developerDataGet?.devDetail[0]?.addInfo?.llp_Number);
       setCSRNumber(developerDataGet?.devDetail[0]?.addInfo?.csr_Number);
@@ -115,6 +115,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       setExistingColonizer(developerDataGet?.devDetail[0]?.addInfo?.existingColonizer || "")
       setExistingDirectors(developerDataGet?.devDetail[0]?.addInfo?.existingDirectors || "")
       setFinancialCapacity(developerDataGet?.devDetail[0]?.addInfo?.financialCapacity);
+      setIsUndertaken(developerDataGet?.devDetail[0]?.addInfo?.isUndertaken);
       setRegisteredMobileNumber(developerDataGet?.devDetail[0]?.addInfo?.registeredContactNo)
       // setShowDevTypeFields(valueOfDrop);
       let totalRemainingShareholdingPattern = 100;
@@ -250,6 +251,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   const [uploadPdf, setUploadPDF] = useState(DevelopersAllData?.uploadPdf || "");
   const [serialNumber, setSerialNumber] = useState("");
   const [DirectorData, setDirectorData] = useState([]);
+  const [DirectorDataMCA, setDirectorDataMCA] = useState([]);
   const [modalNAme, setModalNAme] = useState("");
   const [modaldesignition, setModaldesignition] = useState("");
   const [modalPercentage, setModalPercentage] = useState("");
@@ -481,7 +483,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         // } else {
         //   console.log("log2", DirectorData, Directory.data)
         // }
-        setDirectorData(Directory.data);
+        setDirectorDataMCA(Directory.data);
         setCompanyName(Resp.data.companyName)
         setIncorporation(Resp.data.incorporationDate)
         setUserEmail(Resp.data.email)
@@ -554,8 +556,12 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     HandleGetMCNdata();
   }, [cin_Number])
 
-  const handleChange = () => {
-    setChecked(event.target.checked);
+  function selectChecked(e) {
+    if (isUndertaken == false) {
+      setIsUndertaken(true);
+    }else{
+      setIsUndertaken(false);
+    }
   };
 
 
@@ -598,11 +604,14 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         emailId: emailId,
         registeredContactNo: registeredContactNo,
         gst_Number: gst_Number,
+        DirectorsInformationMCA: DirectorDataMCA,
         DirectorsInformation: DirectorData,
+        isUndertaken:isUndertaken,
         shareHoldingPatterens: modalValuesArray,
         othersDetails: othersArray,
         existingColonizerData: existingColonizerDetails,
-        existingColonizer: existingColonizer
+        existingColonizer: existingColonizer,
+        existingDirectors: existingDirectors,
       }
       onSelect(config.key, addInfo);
       // console.log("DATALICDET",addInfo);
@@ -1568,8 +1577,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                         </thead>
                         <tbody>
                           {
-                            (DirectorData?.length > 0) ?
-                              DirectorData.map((elementInArray, input) => {
+                            (DirectorDataMCA?.length > 0) ?
+                              DirectorDataMCA.map((elementInArray, input) => {
                                 return (
                                   <tr key={input}>
                                     <td>{input + 1}</td>
@@ -1790,15 +1799,16 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                   </div>
 
                   <Col md={12} >
-                  <FormControlLabel
-                    label="It is undertaken that the above information is true and correct for all facts and purposes."
-                    control={
-                      <Checkbox
-                        onChange={handleChange}
-                        inputProps={{ 'aria-label': 'controlled' }}
+                    <Form.Group className="col-md-12">
+                      <CheckBox
+                        label={t("It is undertaken that the above information is true and correct for all facts and purposes.")}
+                        onChange={(e) => selectChecked(e)}
+                        value={isUndertaken}
+                        checked={isUndertaken}
+                        name={isUndertaken}
+                        style={{ paddingBottom: "10px", paddingTop: "10px" }}
                       />
-                    }
-                  />
+                    </Form.Group>
                   </Col>
 
                   <p className="ml-1">
@@ -1912,50 +1922,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                         </div>
 
                         <div className="row mx-2">
-
                           {/* <div className="col col-4">
-                        <div className="form-group">
-                          <label htmlFor="name">Name</label>
-                          <input
-                            type="text"
-                            value={existingColonizerDetails.name}
-                            name="name"
-                            // onChange={SelectName}
-                            onChange={(e) => setExistingColonizerDetails({...existingColonizerDetails,name:e.target.value})}
-                            className="employee-card-input"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="col col-4">
-                        <div className="form-group">
-                          <label htmlFor="mobile">Mobile</label>
-                          <input
-                            type="text"
-                            value={existingColonizerDetails.mobile}
-                            name="mobile"
-                            // onChange={SelectName}
-                            onChange={(e) => setExistingColonizerDetails({...existingColonizerDetails,mobile:e.target.value})}
-                            className="employee-card-input"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="col col-4">
-                        <div className="form-group">
-                          <label htmlFor="email">Email ID</label>
-                          <input
-                            type="text"
-                            value={existingColonizerDetails.email}
-                            name="email"
-                            // onChange={SelectName}
-                            onChange={(e) => setExistingColonizerDetails({...existingColonizerDetails,email:e.target.value})}
-                            className="employee-card-input"
-                          />
-                        </div>
-                      </div> */}
-
-                          <div className="col col-4">
                             <div className="form-group">
                               <label htmlFor="dob">DOB <span className="text-danger font-weight-bold">*</span></label>
                               <input
@@ -1968,9 +1935,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                 max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear() - 18))}
                               />
                             </div>
-                          </div>
+                          </div> */}
 
-                          <div className="col col-4">
+                          {/* <div className="col col-4">
                             <div className="form-group">
                               <label htmlFor="pan">PAN Number <span className="text-danger font-weight-bold">*</span></label>
                               <input
@@ -1984,7 +1951,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                               />
                               {existingColonizerDetails.pan && existingColonizerDetails.pan.length > 0 && !existingColonizerDetails.pan.match(Digit.Utils.getPattern('PAN')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_PAN_NO")}</CardLabelError>}
                             </div>
-                          </div>
+                          </div> */}
 
                           <div className="col col-4">
                             <div className="form-group">
@@ -1996,15 +1963,31 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                 // onChange={SelectName}
                                 onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, licNo: e.target.value.toUpperCase() })}
                                 className="employee-card-input"
-                                maxLength={10}
+                                maxLength={11}
                               />
-                              {existingColonizerDetails.licNo && existingColonizerDetails.licNo.length > 0 && !existingColonizerDetails.licNo.match(Digit.Utils.getPattern('OldLicenceNo')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Invalid Licence No.")}</CardLabelError>}
+                              {existingColonizerDetails.licNo && existingColonizerDetails.licNo.length > 0 && !existingColonizerDetails.licNo.match(Digit.Utils.getPattern('LicNumber')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Invalid Licence No.")}</CardLabelError>}
                             </div>
                           </div>
 
                           <div className="col col-4">
                             <div className="form-group">
-                              <label htmlFor="licDate">Date <span className="text-danger font-weight-bold">*</span></label>
+                              <label htmlFor="name">Name of Developer <span className="text-danger font-weight-bold">*</span></label>
+                              <input
+                                type="text"
+                                value={existingColonizerDetails.name}
+                                name="name"
+                                // onChange={SelectName}
+                                onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, name: e.target.value.toUpperCase() })}
+                                className="employee-card-input"
+                                maxLength={10}
+                              />
+                              {existingColonizerDetails.name && existingColonizerDetails.name.length > 0 && !existingColonizerDetails.name.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid name.")}</CardLabelError>}
+                            </div>
+                          </div>
+
+                          <div className="col col-4">
+                            <div className="form-group">
+                              <label htmlFor="licDate">Date of Grant of Licence <span className="text-danger font-weight-bold">*</span></label>
                               <input
                                 type="date"
                                 value={existingColonizerDetails.licDate}
@@ -2035,7 +2018,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             </div>
                           </div>
 
-                          <div className="col col-4">
+                          {/* <div className="col col-4">
                             <div className="form-group">
                               <label htmlFor="licValidity">Select Purpose</label>
                               <Select
@@ -2056,7 +2039,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                               </Select>
 
                             </div>
-                          </div>
+                          </div> */}
 
 
                         </div>

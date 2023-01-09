@@ -1080,7 +1080,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
 
                     isDisabled={
                         ((data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm") ? (!Documents?.companyBalanceSheet || !Documents?.individualCertificateCA) : (data?.devDetail[0]?.addInfo?.showDevTypeFields === "Company" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Society" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Trust" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Institution") ? (!Documents?.companyBalanceSheet || !Documents?.paidUpCapital) : (data?.devDetail[0]?.addInfo?.showDevTypeFields === "Limited Liability Partnership" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Firm" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm") ? (!Documents?.netWorthOfPartners || !Documents?.netWorthOfFirm) : false) ||
-                        ((permissionGrantedHRDU === "Y" && capacityDevelopColonyHdruAct.length) ? false : permissionGrantedHRDU === "N" ? false : true) || ((technicalCapacityOutsideHaryana === "Y" && technicalCapacityOutsideHaryanaDetails.authority && technicalCapacityOutsideHaryanaDetails.project && technicalCapacityOutsideHaryanaDetails.statusOfDevelopment) ? false : technicalCapacityOutsideHaryana === "N" ? false : true) || ((alreadtObtainedLic === "Y" && Documents?.agreementDocY && Documents?.boardDocX && Documents?.registeredDoc && Documents?.boardDocY && technicalCapacitySoughtFromAnyColonizer.licNo && technicalCapacitySoughtFromAnyColonizer.licNo.match(Digit.Utils.getPattern('LicNumber')) && technicalCapacitySoughtFromAnyColonizer.dateOfGrantingLic && technicalCapacitySoughtFromAnyColonizer.licValidity && technicalCapacitySoughtFromAnyColonizer.purpose) ? false : alreadtObtainedLic === "N" ? false :  (data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm") ? false : true) || ((designatedDirectors === "Y" && Documents?.agreementDoc && Documents?.boardDoc) ? false : designatedDirectors === "N" ? false : permissionGrantedHRDU === "Y" ? false : true) || ((technicalExpert === "Y" && engineerName && engineerQualification && Documents?.engineerSign && Documents?.architectSign && Documents?.townPlannerSign && architectName && architectQualification && townPlannerName && engineerName.match(Digit.Utils.getPattern('Name')) && engineerQualification.match(Digit.Utils.getPattern('Name')) && architectName.match(Digit.Utils.getPattern('Name')) && architectQualification.match(Digit.Utils.getPattern('Name')) && townPlannerQualification && townPlannerQualification.match(Digit.Utils.getPattern('Name')) && townPlannerName.match(Digit.Utils.getPattern('Name'))) ? false : (technicalExpert === "N") ? false : true)
+                        ((permissionGrantedHRDU === "Y" && capacityDevelopColonyHdruAct.length) ? false : permissionGrantedHRDU === "N" ? false : true) || ((technicalCapacityOutsideHaryana === "Y" && technicalCapacityOutsideHaryanaDetails.authority && technicalCapacityOutsideHaryanaDetails.project && technicalCapacityOutsideHaryanaDetails.statusOfDevelopment) ? false : technicalCapacityOutsideHaryana === "N" ? false : true) || ((alreadtObtainedLic === "Y" && Documents?.agreementDocY && Documents?.boardDocX && Documents?.registeredDoc && Documents?.boardDocY && technicalCapacitySoughtFromAnyColonizer.licNo && technicalCapacitySoughtFromAnyColonizer.licNo.match(Digit.Utils.getPattern('LicNumber')) && technicalCapacitySoughtFromAnyColonizer.dateOfGrantingLic && technicalCapacitySoughtFromAnyColonizer.licValidity && technicalCapacitySoughtFromAnyColonizer.purpose) ? false : alreadtObtainedLic === "N" ? false :  (data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm") ? false : true) || ((designatedDirectors === "Y" && Documents?.agreementDoc && Documents?.boardDoc) ? false : designatedDirectors === "N" ? false : permissionGrantedHRDU === "Y" ? false : true) 
                     }
                 >
                     {/* <CheckBox
@@ -1323,7 +1323,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                             </tr>
                                             <tr>
                                                 <td> 5 </td>
-                                                <td>Any other documents <span className="text-danger font-weight-bold">*</span></td>
+                                                <td>Any other documents</td>
                                                 <td align="center" size="large">
                                                     <div className="row">
 
@@ -1467,10 +1467,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                             </p>)
                             :
                             (
-                                <p className="ml-1">(i) Whether the Developer/ group company has
-                                    earlier been granted permission to set up a colony under HDRU
-                                    Act, 1975: <span className="text-danger font-weight-bold">*</span>
-                                </p>
+                                <p className="d-none"></p>
                             )
                         }
                         {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Company") && (
