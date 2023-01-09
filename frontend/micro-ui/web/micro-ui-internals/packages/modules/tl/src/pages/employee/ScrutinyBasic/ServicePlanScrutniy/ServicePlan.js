@@ -17,14 +17,15 @@ import Collapse from "react-bootstrap/Collapse";
 import { IconButton } from "@mui/material";
 import { ScrutinyRemarksContext } from "../../../../../context/remarks-data-context";
 
-const ServicePlanService = ({apiResponse,refreshScrutinyData, applicationNumber}) => {
+const ServicePlanService = (props) => {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
   const [open2, setOpen2] = useState(false);
   const {remarksData,iconStates} = useContext(ScrutinyRemarksContext);
 
-//  const dataIcons = props.dataForIcons;
-
+ const dataIcons = props.dataForIcons;
+ const apiResponse = props.apiResponse
+//  apiResponse,refreshScrutinyData, applicationNumber,iconStates
   const handleshowhide = (event) => {
     const getuser = event.target.value;
 
@@ -67,8 +68,8 @@ const ServicePlanService = ({apiResponse,refreshScrutinyData, applicationNumber}
   const [fieldValue, setFieldValue] = useState("");
   const [openedModal, setOpennedModal] = useState("");
   const [fieldIconColors, setFieldIconColors] = useState({
-    loiNO: Colors.info,
-    UploadedYN: Colors.info,
+    loiNumber: Colors.info,
+    selfCertifiedDrawingsFromCharetedEng: Colors.info,
     Undertaking: Colors.info,
     Selfcertified: Colors.info,
     environmental: Colors.info,
@@ -89,8 +90,8 @@ const ServicePlanService = ({apiResponse,refreshScrutinyData, applicationNumber}
   });
 
   const fieldIdList = [
-    { label: "LOI Number", key: "loiNO" },
-    { label: "Uploaded Service Plan", key: "UploadedYN" },
+    { label: "LOI Number", key: "loiNumber" },
+    { label: "Uploaded Service Plan", key: "selfCertifiedDrawingsFromCharetedEng" },
     { label: "Undertaking Mobile No", key: "Undertaking" },
     { label: "Self-certified drawings from empanelled/certified architects that conform to the standard approved template.", key: "Selfcertified" },
     { label: "Environmental Clearance.", key: "environmental" },
@@ -98,6 +99,44 @@ const ServicePlanService = ({apiResponse,refreshScrutinyData, applicationNumber}
     { label: "Certified copy of the plan verified by a third party", key: "certified" },
     { label: "AutoCAD (DXF) file.", key: "AutoCAD" },
   ];
+
+
+  const getColorofFieldIcon = () => {
+    let tempFieldColorState = fieldIconColors;
+    fieldIdList.forEach((item) => {
+      if (dataIcons !== null && dataIcons !== undefined) {
+        console.log("color method called");
+        const fieldPresent = dataIcons.egScrutiny.filter(ele => (ele.fieldIdL === item.label));
+        console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
+        if (fieldPresent && fieldPresent.length) {
+          console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
+          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved ? Colors.approved : Colors.disapproved }
+
+        }
+      }
+    })
+
+    setFieldIconColors(tempFieldColorState);
+
+  };
+
+
+  useEffect(() => {
+    getColorofFieldIcon();
+    console.log("repeating1...",)
+  }, [dataIcons])
+
+  useEffect(() => {
+    if (labelValue) {
+      const fieldPresent = dataIcons.egScrutiny.filter(ele => (ele.fieldIdL === labelValue));
+      setSelectedFieldData(fieldPresent[0]);
+    } else {
+      setSelectedFieldData(null);
+    }
+  }, [labelValue])
+
+
+
 
   console.log("Digit123", apiResponse );
   return (
@@ -145,10 +184,10 @@ const ServicePlanService = ({apiResponse,refreshScrutinyData, applicationNumber}
 
                     <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.loiNO,
+                        color: fieldIconColors.loiNumber,
                       }}
                       onClick={() => {
-                        setOpennedModal("loiNO");
+                        setOpennedModal("loiNumber");
                         setLabelValue("LOI Number"),
                           setSmShow(true),
                           console.log("modal open"),
@@ -213,10 +252,10 @@ const ServicePlanService = ({apiResponse,refreshScrutinyData, applicationNumber}
                     ></ReportProblemIcon> */}
                       <ReportProblemIcon
                         style={{
-                          color: fieldIconColors.UploadedYN,
+                          color: fieldIconColors.selfCertifiedDrawingsFromCharetedEng,
                         }}
                         onClick={() => {
-                          setOpennedModal("UploadedYN");
+                          setOpennedModal("selfCertifiedDrawingsFromCharetedEng");
                           setLabelValue("Uploaded Service Plan"),
                             setSmShow(true),
                             console.log("modal open"),
