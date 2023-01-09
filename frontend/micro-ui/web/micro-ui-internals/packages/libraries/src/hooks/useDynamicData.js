@@ -97,7 +97,7 @@ const useDynamicData = ({moduleCode ,tenantId, filters, t }) => {
         }), 
         {select: (data) => {
             const obpsData = {
-                dynamicDataOne : data?.bpaTotalPermitsIssued === 0 || data?.bpaTotalPermitsIssued === null ? null : `₹ ${data?.bpaTotalPermitsIssued}` + " " +  t("PERMITS_ISSUED_IN_LAST_12_MONTHS"),
+                dynamicDataOne : data?.bpaTotalPermitsIssued === 0 || data?.bpaTotalPermitsIssued === null ? null : ` ${data?.bpaTotalPermitsIssued}` + " " +  t("PERMITS_ISSUED_IN_LAST_12_MONTHS"),
                 dynamicDataTwo : data?.bpaTotalPlansScrutinized === 0 || data?.bpaTotalPlansScrutinized === null ? null : data?.bpaTotalPlansScrutinized + " " + t("BUILING_PLANS_SCRUTINISED_IN_LAST_12_MONTHS"),
             }
             return obpsData;

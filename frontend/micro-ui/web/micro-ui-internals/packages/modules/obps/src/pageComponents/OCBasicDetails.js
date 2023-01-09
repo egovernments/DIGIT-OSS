@@ -186,7 +186,7 @@ const OCBasicDetails = ({ formData, onSelect, config }) => {
         <TextInput className="searchInput"
           onKeyPress={handleKeyPress}
           onChange={event => setScrutinyNumber({ edcrNumber: event.target.value })} value={scrutinyNumber?.edcrNumber} signature={true} signatureImg={<SearchIconSvg className="signature-img" onClick={!disableVlaue && scrutinyNumber?.edcrNumber ? () => handleSearch() : null} />}
-          disable={isDisabled}
+          disable={scrutinyNumber?.edcrNumber ? true : isDisabled}
           style={{ marginBottom: "10px" }}
         />
       </div>
