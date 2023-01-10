@@ -37,7 +37,7 @@ const Home = () => {
     setIsLoaderOn(true);
   }
 
-  if (tenantId) {
+  if (!tenantId) {
     history.push(`/digit-ui/citizen/select-location`);
   }
 
