@@ -22,7 +22,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step3";
 import FileUpload from "@mui/icons-material/FileUpload";
 import { useLocation } from "react-router-dom";
-
+import { Toast } from "@egovernments/digit-ui-react-components";
 const potentialOptons = [
   {
     label: "Hyper",
@@ -71,6 +71,11 @@ const LandScheduleForm = (props) => {
   const [modal1, setmodal1] = useState(false);
   const stateId = Digit.ULBService.getStateId();
   const [stepData, setStepData] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [showToast, setShowToast] = useState(null);
+  const [showToastError, setShowToastError] = useState(null);
+  const [applicantId, setApplicantId] = useState("");
+  const [litigationRemark, setLitigationRemark] = useState("");
   const { data: PurposeType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
 
   const { data: LandData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["LandType"]);
@@ -128,7 +133,7 @@ const LandScheduleForm = (props) => {
     const postDistrict = {
       pageName: "LandSchedule",
       action: "LANDSCHEDULE",
-      applicationNumber: props?.getId,
+      applicationNumber: applicantId,
       createdBy: userInfo?.id,
       updatedBy: userInfo?.id,
       LicenseDetails: {
@@ -191,6 +196,11 @@ const LandScheduleForm = (props) => {
   }, []);
 
   const getDocumentData = async (file, fieldName) => {
+    if (selectedFiles.includes(file.name)) {
+      setShowToastError({ key: "error" });
+      return;
+    }
+
     const formData = new FormData();
     formData.append("file", file);
     formData.append("tenantId", "hr");
@@ -202,7 +212,64 @@ const LandScheduleForm = (props) => {
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
       // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
+      if (fieldName === "thirdPartyDoc") {
+        setValue("thirdPartyDocFileName", file.name);
+      }
+      if (fieldName === "thirdPartyDocUpload") {
+        setValue("thirdPartyDocUploadFileName", file.name);
+      }
+      if (fieldName === "approvedLayoutPlan") {
+        setValue("approvedLayoutPlanFileName", file.name);
+      }
+      if (fieldName === "approvedLayoutPlan") {
+        setValue("approvedLayoutPlanFileName", file.name);
+      }
+      if (fieldName === "proposedLayoutPlan") {
+        setValue("proposedLayoutPlanFileName", file.name);
+      }
+      if (fieldName === "uploadPreviouslyLayoutPlan") {
+        setValue("uploadPreviouslyLayoutPlanFileName", file.name);
+      }
+      if (fieldName === "litigationDoc") {
+        setValue("litigationDocFileName", file.name);
+      }
+      if (fieldName === "courtDoc") {
+        setValue("courtDocFileName", file.name);
+      }
+      if (fieldName === "insolvencyDoc") {
+        setValue("insolvencyDocFileName", file.name);
+      }
+      if (fieldName === "docUpload") {
+        setValue("docUploadFileName", file.name);
+      }
+      if (fieldName === "landSchedule") {
+        setValue("landScheduleFileName", file.name);
+      }
+      if (fieldName === "mutation") {
+        setValue("mutationFileName", file.name);
+      }
+      if (fieldName === "jambandhi") {
+        setValue("jambandhiFileName", file.name);
+      }
+      if (fieldName === "detailsOfLease") {
+        setValue("detailsOfLeaseFileName", file.name);
+      }
+      if (fieldName === "addSalesDeed") {
+        setValue("addSalesDeedFileName", file.name);
+      }
+      if (fieldName === "copyofSpaBoard") {
+        setValue("copyofSpaBoardFileName", file.name);
+      }
+      if (fieldName === "revisedLanSchedule") {
+        setValue("revisedLanScheduleFileName", file.name);
+      }
+      if (fieldName === "copyOfShajraPlan") {
+        setValue("copyOfShajraPlanFileName", file.name);
+      }
+      setSelectedFiles([...selectedFiles, file.name]);
+
       setLoader(false);
+      setShowToast({ key: "success" });
     } catch (error) {
       setLoader(false);
       return error.message;
@@ -225,12 +292,51 @@ const LandScheduleForm = (props) => {
     }
   };
 
+  const handleWorkflow = async () => {
+    const token = window?.localStorage?.getItem("token");
+    setLoader(true);
+    const payload = {
+      ProcessInstances: [
+        {
+          businessService: "NewTL",
+          documents: null,
+          businessId: applicantId,
+          tenantId: "hr",
+          moduleName: "TL",
+          action: "LANDSCHEDULE",
+          previousStatus: "PURPOSE",
+          comment: null,
+        },
+      ],
+      RequestInfo: {
+        apiId: "Rainmaker",
+        msgId: "1669293303096|en_IN",
+        authToken: token,
+      },
+    };
+    try {
+      await axios.post("/egov-workflow-v2/egov-wf/process/_transition", payload);
+      setLoader(false);
+      props?.Step3Back();
+    } catch (error) {
+      setLoader(false);
+      return error;
+    }
+  };
+
   useEffect(() => {
     const search = location?.search;
     const params = new URLSearchParams(search);
     const id = params.get("id");
+    setApplicantId(id?.toString());
     if (id) getApplicantUserData(id);
   }, []);
+
+  const handleChange = (event) => {
+    const result = event.target.value.replace(/[^a-z]/gi, "");
+
+    setLitigationRemark(result);
+  };
 
   return (
     <div>
@@ -277,7 +383,7 @@ const LandScheduleForm = (props) => {
                                 {...register("licenseNumber")}
                                 required
                                 maxLength={20}
-                                pattern="(/^[^\s][a-zA-Z0-9\s]+$"
+                                // pattern="(/^[^\s][a-zA-Z0-9\s]+$"
                               />
                               <h3 className="error-message" style={{ color: "red" }}>
                                 {errors?.licenseNumber && errors?.licenseNumber?.message}
@@ -350,7 +456,7 @@ const LandScheduleForm = (props) => {
                                 </h2>
                               </label>
                               <input
-                                type="text"
+                                type="number"
                                 className="form-control"
                                 {...register("areaOfParentLicence")}
                                 required
@@ -363,7 +469,7 @@ const LandScheduleForm = (props) => {
                               <label>
                                 <h2>Specify Others</h2>
                               </label>
-                              <input type="text" {...register("specify")} className="form-control" />
+                              <input type="text" {...register("specify")} className="form-control" pattern="[A-Za-z]+" />
                             </div>
 
                             <div className="col col-3 ">
@@ -398,13 +504,14 @@ const LandScheduleForm = (props) => {
                                         <FileUpload color="primary" />
                                         <input
                                           type="file"
-                                          accept="application/pdf/jpeg"
+                                          accept="application/pdf/jpeg/png"
                                           required
                                           style={{ display: "none" }}
                                           onChange={(e) => getDocumentData(e?.target?.files[0], "thirdPartyDoc")}
                                         />
                                       </h2>
                                     </label>
+
                                     {fileStoreId?.thirdPartyDoc ? (
                                       <a onClick={() => getDocShareholding(fileStoreId?.thirdPartyDoc)} className="btn btn-sm ">
                                         <VisibilityIcon color="info" className="icon" />
@@ -412,12 +519,7 @@ const LandScheduleForm = (props) => {
                                     ) : (
                                       <p></p>
                                     )}
-                                    {/* <input
-                                          type="file"
-                                          className="form-control"
-                                          accept="application/pdf"
-                                          onChange={(e) => getDocumentData(e?.target?.files[0], "thirdPartyDoc")}
-                                        /> */}
+                                    <h3 style={{}}>{watch("thirdPartyDocFileName") ? watch("thirdPartyDocFileName") : null}</h3>
 
                                     <h3 className="error-message" style={{ color: "red" }}>
                                       {errors?.thirdPartyDoc && errors?.thirdPartyDoc?.message}
@@ -436,28 +538,21 @@ const LandScheduleForm = (props) => {
                                         <input
                                           type="file"
                                           style={{ display: "none" }}
-                                          accept="application/pdf/jpeg"
+                                          accept="application/pdf/jpeg/png"
                                           required
-                                          onChange={(e) => getDocumentData(e?.target?.files[0], "thirdPartyDoc")}
+                                          onChange={(e) => getDocumentData(e?.target?.files[0], "thirdPartyDocUpload")}
                                         />
                                       </h2>
                                     </label>
-                                    {fileStoreId?.thirdPartyDoc ? (
-                                      <a onClick={() => getDocShareholding(fileStoreId?.thirdPartyDoc)} className="btn btn-sm ">
+
+                                    {fileStoreId?.thirdPartyDocUpload ? (
+                                      <a onClick={() => getDocShareholding(fileStoreId?.thirdPartyDocUpload)} className="btn btn-sm ">
                                         <VisibilityIcon color="info" className="icon" />
                                       </a>
                                     ) : (
                                       <p></p>
                                     )}
-
-                                    {/* <div>
-                                      <input
-                                        type="file"
-                                        className="form-control"
-                                        accept="application/pdf"
-                                        onChange={(e) => getDocumentData(e?.target?.files[0], "thirdPartyDoc")}
-                                      />
-                                    </div> */}
+                                    <h3 style={{}}>{watch("thirdPartyDocUploadFileName") ? watch("thirdPartyDocUploadFileName") : null}</h3>
 
                                     <h3 className="error-message" style={{ color: "red" }}>
                                       {errors?.thirdPartyDoc && errors?.thirdPartyDoc?.message}
@@ -499,7 +594,7 @@ const LandScheduleForm = (props) => {
                                   Area Applied under Migration <span style={{ color: "red" }}>*</span>
                                 </h2>{" "}
                               </label>
-                              <input type="text" className="form-control" {...register("areaUnderMigration")} required />
+                              <input type="number" className="form-control" {...register("areaUnderMigration")} required />
                             </div>
                             <div className="col col-3">
                               <label>
@@ -530,7 +625,7 @@ const LandScheduleForm = (props) => {
                                   Area of Parent Licence <span style={{ color: "red" }}>*</span>
                                 </h2>
                               </label>
-                              <input type="text" className="form-control" {...register("areaofParentLic")} required minLength={1} maxLength={20} />
+                              <input type="number" className="form-control" {...register("areaofParentLic")} required minLength={1} maxLength={20} />
                             </div>
                           </div>
                           <br></br>
@@ -640,7 +735,7 @@ const LandScheduleForm = (props) => {
                                   Area other than migration <span style={{ color: "red" }}>*</span>
                                 </h2>{" "}
                               </label>
-                              <input type="text" className="form-control" {...register("freshlyApplied")} required minLength={2} maxLength={20} />
+                              <input type="number" className="form-control" {...register("freshlyApplied")} required minLength={2} maxLength={20} />
                             </div>
                             <div className="col col-3">
                               <h2
@@ -653,7 +748,7 @@ const LandScheduleForm = (props) => {
                                 <FileUpload color="primary" />
                                 <input
                                   type="file"
-                                  accept="application/pdf/jpeg"
+                                  accept="application/pdf/jpeg/png"
                                   required
                                   style={{ display: "none" }}
                                   onChange={(e) => getDocumentData(e?.target?.files[0], "approvedLayoutPlan")}
@@ -666,28 +761,7 @@ const LandScheduleForm = (props) => {
                               ) : (
                                 <p></p>
                               )}
-                              {/* <FileUpload color="primary" />
-                                <input
-                                  type="file"
-                                  style={{ display: "none" }}
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "approvedLayoutPlan")}
-                                />
-                              </h2>
-                              {fileStoreId?.approvedLayoutPlan ? (
-                                <a onClick={() => getDocShareholding(fileStoreId?.approvedLayoutPlan)} className="btn btn-sm ">
-                                  <VisibilityIcon color="info" className="icon" />
-                                </a>
-                              ) : (
-                                <p></p>
-                              )} */}
-                              {/* <div>
-                                <input
-                                  type="file"
-                                  className="form-control"
-                                  accept="application/pdf"
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "approvedLayoutPlan")}
-                                />
-                              </div> */}
+                              <h3 style={{}}>{watch("approvedLayoutPlanFileName") ? watch("approvedLayoutPlanFileName") : null}</h3>
                               <h3 className="error-message" style={{ color: "red" }}>
                                 {errors?.approvedLayoutPlan && errors?.approvedLayoutPlan?.message}
                               </h3>
@@ -703,7 +777,7 @@ const LandScheduleForm = (props) => {
                                 <FileUpload color="primary" />
                                 <input
                                   type="file"
-                                  accept="application/pdf/jpeg"
+                                  accept="application/pdf/jpeg/png"
                                   required
                                   style={{ display: "none" }}
                                   onChange={(e) => getDocumentData(e?.target?.files[0], "proposedLayoutPlan")}
@@ -716,14 +790,7 @@ const LandScheduleForm = (props) => {
                               ) : (
                                 <p></p>
                               )}
-                              {/* <div>
-                                <input
-                                  type="file"
-                                  className="form-control"
-                                  accept="application/pdf"
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "proposedLayoutPlan")}
-                                />
-                              </div> */}
+                              <h3 style={{}}>{watch("proposedLayoutPlanFileName") ? watch("proposedLayoutPlanFileName") : null}</h3>
                               <h3 className="error-message" style={{ color: "red" }}>
                                 {errors?.proposedLayoutPlan && errors?.proposedLayoutPlan?.message}
                               </h3>
@@ -732,12 +799,12 @@ const LandScheduleForm = (props) => {
                               <h2 data-toggle="tooltip" data-placement="top" title="Upload Previously approved Layout Plan.">
                                 {" "}
                               </h2>
-                              Upload Previously approved.<span style={{ color: "red" }}>*</span>
+                              Previously approved Plan.<span style={{ color: "red" }}>*</span>
                               <label>
                                 <FileUpload color="primary" />
                                 <input
                                   type="file"
-                                  accept="application/pdf/jpeg"
+                                  accept="application/pdf/jpeg/png"
                                   required
                                   style={{ display: "none" }}
                                   onChange={(e) => getDocumentData(e?.target?.files[0], "uploadPreviouslyLayoutPlan")}
@@ -750,14 +817,7 @@ const LandScheduleForm = (props) => {
                               ) : (
                                 <p></p>
                               )}
-                              {/* <div>
-                                <input
-                                  type="file"
-                                  className="form-control"
-                                  accept="application/pdf"
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "uploadPreviouslyLayoutPlan")}
-                                />
-                              </div> */}
+                              <h3 style={{}}>{watch("uploadPreviouslyLayoutPlanFileName") ? watch("uploadPreviouslyLayoutPlanFileName") : null}</h3>
                               <h3 className="error-message" style={{ color: "red" }}>
                                 {errors?.uploadPreviouslyLayoutPlan && errors?.uploadPreviouslyLayoutPlan?.message}
                               </h3>
@@ -828,7 +888,13 @@ const LandScheduleForm = (props) => {
                                 Remark <span style={{ color: "red" }}>*</span>
                               </h2>
                             </label>
-                            <input type="text" className="form-control" {...register("litigationRemark")} />
+                            <input
+                              type="text"
+                              className="form-control"
+                              {...register("litigationRemark")}
+                              value={litigationRemark}
+                              onChange={handleChange}
+                            />
                           </div>
                           <div className="col col-6">
                             <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"></h2>
@@ -837,7 +903,7 @@ const LandScheduleForm = (props) => {
                               <FileUpload color="primary" />
                               <input
                                 type="file"
-                                accept="application/pdf/jpeg"
+                                accept="application/pdf/jpeg/png"
                                 required
                                 style={{ display: "none" }}
                                 onChange={(e) => getDocumentData(e?.target?.files[0], "litigationDoc")}
@@ -850,14 +916,7 @@ const LandScheduleForm = (props) => {
                             ) : (
                               <p></p>
                             )}
-                            {/* <div>
-                              <input
-                                type="file"
-                                className="form-control"
-                                accept="application/pdf"
-                                onChange={(e) => getDocumentData(e?.target?.files[0], "litigationDoc")}
-                              />
-                            </div> */}
+                            <h3 style={{}}>{watch("litigationDocFileName") ? watch("litigationDocFileName") : null}</h3>
                             <h3 className="error-message" style={{ color: "red" }}>
                               {errors?.litigationDoc && errors?.litigationDoc?.message}
                             </h3>
@@ -906,7 +965,7 @@ const LandScheduleForm = (props) => {
                                 type="file"
                                 style={{ display: "none" }}
                                 onChange={(e) => getDocumentData(e?.target?.files[0], "courtDoc")}
-                                accept="application/pdf/jpeg"
+                                accept="application/pdf/jpeg/png"
                                 required
                               />
                             </label>
@@ -917,14 +976,7 @@ const LandScheduleForm = (props) => {
                             ) : (
                               <p></p>
                             )}
-                            {/* <div>
-                              <input
-                                type="file"
-                                className="form-control"
-                                accept="application/pdf"
-                                onChange={(e) => getDocumentData(e?.target?.files[0], "courtDoc")}
-                              />
-                            </div> */}
+                            <h3 style={{}}>{watch("courtDocFileName") ? watch("courtDocFileName") : null}</h3>
                             <h3 className="error-message" style={{ color: "red" }}>
                               {errors?.courtDoc && errors?.courtDoc?.message}
                             </h3>
@@ -973,7 +1025,7 @@ const LandScheduleForm = (props) => {
                               <input
                                 type="file"
                                 style={{ display: "none" }}
-                                accept="application/pdf/jpeg"
+                                accept="application/pdf/jpeg/png"
                                 required
                                 onChange={(e) => getDocumentData(e?.target?.files[0], "insolvencyDoc")}
                               />
@@ -985,14 +1037,7 @@ const LandScheduleForm = (props) => {
                             ) : (
                               <p></p>
                             )}
-                            {/* <div>
-                              <input
-                                type="file"
-                                className="form-control"
-                                accept="application/pdf"
-                                onChange={(e) => getDocumentData(e?.target?.files[0], "insolvencyDoc")}
-                              />
-                            </div> */}
+                            <h3 style={{}}>{watch("insolvencyDocFileName") ? watch("insolvencyDocFileName") : null}</h3>
                             <h3 className="error-message" style={{ color: "red" }}>
                               {errors?.insolvencyDoc && errors?.insolvencyDoc?.message}
                             </h3>
@@ -1034,7 +1079,7 @@ const LandScheduleForm = (props) => {
                                 type="file"
                                 style={{ display: "none" }}
                                 onChange={(e) => getDocumentData(e?.target?.files[0], "docUpload")}
-                                accept="application/pdf/jpeg"
+                                accept="application/pdf/jpeg/png"
                                 required
                               />
                             </label>
@@ -1045,14 +1090,7 @@ const LandScheduleForm = (props) => {
                             ) : (
                               <p></p>
                             )}
-                            {/* <div>
-                              <input
-                                type="file"
-                                className="form-control"
-                                accept="application/pdf"
-                                onChange={(e) => getDocumentData(e?.target?.files[0], "docUpload")}
-                              />
-                            </div> */}
+                            <h3 style={{}}>{watch("docUploadFileName") ? watch("docUploadFileName") : null}</h3>
                             <h3 className="error-message" style={{ color: "red" }}>
                               {errors?.docUpload && errors?.docUpload?.message}
                             </h3>
@@ -1257,8 +1295,8 @@ const LandScheduleForm = (props) => {
                       {watch("orderUpload") === "Y" && (
                         <div className="row ">
                           <div className="col col-3 ">
-                            <h2>
-                              Whether land compensation received <span style={{ color: "red" }}>*</span>{" "}
+                            <h2 data-toggle="tooltip" data-placement="top" title="Whether land compensation received ">
+                              Whether land compensation <span style={{ color: "red" }}>*</span>{" "}
                             </h2>
 
                             <label htmlFor="landCompensation">
@@ -1698,7 +1736,7 @@ const LandScheduleForm = (props) => {
                           type="file"
                           style={{ display: "none" }}
                           onChange={(e) => getDocumentData(e?.target?.files[0], "landSchedule")}
-                          accept="application/pdf/jpeg"
+                          accept="application/pdf/jpeg/png"
                           required
                         />
                       </label>
@@ -1709,15 +1747,7 @@ const LandScheduleForm = (props) => {
                       ) : (
                         <p></p>
                       )}
-                      {/* <div>
-                        <input
-                          type="file"
-                          className="form-control"
-                          accept="application/pdf"
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "landSchedule")}
-                          required
-                        />
-                      </div> */}
+                      <h3 style={{}}>{watch("landScheduleFileName") ? watch("landScheduleFileName") : null}</h3>
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.landSchedule && errors?.landSchedule?.message}
                       </h3>
@@ -1733,7 +1763,7 @@ const LandScheduleForm = (props) => {
                           type="file"
                           style={{ display: "none" }}
                           onChange={(e) => getDocumentData(e?.target?.files[0], "mutation")}
-                          accept="application/pdf/jpeg"
+                          accept="application/pdf/jpeg/png"
                           required
                         />
                       </label>
@@ -1744,15 +1774,7 @@ const LandScheduleForm = (props) => {
                       ) : (
                         <p></p>
                       )}
-                      {/* <div>
-                        <input
-                          type="file"
-                          className="form-control"
-                          accept="application/pdf"
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "mutation")}
-                          required
-                        />
-                      </div> */}
+                      <h3 style={{}}>{watch("mutationFileName") ? watch("mutationFileName") : null}</h3>
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.mutation && errors?.mutation?.message}
                       </h3>
@@ -1768,7 +1790,7 @@ const LandScheduleForm = (props) => {
                           type="file"
                           style={{ display: "none" }}
                           onChange={(e) => getDocumentData(e?.target?.files[0], "jambandhi")}
-                          accept="application/pdf/jpeg"
+                          accept="application/pdf/jpeg/png"
                           required
                         />
                       </label>
@@ -1779,15 +1801,7 @@ const LandScheduleForm = (props) => {
                       ) : (
                         <p></p>
                       )}
-                      {/* <div>
-                        <input
-                          type="file"
-                          className="form-control"
-                          accept="application/pdf"
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "jambandhi")}
-                          required
-                        />
-                      </div> */}
+                      <h3 style={{}}>{watch("jambandhiFileName") ? watch("jambandhiFileName") : null}</h3>
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.jambandhi && errors?.jambandhi?.message}
                       </h3>
@@ -1801,27 +1815,19 @@ const LandScheduleForm = (props) => {
                         <input
                           type="file"
                           style={{ display: "none" }}
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "detailsOfLeases")}
-                          accept="application/pdf/jpeg"
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "detailsOfLease")}
+                          accept="application/pdf/jpeg/png"
                           required
                         />
                       </label>
-                      {fileStoreId?.detailsOfLeases ? (
-                        <a onClick={() => getDocShareholding(fileStoreId?.detailsOfLeases)} className="btn btn-sm ">
+                      {fileStoreId?.detailsOfLease ? (
+                        <a onClick={() => getDocShareholding(fileStoreId?.detailsOfLease)} className="btn btn-sm ">
                           <VisibilityIcon color="info" className="icon" />
                         </a>
                       ) : (
                         <p></p>
                       )}
-                      {/* <div>
-                        <input
-                          type="file"
-                          className="form-control"
-                          accept="application/pdf"
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "detailsOfLease")}
-                          required
-                        />
-                      </div> */}
+                      <h3 style={{}}>{watch("detailsOfLeaseFileName") ? watch("detailsOfLeaseFileName") : null}</h3>
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.detailsOfLease && errors?.detailsOfLease?.message}
                       </h3>
@@ -1844,7 +1850,7 @@ const LandScheduleForm = (props) => {
                           type="file"
                           style={{ display: "none" }}
                           onChange={(e) => getDocumentData(e?.target?.files[0], "addSalesDeed")}
-                          accept="application/pdf/jpeg"
+                          accept="application/pdf/jpeg/png"
                           required
                         />
                       </label>
@@ -1855,15 +1861,7 @@ const LandScheduleForm = (props) => {
                       ) : (
                         <p></p>
                       )}
-                      {/* <div>
-                        <input
-                          type="file"
-                          className="form-control"
-                          accept="application/pdf"
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "addSalesDeed")}
-                          required
-                        />
-                      </div> */}
+                      <h3 style={{}}>{watch("addSalesDeedFileName") ? watch("addSalesDeedFileName") : null}</h3>
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.addSalesDeed && errors?.addSalesDeed?.message}
                       </h3>
@@ -1883,7 +1881,7 @@ const LandScheduleForm = (props) => {
                           type="file"
                           style={{ display: "none" }}
                           onChange={(e) => getDocumentData(e?.target?.files[0], "copyofSpaBoard")}
-                          accept="application/pdf/jpeg"
+                          accept="application/pdf/jpeg/png"
                           required
                         />
                       </label>
@@ -1894,15 +1892,7 @@ const LandScheduleForm = (props) => {
                       ) : (
                         <p></p>
                       )}
-                      {/* <div>
-                        <input
-                          type="file"
-                          className="form-control"
-                          accept="application/pdf"
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "copyofSpaBoard")}
-                          required
-                        />
-                      </div> */}
+                      <h3 style={{}}>{watch("copyofSpaBoardFileName") ? watch("copyofSpaBoardFileName") : null}</h3>
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.copyofSpaBoard && errors?.copyofSpaBoard?.message}
                       </h3>
@@ -1916,7 +1906,7 @@ const LandScheduleForm = (props) => {
                         <input
                           type="file"
                           style={{ display: "none" }}
-                          accept="application/pdf/jpeg"
+                          accept="application/pdf/jpeg/png"
                           required
                           onChange={(e) => getDocumentData(e?.target?.files[0], "revisedLanSchedule")}
                         />
@@ -1928,29 +1918,26 @@ const LandScheduleForm = (props) => {
                       ) : (
                         <p></p>
                       )}
-                      {/* <div>
-                        <input
-                          type="file"
-                          className="form-control"
-                          accept="application/pdf"
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "revisedLanSchedule")}
-                          required
-                        />
-                      </div> */}
+                      <h3 style={{}}>{watch("revisedLanScheduleFileName") ? watch("revisedLanScheduleFileName") : null}</h3>
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.revisedLanSchedule && errors?.revisedLanSchedule?.message}
                       </h3>
                     </div>
 
-                    <div className="col col-4">
+                    <div className="col col-3">
                       <h2 style={{ display: "flex" }}>
-                        Copy of Shajra Plan{" "}
-                        <span className="text-primary">
-                          {" "}
-                          <a onClick={() => setmodal1(true)}>(Click here for instructions to Upload Copy of Shajra Plan. )</a>
-                        </span>
-                        <span style={{ color: "red" }}>*</span>
+                        Copy of Shajra Plan <span style={{ color: "red" }}>*</span>
                       </h2>
+                      <span
+                        className="text-primary"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title=" Click here for instructions to Upload Copy of Shajra Plan."
+                      >
+                        {" "}
+                        <a onClick={() => setmodal1(true)}>(Click here )</a>
+                      </span>
+
                       <div>
                         <Modal size="lg" isOpen={modal1} toggle={() => setmodal(!modal1)} aria-labelledby="contained-modal-title-vcenter" centered>
                           <ModalHeader toggle={() => setmodal1(!modal1)}></ModalHeader>
@@ -2003,15 +1990,7 @@ const LandScheduleForm = (props) => {
                       ) : (
                         <p></p>
                       )}
-                      {/* <div>
-                        <input
-                          type="file"
-                          className="form-control"
-                          accept="application/pdf"
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "copyOfShajraPlan")}
-                          required
-                        />
-                      </div> */}
+                      <h3 style={{}}>{watch("copyOfShajraPlanFileName") ? watch("copyOfShajraPlanFileName") : null}</h3>
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.copyOfShajraPlan && errors?.copyOfShajraPlan?.message}
                       </h3>
@@ -2019,7 +1998,7 @@ const LandScheduleForm = (props) => {
                   </div>
                   <div class="row">
                     <div class="col-sm-12 text-left">
-                      <div id="btnClear" class="btn btn-primary btn-md center-block" onClick={() => props?.Step3Back()}>
+                      <div id="btnClear" class="btn btn-primary btn-md center-block" onClick={() => handleWorkflow()}>
                         Back
                       </div>
                     </div>
@@ -2032,6 +2011,28 @@ const LandScheduleForm = (props) => {
                       </div>
                     </div>
                   </div>
+                  {showToast && (
+                    <Toast
+                      success={showToast?.key === "success" ? true : false}
+                      label="Document Uploaded Successfully"
+                      isDleteBtn={true}
+                      onClose={() => {
+                        setShowToast(null);
+                        setError(null);
+                      }}
+                    />
+                  )}
+                  {showToastError && (
+                    <Toast
+                      error={showToastError?.key === "error" ? true : false}
+                      label="Duplicate file Selected"
+                      isDleteBtn={true}
+                      onClose={() => {
+                        setShowToastError(null);
+                        setError(null);
+                      }}
+                    />
+                  )}
                 </Col>
               </Row>
             </Form.Group>

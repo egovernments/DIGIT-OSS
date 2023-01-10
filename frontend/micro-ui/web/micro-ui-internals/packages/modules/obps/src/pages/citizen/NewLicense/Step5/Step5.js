@@ -12,7 +12,8 @@ import Spinner from "../../../../components/Loader";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step5";
 import ScrollToTop from "@egovernments/digit-ui-react-components/src/atoms/ScrollToTop";
-
+import FileUpload from "@mui/icons-material/FileUpload";
+import { Toast } from "@egovernments/digit-ui-react-components";
 const FeesChargesForm = (props) => {
   const location = useLocation();
   const history = useHistory();
@@ -22,6 +23,8 @@ const FeesChargesForm = (props) => {
   const [loader, setLoader] = useState(false);
   const [stepData, setStepData] = useState(null);
   const [applicantId, setApplicantId] = useState("");
+  const [showToast, setShowToast] = useState(null);
+  const [showToastError, setShowToastError] = useState(null);
   const [getShow, setShow] = useState({ submit: false, payNow: false });
   const {
     register,
@@ -185,6 +188,10 @@ const FeesChargesForm = (props) => {
 
   const [fileStoreId, setFileStoreId] = useState({});
   const getDocumentData = async (file, fieldName) => {
+    if (selectedFiles.includes(file.name)) {
+      setShowToastError({ key: "error" });
+      return;
+    }
     const formData = new FormData();
     formData.append("file", file);
     formData.append("tenantId", "hr");
@@ -195,8 +202,12 @@ const FeesChargesForm = (props) => {
       const Resp = await axios.post("/filestore/v1/files", formData, {});
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
-      // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
+      if (fieldName === "consentLetter") {
+        setValue("consentLetterFileName", file.name);
+      }
+      setSelectedFiles([...selectedFiles, file.name]);
       setLoader(false);
+      setShowToast({ key: "success" });
     } catch (error) {
       setLoader(false);
       return error.message;
@@ -211,6 +222,38 @@ const FeesChargesForm = (props) => {
   const dataAreaBiswansi = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.biswansi;
   const totalAreaAcre =
     dataArea * 0.125 + dataAreaMarla * 0.0062 + dataAreaSarai * 0.00069 + dataAreaBigha * 0.33 + dataAreaBiswa * 0.0309 + dataAreaBiswansi * 0.619;
+
+  // const handleWorkflow = async () => {
+  //   const token = window?.localStorage?.getItem("token");
+  //   setLoader(true);
+  //   const payload = {
+  //     ProcessInstances: [
+  //       {
+  //         businessService: "NewTL",
+  //         documents: null,
+  //         businessId: applicantId,
+  //         tenantId: "hr",
+  //         moduleName: "TL",
+  //         action: "FEESANDCHARGES",
+  //         previousStatus: "LANDDETAILS",
+  //         comment: null,
+  //       },
+  //     ],
+  //     RequestInfo: {
+  //       apiId: "Rainmaker",
+  //       msgId: "1669293303096|en_IN",
+  //       authToken: token,
+  //     },
+  //   };
+  //   try {
+  //     await axios.post("/egov-workflow-v2/egov-wf/process/_transition", payload);
+  //     setLoader(false);
+  //     props?.step4Back();
+  //   } catch (error) {
+  //     setLoader(false);
+  //     return error;
+  //   }
+  // };
 
   const getApplicantUserData = async (id) => {
     const token = window?.localStorage?.getItem("token");
@@ -360,27 +403,28 @@ const FeesChargesForm = (props) => {
                                 <div>
                                   <div className="row">
                                     <div className="col col-12">
+                                      <h2>
+                                        Consent letter in case of Another Developer (verified by the Department)
+                                        <span style={{ color: "red" }}>*</span>
+                                      </h2>
                                       <label>
-                                        <h2>
-                                          Consent letter in case of Another Developer (verified by the Department)
-                                          <span style={{ color: "red" }}>*</span>
-                                          {fileStoreId?.consentLetter ? (
-                                            <a onClick={() => getDocShareholding(fileStoreId?.consentLetter)} className="btn btn-sm col-md-6">
-                                              <VisibilityIcon color="info" className="icon" />
-                                            </a>
-                                          ) : (
-                                            <p></p>
-                                          )}
-                                        </h2>
-                                      </label>
-                                      <div>
+                                        <FileUpload color="primary" />
                                         <input
                                           type="file"
-                                          className="form-control"
-                                          required
+                                          style={{ display: "none" }}
                                           onChange={(e) => getDocumentData(e?.target?.files[0], "consentLetter")}
+                                          accept="application/pdf/jpeg/png"
+                                          required
                                         />
-                                      </div>
+                                      </label>
+                                      {fileStoreId?.consentLetter ? (
+                                        <a onClick={() => getDocShareholding(fileStoreId?.consentLetter)} className="btn btn-sm ">
+                                          <VisibilityIcon color="info" className="icon" />
+                                        </a>
+                                      ) : (
+                                        <p></p>
+                                      )}
+                                      <h3 style={{}}>{watch("consentLetterFileName") ? watch("consentLetterFileName") : null}</h3>
 
                                       <h3 className="error-message" style={{ color: "red" }}>
                                         {errors?.consentLetter && errors?.consentLetter?.message}
@@ -483,6 +527,28 @@ const FeesChargesForm = (props) => {
                       )}
                     </div>
                   </div>
+                  {showToast && (
+                    <Toast
+                      success={showToast?.key === "success" ? true : false}
+                      label="Document Uploaded Successfully"
+                      isDleteBtn={true}
+                      onClose={() => {
+                        setShowToast(null);
+                        setError(null);
+                      }}
+                    />
+                  )}
+                  {showToastError && (
+                    <Toast
+                      error={showToastError?.key === "error" ? true : false}
+                      label="Duplicate file Selected"
+                      isDleteBtn={true}
+                      onClose={() => {
+                        setShowToastError(null);
+                        setError(null);
+                      }}
+                    />
+                  )}
                 </Col>
               </Row>
             </Form.Group>

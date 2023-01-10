@@ -117,12 +117,50 @@ const CommonForm = () => {
     setStep(3);
   };
 
+  const handleWorkflow = async (action, previousStatus) => {
+    const token = window?.localStorage?.getItem("token");
+    const payload = {
+      ProcessInstances: [
+        {
+          businessService: "NewTL",
+          documents: null,
+          businessId: getId,
+          tenantId: "hr",
+          moduleName: "TL",
+          action: action,
+          previousStatus: previousStatus,
+          comment: null,
+        },
+      ],
+      RequestInfo: {
+        apiId: "Rainmaker",
+        msgId: "1669293303096|en_IN",
+        authToken: token,
+      },
+    };
+    try {
+      await axios.post("/egov-workflow-v2/egov-wf/process/_transition", payload);
+    } catch (error) {
+      return error;
+    }
+  };
+
   const changeSteps = (value) => {
-    if (value == 1 && stepActive?.step1) handleStep();
-    else if (value == 2 && stepActive.step2) handleStep1(getId, userData, getLicData);
-    else if (value == 3 && stepActive.step3) handlestep2(getLicData);
-    else if (value == 4 && stepActive.step4) handlestep3(getLicData);
-    else if (value == 5 && stepActive.step5) handlestep4(getLicData, securedData);
+    if (value == 1 && stepActive?.step1) {
+      handleWorkflow("PURPOSE", "INITIATE");
+      handleStep();
+    } else if (value == 2 && stepActive.step2) {
+      handleWorkflow("LANDSCHEDULE", "PURPOSE");
+      handleStep1(getId, userData, getLicData);
+    } else if (value == 3 && stepActive.step3) {
+      handleWorkflow("LANDDETAILS", "LANDSCHEDULE");
+      handlestep2(getLicData);
+    } else if (value == 4 && stepActive.step4) {
+      handlestep3(getLicData);
+    } else if (value == 5 && stepActive.step5) {
+      handleWorkflow("FEESANDCHARGES", "LANDDETAILS");
+      handlestep4(getLicData, securedData);
+    }
   };
 
   useEffect(() => {

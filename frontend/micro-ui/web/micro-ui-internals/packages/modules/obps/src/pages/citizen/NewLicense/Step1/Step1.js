@@ -35,6 +35,25 @@ const ApllicantFormStep1 = (props) => {
   const ApplicantFormSubmitHandlerForm = async (data) => {
     // props.Step1Continue("6", "userInfo", "licData");
 
+    delete data?.developerName;
+    delete data?.developerAddress;
+    delete data?.developerEmail;
+    delete data?.developerType;
+    delete data?.developerCinNo;
+    delete data?.directorDinNo;
+    delete data?.directorName;
+    delete data?.directorContactNumber;
+    delete data?.directorDoc;
+    delete data?.shareholdingName;
+    delete data?.shareholdingDesignition;
+    delete data?.shareholdingPercentage;
+    delete data?.shareholdingDoc;
+    delete data?.authorizedName;
+    delete data?.authorizedMobile;
+    delete data?.authorizedEmail;
+    delete data?.authorizedPan;
+    delete data?.authorizedAddress;
+
     // data["notSigned"] = data?.notSigned?.value;
     const postDistrict = {
       pageName: "ApplicantInfo",
@@ -105,20 +124,24 @@ const ApllicantFormStep1 = (props) => {
 
   useEffect(() => {
     if (developerDataLabel) {
-      setValue("authorizedDeveloper", developerDataLabel?.licenceDetails?.name);
-      setValue("authorizedPerson", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.name);
-      setValue("authorizedmobile", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.mobileNumber);
-      setValue("alternatemobile", developerDataLabel?.licenceDetails?.mobileNumber);
-      setValue("authorizedEmail", developerDataLabel?.licenceDetails?.email);
-      setValue("authorizedPan", developerDataLabel?.licenceDetails?.panNumber);
-      setValue("authorizedAddress", developerDataLabel?.licenceDetails?.addressLineOne);
-      setValue("village", developerDataLabel?.licenceDetails?.village);
-      setValue("authorizedPinCode", developerDataLabel?.licenceDetails?.pincode);
-      setValue("tehsil", developerDataLabel?.licenceDetails?.tehsil);
-      setValue("district", developerDataLabel?.licenceDetails?.district);
-      setValue("state", developerDataLabel?.licenceDetails?.state);
-      setValue("status", developerDataLabel?.addInfo?.showDevTypeFields);
-      setValue("address", developerDataLabel?.addInfo?.registeredAddress);
+      setValue("developerName", developerDataLabel?.addInfo?.name);
+      setValue("developerAddress", developerDataLabel?.addInfo?.registeredAddress);
+      setValue("developerEmail", developerDataLabel?.addInfo?.emailId);
+      setValue("developerType", developerDataLabel?.addInfo?.showDevTypeFields);
+      setValue("developerCinNo", developerDataLabel?.addInfo?.cin_Number);
+      setValue("directorDinNo", developerDataLabel?.addInfo?.DirectorsInformation?.[0]?.din);
+      setValue("directorName", developerDataLabel?.addInfo?.DirectorsInformation?.[0]?.name);
+      setValue("directorContactNumber", developerDataLabel?.addInfo?.DirectorsInformation?.[0]?.contactNumber);
+      // setValue("directorDoc", developerDataLabel?.licenceDetails?.pincode);
+      setValue("shareholdingName", developerDataLabel?.addInfo?.shareHoldingPatterens?.[0]?.name);
+      setValue("shareholdingDesignition", developerDataLabel?.addInfo?.shareHoldingPatterens?.[0]?.designition);
+      setValue("shareholdingPercentage", developerDataLabel?.addInfo?.shareHoldingPatterens?.[0]?.percentage);
+      // setValue("shareholdingDoc", developerDataLabel?.addInfo?.showDevTypeFields);
+      setValue("authorizedName", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.name);
+      setValue("authorizedMobile", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.mobileNumber);
+      setValue("authorizedEmail", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.emailId);
+      setValue("authorizedPan", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.pan);
+      setValue("authorizedAddress", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.permaneneAddress);
       setValue(
         "permanentAddress",
         `${developerDataLabel?.licenceDetails?.addressLineOne} ${developerDataLabel?.licenceDetails?.addressLineTwo} ${developerDataLabel?.licenceDetails?.addressLineThree}`
@@ -127,23 +150,6 @@ const ApllicantFormStep1 = (props) => {
     }
   }, [developerDataLabel]);
 
-  // const getApplicantUserData = async (id) => {
-  //   // http://103.166.62.118:80
-  //   const payload = {
-  //     apiId: "Rainmaker",
-  //     msgId: "1669293303096|en_IN",
-  //     authToken: token,
-  //   };
-  //   try {
-  //     const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${id}`, payload);
-  //     console.log(Resp);
-  //     const userData = Resp?.data?.newServiceInfoData[0]?.ApplicantInfo;
-  //     // setValue("notSigned", { label: userData?.notSigned, value: userData?.notSigned });
-  //     setValue("LC", userData?.LC);
-  //   } catch (error) {
-  //     return error;
-  //   }
-  // };
   useEffect(() => {
     const search = location?.search;
     const params = new URLSearchParams(search);
@@ -156,58 +162,59 @@ const ApllicantFormStep1 = (props) => {
     <form onSubmit={handleSubmit(ApplicantFormSubmitHandlerForm)}>
       <Card style={{ width: "126%", border: "5px solid #1266af" }}>
         <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New Licence </h4>
-        <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
+        <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "10px" }}>
           <Form.Group className="justify-content-center" controlId="formBasicEmail">
+            <h5 className="card-title fw-bold">Developer Information</h5>
             <Row className="ml-auto" style={{ marginBottom: 5 }}>
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
                     <h2>
-                      Developer <span style={{ color: "red" }}>*</span>
+                      Name <span style={{ color: "red" }}>*</span>
                     </h2>
                   </Form.Label>
                 </div>
-                <input type="text" className="form-control" placeholder="N/A" disabled {...register("authorizedDeveloper")} />
+                <input type="text" className="form-control" placeholder="N/A" disabled {...register("developerName")} />
                 <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.authorizedDeveloper && errors?.authorizedDeveloper?.message}
+                  {errors?.developerName && errors?.developerName?.message}
                 </h3>
               </Col>
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
                     <h2>
-                      Authorized Person Name <span style={{ color: "red" }}>*</span>
+                      Address<span style={{ color: "red" }}>*</span>
                     </h2>
                   </Form.Label>
                 </div>
                 <Controller
                   control={control}
-                  name="authorizedPerson"
+                  name="developerAddress"
                   render={({ field: { onChange, value } }) => (
-                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="authorizedPerson" />
+                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="developerAddress" />
                   )}
                 />
                 <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.authorizedPerson && errors?.authorizedPerson?.message}
+                  {errors?.developerAddress && errors?.developerAddress?.message}
                 </h3>
               </Col>
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
                     <h2>
-                      Authorized Mobile No<span style={{ color: "red" }}>*</span>
+                      EmailId<span style={{ color: "red" }}>*</span>
                     </h2>
                   </Form.Label>
                 </div>
                 <Controller
                   control={control}
-                  name="authorizedmobile"
+                  name="developerEmail"
                   render={({ field: { onChange, value } }) => (
-                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="authorizedmobile" />
+                    <input type="text" value={value} className="form-control" disabled name="developerEmail" />
                   )}
                 />
                 <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.authorizedmobile && errors?.authorizedmobile?.message}
+                  {errors?.developerEmail && errors?.developerEmail?.message}
                 </h3>
               </Col>
             </Row>
@@ -216,25 +223,160 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <h2>Alternate Mobile No.</h2>
+                    <h2>Developer type</h2>
                   </Form.Label>
                 </div>
                 <Controller
                   control={control}
-                  name="alternatemobile"
+                  name="developerType"
                   render={({ field: { onChange, value } }) => (
-                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="alternatemobile" />
+                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="developerType" />
                   )}
                 />
                 <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.alternatemobile && errors?.alternatemobile?.message}
+                  {errors?.developerType && errors?.developerType?.message}
                 </h3>
               </Col>
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
                     <h2>
-                      EmailId<span style={{ color: "red" }}>*</span>
+                      CIN No.<span style={{ color: "red" }}>*</span>
+                    </h2>
+                  </Form.Label>
+                </div>
+                <Controller
+                  control={control}
+                  name="developerCinNo"
+                  render={({ field: { onChange, value } }) => (
+                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="developerCinNo" />
+                  )}
+                />
+                <h3 className="error-message" style={{ color: "red" }}>
+                  {errors?.developerCinNo && errors?.developerCinNo?.message}
+                </h3>
+              </Col>
+            </Row>
+            <br></br>
+
+            <h5 className="card-title fw-bold">Directors Information</h5>
+            <div className="card-body">
+              <div className="table-bd">
+                <table className="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Sr. No</th>
+                      <th>DIN Number</th>
+                      <th>Name</th>
+                      <th>Contact Number</th>
+                      <th>View Document</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1.</td>
+                      <td>
+                        <input type="text" disabled="disabled" class="employee-card-input" {...register("directorDinNo")} />
+                      </td>
+                      <td>
+                        <input type="text" disabled="disabled" class="employee-card-input" {...register("directorName")} />
+                      </td>
+                      <td>
+                        <input type="text" disabled="disabled" class="employee-card-input" {...register("directorContactNumber")} />
+                      </td>
+                      <td>
+                        <input type="text" disabled="disabled" class="employee-card-input" {...register("directorDoc")} />
+                      </td>
+                      <td>
+                        <input type="text" disabled="disabled" class="employee-card-input" />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <h5 className="card-title fw-bold">Shareholding Patterns</h5>
+            <div className="card-body">
+              <div className="table-bd">
+                <table className="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Sr. No</th>
+                      <th>Name</th>
+                      <th>Designition</th>
+                      <th>Percentage</th>
+                      <th>View Document</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1.</td>
+                      <td>
+                        <input type="text" readOnly disabled="disabled" class="employee-card-input" {...register("shareholdingName")} />
+                      </td>
+                      <td>
+                        <input type="text" readOnly disabled="disabled" class="employee-card-input" {...register("shareholdingDesignition")} />
+                      </td>
+                      <td>
+                        <input type="text" readOnly disabled="disabled" class="employee-card-input" {...register("shareholdingPercentage")} />
+                      </td>
+                      <td>
+                        <input type="text" readOnly disabled="disabled" class="employee-card-input" {...register("shareholdingDoc")} />
+                      </td>
+                      <td>
+                        <input type="text" readOnly disabled="disabled" class="employee-card-input" />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </Form.Group>
+        </Card>
+        <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "5px", marginBottom: "52px" }}>
+          <Form.Group className="justify-content-center" controlId="formBasicEmail">
+            <h5 className="card-title fw-bold">Authorized Person Information </h5>
+            <Row className="ml-auto" style={{ marginBottom: 5 }}>
+              <Col md={4} xxl lg="4">
+                <div>
+                  <Form.Label>
+                    <h2>
+                      Name <span style={{ color: "red" }}>*</span>
+                    </h2>
+                  </Form.Label>
+                </div>
+                <input type="text" className="form-control" placeholder="N/A" disabled {...register("authorizedName")} />
+                <h3 className="error-message" style={{ color: "red" }}>
+                  {errors?.authorizedName && errors?.authorizedName?.message}
+                </h3>
+              </Col>
+              <Col md={4} xxl lg="4">
+                <div>
+                  <Form.Label>
+                    <h2>
+                      Mobile No.<span style={{ color: "red" }}>*</span>
+                    </h2>
+                  </Form.Label>
+                </div>
+                <Controller
+                  control={control}
+                  name="authorizedPerson"
+                  render={({ field: { onChange, value } }) => (
+                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled {...register("authorizedMobile")} />
+                  )}
+                />
+                <h3 className="error-message" style={{ color: "red" }}>
+                  {errors?.authorizedMobile && errors?.authorizedMobile?.message}
+                </h3>
+              </Col>
+              <Col md={4} xxl lg="4">
+                <div>
+                  <Form.Label>
+                    <h2>
+                      Emailid for Authorized Signatory<span style={{ color: "red" }}>*</span>
                     </h2>
                   </Form.Label>
                 </div>
@@ -249,12 +391,13 @@ const ApllicantFormStep1 = (props) => {
                   {errors?.authorizedEmail && errors?.authorizedEmail?.message}
                 </h3>
               </Col>
+            </Row>
+            <br></br>
+            <Row className="ml-auto" style={{ marginBottom: 5 }}>
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <h2>
-                      PAN No <span style={{ color: "red" }}>*</span>
-                    </h2>
+                    <h2>Pan No.</h2>
                   </Form.Label>
                 </div>
                 <Controller
@@ -268,14 +411,11 @@ const ApllicantFormStep1 = (props) => {
                   {errors?.authorizedPan && errors?.authorizedPan?.message}
                 </h3>
               </Col>
-            </Row>
-            <br></br>
-            <Row className="ml-auto" style={{ marginBottom: 5 }}>
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
                     <h2>
-                      Address 1<span style={{ color: "red" }}>*</span>
+                      Address of Authorized Signatory<span style={{ color: "red" }}>*</span>
                     </h2>
                   </Form.Label>
                 </div>
@@ -290,248 +430,16 @@ const ApllicantFormStep1 = (props) => {
                   {errors?.authorizedAddress && errors?.authorizedAddress?.message}
                 </h3>
               </Col>
-              <Col md={4} xxl lg="4">
-                <div>
-                  <Form.Label>
-                    <h2>
-                      Village/City <span style={{ color: "red" }}>*</span>
-                    </h2>
-                  </Form.Label>
-                </div>
-                <Controller
-                  control={control}
-                  name="village"
-                  render={({ field: { onChange, value } }) => (
-                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="village" />
-                  )}
-                />
-                <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.village && errors?.village?.message}
-                </h3>
-              </Col>
-              <Col md={4} xxl lg="4">
-                <div>
-                  <Form.Label>
-                    <h2>
-                      Pincode<span style={{ color: "red" }}>*</span>
-                    </h2>
-                  </Form.Label>
-                </div>
-                <Controller
-                  control={control}
-                  name="authorizedPinCode"
-                  render={({ field: { onChange, value } }) => (
-                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="authorizedPinCode" />
-                  )}
-                />
-                <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.authorizedPinCode && errors?.authorizedPinCode?.message}
-                </h3>
-              </Col>
-            </Row>
-            <br></br>
-            <Row className="ml-auto" style={{ marginBottom: 5 }}>
-              <Col md={4} xxl lg="4">
-                <div>
-                  <Form.Label>
-                    <h2>
-                      Tehshil<span style={{ color: "red" }}>*</span>
-                    </h2>
-                  </Form.Label>
-                </div>
-                <Controller
-                  control={control}
-                  name="tehsil"
-                  render={({ field: { onChange, value } }) => (
-                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="tehsil" />
-                  )}
-                />
-                <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.tehsil && errors?.tehsil?.message}
-                </h3>
-              </Col>
-              <Col md={4} xxl lg="4">
-                <div>
-                  <Form.Label>
-                    <h2>
-                      District<span style={{ color: "red" }}>*</span>
-                    </h2>
-                  </Form.Label>
-                </div>
-                <Controller
-                  control={control}
-                  name="district"
-                  render={({ field: { onChange, value } }) => (
-                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="district" />
-                  )}
-                />
-                <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.district && errors?.district?.message}
-                </h3>
-              </Col>
-              <Col md={4} xxl lg="4">
-                <div>
-                  <Form.Label>
-                    <h2>
-                      State<span style={{ color: "red" }}>*</span>
-                    </h2>
-                  </Form.Label>
-                </div>
-                <Controller
-                  control={control}
-                  name="state"
-                  render={({ field: { onChange, value } }) => (
-                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="state" />
-                  )}
-                />
-                <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.state && errors?.state?.message}
-                </h3>
-              </Col>
-            </Row>
-            <br></br>
-            <Row className="ml-auto" style={{ marginBottom: 5 }}>
-              <Col md={4} xxl lg="4">
-                <div>
-                  <Form.Label>
-                    <h2>
-                      Status (Individual/ Company/ Firm/ LLP etc.)<span style={{ color: "red" }}>*</span>
-                    </h2>
-                  </Form.Label>
-                </div>
-                <Controller
-                  control={control}
-                  name="status"
-                  render={({ field: { onChange, value } }) => (
-                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="status" />
-                  )}
-                />
-              </Col>
-              <Col md={4} xxl lg="4">
-                <div>
-                  <Form.Label>
-                    <h2>
-                      LC-I signed by <span style={{ color: "red" }}>*</span>
-                    </h2>
-                  </Form.Label>
-                </div>
-                <Controller
-                  control={control}
-                  name="LC"
-                  render={({ field: { onChange, value } }) => (
-                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="LC" />
-                  )}
-                />
-                {/* <Form.Control type="text" placeholder="" {...register("LC")} disabled />
-
-                <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.LC && errors?.LC?.message}
-                </h3> */}
-              </Col>
-              <Col md={4} xxl lg="4">
-                <div>
-                  <Form.Label>
-                    <h2>
-                      Address for communication <span style={{ color: "red" }}>*</span>
-                    </h2>
-                  </Form.Label>
-                </div>
-                <Controller
-                  control={control}
-                  name="address"
-                  render={({ field: { onChange, value } }) => (
-                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="address" />
-                  )}
-                />
-              </Col>
-            </Row>
-            <br></br>
-            <Row className="ml-auto" style={{ marginBottom: 5 }}>
-              <Col md={4} xxl lg="4">
-                <div>
-                  <Form.Label>
-                    <h2
-                      data-toggle="tooltip"
-                      data-placement="top"
-                      title="Permanent address in case of individual/ registered office address in case other than individual"
-                    >
-                      Permanent address/ registered office address<span style={{ color: "red" }}>*</span>
-                      &nbsp;{" "}
-                    </h2>
-                  </Form.Label>
-                </div>
-                <Controller
-                  control={control}
-                  name="permanentAddress"
-                  render={({ field: { onChange, value } }) => (
-                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="permanentAddress" />
-                  )}
-                />
-              </Col>
-              {/* <Col md={4} xxl lg="4">
-                <div>
-                  <Form.Label>
-                    <h2
-                      data-toggle="tooltip"
-                      data-placement="top"
-                      title="If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)"
-                    >
-                      If LC-I is not signed by self <span style={{ color: "red" }}>*</span>
-                      &nbsp;{" "}
-                    </h2>
-                  </Form.Label>
-                </div>
-                <ReactMultiSelect control={control} name="notSigned" placeholder="LC Not Signed" data={LcNotSigned} labels="LcNotSigned" />
-               
-
-                <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.notSigned?.value && errors?.notSigned?.value?.message}
-                </h3>
-              </Col> */}
-              <Col md={4} xxl lg="4">
-                <div>
-                  <Form.Label>
-                    <h2>
-                      EmailId for communication <span style={{ color: "red" }}>*</span>
-                    </h2>
-                  </Form.Label>
-                </div>
-                <Controller
-                  control={control}
-                  name="email"
-                  render={({ field: { onChange, value } }) => (
-                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="email" />
-                  )}
-                />
-              </Col>
-
-              <div className="col col-4">
-                <div>
-                  <Form.Label>
-                    <h2>
-                      Name of the authorized person to sign application <span style={{ color: "red" }}>*</span>
-                    </h2>
-                    <i className="fa fa-info-circle-fill" />
-                  </Form.Label>
-                </div>
-                <Controller
-                  control={control}
-                  name="authorized"
-                  render={({ field: { onChange, value } }) => (
-                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="authorized" />
-                  )}
-                />
-              </div>
             </Row>
           </Form.Group>
-          <div class="row">
-            <div class="col-sm-12 text-right">
-              <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
-                Save and Continue
-              </button>
-            </div>
-          </div>
         </Card>
+        <div class="row">
+          <div class="col-sm-12 text-right">
+            <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
+              Save and Continue
+            </button>
+          </div>
+        </div>
       </Card>
     </form>
   );

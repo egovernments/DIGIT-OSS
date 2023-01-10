@@ -17,7 +17,7 @@ import Spinner from "../../../../components/Loader";
 import { getDocShareholding } from "../docView/docView.help";
 import { convertEpochToDate } from "../../../../../../tl/src/utils";
 import { useLocation } from "react-router-dom";
-
+import { Toast } from "@egovernments/digit-ui-react-components";
 const ApllicantPuropseForm = (props) => {
   const datapost = {
     RequestInfo: {
@@ -208,6 +208,9 @@ const ApllicantPuropseForm = (props) => {
   const [fileStoreId, setFileStoreId] = useState({});
   const [stepData, setStepData] = useState(null);
   const [applicantId, setApplicantId] = useState("");
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [showToast, setShowToast] = useState(null);
+  const [showToastError, setShowToastError] = useState(null);
 
   const resetValues = () => {
     resetField("tehsil");
@@ -308,7 +311,6 @@ const ApllicantPuropseForm = (props) => {
         return { label: el?.districtName, id: el?.districtCode, value: el?.districtCode };
       });
       setDistrictDataLabels({ data: distData, isLoading: false });
-      console.log("data", distData);
     } catch (error) {
       return error;
     }
@@ -420,10 +422,6 @@ const ApllicantPuropseForm = (props) => {
   };
 
   useEffect(() => {
-    console.log("modalData", modalData);
-  }, [modalData]);
-
-  useEffect(() => {
     if (stepData?.AppliedLandDetails) setModalData(stepData?.AppliedLandDetails);
   }, [stepData?.AppliedLandDetails]);
 
@@ -495,9 +493,36 @@ const ApllicantPuropseForm = (props) => {
     }
   };
 
-  const handleWorkflow = () => {
-    // props.Step2Back();
-    // http://103.166.62.118:80/egov-workflow-v2/egov-wf/process/_transition
+  const handleWorkflow = async () => {
+    const token = window?.localStorage?.getItem("token");
+    setLoader(true);
+    const payload = {
+      ProcessInstances: [
+        {
+          businessService: "NewTL",
+          documents: null,
+          businessId: applicantId,
+          tenantId: "hr",
+          moduleName: "TL",
+          action: "PURPOSE",
+          previousStatus: "INITIATE",
+          comment: null,
+        },
+      ],
+      RequestInfo: {
+        apiId: "Rainmaker",
+        msgId: "1669293303096|en_IN",
+        authToken: token,
+      },
+    };
+    try {
+      await axios.post("/egov-workflow-v2/egov-wf/process/_transition", payload);
+      setLoader(false);
+      props.Step2Back();
+    } catch (error) {
+      setLoader(false);
+      return error;
+    }
   };
 
   useEffect(() => {
@@ -522,6 +547,10 @@ const ApllicantPuropseForm = (props) => {
     window?.localStorage.setItem("potential", JSON.stringify(potentialSelected));
   };
   const getDocumentData = async (file, fieldName) => {
+    if (selectedFiles.includes(file.name)) {
+      setShowToastError({ key: "error" });
+      return;
+    }
     const formData = new FormData();
     formData.append("file", file);
     formData.append("tenantId", "hr");
@@ -533,7 +562,12 @@ const ApllicantPuropseForm = (props) => {
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
       // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
+      if (fieldName === "registeringAuthorityDoc") {
+        setValue("registeringAuthorityDocFileName", file.name);
+      }
+      setSelectedFiles([...selectedFiles, file.name]);
       setLoader(false);
+      setShowToast({ key: "success" });
     } catch (error) {
       setLoader(false);
       return error.message;
@@ -558,7 +592,7 @@ const ApllicantPuropseForm = (props) => {
     };
     try {
       const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${id}`, payload);
-      const userData = Resp?.data?.LicenseDetails[0]?.ApplicantPurpose;
+      const userData = Resp?.data?.newBankGuaranteeList;
       setStepData(userData);
     } catch (error) {
       return error;
@@ -574,12 +608,10 @@ const ApllicantPuropseForm = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log("nott", watch("marla") * 0.0062 + watch("sarsai") * 0.00069 + watch("kanal") * 0.125);
     setValue("consolidatedTotal", watch("marla") * 0.0062 + watch("sarsai") * 0.00069 + watch("kanal") * 0.125);
   }, [watch("sarsai"), watch("marla"), watch("kanal")]);
 
   useEffect(() => {
-    console.log("test", watch("bigha") * 0.33 + watch("biswa") * 0.0309 + watch("biswansi") * 0.619);
     setValue("nonConsolidatedTotal", watch("bigha") * 0.33 + watch("biswa") * 0.0309 + watch("biswansi") * 0.619);
   }, [watch("bigha"), watch("biswa"), watch("biswansi")]);
 
@@ -619,28 +651,6 @@ const ApllicantPuropseForm = (props) => {
                   <div>
                     <Form.Label>
                       <h2>
-                        Potential Zone<span style={{ color: "red" }}>*</span>
-                      </h2>
-                    </Form.Label>
-                  </div>
-                  <ReactMultiSelect
-                    control={control}
-                    name="potential"
-                    placeholder="Potential"
-                    data={potentialOptons?.data}
-                    labels="Potential"
-                    onChange={handleChangePotential}
-                    loading={potentialOptons?.isLoading}
-                  />
-                  <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.potential?.value && errors?.potential?.value?.message}
-                  </h3>
-                </Col>
-
-                <Col md={4} xxl lg="3">
-                  <div>
-                    <Form.Label>
-                      <h2>
                         District<span style={{ color: "red" }}>*</span>
                       </h2>
                     </Form.Label>
@@ -666,14 +676,74 @@ const ApllicantPuropseForm = (props) => {
                   <div>
                     <Form.Label>
                       <h2>
-                        State<span style={{ color: "red" }}>*</span>
+                        Development Plan<span style={{ color: "red" }}>*</span>
                       </h2>
                     </Form.Label>
                   </div>
 
-                  <input type="text" className="form-control" placeholder="N/A" {...register("state")} disabled defaultValue="Haryana" />
+                  <ReactMultiSelect
+                    control={control}
+                    name="purpose"
+                    placeholder="Purpose"
+                    // onChange={handleChangePurpose}
+
+                    // data={purposeOptions?.data}
+                    // labels="Purpose"
+                    // loading={purposeOptions?.isLoading}
+                  />
                   <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.state && errors?.state?.message}
+                    {errors?.purpose?.value && errors?.purpose?.value?.message}
+                  </h3>
+                </Col>
+                <Col md={4} xxl lg="3">
+                  <div>
+                    <Form.Label>
+                      <h2>
+                        Zone<span style={{ color: "red" }}>*</span>
+                      </h2>
+                    </Form.Label>
+                  </div>
+                  <input type="text" className="form-control" name="zone" placeholder="zone" diabled />
+
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.zone?.value && errors?.zone?.value?.message}
+                  </h3>
+                </Col>
+                {/* <Col md={4} xxl lg="3">
+                  <div>
+                    <Form.Label>
+                      <h2>
+                        Potential Zone<span style={{ color: "red" }}>*</span>
+                      </h2>
+                    </Form.Label>
+                  </div>
+                  <ReactMultiSelect
+                    control={control}
+                    name="potential"
+                    placeholder="Potential"
+                    data={potentialOptons?.data}
+                    labels="Potential"
+                    onChange={handleChangePotential}
+                    loading={potentialOptons?.isLoading}
+                  />
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.potential?.value && errors?.potential?.value?.message}
+                  </h3>
+                </Col> */}
+              </Row>
+              <Row className="ml-auto" style={{ marginBottom: 5 }}>
+                <Col md={4} xxl lg="3">
+                  <div>
+                    <Form.Label>
+                      <h2>
+                        Sector<span style={{ color: "red" }}>*</span>
+                      </h2>
+                    </Form.Label>
+                  </div>
+                  <ReactMultiSelect control={control} name="sector" placeholder="sector" diabled />
+
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.sector?.value && errors?.sector?.value?.message}
                   </h3>
                 </Col>
               </Row>
@@ -864,8 +934,25 @@ const ApllicantPuropseForm = (props) => {
                   {errors?.landOwner && errors?.landOwner?.message}
                 </h3>
               </Col>
+              <Col md={4} xxl lg="4">
+                <div>
+                  <label>
+                    <h2>Name as Per registry</h2>
+                  </label>
+                </div>
+                <Form.Control type="text" className="form-control" placeholder="" {...register("landOwnerRegistry")} />
+              </Col>
+              <Col md={4} xxl lg="4">
+                <div>
+                  <label>
+                    <h2>Same as</h2>
+                  </label>
+                </div>
+                <Form.Control type="checkbox" className="form-control" placeholder="" {...register("landOwnerRegistry")} />
+              </Col>
             </Row>
             <br></br>
+
             <Row className="ml-auto mb-3">
               <Col md={4} xxl lg="12">
                 <div>
@@ -1054,7 +1141,7 @@ const ApllicantPuropseForm = (props) => {
                           placeholder=""
                           required
                           {...register("validitydate")}
-                          min={modalData?.agreementValidFrom}
+                          min={watch("agreementValidFrom")}
                         />
                       </div>
                     </div>
@@ -1066,11 +1153,11 @@ const ApllicantPuropseForm = (props) => {
                           Whether collaboration agreement irrevocable (Yes/No)<span style={{ color: "red" }}>*</span>
                         </h2>
                         <label htmlFor="agreementIrrevocialble">
-                          <input {...register("agreementIrrevocialble")} type="radio" value="N" id="agreementIrrevocialble" />
+                          <input {...register("agreementIrrevocialble")} type="radio" value="Y" id="yes" />
                           &nbsp;&nbsp; Yes &nbsp;&nbsp;
                         </label>
                         <label htmlFor="agreementIrrevocialble">
-                          <input {...register("agreementIrrevocialble")} type="radio" value="Y" id="agreementIrrevocialble" />
+                          <input {...register("agreementIrrevocialble")} type="radio" value="N" id="no" />
                           &nbsp;&nbsp; No &nbsp;&nbsp;
                         </label>
                       </div>
@@ -1126,15 +1213,18 @@ const ApllicantPuropseForm = (props) => {
                         <label>
                           <h2 data-toggle="tooltip" data-placement="top" title="Upload Document" style={{ marginTop: "-4px" }}>
                             Registering Authority document <span style={{ color: "red" }}>*</span> <FileUpload color="primary" />
-                            <input
-                              type="file"
-                              accept="application/pdf,application//jpeg"
-                              style={{ display: "none" }}
-                              required
-                              onChange={(e) => getDocumentData(e?.target?.files[0], "registeringAuthorityDoc")}
-                            />
+                            <div>
+                              <input
+                                type="file"
+                                accept="application/pdf/jpeg/png"
+                                style={{ display: "none" }}
+                                required
+                                onChange={(e) => getDocumentData(e?.target?.files[0], "registeringAuthorityDoc")}
+                              />
+                            </div>
                           </h2>
                         </label>
+                        <h3 style={{}}>{watch("registeringAuthorityDocFileName") ? watch("registeringAuthorityDocFileName") : null}</h3>
                         <h3 className="error-message" style={{ color: "red" }}>
                           {errors?.registeringAuthorityDoc && errors?.registeringAuthorityDoc?.message}
                         </h3>
@@ -1161,6 +1251,28 @@ const ApllicantPuropseForm = (props) => {
         </ModalBody>
         <ModalFooter toggle={() => setmodal(!modal)}></ModalFooter>
       </Modal>
+      {showToast && (
+        <Toast
+          success={showToast?.key === "success" ? true : false}
+          label="Document Uploaded Successfully"
+          isDleteBtn={true}
+          onClose={() => {
+            setShowToast(null);
+            setError(null);
+          }}
+        />
+      )}
+      {showToastError && (
+        <Toast
+          error={showToastError?.key === "error" ? true : false}
+          label="Duplicate file Selected"
+          isDleteBtn={true}
+          onClose={() => {
+            setShowToastError(null);
+            setError(null);
+          }}
+        />
+      )}
     </div>
   );
 };

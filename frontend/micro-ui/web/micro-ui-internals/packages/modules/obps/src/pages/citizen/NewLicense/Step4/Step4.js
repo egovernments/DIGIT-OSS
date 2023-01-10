@@ -21,6 +21,8 @@ import { VALIDATION_SCHEMA } from "../../../../utils/schema/step4";
 import { useLocation } from "react-router-dom";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import ScrollToTop from "@egovernments/digit-ui-react-components/src/atoms/ScrollToTop";
+import { CardLabelError } from "@egovernments/digit-ui-react-components";
+import { Toast } from "@egovernments/digit-ui-react-components";
 const AppliedDetailForm = (props) => {
   const location = useLocation();
   const Purpose = localStorage.getItem("purpose");
@@ -28,7 +30,12 @@ const AppliedDetailForm = (props) => {
   const [loader, setLoader] = useState(false);
   const [stepData, setStepData] = useState(null);
   const [fileStoreId, setFileStoreId] = useState({});
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [showError, setShowError] = useState({});
+  const [showToast, setShowToast] = useState(null);
+  const [showToastError, setShowToastError] = useState(null);
   const userInfo = Digit.UserService.getUser()?.info || {};
+  const [applicantId, setApplicantId] = useState("");
   const {
     watch,
     register,
@@ -41,6 +48,7 @@ const AppliedDetailForm = (props) => {
     mode: "onChange",
     reValidateMode: "onChange",
     resolver: yupResolver(VALIDATION_SCHEMA),
+    // validationSchema: VALIDATION_SCHEMA,
     shouldFocusError: true,
     defaultValues: {
       dgpsDetails: [
@@ -69,13 +77,34 @@ const AppliedDetailForm = (props) => {
     name: "dgpsDetails",
   });
 
+  const validateDgpsPoint = () => {
+    const data = getValues("dgpsDetails");
+    let temp = {};
+    data.forEach((ele, index) => {
+      temp = { ...temp, [`dgpsPointLatitude${index}`]: true, [`dgpsPointLongitude${index}`]: true };
+    });
+    setShowError({ ...showError, ...temp });
+    if (
+      data.every((item) => {
+        return validateXvalue(item.longitude) && validateYvalue(item.latitude);
+      })
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   const AppliedDetailFormSubmitHandler = async (data) => {
+    if (!validateDgpsPoint()) {
+      return;
+    }
     setLoader(true);
     const token = window?.localStorage?.getItem("token");
     const postDistrict = {
       pageName: "DetailsofAppliedLand",
       action: "LANDDETAILS",
-      applicationNumber: props.getId,
+      applicationNumber: applicantId,
       createdBy: userInfo?.id,
       updatedBy: userInfo?.id,
       LicenseDetails: {
@@ -311,6 +340,10 @@ const AppliedDetailForm = (props) => {
   }, []);
 
   const getDocumentData = async (file, fieldName) => {
+    if (selectedFiles.includes(file.name)) {
+      setShowToastError({ key: "error" });
+      return;
+    }
     const formData = new FormData();
     formData.append("file", file);
     formData.append("tenantId", "hr");
@@ -322,7 +355,80 @@ const AppliedDetailForm = (props) => {
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
       // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
+      if (fieldName === "hostedLayoutPlan") {
+        setValue("hostedLayoutPlanFileName", file.name);
+      }
+      if (fieldName === "consentRera") {
+        setValue("consentReraFileName", file.name);
+      }
+      if (fieldName === "sectoralPlan") {
+        setValue("sectoralPlanFileName", file.name);
+      }
+      if (fieldName === "detailedElectricSupply") {
+        setValue("detailedElectricSupplyFileName", file.name);
+      }
+      if (fieldName === "planCrossSection") {
+        setValue("planCrossSectionFileName", file.name);
+      }
+      if (fieldName === "publicHealthServices") {
+        setValue("publicHealthServicesFileName", file.name);
+      }
+      if (fieldName === "designRoad") {
+        setValue("designRoadFileName", file.name);
+      }
+      if (fieldName === "designSewarage") {
+        setValue("designSewarageFileName", file.name);
+      }
+      if (fieldName === "designDisposal") {
+        setValue("designDisposalFileName", file.name);
+      }
+      if (fieldName === "undertakingChange") {
+        setValue("undertakingChangeFileName", file.name);
+      }
+      if (fieldName === "proposedColony") {
+        setValue("proposedColonyFileName", file.name);
+      }
+      if (fieldName === "reportObjection") {
+        setValue("reportObjectionFileName", file.name);
+      }
+      if (fieldName === "undertaking") {
+        setValue("undertakingFileName", file.name);
+      }
+      setSelectedFiles([...selectedFiles, file.name]);
       setLoader(false);
+      setShowToast({ key: "success" });
+    } catch (error) {
+      setLoader(false);
+      return error;
+    }
+  };
+
+  const handleWorkflow = async () => {
+    const token = window?.localStorage?.getItem("token");
+    setLoader(true);
+    const payload = {
+      ProcessInstances: [
+        {
+          businessService: "NewTL",
+          documents: null,
+          businessId: applicantId,
+          tenantId: "hr",
+          moduleName: "TL",
+          action: "LANDDETAILS",
+          previousStatus: "LANDSCHEDULE",
+          comment: null,
+        },
+      ],
+      RequestInfo: {
+        apiId: "Rainmaker",
+        msgId: "1669293303096|en_IN",
+        authToken: token,
+      },
+    };
+    try {
+      await axios.post("/egov-workflow-v2/egov-wf/process/_transition", payload);
+      setLoader(false);
+      props?.step4Back();
     } catch (error) {
       setLoader(false);
       return error;
@@ -349,10 +455,32 @@ const AppliedDetailForm = (props) => {
     const search = location?.search;
     const params = new URLSearchParams(search);
     const id = params.get("id");
+    setApplicantId(id?.toString());
     if (id) getApplicantUserData(id);
   }, []);
   const [modal, setmodal] = useState(false);
   const [modal1, setmodal1] = useState(false);
+
+  const validateXvalue = (value) => {
+    if (value >= 432100.0 && value <= 751900.0 && value.toString().includes(".")) {
+      const decimalPlaces = value.toString().split(".")[1];
+      if (decimalPlaces.length === 3) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const validateYvalue = (value) => {
+    if (value >= 3054400.0 && value <= 3425500.0 && value.toString().includes(".")) {
+      const decimalPlaces = value.toString().split(".")[1];
+      if (decimalPlaces.length === 3) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   return (
     <div>
       <ScrollToTop />
@@ -407,11 +535,31 @@ const AppliedDetailForm = (props) => {
                         <div className="row ">
                           <div className="col col-4">
                             <label>X:Longitude</label>
-                            <input type="number" className="form-control" {...register(`dgpsDetails.${index}.longitude`)} />
+                            <input
+                              type="number"
+                              className="form-control"
+                              {...register(`dgpsDetails.${index}.longitude`)}
+                              onBlur={() => setShowError({ ...showError, [`dgpsPointLongitude${index}`]: true })}
+                            />
+                            {showError?.[`dgpsPointLongitude${index}`] && !validateXvalue(watch("dgpsDetails")[index].longitude) ? (
+                              <CardLabelError style={{ color: "red" }}>
+                                X:Longitude{index + 1} is not valid. It should be in between 432100.0 and 751900.0
+                              </CardLabelError>
+                            ) : null}
                           </div>
                           <div className="col col-4">
                             <label>Y:Latitude</label>
-                            <input type="number" className="form-control" {...register(`dgpsDetails.${index}.latitude`)} />
+                            <input
+                              type="number"
+                              className="form-control"
+                              {...register(`dgpsDetails.${index}.latitude`)}
+                              onBlur={() => setShowError({ ...showError, [`dgpsPointLatitude${index}`]: true })}
+                            />
+                            {showError?.[`dgpsPointLatitude${index}`] && !validateYvalue(watch("dgpsDetails")[index].latitude) ? (
+                              <CardLabelError style={{ color: "red" }}>
+                                Y:Latitude{index + 1} is not valid. It should be in between 3054400.0 and 3425500.0
+                              </CardLabelError>
+                            ) : null}
                           </div>
                         </div>
                         {index > 3 && (
@@ -426,6 +574,9 @@ const AppliedDetailForm = (props) => {
                       style={{ float: "right", marginRight: 15 }}
                       className="btn btn-primary"
                       onClick={() => append({ longitude: "", latitude: "" })}
+                      // onClick={() => {
+                      //   validateDgpsPoint();
+                      // }}
                     >
                       Add
                     </button>
@@ -1203,7 +1354,7 @@ const AppliedDetailForm = (props) => {
                           type="file"
                           style={{ display: "none" }}
                           onChange={(e) => getDocumentData(e?.target?.files[0], "hostedLayoutPlan")}
-                          accept="application/pdf/jpeg"
+                          accept="application/pdf/jpeg/png"
                           required
                         />
                       </label>
@@ -1214,14 +1365,7 @@ const AppliedDetailForm = (props) => {
                       ) : (
                         <p></p>
                       )}
-                      {/* <div>
-                        <input
-                          type="file"
-                          className="form-control"
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "hostedLayoutPlan")}
-                          required
-                        />
-                      </div> */}
+                      <h3 style={{}}>{watch("hostedLayoutPlanFileName") ? watch("hostedLayoutPlanFileName") : null}</h3>
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.hostedLayoutPlan && errors?.hostedLayoutPlan?.message}
                       </h3>
@@ -1242,7 +1386,7 @@ const AppliedDetailForm = (props) => {
                           type="file"
                           style={{ display: "none" }}
                           onChange={(e) => getDocumentData(e?.target?.files[0], "consentRera")}
-                          accept="application/pdf/jpeg"
+                          accept="application/pdf/jpeg/png"
                           required
                         />
                       </label>
@@ -1253,15 +1397,7 @@ const AppliedDetailForm = (props) => {
                       ) : (
                         <p></p>
                       )}
-                      {/* <div>
-                        <input
-                          type="file"
-                          className="form-control"
-                          accept="application/pdf"
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "consentRera")}
-                          required
-                        />
-                      </div> */}
+                      <h3 style={{}}>{watch("consentReraFileName") ? watch("consentReraFileName") : null}</h3>
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.consentRera && errors?.consentRera?.message}
                       </h3>
@@ -1276,7 +1412,7 @@ const AppliedDetailForm = (props) => {
                           type="file"
                           style={{ display: "none" }}
                           onChange={(e) => getDocumentData(e?.target?.files[0], "sectoralPlan")}
-                          accept="application/pdf/jpeg"
+                          accept="application/pdf/jpeg/png"
                           required
                         />
                       </label>
@@ -1287,15 +1423,7 @@ const AppliedDetailForm = (props) => {
                       ) : (
                         <p></p>
                       )}
-                      {/* <div>
-                        <input
-                          type="file"
-                          className="form-control"
-                          accept="application/pdf"
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "sectoralPlan")}
-                          required
-                        />
-                      </div> */}
+                      <h3 style={{}}>{watch("sectoralPlanFileName") ? watch("sectoralPlanFileName") : null}</h3>
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.sectoralPlan && errors?.sectoralPlan?.message}
                       </h3>
@@ -1315,7 +1443,7 @@ const AppliedDetailForm = (props) => {
                           type="file"
                           style={{ display: "none" }}
                           onChange={(e) => getDocumentData(e?.target?.files[0], "detailedElectricSupply")}
-                          accept="application/pdf/jpeg"
+                          accept="application/pdf/jpeg/png"
                           required
                         />
                       </label>
@@ -1326,15 +1454,7 @@ const AppliedDetailForm = (props) => {
                       ) : (
                         <p></p>
                       )}
-                      {/* <div>
-                        <input
-                          type="file"
-                          className="form-control"
-                          accept="application/pdf"
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "detailedElectricSupply")}
-                          required
-                        />
-                      </div> */}
+                      <h3 style={{}}>{watch("detailedElectricSupplyFileName") ? watch("detailedElectricSupplyFileName") : null}</h3>
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.detailedElectricSupply && errors?.detailedElectricSupply?.message}
                       </h3>
@@ -1357,7 +1477,7 @@ const AppliedDetailForm = (props) => {
                           type="file"
                           style={{ display: "none" }}
                           onChange={(e) => getDocumentData(e?.target?.files[0], "planCrossSection")}
-                          accept="application/pdf/jpeg"
+                          accept="application/pdf/jpeg/png"
                           required
                         />
                       </label>
@@ -1368,15 +1488,7 @@ const AppliedDetailForm = (props) => {
                       ) : (
                         <p></p>
                       )}
-                      {/* <div>
-                        <input
-                          type="file"
-                          className="form-control"
-                          accept="application/pdf"
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "planCrossSection")}
-                          required
-                        />
-                      </div> */}
+                      <h3 style={{}}>{watch("planCrossSectionFileName") ? watch("planCrossSectionFileName") : null}</h3>
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.planCrossSection && errors?.planCrossSection?.message}
                       </h3>
@@ -1396,7 +1508,7 @@ const AppliedDetailForm = (props) => {
                         <input
                           type="file"
                           style={{ display: "none" }}
-                          accept="application/pdf/jpeg"
+                          accept="application/pdf/jpeg/png"
                           required
                           onChange={(e) => getDocumentData(e?.target?.files[0], "publicHealthServices")}
                         />
@@ -1408,15 +1520,7 @@ const AppliedDetailForm = (props) => {
                       ) : (
                         <p></p>
                       )}
-                      {/* <div>
-                        <input
-                          type="file"
-                          className="form-control"
-                          accept="application/pdf"
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "publicHealthServices")}
-                          required
-                        />
-                      </div> */}
+                      <h3 style={{}}>{watch("publicHealthServicesFileName") ? watch("publicHealthServicesFileName") : null}</h3>
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.publicHealthServices && errors?.publicHealthServices?.message}
                       </h3>
@@ -1436,7 +1540,7 @@ const AppliedDetailForm = (props) => {
                           type="file"
                           style={{ display: "none" }}
                           onChange={(e) => getDocumentData(e?.target?.files[0], "designRoad")}
-                          accept="application/pdf/jpeg"
+                          accept="application/pdf/jpeg/png"
                           required
                         />
                       </label>
@@ -1447,15 +1551,7 @@ const AppliedDetailForm = (props) => {
                       ) : (
                         <p></p>
                       )}
-                      {/* <div>
-                        <input
-                          type="file"
-                          className="form-control"
-                          accept="application/pdf"
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "designRoad")}
-                          required
-                        />
-                      </div> */}
+                      <h3 style={{}}>{watch("designRoadFileName") ? watch("designRoadFileName") : null}</h3>
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.designRoad && errors?.designRoad?.message}
                       </h3>
@@ -1475,7 +1571,7 @@ const AppliedDetailForm = (props) => {
                           type="file"
                           style={{ display: "none" }}
                           onChange={(e) => getDocumentData(e?.target?.files[0], "designSewarage")}
-                          accept="application/pdf/jpeg"
+                          accept="application/pdf/jpeg/png"
                           required
                         />
                       </label>
@@ -1486,15 +1582,7 @@ const AppliedDetailForm = (props) => {
                       ) : (
                         <p></p>
                       )}
-                      {/* <div>
-                        <input
-                          type="file"
-                          className="form-control"
-                          accept="application/pdf"
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "designSewarage")}
-                          required
-                        />
-                      </div> */}
+                      <h3 style={{}}>{watch("designSewarageFileName") ? watch("designSewarageFileName") : null}</h3>
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.designSewarage && errors?.designSewarage?.message}
                       </h3>
@@ -1517,7 +1605,7 @@ const AppliedDetailForm = (props) => {
                           type="file"
                           style={{ display: "none" }}
                           onChange={(e) => getDocumentData(e?.target?.files[0], "designDisposal")}
-                          accept="application/pdf/jpeg"
+                          accept="application/pdf/jpeg/png"
                           required
                         />
                       </label>
@@ -1528,15 +1616,7 @@ const AppliedDetailForm = (props) => {
                       ) : (
                         <p></p>
                       )}
-                      {/* <div>
-                        <input
-                          type="file"
-                          className="form-control"
-                          accept="application/pdf"
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "designDisposal")}
-                          required
-                        />
-                      </div> */}
+                      <h3 style={{}}>{watch("designDisposalFileName") ? watch("designDisposalFileName") : null}</h3>
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.designDisposal && errors?.designDisposal?.message}
                       </h3>
@@ -1557,7 +1637,7 @@ const AppliedDetailForm = (props) => {
                           type="file"
                           style={{ display: "none" }}
                           onChange={(e) => getDocumentData(e?.target?.files[0], "undertakingChange")}
-                          accept="application/pdf/jpeg"
+                          accept="application/pdf/jpeg/png"
                           required
                         />
                       </label>
@@ -1568,15 +1648,7 @@ const AppliedDetailForm = (props) => {
                       ) : (
                         <p></p>
                       )}
-                      {/* <div>
-                        <input
-                          type="file"
-                          className="form-control"
-                          accept="application/pdf"
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "undertakingChange")}
-                          required
-                        />
-                      </div> */}
+                      <h3 style={{}}>{watch("undertakingChangeFileName") ? watch("undertakingChangeFileName") : null}</h3>
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.undertakingChange && errors?.undertakingChange?.message}
                       </h3>
@@ -1597,7 +1669,7 @@ const AppliedDetailForm = (props) => {
                           type="file"
                           style={{ display: "none" }}
                           onChange={(e) => getDocumentData(e?.target?.files[0], "proposedColony")}
-                          accept="application/pdf/jpeg"
+                          accept="application/pdf/jpeg/png"
                           required
                         />
                       </label>
@@ -1608,15 +1680,7 @@ const AppliedDetailForm = (props) => {
                       ) : (
                         <p></p>
                       )}
-                      {/* <div>
-                        <input
-                          type="file"
-                          className="form-control"
-                          accept="application/pdf"
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "proposedColony")}
-                          required
-                        />
-                      </div> */}
+                      <h3 style={{}}>{watch("proposedColonyFileName") ? watch("proposedColonyFileName") : null}</h3>
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.proposedColony && errors?.proposedColony?.message}
                       </h3>
@@ -1632,7 +1696,7 @@ const AppliedDetailForm = (props) => {
                           type="file"
                           style={{ display: "none" }}
                           onChange={(e) => getDocumentData(e?.target?.files[0], "reportObjection")}
-                          accept="application/pdf/jpeg"
+                          accept="application/pdf/jpeg/png"
                           required
                         />
                       </label>
@@ -1643,15 +1707,7 @@ const AppliedDetailForm = (props) => {
                       ) : (
                         <p></p>
                       )}
-                      {/* <div>
-                        <input
-                          type="file"
-                          className="form-control"
-                          accept="application/pdf"
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "reportObjection")}
-                          required
-                        />
-                      </div> */}
+                      <h3 style={{}}>{watch("reportObjectionFileName") ? watch("reportObjectionFileName") : null}</h3>
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.reportObjection && errors?.reportObjection?.message}
                       </h3>
@@ -1674,7 +1730,7 @@ const AppliedDetailForm = (props) => {
                           type="file"
                           style={{ display: "none" }}
                           onChange={(e) => getDocumentData(e?.target?.files[0], "undertaking")}
-                          accept="application/pdf/jpeg"
+                          accept="application/pdf/jpeg/png"
                           required
                         />
                       </label>
@@ -1685,15 +1741,7 @@ const AppliedDetailForm = (props) => {
                       ) : (
                         <p></p>
                       )}
-                      {/* <div>
-                        <input
-                          type="file"
-                          className="form-control"
-                          accept="application/pdf"
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "undertaking")}
-                          required
-                        />
-                      </div> */}
+                      <h3 style={{}}>{watch("undertakingFileName") ? watch("undertakingFileName") : null}</h3>
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.undertaking && errors?.undertaking?.message}
                       </h3>
@@ -1728,7 +1776,7 @@ const AppliedDetailForm = (props) => {
                   </div>
                   <div class="row">
                     <div class="col-sm-12 text-left">
-                      <div id="btnClear" class="btn btn-primary btn-md center-block" onClick={() => props?.step4Back()}>
+                      <div id="btnClear" class="btn btn-primary btn-md center-block" onClick={() => handleWorkflow()}>
                         Back
                       </div>
                     </div>
@@ -1738,6 +1786,28 @@ const AppliedDetailForm = (props) => {
                       </button>
                     </div>
                   </div>
+                  {showToast && (
+                    <Toast
+                      success={showToast?.key === "success" ? true : false}
+                      label="Document Uploaded Successfully"
+                      isDleteBtn={true}
+                      onClose={() => {
+                        setShowToast(null);
+                        setError(null);
+                      }}
+                    />
+                  )}
+                  {showToastError && (
+                    <Toast
+                      error={showToastError?.key === "error" ? true : false}
+                      label="Duplicate file Selected"
+                      isDleteBtn={true}
+                      onClose={() => {
+                        setShowToastError(null);
+                        setError(null);
+                      }}
+                    />
+                  )}
                 </Col>
               </Row>
             </Form.Group>
