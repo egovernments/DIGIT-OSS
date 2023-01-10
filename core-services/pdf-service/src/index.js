@@ -156,26 +156,7 @@ const createPdfBinary = async (
             formatconfig,
             listDocDefinition,
             key,
-            false,
-            jobid,
-            noOfDefinitions,
-            entityIds,
-            starttime,
-            successCallback,
-            errorCallback,
-            tenantId,
-            totalobjectcount,
-            userid,
-            documentType,
-            moduleName
-          ),
-          uploadFiles(
-            dbInsertSingleRecords,
-            dbInsertBulkRecords,
-            formatconfig,
-            listDocDefinition,
-            key,
-            true,
+            isconsolidated,
             jobid,
             noOfDefinitions,
             entityIds,
@@ -305,7 +286,7 @@ const uploadFiles = async (
             });
           }
           if (
-            dbInsertSingleRecords.length == totalobjectcount &&
+            dbInsertSingleRecords.length == totalobjectcount ||
             dbInsertBulkRecords.length == 1
           ) {
             insertStoreIds(
@@ -396,6 +377,10 @@ app.post(
       logger.info("received createnosave request on key: " + key);
       requestInfo = get(req.body, "RequestInfo");
       //
+      let isConsolidated = get(req.query, "isconsolidated");
+      // Set isConsolidated true as default if it's not available because it's a test api
+      isConsolidated =
+        isConsolidated == null ? true : getIsConsolidatedFromReq(req.query);
 
       var valid = validateRequest(req, res, key, tenantId, requestInfo);
 
@@ -421,18 +406,16 @@ app.post(
       }
 
       if (valid) {
-        let [
-          formatConfigByFile,
-          totalobjectcount,
-          entityIds,
-        ] = await prepareBegin(
-          key,
-          req,
-          requestInfo,
-          true,
-          formatconfig,
-          dataconfig
-        );
+        let [formatConfigByFile, totalobjectcount, entityIds] =
+          await prepareBegin(
+            key,
+            req,
+            requestInfo,
+            true,
+            formatconfig,
+            dataconfig,
+            isConsolidated
+          );
         // restoring footer function
         formatConfigByFile[0].footer = convertFooterStringtoFunctionIfExist(formatconfig.footer);
         const doc = printer.createPdfKitDocument(formatConfigByFile[0]);
@@ -698,6 +681,7 @@ export const createAndSave = async (
   var requestInfo = get(req.body || req, "RequestInfo");
   var documentType = get(dataconfig, "documentType", "");
   var moduleName = get(dataconfig, "DataConfigs.moduleName", "");
+  let isConsolidated = getIsConsolidatedFromReq(req.query || req);
 
   var valid = validateRequest(req, res, key, tenantId, requestInfo);
   if (valid) {
@@ -707,7 +691,8 @@ export const createAndSave = async (
       requestInfo,
       false,
       formatconfig,
-      dataconfig
+      dataconfig,
+      isConsolidated
     );
 
     // logger.info(`Applied templating engine on ${moduleObjectsArray.length} objects output will be in ${formatConfigByFile.length} files`);
@@ -729,17 +714,33 @@ export const createAndSave = async (
       totalobjectcount,
       userid,
       documentType,
-      moduleName
+      moduleName,
+      isConsolidated
     ).catch((err) => {
       logger.error(err.stack || err);
       errorCallback({
-        message: "error occurred in createPdfBinary call: " + (typeof err === "string") ?
-          err :
-          err.message,
+        message:
+          "error occurred in createPdfBinary call: " + (typeof err === "string")
+            ? err
+            : err.message,
       });
     });
   }
 };
+/**
+ * Check isConsolidated from given object
+ * @param {*} obj 
+ * @returns boolean
+ */
+const getIsConsolidatedFromReq = (obj) => {
+  let isConsolidated;
+  if (obj && obj.isConsolidated) {
+    isConsolidated = obj.isConsolidated;
+  } else if (obj && obj.isconsolidated) {
+    isConsolidated = obj.isconsolidated;
+  }
+  return isConsolidated == undefined ? false : (isConsolidated == true || isConsolidated.toLowerCase() == 'true') ? true : false;
+}
 const updateBorderlayout = (formatconfig) => {
   formatconfig.content = formatconfig.content.map((item) => {
     if (
@@ -860,7 +861,8 @@ const prepareBegin = async (
   requestInfo,
   returnFileInResponse,
   formatconfig,
-  dataconfig
+  dataconfig,
+  isConsolidated
 ) => {
   var baseKeyPath = get(dataconfig, "DataConfigs.baseKeyPath");
   var entityIdPath = get(dataconfig, "DataConfigs.entityIdPath");
@@ -878,7 +880,8 @@ const prepareBegin = async (
     baseKeyPath,
     requestInfo,
     returnFileInResponse,
-    entityIdPath
+    entityIdPath,
+    isConsolidated
   );
 };
 
@@ -930,7 +933,8 @@ const prepareBulk = async (
   baseKeyPath,
   requestInfo,
   returnFileInResponse,
-  entityIdPath
+  entityIdPath,
+  isconsolidated
 ) => {
   let isCommonTableBorderRequired = get(
     dataconfig,
@@ -962,7 +966,8 @@ const prepareBulk = async (
       // Multipage pdf, each pdf from new page
       if (
         formatObjectArrayObject.length != 0 &&
-        formatObject["content"][0] !== undefined
+        formatObject["content"][0] !== undefined &&
+        isconsolidated
       ) {
         formatObject["content"][0]["pageBreak"] = "before";
       }
