@@ -31,6 +31,6 @@ public class BSConstants {
 	public static final String SORT_ORDER_PARAM = "sortOrder";
 	public static final String DESC_PARAM = "DESC";
 	public static final String BS_BUSINESS_IDS_PARAM = "businessIds";
-	public static final String BS_CONSUMER_NO_PARAM = "consumerNo";
+	public static final String BS_CONSUMER_NO_PARAM = "consumerCode";
 	public static final String BS_AMENDMENT_ID_PARAM = "amendmentId";
 }
