@@ -128,7 +128,7 @@ const Inbox = ({ tenants, parentRoute }) => {
         totalRecords={data?.totalCount}
         title={"EVENTS_EVENTS_HEADER"}
         iconName={"calender"}
-        links={links}
+        // links={links}
         currentPage={parseInt(pageOffset / pageSize)}
         onNextPage={fetchNextPage}
         onPrevPage={fetchPrevPage}
