@@ -15,7 +15,7 @@ import Popup from "reactjs-popup";
 //   Row,
 //   Col,
 //   ModalFooter,
-// } from "reactstrap";
+// } from "reactstrap"; 
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import {Modal, ModalHeader, ModalFooter, ModalBody } from 'react-bootstrap';
