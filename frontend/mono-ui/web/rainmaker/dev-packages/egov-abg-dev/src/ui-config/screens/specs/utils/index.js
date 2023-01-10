@@ -127,6 +127,7 @@ export const downloadMultipleBill = async (
     const queryStr = [
       { key: "key", value: configKey },
       { key: "tenantId", value: commonConfig.tenantId },
+      { key: "isConsolidated", value: true }
     ];
     var addDetail = null;
 
