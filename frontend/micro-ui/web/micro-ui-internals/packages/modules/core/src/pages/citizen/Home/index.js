@@ -11,7 +11,7 @@ import {
   StandaloneSearchBar,
   WhatsNewCard,
 } from "@egovernments/digit-ui-react-components";
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 const Home = () => {
@@ -19,7 +19,7 @@ const Home = () => {
   const history = useHistory();
   const tenantId = Digit.ULBService.getCitizenCurrentTenant(true);
   const { data: { stateInfo } = {}, isLoading } = Digit.Hooks.useStore.getInitData();
-
+  const [isLoaderOn, setIsLoaderOn] = useState(false);
   const conditionsToDisableNotificationCountTrigger = () => {
     if (Digit.UserService?.getUser()?.info?.type === "EMPLOYEE") return false;
     if (!Digit.UserService?.getUser()?.access_token) return false;
@@ -33,9 +33,12 @@ const Home = () => {
       enabled: conditionsToDisableNotificationCountTrigger(),
     },
   });
+  const redirectLoading = () => {
+    setIsLoaderOn(true);
+  }
 
   if (!tenantId) {
-    history.push(`/digit-ui/citizen/select-location`);
+    history.push(`/digit-ui/citizen`);
   }
 
   const allCitizenServicesProps = {
@@ -99,6 +102,11 @@ const Home = () => {
         Icon: <CaseIcon className="fill-path-primary-main" />,
         onClick: () => history.push("/digit-ui/citizen/obps/stakeholder/apply/stakeholder-document-details"),
       },
+      // {
+      //   name: t("REDIRCT"),
+      //   Icon: <CaseIcon className="fill-path-primary-main" />,
+      //   onClick: () => redirectLoading(),
+      // },
 
     ],
     styles: { display: "flex", flexWrap: "wrap", justifyContent: "flex-start", width: "100%" },
@@ -140,33 +148,46 @@ const Home = () => {
   return isLoading ? (
     <Loader />
   ) : (
-    <div className="HomePageWrapper">
-      <div className="BannerWithSearch">
-        {/* <img src={stateInfo?.bannerUrl} /> */}
-        {/* <img src={"http://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/bg-login.jpg"} /> */}
-        <div className="Search">
-          <StandaloneSearchBar placeholder={t("CS_COMMON_SEARCH_PLACEHOLDER")} />
-        </div>
-      </div>
-
-      <div className="ServicesSection">
-        <CardBasedOptions {...allCitizenServicesProps} />
-        <CardBasedOptions {...allInfoAndUpdatesProps} />
-      </div>
-
-      {conditionsToDisableNotificationCountTrigger() ? (
-        EventsDataLoading ? (
-          <Loader />
-        ) : (
-          <div className="WhatsNewSection">
-            <div className="headSection">
-              <h2>{t("DASHBOARD_WHATS_NEW_LABEL")}</h2>
-              <p onClick={() => history.push("/digit-ui/citizen/engagement/whats-new")}>{t("DASHBOARD_VIEW_ALL_LABEL")}</p>
-            </div>
-            <WhatsNewCard {...EventsData?.[0]} />
+    
+    <div>
+      {isLoaderOn ? (
+        <div className="loader-container">
+      	  <div className="spinners"></div>
+          <div className="redirect-text">
+            <h4>Redirecting</h4>
           </div>
-        )
-      ) : null}
+        </div>
+      ) : (
+      <div className="HomePageWrapper">
+        
+        <div className="BannerWithSearch">
+          {/* <img src={stateInfo?.bannerUrl} /> */}
+          {/* <img src={"http://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/bg-login.jpg"} /> */}
+          <div className="Search">
+            <StandaloneSearchBar placeholder={t("CS_COMMON_SEARCH_PLACEHOLDER")} />
+          </div>
+        </div>
+
+        <div className="ServicesSection">
+          <CardBasedOptions {...allCitizenServicesProps} />
+          <CardBasedOptions {...allInfoAndUpdatesProps} />
+        </div>
+
+        {conditionsToDisableNotificationCountTrigger() ? (
+          EventsDataLoading ? (
+            <Loader />
+          ) : (
+            <div className="WhatsNewSection">
+              <div className="headSection">
+                <h2>{t("DASHBOARD_WHATS_NEW_LABEL")}</h2>
+                <p onClick={() => history.push("/digit-ui/citizen/engagement/whats-new")}>{t("DASHBOARD_VIEW_ALL_LABEL")}</p>
+              </div>
+              <WhatsNewCard {...EventsData?.[0]} />
+            </div>
+          )
+        ) : null}
+      </div>
+      )}
     </div>
   );
 };
