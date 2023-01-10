@@ -40,7 +40,7 @@ const SelectProofIdentity = ({ t, config, onSelect, userType, formData }) => {
       owners["documents"] = [];
       owners.documents["ProofOfIdentity"] = fileDetails;
     }
-    if(window.location.href.includes("/citizen/tl") && formData?.ownershipCategory?.isSameAsPropertyOwner == true)
+    if(window.location.href.includes("/citizen/tl") && (formData?.ownershipCategory?.isSameAsPropertyOwner == true || formData?.ownershipCategory?.isSameAsPropertyOwner === "true"))
     {
       owners = {...owners, owners : getOwnersfromProperty(formData), permanentAddress: formData?.cpt?.details?.owners?.[0]?.permanentAddress || formData?.cpt?.details?.owners?.[0]?.correspondenceAddress}
     }
