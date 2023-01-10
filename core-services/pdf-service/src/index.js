@@ -133,7 +133,8 @@ const createPdfBinary = async (
   totalobjectcount,
   userid,
   documentType,
-  moduleName
+  moduleName,
+  isconsolidated
 ) => {
   try {
     let noOfDefinitions = listDocDefinition.length;
@@ -151,24 +152,24 @@ const createPdfBinary = async (
       //
       process.nextTick(function () {
         uploadFiles(
-            dbInsertSingleRecords,
-            dbInsertBulkRecords,
-            formatconfig,
-            listDocDefinition,
-            key,
-            isconsolidated,
-            jobid,
-            noOfDefinitions,
-            entityIds,
-            starttime,
-            successCallback,
-            errorCallback,
-            tenantId,
-            totalobjectcount,
-            userid,
-            documentType,
-            moduleName
-          )
+          dbInsertSingleRecords,
+          dbInsertBulkRecords,
+          formatconfig,
+          listDocDefinition,
+          key,
+          isconsolidated,
+          jobid,
+          noOfDefinitions,
+          entityIds,
+          starttime,
+          successCallback,
+          errorCallback,
+          tenantId,
+          totalobjectcount,
+          userid,
+          documentType,
+          moduleName
+        )
       });
     }
   } catch (err) {
@@ -187,7 +188,7 @@ const uploadFiles = async (
   formatconfig,
   listDocDefinition,
   key,
-  isconsolidated,
+  isConsolidated,
   jobid,
   noOfDefinitions,
   entityIds,
@@ -203,7 +204,7 @@ const uploadFiles = async (
   let convertedListDocDefinition = [];
   let listOfFilestoreIds = [];
 
-  if (!isconsolidated) {
+  if (!isConsolidated) {
     listDocDefinition.forEach((docDefinition) => {
       docDefinition["content"].forEach((defn) => {
         var formatobject = JSON.parse(JSON.stringify(formatconfig));
@@ -243,14 +244,14 @@ const uploadFiles = async (
       fileStoreAPICall(filename, tenantId, data)
         .then((result) => {
           listOfFilestoreIds.push(result);
-          if (!isconsolidated) {
+          if (!isConsolidated) {
             dbInsertSingleRecords.push({
               jobid,
               id: uuidv4(),
               createdby: userid,
               modifiedby: userid,
               entityid: entityIds[i],
-              isconsolidated: false,
+              isConsolidated: false,
               filestoreids: [result],
               tenantId,
               createdtime: starttime,
@@ -263,7 +264,7 @@ const uploadFiles = async (
 
             // insertStoreIds(jobid,entityIds[i],[result],tenantId,starttime,successCallback,errorCallback,1,false);
           } else if (
-            isconsolidated &&
+            isConsolidated &&
             listOfFilestoreIds.length == noOfDefinitions
           ) {
             // insertStoreIds("",);
@@ -274,7 +275,7 @@ const uploadFiles = async (
               createdby: userid,
               modifiedby: userid,
               entityid: null,
-              isconsolidated: true,
+              isConsolidated: true,
               filestoreids: listOfFilestoreIds,
               tenantId,
               createdtime: starttime,
@@ -458,7 +459,7 @@ app.post(
     try {
       let tenantid = req.query.tenantid;
       let jobid = req.query.jobid;
-      let isconsolidated = req.query.isconsolidated;
+      let isConsolidated = req.query.isConsolidated;
       let entityid = req.query.entityid;
       requestInfo = get(req.body, "RequestInfo");
       if (
@@ -482,7 +483,7 @@ app.post(
         getFileStoreIds(
           jobid,
           tenantid,
-          isconsolidated,
+          isConsolidated,
           entityid,
           (responseBody) => {
             // doc successfully created
@@ -736,8 +737,8 @@ const getIsConsolidatedFromReq = (obj) => {
   let isConsolidated;
   if (obj && obj.isConsolidated) {
     isConsolidated = obj.isConsolidated;
-  } else if (obj && obj.isconsolidated) {
-    isConsolidated = obj.isconsolidated;
+  } else if (obj && obj.isConsolidated) {
+    isConsolidated = obj.isConsolidated;
   }
   return isConsolidated == undefined ? false : (isConsolidated == true || isConsolidated.toLowerCase() == 'true') ? true : false;
 }
