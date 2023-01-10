@@ -224,7 +224,7 @@ const RenewTrade = ({ parentRoute }) => {
         (nextStep[sessionStorage.getItem("isAccessories")] === "accessories-details" ||
           nextStep[sessionStorage.getItem("isAccessories")] === "map" ||
           nextStep[sessionStorage.getItem("isAccessories")] === "owner-ship-details" || 
-          nextStep[sessionStorage.getItem("isAccessories")] === "know-your-property")
+          nextStep[sessionStorage.getItem("isAccessories")] === "other-trade-details")
       ) {
         if((isReneworEditTrade && !(params?.tradeLicenseDetail?.additionalDetail?.propertyId) && params?.TradeDetails?.StructureType?.code === "MOVABLE" ) )
         nextStep = `map`

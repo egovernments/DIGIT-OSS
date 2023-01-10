@@ -17,12 +17,12 @@ const PropertyDetails = ({ t, config, onSelect, userType, formData }) => {
   }
   const { isLoading, isError, error, data: propertyDetails } = Digit.Hooks.pt.usePropertySearch(
     {
-      filters: { propertyIds: window.location.href.includes("/tl/tradelicence/edit-application") || window.location.href.includes("/renew-trade/")  ? formData?.tradeLicenseDetail?.additionalDetail?.propertyId : (formData?.knowyourproperty?.KnowProperty?.code === "YES" || sessionStorage.getItem("VisitedLightCreate") === "false" ? formData?.cptId?.id : formData?.cpt?.details?.propertyId) },
+      filters: { propertyIds: formData?.cptId?.id || formData?.cpt?.details?.propertyId ? (formData?.knowyourproperty?.KnowProperty?.code === "YES" || sessionStorage.getItem("VisitedLightCreate") === "false" ? formData?.cptId?.id : formData?.cpt?.details?.propertyId) : (window.location.href.includes("/tl/tradelicence/edit-application") || window.location.href.includes("/renew-trade/")  ? formData?.tradeLicenseDetail?.additionalDetail?.propertyId : formData?.cptId?.id || formData?.cpt?.details?.propertyId ) },
       tenantId: tenantId,
       privacy: Digit.Utils.getPrivacyObject(),
     },
     { 
-      filters: { propertyIds: window.location.href.includes("/tl/tradelicence/edit-application") || window.location.href.includes("/renew-trade/")  ? formData?.tradeLicenseDetail?.additionalDetail?.propertyId : (formData?.knowyourproperty?.KnowProperty?.code === "YES" || sessionStorage.getItem("VisitedLightCreate") === "false" ? formData?.cptId?.id : formData?.cpt?.details?.propertyId) }, 
+      filters: { propertyIds: formData?.cptId?.id || formData?.cpt?.details?.propertyId ? (formData?.knowyourproperty?.KnowProperty?.code === "YES" || sessionStorage.getItem("VisitedLightCreate") === "false" ? formData?.cptId?.id : formData?.cpt?.details?.propertyId) : (window.location.href.includes("/tl/tradelicence/edit-application") || window.location.href.includes("/renew-trade/")  ? formData?.tradeLicenseDetail?.additionalDetail?.propertyId : formData?.cptId?.id || formData?.cpt?.details?.propertyId ) }, 
       tenantId: tenantId,
       privacy: Digit.Utils.getPrivacyObject(), }
   );
