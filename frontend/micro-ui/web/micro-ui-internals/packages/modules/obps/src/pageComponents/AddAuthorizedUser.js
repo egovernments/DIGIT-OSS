@@ -12,7 +12,7 @@ import Popup from "reactjs-popup";
 //   Modal,
 //   ModalHeader,
 //   ModalBody,
-//   Row,
+//   Row, 
 //   Col,
 //   ModalFooter,
 // } from "reactstrap"; 
