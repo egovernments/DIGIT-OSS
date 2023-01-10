@@ -16,7 +16,7 @@ import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 const Home = () => {
   const { t } = useTranslation();
-  const history = useHistory();
+  const history = useHistory(); 
   const tenantId = Digit.ULBService.getCitizenCurrentTenant(true);
   const { data: { stateInfo } = {}, isLoading } = Digit.Hooks.useStore.getInitData();
   const [isLoaderOn, setIsLoaderOn] = useState(false);
