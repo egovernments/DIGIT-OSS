@@ -28,7 +28,7 @@ const SearchFormFieldsComponents = ({ registerRef, searchFormState }) => {
       <SearchField className="wns-search-field">
         <label>{t("BILLAMEND_CONSUMER_NO")}</label>
         <TextInput 
-          name="consumerNo" 
+          name="consumerCode" 
           inputRef={registerRef({})} 
           {...(validation = {
             isRequired: false,

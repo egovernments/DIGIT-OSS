@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCount, table, dispatch, onSortingByData, tenantId }) => {
+const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCount, table, dispatch, onSortingByData, tenantId, inboxStyles={}, tableStyle={} }) => {
   const { t } = useTranslation();
 
   const GetCell = (value) => <span className="cell-text styled-cell">{value}</span>;
@@ -103,6 +103,8 @@ const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCo
     // searchQueryForTable,
     data: table,
     columns: tableColumnConfig,
+    inboxStyles:{...inboxStyles},
+    tableStyle:{...tableStyle},
   };
 };
 

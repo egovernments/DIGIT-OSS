@@ -83,7 +83,7 @@ const SearchApplication = ({tenantId, t, onSubmit, data, count }) => {
         {
             Header: t("TL_APPLICATION_TYPE_LABEL"),
             disableSortBy: true,
-            accessor: (row) => GetCell(t(`TL_LOCALIZATION_APPLICATIONTYPE_${row.applicationType}`)),
+            accessor: (row) => GetCell(t(`TL_LOCALIZATION_APPLICATIONTYPE_${row?.workflowCode}`)),
         },
         {
             Header: t("TL_LICENSE_NUMBERL_LABEL"),

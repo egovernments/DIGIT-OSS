@@ -4,11 +4,11 @@ import { useEffect } from "react";
 const useBillAmendmentInbox = ({ tenantId, filters, config = {} }) => {
   const { filterForm, searchForm, tableForm } = filters;
   const user = Digit.UserService.getUser();
-  let { mobileNumber, applicationNumber, consumerNo } = searchForm;
+  let { mobileNumber, applicationNumber, consumerCode } = searchForm;
   let { sortBy, limit, offset, sortOrder } = tableForm;
   let { moduleName, businessService, applicationStatus, locality, assignee, applicationType } = filterForm;
 
-  if (mobileNumber || applicationNumber || consumerNo) {
+  if (mobileNumber || applicationNumber || consumerCode) {
     offset = 0;
   }
 
@@ -38,7 +38,7 @@ const useBillAmendmentInbox = ({ tenantId, filters, config = {} }) => {
     moduleSearchCriteria: {
       ...(mobileNumber ? { mobileNumber } : {}),
       ...(applicationNumber ? { applicationNumber } : {}),
-      ...(consumerNo ? { consumerNo } : {}),
+      ...(consumerCode ? { consumerCode } : {}),
       ...(sortOrder ? { sortOrder } : {}),
       sortBy: "createdTime",
       ...(locality?.length > 0 ? { locality: locality.map((item) => item.code.split("_").pop()) } : {}),

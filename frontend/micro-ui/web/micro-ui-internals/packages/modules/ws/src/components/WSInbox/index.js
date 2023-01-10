@@ -227,9 +227,8 @@ const WSInbox = ({ parentRoute }) => {
     onFilterFormReset,
   };
 
-  const propsForInboxTable = useInboxTableConfig({
-    ...{ parentRoute, onPageSizeChange, formState, totalCount, table, dispatch, onSortingByData, tenantId },
-  });
+  const propsForInboxTable = useInboxTableConfig({ ...{ parentRoute, onPageSizeChange, formState, totalCount, table, dispatch, onSortingByData,tenantId, inboxStyles:{overflowX:"scroll", overflowY:"hidden"}, tableStyle:{width:"70%"} } });
+
 
   const propsForInboxMobileCards = useInboxMobileCardsData({ parentRoute, table });
 
