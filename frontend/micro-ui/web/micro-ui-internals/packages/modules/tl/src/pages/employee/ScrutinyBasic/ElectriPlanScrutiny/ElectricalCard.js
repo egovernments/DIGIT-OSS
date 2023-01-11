@@ -779,14 +779,14 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
         }
     }
     try {
-      const Resp = await axios.post(`/tl-services/serviceplan/_get?applicationNumber=${id}`,requestInfo).then((response) => {
+      const Resp = await axios.post(`/tl-services/electric/plan/_get?applicationNumber=${id}`,requestInfo).then((response) => {
         return response?.data;
       });
     //   console.log("Response From API1", Resp, Resp?.Licenses[0]?.applicationNumber,Resp);
-      setScrutinyDetails(Resp?.servicePlanResponse?.[0]);
+      setScrutinyDetails(Resp?.electricPlanResponse?.[0]);
 
-      console.log("devDel123",Resp?.servicePlanResponse?.[0]);
-      setApplicationData(Resp?.servicePlanResponse?.[0]);
+      console.log("devDel123",Resp?.electricPlanResponse?.[0]);
+      setApplicationData(Resp?.electricPlanResponse?.[0]);
     } catch (error) {
       console.log(error);
     }
@@ -968,6 +968,7 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
          refreshScrutinyData={getScrutinyData}
          ></ElecticalBase>
       </Row>
+      {/* {JSON.stringify(scrutinyDetails)} */}
       <Row style={{ top: 10, padding: "10px 22px" }}>
 
         {/* <Row> */}
