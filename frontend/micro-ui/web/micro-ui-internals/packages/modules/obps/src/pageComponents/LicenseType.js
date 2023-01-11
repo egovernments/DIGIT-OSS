@@ -129,7 +129,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
                 
               </div>}
 
-              {LicenseType && LicenseType?.i18nKey.includes("DEVELOPER") && <div><CardLabel>{`${t("BPA_DEVELOPER_TYPE")}`} <span className="font-weight-bold text-danger">*</span></CardLabel>
+              {LicenseType && LicenseType?.i18nKey.includes("DEVELOPER") && <div><CardLabel>{`${t("Select Developer Type")}`} <span className="font-weight-bold text-danger">*</span></CardLabel>
                 
                 <Dropdown
                   labels="Select Type"
@@ -146,6 +146,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
                 />
               </div>}
             </Form.Group>
+            {/* {LicenseType && LicenseType?.i18nKey.includes("CITIZEN") && <a className="submit-bar col-md-4" onClick={() => history.push("/digit-ui/citizen")}>Submit</a>} */}
           </Row>
         </FormStep>
       </div>

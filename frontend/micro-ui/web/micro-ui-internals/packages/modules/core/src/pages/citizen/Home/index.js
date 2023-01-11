@@ -17,7 +17,8 @@ import { useHistory } from "react-router-dom";
 const Home = () => {
   const { t } = useTranslation();
   const history = useHistory(); 
-  const tenantId = Digit.ULBService.getCitizenCurrentTenant(true);
+  const tenantId = "hr.ambala";
+  // const tenantId = Digit.ULBService.getCitizenCurrentTenant(true);
   const { data: { stateInfo } = {}, isLoading } = Digit.Hooks.useStore.getInitData();
   const [isLoaderOn, setIsLoaderOn] = useState(false);
   const conditionsToDisableNotificationCountTrigger = () => {
@@ -37,9 +38,9 @@ const Home = () => {
     setIsLoaderOn(true);
   }
 
-  if (!tenantId) {
-    history.push(`/digit-ui/citizen/select-location`);
-  }
+  // if (tenantId) {
+  //   history.push(`/digit-ui/citizen`);
+  // }
 
   const allCitizenServicesProps = {
     header: t("DASHBOARD_CITIZEN_SERVICES_LABEL"),
@@ -75,7 +76,7 @@ const Home = () => {
       {
         name: t("CS_COMMON_INBOX_BPA"),
         Icon: <OBPSIcon />,
-        onClick: () => history.push("/digit-ui/citizen/obps-home"),
+        onClick: () => history.push("/digit-ui/citizen/obps/stakeholder/apply/provide-license-type"),
       },
       {
         name: t("PROVIDE_LICENSE_TYPE"),
