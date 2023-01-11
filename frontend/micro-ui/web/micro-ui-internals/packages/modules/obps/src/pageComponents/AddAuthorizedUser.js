@@ -76,12 +76,27 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
       const developerDataGet = getDevDetails?.data; 
       setData(developerDataGet);
       console.log("ADDAUTHUSER",getDevDetails?.data?.devDetail[0]?.aurthorizedUserInfoArray);
-      setAurthorizedUserInfoArray(getDevDetails?.data?.devDetail[0]?.aurthorizedUserInfoArray || []);
+      setAurthorizedUserInfoArray(getDevDetails?.data?.devDetail[0]?.aurthorizedUserInfoArray || [
+        {
+          userName: getDevDetails?.data?.devDetail[0]?.licenceDetails?.mobileNumber,
+          name: getDevDetails?.data?.devDetail[0]?.licenceDetails?.name,
+          gender: getDevDetails?.data?.devDetail[0]?.licenceDetails?.gender,
+          mobileNumber: getDevDetails?.data?.devDetail[0]?.licenceDetails?.mobileNumber,
+          emailId: getDevDetails?.data?.devDetail[0]?.licenceDetails?.email,
+          dob: getDevDetails?.data?.devDetail[0]?.licenceDetails?.dob,
+          pan: getDevDetails?.data?.devDetail[0]?.licenceDetails?.panNumber,
+          uploadBoardResolution: getDevDetails?.data?.devDetail[0]?.licenceDetails?.uploadBoardResolution,
+          uploadDigitalSignaturePdf: getDevDetails?.data?.devDetail[0]?.licenceDetails?.uploadDigitalSignaturePdf
+          ,
+          uuid: userInfo.info.uuid
+        }
+      ]);
     } catch (error) {
       console.log(error);
     }
   }
   useEffect(() => {
+    console.log("userInfo",userInfo)
     getDeveloperData()
   }, []);
 

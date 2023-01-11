@@ -57,6 +57,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   })
   const [llpNumber, setLLPNumber] = useState("");
   const [csrNumber, setCSRNumber] = useState("");
+  const devType = localStorage.getItem("devTypeValueFlag");
 
   let isOpenLinkFlow = window.location.href.includes("openlink");
   const [isUndertaken, setIsUndertaken] = useState(formData?.isUndertaken || formData?.formData?.isUndertaken || false);
@@ -87,7 +88,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
 
       // console.log("STAKEHOLDER",getDevDetails?.data?.devDetail[0]?.addInfo?.registeredContactNo); 
-      setShowDevTypeFields(developerDataGet?.devDetail[0]?.addInfo?.showDevTypeFields);
+      setShowDevTypeFields(developerDataGet?.devDetail[0]?.addInfo?.showDevTypeFields || devType);
       // setName(developerDataGet?.devDetail[0]?.addInfo?.name);
       setCompanyName(developerDataGet?.devDetail[0]?.addInfo?.companyName);
       setIncorporation(developerDataGet?.devDetail[0]?.addInfo?.incorporationDate);
@@ -731,6 +732,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             style={{ width: "100%" }}
                             t={t}
                             required
+                            disable
                           />
                           {/* <Select
                             onChange={(e) => setDevType({showDevTypeFields: e.target.value })}
