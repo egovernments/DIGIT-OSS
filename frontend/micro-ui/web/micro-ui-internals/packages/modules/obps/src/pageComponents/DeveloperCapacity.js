@@ -944,7 +944,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                 })
                 .catch((e) => {
                     setIsDisableForNext(false);
-                    setShowToast({ key: "error" });
+                    // setShowToast({ key: "error" });
                     setError(e?.response?.data?.Errors[0]?.message || null);
                 });
 
@@ -1035,7 +1035,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                 })
                 .catch((e) => {
                     setIsDisableForNext(false);
-                    setShowToast({ key: "error" });
+                    // setShowToast({ key: "error" });
                     setError(e?.response?.data?.Errors[0]?.message || null);
                 });
         }
