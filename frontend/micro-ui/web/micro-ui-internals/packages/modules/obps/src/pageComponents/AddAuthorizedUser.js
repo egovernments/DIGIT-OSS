@@ -13,7 +13,7 @@ import Popup from "reactjs-popup";
 //   ModalHeader,
 //   ModalBody,
 //   Row, 
-//   Col,
+//   Col, 
 //   ModalFooter,
 // } from "reactstrap"; 
 import Col from 'react-bootstrap/Col';
