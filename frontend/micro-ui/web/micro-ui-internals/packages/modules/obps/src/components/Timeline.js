@@ -7,11 +7,11 @@ let actions = [];
 const getAction = (flow) => {
  switch(flow){
    case "STAKEHOLDER": actions = [
-    'BPA_LICENSE_DETAILS_LABEL',
+    'BPA_LICENCE_DETAILS_LABEL',
     // 'BPA_NEW_ADDRESS_HEADER_DETAILS',
-    'Add Info',
-    'Authorized User',
-    'Developer Capacity',
+    'BPA_ADD_INFO_LABEL',
+    'BPA_AUTHORIZED_USER_LABEL',
+    'BPA_DEVELOPER_CAPACITY_LABEL',
     'BPA_DOC_DETAILS_SUMMARY',
     'BPA_STEPPER_SUMMARY_HEADER',
     ]

@@ -7,7 +7,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 // import { Checkbox } from "@mui/material";
 import CalculateIcon from "@mui/icons-material/Calculate";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
-import FileUpload from "@mui/icons-material/FileUpload";
+import ScrollToTop from "@egovernments/digit-ui-react-components/src/atoms/ScrollToTop";
 import axios from "axios";
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
 import Spinner from "../../../../components/Loader";
@@ -20,7 +20,9 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { getDocShareholding } from "../docView/docView.help";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step3";
-
+import FileUpload from "@mui/icons-material/FileUpload";
+import { useLocation } from "react-router-dom";
+import { Toast } from "@egovernments/digit-ui-react-components";
 const potentialOptons = [
   {
     label: "Hyper",
@@ -60,6 +62,7 @@ const releaseStatus = [
 ];
 
 const LandScheduleForm = (props) => {
+  const location = useLocation();
   const [purposeOptions, setPurposeOptions] = useState({ data: [], isLoading: true });
   const [getPotentialOptons, setPotentialOptions] = useState({ data: [], isLoading: true });
   const [typeOfLand, setYypeOfLand] = useState({ data: [], isLoading: true });
@@ -67,6 +70,10 @@ const LandScheduleForm = (props) => {
   const [modal, setmodal] = useState(false);
   const [modal1, setmodal1] = useState(false);
   const stateId = Digit.ULBService.getStateId();
+  const [stepData, setStepData] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [showToast, setShowToast] = useState(null);
+  const [showToastError, setShowToastError] = useState(null);
   const { data: PurposeType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
 
   const { data: LandData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["LandType"]);
@@ -89,7 +96,6 @@ const LandScheduleForm = (props) => {
 
   useEffect(() => {
     const landType = LandData?.["common-masters"]?.LandType?.map(function (data) {
-      console.log("data===", data);
       return { value: data?.landId, label: data?.land };
     });
     setYypeOfLand({ data: landType, isLoading: false });
@@ -112,6 +118,7 @@ const LandScheduleForm = (props) => {
   const [fileStoreId, setFileStoreId] = useState({});
 
   const Purpose = localStorage.getItem("purpose");
+  const userInfo = Digit.UserService.getUser()?.info || {};
 
   const landScheduleFormSubmitHandler = async (data) => {
     const token = window?.localStorage?.getItem("token");
@@ -123,10 +130,10 @@ const LandScheduleForm = (props) => {
     data["releaseStatus"] = data?.releaseStatus?.value;
     const postDistrict = {
       pageName: "LandSchedule",
-      ApplicationStatus: "DRAFT",
+      action: "LANDSCHEDULE",
       applicationNumber: props?.getId,
-      createdBy: props?.userData?.id,
-      updatedBy: props?.userData?.id,
+      createdBy: userInfo?.id,
+      updatedBy: userInfo?.id,
       LicenseDetails: {
         LandSchedule: {
           ...data,
@@ -142,13 +149,14 @@ const LandScheduleForm = (props) => {
         msgId: "090909",
         requesterId: "",
         authToken: token,
-        userInfo: props?.userData,
+        userInfo: userInfo,
       },
     };
     try {
       const Resp = await axios.post("/tl-services/new/_create", postDistrict);
       setLoader(false);
-      props.Step3Continue(Resp?.data?.LicenseServiceResponseInfo?.[0]?.newServiceInfoData?.[0]);
+      const useData = Resp?.data?.LicenseServiceResponseInfo?.[0]?.LicenseDetails?.[0];
+      props.Step3Continue(useData);
     } catch (error) {
       setLoader(false);
       return error.message;
@@ -156,22 +164,21 @@ const LandScheduleForm = (props) => {
   };
 
   useEffect(() => {
-    console.log("props?.getLicData?.ApplicantInfo", props?.getLicData?.LandSchedule);
-    const valueData = props?.getLicData?.LandSchedule;
+    const valueData = stepData?.LandSchedule;
     if (valueData) {
       Object?.keys(valueData)?.map((item) => {
         if (item === "purpose" || item === "potential") return null;
         else setValue(item, valueData[item]);
       });
-      const data = purposeOptions?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.purpose);
-      const potientialData = getPotentialOptons?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.potential);
-      const typeLandData = typeOfLand?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.typeLand);
+      const data = purposeOptions?.data?.filter((item) => item?.value === stepData?.ApplicantPurpose?.purpose);
+      const potientialData = getPotentialOptons?.data?.filter((item) => item?.value === stepData?.ApplicantPurpose?.potential);
+      const typeLandData = typeOfLand?.data?.filter((item) => item?.value === stepData?.ApplicantPurpose?.typeLand);
 
       setValue("purpose", { label: data?.[0]?.label, value: data?.[0]?.value });
       setValue("potential", { label: potientialData?.[0]?.label, value: potientialData?.[0]?.value });
       setValue("typeLand", { label: typeLandData?.[0]?.label, value: typeLandData?.[0]?.value });
     }
-  }, [props?.getLicData, purposeOptions, getPotentialOptons, typeOfLand]);
+  }, [stepData, purposeOptions, getPotentialOptons, typeOfLand]);
 
   const getSubmitDataLabel = async () => {
     try {
@@ -181,11 +188,17 @@ const LandScheduleForm = (props) => {
       return error.message;
     }
   };
+
   useEffect(() => {
     getSubmitDataLabel();
   }, []);
 
   const getDocumentData = async (file, fieldName) => {
+    if (selectedFiles.includes(file.name)) {
+      setShowToastError({ key: "error" });
+      return;
+    }
+
     const formData = new FormData();
     formData.append("file", file);
     formData.append("tenantId", "hr");
@@ -197,15 +210,104 @@ const LandScheduleForm = (props) => {
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
       // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
+      if (fieldName === "thirdPartyDoc") {
+        setValue("thirdPartyDocFileName", file.name);
+      }
+      if (fieldName === "thirdPartyDocUpload") {
+        setValue("thirdPartyDocUploadFileName", file.name);
+      }
+      if (fieldName === "approvedLayoutPlan") {
+        setValue("approvedLayoutPlanFileName", file.name);
+      }
+      if (fieldName === "approvedLayoutPlan") {
+        setValue("approvedLayoutPlanFileName", file.name);
+      }
+      if (fieldName === "proposedLayoutPlan") {
+        setValue("proposedLayoutPlanFileName", file.name);
+      }
+      if (fieldName === "uploadPreviouslyLayoutPlan") {
+        setValue("uploadPreviouslyLayoutPlanFileName", file.name);
+      }
+      if (fieldName === "litigationDoc") {
+        setValue("litigationDocFileName", file.name);
+      }
+      if (fieldName === "courtDoc") {
+        setValue("courtDocFileName", file.name);
+      }
+      if (fieldName === "insolvencyDoc") {
+        setValue("insolvencyDocFileName", file.name);
+      }
+      if (fieldName === "docUpload") {
+        setValue("docUploadFileName", file.name);
+      }
+      if (fieldName === "landSchedule") {
+        setValue("landScheduleFileName", file.name);
+      }
+      if (fieldName === "mutation") {
+        setValue("mutationFileName", file.name);
+      }
+      if (fieldName === "jambandhi") {
+        setValue("jambandhiFileName", file.name);
+      }
+      if (fieldName === "detailsOfLease") {
+        setValue("detailsOfLeaseFileName", file.name);
+      }
+      if (fieldName === "addSalesDeed") {
+        setValue("addSalesDeedFileName", file.name);
+      }
+      if (fieldName === "copyofSpaBoard") {
+        setValue("copyofSpaBoardFileName", file.name);
+      }
+      if (fieldName === "revisedLanSchedule") {
+        setValue("revisedLanScheduleFileName", file.name);
+      }
+      if (fieldName === "copyOfShajraPlan") {
+        setValue("copyOfShajraPlanFileName", file.name);
+      }
+      setSelectedFiles([...selectedFiles, file.name]);
+
       setLoader(false);
+      setShowToast({ key: "success" });
     } catch (error) {
       setLoader(false);
       return error.message;
     }
   };
 
+  const getApplicantUserData = async (id) => {
+    const token = window?.localStorage?.getItem("token");
+    const payload = {
+      apiId: "Rainmaker",
+      msgId: "1669293303096|en_IN",
+      authToken: token,
+    };
+    try {
+      const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${id}`, payload);
+      const userData = Resp?.data?.LicenseDetails?.[0];
+      setStepData(userData);
+    } catch (error) {
+      return error;
+    }
+  };
+
+  useEffect(() => {
+    const search = location?.search;
+    const params = new URLSearchParams(search);
+    const id = params.get("id");
+    if (id) getApplicantUserData(id);
+  }, []);
+
+  const [litigationRemark, setLitigationRemark] = useState("");
+
+  const handleChange = (event) => {
+    const result = event.target.value.replace(/[^a-z]/gi, "");
+
+    setLitigationRemark(result);
+  };
+
   return (
     <div>
+      <ScrollToTop />
       {loader && <Spinner />}
       <form onSubmit={handleSubmit(landScheduleFormSubmitHandler)}>
         <Card style={{ width: "126%", border: "5px solid #1266af" }}>
@@ -248,7 +350,7 @@ const LandScheduleForm = (props) => {
                                 {...register("licenseNumber")}
                                 required
                                 maxLength={20}
-                                pattern="(/^[^\s][a-zA-Z0-9\s]+$"
+                                // pattern="(/^[^\s][a-zA-Z0-9\s]+$"
                               />
                               <h3 className="error-message" style={{ color: "red" }}>
                                 {errors?.licenseNumber && errors?.licenseNumber?.message}
@@ -321,7 +423,7 @@ const LandScheduleForm = (props) => {
                                 </h2>
                               </label>
                               <input
-                                type="text"
+                                type="number"
                                 className="form-control"
                                 {...register("areaOfParentLicence")}
                                 required
@@ -334,7 +436,7 @@ const LandScheduleForm = (props) => {
                               <label>
                                 <h2>Specify Others</h2>
                               </label>
-                              <input type="text" {...register("specify")} className="form-control" />
+                              <input type="text" {...register("specify")} className="form-control" pattern="[A-Za-z]+" />
                             </div>
 
                             <div className="col col-3 ">
@@ -366,22 +468,25 @@ const LandScheduleForm = (props) => {
                                       {" "}
                                       <h2>
                                         Document Upload <span style={{ color: "red" }}>*</span>
-                                        {fileStoreId?.thirdPartyDoc ? (
-                                          <a onClick={() => getDocShareholding(fileStoreId?.thirdPartyDoc)} className="btn btn-sm col-md-6">
-                                            <VisibilityIcon color="info" className="icon" />
-                                          </a>
-                                        ) : (
-                                          <p></p>
-                                        )}
+                                        <FileUpload color="primary" />
+                                        <input
+                                          type="file"
+                                          accept="application/pdf/jpeg/png"
+                                          required
+                                          style={{ display: "none" }}
+                                          onChange={(e) => getDocumentData(e?.target?.files[0], "thirdPartyDoc")}
+                                        />
                                       </h2>
                                     </label>
-                                    <div>
-                                      <input
-                                        type="file"
-                                        className="form-control"
-                                        onChange={(e) => getDocumentData(e?.target?.files[0], "thirdPartyDoc")}
-                                      />
-                                    </div>
+
+                                    {fileStoreId?.thirdPartyDoc ? (
+                                      <a onClick={() => getDocShareholding(fileStoreId?.thirdPartyDoc)} className="btn btn-sm ">
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </a>
+                                    ) : (
+                                      <p></p>
+                                    )}
+                                    <h3 style={{}}>{watch("thirdPartyDocFileName") ? watch("thirdPartyDocFileName") : null}</h3>
 
                                     <h3 className="error-message" style={{ color: "red" }}>
                                       {errors?.thirdPartyDoc && errors?.thirdPartyDoc?.message}
@@ -396,22 +501,25 @@ const LandScheduleForm = (props) => {
                                       {" "}
                                       <h2>
                                         Document Upload <span style={{ color: "red" }}>*</span>
-                                        {fileStoreId?.thirdPartyDoc ? (
-                                          <a onClick={() => getDocShareholding(fileStoreId?.thirdPartyDoc)} className="btn btn-sm col-md-6">
-                                            <VisibilityIcon color="info" className="icon" />
-                                          </a>
-                                        ) : (
-                                          <p></p>
-                                        )}
+                                        <FileUpload color="primary" />
+                                        <input
+                                          type="file"
+                                          style={{ display: "none" }}
+                                          accept="application/pdf/jpeg/png"
+                                          required
+                                          onChange={(e) => getDocumentData(e?.target?.files[0], "thirdPartyDocUpload")}
+                                        />
                                       </h2>
                                     </label>
-                                    <div>
-                                      <input
-                                        type="file"
-                                        className="form-control"
-                                        onChange={(e) => getDocumentData(e?.target?.files[0], "thirdPartyDoc")}
-                                      />
-                                    </div>
+
+                                    {fileStoreId?.thirdPartyDocUpload ? (
+                                      <a onClick={() => getDocShareholding(fileStoreId?.thirdPartyDocUpload)} className="btn btn-sm ">
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </a>
+                                    ) : (
+                                      <p></p>
+                                    )}
+                                    <h3 style={{}}>{watch("thirdPartyDocUploadFileName") ? watch("thirdPartyDocUploadFileName") : null}</h3>
 
                                     <h3 className="error-message" style={{ color: "red" }}>
                                       {errors?.thirdPartyDoc && errors?.thirdPartyDoc?.message}
@@ -453,7 +561,7 @@ const LandScheduleForm = (props) => {
                                   Area Applied under Migration <span style={{ color: "red" }}>*</span>
                                 </h2>{" "}
                               </label>
-                              <input type="text" className="form-control" {...register("areaUnderMigration")} required />
+                              <input type="number" className="form-control" {...register("areaUnderMigration")} required />
                             </div>
                             <div className="col col-3">
                               <label>
@@ -484,7 +592,7 @@ const LandScheduleForm = (props) => {
                                   Area of Parent Licence <span style={{ color: "red" }}>*</span>
                                 </h2>
                               </label>
-                              <input type="text" className="form-control" {...register("areaofParentLic")} required minLength={1} maxLength={20} />
+                              <input type="number" className="form-control" {...register("areaofParentLic")} required minLength={1} maxLength={20} />
                             </div>
                           </div>
                           <br></br>
@@ -594,31 +702,33 @@ const LandScheduleForm = (props) => {
                                   Area other than migration <span style={{ color: "red" }}>*</span>
                                 </h2>{" "}
                               </label>
-                              <input type="text" className="form-control" {...register("freshlyApplied")} required minLength={2} maxLength={20} />
+                              <input type="number" className="form-control" {...register("freshlyApplied")} required minLength={2} maxLength={20} />
                             </div>
                             <div className="col col-3">
                               <h2
                                 data-toggle="tooltip"
                                 data-placement="top"
                                 title=" Approved Layout of Plan/ Site plan for(GH)Showing Area(s)/Proposed migration."
-                              >
-                                Approved Layout of Plan.<span style={{ color: "red" }}>*</span>
-                                {fileStoreId?.approvedLayoutPlan ? (
-                                  <a onClick={() => getDocShareholding(fileStoreId?.approvedLayoutPlan)} className="btn btn-sm col-md-6">
-                                    <VisibilityIcon color="info" className="icon" />
-                                  </a>
-                                ) : (
-                                  <p></p>
-                                )}
-                              </h2>
-                              <div>
+                              ></h2>
+                              Approved Layout of Plan.<span style={{ color: "red" }}>*</span>
+                              <label>
+                                <FileUpload color="primary" />
                                 <input
                                   type="file"
-                                  className="form-control"
+                                  accept="application/pdf/jpeg/png"
+                                  required
+                                  style={{ display: "none" }}
                                   onChange={(e) => getDocumentData(e?.target?.files[0], "approvedLayoutPlan")}
                                 />
-                              </div>
-
+                              </label>
+                              {fileStoreId?.approvedLayoutPlan ? (
+                                <a onClick={() => getDocShareholding(fileStoreId?.approvedLayoutPlan)} className="btn btn-sm ">
+                                  <VisibilityIcon color="info" className="icon" />
+                                </a>
+                              ) : (
+                                <p></p>
+                              )}
+                              <h3 style={{}}>{watch("approvedLayoutPlanFileName") ? watch("approvedLayoutPlanFileName") : null}</h3>
                               <h3 className="error-message" style={{ color: "red" }}>
                                 {errors?.approvedLayoutPlan && errors?.approvedLayoutPlan?.message}
                               </h3>
@@ -628,47 +738,53 @@ const LandScheduleForm = (props) => {
                                 data-toggle="tooltip"
                                 data-placement="top"
                                 title="Proposed Layout of Plan /site plan for area applied for migration."
-                              >
-                                Proposed Layout of Plan.<span style={{ color: "red" }}>*</span>
-                                {fileStoreId?.proposedLayoutPlan ? (
-                                  <a onClick={() => getDocShareholding(fileStoreId?.proposedLayoutPlan)} className="btn btn-sm col-md-6">
-                                    <VisibilityIcon color="info" className="icon" />
-                                  </a>
-                                ) : (
-                                  <p></p>
-                                )}
-                              </h2>
-                              <div>
+                              ></h2>
+                              Proposed Layout of Plan.<span style={{ color: "red" }}>*</span>
+                              <label>
+                                <FileUpload color="primary" />
                                 <input
                                   type="file"
-                                  className="form-control"
+                                  accept="application/pdf/jpeg/png"
+                                  required
+                                  style={{ display: "none" }}
                                   onChange={(e) => getDocumentData(e?.target?.files[0], "proposedLayoutPlan")}
                                 />
-                              </div>
-
+                              </label>
+                              {fileStoreId?.proposedLayoutPlan ? (
+                                <a onClick={() => getDocShareholding(fileStoreId?.proposedLayoutPlan)} className="btn btn-sm ">
+                                  <VisibilityIcon color="info" className="icon" />
+                                </a>
+                              ) : (
+                                <p></p>
+                              )}
+                              <h3 style={{}}>{watch("proposedLayoutPlanFileName") ? watch("proposedLayoutPlanFileName") : null}</h3>
                               <h3 className="error-message" style={{ color: "red" }}>
                                 {errors?.proposedLayoutPlan && errors?.proposedLayoutPlan?.message}
                               </h3>
                             </div>
                             <div className="col col-3">
                               <h2 data-toggle="tooltip" data-placement="top" title="Upload Previously approved Layout Plan.">
-                                Upload Previously approved.<span style={{ color: "red" }}>*</span>
-                                {fileStoreId?.uploadPreviouslyLayoutPlan ? (
-                                  <a onClick={() => getDocShareholding(fileStoreId?.uploadPreviouslyLayoutPlan)} className="btn btn-sm col-md-6">
-                                    <VisibilityIcon color="info" className="icon" />
-                                  </a>
-                                ) : (
-                                  <p></p>
-                                )}
+                                {" "}
                               </h2>
-                              <div>
+                              Previously approved Plan.<span style={{ color: "red" }}>*</span>
+                              <label>
+                                <FileUpload color="primary" />
                                 <input
                                   type="file"
-                                  className="form-control"
+                                  accept="application/pdf/jpeg/png"
+                                  required
+                                  style={{ display: "none" }}
                                   onChange={(e) => getDocumentData(e?.target?.files[0], "uploadPreviouslyLayoutPlan")}
                                 />
-                              </div>
-
+                              </label>
+                              {fileStoreId?.uploadPreviouslyLayoutPlan ? (
+                                <a onClick={() => getDocShareholding(fileStoreId?.uploadPreviouslyLayoutPlan)} className="btn btn-sm ">
+                                  <VisibilityIcon color="info" className="icon" />
+                                </a>
+                              ) : (
+                                <p></p>
+                              )}
+                              <h3 style={{}}>{watch("uploadPreviouslyLayoutPlanFileName") ? watch("uploadPreviouslyLayoutPlanFileName") : null}</h3>
                               <h3 className="error-message" style={{ color: "red" }}>
                                 {errors?.uploadPreviouslyLayoutPlan && errors?.uploadPreviouslyLayoutPlan?.message}
                               </h3>
@@ -739,23 +855,35 @@ const LandScheduleForm = (props) => {
                                 Remark <span style={{ color: "red" }}>*</span>
                               </h2>
                             </label>
-                            <input type="text" className="form-control" {...register("litigationRemark")} />
+                            <input
+                              type="text"
+                              className="form-control"
+                              {...register("litigationRemark")}
+                              value={litigationRemark}
+                              onChange={handleChange}
+                            />
                           </div>
                           <div className="col col-6">
-                            <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">
-                              Document Upload <span style={{ color: "red" }}>*</span>{" "}
-                              {fileStoreId?.litigationDoc ? (
-                                <a onClick={() => getDocShareholding(fileStoreId?.litigationDoc)} className="btn btn-sm col-md-6">
-                                  <VisibilityIcon color="info" className="icon" />
-                                </a>
-                              ) : (
-                                <p></p>
-                              )}
-                            </h2>
-                            <div>
-                              <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "litigationDoc")} />
-                            </div>
-
+                            <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"></h2>
+                            Document Upload <span style={{ color: "red" }}>*</span>{" "}
+                            <label>
+                              <FileUpload color="primary" />
+                              <input
+                                type="file"
+                                accept="application/pdf/jpeg/png"
+                                required
+                                style={{ display: "none" }}
+                                onChange={(e) => getDocumentData(e?.target?.files[0], "litigationDoc")}
+                              />
+                            </label>
+                            {fileStoreId?.litigationDoc ? (
+                              <a onClick={() => getDocShareholding(fileStoreId?.litigationDoc)} className="btn btn-sm ">
+                                <VisibilityIcon color="info" className="icon" />
+                              </a>
+                            ) : (
+                              <p></p>
+                            )}
+                            <h3 style={{}}>{watch("litigationDocFileName") ? watch("litigationDocFileName") : null}</h3>
                             <h3 className="error-message" style={{ color: "red" }}>
                               {errors?.litigationDoc && errors?.litigationDoc?.message}
                             </h3>
@@ -796,20 +924,26 @@ const LandScheduleForm = (props) => {
                             <input type="text" className="form-control" {...register("courtyCaseNo")} />
                           </div>
                           <div className="col col-6">
-                            <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">
-                              Document Upload <span style={{ color: "red" }}>*</span>
-                              {fileStoreId?.courtDoc ? (
-                                <a onClick={() => getDocShareholding(fileStoreId?.courtDoc)} className="btn btn-sm col-md-6">
-                                  <VisibilityIcon color="info" className="icon" />
-                                </a>
-                              ) : (
-                                <p></p>
-                              )}
-                            </h2>
-                            <div>
-                              <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "courtDoc")} />
-                            </div>
-
+                            <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"></h2>
+                            Document Upload <span style={{ color: "red" }}>*</span>
+                            <label>
+                              <FileUpload color="primary" />
+                              <input
+                                type="file"
+                                style={{ display: "none" }}
+                                onChange={(e) => getDocumentData(e?.target?.files[0], "courtDoc")}
+                                accept="application/pdf/jpeg/png"
+                                required
+                              />
+                            </label>
+                            {fileStoreId?.courtDoc ? (
+                              <a onClick={() => getDocShareholding(fileStoreId?.courtDoc)} className="btn btn-sm ">
+                                <VisibilityIcon color="info" className="icon" />
+                              </a>
+                            ) : (
+                              <p></p>
+                            )}
+                            <h3 style={{}}>{watch("courtDocFileName") ? watch("courtDocFileName") : null}</h3>
                             <h3 className="error-message" style={{ color: "red" }}>
                               {errors?.courtDoc && errors?.courtDoc?.message}
                             </h3>
@@ -851,21 +985,26 @@ const LandScheduleForm = (props) => {
                             <input type="text" className="form-control" {...register("insolvencyRemark")} />
                           </div>
                           <div className="col col-6">
-                            <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">
-                              {" "}
-                              Document Upload <span style={{ color: "red" }}>*</span>
-                              {fileStoreId?.insolvencyDoc ? (
-                                <a onClick={() => getDocShareholding(fileStoreId?.insolvencyDoc)} className="btn btn-sm col-md-6">
-                                  <VisibilityIcon color="info" className="icon" />
-                                </a>
-                              ) : (
-                                <p></p>
-                              )}
-                            </h2>
-                            <div>
-                              <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "insolvencyDoc")} />
-                            </div>
-
+                            <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"></h2> Document Upload{" "}
+                            <span style={{ color: "red" }}>*</span>
+                            <label>
+                              <FileUpload color="primary" />
+                              <input
+                                type="file"
+                                style={{ display: "none" }}
+                                accept="application/pdf/jpeg/png"
+                                required
+                                onChange={(e) => getDocumentData(e?.target?.files[0], "insolvencyDoc")}
+                              />
+                            </label>
+                            {fileStoreId?.insolvencyDoc ? (
+                              <a onClick={() => getDocShareholding(fileStoreId?.insolvencyDoc)} className="btn btn-sm ">
+                                <VisibilityIcon color="info" className="icon" />
+                              </a>
+                            ) : (
+                              <p></p>
+                            )}
+                            <h3 style={{}}>{watch("insolvencyDocFileName") ? watch("insolvencyDocFileName") : null}</h3>
                             <h3 className="error-message" style={{ color: "red" }}>
                               {errors?.insolvencyDoc && errors?.insolvencyDoc?.message}
                             </h3>
@@ -899,20 +1038,26 @@ const LandScheduleForm = (props) => {
                       {watch("appliedLand") === "Y" && (
                         <div className="row ">
                           <div className="col col-12">
-                            <h6 data-toggle="tooltip" data-placement="top" title="Upload Document">
-                              Document Upload <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
-                              {fileStoreId?.docUpload ? (
-                                <a onClick={() => getDocShareholding(fileStoreId?.docUpload)} className="btn btn-sm col-md-6">
-                                  <VisibilityIcon color="info" className="icon" />
-                                </a>
-                              ) : (
-                                <p></p>
-                              )}
-                            </h6>
-                            <div>
-                              <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "docUpload")} />
-                            </div>
-
+                            <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"></h6>
+                            Document Upload <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
+                            <label>
+                              <FileUpload color="primary" />
+                              <input
+                                type="file"
+                                style={{ display: "none" }}
+                                onChange={(e) => getDocumentData(e?.target?.files[0], "docUpload")}
+                                accept="application/pdf/jpeg/png"
+                                required
+                              />
+                            </label>
+                            {fileStoreId?.docUpload ? (
+                              <a onClick={() => getDocShareholding(fileStoreId?.docUpload)} className="btn btn-sm ">
+                                <VisibilityIcon color="info" className="icon" />
+                              </a>
+                            ) : (
+                              <p></p>
+                            )}
+                            <h3 style={{}}>{watch("docUploadFileName") ? watch("docUploadFileName") : null}</h3>
                             <h3 className="error-message" style={{ color: "red" }}>
                               {errors?.docUpload && errors?.docUpload?.message}
                             </h3>
@@ -1117,8 +1262,8 @@ const LandScheduleForm = (props) => {
                       {watch("orderUpload") === "Y" && (
                         <div className="row ">
                           <div className="col col-3 ">
-                            <h2>
-                              Whether land compensation received <span style={{ color: "red" }}>*</span>{" "}
+                            <h2 data-toggle="tooltip" data-placement="top" title="Whether land compensation received ">
+                              Whether land compensation <span style={{ color: "red" }}>*</span>{" "}
                             </h2>
 
                             <label htmlFor="landCompensation">
@@ -1235,58 +1380,51 @@ const LandScheduleForm = (props) => {
                       {watch("vacant") === "N" && (
                         <div className="row ">
                           <div className="col col">
-                            <label>
-                              <h2>
-                                Vacant Remark <span style={{ color: "red" }}>*</span>
-                              </h2>
+                            <h2>
+                              Construction: (Yes/No) <span style={{ color: "red" }}>*</span>
+                            </h2>{" "}
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <label htmlFor="construction">
+                              <input {...register("construction")} type="radio" value="Y" id="construction" />
+                              &nbsp; Yes &nbsp;&nbsp;
                             </label>
-                            <input type="text" className="form-control" {...register("vacantRemark")} required />
+                            <label htmlFor="construction">
+                              <input {...register("construction")} type="radio" value="N" id="construction" />
+                              &nbsp; No &nbsp;&nbsp;
+                            </label>
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.construction && errors?.construction?.message}
+                            </h3>
+                            {watch("construction") === "Y" && (
+                              <div className="row ">
+                                <div className="col col">
+                                  <label>
+                                    Type of Construction <span style={{ color: "red" }}>*</span>
+                                  </label>
+                                  <input type="text" className="form-control" {...register("typeOfConstruction")} required />
+                                </div>
+                              </div>
+                            )}
+                            {watch("construction") === "N" && (
+                              <div className="row ">
+                                <div className="col col">
+                                  <label>
+                                    <h2>
+                                      Remark <span style={{ color: "red" }}>*</span>
+                                    </h2>
+                                  </label>
+                                  <input type="text" className="form-control" {...register("constructionRemark")} />
+                                </div>
+                              </div>
+                            )}
                           </div>
                         </div>
                       )}
                     </div>
+
                     <div className="col col-3">
                       <h2>
-                        (b) &nbsp;Construction: (Yes/No) <span style={{ color: "red" }}>*</span>
-                      </h2>{" "}
-                      &nbsp;&nbsp;&nbsp;&nbsp;
-                      <label htmlFor="construction">
-                        <input {...register("construction")} type="radio" value="Y" id="construction" />
-                        &nbsp; Yes &nbsp;&nbsp;
-                      </label>
-                      <label htmlFor="construction">
-                        <input {...register("construction")} type="radio" value="N" id="construction" />
-                        &nbsp; No &nbsp;&nbsp;
-                      </label>
-                      <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.construction && errors?.construction?.message}
-                      </h3>
-                      {watch("construction") === "Y" && (
-                        <div className="row ">
-                          <div className="col col">
-                            <label>
-                              Type of Construction <span style={{ color: "red" }}>*</span>
-                            </label>
-                            <input type="text" className="form-control" {...register("typeOfConstruction")} required />
-                          </div>
-                        </div>
-                      )}
-                      {watch("construction") === "N" && (
-                        <div className="row ">
-                          <div className="col col">
-                            <label>
-                              <h2>
-                                Remark <span style={{ color: "red" }}>*</span>
-                              </h2>
-                            </label>
-                            <input type="text" className="form-control" {...register("constructionRemark")} />
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                    <div className="col col-3">
-                      <h2>
-                        (c) &nbsp;HT line:(Yes/No) <span style={{ color: "red" }}>*</span>
+                        (b) &nbsp;HT line:(Yes/No) <span style={{ color: "red" }}>*</span>
                       </h2>{" "}
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="HTLine">
@@ -1328,7 +1466,7 @@ const LandScheduleForm = (props) => {
 
                     <div className="col col-3">
                       <h2>
-                        (d)&nbsp;IOC Gas Pipeline:(Yes/No) <span style={{ color: "red" }}>*</span>
+                        (c)&nbsp;IOC Gas Pipeline:(Yes/No) <span style={{ color: "red" }}>*</span>
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="IOCGasPipeline">
@@ -1363,12 +1501,9 @@ const LandScheduleForm = (props) => {
                         </div>
                       )}
                     </div>
-                  </div>
-                  <br></br>
-                  <div className="row ">
                     <div className="col col-3">
                       <h2>
-                        (e) &nbsp;Nallah:(Yes/No) <span style={{ color: "red" }}>*</span>
+                        (d) &nbsp;Nallah:(Yes/No) <span style={{ color: "red" }}>*</span>
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="nallah">
@@ -1403,9 +1538,12 @@ const LandScheduleForm = (props) => {
                         </div>
                       )}
                     </div>
+                  </div>
+                  <br></br>
+                  <div className="row ">
                     <div className="col col-3">
                       <h2>
-                        (f) &nbsp;Any revenue rasta/road:(Yes/No) <span style={{ color: "red" }}>*</span>
+                        (e) &nbsp;Any revenue rasta/road:(Yes/No)<span style={{ color: "red" }}>*</span>
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="road">
@@ -1455,7 +1593,7 @@ const LandScheduleForm = (props) => {
                     </div>
                     <div className="col col-3">
                       <h2>
-                        (g) &nbsp;Any marginal land:(Yes/No) <span style={{ color: "red" }}>*</span>
+                        (f) &nbsp;Any marginal land:(Yes/No) <span style={{ color: "red" }}>*</span>
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="marginalLand">
@@ -1500,7 +1638,7 @@ const LandScheduleForm = (props) => {
                         data-placement="top"
                         title="Whether any utility line passing through the site is incorporated/adjusted in the layout plan (Yes/No)"
                       >
-                        (h)&nbsp;Utility Line <span style={{ color: "red" }}>*</span>
+                        (g)&nbsp;Utility Line <span style={{ color: "red" }}>*</span>
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="utilityLine">
@@ -1556,79 +1694,107 @@ const LandScheduleForm = (props) => {
                   <br></br>
                   <div className="row">
                     <div className="col col-3">
-                      <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
+                      <h2 style={{ display: "flex" }}>
                         Land schedule <span style={{ color: "red" }}>*</span>
-                        {fileStoreId?.landSchedule ? (
-                          <a onClick={() => getDocShareholding(fileStoreId?.landSchedule)} className="btn btn-sm col-md-6">
-                            <VisibilityIcon color="info" className="icon" />
-                          </a>
-                        ) : (
-                          <p></p>
-                        )}
                       </h2>
-                      <div>
-                        <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "landSchedule")} />
-                      </div>
-
+                      <label>
+                        <FileUpload color="primary" />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "landSchedule")}
+                          accept="application/pdf/jpeg/png"
+                          required
+                        />
+                      </label>
+                      {fileStoreId?.landSchedule ? (
+                        <a onClick={() => getDocShareholding(fileStoreId?.landSchedule)} className="btn btn-sm ">
+                          <VisibilityIcon color="info" className="icon" />
+                        </a>
+                      ) : (
+                        <p></p>
+                      )}
+                      <h3 style={{}}>{watch("landScheduleFileName") ? watch("landScheduleFileName") : null}</h3>
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.landSchedule && errors?.landSchedule?.message}
                       </h3>
                     </div>
 
                     <div className="col col-3">
-                      <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
+                      <h2 style={{ display: "flex" }}>
                         Copy of Mutation <span style={{ color: "red" }}>*</span>{" "}
-                        {fileStoreId?.mutation ? (
-                          <a onClick={() => getDocShareholding(fileStoreId?.mutation)} className="btn btn-sm col-md-6">
-                            <VisibilityIcon color="info" className="icon" />
-                          </a>
-                        ) : (
-                          <p></p>
-                        )}
                       </h2>
-                      <div>
-                        <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "mutation")} />
-                      </div>
-
+                      <label>
+                        <FileUpload color="primary" />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "mutation")}
+                          accept="application/pdf/jpeg/png"
+                          required
+                        />
+                      </label>
+                      {fileStoreId?.mutation ? (
+                        <a onClick={() => getDocShareholding(fileStoreId?.mutation)} className="btn btn-sm ">
+                          <VisibilityIcon color="info" className="icon" />
+                        </a>
+                      ) : (
+                        <p></p>
+                      )}
+                      <h3 style={{}}>{watch("mutationFileName") ? watch("mutationFileName") : null}</h3>
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.mutation && errors?.mutation?.message}
                       </h3>
                     </div>
 
                     <div className="col col-3">
-                      <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
+                      <h2 style={{ display: "flex" }}>
                         Copy of Jamabandi <span style={{ color: "red" }}>*</span>
-                        {fileStoreId?.jambandhi ? (
-                          <a onClick={() => getDocShareholding(fileStoreId?.jambandhi)} className="btn btn-sm col-md-6">
-                            <VisibilityIcon color="info" className="icon" />
-                          </a>
-                        ) : (
-                          <p></p>
-                        )}
                       </h2>
-                      <div>
-                        <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "jambandhi")} />
-                      </div>
-
+                      <label>
+                        <FileUpload color="primary" />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "jambandhi")}
+                          accept="application/pdf/jpeg/png"
+                          required
+                        />
+                      </label>
+                      {fileStoreId?.jambandhi ? (
+                        <a onClick={() => getDocShareholding(fileStoreId?.jambandhi)} className="btn btn-sm ">
+                          <VisibilityIcon color="info" className="icon" />
+                        </a>
+                      ) : (
+                        <p></p>
+                      )}
+                      <h3 style={{}}>{watch("jambandhiFileName") ? watch("jambandhiFileName") : null}</h3>
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.jambandhi && errors?.jambandhi?.message}
                       </h3>
                     </div>
                     <div className="col col-3">
-                      <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
+                      <h2 style={{ display: "flex" }}>
                         Details of lease / patta <span style={{ color: "red" }}>*</span>
-                        {fileStoreId?.detailsOfLease ? (
-                          <a onClick={() => getDocShareholding(fileStoreId?.detailsOfLease)} className="btn btn-sm col-md-6">
-                            <VisibilityIcon color="info" className="icon" />
-                          </a>
-                        ) : (
-                          <p></p>
-                        )}
                       </h2>
-                      <div>
-                        <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "detailsOfLease")} />
-                      </div>
-
+                      <label>
+                        <FileUpload color="primary" />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "detailsOfLease")}
+                          accept="application/pdf/jpeg/png"
+                          required
+                        />
+                      </label>
+                      {fileStoreId?.detailsOfLease ? (
+                        <a onClick={() => getDocShareholding(fileStoreId?.detailsOfLease)} className="btn btn-sm ">
+                          <VisibilityIcon color="info" className="icon" />
+                        </a>
+                      ) : (
+                        <p></p>
+                      )}
+                      <h3 style={{}}>{watch("detailsOfLeaseFileName") ? watch("detailsOfLeaseFileName") : null}</h3>
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.detailsOfLease && errors?.detailsOfLease?.message}
                       </h3>
@@ -1644,18 +1810,25 @@ const LandScheduleForm = (props) => {
                         title=" Add sales/Deed/exchange/gift deed, mutation, lease/Patta"
                       >
                         Add sales/Deed/exchange <span style={{ color: "red" }}>*</span>
-                        {fileStoreId?.addSalesDeed ? (
-                          <a onClick={() => getDocShareholding(fileStoreId?.addSalesDeed)} className="btn btn-sm col-md-6">
-                            <VisibilityIcon color="info" className="icon" />
-                          </a>
-                        ) : (
-                          <p></p>
-                        )}
                       </h2>
-                      <div>
-                        <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "addSalesDeed")} />
-                      </div>
-
+                      <label>
+                        <FileUpload color="primary" />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "addSalesDeed")}
+                          accept="application/pdf/jpeg/png"
+                          required
+                        />
+                      </label>
+                      {fileStoreId?.addSalesDeed ? (
+                        <a onClick={() => getDocShareholding(fileStoreId?.addSalesDeed)} className="btn btn-sm ">
+                          <VisibilityIcon color="info" className="icon" />
+                        </a>
+                      ) : (
+                        <p></p>
+                      )}
+                      <h3 style={{}}>{watch("addSalesDeedFileName") ? watch("addSalesDeedFileName") : null}</h3>
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.addSalesDeed && errors?.addSalesDeed?.message}
                       </h3>
@@ -1668,57 +1841,123 @@ const LandScheduleForm = (props) => {
                         title="Copy of spa/GPA/board resolution to sign collaboration agrrement"
                       >
                         Copy of spa/GPA/board. <span style={{ color: "red" }}>*</span>
-                        {fileStoreId?.copyofSpaBoard ? (
-                          <a onClick={() => getDocShareholding(fileStoreId?.copyofSpaBoard)} className="btn btn-sm col-md-6">
-                            <VisibilityIcon color="info" className="icon" />
-                          </a>
-                        ) : (
-                          <p></p>
-                        )}
                       </h2>
-                      <div>
-                        <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "copyofSpaBoard")} />
-                      </div>
-
+                      <label>
+                        <FileUpload color="primary" />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "copyofSpaBoard")}
+                          accept="application/pdf/jpeg/png"
+                          required
+                        />
+                      </label>
+                      {fileStoreId?.copyofSpaBoard ? (
+                        <a onClick={() => getDocShareholding(fileStoreId?.copyofSpaBoard)} className="btn btn-sm ">
+                          <VisibilityIcon color="info" className="icon" />
+                        </a>
+                      ) : (
+                        <p></p>
+                      )}
+                      <h3 style={{}}>{watch("copyofSpaBoardFileName") ? watch("copyofSpaBoardFileName") : null}</h3>
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.copyofSpaBoard && errors?.copyofSpaBoard?.message}
                       </h3>
                     </div>
                     <div className="col col-3">
-                      <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
+                      <h2 style={{ display: "flex" }}>
                         Revised Land Schedule <span style={{ color: "red" }}>*</span>
-                        {fileStoreId?.revisedLanSchedule ? (
-                          <a onClick={() => getDocShareholding(fileStoreId?.revisedLanSchedule)} className="btn btn-sm col-md-6">
-                            <VisibilityIcon color="info" className="icon" />
-                          </a>
-                        ) : (
-                          <p></p>
-                        )}
                       </h2>
-                      <div>
-                        <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "revisedLanSchedule")} />
-                      </div>
-
+                      <label>
+                        <FileUpload color="primary" />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          accept="application/pdf/jpeg/png"
+                          required
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "revisedLanSchedule")}
+                        />
+                      </label>
+                      {fileStoreId?.revisedLanSchedule ? (
+                        <a onClick={() => getDocShareholding(fileStoreId?.revisedLanSchedule)} className="btn btn-sm ">
+                          <VisibilityIcon color="info" className="icon" />
+                        </a>
+                      ) : (
+                        <p></p>
+                      )}
+                      <h3 style={{}}>{watch("revisedLanScheduleFileName") ? watch("revisedLanScheduleFileName") : null}</h3>
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.revisedLanSchedule && errors?.revisedLanSchedule?.message}
                       </h3>
                     </div>
 
                     <div className="col col-3">
-                      <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
+                      <h2 style={{ display: "flex" }}>
                         Copy of Shajra Plan <span style={{ color: "red" }}>*</span>
-                        {fileStoreId?.copyOfShajraPlan ? (
-                          <a onClick={() => getDocShareholding(fileStoreId?.copyOfShajraPlan)} className="btn btn-sm col-md-6">
-                            <VisibilityIcon color="info" className="icon" />
-                          </a>
-                        ) : (
-                          <p></p>
-                        )}
                       </h2>
-                      <div>
-                        <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "copyOfShajraPlan")} />
-                      </div>
+                      <span
+                        className="text-primary"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title=" Click here for instructions to Upload Copy of Shajra Plan."
+                      >
+                        {" "}
+                        <a onClick={() => setmodal1(true)}>(Click here )</a>
+                      </span>
 
+                      <div>
+                        <Modal size="lg" isOpen={modal1} toggle={() => setmodal(!modal1)} aria-labelledby="contained-modal-title-vcenter" centered>
+                          <ModalHeader toggle={() => setmodal1(!modal1)}></ModalHeader>
+                          <ModalBody style={{ fontSize: 20 }}>
+                            <h2>
+                              {" "}
+                              <b>1.</b> Standard Formats for preparation of GIS-based layout plans: <br></br>• GIS Format: Plans to be prepared in GIS
+                              Format (each layer of the plan in shapefile format) and submitted along with base GIS data used, i.e. Shajra Plan
+                              (Shajra plan layers in shapefile format).
+                              <br></br>- GIS-based Vector Data Format: Shapefile <br></br>- Projection (Coordinate) system: Universal Transverse
+                              Mercator (UTM) <br></br>- Datum: WGS 84<br></br> - Zone: 43 Northern <br></br>
+                              <br></br>
+                              <b>2.</b> Type of colonies: <br></br>• Plotted Colonies: Layout-cum-Demarcation Plan to be submitted with site plan{" "}
+                              <br></br>• Other than plotted colonies: Demarcation Plan to be submitted with site plan <br></br>
+                              <br></br>
+                              <b>3.</b> GIS Format data to be used: <br></br>- The Department will provide the bundle of predefined blank layers
+                              (Layout plan's operational GIS layers), including attribute structure (in shapefile format) through the e-licensing
+                              Portal. <br></br>- The applicant has to download the bundle of predefined blank layers and may use it in any GIS
+                              software for the preparation of the layout/demarcation plan. <br></br>
+                              <br></br>
+                              <b>4.</b> Preparation of GIS-based Layout plan- <br></br>- The applicant must prepare the layout/Demarcation plans in
+                              predefined opera-tional GIS layers.<br></br> - All attribute fields of GIS layers are to be updated by the applicant.{" "}
+                              <br></br>
+                              <br></br>
+                              <b>5.</b> Submission of Layout Plan on e-License Portal: <br></br>
+                              <b>5.1 </b>Submission of plans in GIS Format: <br></br>- Prepare the zip file of each layer and put it in the main
+                              folder. <br></br>- Convert the folder to a zip file and upload it online.<br></br> <b>5.2 </b>Submission of Print Layout
+                              in pdf format: <br></br>- PDF of the print layout of the plan is essentially required to be submitted along with the GIS
+                              format. <br></br>- Components of the print layout (A1/A0 size) should be the same as finalized by the Department
+                              including Title, Map, Legend, Scale, Direction, Detail of Plots, Labels, etc.
+                            </h2>
+                          </ModalBody>
+                          <ModalFooter toggle={() => setmodal(!modal1)}></ModalFooter>
+                        </Modal>
+                      </div>
+                      <label>
+                        <FileUpload color="primary" />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "copyOfShajraPlan")}
+                          accept="application/shp/zip"
+                          required
+                        />
+                      </label>
+                      {fileStoreId?.copyOfShajraPlan ? (
+                        <a onClick={() => getDocShareholding(fileStoreId?.copyOfShajraPlan)} className="btn btn-sm ">
+                          <VisibilityIcon color="info" className="icon" />
+                        </a>
+                      ) : (
+                        <p></p>
+                      )}
+                      <h3 style={{}}>{watch("copyOfShajraPlanFileName") ? watch("copyOfShajraPlanFileName") : null}</h3>
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.copyOfShajraPlan && errors?.copyOfShajraPlan?.message}
                       </h3>
@@ -1739,6 +1978,28 @@ const LandScheduleForm = (props) => {
                       </div>
                     </div>
                   </div>
+                  {showToast && (
+                    <Toast
+                      success={showToast?.key === "success" ? true : false}
+                      label="Document Uploaded Successfully"
+                      isDleteBtn={true}
+                      onClose={() => {
+                        setShowToast(null);
+                        setError(null);
+                      }}
+                    />
+                  )}
+                  {showToastError && (
+                    <Toast
+                      error={showToastError?.key === "error" ? true : false}
+                      label="Duplicate file Selected"
+                      isDleteBtn={true}
+                      onClose={() => {
+                        setShowToastError(null);
+                        setError(null);
+                      }}
+                    />
+                  )}
                 </Col>
               </Row>
             </Form.Group>

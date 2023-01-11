@@ -2,52 +2,121 @@ import React, { useState, useEffect } from "react";
 import { Card, Row, Col } from "react-bootstrap";
 import { Button, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
+import { DatePicker } from "@egovernments/digit-ui-react-components";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-
+import axios from "axios";
 function SubmitNew() {
-  const [selects, setSelects] = useState();
-  const [showhide, setShowhide] = useState("");
   const [modal, setmodal] = useState(false);
   const [modal1, setmodal1] = useState(false);
-  const handleshowhide = (event) => {
-    const getuser = event.target.value;
-
-    setShowhide(getuser);
-  };
+  const [ServicePlanDataLabel, setServicePlanDataLabel] = useState([]);
+  const userInfo = Digit.UserService.getUser()?.info || {};
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
-    setValue,
     watch,
+    setValue,
   } = useForm({});
 
-  const bankSubmitNew = (data) => console.log(data);
+  const bankSubmitNew = async (data) => {
+    const token = window?.localStorage?.getItem("token");
+    console.log(data);
+    try {
+      const postDistrict = {
+        RequestInfo: {
+          apiId: "Rainmaker",
+          action: "_create",
+          did: 1,
+          key: "",
+          msgId: "20170310130900|en_IN",
+          ts: 0,
+          ver: ".01",
+          authToken: token,
+          userInfo: userInfo,
+        },
+        NewBankGuaranteeRequest: {
+          status: null,
+          tenantId: "hr",
+          additionalDetails: null,
+          workflowAction: "INITIATE",
+          workflowComment: null,
+          workflowAssignee: null,
+          ...data,
+        },
+      };
+      const Resp = await axios.post("/tl-services/bank/guarantee/_create", postDistrict);
+      setServicePlanDataLabel(Resp.data);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+  const [fileStoreId, setFileStoreId] = useState({});
+  const getDocumentData = async (file, fieldName) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("tenantId", "hr");
+    formData.append("module", "property-upload");
+    formData.append("tag", "tag-property");
+    // setLoader(true);
+    try {
+      const Resp = await axios.post("/filestore/v1/files", formData, {});
+      setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
+      setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
+      // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
+      // setLoader(false);
+    } catch (error) {
+      setLoader(false);
+      return error;
+    }
+  };
+  const [applicantId, setApplicantId] = useState("");
+  const getApplicantUserData = async (id) => {
+    const token = window?.localStorage?.getItem("token");
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        action: "_create",
+        did: 1,
+        key: "",
+        msgId: "20170310130900|en_IN",
+        ts: 0,
+        ver: ".01",
+        authToken: token,
+      },
+    };
+    try {
+      const Resp = await axios.post(`http://103.166.62.118:80/tl-services/bank/guarantee/_search?applicationNumber=${id}`, payload);
+      const userData = Resp?.data?.LicenseDetails?.[0];
+      setStepData(userData);
+    } catch (error) {
+      return error;
+    }
+  };
+
+  useEffect(() => {
+    const search = location?.search;
+    const params = new URLSearchParams(search);
+    const id = params.get("id");
+    setApplicantId(id?.toString());
+    if (id) getApplicantUserData(id);
+  }, []);
 
   return (
     <form onSubmit={handleSubmit(bankSubmitNew)}>
       <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Submit</h4>
+        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}> Bank Guarantee Submission</h4>
         <div className="card">
           <Row className="col-12">
-            <Col className="col-3">
-              <Form.Group as={Col} controlId="formGridLicence">
-                <Form.Label>
-                  <h2>Enter LOI No.</h2>{" "}
-                </Form.Label>
-
-                <input type="text" className="form-control" placeholder="" {...register("enterLoiNumber")} />
-              </Form.Group>
-            </Col>
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
-                  <h2>Enter Memo No. </h2>
+                  <h2>Enter LOI No. </h2>
                 </Form.Label>
               </div>
-              <input type="text" className="form-control" placeholder="" {...register("enterMemoNumber")} />
+              <input type="text" className="form-control" placeholder="" {...register("loiNumber")} />
             </Col>
+
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
@@ -58,25 +127,6 @@ function SubmitNew() {
                 <option> IDW</option>
                 <option>EDC</option>
               </select>
-            </Col>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>Upload B.G. </h2>
-                </Form.Label>
-              </div>
-              <input type="file" className="form-control" placeholder="" {...register("uploadBg")} />
-            </Col>
-          </Row>
-
-          <Row className="col-12">
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>Bank Name </h2>
-                </Form.Label>
-              </div>
-              <input type="text" className="form-control" placeholder="" {...register("bankName")} />
             </Col>
             <Col md={4} xxl lg="3">
               <div>
@@ -94,42 +144,67 @@ function SubmitNew() {
               </div>
               <input type="text" className="form-control" placeholder="" {...register("amountInWords")} />
             </Col>
+          </Row>
+          <br></br>
+          <Row className="col-12">
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>Bank Name </h2>
+                </Form.Label>
+              </div>
+              <input type="text" className="form-control" placeholder="" {...register("bankName")} />
+            </Col>
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>Enter Memo No. </h2>
+                </Form.Label>
+              </div>
+              <input type="text" className="form-control" placeholder="" {...register("memoNumber")} />
+            </Col>
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
                   <h2>Valid Upto </h2>
                 </Form.Label>
               </div>
-              <input type="date" className="form-control" placeholder="" {...register("validity")} />
+              <input type="datepicker" className="form-control" placeholder="" {...register("validity")} format="yyyy-MM-dd" />
+            </Col>
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>Upload B.G. </h2>
+                </Form.Label>
+              </div>
+              <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBg")} />
             </Col>
           </Row>
+          <br></br>
           <Row className="col-12">
             <div className="col col-12 ">
               <div>
-                <div className="form-check">
-                  <input className="form-check-input" formControlName="agreeCheck" type="checkbox" value="" id="flexCheckDefault" required />
-                  <label className="checkbox" for="flexCheckDefault">
-                    Hardcopy Submitted at TCP office.{" "}
-                    <label htmlFor="licenseApplied">
-                      <input {...register("licenseApplied")} type="radio" value="Y" id="licenseApplied" />
-                      &nbsp; Yes &nbsp;&nbsp;
-                    </label>
-                    <label htmlFor="licenseApplied">
-                      <input
-                        {...register("licenseApplied")}
-                        type="radio"
-                        value="N"
-                        id="licenseApplied"
-                        className="btn btn-primary"
-                        onClick={() => setmodal1(true)}
-                      />
-                      &nbsp; No &nbsp;&nbsp;
-                    </label>
-                    <h3 className="error-message" style={{ color: "red" }}>
-                      {errors?.licenseApplied && errors?.licenseApplied?.message}
-                    </h3>
+                <label>
+                  Hardcopy Submitted at TCP office.{" "}
+                  <label htmlFor="licenseApplied">
+                    <input {...register("licenseApplied")} type="radio" value="Y" id="licenseApplied" />
+                    &nbsp; Yes &nbsp;&nbsp;
                   </label>
-                </div>
+                  <label htmlFor="licenseApplied">
+                    <input
+                      {...register("licenseApplied")}
+                      type="radio"
+                      value="N"
+                      id="licenseApplied"
+                      className="btn btn-primary"
+                      onClick={() => setmodal1(true)}
+                    />
+                    &nbsp; No &nbsp;&nbsp;
+                  </label>
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.licenseApplied && errors?.licenseApplied?.message}
+                  </h3>
+                </label>
               </div>
 
               {watch("licenseApplied") === "Y" && (
@@ -143,7 +218,7 @@ function SubmitNew() {
                         </h2>
                       </label>
                       <div>
-                        <input type="file" placeholder="" className="form-control" {...register("consentLetter")}></input>
+                        <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "consentLetter")}></input>
                       </div>
 
                       <h3 className="error-message" style={{ color: "red" }}>

@@ -31,7 +31,10 @@ const Developerinfo = (props) => {
   const dataIcons = props.dataForIcons;
   const landScheduleData = props.ApiResponseData;
   const Purpose = props.purpose;
-
+  let user = Digit.UserService.getUser();
+  const userRoles = user?.info?.roles?.map((e) => e.code) || [];
+  const hideRemarks = userRoles.some((item)=>item === "CTP_HR" || item === "CTP_HQ" || item === "DTP_HR" || item === "DTP_HQ")
+  const hideRemarksPatwari = userRoles.some((item)=>item ==="Patwari_HQ")
 
   const [vacant, setVacant] = useState("");
   const [construction, setConstruction] = useState("");
@@ -654,6 +657,8 @@ const Developerinfo = (props) => {
                 <Form.Label
                 // placeholder={personalinfo !== null ? personalinfo.authorizedDeveloper : null}
                 >
+                  {/* {JSON.stringify(userRoles)}
+                    {JSON.stringify(hideRemarks)} */}
 
                   (i)Whether licence applied for additional area ?
 
@@ -665,6 +670,8 @@ const Developerinfo = (props) => {
                     {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks?"none":"block",
+                        // display: hideRemarksPatwari?"none":"block",
                         color: fieldIconColors.licenceApplied
                       }}
                       onClick={() => {
@@ -703,6 +710,8 @@ const Developerinfo = (props) => {
                         ></Form.Control>
                         <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
+                            // display: hideRemarksPatwari?"none":"block",
                             color: fieldIconColors.licenceNo
                           }}
                           onClick={() => {
@@ -752,6 +761,8 @@ const Developerinfo = (props) => {
                         {/* </Form.Select> */}
                         <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
+                            // display: hideRemarksPatwari?"none":"block",
                             color: fieldIconColors.potentialZone
                           }}
                           onClick={() => {
@@ -773,6 +784,8 @@ const Developerinfo = (props) => {
                         <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.siteLoc : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                         <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
+                            // display: hideRemarksPatwari?"none":"block",
                             color: fieldIconColors.siteLocationPurpose
                           }}
                           onClick={() => {
@@ -799,6 +812,7 @@ const Developerinfo = (props) => {
                     <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.approach : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks?"none":"block",
                         color: fieldIconColors.approachType
                       }}
                       onClick={() => {
@@ -893,6 +907,8 @@ const Developerinfo = (props) => {
                         <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.areaOfParentLicence : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                         <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
+                            // display: hideRemarksPatwari?"none":"block",
                             color: fieldIconColors.approachRoadWidth
                           }}
                           onClick={() => {
@@ -913,6 +929,8 @@ const Developerinfo = (props) => {
                         <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.specify : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                         <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
+                            // display: hideRemarksPatwari?"none":"block",
                             color: fieldIconColors.specifyOthers
                           }}
                           onClick={() => {
@@ -926,45 +944,8 @@ const Developerinfo = (props) => {
                       </div>
                     </Col>
                     <Col className="ms-auto" md={4} xxl lg="4">
-                     
-                    
-                    {/* </Row> */}
-                  {/* <Row className="ms-auto" style={{ marginBottom: 20 }}> */}
-                    {/* <div className="col col-4">
-                      <h6>Type of land</h6>{" "}
-                      <div className="d-flex flex-row  align-items-center">
-                        <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.typeLand : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
-                        <ReportProblemIcon
-                          style={{
-                            color: fieldIconColors.typeOfLand
-                          }}
-                          onClick={() => {
-                            setLabelValue("Type of land"),
-                              setOpennedModal("typeOfLand")
-                            setSmShow(true),
-                              console.log("modal open"),
-                              setFieldValue(landScheduleData !== null ? landScheduleData?.typeLand : null);
-                          }}
-                        ></ReportProblemIcon>
-                      </div>
-                    </div> */}
-
-                    <div className="col col-4">
-                      <h6>Third-party right created&nbsp;
-
-                        <ReportProblemIcon
-                          style={{
-                            color: fieldIconColors.thirdPartyRightCreated
-                          }}
-                          onClick={() => {
-                            setLabelValue("Third-party right created"),
-                              setOpennedModal("thirdPartyRightCreated")
-                            setSmShow(true),
-                              console.log("modal open"),
-                              setFieldValue(landScheduleData?.thirdParty === "Y" ? "Yes" : "No");
-                          }}
-                        ></ReportProblemIcon>
-                      </h6>
+                     <div className="col col-4">
+                      <h6>Third-party right created&nbsp; </h6>
 
                       <div className="d-flex flex-row align-items-center my-1 ">
                         <input type="radio" disabled value="Yes" checked={landScheduleData?.thirdParty === "Y" ? true : false} />
@@ -978,18 +959,32 @@ const Developerinfo = (props) => {
                         <label className="m-0 mx-2" for="No">
                           No
                         </label>
+                        <ReportProblemIcon
+                          style={{
+                            display: hideRemarks  ?"none":"block",
+                            // display: hideRemarksPatwari?"none":"block",
+                            color: fieldIconColors.thirdPartyRightCreated
+                          }}
+                          onClick={() => {
+                            setLabelValue("Third-party right created"),
+                              setOpennedModal("thirdPartyRightCreated")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(landScheduleData?.thirdParty === "Y" ? "Yes" : "No");
+                          }}
+                        ></ReportProblemIcon>
 
                       </div>
                     </div>
-                    <div className="col col-4">
+                    <div className="col col-8">
                       {landScheduleData?.thirdParty === "Y" && (
                         <div className="row ">
-                          <div className="col col-8">
+                          {/* <div className="col col-4"> */}
                             <label> Remark </label>
                             <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.thirdPartyRemark : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                             {/* <input type="text" className="form-control" disabled placeholder={landScheduleData !== null ? landScheduleData?.thirdPartyRemark : null} /> */}
-                          </div>
-                          <div className="col col-12">
+                          {/* </div> */}
+                          {/* <div className="col col-4"> */}
                             <label> Document Download </label>
 
                             <IconButton onClick={() => getDocShareholding(landScheduleData?.thirdPartyDoc)}>
@@ -997,7 +992,7 @@ const Developerinfo = (props) => {
                             </IconButton>
 
                           </div>
-                        </div>
+                        // </div>
                       )}
                     </div>
                     <div className="col col-4">
@@ -1031,6 +1026,8 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks?"none":"block",
+                       // display: hideRemarksPatwari?"none":"block",
                       color: fieldIconColors.migrationPolicy
                     }}
                     onClick={() => {
@@ -1063,6 +1060,7 @@ const Developerinfo = (props) => {
                           ></Form.Control>
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks?"none":"block",
                               color: fieldIconColors.areaAppliedUnderMigration
                             }}
                             onClick={() => {
@@ -1093,6 +1091,7 @@ const Developerinfo = (props) => {
                           ></Form.Control>
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks?"none":"block",
                               color: fieldIconColors.purposeOfParentLicence
                             }}
                             onClick={() => {
@@ -1114,6 +1113,7 @@ const Developerinfo = (props) => {
                           <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.licNo : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks?"none":"block",
                               color: fieldIconColors.licenceNo
                             }}
                             onClick={() => {
@@ -1138,6 +1138,7 @@ const Developerinfo = (props) => {
                           <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.areaofParentLic : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks?"none":"block",
                               color: fieldIconColors.areaOfParentLicence
                             }}
                             onClick={() => {
@@ -1162,6 +1163,7 @@ const Developerinfo = (props) => {
                           <label className="m-0 mx-2" for="No">No</label>
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks?"none":"block",
                               color: fieldIconColors.validityOfParentLicence
                             }}
                             onClick={() => {
@@ -1181,6 +1183,7 @@ const Developerinfo = (props) => {
                         <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.typeLand : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                         <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.typeOfLand
                           }}
                           onClick={() => {
@@ -1202,6 +1205,7 @@ const Developerinfo = (props) => {
                         <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.approachRoadWidth : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                         <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.approachRoadWidth
                           }}
                           onClick={() => {
@@ -1222,6 +1226,7 @@ const Developerinfo = (props) => {
                         <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.approachRoadWidth : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                         <ReportProblemIcon
                           style={{
+                            display: hideRemarks?"none":"block",
                             color: fieldIconColors.approachRoadWidth
                           }}
                           onClick={() => {
@@ -1244,6 +1249,7 @@ const Developerinfo = (props) => {
 
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks?"none":"block",
                               color: fieldIconColors.approvedLayoutOfPlan
                             }}
                             onClick={() => {
@@ -1269,6 +1275,7 @@ const Developerinfo = (props) => {
 
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks?"none":"block",
                               color: fieldIconColors.proposedLayoutOfPlan
                             }}
                             onClick={() => {
@@ -1293,6 +1300,7 @@ const Developerinfo = (props) => {
 
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks?"none":"block",
                               color: fieldIconColors.uploadPreviouslyLayoutPlan
                             }}
                             onClick={() => {
@@ -1324,6 +1332,7 @@ const Developerinfo = (props) => {
                 <ReportProblemIcon
                   className="m-0 mx-2"
                   style={{
+                    display: hideRemarks?"none":"block",
                     color: fieldIconColors.encumbrance
                   }}
                   onClick={() => {
@@ -1357,6 +1366,7 @@ const Developerinfo = (props) => {
                 <label className="m-0 mx-2" for="No">No</label>
                 <ReportProblemIcon
                   style={{
+                    display: hideRemarks?"none":"block",
                     color: fieldIconColors.existinglitigation
                   }}
                   onClick={() => {
@@ -1409,6 +1419,7 @@ const Developerinfo = (props) => {
                 <label className="m-0 mx-2" for="No">No</label>
                 <ReportProblemIcon
                   style={{
+                    display: hideRemarks?"none":"block",
                     color: fieldIconColors.courtOrders
                   }}
                   onClick={() => {
@@ -1459,6 +1470,7 @@ const Developerinfo = (props) => {
                 <label className="m-0 mx-2" for="No">No</label>
                 <ReportProblemIcon
                   style={{
+                    display: hideRemarks?"none":"block",
                     color: fieldIconColors.anyInsolvency
                   }}
                   onClick={() => {
@@ -1515,6 +1527,7 @@ const Developerinfo = (props) => {
                     <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks?"none":"block",
                         color: fieldIconColors.asPerAppliedLand
                       }}
                       onClick={() => {
@@ -1560,6 +1573,7 @@ const Developerinfo = (props) => {
                     <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks?"none":"block",
                         color: fieldIconColors.revenueRasta
                       }}
                       onClick={() => {
@@ -1577,7 +1591,8 @@ const Developerinfo = (props) => {
                   <div className="row ml-1 mr-2">
                     <div className="col col p-1">
                       <label> Width of revenue rasta </label>
-                      <input type="number" className="form-control" disabled placeholder={landScheduleData?.revenueRastaWidth} />
+                      <Form.Control placeholder={landScheduleData?.revenueRastaWidth}height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+        {/* <input type="number" className="form-control" disabled placeholder={landScheduleData?.revenueRastaWidth} /> */}
                     </div>
                   </div>
                 )}
@@ -1597,6 +1612,7 @@ const Developerinfo = (props) => {
                     <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks?"none":"block",
                         color: fieldIconColors.waterCourseRunning
                       }}
                       onClick={() => {
@@ -1631,6 +1647,7 @@ const Developerinfo = (props) => {
                     <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks?"none":"block",
                         color: fieldIconColors.whetherInCompactBlock
                       }}
                       onClick={() => {
@@ -1648,7 +1665,8 @@ const Developerinfo = (props) => {
                   <div className="row ml-1 mr-2">
                     <div className="col col p-1">
                       <label> Remark </label>
-                      <input type="number" className="form-control" disabled placeholder={landScheduleData?.compactBlockRemark} />
+    {/* <input type="number" className="form-control" disabled placeholder={landScheduleData?.compactBlockRemark} /> */}
+                      <Form.Control placeholder={landScheduleData?.compactBlockRemark} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                     </div>
                   </div>
                 )}
@@ -1673,6 +1691,7 @@ const Developerinfo = (props) => {
                     <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks?"none":"block",
                         color: fieldIconColors.landSandwiche
                       }}
                       onClick={() => {
@@ -1689,7 +1708,8 @@ const Developerinfo = (props) => {
                   <div className="row ml-1 mr-2">
                     <div className="col col p-1">
                       <label> Remark </label>
-                      <input type="number" className="form-control" disabled placeholder={landScheduleData?.landSandwichedRemark} />
+  {/* <input type="number" className="form-control" disabled placeholder={landScheduleData?.landSandwichedRemark} /> */}
+                      <Form.Control placeholder={landScheduleData?.landSandwichedRemark} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                     </div>
                   </div>
                 )}
@@ -1705,6 +1725,7 @@ const Developerinfo = (props) => {
                     <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks?"none":"block",
                         color: fieldIconColors.acquisitionStatus
                       }}
                       onClick={() => {
@@ -1722,7 +1743,8 @@ const Developerinfo = (props) => {
                   <div className="row ml-1 mr-2">
                     <div className="col col p-1">
                       <label> Remark </label>
-                      <input type="number" className="form-control" disabled placeholder={landScheduleData?.acquistionRemark} />
+      {/* <input type="number" className="form-control" disabled placeholder={landScheduleData?.acquistionRemark} /> */}
+                      <Form.Control placeholder={landScheduleData?.acquistionRemark} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                     </div>
                   </div>
                 )}
@@ -1735,6 +1757,7 @@ const Developerinfo = (props) => {
                     <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.sectionFour} ></Form.Control>
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks?"none":"block",
                         color: fieldIconColors.dateOfSection4Notification
                       }}
                       onClick={() => {
@@ -1756,6 +1779,7 @@ const Developerinfo = (props) => {
                     <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.sectionSix} ></Form.Control>
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks?"none":"block",
                         color: fieldIconColors.dateOfSection6Notification
                       }}
                       onClick={() => {
@@ -1785,6 +1809,7 @@ const Developerinfo = (props) => {
                     <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks?"none":"block",
                         color: fieldIconColors.ordersUpload
                       }}
                       onClick={() => {
@@ -1813,6 +1838,7 @@ const Developerinfo = (props) => {
 
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks?"none":"block",
                               color: fieldIconColors.landCompensationReceived
                             }}
                             onClick={() => {
@@ -1838,6 +1864,7 @@ const Developerinfo = (props) => {
 
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks?"none":"block",
                               color: fieldIconColors.statusOfRelease
                             }}
                             onClick={() => {
@@ -1861,6 +1888,7 @@ const Developerinfo = (props) => {
                           <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.awardDate}></Form.Control>
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks?"none":"block",
                               color: fieldIconColors.dateOfAward
                             }}
                             onClick={() => {
@@ -1885,6 +1913,7 @@ const Developerinfo = (props) => {
                           <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.releaseDate}></Form.Control>
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks?"none":"block",
                               color: fieldIconColors.dateOfRelease
                             }}
                             onClick={() => {
@@ -1907,6 +1936,7 @@ const Developerinfo = (props) => {
                           <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.siteDetail}></Form.Control>
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks?"none":"block",
                               color: fieldIconColors.siteDetails
                             }}
                             onClick={() => {
@@ -1940,6 +1970,7 @@ const Developerinfo = (props) => {
                     <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks?"none":"block",
                         color: fieldIconColors.internalSectoralPlan
                       }}
                       onClick={() => {
@@ -1972,6 +2003,7 @@ const Developerinfo = (props) => {
                     <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks || hideRemarksPatwari ?"none":"block",
                         color: fieldIconColors.vacant
                       }}
                       onClick={() => {
@@ -1988,20 +2020,21 @@ const Developerinfo = (props) => {
                   <div className="row ml-1 mr-2">
                     <div className="col col p-1">
                       <label> Vacant Remark </label>
-                      <input type="number" className="form-control" disabled placeholder={landScheduleData?.vacantRemark} />
+  {/* <input type="number" className="form-control" disabled placeholder={landScheduleData?.vacantRemark} /> */}
+                      <Form.Control placeholder={landScheduleData?.vacantRemark} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                     </div>
                   </div>
                 )}
-                {landScheduleData?.vacant === "N" && (
-                  <div className="row ml-1 mr-2">
-                    <div className="col col p-1">
-                      <label> Vacant Remark </label>
-                      <input type="number" className="form-control" disabled placeholder={landScheduleData?.vacantRemark} />
-                    </div>
-                  </div>
-                )}
+              
               </div>
-              <div className="col col-3 p-1">
+              {landScheduleData?.vacant === "N" && (
+                  // <div className="row ml-1 mr-2">
+                  //   <div className="col col p-1">
+                  //     <label> Vacant Remark </label>
+                  //     <input type="number" className="form-control" disabled placeholder={landScheduleData?.vacantRemark} />
+                  //   </div>
+                  // </div>
+                  <div className="col col-3 p-1">
                 <h6 onChange={(e) => setConstruction(e.target.value)} value={construction}>
                   (b) Construction: (Yes/No)
                 </h6>
@@ -2014,6 +2047,7 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks?"none":"block",
                       color: fieldIconColors.construction
                     }}
                     onClick={() => {
@@ -2030,7 +2064,8 @@ const Developerinfo = (props) => {
                   <div className="row ">
                     <div className="col col">
                       <label>Type of Construction</label>
-                      <input type="text" className="form-control" disabled placeholder={landScheduleData?.typeOfConstruction} />
+  {/* <input type="text" className="form-control" disabled placeholder={landScheduleData?.typeOfConstruction} /> */}
+                      <Form.Control placeholder={landScheduleData?.typeOfConstruction} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                     </div>
                   </div>
                 )}
@@ -2038,11 +2073,14 @@ const Developerinfo = (props) => {
                   <div className="row ">
                     <div className="col col">
                       <label>Remark</label>
-                      <input type="text" className="form-control" disabled placeholder={landScheduleData?.constructionRemark} />
+      {/* <input type="text" className="form-control" disabled placeholder={landScheduleData?.constructionRemark} /> */}
+                      <Form.Control placeholder={landScheduleData?.constructionRemark} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                     </div>
                   </div>
                 )}
               </div>
+                )}
+              
               <div className="col col-3 p-1">
                 <h6 onChange={(e) => setHt(e.target.value)} value={ht}>
                   (c) HT line
@@ -2056,6 +2094,7 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks || hideRemarksPatwari ?"none":"block",
                       color: fieldIconColors.htLine
                     }}
                     onClick={() => {
@@ -2072,7 +2111,8 @@ const Developerinfo = (props) => {
                   <div className="row ">
                     <div className="col col">
                       <label>HT Remarks</label>
-                      <input type="text" className="form-control" disabled placeholder={landScheduleData?.htRemark} />
+                      {/* <input type="text" className="form-control" disabled placeholder={landScheduleData?.htRemark} /> */}
+                      <Form.Control placeholder={landScheduleData?.htRemark} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                     </div>
                   </div>
                 )}
@@ -2080,7 +2120,8 @@ const Developerinfo = (props) => {
                   <div className="row ">
                     <div className="col col">
                       <label>HT Remarks</label>
-                      <input type="text" className="form-control" disabled placeholder={landScheduleData?.htRemark} />
+                      {/* <input type="text" className="form-control" disabled placeholder={landScheduleData?.htRemark} /> */}
+                      <Form.Control placeholder={landScheduleData?.htRemark}  height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                     </div>
                   </div>
                 )}
@@ -2097,6 +2138,7 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks || hideRemarksPatwari ?"none":"block",
                       color: fieldIconColors.iocGasPipeline
                     }}
                     onClick={() => {
@@ -2116,7 +2158,8 @@ const Developerinfo = (props) => {
                   <div className="row ">
                     <div className="col col">
                       <label>IOC Remark</label>
-                      <input type="text" className="form-control" disabled placeholder={landScheduleData?.gasRemark} />
+                      {/* <input type="text" className="form-control" disabled placeholder={landScheduleData?.gasRemark} /> */}
+                      <Form.Control placeholder={landScheduleData?.gasRemark}  height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                     </div>
                   </div>
                 )}
@@ -2124,7 +2167,8 @@ const Developerinfo = (props) => {
                   <div className="row ">
                     <div className="col col">
                       <label>IOC Remark</label>
-                      <input type="text" className="form-control" disabled placeholder={landScheduleData?.gasRemark} />
+                      {/* <input type="text" className="form-control" disabled placeholder={landScheduleData?.gasRemark} /> */}
+                      <Form.Control placeholder={landScheduleData?.gasRemark} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                     </div>
                   </div>
                 )}
@@ -2144,6 +2188,7 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks || hideRemarksPatwari ?"none":"block",
                       color: fieldIconColors.nallah
                     }}
                     onClick={() => {
@@ -2160,7 +2205,8 @@ const Developerinfo = (props) => {
                   <div className="row ">
                     <div className="col col">
                       <label>Nallah Remarks</label>
-                      <input type="text" className="form-control" disabled placeholder={landScheduleData?.nallahRemark} />
+                      {/* <input type="text" className="form-control" disabled placeholder={landScheduleData?.nallahRemark} /> */}
+                      <Form.Control placeholder={landScheduleData?.nallahRemark} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                     </div>
                   </div>
                 )}
@@ -2168,7 +2214,8 @@ const Developerinfo = (props) => {
                   <div className="row ">
                     <div className="col col">
                       <label>Nallah Remarks</label>
-                      <input type="text" className="form-control" disabled placeholder={landScheduleData?.nallahRemark} />
+                      {/* <input type="text" className="form-control" disabled placeholder={landScheduleData?.nallahRemark} /> */}
+                      <Form.Control placeholder={landScheduleData?.nallahRemark}height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                     </div>
                   </div>
                 )}
@@ -2184,6 +2231,7 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks || hideRemarksPatwari ?"none":"block",
                       color: fieldIconColors.anyRevenueRasta
                     }}
                     onClick={() => {
@@ -2199,11 +2247,13 @@ const Developerinfo = (props) => {
                   <div className="row ">
                     <div className="col col">
                       <label>Width of Revenue rasta/road (in Sqm)</label>
-                      <input type="text" className="form-control" disabled placeholder={landScheduleData?.roadWidth} />
+                      {/* <input type="text" className="form-control" disabled placeholder={landScheduleData?.roadWidth} /> */}
+                      <Form.Control placeholder={landScheduleData?.roadWidth} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                     </div>
                     <div className="col col">
                       <label>Remark</label>
-                      <input type="text" className="form-control" disabled placeholder={landScheduleData?.roadRemark} />
+                      <Form.Control placeholder={landScheduleData?.roadRemark} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                      {/* <input type="text" className="form-control" disabled placeholder={landScheduleData?.roadRemark} /> */}
                     </div>
                   </div>
                 )}
@@ -2211,7 +2261,8 @@ const Developerinfo = (props) => {
                   <div className="row ">
                     <div className="col col">
                       <label>Remark</label>
-                      <input type="text" className="form-control" disabled placeholder={landScheduleData?.roadRemark} />
+                      {/* <input type="text" className="form-control" disabled placeholder={landScheduleData?.roadRemark} /> */}
+                      <Form.Control placeholder={landScheduleData?.roadRemark} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                     </div>
                   </div>
                 )}
@@ -2227,6 +2278,7 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks || hideRemarksPatwari ?"none":"block",
                       color: fieldIconColors.anyMarginalLand
                     }}
                     onClick={() => {
@@ -2242,7 +2294,8 @@ const Developerinfo = (props) => {
                   <div className="row ">
                     <div className="col col">
                       <label>Remark of Marginal Land</label>
-                      <input type="text" className="form-control" disabled placeholder={landScheduleData?.marginalLandRemark} />
+      {/* <input type="text" className="form-control" disabled placeholder={landScheduleData?.marginalLandRemark} /> */}
+                      <Form.Control placeholder={landScheduleData?.marginalLandRemark}  height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                     </div>
                   </div>
                 )}
@@ -2250,7 +2303,8 @@ const Developerinfo = (props) => {
                   <div className="row ">
                     <div className="col col">
                       <label>Remark of Marginal Land</label>
-                      <input type="text" className="form-control" disabled placeholder={landScheduleData?.marginalLandRemark} />
+    {/* <input type="text" className="form-control" disabled placeholder={landScheduleData?.marginalLandRemark} /> */}
+                      <Form.Control placeholder={landScheduleData?.marginalLandRemark}  height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                     </div>
                   </div>
                 )}
@@ -2271,6 +2325,7 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks || hideRemarksPatwari ?"none":"block",
                       color: fieldIconColors.utilityLine
                     }}
                     onClick={() => {
@@ -2287,18 +2342,21 @@ const Developerinfo = (props) => {
                   <div className="row ">
                     <div className="col col">
                       <label>Width of row</label>
-                      <input type="text" className="form-control" disabled placeholder={landScheduleData?.utilityWidth} />
+                      {/* <input type="text" className="form-control" disabled placeholder={landScheduleData?.utilityWidth} /> */}
+                      <Form.Control placeholder={landScheduleData?.utilityWidth} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                     </div>
                     <div className="col col">
                       <label>Remark </label>
-                      <input type="text" className="form-control" disabled placeholder={landScheduleData?.utilityRemark} />
+                 {/* <input type="text" className="form-control" disabled placeholder={landScheduleData?.utilityRemark} /> */}
+                 <Form.Control placeholder={landScheduleData?.utilityRemark} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                     </div>
                   </div>
                 )}
                 {landScheduleData?.utilityLine === "N" && (
                   <div className="col col">
                     <label>Remark </label>
-                    <input type="text" className="form-control" disabled placeholder={landScheduleData?.utilityRemark} />
+                    {/* <input type="text" className="form-control" disabled placeholder={landScheduleData?.utilityRemark} /> */}
+                    <Form.Control placeholder={landScheduleData?.utilityRemark} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                   </div>
 
                 )}
@@ -2311,6 +2369,7 @@ const Developerinfo = (props) => {
                 {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.documentsAsAnnexures}></Form.Control> */}
                 <ReportProblemIcon
                   style={{
+                    display: hideRemarks || hideRemarksPatwari ?"none":"block",
                     color: fieldIconColors.documentsAsAnnexures
                   }}
                   onClick={() => {
@@ -2332,6 +2391,7 @@ const Developerinfo = (props) => {
                   </IconButton>
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks?"none":"block",
                       color: fieldIconColors.landSchedule
                     }}
                     onClick={() => {
@@ -2352,6 +2412,7 @@ const Developerinfo = (props) => {
                   </IconButton>
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks?"none":"block",
                       color: fieldIconColors.copyOfMutation
                     }}
                     onClick={() => {
@@ -2372,6 +2433,7 @@ const Developerinfo = (props) => {
                   </IconButton>
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks?"none":"block",
                       color: fieldIconColors.copyOfJamabandi
                     }}
                     onClick={() => {
@@ -2392,6 +2454,7 @@ const Developerinfo = (props) => {
                   </IconButton>
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks?"none":"block",
                       color: fieldIconColors.detailsOfLease
                     }}
                     onClick={() => {
@@ -2418,6 +2481,7 @@ const Developerinfo = (props) => {
 
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks?"none":"block",
                       color: fieldIconColors.addSalesDeed
                     }}
                     onClick={() => {
@@ -2438,6 +2502,7 @@ const Developerinfo = (props) => {
                   </IconButton>
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks?"none":"block",
                       color: fieldIconColors.copyofSpaBoard
                     }}
                     onClick={() => {
@@ -2461,6 +2526,7 @@ const Developerinfo = (props) => {
                   </IconButton>
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks?"none":"block",
                       color: fieldIconColors.revisedLansSchedule
                     }}
                     onClick={() => {
@@ -2483,6 +2549,7 @@ const Developerinfo = (props) => {
                   </IconButton>
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks?"none":"block",
                       color: fieldIconColors.copyOfShajraPlan
                     }}
                     onClick={() => {

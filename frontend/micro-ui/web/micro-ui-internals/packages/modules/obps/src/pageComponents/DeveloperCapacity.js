@@ -1,4 +1,4 @@
-import { BackButton, CardLabel, CheckBox, FormStep, TextArea, TextInput, Dropdown, Toast, RemoveIcon, UploadFile } from "@egovernments/digit-ui-react-components";
+import { BackButton, CardLabel, CheckBox, FormStep, CardLabelError, TextArea, TextInput, Dropdown, Toast, RemoveIcon, UploadFile } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import Timeline from "../components/Timeline";
 import { useForm } from "react-hook-form";
@@ -17,6 +17,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { getDocShareholding } from "../../../tl/src/pages/employee/ScrutinyBasic/ScrutinyDevelopment/docview.helper";
 import { MenuItem, Select } from "@mui/material";
 import { convertEpochToDate } from "../utils/index";
+import Spinner from "../components/Loader/index";
+
 const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) => {
     const { pathname: url } = useLocation();
     let validation = {};
@@ -27,7 +29,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const stateId = Digit.ULBService.getStateId();
     const [data, setData] = useState();
-
+    const [loader, setLoading] = useState(false);
     React.useEffect(async () => {
         const uuid = userInfo?.info?.uuid;
         const usersResponse = await Digit.UserService.userSearch(tenantId, { uuid: [uuid] }, {});
@@ -246,16 +248,20 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
         dateOfGrantingLic: "",
         purposeOfColony: "",
         licValidity: "",
-        technicalExpertEngaged: "",
-        engineerDegree: "",
-        architectDegree: "",
-        townPlannerDegree: "",
+        // technicalExpertEngaged: "",
+        // engineerDegree: "",
+        // architectDegree: "",
+        // townPlannerDegree: "",
     })
     const [technicalCapacityOutsideHaryana, setTechnicalCapacityOutsideHaryana] = useState()
     const [technicalCapacityOutsideHaryanaDetails, setTechnicalCapacityOutsideHaryanaDetails] = useState({
         project: "",
         authority: "",
-        statusOfDevelopment: ""
+        statusOfDevelopment: "",
+        permissionLetterDoc: "",
+        projectArea: "",
+        location: "",
+        hrDetailAnyDoc: "",
     })
     const [purposeOptions, setPurposeOptions] = useState({ data: [], isLoading: true });
     const [technicalCapacitySoughtFromAnyColonizer, setTechnicalCapacitySoughtFromAnyColonizer] = useState({
@@ -404,27 +410,32 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
 
         if(formType==="devTypeDocument"){
             if(getValues("devTypeDocument")?.includes(file.name)){
-              alert("Duplicate file Selected");
+              setShowToastError({ key: "error" });
               return;
             }
           } else if(formType==="hrduModalActFile") {
             if(getValues("hrduModalActFile")?.includes(file.name)){
-              alert("Duplicate file Selected");
+              setShowToastError({ key: "error" });
               return;
             }
           } else if(formType==="designatedDirectorsFile") {
             if(getValues("designatedDirectorsFile")?.includes(file.name)){
-              alert("Duplicate file Selected");
+              setShowToastError({ key: "error" });
               return;
             }
           } else if(formType==="alreadyObtaileLicFile") {
             if(getValues("alreadyObtaileLicFile")?.includes(file.name)){
-              alert("Duplicate file Selected");
+              setShowToastError({ key: "error" });
+              return;
+            }
+          } else if(formType==="outsideHrDocY") {
+            if(getValues("outsideHrDocY")?.includes(file.name)){
+              setShowToastError({ key: "error" });
               return;
             }
           } else if(formType==="techicalExpertFile") {
             if(getValues("techicalExpertFile")?.includes(file.name)){
-              alert("Duplicate file Selected");
+              setShowToastError({ key: "error" });
               return;
             }
           }
@@ -436,9 +447,13 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
         formData.append("tag", "tag-property");
         // setLoader(true);
         try {
+            setLoading(true);
             const Resp = await axios.post("/filestore/v1/files", formData, {}).then((response) => {
                 return response;
             });
+            
+            setLoading(false);
+            setShowToast({ key: "success" });
             console.log(Resp?.data?.files);
             setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
             // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
@@ -470,6 +485,12 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                   } else {
                     setValue("alreadyObtaileLicFile",[file.name]);
                   }
+              } else if(formType==="outsideHrDocY"){
+                if(getValues("outsideHrDocY")) {
+                    setValue("outsideHrDocY",[...getValues("outsideHrDocY"),file.name]);
+                  } else {
+                    setValue("outsideHrDocY",[file.name]);
+                  }
               } else if(formType==="techicalExpertFile") {
                 if(getValues("techicalExpertFile")) {
                     setValue("techicalExpertFile",[...getValues("techicalExpertFile"),file.name]);
@@ -480,7 +501,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
 
 
         } catch (error) {
-            //   setLoader(false);
+            setLoading(false);
             console.log(error.message);
         }
     };
@@ -798,7 +819,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
 
     const handleArrayValues = () => {
 
-        if (hrduModalData.licNo && hrduModalData.licValidity && hrduModalData.dateOfGrantingLic && purposeOfColony && hrduModalData.technicalExpertEngaged) {
+        if (hrduModalData.licNo && hrduModalData.licValidity && hrduModalData.dateOfGrantingLic && purposeOfColony) {
 
             const values = {
 
@@ -807,10 +828,10 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                 purposeOfColony: purposeOfColony,
                 // sectorAndDevelopmentPlan: Documents?.sectorAndDevelopmentPlan,
                 licValidity: hrduModalData.licValidity,
-                technicalExpertEngaged: hrduModalData.technicalExpertEngaged,
-                engineerDegree: Documents?.engineerDegree,
-                architectDegree: Documents?.architectDegree,
-                townPlannerDegree: Documents?.townPlannerDegree
+                // technicalExpertEngaged: hrduModalData.technicalExpertEngaged,
+                // engineerDegree: Documents?.engineerDegree,
+                // architectDegree: Documents?.architectDegree,
+                // townPlannerDegree: Documents?.townPlannerDegree
 
             }
             setModalCapacityDevelopColonyHdruAct((prev) => [...prev, values]);
@@ -823,10 +844,10 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                 dateOfGrantingLic: "",
                 purposeOfColony: "",
                 licValidity: "",
-                technicalExpertEngaged: "",
-                engineerDegree: "",
-                architectDegree: "",
-                townPlannerDegree: ""
+                // technicalExpertEngaged: "",
+                // engineerDegree: "",
+                // architectDegree: "",
+                // townPlannerDegree: ""
             })
         }
         //   console.log("DevCapacityFirst", capacityDevelopColonyHdruAct);
@@ -1046,6 +1067,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
     return (
         <React.Fragment>
             <div className={isopenlink ? "OpenlinkContainer" : ""}>
+            {loader && <Spinner />}
                 {/* {JSON.stringify(data?.devDetail[0]?.addInfo?.showDevTypeFields)}efwefewfewf
                 {JSON.stringify(data)}efewfewf */}
                 {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
@@ -1058,7 +1080,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
 
                     isDisabled={
                         ((data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm") ? (!Documents?.companyBalanceSheet || !Documents?.individualCertificateCA) : (data?.devDetail[0]?.addInfo?.showDevTypeFields === "Company" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Society" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Trust" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Institution") ? (!Documents?.companyBalanceSheet || !Documents?.paidUpCapital) : (data?.devDetail[0]?.addInfo?.showDevTypeFields === "Limited Liability Partnership" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Firm" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm") ? (!Documents?.netWorthOfPartners || !Documents?.netWorthOfFirm) : false) ||
-                        ((permissionGrantedHRDU === "Y" && capacityDevelopColonyHdruAct.length) ? false : permissionGrantedHRDU === "N" ? false : true) || ((technicalCapacityOutsideHaryana === "Y" && technicalCapacityOutsideHaryanaDetails.authority && technicalCapacityOutsideHaryanaDetails.project && technicalCapacityOutsideHaryanaDetails.statusOfDevelopment) ? false : technicalCapacityOutsideHaryana === "N" ? false : true) || ((alreadtObtainedLic === "Y" && Documents?.agreementDocY && Documents?.boardDocX && Documents?.registeredDoc && Documents?.boardDocY && technicalCapacitySoughtFromAnyColonizer.licNo && technicalCapacitySoughtFromAnyColonizer.dateOfGrantingLic && technicalCapacitySoughtFromAnyColonizer.licValidity && technicalCapacitySoughtFromAnyColonizer.purpose) ? false : alreadtObtainedLic === "N" ? false :  (data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm") ? false : true) || ((designatedDirectors === "Y" && Documents?.agreementDoc && Documents?.boardDoc) ? false : designatedDirectors === "N" ? false : permissionGrantedHRDU === "Y" ? false : true) || ((technicalExpert === "Y" && engineerName && engineerQualification && Documents?.engineerSign && Documents?.architectSign && Documents?.townPlannerSign && architectName && architectQualification && townPlannerName && townPlannerQualification) ? false : (technicalExpert === "N") ? false : true)
+                        ((permissionGrantedHRDU === "Y" && capacityDevelopColonyHdruAct.length) ? false : permissionGrantedHRDU === "N" ? false : true) || ((technicalCapacityOutsideHaryana === "Y" && technicalCapacityOutsideHaryanaDetails.authority && technicalCapacityOutsideHaryanaDetails.project && technicalCapacityOutsideHaryanaDetails.statusOfDevelopment) ? false : technicalCapacityOutsideHaryana === "N" ? false : true) || ((alreadtObtainedLic === "Y" && Documents?.agreementDocY && Documents?.boardDocX && Documents?.registeredDoc && Documents?.boardDocY && technicalCapacitySoughtFromAnyColonizer.licNo && technicalCapacitySoughtFromAnyColonizer.licNo.match(Digit.Utils.getPattern('LicNumber')) && technicalCapacitySoughtFromAnyColonizer.dateOfGrantingLic && technicalCapacitySoughtFromAnyColonizer.licValidity && technicalCapacitySoughtFromAnyColonizer.purpose) ? false : alreadtObtainedLic === "N" ? false :  (data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm") ? false : true) || ((designatedDirectors === "Y" && Documents?.agreementDoc && Documents?.boardDoc) ? false : designatedDirectors === "N" ? false : permissionGrantedHRDU === "Y" ? false : true) 
                     }
                 >
                     {/* <CheckBox
@@ -1188,164 +1210,6 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                             </tr>
                                         </thead>
                                         <tbody>
-
-                                            {/* <tr>
-                                                <td> 1 </td>
-                                                <td>Copy of memorandum/Articles of Association/ any other document of developer (if other than an individual)</td>
-                                                
-                                                <td align="center" size="large">
-
-                                                    <div className="row">
-                                                        {Documents?.copyOfMemorandum ?
-                                                            <button type="button" onClick={()=>getDocShareholding(Documents?.copyOfMemorandum)} className="btn btn-sm col-md-6">
-                                                                <VisibilityIcon color="info" className="icon" />
-                                                            </button> : <p></p>
-                                                        }
-                                                        <div className="btn btn-sm col-md-6">
-                                                            <label for="copyOfMemorandum"> <FileUpload color="primary" /></label>
-                                                            <input
-                                                                id="copyOfMemorandum"
-                                                                type="file"
-                                                                accept="application/pdf"
-                                                                style={{ display: "none" }}
-                                                                onChange={(e) => getDocumentData(e?.target?.files[0], "copyOfMemorandum")}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td> 2 </td>
-                                                <td>In the case of the firm/LLP, a copy of the registered irrevocable partnership deed </td>
-                                                
-                                                <td align="center" size="large">
-
-                                                    <div className="row">
-                                                        {Documents?.registeredIrrevocablePartnershipDeed ?
-                                                            <button type="button" onClick={()=>getDocShareholding(Documents?.registeredIrrevocablePartnershipDeed)} className="btn btn-sm col-md-6">
-                                                                <VisibilityIcon color="info" className="icon" />
-                                                            </button> : <p></p>
-                                                        }
-                                                        <div className="btn btn-sm col-md-6">
-                                                            <label for="registeredIrrevocablePartnershipDeed"> <FileUpload color="primary" /></label>
-                                                            <input
-                                                                id="registeredIrrevocablePartnershipDeed"
-                                                                type="file"
-                                                                accept="application/pdf"
-                                                                style={{ display: "none" }}
-                                                                onChange={(e) => getDocumentData(e?.target?.files[0], "registeredIrrevocablePartnershipDeed")}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td> 3 </td>
-                                                <td>In the case of HUF, a copy of the affidavit and a copy of the PAN card </td>
-                                                
-                                                <td align="center" size="large">
-
-                                                    <div className="row">
-                                                        {Documents?.copyOfAffidavitAndPAN ?
-                                                            <button type="button" onClick={()=>getDocShareholding(Documents?.copyOfAffidavitAndPAN)} className="btn btn-sm col-md-6">
-                                                                <VisibilityIcon color="info" className="icon" />
-                                                            </button> : <p></p>
-                                                        }
-                                                        <div className="btn btn-sm col-md-6">
-                                                            <label for="copyOfAffidavitAndPAN"> <FileUpload color="primary" /></label>
-                                                            <input
-                                                                id="copyOfAffidavitAndPAN"
-                                                                type="file"
-                                                                accept="application/pdf"
-                                                                style={{ display: "none" }}
-                                                                onChange={(e) => getDocumentData(e?.target?.files[0], "copyOfAffidavitAndPAN")}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td> 4 </td>
-                                                <td>In case of technical capacity sought from another company/firm who has already obtained a license(s) under the act of 1975 </td>
-                                                
-                                                <td align="center" size="large">
-
-                                                    <div className="row">
-                                                        {Documents?.companyBalanceSheet ?
-                                                            <button type="button" onClick={()=>getDocShareholding(Documents?.companyBalanceSheet)} className="btn btn-sm col-md-6">
-                                                                <VisibilityIcon color="info" className="icon" />
-                                                            </button> : <p></p>
-                                                        }
-                                                        <div className="btn btn-sm col-md-6">
-                                                            <label for="uploadBalanceDoc"> <FileUpload color="primary" /></label>
-                                                            <input
-                                                                id="uploadBalanceDoc"
-                                                                type="file"
-                                                                accept="application/pdf"
-                                                                style={{ display: "none" }}
-                                                                onChange={(e) => getDocumentData(e?.target?.files[0], "companyBalanceSheet")}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr> */}
-
-                                            {/* <tr>
-                                                <td> 1 </td>
-                                                <td>Balance sheet of last 3 years </td>
-                                               
-                                                <td align="center" size="large">
-
-                                                    <div className="row">
-                                                        {Documents?.companyBalanceSheet ?
-                                                            <button type="button" onClick={()=>getDocShareholding(Documents?.companyBalanceSheet)} className="btn btn-sm col-md-6">
-                                                                <VisibilityIcon color="info" className="icon" />
-                                                            </button> : <p></p>
-                                                        }
-                                                        <div className="btn btn-sm col-md-6">
-                                                            <label for="uploadBalanceDoc"> <FileUpload color="primary" /></label>
-                                                            <input
-                                                                id="uploadBalanceDoc"
-                                                                type="file"
-                                                                accept="application/pdf"
-                                                                style={{ display: "none" }}
-                                                                onChange={(e) => getDocumentData(e?.target?.files[0], "companyBalanceSheet")}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr> */}
-
-                                            {/* <tr>
-                                                <td> 1 </td>
-                                                <td>Balance sheet of last 3 years </td>
-                                               
-                                                <td align="center" size="large">
-
-                                                    <div className="row">
-                                                        {Documents?.companyBalanceSheet ?
-                                                            <button type="button" onClick={()=>getDocShareholding(Documents?.companyBalanceSheet)} className="btn btn-sm col-md-6">
-                                                                <VisibilityIcon color="info" className="icon" />
-                                                            </button> : <p></p>
-                                                        }
-                                                        <div className="btn btn-sm col-md-6">
-                                                            <label for="uploadBalanceDoc"> <FileUpload color="primary" /></label>
-                                                            <input
-                                                                id="uploadBalanceDoc"
-                                                                type="file"
-                                                                accept="application/pdf"
-                                                                style={{ display: "none" }}
-                                                                onChange={(e) => getDocumentData(e?.target?.files[0], "companyBalanceSheet")}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr> */}
-
-
                                             <tr>
                                                 <td> 1 </td>
                                                 <td>Balance sheet of last 3 years <span className="text-danger font-weight-bold">*</span></td>
@@ -1383,15 +1247,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                             <tr>
                                                 <td> 2 </td>
                                                 <td>Ps-3(Representing Paid-UP capital) <span className="text-danger font-weight-bold">*</span></td>
-                                                {/* <td>
-                                                    <input
-                                                        type="file"
-                                                        name="paidUpCapital"
-                                                        placeholder=""
-                                                        class="employee-card-input"
-                                                        onChange={(e) => getDocumentData(e?.target?.files[0], "paidUpCapital")}
-                                                    />
-                                                </td> */}
+                                                
                                                 <td align="center" size="large">
                                                     <div className="row">
 
@@ -1418,15 +1274,6 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                             <tr>
                                                 <td> 3 </td>
                                                 <td>Reserves and surpluses <span className="text-danger font-weight-bold">*</span></td>
-                                                {/* <td>
-                                                    <input
-                                                        type="file"
-                                                        name="paidUpCapital"
-                                                        placeholder=""
-                                                        class="employee-card-input"
-                                                        onChange={(e) => getDocumentData(e?.target?.files[0], "paidUpCapital")}
-                                                    />
-                                                </td> */}
                                                 <td align="center" size="large">
                                                     <div className="row">
 
@@ -1449,19 +1296,34 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
 
                                                 </td>
                                             </tr>
-
                                             <tr>
                                                 <td> 4 </td>
-                                                <td>Any other documents (in the case of the company) <span className="text-danger font-weight-bold">*</span></td>
-                                                {/* <td>
-                                                    <input
-                                                        type="file"
-                                                        name="paidUpCapital"
-                                                        placeholder=""
-                                                        class="employee-card-input"
-                                                        onChange={(e) => getDocumentData(e?.target?.files[0], "paidUpCapital")}
-                                                    />
-                                                </td> */}
+                                                <td>Upload Fully Convertible Debenture <span className="text-danger font-weight-bold">*</span></td>
+                                                <td align="center" size="large">
+                                                    <div className="row">
+
+                                                        {Documents?.fullyConvertibleDebenture ?
+                                                            <a onClick={() => getDocShareholding(Documents?.fullyConvertibleDebenture)} className="btn btn-sm col-md-6">
+                                                                <VisibilityIcon color="info" className="icon" />
+                                                            </a> : <p></p>
+                                                        }
+                                                        <div className="btn btn-sm col-md-6">
+                                                            <label for="fullyConvertibleDebentureId"> <FileUpload color="primary" /></label>
+                                                            <input
+                                                                id="fullyConvertibleDebentureId"
+                                                                type="file"
+                                                                accept="application/pdf"
+                                                                style={{ display: "none" }}
+                                                                onChange={(e) => getDocumentData(e?.target?.files[0], "fullyConvertibleDebenture","devTypeDocument")}
+                                                            />
+                                                        </div>
+                                                    </div>
+
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td> 5 </td>
+                                                <td>Any other documents</td>
                                                 <td align="center" size="large">
                                                     <div className="row">
 
@@ -1557,6 +1419,31 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
 
                                                 </td>
                                             </tr>
+                                            <tr>
+                                                <td> 3 </td>
+                                                <td>Upload Fully Convertible Debenture <span className="text-danger font-weight-bold">*</span></td>
+                                                <td align="center" size="large">
+                                                    <div className="row">
+
+                                                        {Documents?.fullyConvertibleDebenture ?
+                                                            <a onClick={() => getDocShareholding(Documents?.fullyConvertibleDebenture)} className="btn btn-sm col-md-6">
+                                                                <VisibilityIcon color="info" className="icon" />
+                                                            </a> : <p></p>
+                                                        }
+                                                        <div className="btn btn-sm col-md-6">
+                                                            <label for="fullyConvertibleDebentureId"> <FileUpload color="primary" /></label>
+                                                            <input
+                                                                id="fullyConvertibleDebentureId"
+                                                                type="file"
+                                                                accept="application/pdf"
+                                                                style={{ display: "none" }}
+                                                                onChange={(e) => getDocumentData(e?.target?.files[0], "fullyConvertibleDebenture","devTypeDocument")}
+                                                            />
+                                                        </div>
+                                                    </div>
+
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -1580,17 +1467,12 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                             </p>)
                             :
                             (
-                                <p className="ml-1">(i) Whether the Developer/ group company has
-                                    earlier been granted permission to set up a colony under HDRU
-                                    Act, 1975: <span className="text-danger font-weight-bold">*</span>
-                                </p>
+                                <p className="d-none"></p>
                             )
                         }
-                        {/* {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Company" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Society" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Trust" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Institution" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Limited Liability Partnership" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Firm" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm") && (
-                        <p className="ml-1">(i) Whether the Developer/ group company has
-                            earlier been granted permission to set up a colony under HDRU
-                            Act, 1975: <span className="text-danger font-weight-bold">*</span>
-                        </p>)} */}
+                        {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Company") && (
+                        <p className="ml-1">(i) Whether the Developer has earlier been granted permission to set up a colony under HDRU Act, 1975: <span className="text-danger font-weight-bold">*</span>
+                        </p>)}
                         <div className="form-group ml-1">
                             <input
                                 type="radio"
@@ -1625,10 +1507,10 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                     <th>Date of grant of license</th>
                                                     <th>Purpose of colony</th>
                                                     <th>Validity of Licence</th>
-                                                    <th>Technical Expert Engaged</th>
+                                                    {/* <th>Technical Expert Engaged</th>
                                                     <th>Degrees of Engineer</th>
                                                     <th>Degrees of Architect</th>
-                                                    <th>Degrees of Town Planner</th>
+                                                    <th>Degrees of Town Planner</th> */}
                                                     <th>Actions</th>
                                                 </tr>
                                             </thead>
@@ -1645,7 +1527,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                             type="text"
                                                                             value={elementInArray?.licenceNumber}
                                                                             placeholder={elementInArray?.licenceNumber}
-                                                                            class="employee-card-input"
+                                                                            class="form-control"
                                                                         />
                                                                     </td>
                                                                     <td>
@@ -1653,7 +1535,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                             type="text"
                                                                             value={elementInArray?.dateOfGrantingLic}
                                                                             placeholder={elementInArray?.dateOfGrantingLic}
-                                                                            class="employee-card-input"
+                                                                            class="form-control"
                                                                         />
                                                                     </td>
                                                                     <td>
@@ -1661,7 +1543,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                             type="text"
                                                                             value={elementInArray?.purposeOfColony}
                                                                             placeholder={elementInArray?.purposeOfColony}
-                                                                            class="employee-card-input"
+                                                                            class="form-control"
                                                                         />
                                                                     </td>
                                                                     <td>
@@ -1669,10 +1551,10 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                             type="text"
                                                                             value={elementInArray?.licValidity}
                                                                             placeholder={elementInArray?.licValidity}
-                                                                            class="employee-card-input"
+                                                                            class="form-control"
                                                                         />
                                                                     </td>
-                                                                    <td>
+                                                                    {/* <td>
                                                                         <p>{elementInArray?.technicalExpertEngaged === "Y" ? "Yes" : "No"}</p>
                                                                     </td>
                                                                     <td>
@@ -1709,7 +1591,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                             }
 
                                                                         </div>
-                                                                    </td>
+                                                                    </td> */}
                                                                     <td>
                                                                         <button type="button"
                                                                             onClick={() => (deleteTableRows(-1))}
@@ -1738,7 +1620,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                             </button>
                                             <Modal show={showCapacityDevelopColony} onHide={handleCloseCapacityDevelopColony} animation={false}>
                                                 <Modal.Header closeButton>
-                                                    <Modal.Title>Add</Modal.Title>
+                                                    <Modal.Title>Add Details</Modal.Title>
                                                 </Modal.Header>
                                                 <Modal.Body>
                                                     <form className="text1">
@@ -1748,11 +1630,13 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                 <input
                                                                     type="text"
                                                                     value={hrduModalData.licNo}
-                                                                    onChange={(e) => setHrduModalData({ ...hrduModalData, licNo: e.target.value })}
+                                                                    onChange={(e) => setHrduModalData({ ...hrduModalData, licNo: e.target.value.toUpperCase() })}
                                                                     placeholder=""
-                                                                    class="employee-card-input"
+                                                                    class="form-control"
                                                                     required="required"
+                                                                    maxLength={11}
                                                                 />
+                                                                {hrduModalData.licNo && hrduModalData.licNo.length > 0 && !hrduModalData.licNo.match(Digit.Utils.getPattern('LicNumber')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Invalid Licence No.")}</CardLabelError>}
                                                             </Col>
                                                             <Col md={4} xxl lg="4">
                                                                 <label htmlFor="name" className="text">Date of grant of a license <span className="text-danger font-weight-bold">*</span></label>
@@ -1761,7 +1645,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     value={hrduModalData.dateOfGrantingLic}
                                                                     onChange={(e) => setHrduModalData({ ...hrduModalData, dateOfGrantingLic: e.target.value })}
                                                                     placeholder=""
-                                                                    class="employee-card-input"
+                                                                    class="form-control"
                                                                     isMandatory={false}
                                                                     {...(validation = {
                                                                         isRequired: true,
@@ -1772,23 +1656,11 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                             </Col>
                                                             <Col md={3} xxl lg="4">
                                                                 <label htmlFor="name" className="text">{`${t("Purpose of colony")}`}<span class="text-danger font-weight-bold mx-2">*</span></label>
-                                                                {/* <Dropdown
-                                                                    labels="Select Type"
-                                                                    className="form-field"
-                                                                    selected={purposeOfColony}
-                                                                    option={arrayDevList}
-                                                                    select={setpurposeType}
-                                                                    value={purposeOfColony}
-                                                                    optionKey="code"
-                                                                    name={purposeOfColony}
-                                                                    placeholder={purposeOfColony}
-                                                                    style={{ width: "100%" }}
-                                                                    t={t}
-                                                                /> */}
+                                                               
                                                                 <Select
                                                                     value={purposeOfColony}
                                                                     onChange={(e) => setShowPurposeType(e.target.value)}
-                                                                    className="w-100"
+                                                                    className="w-100 form-control"
                                                                     variant="standard"
 
                                                                 >
@@ -1801,24 +1673,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                             </Col>
                                                         </Row>
                                                         <Row>
-                                                            {/* <Col md={4} xxl lg="4">
-                                                                <label htmlFor="name" className="text">Sector and development plan</label> */}
-                                                            {/* <input
-                                                                    type="file"
-                                                                    accept="application/pdf"
-                                                                    // onChange={(e) => setModalDevPlan(e.target.value)}
-                                                                    onChange={(e) => setFile({ file: e.target.files[0] })}
-                                                                    placeholder=""
-                                                                    class="employee-card-input"
-                                                                /> */}
-                                                            {/* <input
-                                                                    type="file"
-                                                                    className="form-control"
-                                                                    name="sectorAndDevelopmentPlan"
-                                                                    // {...register("thirdPartyDoc")}
-                                                                    onChange={(e) => getDocumentData(e?.target?.files[0], "sectorAndDevelopmentPlan")}
-                                                                />
-                                                            </Col> */}
+                                                           
                                                             <Col md={4} xxl lg="4">
                                                                 <label htmlFor="name" className="text">Validity of licence <span className="text-danger font-weight-bold">*</span></label>
                                                                 <input
@@ -1828,7 +1683,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     disabled={!hrduModalData.dateOfGrantingLic}
                                                                     onChange={(e) => setHrduModalData({ ...hrduModalData, licValidity: e.target.value })}
                                                                     placeholder=""
-                                                                    class="employee-card-input"
+                                                                    class="form-control"
                                                                     min={hrduModalData.dateOfGrantingLic}
                                                                 />
 
@@ -1836,9 +1691,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
 
                                                         </Row>
 
-                                                        <p>(iii) Whether any technical expert(s) engaged</p>
+                                                        {/* <p>(iii) Whether any technical expert(s) engaged</p> */}
 
-                                                        <div className="form-group">
+                                                        {/* <div className="form-group">
                                                             <input
                                                                 type="radio"
                                                                 value="Y"
@@ -1858,13 +1713,13 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                 name="technicalExpert"
                                                             />
                                                             <label for="No">No</label>
-                                                        </div>
+                                                        </div> */}
 
-                                                        {
+                                                        {/* {
                                                             hrduModalData.technicalExpertEngaged === "Y" &&
                                                             <Row>
                                                                 <Col md={4} xxl lg="4">
-                                                                    <label htmlFor="name" className="text"> Copy of degree of engineer </label>
+                                                                    <label htmlFor="name" className="text"> Copy of degree of engineer <span className="text-danger font-weight-bold">*</span></label>
                                                                     <input
                                                                         type="file"
                                                                         accept="application/pdf"
@@ -1876,7 +1731,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
 
                                                                 </Col>
                                                                 <Col md={4} xxl lg="4">
-                                                                    <label htmlFor="name" className="text"> Copy of degree of architect </label>
+                                                                    <label htmlFor="name" className="text"> Copy of degree of architect <span className="text-danger font-weight-bold">*</span></label>
                                                                     <input
                                                                         type="file"
                                                                         accept="application/pdf"
@@ -1888,7 +1743,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
 
                                                                 </Col>
                                                                 <Col md={4} xxl lg="4">
-                                                                    <label htmlFor="name" className="text"> Copy of degree of Town planer </label>
+                                                                    <label htmlFor="name" className="text"> Copy of degree of Town planer <span className="text-danger font-weight-bold">*</span></label>
                                                                     <input
                                                                         type="file"
                                                                         accept="application/pdf"
@@ -1900,7 +1755,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
 
                                                                 </Col>
                                                             </Row>
-                                                        }
+                                                        } */}
 
                                                     </form>
                                                 </Modal.Body>
@@ -1909,7 +1764,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                         Close
                                                     </Button>
                                                     <Button
-                                                        disabled={!(hrduModalData.licNo && hrduModalData.licValidity && hrduModalData.dateOfGrantingLic && purposeOfColony && hrduModalData.technicalExpertEngaged)}
+                                                        disabled={!(hrduModalData.licNo && hrduModalData.licValidity && hrduModalData.dateOfGrantingLic && purposeOfColony && hrduModalData.licNo.match(Digit.Utils.getPattern('LicNumber')))}
                                                         variant="primary" onClick={handleArrayValues}>
                                                         Submit
                                                     </Button>
@@ -2066,12 +1921,12 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                         <div className="hl"></div>
                         {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm") ? (
                             <p>
-                                (ii) Have you developed project in case of technical capacity of company/firm developed projects outside Haryana:- <span className="text-danger font-weight-bold">*</span>
+                                (ii) Have you developed projects outside Haryana:- <span className="text-danger font-weight-bold">*</span>
                             </p>)
                             :
                             (
                                 <p>
-                                    (ii) In case of technical capacity of company/firm developed projects outside Haryana:- <span className="text-danger font-weight-bold">*</span>
+                                    (ii) Have your company/firm developed projects outside Haryana:- <span className="text-danger font-weight-bold">*</span>
                                 </p>
                             )
                         }
@@ -2104,57 +1959,111 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                             <label for="No">No</label>
                             {technicalCapacityOutsideHaryana === "Y" && (
                                 <Row>
-                                    <Col md={4} xxl lg="4">
-                                        <label htmlFor="project" className="text"> Project <span className="text-danger font-weight-bold">*</span></label>
+                                    <Col md={3} xxl lg="3" className="mb-2">
+                                        <label htmlFor="project" className=""> Name of Project <span className="text-danger font-weight-bold">*</span></label>
                                         <input
                                             type="text"
                                             name="project"
                                             value={technicalCapacityOutsideHaryanaDetails.project}
                                             onChange={(e) => setTechnicalCapacityOutsideHaryanaDetails({ ...technicalCapacityOutsideHaryanaDetails, project: e.target.value })}
                                             placeholder=""
-                                            class="employee-card-input"
+                                            class="form-control"
                                         />
-
+                                        {technicalCapacityOutsideHaryanaDetails.project && technicalCapacityOutsideHaryanaDetails.project.length > 0 &&!technicalCapacityOutsideHaryanaDetails.project.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid details")}</CardLabelError>}
                                     </Col>
 
-                                    <Col md={4} xxl lg="4">
-                                        <label htmlFor="authority" className="text"> Authority <span className="text-danger font-weight-bold">*</span></label>
+                                    <Col md={3} xxl lg="3" className="mb-2">
+                                        <label htmlFor="authority" className=""> Name of Authority <span className="text-danger font-weight-bold">*</span></label>
                                         <input
                                             type="text"
                                             name="authority"
                                             value={technicalCapacityOutsideHaryanaDetails.authority}
                                             onChange={(e) => setTechnicalCapacityOutsideHaryanaDetails({ ...technicalCapacityOutsideHaryanaDetails, authority: e.target.value })}
                                             placeholder=""
-                                            class="employee-card-input"
+                                            class="form-control"
                                         />
-
+                                        {technicalCapacityOutsideHaryanaDetails.authority && technicalCapacityOutsideHaryanaDetails.authority.length > 0 && !technicalCapacityOutsideHaryanaDetails.authority.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid details")}</CardLabelError>}
                                     </Col>
 
-                                    <Col md={4} xxl lg="4">
-                                        <label htmlFor="statusOfDevelopment" className="text">Status of Development <span className="text-danger font-weight-bold">*</span></label>
+                                    <Col md={3} xxl lg="3" className="mb-2">
+                                        <label htmlFor="statusOfDevelopment" className="">Status of Development <span className="text-danger font-weight-bold">*</span></label>
                                         <input
                                             type="text"
                                             name="statusOfDevelopment"
                                             value={technicalCapacityOutsideHaryanaDetails.statusOfDevelopment}
                                             onChange={(e) => setTechnicalCapacityOutsideHaryanaDetails({ ...technicalCapacityOutsideHaryanaDetails, statusOfDevelopment: e.target.value })}
                                             placeholder=""
-                                            class="employee-card-input"
+                                            class="form-control"
                                         />
-
+                                        {technicalCapacityOutsideHaryanaDetails.statusOfDevelopment && technicalCapacityOutsideHaryanaDetails.statusOfDevelopment.length > 0 && !technicalCapacityOutsideHaryanaDetails.statusOfDevelopment.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid details")}</CardLabelError>}
+                                    </Col>
+                                    <Col md={3} xxl lg="3" className="mb-2">
+                                        <label htmlFor="permissionLetterDoc" className="">Permission letter <span className="text-danger font-weight-bold">*</span></label>
+                                       <input
+                                            id="permissionLetterYId"
+                                            type="file"
+                                            className="form-control"
+                                            name="permissionLetterDoc"
+                                            // accept="addplication/pdf"
+                                            onChange={(e) => getDocumentData(e?.target?.files[0], "permissionLetterDoc","outsideHrDocY")}
+                                        />
+                                        {Documents?.permissionLetterDoc ?
+                                            <a onClick={() => getDocShareholding(Documents?.permissionLetterDoc)}>
+                                                <VisibilityIcon color="info" className="icon" />
+                                            </a> : <p></p>
+                                        }
+                                    </Col>
+                                    <Col md={3} xxl lg="3" className="mb-2">
+                                        <label htmlFor="projectArea" className="">Area of the project in acres <span className="text-danger font-weight-bold">*</span></label>
+                                        <input
+                                            type="number"
+                                            name="projectArea"
+                                            value={technicalCapacityOutsideHaryanaDetails.projectArea}
+                                            onChange={(e) => setTechnicalCapacityOutsideHaryanaDetails({ ...technicalCapacityOutsideHaryanaDetails, projectArea: e.target.value })}
+                                            placeholder=""
+                                            class="form-control"
+                                        />
+                                    </Col>
+                                    <Col md={3} xxl lg="3" className="mb-2">
+                                        <label htmlFor="location" className="">Location <span className="text-danger font-weight-bold">*</span></label>
+                                        <input
+                                            type="number"
+                                            name="location"
+                                            value={technicalCapacityOutsideHaryanaDetails.location}
+                                            onChange={(e) => setTechnicalCapacityOutsideHaryanaDetails({ ...technicalCapacityOutsideHaryanaDetails, location: e.target.value })}
+                                            placeholder=""
+                                            class="form-control"
+                                        />
+                                    </Col>
+                                    <Col md={3} xxl lg="3" className="mb-2">
+                                        <label htmlFor="hrDetailAnyDoc" className="">Any other document <span className="text-danger font-weight-bold">*</span></label>
+                                       <input
+                                            id="hrDetailAnyDocId"
+                                            type="file"
+                                            className="form-control"
+                                            name="hrDetailAnyDoc"
+                                            // accept="addplication/pdf"
+                                            onChange={(e) => getDocumentData(e?.target?.files[0], "hrDetailAnyDoc","outsideHrDocY")}
+                                        />
+                                        {Documents?.hrDetailAnyDoc ?
+                                            <a onClick={() => getDocShareholding(Documents?.hrDetailAnyDoc)}>
+                                                <VisibilityIcon color="info" className="icon" />
+                                            </a> : <p></p>
+                                        }
                                     </Col>
                                 </Row>
                             )}
                         </div>
 
                         <div className="hl"></div>
-                        {!(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm") && (
+                        {!(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual NOT USES" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm NOT USES") && (
                             <div>
 
 
                                 <p>
                                     (iii). In case of technical capacity sought from another
                                     company/firm who has already obtained license(s) under act of
-                                    1975 or outside Haryana:<span className="text-danger font-weight-bold">*</span>
+                                    1975 Haryana:<span className="text-danger font-weight-bold">*</span>
                                 </p>
 
                                 <div className="form-group">
@@ -2203,7 +2112,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                             <td>
                                                                                 Agreement between the proposed developer and existing colonizer <span className="text-danger font-weight-bold">*</span>
                                                                             </td>
-                                                                            <td align="center" size="large">
+                                                                            <td align="center" size="large" style={{textAlign: "center"}}>
                                                                                 <label for="agreementDocYId"> <FileUpload color="primary" /></label>
                                                                                 <input
                                                                                     id="agreementDocYId"
@@ -2236,7 +2145,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                             <td>
                                                                                 Board resolution of authorised signatory of the existing colonizer <span className="text-danger font-weight-bold">*</span>
                                                                             </td>
-                                                                            <td align="center" size="large">
+                                                                            <td align="center" size="large" style={{textAlign: "center"}}>
                                                                                 <label for="boardDocXId"> <FileUpload color="primary" /></label>
                                                                                 <input
                                                                                     id="boardDocXId"
@@ -2266,7 +2175,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                         <tr>
                                                                             <td> 3 </td>
                                                                             <td> Registered and Irrevocable Agreement <span className="text-danger font-weight-bold">*</span></td>
-                                                                            <td align="center" size="large">
+                                                                            <td align="center" size="large" style={{textAlign: "center"}}>
                                                                                 <label for="registeredDocId"> <FileUpload color="primary" /></label>
                                                                                 <input
                                                                                     id="registeredDocId"
@@ -2299,7 +2208,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                                 Board resolutions of authorized signatory of
                                                                                 firm/company provided technical assistance <span className="text-danger font-weight-bold">*</span>
                                                                             </td>
-                                                                            <td align="center" size="large">
+                                                                            <td align="center" size="large" style={{textAlign: "center"}}>
                                                                                 <label for="boardDocYId"> <FileUpload color="primary" /></label>
                                                                                 <input
                                                                                     id="boardDocYId"
@@ -2340,10 +2249,11 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                             type="text"
                                                             name="licNo"
                                                             value={technicalCapacitySoughtFromAnyColonizer.licNo}
-                                                            onChange={(e) => setTechnicalCapacitySoughtFromAnyColonizer({ ...technicalCapacitySoughtFromAnyColonizer, licNo: e.target.value })}
-                                                            className="employee-card-input"
-                                                            maxLength={10}
+                                                            onChange={(e) => setTechnicalCapacitySoughtFromAnyColonizer({ ...technicalCapacitySoughtFromAnyColonizer, licNo: e.target.value.toUpperCase() })}
+                                                            className="form-control"
+                                                            maxLength={11}
                                                         />
+                                                        {technicalCapacitySoughtFromAnyColonizer.licNo && technicalCapacitySoughtFromAnyColonizer.licNo.length > 0 && !technicalCapacitySoughtFromAnyColonizer.licNo.match(Digit.Utils.getPattern('LicNumber')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid Licence Number")}</CardLabelError>}
                                                     </div>
                                                 </div>
 
@@ -2355,7 +2265,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                             name="licDate"
                                                             value={technicalCapacitySoughtFromAnyColonizer.dateOfGrantingLic}
                                                             onChange={(e) => setTechnicalCapacitySoughtFromAnyColonizer({ ...technicalCapacitySoughtFromAnyColonizer, dateOfGrantingLic: e.target.value })}
-                                                            className="employee-card-input"
+                                                            className="form-control"
                                                             maxLength={10}
                                                             max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
                                                         />
@@ -2371,7 +2281,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                             disabled={!technicalCapacitySoughtFromAnyColonizer.dateOfGrantingLic}
                                                             value={technicalCapacitySoughtFromAnyColonizer.licValidity}
                                                             onChange={(e) => setTechnicalCapacitySoughtFromAnyColonizer({ ...technicalCapacitySoughtFromAnyColonizer, licValidity: e.target.value })}
-                                                            className="employee-card-input"
+                                                            className="form-control"
                                                             min={technicalCapacitySoughtFromAnyColonizer.dateOfGrantingLic}
                                                         />
                                                     </div>
@@ -2383,7 +2293,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                         <Select
                                                             value={technicalCapacitySoughtFromAnyColonizer.purpose}
                                                             onChange={(e) => setTechnicalCapacitySoughtFromAnyColonizer({ ...technicalCapacitySoughtFromAnyColonizer, purpose: e.target.value })}
-                                                            className="w-100"
+                                                            className="w-100 form-control"
                                                             variant="standard"
                                                             placeholder="Select purpose"
                                                         >
@@ -2404,19 +2314,15 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                             </div>
                         )}
                         <div className="mb-3"></div>
-                        {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm") ? (
+                        {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual NOT USES" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm NOT USES") ? (
                             <p>(iii) Whether any technical expert(s) engaged <span className="text-danger font-weight-bold">*</span></p>
                         ):
                             (
-                                <p>(iv) Whether any technical expert(s) engaged <span className="text-danger font-weight-bold">*</span></p>
+                                <p className="d-none">(iv) Whether any technical expert(s) engaged <span className="text-danger font-weight-bold">*</span></p>
                             )
                         }
 
-                        {/* {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Company" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Society" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Trust" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Institution" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Limited Liability Partnership" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Firm" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm") && (
-                            <p>(v) Whether any technical expert(s) engaged <span className="text-danger font-weight-bold">*</span></p>
-                        )} */}
-
-                        <div className="form-group">
+                        <div className="form-group d-none">
                             <input
                                 type="radio"
                                 value="Y"
@@ -2464,6 +2370,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     placeholder="Name of Engineer"
                                                                     class="employee-card-input"
                                                                 />
+                                                                {engineerName && engineerName.length > 0 && !engineerName.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid details")}</CardLabelError>}
                                                             </td>
                                                             <td>
                                                                 <input
@@ -2473,9 +2380,10 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     placeholder=""
                                                                     class="employee-card-input"
                                                                 />
+                                                                {engineerQualification && engineerQualification.length > 0 && !engineerQualification.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid details")}</CardLabelError>}
                                                             </td>
 
-                                                            <td>
+                                                            <td style={{textAlign: "center"}}>
                                                                 <label for="engineerSignId"> <FileUpload color="primary" /></label>
                                                                 <input
                                                                     id="engineerSignId"
@@ -2484,13 +2392,6 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     style={{ display: "none" }}
                                                                     onChange={(e) => getDocumentData(e?.target?.files[0], "engineerSign","techicalExpertFile")}
                                                                 />
-                                                                {/* <input
-                                                                    type="file"
-                                                                    name="engineerSign"
-                                                                    onChange={(e) => getDocumentData(e?.target?.files[0], "engineerSign")}
-                                                                    placeholder=""
-                                                                    class="employee-card-input"
-                                                                /> */}
                                                             </td>
                                                             <td align="center" size="large">
                                                                 {Documents?.engineerSign ?
@@ -2511,6 +2412,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     placeholder="Name of Architect"
                                                                     class="employee-card-input"
                                                                 />
+                                                                {architectName && architectName.length > 0 && !architectName.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid details")}</CardLabelError>}
                                                             </td>
                                                             <td>
                                                                 <input
@@ -2520,9 +2422,10 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     placeholder=""
                                                                     class="employee-card-input"
                                                                 />
+                                                                {architectQualification && architectQualification.length > 0 && !architectQualification.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid details")}</CardLabelError>}
                                                             </td>
 
-                                                            <td>
+                                                            <td style={{textAlign: "center"}}>
                                                                 <label for="architectSignId"> <FileUpload color="primary" /></label>
                                                                 <input
                                                                     id="architectSignId"
@@ -2557,6 +2460,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     placeholder="Name of Town Planner"
                                                                     class="employee-card-input"
                                                                 />
+                                                                {townPlannerName && townPlannerName.length > 0 && !townPlannerName.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid details")}</CardLabelError>}
                                                             </td>
                                                             <td>
                                                                 <input
@@ -2566,9 +2470,10 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     placeholder=""
                                                                     class="employee-card-input"
                                                                 />
+                                                                {townPlannerQualification && townPlannerQualification.length > 0 && !townPlannerQualification.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid details")}</CardLabelError>}
                                                             </td>
 
-                                                            <td>
+                                                            <td style={{textAlign: "center"}}>
                                                                 <label for="townPlannerSignId"> <FileUpload color="primary" /></label>
                                                                 <input
                                                                     id="townPlannerSignId"
@@ -2600,370 +2505,14 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                     </div>
                                 </div>
                             )}
-                            {/* {technicalExpert === "N" && (
-                                <div className="row ">
-                                    <div className="form-group row">
-                                        <div className="col-sm-12">
-                                            <div className="table-bd">
-                                                <Table className="table table-bordered" size="sm">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>S.No.</th>
-                                                            <th>Professional </th>
-                                                            <th> Annexure</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td> 1 &nbsp;&nbsp;</td>
-                                                            <td>
-                                                                {" "}
-                                                                Agreement with existing colonizer/developer
-                                                                who has already developed a colony
-                                                               
-                                                            </td>
-                                                            <td align="center" size="large">
-
-                                                                <div className="row">
-                                                                    {Documents?.existingDeveloperAgreementDoc ?
-                                                                        <button type="button" onClick={() => getDocShareholding(Documents?.existingDeveloperAgreementDoc)} className="btn btn-sm col-md-6">
-                                                                            <VisibilityIcon color="info" className="icon" />
-                                                                        </button> : <p></p>
-                                                                    }
-                                                                    <div className="btn btn-sm col-md-6">
-                                                                        <label for="existingDeveloperAgreementDoc"> <FileUpload color="primary" /></label>
-                                                                        <input
-                                                                            id="existingDeveloperAgreementDoc"
-                                                                            type="file"
-                                                                            accept="addplication/pdf"
-                                                                            style={{ display: "none" }}
-                                                                            onChange={(e) => getDocumentData(e?.target?.files[0], "existingDeveloperAgreementDoc")}
-                                                                        />
-                                                                    </div>
-                                                                </div>
-
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td> 2&nbsp;&nbsp; </td>
-                                                            <td>
-                                                                <input
-                                                                    type="text"
-                                                                    onChange={((e) => setTechnicalCapacity(e.target.value))}
-                                                                    placeholder="Technical Capacity"
-                                                                    value={technicalCapacity}
-                                                                    class="employee-card-input"
-                                                                />
-                                                            </td>
-                                                            <td align="center" size="large">
-                                                                <div className="row">
-                                                                    {Documents?.technicalCapacityDoc ?
-                                                                        <button type="button" onClick={() => getDocShareholding(Documents?.technicalCapacityDoc)} className="btn btn-sm col-md-6">
-                                                                            <VisibilityIcon color="info" className="icon" />
-                                                                        </button> : <p></p>
-                                                                    }
-                                                                    <div className="btn btn-sm col-md-6">
-                                                                        <label for="technicalCapacityDoc"> <FileUpload color="primary" /></label>
-                                                                        <input
-                                                                            id="technicalCapacityDoc"
-                                                                            type="file"
-                                                                            accept="addplication/pdf"
-                                                                            style={{ display: "none" }}
-                                                                            onChange={(e) => getDocumentData(e?.target?.files[0], "technicalCapacityDoc")}
-                                                                        />
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td> 3 &nbsp;&nbsp;</td>
-                                                            <td>
-                                                                <input
-                                                                    type="text"
-                                                                    placeholder="Name of Engineer"
-                                                                    onChange={((e) => setengineerNameN(e.target.value))}
-                                                                    value={engineerNameN}
-                                                                    class="employee-card-input"
-                                                                />
-                                                            </td>
-                                                            <td align="center" size="large">
-                                                                <div className="row">
-                                                                    {Documents?.engineerDocN ?
-                                                                        <button type="button" onClick={() => getDocShareholding(Documents?.engineerDocN)} className="btn btn-sm col-md-6">
-                                                                            <VisibilityIcon color="info" className="icon" />
-                                                                        </button> : <p></p>
-                                                                    }
-                                                                    <div className="btn btn-sm col-md-6">
-                                                                        <label for="engineerDocN"> <FileUpload color="primary" /></label>
-                                                                        <input
-                                                                            id="engineerDocN"
-                                                                            type="file"
-                                                                            accept="addplication/pdf"
-                                                                            style={{ display: "none" }}
-                                                                            onChange={(e) => getDocumentData(e?.target?.files[0], "engineerDocN")}
-                                                                        />
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td> 4&nbsp;&nbsp; </td>
-                                                            <td>
-                                                                <input
-                                                                    type="text"
-                                                                    placeholder="Name of Architect"
-                                                                    onChange={((e) => setArchitectNameN(e.target.value))}
-                                                                    value={architectNameN}
-                                                                    class="employee-card-input"
-                                                                />
-                                                            </td>
-                                                            <td align="center" size="large">
-                                                            <div className="row">
-                                                                    {Documents?.architectDocN ?
-                                                                        <button type="button" onClick={() => getDocShareholding(Documents?.architectDocN)} className="btn btn-sm col-md-6">
-                                                                            <VisibilityIcon color="info" className="icon" />
-                                                                        </button> : <p></p>
-                                                                    }
-                                                                    <div className="btn btn-sm col-md-6">
-                                                                        <label for="architectDocN"> <FileUpload color="primary" /></label>
-                                                                        <input
-                                                                            id="architectDocN"
-                                                                            type="file"
-                                                                            accept="addplication/pdf"
-                                                                            style={{ display: "none" }}
-                                                                            onChange={(e) => getDocumentData(e?.target?.files[0], "architectDocN")}
-                                                                        />
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td> 5&nbsp;&nbsp; </td>
-                                                            <td>
-                                                                Upload SPA/GPA/ Board Resolution to sign
-                                                                collaboration agreement on behalf of land
-                                                                owner(s)
-                                                            </td>
-                                                            <td align="center" size="large">
-                                                            <div className="row">
-                                                                    {Documents?.collabAgreement ?
-                                                                        <button type="button" onClick={() => getDocShareholding(Documents?.collabAgreement)} className="btn btn-sm col-md-6">
-                                                                            <VisibilityIcon color="info" className="icon" />
-                                                                        </button> : <p></p>
-                                                                    }
-                                                                    <div className="btn btn-sm col-md-6">
-                                                                        <label for="collabAgreement"> <FileUpload color="primary" /></label>
-                                                                        <input
-                                                                            id="collabAgreement"
-                                                                            type="file"
-                                                                            accept="addplication/pdf"
-                                                                            style={{ display: "none" }}
-                                                                            onChange={(e) => getDocumentData(e?.target?.files[0], "collabAgreement")}
-                                                                        />
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </Table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            )} */}
+                            
                         </div>
-
-
-                        {/* <div className="hl"></div>
-                        <p>
-                            (vi) Licences/permissions granted to
-                            Developer/ group company for development of colony under any
-                            other law/Act as .
-                        </p>
-                        <div>
-                            <div className="card-body">
-                                <div className="table-bd">
-                                    <Table className="table table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>S.No</th>
-                                                <th>Colonies developed</th>
-                                                <th>Area</th>
-                                                <th>Purpose</th>
-                                                <th>Status of development</th>
-                                                <th>Outstanding Dues</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {
-                                                (capacityDevelopColonyLawAct.length > 0) ?
-                                                    capacityDevelopColonyLawAct.map((elementInArray, input) => {
-                                                        return (
-                                                            <tr>
-                                                                <td>{input + 1}</td>
-                                                                <td>
-                                                                    <input
-                                                                        type="text"
-                                                                        value={elementInArray.coloniesDeveloped}
-                                                                        placeholder={elementInArray.coloniesDeveloped}
-                                                                        class="employee-card-input"
-                                                                    />
-                                                                </td>
-                                                                <td>
-                                                                    <input
-                                                                        type="text"
-                                                                        value={elementInArray.area}
-                                                                        placeholder={elementInArray.area}
-                                                                        class="employee-card-input"
-                                                                    />
-                                                                </td>
-                                                                <td>
-                                                                    <input
-                                                                        type="text"
-                                                                        value={elementInArray.purpose}
-                                                                        placeholder={elementInArray.purpose}
-                                                                        class="employee-card-input"
-                                                                    />
-                                                                </td>
-                                                                <td>
-                                                                    <div className="row">
-                                                                        {elementInArray.statusOfDevelopment !== "" ?
-                                                                            <a href={urlGetStatusDevFile} target="_blank" className="btn btn-sm col-md-6">
-                                                                                <VisibilityIcon color="info" className="icon" />
-                                                                            </a> : <p></p>
-                                                                        }
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div className="row">
-                                                                        {elementInArray.outstandingDues !== "" ?
-                                                                            <a href={urlGetOutstandingFile} target="_blank" className="btn btn-sm col-md-6">
-                                                                                <VisibilityIcon color="info" className="icon" />
-                                                                            </a> : <p></p>
-                                                                        }
-
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <button type="button"
-                                                                        onClick={() => (deleteLawActTableRows(-1))}
-                                                                    >
-                                                                        <DeleteIcon />
-                                                                    </button>
-                                                                </td>
-                                                            </tr>
-                                                        )
-                                                    }
-                                                    ) : <p className="d-none">Click on add more</p>
-                                            }
-                                        </tbody>
-                                    </Table>
-                                    <div>
-                                        <button type="button"
-                                            style={{
-                                                float: "left",
-                                                backgroundColor: "#0b3629",
-                                                color: "white",
-                                            }}
-                                            className="btn mt-3"
-                                            onClick={handleShowColoniesDeveloped}
-                                        >
-                                            Add More
-                                        </button>
-                                        <Modal show={showColoniesDeveloped} onHide={handleCloseColoniesDeveloped} animation={false}>
-                                            <Modal.Header closeButton>
-                                                <Modal.Title>Add</Modal.Title>
-                                            </Modal.Header>
-                                            <Modal.Body>
-
-                                                <form className="text1">
-                                                    <Row>
-                                                        <Col md={4} xxl lg="4">
-                                                            <label htmlFor="name" className="text">Colonies developed</label>
-                                                            <input
-                                                                type="text"
-                                                                onChange={(e) => setColonyDev(e.target.value)}
-                                                                placeholder=""
-                                                                class="employee-card-input"
-                                                            />
-                                                        </Col>
-                                                        <Col md={4} xxl lg="4">
-                                                            <label htmlFor="name" className="text">Area</label>
-                                                            <input
-                                                                type="number"
-                                                                onChange={(e) => setColonyArea(e.target.value)}
-                                                                placeholder=""
-                                                                class="employee-card-input"
-                                                            />
-                                                        </Col>
-                                                        <Col md={4} xxl lg="4">
-                                                            <label htmlFor="name" className="text">Purpose</label>
-                                                            <input
-                                                                type="text"
-                                                                onChange={(e) => setColonyPurpose(e.target.value)}
-                                                                placeholder=""
-                                                                class="employee-card-input"
-                                                            />
-                                                        </Col>
-                                                    </Row>
-                                                    <Row>
-                                                        <Col md={4} xxl lg="4">
-                                                            <label htmlFor="name" className="text">Status of development</label>
-                                                            <input
-                                                                type="file"
-                                                                onChange={(e) => getDocumentData(e.target.files[0], "statusOfDevelopment")}
-                                                                placeholder=""
-                                                                class="employee-card-input"
-                                                            />
-                                                        </Col>
-                                                        <Col md={4} xxl lg="4">
-                                                            <label htmlFor="name" className="text">Outstanding Dues</label>
-                                                            <input
-                                                                type="file"
-                                                                onChange={(e) => getDocumentData(e.target.files[0], "outstandingDues")}
-                                                                placeholder=""
-                                                                class="employee-card-input"
-                                                            />
-                                                        </Col>
-
-                                                    </Row>
-                                                </form>
-                                            </Modal.Body>
-                                            <Modal.Footer>
-                                                <Button variant="secondary" onClick={handleCloseColoniesDeveloped}>
-                                                    Close
-                                                </Button>
-                                                <Button variant="primary" onClick={handleColonyDevGrp}>
-                                                    Submit
-                                                </Button>
-                                            </Modal.Footer>
-                                        </Modal>
-                                    </div>
-                                    <br></br>
-                                    <br></br>
-                                </div>
-                            </div>
-                        </div> */}
-
-
-
-
-                        {/* </Col> */}
                     </div>
-                    {/* <div className="form-group col-md2 mt-4">
-                    <button type="button" 
-                        className="btn btn-success" 
-                        style={{ float: "right" }} 
-                        >
-                    Submit
-                    </button>
-                </div> */}
-
                 </FormStep>
             </div>
-            <div style={{ disabled: "true", height: "30px", width: "100%", fontSize: "14px" }}></div>
-            {showToast && <Toast error={showToast?.key === "error" ? true : false} label={error} isDleteBtn={true} onClose={() => { setShowToast(null); setError(null); }} />}
+            {/* <div style={{ disabled: "true", height: "30px", width: "100%", fontSize: "14px" }}></div> */}
+            {/* {showToast && <Toast error={showToast?.key === "error" ? true : false} label={error} isDleteBtn={true} onClose={() => { setShowToast(null); setError(null); }} />} */}
+            {showToast && <Toast success={showToast?.key === "success" ? true : false} label="Document Uploaded Successfully" isDleteBtn={true} onClose={() => { setShowToast(null); setError(null); }} />}
         </React.Fragment>
     );
 };

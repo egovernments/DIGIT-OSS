@@ -14,6 +14,10 @@ const IndustrialPlottedForm = (props) => {
 
   const industrialData = props.data;
   const dataIcons = props.dataForIcons;
+  let user = Digit.UserService.getUser();
+  const userRoles = user?.info?.roles?.map((e) => e.code) || [];
+  const hideRemarks = userRoles.some((item)=>item === "CTP_HR" || item === "CTP_HQ" || item === "DTP_HR" || item === "DTP_HQ")
+  const hideRemarksPatwari = userRoles.some((item)=>item ==="Patwari_HQ")
 
   const { register, handleSubmit, formState: { errors } } = useForm([{ XLongitude: '', YLatitude: '' }]);
   const formSubmit = (data) => {
@@ -146,6 +150,7 @@ const IndustrialPlottedForm = (props) => {
                   <input type="number" className="form-control" disabled placeholder={industrialData?.upTo50?.plotNo} />
                   <ReportProblemIcon
                           style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
                             color: fieldIconColors.upTo50PlotNo
                           }}
                           onClick={() => {
@@ -163,6 +168,7 @@ const IndustrialPlottedForm = (props) => {
                     <input type="number" className="form-control" disabled placeholder={industrialData?.upTo50?.area} />
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
                             color: fieldIconColors.upTo50Area
                           }}
                           onClick={() => {
@@ -188,6 +194,7 @@ const IndustrialPlottedForm = (props) => {
                   <input type="number" className="form-control" disabled placeholder={industrialData?.upTo200?.plotNo} />
                   <ReportProblemIcon
                           style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
                             color: fieldIconColors.upTo200PlotNo
                           }}
                           onClick={() => {
@@ -205,6 +212,7 @@ const IndustrialPlottedForm = (props) => {
                     <input type="number" className="form-control" disabled placeholder={industrialData?.upTo200?.area} />
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
                             color: fieldIconColors.upTo200Area
                           }}
                           onClick={() => {
@@ -230,6 +238,7 @@ const IndustrialPlottedForm = (props) => {
                   <input type="number" className="form-control" disabled placeholder={industrialData?.moreThan200?.plotNo} />
                   <ReportProblemIcon
                           style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
                             color: fieldIconColors.moreThan200PlotNo
                           }}
                           onClick={() => {
@@ -247,6 +256,7 @@ const IndustrialPlottedForm = (props) => {
                     <input type="number" className="form-control" disabled placeholder={industrialData?.moreThan200?.area} />
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
                             color: fieldIconColors.moreThan200Area
                           }}
                           onClick={() => {
@@ -272,6 +282,7 @@ const IndustrialPlottedForm = (props) => {
                   <input type="number" className="form-control" disabled placeholder={industrialData?.residentialDDJAY?.plotNo} />
                   <ReportProblemIcon
                           style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
                             color: fieldIconColors.underResidentialDDJAYPlotNo
                           }}
                           onClick={() => {
@@ -289,6 +300,7 @@ const IndustrialPlottedForm = (props) => {
                     <input type="number" className="form-control" disabled placeholder={industrialData?.residentialDDJAY?.area} />
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
                             color: fieldIconColors.underResidentialDDJAYArea
                           }}
                           onClick={() => {
@@ -314,6 +326,7 @@ const IndustrialPlottedForm = (props) => {
                   <input type="number" className="form-control" disabled placeholder={industrialData?.facilitiesDDJAY?.plotNo} />
                   <ReportProblemIcon
                           style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
                             color: fieldIconColors.underCommunityDDJAYPlotNo
                           }}
                           onClick={() => {
@@ -331,6 +344,7 @@ const IndustrialPlottedForm = (props) => {
                     <input type="number" className="form-control" disabled placeholder={industrialData?.facilitiesDDJAY?.area} />
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
                             color: fieldIconColors.underCommunityDDJAYArea
                           }}
                           onClick={() => {
@@ -356,6 +370,7 @@ const IndustrialPlottedForm = (props) => {
                   <input type="number" className="form-control" disabled placeholder={industrialData?.affordableHousing?.plotNo} />
                   <ReportProblemIcon
                           style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
                             color: fieldIconColors.affordableHousingPlotNo
                           }}
                           onClick={() => {
@@ -373,6 +388,7 @@ const IndustrialPlottedForm = (props) => {
                     <input type="number" className="form-control" disabled placeholder={industrialData?.affordableHousing?.area} />
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
                             color: fieldIconColors.affordableHousingArea
                           }}
                           onClick={() => {

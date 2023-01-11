@@ -6,6 +6,14 @@ import { EmployeeModuleCard, DocumentIconSolid, EventsIconSolid, PMBIconSolid, S
 const EngagementCard = () => {
   const userRoles = Digit.SessionStorage.get('User')?.info?.roles
   const isEmployee = userRoles.find((role) => role.code === 'EMPLOYEE');
+  const BgRole = ["SO", "AO", "CAO"]
+  function isBankGuarrantee(){
+    for(let i=0; i<userRoles.length; i++){
+      if(BgRole.includes(userRoles[i].code)){
+        return true
+      }
+    }
+  }
   
   useEffect(() => {
     Digit.SessionStorage.set("CITIZENSURVEY.INBOX", null)
@@ -132,8 +140,69 @@ const EngagementCard = () => {
     ],
   };
 
-  const engagementSubModulesProps = [propsForDocumentModuleCard, propsForEventsModuleCard, propsForPMBModuleCard, propsForSurveyModuleCard]
+  const propsForServiceModuleCard = {
+    Icon: <DocumentIconSolid />,
+    moduleName: t("SERVICE_PLAN_CARD"),
+    kpis: [
+      {
+        count: totalDocsCount,
+        label: t("SERVICE_PLAN"),
+        link: `/digit-ui/employee/engagement/servicplan/inbox`,
+      },
+    ],
+    links: [
+      {
+        count: totalDocsCount,
+        label: t("ES_TITLE_INBOX"),
+        link: `/digit-ui/employee/engagement/serviceplan/inbox`,
+      }
+    ],
+  };
 
+  const propsForElectricModuleCard = {
+    Icon: <DocumentIconSolid />,
+    moduleName: t("ELECTRIC_PLAN_CARD"),
+    kpis: [
+      {
+        count: totalDocsCount,
+        label: t("ELECTRIC_PLAN"),
+        link: `/digit-ui/employee/engagement/electricplan/inbox`,
+      },
+    ],
+    links: [
+      {
+        count: totalDocsCount,
+        label: t("ES_TITLE_INBOX"),
+        link: `/digit-ui/employee/engagement/electricplan/inbox`,
+      }
+    ],
+  };
+
+  const propsForBankModuleCard = {
+    Icon: <DocumentIconSolid />,
+    moduleName: t("BANK_PLAN_CARD"),
+    kpis: [
+      {
+        count: totalDocsCount,
+        label: t("BANK_PLAN"),
+        link: `/digit-ui/employee/engagement/bankplan/inbox`,
+      },
+    ],
+    links: [
+      {
+        count: totalDocsCount,
+        label: t("ES_TITLE_INBOX"),
+        link: `/digit-ui/employee/engagement/bankplan/inbox`,
+      },
+    ],
+  };
+
+  
+  
+    const engagementSubModulesProps = [propsForDocumentModuleCard, propsForEventsModuleCard, propsForPMBModuleCard, propsForSurveyModuleCard, propsForServiceModuleCard, propsForElectricModuleCard]
+    if(isBankGuarrantee()){
+      engagementSubModulesProps.push(propsForBankModuleCard)
+    }
 
   if (isEmployee) result = (
       <>

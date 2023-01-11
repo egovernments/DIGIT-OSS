@@ -12,8 +12,12 @@ import ModalChild from "../Remarks/ModalChild";
 
 const ResidentialPlottedForm = (props) => {
 
-  const residentialData = props.residentialData;
+  const residentialData = props.data;
   const dataIcons = props.dataForIcons;
+  let user = Digit.UserService.getUser();
+  const userRoles = user?.info?.roles?.map((e) => e.code) || [];
+  const hideRemarks = userRoles.some((item)=>item === "CTP_HR" || item === "CTP_HQ" || item === "DTP_HR" || item === "DTP_HQ")
+  const hideRemarksPatwari = userRoles.some((item)=>item ==="Patwari_HQ")
 
   const { register, handleSubmit, formState: { errors } } = useForm([{ XLongitude: '', YLatitude: '' }]);
   const formSubmit = (data) => {
@@ -130,11 +134,13 @@ const ResidentialPlottedForm = (props) => {
                       </h5></p>
                     </div>
                   </td>
+                  
                   <td align="right"> 
                   <div  className="d-flex flex-row align-items-center">
-                  <input type="number" className="form-control" disabled placeholder={residentialData?.npnl?.plotNo} />
+                  <input type="number" className="form-control" disabled placeholder={residentialData?.npnlNo} />
                   <ReportProblemIcon
                           style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
                             color: fieldIconColors.npnlNo
                           }}
                           onClick={() => {
@@ -142,16 +148,20 @@ const ResidentialPlottedForm = (props) => {
                               setOpennedModal("npnlNo")
                             setSmShow(true),
                               console.log("modal open"),
-                              setFieldValue(residentialData?.npnl?.plotNo);
+                              setFieldValue(residentialData?.npnlNo);
                           }}
                         ></ReportProblemIcon>
                     </div> 
                   </td>
+                  {/* {JSON.stringify(userRoles)} */}
+                    {/* {JSON.stringify(residentialData)}efewfwefwefewfwefewfewfewfDev */}
+                    {/* {JSON.stringify(hideRemarks)} */}
                   <td component="th" scope="row">
                     <div  className="d-flex flex-row align-items-center">
-                    <input type="text" className="form-control" disabled placeholder={residentialData?.npnl?.area}/>
+                    <input type="text" className="form-control" disabled placeholder={residentialData?.npnlNo}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
                             color: fieldIconColors.npnlArea
                           }}
                           onClick={() => {
@@ -159,7 +169,7 @@ const ResidentialPlottedForm = (props) => {
                               setOpennedModal("npnlArea")
                             setSmShow(true),
                               console.log("modal open"),
-                              setFieldValue(residentialData?.npnl?.area);
+                              setFieldValue(residentialData?.npnlArea);
                           }}
                         ></ReportProblemIcon>
                     </div>
@@ -175,9 +185,10 @@ const ResidentialPlottedForm = (props) => {
                   </td>
                   <td align="right"> 
                   <div  className="d-flex flex-row align-items-center">
-                  <input type="number" className="form-control" disabled placeholder={residentialData?.ews?.plotNo}/>
+                  <input type="number" className="form-control" disabled placeholder={residentialData?.ewsNo}/>
                   <ReportProblemIcon
                           style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
                             color: fieldIconColors.ewsNo
                           }}
                           onClick={() => {
@@ -185,16 +196,17 @@ const ResidentialPlottedForm = (props) => {
                               setOpennedModal("ewsNo")
                             setSmShow(true),
                               console.log("modal open"),
-                              setFieldValue(residentialData?.ews?.plotNo);
+                              setFieldValue(residentialData?.ewsNo);
                           }}
                         ></ReportProblemIcon>
                     </div> 
                   </td>
                   <td component="th" scope="row">
                   <div  className="d-flex flex-row align-items-center">
-                    <input type="text" className="form-control" disabled placeholder={residentialData?.ews?.area}/>
+                    <input type="text" className="form-control" disabled placeholder={residentialData?.ewsArea}/>
                     <ReportProblemIcon
                           style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
                             color: fieldIconColors.ewsArea
                           }}
                           onClick={() => {
@@ -202,7 +214,7 @@ const ResidentialPlottedForm = (props) => {
                               setOpennedModal("ewsArea")
                             setSmShow(true),
                               console.log("modal open"),
-                              setFieldValue(rresidentialData?.ews?.area);
+                              setFieldValue(residentialData?.ewsArea);
                           }}
                         ></ReportProblemIcon>
                     </div>

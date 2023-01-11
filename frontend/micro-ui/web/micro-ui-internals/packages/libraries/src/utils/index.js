@@ -49,9 +49,9 @@ const getPattern = type => {
     case "CIN":
       return /^[L|U]{1}\d{5}[A-Z]{2}\d{4}[A-Z]{3}\d{6}$/i;
     case "CSR":
-      return /^[L|U]{1}\d{5}[A-Z]{2}\d{4}[A-Z]{3}\d{6}$/i;
+      return /^[C]{1}[S]{1}[R]{1}\d{8}$/i;
     case "LLP":
-      return /^LLP[0-9]{6}$/;
+      return /^[A]{1}[A]{1}[B]{1}[-]{1}\d{4}$/i;
     case "DIN":
       return /^[1-9][0-9]{7}$/i;
     case "GSTNo":
@@ -90,6 +90,10 @@ const getPattern = type => {
       return /^[a-zA-Z0-9-/]{0,64}$/;
     case "Percentage":
       return /^\b(?<!\.)(?!0+(?:\.0+)?%)(?:\d|[1-9]\d|100)(?:(?<!100)\.\d+)?%/i;
+    case "LicNumber" :
+      return /^[L]{1}[C]{1}[-]{1}\d{7}[A-Z]{1}/i;
+    case "architectNumber" :
+      return /^[C]{1}[A]{1}[/]{1}\d{4}[/]{1}\d{7}/i;
   }
 };
 

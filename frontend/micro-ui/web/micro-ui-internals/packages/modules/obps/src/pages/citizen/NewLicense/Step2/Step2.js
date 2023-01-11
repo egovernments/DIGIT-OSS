@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Button, Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import { useForm, Controller } from "react-hook-form";
+import FileUpload from "@mui/icons-material/FileUpload";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { Modal, ModalHeader, ModalBody, ModalFooter, CloseButton } from "reactstrap";
+import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import axios from "axios";
 import { yupResolver } from "@hookform/resolvers/yup";
 import WorkingTable from "../../../../components/Table";
@@ -14,7 +15,9 @@ import { VALIDATION_SCHEMA, MODAL_VALIDATION_SCHEMA } from "../../../../utils/sc
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
 import Spinner from "../../../../components/Loader";
 import { getDocShareholding } from "../docView/docView.help";
-
+import { convertEpochToDate } from "../../../../../../tl/src/utils";
+import { useLocation } from "react-router-dom";
+import { Toast } from "@egovernments/digit-ui-react-components";
 const ApllicantPuropseForm = (props) => {
   const datapost = {
     RequestInfo: {
@@ -46,11 +49,15 @@ const ApllicantPuropseForm = (props) => {
       dataIndex: "hadbastNo",
     },
     {
+      key: "khewats",
+      title: "Khewat No.",
+      dataIndex: "khewats",
+    },
+    {
       key: "rectangleNo",
       title: "Rectangle No.",
       dataIndex: "rectangleNo",
     },
-
     {
       key: "consolidationType",
       title: "Consolidation Type",
@@ -83,10 +90,20 @@ const ApllicantPuropseForm = (props) => {
       dataIndex: "biswansi",
     },
     {
+      // key: "totalArea",
+      title: "Total Area",
+      // dataIndex: "totalArea",
+      render: (data) => data?.nonConsolidatedTotal || data?.consolidatedTotal,
+    },
+    {
       key: "landOwner",
       title: "Name of Land Owner",
       dataIndex: "landOwner",
-      render: (data) => data?.split(" ")?.slice(0, 2)?.join(" "),
+      render: (data) => (
+        <h6 data-toggle="tooltip" data-placement="top" title={data}>
+          {data?.split(" ")?.slice(0, 2)?.join(" ")}
+        </h6>
+      ),
     },
     {
       key: "agreementIrrevocialble",
@@ -129,6 +146,22 @@ const ApllicantPuropseForm = (props) => {
       dataIndex: "registeringAuthority",
     },
     {
+      key: "registeringAuthorityDoc",
+      title: "Document",
+      dataIndex: "",
+      render: (data) => (
+        <div>
+          {fileStoreId?.registeringAuthorityDoc ? (
+            <a onClick={() => getDocShareholding(fileStoreId?.registeringAuthorityDoc)} className="btn btn-sm col-md-6">
+              <VisibilityIcon color="info" className="icon" />
+            </a>
+          ) : (
+            <p></p>
+          )}
+        </div>
+      ),
+    },
+    {
       title: "Action",
       dataIndex: "",
       render: (data) => (
@@ -136,7 +169,6 @@ const ApllicantPuropseForm = (props) => {
           <EditIcon
             style={{ cursor: "pointer" }}
             onClick={() => {
-              console.log("data", data);
               setSpecificTableData(data);
               setmodal(true);
               setEdit(true);
@@ -156,7 +188,8 @@ const ApllicantPuropseForm = (props) => {
       ),
     },
   ];
-
+  const location = useLocation();
+  const userInfo = Digit.UserService.getUser()?.info || {};
   const [district, setDistrict] = useState("");
   const [modalData, setModalData] = useState([]);
   const [specificTableData, setSpecificTableData] = useState(null);
@@ -172,6 +205,12 @@ const ApllicantPuropseForm = (props) => {
   const [loader, setLoader] = useState(false);
   const [getKhewats, setKhewats] = useState("");
   const [getEdit, setEdit] = useState(false);
+  const [fileStoreId, setFileStoreId] = useState({});
+  const [stepData, setStepData] = useState(null);
+  const [applicantId, setApplicantId] = useState("");
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [showToast, setShowToast] = useState(null);
+  const [showToastError, setShowToastError] = useState(null);
 
   const resetValues = () => {
     resetField("tehsil");
@@ -196,10 +235,10 @@ const ApllicantPuropseForm = (props) => {
     resetField("registeringAuthority");
     resetField("consolidationType");
     resetField("agreementIrrevocialble");
+    resetField("registeringAuthorityDoc");
   };
 
   useEffect(() => {
-    console.log("specificTableData", specificTableData);
     if (specificTableData) {
       setValue("hadbastNo", specificTableData?.hadbastNo);
       setValue("khewats", specificTableData?.khewats);
@@ -219,6 +258,7 @@ const ApllicantPuropseForm = (props) => {
       setValue("authSignature", specificTableData?.authSignature);
       setValue("nameAuthSign", specificTableData?.nameAuthSign);
       setValue("registeringAuthority", specificTableData?.registeringAuthority);
+      setValue("registeringAuthorityDoc", specificTableData?.registeringAuthorityDoc);
       const tehsilValue = tehsilDataLabels?.data?.filter((item) => item?.value === specificTableData?.tehsil);
       setValue("tehsil", { label: tehsilValue?.[0]?.label, value: tehsilValue?.[0]?.value });
       const revenueValue = revenueDataLabels?.data?.filter((item) => item?.value === specificTableData?.revenueEstate);
@@ -346,9 +386,7 @@ const ApllicantPuropseForm = (props) => {
   }, []);
 
   const ApplicantPurposeModalData = (modaldata) => {
-    console.log("specificTableData", specificTableData?.rowid);
     const test = modalData?.filter((item) => item?.rowid === specificTableData?.rowid);
-    console.log("test", test);
     modaldata["tehsil"] = modaldata?.tehsil?.value;
     modaldata["revenueEstate"] = modaldata?.revenueEstate?.value;
     modaldata["rectangleNo"] = modaldata?.rectangleNo?.value;
@@ -373,6 +411,8 @@ const ApllicantPuropseForm = (props) => {
     if (specificTableData?.rowid) {
       const filteredRowData = modalData?.filter((item) => item?.rowid !== specificTableData?.rowid);
       setModalData([...filteredRowData, modaldata]);
+    } else if (stepData?.AppliedLandDetails) {
+      setModalData([...stepData?.AppliedLandDetails, modaldata]);
     } else {
       setModalData((prev) => [...prev, modaldata]);
     }
@@ -381,7 +421,16 @@ const ApllicantPuropseForm = (props) => {
     setmodal(false);
   };
 
+  useEffect(() => {
+    console.log("modalData", modalData);
+  }, [modalData]);
+
+  useEffect(() => {
+    if (stepData?.AppliedLandDetails) setModalData(stepData?.AppliedLandDetails);
+  }, [stepData?.AppliedLandDetails]);
+
   const PurposeFormSubmitHandler = async (data) => {
+    const token = window?.localStorage?.getItem("token");
     data["purpose"] = data?.purpose?.value;
     data["potential"] = data?.potential?.value;
     data["district"] = watch("district")?.value;
@@ -408,16 +457,14 @@ const ApllicantPuropseForm = (props) => {
     delete data?.consolidationType;
     delete data?.khewats;
     delete data?.rowid;
-
-    const token = window?.localStorage?.getItem("token");
-    if (!modalData?.length && !props?.getLicData?.ApplicantPurpose?.AppliedLandDetails) alert("Please enter atleast one record");
+    if (!modalData?.length && !stepData?.AppliedLandDetails) alert("Please enter atleast one record");
     else {
       const postDistrict = {
         pageName: "ApplicantPurpose",
-        ApplicationStatus: "DRAFT",
-        applicationNumber: props.getId,
-        createdBy: props?.userData?.id,
-        updatedBy: props?.userData?.id,
+        action: "PURPOSE",
+        applicationNumber: applicantId,
+        createdBy: userInfo?.id,
+        updatedBy: userInfo?.id,
         LicenseDetails: {
           ApplicantPurpose: {
             ...data,
@@ -434,14 +481,15 @@ const ApllicantPuropseForm = (props) => {
           msgId: "090909",
           requesterId: "",
           authToken: token,
-          userInfo: props?.userData,
+          userInfo: userInfo,
         },
       };
       setLoader(true);
       try {
         const Resp = await axios.post("/tl-services/new/_create", postDistrict);
         setLoader(false);
-        props.Step2Continue(Resp?.data?.LicenseServiceResponseInfo?.[0]?.newServiceInfoData?.[0]);
+        const useData = Resp?.data?.LicenseServiceResponseInfo?.[0]?.LicenseDetails?.[0];
+        props.Step2Continue(useData);
       } catch (error) {
         setLoader(false);
         return error;
@@ -450,16 +498,17 @@ const ApllicantPuropseForm = (props) => {
   };
 
   useEffect(() => {
-    if (props?.getLicData?.ApplicantPurpose) {
-      const data = purposeOptions?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.purpose);
-      const potientialData = potentialOptons?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.potential);
-      const districtData = districtDataLabels?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.district);
+    if (stepData) {
+      const data = purposeOptions?.data?.filter((item) => item?.value === stepData?.purpose);
+      const potientialData = potentialOptons?.data?.filter((item) => item?.value === stepData?.potential);
+      const districtData = districtDataLabels?.data?.filter((item) => item?.value === stepData?.district);
       setValue("purpose", { label: data?.[0]?.label, value: data?.[0]?.value });
       setValue("potential", { label: potientialData?.[0]?.label, value: potientialData?.[0]?.value });
       setValue("district", { label: districtData?.[0]?.label, value: districtData?.[0]?.value });
+      setDistrict(districtData?.[0]?.value);
       if (districtData?.[0]?.value) getTehslidata(districtData?.[0]?.value);
     }
-  }, [props?.getLicData, purposeOptions, potentialOptons, districtDataLabels]);
+  }, [stepData, purposeOptions, potentialOptons, districtDataLabels]);
 
   const handleChangePurpose = (data) => {
     const purposeSelected = data?.value;
@@ -470,6 +519,10 @@ const ApllicantPuropseForm = (props) => {
     window?.localStorage.setItem("potential", JSON.stringify(potentialSelected));
   };
   const getDocumentData = async (file, fieldName) => {
+    if (selectedFiles.includes(file.name)) {
+      setShowToastError({ key: "error" });
+      return;
+    }
     const formData = new FormData();
     formData.append("file", file);
     formData.append("tenantId", "hr");
@@ -481,7 +534,12 @@ const ApllicantPuropseForm = (props) => {
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
       // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
+      if (fieldName === "registeringAuthorityDoc") {
+        setValue("registeringAuthorityDocFileName", file.name);
+      }
+      setSelectedFiles([...selectedFiles, file.name]);
       setLoader(false);
+      setShowToast({ key: "success" });
     } catch (error) {
       setLoader(false);
       return error.message;
@@ -491,15 +549,46 @@ const ApllicantPuropseForm = (props) => {
   let delay;
 
   useEffect(() => {
-    console.log("here");
     delay = setTimeout(() => {
-      if (getKhewats) {
-        console.log("here", getKhewats);
-        getLandOwnerStateData(getKhewats);
-      }
+      if (getKhewats) getLandOwnerStateData(getKhewats);
     }, 500);
     return () => clearTimeout(delay);
   }, [getKhewats]);
+
+  const getApplicantUserData = async (id) => {
+    const token = window?.localStorage?.getItem("token");
+    const payload = {
+      apiId: "Rainmaker",
+      msgId: "1669293303096|en_IN",
+      authToken: token,
+    };
+    try {
+      const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${id}`, payload);
+      const userData = Resp?.data?.newBankGuaranteeList;
+      console.log("yg", userData);
+      setStepData(userData);
+    } catch (error) {
+      return error;
+    }
+  };
+
+  useEffect(() => {
+    const search = location?.search;
+    const params = new URLSearchParams(search);
+    const id = params.get("id");
+    setApplicantId(id?.toString());
+    if (id) getApplicantUserData(id);
+  }, []);
+
+  useEffect(() => {
+    console.log("nott", watch("marla") * 0.0062 + watch("sarsai") * 0.00069 + watch("kanal") * 0.125);
+    setValue("consolidatedTotal", watch("marla") * 0.0062 + watch("sarsai") * 0.00069 + watch("kanal") * 0.125);
+  }, [watch("sarsai"), watch("marla"), watch("kanal")]);
+
+  useEffect(() => {
+    console.log("test", watch("bigha") * 0.33 + watch("biswa") * 0.0309 + watch("biswansi") * 0.619);
+    setValue("nonConsolidatedTotal", watch("bigha") * 0.33 + watch("biswa") * 0.0309 + watch("biswansi") * 0.619);
+  }, [watch("bigha"), watch("biswa"), watch("biswansi")]);
 
   return (
     <div>
@@ -537,28 +626,6 @@ const ApllicantPuropseForm = (props) => {
                   <div>
                     <Form.Label>
                       <h2>
-                        Potential Zone<span style={{ color: "red" }}>*</span>
-                      </h2>
-                    </Form.Label>
-                  </div>
-                  <ReactMultiSelect
-                    control={control}
-                    name="potential"
-                    placeholder="Potential"
-                    data={potentialOptons?.data}
-                    labels="Potential"
-                    onChange={handleChangePotential}
-                    loading={potentialOptons?.isLoading}
-                  />
-                  <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.potential?.value && errors?.potential?.value?.message}
-                  </h3>
-                </Col>
-
-                <Col md={4} xxl lg="3">
-                  <div>
-                    <Form.Label>
-                      <h2>
                         District<span style={{ color: "red" }}>*</span>
                       </h2>
                     </Form.Label>
@@ -584,14 +651,74 @@ const ApllicantPuropseForm = (props) => {
                   <div>
                     <Form.Label>
                       <h2>
-                        State<span style={{ color: "red" }}>*</span>
+                        Development Plan<span style={{ color: "red" }}>*</span>
                       </h2>
                     </Form.Label>
                   </div>
 
-                  <input type="text" className="form-control" placeholder="N/A" {...register("state")} disabled defaultValue="Haryana" />
+                  <ReactMultiSelect
+                    control={control}
+                    name="purpose"
+                    placeholder="Purpose"
+                    // onChange={handleChangePurpose}
+
+                    // data={purposeOptions?.data}
+                    // labels="Purpose"
+                    // loading={purposeOptions?.isLoading}
+                  />
                   <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.state && errors?.state?.message}
+                    {errors?.purpose?.value && errors?.purpose?.value?.message}
+                  </h3>
+                </Col>
+                <Col md={4} xxl lg="3">
+                  <div>
+                    <Form.Label>
+                      <h2>
+                        Zone<span style={{ color: "red" }}>*</span>
+                      </h2>
+                    </Form.Label>
+                  </div>
+                  <input type="text" className="form-control" name="zone" placeholder="zone" diabled />
+
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.zone?.value && errors?.zone?.value?.message}
+                  </h3>
+                </Col>
+                {/* <Col md={4} xxl lg="3">
+                  <div>
+                    <Form.Label>
+                      <h2>
+                        Potential Zone<span style={{ color: "red" }}>*</span>
+                      </h2>
+                    </Form.Label>
+                  </div>
+                  <ReactMultiSelect
+                    control={control}
+                    name="potential"
+                    placeholder="Potential"
+                    data={potentialOptons?.data}
+                    labels="Potential"
+                    onChange={handleChangePotential}
+                    loading={potentialOptons?.isLoading}
+                  />
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.potential?.value && errors?.potential?.value?.message}
+                  </h3>
+                </Col> */}
+              </Row>
+              <Row className="ml-auto" style={{ marginBottom: 5 }}>
+                <Col md={4} xxl lg="3">
+                  <div>
+                    <Form.Label>
+                      <h2>
+                        Sector<span style={{ color: "red" }}>*</span>
+                      </h2>
+                    </Form.Label>
+                  </div>
+                  <ReactMultiSelect control={control} name="sector" placeholder="sector" diabled />
+
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.sector?.value && errors?.sector?.value?.message}
                   </h3>
                 </Col>
               </Row>
@@ -629,12 +756,11 @@ const ApllicantPuropseForm = (props) => {
               </div>
               <br></br>
 
-              <div className="applt" style={{ overflow: "auto" }}>
-                <WorkingTable
-                  columns={columns}
-                  data={props?.getLicData?.ApplicantPurpose?.AppliedLandDetails ? props?.getLicData?.ApplicantPurpose?.AppliedLandDetails : modalData}
-                />
-              </div>
+              {modalData.length > 0 && (
+                <div className="applt" style={{ overflow: "auto" }}>
+                  <WorkingTable columns={columns} data={modalData} />
+                </div>
+              )}
             </Form.Group>
 
             <div class="row">
@@ -759,6 +885,7 @@ const ApllicantPuropseForm = (props) => {
                   </label>
                 </div>
                 <input
+                  autoComplete="off"
                   type="text"
                   className="form-control"
                   placeholder="Enter Khewat"
@@ -777,7 +904,7 @@ const ApllicantPuropseForm = (props) => {
                     </h2>
                   </label>
                 </div>
-                <Form.Control type="text" className="form-control" placeholder="" {...register("landOwner")} />
+                <Form.Control as="textarea" rows={1} type="text" className="form-control" placeholder="" {...register("landOwner")} disabled />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.landOwner && errors?.landOwner?.message}
                 </h3>
@@ -787,248 +914,356 @@ const ApllicantPuropseForm = (props) => {
             <Row className="ml-auto mb-3">
               <Col md={4} xxl lg="12">
                 <div>
-                  <h2>
-                    Consolidation Type<span style={{ color: "red" }}>*</span> &nbsp;&nbsp;&nbsp;&nbsp;
-                    <label htmlFor="consolidated">
-                      <input {...register("consolidationType")} type="radio" value="consolidated" defaultValue="consolidated" id="consolidated" />
-                      &nbsp; Consolidated &nbsp;&nbsp;
-                    </label>
-                    <label htmlFor="non-consolidated">
-                      <input {...register("consolidationType")} type="radio" value="non-consolidated" id="non-consolidated" />
-                      &nbsp; Non-Consolidated &nbsp;&nbsp;
-                    </label>
-                  </h2>
-                  <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.consolidationType && errors?.consolidationType?.message}
-                  </h3>
-                </div>
+                  <h3>If there is a change in information auto-populated, then the information be provided in the following format.</h3>
+                  <br></br>
+                  <div className="row">
+                    <Col md={4} xxl lg="4">
+                      <div>
+                        <Form.Label>
+                          <h2>
+                            Rectangle No./Mustil <span style={{ color: "red" }}>*</span>
+                          </h2>
+                        </Form.Label>
+                      </div>
+                      <ReactMultiSelect
+                        control={control}
+                        data={mustilDataLabels?.data}
+                        loading={mustilDataLabels?.isLoading}
+                        labels="Rectangle No."
+                        {...register("rectangleNo")}
+                      />
 
-                {watch("consolidationType") == "consolidated" && (
-                  <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
-                    <thead>
-                      <tr>
-                        <th>
-                          <h2>
-                            Kanal <span style={{ color: "red" }}>*</span>
-                          </h2>
-                        </th>
-                        <th>
-                          <h2>
-                            Marla <span style={{ color: "red" }}>*</span>
-                          </h2>
-                        </th>
-                        <th>
-                          <h2>
-                            Sarsai <span style={{ color: "red" }}>*</span>
-                          </h2>
-                          &nbsp;&nbsp;
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>
-                          <input type="text" className="form-control  " {...register("kanal")} id="kanal" required maxLength={20} />
-                          <label htmlFor="sum">Total: {watch("kanal") * 0.125}</label>&nbsp;&nbsp;
-                        </td>
-                        <td>
-                          <input type="text" className="form-control " {...register("marla")} id="marla" required maxLength={20} />
-                          <label htmlFor="summarla">Total: {watch("marla") * 0.0062}</label>&nbsp;&nbsp;
-                        </td>
-                        <td>
-                          <input type="text" className="form-control " {...register("sarsai")} id="sarsai" required maxLength={20} />
-                          <label htmlFor="sumsarsai">Total: {watch("sarsai") * 0.00069}</label>&nbsp;&nbsp;
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                )}
-                {watch("consolidationType") == "non-consolidated" && (
-                  <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
-                    <thead>
-                      <tr>
-                        <th>
-                          <h2>
-                            Bigha <span style={{ color: "red" }}>*</span>
-                          </h2>
-                        </th>
-                        <th>
-                          <h2>
-                            Biswa <span style={{ color: "red" }}>*</span>
-                          </h2>
-                        </th>
-                        <th>
-                          <h2>
-                            Biswansi <span style={{ color: "red" }}>*</span>
-                          </h2>
-                          &nbsp;&nbsp;
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>
-                          <input type="text" className="form-control" {...register("bigha")} id="bigha" required maxLength={20} />
-                          <label htmlFor="sumBigha">Total: {watch("bigha") * 0.33}</label>&nbsp;&nbsp;
-                        </td>
-                        <td>
-                          <input type="text" className="form-control" {...register("biswa")} id="biswa" required maxLength={20} />
-                          <label htmlFor="sumBiswa">Total: {watch("biswa") * 0.0309}</label>&nbsp;&nbsp;
-                        </td>
-                        <td>
-                          <input type="text" className="form-control" {...register("biswansi")} id="biswansi" required maxLength={20} />
-                          <label htmlFor="sumBiswansi">Total: {watch("biswansi") * 0.619}</label>&nbsp;&nbsp;
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                )}
-              </Col>
-            </Row>
-            <Row className="ml-auto mb-3">
-              <div className="col col-12">
-                <h2>
-                  Collaboration agreement Owner<span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
-                  <label htmlFor="collaboration">
-                    <input {...register("collaboration")} type="radio" value="Y" id="yes" />
-                    &nbsp;&nbsp; Yes &nbsp;&nbsp;
-                  </label>
-                  <label htmlFor="collaboration">
-                    <input {...register("collaboration")} type="radio" value="N" id="no" />
-                    &nbsp;&nbsp; No &nbsp;&nbsp;
-                  </label>
-                  <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.collaboration && errors?.collaboration?.message}
-                  </h3>
-                </h2>
-                {watch("collaboration") === "Y" && (
-                  <div>
-                    <div className="row ">
-                      <div className="col col-4">
-                        <label>
-                          <h2
-                            data-toggle="tooltip"
-                            data-placement="top"
-                            title=" Name of the developer company / Firm/ LLP etc. with whom collaboration agreement entered."
-                          >
-                            Name of the developer company .<span style={{ color: "red" }}>*</span>
-                          </h2>
-                        </label>
-                        <Form.Control
-                          type="text"
-                          className="form-control"
-                          placeholder=""
-                          {...register("developerCompany")}
-                          required
-                          minlength={2}
-                          maxLength={99}
-                        />
-                      </div>
-                      <div className="col col-4">
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.rectangleNo?.value && errors?.rectangleNo?.value?.message}
+                      </h3>
+                    </Col>
+
+                    <Col md={4} xxl lg="4">
+                      <div>
                         <label>
                           <h2>
-                            Date of registering collaboration agreement<span style={{ color: "red" }}>*</span>
+                            Enter Khewat <span style={{ color: "red" }}>*</span>
                           </h2>
                         </label>
-                        <Form.Control type="date" className="form-control" placeholder="" {...register("agreementValidFrom")} />
                       </div>
-                      <div className="col col-4">
+                      <input
+                        autoComplete="off"
+                        type="text"
+                        className="form-control"
+                        placeholder="Enter Khewat"
+                        {...register("khewats")}
+                        onChange={(e) => setKhewats(e?.target?.value)}
+                      />
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.khewats && errors?.khewats?.message}
+                      </h3>
+                    </Col>
+                    <Col md={4} xxl lg="4">
+                      <div>
                         <label>
                           <h2>
-                            Date of validity of collaboration agreement<span style={{ color: "red" }}>*</span>
+                            Name of Land Owner<span style={{ color: "red" }}>*</span>
                           </h2>
                         </label>
-                        <Form.Control type="date" className="form-control" placeholder="" {...register("validitydate")} />
                       </div>
+                      <Form.Control type="text" className="form-control" placeholder="" {...register("landOwner")} />
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.landOwner && errors?.landOwner?.message}
+                      </h3>
+                    </Col>
+                  </div>
+
+                  <br></br>
+
+                  <Col md={4} xxl lg="12">
+                    <div>
+                      <h2>
+                        Consolidation Type<span style={{ color: "red" }}>*</span> &nbsp;&nbsp;&nbsp;&nbsp;
+                        <label htmlFor="consolidated">
+                          <input {...register("consolidationType")} type="radio" value="consolidated" defaultValue="consolidated" id="consolidated" />
+                          &nbsp; Consolidated &nbsp;&nbsp;
+                        </label>
+                        <label htmlFor="non-consolidated">
+                          <input {...register("consolidationType")} type="radio" value="non-consolidated" id="non-consolidated" />
+                          &nbsp; Non-Consolidated &nbsp;&nbsp;
+                        </label>
+                      </h2>
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.consolidationType && errors?.consolidationType?.message}
+                      </h3>
                     </div>
-                    <br></br>
-                    <br></br>
-                    <div className="row ">
-                      <div className="col col-4">
-                        <h2>
-                          Whether collaboration agreement irrevocable (Yes/No)<span style={{ color: "red" }}>*</span>
-                        </h2>
-                        <label htmlFor="agreementIrrevocialble">
-                          <input {...register("agreementIrrevocialble")} type="radio" value="N" id="agreementIrrevocialble" />
-                          &nbsp;&nbsp; Yes &nbsp;&nbsp;
-                        </label>
-                        <label htmlFor="agreementIrrevocialble">
-                          <input {...register("agreementIrrevocialble")} type="radio" value="Y" id="agreementIrrevocialble" />
-                          &nbsp;&nbsp; No &nbsp;&nbsp;
-                        </label>
-                      </div>
-                      <div className="col col-4">
-                        <label>
-                          <h2>
-                            Name of authorized signatory on behalf of land owner(s)<span style={{ color: "red" }}>*</span>
-                          </h2>
-                        </label>
-                        <Form.Control
-                          type="text"
-                          className="form-control"
-                          placeholder=""
-                          {...register("authSignature")}
-                          required
-                          minlength={4}
-                          maxLength={99}
-                        />
-                      </div>
-                      <div className="col col-4">
-                        <label>
-                          <h2
-                            data-toggle="tooltip"
-                            data-placement="top"
-                            title="  Name of authorized signatory on behalf of developer to sign Collaboration agreement."
-                          >
-                            Name of authorized signatory on behalf of developer.<span style={{ color: "red" }}>*</span>
-                          </h2>
-                        </label>
-                        <Form.Control
-                          type="text"
-                          className="form-control"
-                          placeholder=""
-                          {...register("nameAuthSign")}
-                          required
-                          minlength={4}
-                          maxLength={99}
-                        />
-                      </div>
-                    </div>
-                    <br></br>
-                    <br></br>
-                    <div className="row ">
-                      <div className="col col-4">
-                        <label>
-                          <h2>
-                            Registering Authority<span style={{ color: "red" }}>*</span>
-                          </h2>
-                        </label>
-                        <Form.Control type="text" className="form-control" placeholder="" {...register("registeringAuthority")} required />
-                      </div>
-                      <div className="col col-4">
-                        <label>
-                          <h2 data-toggle="tooltip" data-placement="top" title="Upload Document" style={{ marginTop: "-4px" }}>
-                            Registering Authority document <span style={{ color: "red" }}>*</span>
-                            <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                            <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.registeringAuthorityDoc)}>
-                              {" "}
-                            </VisibilityIcon>
-                          </h2>
-                        </label>
+
+                    {watch("consolidationType") == "consolidated" && (
+                      <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
+                        <thead>
+                          <tr>
+                            <th>
+                              <h2>
+                                Kanal <span style={{ color: "red" }}>*</span>
+                              </h2>
+                            </th>
+                            <th>
+                              <h2>
+                                Marla <span style={{ color: "red" }}>*</span>
+                              </h2>
+                            </th>
+                            <th>
+                              <h2>
+                                Sarsai <span style={{ color: "red" }}>*</span>
+                              </h2>
+                              &nbsp;&nbsp;
+                            </th>
+                            <th>
+                              <h2>
+                                Total Area <span style={{ color: "red" }}>*</span>
+                              </h2>
+                              &nbsp;&nbsp;
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>
+                              <input type="number" className="form-control  " {...register("kanal")} id="kanal" required maxLength={20} />
+                              <label htmlFor="sum">Total: {watch("kanal") * 0.125}</label>&nbsp;&nbsp;
+                            </td>
+                            <td>
+                              <input type="number" className="form-control " {...register("marla")} id="marla" required maxLength={20} />
+                              <label htmlFor="summarla">Total: {watch("marla") * 0.0062}</label>&nbsp;&nbsp;
+                            </td>
+                            <td>
+                              <input type="number" className="form-control " {...register("sarsai")} id="sarsai" required maxLength={20} />
+                              <label htmlFor="sumsarsai">Total: {watch("sarsai") * 0.00069}</label>&nbsp;&nbsp;
+                            </td>
+                            <td>
+                              <input step="any" type="number" className="form-control " {...register("consolidatedTotal")} />
+                              <label htmlFor="sumsarsai">Total: {watch("consolidatedTotal")}</label>&nbsp;&nbsp;
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    )}
+                    {watch("consolidationType") == "non-consolidated" && (
+                      <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
+                        <thead>
+                          <tr>
+                            <th>
+                              <h2>
+                                Bigha <span style={{ color: "red" }}>*</span>
+                              </h2>
+                            </th>
+                            <th>
+                              <h2>
+                                Biswa <span style={{ color: "red" }}>*</span>
+                              </h2>
+                            </th>
+                            <th>
+                              <h2>
+                                Biswansi <span style={{ color: "red" }}>*</span>
+                              </h2>
+                              &nbsp;&nbsp;
+                            </th>
+                            <th>
+                              <h2>
+                                Total Area <span style={{ color: "red" }}>*</span>
+                              </h2>
+                              &nbsp;&nbsp;
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>
+                              <input type="number" className="form-control" {...register("bigha")} id="bigha" required maxLength={20} />
+                              <label htmlFor="sumBigha">Total: {watch("bigha") * 0.33}</label>&nbsp;&nbsp;
+                            </td>
+                            <td>
+                              <input type="number" className="form-control" {...register("biswa")} id="biswa" required maxLength={20} />
+                              <label htmlFor="sumBiswa">Total: {watch("biswa") * 0.0309}</label>&nbsp;&nbsp;
+                            </td>
+                            <td>
+                              <input type="number" className="form-control" {...register("biswansi")} id="biswansi" required maxLength={20} />
+                              <label htmlFor="sumBiswansi">Total: {watch("biswansi") * 0.619}</label>&nbsp;&nbsp;
+                            </td>
+                            <td>
+                              <input step="any" type="number" className="form-control " {...register("nonConsolidatedTotal")} />
+                              <label htmlFor="sumsarsai">Total: {watch("nonConsolidatedTotal")}</label>&nbsp;&nbsp;
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    )}
+                  </Col>
+
+                  <div className="col col-12">
+                    <h2>
+                      Collaboration agreement Owner<span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
+                      <label htmlFor="collaboration">
+                        <input {...register("collaboration")} type="radio" value="Y" id="yes" />
+                        &nbsp;&nbsp; Yes &nbsp;&nbsp;
+                      </label>
+                      <label htmlFor="collaboration">
+                        <input {...register("collaboration")} type="radio" value="N" id="no" />
+                        &nbsp;&nbsp; No &nbsp;&nbsp;
+                      </label>
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.collaboration && errors?.collaboration?.message}
+                      </h3>
+                    </h2>
+                    {watch("collaboration") === "Y" && (
+                      <div>
+                        <div className="row ">
+                          <div className="col col-4">
+                            <label>
+                              <h2
+                                data-toggle="tooltip"
+                                data-placement="top"
+                                title=" Name of the developer company / Firm/ LLP etc. with whom collaboration agreement entered."
+                              >
+                                Name of the developer company .<span style={{ color: "red" }}>*</span>
+                              </h2>
+                            </label>
+                            <Form.Control
+                              type="text"
+                              className="form-control"
+                              placeholder=""
+                              {...register("developerCompany")}
+                              required
+                              minlength={2}
+                              maxLength={99}
+                            />
+                          </div>
+                          <div className="col col-4">
+                            <label>
+                              <h2>
+                                Date of registering collaboration agreement<span style={{ color: "red" }}>*</span>
+                              </h2>
+                            </label>
+                            <Form.Control
+                              type="date"
+                              value={modalData.agreementValidFrom}
+                              className="form-control"
+                              required
+                              placeholder=""
+                              {...register("agreementValidFrom")}
+                              max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
+                            />
+                          </div>
+                          <div className="col col-4">
+                            <label>
+                              <h2>
+                                Date of validity of collaboration agreement<span style={{ color: "red" }}>*</span>
+                              </h2>
+                            </label>
+                            <Form.Control
+                              type="date"
+                              className="form-control"
+                              placeholder=""
+                              required
+                              {...register("validitydate")}
+                              min={watch("agreementValidFrom")}
+                            />
+                          </div>
+                        </div>
                         <br></br>
-                        <input
+                        <br></br>
+                        <div className="row ">
+                          <div className="col col-4">
+                            <h2>
+                              Whether collaboration agreement irrevocable (Yes/No)<span style={{ color: "red" }}>*</span>
+                            </h2>
+                            <label htmlFor="agreementIrrevocialble">
+                              <input {...register("agreementIrrevocialble")} type="radio" value="Y" id="yes" />
+                              &nbsp;&nbsp; Yes &nbsp;&nbsp;
+                            </label>
+                            <label htmlFor="agreementIrrevocialble">
+                              <input {...register("agreementIrrevocialble")} type="radio" value="N" id="no" />
+                              &nbsp;&nbsp; No &nbsp;&nbsp;
+                            </label>
+                          </div>
+                          <div className="col col-4">
+                            <label>
+                              <h2>
+                                Name of authorized signatory on behalf of land owner(s)<span style={{ color: "red" }}>*</span>
+                              </h2>
+                            </label>
+                            <Form.Control
+                              type="text"
+                              className="form-control"
+                              placeholder=""
+                              {...register("authSignature")}
+                              required
+                              minlength={4}
+                              maxLength={99}
+                            />
+                          </div>
+                          <div className="col col-4">
+                            <label>
+                              <h2
+                                data-toggle="tooltip"
+                                data-placement="top"
+                                title="  Name of authorized signatory on behalf of developer to sign Collaboration agreement."
+                              >
+                                Name of authorized signatory on behalf of developer.<span style={{ color: "red" }}>*</span>
+                              </h2>
+                            </label>
+                            <Form.Control
+                              type="text"
+                              className="form-control"
+                              placeholder=""
+                              {...register("nameAuthSign")}
+                              required
+                              minlength={4}
+                              maxLength={99}
+                            />
+                          </div>
+                        </div>
+                        <br></br>
+                        <br></br>
+                        <div className="row ">
+                          <div className="col col-4">
+                            <label>
+                              <h2>
+                                Registering Authority<span style={{ color: "red" }}>*</span>
+                              </h2>
+                            </label>
+                            <Form.Control type="text" className="form-control" placeholder="" {...register("registeringAuthority")} required />
+                          </div>
+                          <div className="col col-4">
+                            <label>
+                              <h2 data-toggle="tooltip" data-placement="top" title="Upload Document" style={{ marginTop: "-4px" }}>
+                                Registering Authority document <span style={{ color: "red" }}>*</span> <FileUpload color="primary" />
+                                <div>
+                                  <input
+                                    type="file"
+                                    accept="application/pdf/jpeg/png"
+                                    style={{ display: "none" }}
+                                    required
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "registeringAuthorityDoc")}
+                                  />
+                                </div>
+                              </h2>
+                            </label>
+                            <h3 style={{}}>{watch("registeringAuthorityDocFileName") ? watch("registeringAuthorityDocFileName") : null}</h3>
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.registeringAuthorityDoc && errors?.registeringAuthorityDoc?.message}
+                            </h3>
+
+                            {/* <input
                           type="file"
                           style={{ marginTop: "-6px" }}
                           className="form-control"
                           accept="application/pdf"
                           required
-                          onChange={(e) => getDocumentData(e?.target?.files[0], registeringAuthorityDoc)}
-                        />
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "registeringAuthorityDoc")}
+                        /> */}
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
-                )}
-              </div>
+                </div>
+              </Col>
             </Row>
 
             <button type="submit" style={{ float: "right" }} class="btn btn-primary btn-md center-block">
@@ -1038,6 +1273,28 @@ const ApllicantPuropseForm = (props) => {
         </ModalBody>
         <ModalFooter toggle={() => setmodal(!modal)}></ModalFooter>
       </Modal>
+      {showToast && (
+        <Toast
+          success={showToast?.key === "success" ? true : false}
+          label="Document Uploaded Successfully"
+          isDleteBtn={true}
+          onClose={() => {
+            setShowToast(null);
+            setError(null);
+          }}
+        />
+      )}
+      {showToastError && (
+        <Toast
+          error={showToastError?.key === "error" ? true : false}
+          label="Duplicate file Selected"
+          isDleteBtn={true}
+          onClose={() => {
+            setShowToastError(null);
+            setError(null);
+          }}
+        />
+      )}
     </div>
   );
 };

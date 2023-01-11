@@ -36,7 +36,10 @@ const AppliedLandinfo = (props) => {
   const dataIcons = props.dataForIcons;
   const DetailsofAppliedLand = props.ApiResponseData;
   console.log("personal info applicant data4", DetailsofAppliedLand);
-
+  let user = Digit.UserService.getUser();
+  const userRoles = user?.info?.roles?.map((e) => e.code) || [];
+  const hideRemarks = userRoles.some((item)=>item === "CTP_HR" || item === "CTP_HQ" || item === "DTP_HR" || item === "DTP_HQ")
+  const hideRemarksPatwari = userRoles.some((item)=>item ==="Patwari_HQ")
 
   const [uncheckedValue, setUncheckedVlue] = useState([]);
   console.log("abcd1",uncheckedValue);
@@ -433,12 +436,16 @@ console.log("AccessInfortech", Purpose);
             className="justify-content-center"
           >
             <Row className="ml-auto" style={{ marginBottom: 5 }}>
+              {/* {JSON.stringify(userRoles)}
+                    {JSON.stringify(hideRemarks)} */}
               <Col col-12>
                 <div style={{ display: "flex" }}>
                   {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
-                  1. DGPS points <span className="text-primary"> (Click here for instructions to capture DGPS points)</span>
+                  1. DGPS points 
+                  {/* <span className="text-primary"> (Click here for instructions to capture DGPS points)</span> */}
                   <ReportProblemIcon
                     style={{
+                      display: hideRemarks || hideRemarksPatwari ?"none":"block",
                       color: fieldIconColors.dgpsPoint
                     }}
                     onClick={() => {
@@ -451,9 +458,9 @@ console.log("AccessInfortech", Purpose);
                   ></ReportProblemIcon>
                 </div>
                 {/* </h5> */}
-
-                <div className="px-2">
-                {Purpose}
+ {/* {Purpose} */}
+                {/* <div className="px-2">
+               
                   (i)Add point 1 &nbsp;
                   <div className="row ">
                     <br></br>
@@ -466,8 +473,8 @@ console.log("AccessInfortech", Purpose);
                       <input type="number" name="YLatitude" className="form-control" disabled placeholder={DetailsofAppliedLand?.dgpsDetails?.[0]?.longitude} />
                     </div>
                   </div>
-                </div>
-                <div className="px-2">
+                </div> */}
+                {/* <div className="px-2">
                   (ii)Add point 2 &nbsp;
                   <div className="row ">
                     <br></br>
@@ -480,9 +487,9 @@ console.log("AccessInfortech", Purpose);
                       <input type="number" name="YLatitude" className="form-control" disabled placeholder={DetailsofAppliedLand?.dgpsDetails?.[1]?.longitude} />
                     </div>
                   </div>
-                </div>
+                </div> */}
 
-                <div className="px-2">
+                {/* <div className="px-2">
                   <div className="text-black">
                     (iii)Add point 3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <br></br>
@@ -497,9 +504,9 @@ console.log("AccessInfortech", Purpose);
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
                 <div className="px-2">
-                  <div className="text-black">
+                  {/* <div className="text-black">
                     (iv)Add point 4 &nbsp;
                     <div className="row ">
                       <br></br>
@@ -513,22 +520,29 @@ console.log("AccessInfortech", Purpose);
                       </div>
                     </div>
                     &nbsp;&nbsp;&nbsp;
-                  </div>
-
-                  {[...Array(noOfRows)].map((elementInArray, index) => {
-                    return (
-                      <div className="row ">
+                  </div> */}
+ {DetailsofAppliedLand?.dgpsDetails?.map((item,index)=>(
+                      
+                  // <tr key={index}></tr>
+                  // {[...Array(noOfRows)].map((elementInArray, index) => {
+                  //   return (
+                    // (iv)Add point key={index} &nbsp;
+                    
+                      <div className="row " key={index}>
                         <div className="col col-6">
                           <label className={classes.formLabel} htmlFor="pitentialZone">X:Longiude</label>
-                          <input type="number" name="XLongitude" className="form-control" disabled placeholder={elementInArray?.dgpsDetails?.latitude} />
+                          <input type="number" name="XLongitude" className="form-control" disabled placeholder={item?.latitude} />
                         </div>
                         <div className="col col-6">
                           <label className={classes.formLabel} htmlFor="pitentialZone">Y:Latitude</label>
-                          <input type="number" name="YLatitude" className="form-control" disabled placeholder={elementInArray?.dgpsDetails?.longitude} />
+                          <input type="number" name="YLatitude" className="form-control" disabled placeholder={item?.longitude} />
                         </div>
                       </div>
-                    );
-                  })}
+                  //   );
+                  // })}
+                 
+                    ))
+                  }
                 </div>
 
                 <hr className="my-3" />
@@ -548,6 +562,7 @@ console.log("AccessInfortech", Purpose);
                     {" "}
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks || hideRemarksPatwari ?"none":"block",
                         color: fieldIconColors.detailsOfPlots
                       }}
                       onClick={() => {
@@ -966,6 +981,7 @@ console.log("AccessInfortech", Purpose);
                         Area Under
                         <ReportProblemIcon
                           style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
                             color: fieldIconColors.areaUnder
                           }}
                           onClick={() => {
@@ -1170,6 +1186,7 @@ console.log("AccessInfortech", Purpose);
                     {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                     <ReportProblemIcon
                       style={{
+                        display: hideRemarks || hideRemarksPatwari ?"none":"block",
                         color: fieldIconColors.nilp
                       }}
                       onClick={() => {
@@ -1387,6 +1404,7 @@ console.log("AccessInfortech", Purpose);
                         </IconButton>
                         <ReportProblemIcon
                           style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
                             color: fieldIconColors.demarcationPlan
                           }}
                           onClick={() => {
@@ -1414,6 +1432,7 @@ console.log("AccessInfortech", Purpose);
                         </IconButton>
                         <ReportProblemIcon
                           style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
                             color: fieldIconColors.democraticPlan
                           }}
                           onClick={() => {
@@ -1440,6 +1459,7 @@ console.log("AccessInfortech", Purpose);
                         </IconButton>
                         <ReportProblemIcon
                           style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
                             color: fieldIconColors.sectoralPlan
                           }}
                           onClick={() => {
@@ -1470,6 +1490,7 @@ console.log("AccessInfortech", Purpose);
                         </IconButton>
                             <ReportProblemIcon
                               style={{
+                                display: hideRemarks || hideRemarksPatwari ?"none":"block",
                                 color: fieldIconColors.uploadLayoutPlan
                               }}
                               onClick={() => {
@@ -1500,6 +1521,7 @@ console.log("AccessInfortech", Purpose);
                         </IconButton>
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.planCrossSection
                             }}
                             onClick={() => {
@@ -1527,6 +1549,7 @@ console.log("AccessInfortech", Purpose);
                         </IconButton>
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.publicHealthServices
                             }}
                             onClick={() => {
@@ -1553,6 +1576,7 @@ console.log("AccessInfortech", Purpose);
                         </IconButton>
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.designRoad
                             }}
                             onClick={() => {
@@ -1579,6 +1603,7 @@ console.log("AccessInfortech", Purpose);
                         </IconButton>
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.designSewarage
                             }}
                             onClick={() => {
@@ -1609,6 +1634,7 @@ console.log("AccessInfortech", Purpose);
                         </IconButton>
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.designDisposal
                             }}
                             onClick={() => {
@@ -1636,6 +1662,7 @@ console.log("AccessInfortech", Purpose);
                         </IconButton>
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.undertakingChange
                             }}
                             onClick={() => {
@@ -1662,6 +1689,7 @@ console.log("AccessInfortech", Purpose);
                         </IconButton>
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.hostedLayoutPlan
                             }}
                             onClick={() => {
@@ -1689,6 +1717,7 @@ console.log("AccessInfortech", Purpose);
                         </IconButton>
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.reportObjection
                             }}
                             onClick={() => {
@@ -1719,6 +1748,7 @@ console.log("AccessInfortech", Purpose);
                         </IconButton>
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.consentRera
                             }}
                             onClick={() => {
@@ -1746,6 +1776,7 @@ console.log("AccessInfortech", Purpose);
                         </IconButton>
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.undertaking
                             }}
                             onClick={() => {
@@ -1773,6 +1804,7 @@ console.log("AccessInfortech", Purpose);
                         </IconButton>
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.designForElectricSupply
                             }}
                             onClick={() => {
@@ -1800,6 +1832,7 @@ console.log("AccessInfortech", Purpose);
                         </IconButton>
                           <ReportProblemIcon
                             style={{
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
                               color: fieldIconColors.proposedColony
                             }}
                             onClick={() => {

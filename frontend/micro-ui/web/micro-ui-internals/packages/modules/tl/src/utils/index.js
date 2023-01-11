@@ -831,11 +831,12 @@ export const getPattern = type => {
       return /^[1-9][0-9]{0,7}$/i;
     case "DecimalNumber":
       return /^\d{0,8}(\.\d{1,2})?$/i;
-    //return /(([0-9]+)((\.\d{1,2})?))$/i;
+    case "onlyAlphabets":
+    return /^[0-9a-zA-Z\_]+$/i;
     case "Email":
       return /^(?=^.{1,64}$)((([^<>()\[\]\\.,;:\s$*@'"]+(\.[^<>()\[\]\\.,;:\s@'"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})))$/i;
     case "Address":
-      return /^[^\$\"<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,500}$/i;
+      return /(\d{1,}) [a-zA-Z0-9\s]+(\.)? [a-zA-Z]+(\,)? [A-Z]{2} [0-9]{5,6}$/i;
     case "PAN":
       return /^[A-Za-z]{5}\d{4}[A-Za-z]{1}$/i;
     case "TradeName":
@@ -877,13 +878,15 @@ export const getPattern = type => {
       return /^[a-zA-Z0-9/-]*$/i;
     case "AadharNo":
       //return /^\d{4}\s\d{4}\s\d{4}$/;
-      return /^([0-9]){12}$/;
+      return /^[2-9]{1}[0-9]{3}[0-9]{4}[0-9]{4}$/;
     case "ChequeNo":
       return /^(?!0{6})[0-9]{6}$/;
     case "Comments":
       return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,50}$/i;
     case "OldLicenceNo":
-      return /^[a-zA-Z0-9-/]{0,64}$/;
+      return /^[L]{1}[C]{1}[-]{1}[0-9]{0,5}[A-Z]{1}$/;
+    case "architectNumber":
+      return /^([A-Z0-9 /])$/;
   }
 };
 

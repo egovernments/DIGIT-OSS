@@ -1,4 +1,4 @@
-import { FormStep,TextInput, MobileNumber, CardLabel, CardLabelError, Dropdown, RemoveIcon  } from "@egovernments/digit-ui-react-components";
+import { FormStep,TextInput, MobileNumber, CardLabel, CardLabelError, Dropdown, Toast, RemoveIcon  } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Table from "react-bootstrap/Table";
@@ -12,10 +12,10 @@ import Popup from "reactjs-popup";
 //   Modal,
 //   ModalHeader,
 //   ModalBody,
-//   Row,
+//   Row, 
 //   Col,
 //   ModalFooter,
-// } from "reactstrap";
+// } from "reactstrap"; 
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import {Modal, ModalHeader, ModalFooter, ModalBody } from 'react-bootstrap';
@@ -28,13 +28,14 @@ import axios from "axios";
 import { getDocShareholding } from "../../../tl/src/pages/employee/ScrutinyBasic/ScrutinyDevelopment/docview.helper";
 const TYPE_REGISTER = { type: "register" };
 const TYPE_LOGIN = { type: "login" };
+import Spinner from "../components/Loader/index";
 // const tenantId = Digit.ULBService.getCurrentTenantId();
 
 //for Redux use only
 // import { setAurthorizedUserData } from "../Redux/Slicer/Slicer";
 // import { useDispatch } from "react-redux";
 
-const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegistered = true }) => {
+const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = true }) => {
 
   const { pathname: url } = useLocation();
   const userInfo = Digit.UserService.getUser();
@@ -42,13 +43,16 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
   // console.log(userInfo?.info?.id);
-
+  const [success, setError] = useState(null);
+  const [showToast, setShowToast] = useState(null);
+  const [showToastError, setShowToastError] = useState(null);
   const {setValue, getValues, watch} = useForm();
   const [Documents, setDocumentsData] = useState({});
-
+  const [data, setData] = useState();
   const DevelopersAllData = getValues();
   // console.log("DEVEDATAGEGT",DevelopersAllData);
   const [userDelete, setUserDelete] = useState([]);
+  const [loader, setLoading] = useState(false);
   const [aurthorizedUserInfoArray, setAurthorizedUserInfoArray] = useState([]);
   const getDeveloperData = async ()=>{
     try {
@@ -70,6 +74,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
 
       });
       const developerDataGet = getDevDetails?.data; 
+      setData(developerDataGet);
       console.log("ADDAUTHUSER",getDevDetails?.data?.devDetail[0]?.aurthorizedUserInfoArray);
       setAurthorizedUserInfoArray(getDevDetails?.data?.devDetail[0]?.aurthorizedUserInfoArray || []);
     } catch (error) {
@@ -128,7 +133,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
   const [aurthorizedPan, setAurthorizedPan] = useState(formData?.LicneseDetails?.aurthorizedPan || formData?.LicneseDetails?.aurthorizedPan || "");
  
   const [docUpload,setDocuploadData]=useState([]);
-  const [uploadAadharPdf,setAdhaarPdf] = useState( DevelopersAllData?.uploadAadharPdf || "");
+  const [uploadBoardResolution,setAdhaarPdf] = useState( DevelopersAllData?.uploadBoardResolution || "");
   const [uploadDigitalSignaturePdf,setDigitalSignPdf] = useState( DevelopersAllData?.uploadDigitalSignaturePdf || "");
   const [file,setFile]=useState(null);
   const [urlGetAdhaarPdf,setAdhaarPdfUrl] = useState("");
@@ -280,12 +285,12 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
 
     if(fromTable){
       if(getValues("authorizedUserFiles")?.includes(file.name)){
-        alert("Duplicate file Selected");
+        setShowToastError({ key: "error" });
         return;
       }
     } else {
       if(getValues("modalFiles")?.includes(file.name)){
-        alert("Duplicate file Selected");
+        setShowToastError({ key: "error" });
         return;
       }
     }
@@ -297,9 +302,12 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
     formData.append("tag", "tag-property");
     // setLoader(true);
     try {
+      setLoading(true);
       const Resp = await axios.post("/filestore/v1/files", formData, {}).then((response) => {
         return response;
       });
+      setLoading(false);
+      setShowToast({ key: "success" });
       console.log(Resp?.data?.files);
 
       if(fromTable){
@@ -335,7 +343,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
   };
   
   const handleUserNameChange = (e) => {
-    if(!e.target.value || e.target.value.match("^[a-zA-Z]*$")){
+    if(!e.target.value || e.target.value.match("^[a-zA-Z ]*$")){
       setAurtorizedUserName(e.target.value);
     }
   }
@@ -368,7 +376,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
           emailId: aurthorizedEmail,
           dob: aurthorizedDob,
           pan: aurthorizedPan,
-          uploadAadharPdf: Documents?.uploadAadharPdf,
+          uploadBoardResolution: Documents?.uploadBoardResolution,
           uploadDigitalSignaturePdf: Documents?.uploadDigitalSignaturePdf,
           "parentId": userInfo?.info?.id,
           "type": "CITIZEN",
@@ -385,11 +393,11 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                   "name": "BPA BUILDER",
                   "tenantId": tenantId
               },
-              // {
-              //     "code": "BPA_ARCHITECT",
-              //     "name": "BPA ARCHITECT",
-              //     "tenantId": tenantId
-              // }
+              {
+                  "code": "BPA_DEVELOPER",
+                  "name": "BPA DEVELOPER",
+                  "tenantId": tenantId
+              }
           ],
           "tenantId": "hr",
       }
@@ -532,6 +540,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
   return (
 
     <div className={isOpenLinkFlow ? "OpenlinkContainer" : ""}>
+      {loader && <Spinner />}
       {/* {JSON.stringify(aurthorizedUserInfoArray)} */}
       <Timeline currentStep={3} flow="STAKEHOLDER" onChangeStep={changeStep} />
       <FormStep
@@ -555,7 +564,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                     const {}
                     })
                     } */}
-            <Table className="table table-bordered table-responsive">
+            <Table className="table table-bordered table-striped table-responsive">
               <thead>
                 <tr>
                   <th>Sr. No</th>
@@ -565,7 +574,15 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                   <th>Gender</th>
                   {/* <th>Date of Birth</th> */}
                   <th>PAN No.</th>
-                  <th>View Board Resolution PDF</th>
+                  <th>
+                    {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Hindu Undivided Family") ? (
+                        <label htmlFor="name" className="text">Upload Power of Attorney </label>)
+                        :
+                        (
+                          <label htmlFor="name" className="text"> Upload Board Resolution</label>
+                        )
+                    }
+                  </th>
                   <th>View Digital Signature PDF</th>
                   <th>Action</th>
                 </tr>
@@ -578,65 +595,24 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                         <tr key={elementInArray.id}>
                           <td>{input + 1}</td>
                           <td>
-                            <input
-                              type="text"
-                              name="name[]"
-                              placeholder={elementInArray.name}
-                              value={elementInArray.name}
-                              class="employee-card-input"
-                             
-                            />
+                            {elementInArray.name}
                           </td>
                           <td>
-                            <input
-                              type="text"
-                              name="mobile[]"
-                              placeholder={elementInArray.mobileNumber}
-                              value={elementInArray.mobileNumber}
-                              class="employee-card-input"
-                            />
+                            {elementInArray.mobileNumber}
                           </td>
                           <td>
-                            <input
-                              type="email"
-                              name="email[]"
-                              placeholder={elementInArray.emailId}
-                              value={elementInArray.emailId}
-                              class="employee-card-input"
-                              disabled={"disabled"}
-                            />
+                            {elementInArray.emailId}
                           </td>
                           <td>
-                            <input
-                              type="text"
-                              name="gender[]"
-                              placeholder={elementInArray.gender}
-                              value={elementInArray.gender}
-                              class="employee-card-input"
-                            />
+                            {elementInArray.gender}
                           </td>
-                          {/* <td>
-                            <input
-                              type="text"
-                              name="dob[]"
-                              placeholder={elementInArray.dob}
-                              value={elementInArray.dob || DD-MM-YYYY}
-                              class="employee-card-input"
-                            />
-                          </td> */}
                           <td>
-                            <input
-                              type="text"
-                              name="pan[]"
-                              placeholder={elementInArray.pan}
-                              value={elementInArray.pan}
-                              class="employee-card-input"
-                            />
+                            {elementInArray.pan}
                           </td>
                           <td>
                             <div className="row">
-                            {(elementInArray.uploadAadharPdf !== "")?
-                              <button type="button" onClick={()=>getDocShareholding(elementInArray?.uploadAadharPdf)} className="btn btn-sm col-md-6">
+                            {(elementInArray.uploadBoardResolution !== "")?
+                              <button type="button" onClick={()=>getDocShareholding(elementInArray?.uploadBoardResolution)} className="btn btn-sm col-md-6">
                                 <VisibilityIcon color="info" className="icon" />
                               </button>
                               :<p></p>
@@ -648,7 +624,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                                   type="file" 
                                   accept="application/pdf"
                                   style={{display: "none"}}
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "uploadAadharPdf",true,input)} 
+                                  onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBoardResolution",true,input)} 
                                 />
                               </div>
 
@@ -709,35 +685,33 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
 
               <Modal show={showAuthuser} onHide={handleCloseAuthuser} animation={false}>
                 <Modal.Header closeButton>
-                  <Modal.Title>Add Authorised user</Modal.Title>
+                  <Modal.Title>Add Authorised User</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                   <form className="text1">
                     <Row>
                       <Col md={3} xxl lg="3">
                         <label htmlFor="name" className="text">Name  <span className="text-danger font-weight-bold">*</span></label>
-                        {/* <input
-                                type="text"
-                                name="name[]"
-                                placeholder=""
-                                class="employee-card-input"
-                                onChange={(e) => setAurtorizedUserName(e.target.value)}
-                              /> */}
-                        <TextInput
+                        <input
+                          type="text"
+                          value={aurthorizedUserName}
+                          class="employee-card-input"
+                          onChange={handleUserNameChange}
+                        />
+                        {/* <TextInput
                           t={t}
                           type={"text"}
                           isMandatory={false}
                           optionKey="i18nKey"
                           value={aurthorizedUserName}
                           name="aurthorizedUserName"
-                          // value={aurthorizedUserName}
                           onChange={handleUserNameChange}
                           {...(validation = {
                             isRequired: true,
                             type: "text",
-                            title: "Please enter Name",
                           })}
-                        />
+                        /> */}
+                        {aurthorizedUserName && aurthorizedUserName.length > 0 && !aurthorizedUserName.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid Name")}</CardLabelError>}
                       </Col>
                       <Col md={3} xxl lg="3">
                         <label htmlFor="name" className="text">Mobile Number  <span className="text-danger font-weight-bold">*</span></label>
@@ -748,7 +722,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                           required
                           onChange={selectAurthorizedMobileNumber}
                           // disable={mobileNumber && !isOpenLinkFlow ? true : false}
-                          {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
+                          {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel" }}
                         />
                         {aurthorizedMobileNumber && aurthorizedMobileNumber.length > 0 && !aurthorizedMobileNumber.match(Digit.Utils.getPattern('MobileNo')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID")}</CardLabelError>}
                         
@@ -827,20 +801,26 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                           placeholder=""
                           // onChange={(e) => setAurthorizedPan(e.target.value.toUpperCase())}
                           onChange={selectPanNumber}
-                          {...{ required: true, maxlength: "10", title: t("BPA_INVALID_PAN_NO") }}
+                          {...{ required: true, maxlength: "10" }}
                         />
                         {aurthorizedPan && aurthorizedPan.length > 0 && !aurthorizedPan.match(Digit.Utils.getPattern('PAN')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px' }}>{t("BPA_INVALID_PAN_NO")}</CardLabelError>}
                         <h3 className="error-message" style={{ color: "red" }}>{PanValError}</h3>
                       </Col>
                       <Col md={3} xxl lg="3">
-                        <label htmlFor="name" className="text">Upload Board Resolution <span className="text-danger font-weight-bold">*</span></label>
+                      {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Hindu Undivided Family") ? (
+                            <label htmlFor="name" className="text">Upload Power of Attorney <span className="text-danger font-weight-bold">*</span></label>)
+                            :
+                            (
+                              <label htmlFor="name" className="text"> Upload Board Resolution<span className="text-danger font-weight-bold">*</span></label>
+                            )
+                        }
                         <input
                           type="file"
-                          name="uploadAadharPdf"
+                          name="uploadBoardResolution"
                           accept="application/pdf"
                           placeholder=""
                           class="employee-card-input"
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "uploadAadharPdf")}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBoardResolution")}
                         />
                       </Col>
                       <Col md={3} xxl lg="3">
@@ -862,7 +842,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                     Close
                   </Button>
                   <Button 
-                    disabled = { !aurthorizedUserName || !aurthorizedDob || !aurthorizedEmail || !aurthorizedMobileNumber || !aurthorizedPan || !aurthorizedEmail.match(Digit.Utils.getPattern("Email")) || !aurthorizedPan.match(Digit.Utils.getPattern("PAN")) || !aurthorizedMobileNumber.match(Digit.Utils.getPattern("MobileNo")) || !Documents?.uploadAadharPdf || !Documents?.uploadDigitalSignaturePdf }
+                    disabled = { !aurthorizedUserName || !aurthorizedDob || !aurthorizedEmail || !aurthorizedMobileNumber || !aurthorizedPan || !aurthorizedEmail.match(Digit.Utils.getPattern("Email")) || !aurthorizedUserName.match(Digit.Utils.getPattern('Name')) || !aurthorizedPan.match(Digit.Utils.getPattern("PAN")) || !aurthorizedMobileNumber.match(Digit.Utils.getPattern("MobileNo")) || !Documents?.uploadBoardResolution || !Documents?.uploadDigitalSignaturePdf }
                   variant="primary" onClick={handleSubmitFormdata}>
                     Submit
                   </Button>
@@ -899,6 +879,8 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                 Submit
                 </button>
             </div> */}
+            {showToast && <Toast success={showToast?.key === "success" ? true : false} label="Document Uploaded Successfully" isDleteBtn={true} onClose={() => { setShowToast(null); setError(null); }} />}
+            {showToastError && <Toast error={showToastError?.key === "error" ? true : false} label="Duplicate file Selected" isDleteBtn={true} onClose={() => { setShowToastError(null); setError(null); }} />}
       </FormStep>
     </div>
   );

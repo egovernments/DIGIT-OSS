@@ -4,6 +4,12 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { getDocShareholding } from "../NewLicense/docView/docView.help";
+import { Dialog } from "@mui/material";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
 const ServicePlanService = () => {
   const [file, setFile] = useState(null);
@@ -11,6 +17,8 @@ const ServicePlanService = () => {
   const [submitDataLabel, setSubmitDataLabel] = useState([]);
   const [ServicePlanDataLabel, setServicePlanDataLabel] = useState([]);
   const [docUpload, setDocuploadData] = useState([]);
+  const [open, setOpen] = useState(false)
+  const [applicationNumber, setApplicationNumber] = useState()
   const {
     register,
     handleSubmit,
@@ -23,10 +31,11 @@ const ServicePlanService = () => {
 
     shouldFocusError: true,
   });
-
+  const userInfo = Digit.UserService.getUser();
   const servicePlan = async (data) => {
     const token = window?.localStorage?.getItem("token");
-    console.log(data);
+    const tenantId = Digit.ULBService.getCurrentTenantId();
+    console.log(data, "service-service");
     try {
       const postDistrict = {
         requestInfo: {
@@ -39,14 +48,21 @@ const ServicePlanService = () => {
           msg_id: "",
           requester_id: "",
           authToken: token,
+          "userInfo": userInfo.info
         },
 
         ServicePlanRequest: {
           ...data,
+          "action": "APPLY",
+          "tenantId":  tenantId,
+          "businessService": "SERVICE_PLAN",
         },
       };
-      const Resp = await axios.post("/land-services/serviceplan/_create", postDistrict);
+      const Resp = await axios.post("/tl-services/serviceplan/_create", postDistrict);
       setServicePlanDataLabel(Resp.data);
+      setOpen(true)
+      setApplicationNumber(Resp.data.servicePlanResponse[0].applicationNumber)
+
     } catch (error) {
       console.log(error.message);
     }
@@ -71,6 +87,11 @@ const ServicePlanService = () => {
       console.log(error.message);
     }
   };
+
+  const handleClose = () => {
+    setOpen(false)
+    window.location.href = `/digit-ui/citizen`
+  }
 
   // const getSubmitDataLabel = async () => {
   //   try {
@@ -98,6 +119,7 @@ const ServicePlanService = () => {
   // }, []);
 
   return (
+    <React.Fragment>
     <form onSubmit={handleSubmit(servicePlan)}>
       <Card style={{ width: "126%", border: "5px solid #1266af" }}>
         <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Service Plan </h4>
@@ -283,6 +305,29 @@ const ServicePlanService = () => {
         </Card>
       </Card>
     </form>
+    <Dialog
+    open={open}
+    onClose={handleClose}
+    aria-labelledby="alert-dialog-title"
+    aria-describedby="alert-dialog-description"
+    >
+    <DialogTitle id="alert-dialog-title">
+        Service Plan Submission
+    </DialogTitle>
+    <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <p>Your Service Plan is submitted successfully <span><CheckCircleOutlineIcon style={{color: 'blue', variant: 'filled'}}/></span></p>
+            <p>Please Note down your Application Number <span style={{padding: '5px', color: 'blue'}}>{applicationNumber}</span> for further assistance</p>
+          </DialogContentText>
+    </DialogContent>
+    <DialogActions>
+          <Button onClick={handleClose} autoFocus>
+            Ok
+          </Button>
+    </DialogActions>
+
+    </Dialog>
+    </React.Fragment>
   );
 };
 

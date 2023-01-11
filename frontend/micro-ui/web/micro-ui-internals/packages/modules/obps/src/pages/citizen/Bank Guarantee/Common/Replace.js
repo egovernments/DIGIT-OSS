@@ -25,25 +25,19 @@ function Replace() {
   const bankReplace = (data) => console.log(data);
   return (
     <form onSubmit={handleSubmit(bankReplace)}>
-      <Card style={{ width: "126%", marginLeft: "19px", paddingRight: "10px" }}>
-        <Form.Group className="justify-content-center" controlId="formBasicEmail">
-          <Row className="ml-auto" style={{ marginBottom: 5 }}>
+      <Card style={{ width: "126%", border: "5px solid #1266af" }}>
+        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Replace/Renew of Bank Guarantee</h4>
+        <div className="card">
+          <Row className="col-12">
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
                   <h2>Enter License No. </h2>
                 </Form.Label>
               </div>
-              <input type="text" className="form-control" placeholder="" {...register("enterLicNo")} />
+              <input type="text" className="form-control" placeholder="" {...register("licenceNumber")} />
             </Col>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>Enter Memo No. </h2>
-                </Form.Label>
-              </div>
-              <input type="text" className="form-control" placeholder="" {...register("enterMemoNumber")} disabled />
-            </Col>
+
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
@@ -63,31 +57,49 @@ function Replace() {
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
-                  <h2>Valid Upto </h2>
+                  <h2>Previous Memo No. </h2>
                 </Form.Label>
               </div>
-              <input type="text" className="form-control" placeholder="" {...register("validity")} disabled />
+              <input type="text" className="form-control" placeholder="" {...register("previousMemoNumber")} disabled />
             </Col>
-
+          </Row>
+          <br></br>
+          <Row className="col-12">
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
                   <h2>Bank Name</h2>
                 </Form.Label>
               </div>
-              <input type="text" className="form-control" placeholder="" {...register("nameBank")} />
+              <input type="text" className="form-control" placeholder="" {...register("bankName")} />
             </Col>
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
-                  <h2>Type of B.G</h2>
+                  <h2>Enter Memo No. </h2>
                 </Form.Label>
               </div>
-              <select className="form-control" placeholder="" {...register("bgType")}>
-                <option> IDW</option>
-                <option>EDC</option>
-              </select>
+              <input type="text" className="form-control" placeholder="" {...register("memoNumber")} />
             </Col>
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>Date of validity</h2>
+                </Form.Label>
+              </div>
+              <input type="date" className="form-control" placeholder="" {...register("validity")} />
+            </Col>
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>Extended time</h2>
+                </Form.Label>
+              </div>
+              <input type="date" className="form-control" placeholder="" {...register("extendedTime")} />
+            </Col>
+          </Row>
+          <br></br>
+          <Row className="col-12">
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
@@ -97,85 +109,82 @@ function Replace() {
               <input type="file" className="form-control" placeholder="" {...register("uploadBg")} />
             </Col>
           </Row>
-          <div className="row">
-            <div className="col col-12 ">
+          <br></br>
+          <div className="col col-12 ">
+            <div>
+              <label>
+                Hardcopy Submitted at TCP office.{" "}
+                <label htmlFor="hardcopySubmitted">
+                  <input {...register("hardcopySubmitted")} type="radio" value="Y" id="hardcopySubmitted" />
+                  &nbsp; Yes &nbsp;&nbsp;
+                </label>
+                <label htmlFor="hardcopySubmitted">
+                  <input
+                    {...register("hardcopySubmitted")}
+                    type="radio"
+                    value="N"
+                    id="hardcopySubmitted"
+                    className="btn btn-primary"
+                    onClick={() => setmodal1(true)}
+                  />
+                  &nbsp; No &nbsp;&nbsp;
+                </label>
+                <h3 className="error-message" style={{ color: "red" }}>
+                  {errors?.hardcopySubmitted && errors?.hardcopySubmitted?.message}
+                </h3>
+              </label>
+            </div>
+
+            {watch("hardcopySubmitted") === "Y" && (
               <div>
-                <div className="form-check">
-                  <input className="form-check-input" formControlName="agreeCheck" type="checkbox" value="" id="flexCheckDefault" required />
-                  <label className="checkbox" for="flexCheckDefault">
-                    Hardcopy Submitted at TCP office.{" "}
-                    <label htmlFor="licenseApplied">
-                      <input {...register("licenseApplied")} type="radio" value="Y" id="licenseApplied" />
-                      &nbsp; Yes &nbsp;&nbsp;
+                <div className="row">
+                  <div className="col col-4">
+                    <label>
+                      <h2>
+                        Upload Receipt of Submission.
+                        <span style={{ color: "red" }}>*</span>
+                      </h2>
                     </label>
-                    <label htmlFor="licenseApplied">
-                      <input
-                        {...register("licenseApplied")}
-                        type="radio"
-                        value="N"
-                        id="licenseApplied"
-                        className="btn btn-primary"
-                        onClick={() => setmodal1(true)}
-                      />
-                      &nbsp; No &nbsp;&nbsp;
-                    </label>
-                    <h3 className="error-message" style={{ color: "red" }}>
-                      {errors?.licenseApplied && errors?.licenseApplied?.message}
-                    </h3>
-                  </label>
-                </div>
-              </div>
-
-              {watch("licenseApplied") === "Y" && (
-                <div>
-                  <div className="row">
-                    <div className="col col-4">
-                      <label>
-                        <h2>
-                          Upload Receipt of Submission.
-                          <span style={{ color: "red" }}>*</span>
-                        </h2>
-                      </label>
-                      <div>
-                        <input type="file" placeholder="" className="form-control" {...register("consentLetter")}></input>
-                      </div>
-
-                      <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.consentLetter && errors?.consentLetter?.message}
-                      </h3>
+                    <div>
+                      <input type="file" placeholder="" className="form-control" {...register("consentLetter")}></input>
                     </div>
+
+                    <h3 className="error-message" style={{ color: "red" }}>
+                      {errors?.consentLetter && errors?.consentLetter?.message}
+                    </h3>
                   </div>
                 </div>
-              )}
-              {watch("licenseApplied") === "N" && (
-                <div>
-                  <Modal
-                    size="lg"
-                    isOpen={modal1}
-                    toggle={() => setmodal(!modal1)}
-                    style={{ width: "500px", height: "200px" }}
-                    aria-labelledby="contained-modal-title-vcenter"
-                    centered
-                  >
-                    <ModalHeader toggle={() => setmodal1(!modal1)}></ModalHeader>
-                    <ModalBody style={{ fontSize: 20 }}>
-                      <h2> Submit Hardcopy of B.G. at TCP office.</h2>
-                    </ModalBody>
-                    <ModalFooter toggle={() => setmodal(!modal1)}></ModalFooter>
-                  </Modal>
-                </div>
-              )}
-            </div>
+              </div>
+            )}
+            {watch("hardcopySubmitted") === "N" && (
+              <div>
+                <Modal
+                  size="lg"
+                  isOpen={modal1}
+                  toggle={() => setmodal(!modal1)}
+                  style={{ width: "500px", height: "200px" }}
+                  aria-labelledby="contained-modal-title-vcenter"
+                  centered
+                >
+                  <ModalHeader toggle={() => setmodal1(!modal1)}></ModalHeader>
+                  <ModalBody style={{ fontSize: 20 }}>
+                    <h2> Submit Hardcopy of B.G. at TCP office.</h2>
+                  </ModalBody>
+                  <ModalFooter toggle={() => setmodal(!modal1)}></ModalFooter>
+                </Modal>
+              </div>
+            )}
           </div>
-        </Form.Group>
-        <Row className="justify-content-end">
-          <Button variant="outline-primary" className="col-md-2 my-2 mx-2" aria-label="right-end">
-            Cancel
-          </Button>
-          <Button variant="outline-primary" className="col-md-2 my-2 mx-2" type="submit" aria-label="right-end">
-            Submit
-          </Button>
-        </Row>
+
+          <Row className="justify-content-end">
+            <Button variant="outline-primary" className="col-md-2 my-2 mx-2" aria-label="right-end">
+              Cancel
+            </Button>
+            <Button variant="outline-primary" className="col-md-2 my-2 mx-2" type="submit" aria-label="right-end">
+              Submit
+            </Button>
+          </Row>
+        </div>
       </Card>
     </form>
   );

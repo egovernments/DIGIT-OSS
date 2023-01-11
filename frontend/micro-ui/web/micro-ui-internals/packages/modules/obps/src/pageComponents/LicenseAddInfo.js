@@ -1,4 +1,4 @@
-import { BackButton, CardLabel, CardLabelError, FormStep, Loader, MobileNumber, RadioButtons, TextInput, ViewsIcon, DownloadIcon, Dropdown, DatePicker, RemoveIcon } from "@egovernments/digit-ui-react-components";
+import { BackButton, CardLabel, CheckBox, CardLabelError, FormStep, Loader, MobileNumber, RadioButtons, Toast,TextInput, ViewsIcon, DownloadIcon, Dropdown, DatePicker, RemoveIcon } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import Timeline from "../components/Timeline";
@@ -28,7 +28,8 @@ import Delete from "@mui/icons-material/Delete";
 import { getDocShareholding } from "../../../tl/src/pages/employee/ScrutinyBasic/ScrutinyDevelopment/docview.helper";
 import { MenuItem, Select } from "@mui/material";
 import { convertEpochToDate } from "../utils/index";
-
+import Spinner from "../components/Loader/index";
+import FormControlLabel from '@mui/material/FormControlLabel';
 const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
   let validation = {};
   const { pathname: url } = useLocation();
@@ -40,6 +41,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   const [dob, setDOB] = useState();
   const [developerDataAddinfo, setDeveloperDataAddinfo] = useState([]);
   const [existingColonizer, setExistingColonizer] = useState();
+  const [existingDirectors, setExistingDirectors] = useState();
   const [existingColonizerDetails, setExistingColonizerDetails] = useState({
     name: "",
     mobile: "",
@@ -57,8 +59,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   const [csrNumber, setCSRNumber] = useState("");
 
   let isOpenLinkFlow = window.location.href.includes("openlink");
-
-
+  const [isUndertaken, setIsUndertaken] = useState(formData?.isUndertaken || formData?.formData?.isUndertaken || false);
+  const [loader, setLoading] = useState(false);
   const getDeveloperData = async () => {
 
     try {
@@ -99,7 +101,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       setPercetage(developerDataGet?.devDetail[0]?.addInfo?.percentage);
       setUploadPDF(developerDataGet?.devDetail[0]?.addInfo?.uploadPdf);
       setSerialNumber(developerDataGet?.devDetail[0]?.addInfo?.serialNumber);
-      setDirectorData(developerDataGet?.devDetail[0]?.addInfo?.directorsInformation || []);
+      setDirectorData(developerDataGet?.devDetail[0]?.addInfo?.DirectorsInformation || []);
+      setDirectorDataMCA(developerDataGet?.devDetail[0]?.addInfo?.DirectorsInformationMCA || []);
       setCinNo(developerDataGet?.devDetail[0]?.addInfo?.cin_Number);
       setLLPNumber(developerDataGet?.devDetail[0]?.addInfo?.llp_Number);
       setCSRNumber(developerDataGet?.devDetail[0]?.addInfo?.csr_Number);
@@ -110,7 +113,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       setOthersArray(developerDataGet?.devDetail[0]?.addInfo?.othersDetails || othersArray)
       setExistingColonizerDetails(developerDataGet?.devDetail[0]?.addInfo?.existingColonizerData || existingColonizerDetails)
       setExistingColonizer(developerDataGet?.devDetail[0]?.addInfo?.existingColonizer || "")
+      setExistingDirectors(developerDataGet?.devDetail[0]?.addInfo?.existingDirectors || "")
       setFinancialCapacity(developerDataGet?.devDetail[0]?.addInfo?.financialCapacity);
+      setIsUndertaken(developerDataGet?.devDetail[0]?.addInfo?.isUndertaken);
       setRegisteredMobileNumber(developerDataGet?.devDetail[0]?.addInfo?.registeredContactNo)
       // setShowDevTypeFields(valueOfDrop);
       let totalRemainingShareholdingPattern = 100;
@@ -194,6 +199,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
   const { data: PurposeType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
 
+  
+
   useEffect(() => {
     const purpose = PurposeType?.["common-masters"]?.Purpose?.map(function (data) {
       return { value: data?.purposeCode, label: data?.name };
@@ -218,10 +225,14 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   } = useForm([
     { Sr: "", name: "", mobileNumber: "", email: "", PAN: "", Aadhar: "" },
   ]);
+  const [success, setError] = useState(null);
+  const [showToast, setShowToast] = useState(null);
+  const [showToastError, setShowToastError] = useState(null);
+  // const handleChange = (e) => {
+  //   this.setState({ isRadioSelected: true });
+  // };
 
-  const handleChange = (e) => {
-    this.setState({ isRadioSelected: true });
-  };
+  const [checked, setChecked] = React.useState(false);
   const [showhide0, setShowhide0] = useState("No");
   const [showDevTypeFields, setShowDevTypeFields] = useState(formData?.LicneseDetails?.showDevTypeFields || formData?.formData?.LicneseDetails?.showDevTypeFields || "");
   const [FormSubmitted, setFormSubmitted] = useState(false);
@@ -240,6 +251,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   const [uploadPdf, setUploadPDF] = useState(DevelopersAllData?.uploadPdf || "");
   const [serialNumber, setSerialNumber] = useState("");
   const [DirectorData, setDirectorData] = useState([]);
+  const [DirectorDataMCA, setDirectorDataMCA] = useState([]);
   const [modalNAme, setModalNAme] = useState("");
   const [modaldesignition, setModaldesignition] = useState("");
   const [modalPercentage, setModalPercentage] = useState("");
@@ -333,6 +345,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     setModalValuesArray([]);
     setRemainingStakeholderPercentage(100);
     setDirectorData([]);
+    setExistingDirectors();
     setExistingColonizer();
     setExistingColonizerDetails({
       name: "",
@@ -365,17 +378,17 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     console.log("logFile",file)
     if (type === "existingColonizer") { 
       if(getValues("existingColonizerFiles")?.includes(file.name)){
-        alert("Duplicate file Selected");
+        setShowToastError({ key: "error" });
         return;
       }
     } else if (type === "shareholdingPattern") {
       if(getValues("shareholdingPatternFiles")?.includes(file.name)){
-        alert("Duplicate file Selected");
+        setShowToastError({ key: "error" });
         return;
       }
     } else if (type === "directorInfoPdf") {
       if(getValues("directorInfoPdfFiles")?.includes(file.name)){
-        alert("Duplicate file Selected");
+        setShowToastError({ key: "error" });
         return;
       }
     } 
@@ -387,9 +400,12 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     formData.append("tag", "tag-property");
     // setLoader(true);
     try {
+      setLoading(true);
       const Resp = await axios.post("/filestore/v1/files", formData, {}).then((response) => {
         return response;
       });
+      setLoading(false);
+      setShowToast({ key: "success" });
       console.log(Resp?.data?.files?.[0]?.fileStoreId, fieldName, type, index);
 
       if (type === "existingColonizer") {
@@ -430,6 +446,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       }
 
     } catch (error) {
+      setLoading(false);
       //   setLoader(false);
       alert(error?.response?.data?.Errors?.[0]?.description);
       console.log(error);
@@ -437,55 +454,10 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   };
   
 
-  // useEffect(() => {
-  //   getDocumentData();
-  // }, [file]);
-
-  // const getDocShareholding = async () => {
-  //   if ((Documents?.uploadPdf !== null || Documents?.uploadPdf !== undefined) && (uploadPdf !== null || uploadPdf !== "")) {
-
-  //     try {
-  //       const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${Documents?.uploadPdf}`, {
-
-  //       });
-  //       const FILDATA = response.data?.fileStoreIds[0]?.url;
-  //       setDocShareHoldingUrl(FILDATA)
-  //     } catch (error) {
-  //       console.log(error.message);
-  //     }
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   if ((Documents?.uploadPdf !== null || Documents?.uploadPdf !== undefined) && (uploadPdf !== null || uploadPdf !== "")) {
-  //     getDocShareholding(Documents?.uploadPdf);
-  //   }
-  // }, [Documents?.uploadPdf]);
-
-
-  // const getDocDirector = async () => {
-  //   if ((Documents?.uploadPdf !== null || Documents?.uploadPdf !== undefined) && (uploadPdf !== null || uploadPdf !== "")) {
-
-  //     try {
-  //       const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${Documents?.uploadPdf}`, {
-
-  //       });
-  //       const FILDATA = response.data?.fileStoreIds[0]?.url;
-  //       setDocDirectorUrl(FILDATA)
-  //     } catch (error) {
-  //       console.log(error.message);
-  //     }
-  //   }
-  // }
-
-  // useEffect(() => {
-  //     getDocDirector();
-  // }, [Documents?.uploadPdf]);
-
-
   const HandleGetMCNdata = async () => {
     try {
       if (cin_Number.length === 21) {
+        setLoading(true);
         const Resp = await axios.get(`/mca/v1/companies/${cin_Number}`, {
           headers: {
             'Content-Type': 'application/json',
@@ -503,7 +475,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
             'Access-Control-Allow-Origin': "*",
           }
         })
-
+        setLoading(false);
         // console.log("CIN",Resp.data)
         // console.log(Directory.data);
         // if (DirectorData && DirectorData.length) {
@@ -511,7 +483,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         // } else {
         //   console.log("log2", DirectorData, Directory.data)
         // }
-        setDirectorData(Directory.data);
+        setDirectorDataMCA(Directory.data);
         setCompanyName(Resp.data.companyName)
         setIncorporation(Resp.data.incorporationDate)
         setUserEmail(Resp.data.email)
@@ -522,7 +494,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
       }
     } catch (error) {
-
+      setLoading(false);
       console.log(error?.response?.data?.error_description);
       setCINValError(error?.response?.data?.error_description)
     }
@@ -584,10 +556,14 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     HandleGetMCNdata();
   }, [cin_Number])
 
+  function selectChecked(e) {
+    if (isUndertaken == false) {
+      setIsUndertaken(true);
+    }else{
+      setIsUndertaken(false);
+    }
+  };
 
-
-  const [noofRows, setNoOfRows] = useState(1);
-  const [aoofRows, setAoOfRows] = useState(1);
 
 
   const deleteTableRows = (i) => {
@@ -628,11 +604,14 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         emailId: emailId,
         registeredContactNo: registeredContactNo,
         gst_Number: gst_Number,
-        directorsInformation: DirectorData || modalDirectorValuesArray,
+        DirectorsInformationMCA: DirectorDataMCA,
+        DirectorsInformation: DirectorData,
+        isUndertaken:isUndertaken,
         shareHoldingPatterens: modalValuesArray,
         othersDetails: othersArray,
         existingColonizerData: existingColonizerDetails,
-        existingColonizer: existingColonizer
+        existingColonizer: existingColonizer,
+        existingDirectors: existingDirectors,
       }
       onSelect(config.key, addInfo);
       // console.log("DATALICDET",addInfo);
@@ -668,7 +647,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         })
         .catch((e) => {
           setIsDisableForNext(false);
-          setShowToast({ key: "error" });
+          // setShowToast({ key: "error" });
           setError(e?.response?.data?.Errors[0]?.message || null);
         });
     }
@@ -683,7 +662,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
         data.LicneseDetails.registeredContactNo = registeredContactNo,
         data.LicneseDetails.gst_Number = gst_Number,
-        data.LicneseDetails.directorsInformation = DirectorData,
+        data.LicneseDetails.DirectorsInformation = DirectorData,
         data.LicneseDetails.shareHoldingPatterens = modalValuesArray
       data.LicneseDetails.othersDetails = othersArray
 
@@ -693,15 +672,6 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
 
   };
-
-  var regNumber = /^\d+$/;
-  //   const handleStakeholderPercentageChange = (value) => {
-  //     console.log("loggg",value,value.split("%")[0],reg.test(value.split("%")[0]))
-  //     if(value && reg.test(value)){
-  //       setModalPercentage(value);
-  //     }
-  // }
-
 
   const onSkip = () => onSelect();
 
@@ -717,6 +687,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
   return (
     <div>
+      {loader && <Spinner />}
       <div className={isOpenLinkFlow ? "OpenlinkContainer" : ""}>
         {/* {JSON.stringify(showDevTypeFields)}efewfewfef */}
         {isOpenLinkFlow && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
@@ -736,7 +707,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
             // isDisabled={
             //   !showDevTypeFields || (showDevTypeFields === "Individual" && (!name || !mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) || !emailId?.match(Digit.Utils.getPattern('Email')))) || (showDevTypeFields === "Others" && othersArray.length) || (showDevTypeFields === "Proprietorship Firm") || (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others" && (!cin_Number?.match(Digit.Utils.getPattern('CIN')) || !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) || !gst_Number?.match(Digit.Utils.getPattern('GSTNo')) || !((existingColonizer === "N") || (existingColonizer === "Y" && existingColonizerDetails.aggreementBtw && existingColonizerDetails.boardResolution && existingColonizerDetails.dob && existingColonizerDetails.pan && existingColonizerDetails.pan.match(Digit.Utils.getPattern('PAN')) && existingColonizerDetails.licNo && existingColonizerDetails.licDate && existingColonizerDetails.licValidity && existingColonizerDetails.licPurpose))))
             // }
-            isDisabled={(showDevTypeFields === "Individual" || showDevTypeFields === "Proprietorship Firm") ? !(name && mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) && emailId?.match(Digit.Utils.getPattern('Email'))) : (showDevTypeFields === "Others") ? (!othersArray.length) : (showDevTypeFields === "Proprietorship Firm") ? false : (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others") ? (((showDevTypeFields === "Limited Liability Partnership" || showDevTypeFields === "Trust") ? ( showDevTypeFields === "Trust" ? !csrNumber?.match(Digit.Utils.getPattern('CSR')) : !llpNumber?.match(Digit.Utils.getPattern('LLP'))) : ( showDevTypeFields === "Hindu Undivided Family" ) ? false : !cin_Number?.match(Digit.Utils.getPattern('CIN')) ) || !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) || (showDevTypeFields === "Trust" ? false : !gst_Number?.match(Digit.Utils.getPattern('GSTNo'))) || !registeredAddress.match(Digit.Utils.getPattern('Address')) || !(modalValuesArray?.length) || !((existingColonizer === "N") || (existingColonizer === "Y" && existingColonizerDetails.aggreementBtw && existingColonizerDetails.boardResolution && existingColonizerDetails.dob && existingColonizerDetails.pan && existingColonizerDetails.pan.match(Digit.Utils.getPattern('PAN')) && existingColonizerDetails.licNo && existingColonizerDetails.licDate && existingColonizerDetails.licValidity && existingColonizerDetails.licPurpose))) : true}
+            isDisabled={(showDevTypeFields === "Individual" || showDevTypeFields === "Proprietorship Firm") ? !(name && mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) && emailId?.match(Digit.Utils.getPattern('Email'))) : (showDevTypeFields === "Others") ? (!othersArray.length) : (showDevTypeFields === "Proprietorship Firm") ? false : (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others") ? (((showDevTypeFields === "Limited Liability Partnership" || showDevTypeFields === "Trust") ? ( showDevTypeFields === "Trust" ? !csrNumber?.match(Digit.Utils.getPattern('CSR')) : !llpNumber?.match(Digit.Utils.getPattern('LLP'))) : ( showDevTypeFields === "Hindu Undivided Family" ) ? false : !cin_Number?.match(Digit.Utils.getPattern('CIN')) ) || !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) || (showDevTypeFields === "Trust" ? false : !gst_Number?.match(Digit.Utils.getPattern('GSTNo'))) || !registeredAddress.match(Digit.Utils.getPattern('Address')) || (!existingColonizerDetails.licNo.match(Digit.Utils.getPattern('OldLicenceNo'))) || !(modalValuesArray?.length) || !((existingColonizer === "N") || (existingColonizer === "Y" && existingColonizerDetails.aggreementBtw && existingColonizerDetails.boardResolution && existingColonizerDetails.dob && existingColonizerDetails.pan && existingColonizerDetails.pan.match(Digit.Utils.getPattern('PAN')) && existingColonizerDetails.licNo && existingColonizerDetails.licDate && existingColonizerDetails.licValidity && existingColonizerDetails.licPurpose))) : true}
             t={t}
           >
             <div className="happy">
@@ -747,7 +718,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                     <div className="col-sm-12">
                       <div className="form-group row">
                         <div className="col-sm-4">
-                          <CardLabel class="required">{`${t("Select Developer's Type")}`}<span class="text-danger font-weight-bold mx-2">*</span></CardLabel>
+                          <label htmlFor="name">{`${t("Select Developer's Type")}`} <span className="text-danger font-weight-bold">*</span></label>
                           <Dropdown
                             labels="Select Type"
                             className="form-field"
@@ -760,7 +731,6 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             style={{ width: "100%" }}
                             t={t}
                             required
-                            disable
                           />
                           {/* <Select
                             onChange={(e) => setDevType({showDevTypeFields: e.target.value })}
@@ -847,7 +817,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
               {/* FOR PROPR */}
 
-              {showDevTypeFields === "Others" && (
+              {showDevTypeFields === "Otherss" && (
                 <div className="card mb-3">
                   {/* <div className="card-header">
               <h5 className="card-title"> Developer</h5>
@@ -970,15 +940,25 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                               </Col>
                               <Col md={3} xxl lg="4">
                                 <label htmlFor="designation" className="text">  Designition <span className="text-danger font-weight-bold">*</span></label>
-                                <TextInput
+                                {/* <TextInput
                                   type="text"
                                   isMandatory={false}
                                   onChange={(e) => setOthersDetails({ ...othersDetails, designation: e.target.value })}
                                   placeholder=""
                                   class="employee-card-input"
                                   value={othersDetails.designation}
-                                  maxlength={"2"}
+                                  maxlength={"30"}
+                                /> */}
+                                <input
+                                  type="text"
+                                  isMandatory={false}
+                                  onChange={(e) => setOthersDetails({ ...othersDetails, designation: e.target.value })}
+                                  placeholder=""
+                                  class="employee-card-input"
+                                  value={othersDetails.designation}
+                                  maxlength={"30"}
                                 />
+                                {othersDetails.designation && othersDetails.designation?.length > 0 && !othersDetails.designation.match(Digit.Utils.getPattern('onlyAlphabets')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("No Numbers and Alphabets allowed ")}</CardLabelError>}
                               </Col>
 
                               <Col md={3} xxl lg="4">
@@ -1070,7 +1050,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
 
               {/* FOR COMPANY */}
-              {(showDevTypeFields && showDevTypeFields !== "Individual" && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Others") && (
+              {(showDevTypeFields && showDevTypeFields !== "Individual" && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Others" && showDevTypeFields !== "Society" && showDevTypeFields !== "Firm") && (
                 <div className="card mb-3">
                   {/* <div className="card-header">
               <h5 className="card-title"> Developer</h5>
@@ -1098,13 +1078,11 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                         // isMendatory={false}
                                         placeholder={csrNumber}
                                         className="employee-card-input text-uppercase"
-                                        max={"21"}
+                                        max={"11"}
                                         {...(validation = {
                                           // isRequired: true,
-                                          pattern: "^[A-Z0-9]*$",
                                           type: "text",
-                                          maxlength: "21",
-                                          title: "Please Enter CSR Number"
+                                          maxlength: "11",
                                         })}
                                       />
                                       {csrNumber && csrNumber.length > 0 && !csrNumber.match(Digit.Utils.getPattern('CSR')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_CSR_NO")}</CardLabelError>}
@@ -1124,13 +1102,11 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                         // isMendatory={false}
                                         placeholder={llpNumber}
                                         className="employee-card-input text-uppercase"
-                                        max={"21"}
+                                        max={"8"}
                                         {...(validation = {
                                           // isRequired: true,
-                                          pattern: "^[A-Z0-9]*$",
                                           type: "text",
-                                          maxlength: "21",
-                                          title: "Please Enter LLP Number"
+                                          maxlength: "8",
                                         })}
                                       />
                                       {llpNumber && llpNumber.length > 0 && !llpNumber.match(Digit.Utils.getPattern('LLP')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_LLP_NO")}</CardLabelError>}
@@ -1362,9 +1338,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                   </div>
                 </div>
               )}
-              {(showDevTypeFields && showDevTypeFields !== "Individual" && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Others") && (
+              {(showDevTypeFields && showDevTypeFields !== "Individual" && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Others" && showDevTypeFields !== "Society" && showDevTypeFields !== "Firm") && (
                 <div className="card mb-3">
-                  <h5 className="card-title fw-bold">Shareholding Patterns</h5>
+                  <h5 className="card-title fw-bold">Shareholding Patterns <span className="text-danger font-weight-bold">*</span></h5>
                   {/* {JSON.stringify(modalValuesArray)} */}
                   <div className="card-body">
                     <div className="table-bd">
@@ -1499,11 +1475,11 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                   class="employee-card-input"
                                   {...(validation = {
                                     isRequired: true,
-                                    pattern: "^[a-zA-Z]*$",
+                                    pattern: "^[a-zA-Z ]*$",
                                     type: "text",
-                                    title: "Please Enter Name"
                                   })}
                                 />
+                                {modalNAme && modalNAme.length > 0 && !modalNAme.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter a valid Name")}</CardLabelError>}
                               </Col>
                               <Col md={3} xxl lg="4">
                                 <label htmlFor="name" className="text"> Designition <span className="text-danger font-weight-bold">*</span></label>
@@ -1515,11 +1491,11 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                   class="employee-card-input"
                                   {...(validation = {
                                     isRequired: true,
-                                    pattern: "^[a-z A-Z]*$",
+                                    pattern: "^[a-z A-Z ]*$",
                                     type: "text",
-                                    title: "Please Enter Designition"
                                   })}
                                 />
+                                {modaldesignition && modaldesignition.length > 0 && !modaldesignition.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter a valid Designition")}</CardLabelError>}
                               </Col>
 
                               <Col md={3} xxl lg="4">
@@ -1529,11 +1505,10 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                   isMandatory={false}
                                   value={modalPercentage}
                                   onChange={(e) => setModalPercentage(e.target.value)}
-                                  placeholder=""
+                                  maxlength={4}
                                   class="employee-card-input"
                                   {...(validation = {
                                     isRequired: true,
-                                    title: "Please Enter Percentage"
                                   })}
                                 />
 
@@ -1554,7 +1529,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
                               </Col>
                               <Col md={3} xxl lg="4">
-                                <label htmlFor="name" className="text">Upload Document</label>
+                                <label htmlFor="name" className="text">Any Supportive Document</label>
                                 <input
                                   type="file"
                                   // value={file}
@@ -1564,7 +1539,6 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                   onChange={(e) => getDocumentData(e?.target?.files[0], "uploadPdf")}
                                   {...(validation = {
                                     isRequired: true,
-                                    title: "Please upload document"
                                   })}
                                 />
                               </Col>
@@ -1576,7 +1550,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                           <Button variant="secondary" onClick={handleCloseStakeholder}>
                             Close
                           </Button>
-                          <Button variant="primary" disabled={!modalNAme || !modaldesignition || !modalPercentage || (remainingStakeholderPercentage < modalPercentage || modalPercentage <= 0)} onClick={handleArrayValues}>
+                          <Button variant="primary" disabled={!modalNAme || !modalNAme.match(Digit.Utils.getPattern('Name')) || !modaldesignition.match(Digit.Utils.getPattern('Name')) || !modaldesignition || !modalPercentage || (remainingStakeholderPercentage < modalPercentage || modalPercentage <= 0)} onClick={handleArrayValues}>
                             Save Changes
                           </Button>
                         </Modal.Footer>
@@ -1585,7 +1559,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                   </div>
                 </div>
               )}
-              {(showDevTypeFields && showDevTypeFields !== "Individual" && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Others") && (
+              {(showDevTypeFields && showDevTypeFields !== "Individual" && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Others" && showDevTypeFields !== "Society" && showDevTypeFields !== "Firm") && (
                 <div className="card mb-3">
                   <h5 className="card-title fw-bold">Directors Information</h5>
                   <div className="card-body">
@@ -1598,72 +1572,24 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             <th>DIN Number</th>
                             <th>Name</th>
                             <th>Contact Number</th>
-                            <th>View Document</th>
-                            <th>Action</th>
+                            
                           </tr>
                         </thead>
                         <tbody>
                           {
-                            (DirectorData?.length > 0) ?
-                              DirectorData.map((elementInArray, input) => {
+                            (DirectorDataMCA?.length > 0) ?
+                              DirectorDataMCA.map((elementInArray, input) => {
                                 return (
                                   <tr key={input}>
                                     <td>{input + 1}</td>
                                     <td>
-                                      <input
-                                        type="text"
-                                        disabled="disabled"
-                                        value={elementInArray.din}
-                                        placeholder={elementInArray.din}
-                                        class="employee-card-input"
-                                      />
+                                      {elementInArray.din}
                                     </td>
                                     <td>
-                                      <input
-                                        type="text"
-                                        disabled="disabled"
-                                        value={elementInArray.name}
-                                        placeholder={elementInArray.name}
-                                        class="employee-card-input"
-                                      />
+                                      {elementInArray.name}
                                     </td>
                                     <td>
-                                      <input
-                                        type="text"
-                                        disabled="disabled"
-                                        value={elementInArray.contactNumber}
-                                        placeholder={elementInArray.contactNumber}
-                                        class="employee-card-input"
-                                      />
-                                    </td>
-                                    <td>
-                                      <div className="row">
-                                        {/* {JSON.stringify(elementInArray?.uploadPdf)} */}
-                                        {(elementInArray?.uploadPdf) ?
-                                          <button type="button" onClick={() => getDocShareholding(elementInArray?.uploadPdf)} className="btn btn-sm col-md-6 text-center">
-                                            <VisibilityIcon color="info" className="icon" />
-                                          </button>
-                                          : <p></p>
-                                        }
-                                        <div className="btn btn-sm col-md-6">
-                                          <label for={"uploaddirectorInfoPdf" + input}>
-                                            <FileUpload color="primary" for={"uploaddirectorInfoPdf" + input} />
-                                          </label>
-                                          <input
-                                            id={"uploaddirectorInfoPdf" + input}
-                                            type="file"
-                                            style={{ display: "none" }}
-                                            onChange={(e) => getDocumentData(e?.target?.files[0], "directorInfoPdf", "directorInfoPdf", input)}
-                                          />
-                                        </div>
-                                      </div>
-                                    </td>
-                                    <td>
-                                      <a href="javascript:void(0)"
-                                        onClick={() => (deleteDirectorTableRows(-1))}
-                                      >
-                                        <DeleteIcon color="danger" className="icon" />
-                                      </a>
+                                      {elementInArray.contactNumber}
                                     </td>
                                   </tr>
                                 );
@@ -1671,111 +1597,219 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                         </tbody>
                       </table>
                     </div>
-                    <div>
-                      <button
-                        type="button"
-                        style={{
-                          color: "white",
-                        }}
-                        className="btn btn-primary mt-3"
-                        // onClick={() => setNoOfRows(noofRows + 1)}
-                        // onClick={() => setmodalDirector(true)}
-                        onClick={handleShow}
-                      >
-                        Add More
-                      </button>
-                      <Modal show={show} onHide={handleClose} animation={false}>
-                        <Modal.Header closeButton>
-                          <Modal.Title>Add Directors Info</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                          <form className="text1">
-                            <Row>
-                              <Col md={3} xxl lg="4">
-                                <label htmlFor="name" className="text">DIN Number</label>
-                                <MobileNumber
-                                  value={modalDIN}
-                                  name="modalDIN"
-                                  maxlength={"8"}
-                                  hideSpan="true"
-                                  // onChange={(e) => setModalDIN(e.target.value)}
-                                  onChange={selectDinNumber}
-                                  // disable={mobileNumber && !isOpenLinkFlow ? true : false}
-                                  {...{ required: true, pattern: "[1-9][0-9]{7}", type: "tel", title: t("Enter Valid DIN") }}
-                                />
-                                {/* <MobileNumber
-                              
-                              isMandatory={false}
-                              onChange={(e) => setModalDIN(e.target.value.toUpperCase())}
-                              placeholder=""
-                              max= {8}
-                              class="employee-card-input"
-                              {...(validation = {
-                                isRequired: true,
-                                maxlength: "8",
-                                type: "tel",
-                                title: "Please Enter DIN No."
-                              })}
-                            /> */}
-                                {modalDIN && modalDIN.length > 0 && !modalDIN.match(Digit.Utils.getPattern('DIN')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_DIN_NO")}</CardLabelError>}
-                              </Col>
-                              <Col md={3} xxl lg="4">
-                                <label htmlFor="name" className="text">Name</label>
-                                <input
-                                  type="text"
+                    <p className="ml-2">
+                      If the directors are in addition/modification to data fetched from the MCA portal, then the complete details of existing directors may be provided.
+                    </p>
+                    <div className="form-group ml-2">
+                      <input
+                        type="radio"
+                        value="Y"
+                        checked={existingDirectors === "Y" ? true : false}
+                        id="existingDirectors"
+                        className="mx-2 mt-1"
+                        onChange={(e) => setExistingDirectors(e.target.value)}
+                        name="existingDirectors"
+                      />
+                      <label for="Yes">Yes</label>
 
-                                  onChange={(e) => setModalDirectorName(e.target.value)}
-                                  placeholder=""
-                                  class="employee-card-input"
-                                  {...(validation = {
-                                    isRequired: true,
-                                    pattern: "^[a-zA-Z]*$",
-                                    type: "text",
-                                    title: "Please Enter Name"
-                                  })}
-                                />
-                              </Col>
-                              <Col md={3} xxl lg="4">
-                                <label htmlFor="name" className="text"> Contact Number <span className="text-danger font-weight-bold">*</span></label>
-
-                                <MobileNumber
-                                  value={modalDirectorContact}
-                                  name="modalDirectorContact"
-                                  onChange={selectModalContactDirector}
-                                  // disable={modalDirectorContact && !isOpenLinkFlow ? true : false}
-                                  {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
-                                />
-                                {modalDirectorContact && modalDirectorContact.length > 0 && !modalDirectorContact.match(Digit.Utils.getPattern('MobileNo')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID")}</CardLabelError>}
-                              </Col>
-                              <Col md={3} xxl lg="4">
-                                <label htmlFor="name" className="text">Upload document</label>
-                                <input
-                                  type="file"
-                                  name="uploadPdf"
-                                  class="employee-card-input"
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "directorInfoPdf")}
-                                  {...(validation = {
-                                    isRequired: true,
-                                    title: "Please upload document"
-                                  })}
-                                />
-                              </Col>
-
-                            </Row>
-                          </form>
-                        </Modal.Body>
-                        <Modal.Footer>
-                          <Button variant="secondary" onClick={handleClose}>
-                            Close
-                          </Button>
-                          <Button variant="primary" onClick={handleDirectorsArrayValues}>
-                            Save Changes
-                          </Button>
-                        </Modal.Footer>
-                      </Modal>
-
+                      <input
+                        type="radio"
+                        value="N"
+                        checked={existingDirectors === "N" ? true : false}
+                        id="existingDirectorsN"
+                        className="mx-2 mt-1"
+                        onChange={(e) => setExistingDirectors(e.target.value)}
+                        name="existingDirectors"
+                      />
+                      <label for="No">No</label>
+                      {existingDirectors === 'Y' && (
+                        <div>
+                           <div>
+                            <button
+                              type="button"
+                              style={{
+                                color: "white",
+                              }}
+                              className="btn btn-primary my-3"
+                              onClick={handleShow}
+                            >
+                              Enter Details
+                            </button>
+                            <Modal show={show} onHide={handleClose} animation={false}>
+                              <Modal.Header closeButton>
+                                <Modal.Title>Add Directors Info</Modal.Title>
+                              </Modal.Header>
+                              <Modal.Body>
+                                <form className="text1">
+                                  <Row>
+                                    <Col md={3} xxl lg="4">
+                                      <label htmlFor="name" className="text">DIN Number <span className="text-danger font-weight-bold">*</span></label>
+                                      <MobileNumber
+                                        value={modalDIN}
+                                        name="modalDIN"
+                                        maxlength={"8"}
+                                        hideSpan="true"
+                                        // onChange={(e) => setModalDIN(e.target.value)}
+                                        onChange={selectDinNumber}
+                                        // disable={mobileNumber && !isOpenLinkFlow ? true : false}
+                                        {...{ required: true, pattern: "[1-9][0-9]{7}", type: "tel"}}
+                                      />
+                                      {/* <MobileNumber
+                                    
+                                    isMandatory={false}
+                                    onChange={(e) => setModalDIN(e.target.value.toUpperCase())}
+                                    placeholder=""
+                                    max= {8}
+                                    class="employee-card-input"
+                                    {...(validation = {
+                                      isRequired: true,
+                                      maxlength: "8",
+                                      type: "tel",
+                                      title: "Please Enter DIN No."
+                                    })}
+                                  /> */}
+                                      {modalDIN && modalDIN.length > 0 && !modalDIN.match(Digit.Utils.getPattern('DIN')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_DIN_NO")}</CardLabelError>}
+                                    </Col>
+                                    <Col md={3} xxl lg="4">
+                                      <label htmlFor="name" className="text">Name <span className="text-danger font-weight-bold">*</span></label>
+                                      <input
+                                        type="text"
+      
+                                        onChange={(e) => setModalDirectorName(e.target.value)}
+                                        placeholder=""
+                                        class="form-control"
+                                        {...(validation = {
+                                          isRequired: true,
+                                          pattern: "^[a-zA-Z ]*$",
+                                          type: "text",
+                                        })}
+                                      />
+                                      {modalDirectorName && modalDirectorName.length > 0 &&!modalDirectorName.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid Name")}</CardLabelError>}
+                                    </Col>
+                                    <Col md={3} xxl lg="4">
+                                      <label htmlFor="name" className="text"> Contact Number <span className="text-danger font-weight-bold">*</span></label>
+      
+                                      <MobileNumber
+                                        value={modalDirectorContact}
+                                        name="modalDirectorContact"
+                                        onChange={selectModalContactDirector}
+                                        // disable={modalDirectorContact && !isOpenLinkFlow ? true : false}
+                                        {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
+                                      />
+                                      {modalDirectorContact && modalDirectorContact.length > 0 && !modalDirectorContact.match(Digit.Utils.getPattern('MobileNo')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID")}</CardLabelError>}
+                                    </Col>
+                                    <Col md={3} xxl lg="4">
+                                      <label htmlFor="name" className="text">Upload document</label>
+                                      <input
+                                        type="file"
+                                        name="uploadPdf"
+                                        class="form-control"
+                                        onChange={(e) => getDocumentData(e?.target?.files[0], "directorInfoPdf")}
+                                        {...(validation = {
+                                          isRequired: true,
+                                          title: "Please upload document"
+                                        })}
+                                      />
+                                    </Col>
+      
+                                  </Row>
+                                </form>
+                              </Modal.Body>
+                              <Modal.Footer>
+                                <Button variant="secondary" onClick={handleClose}>
+                                  Close
+                                </Button>
+                                <Button 
+                                  variant="primary" 
+                                  onClick={handleDirectorsArrayValues}
+                                  disabled={!modalDIN || !modalDIN.match(Digit.Utils.getPattern('DIN')) || !modalDirectorName.match(Digit.Utils.getPattern('Name')) || !modalDirectorContact || !modalDirectorContact.match(Digit.Utils.getPattern('MobileNo'))}
+                                >
+                                  Save Changes
+                                </Button>
+                              </Modal.Footer>
+                            </Modal>
+      
+                          </div>
+                          <div className="table-bd">
+                            <table className="table table-bordered">
+                              <thead>
+                                <tr>
+                                  <th>Sr. No</th>
+                                  <th>DIN Number</th>
+                                  <th>Name</th>
+                                  <th>Contact Number</th>
+                                  <th>View Document</th>
+                                  <th>Action</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {
+                                  (DirectorData?.length > 0) ?
+                                    DirectorData.map((elementInArray, input) => {
+                                      return (
+                                        <tr key={input}>
+                                          <td>{input + 1}</td>
+                                          <td>
+                                            {elementInArray.din}
+                                          </td>
+                                          <td>
+                                            {elementInArray.name}
+                                          </td>
+                                          <td>
+                                            {elementInArray.contactNumber}
+                                          </td>
+                                          <td>
+                                            <div className="row">
+                                              {/* {JSON.stringify(elementInArray?.uploadPdf)} */}
+                                              {(elementInArray?.uploadPdf) ?
+                                                <button type="button" onClick={() => getDocShareholding(elementInArray?.uploadPdf)} className="btn btn-sm col-md-6 text-center">
+                                                  <VisibilityIcon color="info" className="icon" />
+                                                </button>
+                                                : <p></p>
+                                              }
+                                              <div className="btn btn-sm col-md-6">
+                                                <label for={"uploaddirectorInfoPdf" + input}>
+                                                  <FileUpload color="primary" for={"uploaddirectorInfoPdf" + input} />
+                                                </label>
+                                                <input
+                                                  id={"uploaddirectorInfoPdf" + input}
+                                                  type="file"
+                                                  style={{ display: "none" }}
+                                                  onChange={(e) => getDocumentData(e?.target?.files[0], "directorInfoPdf", "directorInfoPdf", input)}
+                                                />
+                                              </div>
+                                            </div>
+                                          </td>
+                                          <td>
+                                            <a href="javascript:void(0)"
+                                              onClick={() => (deleteDirectorTableRows(-1))}
+                                            >
+                                              <DeleteIcon color="danger" className="icon" />
+                                            </a>
+                                          </td>
+                                        </tr>
+                                      );
+                                    }) : <p></p>}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
+
+                  <Col md={12} >
+                    <Form.Group className="col-md-12">
+                      <CheckBox
+                        label={t("It is undertaken that the above information is true and correct for all facts and purposes.")}
+                        onChange={(e) => selectChecked(e)}
+                        value={isUndertaken}
+                        checked={isUndertaken}
+                        name={isUndertaken}
+                        style={{ paddingBottom: "10px", paddingTop: "10px" }}
+                      />
+                    </Form.Group>
+                  </Col>
 
                   <p className="ml-1">
                     In case the Partner/director of the applicant firm/company is common with any existing colonizer who has been granted a license under the 1975 act Yes/No.
@@ -1826,16 +1860,26 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                         {" "}
                                         Agreement between the proposed developer and existing colonizer
                                       </td>
-                                      <td align="center" size="large">
-                                        <input
+                                      <td align="center" style={{textAlign:'center'}} size="large">
+                                          <label for="aggreementBtwId">
+                                            <FileUpload color="primary" for="aggreementBtwId" />
+                                          </label>
+                                          <input
+                                            id="aggreementBtwId"
+                                            type="file"
+                                            accept="application/pdf"
+                                            style={{ display: "none" }}
+                                            onChange={(e) => getDocumentData(e?.target?.files[0], "aggreementBtw", "existingColonizer")}
+                                          />
+                                        {/* <input
                                           type="file"
                                           accept="application/pdf"
                                           name="agreementDoc"
                                           onChange={(e) => getDocumentData(e?.target?.files[0], "aggreementBtw", "existingColonizer")}
                                           class="employee-card-input"
-                                        />
+                                        /> */}
                                       </td>
-                                      <td>
+                                      <td style={{textAlign:'center'}}>
                                         {existingColonizerDetails.aggreementBtw ?
                                           <button type="button" onClick={() => getDocShareholding(existingColonizerDetails.aggreementBtw)} className="btn btn-sm col-md-6">
                                             <VisibilityIcon color="info" className="icon" />
@@ -1848,16 +1892,21 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                       <td>
                                         Board resolution of authorised signatory of the existing colonizer
                                       </td>
-                                      <td align="center" size="large">
+                                      <td align="center" style={{textAlign:'center'}} size="large">
+                                        <label for="boardResolutionId">
+                                          <FileUpload color="primary" for="boardResolutionId" />
+                                        </label>
                                         <input
+                                          id="boardResolutionId"
                                           type="file"
                                           accept="application/pdf"
                                           name="boardDoc"
+                                          style={{ display: "none" }}
                                           onChange={(e) => getDocumentData(e?.target?.files[0], "boardResolution", "existingColonizer")}
                                           class="employee-card-input"
                                         />
                                       </td>
-                                      <td>
+                                      <td style={{textAlign:'center'}}>
                                         {existingColonizerDetails.boardResolution ?
                                           <button type="button" onClick={() => getDocShareholding(existingColonizerDetails.boardResolution)} className="btn btn-sm col-md-6">
                                             <VisibilityIcon color="info" className="icon" />
@@ -1873,50 +1922,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                         </div>
 
                         <div className="row mx-2">
-
                           {/* <div className="col col-4">
-                        <div className="form-group">
-                          <label htmlFor="name">Name</label>
-                          <input
-                            type="text"
-                            value={existingColonizerDetails.name}
-                            name="name"
-                            // onChange={SelectName}
-                            onChange={(e) => setExistingColonizerDetails({...existingColonizerDetails,name:e.target.value})}
-                            className="employee-card-input"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="col col-4">
-                        <div className="form-group">
-                          <label htmlFor="mobile">Mobile</label>
-                          <input
-                            type="text"
-                            value={existingColonizerDetails.mobile}
-                            name="mobile"
-                            // onChange={SelectName}
-                            onChange={(e) => setExistingColonizerDetails({...existingColonizerDetails,mobile:e.target.value})}
-                            className="employee-card-input"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="col col-4">
-                        <div className="form-group">
-                          <label htmlFor="email">Email ID</label>
-                          <input
-                            type="text"
-                            value={existingColonizerDetails.email}
-                            name="email"
-                            // onChange={SelectName}
-                            onChange={(e) => setExistingColonizerDetails({...existingColonizerDetails,email:e.target.value})}
-                            className="employee-card-input"
-                          />
-                        </div>
-                      </div> */}
-
-                          <div className="col col-4">
                             <div className="form-group">
                               <label htmlFor="dob">DOB <span className="text-danger font-weight-bold">*</span></label>
                               <input
@@ -1929,9 +1935,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                 max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear() - 18))}
                               />
                             </div>
-                          </div>
+                          </div> */}
 
-                          <div className="col col-4">
+                          {/* <div className="col col-4">
                             <div className="form-group">
                               <label htmlFor="pan">PAN Number <span className="text-danger font-weight-bold">*</span></label>
                               <input
@@ -1945,7 +1951,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                               />
                               {existingColonizerDetails.pan && existingColonizerDetails.pan.length > 0 && !existingColonizerDetails.pan.match(Digit.Utils.getPattern('PAN')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_PAN_NO")}</CardLabelError>}
                             </div>
-                          </div>
+                          </div> */}
 
                           <div className="col col-4">
                             <div className="form-group">
@@ -1955,16 +1961,33 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                 value={existingColonizerDetails.licNo}
                                 name="licNo"
                                 // onChange={SelectName}
-                                onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, licNo: e.target.value })}
+                                onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, licNo: e.target.value.toUpperCase() })}
                                 className="employee-card-input"
-                                maxLength={10}
+                                maxLength={11}
                               />
+                              {existingColonizerDetails.licNo && existingColonizerDetails.licNo.length > 0 && !existingColonizerDetails.licNo.match(Digit.Utils.getPattern('LicNumber')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Invalid Licence No.")}</CardLabelError>}
                             </div>
                           </div>
 
                           <div className="col col-4">
                             <div className="form-group">
-                              <label htmlFor="licDate">Date <span className="text-danger font-weight-bold">*</span></label>
+                              <label htmlFor="name">Name of Developer <span className="text-danger font-weight-bold">*</span></label>
+                              <input
+                                type="text"
+                                value={existingColonizerDetails.name}
+                                name="name"
+                                // onChange={SelectName}
+                                onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, name: e.target.value.toUpperCase() })}
+                                className="employee-card-input"
+                                maxLength={10}
+                              />
+                              {existingColonizerDetails.name && existingColonizerDetails.name.length > 0 && !existingColonizerDetails.name.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid name.")}</CardLabelError>}
+                            </div>
+                          </div>
+
+                          <div className="col col-4">
+                            <div className="form-group">
+                              <label htmlFor="licDate">Date of Grant of Licence <span className="text-danger font-weight-bold">*</span></label>
                               <input
                                 type="date"
                                 value={existingColonizerDetails.licDate}
@@ -1995,7 +2018,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             </div>
                           </div>
 
-                          <div className="col col-4">
+                          {/* <div className="col col-4">
                             <div className="form-group">
                               <label htmlFor="licValidity">Select Purpose</label>
                               <Select
@@ -2016,7 +2039,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                               </Select>
 
                             </div>
-                          </div>
+                          </div> */}
 
 
                         </div>
@@ -2266,300 +2289,12 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                   </div>
                 </div>
               )}
-              {/* {showDevTypeFields === "LLP" && (
-            <div className="card mb-3">
-            <h5 className="card-title fw-bold">Shareholding Patterns</h5>
-              <div className="card-body">
-                <div className="table-bd">
-                  <table className="table table-bordered">
-                    <thead>
-                      <tr>
-                        <th>Sr. No</th>
-                        <th>Name</th>
-                        <th>Designition</th>
-                        <th>Percentage</th>
-                        <th>View PDF</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {
-                        ( modalValuesArray.length>0)?
-                        modalValuesArray.map((elementInArray, input) => {
-                          return (
-                            <tr>
-                              <td>{input+ 1}</td>
-                              <td>
-                                <input
-                                  type="text"
-                                  value={elementInArray.name}
-                                  placeholder={elementInArray.name}
-                                  readOnly
-                                  disabled="disabled"
-                                  class="employee-card-input"
-                                />
-                              </td>
-                              <td>
-                                <input
-                                  type="text"
-                                  value={elementInArray.designition}
-                                  placeholder={elementInArray.designition}
-                                  readOnly
-                                  disabled="disabled"
-                                  class="employee-card-input"
-                                />
-                              </td>
-                              <td>
-                                <input
-                                  type="text"
-                                  value={elementInArray.percentage}
-                                  placeholder={elementInArray.percentage}
-                                  readOnly
-                                  disabled="disabled"
-                                  class="employee-card-input"
-                                />
-                              </td>
-                              <td>
-                                <div className="text-center">
-                                  <button className="btn btn-success btn-sm">View</button>
-                                </div>
-                              </td>
-                            </tr>
-                          );
-                        })
-                        :
-                        <p className="text-danger text-center">Click on the Add More Button</p>
-                      }
-                    </tbody>
-                  </table>
-                </div> */}
-              {/* <div className="form-group col-md2 mt-4">
-                      <button  className="btn btn-success" >Add More
-                        
-                      </button>
-                    </div> */}
-
-              {/* <button
-                    type="button"
-                    style={{ float: "left" }}
-                    className="btn btn-primary"
-                    onClick={() => setNoOfRows(noofRows + 1)}
-                  >
-                    Add More
-                  </button> */}
-              {/* <div>
-                  <button
-                    type="button"
-                    style={{
-                      color: "white",
-                    }}
-                    className="btn btn-primary mt-3"
-                    // onClick={() => setNoOfRows(noofRows + 1)}
-                    onClick={() => setmodal(true)}
-                  >
-                    Add More
-                  </button>
-
-                  <div>
-                    <Modal
-                      size="lg"
-                      isOpen={modal}
-                      toggle={() => setmodal(!modal)}
-                    >
-                      <ModalHeader
-                        toggle={() => setmodal(!modal)}
-                      ></ModalHeader>
-
-                      <ModalBody>
-                        <div className="card2">
-                          <div className="popupcard">
-                            
-                            <form className="text1">
-                              <Row>
-                                <Col md={3} xxl lg="4">
-                                  <label htmlFor="name" className="text">Name *</label>
-                                  <input
-                                    type="text"
-                                    
-                                    onChange={(e)=>setModalNAme(e.target.value)}
-                                    placeholder=""
-                                    class="employee-card-input"
-                                    {...(validation = {
-                                      isRequired: true,
-                                      pattern: "^[a-zA-Z]*$",
-                                      type: "text",
-                                      title: "Please Enter Name"
-                                    })}
-                                  />
-                                </Col>
-                                <Col md={3} xxl lg="4">
-                                  <label htmlFor="name" className="text"> Designition *</label>
-                                  <input
-                                    type="text"
-                                    
-                                    onChange={(e)=>setModaldesignition(e.target.value)}
-                                    placeholder=""
-                                    class="employee-card-input"
-                                    {...(validation = {
-                                      isRequired: true,
-                                      pattern: "^[a-zA-Z]*$",
-                                      type: "text",
-                                      title: "Please Enter Designition"
-                                    })}
-                                  />
-                                </Col>
-
-                                <Col md={3} xxl lg="4">
-                                  <label htmlFor="name" className="text">Percentage *</label>
-                                  <input
-                                    type="flot"
-                                    
-                                    onChange={(e)=>setModalPercentage(e.target.value)}
-                                    placeholder=""
-                                    class="employee-card-input"
-                                    {...(validation = {
-                                      isRequired: true,
-                                      pattern: "^[a-zA-Z]*$",
-                                      type: "text",
-                                      title: "Please Enter Percentage"
-                                    })}
-                                  />
-                                </Col>
-                                <Col md={3} xxl lg="4">
-                                  <label htmlFor="name" className="text">Upload PDF</label>
-                                  <input
-                                    type="file"
-                                    value={uploadPdf}
-                                    placeholder=""
-                                    class="employee-card-input"
-                                    {...(validation = {
-                                      isRequired: true,
-                                      pattern: "^[a-zA-Z]*$",
-                                      type: "text",
-                                      title: "Please upload document"
-                                    })}
-                                  />
-                                </Col>
-
-                              </Row>
-                            </form>
-
-                          </div>
-                          <div className="submit-btn">
-                            <div className="form-group col-md6 mt-6">
-                              <button
-                                type="button"
-                                style={{ float: "right" }}
-                                className="btn btn-success"
-                                onClick={handleArrayValues}
-                              >
-                                Submit
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </ModalBody>
-                      <ModalFooter
-                        toggle={() => setmodal(!modal)}
-                      ></ModalFooter>
-                    </Modal>
-                  </div>
-                </div> */}
-              {/* <button
-                    type="button"
-                    style={{ float: "right" }}
-                    className="btn btn-danger"
-                    onClick={() => setNoOfRows(noofRows - 1)}
-                  >
-                    Remove
-                  </button> */}
-
-              {/* <div className="form-group">
-                      <button type="submit" className="btn btn-success">
-                        {" "}
-                        Save{" "}
-                      </button>
-                    </div> */}
-              {/* </div>
-            </div>
-             )}
-            {showDevTypeFields === "LLP" && (
-            <div className="card mb-3">
-            <h5 className="card-title fw-bold">Directors Information</h5>
-              <div className="card-body">
-                <div className="table-bd">
-                  <table className="table table-bordered">
-                    <thead>
-                      <tr>
-                        <th>Sr. No</th>
-                        <th>DIN Number</th>
-                        <th>Name</th>
-                        <th>Contact Number</th>
-                        <th>Upload PDF</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {
-                      (DirectorData.length>0)?
-                      DirectorData.map((elementInArray, input) => {
-                        return (
-                          <tr key={input}>
-                            <td>{input}</td>
-                            <td>
-                              <input
-                                type="text"
-                                disabled="disabled"
-                                value={elementInArray.din}
-                                placeholder={elementInArray.din}
-                                class="employee-card-input"
-                              />
-                            </td>
-                            <td>
-                              <input
-                                type="text"
-                                disabled="disabled"
-                                value={elementInArray.name}
-                                placeholder={elementInArray.name}
-                                class="employee-card-input"
-                              />
-                            </td>
-                            <td>
-                              <input
-                                type="text"
-                                disabled="disabled"
-                                value={elementInArray.contactNumber}
-                                placeholder={elementInArray.contactNumber}
-                                class="employee-card-input"
-                              />
-                            </td>
-                            <td>
-                              <input
-                                type="file"
-                                value={uploadPdf}
-                                placeholder=""
-                                class="employee-card-input"
-                              />
-                            </td>
-                          </tr>
-                        );
-                      }):<p></p>}
-                    </tbody>
-                  </table>
-                </div>
-                
-              </div>
-            </div>
-            )} */}
-              {/* <div className="col-md-12 text-end">
-              <button
-                className="btn btn-success"
-              >
-                Save and Continue
-              </button>
-            </div> */}
+              
 
 
             </div>
-
+            {showToast && <Toast success={showToast?.key === "success" ? true : false} label="Document Uploaded Successfully" isDleteBtn={true} onClose={() => { setShowToast(null); setError(null); }} />}
+            {showToastError && <Toast error={showToastError?.key === "error" ? true : false} label="Duplicate file Selected" isDleteBtn={true} onClose={() => { setShowToastError(null); setError(null); }} />}
           </FormStep> : <Loader />}
       </div>
     </div>
