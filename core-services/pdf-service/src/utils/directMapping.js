@@ -108,7 +108,18 @@ export const directMapping = async (
           message: `error while loading image from: ${directArr[i].url}`
         };
       }
-    } else if (directArr[i].type == "array") {
+    }
+    else if (directArr[i].type == "base64") {
+      try {
+        variableTovalueMap[directArr[i].jPath] = directArr[i].format;
+      } catch (error) {
+        logger.error(error.stack || error);
+        throw {
+          message: `error while loading image`,
+        };
+      }
+    }
+    else if (directArr[i].type == "array") {
       let arrayOfOwnerObject = [];
       // let ownerObject = JSON.parse(JSON.stringify(get(formatconfig, directArr[i].jPath + "[0]", [])));
 
