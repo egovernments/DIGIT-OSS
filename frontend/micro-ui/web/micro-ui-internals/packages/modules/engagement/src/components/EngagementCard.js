@@ -146,15 +146,15 @@ const EngagementCard = () => {
     kpis: [
       {
         count: totalDocsCount,
-        label: t("SERVICE_PLAN"),
-        link: `/digit-ui/employee/engagement/servicplan/inbox`,
+        label: t("SERVICE_PLAN_CARD"),
+        link: `/digit-ui/employee/obps/servicePlanInbox`,
       },
     ],
     links: [
       {
         count: totalDocsCount,
         label: t("ES_TITLE_INBOX"),
-        link: `/digit-ui/employee/engagement/serviceplan/inbox`,
+        link: `/digit-ui/employee/obps/servicePlanInbox`,
       }
     ],
   };
@@ -165,15 +165,15 @@ const EngagementCard = () => {
     kpis: [
       {
         count: totalDocsCount,
-        label: t("ELECTRIC_PLAN"),
-        link: `/digit-ui/employee/engagement/electricplan/inbox`,
+        label: t("ELECTRIC_PLAN_CARD"),
+        link: `/digit-ui/employee/obps/electricplan/inbox`,
       },
     ],
     links: [
       {
         count: totalDocsCount,
         label: t("ES_TITLE_INBOX"),
-        link: `/digit-ui/employee/engagement/electricplan/inbox`,
+        link: `/digit-ui/employee/obps/electricplan/inbox`,
       }
     ],
   };
