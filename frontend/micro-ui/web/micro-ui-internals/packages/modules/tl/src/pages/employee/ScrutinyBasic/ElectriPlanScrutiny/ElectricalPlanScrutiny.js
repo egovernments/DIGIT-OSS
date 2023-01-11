@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Card, Row, Col, Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 // import axios from "axios";
@@ -7,7 +7,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 // import FileDownload from "@mui/icons-material/FileDownload";
 import Visibility from "@mui/icons-material/Visibility";
 import FileDownload from "@mui/icons-material/FileDownload";
-// import { getDocShareholding } from "../ScrutinyDevelopment/docview.helper";
+import { getDocShareholding } from "../ScrutinyDevelopment/docview.helper";
 import ModalChild from "../Remarks/ModalChild/"
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import '../css/personalInfoChild.style.js'
@@ -15,120 +15,140 @@ import { useStyles } from "../css/personalInfoChild.style.js"
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import Collapse from "react-bootstrap/Collapse";
-
+import { IconButton } from "@mui/material";
+import { ScrutinyRemarksContext } from "../../../../../context/remarks-data-context";
 
 const ElectricalPlanScrutiny = (props) => {
+  
 
-    const [selects, setSelects] = useState();
-    const [showhide, setShowhide] = useState("");
-    const [open2, setOpen2] = useState(false);
+  const [selects, setSelects] = useState();
+  const [showhide, setShowhide] = useState("");
+  const [open2, setOpen2] = useState(false);
+  const {remarksData,iconStates} = useContext(ScrutinyRemarksContext);
 
-    const handleshowhide = (event) => {
-      const getuser = event.target.value;
+ const dataIcons = props.dataForIcons;
+ const apiResponse = props.apiResponse
+//  apiResponse,refreshScrutinyData, applicationNumber,iconStates
+  const handleshowhide = (event) => {
+    const getuser = event.target.value;
 
-      setShowhide(getuser);
-    };
-    const {
-      register,
-      handleSubmit,
-      formState: { errors },
-      control,
-      setValue,
-    } = useForm({});
+    setShowhide(getuser);
+  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+    setValue,
+  } = useForm({});
 
+  const servicePlan = (data) => console.log(data);
 
-    const servicePlan = (data) => console.log(data);
+  const classes = useStyles();
+  const currentRemarks = (data) => {
+    props.showTable({ data: data.data });
+  };
 
-    const classes = useStyles();
-    const currentRemarks = (data) => {
-      props.showTable({ data: data.data });
-    };
+  const [smShow, setSmShow] = useState(false);
+  const [labelValue, setLabelValue] = useState("");
+  const Colors = {
+    approved: "#09cb3d",
+    disapproved: "#ff0000",
+    info: "#FFB602",
+  };
 
-
-    const [smShow, setSmShow] = useState(false);
-    const [labelValue, setLabelValue] = useState("");
-    const Colors = {
-      approved:"#09cb3d",
-      disapproved:"#ff0000",
-      info:"#FFB602"
+  const handlemodaldData = (data) => {
+    // setmodaldData(data.data);
+    setSmShow(false);
+    console.log("here", openedModal, data);
+    if (openedModal && data) {
+      setFieldIconColors({ ...fieldIconColors, [openedModal]: data.data.isApproved ? Colors.approved : Colors.disapproved });
     }
+    setOpennedModal("");
+    setLabelValue("");
+  };
+  const [selectedFieldData, setSelectedFieldData] = useState();
+  const [fieldValue, setFieldValue] = useState("");
+  const [openedModal, setOpennedModal] = useState("");
+  const [fieldIconColors, setFieldIconColors] = useState({
+    loiNumber: Colors.info,
+    electricalInfra: Colors.info,
+    elecricDistribution: Colors.info,
+    electricalCapacity: Colors.info,
+    switchingStation: Colors.info,
+    loadSancation: Colors.info,
+    selfCenteredDrawings: Colors.info,
+    autoCad: Colors.info,
+    pdfFormat: Colors.info,
+    environmentalClearance: Colors.info,
+    verifiedPlan: Colors.info,
+    state: Colors.info,
+    type: Colors.info,
+    lciSignedBy: Colors.info,
+    lciNotSigned: Colors.info,
+    parmanentAddress: Colors.info,
+    addressForCommunication: Colors.info,
+    authPerson: Colors.info,
+    emailForCommunication: Colors.info,
+  });
 
-    const handlemodaldData = (data) => {
-      // setmodaldData(data.data);
-      setSmShow(false);
-      console.log("here",openedModal,data);
-      if(openedModal && data){
-        setFieldIconColors({...fieldIconColors,[openedModal]:data.data.isApproved?Colors.approved:Colors.disapproved})
+  const fieldIdList = [
+    { label: "LOI Number", key: "loiNumber" },
+    { label: "Electrical infrastructure sufficient to cater for the electrical need of the project area", key: "electricalInfra" },
+    { label: "Provision of the electricity distribution in the project area by the instructions of the DHBVN", key: "elecricDistribution" },
+    { label: "The capacity of the proposed electrical substation as per the requirement", key: "electricalCapacity" },
+    { label: "Provision of 33 Kv switching station for the electrical infrastructure as per the approved layout plan", key: "switchingStation" },
+    { label: "Load sanction approval as per the requirement", key: "loadSancation" },
+    { label: "Self-certified drawings from empanelled/certified architects that conform to the standard approved template.", key: "selfCenteredDrawings" },
+    { label: "Environmental Clearance", key: "environmentalClearance" },
+    { label: "PDF (OCR Compatible) + GIS format (shapefile as per the template uploaded on the department website).", key: "pdfFormat" },
+    { label: "AutoCAD (DXF) file.", key: "autoCad" },
+    { label: "Certified copy of the plan verified by a third party.", key: "verifiedPlan" }
+  ];
+
+
+  const getColorofFieldIcon = () => {
+    let tempFieldColorState = fieldIconColors;
+    fieldIdList.forEach((item) => {
+      if (dataIcons !== null && dataIcons !== undefined) {
+        console.log("color method called");
+        const fieldPresent = dataIcons.egScrutiny.filter(ele => (ele.fieldIdL === item.label));
+        console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
+        if (fieldPresent && fieldPresent.length) {
+          console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
+          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved ? Colors.approved : Colors.disapproved }
+
+        }
       }
-        setOpennedModal("");
-        setLabelValue("");
-    };
-    const [selectedFieldData,setSelectedFieldData] = useState();
-    const [fieldValue, setFieldValue] = useState("");
-    const [openedModal, setOpennedModal] = useState("")
-    const [fieldIconColors, setFieldIconColors] = useState({
-        loiNO: Colors.info,
-        UploadedYN: Colors.info,
-        Undertaking: Colors.info,
-        Selfcertified: Colors.info,
-        environmental : Colors.info,
-        template: Colors.info,
-        certified: Colors.info,
-        AutoCAD: Colors.info,
-      pin: Colors.info,
-      tehsil: Colors.info,
-      district: Colors.info,
-      state: Colors.info,
-      type: Colors.info,
-      lciSignedBy: Colors.info,
-      lciNotSigned: Colors.info,
-      parmanentAddress: Colors.info,
-      addressForCommunication: Colors.info,
-      authPerson: Colors.info,
-      emailForCommunication: Colors.info
     })
 
-    const fieldIdList = [{label:"LOI Number",key:"loiNO"},{label:"Uploaded Service Plan",key:"UploadedYN"},
-    {label:"Undertaking Mobile No",key:"Undertaking"},
-    {label:"Self-certified drawings from empanelled/certified architects that conform to the standard approved template.",key:"Selfcertified"},
-    {label:"Environmental Clearance.",key:"environmental"}
-    ,{label:"PDF (OCR Compatible) + GIS format (shapefile as per the template uploaded on the department website).",key:"template"},
-    {label:"Certified copy of the plan verified by a third party",key:"certified"},
-    {label:"AutoCAD (DXF) file.",key:"AutoCAD"}
-    ]
-  //////////////////////////////////////////////////////////////
-  const getSubmitDataLabel = async () => {
-      try {
-        const postDistrict = {
-          requestInfo: {
-            api_id: "1",
-            ver: "1",
-            ts: null,
-            action: "create",
-            did: "",
-            key: "",
-            msg_id: "",
-            requester_id: "",
-            auth_token: null,
-          },
-        };
+    setFieldIconColors(tempFieldColorState);
 
-        const Resp = await axios.post(`http://10.1.1.18:80/land-services/serviceplan/_get?loiNumber=123`, postDistrict);
-      } catch (error) {
-        console.log(error.message);
-      }
-    };
-    useEffect(() => {
-      getSubmitDataLabel();
-    }, []);
+  };
+
+
+  useEffect(() => {
+    getColorofFieldIcon();
+    console.log("repeating1...",)
+  }, [dataIcons])
+
+  useEffect(() => {
+    if (labelValue) {
+      const fieldPresent = dataIcons.egScrutiny.filter(ele => (ele.fieldIdL === labelValue));
+      setSelectedFieldData(fieldPresent[0]);
+    } else {
+      setSelectedFieldData(null);
+    }
+  }, [labelValue])
 
 
 
 
+  console.log("Digit123", apiResponse );
 
   return (
     <form 
-    // onSubmit={handleSubmit(ElectricalPlanScrutiny)}
+    
     >
     <div
   className="collapse-header"
@@ -162,16 +182,7 @@ const ElectricalPlanScrutiny = (props) => {
         style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}
         >
           <Row className="ml-auto" style={{ marginBottom: 5 }}>
-            {/* <Col md={4} xxl lg="4">
-              <div>
-                <Form.Label>
-                  <h2>
-                    LOI Number <span style={{ color: "red" }}>*</span>
-                  </h2>
-                </Form.Label>
-              </div>
-              <input type="number" className="form-control" placeholder="" {...register("loiNumber")} />
-            </Col> */}
+          
             <Col className="col-4">
               {/* <Form.Group as={Col} controlId="formGridLicence"> */}
                <div>
@@ -183,19 +194,19 @@ const ElectricalPlanScrutiny = (props) => {
             <div className={classes.fieldContainer}>
             <Form.Control
               className={classes.formControl}
-              placeholder=""
+              placeholder={apiResponse?.loiNumber}
               disabled
             ></Form.Control>
 
                 <ReportProblemIcon
               style={{
-                color:fieldIconColors.loiNO }}
+                color:fieldIconColors.loiNumber }}
               onClick={() => {
-                  setOpennedModal("LOI Number")
+                  setOpennedModal("loiNumber")
                   setLabelValue("LOI Number"),
                   setSmShow(true),
                   console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                  setFieldValue(apiResponse !== null ? apiResponse?.loiNumber : null);
               }}
             ></ReportProblemIcon>
              <ModalChild
@@ -221,7 +232,7 @@ const ElectricalPlanScrutiny = (props) => {
                     value="Yes"
 
                     className="mx-2 mt-1"
-                    // checked={capacityScrutinyInfo?.designatedDirectors === "Y" ?true:false}
+                    checked={apiResponse?.electricalInfra  === "Y" ?true:false}
                     // onChange={(e) => handleChange(e.target.value)}
                     // 
                     // onClick={handleshow}
@@ -234,53 +245,24 @@ const ElectricalPlanScrutiny = (props) => {
                     value="No"
 
                     className="mx-2 mt-1"
-                    // checked={capacityScrutinyInfo?.designatedDirectors === "N" ?true:false}
-                    // onChange={(e) => handleChange(e.target.value)}
-                    // 
-                    // onClick={handleshow}
+                    checked={apiResponse?.electricalInfra  === "N" ?true:false}
+                  
                     disabled
                   />
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
               style={{
-                color:fieldIconColors.loiNO }}
+                color:fieldIconColors.electricalInfra }}
               onClick={() => {
-                  setOpennedModal("LOI Number")
-                  setLabelValue("LOI Number"),
+                  setOpennedModal("electricalInfra")
+                  setLabelValue("Electrical infrastructure sufficient to cater for the electrical need of the project area"),
                   setSmShow(true),
                   console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                  setFieldValue(apiResponse !== null ? apiResponse.electricalInfra : null);
               }}
             ></ReportProblemIcon>
                 </div>
-              {/* <div>
-                <Form.Label>
-                  <h2>
-                    Electrical infrastructure sufficient to cater for the electrical need of the project area <span style={{ color: "red" }}>*</span>{" "}
-                    &nbsp;&nbsp;
-                  </h2>
-                </Form.Label>
-                <Form.Check
-                  onChange={(e) => console.log(e)}
-                  value="true"
-                  type="radio"
-                  id="default-radio"
-                  label="Yes"
-                  name="true"
-                  {...register("electricInfra")}
-                  inline
-                ></Form.Check>
-                <Form.Check
-                  onChange={(e) => console.log(e)}
-                  value="false"
-                  type="radio"
-                  id="default-radio"
-                  label="No"
-                  name="false"
-                  {...register("electricInfra")}
-                  inline
-                ></Form.Check>
-              </div> */}
+              
             </Col>
             <Col className="ms-auto" md={4} xxl lg="4">
             <p className="ml-3">
@@ -293,6 +275,7 @@ const ElectricalPlanScrutiny = (props) => {
                     value="Yes"
 
                     className="mx-2 mt-1"
+                    checked={apiResponse?.elecricDistribution  === "true" ?true:false}
                     // checked={capacityScrutinyInfo?.designatedDirectors === "Y" ?true:false}
                     // onChange={(e) => handleChange(e.target.value)}
                     // 
@@ -306,6 +289,7 @@ const ElectricalPlanScrutiny = (props) => {
                     value="No"
 
                     className="mx-2 mt-1"
+                    checked={apiResponse?.elecricDistribution  === "false" ?true:false}
                     // checked={capacityScrutinyInfo?.designatedDirectors === "N" ?true:false}
                     // onChange={(e) => handleChange(e.target.value)}
                     // 
@@ -315,13 +299,13 @@ const ElectricalPlanScrutiny = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
               style={{
-                color:fieldIconColors.loiNO }}
+                color:fieldIconColors.elecricDistribution }}
               onClick={() => {
-                  setOpennedModal("LOI Number")
-                  setLabelValue("LOI Number"),
+                  setOpennedModal("elecricDistribution")
+                  setLabelValue("Provision of the electricity distribution in the project area by the instructions of the DHBVN"),
                   setSmShow(true),
                   console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                  setFieldValue(apiResponse !== null ? apiResponse?.elecricDistributionr : null);
               }}
             ></ReportProblemIcon>
                 </div>
@@ -363,6 +347,7 @@ const ElectricalPlanScrutiny = (props) => {
                     value="Yes"
 
                     className="mx-2 mt-1"
+                    checked={apiResponse?.electricalCapacity  === "true" ?true:false}
                     // checked={capacityScrutinyInfo?.designatedDirectors === "Y" ?true:false}
                     // onChange={(e) => handleChange(e.target.value)}
                     // 
@@ -376,79 +361,28 @@ const ElectricalPlanScrutiny = (props) => {
                     value="No"
 
                     className="mx-2 mt-1"
-                    // checked={capacityScrutinyInfo?.designatedDirectors === "N" ?true:false}
-                    // onChange={(e) => handleChange(e.target.value)}
-                    // 
-                    // onClick={handleshow}
+                    checked={apiResponse?.electricalCapacity  === "flase" ?true:false}
+                    
                     disabled
                   />
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
               style={{
-                color:fieldIconColors.loiNO }}
+                color:fieldIconColors.electricalCapacity }}
               onClick={() => {
-                  setOpennedModal("LOI Number")
-                  setLabelValue("LOI Number"),
+                  setOpennedModal("electricalCapacity")
+                  setLabelValue("The capacity of the proposed electrical substation as per the requirement"),
                   setSmShow(true),
                   console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                  setFieldValue(apiResponse !== null ? apiResponse.electricalCapacity : null);
               }}
             ></ReportProblemIcon>
                 </div>
 
-              {/* <div>
-                <Form.Label>
-                  The capacity of the proposed electrical substation as per the requirement <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-                </Form.Label>
-              </div>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="true"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="true"
-                {...register("electricalCapacity")}
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="false"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="false"
-                {...register("electricalCapacity")}
-                inline
-              ></Form.Check> */}
+              
             </Col>
             <Col className="ms-auto" md={4} xxl lg="4">
-              {/* <div>
-                <Form.Label>
-                  Provision of 33 Kv switching station for the electrical infrastructure as per the approved layout plan
-                  <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-                </Form.Label>
-              </div>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="true"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="true"
-                {...register("switchingStation")}
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="false"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="false"
-                {...register("switchingStation")}
-                inline
-              ></Form.Check> */}
+              
                 <p className="ml-3">
                 Provision of 33 Kv switching station for the electrical infrastructure as per the approved layout plan <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;{" "}
 
@@ -459,6 +393,7 @@ const ElectricalPlanScrutiny = (props) => {
                     value="Yes"
 
                     className="mx-2 mt-1"
+                    checked={apiResponse?.switchingStation  === "true" ?true:false}
                     // checked={capacityScrutinyInfo?.designatedDirectors === "Y" ?true:false}
                     // onChange={(e) => handleChange(e.target.value)}
                     // 
@@ -472,6 +407,7 @@ const ElectricalPlanScrutiny = (props) => {
                     value="No"
 
                     className="mx-2 mt-1"
+                    checked={apiResponse?.switchingStation  === "false" ?true:false}
                     // checked={capacityScrutinyInfo?.designatedDirectors === "N" ?true:false}
                     // onChange={(e) => handleChange(e.target.value)}
                     // 
@@ -481,43 +417,19 @@ const ElectricalPlanScrutiny = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
               style={{
-                color:fieldIconColors.loiNO }}
+                color:fieldIconColors.switchingStation }}
               onClick={() => {
-                  setOpennedModal("LOI Number")
-                  setLabelValue("LOI Number"),
+                  setOpennedModal("switchingStation")
+                  setLabelValue("Provision of 33 Kv switching station for the electrical infrastructure as per the approved layout plan"),
                   setSmShow(true),
                   console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                  setFieldValue(apiResponse !== null ? apiResponse.switchingStation : null);
               }}
             ></ReportProblemIcon>
                 </div>
             </Col>
             <Col className="ms-auto" md={4} xxl lg="4">
-              {/* <div>
-                <Form.Label>
-                  Load sanction approval as per the requirement <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-                </Form.Label>
-              </div>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="true"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="true"
-                {...register("LoadSancation")}
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="false"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="false"
-                {...register("LoadSancation")}
-                inline
-              ></Form.Check> */}
+              
                 <p className="ml-3">
                 Load sanction approval as per the requirement <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
 
@@ -528,6 +440,7 @@ const ElectricalPlanScrutiny = (props) => {
                     value="Yes"
 
                     className="mx-2 mt-1"
+                    checked={apiResponse?.loadSancation  === "true" ?true:false}
                     // checked={capacityScrutinyInfo?.designatedDirectors === "Y" ?true:false}
                     // onChange={(e) => handleChange(e.target.value)}
                     // 
@@ -541,6 +454,7 @@ const ElectricalPlanScrutiny = (props) => {
                     value="No"
 
                     className="mx-2 mt-1"
+                    checked={apiResponse?.loadSancation  === "false" ?true:false}
                     // checked={capacityScrutinyInfo?.designatedDirectors === "N" ?true:false}
                     // onChange={(e) => handleChange(e.target.value)}
                     // 
@@ -550,18 +464,18 @@ const ElectricalPlanScrutiny = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
               style={{
-                color:fieldIconColors.loiNO }}
+                color:fieldIconColors.loadSancation }}
               onClick={() => {
-                  setOpennedModal("LOI Number")
-                  setLabelValue("LOI Number"),
+                  setOpennedModal("loadSancation")
+                  setLabelValue("Load sanction approval as per the requirement"),
                   setSmShow(true),
                   console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                  setFieldValue(apiResponse !== null ? apiResponse.loadSancation : null);
               }}
             ></ReportProblemIcon>
                 </div>
             </Col>
-            <Col className="ms-auto" md={4} xxl lg="4"></Col>
+            {/* <Col className="ms-auto" md={4} xxl lg="4"></Col> */}
           </Row>
 <br></br>
           <div className="table table-bordered table-responsive">
@@ -585,26 +499,26 @@ const ElectricalPlanScrutiny = (props) => {
                 <td component="th" scope="row">
                   {/* <input type="file" className="form-control" {...register("selfCenteredDrawings")} /> */}
                   <div className="btn btn-sm col-md-4">
-                        {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.selfCenteredDrawings)}>
                         <Visibility color="info" className="icon" />
-                        {/* </IconButton> */}
+                        </IconButton>
                       </div>
 
                       <div className="btn btn-sm col-md-4">
-                        {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.selfCenteredDrawings)}>
                         <FileDownload color="primary" className="mx-1" />
-                        {/* </IconButton> */}
+                        </IconButton>
                       </div>
                       <div className="btn btn-sm col-md-4">
                   <ReportProblemIcon
               style={{
-                color:fieldIconColors.loiNO }}
+                color:fieldIconColors.selfCenteredDrawings }}
               onClick={() => {
                   setOpennedModal("Selfcertified")
                   setLabelValue("Self-certified drawings from empanelled/certified architects that conform to the standard approved template."),
                   setSmShow(true),
                   console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                  setFieldValue(apiResponse !== null ? apiResponse.selfCenteredDrawings : null);
               }}
             ></ReportProblemIcon>
       </div>
@@ -622,26 +536,26 @@ const ElectricalPlanScrutiny = (props) => {
                 <td component="th" scope="row">
                   {/* <input type="file" className="form-control" {...register("environmentalClearance")} /> */}
                   <div className="btn btn-sm col-md-4">
-                        {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.environmentalClearance)}>
                         <Visibility color="info" className="icon" />
-                        {/* </IconButton> */}
+                        </IconButton>
                       </div>
 
                       <div className="btn btn-sm col-md-4">
-                        {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.environmentalClearance)}>
                         <FileDownload color="primary" className="mx-1" />
-                        {/* </IconButton> */}
+                        </IconButton>
                       </div>
                       <div className="btn btn-sm col-md-4">
                   <ReportProblemIcon
               style={{
-                color:fieldIconColors.loiNO }}
+                color:fieldIconColors.environmentalClearance }}
               onClick={() => {
-                  setOpennedModal("environmental")
+                  setOpennedModal("environmentalClearance")
                   setLabelValue("Environmental Clearance."),
                   setSmShow(true),
                   console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                  setFieldValue(apiResponse !== null ? apiResponse?.environmentalClearance : null);
               }}
             ></ReportProblemIcon>
             </div>
@@ -660,26 +574,26 @@ const ElectricalPlanScrutiny = (props) => {
                 <td component="th" scope="row">
                   {/* <input type="file" className="form-control" {...register("pdfFormat")} /> */}
                   <div className="btn btn-sm col-md-4">
-                        {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.pdfFormat)}>
                         <Visibility color="info" className="icon" />
-                        {/* </IconButton> */}
+                        </IconButton>
                       </div>
 
                       <div className="btn btn-sm col-md-4">
-                        {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.pdfFormat)}>
                         <FileDownload color="primary" className="mx-1" />
-                        {/* </IconButton> */}
+                        </IconButton>
                       </div>
                       <div className="btn btn-sm col-md-4">
                   <ReportProblemIcon
               style={{
-                color:fieldIconColors.loiNO }}
+                color:fieldIconColors.pdfFormat }}
               onClick={() => {
-                  setOpennedModal("template")
+                  setOpennedModal("pdfFormat")
                   setLabelValue("PDF (OCR Compatible) + GIS format (shapefile as per the template uploaded on the department website)."),
                   setSmShow(true),
                   console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                  setFieldValue(apiResponse !== null ? apiResponse?.pdfFormat : null);
               }}
             ></ReportProblemIcon>
       </div>
@@ -697,27 +611,27 @@ const ElectricalPlanScrutiny = (props) => {
                 <td component="th" scope="row">
                   {/* <input type="file" className="form-control" {...register("autoCad")} /> */}
                   <div className="btn btn-sm col-md-4">
-                        {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.autoCad)}>
                         <Visibility color="info" className="icon" />
-                        {/* </IconButton> */}
+                        </IconButton>
                       </div>
 
                       <div className="btn btn-sm col-md-4">
-                        {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.autoCad)}>
                         <FileDownload color="primary" className="mx-1" />
-                        {/* </IconButton> */}
+                        </IconButton>
                       </div>
                       <div className="btn btn-sm col-md-4">
 
                   <ReportProblemIcon
               style={{
-                color:fieldIconColors.loiNO }}
+                color:fieldIconColors.autoCad }}
               onClick={() => {
-                  setOpennedModal("AutoCAD")
+                  setOpennedModal("autoCad")
                   setLabelValue("AutoCAD (DXF) file."),
                   setSmShow(true),
                   console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                  setFieldValue(apiResponse !== null ? apiResponse?.autoCad : null);
               }}
             ></ReportProblemIcon>
               </div>
@@ -735,26 +649,26 @@ const ElectricalPlanScrutiny = (props) => {
                 <td component="th" scope="row">
                   {/* <input type="file" className="form-control" {...register("verifiedPlan")} /> */}
                   <div className="btn btn-sm col-md-4">
-                        {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.verifiedPlan)}>
                         <Visibility color="info" className="icon" />
-                        {/* </IconButton> */}
+                        </IconButton>
                       </div>
 
                       <div className="btn btn-sm col-md-4">
-                        {/* <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}> */}
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.verifiedPlan)}>
                         <FileDownload color="primary" className="mx-1" />
-                        {/* </IconButton> */}
+                        </IconButton>
                       </div>
                       <div className="btn btn-sm col-md-4">
                  <ReportProblemIcon
               style={{
-                color:fieldIconColors.loiNO }}
+                color:fieldIconColors.verifiedPlan }}
               onClick={() => {
-                  setOpennedModal("certified")
+                  setOpennedModal("verifiedPlan")
                   setLabelValue("Certified copy of the plan verified by a third party"),
                   setSmShow(true),
                   console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                  setFieldValue(apiResponse !== null ? apiResponse?.verifiedPlan : null);
               }}
             ></ReportProblemIcon>
             </div>
