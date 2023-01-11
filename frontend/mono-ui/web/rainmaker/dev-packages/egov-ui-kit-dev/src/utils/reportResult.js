@@ -944,60 +944,60 @@ class ShowField extends Component {
     sumColumn = [];
     let { reportResult, metaData } = this.props;
     let { drillDown, checkIfDate } = this;
-    let elapsedTimeValue = [];
-    let localityIndex = "";
+    // let elapsedTimeValue = [];
+    // let localityIndex = "";
 
-    let metaDataResults = metaData && metaData.reportDetails && metaData.reportDetails.reportHeader;
-    if (metaDataResults && metaDataResults.length > 0) {
-      localityIndex = metaDataResults.findIndex(checkLocality);
-      function checkLocality(column) {
-        return column && column.label && column.label.includes("locality");
-      }
-    }
+    // let metaDataResults = metaData && metaData.reportDetails && metaData.reportDetails.reportHeader;
+    // if (metaDataResults && metaDataResults.length > 0) {
+    //   localityIndex = metaDataResults.findIndex(checkLocality);
+    //   function checkLocality(column) {
+    //     return column && column.label && column.label.includes("locality");
+    //   }
+    // }
     
 
-    if (
-      metaData && 
-      metaData.reportDetails &&
-      metaData.reportDetails.reportName == "TLRenewalPendingReport"  ) {
-        reportResult.reportHeader.forEach((data, index) => data.index = index);
-        elapsedTimeValue = reportResult.reportHeader.filter((data, index) => data.name == "elapsedtime" && index);
-      }
-    let reportResultArray = [];
-    if(reportResult && reportResult.reportData && reportResult.reportData.length) {
-      reportResult.reportData.forEach(data => {
-        let reportDataArray = [];
-        data.forEach((details, index) => {
-          if(details == null || details == undefined || details == "") {
-            reportDataArray.push("NA")
-          } else {
-            if ((details && typeof details == "string") || (details && typeof details == "string" && details.includes("_"))) {
-              if (localityIndex !== index) {
-                let localisedData = getLocaleLabels(details, details);
-                reportDataArray.push(localisedData);
-              } else {
-                reportDataArray.push(details)
-              }
-            } else {
-              if ( metaData && 
-                metaData.reportDetails &&
-                metaData.reportDetails.reportName == "TLRenewalPendingReport" && elapsedTimeValue && elapsedTimeValue[0].index == index && Number(details) > 7) {
-                  reportDataArray.push(<span style={{color: "red"}}>{details}</span>)
-              } else {
-                reportDataArray.push(details)
-              }
+    // if (
+    //   metaData && 
+    //   metaData.reportDetails &&
+    //   metaData.reportDetails.reportName == "TLRenewalPendingReport"  ) {
+    //     reportResult.reportHeader.forEach((data, index) => data.index = index);
+    //     elapsedTimeValue = reportResult.reportHeader.filter((data, index) => data.name == "elapsedtime" && index);
+    //   }
+    // let reportResultArray = [];
+    // if(reportResult && reportResult.reportData && reportResult.reportData.length) {
+    //   reportResult.reportData.forEach(data => {
+    //     let reportDataArray = [];
+    //     data.forEach((details, index) => {
+    //       if(details == null || details == undefined || details == "") {
+    //         reportDataArray.push("NA")
+    //       } else {
+    //         if ((details && typeof details == "string") || (details && typeof details == "string" && details.includes("_"))) {
+    //           if (localityIndex !== index) {
+    //             let localisedData = getLocaleLabels(details, details);
+    //             reportDataArray.push(localisedData);
+    //           } else {
+    //             reportDataArray.push(details)
+    //           }
+    //         } else {
+    //           if ( metaData && 
+    //             metaData.reportDetails &&
+    //             metaData.reportDetails.reportName == "TLRenewalPendingReport" && elapsedTimeValue && elapsedTimeValue[0].index == index && Number(details) > 7) {
+    //               reportDataArray.push(<span style={{color: "red"}}>{details}</span>)
+    //           } else {
+    //             reportDataArray.push(details)
+    //           }
               
-            }
-          }
-        })
-        reportResultArray.push(reportDataArray);
-      })
-    }
+    //         }
+    //       }
+    //     })
+    //     reportResultArray.push(reportDataArray);
+    //   })
+    // }
 
     return (
       <tbody>
         {reportResult.hasOwnProperty("reportData") &&
-          reportResultArray.map((dataItem, dataIndex) => {
+          reportResult.reportData.map((dataItem, dataIndex) => {
             //array of array
             let reportHeaderObj = reportResult.reportHeader;
             return (
