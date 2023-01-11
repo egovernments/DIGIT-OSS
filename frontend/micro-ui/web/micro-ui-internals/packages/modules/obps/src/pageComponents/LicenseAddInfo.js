@@ -331,6 +331,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     setShowhide0(getshow);
     localStorage.setItem('devTypeFlag', getshow)
   };
+  // console.log("LOCALVAL",localStorage.getItem('devTypeValueFlag'));
 
   const resetForm = () => {
     setCinNo("")
@@ -367,7 +368,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     const getDevTypeValue = data?.value;
     console.log("data123", data)
     setShowDevTypeFields(getDevTypeValue);
-    localStorage.setItem('devTypeValueFlag', getDevTypeValue)
+    // localStorage.setItem('devTypeValueFlag', getDevTypeValue)
     resetForm();
   }
   // function setDevType(value){
@@ -707,7 +708,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
             // isDisabled={
             //   !showDevTypeFields || (showDevTypeFields === "Individual" && (!name || !mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) || !emailId?.match(Digit.Utils.getPattern('Email')))) || (showDevTypeFields === "Others" && othersArray.length) || (showDevTypeFields === "Proprietorship Firm") || (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others" && (!cin_Number?.match(Digit.Utils.getPattern('CIN')) || !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) || !gst_Number?.match(Digit.Utils.getPattern('GSTNo')) || !((existingColonizer === "N") || (existingColonizer === "Y" && existingColonizerDetails.aggreementBtw && existingColonizerDetails.boardResolution && existingColonizerDetails.dob && existingColonizerDetails.pan && existingColonizerDetails.pan.match(Digit.Utils.getPattern('PAN')) && existingColonizerDetails.licNo && existingColonizerDetails.licDate && existingColonizerDetails.licValidity && existingColonizerDetails.licPurpose))))
             // }
-            isDisabled={(showDevTypeFields === "Individual" || showDevTypeFields === "Proprietorship Firm") ? !(name && mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) && emailId?.match(Digit.Utils.getPattern('Email'))) : (showDevTypeFields === "Others") ? (!othersArray.length) : (showDevTypeFields === "Proprietorship Firm") ? false : (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others") ? (((showDevTypeFields === "Limited Liability Partnership" || showDevTypeFields === "Trust") ? ( showDevTypeFields === "Trust" ? !csrNumber?.match(Digit.Utils.getPattern('CSR')) : !llpNumber?.match(Digit.Utils.getPattern('LLP'))) : ( showDevTypeFields === "Hindu Undivided Family" ) ? false : !cin_Number?.match(Digit.Utils.getPattern('CIN')) ) || !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) || (showDevTypeFields === "Trust" ? false : !gst_Number?.match(Digit.Utils.getPattern('GSTNo'))) || !registeredAddress.match(Digit.Utils.getPattern('Address')) || (!existingColonizerDetails.licNo.match(Digit.Utils.getPattern('OldLicenceNo'))) || !(modalValuesArray?.length) || !((existingColonizer === "N") || (existingColonizer === "Y" && existingColonizerDetails.aggreementBtw && existingColonizerDetails.boardResolution && existingColonizerDetails.dob && existingColonizerDetails.pan && existingColonizerDetails.pan.match(Digit.Utils.getPattern('PAN')) && existingColonizerDetails.licNo && existingColonizerDetails.licDate && existingColonizerDetails.licValidity && existingColonizerDetails.licPurpose))) : true}
+            isDisabled={(showDevTypeFields === "Individual" || showDevTypeFields === "Proprietorship Firm" || showDevTypeFields === "Hindu Undivided Family") ? !(name && mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) && emailId?.match(Digit.Utils.getPattern('Email'))) : (showDevTypeFields === "Others") ? (!othersArray.length) : (showDevTypeFields === "Proprietorship Firm") ? false : (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others") ? (((showDevTypeFields === "Limited Liability Partnership" || showDevTypeFields === "Trust") ? ( showDevTypeFields === "Trust" ? !csrNumber?.match(Digit.Utils.getPattern('CSR')) : !llpNumber?.match(Digit.Utils.getPattern('LLP'))) : ( showDevTypeFields === "Company" ) ? false : !cin_Number?.match(Digit.Utils.getPattern('CIN')) ) || !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) || (showDevTypeFields === "Trust" ? false : !gst_Number?.match(Digit.Utils.getPattern('GSTNo'))) || !registeredAddress.match(Digit.Utils.getPattern('Address')) || (!existingColonizerDetails.licNo.match(Digit.Utils.getPattern('OldLicenceNo'))) || !(modalValuesArray?.length) || !((existingColonizer === "N") || (existingColonizer === "Y" && existingColonizerDetails.name && existingColonizerDetails.licNo && existingColonizerDetails.licDate))) : true}
             t={t}
           >
             <div className="happy">
@@ -756,7 +757,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
               </div>
 
               {/* FOR INDIVIDUAL */}
-              {(showDevTypeFields === "Individual" || showDevTypeFields == "Proprietorship Firm") && (
+              {(showDevTypeFields === "Individual" || showDevTypeFields == "Proprietorship Firm" || showDevTypeFields == "Hindu Undivided Family") && (
                 <div className="card mb-3">
                   {/* <div className="card-header">
               <h5 className="card-title"> Developer</h5>
@@ -1050,7 +1051,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
 
               {/* FOR COMPANY */}
-              {(showDevTypeFields && showDevTypeFields !== "Individual" && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Others" && showDevTypeFields !== "Society" && showDevTypeFields !== "Firm") && (
+              {(showDevTypeFields && showDevTypeFields !== "Individual" && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Hindu Undivided Family" && showDevTypeFields !== "Others" && showDevTypeFields !== "Society" && showDevTypeFields !== "Firm") && (
                 <div className="card mb-3">
                   {/* <div className="card-header">
               <h5 className="card-title"> Developer</h5>
@@ -1338,7 +1339,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                   </div>
                 </div>
               )}
-              {(showDevTypeFields && showDevTypeFields !== "Individual" && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Others" && showDevTypeFields !== "Society" && showDevTypeFields !== "Firm") && (
+              {(showDevTypeFields && showDevTypeFields !== "Individual" && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Hindu Undivided Family" && showDevTypeFields !== "Others" && showDevTypeFields !== "Society" && showDevTypeFields !== "Firm") && (
                 <div className="card mb-3">
                   <h5 className="card-title fw-bold">Shareholding Patterns <span className="text-danger font-weight-bold">*</span></h5>
                   {/* {JSON.stringify(modalValuesArray)} */}
@@ -1559,7 +1560,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                   </div>
                 </div>
               )}
-              {(showDevTypeFields && showDevTypeFields !== "Individual" && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Others" && showDevTypeFields !== "Society" && showDevTypeFields !== "Firm") && (
+              {(showDevTypeFields && showDevTypeFields !== "Individual" && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Hindu Undivided Family" && showDevTypeFields !== "Others" && showDevTypeFields !== "Society" && showDevTypeFields !== "Firm") && (
                 <div className="card mb-3">
                   <h5 className="card-title fw-bold">Directors Information</h5>
                   <div className="card-body">
@@ -1840,7 +1841,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                     <label for="No">No</label>
                     {existingColonizer === "Y" && (
                       <div>
-                        <div className="row ">
+                        {/* <div className="row ">
                           <div className="form-group row">
                             <div className="col-sm-12">
                               <Col xs="12" md="12" sm="12">
@@ -1871,13 +1872,6 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                             style={{ display: "none" }}
                                             onChange={(e) => getDocumentData(e?.target?.files[0], "aggreementBtw", "existingColonizer")}
                                           />
-                                        {/* <input
-                                          type="file"
-                                          accept="application/pdf"
-                                          name="agreementDoc"
-                                          onChange={(e) => getDocumentData(e?.target?.files[0], "aggreementBtw", "existingColonizer")}
-                                          class="employee-card-input"
-                                        /> */}
                                       </td>
                                       <td style={{textAlign:'center'}}>
                                         {existingColonizerDetails.aggreementBtw ?
@@ -1919,7 +1913,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                               </Col>
                             </div>
                           </div>
-                        </div>
+                        </div> */}
 
                         <div className="row mx-2">
                           {/* <div className="col col-4">
@@ -1977,7 +1971,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                 value={existingColonizerDetails.name}
                                 name="name"
                                 // onChange={SelectName}
-                                onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, name: e.target.value.toUpperCase() })}
+                                onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, name: e.target.value})}
                                 className="employee-card-input"
                                 maxLength={10}
                               />
@@ -2001,22 +1995,20 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             </div>
                           </div>
 
-                          <div className="col col-4">
+                          {/* <div className="col col-4">
                             <div className="form-group">
                               <label htmlFor="licValidity">Validity <span className="text-danger font-weight-bold">*</span></label>
                               <input
                                 type="date"
                                 value={existingColonizerDetails.licValidity}
                                 name="licValidity"
-                                // onChange={SelectName}
                                 onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, licValidity: e.target.value })}
                                 className="employee-card-input"
                                 disabled={!existingColonizerDetails.licDate}
-                                // min={convertEpochToDate(new Date().setFullYear(new Date().getFullYear() - existingColonizerDetails.licDate))}
                                 min={existingColonizerDetails.licDate}
                               />
                             </div>
-                          </div>
+                          </div> */}
 
                           {/* <div className="col col-4">
                             <div className="form-group">
