@@ -733,7 +733,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             style={{ width: "100%" }}
                             t={t}
                             required
-                            disable
+                            
                           />
                           {/* <Select
                             onChange={(e) => setDevType({showDevTypeFields: e.target.value })}
