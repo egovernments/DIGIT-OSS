@@ -5,9 +5,12 @@ import ApllicantPuropseForm from "../Step2/Step2";
 import LandScheduleForm from "../Step3/Step3";
 import AppliedDetailForm from "../Step4/Step4";
 import FeesChargesForm from "../Step5/Step5";
+import { useLocation } from "react-router-dom";
+import axios from "axios";
 import _ from "lodash";
 
 const CommonForm = () => {
+  const location = useLocation();
   const [isStep1, setIsStep1] = useState(false);
   const [isStep2, setIsStep2] = useState(false);
   const [isStep3, setIsStep3] = useState(false);
@@ -16,7 +19,6 @@ const CommonForm = () => {
   const [step, setStep] = useState(1);
   const [getId, setId] = useState("");
   const [userData, setUserData] = useState(null);
-  const [getCheck, setCheck] = useState(null);
   const [getLicData, setLicData] = useState(null);
   const [securedData, setSucuredData] = useState(null);
   const [stepActive, setStepActive] = useState({ step1: false, step2: false, step3: false, step4: false, step5: false });
@@ -131,9 +133,68 @@ const CommonForm = () => {
     if (!_.isEmpty(getLicData?.DetailsofAppliedLand)) setStepActive({ step1: true, step2: true, step3: true, step4: true, step5: true });
   }, [getLicData]);
 
+  const getApplicantUserData = async (id) => {
+    const token = window?.localStorage?.getItem("token");
+    const payload = {
+      apiId: "Rainmaker",
+      msgId: "1669293303096|en_IN",
+      authToken: token,
+    };
+    try {
+      const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${id}`, payload);
+      const appNumber = Resp?.data?.applicationStatus;
+      const licData = Resp?.data?.LicenseDetails?.[0];
+      setLicData(licData);
+      if (appNumber === "INITIATED") {
+        setIsStep1(true);
+        setIsStep2(false);
+        setIsStep3(false);
+        setIsStep4(false);
+        setIsStep5(false);
+        setStep(2);
+        setStepActive({ step1: true, step2: true, step3: false, step4: false, step5: false });
+      }
+      if (appNumber === "PURPOSE") {
+        setIsStep2(true);
+        setIsStep1(false);
+        setIsStep3(false);
+        setIsStep4(false);
+        setIsStep5(false);
+        setStep(3);
+        setStepActive({ step1: true, step2: true, step3: true, step4: false, step5: false });
+      }
+      if (appNumber === "LANDSCHEDULE") {
+        setIsStep3(true);
+        setIsStep1(false);
+        setIsStep2(false);
+        setIsStep4(false);
+        setStep(4);
+        setStepActive({ step1: true, step2: true, step3: true, step4: true, step5: false });
+      }
+      if (appNumber === "LANDDETAILS") {
+        setIsStep4(true);
+        setIsStep1(false);
+        setIsStep2(false);
+        setIsStep3(false);
+        setStep(5);
+        setStepActive({ step1: true, step2: true, step3: true, step4: true, step5: true });
+      }
+    } catch (error) {
+      return error;
+    }
+  };
+
+  useEffect(() => {
+    const search = location?.search;
+    const params = new URLSearchParams(search);
+    const id = params.get("id");
+    if (id) getApplicantUserData(id);
+    setId(id?.toString());
+  }, []);
+
   return (
     <div>
-      <TimelineNewLic currentStep={step} setCheck={setCheck} changeSteps={changeSteps} flow="NEWLICENSE" />
+      <TimelineNewLic currentStep={step} changeSteps={changeSteps} flow="NEWLICENSE" />
       {isStep1 ? (
         <ApllicantPuropseForm getLicData={getLicData} userData={userData} getId={getId} Step2Continue={handlestep2} Step2Back={handleBack} />
       ) : isStep2 ? (

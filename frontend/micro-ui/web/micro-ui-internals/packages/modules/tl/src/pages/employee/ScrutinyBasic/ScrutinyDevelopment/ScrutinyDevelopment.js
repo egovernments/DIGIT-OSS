@@ -79,17 +79,6 @@ const ScrutinyDevelopment = (props) => {
         minHeight: "40%",
       }}
     >
-      {/* <Row>
-      <Col>
-        {el.applicationId}
-      </Col>
-      <Col>
-        {el.serviceId}
-      </Col>
-      <Col>
-        {el.documentId}
-      </Col>
-        </Row> */}
       <Row>
         <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
           <Row>
@@ -147,7 +136,9 @@ const ScrutinyDevelopment = (props) => {
                   </Row>
 
                   <Row style={{ margin: 4 }}>
-                    <b style={{ textAlign: "right" }}>{new Date(el.ts).toLocaleDateString('en-GB')} {new Date(el.ts).toLocaleTimeString('en-US')}</b>
+                    <b style={{ textAlign: "right" }}>
+                      {new Date(el.ts).toLocaleDateString("en-GB")} {new Date(el.ts).toLocaleTimeString("en-US")}
+                    </b>
                   </Row>
                 </div>
               );

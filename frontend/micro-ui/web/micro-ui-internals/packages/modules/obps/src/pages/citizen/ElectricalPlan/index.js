@@ -4,6 +4,12 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { getDocShareholding } from "../NewLicense/docView/docView.help";
+import { Dialog } from "@mui/material";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
 const electricalPlanService = () => {
   const {
@@ -18,10 +24,15 @@ const electricalPlanService = () => {
 
     shouldFocusError: true,
   });
+  const [open, setOpen] = useState(false)
+  const [applicationNumber, setApplicationNumber] = useState()
+
   const [developerDataLabel, setDeveloperDataLabel] = useState([]);
   const electricPlan = async (data) => {
     const token = window?.localStorage?.getItem("token");
     console.log(data);
+    const tenantId = Digit.ULBService.getCurrentTenantId();
+
     try {
       const postDistrict = {
         requestInfo: {
@@ -38,14 +49,23 @@ const electricalPlanService = () => {
 
         ElectricPlanRequest: {
           ...data,
+          "action": "APPLY",
+          "tenantId":  tenantId,
+          "businessService": "ELECTRICAL_PLAN",
         },
       };
-      const Resp = await axios.post("/land-services/electric/plan/_create", postDistrict);
+      const Resp = await axios.post("/tl-services/electric/plan/_create", postDistrict);
       setDeveloperDataLabel(Resp.data);
+      setApplicationNumber(Resp.data.electricPlanResponse[0].applicationNumber)
+      setOpen(true)
     } catch (error) {
       console.log(error.message);
     }
   };
+  const handleClose = () => {
+    setOpen(false)
+    window.location.href = `/digit-ui/citizen`
+  }
 
   const [fileStoreId, setFileStoreId] = useState({});
   const getDocumentData = async (file, fieldName) => {
@@ -68,6 +88,7 @@ const electricalPlanService = () => {
     }
   };
   return (
+    <React.Fragment>
     <form onSubmit={handleSubmit(electricPlan)}>
       <Card style={{ width: "126%", border: "5px solid #1266af" }}>
         <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Electrical Plan </h4>
@@ -329,6 +350,29 @@ const electricalPlanService = () => {
         </Card>
       </Card>
     </form>
+    <Dialog
+    open={open}
+    onClose={handleClose}
+    aria-labelledby="alert-dialog-title"
+    aria-describedby="alert-dialog-description"
+    >
+    <DialogTitle id="alert-dialog-title">
+        Electric Plan Submission
+    </DialogTitle>
+    <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <p>Your Electric Plan is submitted successfully <span><CheckCircleOutlineIcon style={{color: 'blue', variant: 'filled'}}/></span></p>
+            <p>Please Note down your Application Number <span style={{padding: '5px', color: 'blue'}}>{applicationNumber}</span> for further assistance</p>
+          </DialogContentText>
+    </DialogContent>
+    <DialogActions>
+          <Button onClick={handleClose} autoFocus>
+            Ok
+          </Button>
+    </DialogActions>
+
+    </Dialog>
+    </React.Fragment>
   );
 };
 
