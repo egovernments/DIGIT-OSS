@@ -88,10 +88,6 @@ public class TLNotificationService {
 		}
 
 		String propertyId = "";
-		if(request.getLicenses().get(0).getTradeLicenseDetail().getAdditionalDetail().get(PROPERTY_ID) != null)
-			propertyId = request.getLicenses().get(0).getTradeLicenseDetail().getAdditionalDetail().get(PROPERTY_ID).asText();
-		Property property = propertyUtil.getPropertyDetails(request.getLicenses().get(0), propertyId, requestInfo);
-		String source = property.getSource().name();
 
 		String businessService = request.getLicenses().isEmpty() ? null : request.getLicenses().get(0).getBusinessService();
 		if (businessService == null)
@@ -102,6 +98,11 @@ public class TLNotificationService {
 				List<SMSRequest> smsRequestsTL = new LinkedList<>();
 				TradeLicense license = request.getLicenses().get(0);
 				String ACTION_STATUS = license.getAction() + "_" + license.getStatus();
+				if (request.getLicenses().get(0).getTradeLicenseDetail().getAdditionalDetail().get(PROPERTY_ID) != null)
+					propertyId = request.getLicenses().get(0).getTradeLicenseDetail().getAdditionalDetail().get(PROPERTY_ID).asText();
+				Property property = propertyUtil.getPropertyDetails(request.getLicenses().get(0), propertyId, requestInfo);
+				String source = property.getSource().name();
+
 				if (config.getIsTLSMSEnabled()) {
 					if (!propertyId.isEmpty() && ACTION_STATUS_INITIATED.equalsIgnoreCase(ACTION_STATUS)) {
 						List<SMSRequest> smsRequestsPT = new ArrayList<>();

@@ -37,6 +37,8 @@ public class BPANotificationUtil {
 
     private NotificationUtil notificationUtil;
 
+    @Autowired
+    private TradeUtil tradeUtil;
 
     @Value("${egov.ui.app.host}")
     private String egovhost;
@@ -173,7 +175,7 @@ public class BPANotificationUtil {
 
             case ACTION_STATUS_PENDINGPAYMENT:
                 messageTemplate = getMessageTemplate(NOTIFICATION_PENDINGPAYMENT_EMAIL, localizationMessage);
-                message = getReplacedEmailMessage(license, messageTemplate);
+                message = getReplacedEmailMessage(requestInfo, license, messageTemplate);
                 BigDecimal amountToBePaid = notificationUtil.getAmountToBePaid(requestInfo, license);
 
                 if (message.contains("{AMOUNT_TO_BE_PAID}")) {
@@ -187,22 +189,22 @@ public class BPANotificationUtil {
 
             case ACTION_STATUS_PENDINGAPPROVAL:
                 messageTemplate = getMessageTemplate(NOTIFICATION_PENDINGAPPROVAL_EMAIL, localizationMessage);
-                message = getReplacedEmailMessage(license, messageTemplate);
+                message = getReplacedEmailMessage(requestInfo, license, messageTemplate);
                 break;
 
             case ACTION_STATUS_APPROVED:
                 messageTemplate = getMessageTemplate(NOTIFICATION_APPROVED_EMAIL, localizationMessage);
-                message = getReplacedEmailMessage(license, messageTemplate);
+                message = getReplacedEmailMessage(requestInfo, license, messageTemplate);
                 break;
 
             case ACTION_STATUS_REJECTED:
                 messageTemplate = getMessageTemplate(NOTIFICATION_REJECTED_EMAIL, localizationMessage);
-                message = getReplacedEmailMessage(license, messageTemplate);
+                message = getReplacedEmailMessage(requestInfo, license, messageTemplate);
                 break;
 
             case ACTION_STATUS_INITIATED:
                 messageTemplate = getMessageTemplate(NOTIFICATION_PENDINGPAYMENT_EMAIL, localizationMessage);
-                message = getReplacedEmailMessage(license, messageTemplate);
+                message = getReplacedEmailMessage(requestInfo, license, messageTemplate);
                 amountToBePaid =  notificationUtil.getAmountToBePaid(requestInfo, license);
 
                 if (message.contains("{AMOUNT_TO_BE_PAID}")) {
@@ -212,7 +214,7 @@ public class BPANotificationUtil {
 
             case ACTION_STATUS_INITIATED_PARTIAL:
                 messageTemplate = getMessageTemplate(NOTIFICATION_INITIATED_EMAIL, localizationMessage);
-                message = getReplacedEmailMessage(license, messageTemplate);
+                message = getReplacedEmailMessage(requestInfo, license, messageTemplate);
                 break;
 
         }
@@ -220,11 +222,14 @@ public class BPANotificationUtil {
         return message;
     }
 
-    public String getReplacedEmailMessage(TradeLicense license, String messageTemplate) {
+    public String getReplacedEmailMessage(RequestInfo requestInfo, TradeLicense license, String messageTemplate) {
         String message = messageTemplate.replace("{APPLICATION_NUMBER}",license.getApplicationNumber());
-
+        String stateName = tradeUtil.mDMSCallForStateName(requestInfo, license.getTenantId());
         if(license.getTenantId().split("\\.").length!=1)
-            message = message.replace("{ULB}", capitalize(license.getTenantId().split("\\.")[1]));
+            message = message.replace("{ULB}", capitalize(stateName));
+        else if (license.getTenantId().split("\\.").length == 1){
+            message = message.replace("{ULB}", capitalize(stateName) + " State");
+        }
         message = message.replace("{PORTAL_LINK}",egovhost+citizenHomeEndpoint);
 
         if(license.getTradeLicenseDetail().getTradeUnits().get(0).getTradeType().split("\\.").length!=1)
@@ -386,6 +391,13 @@ public class BPANotificationUtil {
                         .replace("$businessService", license.getBusinessService());;
                 actionLink = config.getUiAppHost() + actionLink;
                 ActionItem item = ActionItem.builder().actionUrl(actionLink).code(config.getPayCode()).build();
+                items.add(item);
+                action = Action.builder().actionUrls(items).build();
+            }
+            if (license.getStatus().equals(PENDINGDOCVERIFICATION_STATUS)) {
+                List<ActionItem> items = new ArrayList<>();
+                String actionLink = getRecepitDownloadLink(license, mobile, receiptno);
+                ActionItem item = ActionItem.builder().actionUrl(actionLink).code(config.getDownloadReceiptCode()).build();
                 items.add(item);
                 action = Action.builder().actionUrls(items).build();
             }

@@ -429,7 +429,6 @@ public class TLConstants {
 
     public TLConstants() {}
 
-
-
+    public static final String TENANTS_JSONPATH = "$.MdmsRes.tenant.tenants";
 
 }

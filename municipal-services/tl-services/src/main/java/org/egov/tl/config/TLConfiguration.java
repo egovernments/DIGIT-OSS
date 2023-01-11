@@ -264,6 +264,9 @@ public class TLConfiguration {
 	
 	@Value("${egov.usr.events.pay.code}")
 	private String payCode;
+
+    @Value("${egov.usr.events.download.receipt.code}")
+    private String downloadReceiptCode;
 	
 	@Value("${egov.user.event.notification.enabledForTL}")
 	private Boolean isUserEventsNotificationEnabledForTL;
