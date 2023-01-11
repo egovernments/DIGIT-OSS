@@ -12,6 +12,7 @@ import Login from "./Login";
 import UserProfile from "./Home/UserProfile";
 import ServicePlan from "./ServicePlan";
 import ElectricalPlan from "./ElecticalPlan";
+import CheckCredentials from "./CheckCredentials";
 
 const getTenants = (codes, tenants) => {
   return tenants.filter((tenant) => codes.map((item) => item.code).includes(tenant.code));
@@ -95,6 +96,10 @@ const Home = ({
 
           <Route path={`${path}/login`}>
             <Login stateCode={stateCode} />
+          </Route>
+
+          <Route path={`${path}/sso-login`}>
+            <CheckCredentials stateCode={stateCode} />
           </Route>
 
           <Route path={`${path}/register`}>
