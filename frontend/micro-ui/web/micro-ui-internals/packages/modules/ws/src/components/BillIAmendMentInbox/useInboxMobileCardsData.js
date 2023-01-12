@@ -63,7 +63,7 @@ const useInboxMobileCardsData = ({ parentRoute, table }) => {
 
   return {
     data: dataForMobileInboxCards,
-    linkPrefix: `${parentRoute}/inbox/application-overview/`,
+    //linkPrefix: `${parentRoute}/application-details?applicationNumber=${value}`,
     serviceRequestIdKey: t("NOC_APP_NO_LABEL"),
     MobileSortFormValues,
   };

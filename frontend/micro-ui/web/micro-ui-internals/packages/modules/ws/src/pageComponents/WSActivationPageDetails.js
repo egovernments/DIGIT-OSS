@@ -87,6 +87,7 @@ const ConnectionDetails = (_props) => {
     const formValue = watch();
     const { errors } = localFormState;
     const isMobile = window.Digit.Utils.browser.isMobile();
+    let isEmployee = window.location.href.includes("/employee")
 
     useEffect(() => {
         trigger();
@@ -138,7 +139,7 @@ const ConnectionDetails = (_props) => {
             <div style={{ marginBottom: "16px" }}>
                 {filters?.service === "WATER" && formData?.connectionDetails?.[0]?.connectionType?.code?.toUpperCase() === "METERED" ? <div>
                     <LabelFieldPair>
-                        <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_METER_ID")}*`}</CardLabel>
+                        <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700", width:"100%" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_METER_ID")}*`}</CardLabel>
                         <div className="field">
                             <Controller
                                 control={control}
@@ -166,7 +167,7 @@ const ConnectionDetails = (_props) => {
                     </LabelFieldPair>
                     <CardLabelError style={errorStyle}>{localFormState.touched.meterId ? errors?.meterId?.message : ""}</CardLabelError>
                     <LabelFieldPair>
-                        <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_ADDN_DETAIL_METER_INSTALL_DATE")}*`}</CardLabel>
+                        <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700", width:"100%" }} className="card-label-smaller">{`${t("WS_ADDN_DETAIL_METER_INSTALL_DATE")}*`}</CardLabel>
                         <div className="field">
                             <Controller
                                 name="meterInstallationDate"
@@ -186,7 +187,7 @@ const ConnectionDetails = (_props) => {
                     </LabelFieldPair>
                     <CardLabelError style={errorStyle}>{localFormState.touched.meterInstallationDate ? errors?.meterInstallationDate?.message : ""}</CardLabelError>
                     <LabelFieldPair>
-                        <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_INITIAL_METER_READING_LABEL")}*`}</CardLabel>
+                        <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700", width:"100%" }} className="card-label-smaller">{`${t("WS_INITIAL_METER_READING_LABEL")}*`}</CardLabel>
                         <div className="field">
                             <Controller
                                 type="number"
@@ -215,7 +216,7 @@ const ConnectionDetails = (_props) => {
                     <CardLabelError style={errorStyle}>{localFormState.touched.meterInitialReading ? errors?.meterInitialReading?.message : ""}</CardLabelError>
                 </div> : null}
                 <LabelFieldPair>
-                    <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_CONN_EXECUTION_DATE")}*`}</CardLabel>
+                    <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700", width:"100%" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_CONN_EXECUTION_DATE")}*`}</CardLabel>
                     <div className="field">
                         <Controller
                             name="connectionExecutionDate"
@@ -238,7 +239,7 @@ const ConnectionDetails = (_props) => {
                 <CardLabelError style={errorStyle}>{localFormState.touched.connectionExecutionDate ? errors?.connectionExecutionDate?.message : ""}</CardLabelError>
                 {window.location.href.includes("modify") ? <div>
                 <LabelFieldPair>
-                    <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_MODIFICATIONS_EFFECTIVE_FROM")}*`}</CardLabel>
+                    <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700", width:"100%" }} className="card-label-smaller">{`${t("WS_MODIFICATIONS_EFFECTIVE_FROM")}*`}</CardLabel>
                     <div className="field">
                         <Controller
                             name="dateEffectiveFrom"

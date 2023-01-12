@@ -54,11 +54,17 @@ const WSDocsRequired = ({ onSelect, userType, onSkip, config }) => {
 
   const printDiv = () => {
     let content = document.getElementById("documents-div").innerHTML;
+    //APK button to print required docs
+    if(window.mSewaApp && window.mSewaApp.isMsewaApp()){
+      window.mSewaApp.downloadBase64File(window.btoa(content), t("WS_REQ_DOCS"));
+    }
+    else{
     let printWindow = window.open("", "");
     printWindow.document.write(`<html><body>${content}</body></html>`);
     printWindow.document.close();
     printWindow.focus();
     printWindow.print();
+    }
   };
   
 

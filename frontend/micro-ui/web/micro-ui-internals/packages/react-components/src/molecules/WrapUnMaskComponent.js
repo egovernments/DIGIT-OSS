@@ -26,7 +26,10 @@ const formatValue = (showValue) => {
 const WrapUnMaskComponent = React.memo(({ privacy = {}, value, unmaskField, ...rem }) => {
   const [privacyState, setPrivacyState] = useState(false);
   const { loadData = {} } = privacy;
-  const { t } = useTranslation();
+  const { t } = useTranslation(); 
+  const isMobile = window.Digit.Utils.browser.isMobile();
+  const isEmployee = window.location.href.includes("/employee")
+
   const requestCriteria = [
     loadData?.serviceName,
     loadData?.requestParam,
@@ -54,7 +57,7 @@ const WrapUnMaskComponent = React.memo(({ privacy = {}, value, unmaskField, ...r
     return !unmaskField ? (
       <Loader />
     ) : (
-      <span style={{ display: "inline-flex", width: "fit-content", marginLeft: "10px" }}>
+      <span style={{ display: "inline-flex", width: "fit-content", marginLeft: isMobile && isEmployee ?"":"10px" }}>
         <div className={`tooltip`}>
           <PrivacyMaskIcon className="privacy-icon-2" style={{ ...rem?.style, cursor: "default" }}></PrivacyMaskIcon>
         </div>

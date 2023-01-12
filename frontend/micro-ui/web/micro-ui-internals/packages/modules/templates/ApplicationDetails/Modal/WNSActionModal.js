@@ -58,6 +58,8 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
   const [error, setError] = useState(null);
+  const isMobile = window.Digit.Utils.browser.isMobile();
+  const isEmployee = window.location.href.includes("/employee")
 
   useEffect(() => {
     setApprovers(approverData?.Employees?.map((employee) => ({ uuid: employee?.uuid, name: employee?.user?.name })));
@@ -254,6 +256,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       actionSaveLabel={t(config.label.submit)}
       actionSaveOnSubmit={() => { }}
       formId="modal-action"
+      style={isMobile && isEmployee ? {width:"100%",height:"auto"} : {}}
     >
       {PTALoading ? (
         <Loader />

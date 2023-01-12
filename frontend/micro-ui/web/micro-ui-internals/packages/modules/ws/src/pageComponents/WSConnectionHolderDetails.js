@@ -223,6 +223,8 @@ const ConnectionDetails = (_props) => {
   const [uuid, setuuid] = useState(connectionHolderDetail?.uuid);
   const formValue = { name, gender, mobileNumber, guardian, relationship, ownerType, sameAsOwnerDetails, address, uuid };
   const { errors } = localFormState;
+  const isMobile = window.Digit.Utils.browser.isMobile();
+  const isEmployee = window.location.href.includes("/employee")
 
   const { isLoading, data: privacyData } = Digit.Hooks.useCustomMDMS(Digit.ULBService.getStateId(), "DataSecurity", [{ name: "SecurityPolicy" }], {
     select: (data) => data?.DataSecurity?.SecurityPolicy?.find((elem) => elem?.model == "User") || {},
@@ -316,7 +318,7 @@ const ConnectionDetails = (_props) => {
       {!sameAsOwnerDetails ? (
         <div>
           <LabelFieldPair>
-            <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_OWN_DETAIL_NAME")}*`}</CardLabel>
+            <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700", width:"100%" }} className="card-label-smaller">{`${t("WS_OWN_DETAIL_NAME")}*`}</CardLabel>
             <div className="field">
               <Controller
                 control={control}
@@ -344,13 +346,13 @@ const ConnectionDetails = (_props) => {
                         checkifPrivacyValid() && !getValues("name")?.includes("*")
                           ? !Digit.Utils.checkPrivacy(privacyData, { uuid: connectionHolderDetail?.uuid, fieldName: "name", model: "User" }) &&
                             !Digit.Utils.checkPrivacy(privacyData, { uuid: connectionHolderDetail?.uuid, fieldName: "mobileNumber", model: "User" })
-                            ? { width: "96%" }
-                            : { width: "96%" }
+                            ? ((isMobile && isEmployee) ? {} :{ width: "96%" })
+                            : ((isMobile && isEmployee) ? {} :{ width: "96%" })
                           : {}
                       }
                     />
                     {checkifPrivacyValid() && (
-                      <div style={{ marginRight: "-10px", marginLeft: "10px" }}>
+                      <div style={!(isMobile && isEmployee) ? { marginRight: "-10px", marginLeft: "10px" } : {}}>
                         <WrapUnMaskComponent
                           unmaskField={(e) => {
                             setName(e);
@@ -384,7 +386,7 @@ const ConnectionDetails = (_props) => {
           </LabelFieldPair>
           <CardLabelError style={errorStyle}>{localFormState.touched.name ? errors?.name?.message : ""}</CardLabelError>
           <LabelFieldPair>
-            <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t(
+            <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700", width:"100%" }} className="card-label-smaller">{`${t(
               "WS_CONN_HOLDER_OWN_DETAIL_GENDER_LABEL"
             )}*`}</CardLabel>
             <div className="field">
@@ -398,8 +400,8 @@ const ConnectionDetails = (_props) => {
                   <div
                     style={{
                       display: "flex",
-                      marginRight: checkifPrivacyValid() ? "-20px" : "unset",
-                      width: checkifPrivacyValid() ? "197%" : "208%",
+                      marginRight: checkifPrivacyValid() && !(isMobile && isEmployee) ? "-20px" : "unset",
+                      width: (isMobile && isEmployee) ? "" : checkifPrivacyValid() ? "197%" : "208%",
                     }}
                   >
                     <Dropdown
@@ -418,7 +420,7 @@ const ConnectionDetails = (_props) => {
                       t={t}
                     />
                     {checkifPrivacyValid() && (
-                      <div style={{ marginRight: "-10px", marginLeft: "8px", marginTop: "15px" }}>
+                      <div style={{ marginRight: "-10px", marginLeft: (isMobile && isEmployee) ? "" : "8px", marginTop: "15px" }}>
                         <WrapUnMaskComponent
                           unmaskField={(e) => {
                             const r = { code: e, i18nKey: `COMMON_GENDER_${e}`, name: e };
@@ -453,7 +455,7 @@ const ConnectionDetails = (_props) => {
           </LabelFieldPair>
           <CardLabelError style={errorStyle}>{localFormState.touched.gender ? errors?.gender?.message : ""}</CardLabelError>
           <LabelFieldPair>
-            <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t(
+            <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700", width:"100%" }} className="card-label-smaller">{`${t(
               "CORE_COMMON_MOBILE_NUMBER"
             )}*`}</CardLabel>
             <div className="field">
@@ -469,7 +471,7 @@ const ConnectionDetails = (_props) => {
                 //type="number"
                 isMandatory={true}
                 render={(props) => (
-                  <div style={{ display: "flex", alignItems: "baseline", marginRight: getValues("mobileNumber")?.includes("*") ? "-20px" : "-4%" }}>
+                  <div style={{ display: "flex", alignItems: "baseline", marginRight: getValues("mobileNumber")?.includes("*") && !(isMobile && isEmployee) ? "-20px" : "-4%" }}>
                     <div className="employee-card-input employee-card-input--front" style={{ position: "relative", marginTop: "4px" }}>
                       +91
                     </div>
@@ -494,13 +496,13 @@ const ConnectionDetails = (_props) => {
                               model: "WnSConnectionOwner",
                             }) &&
                             !Digit.Utils.checkPrivacy(privacyData, { uuid: connectionHolderDetail?.uuid, fieldName: "mobileNumber", model: "User" })
-                            ? { width: "96%" }
-                            : { width: "96%", background: "#FAFAFA" }
+                            ? ((isMobile && isEmployee) ? {} :{ width: "96%" })
+                            : ((isMobile && isEmployee) ? {} :{ width: "96%", background: "#FAFAFA" })
                           : { background: "#FAFAFA" }
                       }
                     />
                     {checkifPrivacyValid() && (
-                      <div style={{ marginRight: "-10px", marginLeft: "10px" }}>
+                      <div style={!(isMobile && isEmployee) ? { marginRight: "-10px", marginLeft: "10px" } : {}}>
                         <WrapUnMaskComponent
                           unmaskField={(e) => {
                             setMobileNumber(e);
@@ -534,7 +536,7 @@ const ConnectionDetails = (_props) => {
           </LabelFieldPair>
           <CardLabelError style={errorStyle}>{localFormState.touched.mobileNumber ? errors?.mobileNumber?.message : ""}</CardLabelError>
           <LabelFieldPair>
-            <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t(
+            <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700", width:"100%" }} className="card-label-smaller">{`${t(
               "WS_OWN_DETAIL_GUARDIAN_LABEL"
             )}*`}</CardLabel>
             <div className="field">
@@ -548,7 +550,7 @@ const ConnectionDetails = (_props) => {
                 }}
                 isMandatory={true}
                 render={(props) => (
-                  <div style={{ display: "flex", alignItems: "baseline", marginRight: getValues("guardian")?.includes("*") ? "-20px" : "-4%" }}>
+                  <div style={{ display: "flex", alignItems: "baseline", marginRight: getValues("guardian")?.includes("*") && !(isMobile && isEmployee) ? "-20px" : "-4%" }}>
                     <TextInput
                       value={getValues("guardian")}
                       autoFocus={focusIndex.index === connectionHolderDetail?.key && focusIndex.type === "guardian"}
@@ -568,13 +570,13 @@ const ConnectionDetails = (_props) => {
                               model: "WnSConnectionOwner",
                             }) &&
                             !Digit.Utils.checkPrivacy(privacyData, { uuid: connectionHolderDetail?.uuid, fieldName: "mobileNumber", model: "User" })
-                            ? { width: "96%" }
-                            : { width: "96.2%" }
+                            ? ((isMobile && isEmployee) ? {} :{ width: "96%" })
+                            : ((isMobile && isEmployee) ? {} :{ width: "96.2%" })
                           : {}
                       }
                     />
                     {checkifPrivacyValid() && (
-                      <div style={{ marginRight: "-10px", marginLeft: "10px" }}>
+                      <div style={!(isMobile && isEmployee) ? { marginRight: "-10px", marginLeft: "10px" } : {}}>
                         <WrapUnMaskComponent
                           unmaskField={(e) => {
                             setGuardian(e);
@@ -608,7 +610,7 @@ const ConnectionDetails = (_props) => {
           </LabelFieldPair>
           <CardLabelError style={errorStyle}>{localFormState.touched.guardian ? errors?.guardian?.message : ""}</CardLabelError>
           <LabelFieldPair>
-            <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t(
+            <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700", width:"100%" }} className="card-label-smaller">{`${t(
               "WS_CONN_HOLDER_OWN_DETAIL_RELATION_LABEL"
             )}*`}</CardLabel>
             <div className="field">
@@ -622,8 +624,8 @@ const ConnectionDetails = (_props) => {
                   <div
                     style={{
                       display: "flex",
-                      marginRight: checkifPrivacyValid() ? "-20px" : "unset",
-                      width: checkifPrivacyValid() ? "197%" : "208%",
+                      marginRight: checkifPrivacyValid() && !(isMobile && isEmployee) ? "-20px" : "unset",
+                      width: (isMobile && isEmployee) ? "" : checkifPrivacyValid() ? "197%" : "208%",
                     }}
                   >
                     <Dropdown
@@ -642,7 +644,7 @@ const ConnectionDetails = (_props) => {
                       t={t}
                     />
                     {checkifPrivacyValid() && (
-                      <div style={{ marginRight: "-10px", marginLeft: "8px", marginTop: "15px" }}>
+                      <div style={{ marginRight: "-10px", marginLeft: (isMobile && isEmployee) ? "" :"8px", marginTop: "15px" }}>
                         <WrapUnMaskComponent
                           unmaskField={(e) => {
                             const r = { code: e, i18nKey: `COMMON_MASTERS_OWNERTYPE_${e}`, name: e };
@@ -677,7 +679,7 @@ const ConnectionDetails = (_props) => {
           </LabelFieldPair>
           <CardLabelError style={errorStyle}>{localFormState.touched.relationship ? errors?.relationship?.message : ""}</CardLabelError>
           <LabelFieldPair>
-            <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t(
+            <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700", width:"100%" }} className="card-label-smaller">{`${t(
               "WS_CORRESPONDANCE_ADDRESS_LABEL"
             )}*`}</CardLabel>
             <div className="field">
@@ -691,7 +693,7 @@ const ConnectionDetails = (_props) => {
                 }}
                 isMandatory={true}
                 render={(props) => (
-                  <div style={{ display: "flex", alignItems: "baseline", marginRight: getValues("address")?.includes("*") ? "-20px" : "-4%" }}>
+                  <div style={{ display: "flex", alignItems: "baseline", marginRight: getValues("address")?.includes("*") && !(isMobile && isEmployee) ? "-20px" : "-4%" }}>
                     <TextInput
                       value={getValues("address")}
                       autoFocus={focusIndex.index === connectionHolderDetail?.key && focusIndex.type === "address"}
@@ -711,13 +713,13 @@ const ConnectionDetails = (_props) => {
                               model: "WnSConnectionOwner",
                             }) &&
                             !Digit.Utils.checkPrivacy(privacyData, { uuid: connectionHolderDetail?.uuid, fieldName: "mobileNumber", model: "User" })
-                            ? { width: "96%" }
-                            : { width: "96.2%" }
+                            ? ((isMobile && isEmployee) ? {} :{ width: "96%" })
+                            : ((isMobile && isEmployee) ? {} :{ width: "96.2%" })
                           : {}
                       }
                     />
                     {checkifPrivacyValid() && (
-                      <div style={{ marginRight: "-10px", marginLeft: "10px" }}>
+                      <div style={ !(isMobile && isEmployee) ? { marginRight: "-10px", marginLeft: "10px" } : {}}>
                         <WrapUnMaskComponent
                           unmaskField={(e) => {
                             setAddress(e);
@@ -751,7 +753,7 @@ const ConnectionDetails = (_props) => {
           </LabelFieldPair>
           <CardLabelError style={errorStyle}>{localFormState.touched.address ? errors?.address?.message : ""}</CardLabelError>
           <LabelFieldPair>
-            <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t(
+            <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700", width:"100%" }} className="card-label-smaller">{`${t(
               "WS_OWNER_SPECIAL_CATEGORY"
             )}*`}</CardLabel>
             <div className="field">
@@ -765,8 +767,8 @@ const ConnectionDetails = (_props) => {
                   <div
                     style={{
                       display: "flex",
-                      marginRight: checkifPrivacyValid() ? "-20px" : "unset",
-                      width: checkifPrivacyValid() ? "197%" : "208%",
+                      marginRight: checkifPrivacyValid() && !(isMobile && isEmployee) ? "-20px" : "unset",
+                      width: (isMobile && isEmployee) ? "" : checkifPrivacyValid() ? "197%" : "208%",
                     }}
                   >
                     <Dropdown
@@ -785,7 +787,7 @@ const ConnectionDetails = (_props) => {
                       t={t}
                     />
                     {checkifPrivacyValid() && (
-                      <div style={{ marginRight: "-10px", marginLeft: "8px", marginTop: "10px" }}>
+                      <div style={{ marginRight: "-10px", marginLeft: (isMobile && isEmployee) ? "" :"8px", marginTop: "10px" }}>
                         <WrapUnMaskComponent
                           unmaskField={(e) => {
                             const r = { code: e, i18nKey: `COMMON_MASTERS_OWNERTYPE_${e}`, name: e };

@@ -88,14 +88,15 @@ const MobileSearchWater = ({ Controller, register, control, t, reset, previousPa
     }
   };
   const GetStatusLinkCell = (value) => {
-    let service = "WATER";
+
+    //let service = "WATER";
     return (
       <div>
         <span className="link">
           <Link
             to={`/digit-ui/employee/ws/connection-details?applicationNumber=${value?.connectionNo}&tenantId=${
               value?.tenantId
-            }&service=${service}&connectionType=${value?.connectionType}&due=${value?.due || 0}`}
+            }&service=${value?.service}&connectionType=${value?.connectionType}&due=${value?.due || 0}`}
           >
             {value?.connectionNo || "NA"}
           </Link>

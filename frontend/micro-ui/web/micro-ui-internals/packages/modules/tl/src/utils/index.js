@@ -179,8 +179,8 @@ export const gettradeownerarray = (data) => {
       tradeownerarray.push({
               mobileNumber: ob.mobilenumber,
               name: ob.name,
-              fatherOrHusbandName: "",
-              relationship: "",
+              fatherOrHusbandName: ob?.fatherOrHusbandName,
+              relationship: ob?.relationship?.code ? ob?.relationship?.code : ob?.relationship,
               dob: null,
               gender: ob?.gender?.code || null,
               permanentAddress: data?.owners?.permanentAddress,

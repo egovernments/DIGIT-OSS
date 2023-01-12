@@ -10,7 +10,7 @@ const useInboxMobileCardsData = ({ parentRoute, table }) => {
     value === "Active" || value > 0 ? <span className="sla-cell-success">{value}</span> : <span className="sla-cell-error">{value}</span>;
 
   const GetStatusLinkCell = (value, tenantId, applicationType) => {
-    let service = "WATER";
+    let service = value?.includes("WS")?"WATER":"SEWERAGE";
     let application = "application";
     if (applicationType?.toUpperCase()?.includes("DISCONNECT")) {
       application = "disconnection"
@@ -71,7 +71,7 @@ const useInboxMobileCardsData = ({ parentRoute, table }) => {
 
   return {
     data: dataForMobileInboxCards,
-    linkPrefix: `${parentRoute}/inbox/application-overview/`,
+    //linkPrefix: `${parentRoute}/application-details?applicationNumber=${value}`,
     serviceRequestIdKey: t("NOC_APP_NO_LABEL"),
     MobileSortFormValues,
   };

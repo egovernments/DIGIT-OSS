@@ -287,13 +287,13 @@ export const WSSearch = {
         serviceType == "WATER"
           ? [
               { title: "PDF_STATIC_LABEL_APPLICATION_NUMBER_LABEL", value: wsDataDetails?.applicationNo || t("NA") },
-              { title: "WS_SERVICE_NAME_LABEL", value:  t(`WS_APPLICATION_TYPE_${wsDataDetails?.applicationType}`) },
+              { title: "WS_SERVICE_NAME_LABEL", value:  t(`WS_APPLICATION_TYPE_${wsDataDetails?.applicationType ? wsDataDetails?.applicationType : wsDataDetails?.serviceType}`) },
               { title: "WS_NO_OF_CONNECTIONS_PROPOSED_LABEL", value: wsDataDetails?.proposedTaps || t("NA") },
               { title: "WS_PROPOSED_PIPE_SIZE", value: wsDataDetails?.proposedPipeSize || t("NA") },
             ]
           : [
               { title: "PDF_STATIC_LABEL_APPLICATION_NUMBER_LABEL", value: wsDataDetails?.applicationNo || t("NA") },
-              { title: "WS_SERVICE_NAME_LABEL", value:  t(`WS_APPLICATION_TYPE_${wsDataDetails?.applicationType}`) },
+              { title: "WS_SERVICE_NAME_LABEL", value:  t(`WS_APPLICATION_TYPE_${wsDataDetails?.applicationType ? wsDataDetails?.applicationType : wsDataDetails?.serviceType}`) },
               { title: "WS_NO_WATER_CLOSETS_LABEL", value: wsDataDetails?.proposedWaterClosets || t("NA") },
               { title: "WS_PROPOSED_WATER_TOILETS_LABEL", value: wsDataDetails?.proposedToilets || t("NA") },
             ],
@@ -659,13 +659,13 @@ export const WSSearch = {
         serviceType == "WATER"
           ? [
             { title: "PDF_STATIC_LABEL_APPLICATION_NUMBER_LABEL", value: wsDataDetails?.applicationNo || t("NA") },
-            { title: "WS_SERVICE_NAME_LABEL", value: t(`WS_APPLICATION_TYPE_${wsDataDetails?.applicationType}`) },
+            { title: "WS_SERVICE_NAME_LABEL", value: t(`WS_APPLICATION_TYPE_${wsDataDetails?.applicationType? wsDataDetails?.applicationType : wsDataDetails?.serviceType}`) },
             { title: "WS_NO_OF_CONNECTIONS_PROPOSED_LABEL", value: wsDataDetails?.proposedTaps || t("NA") },
             { title: "WS_PROPOSED_PIPE_SIZE", value: wsDataDetails?.proposedPipeSize || t("NA") },
           ]
           : [
             { title: "PDF_STATIC_LABEL_APPLICATION_NUMBER_LABEL", value: wsDataDetails?.applicationNo || t("NA") },
-            { title: "WS_SERVICE_NAME_LABEL", value: t(`WS_APPLICATION_TYPE_${wsDataDetails?.applicationType}`) },
+            { title: "WS_SERVICE_NAME_LABEL", value: t(`WS_APPLICATION_TYPE_${wsDataDetails?.applicationType? wsDataDetails?.applicationType : wsDataDetails?.serviceType}`) },
             { title: "WS_NO_WATER_CLOSETS_LABEL", value: wsDataDetails?.proposedWaterClosets || t("NA") },
             { title: "WS_PROPOSED_WATER_TOILETS_LABEL", value: wsDataDetails?.proposedToilets || t("NA") },
           ],
@@ -1494,7 +1494,7 @@ export const WSSearch = {
         serviceType == "WATER"
           ? [
               { title: "PDF_STATIC_LABEL_CONSUMER_NUMBER_LABEL", value: wsDataDetails?.connectionNo || t("NA") },
-              { title: "WS_SERVICE_NAME_LABEL", value: t(`WS_APPLICATION_TYPE_${wsDataDetails?.applicationType}`) },
+              { title: "WS_SERVICE_NAME_LABEL", value: t(`WS_APPLICATION_TYPE_${wsDataDetails?.applicationType? wsDataDetails?.applicationType : wsDataDetails?.serviceType}`) },
               {
                 title: "WS_SERV_DETAIL_CONN_TYPE",
                 value: wsDataDetails?.connectionType
@@ -1532,7 +1532,7 @@ export const WSSearch = {
             ]
           : [
               { title: "PDF_STATIC_LABEL_CONSUMER_NUMBER_LABEL", value: wsDataDetails?.connectionNo || t("NA") },
-              { title: "WS_SERVICE_NAME_LABEL", value: t(`WS_APPLICATION_TYPE_${wsDataDetails?.applicationType}`) },
+              { title: "WS_SERVICE_NAME_LABEL", value: t(`WS_APPLICATION_TYPE_${wsDataDetails?.applicationType? wsDataDetails?.applicationType : wsDataDetails?.serviceType}`) },
               { title: "WS_NUMBER_WATER_CLOSETS_LABEL", value: wsDataDetails?.noOfWaterClosets || t("NA") },
               { title: "WS_SERV_DETAIL_NO_OF_TOILETS", value: wsDataDetails?.noOfToilets || t("NA") },
               {
@@ -1787,7 +1787,7 @@ export const WSSearch = {
         [
           { title: "PDF_STATIC_LABEL_APPLICATION_NUMBER_LABEL", value: wsDataDetails?.applicationNo || t("NA") },
           { title: "PDF_STATIC_LABEL_CONSUMER_NUMBER_LABEL", value: wsDataDetails?.connectionNo || t("NA") },
-          { title: "WS_SERVICE_NAME_LABEL", value: t(`WS_APPLICATION_TYPE_${wsDataDetails?.applicationType}`) },
+          { title: "WS_SERVICE_NAME_LABEL", value: t(`WS_APPLICATION_TYPE_${wsDataDetails?.applicationType? wsDataDetails?.applicationType : wsDataDetails?.serviceType}`) },
           { title: "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_DISCONNECTION_TYPE", value: t(`${applicationType}`) },
           { title: "WNS_COMMON_TABLE_COL_AMT_DUE_LABEL", value: fetchBillData.Bill[0]?.totalAmount ? "₹ " + fetchBillData.Bill[0]?.totalAmount : "₹ 0" },
           { title: "WS_DISCONNECTION_PROPOSED_DATE", value: wsDataDetails?.dateEffectiveFrom ? convertEpochToDate(wsDataDetails?.dateEffectiveFrom) : t("NA") },

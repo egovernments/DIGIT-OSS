@@ -39,7 +39,7 @@ const WrapCheckPage = ({ onSubmit, value }) => {
   const history = useHistory();
   const match = useRouteMatch();
   const [toast, setToast] = useState(null);
-  const { TradeDetails, address, owners, propertyType, subtype, pitType, pitDetail, isEditProperty, cpt } = value;
+  const { TradeDetails, address, owners, propertyType, subtype, pitType, pitDetail, isEditProperty, cpt, cptId } = value;
 
   const { data: billingSlabTradeTypeData, isLoading : isBillingSlabLoading } = Digit.Hooks.tl.useTradeLicenseBillingslab({ tenantId: value?.tenantId || Digit.ULBService.getCurrentTenantId(), filters: {} }, {
     select: (data) => {
@@ -201,7 +201,7 @@ const WrapCheckPage = ({ onSubmit, value }) => {
           )}
         </StatusTable>
         <div style={{ textAlign: "left" }}>
-          <Link to={`/digit-ui/citizen/commonpt/view-property?propertyId=${cpt?.details?.propertyId}&tenantId=${cpt?.details?.tenantId}`}>
+          <Link to={`/digit-ui/citizen/commonpt/view-property?propertyId=${cpt?.details?.propertyId || cptId?.id || value?.tradeLicenseDetail?.additionalDetail?.propertyId}&tenantId=${cpt?.details?.tenantId || value?.tenantId}`}>
             <LinkButton style={{ textAlign: "left" }} label={t("TL_VIEW_PROPERTY")} />
           </Link>
         </div>

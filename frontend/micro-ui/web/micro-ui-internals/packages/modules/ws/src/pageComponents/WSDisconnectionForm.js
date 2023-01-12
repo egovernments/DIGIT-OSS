@@ -315,8 +315,9 @@ if(userType === 'citizen') {
             <div className={`tooltip`} style={{marginLeft: "8px"}}>
             <InfoIcon/>
             <span className="tooltiptext" style={{
-                    whiteSpace: "nowrap",
-                    fontSize: "medium"
+                    whiteSpace: Digit.Utils.browser.isMobile() ? "unset" : "nowrap",
+                    fontSize: "medium",
+                    width:  Digit.Utils.browser.isMobile() && window.location.href.includes("/employee") ? "200px" : "",
                   }}>
                     {`${t(`WS_DISCONNECTION_PERMANENT_TOOLTIP`)}`}
                     <br/><br/>
@@ -342,8 +343,8 @@ if(userType === 'citizen') {
             <div className={`tooltip`} style={{position: "absolute", marginLeft: "4px"}}>
             <InfoIcon/>
             <span className="tooltiptext" style={{
-                    whiteSpace: "nowrap",
-                    fontSize: "medium"
+                    whiteSpace: Digit.Utils.browser.isMobile() ? "unset" : "nowrap",
+                    fontSize: "medium",
                   }}>
                     {t("SHOULD_BE_DATE")+ " " + slaData?.slaDays + " " + t("DAYS_OF_APPLICATION_DATE")}
                   </span>

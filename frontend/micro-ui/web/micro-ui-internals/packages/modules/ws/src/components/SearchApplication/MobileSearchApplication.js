@@ -154,7 +154,7 @@ const MobileSearchApplication = ({ Controller, register, control, t, reset, prev
         <DetailsCard
           {...{
             data: propsMobileInboxCards,
-            linkPrefix: `/digit-ui/employee/ws/application-details/`,
+            //linkPrefix: `/digit-ui/employee/ws/application-details/`,
             serviceRequestIdKey: t("WS_COMMON_TABLE_COL_APP_NO"),
           }}
         />
