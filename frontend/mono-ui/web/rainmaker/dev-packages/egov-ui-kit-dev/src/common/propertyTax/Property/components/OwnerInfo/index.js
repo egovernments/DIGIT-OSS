@@ -510,7 +510,7 @@ class OwnerInfo extends Component {
       // OldProperty,
       updateNumberConfig,
     } = this.props;
-    // let showEditIcon = true;
+    let showEditIcon = editIcon? true:false;
     let ownerInfo = [];
     let multipleOwner = false;
     let mutationCheck = process.env.REACT_APP_NAME === "Citizen" ? false : true;
@@ -522,9 +522,10 @@ class OwnerInfo extends Component {
     // }
     if (properties) {
       const { propertyDetails } = properties;
-      // if (properties.propertyId){
-      //   showEditIcon = false;
-      // }
+      if (properties.propertyId){
+        showEditIcon = false;
+      }
+      console.log(showEditIcon,"showEditIcon")
       if (propertyDetails && propertyDetails.length > 0) {
          ownerInfo = this.getOwnerInfo(propertyDetails[0], generalMDMSDataById);
        /* if (ownerInfo.length > 1) {
@@ -563,8 +564,8 @@ class OwnerInfo extends Component {
                       />
                     )}
                   </div>
-                  {{ editIcon } && <span style={{ alignItems: "right" }}>{editIcon}</span>}
-                  {/* {editIcon && showEditIcon && <span style={{ alignItems: "right" }}>{editIcon}</span>} */}
+                  {/* {{ editIcon } && <span style={{ alignItems: "right" }}>{editIcon}</span>} */}
+                  { showEditIcon && <span style={{ alignItems: "right" }}>{editIcon}</span>}
                   {/* Transfer ownership button and View History button */}
                   {(viewHistory || ownershipTransfer) && (
                     <div id="pt-header-button-container" className="header-button-container">
