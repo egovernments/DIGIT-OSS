@@ -15,12 +15,12 @@ export default function CheckCredentials(){
     const checkCrednetials = async () => {
         const body = {
             "SsoCitizen": {
-                "userId": queryParameters.get("userId"),
-                "emailId": queryParameters.get("emailId"),
-                "mobileNumber": queryParameters.get("mobileNumber"),
-                "returnUrl":  queryParameters.get("returnUrl"),
-                "redirectUrl":  queryParameters.get("redirectUrl"),
-                "tokenId": queryParameters.get("tokenId")
+                "userId": queryParameters.get("UserId"),
+                "emailId": queryParameters.get("EmailId"),
+                "mobileNumber": queryParameters.get("MobNo"),
+                "returnUrl": queryParameters.get("RedirectUrl"),
+                "redirectUrl": queryParameters.get("ReturnUrl"),
+                "tokenId": queryParameters.get("TokenId")
             }
         }
         const response = await axios.post("http://103.166.62.118:80/user/users/_ssoCitizen",body)
