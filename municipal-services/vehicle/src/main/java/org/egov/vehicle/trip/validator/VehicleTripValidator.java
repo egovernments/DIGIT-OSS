@@ -173,7 +173,16 @@ public class VehicleTripValidator {
 		if (userDetailResponse == null && CollectionUtils.isEmpty(userDetailResponse.getUser())) {
 			throw new CustomException(VehicleTripConstants.INVALID_VEHICLELOG_ERROR, "Invalid Trip owner");
 		} else {
-			BeanUtils.copyProperties(userDetailResponse.getUser().get(0), owner);
+			userDetailResponse.getUser().forEach(userInfo -> {
+
+				userInfo.getRoles().forEach(role -> {
+
+					if (role.getCode().contains(VehicleTripConstants.FSM_DSO) ) {
+						BeanUtils.copyProperties(userInfo, owner);
+					}
+
+				});
+			});
 			vehicleTrip.setTripOwner(owner);
 		}
 	}
@@ -188,7 +197,16 @@ public class VehicleTripValidator {
 		if (userDetailResponse == null && CollectionUtils.isEmpty(userDetailResponse.getUser())) {
 			throw new CustomException(VehicleTripConstants.INVALID_VEHICLELOG_ERROR, "Invalid Trip driver");
 		} else {
-			BeanUtils.copyProperties(userDetailResponse.getUser().get(0), driver);
+			userDetailResponse.getUser().forEach(userInfo -> {
+
+				userInfo.getRoles().forEach(role -> {
+
+					if (role.getCode().contains(VehicleTripConstants.FSM_DRIVER) ) {
+						BeanUtils.copyProperties(userInfo, driver);
+					}
+
+				});
+			});
 			vehicleTrip.setDriver(driver);
 		}
 	}
