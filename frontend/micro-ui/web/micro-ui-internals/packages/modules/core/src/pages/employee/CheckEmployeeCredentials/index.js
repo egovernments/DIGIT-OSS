@@ -48,8 +48,8 @@ export default function CheckCredentials(){
                 "userId": queryParameters.get("userId"),
                 "emailId": queryParameters.get("emailId"),
                 "mobileNumber": queryParameters.get("mobileNumber"),
-                "returnUrl": "http;//103.166.62.118:3001/digit-ui/citizen",
-                "redirectUrl": "http;//103.166.62.118:3001/digit-ui/citizen",
+                "returnUrl":  queryParameters.get("returnUrl"),
+                "redirectUrl":  queryParameters.get("redirectUrl"),
                 "tokenId": queryParameters.get("tokenId")
             }
         }
