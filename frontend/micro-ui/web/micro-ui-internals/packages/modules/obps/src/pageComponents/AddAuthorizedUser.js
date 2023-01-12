@@ -54,6 +54,9 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
   const [userDelete, setUserDelete] = useState([]);
   const [loader, setLoading] = useState(false);
   const [aurthorizedUserInfoArray, setAurthorizedUserInfoArray] = useState([]);
+  const [ panIsValid, setPanIsValid ] = useState(false);
+  const [ toastError,setToastError ] = useState("");
+
   const getDeveloperData = async ()=>{
     try {
       const requestResp = {
@@ -216,6 +219,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
 
   
   const panVerification = async () => {
+    setLoading(true);
     try {
       const panVal =  {
         "txnId": "f7f1469c-29b0-4325-9dfc-c567200a70f7",
@@ -275,9 +279,13 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
         'Access-Control-Allow-Origin':"*",
       }}) 
       console.log("",panResp.data);
+      setPanIsValid(true);
+      setLoading(false);
     } catch(errdata){
-      console.log(error?.response?.data?.errorDescription);
-      setPanValError(error?.response?.data?.errorDescription)
+      setLoading(false);
+      setPanIsValid(false);
+      console.log("error",errdata?.response);
+      setPanValError(errdata?.response?.data?.errorDescription);
     }
   }
   
@@ -352,6 +360,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
     
     } catch (error) {
     //   setLoader(false);
+    setLoading(false);
       alert(error?.response?.data?.Errors?.[0]?.description);
       console.log(error,error?.body,error?.response?.data?.Errors?.[0]?.description);
     }
@@ -381,10 +390,10 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
     if(validateUser(aurthorizedPan,aurthorizedMobileNumber,aurthorizedEmail)){
       return alert("PLease Enter Unique PAN, Email and Mobile Number for every user") ;
     }
-
+    setLoading(true);
     // if(aurthorizedMobileNumber!=="" && aurthorizedUserName!=="" && aurthorizedMobileNumber!=="" && aurthorizedEmail!==""){
       const user = {
-          userName: aurthorizedMobileNumber,
+          userName: aurthorizedEmail,
           name: aurthorizedUserName,
           gender: gender.value,
           mobileNumber: aurthorizedMobileNumber,
@@ -443,10 +452,12 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
           setValue("authorizedUserFiles",[...getValues("modalFiles")]);
         }
         setDocumentsData({});
+        setLoading(false);
       }
       
       catch(error){
         console.log(error.message);
+        setLoading(false);
     }
     // getAdhaarPdf();
     // getDigitalSignPdf();
@@ -857,7 +868,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                     Close
                   </Button>
                   <Button 
-                    disabled = { !aurthorizedUserName || !aurthorizedDob || !aurthorizedEmail || !aurthorizedMobileNumber || !aurthorizedPan || !aurthorizedEmail.match(Digit.Utils.getPattern("Email")) || !aurthorizedUserName.match(Digit.Utils.getPattern('Name')) || !aurthorizedPan.match(Digit.Utils.getPattern("PAN")) || !aurthorizedMobileNumber.match(Digit.Utils.getPattern("MobileNo")) || !Documents?.uploadBoardResolution || !Documents?.uploadDigitalSignaturePdf }
+                    disabled = { !aurthorizedUserName || !aurthorizedDob || !aurthorizedEmail || !panIsValid || !aurthorizedMobileNumber || !aurthorizedPan || !aurthorizedEmail.match(Digit.Utils.getPattern("Email")) || !aurthorizedUserName.match(Digit.Utils.getPattern('Name')) || !aurthorizedPan.match(Digit.Utils.getPattern("PAN")) || !aurthorizedMobileNumber.match(Digit.Utils.getPattern("MobileNo")) || !Documents?.uploadBoardResolution || !Documents?.uploadDigitalSignaturePdf }
                   variant="primary" onClick={handleSubmitFormdata}>
                     Submit
                   </Button>
@@ -894,6 +905,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                 Submit
                 </button>
             </div> */}
+            {toastError && <Toast error={ "error" ? true : false} label={toastError} isDleteBtn={true} onClose={() => { toastError(null); }} />}
             {showToast && <Toast success={showToast?.key === "success" ? true : false} label="Document Uploaded Successfully" isDleteBtn={true} onClose={() => { setShowToast(null); setError(null); }} />}
             {showToastError && <Toast error={showToastError?.key === "error" ? true : false} label="Duplicate file Selected" isDleteBtn={true} onClose={() => { setShowToastError(null); setError(null); }} />}
       </FormStep>
