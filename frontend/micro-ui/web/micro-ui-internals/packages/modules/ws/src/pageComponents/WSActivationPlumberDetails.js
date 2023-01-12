@@ -142,7 +142,7 @@ const PlumberDetails = (_props) => {
             <div style={{ marginBottom: "16px" }}>
                 <div>
                     <LabelFieldPair>
-                        <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700", width:"100%" }} className="card-label-smaller">{`${t("WS_ADDN_DETAILS_PLUMBER_PROVIDED_BY")}*`}</CardLabel>
+                        <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_ADDN_DETAILS_PLUMBER_PROVIDED_BY")}*`}</CardLabel>
                         <Controller
                             control={control}
                             name={"detailsProvidedBy"}
@@ -183,7 +183,7 @@ const PlumberDetails = (_props) => {
                     {!plumberDetail?.detailsProvidedBy?.code || plumberDetail?.detailsProvidedBy?.code == "ULB" ?
                         <div>
                             <LabelFieldPair>
-                                <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700", width:"100%" }} className="card-label-smaller">{`${t("WS_PLIMBER_LICENSE_NO_LABEL")}*`}</CardLabel>
+                                <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_PLIMBER_LICENSE_NO_LABEL")}*`}</CardLabel>
                                 <div className="field">
                                     <Controller
                                         control={control}
@@ -210,7 +210,7 @@ const PlumberDetails = (_props) => {
                             </LabelFieldPair>
                             <CardLabelError style={errorStyle}>{localFormState.touched.plumberLicenseNo ? errors?.plumberLicenseNo?.message : ""}</CardLabelError>
                             <LabelFieldPair>
-                                <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700", width:"100%" }} className="card-label-smaller">{`${t("WS_ADDN_DETAILS_PLUMBER_NAME_LABEL")}*`}</CardLabel>
+                                <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_ADDN_DETAILS_PLUMBER_NAME_LABEL")}*`}</CardLabel>
                                 <div className="field">
                                     <Controller
                                         control={control}
@@ -237,7 +237,7 @@ const PlumberDetails = (_props) => {
                             </LabelFieldPair>
                             <CardLabelError style={errorStyle}>{localFormState.touched.plumberName ? errors?.plumberName?.message : ""}</CardLabelError>
                             <LabelFieldPair>
-                                <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700", width:"100%" }} className="card-label-smaller">{`${t("WS_PLUMBER_MOBILE_NO_LABEL")}*`}</CardLabel>
+                                <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_PLUMBER_MOBILE_NO_LABEL")}*`}</CardLabel>
                                 <div className="field">
                                     <Controller
                                         control={control}

@@ -318,7 +318,7 @@ const ConnectionDetails = (_props) => {
       {!sameAsOwnerDetails ? (
         <div>
           <LabelFieldPair>
-            <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700", width:"100%" }} className="card-label-smaller">{`${t("WS_OWN_DETAIL_NAME")}*`}</CardLabel>
+            <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_OWN_DETAIL_NAME")}*`}</CardLabel>
             <div className="field">
               <Controller
                 control={control}
@@ -386,7 +386,7 @@ const ConnectionDetails = (_props) => {
           </LabelFieldPair>
           <CardLabelError style={errorStyle}>{localFormState.touched.name ? errors?.name?.message : ""}</CardLabelError>
           <LabelFieldPair>
-            <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700", width:"100%" }} className="card-label-smaller">{`${t(
+            <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t(
               "WS_CONN_HOLDER_OWN_DETAIL_GENDER_LABEL"
             )}*`}</CardLabel>
             <div className="field">
@@ -455,7 +455,7 @@ const ConnectionDetails = (_props) => {
           </LabelFieldPair>
           <CardLabelError style={errorStyle}>{localFormState.touched.gender ? errors?.gender?.message : ""}</CardLabelError>
           <LabelFieldPair>
-            <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700", width:"100%" }} className="card-label-smaller">{`${t(
+            <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700"}} className="card-label-smaller">{`${t(
               "CORE_COMMON_MOBILE_NUMBER"
             )}*`}</CardLabel>
             <div className="field">
@@ -536,7 +536,7 @@ const ConnectionDetails = (_props) => {
           </LabelFieldPair>
           <CardLabelError style={errorStyle}>{localFormState.touched.mobileNumber ? errors?.mobileNumber?.message : ""}</CardLabelError>
           <LabelFieldPair>
-            <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700", width:"100%" }} className="card-label-smaller">{`${t(
+            <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t(
               "WS_OWN_DETAIL_GUARDIAN_LABEL"
             )}*`}</CardLabel>
             <div className="field">
@@ -610,7 +610,7 @@ const ConnectionDetails = (_props) => {
           </LabelFieldPair>
           <CardLabelError style={errorStyle}>{localFormState.touched.guardian ? errors?.guardian?.message : ""}</CardLabelError>
           <LabelFieldPair>
-            <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700", width:"100%" }} className="card-label-smaller">{`${t(
+            <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t(
               "WS_CONN_HOLDER_OWN_DETAIL_RELATION_LABEL"
             )}*`}</CardLabel>
             <div className="field">
@@ -679,7 +679,7 @@ const ConnectionDetails = (_props) => {
           </LabelFieldPair>
           <CardLabelError style={errorStyle}>{localFormState.touched.relationship ? errors?.relationship?.message : ""}</CardLabelError>
           <LabelFieldPair>
-            <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700", width:"100%" }} className="card-label-smaller">{`${t(
+            <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t(
               "WS_CORRESPONDANCE_ADDRESS_LABEL"
             )}*`}</CardLabel>
             <div className="field">
@@ -753,7 +753,7 @@ const ConnectionDetails = (_props) => {
           </LabelFieldPair>
           <CardLabelError style={errorStyle}>{localFormState.touched.address ? errors?.address?.message : ""}</CardLabelError>
           <LabelFieldPair>
-            <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700", width:"100%" }} className="card-label-smaller">{`${t(
+            <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t(
               "WS_OWNER_SPECIAL_CATEGORY"
             )}*`}</CardLabel>
             <div className="field">

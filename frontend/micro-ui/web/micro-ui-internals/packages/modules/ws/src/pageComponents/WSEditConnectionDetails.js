@@ -193,7 +193,7 @@ const ConnectionDetails = (_props) => {
             </div> : 
             <div style={{ marginBottom: "16px" }}>
                 <LabelFieldPair>
-                    <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700", width:"100%" }} className="card-label-smaller">{`${t("PDF_STATIC_LABEL_APPLICATION_NUMBER_LABEL")}`}</CardLabel>
+                    <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("PDF_STATIC_LABEL_APPLICATION_NUMBER_LABEL")}`}</CardLabel>
                     <div className="field">
                         <Controller
                             control={control}
@@ -219,7 +219,7 @@ const ConnectionDetails = (_props) => {
                     </div>
                 </LabelFieldPair>
                 <LabelFieldPair>
-                    <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700", width:"100%" }} className="card-label-smaller">{`${t("WS_SERVICE_NAME_LABEL")}`}</CardLabel>
+                    <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_SERVICE_NAME_LABEL")}`}</CardLabel>
                     <div className="field">
                         <Controller
                             control={control}
@@ -247,7 +247,7 @@ const ConnectionDetails = (_props) => {
                 {connectionDetail?.serviceName == "WATER" && (
                     <div>
                         <LabelFieldPair>
-                            <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700", width:"100%" }} className="card-label-smaller">{`${t("WS_NO_OF_PROPOSED_TAPS_LABEL")}*`}</CardLabel>
+                            <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_NO_OF_PROPOSED_TAPS_LABEL")}*`}</CardLabel>
                             <div className="field">
                                 <Controller
                                     control={control}
@@ -275,7 +275,7 @@ const ConnectionDetails = (_props) => {
                         </LabelFieldPair>
                         <CardLabelError style={errorStyle}>{localFormState.touched.proposedTaps ? errors?.proposedTaps?.message : ""}</CardLabelError>
                         <LabelFieldPair>
-                            <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700", width:"100%" }} className="card-label-smaller">{`${t("WS_PROPOSED_PIPE_SIZE_IN_INCHES_LABEL")}*`}</CardLabel>
+                            <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_PROPOSED_PIPE_SIZE_IN_INCHES_LABEL")}*`}</CardLabel>
                             <Controller
                                 control={control}
                                 name={"proposedPipeSize"}
@@ -305,7 +305,7 @@ const ConnectionDetails = (_props) => {
                 {connectionDetail?.serviceName !== "WATER" && (
                     <div>
                         <LabelFieldPair>
-                            <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700", width:"100%" }} className="card-label-smaller">{`${t("WS_PROPOSED_WATER_CLOSETS_LABEL")}*`}</CardLabel>
+                            <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_PROPOSED_WATER_CLOSETS_LABEL")}*`}</CardLabel>
                             <div className="field">
                                 <Controller
                                     control={control}
@@ -333,7 +333,7 @@ const ConnectionDetails = (_props) => {
                         </LabelFieldPair>
                         <CardLabelError style={errorStyle}>{localFormState.touched.proposedWaterClosets ? errors?.proposedWaterClosets?.message : ""}</CardLabelError>
                         <LabelFieldPair>
-                            <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700", width:"100%" }} className="card-label-smaller">{`${t("WS_PROPOSED_WATER_TOILETS_LABEL")}*`}</CardLabel>
+                            <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_PROPOSED_WATER_TOILETS_LABEL")}*`}</CardLabel>
                             <div className="field">
                                 <Controller
                                     control={control}

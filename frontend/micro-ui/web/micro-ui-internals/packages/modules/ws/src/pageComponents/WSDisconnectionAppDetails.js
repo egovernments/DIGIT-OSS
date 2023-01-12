@@ -140,7 +140,7 @@ const PlumberDetails = (_props) => {
       <div style={{ marginBottom: "16px" }}>
         <CardSubHeader style={{ marginBottom: "40px", "fontSize": "24px", "lineHeight": "32px" }}>{t("WS_APPLICATION_DETAILS")}</CardSubHeader>
         <LabelFieldPair>
-          <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700", width:"100%" }} className="card-label-smaller">{`${t("WS_ACK_COMMON_APP_NO_LABEL")}*`}</CardLabel>
+          <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_ACK_COMMON_APP_NO_LABEL")}*`}</CardLabel>
           <div className="field">
             <Controller
               control={control}
@@ -165,7 +165,7 @@ const PlumberDetails = (_props) => {
             />
           </div>
         </LabelFieldPair>
-        <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700", width:"100%" }} className="card-label-smaller">{`${t("WS_DISCONNECTION_TYPE")}`}</CardLabel>
+        <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_DISCONNECTION_TYPE")}`}</CardLabel>
         <Controller
           control={control}
           name="disConnectionType"
@@ -202,7 +202,7 @@ const PlumberDetails = (_props) => {
           )}
         />
         <LabelFieldPair>
-          <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700", width:"100%" }} className="card-label-smaller">{`${t("WS_DISCONNECTION_PROPOSED_DATE")}*`}</CardLabel>
+          <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_DISCONNECTION_PROPOSED_DATE")}*`}</CardLabel>
           <div className="field">
             <Controller
               name="disConnectionProposeDate"
@@ -222,7 +222,7 @@ const PlumberDetails = (_props) => {
         </LabelFieldPair>
         <CardLabelError style={errorStyle}>{localFormState.touched.disConnectionProposeDate ? errors?.disConnectionProposeDate?.message : ""}</CardLabelError>
         <LabelFieldPair>
-          <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700", width:"100%" }} className="card-label-smaller">{`${t("WS_DISCONNECTION_REASON")}*`}</CardLabel>
+          <CardLabel style={isMobile && isEmployee ? {fontWeight: "700", width:"100%"} : { marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_DISCONNECTION_REASON")}*`}</CardLabel>
           <div className="field">
             <Controller
               control={control}
