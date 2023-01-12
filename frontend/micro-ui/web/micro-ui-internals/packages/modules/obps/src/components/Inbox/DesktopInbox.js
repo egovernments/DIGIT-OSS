@@ -15,7 +15,6 @@ const DesktopInbox = ({ tableConfig, filterComponent, columns, isLoading, setSea
         const { t } = useTranslation();
 
         const [FilterComponent, setComp] = useState(() => Digit.ComponentRegistryService?.getComponent(filterComponent));
-        console.log(Digit, "cccccccccccc");
         const GetCell = (value) => <span className="cell-text">{value}</span>;
       
         const GetSlaCell = (value) => {
@@ -37,10 +36,11 @@ const DesktopInbox = ({ tableConfig, filterComponent, columns, isLoading, setSea
     {
       Header: t("WF_INBOX_HEADER_APPLICATION_NO"),
       Cell: ({ row }) => {
+        console.log({row, data}, "rrrrrrrrrrrrrrrrrrrrrr");
         return (
           <div>
             <span className="link">
-              <Link to={`/digit-ui/employee/tl/${row.original["businessService"] === 'NewTL' || 'TL' ? 'scrutiny' : row.original["businessService"] === 'SERVICE_PLAN' ? 'ServiceScrutiny' : null }/` + row.original["applicationId"]}>{row.original["applicationId"]}</Link>
+              <Link to={`/digit-ui/employee/tl/${row.original["businessService"] === 'SERVICE_PLAN' ? 'ServiceScrutiny' : row.original["businessService"] === 'ELECTRICAL_PLAN' ? 'ElectricalScrutiny' : undefined }/` + row.original["applicationId"]}>{row.original["applicationId"]}</Link>
             </span>
           </div>
         );
@@ -64,12 +64,12 @@ const DesktopInbox = ({ tableConfig, filterComponent, columns, isLoading, setSea
     //     return GetCell(t(Digit.Utils.locale.getRevenueLocalityCode(row.original["locality"], row.original["tenantId"])));
     //   },
     // },
-    {
-      Header: t("WF_INBOX_HEADER_DIARY_NO"),
-      Cell: ({ row }) => {
-        return GetCell(row.original["dairyNo"]);
-      },
-    },
+    // {
+    //   Header: t("WF_INBOX_HEADER_DIARY_NO"),
+    //   Cell: ({ row }) => {
+    //     return GetCell(row.original["dairyNo"]);
+    //   },
+    // },
     {
       Header: t("WF_INBOX_HEADER_STATUS"),
       Cell: ({ row }) => {
@@ -81,19 +81,20 @@ const DesktopInbox = ({ tableConfig, filterComponent, columns, isLoading, setSea
       Cell: ({ row }) => {
         return GetCell(t(`${row.original?.owner}`));
       }
-    }, {
+    }, 
+    {
       Header: t("WF_INBOX_HEADER_SLA_DAYS_REMAINING"),
       Cell: ({ row }) => {
         return GetSlaCell(row.original["sla"])
       },
     },
-    {
-      Header: t("WF_INBOX_HEADER_AGING"),
-      Cell: ({ row }) => {
-        const date = elapsedTime(row.original.date,new Date().getTime());
-        return GetCell(`${date.days} Days ${date.hours} Hours ${date.hours} Minutes`)
-      },
-    },
+    // {
+    //   Header: t("WF_INBOX_HEADER_AGING"),
+    //   Cell: ({ row }) => {
+    //     const date = elapsedTime(row.original.date,new Date().getTime());
+    //     return GetCell(`${date.days} Days ${date.hours} Hours ${date.hours} Minutes`)
+    //   },
+    // },
     {
       Header: t("WF_INBOX_HEADER_ACTION"),
       Cell: ({ row }) => {
@@ -203,7 +204,7 @@ const DesktopInbox = ({ tableConfig, filterComponent, columns, isLoading, setSea
                 roles: ["STADMIN"],
               },
             ]}
-            headerText={t("SERVICE_PLAN_CARD")} businessService={props.businessService} />
+            headerText={t(`${props.businessService}_CARD`)} businessService={props.businessService} />
           <div>
             {isLoading ? <Loader /> :
               <FilterComponent
