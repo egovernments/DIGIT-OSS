@@ -85,7 +85,7 @@ const ScrutinyForm = (props) => {
     config: { EditRenewalApplastModifiedTime: EditRenewalApplastModifiedTime },
   });
 
-  // const applicationDetailsTemp = Digit.Hooks.tl.useApplicationDetail(t, tenantId, id);
+  const applicationDetailsTemp = Digit.Hooks.tl.useApplicationDetail(t, tenantId, id);
 
   const {
     // isLoading: updatingApplication,

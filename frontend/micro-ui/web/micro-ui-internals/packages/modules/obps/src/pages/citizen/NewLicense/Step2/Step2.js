@@ -971,217 +971,203 @@ const ApllicantPuropseForm = (props) => {
             </Row>
             <br></br>
             <Row className="ml-auto mb-3">
-              <Col md={4} xxl lg="12">
-                <div>
-                  <div className="form-check">
-                    <label style={{ marginRight: "23px" }} className="checkbox" for="flexCheckDefault">
-                      If there is a change in information auto-populated, then the information be provided in the following format.
-                    </label>
+              <div className="form-check">
+                <label style={{ marginRight: "23px" }} className="checkbox" for="flexCheckDefault">
+                  <b>If there is a change in information auto-populated, then the information be provided in the following format.</b>
+                </label>
+                <input
+                  onClick={(e) => setShowFields(e.target.checked)}
+                  className="form-check-input"
+                  formControlName="agreeCheck"
+                  type="checkbox"
+                  value=""
+                  id="flexCheckDefault"
+                  required
+                />
+              </div>
+              {showFields && (
+                <Row className="ml-auto mb-3">
+                  <Col md={4} xxl lg="4">
+                    <div>
+                      <Form.Label>
+                        <h2>
+                          Rectangle No./Mustil <span style={{ color: "red" }}>*</span>
+                        </h2>
+                      </Form.Label>
+                    </div>
                     <input
-                      onClick={(e) => setShowFields(e.target.checked)}
-                      className="form-check-input"
-                      formControlName="agreeCheck"
-                      type="checkbox"
-                      value=""
-                      id="flexCheckDefault"
-                      required
+                      autoComplete="off"
+                      type="text"
+                      className="form-control"
+                      placeholder="Rectangle No./Mustil"
+                      {...register("editRectangleNo")}
                     />
-                  </div>
-                  {showFields && (
-                    <Row className="ml-auto mb-3">
-                      <Col md={4} xxl lg="4">
-                        <div>
-                          <Form.Label>
-                            <h2>
-                              Rectangle No./Mustil <span style={{ color: "red" }}>*</span>
-                            </h2>
-                          </Form.Label>
-                        </div>
-                        <input
-                          autoComplete="off"
+                  </Col>
+
+                  <Col md={4} xxl lg="4">
+                    <div>
+                      <label>
+                        <h2>
+                          Enter Khewat <span style={{ color: "red" }}>*</span>
+                        </h2>
+                      </label>
+                    </div>
+                    <input autoComplete="off" type="text" className="form-control" placeholder="Enter Khewat" {...register("editKhewats")} />
+                  </Col>
+
+                  <Col md={4} xxl lg="4">
+                    <div>
+                      <label>
+                        <h2>Name of land owner as per registry</h2>
+                      </label>
+                    </div>
+                    <input autoComplete="off" type="text" className="form-control" placeholder="" {...register("landOwnerRegistry")} />
+                  </Col>
+                </Row>
+              )}
+              <div className="col col-12">
+                <h2>
+                  <b>
+                    Whether Khasra been developed in collaboration<span style={{ color: "red" }}>*</span>
+                  </b>
+                  &nbsp;&nbsp;
+                  <label htmlFor="collaboration">
+                    <input {...register("collaboration")} type="radio" value="Y" id="yes" />
+                    &nbsp;&nbsp; Yes &nbsp;&nbsp;
+                  </label>
+                  <label htmlFor="collaboration">
+                    <input {...register("collaboration")} type="radio" value="N" id="no" />
+                    &nbsp;&nbsp; No &nbsp;&nbsp;
+                  </label>
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.collaboration && errors?.collaboration?.message}
+                  </h3>
+                </h2>
+                {watch("collaboration") === "Y" && (
+                  <div>
+                    <div className="row ">
+                      <div className="col col-4">
+                        <label>
+                          <h2
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            title=" Name of the developer company / Firm/ LLP etc. with whom collaboration agreement entered."
+                          >
+                            Name of the developer company .<span style={{ color: "red" }}>*</span>
+                          </h2>
+                        </label>
+                        <Form.Control
                           type="text"
                           className="form-control"
-                          placeholder="Rectangle No./Mustil"
-                          {...register("editRectangleNo")}
+                          placeholder=""
+                          {...register("developerCompany")}
+                          required
+                          minlength={2}
+                          maxLength={99}
                         />
-                      </Col>
+                      </div>
+                      <div className="col col-4">
+                        <label>
+                          <h2>
+                            Date of registering collaboration agreement<span style={{ color: "red" }}>*</span>
+                          </h2>
+                        </label>
+                        <Form.Control
+                          type="date"
+                          value={modalData.agreementValidFrom}
+                          className="form-control"
+                          required
+                          placeholder=""
+                          {...register("agreementValidFrom")}
+                          max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
+                        />
+                      </div>
+                      <div className="col col-4">
+                        <h2>
+                          Whether collaboration agreement irrevocable (Yes/No)<span style={{ color: "red" }}>*</span>
+                        </h2>
+                        <label htmlFor="agreementIrrevocialble">
+                          <input {...register("agreementIrrevocialble")} type="radio" value="Y" id="yes" />
+                          &nbsp;&nbsp; Yes &nbsp;&nbsp;
+                        </label>
+                        <label htmlFor="agreementIrrevocialble">
+                          <input {...register("agreementIrrevocialble")} type="radio" value="N" id="no" />
+                          &nbsp;&nbsp; No &nbsp;&nbsp;
+                        </label>
+                      </div>
+                    </div>
+                    <br></br>
+                    <br></br>
+                    <div className="row ">
+                      <div className="col col-4">
+                        <label>
+                          <h2>
+                            Name of authorized signatory on behalf of land owner(s)<span style={{ color: "red" }}>*</span>
+                          </h2>
+                        </label>
+                        <Form.Control
+                          type="text"
+                          className="form-control"
+                          placeholder=""
+                          {...register("authSignature")}
+                          required
+                          minlength={4}
+                          maxLength={99}
+                        />
+                      </div>
+                      <div className="col col-4">
+                        <label>
+                          <h2
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            title="  Name of authorized signatory on behalf of developer to sign Collaboration agreement."
+                          >
+                            Name of authorized signatory on behalf of developer.<span style={{ color: "red" }}>*</span>
+                          </h2>
+                        </label>
+                        <Form.Control
+                          type="text"
+                          className="form-control"
+                          placeholder=""
+                          {...register("nameAuthSign")}
+                          required
+                          minlength={4}
+                          maxLength={99}
+                        />
+                      </div>
+                      <div className="col col-4">
+                        <label>
+                          <h2>
+                            Registering Authority<span style={{ color: "red" }}>*</span>
+                          </h2>
+                        </label>
+                        <Form.Control type="text" className="form-control" placeholder="" {...register("registeringAuthority")} required />
+                      </div>
+                    </div>
+                    <br></br>
+                    <br></br>
+                    <div className="row ">
+                      <div className="col col-4">
+                        <label>
+                          <h2 data-toggle="tooltip" data-placement="top" title="Upload Document" style={{ marginTop: "-4px" }}>
+                            Registering Authority document <span style={{ color: "red" }}>*</span> <FileUpload color="primary" />
+                            <div>
+                              <input
+                                type="file"
+                                accept="application/pdf/jpeg/png"
+                                style={{ display: "none" }}
+                                required
+                                onChange={(e) => getDocumentData(e?.target?.files[0], "registeringAuthorityDoc")}
+                              />
+                            </div>
+                          </h2>
+                        </label>
+                        <h3 style={{}}>{watch("registeringAuthorityDocFileName") ? watch("registeringAuthorityDocFileName") : null}</h3>
+                        <h3 className="error-message" style={{ color: "red" }}>
+                          {errors?.registeringAuthorityDoc && errors?.registeringAuthorityDoc?.message}
+                        </h3>
 
-                      <Col md={4} xxl lg="4">
-                        <div>
-                          <label>
-                            <h2>
-                              Enter Khewat <span style={{ color: "red" }}>*</span>
-                            </h2>
-                          </label>
-                        </div>
-                        <input autoComplete="off" type="text" className="form-control" placeholder="Enter Khewat" {...register("editKhewats")} />
-                      </Col>
-
-                      <Col md={4} xxl lg="4">
-                        <div>
-                          <label>
-                            <h2>Name of land owner as per registry</h2>
-                          </label>
-                        </div>
-                        <input autoComplete="off" type="text" className="form-control" placeholder="" {...register("landOwnerRegistry")} />
-                      </Col>
-                    </Row>
-                  )}
-                  <div className="col col-12">
-                    <h2>
-                      Whether Khasra been developed in collaboration<span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
-                      <label htmlFor="collaboration">
-                        <input {...register("collaboration")} type="radio" value="Y" id="yes" />
-                        &nbsp;&nbsp; Yes &nbsp;&nbsp;
-                      </label>
-                      <label htmlFor="collaboration">
-                        <input {...register("collaboration")} type="radio" value="N" id="no" />
-                        &nbsp;&nbsp; No &nbsp;&nbsp;
-                      </label>
-                      <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.collaboration && errors?.collaboration?.message}
-                      </h3>
-                    </h2>
-                    {watch("collaboration") === "Y" && (
-                      <div>
-                        <div className="row ">
-                          <div className="col col-4">
-                            <label>
-                              <h2
-                                data-toggle="tooltip"
-                                data-placement="top"
-                                title=" Name of the developer company / Firm/ LLP etc. with whom collaboration agreement entered."
-                              >
-                                Name of the developer company .<span style={{ color: "red" }}>*</span>
-                              </h2>
-                            </label>
-                            <Form.Control
-                              type="text"
-                              className="form-control"
-                              placeholder=""
-                              {...register("developerCompany")}
-                              required
-                              minlength={2}
-                              maxLength={99}
-                            />
-                          </div>
-                          <div className="col col-4">
-                            <label>
-                              <h2>
-                                Date of registering collaboration agreement<span style={{ color: "red" }}>*</span>
-                              </h2>
-                            </label>
-                            <Form.Control
-                              type="date"
-                              value={modalData.agreementValidFrom}
-                              className="form-control"
-                              required
-                              placeholder=""
-                              {...register("agreementValidFrom")}
-                              max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
-                            />
-                          </div>
-                          {/* <div className="col col-4">
-                            <label>
-                              <h2>
-                                Date of validity of collaboration agreement<span style={{ color: "red" }}>*</span>
-                              </h2>
-                            </label>
-                            <Form.Control
-                              type="date"
-                              className="form-control"
-                              placeholder=""
-                              required
-                              {...register("validitydate")}
-                              min={watch("agreementValidFrom")}
-                            />
-                          </div> */}
-                        </div>
-                        <br></br>
-                        <br></br>
-                        <div className="row ">
-                          <div className="col col-4">
-                            <h2>
-                              Whether collaboration agreement irrevocable (Yes/No)<span style={{ color: "red" }}>*</span>
-                            </h2>
-                            <label htmlFor="agreementIrrevocialble">
-                              <input {...register("agreementIrrevocialble")} type="radio" value="Y" id="yes" />
-                              &nbsp;&nbsp; Yes &nbsp;&nbsp;
-                            </label>
-                            <label htmlFor="agreementIrrevocialble">
-                              <input {...register("agreementIrrevocialble")} type="radio" value="N" id="no" />
-                              &nbsp;&nbsp; No &nbsp;&nbsp;
-                            </label>
-                          </div>
-                          <div className="col col-4">
-                            <label>
-                              <h2>
-                                Name of authorized signatory on behalf of land owner(s)<span style={{ color: "red" }}>*</span>
-                              </h2>
-                            </label>
-                            <Form.Control
-                              type="text"
-                              className="form-control"
-                              placeholder=""
-                              {...register("authSignature")}
-                              required
-                              minlength={4}
-                              maxLength={99}
-                            />
-                          </div>
-                          <div className="col col-4">
-                            <label>
-                              <h2
-                                data-toggle="tooltip"
-                                data-placement="top"
-                                title="  Name of authorized signatory on behalf of developer to sign Collaboration agreement."
-                              >
-                                Name of authorized signatory on behalf of developer.<span style={{ color: "red" }}>*</span>
-                              </h2>
-                            </label>
-                            <Form.Control
-                              type="text"
-                              className="form-control"
-                              placeholder=""
-                              {...register("nameAuthSign")}
-                              required
-                              minlength={4}
-                              maxLength={99}
-                            />
-                          </div>
-                        </div>
-                        <br></br>
-                        <br></br>
-                        <div className="row ">
-                          <div className="col col-4">
-                            <label>
-                              <h2>
-                                Registering Authority<span style={{ color: "red" }}>*</span>
-                              </h2>
-                            </label>
-                            <Form.Control type="text" className="form-control" placeholder="" {...register("registeringAuthority")} required />
-                          </div>
-                          <div className="col col-4">
-                            <label>
-                              <h2 data-toggle="tooltip" data-placement="top" title="Upload Document" style={{ marginTop: "-4px" }}>
-                                Registering Authority document <span style={{ color: "red" }}>*</span> <FileUpload color="primary" />
-                                <div>
-                                  <input
-                                    type="file"
-                                    accept="application/pdf/jpeg/png"
-                                    style={{ display: "none" }}
-                                    required
-                                    onChange={(e) => getDocumentData(e?.target?.files[0], "registeringAuthorityDoc")}
-                                  />
-                                </div>
-                              </h2>
-                            </label>
-                            <h3 style={{}}>{watch("registeringAuthorityDocFileName") ? watch("registeringAuthorityDocFileName") : null}</h3>
-                            <h3 className="error-message" style={{ color: "red" }}>
-                              {errors?.registeringAuthorityDoc && errors?.registeringAuthorityDoc?.message}
-                            </h3>
-
-                            {/* <input
+                        {/* <input
                           type="file"
                           style={{ marginTop: "-6px" }}
                           className="form-control"
@@ -1189,132 +1175,134 @@ const ApllicantPuropseForm = (props) => {
                           required
                           onChange={(e) => getDocumentData(e?.target?.files[0], "registeringAuthorityDoc")}
                         /> */}
-                          </div>
-                        </div>
                       </div>
-                    )}
-                  </div>
-
-                  <Col md={4} xxl lg="12">
-                    <div>
-                      <h2>
-                        Consolidation Type<span style={{ color: "red" }}>*</span> &nbsp;&nbsp;&nbsp;&nbsp;
-                        <label htmlFor="consolidated">
-                          <input {...register("consolidationType")} type="radio" value="consolidated" defaultValue="consolidated" id="consolidated" />
-                          &nbsp; Consolidated &nbsp;&nbsp;
-                        </label>
-                        <label htmlFor="non-consolidated">
-                          <input {...register("consolidationType")} type="radio" value="non-consolidated" id="non-consolidated" />
-                          &nbsp; Non-Consolidated &nbsp;&nbsp;
-                        </label>
-                      </h2>
-                      <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.consolidationType && errors?.consolidationType?.message}
-                      </h3>
                     </div>
+                  </div>
+                )}
+              </div>
 
-                    {watch("consolidationType") == "consolidated" && (
-                      <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
-                        <thead>
-                          <tr>
-                            <th>
-                              <h2>
-                                Kanal <span style={{ color: "red" }}>*</span>
-                              </h2>
-                            </th>
-                            <th>
-                              <h2>
-                                Marla <span style={{ color: "red" }}>*</span>
-                              </h2>
-                            </th>
-                            <th>
-                              <h2>
-                                Sarsai <span style={{ color: "red" }}>*</span>
-                              </h2>
-                              &nbsp;&nbsp;
-                            </th>
-                            <th>
-                              <h2>
-                                Total Area <span style={{ color: "red" }}>*</span>
-                              </h2>
-                              &nbsp;&nbsp;
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>
-                              <input type="number" className="form-control  " {...register("kanal")} id="kanal" required maxLength={20} />
-                              <label htmlFor="sum">Total: {watch("kanal") * 0.125}</label>&nbsp;&nbsp;
-                            </td>
-                            <td>
-                              <input type="number" className="form-control " {...register("marla")} id="marla" required maxLength={20} />
-                              <label htmlFor="summarla">Total: {watch("marla") * 0.0062}</label>&nbsp;&nbsp;
-                            </td>
-                            <td>
-                              <input type="number" className="form-control " {...register("sarsai")} id="sarsai" required maxLength={20} />
-                              <label htmlFor="sumsarsai">Total: {watch("sarsai") * 0.00069}</label>&nbsp;&nbsp;
-                            </td>
-                            <td>
-                              <input step="any" type="number" className="form-control " {...register("consolidatedTotal")} />
-                              <label htmlFor="sumsarsai">Total: {watch("consolidatedTotal")}</label>&nbsp;&nbsp;
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    )}
-                    {watch("consolidationType") == "non-consolidated" && (
-                      <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
-                        <thead>
-                          <tr>
-                            <th>
-                              <h2>
-                                Bigha <span style={{ color: "red" }}>*</span>
-                              </h2>
-                            </th>
-                            <th>
-                              <h2>
-                                Biswa <span style={{ color: "red" }}>*</span>
-                              </h2>
-                            </th>
-                            <th>
-                              <h2>
-                                Biswansi <span style={{ color: "red" }}>*</span>
-                              </h2>
-                              &nbsp;&nbsp;
-                            </th>
-                            <th>
-                              <h2>
-                                Total Area <span style={{ color: "red" }}>*</span>
-                              </h2>
-                              &nbsp;&nbsp;
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>
-                              <input type="number" className="form-control" {...register("bigha")} id="bigha" required maxLength={20} />
-                              <label htmlFor="sumBigha">Total: {watch("bigha") * 0.33}</label>&nbsp;&nbsp;
-                            </td>
-                            <td>
-                              <input type="number" className="form-control" {...register("biswa")} id="biswa" required maxLength={20} />
-                              <label htmlFor="sumBiswa">Total: {watch("biswa") * 0.0309}</label>&nbsp;&nbsp;
-                            </td>
-                            <td>
-                              <input type="number" className="form-control" {...register("biswansi")} id="biswansi" required maxLength={20} />
-                              <label htmlFor="sumBiswansi">Total: {watch("biswansi") * 0.619}</label>&nbsp;&nbsp;
-                            </td>
-                            <td>
-                              <input step="any" type="number" className="form-control " {...register("nonConsolidatedTotal")} />
-                              <label htmlFor="sumsarsai">Total: {watch("nonConsolidatedTotal")}</label>&nbsp;&nbsp;
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    )}
-                  </Col>
+              <Col md={4} xxl lg="12">
+                <div>
+                  <h2>
+                    <b>
+                      {" "}
+                      Consolidation Type<span style={{ color: "red" }}>*</span>{" "}
+                    </b>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <label htmlFor="consolidated">
+                      <input {...register("consolidationType")} type="radio" value="consolidated" defaultValue="consolidated" id="consolidated" />
+                      &nbsp; Consolidated &nbsp;&nbsp;
+                    </label>
+                    <label htmlFor="non-consolidated">
+                      <input {...register("consolidationType")} type="radio" value="non-consolidated" id="non-consolidated" />
+                      &nbsp; Non-Consolidated &nbsp;&nbsp;
+                    </label>
+                  </h2>
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.consolidationType && errors?.consolidationType?.message}
+                  </h3>
                 </div>
+
+                {watch("consolidationType") == "consolidated" && (
+                  <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
+                    <thead>
+                      <tr>
+                        <th>
+                          <h2>
+                            Kanal <span style={{ color: "red" }}>*</span>
+                          </h2>
+                        </th>
+                        <th>
+                          <h2>
+                            Marla <span style={{ color: "red" }}>*</span>
+                          </h2>
+                        </th>
+                        <th>
+                          <h2>
+                            Sarsai <span style={{ color: "red" }}>*</span>
+                          </h2>
+                          &nbsp;&nbsp;
+                        </th>
+                        <th>
+                          <h2>
+                            Total Area <span style={{ color: "red" }}>*</span>
+                          </h2>
+                          &nbsp;&nbsp;
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <input type="number" className="form-control  " {...register("kanal")} id="kanal" required maxLength={20} />
+                          <label htmlFor="sum">Total: {watch("kanal") * 0.125}</label>&nbsp;&nbsp;
+                        </td>
+                        <td>
+                          <input type="number" className="form-control " {...register("marla")} id="marla" required maxLength={20} />
+                          <label htmlFor="summarla">Total: {watch("marla") * 0.0062}</label>&nbsp;&nbsp;
+                        </td>
+                        <td>
+                          <input type="number" className="form-control " {...register("sarsai")} id="sarsai" required maxLength={20} />
+                          <label htmlFor="sumsarsai">Total: {watch("sarsai") * 0.00069}</label>&nbsp;&nbsp;
+                        </td>
+                        <td>
+                          <input step="any" type="number" className="form-control " {...register("consolidatedTotal")} />
+                          <label htmlFor="sumsarsai">Total: {watch("consolidatedTotal")}</label>&nbsp;&nbsp;
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                )}
+                {watch("consolidationType") == "non-consolidated" && (
+                  <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
+                    <thead>
+                      <tr>
+                        <th>
+                          <h2>
+                            Bigha <span style={{ color: "red" }}>*</span>
+                          </h2>
+                        </th>
+                        <th>
+                          <h2>
+                            Biswa <span style={{ color: "red" }}>*</span>
+                          </h2>
+                        </th>
+                        <th>
+                          <h2>
+                            Biswansi <span style={{ color: "red" }}>*</span>
+                          </h2>
+                          &nbsp;&nbsp;
+                        </th>
+                        <th>
+                          <h2>
+                            Total Area <span style={{ color: "red" }}>*</span>
+                          </h2>
+                          &nbsp;&nbsp;
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <input type="number" className="form-control" {...register("bigha")} id="bigha" required maxLength={20} />
+                          <label htmlFor="sumBigha">Total: {watch("bigha") * 0.33}</label>&nbsp;&nbsp;
+                        </td>
+                        <td>
+                          <input type="number" className="form-control" {...register("biswa")} id="biswa" required maxLength={20} />
+                          <label htmlFor="sumBiswa">Total: {watch("biswa") * 0.0309}</label>&nbsp;&nbsp;
+                        </td>
+                        <td>
+                          <input type="number" className="form-control" {...register("biswansi")} id="biswansi" required maxLength={20} />
+                          <label htmlFor="sumBiswansi">Total: {watch("biswansi") * 0.619}</label>&nbsp;&nbsp;
+                        </td>
+                        <td>
+                          <input step="any" type="number" className="form-control " {...register("nonConsolidatedTotal")} />
+                          <label htmlFor="sumsarsai">Total: {watch("nonConsolidatedTotal")}</label>&nbsp;&nbsp;
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                )}
               </Col>
             </Row>
 

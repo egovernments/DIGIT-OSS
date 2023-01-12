@@ -128,9 +128,9 @@ const ApllicantFormStep1 = (props) => {
   useEffect(() => {
     if (developerDataLabel) {
       console.log("developerDataLabel", developerDataLabel);
-      setValue("developerName", developerDataLabel?.addInfo?.name);
+      setValue("developerName", developerDataLabel?.addInfo?.companyName);
       setValue("developerAddress", developerDataLabel?.addInfo?.registeredAddress);
-      setValue("developerEmail", developerDataLabel?.addInfo?.emailId);
+      setValue("developerEmail", developerDataLabel?.addInfo?.email);
       setValue("developerType", developerDataLabel?.addInfo?.showDevTypeFields);
       setValue("developerCinNo", developerDataLabel?.addInfo?.cin_Number);
       // setValue("directorDinNo", developerDataLabel?.addInfo?.DirectorsInformation?.[0]?.din);
@@ -312,7 +312,7 @@ const ApllicantFormStep1 = (props) => {
                         <th>Sr. No</th>
                         <th>Name</th>
                         <th>Designition</th>
-                        <th>Serial Number</th>
+
                         <th>Percentage</th>
                         <th>View Document</th>
                       </tr>
@@ -324,7 +324,7 @@ const ApllicantFormStep1 = (props) => {
                             <td>{ind}</td>
                             <td>{it?.name}</td>
                             <td>{it?.designition}</td>
-                            <td>{it?.serialNumber}</td>
+
                             <td>{it?.percentage}</td>
                             <td
                               style={{ color: " #1266af", fontSize: " 12px", fontWeight: "bold", cursor: "pointer", textDecorationLine: "underline" }}
@@ -420,27 +420,6 @@ const ApllicantFormStep1 = (props) => {
                   </h3>
                 </Col>
                 <Col md={4} xxl lg="4">
-                  <div>
-                    <Form.Label>
-                      <h2>
-                        Address of Authorized Signatory<span style={{ color: "red" }}>*</span>
-                      </h2>
-                    </Form.Label>
-                  </div>
-                  <Controller
-                    control={control}
-                    name="authorizedAddress"
-                    render={({ field: { onChange, value } }) => (
-                      <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="authorizedAddress" />
-                    )}
-                  />
-                  <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.authorizedAddress && errors?.authorizedAddress?.message}
-                  </h3>
-                </Col>
-              </Row>
-              <Row className="mt-4">
-                <Col md={4} xxl lg="4">
                   <div
                     style={{ cursor: "pointer" }}
                     onClick={() => {
@@ -451,7 +430,7 @@ const ApllicantFormStep1 = (props) => {
                     id="btnSearch"
                     class=""
                   >
-                    View Upload Digital Signature <VisibilityIcon color="info" className="icon" />
+                    Upload Digital Signature <VisibilityIcon color="info" className="icon" />
                   </div>
                 </Col>
                 <Col md={4} xxl lg="4">
@@ -465,7 +444,7 @@ const ApllicantFormStep1 = (props) => {
                     id="btnSearch"
                     class=""
                   >
-                    View Upload Board Resolution <VisibilityIcon color="info" className="icon" />
+                    Upload Board Resolution <VisibilityIcon color="info" className="icon" />
                   </div>
                 </Col>
               </Row>
