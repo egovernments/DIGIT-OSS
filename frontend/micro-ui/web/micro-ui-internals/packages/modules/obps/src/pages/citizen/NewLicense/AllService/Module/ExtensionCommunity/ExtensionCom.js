@@ -311,13 +311,13 @@ function ExtensionCom() {
                     </td>
                   </tr>
                   <tr>
-                  <th scope="row">7</th>
+                    <th scope="row">7</th>
                     <td>
                       {" "}
                       Any other document which the director may require for the said purpose. <span style={{ color: "red" }}>*</span>
                     </td>
                     <td>
-                      <input type="file" className="form-control" placeholder="" {...register("documentdirector")}></input>
+                      <input type="file" className="form-control" placeholder="" {...register("documenteddDirector")}></input>
                     </td>
                   </tr>
                 </tbody>

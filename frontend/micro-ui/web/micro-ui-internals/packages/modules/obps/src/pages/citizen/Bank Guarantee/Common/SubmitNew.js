@@ -9,6 +9,7 @@ function SubmitNew() {
   const [modal, setmodal] = useState(false);
   const [modal1, setmodal1] = useState(false);
   const [ServicePlanDataLabel, setServicePlanDataLabel] = useState([]);
+  // const [getShow, setShow] = useState({ submit: false });
   const userInfo = Digit.UserService.getUser()?.info || {};
   const {
     register,
@@ -18,7 +19,7 @@ function SubmitNew() {
     watch,
     setValue,
   } = useForm({});
-
+  const tenantId = Digit.ULBService.getCurrentTenantId();
   const bankSubmitNew = async (data) => {
     const token = window?.localStorage?.getItem("token");
     console.log(data);
@@ -33,12 +34,11 @@ function SubmitNew() {
           ts: 0,
           ver: ".01",
           authToken: token,
-          userInfo: userInfo,
         },
         NewBankGuaranteeRequest: {
-          status: null,
-          tenantId: "hr",
+          tenantId: tenantId,
           additionalDetails: null,
+          additionalDocuments: null,
           workflowAction: "INITIATE",
           workflowComment: null,
           workflowAssignee: null,
@@ -47,6 +47,7 @@ function SubmitNew() {
       };
       const Resp = await axios.post("/tl-services/bank/guarantee/_create", postDistrict);
       setServicePlanDataLabel(Resp.data);
+      // setShow({ submit: true });
     } catch (error) {
       console.log(error.message);
     }
@@ -71,36 +72,36 @@ function SubmitNew() {
     }
   };
   const [applicantId, setApplicantId] = useState("");
-  const getApplicantUserData = async (id) => {
-    const token = window?.localStorage?.getItem("token");
-    const payload = {
-      RequestInfo: {
-        apiId: "Rainmaker",
-        action: "_create",
-        did: 1,
-        key: "",
-        msgId: "20170310130900|en_IN",
-        ts: 0,
-        ver: ".01",
-        authToken: token,
-      },
-    };
-    try {
-      const Resp = await axios.post(`http://103.166.62.118:80/tl-services/bank/guarantee/_search?applicationNumber=${id}`, payload);
-      const userData = Resp?.data?.LicenseDetails?.[0];
-      setStepData(userData);
-    } catch (error) {
-      return error;
-    }
-  };
+  // const getApplicantUserData = async (id) => {
+  //   const token = window?.localStorage?.getItem("token");
+  //   const payload = {
+  //     RequestInfo: {
+  //       apiId: "Rainmaker",
+  //       action: "_create",
+  //       did: 1,
+  //       key: "",
+  //       msgId: "20170310130900|en_IN",
+  //       ts: 0,
+  //       ver: ".01",
+  //       authToken: token,
+  //     },
+  //   };
+  //   try {
+  //     const Resp = await axios.post(`http://103.166.62.118:80/tl-services/bank/guarantee/_search?applicationNumber=${id}`, payload);
+  //     const userData = Resp?.data?.LicenseDetails?.[0];
+  //     setStepData(userData);
+  //   } catch (error) {
+  //     return error;
+  //   }
+  // };
 
-  useEffect(() => {
-    const search = location?.search;
-    const params = new URLSearchParams(search);
-    const id = params.get("id");
-    setApplicantId(id?.toString());
-    if (id) getApplicantUserData(id);
-  }, []);
+  // useEffect(() => {
+  //   const search = location?.search;
+  //   const params = new URLSearchParams(search);
+  //   const id = params.get("id");
+  //   setApplicantId(id?.toString());
+  //   if (id) getApplicantUserData(id);
+  // }, []);
 
   return (
     <form onSubmit={handleSubmit(bankSubmitNew)}>
@@ -150,23 +151,24 @@ function SubmitNew() {
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
-                  <h2>Bank Name </h2>
+                  <h2>Enter Bank Guarantee No. </h2>
+                </Form.Label>
+              </div>
+              <input type="text" className="form-control" placeholder="" {...register("bgNumber")} />
+            </Col>
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>Enter Bank Name </h2>
                 </Form.Label>
               </div>
               <input type="text" className="form-control" placeholder="" {...register("bankName")} />
             </Col>
+
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
-                  <h2>Enter Memo No. </h2>
-                </Form.Label>
-              </div>
-              <input type="text" className="form-control" placeholder="" {...register("memoNumber")} />
-            </Col>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>Valid Upto </h2>
+                  <h2>Expiry Date </h2>
                 </Form.Label>
               </div>
               <input type="datepicker" className="form-control" placeholder="" {...register("validity")} format="yyyy-MM-dd" />
@@ -174,15 +176,77 @@ function SubmitNew() {
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
-                  <h2>Upload B.G. </h2>
+                  <h2>Claim Period</h2>
                 </Form.Label>
               </div>
-              <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBg")} />
+              <select className="form-control" placeholder="" {...register("claimPeriod")}>
+                <option> 0</option>
+                <option>1</option>
+                <option> 2</option>
+                <option>3</option>
+                <option> 4</option>
+                <option>5</option>
+                <option> 6</option>
+                <option>7</option>
+                <option> 8</option>
+                <option>9</option>
+                <option> 10</option>
+                <option>11</option>
+                <option> 12</option>
+              </select>
             </Col>
           </Row>
           <br></br>
           <Row className="col-12">
-            <div className="col col-12 ">
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>Country of origin</h2>
+                </Form.Label>
+              </div>
+              <select className="form-control" placeholder="" {...register("originCountry")}>
+                <option>------</option>
+                <option value="1"> Indian</option>
+                <option value="2">Foreign</option>
+              </select>
+              {watch("originCountry") === "2" && (
+                <div>
+                  <div className="row">
+                    <div className="col col-12">
+                      <p>In case of B.G. from other country, you need to upload Indian Bank Advice Certificate.</p>
+                    </div>
+                    <div className="col col-12">
+                      <label>
+                        <h2>
+                          Upload Bank Advice Certificate.
+                          <span style={{ color: "red" }}>*</span>
+                        </h2>
+                      </label>
+                      <div>
+                        <input
+                          type="file"
+                          className="form-control"
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "indianBankAdvisedCertificate")}
+                        ></input>
+                      </div>
+
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.indianBankAdvisedCertificate && errors?.indianBankAdvisedCertificate?.message}
+                      </h3>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </Col>
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>Upload B.G. softcopy</h2>
+                </Form.Label>
+              </div>
+              <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBg")} />
+            </Col>
+            <Col md={4} xxl lg="3">
               <div>
                 <label>
                   Hardcopy Submitted at TCP office.{" "}
@@ -210,7 +274,7 @@ function SubmitNew() {
               {watch("licenseApplied") === "Y" && (
                 <div>
                   <div className="row">
-                    <div className="col col-4">
+                    <div className="col col-12">
                       <label>
                         <h2>
                           Upload Receipt of Submission.
@@ -218,11 +282,15 @@ function SubmitNew() {
                         </h2>
                       </label>
                       <div>
-                        <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "consentLetter")}></input>
+                        <input
+                          type="file"
+                          className="form-control"
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "tcpSubmissionReceived")}
+                        ></input>
                       </div>
 
                       <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.consentLetter && errors?.consentLetter?.message}
+                        {errors?.tcpSubmissionReceived && errors?.tcpSubmissionReceived?.message}
                       </h3>
                     </div>
                   </div>
@@ -246,12 +314,24 @@ function SubmitNew() {
                   </Modal>
                 </div>
               )}
-            </div>
+            </Col>
+          </Row>
+          <br></br>
+          <Row className="col-12">
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>Existing B.G. No. (In case of Replace, Extend and Renew, Enter B.G. No.)</h2>
+                </Form.Label>
+              </div>
+              <input type="text" className="form-control" placeholder="" {...register("existingBgNumber")} />
+            </Col>
           </Row>
           <Row className="justify-content-end">
             <Button variant="outline-primary" className="col-md-2 my-2 mx-2" aria-label="right-end">
               Cancel
             </Button>
+
             <Button variant="outline-primary" className="col-md-2 my-2 mx-2" type="submit" aria-label="right-end">
               Submit
             </Button>

@@ -37,7 +37,7 @@ const ScrutinyForm = (props) => {
   const [isEnableLoader, setIsEnableLoader] = useState(false);
   const [isWarningPop, setWarningPopUp] = useState(false);
   const [showhide19, setShowhide19] = useState("true");
-  const [businessService, setBusinessService] = useState("NewTL");
+  const [businessService, setBusinessService] = useState("BG_NEW");
   const [moduleCode, setModuleCode] = useState("TL");
   const [scrutinyDetails, setScrutinyDetails] = useState();
   // const [applicationNumber,setApplicationNumber] = useState("");
@@ -69,6 +69,7 @@ const ScrutinyForm = (props) => {
       console.log("Response From API1", Resp, Resp?.newBankGuaranteeList?.[0]);
       setScrutinyDetails(Resp?.newBankGuaranteeList?.[0]);
       setApplicationNumber(Resp?.newBankGuaranteeList?.[0]);
+      setApplicationDetails({ applicationData: Resp?.newBankGuaranteeList?.[0] });
       // setApplicationNumber("HR-TL-2022-12-07-000498");Resp?.newBankGuaranteeList?.[0]
     } catch (error) {
       console.log(error);
@@ -85,7 +86,7 @@ const ScrutinyForm = (props) => {
     config: { EditRenewalApplastModifiedTime: EditRenewalApplastModifiedTime },
   });
 
-  const applicationDetailsTemp = Digit.Hooks.tl.useApplicationDetail(t, tenantId, id);
+  // const applicationDetailsTemp = Digit.Hooks.tl.useApplicationDetail(t, tenantId, id);
 
   const {
     // isLoading: updatingApplication,
@@ -111,6 +112,7 @@ const ScrutinyForm = (props) => {
       }
     }
     setSelectedAction(action);
+    console.log("DelDev123...", action);
     setDisplayMenu(false);
   }
 
@@ -184,12 +186,12 @@ const ScrutinyForm = (props) => {
     closeModal();
   };
 
-  useEffect(() => {
-    console.log("log123...applicationDetailsAPI", applicationDetailsTemp);
-    if (applicationDetailsTemp?.data) {
-      setApplicationDetails(applicationDetailsTemp?.data);
-    }
-  }, [applicationDetailsTemp?.data]);
+  // useEffect(() => {
+  //   console.log("log123...applicationDetailsAPI", applicationDetailsTemp);
+  //   if (applicationDetailsTemp?.data) {
+  //     setApplicationDetails(applicationDetailsTemp?.data);
+  //   }
+  // }, [applicationDetailsTemp?.data]);
 
   useEffect(() => {
     console.log("log123...wrkflw", id, workflowDetailsTemp, scrutinyDetails, applicationDetails);
@@ -205,11 +207,11 @@ const ScrutinyForm = (props) => {
 
   return (
     <Card>
-      {/* <Row style={{ top: 25, padding: 5 }}>
+      <Row style={{ top: 25, padding: 5 }}>
         <div className="ml-auto">
           <h2>Application : {id}</h2>
         </div>
-      </Row> */}
+      </Row>
       <Row style={{ top: 30, padding: 10 }}>
         <FormBank apiResponse={scrutinyDetails} applicationNumber={id} refreshScrutinyData={getScrutinyData}></FormBank>
       </Row>
@@ -266,7 +268,7 @@ const ScrutinyForm = (props) => {
                 applicationDetails={applicationDetails}
                 applicationData={{
                   ...applicationDetails?.applicationData,
-                  workflowCode: applicationDetails?.applicationData?.workflowCode || "NewTL",
+                  workflowCode: applicationDetails?.applicationData?.workflowCode || "BG_NEW",
                 }}
                 closeModal={closeModal}
                 submitAction={submitAction}
