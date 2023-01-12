@@ -9,6 +9,7 @@ import { Toast } from "@egovernments/digit-ui-react-components";
 import Spinner from "../../../../components/Loader";
 import { getDocShareholding } from "../docView/docView.help";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step1";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 const ApllicantFormStep1 = (props) => {
   const history = useHistory();
@@ -292,7 +293,7 @@ const ApllicantFormStep1 = (props) => {
                                 else setShowToastError({ key: "error" });
                               }}
                             >
-                              View Document
+                              <VisibilityIcon color="info" className="icon" />
                             </td>
                           </tr>
                         );
@@ -332,7 +333,7 @@ const ApllicantFormStep1 = (props) => {
                                 else setShowToastError({ key: "error" });
                               }}
                             >
-                              View Document
+                              <VisibilityIcon color="info" className="icon" />
                             </td>
                           </tr>
                         );
@@ -448,9 +449,9 @@ const ApllicantFormStep1 = (props) => {
                       else setShowToastError({ key: "error" });
                     }}
                     id="btnSearch"
-                    class="btn-primary btn-md center-block p-2"
+                    class=""
                   >
-                    Upload Digital Signature
+                    View Upload Digital Signature <VisibilityIcon color="info" className="icon" />
                   </div>
                 </Col>
                 <Col md={4} xxl lg="4">
@@ -462,9 +463,9 @@ const ApllicantFormStep1 = (props) => {
                       else setShowToastError({ key: "error" });
                     }}
                     id="btnSearch"
-                    class="btn-primary btn-md center-block p-2"
+                    class=""
                   >
-                    Upload Board Resolution
+                    View Upload Board Resolution <VisibilityIcon color="info" className="icon" />
                   </div>
                 </Col>
               </Row>
