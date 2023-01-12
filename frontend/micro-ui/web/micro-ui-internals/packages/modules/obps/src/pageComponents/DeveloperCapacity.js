@@ -132,7 +132,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                 licValidity: developerDataGet?.devDetail[0]?.capacityDevelopAColony?.obtainedLicense[0]?.licValidity || "",
                 purpose: developerDataGet?.devDetail[0]?.capacityDevelopAColony?.obtainedLicense[0]?.purpose || ""
             })
-            setDocumentsData(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.documents)
+            setDocumentsData(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.documents);
+            setTradeType(developerDataGet?.devDetail[0]?.applicantType?.licenceType);
+            console.log("TRADETYPE",developerDataGet?.devDetail[0]?.applicantType?.licenceType);
         } catch (error) {
             console.log(error);
         }
@@ -141,6 +143,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
         getDeveloperData()
     }, []);
 
+    const [tradeType, setTradeType] = useState("")
     const [Documents, setDocumentsData] = useState();
     const [genderUser, setGenderMF] = useState(formData?.LicneseDetails?.genderUser || formData?.formData?.LicneseDetails?.genderUser || "");
     const [name, setName] = useState((!isOpenLinkFlow ? userInfo?.info?.name : "") || formData?.LicneseDetails?.name || formData?.formData?.LicneseDetails?.name || "");
@@ -889,6 +892,8 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
         setCapacityDevelopColonyLawAct(rows);
     }
 
+    
+
     const goNext = async (e) => {
         if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
 
@@ -913,7 +918,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                 }
                             ],
                             "subOwnerShipCategory": "INDIVIDUAL",
-                            "tradeType": "BPA_DEVELOPER.CLASSA",
+                            "tradeType": tradeType,
 
                             "additionalDetail": {
                                 "counsilForArchNo": null,

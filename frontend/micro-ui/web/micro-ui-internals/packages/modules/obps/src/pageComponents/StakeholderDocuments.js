@@ -12,6 +12,7 @@ import {
 } from "@egovernments/digit-ui-react-components";
 import Timeline from "../components/Timeline";
 import { useHistory } from "react-router-dom";
+import axios from "axios";
 
 const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setError: setFormError, clearErrors: clearFormErrors, formState }) => {
     const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -19,23 +20,46 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
     const [documents, setDocuments] = useState(formData?.documents?.documents || []);
     const [error, setError] = useState(null);
     const [bpaTaxDocuments, setBpaTaxDocuments] = useState([]);
+    const userInfo = Digit.UserService.getUser();
     const [enableSubmit, setEnableSubmit] = useState(true)
     const [checkRequiredFields, setCheckRequiredFields] = useState(false);
     const isCitizenUrl = Digit.Utils.browser.isMobile()?true:false;
     let isopenlink = window.location.href.includes("/openlink/");
 
+
+
     if(isopenlink)  
     window.onunload = function () {
       sessionStorage.removeItem("Digit.BUILDING_PERMIT");
     }
-
+   
     const { data, isLoading } = Digit.Hooks.obps.useMDMS(stateId, "StakeholderRegistraition", "TradeTypetoRoleMapping");
+    const getDeveloperData = async () => {
+        try {
+          const requestResp = {
     
+            "RequestInfo": {
+              "api_id": "1",
+              "ver": "1",
+              "ts": "",
+              "action": "_getDeveloperById",
+              "did": "",
+              "key": "",
+              "msg_id": "",
+              "requester_id": "",
+              "auth_token": ""
+            },
+          }
+          const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${userInfo?.info?.id}&isAllData=true`, requestResp, {
+            
+          });
+          const developerDataGet = getDevDetails?.data;
+          setTradeType(developerDataGet?.devDetail[0]?.applicantType?.licenceType);
 
-    useEffect(() => {
+          console.log("TRADETYPE",tradeType);
         let filtredBpaDocs = [];
         if (data?.StakeholderRegistraition?.TradeTypetoRoleMapping) {
-            filtredBpaDocs = data?.StakeholderRegistraition?.TradeTypetoRoleMapping?.filter(ob => (ob.tradeType === formData?.formData?.LicneseType?.LicenseType?.tradeType))
+            filtredBpaDocs = data?.StakeholderRegistraition?.TradeTypetoRoleMapping?.filter(ob => (ob.tradeType === developerDataGet?.devDetail[0]?.applicantType?.licenceType))
         }
 
         let documentsList = [];
@@ -44,8 +68,27 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
         });
         console.log("log123",documentsList)
         setBpaTaxDocuments(documentsList);
+        //   console.log("TRADETYPE",developerDataGet?.devDetail[0]?.applicantType?.licenceType);
+        } catch (error) {
+          console.log(error);
+        }
+      }
 
-    }, [!isLoading]);
+      const [tradeType, setTradeType] = useState("");
+
+      useEffect(() => {
+        getDeveloperData();
+
+        
+      }, [!isLoading]);
+
+      
+    
+    
+    // useEffect(() => {
+        
+
+    // }, [!isLoading]);
 
     const handleSubmit = () => {
         let document = formData.documents;
@@ -85,7 +128,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
     const changeStep = (step) => {
       switch (step) {
         case 1 :
-          navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/license-details");
+          navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/provide-license-type");
           break;
         case 2 :
           navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/license-add-info");

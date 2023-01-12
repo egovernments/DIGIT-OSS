@@ -362,7 +362,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     }
   }
   function selectPincode(e) {
-    if(!e.target.value || e.target.value.match("^[1-9]*$")){
+    if(!e.target.value || e.target.value.match("^[1-9][0-9]*$")){
       if (isAddressSame == true) {
         setPincode(e.target.value);
         setPincodeCorrespondence(e.target.value);
@@ -665,7 +665,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
               <Row className="justify-content-left">
                 <Form.Group className="col-md-4 mb-2">
                   <label>{`${t("BPA_APPLICANT_NAME_LABEL")}`}<span class="text-danger font-weight-bold mx-2">*</span></label>
-                  <TextInput
+                  {/* <TextInput
                     t={t}
                     type={"text"}
                     isMandatory={false}
@@ -679,6 +679,14 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                       pattern: "^[a-zA-Z-.`' ]*$",
                       type: "text",
                     })}
+                  /> */}
+                  <input
+                    type="text"
+                    name="name"
+                    value={name}
+                    onChange={SelectName}
+                    disabled="disabled"
+                    className="form-control"
                   />
                 </Form.Group>
                 <Form.Group className="col-md-4 mb-2">
@@ -767,20 +775,6 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                 </Form.Group>
                 <Form.Group className="col-md-4 mb-2">
                   <label>{`${t("BPA_APPLICANT_PAN_NO")}`}<span class="text-danger font-weight-bold mx-2">*</span></label>
-                  {/* <TextInput
-                    t={t}
-                    type={"text"}
-                    isMandatory={true}
-                    optionKey="i18nKey"
-                    name="PanNumber"
-                    required={true}
-                    value={PanNumber}
-                    placeholder={PanNumber}
-                    onChange={selectPanNumber}
-                    className="text-uppercase"
-                    max={10}
-                    {...{ required: true,maxlength:"10" }}
-                  /> */}
                   <input
                     type="text"
                     name="PanNumber"
