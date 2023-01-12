@@ -133,7 +133,7 @@ public class PropertyUtil {
             customizedMsg = customizedMsg.replace("{MOBILE_NUMBER}",entryset.getKey());
 
             String subject = customizedMsg.substring(customizedMsg.indexOf("<h2>")+4,customizedMsg.indexOf("</h2>"));
-            String body = customizedMsg.substring(customizedMsg.indexOf("</h2>")+4);
+            String body = customizedMsg.substring(customizedMsg.indexOf("</h2>")+5);
             Email emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(true).body(body).subject(subject).build();
             EmailRequest email = new EmailRequest(requestInfo,emailobj);
             emailRequest.add(email);

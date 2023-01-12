@@ -251,6 +251,12 @@ public class BPANotificationUtil {
         if(message.contains("{STAKEHOLDER_NAME}"))
             message = message.replace("{STAKEHOLDER_NAME}",license.getTradeLicenseDetail().getOwners().get(0).getName());
 
+        if(message.contains("{PAYMENT_LINK}"))
+        {
+            String payEndpoint = commonPayEndpoint.replace("$applicationNo", license.getApplicationNumber()).replace("$tenantId", license.getTenantId());
+            message = message.replace("{PAYMENT_LINK}", notificationUtil.getShortenedUrl(egovhost + payEndpoint));
+        }
+
         return message;
     }
 
@@ -319,7 +325,7 @@ public class BPANotificationUtil {
             String customizedMsg = message.replace("{RECEIPT_DOWNLOAD_LINK}",getRecepitDownloadLink(license,entryset.getKey(),receiptno));
             customizedMsg = customizedMsg.replace("{MOBILE_NUMBER}",entryset.getKey());
             String subject = customizedMsg.substring(customizedMsg.indexOf("<h2>")+4,customizedMsg.indexOf("</h2>"));
-            String body = customizedMsg.substring(customizedMsg.indexOf("</h2>")+4);
+            String body = customizedMsg.substring(customizedMsg.indexOf("</h2>")+5);
             Email emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(true).body(body).subject(subject).build();
             EmailRequest email = new EmailRequest(requestInfo,emailobj);
             emailRequest.add(email);
