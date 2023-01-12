@@ -1,7 +1,7 @@
 import get from "lodash/get";
 import set from "lodash/set";
 
-
+import axios from "axios";
 /*   method to check not null  if not returns false*/
 export const checkForNotNull = (value = "") => {
   return value && value != null && value != undefined && value != "" ? true : false;
@@ -14,6 +14,7 @@ export const convertDotValues = (value = "") => {
 };
 
 export const sortDropdownNames = (options, optionkey, locilizationkey) => {
+  const userInfo = Digit.UserService.getUser();
   return options.sort((a, b) => locilizationkey(a[optionkey]).localeCompare(locilizationkey(b[optionkey])));
 };
 
@@ -24,6 +25,39 @@ export const convertToLocale = (value = "", key = "") => {
   }
   return `${key}_${convertedValue}`;
 };
+
+// const getDeveloperData = async () => {
+//   try {
+//       const requestResp = {
+
+//           "RequestInfo": {
+//               "api_id": "1",
+//               "ver": "1",
+//               "ts": "",
+//               "action": "_getDeveloperById",
+//               "did": "",
+//               "key": "",
+//               "msg_id": "",
+//               "requester_id": "",
+//               "auth_token": ""
+//           },
+//       }
+//       const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${userInfo?.info?.id}&isAllData=true`, requestResp, {
+
+//       });
+//       const developerDataGet = getDevDetails?.data;
+      
+//       setTradeType(developerDataGet?.devDetail[0]?.applicantType?.licenceType);
+//       console.log("TRADETYPE",developerDataGet?.devDetail[0]?.applicantType?.licenceType);
+//   } catch (error) {
+//       console.log(error);
+//   }
+// }
+// useEffect(() => {
+//   getDeveloperData()
+// }, []);
+
+const [tradeType, setTradeType] = useState("")
 
 export const getPropertyTypeLocale = (value = "") => {
   return convertToLocale(value, "COMMON_PROPTYPE");
@@ -542,6 +576,7 @@ export const convertToEditTrade = (data, fy = []) => {
         wfDocuments: data?.wfDocuments,
         status: data?.status,
         tradeLicenseDetail: {
+          tradeType: "BPA_DEVELOPER.Company",
           address: data.tradeLicenseDetail.address,
           applicationDocuments: data.tradeLicenseDetail.applicationDocuments,
           accessories: isDirectrenewal ? data.tradeLicenseDetail.accessories : gettradeupdateaccessories(data),
