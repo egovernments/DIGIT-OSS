@@ -408,7 +408,7 @@ const LandScheduleForm = (props) => {
                             <div className="col col-4">
                               <label>
                                 <h2>
-                                  Site Location Purpose <span style={{ color: "red" }}>*</span>
+                                  Type of colony <span style={{ color: "red" }}>*</span>
                                 </h2>
                               </label>
                               <ReactMultiSelect
@@ -452,7 +452,7 @@ const LandScheduleForm = (props) => {
                             <div className="col col-3">
                               <label>
                                 <h2>
-                                  Area of Parent Licence <span style={{ color: "red" }}>*</span>
+                                  Area of parent licence in acres <span style={{ color: "red" }}>*</span>
                                 </h2>
                               </label>
                               <input
@@ -467,7 +467,7 @@ const LandScheduleForm = (props) => {
 
                             <div className="col col-3">
                               <label>
-                                <h2>Specify Others</h2>
+                                <h2>Any Other Remark </h2>
                               </label>
                               <input type="text" {...register("specify")} className="form-control" pattern="[A-Za-z]+" />
                             </div>

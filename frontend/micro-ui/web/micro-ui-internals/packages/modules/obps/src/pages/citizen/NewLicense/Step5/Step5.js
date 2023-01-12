@@ -92,8 +92,10 @@ const FeesChargesForm = (props) => {
       ],
       CalculatorRequest: {
         totalLandSize: 1,
-        potenialZone: stepData?.ApplicantPurpose?.potential,
-        purposeCode: stepData?.ApplicantPurpose?.purpose,
+        // potenialZone: stepData?.ApplicantPurpose?.potential,
+        potenialZone: "HYP",
+        // purposeCode: stepData?.ApplicantPurpose?.purpose,
+        purposeCode: "DDJAY_APHP",
         applicationNumber: applicantId,
       },
     };
@@ -187,6 +189,8 @@ const FeesChargesForm = (props) => {
   }, []);
 
   const [fileStoreId, setFileStoreId] = useState({});
+  const [selectedFiles, setSelectedFiles] = useState([]);
+
   const getDocumentData = async (file, fieldName) => {
     if (selectedFiles.includes(file.name)) {
       setShowToastError({ key: "error" });
@@ -336,14 +340,14 @@ const FeesChargesForm = (props) => {
                           <input type="text" className="form-control" disabled {...register("licenseFee")} />
                         </td>
                       </tr>
-                      <tr>
+                      {/* <tr>
                         <th>
                           Conversion Charges <span style={{ color: "red" }}>*</span>
                         </th>
                         <td>
                           <input type="text" className="form-control" disabled {...register("conversionCharges")} />
                         </td>
-                      </tr>
+                      </tr> */}
                     </tbody>
                   </table>
 

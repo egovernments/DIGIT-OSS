@@ -14,15 +14,13 @@ import ScrutitnyForms from "../ScrutinyBasic/ScutinyBasic";
 // import { useSearchParams } from "react-router-dom";
 
 const ScrutinyFormcontainer = (props) => {
-
-  
   // const [ApplicantFormshow, SetApplicantForm] = useState(true);
   // const [PurposeFormshow, SetPurposeForm] = useState(false);
   // const [LandScheduleFormshow, SetLandScheduleForm] = useState(false);
   // const [AppliedDetailsFormshow, SetAppliedDetailsForm] = useState(false);
   // const [FeesChargesFormshow, SetFeesChargesForm] = useState(false);
 
-const {id} = useParams();
+  const { id } = useParams();
 
   // const applicationNumber = "HR-TL-2022-12-07-000498"
 
@@ -31,60 +29,53 @@ const {id} = useParams();
   const state = Digit.ULBService.getStateId();
   const { t } = useTranslation();
   const history = useHistory();
-  
+
   const [displayMenu, setDisplayMenu] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [isEnableLoader, setIsEnableLoader] = useState(false);
-  const [isWarningPop, setWarningPopUp ] = useState(false);
+  const [isWarningPop, setWarningPopUp] = useState(false);
   const [showhide19, setShowhide19] = useState("true");
   const [businessService, setBusinessService] = useState("NewTL");
-  const [moduleCode,setModuleCode] = useState("TL")
-  const [ scrutinyDetails, setScrutinyDetails] = useState();
+  const [moduleCode, setModuleCode] = useState("TL");
+  const [scrutinyDetails, setScrutinyDetails] = useState();
   // const [applicationNumber,setApplicationNumber] = useState("");
   const [applicationDetails, setApplicationDetails] = useState();
   const [workflowDetails, setWorkflowDetails] = useState();
 
   const authToken = Digit.UserService.getUser()?.access_token || null;
 
-
   const getScrutinyData = async () => {
-    console.log("log123... userInfo",authToken);
     let requestInfo = {
-      "RequestInfo": {
-        "apiId": "Rainmaker",
-        "msgId": "1669293303096|en_IN",
-        "authToken": authToken
-       
-    }
-    }
+      RequestInfo: {
+        apiId: "Rainmaker",
+        msgId: "1669293303096|en_IN",
+        authToken: authToken,
+      },
+    };
     try {
-      const Resp = await axios.post(`/tl-services/v1/_search?tenantId=hr&applicationNumber=${id}`,requestInfo).then((response) => {
+      const Resp = await axios.post(`/tl-services/v1/_search?tenantId=hr&applicationNumber=${id}`, requestInfo).then((response) => {
         return response?.data;
       });
-      console.log("Response From API1", Resp, Resp?.Licenses[0]?.applicationNumber,Resp?.Licenses[0]?.tradeLicenseDetail?.additionalDetail[0]);
       setScrutinyDetails(Resp?.Licenses[0]?.tradeLicenseDetail?.additionalDetail[0]);
       // setApplicationNumber(Resp?.Licenses[0]?.applicationNumber);
       // setApplicationNumber("HR-TL-2022-12-07-000498");
     } catch (error) {
-      console.log(error);
+      return error;
     }
   };
 
   let EditRenewalApplastModifiedTime = Digit.SessionStorage.get("EditRenewalApplastModifiedTime");
 
   let workflowDetailsTemp = Digit.Hooks.useWorkflowDetails({
-    tenantId:  tenantId,
+    tenantId: tenantId,
     id: id,
     moduleCode: businessService,
     role: "TL_CEMP",
-    config:{EditRenewalApplastModifiedTime:EditRenewalApplastModifiedTime},
+    config: { EditRenewalApplastModifiedTime: EditRenewalApplastModifiedTime },
   });
-  
+
   const applicationDetailsTemp = Digit.Hooks.tl.useApplicationDetail(t, tenantId, id);
-  
-
-
 
   const {
     // isLoading: updatingApplication,
@@ -94,13 +85,11 @@ const {id} = useParams();
     mutate,
   } = Digit.Hooks.tl.useApplicationActions(tenantId);
 
-
   function onActionSelect(action) {
     if (action) {
-      if(action?.isWarningPopUp){
+      if (action?.isWarningPopUp) {
         setWarningPopUp(true);
-      }
-      else if (action?.redirectionUrll) {
+      } else if (action?.redirectionUrll) {
         window.location.assign(`${window.location.origin}/digit-ui/employee/payment/collect/${action?.redirectionUrll?.pathname}`);
       } else if (!action?.redirectionUrl) {
         setShowModal(true);
@@ -110,13 +99,12 @@ const {id} = useParams();
           state: { ...action.redirectionUrl?.state },
         });
       }
-    } 
+    }
     setSelectedAction(action);
     setDisplayMenu(false);
   }
 
   const queryClient = useQueryClient();
-
 
   const closeModal = () => {
     setSelectedAction(null);
@@ -125,7 +113,7 @@ const {id} = useParams();
 
   const closeWarningPopup = () => {
     setWarningPopUp(false);
-  }
+  };
 
   const submitAction = async (data, nocData = false, isOBPS = {}) => {
     setIsEnableLoader(true);
@@ -133,21 +121,23 @@ const {id} = useParams();
       data?.customFunctionToExecute({ ...data });
     }
     if (nocData !== false && nocMutation) {
-      const nocPrmomises = nocData?.map(noc => {
-        return nocMutation?.mutateAsync(noc)
-      })
+      const nocPrmomises = nocData?.map((noc) => {
+        return nocMutation?.mutateAsync(noc);
+      });
       try {
         setIsEnableLoader(true);
         const values = await Promise.all(nocPrmomises);
-        values && values.map((ob) => {
-          Digit.SessionStorage.del(ob?.Noc?.[0]?.nocType);
-        })
-      }
-      catch (err) {
+        values &&
+          values.map((ob) => {
+            Digit.SessionStorage.del(ob?.Noc?.[0]?.nocType);
+          });
+      } catch (err) {
         setIsEnableLoader(false);
-        let errorValue = err?.response?.data?.Errors?.[0]?.code ? t(err?.response?.data?.Errors?.[0]?.code) : err?.response?.data?.Errors?.[0]?.message || err;
+        let errorValue = err?.response?.data?.Errors?.[0]?.code
+          ? t(err?.response?.data?.Errors?.[0]?.code)
+          : err?.response?.data?.Errors?.[0]?.message || err;
         closeModal();
-        setShowToast({ key: "error", error: {message: errorValue}});
+        setShowToast({ key: "error", error: { message: errorValue } });
         setTimeout(closeToast, 5000);
         return;
       }
@@ -180,31 +170,23 @@ const {id} = useParams();
         },
       });
     }
-
     closeModal();
   };
 
-  useEffect(()=>{
-    console.log("log123...applicationDetailsAPI",applicationDetailsTemp)
-    if(applicationDetailsTemp?.data){
-      setApplicationDetails(applicationDetailsTemp?.data)
-    }
-  },[applicationDetailsTemp?.data])
-
+  useEffect(() => {
+    if (applicationDetailsTemp?.data) setApplicationDetails(applicationDetailsTemp?.data);
+  }, [applicationDetailsTemp?.data]);
 
   useEffect(() => {
-    console.log("log123...wrkflw",id,workflowDetailsTemp,scrutinyDetails,applicationDetails)
     if (workflowDetailsTemp?.data?.applicationBusinessService) {
       setWorkflowDetails(workflowDetailsTemp);
       setBusinessService(workflowDetailsTemp?.data?.applicationBusinessService);
     }
   }, [workflowDetailsTemp?.data]);
-  
- 
-  useEffect(()=>{
-    getScrutinyData();
-  },[])
 
+  useEffect(() => {
+    getScrutinyData();
+  }, []);
 
   return (
     <Card>
@@ -214,18 +196,11 @@ const {id} = useParams();
         </div>
       </Row> */}
       <Row style={{ top: 30, padding: 10 }}>
-        <ScrutitnyForms
-          apiResponse={scrutinyDetails}
-          applicationNumber={id}
-          refreshScrutinyData={getScrutinyData}
-        ></ScrutitnyForms>
+        <ScrutitnyForms apiResponse={scrutinyDetails} applicationNumber={id} refreshScrutinyData={getScrutinyData}></ScrutitnyForms>
       </Row>
       <Row style={{ top: 30, padding: "10px 22px" }}>
-
-
-
         {/* <Form.Group className="mb-3" controlId="exampleForm.ControlInput1"> */}
-          {/* <Card>
+        {/* <Card>
             <Card.Header style={{ fontSize: "17px", lineHeight: "18px", margin: "0px 15px" }}>
               <Card.Title className="m-0" style={{ fontFamily: "Roboto", fontSize: 20, fontWeight: "bold", textAlign: "center" }}>Summary</Card.Title>
             </Card.Header>
@@ -244,7 +219,7 @@ const {id} = useParams();
               />
             </Col>
           </Card> */}
-          {/* <div class="card">
+        {/* <div class="card">
             <h5 class="card-header">Featured</h5>
             <div class="card-body">
               <h5 class="card-title">Special title treatment</h5>
@@ -264,64 +239,63 @@ const {id} = useParams();
            
           </div> */}
           <div class="col-md-10 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
-          {/* <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}>Submit</Button> */}
+            {/* <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}>Submit</Button> */}
 
-
-          {showModal ? (
-            <ActionModal
-              t={t}
-              action={selectedAction}
-              tenantId={tenantId}
-              state={state}
-              id={id}
-              applicationDetails={applicationDetails}
-              applicationData={{...applicationDetails?.applicationData,workflowCode:applicationDetails?.applicationData?.workflowCode || "NewTL"}}
-              closeModal={closeModal}
-              submitAction={submitAction}
-              actionData={workflowDetails?.data?.timeline}
-              businessService={businessService}
+            {showModal ? (
+              <ActionModal
+                t={t}
+                action={selectedAction}
+                tenantId={tenantId}
+                state={state}
+                id={id}
+                applicationDetails={applicationDetails}
+                applicationData={{
+                  ...applicationDetails?.applicationData,
+                  workflowCode: applicationDetails?.applicationData?.workflowCode || "NewTL",
+                }}
+                closeModal={closeModal}
+                submitAction={submitAction}
+                actionData={workflowDetails?.data?.timeline}
+                businessService={businessService}
+                workflowDetails={workflowDetails}
+                moduleCode={moduleCode}
+              />
+            ) : null}
+            {isWarningPop ? (
+              <ApplicationDetailsWarningPopup
+                action={selectedAction}
+                workflowDetails={workflowDetails}
+                businessService={businessService}
+                isWarningPop={isWarningPop}
+                closeWarningPopup={closeWarningPopup}
+              />
+            ) : null}
+            {/* <ApplicationDetailsToast t={t} showToast={showToast} closeToast={closeToast} businessService={businessService} /> */}
+            <ApplicationDetailsActionBar
               workflowDetails={workflowDetails}
-              moduleCode={moduleCode}
+              displayMenu={displayMenu}
+              onActionSelect={onActionSelect}
+              setDisplayMenu={setDisplayMenu}
+              businessService={businessService}
+              // forcedActionPrefix={forcedActionPrefix}
+              ActionBarStyle={{}}
+              MenuStyle={{}}
             />
-          ) : null}
-          {isWarningPop ? (
-            <ApplicationDetailsWarningPopup 
-            action={selectedAction}
-            workflowDetails={workflowDetails}
-            businessService={businessService}
-            isWarningPop={isWarningPop}
-            closeWarningPopup={closeWarningPopup}
-            />
-          ) : null}
-          {/* <ApplicationDetailsToast t={t} showToast={showToast} closeToast={closeToast} businessService={businessService} /> */}
-          <ApplicationDetailsActionBar
-            workflowDetails={workflowDetails}
-            displayMenu={displayMenu}
-            onActionSelect={onActionSelect}
-            setDisplayMenu={setDisplayMenu}
-            businessService={businessService}
-            // forcedActionPrefix={forcedActionPrefix}
-            ActionBarStyle={{}}
-            MenuStyle={{}}
-          />
-
-
-            </div>
-          
+          </div>
         </Row>
         <Row>
-          
           <div class="col-md-12 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
-          {/* <Button style={{ textAlign: "right" }}> <a href="http://localhost:3000/digit-ui/citizen/obps/Loi" >Generate LOI</a></Button> */}
-          {/* <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow19} /> */}
+            {/* <Button style={{ textAlign: "right" }}> <a href="http://localhost:3000/digit-ui/citizen/obps/Loi" >Generate LOI</a></Button> */}
+            {/* <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow19} /> */}
           </div>
           {showhide19 === "Submit" && (
-                     <div>
-                       <Button style={{ textAlign: "right" }}> <a href="http://localhost:3000/digit-ui/employee/tl/Loi" >Generate LOI</a></Button>
-                     </div>
-                        )}
-                        
-                    
+            <div>
+              <Button style={{ textAlign: "right" }}>
+                {" "}
+                <a href="http://localhost:3000/digit-ui/employee/tl/Loi">Generate LOI</a>
+              </Button>
+            </div>
+          )}
         </Row>
       </Row>
     </Card>

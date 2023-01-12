@@ -4,9 +4,9 @@ const VALIDATION_SCHEMA = Yup.object().shape({
   purpose: Yup.object({
     value: Yup.string().required("This field is required"),
   }),
-  potential: Yup.object({
-    value: Yup.string().required("This field is required"),
-  }),
+  // potential: Yup.object({
+  //   value: Yup.string().required("This field is required"),
+  // }),
   district: Yup.object({
     value: Yup.string().required("This field is required"),
   }),

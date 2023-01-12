@@ -9,7 +9,7 @@ import ScrutinyDevelopment from "../../../ScrutinyDevelopment/ScrutinyDevelopmen
 import { ScrutinyRemarksContext } from "../../../../../../../context/remarks-data-context/index";
 import SubmitNew from "../SubmitNew";
 
-const FormBank = () => {
+const FormBank = ({ apiResponse, applicationNumber, refreshScrutinyData }) => {
   const personalInfoRef = useRef();
   // const generalInfoRef = useRef();
   // const developerInfoRef = useRef();
@@ -82,7 +82,7 @@ const FormBank = () => {
       <div style={{ position: "relative", maxWidth: "100%", padding: 2 }}>
         <div>
           <div>
-            <SubmitNew />
+            <SubmitNew apiResponse={apiResponse} refreshScrutinyData={refreshScrutinyData}></SubmitNew>
           </div>
 
           {/* <JeLandinfo jeLandInfoRef={jeLandInfoRef} passUncheckedList={getUncheckedJeLandInfo}></JeLandinfo> */}

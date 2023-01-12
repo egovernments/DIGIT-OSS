@@ -1793,7 +1793,6 @@ const AppliedDetailForm = (props) => {
                       isDleteBtn={true}
                       onClose={() => {
                         setShowToast(null);
-                        setError(null);
                       }}
                     />
                   )}
@@ -1804,7 +1803,6 @@ const AppliedDetailForm = (props) => {
                       isDleteBtn={true}
                       onClose={() => {
                         setShowToastError(null);
-                        setError(null);
                       }}
                     />
                   )}
