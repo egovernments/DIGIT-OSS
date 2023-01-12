@@ -7,11 +7,9 @@ import { MenuItem, Select } from "@mui/material";
 
 const LicenseType = ({ t, config, onSelect, userType, formData }) => {
   if (JSON.parse(sessionStorage.getItem("BPAREGintermediateValue")) !== null) {
-    formData = JSON.parse(sessionStorage.getItem("BPAREGintermediateValue"))
+    formData = JSON.parse(sessionStorage.getItem("BPAREGintermediateValue"));
     sessionStorage.setItem("BPAREGintermediateValue", null);
-  }
-  else
-    formData = formData
+  } else formData = formData;
 
   let index = window.location.href.split("/").pop();
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -26,26 +24,21 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
   if (isopenlink)
     window.onunload = function () {
       sessionStorage.removeItem("Digit.BUILDING_PERMIT");
-    }
-
+    };
 
   function getLicenseType() {
     let list = [];
     let found = false;
     data?.StakeholderRegistraition?.TradeTypetoRoleMapping.map((ob) => {
-      found = list.some(el => el.i18nKey.includes(ob.tradeType.split(".")[0]));
-      if (!found) list.push({ role: ob.role, i18nKey: `TRADELICENSE_TRADETYPE_${ob.tradeType.split(".")[0]}`, tradeType: ob.tradeType })
+      found = list.some((el) => el.i18nKey.includes(ob.tradeType.split(".")[0]));
+      if (!found) list.push({ role: ob.role, i18nKey: `TRADELICENSE_TRADETYPE_${ob.tradeType.split(".")[0]}`, tradeType: ob.tradeType });
     });
     return list;
   }
 
-
-
-
   const onSkip = () => onSelect();
 
   function selectLicenseType(value) {
-    console.log("log123", value)
     setLicenseType(value);
   }
 
@@ -54,27 +47,27 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
   }
 
   function goNext() {
-    if (!(formData?.result && formData?.result?.Licenses[0]?.id))
-      onSelect(config.key, { LicenseType, ArchitectNo });
+    if (!(formData?.result && formData?.result?.Licenses[0]?.id)) onSelect(config.key, { LicenseType, ArchitectNo });
     else {
       let data = formData?.formData;
       data.LicneseType.LicenseType = LicenseType;
       data.LicneseType.ArchitectNo = ArchitectNo;
-      onSelect("", formData)
+      onSelect("", formData);
     }
   }
-
-
-
-
 
   return (
     <div>
       <div className={isopenlink ? "OpenlinkContainer" : ""}>
-
         {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
         <Timeline currentStep={1} flow="STAKEHOLDER" />
-        <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={LicenseType && LicenseType?.i18nKey.includes("ARCHITECT") ? !LicenseType || !ArchitectNo : !LicenseType}>
+        <FormStep
+          t={t}
+          config={config}
+          onSelect={goNext}
+          onSkip={onSkip}
+          isDisabled={LicenseType && LicenseType?.i18nKey.includes("ARCHITECT") ? !LicenseType || !ArchitectNo : !LicenseType}
+        >
           <Row className="justify-content-between">
             <Form.Group className="col-md-5">
               <CardLabel>{t("BPA_LICENSE_TYPE")}*</CardLabel>
@@ -96,23 +89,23 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
             </Form.Group>
 
             <Form.Group className="col-md-5">
-              {LicenseType && LicenseType?.i18nKey.includes("ARCHITECT") && <div><CardLabel>{`${t("BPA_COUNCIL_NUMBER")}*`}</CardLabel>
-                <TextInput
-                  t={t}
-                  type={"text"}
-                  isMandatory={false}
-                  optionKey="i18nKey"
-                  name="ArchitectNo"
-                  value={ArchitectNo}
-                  onChange={selectArchitectNo}
-                />
-              </div>}
+              {LicenseType && LicenseType?.i18nKey.includes("ARCHITECT") && (
+                <div>
+                  <CardLabel>{`${t("BPA_COUNCIL_NUMBER")}*`}</CardLabel>
+                  <TextInput
+                    t={t}
+                    type={"text"}
+                    isMandatory={false}
+                    optionKey="i18nKey"
+                    name="ArchitectNo"
+                    value={ArchitectNo}
+                    onChange={selectArchitectNo}
+                  />
+                </div>
+              )}
             </Form.Group>
 
-            <Form.Group>
-
-
-            </Form.Group>
+            <Form.Group></Form.Group>
           </Row>
         </FormStep>
       </div>
@@ -120,4 +113,4 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
   );
 };
 
-export default LicenseType; 
+export default LicenseType;

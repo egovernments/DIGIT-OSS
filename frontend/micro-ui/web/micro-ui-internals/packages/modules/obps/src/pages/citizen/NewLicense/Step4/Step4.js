@@ -35,6 +35,7 @@ const AppliedDetailForm = (props) => {
   const [showToast, setShowToast] = useState(null);
   const [showToastError, setShowToastError] = useState(null);
   const userInfo = Digit.UserService.getUser()?.info || {};
+  const [applicantId, setApplicantId] = useState("");
   const {
     watch,
     register,
@@ -103,7 +104,7 @@ const AppliedDetailForm = (props) => {
     const postDistrict = {
       pageName: "DetailsofAppliedLand",
       action: "LANDDETAILS",
-      applicationNumber: props.getId,
+      applicationNumber: applicantId,
       createdBy: userInfo?.id,
       updatedBy: userInfo?.id,
       LicenseDetails: {
@@ -402,6 +403,38 @@ const AppliedDetailForm = (props) => {
     }
   };
 
+  const handleWorkflow = async () => {
+    const token = window?.localStorage?.getItem("token");
+    setLoader(true);
+    const payload = {
+      ProcessInstances: [
+        {
+          businessService: "NewTL",
+          documents: null,
+          businessId: applicantId,
+          tenantId: "hr",
+          moduleName: "TL",
+          action: "LANDDETAILS",
+          previousStatus: "LANDSCHEDULE",
+          comment: null,
+        },
+      ],
+      RequestInfo: {
+        apiId: "Rainmaker",
+        msgId: "1669293303096|en_IN",
+        authToken: token,
+      },
+    };
+    try {
+      await axios.post("/egov-workflow-v2/egov-wf/process/_transition", payload);
+      setLoader(false);
+      props?.step4Back();
+    } catch (error) {
+      setLoader(false);
+      return error;
+    }
+  };
+
   const getApplicantUserData = async (id) => {
     const token = window?.localStorage?.getItem("token");
     const payload = {
@@ -422,6 +455,7 @@ const AppliedDetailForm = (props) => {
     const search = location?.search;
     const params = new URLSearchParams(search);
     const id = params.get("id");
+    setApplicantId(id?.toString());
     if (id) getApplicantUserData(id);
   }, []);
   const [modal, setmodal] = useState(false);
@@ -1742,7 +1776,7 @@ const AppliedDetailForm = (props) => {
                   </div>
                   <div class="row">
                     <div class="col-sm-12 text-left">
-                      <div id="btnClear" class="btn btn-primary btn-md center-block" onClick={() => props?.step4Back()}>
+                      <div id="btnClear" class="btn btn-primary btn-md center-block" onClick={() => handleWorkflow()}>
                         Back
                       </div>
                     </div>
@@ -1759,7 +1793,6 @@ const AppliedDetailForm = (props) => {
                       isDleteBtn={true}
                       onClose={() => {
                         setShowToast(null);
-                        setError(null);
                       }}
                     />
                   )}
@@ -1770,7 +1803,6 @@ const AppliedDetailForm = (props) => {
                       isDleteBtn={true}
                       onClose={() => {
                         setShowToastError(null);
-                        setError(null);
                       }}
                     />
                   )}

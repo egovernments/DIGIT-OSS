@@ -74,6 +74,8 @@ const LandScheduleForm = (props) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [showToast, setShowToast] = useState(null);
   const [showToastError, setShowToastError] = useState(null);
+  const [applicantId, setApplicantId] = useState("");
+  const [litigationRemark, setLitigationRemark] = useState("");
   const { data: PurposeType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
 
   const { data: LandData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["LandType"]);
@@ -131,7 +133,7 @@ const LandScheduleForm = (props) => {
     const postDistrict = {
       pageName: "LandSchedule",
       action: "LANDSCHEDULE",
-      applicationNumber: props?.getId,
+      applicationNumber: applicantId,
       createdBy: userInfo?.id,
       updatedBy: userInfo?.id,
       LicenseDetails: {
@@ -290,14 +292,45 @@ const LandScheduleForm = (props) => {
     }
   };
 
+  const handleWorkflow = async () => {
+    const token = window?.localStorage?.getItem("token");
+    setLoader(true);
+    const payload = {
+      ProcessInstances: [
+        {
+          businessService: "NewTL",
+          documents: null,
+          businessId: applicantId,
+          tenantId: "hr",
+          moduleName: "TL",
+          action: "LANDSCHEDULE",
+          previousStatus: "PURPOSE",
+          comment: null,
+        },
+      ],
+      RequestInfo: {
+        apiId: "Rainmaker",
+        msgId: "1669293303096|en_IN",
+        authToken: token,
+      },
+    };
+    try {
+      await axios.post("/egov-workflow-v2/egov-wf/process/_transition", payload);
+      setLoader(false);
+      props?.Step3Back();
+    } catch (error) {
+      setLoader(false);
+      return error;
+    }
+  };
+
   useEffect(() => {
     const search = location?.search;
     const params = new URLSearchParams(search);
     const id = params.get("id");
+    setApplicantId(id?.toString());
     if (id) getApplicantUserData(id);
   }, []);
-
-  const [litigationRemark, setLitigationRemark] = useState("");
 
   const handleChange = (event) => {
     const result = event.target.value.replace(/[^a-z]/gi, "");
@@ -375,7 +408,7 @@ const LandScheduleForm = (props) => {
                             <div className="col col-4">
                               <label>
                                 <h2>
-                                  Site Location Purpose <span style={{ color: "red" }}>*</span>
+                                  Type of colony <span style={{ color: "red" }}>*</span>
                                 </h2>
                               </label>
                               <ReactMultiSelect
@@ -419,7 +452,7 @@ const LandScheduleForm = (props) => {
                             <div className="col col-3">
                               <label>
                                 <h2>
-                                  Area of Parent Licence <span style={{ color: "red" }}>*</span>
+                                  Area of parent licence in acres <span style={{ color: "red" }}>*</span>
                                 </h2>
                               </label>
                               <input
@@ -434,7 +467,7 @@ const LandScheduleForm = (props) => {
 
                             <div className="col col-3">
                               <label>
-                                <h2>Specify Others</h2>
+                                <h2>Any Other Remark </h2>
                               </label>
                               <input type="text" {...register("specify")} className="form-control" pattern="[A-Za-z]+" />
                             </div>
@@ -1965,7 +1998,7 @@ const LandScheduleForm = (props) => {
                   </div>
                   <div class="row">
                     <div class="col-sm-12 text-left">
-                      <div id="btnClear" class="btn btn-primary btn-md center-block" onClick={() => props?.Step3Back()}>
+                      <div id="btnClear" class="btn btn-primary btn-md center-block" onClick={() => handleWorkflow()}>
                         Back
                       </div>
                     </div>

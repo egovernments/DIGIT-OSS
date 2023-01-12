@@ -92,8 +92,10 @@ const FeesChargesForm = (props) => {
       ],
       CalculatorRequest: {
         totalLandSize: 1,
-        potenialZone: stepData?.ApplicantPurpose?.potential,
-        purposeCode: stepData?.ApplicantPurpose?.purpose,
+        // potenialZone: stepData?.ApplicantPurpose?.potential,
+        potenialZone: "HYP",
+        // purposeCode: stepData?.ApplicantPurpose?.purpose,
+        purposeCode: "DDJAY_APHP",
         applicationNumber: applicantId,
       },
     };
@@ -187,6 +189,8 @@ const FeesChargesForm = (props) => {
   }, []);
 
   const [fileStoreId, setFileStoreId] = useState({});
+  const [selectedFiles, setSelectedFiles] = useState([]);
+
   const getDocumentData = async (file, fieldName) => {
     if (selectedFiles.includes(file.name)) {
       setShowToastError({ key: "error" });
@@ -222,6 +226,38 @@ const FeesChargesForm = (props) => {
   const dataAreaBiswansi = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.biswansi;
   const totalAreaAcre =
     dataArea * 0.125 + dataAreaMarla * 0.0062 + dataAreaSarai * 0.00069 + dataAreaBigha * 0.33 + dataAreaBiswa * 0.0309 + dataAreaBiswansi * 0.619;
+
+  // const handleWorkflow = async () => {
+  //   const token = window?.localStorage?.getItem("token");
+  //   setLoader(true);
+  //   const payload = {
+  //     ProcessInstances: [
+  //       {
+  //         businessService: "NewTL",
+  //         documents: null,
+  //         businessId: applicantId,
+  //         tenantId: "hr",
+  //         moduleName: "TL",
+  //         action: "FEESANDCHARGES",
+  //         previousStatus: "LANDDETAILS",
+  //         comment: null,
+  //       },
+  //     ],
+  //     RequestInfo: {
+  //       apiId: "Rainmaker",
+  //       msgId: "1669293303096|en_IN",
+  //       authToken: token,
+  //     },
+  //   };
+  //   try {
+  //     await axios.post("/egov-workflow-v2/egov-wf/process/_transition", payload);
+  //     setLoader(false);
+  //     props?.step4Back();
+  //   } catch (error) {
+  //     setLoader(false);
+  //     return error;
+  //   }
+  // };
 
   const getApplicantUserData = async (id) => {
     const token = window?.localStorage?.getItem("token");
@@ -304,14 +340,14 @@ const FeesChargesForm = (props) => {
                           <input type="text" className="form-control" disabled {...register("licenseFee")} />
                         </td>
                       </tr>
-                      <tr>
+                      {/* <tr>
                         <th>
                           Conversion Charges <span style={{ color: "red" }}>*</span>
                         </th>
                         <td>
                           <input type="text" className="form-control" disabled {...register("conversionCharges")} />
                         </td>
-                      </tr>
+                      </tr> */}
                     </tbody>
                   </table>
 

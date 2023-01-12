@@ -28,6 +28,8 @@ const LayoutPlan = (props) => {
   const [loader, setLoader] = useState(false);
   const [showToast, setShowToast] = useState(null);
   const [showToastError, setShowToastError] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState([]);
+
   const getDocumentData = async (file, fieldName) => {
     if (selectedFiles.includes(file.name)) {
       setShowToastError({ key: "error" });

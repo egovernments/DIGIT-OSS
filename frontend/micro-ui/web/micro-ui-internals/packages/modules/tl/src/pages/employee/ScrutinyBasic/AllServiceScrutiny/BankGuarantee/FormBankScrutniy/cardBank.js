@@ -47,7 +47,6 @@ const ScrutinyForm = (props) => {
   const authToken = Digit.UserService.getUser()?.access_token || null;
 
   const getScrutinyData = async () => {
-    console.log("log123... userInfo", authToken);
     let requestInfo = {
       RequestInfo: {
         apiId: "Rainmaker",
@@ -186,15 +185,13 @@ const ScrutinyForm = (props) => {
     closeModal();
   };
 
-  // useEffect(() => {
-  //   console.log("log123...applicationDetailsAPI", applicationDetailsTemp);
-  //   if (applicationDetailsTemp?.data) {
-  //     setApplicationDetails(applicationDetailsTemp?.data);
-  //   }
-  // }, [applicationDetailsTemp?.data]);
+  useEffect(() => {
+    if (applicationDetailsTemp?.data) {
+      setApplicationDetails(applicationDetailsTemp?.data);
+    }
+  }, [applicationDetailsTemp?.data]);
 
   useEffect(() => {
-    console.log("log123...wrkflw", id, workflowDetailsTemp, scrutinyDetails, applicationDetails);
     if (workflowDetailsTemp?.data?.applicationBusinessService) {
       setWorkflowDetails(workflowDetailsTemp);
       setBusinessService(workflowDetailsTemp?.data?.applicationBusinessService);
