@@ -14,36 +14,6 @@ export default function CheckCredentials(){
 
     const checkCrednetials = async () => {
         const body = {
-            "RequestInfo": {
-                "apiId": "Rainmaker",
-                "authToken": queryParameters.get("authToken"),
-                "userInfo": {
-                    "id": 1776,
-                    "uuid": queryParameters.get("uuid"),
-                    "userName": queryParameters.get("userName"),
-                    "name": queryParameters.get("name"),
-                    "mobileNumber": queryParameters.get("mobileNumber"),
-                    "emailId": queryParameters.get("email"),
-                    "locale": null,
-                    "type": "CITIZEN",
-                    "roles": [
-                        {
-                            "name": "Builder",
-                            "code": "BPA_BUILDER",
-                            "tenantId": "hr"
-                        },
-                        {
-                            "name": "Citizen",
-                            "code": "CITIZEN",
-                            "tenantId": "hr"
-                        }
-                    ],
-                    "active": true,
-                    "tenantId": "hr",
-                    "permanentCity": null
-                },
-                "msgId": "1672461837709|en_IN"
-            },
             "SsoCitizen": {
                 "userId": queryParameters.get("userId"),
                 "emailId": queryParameters.get("emailId"),
@@ -54,6 +24,7 @@ export default function CheckCredentials(){
             }
         }
         const response = await axios.post("http://103.166.62.118:80/user/users/_ssoCitizen",body)
+        sessionStorage.setItem("access_token",response.data.access_token);
         // console.log("_ssoCitizen response ",response.data)
         window.open(response.data.ReturnUrl,"_self");
 

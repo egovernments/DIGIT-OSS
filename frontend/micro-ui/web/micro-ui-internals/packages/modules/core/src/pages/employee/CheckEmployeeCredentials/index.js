@@ -13,47 +13,25 @@ export default function CheckCredentials(){
     const queryParameters = new URLSearchParams(window.location.search)
 
     const checkCrednetials = async () => {
-        const body = {
-            "RequestInfo": {
-                "apiId": "Rainmaker",
-                "authToken": queryParameters.get("authToken"),
-                "userInfo": {
-                    "id": 1776,
-                    "uuid": queryParameters.get("uuid"),
-                    "userName": queryParameters.get("userName"),
-                    "name": queryParameters.get("name"),
-                    "mobileNumber": queryParameters.get("mobileNumber"),
-                    "emailId": queryParameters.get("email"),
-                    "locale": null,
-                    "type": "CITIZEN",
-                    "roles": [
-                        {
-                            "name": "Builder",
-                            "code": "BPA_BUILDER",
-                            "tenantId": "hr"
-                        },
-                        {
-                            "name": "Citizen",
-                            "code": "CITIZEN",
-                            "tenantId": "hr"
-                        }
-                    ],
-                    "active": true,
-                    "tenantId": "hr",
-                    "permanentCity": null
-                },
-                "msgId": "1672461837709|en_IN"
-            },
-            "SsoCitizen": {
-                "userId": queryParameters.get("userId"),
-                "emailId": queryParameters.get("emailId"),
-                "mobileNumber": queryParameters.get("mobileNumber"),
-                "returnUrl":  queryParameters.get("returnUrl"),
-                "redirectUrl":  queryParameters.get("redirectUrl"),
-                "tokenId": queryParameters.get("tokenId")
+        
+       let body =  {
+            "SsoEmployee":{
+            "applicantName":queryParameters.get("applicantName"),
+            "mobileNumber":queryParameters.get("mobileNumber"),
+            "uid":queryParameters.get("uid"),
+            "userName":queryParameters.get("userName"),
+            "email":queryParameters.get("email"),
+            "rtnUrl":queryParameters.get("rtnUrl"),
+            "ssoDashboardURL":queryParameters.get("ssoDashboardURL"),
+            "tokenId":queryParameters.get("tokenId"),
+            "designationID":queryParameters.get("designationID"),
+            "designation":queryParameters.get("designation"),
+            "officeID":queryParameters.get("officeID"),
+            "officeName":queryParameters.get("officeName")
             }
         }
-        const response = await axios.post("http://103.166.62.118:80/user/users/_ssoCitizen",body)
+        const response = await axios.post("http://103.166.62.118:80/user/users/_ssoEmployee",body)
+        sessionStorage.setItem("access_token",response.data.access_token);
         // console.log("_ssoCitizen response ",response.data)
         window.open(response.data.ReturnUrl,"_self");
 
