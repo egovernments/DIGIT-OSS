@@ -127,6 +127,7 @@ export const downloadMultipleBill = async (
     const queryStr = [
       { key: "key", value: configKey },
       { key: "tenantId", value: commonConfig.tenantId },
+      { key: "isConsolidated", value: true }
     ];
     var addDetail = null;
 
@@ -138,7 +139,7 @@ export const downloadMultipleBill = async (
       item.additionalDetails = addDetail;
     });
 
-    var actualBills = [],size = 30;
+    var actualBills = [],size = 80;
     for (let i = 0; bills.length > 0; i++) {
       actualBills.push(bills.splice(0, size));
     }
