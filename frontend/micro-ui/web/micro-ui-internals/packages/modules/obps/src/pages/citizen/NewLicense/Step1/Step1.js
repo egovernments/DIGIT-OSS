@@ -126,7 +126,7 @@ const ApllicantFormStep1 = (props) => {
 
   useEffect(() => {
     if (developerDataLabel) {
-      console.log("developerDataLabel", developerDataLabel?.addInfo);
+      console.log("developerDataLabel", developerDataLabel);
       setValue("developerName", developerDataLabel?.addInfo?.name);
       setValue("developerAddress", developerDataLabel?.addInfo?.registeredAddress);
       setValue("developerEmail", developerDataLabel?.addInfo?.emailId);
@@ -436,6 +436,36 @@ const ApllicantFormStep1 = (props) => {
                   <h3 className="error-message" style={{ color: "red" }}>
                     {errors?.authorizedAddress && errors?.authorizedAddress?.message}
                   </h3>
+                </Col>
+              </Row>
+              <Row className="mt-4">
+                <Col md={4} xxl lg="4">
+                  <div
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      if (developerDataLabel?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf)
+                        getDocShareholding(developerDataLabel?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf, setLoader);
+                      else setShowToastError({ key: "error" });
+                    }}
+                    id="btnSearch"
+                    class="btn-primary btn-md center-block p-2"
+                  >
+                    Upload Digital Signature
+                  </div>
+                </Col>
+                <Col md={4} xxl lg="4">
+                  <div
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      if (developerDataLabel?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution)
+                        getDocShareholding(developerDataLabel?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution, setLoader);
+                      else setShowToastError({ key: "error" });
+                    }}
+                    id="btnSearch"
+                    class="btn-primary btn-md center-block p-2"
+                  >
+                    Upload Board Resolution
+                  </div>
                 </Col>
               </Row>
             </Form.Group>
