@@ -14,7 +14,7 @@ export const convertDotValues = (value = "") => {
 };
 
 export const sortDropdownNames = (options, optionkey, locilizationkey) => {
-  const userInfo = Digit.UserService.getUser();
+  // const userInfo = Digit.UserService.getUser();
   return options.sort((a, b) => locilizationkey(a[optionkey]).localeCompare(locilizationkey(b[optionkey])));
 };
 
@@ -57,7 +57,7 @@ export const convertToLocale = (value = "", key = "") => {
 //   getDeveloperData()
 // }, []);
 
-const [tradeType, setTradeType] = useState("")
+// const [tradeType, setTradeType] = useState("")
 
 export const getPropertyTypeLocale = (value = "") => {
   return convertToLocale(value, "COMMON_PROPTYPE");
