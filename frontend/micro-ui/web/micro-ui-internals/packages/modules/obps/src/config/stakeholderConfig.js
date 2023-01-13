@@ -16,7 +16,7 @@ export const newConfig = [
         texts: {
           headerCaption: "Applicant Type",
           header: "",
-          cardText: "BPA_LICENSE_TYPE_TEXT",
+          cardText: "",
           submitBarLabel: "CS_COMMON_NEXT",
         },
         nextStep: "license-add-info",

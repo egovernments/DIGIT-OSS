@@ -53,7 +53,7 @@ const getPattern = type => {
     case "LLP":
       return /^[A]{1}[A]{1}[B]{1}[-]{1}\d{4}$/i;
     case "DIN":
-      return /^[1-9][0-9]{7}$/i;
+      return /^[0-9]{8}$/i;
     case "GSTNo":
       return /^\d{2}[A-Z]{5}\d{4}[A-Z]{1}\d[Z]{1}[A-Z\d]{1}$/i;
     case "DoorHouseNo":

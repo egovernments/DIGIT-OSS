@@ -555,7 +555,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
   const changeStep = (step) => {
     switch (step) {
       case 1 :
-        navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/license-details");
+        navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/provide-license-type");
         break;
       case 2 :
         navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/license-add-info");
@@ -717,7 +717,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                   <form className="text1">
                     <Row>
                       <Col md={3} xxl lg="3">
-                        <label htmlFor="name" className="text">Name  <span className="text-danger font-weight-bold">*</span></label>
+                        <label htmlFor="name" className="text">Enter Full Name  <span className="text-danger font-weight-bold">*</span></label>
                         <input
                           type="text"
                           value={aurthorizedUserName}
