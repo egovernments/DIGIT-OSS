@@ -91,7 +91,7 @@ const OBPSLinks = ({ matchPath, userType }) => {
       i18nKey: t("BPA_CITIZEN_HOME_VIEW_APP_BY_CITIZEN_LABEL"),
     },
     {
-      link: `${matchPath}/stakeholder/apply/stakeholder-docs-required`,
+      link: `${matchPath}/stakeholder/apply/provide-license-type`,
       i18nKey: t("BPA_CITIZEN_HOME_STAKEHOLDER_LOGIN_LABEL"),
     },
     {

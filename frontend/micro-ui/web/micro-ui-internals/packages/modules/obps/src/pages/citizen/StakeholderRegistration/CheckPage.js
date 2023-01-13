@@ -58,7 +58,7 @@ const CheckPage = ({ onSubmit, value }) => {
   const changeStep = (step) => {
     switch (step) {
       case 1 :
-        navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/license-details");
+        navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/provide-license-type");
         break;
       case 2 :
         navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/license-add-info");
