@@ -6,6 +6,7 @@ import { EmployeeModuleCard, DocumentIconSolid, EventsIconSolid, PMBIconSolid, S
 const EngagementCard = () => {
   const userRoles = Digit.SessionStorage.get('User')?.info?.roles
   const isEmployee = userRoles.find((role) => role.code === 'EMPLOYEE');
+  const isCTP_HR = userRoles.find((role) => role.code === "CTP_HR")
   const BgRole = ["SO", "AO", "CAO"]
   function isBankGuarrantee(){
     for(let i=0; i<userRoles.length; i++){
@@ -166,14 +167,14 @@ const EngagementCard = () => {
       {
         count: totalDocsCount,
         label: t("ELECTRIC_PLAN_CARD"),
-        link: `/digit-ui/employee/obps/electricplan/inbox`,
+        link: `/digit-ui/employee/obps/electricPlanInbox`,
       },
     ],
     links: [
       {
         count: totalDocsCount,
         label: t("ES_TITLE_INBOX"),
-        link: `/digit-ui/employee/obps/electricplan/inbox`,
+        link: `/digit-ui/employee/obps/electricPlanInbox`,
       }
     ],
   };
@@ -199,9 +200,12 @@ const EngagementCard = () => {
 
   
   
-    const engagementSubModulesProps = [propsForDocumentModuleCard, propsForEventsModuleCard, propsForPMBModuleCard, propsForSurveyModuleCard, propsForServiceModuleCard, propsForElectricModuleCard]
+    const engagementSubModulesProps = [propsForDocumentModuleCard, propsForEventsModuleCard, propsForPMBModuleCard, propsForSurveyModuleCard]
     if(isBankGuarrantee()){
       engagementSubModulesProps.push(propsForBankModuleCard)
+    }
+    else if(Digit.Utils.tlAccess() || isCTP_HR){
+      engagementSubModulesProps.push(propsForServiceModuleCard, propsForElectricModuleCard)
     }
 
   if (isEmployee) result = (

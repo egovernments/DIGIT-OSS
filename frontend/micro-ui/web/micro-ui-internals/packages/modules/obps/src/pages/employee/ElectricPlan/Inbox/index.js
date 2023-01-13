@@ -6,9 +6,9 @@ import { Header } from "@egovernments/digit-ui-react-components";
 
 
 
-const ServicePlanInbox = ({
+const ElectricalPlanInbox = ({
   parentRoute,
-  businessService = "SERVICE_PLAN",
+  businessService = "ELECTRICAL_PLAN",
   initialStates = {},
   filterComponent,
   isInbox
@@ -30,7 +30,7 @@ const ServicePlanInbox = ({
     ? { limit: 100, offset: 0, sortBy: sortParams?.[0]?.id, sortOrder: sortParams?.[0]?.desc ? "DESC" : "ASC" }
     : { limit: pageSize, offset: pageOffset, sortBy: sortParams?.[0]?.id, sortOrder: sortParams?.[0]?.desc ? "DESC" : "ASC" };
 
-    const { isFetching, isLoading: hookLoading, searchResponseKey, data, searchFields, ...rest } = Digit.Hooks.obps.useSPInbox({
+    const { isFetching, isLoading: hookLoading, searchResponseKey, data, searchFields, ...rest } = Digit.Hooks.obps.useEPInbox({
     tenantId,
     filters: { ...searchParams, ...paginationParams, sortParams },
     config: {}
@@ -149,4 +149,4 @@ const ServicePlanInbox = ({
   }
 }
 
-export default ServicePlanInbox
+export default ElectricalPlanInbox
