@@ -23,6 +23,8 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import ScrollToTop from "@egovernments/digit-ui-react-components/src/atoms/ScrollToTop";
 import { CardLabelError } from "@egovernments/digit-ui-react-components";
 import { Toast } from "@egovernments/digit-ui-react-components";
+import _ from "lodash";
+
 const AppliedDetailForm = (props) => {
   const location = useLocation();
   const Purpose = localStorage.getItem("purpose");
@@ -34,6 +36,7 @@ const AppliedDetailForm = (props) => {
   const [showError, setShowError] = useState({});
   const [showToast, setShowToast] = useState(null);
   const [showToastError, setShowToastError] = useState(null);
+  const [toastMessage, setToastMessage] = useState(null);
   const userInfo = Digit.UserService.getUser()?.info || {};
   const [applicantId, setApplicantId] = useState("");
   const {
@@ -342,6 +345,7 @@ const AppliedDetailForm = (props) => {
   const getDocumentData = async (file, fieldName) => {
     if (selectedFiles.includes(file.name)) {
       setShowToastError({ key: "error" });
+      setToastMessage("Duplicate file Selected");
       return;
     }
     const formData = new FormData();
@@ -579,6 +583,27 @@ const AppliedDetailForm = (props) => {
                       // }}
                     >
                       Add
+                    </button>
+                    <button
+                      type="button"
+                      style={{ float: "right", marginRight: 15 }}
+                      className="btn btn-primary"
+                      onClick={() => {
+                        console.log("showError", showError);
+                        if (!_.isEmpty(showError)) {
+                          // const status = Object.keys(showError).every((k) => showError[k]);
+                          // console.log(status);
+                          setShowToastError({ key: "error" });
+                          setToastMessage("Please fill enter all DGPS Points");
+                        } else
+                          window.open(
+                            `/digit-ui/WNS/wmsmap.html?latlngs=${watch("dgpsDetails")
+                              ?.map((element) => `${element.latitude},${element.longitude}`)
+                              .join(":")}`
+                          );
+                      }}
+                    >
+                      View On Map
                     </button>
                   </div>
 
@@ -1799,7 +1824,7 @@ const AppliedDetailForm = (props) => {
                   {showToastError && (
                     <Toast
                       error={showToastError?.key === "error" ? true : false}
-                      label="Duplicate file Selected"
+                      label={toastMessage}
                       isDleteBtn={true}
                       onClose={() => {
                         setShowToastError(null);
