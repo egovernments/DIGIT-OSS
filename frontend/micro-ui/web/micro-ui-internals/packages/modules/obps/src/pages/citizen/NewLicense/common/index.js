@@ -150,7 +150,7 @@ const CommonForm = () => {
       handleWorkflow("PURPOSE", "INITIATE");
       handleStep();
     } else if (value == 2 && stepActive.step2) {
-      handleWorkflow("LANDSCHEDULE", "PURPOSE");
+      handleWorkflow("SENDBACK_TO_PURPOSE", "LANDDETAILS");
       handleStep1(getId, userData, getLicData);
     } else if (value == 3 && stepActive.step3) {
       handleWorkflow("LANDDETAILS", "LANDSCHEDULE");
