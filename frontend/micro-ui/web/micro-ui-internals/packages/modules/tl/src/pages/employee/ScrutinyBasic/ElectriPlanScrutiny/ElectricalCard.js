@@ -742,7 +742,7 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
   const [isEnableLoader, setIsEnableLoader] = useState(false);
   const [isWarningPop, setWarningPopUp ] = useState(false);
   const [showhide19, setShowhide19] = useState("true");
-  const [businessService, setBusinessService] = useState("NewTL");
+  const [businessService, setBusinessService] = useState("ELECTRICAL_PLAN");
   const [moduleCode,setModuleCode] = useState("TL")
   const [ scrutinyDetails, setScrutinyDetails] = useState();
   // const [applicationNumber,setApplicationNumber] = useState("");
@@ -787,6 +787,10 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
 
       console.log("devDel123",Resp?.electricPlanResponse?.[0]);
       setApplicationData(Resp?.electricPlanResponse?.[0]);
+      setApplicationDetails({
+        applicationData: Resp?.electricPlanResponse?.[0],
+        workflowCode: Resp?.electricPlanResponse?.[0].businessService
+      })
     } catch (error) {
       console.log(error);
     }
@@ -802,7 +806,7 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
     config:{EditRenewalApplastModifiedTime:EditRenewalApplastModifiedTime},
   });
   
-  const applicationDetailsTemp = Digit.Hooks.tl.useApplicationDetail(t, tenantId, id);
+  // const applicationDetailsTemp = Digit.Hooks.tl.useApplicationDetail(t, tenantId, id);
   
 
 
@@ -849,68 +853,39 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
   }
 
   const submitAction = async (data, nocData = false, isOBPS = {}) => {
-    setIsEnableLoader(true);
-    if (typeof data?.customFunctionToExecute === "function") {
-      data?.customFunctionToExecute({ ...data });
-    }
-    if (nocData !== false && nocMutation) {
-      const nocPrmomises = nocData?.map(noc => {
-        return nocMutation?.mutateAsync(noc)
-      })
-      try {
-        setIsEnableLoader(true);
-        const values = await Promise.all(nocPrmomises);
-        values && values.map((ob) => {
-          Digit.SessionStorage.del(ob?.Noc?.[0]?.nocType);
-        })
+
+    console.log("logger log1223", data)
+
+    try{
+      let body = {
+        ...data,
+        RequestInfo: {
+          api_id: "1",
+          ver: "1",
+          ts: null,
+          action: "create",
+          did: "",
+          key: "",
+          msg_id: "",
+          requester_id: "",
+          authToken: authToken
       }
-      catch (err) {
-        setIsEnableLoader(false);
-        let errorValue = err?.response?.data?.Errors?.[0]?.code ? t(err?.response?.data?.Errors?.[0]?.code) : err?.response?.data?.Errors?.[0]?.message || err;
-        closeModal();
-        setShowToast({ key: "error", error: {message: errorValue}});
-        setTimeout(closeToast, 5000);
-        return;
       }
-    }
-    if (mutate) {
-      setIsEnableLoader(true);
-      mutate(data, {
-        onError: (error, variables) => {
-          setIsEnableLoader(false);
-          setShowToast({ key: "error", error });
-          setTimeout(closeToast, 5000);
-        },
-        onSuccess: (data, variables) => {
-          setIsEnableLoader(false);
-          if (isOBPS?.bpa) {
-            data.selectedAction = selectedAction;
-            history.replace(`/digit-ui/employee/obps/response`, { data: data });
-          }
-          if (isOBPS?.isStakeholder) {
-            data.selectedAction = selectedAction;
-            history.push(`/digit-ui/employee/obps/stakeholder-response`, { data: data });
-          }
-          if (isOBPS?.isNoc) {
-            history.push(`/digit-ui/employee/noc/response`, { data: data });
-          }
-          setShowToast({ key: "success", action: selectedAction });
-          setTimeout(closeToast, 5000);
-          queryClient.clear();
-          queryClient.refetchQueries("APPLICATION_SEARCH");
-        },
-      });
+      const response = await axios.post("/tl-services/electric/plan/_update",body);
+      console.log("Update API Response ====> ", response.data);
+    } catch (error) {
+      console.log("Update Error ===> ", error.message)
     }
 
     closeModal();
   };
 
-  useEffect(()=>{
-    console.log("log123...applicationDetailsAPI",applicationDetailsTemp)
-    if(applicationDetailsTemp?.data){
-      setApplicationDetails(applicationDetailsTemp?.data)
-    }
-  },[applicationDetailsTemp?.data])
+  // useEffect(()=>{
+  //   console.log("log123...applicationDetailsAPI",applicationDetailsTemp)
+  //   if(applicationDetailsTemp?.data){
+  //     setApplicationDetails(applicationDetailsTemp?.data)
+  //   }
+  // },[applicationDetailsTemp?.data])
 
 
   useEffect(() => {
@@ -985,7 +960,7 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
               state={state}
               id={id}
               applicationDetails={applicationDetails}
-              applicationData={{...applicationDetails?.applicationData,workflowCode:applicationDetails?.applicationData?.workflowCode || "NewTL"}}
+              applicationData={{...applicationDetails?.applicationData,workflowCode:applicationDetails?.applicationData?.workflowCode || "ELECTRICAL_PLAN"}}
               closeModal={closeModal}
               submitAction={submitAction}
               actionData={workflowDetails?.data?.timeline}

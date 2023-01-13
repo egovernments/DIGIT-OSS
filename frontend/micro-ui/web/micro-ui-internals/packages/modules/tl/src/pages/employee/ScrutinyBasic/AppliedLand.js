@@ -561,7 +561,8 @@ console.log("AccessInfortech", Purpose);
    
                 <Button style={{ textAlign: "right" }}>      <a href={`/digit-ui/WNS/wmsmap.html?latlngs=${DetailsofAppliedLand?.dgpsDetails?.map((element)=>(`${element.latitude},${element.longitude}`)).join(":")}`} 
   target="popup" 
-  onclick="window.open({`/digit-ui/WNS/wmsmap.html?latlngs=${DetailsofAppliedLand?.dgpsDetails?.map((element)=>(`${element.latitude},${element.longitude}`,'popup','width:600,height:600'); return false;">
+  onclick="window.open({`/digit-ui/WNS/wmsmap.html?latlngs=${DetailsofAppliedLand?.dgpsDetails?.map((element)=>(`${element.latitude},${element.longitude}`,'popup','width:600,height:600'); return false;"
+  >
   Graphic design</a></Button>
  
 

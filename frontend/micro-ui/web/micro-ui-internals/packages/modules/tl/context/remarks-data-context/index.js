@@ -18,6 +18,7 @@ const ScrutinyRemarksProvider = ({ children }) => {
 
 
     const handleGetRemarkssValues = async (applicationNumber) => {
+        console.log("logger1234...",applicationNumber)
         const dataToSend = {
             RequestInfo: {
                 apiId: "Rainmaker",
@@ -45,6 +46,7 @@ const ScrutinyRemarksProvider = ({ children }) => {
 
 
     const handleGetFiledsStatesById=async(applicationNumber)=>{
+        console.log("logger123...",applicationNumber)
         const dataToPass={
           "RequestInfo": {
               "api_id": "1",

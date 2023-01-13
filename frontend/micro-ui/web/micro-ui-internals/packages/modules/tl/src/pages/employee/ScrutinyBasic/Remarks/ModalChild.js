@@ -54,18 +54,18 @@ function ModalChild(props) {
       };
       
       try {
-        const Resp = await axios.post("/land-services/egscrutiny/_create?status=submit", postData, {}).then((response) => {
+        const Resp = await axios.post("/land-services/egscrutiny/_create?status=submit1", postData, {}).then((response) => {
           return response.data;
         });
       } catch (error) {
         console.log(error);
       }
-      props.remarksUpdate({ data: RemarksDeveloper.data });
       handleGetFiledsStatesById(id);
       handleGetRemarkssValues(id);
       console.log("response from API", Resp);
+      props?.remarksUpdate({ data: RemarksDeveloper.data });
     } else {
-      props.passmodalData();
+      props?.passmodalData();
     }
   };
   console.log("smshow", smShow);

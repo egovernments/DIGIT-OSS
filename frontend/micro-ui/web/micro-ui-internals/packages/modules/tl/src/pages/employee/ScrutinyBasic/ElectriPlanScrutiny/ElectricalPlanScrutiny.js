@@ -275,7 +275,7 @@ const ElectricalPlanScrutiny = (props) => {
                     value="Yes"
 
                     className="mx-2 mt-1"
-                    checked={apiResponse?.elecricDistribution  === "true" ?true:false}
+                    checked={apiResponse?.elecricDistribution  === "Y" ?true:false}
                     // checked={capacityScrutinyInfo?.designatedDirectors === "Y" ?true:false}
                     // onChange={(e) => handleChange(e.target.value)}
                     // 
@@ -289,7 +289,7 @@ const ElectricalPlanScrutiny = (props) => {
                     value="No"
 
                     className="mx-2 mt-1"
-                    checked={apiResponse?.elecricDistribution  === "false" ?true:false}
+                    checked={apiResponse?.elecricDistribution  === "N" ?true:false}
                     // checked={capacityScrutinyInfo?.designatedDirectors === "N" ?true:false}
                     // onChange={(e) => handleChange(e.target.value)}
                     // 
@@ -347,7 +347,7 @@ const ElectricalPlanScrutiny = (props) => {
                     value="Yes"
 
                     className="mx-2 mt-1"
-                    checked={apiResponse?.electricalCapacity  === "true" ?true:false}
+                    checked={apiResponse?.electricalCapacity  === "Y" ?true:false}
                     // checked={capacityScrutinyInfo?.designatedDirectors === "Y" ?true:false}
                     // onChange={(e) => handleChange(e.target.value)}
                     // 
@@ -361,7 +361,7 @@ const ElectricalPlanScrutiny = (props) => {
                     value="No"
 
                     className="mx-2 mt-1"
-                    checked={apiResponse?.electricalCapacity  === "flase" ?true:false}
+                    checked={apiResponse?.electricalCapacity  === "N" ?true:false}
                     
                     disabled
                   />
@@ -393,7 +393,7 @@ const ElectricalPlanScrutiny = (props) => {
                     value="Yes"
 
                     className="mx-2 mt-1"
-                    checked={apiResponse?.switchingStation  === "true" ?true:false}
+                    checked={apiResponse?.switchingStation  === "Y" ?true:false}
                     // checked={capacityScrutinyInfo?.designatedDirectors === "Y" ?true:false}
                     // onChange={(e) => handleChange(e.target.value)}
                     // 
@@ -407,14 +407,20 @@ const ElectricalPlanScrutiny = (props) => {
                     value="No"
 
                     className="mx-2 mt-1"
-                    checked={apiResponse?.switchingStation  === "false" ?true:false}
+                    checked={apiResponse?.switchingStation  === "N" ?true:false}
+                    
                     // checked={capacityScrutinyInfo?.designatedDirectors === "N" ?true:false}
                     // onChange={(e) => handleChange(e.target.value)}
                     // 
                     // onClick={handleshow}
                     disabled
                   />
-                  <label className="m-0 mx-2" for="No">No</label>
+                    {/* <label className="m-0 mx-2" for="No">No</label>
+                  <input type="radio" value="Yes" checked={apiResponse?.switchingStation  === "true" ? true : false}  disabled />
+                <label className="m-0  mx-1" for="Yes">Yes</label>
+                <input type="radio" value="No"  checked={apiResponse?.switchingStation  === "false" ? true : false} disabled />
+                <label className="m-0 mx-2" for="No">No</label> */}
+                
                   <ReportProblemIcon
               style={{
                 color:fieldIconColors.switchingStation }}
@@ -440,7 +446,7 @@ const ElectricalPlanScrutiny = (props) => {
                     value="Yes"
 
                     className="mx-2 mt-1"
-                    checked={apiResponse?.loadSancation  === "true" ?true:false}
+                    checked={apiResponse?.loadSancation  === "Y" ?true:false}
                     // checked={capacityScrutinyInfo?.designatedDirectors === "Y" ?true:false}
                     // onChange={(e) => handleChange(e.target.value)}
                     // 
@@ -454,7 +460,7 @@ const ElectricalPlanScrutiny = (props) => {
                     value="No"
 
                     className="mx-2 mt-1"
-                    checked={apiResponse?.loadSancation  === "false" ?true:false}
+                    checked={apiResponse?.loadSancation  === "N" ?true:false}
                     // checked={capacityScrutinyInfo?.designatedDirectors === "N" ?true:false}
                     // onChange={(e) => handleChange(e.target.value)}
                     // 
