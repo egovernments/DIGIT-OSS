@@ -8,6 +8,7 @@ import Search from "./Search";
 import OBPSResponse from "./OBPSResponse";
 import StakeholderResponse from "./StakeholderResponse";
 import ServicePlanInbox from "./ServicePlan/Inbox";
+import ElectricalPlanInbox from "./ElectricPlan/Inbox";
 // import ScrutinyFormcontainer from "../citizen/NewLicense/ScrutinyContainer";
 const OBPSBreadCrumbs = ({ location }) => {
   const { t } = useTranslation();
@@ -79,6 +80,7 @@ const EmployeeApp = ({ path }) => {
         <PrivateRoute path={`${path}/inbox/bpa/:id`} component={BpaApplicationDetail} />
         <PrivateRoute path={`${path}/inbox`} component={(props) => <Inbox {...props} parentRoute={path} />} />
         <PrivateRoute path={`${path}/servicePlanInbox`} component={(props) => <ServicePlanInbox parentRoute={path} businessService="SERVICE_PLAN" filterComponent="TL_INBOX_FILTER" initialStates={{}} isInbox={true} /> } /> 
+        <PrivateRoute path={`${path}/electricPlanInbox`} component={(props) => <ElectricalPlanInbox parentRoute={path} businessService="ELECTRICAL_PLAN" filterComponent="TL_INBOX_FILTER" initialStates={{}} isInbox={true} /> } /> 
         <PrivateRoute path={`${path}/stakeholder-inbox`} component={(props) => <StakeholderInbox {...props} parentRoute={path} />} />
         <PrivateRoute path={`${path}/bpa/:id`} component={BpaApplicationDetail} />
         <PrivateRoute path={`${path}/bpa/:id`} component={BpaApplicationDetail} />
