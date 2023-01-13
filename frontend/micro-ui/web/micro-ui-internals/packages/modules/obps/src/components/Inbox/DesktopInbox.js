@@ -36,11 +36,10 @@ const DesktopInbox = ({ tableConfig, filterComponent, columns, isLoading, setSea
     {
       Header: t("WF_INBOX_HEADER_APPLICATION_NO"),
       Cell: ({ row }) => {
-        console.log({row, data}, "rrrrrrrrrrrrrrrrrrrrrr");
         return (
           <div>
             <span className="link">
-              <Link to={`/digit-ui/employee/tl/${row.original["businessService"] === 'SERVICE_PLAN' ? 'ServiceScrutiny' : row.original["businessService"] === 'ELECTRICAL_PLAN' ? 'ElectricalScrutiny' : undefined }/` + row.original["applicationId"]}>{row.original["applicationId"]}</Link>
+              <Link to={`/digit-ui/employee/tl/${row.original["businessService"] === 'SERVICE_PLAN' ? 'ServiceScrutiny' : row.original["businessService"] === 'ELECTRICAL_PLAN' ? 'ElectricalScrutiny' : row.original["businessService"] === "BG_NEW" ? 'BankScrutiny' : null }/` + row.original["applicationId"]}>{row.original["applicationId"]}</Link>
             </span>
           </div>
         );
