@@ -71,7 +71,7 @@ public class WsQueryBuilder {
 			+  LEFT_OUTER_JOIN_STRING
 			+ "eg_ws_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.wsid = conn.id";
 
-	private static final String TOTAL_APPLICATIONS_COUNT_QUERY = "select count(*) from eg_ws_connection where tenantid = '{}';";
+	private static final String TOTAL_APPLICATIONS_COUNT_QUERY = "select count(*) from eg_ws_connection where tenantid = ?;";
 	
 	private static final String PAGINATION_WRAPPER = "SELECT * FROM " +
             "(SELECT *, DENSE_RANK() OVER (ORDER BY wc_appCreatedDate DESC) offset_ FROM " +
@@ -419,8 +419,9 @@ public class WsQueryBuilder {
 		return builder.toString();
 	}
 
-	public String getTotalApplicationsCountQueryString(SearchCriteria criteria) {
-		return TOTAL_APPLICATIONS_COUNT_QUERY.replace("{}",criteria.getTenantId());
+	public String getTotalApplicationsCountQueryString(SearchCriteria criteria, List<Object> preparedStatement) {
+		preparedStatement.add(criteria.getTenantId());
+		return TOTAL_APPLICATIONS_COUNT_QUERY;
 	}
 
 	public String getLastExecutionDetail(SearchCriteria criteria, List<Object> preparedStatement) {

@@ -29,6 +29,9 @@ public class SearchCriteria {
 	@JsonProperty("tenantId")
 	private String tenantId;
 
+	@JsonProperty("tenantIds")
+	private Set<String> tenantIds;
+
 	private Set<String> propertyIds;
 
 	private Set<String> userIds;

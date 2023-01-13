@@ -68,7 +68,7 @@ public class SWQueryBuilder {
 			+  LEFT_OUTER_JOIN_STRING
 			+ "eg_sw_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.swid = conn.id";
 
-	private static final String TOTAL_APPLICATIONS_COUNT_QUERY = "select count(*) from eg_sw_connection where tenantid = '{}';";
+	private static final String TOTAL_APPLICATIONS_COUNT_QUERY = "select count(*) from eg_sw_connection where tenantid = ?;";
 
 	private final String paginationWrapper = "SELECT * FROM " +
             "(SELECT *, DENSE_RANK() OVER (ORDER BY sc_appCreatedDate DESC) offset_ FROM " +
@@ -372,8 +372,9 @@ public class SWQueryBuilder {
 		return query.toString();
 	}
 
-	public String getTotalApplicationsCountQueryString(SearchCriteria criteria) {
-		return TOTAL_APPLICATIONS_COUNT_QUERY.replace("{}",criteria.getTenantId());
+	public String getTotalApplicationsCountQueryString(SearchCriteria criteria, List<Object> preparedStatement) {
+		preparedStatement.add(criteria.getTenantId());
+		return TOTAL_APPLICATIONS_COUNT_QUERY;
 	}
 
 	private String addPaginationWrapperForPlainSearch(String query, List<Object> preparedStmtList, SearchCriteria criteria) {

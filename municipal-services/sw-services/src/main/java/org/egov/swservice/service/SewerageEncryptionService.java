@@ -1,13 +1,22 @@
 package org.egov.swservice.service;
 
+import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.mdms.model.MasterDetail;
+import org.egov.mdms.model.MdmsCriteria;
+import org.egov.mdms.model.MdmsCriteriaReq;
+import org.egov.mdms.model.ModuleDetail;
+import org.egov.swservice.repository.ServiceRequestRepository;
 import org.egov.swservice.repository.SewerageDao;
 import org.egov.swservice.util.EncryptionDecryptionUtil;
+import org.egov.swservice.util.SWConstants;
 import org.egov.swservice.web.models.*;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
@@ -38,6 +47,15 @@ public class SewerageEncryptionService {
 
     private Integer countPushed = 0;
 
+    @Value("${egov.mdms.host}")
+    private String mdmsHost;
+
+    @Value("${egov.mdms.search.endpoint}")
+    private String mdmsEndpoint;
+
+    @Autowired
+    private ServiceRequestRepository serviceRequestRepository;
+
     /**
      * Initiates Sewerage applications/connections data encryption
      *
@@ -59,18 +77,28 @@ public class SewerageEncryptionService {
         List<SewerageConnection> sewerageConnectionList = new ArrayList<>();
         SewerageConnectionResponse sewerageConnectionResponse;
 
-        EncryptionCount encryptionCount = sewerageDao.getLastExecutionDetail(criteria);
+        if (CollectionUtils.isEmpty(criteria.getTenantIds())) {
+            //mdms call for tenantIds in case tenantIds array is not sent in criteria
+            Set<String> tenantIds = getAllTenantsFromMdms(requestInfo);
+            criteria.setTenantIds(tenantIds);
+        }
+        List<SewerageConnection> finalSewerageList = new LinkedList<>();
+        for (String tenantId : criteria.getTenantIds()) {
+            criteria.setTenantId(tenantId);
+            EncryptionCount encryptionCount = sewerageDao.getLastExecutionDetail(criteria);
 
-        if (criteria.getLimit() == null)
-            criteria.setLimit(Integer.valueOf(batchSize));
+            if (criteria.getLimit() == null)
+                criteria.setLimit(Integer.valueOf(batchSize));
 
-        if (encryptionCount.getRecordCount() != null)
-            criteria.setOffset((int) (encryptionCount.getBatchOffset() + encryptionCount.getRecordCount()));
-        else if (criteria.getOffset() == null)
-            criteria.setOffset(Integer.valueOf(batchOffset));
+            if (encryptionCount.getRecordCount() != null)
+                criteria.setOffset((int) (encryptionCount.getBatchOffset() + encryptionCount.getRecordCount()));
+            else if (criteria.getOffset() == null)
+                criteria.setOffset(Integer.valueOf(batchOffset));
 
-        sewerageConnectionList = initiateEncryption(requestInfo, criteria);
-        sewerageConnectionResponse = SewerageConnectionResponse.builder().sewerageConnections(sewerageConnectionList)
+            sewerageConnectionList = initiateEncryption(requestInfo, criteria);
+            finalSewerageList.addAll(sewerageConnectionList);
+        }
+        sewerageConnectionResponse = SewerageConnectionResponse.builder().sewerageConnections(finalSewerageList)
                 .build();
         return sewerageConnectionResponse;
     }
@@ -171,6 +199,38 @@ public class SewerageEncryptionService {
         criteria.setOffset(Integer.valueOf(batchOffset));
 
         return finalSewerageList;
+    }
+
+    /**
+     *
+     * @param requestInfo RequestInfo Object
+     *
+     * @return MdmsCriteria
+     */
+    private Set<String> getAllTenantsFromMdms(RequestInfo requestInfo) {
+
+        String tenantId = (requestInfo.getUserInfo().getTenantId());
+        String jsonPath = SWConstants.TENANTS_JSONPATH_ROOT;
+
+        MasterDetail mstrDetail = MasterDetail.builder().name(SWConstants.TENANTS_MASTER_ROOT)
+                .filter("$.*").build();
+        ModuleDetail moduleDetail = ModuleDetail.builder().moduleName(SWConstants.TENANT_MASTER_MODULE)
+                .masterDetails(Arrays.asList(mstrDetail)).build();
+        MdmsCriteria mdmsCriteria = MdmsCriteria.builder().moduleDetails(Arrays.asList(moduleDetail)).tenantId(tenantId)
+                .build();
+        MdmsCriteriaReq mdmsCriteriaReq = MdmsCriteriaReq.builder().requestInfo(requestInfo).mdmsCriteria(mdmsCriteria).build();
+        StringBuilder uri = new StringBuilder(mdmsHost).append(mdmsEndpoint);
+        try {
+            Object result = serviceRequestRepository.fetchResult(uri, mdmsCriteriaReq);
+            List<Map<String, Object>> jsonOutput = JsonPath.read(result, jsonPath);
+            Set<String> state = new HashSet<String>();
+            for (Map<String, Object> json : jsonOutput) {
+                state.add((String) json.get("code"));
+            }
+            return state;
+        } catch (Exception e) {
+            throw new CustomException("INVALID_TENANT_FILE_SEARCH", "Exception in TenantId File search in MDMS: " + e.getMessage());
+        }
     }
 
 }

@@ -1,18 +1,29 @@
 package org.egov.pt.service;
 
+import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.mdms.model.MasterDetail;
+import org.egov.mdms.model.MdmsCriteria;
+import org.egov.mdms.model.MdmsCriteriaReq;
+import org.egov.mdms.model.ModuleDetail;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.EncryptionCount;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
+import org.egov.pt.models.collection.BillResponse;
 import org.egov.pt.producer.PropertyProducer;
 import org.egov.pt.repository.PropertyRepository;
+import org.egov.pt.repository.ServiceRequestRepository;
 import org.egov.pt.util.EncryptionDecryptionUtil;
+import org.egov.pt.util.ErrorConstants;
+import org.egov.pt.util.PTConstants;
 import org.egov.pt.web.contracts.PropertyRequest;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
@@ -45,6 +56,9 @@ public class PropertyEncryptionService {
 
     private Integer countPushed = 0;
 
+    @Autowired
+    private ServiceRequestRepository serviceRequestRepository;
+
     /**
      * Initiates property data encryption
      *
@@ -64,19 +78,29 @@ public class PropertyEncryptionService {
      */
     public List<Property> updateBatchCriteria(RequestInfo requestInfo, PropertyCriteria criteria) {
         List<Property> propertyList = new ArrayList<>();
+        Set<String> tenantIds = new HashSet<>();
+        if (CollectionUtils.isEmpty(criteria.getTenantIds())) {
+            //mdms call for tenantIds in case tenantIds array is not sent in criteria
+            tenantIds = getAllTenantsFromMdms(requestInfo);
+        }
+        List<Property> finalPropertyList = new LinkedList<>();
+        for (String tenantId : tenantIds) {
+            criteria.setTenantIds(Collections.singleton(tenantId));
+            criteria.setTenantId(tenantId);
+            EncryptionCount encryptionCount = repository.getLastExecutionDetail(criteria);
 
-        EncryptionCount encryptionCount = repository.getLastExecutionDetail(criteria);
+            if (criteria.getLimit() == null)
+                criteria.setLimit(Long.valueOf(batchSize));
 
-        if (criteria.getLimit() == null)
-            criteria.setLimit(Long.valueOf(batchSize));
+            if (encryptionCount.getRecordCount() != null)
+                criteria.setOffset(encryptionCount.getBatchOffset() + encryptionCount.getRecordCount());
+            else if (criteria.getOffset() == null)
+                criteria.setOffset(Long.valueOf(batchOffset));
 
-        if (encryptionCount.getRecordCount() != null)
-            criteria.setOffset(encryptionCount.getBatchOffset() + encryptionCount.getRecordCount());
-        else if (criteria.getOffset() == null)
-            criteria.setOffset(Long.valueOf(batchOffset));
-
-        propertyList = initiateEncryption(requestInfo, criteria);
-        return propertyList;
+            propertyList = initiateEncryption(requestInfo, criteria);
+            finalPropertyList.addAll(propertyList);
+        }
+        return finalPropertyList;
     }
 
     /**
@@ -174,6 +198,42 @@ public class PropertyEncryptionService {
 
         return finalPropertyList;
 
+    }
+
+    /**
+     *
+     * @param requestInfo RequestInfo Object
+     *
+     * @return MdmsCriteria
+     */
+    private Set<String> getAllTenantsFromMdms(RequestInfo requestInfo) {
+
+        String tenantId = (requestInfo.getUserInfo().getTenantId());
+        List<String> tenantsModuleMasters = new ArrayList<>(Arrays.asList("tenants"));
+        String jsonPath = PTConstants.TENANTS_JSONPATH_ROOT;
+
+        MasterDetail mstrDetail = MasterDetail.builder().name(PTConstants.TENANTS_MASTER_ROOT)
+                .filter("$.*").build();
+        ModuleDetail moduleDetail = ModuleDetail.builder().moduleName(PTConstants.TENANT_MASTER_MODULE)
+                .masterDetails(Arrays.asList(mstrDetail)).build();
+        MdmsCriteria mdmsCriteria = MdmsCriteria.builder().moduleDetails(Arrays.asList(moduleDetail)).tenantId(tenantId)
+                .build();
+        MdmsCriteriaReq mdmsCriteriaReq = MdmsCriteriaReq.builder().requestInfo(requestInfo).mdmsCriteria(mdmsCriteria).build();
+        StringBuilder uri = new StringBuilder(config.getMdmsHost()).append(config.getMdmsEndpoint());
+        try {
+            Optional<Object> result = serviceRequestRepository.fetchResult(uri, mdmsCriteriaReq);
+            List<Map<String, Object>> jsonOutput = new ArrayList<>();
+            if (result.isPresent())
+                jsonOutput = JsonPath.read(result.get(), jsonPath);
+
+            Set<String> state = new HashSet<String>();
+            for (Map<String, Object> json : jsonOutput) {
+                state.add((String) json.get("code"));
+            }
+            return state;
+        } catch (Exception e) {
+            throw new CustomException(ErrorConstants.INVALID_TENANT_ID_MDMS_KEY, ErrorConstants.INVALID_TENANT_ID_MDMS_MSG);
+        }
     }
 
 }

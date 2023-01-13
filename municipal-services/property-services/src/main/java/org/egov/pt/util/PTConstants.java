@@ -414,5 +414,11 @@ public class PTConstants {
 
     public static final String PT_TAX_PARTIAL = "You can pay your Property Tax online here - {payLink} Click on the link to download payment receipt {receipt download link}";
 
+    public static final String TENANT_MASTER_MODULE = "tenant";
+
+    public static final String TENANTS_MASTER_ROOT = "tenants";
+
+    public static final String TENANTS_JSONPATH_ROOT = "$.MdmsRes.tenant.tenants";
+
 }
 

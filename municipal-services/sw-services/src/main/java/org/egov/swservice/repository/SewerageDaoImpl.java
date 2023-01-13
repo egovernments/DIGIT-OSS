@@ -178,11 +178,11 @@ public class SewerageDaoImpl implements SewerageDao {
 	/* Method to find the total count of applications present in dB */
 	@Override
 	public Integer getTotalApplications(SearchCriteria criteria) {
-
-		String query = swQueryBuilder.getTotalApplicationsCountQueryString(criteria);
+		List<Object> preparedStatement = new ArrayList<>();
+		String query = swQueryBuilder.getTotalApplicationsCountQueryString(criteria, preparedStatement);
 		if (query == null)
 			return 0;
-		Integer count = jdbcTemplate.queryForObject(query, Integer.class);
+		Integer count = jdbcTemplate.queryForObject(query, preparedStatement.toArray(), Integer.class);
 		return count;
 	}
 

@@ -364,5 +364,11 @@ public class WCConstants {
 	public static final String SMS_MESSAGE = "_SMS_MESSAGE";
 
 	public static final String EMAIL_MESSAGE = "_EMAIL_MESSAGE";
-	
+
+	public static final String TENANT_MASTER_MODULE = "tenant";
+
+	public static final String TENANTS_MASTER_ROOT = "tenants";
+
+	public static final String TENANTS_JSONPATH_ROOT = "$.MdmsRes.tenant.tenants";
+
 }
