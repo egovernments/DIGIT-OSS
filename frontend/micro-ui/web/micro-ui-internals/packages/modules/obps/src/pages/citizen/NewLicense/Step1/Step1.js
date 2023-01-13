@@ -229,7 +229,7 @@ const ApllicantFormStep1 = (props) => {
                 <Col md={4} xxl lg="4">
                   <div>
                     <Form.Label>
-                      <h2>Developer type</h2>
+                      <h2>Developer Type</h2>
                     </Form.Label>
                   </div>
                   <Controller
@@ -247,7 +247,7 @@ const ApllicantFormStep1 = (props) => {
                   <div>
                     <Form.Label>
                       <h2>
-                        CIN No.<span style={{ color: "red" }}>*</span>
+                        CIN Number<span style={{ color: "red" }}>*</span>
                       </h2>
                     </Form.Label>
                   </div>

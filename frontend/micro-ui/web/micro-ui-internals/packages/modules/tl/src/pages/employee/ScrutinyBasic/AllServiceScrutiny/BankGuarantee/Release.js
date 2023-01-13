@@ -20,6 +20,11 @@ const Release = (props) => {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
   const [open2, setOpen2] = useState(false);
+  const apiResponse = props.apiResponse;
+
+  let user = Digit.UserService.getUser();
+  const userRoles = user?.info?.roles?.map((e) => e.code);
+  const showRemarks = userRoles.includes("AO_HQ");
 
   const handleshowhide = (event) => {
     const getuser = event.target.value;
@@ -107,7 +112,8 @@ const Release = (props) => {
     { label: "Name of the authorized person to sign the application", key: "authPerson" },
     { label: "Email ID for communication", key: "emailForCommunication" },
   ];
-
+  const item = props.ApiResponseData;
+  console.log("digit2...........", apiResponse);
   return (
     <form onSubmit={handleSubmit(Release)}>
       <div
@@ -140,23 +146,68 @@ const Release = (props) => {
             <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Release of Bank Guarantee</h4>
             <div className="card">
               <Row className="col-12">
-                <Col md={4} xxl lg="3">
-                  <Form.Label>
-                    <h2>Enter License No. </h2>
-                  </Form.Label>
-                  <div className={classes.fieldContainer}>
-                    <Form.Control className={classes.formControl} placeholder="" disabled></Form.Control>
+                <Col md={4} xxl lg="4">
+                  <div>
+                    <h6>
+                      Do you want to Replace B.G.?
+                      <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                      <label htmlFor="releaseBankGuarantee">
+                        <input
+                          {...register("releaseBankGuarantee")}
+                          type="radio"
+                          checked={apiResponse?.releaseBankGuarantee === "Y" ? true : false}
+                          id="releaseBankGuarantee"
+                          onClick={() => setmodal1(true)}
+                          disabled
+                        />
+                        &nbsp; Yes &nbsp;&nbsp;
+                      </label>
+                      <label htmlFor="releaseBankGuarantee">
+                        <input
+                          {...register("releaseBankGuarantee")}
+                          type="radio"
+                          checked={apiResponse?.releaseBankGuarantee === "N" ? true : false}
+                          disabled
+                          id="releaseBankGuarantee"
+                        />
+                        &nbsp; No &nbsp;&nbsp;
+                      </label>
+                      <div className={classes.fieldContainer}>
+                        {/* <Form.Control className={classes.formControl} placeholder={apiResponse?.licenseApplied} disabled></Form.Control> */}
 
+                        <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.releaseBankGuarantee,
+                            display: showRemarks ? "block" : "none",
+                          }}
+                          onClick={() => {
+                            setOpennedModal("releaseBankGuarantee");
+                            setLabelValue(" Do you want to Replace B.G.?"),
+                              setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(releaseBankGuarantee);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
+                    </h6>
+                  </div>
+                </Col>
+                <Col md={4} xxl lg="4">
+                  <div>
+                    <Form.Label>
+                      <h2>Enter Bank Guarantee No. </h2>
+                    </Form.Label>
+                  </div>
+                  <div className={classes.fieldContainer}>
+                    <Form.Control className={classes.formControl} placeholder={apiResponse?.bgNumber} disabled></Form.Control>
                     <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.developer,
+                        color: fieldIconColors.loiNumber,
+                        display: showRemarks ? "block" : "none",
                       }}
                       onClick={() => {
-                        setOpennedModal("Licence No");
-                        setLabelValue("Licence No"),
-                          setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                        setOpennedModal("loiNumber");
+                        setLabelValue("Enter LOI No"), setSmShow(true), console.log("modal open"), setFieldValue(loiNumber);
                       }}
                     ></ReportProblemIcon>
                     <ModalChild
@@ -169,196 +220,137 @@ const Release = (props) => {
                       remarksUpdate={currentRemarks}
                     ></ModalChild>
                   </div>
-                  {/* <input type="text" className="form-control" placeholder="" {...register("licenseNo")} /> */}
+                  {/* <input type="text" className="form-control" placeholder="" {...register("bgNumber")} /> */}
                 </Col>
-                <Col md={4} xxl lg="3">
+                <Col md={4} xxl lg="4">
                   <div>
                     <Form.Label>
                       <h2>Type of B.G. </h2>
                     </Form.Label>
                   </div>
                   <div className={classes.fieldContainer}>
-                    <Form.Control className={classes.formControl} placeholder="" disabled></Form.Control>
+                    <Form.Control className={classes.formControl} placeholder={apiResponse?.typeOfBg} disabled></Form.Control>
+
                     <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.developer,
+                        color: fieldIconColors.typeOfBg,
+                        display: showRemarks ? "block" : "none",
                       }}
                       onClick={() => {
-                        setOpennedModal("Licence No");
-                        setLabelValue("Licence No"),
-                          setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                        setOpennedModal("typeOfBg");
+                        setLabelValue("Type of B.G"), setSmShow(true), console.log("modal open"), setFieldValue(typeOfBg);
                       }}
                     ></ReportProblemIcon>
-
-                    {/* </Form.Control> */}
                   </div>
-                  {/* <select className="form-control" placeholder="" {...register("bgTypes")}>
+                  {/* <select className="form-control" placeholder="" {...register("typeOfBg")}>
                     <option value="1"> IDW</option>
                     <option value="2">EDC</option>
                   </select> */}
                 </Col>
-                {watch("bgTypes") === "1" && (
-                  <div>
-                    <div className="row">
-                      <div className="col col-3">
-                        <label>
-                          <h2>
-                            Upload Full Completion Certificate.
-                            <span style={{ color: "red" }}>*</span>
-                          </h2>
-                        </label>
-                        <div>
-                          <div className="row">
-                            <div className="btn btn-sm col-md-4">
-                              <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
-                                <VisibilityIcon color="info" className="icon" />
-                              </IconButton>
-                            </div>
-                            <div className="btn btn-sm col-md-4">
-                              <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
-                                <FileDownloadIcon color="info" className="icon" />
-                              </IconButton>
-                            </div>
-                            <div className="btn btn-sm col-md-4">
-                              <ReportProblemIcon
-                                style={{
-                                  color: fieldIconColors.developer,
-                                }}
-                                onClick={() => {
-                                  setOpennedModal("Amount");
-                                  setLabelValue("Amount"),
-                                    setSmShow(true),
-                                    console.log("modal open"),
-                                    setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-                                }}
-                              ></ReportProblemIcon>
-                            </div>
+                <div className="row">
+                  <div className="col col-12 ">
+                    {watch("releaseBankGuarantee") === "Y" && (
+                      <div className="row ">
+                        <div className="col col-4">
+                          <label>
+                            <h2>
+                              Upload New B.G. softcopy
+                              <span style={{ color: "red" }}>*</span>
+                            </h2>
+                          </label>
+                          <div>
+                            <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBg")} />
                           </div>
-                          {/* <input
-                            type="file"
-                            className="form-control"
-                            required
-                            onChange={(e) => getDocumentData(e?.target?.files[0], "fullCertificate")}
-                          /> */}
                         </div>
-
-                        <h3 className="error-message" style={{ color: "red" }}>
-                          {errors?.fullCertificate && errors?.fullCertificate?.message}
-                        </h3>
                       </div>
-                    </div>
+                    )}
                   </div>
-                )}
-                {watch("bgTypes") === "2" && (
-                  <div>
-                    <div className="row">
-                      <div className="col col-3">
-                        <label>
-                          <h2>
-                            Amount.
-                            <span style={{ color: "red" }}>*</span>
-                          </h2>
-                        </label>
+                </div>
+                <div className="row">
+                  <div className="col col-12 ">
+                    {watch("releaseBankGuarantee") === "N" && (
+                      <div className="row ">
+                        {/* <Col md={4} xxl lg="3">
                         <div>
-                          <div className={classes.fieldContainer}>
-                            <Form.Control className={classes.formControl} placeholder="" disabled></Form.Control>
-
-                            <ReportProblemIcon
-                              style={{
-                                color: fieldIconColors.developer,
-                              }}
-                              onClick={() => {
-                                setOpennedModal("Licence No");
-                                setLabelValue("Licence No"),
-                                  setSmShow(true),
-                                  console.log("modal open"),
-                                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-                              }}
-                            ></ReportProblemIcon>
-                            <ModalChild
-                              labelmodal={labelValue}
-                              passmodalData={handlemodaldData}
-                              displaymodal={smShow}
-                              onClose={() => setSmShow(false)}
-                              selectedFieldData={selectedFieldData}
-                              fieldValue={fieldValue}
-                              remarksUpdate={currentRemarks}
-                            ></ModalChild>
-                          </div>
-                          {/* <input type="text" className="form-control" placeholder="" {...register("amount")} /> */}
+                          <Form.Label>
+                            <h2>Enter B.G. No. </h2>
+                          </Form.Label>
                         </div>
-
-                        <h3 className="error-message" style={{ color: "red" }}>
-                          {errors?.consentLetter && errors?.consentLetter?.message}
-                        </h3>
+                        <input type="text" className="form-control" placeholder="" {...register("bgNo")} />
+                      </Col> */}
+                        {/* <Col md={4} xxl lg="3">
+                      <div>
+                        <Form.Label>
+                          <h2>Type of B.G. </h2>
+                        </Form.Label>
                       </div>
-                      <div className="col col-3 ">
-                        <label>
-                          <h2>
-                            Upload Partial Completion Certificate.
-                            <span style={{ color: "red" }}>*</span>
-                          </h2>
-                        </label>
-                        <div>
-                          <div className="row">
-                            <div className="btn btn-sm col-md-4">
-                              <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
-                                <VisibilityIcon color="info" className="icon" />
-                              </IconButton>
-                            </div>
-                            <div className="btn btn-sm col-md-4">
-                              <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
-                                <FileDownloadIcon color="info" className="icon" />
-                              </IconButton>
-                            </div>
-                            <div className="btn btn-sm col-md-4">
-                              <ReportProblemIcon
-                                style={{
-                                  color: fieldIconColors.developer,
-                                }}
-                                onClick={() => {
-                                  setOpennedModal("Amount");
-                                  setLabelValue("Amount"),
-                                    setSmShow(true),
-                                    console.log("modal open"),
-                                    setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-                                }}
-                              ></ReportProblemIcon>
+                      <select className="form-control" placeholder="" {...register("typesOfBg")}>
+                        <option value="1"> IDW</option>
+                        <option value="2">EDC</option>
+                      </select>
+                    </Col> */}
+                        {watch("typeOfBg") === "1" && (
+                          <div>
+                            <div className="row">
+                              <div className="col col-4">
+                                <label>
+                                  <h2>
+                                    Full Completion Certificate.
+                                    <span style={{ color: "red" }}>*</span>
+                                  </h2>
+                                </label>
+                                <div>
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "fullCertificate")}
+                                  />
+                                </div>
+                              </div>
                             </div>
                           </div>
-                          {/* <input
-                            type="file"
-                            className="form-control"
-                            required
-                            onChange={(e) => getDocumentData(e?.target?.files[0], "partialCertificate")}
-                          /> */}
-                        </div>
+                        )}
+                        {watch("typeOfBg") === "2" && (
+                          <div>
+                            <div className="row">
+                              <div className="col col-4">
+                                <label>
+                                  <h2>
+                                    Amount.
+                                    <span style={{ color: "red" }}>*</span>
+                                  </h2>
+                                </label>
+                                <div>
+                                  <input type="text" className="form-control" placeholder="" {...register("tcpSubmissionReceived")} />
+                                </div>
 
-                        <h3 className="error-message" style={{ color: "red" }}>
-                          {errors?.partialCertificate && errors?.partialCertificate?.message}
-                        </h3>
+                                <h3 className="error-message" style={{ color: "red" }}>
+                                  {errors?.tcpSubmissionReceived && errors?.tcpSubmissionReceived?.message}
+                                </h3>
+                              </div>
+                              <div className="col col-4">
+                                <label>
+                                  <h2>
+                                    Partial Completion Certificate.
+                                    <span style={{ color: "red" }}>*</span>
+                                  </h2>
+                                </label>
+                                <div>
+                                  <input
+                                    type="file"
+                                    className="form-control"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "partialCertificate")}
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
-                    </div>
+                    )}
                   </div>
-                )}
+                </div>
               </Row>
-
-              {/* <div class="row">
-                <div class="col-sm-12 text-right">
-                  <button type="submit" id="btnClear" class="btn btn-primary btn-md center-block" style={{ marginBottom: "-44px" }}>
-                    Submit
-                  </button>
-                </div>
-                <div class="row">
-                  <div class="col-sm-12 text-right">
-                    <button id="btnSearch" class="btn btn-danger btn-md center-block" style={{ marginRight: "66px", marginTop: "-6px" }}>
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              </div> */}
             </div>
           </Card>
         </div>

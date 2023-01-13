@@ -23,6 +23,7 @@ import { VALIDATION_SCHEMA } from "../../../../utils/schema/step3";
 import FileUpload from "@mui/icons-material/FileUpload";
 import { useLocation } from "react-router-dom";
 import { Toast } from "@egovernments/digit-ui-react-components";
+import WorkingTable from "../../../../components/Table";
 const potentialOptons = [
   {
     label: "Hyper",
@@ -60,7 +61,162 @@ const releaseStatus = [
     value: "no",
   },
 ];
+const columns = [
+  {
+    key: "tehsil",
+    title: "Tehsil",
+    dataIndex: "tehsil",
+  },
+  {
+    key: "revenueEstate",
+    title: "Revenue Estate",
+    dataIndex: "revenueEstate",
+  },
+  {
+    key: "hadbastNo",
+    title: "Hadbast No.",
+    dataIndex: "hadbastNo",
+  },
+  {
+    key: "khewats",
+    title: "Khewat No.",
+    dataIndex: "khewats",
+  },
+  {
+    key: "rectangleNo",
+    title: "Rectangle No.",
+    dataIndex: "rectangleNo",
+  },
+  {
+    key: "consolidationType",
+    title: "Consolidation Type",
+    dataIndex: "consolidationType",
+  },
+  { key: "kanal", title: "Kanal", dataIndex: "kanal" },
+  {
+    key: "kanal",
+    title: "Bigha",
+    dataIndex: "bigha",
+  },
+  {
+    key: "marla",
+    title: "Marla",
+    dataIndex: "marla",
+  },
+  {
+    key: "biswa",
+    title: "Biswa",
+    dataIndex: "biswa",
+  },
+  {
+    key: "sarsai",
+    title: "Sarsai",
+    dataIndex: "sarsai",
+  },
+  {
+    key: "biswansi",
+    title: "Biswansi",
+    dataIndex: "biswansi",
+  },
+  {
+    // key: "totalArea",
+    title: "Total Area",
+    // dataIndex: "totalArea",
+    render: (data) => data?.nonConsolidatedTotal || data?.consolidatedTotal,
+  },
+  {
+    key: "landOwner",
+    title: "Name of Land Owner",
+    dataIndex: "landOwner",
+    render: (data) => (
+      <h6 data-toggle="tooltip" data-placement="top" title={data}>
+        {data?.split(" ")?.slice(0, 2)?.join(" ")}
+      </h6>
+    ),
+  },
+  {
+    key: "agreementIrrevocialble",
+    title: "Whether collaboration agreement irrevocable (Yes/No)",
+    dataIndex: "agreementIrrevocialble",
+  },
+  {
+    key: "agreementValidFrom",
+    title: "Date of registering collaboration agreement",
+    dataIndex: "agreementValidFrom",
+  },
+  {
+    key: "validitydate",
+    title: "Date of validity of collaboration agreement",
+    dataIndex: "validitydate",
+  },
+  {
+    key: "authSignature",
+    title: "Name of authorized signatory on behalf of land owner(s)",
+    dataIndex: "authSignature",
+  },
+  {
+    key: "collaboration",
+    title: "Collaboration agreement Owner",
+    dataIndex: "collaboration",
+  },
+  {
+    key: "developerCompany",
+    title: "Name of the developer company",
+    dataIndex: "developerCompany",
+  },
+  {
+    key: "nameAuthSign",
+    title: " Name of authorized signatory",
+    dataIndex: "nameAuthSign",
+  },
+  {
+    key: "registeringAuthority",
+    title: "Registring Authority",
+    dataIndex: "registeringAuthority",
+  },
+  {
+    key: "registeringAuthorityDoc",
+    title: "Document",
+    dataIndex: "",
+    render: (data) => (
+      <div>
+        {fileStoreId?.registeringAuthorityDoc ? (
+          <a onClick={() => getDocShareholding(fileStoreId?.registeringAuthorityDoc)} className="btn btn-sm col-md-6">
+            <VisibilityIcon color="info" className="icon" />
+          </a>
+        ) : (
+          <p></p>
+        )}
+      </div>
+    ),
+  },
+  {
+    title: "Action",
+    dataIndex: "",
+    render: (data) => (
+      <div>
+        <EditIcon
+          style={{ cursor: "pointer" }}
+          onClick={() => {
+            setSpecificTableData(data);
+            setmodal(true);
+            setEdit(true);
+          }}
+          color="primary"
+        />
 
+        <DeleteIcon
+          style={{ cursor: "pointer" }}
+          onClick={() => {
+            const filteredData = modalData?.filter((item) => item?.rowid !== data?.rowid);
+            setModalData(filteredData);
+          }}
+          color="error"
+        />
+      </div>
+    ),
+  },
+];
 const LandScheduleForm = (props) => {
   const location = useLocation();
   const [purposeOptions, setPurposeOptions] = useState({ data: [], isLoading: true });
@@ -77,7 +233,7 @@ const LandScheduleForm = (props) => {
   const [applicantId, setApplicantId] = useState("");
   const [litigationRemark, setLitigationRemark] = useState("");
   const { data: PurposeType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
-
+  const [modalData, setModalData] = useState([]);
   const { data: LandData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["LandType"]);
 
   const { data: PotentialType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["PotentialZone"]);
@@ -624,239 +780,8 @@ const LandScheduleForm = (props) => {
                         </h2>
                       </div>
                       {watch("migrationLic") === "Y" && (
-                        <div>
-                          <div className="row">
-                            <div className="col col-3">
-                              <label>
-                                <h2>
-                                  Area Applied under Migration <span style={{ color: "red" }}>*</span>
-                                </h2>{" "}
-                              </label>
-                              <input type="number" className="form-control" {...register("areaUnderMigration")} required />
-                            </div>
-                            <div className="col col-3">
-                              <label>
-                                <h2>
-                                  Purpose of Parent Licence <span style={{ color: "red" }}>*</span>
-                                </h2>
-                              </label>
-                              <ReactMultiSelect
-                                control={control}
-                                name="purposeParentLic"
-                                placeholder="Purpose"
-                                data={purposeOptions?.data}
-                                loading={purposeOptions?.isLoading}
-                                labels="purposeParentLic"
-                              />
-                            </div>
-                            <div className="col col-3">
-                              <label>
-                                <h2>
-                                  Licence No. <span style={{ color: "red" }}>*</span>
-                                </h2>
-                              </label>
-                              <input type="text" className="form-control" {...register("licNo")} required minLength={10} maxLength={20} />
-                            </div>
-                            <div className="col col-3">
-                              <label>
-                                <h2>
-                                  Area of Parent Licence <span style={{ color: "red" }}>*</span>
-                                </h2>
-                              </label>
-                              <input type="number" className="form-control" {...register("areaofParentLic")} required minLength={1} maxLength={20} />
-                            </div>
-                          </div>
-                          <br></br>
-                          <div className="row">
-                            <div className="col col-3">
-                              <label>
-                                <h2>
-                                  Validity of Parent Licence <span style={{ color: "red" }}>*</span>
-                                </h2>{" "}
-                              </label>
-                              &nbsp;&nbsp;<br></br>
-                              <label htmlFor="validityOfParentLic">
-                                <input {...register("validityOfParentLic")} type="radio" value="Y" id="validityOfParentLic" required />
-                                &nbsp; Yes &nbsp;&nbsp;
-                              </label>
-                              <label htmlFor="validityOfParentLic">
-                                <input {...register("validityOfParentLic")} type="radio" value="N" id="validityOfParentLic" required />
-                                &nbsp; No &nbsp;&nbsp;
-                              </label>
-                            </div>
-                            {watch("validityOfParentLic") === "N" && (
-                              <div className="row ">
-                                <div className="col col-12">
-                                  <label>
-                                    <h2>
-                                      <span className="text-primary" onClick={() => setmodal1(true)}>
-                                        {" "}
-                                        (Kindly avail for renewal of Licence)
-                                      </span>{" "}
-                                      <span style={{ color: "red" }}>*</span>
-                                    </h2>
-                                    <Modal
-                                      size="lg"
-                                      isOpen={modal1}
-                                      toggle={() => setmodal(!modal1)}
-                                      style={{ width: "500px", height: "200px" }}
-                                      aria-labelledby="contained-modal-title-vcenter"
-                                      centered
-                                    >
-                                      <ModalHeader toggle={() => setmodal1(!modal1)}></ModalHeader>
-                                      <ModalBody style={{ fontSize: 20 }}>
-                                        <h2>
-                                          {" "}
-                                          I hereby declare that the details furnished above are true and correct to the best of my knowledge and
-                                          belief and I undertake to inform you of any changes therein, immediately. In case any of the above
-                                          information is found to be false or untrue or misleading or misrepresenting, I am aware that I may be held
-                                          liable for it.
-                                        </h2>
-                                      </ModalBody>
-                                      <ModalFooter toggle={() => setmodal(!modal1)}></ModalFooter>
-                                    </Modal>
-                                  </label>
-                                  {/* <input type="text" className="form-control" {...register("renewalFee")} required /> */}
-                                </div>
-                                {/* <div className="col col-6">
-                                  <label>
-                                    <h2>
-                                      Freshly applied area,other than migration <span style={{ color: "red" }}>*</span>
-                                    </h2>{" "}
-                                  </label>
-                                  <input type="text" className="form-control" {...register("freshlyApplied")} required minLength={2} maxLength={20} />
-                                </div> */}
-                              </div>
-                            )}
-                            <br></br>
-                            <div className="col col-3">
-                              <label>
-                                <h2>
-                                  Type of land<span style={{ color: "red" }}>*</span>
-                                </h2>
-                              </label>
-                              <ReactMultiSelect
-                                control={control}
-                                name="typeLand"
-                                placeholder="Type of Land"
-                                data={typeOfLand?.data}
-                                labels="typeland"
-                                required
-                              />
-
-                              {/* <select className="form-control" id="typeLand" {...register("typeLand")}>
-                            <option value="">Type of Land</option>
-                            <option value="">Chahi/nehri</option>
-                            <option>Gair Mumkins</option>
-                            <option>Others</option>
-                          </select> */}
-                            </div>
-                            <div className="col col-3">
-                              <label>
-                                <h2>
-                                  Approach Road Width <span style={{ color: "red" }}>*</span>
-                                  <CalculateIcon color="primary" />
-                                </h2>{" "}
-                              </label>
-                              <input
-                                type="number"
-                                className="form-control"
-                                {...register("approachRoadWidth")}
-                                required
-                                minLength={10}
-                                maxLength={20}
-                              ></input>
-                            </div>
-                            <div className="col col-3">
-                              <label>
-                                <h2 data-toggle="tooltip" data-placement="top" title=" Freshly applied area other than migration.">
-                                  Area other than migration <span style={{ color: "red" }}>*</span>
-                                </h2>{" "}
-                              </label>
-                              <input type="number" className="form-control" {...register("freshlyApplied")} required minLength={2} maxLength={20} />
-                            </div>
-                            <div className="col col-3">
-                              <h2 data-toggle="tooltip" data-placement="top" title=" Existing approved layout plan of parent licence/Colony ."></h2>
-                              Existing approved layout plan .<span style={{ color: "red" }}>*</span>
-                              <label>
-                                <FileUpload color="primary" />
-                                <input
-                                  type="file"
-                                  accept="application/pdf/jpeg/png"
-                                  required
-                                  style={{ display: "none" }}
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "approvedLayoutPlan")}
-                                />
-                              </label>
-                              {fileStoreId?.approvedLayoutPlan ? (
-                                <a onClick={() => getDocShareholding(fileStoreId?.approvedLayoutPlan)} className="btn btn-sm ">
-                                  <VisibilityIcon color="info" className="icon" />
-                                </a>
-                              ) : (
-                                <p></p>
-                              )}
-                              <h3 style={{}}>{watch("approvedLayoutPlanFileName") ? watch("approvedLayoutPlanFileName") : null}</h3>
-                              <h3 className="error-message" style={{ color: "red" }}>
-                                {errors?.approvedLayoutPlan && errors?.approvedLayoutPlan?.message}
-                              </h3>
-                            </div>
-                            <div className="col col-3">
-                              <h2
-                                data-toggle="tooltip"
-                                data-placement="top"
-                                title="Proposed layout plan of balance land of parent licence/colony and the applied land."
-                              ></h2>
-                              Proposed Layout of Plan.<span style={{ color: "red" }}>*</span>
-                              <label>
-                                <FileUpload color="primary" />
-                                <input
-                                  type="file"
-                                  accept="application/pdf/jpeg/png"
-                                  required
-                                  style={{ display: "none" }}
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "proposedLayoutPlan")}
-                                />
-                              </label>
-                              {fileStoreId?.proposedLayoutPlan ? (
-                                <a onClick={() => getDocShareholding(fileStoreId?.proposedLayoutPlan)} className="btn btn-sm ">
-                                  <VisibilityIcon color="info" className="icon" />
-                                </a>
-                              ) : (
-                                <p></p>
-                              )}
-                              <h3 style={{}}>{watch("proposedLayoutPlanFileName") ? watch("proposedLayoutPlanFileName") : null}</h3>
-                              <h3 className="error-message" style={{ color: "red" }}>
-                                {errors?.proposedLayoutPlan && errors?.proposedLayoutPlan?.message}
-                              </h3>
-                            </div>
-                            <div className="col col-3">
-                              <h2 data-toggle="tooltip" data-placement="top" title="Proposed layout plan of the applied land.">
-                                {" "}
-                              </h2>
-                              Previously approved Plan.<span style={{ color: "red" }}>*</span>
-                              <label>
-                                <FileUpload color="primary" />
-                                <input
-                                  type="file"
-                                  accept="application/pdf/jpeg/png"
-                                  required
-                                  style={{ display: "none" }}
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "uploadPreviouslyLayoutPlan")}
-                                />
-                              </label>
-                              {fileStoreId?.uploadPreviouslyLayoutPlan ? (
-                                <a onClick={() => getDocShareholding(fileStoreId?.uploadPreviouslyLayoutPlan)} className="btn btn-sm ">
-                                  <VisibilityIcon color="info" className="icon" />
-                                </a>
-                              ) : (
-                                <p></p>
-                              )}
-                              <h3 style={{}}>{watch("uploadPreviouslyLayoutPlanFileName") ? watch("uploadPreviouslyLayoutPlanFileName") : null}</h3>
-                              <h3 className="error-message" style={{ color: "red" }}>
-                                {errors?.uploadPreviouslyLayoutPlan && errors?.uploadPreviouslyLayoutPlan?.message}
-                              </h3>
-                            </div>
-                          </div>
+                        <div className="applt" style={{ overflow: "auto" }}>
+                          <WorkingTable columns={columns} data={modalData} />
                         </div>
                       )}
                     </div>
@@ -2068,6 +1993,23 @@ const LandScheduleForm = (props) => {
           </Card>
         </Card>
       </form>
+      <Modal size="xl" isOpen={modal} toggle={() => setmodal(!modal)}>
+        <div style={{ padding: "4px", textAlign: "right" }}>
+          <span
+            onClick={() => {
+              // if (!getEdit) resetValues();
+              setmodal(!modal);
+            }}
+            style={{ cursor: "pointer" }}
+          >
+            X
+          </span>
+        </div>
+        <ModalBody>
+          <form></form>
+        </ModalBody>
+        <ModalFooter toggle={() => setmodal(!modal)}></ModalFooter>
+      </Modal>
     </div>
   );
 };
