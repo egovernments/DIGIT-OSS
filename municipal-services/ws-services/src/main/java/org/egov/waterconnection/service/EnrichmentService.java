@@ -39,6 +39,8 @@ import java.util.stream.Stream;
 
 import static org.egov.waterconnection.constants.WCConstants.DOCUMENT_ACCESS_AUDIT_MSG;
 import static org.egov.waterconnection.constants.WCConstants.WNS_OWNER_ENCRYPTION_MODEL;
+import static org.egov.waterconnection.constants.WCConstants.MODIFY_WATER_CONNECTION;
+import static org.egov.waterconnection.constants.WCConstants.DISCONNECT_WATER_CONNECTION;
 
 @Service
 @Slf4j
@@ -144,6 +146,15 @@ public class EnrichmentService {
 				roadCuttingInfo.setStatus(Status.ACTIVE);
 				roadCuttingInfo.setAuditDetails(auditDetails);
 			});
+		}
+
+		if (applicationType.equalsIgnoreCase(MODIFY_WATER_CONNECTION) || applicationType.equalsIgnoreCase(DISCONNECT_WATER_CONNECTION)) {
+			if (!CollectionUtils.isEmpty(connection.getPlumberInfo())) {
+				connection.getPlumberInfo().forEach(plumberInfo -> {
+					plumberInfo.setId(null);
+					plumberInfo.setAuditDetails(auditDetails);
+				});
+			}
 		}
 
 	}

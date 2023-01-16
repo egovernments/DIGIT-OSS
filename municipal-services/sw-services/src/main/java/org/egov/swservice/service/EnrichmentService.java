@@ -38,6 +38,8 @@ import org.springframework.util.StringUtils;
 
 import static org.egov.swservice.util.SWConstants.DOCUMENT_ACCESS_AUDIT_MSG;
 import static org.egov.swservice.util.SWConstants.WNS_OWNER_ENCRYPTION_MODEL;
+import static org.egov.swservice.util.SWConstants.MODIFY_SEWERAGE_CONNECTION;
+import static org.egov.swservice.util.SWConstants.DISCONNECT_SEWERAGE_CONNECTION;
 
 @Service
 @Slf4j
@@ -140,6 +142,16 @@ public class EnrichmentService {
 				roadCuttingInfo.setAuditDetails(auditDetails);
 			});
 		}
+
+		if (applicationType.equalsIgnoreCase(MODIFY_SEWERAGE_CONNECTION) || applicationType.equalsIgnoreCase(DISCONNECT_SEWERAGE_CONNECTION)) {
+			if (!CollectionUtils.isEmpty(connection.getPlumberInfo())) {
+				connection.getPlumberInfo().forEach(plumberInfo -> {
+					plumberInfo.setId(null);
+					plumberInfo.setAuditDetails(auditDetails);
+				});
+			}
+		}
+
 	}
 
 	@SuppressWarnings("unchecked")
