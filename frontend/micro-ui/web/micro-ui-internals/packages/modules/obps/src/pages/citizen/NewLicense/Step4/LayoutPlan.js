@@ -114,8 +114,7 @@ const LayoutPlan = (props) => {
             type="file"
             style={{ display: "none" }}
             onChange={(e) => getDocumentData(e?.target?.files[0], "uploadLayoutPlan")}
-            accept="application/shp/zip"
-            required
+            // accept="application/shp/zip"
           />
         </label>
         {fileStoreId?.uploadLayoutPlan ? (

@@ -80,28 +80,28 @@ const AppliedDetailForm = (props) => {
     name: "dgpsDetails",
   });
 
-  const validateDgpsPoint = () => {
-    const data = getValues("dgpsDetails");
-    let temp = {};
-    data.forEach((ele, index) => {
-      temp = { ...temp, [`dgpsPointLatitude${index}`]: true, [`dgpsPointLongitude${index}`]: true };
-    });
-    setShowError({ ...showError, ...temp });
-    if (
-      data.every((item) => {
-        return validateXvalue(item.longitude) && validateYvalue(item.latitude);
-      })
-    ) {
-      return true;
-    } else {
-      return false;
-    }
-  };
+  // const validateDgpsPoint = () => {
+  //   const data = getValues("dgpsDetails");
+  //   let temp = {};
+  //   data.forEach((ele, index) => {
+  //     temp = { ...temp, [`dgpsPointLatitude${index}`]: true, [`dgpsPointLongitude${index}`]: true };
+  //   });
+  //   setShowError({ ...showError, ...temp });
+  //   if (
+  //     data.every((item) => {
+  //       return validateXvalue(item.longitude) && validateYvalue(item.latitude);
+  //     })
+  //   ) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // };
 
   const AppliedDetailFormSubmitHandler = async (data) => {
-    if (!validateDgpsPoint()) {
-      return;
-    }
+    // if (!validateDgpsPoint()) {
+    //   return;
+    // }
     setLoader(true);
     const token = window?.localStorage?.getItem("token");
     const postDistrict = {
@@ -465,25 +465,25 @@ const AppliedDetailForm = (props) => {
   const [modal, setmodal] = useState(false);
   const [modal1, setmodal1] = useState(false);
 
-  const validateXvalue = (value) => {
-    if (value >= 432100.0 && value <= 751900.0 && value.toString().includes(".")) {
-      const decimalPlaces = value.toString().split(".")[1];
-      if (decimalPlaces.length === 3) {
-        return true;
-      }
-    }
-    return false;
-  };
+  // const validateXvalue = (value) => {
+  //   if (value >= 432100.0 && value <= 751900.0 && value.toString().includes(".")) {
+  //     const decimalPlaces = value.toString().split(".")[1];
+  //     if (decimalPlaces.length === 3) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // };
 
-  const validateYvalue = (value) => {
-    if (value >= 3054400.0 && value <= 3425500.0 && value.toString().includes(".")) {
-      const decimalPlaces = value.toString().split(".")[1];
-      if (decimalPlaces.length === 3) {
-        return true;
-      }
-    }
-    return false;
-  };
+  // const validateYvalue = (value) => {
+  //   if (value >= 3054400.0 && value <= 3425500.0 && value.toString().includes(".")) {
+  //     const decimalPlaces = value.toString().split(".")[1];
+  //     if (decimalPlaces.length === 3) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // };
 
   return (
     <div>
@@ -543,13 +543,13 @@ const AppliedDetailForm = (props) => {
                               type="number"
                               className="form-control"
                               {...register(`dgpsDetails.${index}.longitude`)}
-                              onBlur={() => setShowError({ ...showError, [`dgpsPointLongitude${index}`]: true })}
+                              // onBlur={() => setShowError({ ...showError, [`dgpsPointLongitude${index}`]: true })}
                             />
-                            {showError?.[`dgpsPointLongitude${index}`] && !validateXvalue(watch("dgpsDetails")[index].longitude) ? (
+                            {/* {showError?.[`dgpsPointLongitude${index}`] && !validateXvalue(watch("dgpsDetails")[index].longitude) ? (
                               <CardLabelError style={{ color: "red" }}>
                                 X:Longitude{index + 1} is not valid. It should be in between 432100.0 and 751900.0
                               </CardLabelError>
-                            ) : null}
+                            ) : null} */}
                           </div>
                           <div className="col col-4">
                             <label>Y:Latitude</label>
@@ -557,13 +557,13 @@ const AppliedDetailForm = (props) => {
                               type="number"
                               className="form-control"
                               {...register(`dgpsDetails.${index}.latitude`)}
-                              onBlur={() => setShowError({ ...showError, [`dgpsPointLatitude${index}`]: true })}
+                              // onBlur={() => setShowError({ ...showError, [`dgpsPointLatitude${index}`]: true })}
                             />
-                            {showError?.[`dgpsPointLatitude${index}`] && !validateYvalue(watch("dgpsDetails")[index].latitude) ? (
+                            {/* {showError?.[`dgpsPointLatitude${index}`] && !validateYvalue(watch("dgpsDetails")[index].latitude) ? (
                               <CardLabelError style={{ color: "red" }}>
                                 Y:Latitude{index + 1} is not valid. It should be in between 3054400.0 and 3425500.0
                               </CardLabelError>
-                            ) : null}
+                            ) : null} */}
                           </div>
                         </div>
                         {index > 3 && (
@@ -1380,7 +1380,6 @@ const AppliedDetailForm = (props) => {
                           style={{ display: "none" }}
                           onChange={(e) => getDocumentData(e?.target?.files[0], "hostedLayoutPlan")}
                           accept="application/pdf/jpeg/png"
-                          required
                         />
                       </label>
                       {fileStoreId?.hostedLayoutPlan ? (
@@ -1412,7 +1411,6 @@ const AppliedDetailForm = (props) => {
                           style={{ display: "none" }}
                           onChange={(e) => getDocumentData(e?.target?.files[0], "consentRera")}
                           accept="application/pdf/jpeg/png"
-                          required
                         />
                       </label>
                       {fileStoreId?.consentRera ? (
@@ -1438,7 +1436,6 @@ const AppliedDetailForm = (props) => {
                           style={{ display: "none" }}
                           onChange={(e) => getDocumentData(e?.target?.files[0], "sectoralPlan")}
                           accept="application/pdf/jpeg/png"
-                          required
                         />
                       </label>
                       {fileStoreId?.sectoralPlan ? (
@@ -1469,7 +1466,6 @@ const AppliedDetailForm = (props) => {
                           style={{ display: "none" }}
                           onChange={(e) => getDocumentData(e?.target?.files[0], "detailedElectricSupply")}
                           accept="application/pdf/jpeg/png"
-                          required
                         />
                       </label>
                       {fileStoreId?.detailedElectricSupply ? (
@@ -1503,7 +1499,6 @@ const AppliedDetailForm = (props) => {
                           style={{ display: "none" }}
                           onChange={(e) => getDocumentData(e?.target?.files[0], "planCrossSection")}
                           accept="application/pdf/jpeg/png"
-                          required
                         />
                       </label>
                       {fileStoreId?.planCrossSection ? (
@@ -1534,7 +1529,6 @@ const AppliedDetailForm = (props) => {
                           type="file"
                           style={{ display: "none" }}
                           accept="application/pdf/jpeg/png"
-                          required
                           onChange={(e) => getDocumentData(e?.target?.files[0], "publicHealthServices")}
                         />
                       </label>
@@ -1566,7 +1560,6 @@ const AppliedDetailForm = (props) => {
                           style={{ display: "none" }}
                           onChange={(e) => getDocumentData(e?.target?.files[0], "designRoad")}
                           accept="application/pdf/jpeg/png"
-                          required
                         />
                       </label>
                       {fileStoreId?.designRoad ? (
@@ -1597,7 +1590,6 @@ const AppliedDetailForm = (props) => {
                           style={{ display: "none" }}
                           onChange={(e) => getDocumentData(e?.target?.files[0], "designSewarage")}
                           accept="application/pdf/jpeg/png"
-                          required
                         />
                       </label>
                       {fileStoreId?.designSewarage ? (
@@ -1631,7 +1623,6 @@ const AppliedDetailForm = (props) => {
                           style={{ display: "none" }}
                           onChange={(e) => getDocumentData(e?.target?.files[0], "designDisposal")}
                           accept="application/pdf/jpeg/png"
-                          required
                         />
                       </label>
                       {fileStoreId?.designDisposal ? (
@@ -1663,7 +1654,6 @@ const AppliedDetailForm = (props) => {
                           style={{ display: "none" }}
                           onChange={(e) => getDocumentData(e?.target?.files[0], "undertakingChange")}
                           accept="application/pdf/jpeg/png"
-                          required
                         />
                       </label>
                       {fileStoreId?.undertakingChange ? (
@@ -1695,7 +1685,6 @@ const AppliedDetailForm = (props) => {
                           style={{ display: "none" }}
                           onChange={(e) => getDocumentData(e?.target?.files[0], "proposedColony")}
                           accept="application/pdf/jpeg/png"
-                          required
                         />
                       </label>
                       {fileStoreId?.proposedColony ? (
@@ -1722,7 +1711,6 @@ const AppliedDetailForm = (props) => {
                           style={{ display: "none" }}
                           onChange={(e) => getDocumentData(e?.target?.files[0], "reportObjection")}
                           accept="application/pdf/jpeg/png"
-                          required
                         />
                       </label>
                       {fileStoreId?.reportObjection ? (
@@ -1756,7 +1744,6 @@ const AppliedDetailForm = (props) => {
                           style={{ display: "none" }}
                           onChange={(e) => getDocumentData(e?.target?.files[0], "undertaking")}
                           accept="application/pdf/jpeg/png"
-                          required
                         />
                       </label>
                       {fileStoreId?.undertaking ? (

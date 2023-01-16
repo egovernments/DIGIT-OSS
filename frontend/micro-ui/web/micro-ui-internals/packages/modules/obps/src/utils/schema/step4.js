@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 
 const VALIDATION_SCHEMA = Yup.object().shape({
-  regularOption: Yup.string().nullable().required("This field is required."),
+  // regularOption: Yup.string().nullable().required("This field is required."),
   //   resplotno: Yup.string().required("This field is required."),
   //   npnlplotno: Yup.string().required("This field is required."),
   //   ewsplotno: Yup.string().required("This field is required."),
@@ -21,11 +21,10 @@ const VALIDATION_SCHEMA = Yup.object().shape({
   //   internalPlot: Yup.string().required("This field is required."),
   //   otherPlot: Yup.string().required("This field is required."),
   //   undeterminedPlot: Yup.string().required("This field is required."),
-  surrender: Yup.string().nullable().required("This field is required."),
-  pocketProposed: Yup.string().nullable().required("This field is required."),
-  deposit: Yup.string().nullable().required("This field is required."),
-  surrendered: Yup.string().nullable().required("This field is required."),
-
+  // surrender: Yup.string().nullable().required("This field is required."),
+  // pocketProposed: Yup.string().nullable().required("This field is required."),
+  // deposit: Yup.string().nullable().required("This field is required."),
+  // surrendered: Yup.string().nullable().required("This field is required."),
   // hostedLayoutPlan: Yup.string().required("This field is required."),
   // consentRera: Yup.string().required("This field is required."),
   // sectoralPlan: Yup.string().required("This field is required."),

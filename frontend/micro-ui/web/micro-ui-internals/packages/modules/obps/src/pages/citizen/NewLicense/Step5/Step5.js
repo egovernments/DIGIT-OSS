@@ -418,7 +418,6 @@ const FeesChargesForm = (props) => {
                                           style={{ display: "none" }}
                                           onChange={(e) => getDocumentData(e?.target?.files[0], "consentLetter")}
                                           accept="application/pdf/jpeg/png"
-                                          required
                                         />
                                       </label>
                                       {fileStoreId?.consentLetter ? (
@@ -499,7 +498,6 @@ const FeesChargesForm = (props) => {
                         type="checkbox"
                         value=""
                         id="flexCheckDefault"
-                        required
                       />
                       <label className="checkbox" for="flexCheckDefault">
                         I agree and accept the terms and conditions.

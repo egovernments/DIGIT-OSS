@@ -103,8 +103,8 @@ const DemarcationPlan = (props) => {
                 <b>5.</b> Submission of Layout Plan on e-License Portal: <br></br>
                 <b>5.1 </b>Submission of plans in GIS Format: <br></br>- Prepare the zip file of each layer and put it in the main folder. <br></br>-
                 Convert the folder to a zip file and upload it online.<br></br> <b>5.2 </b>Submission of Print Layout in pdf format: <br></br>- PDF of
-                the print layout of the plan is essentially required to be submitted along with the GIS format. <br></br>- Components of the print
-                layout (A1/A0 size) should be the same as finalized by the Department including Title, Map, Legend, Scale, Direction, Detail of Plots,
+                the print layout of the plan is essentially to be submitted along with the GIS format. <br></br>- Components of the print layout
+                (A1/A0 size) should be the same as finalized by the Department including Title, Map, Legend, Scale, Direction, Detail of Plots,
                 Labels, etc.
               </h2>
             </ModalBody>
@@ -117,8 +117,7 @@ const DemarcationPlan = (props) => {
             type="file"
             style={{ display: "none" }}
             onChange={(e) => getDocumentData(e?.target?.files[0], "demarcationPlan")}
-            accept="application/shp/zip"
-            required
+            // accept="application/shp/zip"
           />
         </label>
         {fileStoreId?.demarcationPlan ? (

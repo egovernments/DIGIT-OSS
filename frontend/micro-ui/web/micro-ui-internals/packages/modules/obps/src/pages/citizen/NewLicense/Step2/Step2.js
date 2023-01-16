@@ -201,6 +201,8 @@ const ApllicantPuropseForm = (props) => {
   const [tehsilCode, setTehsilCode] = useState(null);
   const [purposeOptions, setPurposeOptions] = useState({ data: [], isLoading: true });
   const [potentialOptons, setPotentialOptions] = useState({ data: [], isLoading: true });
+  // const [districtOptons, setDistrictOptions] = useState({ data: [], isLoading: true });
+  // const [devPlanOptons, setDevPlanOptions] = useState({ data: [], isLoading: true });
   const [docId, setDocId] = useState(null);
   const [loader, setLoader] = useState(false);
   const [getKhewats, setKhewats] = useState("");
@@ -293,7 +295,8 @@ const ApllicantPuropseForm = (props) => {
   });
 
   const { data: PurposeType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
-
+  // const { data: DistrictType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["District"]);
+  // const { data: DevPlanType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["DevPlan"]);
   const { data: PotentialType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["PotentialZone"]);
 
   useEffect(() => {
@@ -309,6 +312,21 @@ const ApllicantPuropseForm = (props) => {
     });
     setPotentialOptions({ data: potential, isLoading: false });
   }, [PotentialType]);
+
+  // useEffect(() => {
+  //   const district = DistrictType?.["common-masters"]?.District?.map(function (data) {
+  //     return { value: data?.distCodeTCP, label: data?.name };
+  //   });
+
+  //   setDistrictOptions({ data: district, isLoading: false });
+  // }, [DistrictType]);
+
+  // useEffect(() => {
+  //   const devPlan = DevPlanType?.["common-masters"]?.DevPlan?.map(function (data) {
+  //     return { value: data?.devPlanCode, label: data?.devPlan };
+  //   });
+  //   setDevPlanOptions({ data: devPlan, isLoading: false });
+  // }, [DevPlanType]);
 
   const DistrictApiCall = async () => {
     try {
@@ -538,9 +556,13 @@ const ApllicantPuropseForm = (props) => {
     if (stepData) {
       const data = purposeOptions?.data?.filter((item) => item?.value === stepData?.purpose);
       const potientialData = potentialOptons?.data?.filter((item) => item?.value === stepData?.potential);
+      // const devPlanData = devPlanOptons?.data?.filter((item) => item?.value === stepData?.devPlan);
+      // const districtsData = districtOptons?.data?.filter((item) => item?.value === stepData?.potential);
       const districtData = districtDataLabels?.data?.filter((item) => item?.value === stepData?.district);
       setValue("purpose", { label: data?.[0]?.label, value: data?.[0]?.value });
       setValue("potential", { label: potientialData?.[0]?.label, value: potientialData?.[0]?.value });
+      // setValue("devPlan", { label: devPlanData?.[0]?.label, value: devPlanData?.[0]?.value });
+      // setValue("districts", { label: districtsData?.[0]?.label, value: districtsData?.[0]?.value });
       setValue("district", { label: districtData?.[0]?.label, value: districtData?.[0]?.value });
       setDistrict(districtData?.[0]?.value);
       if (districtData?.[0]?.value) getTehslidata(districtData?.[0]?.value);
@@ -673,6 +695,14 @@ const ApllicantPuropseForm = (props) => {
                       </h2>
                     </Form.Label>
                   </div>
+                  {/* <ReactMultiSelect
+                    control={control}
+                    name="districts"
+                    placeholder="District"
+                    data={districtOptons?.data}
+                    labels="District"
+                    loading={districtOptons?.isLoading}
+                  /> */}
                   <ReactMultiSelect
                     control={control}
                     name="district"
@@ -701,13 +731,11 @@ const ApllicantPuropseForm = (props) => {
 
                   <ReactMultiSelect
                     control={control}
-                    name="potential"
-                    placeholder="Potential"
-                    // onChange={handleChangePurpose}
-
-                    // data={purposeOptions?.data}
-                    // labels="Purpose"
-                    // loading={purposeOptions?.isLoading}
+                    name="devPlan"
+                    placeholder="DevPlan"
+                    // data={devPlanOptons?.data}
+                    // labels="DevPlan"
+                    // loading={devPlanOptons?.isLoading}
                   />
                   <h3 className="error-message" style={{ color: "red" }}>
                     {errors?.potential?.value && errors?.potential?.value?.message}
