@@ -12,17 +12,19 @@ import {
   BackButton,
   EditIcon,
 } from "@egovernments/digit-ui-react-components";
-import React, { useMemo } from "react";
+import React, { useMemo,useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import Timeline from "../../../components/Timeline";
 import OBPSDocument from "../../../pageComponents/OBPSDocuments";
+import axios from "axios";
 
 const CheckPage = ({ onSubmit, value }) => {
   const { t } = useTranslation();
   const history = useHistory();
   const match = useRouteMatch();
   let user = Digit.UserService.getUser();
+  const userInfo = Digit.UserService.getUser();
   // console.log("USER-INFO",user);
   const tenantId = user && user?.info && user?.info?.permanentCity ? user?.info?.permanentCity : Digit.ULBService.getCurrentTenantId();
   const tenant = Digit.ULBService.getStateId();
@@ -33,6 +35,40 @@ const CheckPage = ({ onSubmit, value }) => {
     window.onunload = function () {
       sessionStorage.removeItem("Digit.BUILDING_PERMIT");
     };
+
+
+    const getDeveloperData = async () => {
+      try {
+          const requestResp = {
+
+              "RequestInfo": {
+                  "api_id": "1",
+                  "ver": "1",
+                  "ts": "",
+                  "action": "_getDeveloperById",
+                  "did": "",
+                  "key": "",
+                  "msg_id": "",
+                  "requester_id": "",
+                  "auth_token": ""
+              },
+          }
+          const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${userInfo?.info?.id}&isAllData=true`, requestResp, {
+
+          });
+          const developerDataGet = getDevDetails?.data;
+          setShowDevTypeFields(developerDataGet?.devDetail[0]?.applicantType?.developerType);
+          setAurthorizedUserInfoArray(getDevDetails?.data?.devDetail[0]?.aurthorizedUserInfoArray);
+      } catch (error) {
+          console.log(error);
+      }
+  }
+  useEffect(() => {
+      getDeveloperData()
+  }, []);
+
+  const [showDevTypeFields, setShowDevTypeFields] = useState("");
+  const [aurthorizedUserInfoArray, setAurthorizedUserInfoArray] = useState([]);
 
   const { result, formData, documents } = value; 
   // console.log("form DATA",value?.formData);
@@ -93,7 +129,7 @@ const CheckPage = ({ onSubmit, value }) => {
             </StatusTable>
           </Card>
           <Card style={{ paddingRight: "16px" }}>
-            <CardHeader styles={{ fontSize: "24px" }}>{t(`BPA_LICENSE_DETAILS_LABEL`)}</CardHeader>
+            <CardHeader styles={{ fontSize: "24px" }}>{t(`BPA_LICENSE_TYPE`)}</CardHeader>
             <LinkButton
               label={<EditIcon style={{ marginTop: "-15px", float: "right", position: "relative", bottom: "32px" }} />}
               style={{ width: "100px", display: "inline" }}
@@ -111,7 +147,7 @@ const CheckPage = ({ onSubmit, value }) => {
               )}
             </StatusTable>
           </Card>
-          <Card style={{ paddingRight: "16px" }}>
+          <Card style={{ paddingRight: "16px", display: "none" }}>
             <CardHeader styles={{ fontSize: "24px" }}>{t(`BPA_LICENSE_DET_CAPTION`)}</CardHeader>
             <LinkButton
               label={<EditIcon style={{ marginTop: "-15px", float: "right", position: "relative", bottom: "32px" }} />}
@@ -147,13 +183,14 @@ const CheckPage = ({ onSubmit, value }) => {
           </Card>
           <Card style={{ paddingRight: "16px" }}>
             <div style={{ marginRight: "24px" }}>
-              <CardHeader styles={{ fontSize: "24px" }}>{`Add Info`}</CardHeader>
+              <CardHeader styles={{ fontSize: "24px" }}>{t(`BPA_ADD_INFO_LABEL`)}</CardHeader>
             </div>
             <LinkButton
               label={<EditIcon style={{ marginTop: "-15px", float: "right", position: "relative", bottom: "32px" }} />}
               style={{ width: "100px", display: "inline" }}
               onClick={() => routeTo(`${routeLink}/license-add-info`)}
             />
+            
             <StatusTable>
               <Row className="border-none" label={"Developer's type"} text={formData?.LicenseAddInfo?.showDevTypeFields || t("CS_NA")} />
               <Row className="border-none" label={"CIN Number"} text={formData?.LicenseAddInfo?.cin_Number || t("CS_NA")} />
@@ -164,17 +201,68 @@ const CheckPage = ({ onSubmit, value }) => {
             </StatusTable>
             {/* <Row className="border-none" text={t(formData?.LicneseDetails?.cin_Number)} /> */}
           </Card>
-          {/* <Card style={{ paddingRight: "16px" }}>
+          <Card style={{ paddingRight: "16px" }}>
             <div style={{ marginRight: "24px" }}>
-              <CardHeader styles={{ fontSize: "24px" }}>{t(`BPA_COMMUNICATION_ADDRESS_HEADER_DETAILS`)}</CardHeader>
+              <CardHeader styles={{ fontSize: "24px" }}>{t(`BPA_AUTHORIZED_USER_LABEL`)}</CardHeader>
             </div>
             <LinkButton
               label={<EditIcon style={{ marginTop: "-15px", float: "right", position: "relative", bottom: "32px" }} />}
               style={{ width: "100px", display: "inline" }}
-              onClick={() => routeTo(`${routeLink}/correspondence-address`)}
+              onClick={() => routeTo(`${routeLink}/add-authorized-user`)}
             />
-            <Row className="border-none" text={t(value?.Correspondenceaddress)} />
-          </Card> */}
+            <StatusTable>
+              <table className="table table-bordered table-striped table-responsive">
+                <thead>
+                  <tr>
+                    <th>Sr. No.</th>
+                    <th>Name</th>
+                    <th>Mobile No.</th>
+                    <th>Email</th>
+                    <th>Gender</th>
+                    <th>PAN No.</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {
+                    (aurthorizedUserInfoArray?.length > 0 ) ?
+                      aurthorizedUserInfoArray.map((elementInArray,input) => {
+                      return(
+                        <tr key={elementInArray.id}>
+                          <td>{input + 1}</td>
+                          <td>
+                            {elementInArray.name}
+                          </td>
+                          <td>
+                            {elementInArray.mobileNumber}
+                          </td>
+                          <td>
+                            {elementInArray.emailId}
+                          </td>
+                          <td>
+                            {elementInArray.gender}
+                          </td>
+                          <td>
+                            {elementInArray.pan}
+                          </td>
+                        </tr>
+                      );
+                    }): <div className="d-none"></div>
+                  }
+                </tbody>
+              </table>
+            </StatusTable>
+          </Card>
+          <Card style={{ paddingRight: "16px" }}>
+            <CardHeader styles={{ fontSize: "24px" }}>{t("Financial Capacity BPA_DOC_DETAILS_SUMMARY")}</CardHeader>
+            <LinkButton
+              label={<EditIcon style={{ marginTop: "-15px", float: "right", position: "relative", bottom: "32px" }} />}
+              style={{ width: "100px", display: "inline" }}
+              onClick={() => routeTo(`${routeLink}/developer-capacity`)}
+            />
+            <StatusTable>
+              
+            </StatusTable>
+          </Card>
           <Card style={{ paddingRight: "16px" }}>
             <CardHeader styles={{ fontSize: "24px" }}>{t("BPA_DOC_DETAILS_SUMMARY")}</CardHeader>
             <LinkButton
