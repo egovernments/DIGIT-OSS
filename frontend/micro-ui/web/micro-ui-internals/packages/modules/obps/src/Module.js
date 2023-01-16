@@ -50,6 +50,7 @@ import InspectionReport from "./pageComponents/InspectionReport";
 import OBPSEmployeeHomeCard from "./pages/employee/EmployeeCard";
 import EmpApplicationDetail from "./pages/employee/ApplicationDetail";
 import EmployeeBpaApplicationDetail from "./pages/employee/BpaApplicationDetails";
+import OBPSCard from "./components/OBPSCard";
 
 import BPACheckPage from "./pages/citizen/NewBuildingPermit/CheckPage";
 import OCBPACheckPage from "./pages/citizen/OCBuildingPermit/CheckPage";
@@ -140,6 +141,7 @@ const componentsToRegister = {
   NOCDetails,
   LocationDetails,
   GIS,
+  OBPSCard,
   OCEDCRDocsRequired,
   OCeDCRScrutiny,
   OCUploadPlanDiagram,

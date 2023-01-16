@@ -156,6 +156,7 @@ import useBusinessServiceData from "./obps/useBusinessServiceData";
 import useBPATaxDocuments from "./obps/useBPATaxDocuments";
 import useSPInbox from "./obps/useSPInbox";
 import useEPInbox from "./obps/useEPInbox";
+import useBGInbox from "./obps/useBGInbox";
 
 import useEventInbox from "./events/useEventInbox";
 import useEventDetails from "./events/useEventDetails";
@@ -326,7 +327,8 @@ const obps = {
   useBusinessServiceData,
   useBPATaxDocuments,
   useSPInbox,
-  useEPInbox
+  useEPInbox,
+  useBGInbox
 };
 
 const events = {
