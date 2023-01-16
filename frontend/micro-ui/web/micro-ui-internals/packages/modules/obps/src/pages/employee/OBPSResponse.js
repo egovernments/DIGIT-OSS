@@ -85,7 +85,7 @@ const OBPSResponse = (props) => {
             info={getApplicationNoLabel()}
             successful={applicationData?.status == "PERMIT REVOCATION" || applicationData?.status == "REJECTED" ? false : true}
             style={{ padding: "10px" }}
-            headerStyles={{ fontSize: "32px" }}
+            headerStyles={{ fontSize: "32px", wordBreak: "break-word" }}
           />
           <CardText style={{ paddingBottom: "10px", marginBottom: "10px" }}>{getSubHeaderMessage()}</CardText>
           {applicationData?.status == "PERMIT REVOCATION" ?

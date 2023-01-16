@@ -60,7 +60,7 @@ const OCUploadPlanDiagram = ({ t, config, onSelect, userType, formData, ownerInd
             <UploadFile
                 id={"oc-doc"}
                 extraStyleName={"propertyCreate"}
-                accept=".dxf"
+                // accept=".dxf"
                 onUpload={selectfile}
                 onDelete={() => {
                     setUploadedFile(null);

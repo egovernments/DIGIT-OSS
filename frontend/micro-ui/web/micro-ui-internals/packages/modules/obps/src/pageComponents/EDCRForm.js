@@ -124,7 +124,7 @@ const EDCRForm = ({ t, config, onSelect, userType, formData, ownerIndex = 0, add
             <UploadFile
                 id={"edcr-doc"}
                 extraStyleName={"propertyCreate"}
-                accept=".dxf"
+                // accept=".dxf"
                 onUpload={selectfile}
                 onDelete={() => {
                     setUploadedFile(null);

@@ -229,7 +229,7 @@ function ApplicationDetailsContent({
                 !detail?.title.includes("NOC") &&
                 detail?.values?.map((value, index) => {
                   if (value.map === true && value.value !== "N/A") {
-                    return <Row key={t(value.title)} label={t(value.title)} text={<img src={t(value.value)} alt="" privacy={value?.privacy} />} />;
+                    return <Row labelStyle={{wordBreak: "break-all"}} textStyle={{wordBreak: "break-all"}} key={t(value.title)} label={t(value.title)} text={<img src={t(value.value)} alt="" privacy={value?.privacy} />} />;
                   }
                   if (value?.isLink == true) {
                     return (
@@ -263,6 +263,8 @@ function ApplicationDetailsContent({
                         caption={value.caption}
                         className="border-none"
                         rowContainerStyle={getRowStyles()}
+                        labelStyle={{wordBreak: "break-all"}}
+                        textStyle={{wordBreak: "break-all"}}
                       />
                     );
                   }
@@ -275,6 +277,8 @@ function ApplicationDetailsContent({
                         label={`${t(`${value.title}`)}`}
                         privacy={value?.privacy}
                         text={value?.oldValue ? value?.oldValue : value?.value ? value?.value : ""}
+                        labelStyle={{wordBreak: "break-all"}}
+                        textStyle={{wordBreak: "break-all"}}
                       /> ) : (<Row
                         key={t(value.title)}
                         label={t(value.title)}
@@ -286,6 +290,8 @@ function ApplicationDetailsContent({
                         privacy={value?.privacy}
                         // TODO, Later will move to classes
                         rowContainerStyle={getRowStyles()}
+                        labelStyle={{wordBreak: "break-all"}}
+                        textStyle={{wordBreak: "break-all"}}
                       />
                     )}
                     </div>
