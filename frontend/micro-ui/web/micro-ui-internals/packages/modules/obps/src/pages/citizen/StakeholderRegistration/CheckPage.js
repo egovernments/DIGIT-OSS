@@ -35,7 +35,7 @@ const CheckPage = ({ onSubmit, value }) => {
     };
 
   const { result, formData, documents } = value; 
-  // console.log("form DATA",value?.formData);
+  // console.log("form DATA",value);
   let consumerCode = value?.result?.Licenses[0].applicationNumber;
   const fetchBillParams = { consumerCode };
 
@@ -55,25 +55,40 @@ const CheckPage = ({ onSubmit, value }) => {
 
   const navigate = useHistory();
 
+
   const changeStep = (step) => {
-    switch (step) {
-      case 1 :
-        navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/provide-license-type");
+    if(value?.LicneseType?.licenceType === "ARCHITECT.CLASSA"){
+        switch (step) {
+            case 1 :
+              navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/provide-license-type");
+              break;
+            case 2 :
+              navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/license-details");
+            break;
+            case 3 :
+              navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/stakeholder-document-details");
+            break;
+          }
+    } else {
+      switch (step) {
+        case 1 :
+          navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/provide-license-type");
+          break;
+        case 2 :
+          navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/license-add-info");
         break;
-      case 2 :
-        navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/license-add-info");
-      break;
-      case 3 :
-        navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/add-authorized-user");
-      break;
-      case 4 :
-        navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/developer-capacity");
-      break;
-      case 5 :
-        navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/stakeholder-document-details");
-      break;
+        case 3 :
+          navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/add-authorized-user");
+        break;
+        case 4 :
+          navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/developer-capacity");
+        break;
+        case 5 :
+          navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/stakeholder-document-details");
+        break;
+      }
     }
-  }
+}
 
   return (
     <React.Fragment>
@@ -81,7 +96,7 @@ const CheckPage = ({ onSubmit, value }) => {
         {/* <div style={isopenlink?{ width:isCitizenUrl?"100%":"70%", marginLeft:"auto",marginRight:"auto"}:{}}> */}
         <div>
           {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
-          <Timeline currentStep={6} flow="STAKEHOLDER" onChangeStep={changeStep} />
+          <Timeline currentStep={ value?.LicneseType?.licenceType === "ARCHITECT.CLASSA" ? 4 : 6 } flow={value?.LicneseType?.licenceType === "ARCHITECT.CLASSA" ? "ARCHITECT.CLASSA" :"STAKEHOLDER" } onChangeStep={changeStep} isAPILoaded={value?.LicneseType?.licenceType ? true : false}/>
           <Header styles={{ fontSize: "32px" }}>{t("BPA_STEPPER_SUMMARY_HEADER")}</Header>
           <Card style={{ paddingRight: "16px" }}>
             <StatusTable>
