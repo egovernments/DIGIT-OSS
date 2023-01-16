@@ -15,7 +15,7 @@ import axios from "axios";
 import { ScrutinyRemarksContext } from "../../../../context/remarks-data-context";
 // import AddIcon from "@mui/icons-material/Add";
 
-const ScrutitnyForms = ({apiResponse,applicationNumber,refreshScrutinyData}) => {
+const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData }) => {
   const personalInfoRef = useRef();
   const generalInfoRef = useRef();
   const developerInfoRef = useRef();
@@ -53,11 +53,10 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
   const [disapprovalData, setDisapprovalData] = useState({});
   const [applictaionNo, setApplicationNO] = useState(null);
   // const [iconStates,setIconState]= useState(null)
-  const [urlGetShareHoldingDoc,setDocShareHoldingUrl] = useState("")
+  const [urlGetShareHoldingDoc, setDocShareHoldingUrl] = useState("");
 
   const userInfo = Digit.UserService.getUser()?.info || {};
   const authToken = Digit.UserService.getUser()?.access_token || null;
-
 
   const getUncheckedPersonalinfos = (data) => {
     setDisplayPersonalInfo(data.data);
@@ -166,9 +165,11 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
       },
     };
     try {
-      const Resp = await axios.post(`/land-services/egscrutiny/_searchbylogin?applicationId=${apiResponse?.id}&userid=${userInfo?.id}`, dataToPass).then((response) => {
-        return response.data;
-      });
+      const Resp = await axios
+        .post(`/land-services/egscrutiny/_searchbylogin?applicationId=${apiResponse?.id}&userid=${userInfo?.id}`, dataToPass)
+        .then((response) => {
+          return response.data;
+        });
 
       console.log("Response From API", Resp);
       setDisapprovalData(Resp);
@@ -204,31 +205,27 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
   // };
 
   useEffect(() => {
-    if(apiResponse?.id){
+    if (apiResponse?.id) {
       handleGetDisapprovalList();
     }
-  }, [remarksChanges,apiResponse]);
+  }, [remarksChanges, apiResponse]);
 
-  // useEffect(() => {
-  //   handleGetInputFieldsValues();
-  // }, []);
   useEffect(() => {
-    if(applicationNumber){
-      // console.log("log123...",userInfo)
+    if (applicationNumber) {
       handleGetRemarkssValues(applicationNumber);
     }
   }, [applicationNumber]);
 
-  useEffect(()=>{
-    if(applicationNumber){
+  useEffect(() => {
+    if (applicationNumber) {
       handleGetFiledsStatesById(applicationNumber);
     }
-  },[applicationNumber]);
+  }, [applicationNumber]);
 
   const curentDataPersonal = (data) => {
     setRemarksChanges(data.data);
   };
-  
+
   console.log(uncheckedValue);
   console.log("React", purpose);
 
@@ -288,18 +285,11 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
     }
   };
   console.log("scrutiny form api get", apiResponse !== undefined ? apiResponse?.ApplicantInfo : apiResponse);
-  console.log(
-    "scrutiny form api get1",
-    apiResponse !== undefined ? apiResponse?.ApplicantPurpose : apiResponse
-  );
+  console.log("scrutiny form api get1", apiResponse !== undefined ? apiResponse?.ApplicantPurpose : apiResponse);
   // console.log("scrutiny form api get2", apiResponse !== undefined ? apiResponse?.LandSchedule : apiResponse);
   console.log("remarks api", remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null);
 
   console.log("remakes data parsnalinfo", remarksChanges);
-
-
-
-
 
   return (
     <div>
@@ -331,12 +321,11 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
           <div>
             <Developerinfo
               developerInfoRef={developerInfoRef}
-              purpose={apiResponse?apiResponse?.ApplicantPurpose?.purpose:null}
+              purpose={apiResponse ? apiResponse?.ApplicantPurpose?.purpose : null}
               passUncheckedList={getUncheckedPurposeinfos}
               passCheckedList={getCheckedPurposeInfoValue}
               onClick={() => setOpen(!open)}
-              ApiResponseData={apiResponse !== undefined ? apiResponse?.LandSchedule
-                : null}
+              ApiResponseData={apiResponse !== undefined ? apiResponse?.LandSchedule : null}
               dataForIcons={iconStates}
             ></Developerinfo>
             {/* </Col> */}
@@ -344,11 +333,10 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
           <div>
             <AppliedLandinfo
               appliedInfoRef={appliedInfoRef}
-              purpose={apiResponse?apiResponse?.ApplicantPurpose?.purpose:null}
+              purpose={apiResponse ? apiResponse?.ApplicantPurpose?.purpose : null}
               passUncheckedList={getUncheckedAppliedLandInfo}
               passCheckedList={getCheckedAppliedInfoValue}
-              ApiResponseData={apiResponse !== undefined ? apiResponse?.DetailsofAppliedLand
-                : null}
+              ApiResponseData={apiResponse !== undefined ? apiResponse?.DetailsofAppliedLand : null}
               heightApplied={defaultheightApplied}
               dataForIcons={iconStates}
             ></AppliedLandinfo>
@@ -359,8 +347,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
               feeandchargesInfoRef={feeandchargesInfoRef}
               passUncheckedList={getUncheckedFeeandChargesInfo}
               heightFee={defaultheightFee}
-              ApiResponseData={apiResponse !== undefined ? apiResponse?.FeesAndCharges
-                : null}
+              ApiResponseData={apiResponse !== undefined ? apiResponse?.FeesAndCharges : null}
             ></Feeandcharges>
             {/* </Col> */}
           </div>

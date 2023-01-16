@@ -28,6 +28,8 @@ const LayoutPlan = (props) => {
   const [loader, setLoader] = useState(false);
   const [showToast, setShowToast] = useState(null);
   const [showToastError, setShowToastError] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState([]);
+
   const getDocumentData = async (file, fieldName) => {
     if (selectedFiles.includes(file.name)) {
       setShowToastError({ key: "error" });
@@ -112,8 +114,7 @@ const LayoutPlan = (props) => {
             type="file"
             style={{ display: "none" }}
             onChange={(e) => getDocumentData(e?.target?.files[0], "uploadLayoutPlan")}
-            accept="application/shp/zip"
-            required
+            // accept="application/shp/zip"
           />
         </label>
         {fileStoreId?.uploadLayoutPlan ? (

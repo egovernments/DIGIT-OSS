@@ -5,9 +5,9 @@ import { useForm } from "react-hook-form";
 import { Button, Form, FormLabel } from "react-bootstrap";
 // import { Card, Row, Col } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
-import { Modal, ModalHeader, ModalFooter, ModalBody } from 'react-bootstrap';
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+import { Modal, ModalHeader, ModalFooter, ModalBody } from "react-bootstrap";
 import axios from "axios";
 import { useHistory, useLocation } from "react-router-dom";
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -38,19 +38,19 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
         console.log("USERID", usersResponse?.user[0]?.gender)
     }, [userInfo?.info?.uuid])
 
-    const { data: optionsArrList } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
+  const { data: optionsArrList } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
 
-    let arrayDevList = [];
-    optionsArrList &&
-        optionsArrList["common-masters"].Purpose.map((purposeTypeDetails) => {
-            arrayDevList.push({ code: `${purposeTypeDetails.name}`, value: `${purposeTypeDetails.purposeCode}` });
-        });
+  let arrayDevList = [];
+  optionsArrList &&
+    optionsArrList["common-masters"].Purpose.map((purposeTypeDetails) => {
+      arrayDevList.push({ code: `${purposeTypeDetails.name}`, value: `${purposeTypeDetails.purposeCode}` });
+    });
 
-    const { setValue, getValues, watch } = useForm();
+  const { setValue, getValues, watch } = useForm();
 
-    const DevelopersAllData = getValues();
-    console.log("DEVEDATAGEGT", DevelopersAllData);
-    // const [Documents,getValues] = useState([]);
+  const DevelopersAllData = getValues();
+  console.log("DEVEDATAGEGT", DevelopersAllData);
+  // const [Documents,getValues] = useState([]);
 
     const onSkip = () => onSelect();
     const getDeveloperData = async () => {
@@ -170,18 +170,17 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
     const [capacityDevelopColonyLawAct, setCapacityDevelopColonyLawAct] = useState(formData?.LicneseDetails?.capacityDevelopColonyLawAct || []);
     const [capacityDevelopAColony, setcapacityDevelopAColony] = useState([]);
 
-    const [licenceNumber, setModalLcNo] = useState(formData?.LicneseDetails?.licenceNumber || "");
-    const [nameOfDeveloper, setModalDevName] = useState(formData?.LicneseDetails?.nameOfDeveloper || "");
-    // const [purposeOfColony, setModalPurposeCol] = useState(formData?.LicneseDetails?.purposeOfColony || "");
-    const [sectorAndDevelopmentPlan, setModalDevPlan] = useState(formData?.LicneseDetails?.sectorAndDevelopmentPlan || "");
-    const [validatingLicence, setModalDevValidity] = useState(formData?.LicneseDetails?.validatingLicence || "");
+  const [licenceNumber, setModalLcNo] = useState(formData?.LicneseDetails?.licenceNumber || "");
+  const [nameOfDeveloper, setModalDevName] = useState(formData?.LicneseDetails?.nameOfDeveloper || "");
+  // const [purposeOfColony, setModalPurposeCol] = useState(formData?.LicneseDetails?.purposeOfColony || "");
+  const [sectorAndDevelopmentPlan, setModalDevPlan] = useState(formData?.LicneseDetails?.sectorAndDevelopmentPlan || "");
+  const [validatingLicence, setModalDevValidity] = useState(formData?.LicneseDetails?.validatingLicence || "");
 
-
-    const [coloniesDeveloped, setColonyDev] = useState(formData?.LicneseDetails?.coloniesDeveloped || "");
-    const [area, setColonyArea] = useState(formData?.LicneseDetails?.area || "");
-    const [purpose, setColonyPurpose] = useState(formData?.LicneseDetails?.purpose || "");
-    const [statusOfDevelopment, setColonyStatusDev] = useState(formData?.LicneseDetails?.statusOfDevelopment || "");
-    const [outstandingDues, setColonyoutstandingDue] = useState(formData?.LicneseDetails?.outstandingDues || "");
+  const [coloniesDeveloped, setColonyDev] = useState(formData?.LicneseDetails?.coloniesDeveloped || "");
+  const [area, setColonyArea] = useState(formData?.LicneseDetails?.area || "");
+  const [purpose, setColonyPurpose] = useState(formData?.LicneseDetails?.purpose || "");
+  const [statusOfDevelopment, setColonyStatusDev] = useState(formData?.LicneseDetails?.statusOfDevelopment || "");
+  const [outstandingDues, setColonyoutstandingDue] = useState(formData?.LicneseDetails?.outstandingDues || "");
 
     const [engineerName, setEngineerName] = useState(formData?.LicneseDetails?.engineerName || "")
     const [engineerQualification, setEngineerQualification] = useState(formData?.LicneseDetails?.engineerQualification || "")
@@ -274,44 +273,42 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
         purpose: ""
     })
 
-    // console.log("LIC NO...",technicalCapacitySoughtFromAnyColonizer.licNo)
-    const { data: PurposeType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
+  // console.log("LIC NO...",technicalCapacitySoughtFromAnyColonizer.licNo)
+  const { data: PurposeType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
 
-    useEffect(() => {
-        const purpose = PurposeType?.["common-masters"]?.Purpose?.map(function (data) {
-            return { value: data?.purposeCode, label: data?.name };
-        });
-        console.log("log123", purpose)
-        setPurposeOptions({ data: purpose, isLoading: false });
-    }, [PurposeType])
+  useEffect(() => {
+    const purpose = PurposeType?.["common-masters"]?.Purpose?.map(function (data) {
+      return { value: data?.purposeCode, label: data?.name };
+    });
+    setPurposeOptions({ data: purpose, isLoading: false });
+  }, [PurposeType]);
 
-    if (isopenlink)
-        window.onunload = function () {
-            sessionStorage.removeItem("Digit.BUILDING_PERMIT");
-        }
+  if (isopenlink)
+    window.onunload = function () {
+      sessionStorage.removeItem("Digit.BUILDING_PERMIT");
+    };
 
-    function selectChecked(e) {
-        if (isAddressSame == false) {
-            setisAddressSame(true);
-            setCorrespondenceaddress(formData?.LicneseDetails?.PermanentAddress ? formData?.LicneseDetails?.PermanentAddress : formData?.formData?.LicneseDetails?.PermanentAddress);
-        }
-        else {
-            Array.from(document.querySelectorAll("input")).forEach((input) => (input.value = ""));
-            setisAddressSame(false);
-            setCorrespondenceaddress("");
-        }
+  function selectChecked(e) {
+    if (isAddressSame == false) {
+      setisAddressSame(true);
+      setCorrespondenceaddress(
+        formData?.LicneseDetails?.PermanentAddress ? formData?.LicneseDetails?.PermanentAddress : formData?.formData?.LicneseDetails?.PermanentAddress
+      );
+    } else {
+      Array.from(document.querySelectorAll("input")).forEach((input) => (input.value = ""));
+      setisAddressSame(false);
+      setCorrespondenceaddress("");
     }
-    function selectCorrespondenceaddress(e) {
-        setCorrespondenceaddress(e.target.value);
-    }
+  }
+  function selectCorrespondenceaddress(e) {
+    setCorrespondenceaddress(e.target.value);
+  }
 
-    // const formSubmit = (data) => {
-    //     console.log("data", data);
-    // };
+  // const formSubmit = (data) => {
+  //     console.log("data", data);
+  // };
 
-
-
-    const [AppliedDetailFormSubmitted, SetAppliedDetailFormSubmitted] = useState(false);
+  const [AppliedDetailFormSubmitted, SetAppliedDetailFormSubmitted] = useState(false);
 
     const [showCapacityDevelopColony, setShowCapacityDevelopColony] = useState(false);
     const handleShowCapacityDevelopColony = () => {
@@ -329,17 +326,17 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
         setShowCapacityDevelopColony(false)
     };
 
-    const [showColoniesDeveloped, setShowColoniesDeveloped] = useState(false);
-    const handleShowColoniesDeveloped = () => {
-        setShowColoniesDeveloped(true)
-        setColonyArea("");
-        setColonyPurpose("");
-        // setAurthorizedEmail("");
-        // setAurthorizedDob("");
-        // setGender("");
-        // setAurthorizedPan("");
-    };
-    const handleCloseColoniesDeveloped = () => setShowColoniesDeveloped(false);
+  const [showColoniesDeveloped, setShowColoniesDeveloped] = useState(false);
+  const handleShowColoniesDeveloped = () => {
+    setShowColoniesDeveloped(true);
+    setColonyArea("");
+    setColonyPurpose("");
+    // setAurthorizedEmail("");
+    // setAurthorizedDob("");
+    // setGender("");
+    // setAurthorizedPan("");
+  };
+  const handleCloseColoniesDeveloped = () => setShowColoniesDeveloped(false);
 
     const changeValueHrdu = (e) => {
         console.log(e.target.value);
@@ -362,52 +359,52 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
         setValueAlreadyObtainedLic(e.target.value);
     }
 
-    const handleshow = (e) => {
-        const getshow = e.target.value;
-        console.log(getshow)
-    };
-    const handleshow0 = (e) => {
-        const getshow = e.target.value;
-        setShowhide0(getshow);
-    };
-    const handleshow1 = (e) => {
-        const getshow = e.target.value;
-        setShowhide1(getshow);
-    };
-    const handleshow6 = (e) => {
-        const getshow = e.target.value;
-        setShowhide6(getshow);
-    };
+  const handleshow = (e) => {
+    const getshow = e.target.value;
+    console.log(getshow);
+  };
+  const handleshow0 = (e) => {
+    const getshow = e.target.value;
+    setShowhide0(getshow);
+  };
+  const handleshow1 = (e) => {
+    const getshow = e.target.value;
+    setShowhide1(getshow);
+  };
+  const handleshow6 = (e) => {
+    const getshow = e.target.value;
+    setShowhide6(getshow);
+  };
 
-    const handleChange = (e) => {
-        this.setState({ isRadioSelected: true });
-    };
+  const handleChange = (e) => {
+    this.setState({ isRadioSelected: true });
+  };
 
-    const devTypeFlagVal = localStorage.getItem('devTypeValueFlag');
-    // const getDocumentData = async () => {
-    //     if (file === null) {
-    //         return
-    //     }
-    //     const formData = new FormData();
-    //     formData.append("file", file.file);
-    //     formData.append("tenantId", tenantId);
-    //     formData.append("module", "property-upload");
-    //     try {
-    //         const Resp = await axios.post("/filestore/v1/files", formData,
-    //             {
-    //                 headers: {
-    //                     "content-type": "multipart/form-data"
-    //                 }
-    //             }).then((response) => {
-    //                 return response
-    //             });
-    //         const docValue = Resp.data?.files[0]?.fileStoreId
-    //         setModalDevPlan(docValue);
-    //     } catch (error) {
-    //         console.log(error.message);
-    //     }
-    //     getDocData();
-    // }
+  const devTypeFlagVal = localStorage.getItem("devTypeValueFlag");
+  // const getDocumentData = async () => {
+  //     if (file === null) {
+  //         return
+  //     }
+  //     const formData = new FormData();
+  //     formData.append("file", file.file);
+  //     formData.append("tenantId", tenantId);
+  //     formData.append("module", "property-upload");
+  //     try {
+  //         const Resp = await axios.post("/filestore/v1/files", formData,
+  //             {
+  //                 headers: {
+  //                     "content-type": "multipart/form-data"
+  //                 }
+  //             }).then((response) => {
+  //                 return response
+  //             });
+  //         const docValue = Resp.data?.files[0]?.fileStoreId
+  //         setModalDevPlan(docValue);
+  //     } catch (error) {
+  //         console.log(error.message);
+  //     }
+  //     getDocData();
+  // }
 
     const getDocumentData = async (file, fieldName, formType) => {
 
@@ -509,316 +506,294 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
         }
     };
 
-    const getDocData = async () => {
-        if ((Documents?.sectorAndDevelopmentPlan !== null || Documents?.sectorAndDevelopmentPlan !== undefined) && (sectorAndDevelopmentPlan !== null || sectorAndDevelopmentPlan !== "")) {
-            try {
-                const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${Documents?.sectorAndDevelopmentPlan}`, {
-
-                });
-                const FILDATA = response.data?.fileStoreIds[0]?.url;
-                setFIleUrl(FILDATA)
-                console.log("GET DOCUMENT LABEL", FILDATA);
-            } catch (error) {
-                console.log(error.message);
-            }
-        }
+  const getDocData = async () => {
+    if (
+      (Documents?.sectorAndDevelopmentPlan !== null || Documents?.sectorAndDevelopmentPlan !== undefined) &&
+      (sectorAndDevelopmentPlan !== null || sectorAndDevelopmentPlan !== "")
+    ) {
+      try {
+        const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${Documents?.sectorAndDevelopmentPlan}`, {});
+        const FILDATA = response.data?.fileStoreIds[0]?.url;
+        setFIleUrl(FILDATA);
+        console.log("GET DOCUMENT LABEL", FILDATA);
+      } catch (error) {
+        console.log(error.message);
+      }
     }
+  };
 
-    useEffect(() => {
-        getDocData();
-    }, [Documents?.sectorAndDevelopmentPlan]);
+  useEffect(() => {
+    getDocData();
+  }, [Documents?.sectorAndDevelopmentPlan]);
 
-    const getDocValidLic = async () => {
-        if ((Documents?.validatingLicence !== null || Documents?.validatingLicence !== undefined) && (validatingLicence !== null || validatingLicence !== "")) {
-
-            try {
-                const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${Documents?.validatingLicence}`, {
-
-                });
-                const FILDATA = response.data?.fileStoreIds[0]?.url;
-                setValidateLicUrl(FILDATA)
-                console.log("GET VALID LIC", FILDATA);
-            } catch (error) {
-                console.log(error.message);
-            }
-        }
+  const getDocValidLic = async () => {
+    if (
+      (Documents?.validatingLicence !== null || Documents?.validatingLicence !== undefined) &&
+      (validatingLicence !== null || validatingLicence !== "")
+    ) {
+      try {
+        const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${Documents?.validatingLicence}`, {});
+        const FILDATA = response.data?.fileStoreIds[0]?.url;
+        setValidateLicUrl(FILDATA);
+        console.log("GET VALID LIC", FILDATA);
+      } catch (error) {
+        console.log(error.message);
+      }
     }
+  };
 
-    useEffect(() => {
-        getDocValidLic();
-    }, [Documents?.validatingLicence]);
+  useEffect(() => {
+    getDocValidLic();
+  }, [Documents?.validatingLicence]);
 
-    // COLONIES DEVELOPED GET UPLOADED DOC
-    const getDocStatusDev = async () => {
-        if ((Documents?.statusOfDevelopment !== null || Documents?.statusOfDevelopment !== undefined) && (statusOfDevelopment !== null || statusOfDevelopment !== "")) {
-
-            try {
-                const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${Documents?.statusOfDevelopment}`, {
-
-                });
-                const FILDATA = response.data?.fileStoreIds[0]?.url;
-                setStatusDevUrl(FILDATA)
-                console.log("GET DOCUMENT LABEL", FILDATA);
-            } catch (error) {
-                console.log(error.message);
-            }
-        }
+  // COLONIES DEVELOPED GET UPLOADED DOC
+  const getDocStatusDev = async () => {
+    if (
+      (Documents?.statusOfDevelopment !== null || Documents?.statusOfDevelopment !== undefined) &&
+      (statusOfDevelopment !== null || statusOfDevelopment !== "")
+    ) {
+      try {
+        const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${Documents?.statusOfDevelopment}`, {});
+        const FILDATA = response.data?.fileStoreIds[0]?.url;
+        setStatusDevUrl(FILDATA);
+        console.log("GET DOCUMENT LABEL", FILDATA);
+      } catch (error) {
+        console.log(error.message);
+      }
     }
+  };
 
-    useEffect(() => {
-        getDocStatusDev();
-    }, [Documents?.statusOfDevelopment]);
+  useEffect(() => {
+    getDocStatusDev();
+  }, [Documents?.statusOfDevelopment]);
 
-
-    const getOutstandingDues = async () => {
-        if ((Documents?.outstandingDues !== null || Documents?.outstandingDues !== undefined) && (outstandingDues !== null || outstandingDues !== "")) {
-
-            try {
-                const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${Documents?.outstandingDues}`, {
-
-                });
-                const FILDATA = response.data?.fileStoreIds[0]?.url;
-                setOutStandingUrl(FILDATA)
-                console.log("GET DOCUMENT LABEL", FILDATA);
-            } catch (error) {
-                console.log(error.message);
-            }
-        }
+  const getOutstandingDues = async () => {
+    if ((Documents?.outstandingDues !== null || Documents?.outstandingDues !== undefined) && (outstandingDues !== null || outstandingDues !== "")) {
+      try {
+        const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${Documents?.outstandingDues}`, {});
+        const FILDATA = response.data?.fileStoreIds[0]?.url;
+        setOutStandingUrl(FILDATA);
+        console.log("GET DOCUMENT LABEL", FILDATA);
+      } catch (error) {
+        console.log(error.message);
+      }
     }
+  };
 
-    useEffect(() => {
-        getOutstandingDues();
-    }, [Documents?.outstandingDues]);
+  useEffect(() => {
+    getOutstandingDues();
+  }, [Documents?.outstandingDues]);
 
-    // PARTICULAR OF DOCUMENTS
+  // PARTICULAR OF DOCUMENTS
 
-
-    const getCompanyBalanceSheet = async () => {
-        if ((DevelopersAllData?.companyBalanceSheet !== null || DevelopersAllData?.companyBalanceSheet !== undefined) && (companyBalanceSheet !== null || companyBalanceSheet !== "")) {
-
-            try {
-                const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${DevelopersAllData?.companyBalanceSheet}`, {
-
-                });
-                const FILDATA = response.data?.fileStoreIds[0]?.url;
-                setCompanyBalanceSheetUrl(FILDATA)
-            } catch (error) {
-                console.log(error.message);
-            }
-        }
+  const getCompanyBalanceSheet = async () => {
+    if (
+      (DevelopersAllData?.companyBalanceSheet !== null || DevelopersAllData?.companyBalanceSheet !== undefined) &&
+      (companyBalanceSheet !== null || companyBalanceSheet !== "")
+    ) {
+      try {
+        const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${DevelopersAllData?.companyBalanceSheet}`, {});
+        const FILDATA = response.data?.fileStoreIds[0]?.url;
+        setCompanyBalanceSheetUrl(FILDATA);
+      } catch (error) {
+        console.log(error.message);
+      }
     }
+  };
 
-    useEffect(() => {
-        getCompanyBalanceSheet();
-    }, [DevelopersAllData?.companyBalanceSheet]);
+  useEffect(() => {
+    getCompanyBalanceSheet();
+  }, [DevelopersAllData?.companyBalanceSheet]);
 
-
-    const getPaidUpCapital = async () => {
-        if ((DevelopersAllData?.paidUpCapital !== null || DevelopersAllData?.paidUpCapital !== undefined) && (paidUpCapital !== null || paidUpCapital !== "")) {
-
-            try {
-                const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${DevelopersAllData?.paidUpCapital}`, {
-
-                });
-                const FILDATA = response.data?.fileStoreIds[0]?.url;
-                setPaidUpCapitalUrl(FILDATA)
-            } catch (error) {
-                console.log(error.message);
-            }
-        }
+  const getPaidUpCapital = async () => {
+    if (
+      (DevelopersAllData?.paidUpCapital !== null || DevelopersAllData?.paidUpCapital !== undefined) &&
+      (paidUpCapital !== null || paidUpCapital !== "")
+    ) {
+      try {
+        const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${DevelopersAllData?.paidUpCapital}`, {});
+        const FILDATA = response.data?.fileStoreIds[0]?.url;
+        setPaidUpCapitalUrl(FILDATA);
+      } catch (error) {
+        console.log(error.message);
+      }
     }
+  };
 
-    useEffect(() => {
-        getPaidUpCapital();
-    }, [DevelopersAllData?.paidUpCapital]);
+  useEffect(() => {
+    getPaidUpCapital();
+  }, [DevelopersAllData?.paidUpCapital]);
 
-
-    const getIndividualCertificateCA = async () => {
-        if ((DevelopersAllData?.individualCertificateCA !== null || DevelopersAllData?.individualCertificateCA !== undefined) && (individualCertificateCA !== null || individualCertificateCA !== "")) {
-
-            try {
-                const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${DevelopersAllData?.individualCertificateCA}`, {
-
-                });
-                const FILDATA = response.data?.fileStoreIds[0]?.url;
-                setIndividualCertificatCAUrl(FILDATA)
-            } catch (error) {
-                console.log(error.message);
-            }
-        }
+  const getIndividualCertificateCA = async () => {
+    if (
+      (DevelopersAllData?.individualCertificateCA !== null || DevelopersAllData?.individualCertificateCA !== undefined) &&
+      (individualCertificateCA !== null || individualCertificateCA !== "")
+    ) {
+      try {
+        const response = await axios.get(
+          `/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${DevelopersAllData?.individualCertificateCA}`,
+          {}
+        );
+        const FILDATA = response.data?.fileStoreIds[0]?.url;
+        setIndividualCertificatCAUrl(FILDATA);
+      } catch (error) {
+        console.log(error.message);
+      }
     }
+  };
 
-    useEffect(() => {
-        getIndividualCertificateCA();
-    }, [DevelopersAllData?.individualCertificateCA]);
+  useEffect(() => {
+    getIndividualCertificateCA();
+  }, [DevelopersAllData?.individualCertificateCA]);
 
-
-    // GET TECHNICAL EXPERTS DOCUMENTS
-    const getEngineerSign = async () => {
-        if ((DevelopersAllData?.engineerSign !== null || DevelopersAllData?.engineerSign !== undefined) && (engineerSign !== null || engineerSign !== "")) {
-
-            try {
-                const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${DevelopersAllData?.engineerSign}`, {
-
-                });
-                const FILDATA = response.data?.fileStoreIds[0]?.url;
-                setEngineerSignUrl(FILDATA)
-            } catch (error) {
-                console.log(error.message);
-            }
-        }
+  // GET TECHNICAL EXPERTS DOCUMENTS
+  const getEngineerSign = async () => {
+    if (
+      (DevelopersAllData?.engineerSign !== null || DevelopersAllData?.engineerSign !== undefined) &&
+      (engineerSign !== null || engineerSign !== "")
+    ) {
+      try {
+        const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${DevelopersAllData?.engineerSign}`, {});
+        const FILDATA = response.data?.fileStoreIds[0]?.url;
+        setEngineerSignUrl(FILDATA);
+      } catch (error) {
+        console.log(error.message);
+      }
     }
+  };
 
-    useEffect(() => {
-        getEngineerSign();
-    }, [DevelopersAllData?.engineerSign]);
+  useEffect(() => {
+    getEngineerSign();
+  }, [DevelopersAllData?.engineerSign]);
 
-
-    const getArchitectSign = async () => {
-        if ((DevelopersAllData?.architectSign !== null || DevelopersAllData?.architectSign !== undefined) && (architectSign !== null || architectSign !== "")) {
-
-            try {
-                const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${DevelopersAllData?.architectSign}`, {
-
-                });
-                const FILDATA = response.data?.fileStoreIds[0]?.url;
-                setArchitectSignUrl(FILDATA)
-            } catch (error) {
-                console.log(error.message);
-            }
-        }
+  const getArchitectSign = async () => {
+    if (
+      (DevelopersAllData?.architectSign !== null || DevelopersAllData?.architectSign !== undefined) &&
+      (architectSign !== null || architectSign !== "")
+    ) {
+      try {
+        const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${DevelopersAllData?.architectSign}`, {});
+        const FILDATA = response.data?.fileStoreIds[0]?.url;
+        setArchitectSignUrl(FILDATA);
+      } catch (error) {
+        console.log(error.message);
+      }
     }
+  };
 
-    useEffect(() => {
-        getArchitectSign();
-    }, [DevelopersAllData?.architectSign]);
+  useEffect(() => {
+    getArchitectSign();
+  }, [DevelopersAllData?.architectSign]);
 
-
-    const getTownPlannerSign = async () => {
-        if ((DevelopersAllData?.townPlannerSign !== null || DevelopersAllData?.townPlannerSign !== undefined) && (townPlannerSign !== null || townPlannerSign !== "")) {
-
-            try {
-                const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${DevelopersAllData?.townPlannerSign}`, {
-
-                });
-                const FILDATA = response.data?.fileStoreIds[0]?.url;
-                setTownPlannerSignUrl(FILDATA)
-            } catch (error) {
-                console.log(error.message);
-            }
-        }
+  const getTownPlannerSign = async () => {
+    if (
+      (DevelopersAllData?.townPlannerSign !== null || DevelopersAllData?.townPlannerSign !== undefined) &&
+      (townPlannerSign !== null || townPlannerSign !== "")
+    ) {
+      try {
+        const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${DevelopersAllData?.townPlannerSign}`, {});
+        const FILDATA = response.data?.fileStoreIds[0]?.url;
+        setTownPlannerSignUrl(FILDATA);
+      } catch (error) {
+        console.log(error.message);
+      }
     }
+  };
 
-    useEffect(() => {
-        getTownPlannerSign();
-    }, [DevelopersAllData?.townPlannerSign]);
+  useEffect(() => {
+    getTownPlannerSign();
+  }, [DevelopersAllData?.townPlannerSign]);
 
-
-    const getAgreementDoc = async () => {
-        if ((DevelopersAllData?.agreementDoc !== null || DevelopersAllData?.agreementDoc !== undefined) && (agreementDoc !== null || agreementDoc !== "")) {
-
-            try {
-                const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${DevelopersAllData?.agreementDoc}`, {
-
-                });
-                const FILDATA = response.data?.fileStoreIds[0]?.url;
-                setAgreementDocUrl(FILDATA)
-            } catch (error) {
-                console.log(error.message);
-            }
-        }
+  const getAgreementDoc = async () => {
+    if (
+      (DevelopersAllData?.agreementDoc !== null || DevelopersAllData?.agreementDoc !== undefined) &&
+      (agreementDoc !== null || agreementDoc !== "")
+    ) {
+      try {
+        const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${DevelopersAllData?.agreementDoc}`, {});
+        const FILDATA = response.data?.fileStoreIds[0]?.url;
+        setAgreementDocUrl(FILDATA);
+      } catch (error) {
+        console.log(error.message);
+      }
     }
+  };
 
-    useEffect(() => {
-        getAgreementDoc();
-    }, [DevelopersAllData?.agreementDoc]);
+  useEffect(() => {
+    getAgreementDoc();
+  }, [DevelopersAllData?.agreementDoc]);
 
-
-    const getBoardDoc = async () => {
-        if ((DevelopersAllData?.boardDoc !== null || DevelopersAllData?.boardDoc !== undefined) && (boardDoc !== null || boardDoc !== "")) {
-
-            try {
-                const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${DevelopersAllData?.boardDoc}`, {
-
-                });
-                const FILDATA = response.data?.fileStoreIds[0]?.url;
-                setBoardDocUrl(FILDATA)
-            } catch (error) {
-                console.log(error.message);
-            }
-        }
+  const getBoardDoc = async () => {
+    if ((DevelopersAllData?.boardDoc !== null || DevelopersAllData?.boardDoc !== undefined) && (boardDoc !== null || boardDoc !== "")) {
+      try {
+        const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${DevelopersAllData?.boardDoc}`, {});
+        const FILDATA = response.data?.fileStoreIds[0]?.url;
+        setBoardDocUrl(FILDATA);
+      } catch (error) {
+        console.log(error.message);
+      }
     }
+  };
 
-    useEffect(() => {
-        getBoardDoc();
-    }, [DevelopersAllData?.boardDoc]);
+  useEffect(() => {
+    getBoardDoc();
+  }, [DevelopersAllData?.boardDoc]);
 
-
-    const getRegisteredDoc = async () => {
-        if ((DevelopersAllData?.registeredDoc !== null || DevelopersAllData?.registeredDoc !== undefined) && (registeredDoc !== null || registeredDoc !== "")) {
-
-            try {
-                const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${DevelopersAllData?.registeredDoc}`, {
-
-                });
-                const FILDATA = response.data?.fileStoreIds[0]?.url;
-                setRegisteredDocUrl(FILDATA)
-            } catch (error) {
-                console.log(error.message);
-            }
-        }
+  const getRegisteredDoc = async () => {
+    if (
+      (DevelopersAllData?.registeredDoc !== null || DevelopersAllData?.registeredDoc !== undefined) &&
+      (registeredDoc !== null || registeredDoc !== "")
+    ) {
+      try {
+        const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${DevelopersAllData?.registeredDoc}`, {});
+        const FILDATA = response.data?.fileStoreIds[0]?.url;
+        setRegisteredDocUrl(FILDATA);
+      } catch (error) {
+        console.log(error.message);
+      }
     }
+  };
 
-    useEffect(() => {
-        getRegisteredDoc();
-    }, [DevelopersAllData?.registeredDoc]);
+  useEffect(() => {
+    getRegisteredDoc();
+  }, [DevelopersAllData?.registeredDoc]);
 
-
-
-    const getBoardDocY = async () => {
-        if ((DevelopersAllData?.boardDocY !== null || DevelopersAllData?.boardDocY !== undefined) && (boardDocY !== null || boardDocY !== "")) {
-
-            try {
-                const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${DevelopersAllData?.boardDocY}`, {
-
-                });
-                const FILDATA = response.data?.fileStoreIds[0]?.url;
-                setBoardDocYUrl(FILDATA)
-            } catch (error) {
-                console.log(error.message);
-            }
-        }
+  const getBoardDocY = async () => {
+    if ((DevelopersAllData?.boardDocY !== null || DevelopersAllData?.boardDocY !== undefined) && (boardDocY !== null || boardDocY !== "")) {
+      try {
+        const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${DevelopersAllData?.boardDocY}`, {});
+        const FILDATA = response.data?.fileStoreIds[0]?.url;
+        setBoardDocYUrl(FILDATA);
+      } catch (error) {
+        console.log(error.message);
+      }
     }
+  };
 
-    useEffect(() => {
-        getBoardDocY();
-    }, [DevelopersAllData?.boardDocY]);
+  useEffect(() => {
+    getBoardDocY();
+  }, [DevelopersAllData?.boardDocY]);
 
-
-    const getEarlierDocY = async () => {
-        if ((DevelopersAllData?.earlierDocY !== null || DevelopersAllData?.earlierDocY !== undefined) && (earlierDocY !== null || earlierDocY !== "")) {
-
-            try {
-                const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${DevelopersAllData?.earlierDocY}`, {
-
-                });
-                const FILDATA = response.data?.fileStoreIds[0]?.url;
-                setEarlierDocYUrl(FILDATA)
-            } catch (error) {
-                console.log(error.message);
-            }
-        }
+  const getEarlierDocY = async () => {
+    if ((DevelopersAllData?.earlierDocY !== null || DevelopersAllData?.earlierDocY !== undefined) && (earlierDocY !== null || earlierDocY !== "")) {
+      try {
+        const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${DevelopersAllData?.earlierDocY}`, {});
+        const FILDATA = response.data?.fileStoreIds[0]?.url;
+        setEarlierDocYUrl(FILDATA);
+      } catch (error) {
+        console.log(error.message);
+      }
     }
+  };
 
-    useEffect(() => {
-        getEarlierDocY();
-    }, [DevelopersAllData?.earlierDocY]);
+  useEffect(() => {
+    getEarlierDocY();
+  }, [DevelopersAllData?.earlierDocY]);
 
-
-    const setpurposeType = (data) => {
-        const getDevTypeValue = data?.value;
-        setShowPurposeType(getDevTypeValue);
-    }
+  const setpurposeType = (data) => {
+    const getDevTypeValue = data?.value;
+    setShowPurposeType(getDevTypeValue);
+  };
 
     const handleArrayValues = () => {
 
@@ -857,40 +832,34 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
         localStorage.setItem("DevCapacityDetails", JSON.stringify(capacityDevelopColonyHdruAct))
     }
 
-    const deleteTableRows = (i) => {
-        const rows = [...capacityDevelopColonyHdruAct];
-        rows.splice(i, 1);
-        setModalCapacityDevelopColonyHdruAct(rows);
+  const deleteTableRows = (i) => {
+    const rows = [...capacityDevelopColonyHdruAct];
+    rows.splice(i, 1);
+    setModalCapacityDevelopColonyHdruAct(rows);
+  };
+
+  const handleColonyDevGrp = () => {
+    if (coloniesDeveloped !== "" && area !== "" && purpose !== "") {
+      const colonyDevValues = {
+        coloniesDeveloped: coloniesDeveloped,
+        area: area,
+        purpose: purpose,
+        statusOfDevelopment: Documents?.statusOfDevelopment,
+        outstandingDues: Documents?.outstandingDues,
+      };
+      setCapacityDevelopColonyLawAct((prev) => [...prev, colonyDevValues]);
+      getDocStatusDev();
+      getOutstandingDues();
+      handleCloseColoniesDeveloped();
+      console.log("DevCapacityColony", capacityDevelopColonyLawAct);
     }
+  };
 
-    const handleColonyDevGrp = () => {
-        if (coloniesDeveloped !== "" && area !== "" && purpose !== "") {
-            const colonyDevValues = {
-
-                coloniesDeveloped: coloniesDeveloped,
-                area: area,
-                purpose: purpose,
-                statusOfDevelopment: Documents?.statusOfDevelopment,
-                outstandingDues: Documents?.outstandingDues
-
-
-            }
-            setCapacityDevelopColonyLawAct((prev) => [...prev, colonyDevValues]);
-            getDocStatusDev();
-            getOutstandingDues();
-            handleCloseColoniesDeveloped();
-            console.log("DevCapacityColony", capacityDevelopColonyLawAct);
-        }
-
-
-    }
-
-
-    const deleteLawActTableRows = (i) => {
-        const rows = [...capacityDevelopColonyLawAct];
-        rows.splice(i, 1);
-        setCapacityDevelopColonyLawAct(rows);
-    }
+  const deleteLawActTableRows = (i) => {
+    const rows = [...capacityDevelopColonyLawAct];
+    rows.splice(i, 1);
+    setCapacityDevelopColonyLawAct(rows);
+  };
 
     
 
@@ -920,24 +889,24 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                             "subOwnerShipCategory": "INDIVIDUAL",
                             "tradeType": tradeType,
 
-                            "additionalDetail": {
-                                "counsilForArchNo": null,
-                            },
-                            "address": {
-                                "city": "",
-                                "landmark": "",
-                                "pincode": ""
-                            },
-                            "institution": null,
-                            "applicationDocuments": null
-                        },
-                        "licenseType": "PERMANENT",
-                        "businessService": "BPAREG",
-                        "tenantId": stateId,
-                        "action": "NOWORKFLOW"
-                    }
-                ]
-            }
+              additionalDetail: {
+                counsilForArchNo: null,
+              },
+              address: {
+                city: "",
+                landmark: "",
+                pincode: "",
+              },
+              institution: null,
+              applicationDocuments: null,
+            },
+            licenseType: "PERMANENT",
+            businessService: "BPAREG",
+            tenantId: stateId,
+            action: "NOWORKFLOW",
+          },
+        ],
+      };
 
             Digit.OBPSService.BPAREGCreate(payload, tenantId)
                 .then((result, err) => {
@@ -953,84 +922,88 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                     setError(e?.response?.data?.Errors[0]?.message || null);
                 });
 
+      const developerRegisterData = {
+        id: userInfo?.info?.id,
+        pageName: "capacityDevelopAColony",
+        createdBy: userInfo?.info?.id,
+        updatedBy: userInfo?.info?.id,
+        devDetail: {
+          capacityDevelopAColony: {
+            individualCertificateCA: individualCertificateCA,
+            companyBalanceSheet: companyBalanceSheet,
+            paidUpCapital: paidUpCapital,
+            networthPartners: networthPartners,
+            networthFirm: networthFirm,
+            permissionGrantedHRDU: permissionGrantedHRDU,
+            technicalExpert: technicalExpert,
+            designatedDirectors: designatedDirectors,
+            alreadtObtainedLic: alreadtObtainedLic,
+            capacityDevelopColonyHdruAct: capacityDevelopColonyHdruAct,
+            // capacityDevelopColonyLawAct: capacityDevelopColonyLawAct,
+            technicalExpertEngaged: [
+              {
+                engineerName: engineerName,
+                engineerQualification: engineerQualification,
+                engineerSign: engineerSign,
+                engineerDegree: engineerDegree,
+                architectName: architectName,
+                architectQualification: architectQualification,
+                architectSign: architectSign,
+                architectDegree: architectDegree,
+                townPlannerName: townPlannerName,
+                townPlannerQualification: townPlannerQualification,
+                townPlannerSign: townPlannerSign,
+                townPlannerDegree: townPlannerDegree,
+                existingDeveloperAgreement: existingDeveloperAgreement,
+                existingDeveloperAgreementDoc: existingDeveloperAgreementDoc,
+                technicalCapacity: technicalCapacity,
+                technicalCapacityDoc: technicalCapacityDoc,
+                engineerNameN: engineerNameN,
+                engineerDocN: engineerDocN,
+                architectNameN: architectNameN,
+                architectDocN: architectDocN,
+                uplaodSpaBoard: uplaodSpaBoard,
+                uplaodSpaBoardDoc: uplaodSpaBoardDoc,
+              },
+            ],
+            designationDirector: [
+              {
+                agreementDoc: agreementDoc,
+                boardDoc: boardDoc,
+              },
+            ],
+            obtainedLicense: [
+              {
+                registeredDoc: registeredDoc,
+                boardDocY: boardDocY,
+                earlierDocY: earlierDocY,
+                boardDocN: boardDocN,
+                earlierDocN: earlierDocN,
+                technicalAssistanceAgreementDoc: technicalAssistanceAgreementDoc,
+                licNo: technicalCapacitySoughtFromAnyColonizer.licNo,
+                dateOfGrantingLic: technicalCapacitySoughtFromAnyColonizer.dateOfGrantingLic,
+                licValidity: technicalCapacitySoughtFromAnyColonizer.licValidity,
+                purpose: technicalCapacitySoughtFromAnyColonizer.purpose,
+              },
+            ],
+            technicalCapacityOutsideHaryana: technicalCapacityOutsideHaryana,
+            technicalCapacityOutsideHaryanaDetails: technicalCapacityOutsideHaryanaDetails,
+            documents: Documents,
+          },
+        },
+      };
 
-            const developerRegisterData = {
-                "id": userInfo?.info?.id,
-                "pageName": "capacityDevelopAColony",
-                "createdBy": userInfo?.info?.id,
-                "updatedBy": userInfo?.info?.id,
-                "devDetail": {
-
-                    "capacityDevelopAColony": {
-                        "individualCertificateCA": individualCertificateCA,
-                        "companyBalanceSheet": companyBalanceSheet,
-                        "paidUpCapital": paidUpCapital,
-                        "networthPartners": networthPartners,
-                        "networthFirm": networthFirm,
-                        "permissionGrantedHRDU": permissionGrantedHRDU,
-                        "technicalExpert": technicalExpert,
-                        "designatedDirectors": designatedDirectors,
-                        "alreadtObtainedLic": alreadtObtainedLic,
-                        capacityDevelopColonyHdruAct: capacityDevelopColonyHdruAct,
-                        // capacityDevelopColonyLawAct: capacityDevelopColonyLawAct,
-                        technicalExpertEngaged: [{
-                            engineerName: engineerName,
-                            engineerQualification: engineerQualification,
-                            engineerSign: engineerSign,
-                            engineerDegree: engineerDegree,
-                            architectName: architectName,
-                            architectQualification: architectQualification,
-                            architectSign: architectSign,
-                            architectDegree: architectDegree,
-                            townPlannerName: townPlannerName,
-                            townPlannerQualification: townPlannerQualification,
-                            townPlannerSign: townPlannerSign,
-                            townPlannerDegree: townPlannerDegree,
-                            existingDeveloperAgreement: existingDeveloperAgreement,
-                            existingDeveloperAgreementDoc: existingDeveloperAgreementDoc,
-                            technicalCapacity: technicalCapacity,
-                            technicalCapacityDoc: technicalCapacityDoc,
-                            engineerNameN: engineerNameN,
-                            engineerDocN: engineerDocN,
-                            architectNameN: architectNameN,
-                            architectDocN: architectDocN,
-                            uplaodSpaBoard: uplaodSpaBoard,
-                            uplaodSpaBoardDoc: uplaodSpaBoardDoc
-                        }],
-                        designationDirector: [{
-                            agreementDoc: agreementDoc,
-                            boardDoc: boardDoc
-                        }],
-                        obtainedLicense: [{
-                            registeredDoc: registeredDoc,
-                            boardDocY: boardDocY,
-                            earlierDocY: earlierDocY,
-                            boardDocN: boardDocN,
-                            earlierDocN: earlierDocN,
-                            technicalAssistanceAgreementDoc: technicalAssistanceAgreementDoc,
-                            licNo: technicalCapacitySoughtFromAnyColonizer.licNo,
-                            dateOfGrantingLic: technicalCapacitySoughtFromAnyColonizer.dateOfGrantingLic,
-                            licValidity: technicalCapacitySoughtFromAnyColonizer.licValidity,
-                            purpose: technicalCapacitySoughtFromAnyColonizer.purpose
-                        }],
-                        technicalCapacityOutsideHaryana: technicalCapacityOutsideHaryana,
-                        technicalCapacityOutsideHaryanaDetails: technicalCapacityOutsideHaryanaDetails,
-                        documents: Documents
-                    }
-                }
-            }
-
-            Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
-                .then((result, err) => {
-                    console.log("DATA", result?.id);
-                    // localStorage.setItem('devRegId',JSON.stringify(result?.id));
-                    setIsDisableForNext(false);
-                    let data = {
-                        result: result,
-                        formData: formData,
-                        Correspondenceaddress: Correspondenceaddress,
-                        addressLineOneCorrespondence: addressLineOneCorrespondence,
-                        addressLineTwoCorrespondence: addressLineTwoCorrespondence,
+      Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
+        .then((result, err) => {
+          console.log("DATA", result?.id);
+          // localStorage.setItem('devRegId',JSON.stringify(result?.id));
+          setIsDisableForNext(false);
+          let data = {
+            result: result,
+            formData: formData,
+            Correspondenceaddress: Correspondenceaddress,
+            addressLineOneCorrespondence: addressLineOneCorrespondence,
+            addressLineTwoCorrespondence: addressLineTwoCorrespondence,
 
                         isAddressSame: isAddressSame
                     }
@@ -1778,13 +1751,12 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
 
                                         </div>
 
-                                        <br></br>
-                                        <br></br>
-                                    </div>
-
-                                </div>
-                            )}
-                        </div>
+                    <br></br>
+                    <br></br>
+                  </div>
+                </div>
+              )}
+            </div>
 
                         {(permissionGrantedHRDU === "N") && (
                             <div className="ml-1">
@@ -2434,15 +2406,17 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     placeholder=""
                                                                     class="employee-card-input"
                                                                 /> */}
-                                                            </td>
-                                                            <td align="center" size="large">
-                                                                {Documents?.architectSign ?
-                                                                    <a onClick={() => getDocShareholding(Documents?.architectSign)} className="btn btn-sm col-md-6">
-                                                                        <VisibilityIcon color="info" className="icon" />
-                                                                    </a> : <p></p>
-                                                                }
-                                                            </td>
-                                                        </tr>
+                              </td>
+                              <td align="center" size="large">
+                                {Documents?.architectSign ? (
+                                  <a onClick={() => getDocShareholding(Documents?.architectSign)} className="btn btn-sm col-md-6">
+                                    <VisibilityIcon color="info" className="icon" />
+                                  </a>
+                                ) : (
+                                  <p></p>
+                                )}
+                              </td>
+                            </tr>
 
                                                         <tr>
                                                             <td>3</td>
