@@ -21,6 +21,8 @@ import { getDocShareholding } from "../docView/docView.help";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step3";
 import FileUpload from "@mui/icons-material/FileUpload";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import { useLocation } from "react-router-dom";
 import { Toast } from "@egovernments/digit-ui-react-components";
 import WorkingTable from "../../../../components/Table";
@@ -65,7 +67,7 @@ const columns = [
   {
     key: "previousLicensenumber",
     title: "Previous Licence Number",
-    dataIndex: "tehsil",
+    dataIndex: "previousLicensenumber",
   },
   {
     key: "areaOfParentLicence",
@@ -102,6 +104,11 @@ const columns = [
     key: "area",
     title: "Area ",
     dataIndex: "area",
+  },
+  {
+    key: "balanceOfParentLicence",
+    title: "Balance of Parent Licence ",
+    dataIndex: "balanceOfParentLicence",
   },
 
   {
@@ -151,7 +158,7 @@ const LandScheduleForm = (props) => {
   const { data: LandData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["LandType"]);
 
   const { data: PotentialType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["PotentialZone"]);
-  const [specificTableData, setSpecificTableData] = useState(null);
+
   useEffect(() => {
     const purpose = PurposeType?.["common-masters"]?.Purpose?.map(function (data) {
       return { value: data?.purposeCode, label: data?.name };
@@ -191,7 +198,7 @@ const LandScheduleForm = (props) => {
   });
 
   const [fileStoreId, setFileStoreId] = useState({});
-
+  const [specificTableData, setSpecificTableData] = useState(null);
   const Purpose = localStorage.getItem("purpose");
   const userInfo = Digit.UserService.getUser()?.info || {};
 
@@ -738,9 +745,11 @@ const LandScheduleForm = (props) => {
                       </div>
                       {watch("migrationLic") === "Y" && (
                         <div>
-                          <div className="applt" style={{ overflow: "auto" }}>
-                            <WorkingTable columns={columns} data={modalData} />
-                          </div>
+                          {modalData.length > 0 && (
+                            <div className="applt" style={{ overflow: "auto" }}>
+                              <WorkingTable columns={columns} data={modalData} />
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
@@ -1915,7 +1924,7 @@ const LandScheduleForm = (props) => {
           </Card>
         </Card>
       </form>
-      {/* <Modal size="xl" isOpen={modal} toggle={() => setmodal(!modal)}>
+      <Modal size="xl" isOpen={modal} toggle={() => setmodal(!modal)}>
         <div style={{ padding: "4px", textAlign: "right" }}>
           <span
             onClick={() => {
@@ -2048,7 +2057,7 @@ const LandScheduleForm = (props) => {
           </form>
         </ModalBody>
         <ModalFooter toggle={() => setmodal(!modal)}></ModalFooter>
-      </Modal> */}
+      </Modal>
       {showToast && (
         <Toast
           success={showToast?.key === "success" ? true : false}
