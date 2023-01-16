@@ -38,6 +38,8 @@ const ApplicationBillAmendment = () => {
   const [error, setUploadError] = useState("")
   const [ischeckedReduce, setischeckedReduce] = useState(false)
   const [ischeckedAddition, setischeckedAddition] = useState(false)
+  let isMobile = window.Digit.Utils.browser.isMobile();
+  let isEmployee = window.location.href.includes("/employee");
 
   const { isLoading: BillAmendmentMDMSLoading, data: BillAmendmentMDMS } = Digit.Hooks.ws.WSSearchMdmsTypes.useWSMDMSBillAmendment({
     tenantId: stateId,
@@ -329,6 +331,8 @@ const ApplicationBillAmendment = () => {
 
         {!isBillSearchLoading ? (
           <table cellPadding={"8px"} cellSpacing={"10px"}>
+            <div  style={isMobile && isEmployee ? {overflow:"scroll",maxWidth:"50%"} : {}}>
+            <tbody>
             <tr style={{ textAlign: "left" }}>
               <th>{t("WS_TAX_HEADS")}</th>
               <th style={{textAlign : "right"}}>{t("WS_CURRENT_AMOUNT")}</th>
@@ -497,6 +501,8 @@ const ApplicationBillAmendment = () => {
                 </>
               </td>
             </tr>}
+            </tbody>
+            </div>
           </table>
         ) : (
           <Loader />
@@ -516,7 +522,7 @@ const ApplicationBillAmendment = () => {
                 render={(props) => {
                   return (
                     <Dropdown
-                      style={{ width: "640px" }}
+                      style={isMobile && isEmployee ? {} : { width: "640px" }}
                       option={BillAmendmentMDMS}
                       selected={props?.value}
                       optionKey={"code"}
@@ -531,14 +537,14 @@ const ApplicationBillAmendment = () => {
             <LabelFieldPair>
               <CardLabel style={{ fontWeight: "500" }}>{`${t(getReasonDocNoHeader())} *`}</CardLabel>
               <div className="reasonDocumentNumber">
-                <TextInput style={{ width: "640px" }} name="reasonDocumentNumber" inputRef={register({ required: true })} />
+                <TextInput style={isMobile && isEmployee ? {} : { width: "640px" }} name="reasonDocumentNumber" inputRef={register({ required: true })} />
               </div>
             </LabelFieldPair>
             {errors?.reasonDocumentNumber ? <CardLabelError style={{ width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" }}>{t("WS_REQUIRED_FIELD")}</CardLabelError> : null}
             <LabelFieldPair>
               <CardLabel style={{ fontWeight: "500" }}>{`${t("WS_BILL_AMEND_EFFECTIVE_FROM")} *`}</CardLabel>
               <Controller
-                render={(props) => <DatePicker style={{ width: "640px" }} date={props.value} disabled={false} onChange={props.onChange} />}
+                render={(props) => <DatePicker style={isMobile && isEmployee ? {} : { width: "640px" }} date={props.value} disabled={false} onChange={props.onChange} />}
                 name="effectiveFrom"
                 rules={{ required: true }}
                 control={control}
@@ -549,7 +555,7 @@ const ApplicationBillAmendment = () => {
             <LabelFieldPair>
               <CardLabel style={{ fontWeight: "500" }}>{`${t("WS_BILL_AMEND_EFFECTIVE_TILL")} *`}</CardLabel>
               <Controller
-                render={(props) => <DatePicker style={{ width: "640px" }} date={props.value} disabled={false} onChange={props.onChange} />}
+                render={(props) => <DatePicker style={isMobile && isEmployee ? {} : { width: "640px" }} date={props.value} disabled={false} onChange={props.onChange} />}
                 name="effectiveTill"
                 rules={{ required: true, validate: { isValidToDate } }}
                 control={control}
@@ -579,7 +585,7 @@ const ApplicationBillAmendment = () => {
                     id={`ws-doc-${e.documentType}`}
                     onUpload={(d) => functionToHandleFileUpload(d, e?.documentType, props)}
                     onDelete={() => dispatch({ type: "remove", payload: { id: e?.documentType } })}
-                    style={{ width: "640px" }}
+                    style={isMobile && isEmployee ? {} : { width: "640px" }}
                     //message={functionToDisplayTheMessage}
                     message={e?.url ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
                     accept= "image/*, .pdf, .png, .jpeg, .jpg"

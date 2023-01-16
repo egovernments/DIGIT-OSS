@@ -263,7 +263,7 @@ const PlumberDetails = (_props) => {
                                                     labelStyle={{ marginTop: "unset" }}
                                                     onBlur={props.onBlur}
                                                 />
-                                                <div style={{marginRight:"-50px",marginLeft:"10px"}}>
+                                                <div style={isMobile && isEmployee ?{} : {marginRight:"-50px",marginLeft:"10px"}}>
                                            <WrapUnMaskComponent
                                             unmaskField={(e) => {
                                                 props.onChange(e);

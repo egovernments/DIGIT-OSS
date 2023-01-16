@@ -232,6 +232,7 @@ if(userType === 'citizen') {
                 isMandatory={false}
                 onSelect={(val) => filedChange({code: "type",value: val})}
                 labelKey="WS_DISCONNECTION_TYPE"
+                inputStyle={isMobile ? {marginLeft:"unset"} : {}}
             />
             <CardLabel className="card-label-smaller" style={{display: "inline"}}>
             {t("WS_DISCONNECTION_PROPOSED_DATE") + "*"}
@@ -335,6 +336,7 @@ if(userType === 'citizen') {
                 onSelect={(val) => filedChange({code: "type",value: val})}
                 labelKey="WS_DISCONNECTION_TYPE"
                 style={{display: "flex", gap: "0px 3rem"}}
+                inputStyle={isMobile ? {marginLeft:"unset"} : {}}
             />
           
           <LabelFieldPair>

@@ -16,6 +16,7 @@ const BILLSBreadCrumbs = ({ location }) => {
   const fromScreen = new URLSearchParams(search).get("from") || null;
   const IsEdit = new URLSearchParams(search).get("isEdit") || null;
   const applicationNumbercheck = new URLSearchParams(search).get("applicationNumber") || null;
+  let isMobile = window.Digit.Utils.browser.isMobile();
   let requestParam = window.location.href.split("?")[1];
 
   function findLastIndex(array, searchKey, searchValue) {
@@ -30,6 +31,7 @@ const BILLSBreadCrumbs = ({ location }) => {
       path: "/digit-ui/employee",
       content: t("ES_COMMON_HOME"),
       show: true,
+      style: isMobile ? {width:"20%"} : {},
     },
     {
       path: "/digit-ui/employee/ws/create-application",
@@ -163,7 +165,7 @@ const BILLSBreadCrumbs = ({ location }) => {
     },
     {
       path: `/digit-ui/employee/ws/new-disconnection/application-form`,
-      content: `${t("WS_NEW_DISCONNECTION_DOCS_REQUIRED")} / ${t("WS_NEW_DISCONNECTION_APPLICATION")}`,
+      content: isMobile ? `${t("WS_NEW_DISCONNECTION_DOCS_REQUIRED")} / ${t("WS_NEW_DISCONNECTION_APPLICATION")}` : `${t("WS_NEW_DISCONNECTION_DOCS_REQUIRED")} / ${t("WS_NEW_DISCONNECTION_APPLICATION")}`,
       show: location.pathname.includes("/new-disconnection/application-form") ? true : false,
       isBack: true
     },

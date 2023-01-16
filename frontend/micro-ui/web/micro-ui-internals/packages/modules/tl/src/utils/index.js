@@ -565,7 +565,7 @@ export const convertToEditTrade = (data, fy = []) => {
           applicationDocuments: data.tradeLicenseDetail.applicationDocuments,
           noOfEmployees: data?.TradeDetails?.NumberOfEmployees || null,
           operationalArea : data?.TradeDetails?.OperationalSqFtArea || null,
-          accessories: isDirectrenewal ? data.tradeLicenseDetail.accessories : gettradeupdateaccessories(data),
+          accessories: isDirectrenewal ? data.tradeLicenseDetail.accessories : gettradeupdateaccessories(data)?.filter((ob) => ob?.active !== false),
           owners: isDirectrenewal ? data.tradeLicenseDetail.owners : gettradeownerarray(data),
           structureType: isDirectrenewal ? data.tradeLicenseDetail.structureType : (data?.TradeDetails?.VehicleType ? data?.TradeDetails?.VehicleType.code : data?.TradeDetails?.BuildingType.code),
           subOwnerShipCategory: data?.ownershipCategory?.code.includes("INSTITUTIONAL") ? data?.owners?.owners?.[0]?.subOwnerShipCategory.code : data?.ownershipCategory?.code,

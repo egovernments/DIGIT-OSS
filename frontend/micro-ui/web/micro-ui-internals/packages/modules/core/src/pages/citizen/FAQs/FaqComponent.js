@@ -6,6 +6,7 @@ const FaqComponent = props => {
   const { question, answer, subAnswer, lastIndex } = props;
   const [isOpen, toggleOpen] = useState(false);
   const { t } = useTranslation();
+  const isMobile = window.Digit.Utils.browser.isMobile();
 
   return (
     <div className="faqs border-none" onClick={() => toggleOpen(!isOpen)}>
@@ -14,7 +15,7 @@ const FaqComponent = props => {
         <span>
         {t(question)}
         </span>
-        <span className={isOpen ? "faqicon rotate" : "faqicon"} style={{float: "right"}}>
+        <span className={isOpen ? "faqicon rotate" : "faqicon"} style={isMobile ? {float: "right",marginRight:isOpen ?(t(question).length > 27 ? "12%" : "8%") : ""} : {float: "right"}}>
             {isOpen ? <ArrowForward /> : <ArrowForward/>}
         </span>
       </div>

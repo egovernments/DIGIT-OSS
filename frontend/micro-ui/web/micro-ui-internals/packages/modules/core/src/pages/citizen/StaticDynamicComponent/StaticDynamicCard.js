@@ -22,6 +22,7 @@ const StaticDynamicCard = ({moduleCode}) => {
     const tenantId = Digit.ULBService.getCitizenCurrentTenant();
     const { isLoading: isMdmsLoading, data: mdmsData } = Digit.Hooks.useStaticData(Digit.ULBService.getStateId());
     const { isLoading: isSearchLoading, error, data: dynamicData, isSuccess } = Digit.Hooks.useDynamicData({ moduleCode, tenantId: tenantId , filters: {} , t});
+    const isMobile = window.Digit.Utils.browser.isMobile();
     const handleClickOnWhatsApp = (obj) => {
       window.open(obj);
     };
@@ -174,7 +175,7 @@ const StaticDynamicCard = ({moduleCode}) => {
       { error || dynamicData == null || dynamicData?.dynamicDataOne === null ? (
         <div/>
       ) : (
-      <div className="dynamicDataCard">
+      <div className="dynamicDataCard" style={isMobile ? {maxHeight:"fit-content"} : {}}>
         <div className="dynamicData">
         <span style={{paddingTop: "2px"}}>
         <IconComponent module={moduleCode} styles={{width: "18px", height: "24px"}}/></span>
@@ -186,7 +187,7 @@ const StaticDynamicCard = ({moduleCode}) => {
       { error || dynamicData == null || dynamicData?.dynamicDataTwo === null ? (
         <div/>
       ) : (
-      <div className="dynamicDataCard">
+      <div className="dynamicDataCard" style={isMobile ? {maxHeight:"fit-content"} : {}}>
       <div className="dynamicData">
       <span style={{paddingTop: "2px"}}>
         <IconComponent module={moduleCode} styles={{width: "18px", height: "24px"}}/></span>

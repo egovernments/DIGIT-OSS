@@ -13,7 +13,7 @@ const FAQComponent = props => {
         <span style={{fontWeight:700}}>
         {`${index}. `+ t(question)}
         </span>
-        <span className={isOpen ? "faqicon rotate" : "faqicon"} style={{float: "right"}}>
+        <span className={isOpen ? "faqicon rotate" : "faqicon"} style={{float: "right",marginRight:isOpen ?(t(question).length > 27 ? "12%" : "8%") : ""}}>
             {isOpen ? <ArrowForward /> : <ArrowForward/>}
         </span>
       </div>

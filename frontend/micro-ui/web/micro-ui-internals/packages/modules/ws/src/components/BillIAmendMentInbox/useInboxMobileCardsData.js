@@ -21,7 +21,7 @@ const useInboxMobileCardsData = ({ parentRoute, table }) => {
 
   const dataForMobileInboxCards = table?.map(({ applicationNo, address, status, owner, service, tenantId, amendmentReason, taskOwner }) => ({
     [t("WS_COMMON_TABLE_COL_SERVICE_LABEL")]: t(`ACTION_TEST_${service}`),
-    [t("WS_MYCONNECTIONS_APPLICATION_NO")]: getApplicationNumberCell(applicationNo, tenantId, service, amendmentReason),
+    [t("WS_MYCONNECTIONS_APPLICATION_NO")]: getApplicationNumberCell(applicationNo, amendmentReason, tenantId, service),
     [t("CORE_COMMON_NAME")]: owner,
     [t("WS_COMMON_TABLE_COL_ADDRESS")]: t(Digit.Utils.locale.getRevenueLocalityCode(address, tenantId)),
     [t("WS_COMMON_TABLE_COL_APPLICATION_STATUS")]: t(status),

@@ -92,7 +92,19 @@ const MobileSearchApplication = ({ Controller, register, control, t, reset, prev
     }
 
     return data?.map((data) => ({
-      [t("WS_MYCONNECTIONS_CONSUMER_NO")]: data?.connectionNo || "NA",
+      [t("WS_MYCONNECTIONS_CONSUMER_NO")]: /*data?.connectionNo || "NA",*/data?.connectionNo ? (
+        <div>
+          <span className="link">
+            <Link
+              to={`/digit-ui/employee/ws/connection-details?applicationNumber=${data?.connectionNo}&tenantId=${tenantId}&service=${
+                getWaterSewerageData(data)
+              }`}
+            >
+              {data?.connectionNo}
+            </Link>
+          </span>
+        </div>
+      ) : t("CS_NA"),
       //[t("WS_ACK_COMMON_APP_NO_LABEL")]: data?.applicationNo || "-",
       [t("WS_ACK_COMMON_APP_NO_LABEL")]: (
         <div>

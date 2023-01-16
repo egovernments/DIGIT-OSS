@@ -330,7 +330,7 @@ const ConnectionDetails = (_props) => {
                 }}
                 isMandatory={true}
                 render={(props) => (
-                  <div style={{ display: "flex", alignItems: "baseline", marginRight: checkifPrivacyValid() ? "-4%" : "-4%" }}>
+                  <div style={{ display: "flex", alignItems: "baseline", marginRight: isMobile && isEmployee ? "" :(checkifPrivacyValid() ? "-4%" : "-4%") }}>
                     <TextInput
                       value={getValues("name")}
                       autoFocus={focusIndex.index === connectionHolderDetail?.key && focusIndex.type === "name"}
@@ -471,7 +471,7 @@ const ConnectionDetails = (_props) => {
                 //type="number"
                 isMandatory={true}
                 render={(props) => (
-                  <div style={{ display: "flex", alignItems: "baseline", marginRight: getValues("mobileNumber")?.includes("*") && !(isMobile && isEmployee) ? "-20px" : "-4%" }}>
+                  <div style={{ display: "flex", alignItems: "baseline", marginRight: isEmployee && isMobile ? "" : (getValues("mobileNumber")?.includes("*") && !(isMobile && isEmployee) ? "-20px" : "-4%") }}>
                     <div className="employee-card-input employee-card-input--front" style={{ position: "relative", marginTop: "4px" }}>
                       +91
                     </div>
@@ -550,7 +550,7 @@ const ConnectionDetails = (_props) => {
                 }}
                 isMandatory={true}
                 render={(props) => (
-                  <div style={{ display: "flex", alignItems: "baseline", marginRight: getValues("guardian")?.includes("*") && !(isMobile && isEmployee) ? "-20px" : "-4%" }}>
+                  <div style={{ display: "flex", alignItems: "baseline", marginRight: isEmployee && isMobile ? "" :(getValues("guardian")?.includes("*") && !(isMobile && isEmployee) ? "-20px" : "-4%") }}>
                     <TextInput
                       value={getValues("guardian")}
                       autoFocus={focusIndex.index === connectionHolderDetail?.key && focusIndex.type === "guardian"}
@@ -693,7 +693,7 @@ const ConnectionDetails = (_props) => {
                 }}
                 isMandatory={true}
                 render={(props) => (
-                  <div style={{ display: "flex", alignItems: "baseline", marginRight: getValues("address")?.includes("*") && !(isMobile && isEmployee) ? "-20px" : "-4%" }}>
+                  <div style={{ display: "flex", alignItems: "baseline", marginRight: isEmployee && isMobile ? "" : (getValues("address")?.includes("*") && !(isMobile && isEmployee) ? "-20px" : "-4%") }}>
                     <TextInput
                       value={getValues("address")}
                       autoFocus={focusIndex.index === connectionHolderDetail?.key && focusIndex.type === "address"}
