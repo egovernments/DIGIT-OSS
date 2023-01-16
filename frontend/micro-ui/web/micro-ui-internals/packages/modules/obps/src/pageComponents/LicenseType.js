@@ -30,7 +30,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
       });
       const developerDataGet = getDevDetails?.data;
       setShowDevTypeFields(developerDataGet?.devDetail[0]?.applicantType?.developerType || devType);
-      setLicenseType(developerDataGet?.devDetail[0]?.applicantType?.LicneseType?.tradeType);
+      setLicenseType(developerDataGet?.devDetail[0]?.applicantType?.LicneseType);
     } catch (error) {
       console.log(error);
     }
@@ -60,7 +60,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
     setShowDevTypeFields(getDevTypeValue);
     localStorage.setItem('devTypeValueFlag', getDevTypeValue)
     setLicenseTypeCom(`${LicenseType?.tradeType}.${getDevTypeValue}`);
-    // resetForm();
+    // alert(licenceTypeCombined);
   }
 
   
