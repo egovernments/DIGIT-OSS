@@ -142,7 +142,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   const [emailId, setUserEmailInd] = useState(formData?.LicneseDetails?.emailId || formData?.formData?.LicneseDetails?.emailId || "")
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
-  const [developerTypeOptions, setDevTypeOptions] = useState({ data: [], isLoading: true });
+  const [developerTypeOptions, setDevTypeOptions] = useState({ data: [], isLoading: true }); 
 
   const isCitizenUrl = Digit.Utils.browser.isMobile() ? true : false;
 
