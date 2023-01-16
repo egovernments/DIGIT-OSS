@@ -12,10 +12,10 @@ import Popup from "reactjs-popup";
 //   Modal,
 //   ModalHeader,
 //   ModalBody,
-//   Row,
-//   Col,
+//   Row, 
+//   Col, 
 //   ModalFooter,
-// } from "reactstrap";
+// } from "reactstrap"; 
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import {Modal, ModalHeader, ModalFooter, ModalBody } from 'react-bootstrap';
@@ -54,6 +54,9 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
   const [userDelete, setUserDelete] = useState([]);
   const [loader, setLoading] = useState(false);
   const [aurthorizedUserInfoArray, setAurthorizedUserInfoArray] = useState([]);
+  const [ panIsValid, setPanIsValid ] = useState(false);
+  const [ toastError,setToastError ] = useState("");
+
   const getDeveloperData = async ()=>{
     try {
       const requestResp = {
@@ -76,12 +79,27 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
       const developerDataGet = getDevDetails?.data; 
       setData(developerDataGet);
       console.log("ADDAUTHUSER",getDevDetails?.data?.devDetail[0]?.aurthorizedUserInfoArray);
-      setAurthorizedUserInfoArray(getDevDetails?.data?.devDetail[0]?.aurthorizedUserInfoArray || []);
+      setAurthorizedUserInfoArray(getDevDetails?.data?.devDetail[0]?.aurthorizedUserInfoArray || [
+        {
+          userName: getDevDetails?.data?.devDetail[0]?.licenceDetails?.mobileNumber,
+          name: getDevDetails?.data?.devDetail[0]?.licenceDetails?.name,
+          gender: getDevDetails?.data?.devDetail[0]?.licenceDetails?.gender,
+          mobileNumber: getDevDetails?.data?.devDetail[0]?.licenceDetails?.mobileNumber,
+          emailId: getDevDetails?.data?.devDetail[0]?.licenceDetails?.email,
+          dob: getDevDetails?.data?.devDetail[0]?.licenceDetails?.dob,
+          pan: getDevDetails?.data?.devDetail[0]?.licenceDetails?.panNumber,
+          uploadBoardResolution: getDevDetails?.data?.devDetail[0]?.licenceDetails?.uploadBoardResolution,
+          uploadDigitalSignaturePdf: getDevDetails?.data?.devDetail[0]?.licenceDetails?.uploadDigitalSignaturePdf
+          ,
+          uuid: userInfo.info.uuid
+        }
+      ]);
     } catch (error) {
       console.log(error);
     }
   }
   useEffect(() => {
+    console.log("userInfo",userInfo)
     getDeveloperData()
   }, []);
 
@@ -201,6 +219,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
 
   
   const panVerification = async () => {
+    setLoading(true);
     try {
       const panVal =  {
         "txnId": "f7f1469c-29b0-4325-9dfc-c567200a70f7",
@@ -260,9 +279,13 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
         'Access-Control-Allow-Origin':"*",
       }}) 
       console.log("",panResp.data);
+      setPanIsValid(true);
+      setLoading(false);
     } catch(errdata){
-      console.log(error?.response?.data?.errorDescription);
-      setPanValError(error?.response?.data?.errorDescription)
+      setLoading(false);
+      setPanIsValid(false);
+      console.log("error",errdata?.response);
+      setPanValError(errdata?.response?.data?.errorDescription);
     }
   }
   
@@ -337,6 +360,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
     
     } catch (error) {
     //   setLoader(false);
+    setLoading(false);
       alert(error?.response?.data?.Errors?.[0]?.description);
       console.log(error,error?.body,error?.response?.data?.Errors?.[0]?.description);
     }
@@ -366,10 +390,10 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
     if(validateUser(aurthorizedPan,aurthorizedMobileNumber,aurthorizedEmail)){
       return alert("PLease Enter Unique PAN, Email and Mobile Number for every user") ;
     }
-
+    setLoading(true);
     // if(aurthorizedMobileNumber!=="" && aurthorizedUserName!=="" && aurthorizedMobileNumber!=="" && aurthorizedEmail!==""){
       const user = {
-          userName: aurthorizedMobileNumber,
+          userName: aurthorizedEmail,
           name: aurthorizedUserName,
           gender: gender.value,
           mobileNumber: aurthorizedMobileNumber,
@@ -428,10 +452,12 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
           setValue("authorizedUserFiles",[...getValues("modalFiles")]);
         }
         setDocumentsData({});
+        setLoading(false);
       }
       
       catch(error){
         console.log(error.message);
+        setLoading(false);
     }
     // getAdhaarPdf();
     // getDigitalSignPdf();
@@ -529,7 +555,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
   const changeStep = (step) => {
     switch (step) {
       case 1 :
-        navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/license-details");
+        navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/provide-license-type");
         break;
       case 2 :
         navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/license-add-info");
@@ -691,7 +717,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                   <form className="text1">
                     <Row>
                       <Col md={3} xxl lg="3">
-                        <label htmlFor="name" className="text">Name  <span className="text-danger font-weight-bold">*</span></label>
+                        <label htmlFor="name" className="text">Enter Full Name  <span className="text-danger font-weight-bold">*</span></label>
                         <input
                           type="text"
                           value={aurthorizedUserName}
@@ -842,7 +868,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                     Close
                   </Button>
                   <Button 
-                    disabled = { !aurthorizedUserName || !aurthorizedDob || !aurthorizedEmail || !aurthorizedMobileNumber || !aurthorizedPan || !aurthorizedEmail.match(Digit.Utils.getPattern("Email")) || !aurthorizedUserName.match(Digit.Utils.getPattern('Name')) || !aurthorizedPan.match(Digit.Utils.getPattern("PAN")) || !aurthorizedMobileNumber.match(Digit.Utils.getPattern("MobileNo")) || !Documents?.uploadBoardResolution || !Documents?.uploadDigitalSignaturePdf }
+                    disabled = { !aurthorizedUserName || !aurthorizedDob || !aurthorizedEmail || !panIsValid || !aurthorizedMobileNumber || !aurthorizedPan || !aurthorizedEmail.match(Digit.Utils.getPattern("Email")) || !aurthorizedUserName.match(Digit.Utils.getPattern('Name')) || !aurthorizedPan.match(Digit.Utils.getPattern("PAN")) || !aurthorizedMobileNumber.match(Digit.Utils.getPattern("MobileNo")) || !Documents?.uploadBoardResolution || !Documents?.uploadDigitalSignaturePdf }
                   variant="primary" onClick={handleSubmitFormdata}>
                     Submit
                   </Button>
@@ -879,6 +905,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                 Submit
                 </button>
             </div> */}
+            {toastError && <Toast error={ "error" ? true : false} label={toastError} isDleteBtn={true} onClose={() => { toastError(null); }} />}
             {showToast && <Toast success={showToast?.key === "success" ? true : false} label="Document Uploaded Successfully" isDleteBtn={true} onClose={() => { setShowToast(null); setError(null); }} />}
             {showToastError && <Toast error={showToastError?.key === "error" ? true : false} label="Duplicate file Selected" isDleteBtn={true} onClose={() => { setShowToastError(null); setError(null); }} />}
       </FormStep>

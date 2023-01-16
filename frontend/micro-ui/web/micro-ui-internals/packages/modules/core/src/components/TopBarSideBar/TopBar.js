@@ -77,7 +77,7 @@ const TopBar = ({
       ? false
       : [
         // "/digit-ui/citizen/select-language", 
-      "/digit-ui/citizen/select-location"].includes(pathname);
+      "/digit-ui/citizen"].includes(pathname);
 
   if (CITIZEN) {
     return (

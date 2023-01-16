@@ -37,8 +37,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   const userInfo = Digit.UserService.getUser();
   const [designation, setDesignation] = useState();
   const [aadharNumber, setAadharNumber] = useState();
-  const [panNumber, setPanNumber] = useState();
-  const [dob, setDOB] = useState();
+  // const [panNumber, setPanNumber] = useState();
   const [developerDataAddinfo, setDeveloperDataAddinfo] = useState([]);
   const [existingColonizer, setExistingColonizer] = useState();
   const [existingDirectors, setExistingDirectors] = useState();
@@ -57,6 +56,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   })
   const [llpNumber, setLLPNumber] = useState("");
   const [csrNumber, setCSRNumber] = useState("");
+  const devType = localStorage.getItem("devTypeValueFlag");
 
   let isOpenLinkFlow = window.location.href.includes("openlink");
   const [isUndertaken, setIsUndertaken] = useState(formData?.isUndertaken || formData?.formData?.isUndertaken || false);
@@ -87,7 +87,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
 
       // console.log("STAKEHOLDER",getDevDetails?.data?.devDetail[0]?.addInfo?.registeredContactNo); 
-      setShowDevTypeFields(developerDataGet?.devDetail[0]?.addInfo?.showDevTypeFields);
+      setShowDevTypeFields(developerDataGet?.devDetail[0]?.applicantType?.developerType || devType);
       // setName(developerDataGet?.devDetail[0]?.addInfo?.name);
       setCompanyName(developerDataGet?.devDetail[0]?.addInfo?.companyName);
       setIncorporation(developerDataGet?.devDetail[0]?.addInfo?.incorporationDate);
@@ -241,6 +241,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   const [companyName, setCompanyName] = useState(formData?.LicneseDetails?.companyName || formData?.LicneseDetails?.companyName || "");
   const [incorporationDate, setIncorporation] = useState(formData?.LicneseDetails?.incorporationDate || formData?.LicneseDetails?.incorporationDate || "");
   const [registeredAddress, setRegistered] = useState(formData?.LicneseDetails?.registeredAddress || formData?.LicneseDetails?.registeredAddress || "");
+  const [PanNumber, setPanNumber] = useState(formData?.LicneseDetails?.PanNumber || formData?.formData?.LicneseDetails?.PanNumber || ""
+  );
+  const [dob, setDOB] = useState(formData?.LicneseDetails?.dob || formData?.formData?.LicneseDetails?.dob || "");
   // const [email, setEmail] = useState(formData?.LicneseDetails?.email || formData?.LicneseDetails?.email || "");
   const [email, setUserEmail] = useState(formData?.LicneseDetails?.email || formData?.formData?.LicneseDetails?.email || "");
   const [registeredContactNo, setRegisteredMobileNumber] = useState(formData?.LicneseDetails?.registeredContactNo || formData?.LicneseDetails?.registeredContactNo || "");
@@ -323,14 +326,100 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   function selectCsrNumber(e) {
     setCSRNumber(e.target.value.toUpperCase())
   }
-  function selectDinNumber(value) {
-    setModalDIN(value)
+  function selectDinNumber(e) {
+    if(!e.target.value || e.target.value.match("^[0-9]*$")){
+    setModalDIN(e.target.value)
+    }
+  }
+  function setDateofBirth(e) {
+    setDOB(e.target.value);
+  }
+  function selectPanNumber(e) {
+    // setPanNumber(e.target.value.toUpperCase());
+    // if(e.target.value === 10){
+    //   panVerification();
+    // }
+    if (!e.target.value || /^\w+$/.test(e.target.value)){
+      setPanNumber(e.target.value.toUpperCase());
+      if(e.target.value === 10){
+        alert("HEY")
+        panVerification();
+      }
+    }
+  }
+
+  const panVerification = async () => {
+    try {
+      const panVal = {
+        "txnId": "f7f1469c-29b0-4325-9dfc-c567200a70f7",
+        "format": "xml",
+        "certificateParameters": {
+          "panno": PanNumber,
+          "PANFullName": name,
+          "FullName": name,
+          "DOB": dob,
+          "GENDER": gender
+        },
+        "consentArtifact": {
+          "consent": {
+            "consentId": "ea9c43aa-7f5a-4bf3-a0be-e1caa24737ba",
+            "timestamp": "2022-10-08T06:21:51.321Z",
+            "dataConsumer": {
+              "id": "string"
+            },
+            "dataProvider": {
+              "id": "string"
+            },
+            "purpose": {
+              "description": "string"
+            },
+            "user": {
+              "idType": "string",
+              "idNumber": "string",
+              "mobile": mobileNumber,
+              "email": email
+            },
+            "data": {
+              "id": "string"
+            },
+            "permission": {
+              "access": "string",
+              "dateRange": {
+                "from": "2022-10-08T06:21:51.321Z",
+                "to": "2022-10-08T06:21:51.321Z"
+              },
+              "frequency": {
+                "unit": "string",
+                "value": 0,
+                "repeats": 0
+              }
+            }
+          },
+          "signature": {
+            "signature": "string"
+          }
+        }
+      }
+      const panResp = await axios.post(`/certificate/v3/pan/pancr`, panVal, {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-APISETU-APIKEY': 'PDSHazinoV47E18bhNuBVCSEm90pYjEF',
+          'X-APISETU-CLIENTID': 'in.gov.tcpharyana',
+          'Access-Control-Allow-Origin': "*",
+        }
+      })
+      // console.log("PANDET", panResp?.data);
+    } catch (error) {
+      console.log(error?.response?.data?.errorDescription);
+      setPanValError(error?.response?.data?.errorDescription)
+    }
   }
   const handleshow0 = (e) => {
     const getshow = e.target.value;
     setShowhide0(getshow);
     localStorage.setItem('devTypeFlag', getshow)
   };
+  // console.log("LOCALVAL",localStorage.getItem('devTypeValueFlag'));
 
   const resetForm = () => {
     setCinNo("")
@@ -367,7 +456,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     const getDevTypeValue = data?.value;
     console.log("data123", data)
     setShowDevTypeFields(getDevTypeValue);
-    localStorage.setItem('devTypeValueFlag', getDevTypeValue)
+    // localStorage.setItem('devTypeValueFlag', getDevTypeValue)
     resetForm();
   }
   // function setDevType(value){
@@ -564,7 +653,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     }
   };
 
-
+  const [PanValError, setPanValError] = useState("");
 
   const deleteTableRows = (i) => {
     const rows = [...modalValuesArray];
@@ -680,7 +769,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   const changeStep = (step) => {
     switch (step) {
       case 1 :
-        navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/license-details");
+        navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/provide-license-type");
         break;
     }
   }
@@ -707,7 +796,10 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
             // isDisabled={
             //   !showDevTypeFields || (showDevTypeFields === "Individual" && (!name || !mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) || !emailId?.match(Digit.Utils.getPattern('Email')))) || (showDevTypeFields === "Others" && othersArray.length) || (showDevTypeFields === "Proprietorship Firm") || (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others" && (!cin_Number?.match(Digit.Utils.getPattern('CIN')) || !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) || !gst_Number?.match(Digit.Utils.getPattern('GSTNo')) || !((existingColonizer === "N") || (existingColonizer === "Y" && existingColonizerDetails.aggreementBtw && existingColonizerDetails.boardResolution && existingColonizerDetails.dob && existingColonizerDetails.pan && existingColonizerDetails.pan.match(Digit.Utils.getPattern('PAN')) && existingColonizerDetails.licNo && existingColonizerDetails.licDate && existingColonizerDetails.licValidity && existingColonizerDetails.licPurpose))))
             // }
-            isDisabled={(showDevTypeFields === "Individual" || showDevTypeFields === "Proprietorship Firm") ? !(name && mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) && emailId?.match(Digit.Utils.getPattern('Email'))) : (showDevTypeFields === "Others") ? (!othersArray.length) : (showDevTypeFields === "Proprietorship Firm") ? false : (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others") ? (((showDevTypeFields === "Limited Liability Partnership" || showDevTypeFields === "Trust") ? ( showDevTypeFields === "Trust" ? !csrNumber?.match(Digit.Utils.getPattern('CSR')) : !llpNumber?.match(Digit.Utils.getPattern('LLP'))) : ( showDevTypeFields === "Hindu Undivided Family" ) ? false : !cin_Number?.match(Digit.Utils.getPattern('CIN')) ) || !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) || (showDevTypeFields === "Trust" ? false : !gst_Number?.match(Digit.Utils.getPattern('GSTNo'))) || !registeredAddress.match(Digit.Utils.getPattern('Address')) || (!existingColonizerDetails.licNo.match(Digit.Utils.getPattern('OldLicenceNo'))) || !(modalValuesArray?.length) || !((existingColonizer === "N") || (existingColonizer === "Y" && existingColonizerDetails.aggreementBtw && existingColonizerDetails.boardResolution && existingColonizerDetails.dob && existingColonizerDetails.pan && existingColonizerDetails.pan.match(Digit.Utils.getPattern('PAN')) && existingColonizerDetails.licNo && existingColonizerDetails.licDate && existingColonizerDetails.licValidity && existingColonizerDetails.licPurpose))) : true}
+            isDisabled={(showDevTypeFields === "Individual" || showDevTypeFields === "Proprietorship Firm" || showDevTypeFields === "Hindu Undivided Family") ? !(name && mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) && emailId?.match(Digit.Utils.getPattern('Email'))) : (showDevTypeFields === "Others") ? (!othersArray.length) : (showDevTypeFields === "Proprietorship Firm") ? false : (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others") ? 
+            (showDevTypeFields === "Limited Liability Partnership" || !(modalValuesArray?.length)) ? false : !gst_Number?.match(Digit.Utils.getPattern('GSTNo')) ||
+            (
+               ((showDevTypeFields === "Trust") ? false : !csrNumber?.match(Digit.Utils.getPattern('CSR')) || ( showDevTypeFields === "Company" ) ? false : !cin_Number?.match(Digit.Utils.getPattern('CIN')) ) || !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) || (showDevTypeFields === "Trust" ? false : !gst_Number?.match(Digit.Utils.getPattern('GSTNo'))) || !registeredAddress.match(Digit.Utils.getPattern('Address')) || (!existingColonizerDetails.licNo.match(Digit.Utils.getPattern('OldLicenceNo'))) || !(modalValuesArray?.length) || !((existingColonizer === "N") || (existingColonizer === "Y" && existingColonizerDetails.name && existingColonizerDetails.licNo && existingColonizerDetails.licDate))) : true}
             t={t}
           >
             <div className="happy">
@@ -731,23 +823,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             style={{ width: "100%" }}
                             t={t}
                             required
+                            disable
                           />
-                          {/* <Select
-                            onChange={(e) => setDevType({showDevTypeFields: e.target.value })}
-                            value={showDevTypeFields}
-                            className="w-100"
-                            variant="standard"
-                          >
-                            {
-                              arrayDevList.map((item, index) => (
-                                <MenuItem value={item.code} >{item?.code}</MenuItem>
-                              ))
-                            }
-                          </Select> */}
-                          {/* <MuiDropdown 
-                          listOfData={optionsArrList}
-                          labels="text"
-                        /> */}
                         </div>
                       </div>
                     </div>
@@ -756,18 +833,16 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
               </div>
 
               {/* FOR INDIVIDUAL */}
-              {(showDevTypeFields === "Individual" || showDevTypeFields == "Proprietorship Firm") && (
+              {(showDevTypeFields === "Individual" || showDevTypeFields == "Proprietorship Firm" || showDevTypeFields == "Hindu Undivided Family") && (
                 <div className="card mb-3">
-                  {/* <div className="card-header">
-              <h5 className="card-title"> Developer</h5>
-            </div> */}
+                  
                   <h5 className="card-title fw-bold">Developer Details</h5>
                   <div className="card-body">
                     <div className="row">
                       <div className="col col-4">
                         <div className="form-group">
 
-                          <label htmlFor="name">Name</label>
+                          <label htmlFor="name">Name <span className="text-danger font-weight-bold">*</span></label>
 
                           <input
                             type="text"
@@ -783,14 +858,14 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                       </div>
                       <div className="col col-4">
                         <div className="form-group ">
-                          <label htmlFor="email"> Email </label>
+                          <label htmlFor="email"> Email <span className="text-danger font-weight-bold">*</span></label>
                           <input
                             type="text"
                             value={emailId}
                             placeholder={emailId}
                             name="emailId"
-                            onChange={(e) => setUserEmailIndVal(e.target.value)}
-                            disabled
+                            onChange={setUserEmailIndVal}
+                            
                             className="employee-card-input"
                           />
                           {emailId && emailId.length > 0 && !emailId.match(Digit.Utils.getPattern('Email')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{("Invalid Email Address")}</CardLabelError>}
@@ -798,7 +873,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                       </div>
                       <div className="col col-4">
                         <div className="form-group">
-                          <label htmlFor="name">Mobile No.</label>
+                          <label htmlFor="name">Mobile No. <span className="text-danger font-weight-bold">*</span></label>
                           <input
                             value={mobileNumberUser}
                             placeholder={mobileNumberUser}
@@ -808,6 +883,64 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             className="employee-card-input"
                           />
                           {mobileNumberUser && mobileNumberUser.length > 0 && !mobileNumberUser.match(Digit.Utils.getPattern('MobileNo')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID")}</CardLabelError>}
+                        </div>
+                      </div>
+                      <div className="col col-4">
+                        <div className="form-group"> 
+                          <label htmlFor="dob">Date of Birth <span className="text-danger font-weight-bold">*</span></label>
+                          <input 
+                            type="date"
+                            value={dob}
+                            date={dob}
+                            onChange={setDateofBirth}
+                            className="form-control"
+                            name={dob}
+                            max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear() - 18))}
+                          />
+                        </div>
+                      </div>
+                      <div className="col col-4">
+                        <label>{`${t("BPA_APPLICANT_PAN_NO")}`}<span class="text-danger font-weight-bold mx-2">*</span></label>
+                        <input
+                          type="text"
+                          name="PanNumber"
+                          required={true}
+                          value={PanNumber}
+                          className="form-control"
+                          onChange={selectPanNumber}
+                          max={10}
+                          maxlength="10"
+                        />
+                        {PanNumber && PanNumber.length > 0 && !PanNumber.match(Digit.Utils.getPattern('PAN')) && <labelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_PAN_NO")}</labelError>}
+                        <h3 className="error-message" style={{ color: "red" }}>{PanValError}</h3>
+                      </div>
+                      <div className="col col-4">
+                        <div className="form-group">
+                          <label htmlFor="name">Registered Address <span className="text-danger font-weight-bold">*</span></label>
+                          
+                          <input
+                            type="text"
+                            name="registeredAddress"
+                            value={registeredAddress}
+                            placeholder={registeredAddress}
+                            onChange={(e) => setRegistered(e.target.value)}
+                            className="form-control"
+                          />
+                          {registeredAddress && registeredAddress.length > 0 && !registeredAddress.match(Digit.Utils.getPattern('Address')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Invalid Address")}</CardLabelError>}
+                        </div>
+                      </div>
+                      <div className="col col-4">
+                        <div className="form-group">
+                          <label htmlFor="name">GST No. {showDevTypeFields !== "Trust" && <span className="text-danger font-weight-bold">*</span>}</label>
+                          <input
+                            type="text"
+                            value={gst_Number}
+                            placeholder={gst_Number}
+                            onChange={(e) => setGST(e.target.value.toUpperCase())}
+                            name="gst_Number"
+                            className="form-control"
+                          />
+                          {gst_Number && gst_Number.length > 0 && !gst_Number.match(Digit.Utils.getPattern('GSTNo')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_GST_NO")}</CardLabelError>}
                         </div>
                       </div>
                     </div>
@@ -1050,7 +1183,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
 
               {/* FOR COMPANY */}
-              {(showDevTypeFields && showDevTypeFields !== "Individual" && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Others" && showDevTypeFields !== "Society" && showDevTypeFields !== "Firm") && (
+              {(showDevTypeFields && showDevTypeFields !== "Individual" && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Hindu Undivided Family" && showDevTypeFields !== "Others" && showDevTypeFields !== "Society" && showDevTypeFields !== "Firm") && (
                 <div className="card mb-3">
                   {/* <div className="card-header">
               <h5 className="card-title"> Developer</h5>
@@ -1168,24 +1301,6 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                               title: "Please Enter Company Name"
                             })}
                             disabled = {showDevTypeFields==="Company"}
-                          // placeholder=""
-                          // {...register("name", {
-                          //   required: "Name is required",
-                          //   pattern: {
-                          //     value: /^[a-zA-Z]+$/,
-                          //     message: "Name must be a valid string",
-                          //   },
-                          //   minLength: {
-                          //     value: 3,
-                          //     message:
-                          //       "Name should be greater than 3 characters",
-                          //   },
-                          //   maxLength: {
-                          //     value: 20,
-                          //     message:
-                          //       "Name shouldn't be greater than 20 characters",
-                          //   },
-                          // })}
                           />
                         </div>
                       </div>
@@ -1338,7 +1453,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                   </div>
                 </div>
               )}
-              {(showDevTypeFields && showDevTypeFields !== "Individual" && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Others" && showDevTypeFields !== "Society" && showDevTypeFields !== "Firm") && (
+              {(showDevTypeFields && showDevTypeFields !== "Individual" && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Hindu Undivided Family" && showDevTypeFields !== "Others" && showDevTypeFields !== "Society" && showDevTypeFields !== "Firm" && showDevTypeFields !== "Limited Liability Partnership") && (
                 <div className="card mb-3">
                   <h5 className="card-title fw-bold">Shareholding Patterns <span className="text-danger font-weight-bold">*</span></h5>
                   {/* {JSON.stringify(modalValuesArray)} */}
@@ -1559,7 +1674,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                   </div>
                 </div>
               )}
-              {(showDevTypeFields && showDevTypeFields !== "Individual" && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Others" && showDevTypeFields !== "Society" && showDevTypeFields !== "Firm") && (
+              {(showDevTypeFields && showDevTypeFields !== "Individual" && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Hindu Undivided Family" && showDevTypeFields !== "Others" && showDevTypeFields !== "Society" && showDevTypeFields !== "Firm" && showDevTypeFields !== "Limited Liability Partnership") && (
                 <div className="card mb-3">
                   <h5 className="card-title fw-bold">Directors Information</h5>
                   <div className="card-body">
@@ -1644,37 +1759,30 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                   <Row>
                                     <Col md={3} xxl lg="4">
                                       <label htmlFor="name" className="text">DIN Number <span className="text-danger font-weight-bold">*</span></label>
-                                      <MobileNumber
+                                      {/* <MobileNumber
                                         value={modalDIN}
                                         name="modalDIN"
                                         maxlength={"8"}
                                         hideSpan="true"
-                                        // onChange={(e) => setModalDIN(e.target.value)}
                                         onChange={selectDinNumber}
-                                        // disable={mobileNumber && !isOpenLinkFlow ? true : false}
                                         {...{ required: true, pattern: "[1-9][0-9]{7}", type: "tel"}}
+                                      /> */}
+                                      <input
+                                        type="text"
+                                        value={modalDIN}
+                                        name="modalDIN"
+                                        maxlength={"8"}
+                                        max={8}
+                                        onChange={selectDinNumber}
+                                        className="form-control"
                                       />
-                                      {/* <MobileNumber
-                                    
-                                    isMandatory={false}
-                                    onChange={(e) => setModalDIN(e.target.value.toUpperCase())}
-                                    placeholder=""
-                                    max= {8}
-                                    class="employee-card-input"
-                                    {...(validation = {
-                                      isRequired: true,
-                                      maxlength: "8",
-                                      type: "tel",
-                                      title: "Please Enter DIN No."
-                                    })}
-                                  /> */}
+                                      
                                       {modalDIN && modalDIN.length > 0 && !modalDIN.match(Digit.Utils.getPattern('DIN')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_DIN_NO")}</CardLabelError>}
                                     </Col>
                                     <Col md={3} xxl lg="4">
                                       <label htmlFor="name" className="text">Name <span className="text-danger font-weight-bold">*</span></label>
                                       <input
                                         type="text"
-      
                                         onChange={(e) => setModalDirectorName(e.target.value)}
                                         placeholder=""
                                         class="form-control"
@@ -1743,6 +1851,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                 </tr>
                               </thead>
                               <tbody>
+                             
                                 {
                                   (DirectorData?.length > 0) ?
                                     DirectorData.map((elementInArray, input) => {
@@ -1840,7 +1949,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                     <label for="No">No</label>
                     {existingColonizer === "Y" && (
                       <div>
-                        <div className="row ">
+                        {/* <div className="row ">
                           <div className="form-group row">
                             <div className="col-sm-12">
                               <Col xs="12" md="12" sm="12">
@@ -1871,13 +1980,6 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                             style={{ display: "none" }}
                                             onChange={(e) => getDocumentData(e?.target?.files[0], "aggreementBtw", "existingColonizer")}
                                           />
-                                        {/* <input
-                                          type="file"
-                                          accept="application/pdf"
-                                          name="agreementDoc"
-                                          onChange={(e) => getDocumentData(e?.target?.files[0], "aggreementBtw", "existingColonizer")}
-                                          class="employee-card-input"
-                                        /> */}
                                       </td>
                                       <td style={{textAlign:'center'}}>
                                         {existingColonizerDetails.aggreementBtw ?
@@ -1919,7 +2021,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                               </Col>
                             </div>
                           </div>
-                        </div>
+                        </div> */}
 
                         <div className="row mx-2">
                           {/* <div className="col col-4">
@@ -1977,7 +2079,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                 value={existingColonizerDetails.name}
                                 name="name"
                                 // onChange={SelectName}
-                                onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, name: e.target.value.toUpperCase() })}
+                                onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, name: e.target.value})}
                                 className="employee-card-input"
                                 maxLength={10}
                               />
@@ -2001,22 +2103,20 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             </div>
                           </div>
 
-                          <div className="col col-4">
+                          {/* <div className="col col-4">
                             <div className="form-group">
                               <label htmlFor="licValidity">Validity <span className="text-danger font-weight-bold">*</span></label>
                               <input
                                 type="date"
                                 value={existingColonizerDetails.licValidity}
                                 name="licValidity"
-                                // onChange={SelectName}
                                 onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, licValidity: e.target.value })}
                                 className="employee-card-input"
                                 disabled={!existingColonizerDetails.licDate}
-                                // min={convertEpochToDate(new Date().setFullYear(new Date().getFullYear() - existingColonizerDetails.licDate))}
                                 min={existingColonizerDetails.licDate}
                               />
                             </div>
-                          </div>
+                          </div> */}
 
                           {/* <div className="col col-4">
                             <div className="form-group">

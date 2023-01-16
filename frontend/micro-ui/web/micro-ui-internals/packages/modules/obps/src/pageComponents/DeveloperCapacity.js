@@ -132,7 +132,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                 licValidity: developerDataGet?.devDetail[0]?.capacityDevelopAColony?.obtainedLicense[0]?.licValidity || "",
                 purpose: developerDataGet?.devDetail[0]?.capacityDevelopAColony?.obtainedLicense[0]?.purpose || ""
             })
-            setDocumentsData(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.documents)
+            setDocumentsData(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.documents);
+            setTradeType(developerDataGet?.devDetail[0]?.applicantType?.licenceType);
+            console.log("TRADETYPE",developerDataGet?.devDetail[0]?.applicantType?.licenceType);
         } catch (error) {
             console.log(error);
         }
@@ -141,6 +143,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
         getDeveloperData()
     }, []);
 
+    const [tradeType, setTradeType] = useState("")
     const [Documents, setDocumentsData] = useState();
     const [genderUser, setGenderMF] = useState(formData?.LicneseDetails?.genderUser || formData?.formData?.LicneseDetails?.genderUser || "");
     const [name, setName] = useState((!isOpenLinkFlow ? userInfo?.info?.name : "") || formData?.LicneseDetails?.name || formData?.formData?.LicneseDetails?.name || "");
@@ -889,6 +892,8 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
         setCapacityDevelopColonyLawAct(rows);
     }
 
+    
+
     const goNext = async (e) => {
         if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
 
@@ -913,7 +918,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                 }
                             ],
                             "subOwnerShipCategory": "INDIVIDUAL",
-                            "tradeType": "BUILDER.CLASSA",
+                            "tradeType": tradeType,
 
                             "additionalDetail": {
                                 "counsilForArchNo": null,
@@ -944,7 +949,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                 })
                 .catch((e) => {
                     setIsDisableForNext(false);
-                    setShowToast({ key: "error" });
+                    // setShowToast({ key: "error" });
                     setError(e?.response?.data?.Errors[0]?.message || null);
                 });
 
@@ -1035,7 +1040,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                 })
                 .catch((e) => {
                     setIsDisableForNext(false);
-                    setShowToast({ key: "error" });
+                    // setShowToast({ key: "error" });
                     setError(e?.response?.data?.Errors[0]?.message || null);
                 });
         }
@@ -1053,7 +1058,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
     const changeStep = (step) => {
       switch (step) {
         case 1 :
-          navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/license-details");
+          navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/provide-license-type");
           break;
         case 2 :
           navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/license-add-info");
@@ -1080,7 +1085,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
 
                     isDisabled={
                         ((data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm") ? (!Documents?.companyBalanceSheet || !Documents?.individualCertificateCA) : (data?.devDetail[0]?.addInfo?.showDevTypeFields === "Company" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Society" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Trust" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Institution") ? (!Documents?.companyBalanceSheet || !Documents?.paidUpCapital) : (data?.devDetail[0]?.addInfo?.showDevTypeFields === "Limited Liability Partnership" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Firm" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm") ? (!Documents?.netWorthOfPartners || !Documents?.netWorthOfFirm) : false) ||
-                        ((permissionGrantedHRDU === "Y" && capacityDevelopColonyHdruAct.length) ? false : permissionGrantedHRDU === "N" ? false : true) || ((technicalCapacityOutsideHaryana === "Y" && technicalCapacityOutsideHaryanaDetails.authority && technicalCapacityOutsideHaryanaDetails.project && technicalCapacityOutsideHaryanaDetails.statusOfDevelopment) ? false : technicalCapacityOutsideHaryana === "N" ? false : true) || ((alreadtObtainedLic === "Y" && Documents?.agreementDocY && Documents?.boardDocX && Documents?.registeredDoc && Documents?.boardDocY && technicalCapacitySoughtFromAnyColonizer.licNo && technicalCapacitySoughtFromAnyColonizer.licNo.match(Digit.Utils.getPattern('LicNumber')) && technicalCapacitySoughtFromAnyColonizer.dateOfGrantingLic && technicalCapacitySoughtFromAnyColonizer.licValidity && technicalCapacitySoughtFromAnyColonizer.purpose) ? false : alreadtObtainedLic === "N" ? false :  (data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm") ? false : true) || ((designatedDirectors === "Y" && Documents?.agreementDoc && Documents?.boardDoc) ? false : designatedDirectors === "N" ? false : permissionGrantedHRDU === "Y" ? false : true) 
+                        ((permissionGrantedHRDU === "Y" && capacityDevelopColonyHdruAct.length) ? false : permissionGrantedHRDU === "N" ? false : true) || ((technicalCapacityOutsideHaryana === "Y" && technicalCapacityOutsideHaryanaDetails.authority && technicalCapacityOutsideHaryanaDetails.project && technicalCapacityOutsideHaryanaDetails.statusOfDevelopment && technicalCapacityOutsideHaryanaDetails.location && technicalCapacityOutsideHaryanaDetails.projectArea) ? false : technicalCapacityOutsideHaryana === "N" ? false : true) 
                     }
                 >
                     {/* <CheckBox
@@ -1102,7 +1107,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
             disable={isAddressSame}
           /> */}
 
-                    {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm") && (
+                    {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Hindu Undivided Family") && (
                         <div className="card-body">
                             <div className="form-group row mb-12">
                                 {/* <label className="col-sm-3 col-form-label">Individual</label> */}
@@ -1298,7 +1303,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                             </tr>
                                             <tr>
                                                 <td> 4 </td>
-                                                <td>Upload Fully Convertible Debenture <span className="text-danger font-weight-bold">*</span></td>
+                                                <td>Fully Convertible Debenture </td>
                                                 <td align="center" size="large">
                                                     <div className="row">
 
@@ -1460,7 +1465,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                             1. I/ We hereby submit the following information/ enclose the
                             relevant documents:-
                         </p>
-                        {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm") ? (
+                        {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Hindu Undivided Family") ? (
                             <p className="ml-1">(i) Whether the Developer has
                                 earlier been granted permission to set up a colony under HDRU
                                 Act, 1975: <span className="text-danger font-weight-bold">*</span>
@@ -1782,8 +1787,8 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                         </div>
 
                         {(permissionGrantedHRDU === "N") && (
-                            <div className="ml-3">
-                                {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm") ? (
+                            <div className="ml-1">
+                                {/* {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm") ? (
                                     <p>
                                         (a) Whether you hold designation of
                                         director/partner in any other company/firm who has already
@@ -1799,13 +1804,6 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                         </p>
                                     )
                                 }
-                                {/* {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Company" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Society" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Trust" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Institution" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Limited Liability Partnership" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Firm" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm") && (
-                            <p>
-                                (ii) If director/partner of the proposed
-                                developer company/firm also holds designation of
-                                director/partner in any other company/firm who has already
-                                obtained license(s) under act of 1975: <span className="text-danger font-weight-bold">*</span>
-                            </p>)} */}
 
                                 <div className="form-group">
                                     <input
@@ -1857,16 +1855,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                             id="agreementDocId"
                                                                             type="file"
                                                                             name="agreementDoc"
-                                                                            // accept="addplication/pdf"
                                                                             style={{ display: "none" }}
                                                                             onChange={(e) => getDocumentData(e?.target?.files[0], "agreementDoc","designatedDirectorsFile")}
                                                                         />
-                                                                        {/* <input
-                                                                        type="file"
-                                                                        name="agreementDoc"
-                                                                        onChange={(e) => getDocumentData(e?.target?.files[0], "agreementDoc")}
-                                                                        class="employee-card-input"
-                                                                    /> */}
                                                                     </td>
                                                                     <td>
                                                                         {Documents?.agreementDoc ?
@@ -1888,16 +1879,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                             id="boardDocId"
                                                                             type="file"
                                                                             name="boardDoc"
-                                                                            // accept="addplication/pdf"
                                                                             style={{ display: "none" }}
                                                                             onChange={(e) => getDocumentData(e?.target?.files[0], "boardDoc","designatedDirectorsFile")}
                                                                         />
-                                                                        {/* <input
-                                                                        type="file"
-                                                                        name="boardDoc"
-                                                                        onChange={(e) => getDocumentData(e?.target?.files[0], "boardDoc")}
-                                                                        class="employee-card-input"
-                                                                    /> */}
                                                                     </td>
                                                                     <td>
                                                                         {Documents?.boardDoc ?
@@ -1914,149 +1898,159 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                             </div>
                                         </div>
                                     )}
+                                </div> */}
+                                {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm") ? (
+                                    <p>
+                                        (ii) Have you developed projects outside Haryana:- <span className="text-danger font-weight-bold">*</span>
+                                    </p>)
+                                    :
+                                    (
+                                        <p>
+                                            (ii) Have your company/firm developed projects outside Haryana:- <span className="text-danger font-weight-bold">*</span>
+                                        </p>
+                                    )
+                                }
+                                
+
+                                <div className="form-group">
+                                    <input
+                                        type="radio"
+                                        value="Y"
+                                        checked={technicalCapacityOutsideHaryana === "Y" ? true : false}
+                                        id="technicalCapacityOutsideHaryana"
+                                        className="mx-2 mt-1"
+                                        onChange={(e) => setTechnicalCapacityOutsideHaryana(e.target.value)}
+                                        name="technicalCapacityOutsideHaryana"
+                                    />
+                                    <label for="Yes">Yes</label>
+
+                                    <input
+                                        type="radio"
+                                        value="N"
+                                        checked={technicalCapacityOutsideHaryana === "N" ? true : false}
+                                        id="technicalCapacityOutsideHaryanaN"
+                                        className="mx-2 mt-1"
+                                        onChange={(e) => setTechnicalCapacityOutsideHaryana(e.target.value)}
+                                        name="technicalCapacityOutsideHaryana"
+                                    />
+                                    <label for="No">No</label>
+                                    {technicalCapacityOutsideHaryana === "Y" && (
+                                        <Row>
+                                            <Col md={3} xxl lg="3" className="mb-2">
+                                                <label htmlFor="project" className=""> Name of Project <span className="text-danger font-weight-bold">*</span></label>
+                                                <input
+                                                    type="text"
+                                                    name="project"
+                                                    value={technicalCapacityOutsideHaryanaDetails.project}
+                                                    onChange={(e) => setTechnicalCapacityOutsideHaryanaDetails({ ...technicalCapacityOutsideHaryanaDetails, project: e.target.value })}
+                                                    placeholder=""
+                                                    class="form-control"
+                                                />
+                                                {technicalCapacityOutsideHaryanaDetails.project && technicalCapacityOutsideHaryanaDetails.project.length > 0 &&!technicalCapacityOutsideHaryanaDetails.project.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid details")}</CardLabelError>}
+                                            </Col>
+
+                                            <Col md={3} xxl lg="3" className="mb-2">
+                                                <label htmlFor="authority" className=""> Name of Authority <span className="text-danger font-weight-bold">*</span></label>
+                                                <input
+                                                    type="text"
+                                                    name="authority"
+                                                    value={technicalCapacityOutsideHaryanaDetails.authority}
+                                                    onChange={(e) => setTechnicalCapacityOutsideHaryanaDetails({ ...technicalCapacityOutsideHaryanaDetails, authority: e.target.value })}
+                                                    placeholder=""
+                                                    class="form-control"
+                                                />
+                                                {technicalCapacityOutsideHaryanaDetails.authority && technicalCapacityOutsideHaryanaDetails.authority.length > 0 && !technicalCapacityOutsideHaryanaDetails.authority.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid details")}</CardLabelError>}
+                                            </Col>
+
+                                            <Col md={3} xxl lg="3" className="mb-2">
+                                                <label htmlFor="statusOfDevelopment" className="">Status of Development <span className="text-danger font-weight-bold">*</span></label>
+                                                <input
+                                                    type="text"
+                                                    name="statusOfDevelopment"
+                                                    value={technicalCapacityOutsideHaryanaDetails.statusOfDevelopment}
+                                                    onChange={(e) => setTechnicalCapacityOutsideHaryanaDetails({ ...technicalCapacityOutsideHaryanaDetails, statusOfDevelopment: e.target.value })}
+                                                    placeholder=""
+                                                    class="form-control"
+                                                />
+                                                {technicalCapacityOutsideHaryanaDetails.statusOfDevelopment && technicalCapacityOutsideHaryanaDetails.statusOfDevelopment.length > 0 && !technicalCapacityOutsideHaryanaDetails.statusOfDevelopment.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid details")}</CardLabelError>}
+                                            </Col>
+                                            <Col md={3} xxl lg="3" className="mb-2">
+                                                <label htmlFor="permissionLetterDoc" className="">Permission letter <span className="text-danger font-weight-bold">*</span></label>
+                                                <div className="d-flex">
+                                                    <input
+                                                        id="permissionLetterYId"
+                                                        type="file"
+                                                        className="form-control"
+                                                        name="permissionLetterDoc"
+                                                        // accept="addplication/pdf"
+                                                        onChange={(e) => getDocumentData(e?.target?.files[0], "permissionLetterDoc","outsideHrDocY")}
+                                                    />
+                                                    <span>
+                                                        {Documents?.permissionLetterDoc ?
+                                                            <a onClick={() => getDocShareholding(Documents?.permissionLetterDoc)} className="btn btn-sm col-md-6">
+                                                                <VisibilityIcon color="info" className="icon" />
+                                                            </a> : <p></p>
+                                                        }
+                                                    </span>
+                                                </div>
+                                                
+                                                
+                                            </Col>
+                                            <Col md={3} xxl lg="3" className="mb-2">
+                                                <label htmlFor="projectArea" className="">Area of the project in acres <span className="text-danger font-weight-bold">*</span></label>
+                                                <input
+                                                    type="number"
+                                                    name="projectArea"
+                                                    value={technicalCapacityOutsideHaryanaDetails.projectArea}
+                                                    onChange={(e) => setTechnicalCapacityOutsideHaryanaDetails({ ...technicalCapacityOutsideHaryanaDetails, projectArea: e.target.value })}
+                                                    placeholder=""
+                                                    class="form-control"
+                                                />
+                                            </Col>
+                                            <Col md={3} xxl lg="3" className="mb-2">
+                                                <label htmlFor="location" className="">Location <span className="text-danger font-weight-bold">*</span></label>
+                                                <input
+                                                    type="text"
+                                                    name="location"
+                                                    value={technicalCapacityOutsideHaryanaDetails.location}
+                                                    onChange={(e) => setTechnicalCapacityOutsideHaryanaDetails({ ...technicalCapacityOutsideHaryanaDetails, location: e.target.value })}
+                                                    placeholder=""
+                                                    class="form-control"
+                                                />
+                                            </Col>
+                                            <Col md={3} xxl lg="3" className="mb-2">
+                                                <label htmlFor="hrDetailAnyDoc" className="">Any other document/ Photo</label>
+                                                <div className="d-flex">
+                                                    <input
+                                                        id="hrDetailAnyDocId"
+                                                        type="file"
+                                                        className="form-control"
+                                                        name="hrDetailAnyDoc"
+                                                        // accept="addplication/pdf"
+                                                        onChange={(e) => getDocumentData(e?.target?.files[0], "hrDetailAnyDoc","outsideHrDocY")}
+                                                    />
+                                                    <span>
+                                                        {Documents?.hrDetailAnyDoc ?
+                                                            <a onClick={() => getDocShareholding(Documents?.hrDetailAnyDoc)} className="btn btn-sm col-md-6">
+                                                                <VisibilityIcon color="info" className="icon" />
+                                                            </a> : <p></p>
+                                                        }
+                                                    </span>
+                                                </div>
+                                                
+                                                
+                                            </Col>
+                                        </Row>
+                                    )}
                                 </div>
                             </div>
                         )}
 
                         <div className="hl"></div>
-                        {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm") ? (
-                            <p>
-                                (ii) Have you developed projects outside Haryana:- <span className="text-danger font-weight-bold">*</span>
-                            </p>)
-                            :
-                            (
-                                <p>
-                                    (ii) Have your company/firm developed projects outside Haryana:- <span className="text-danger font-weight-bold">*</span>
-                                </p>
-                            )
-                        }
-                        {/* {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Company" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Society" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Trust" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Institution" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Limited Liability Partnership" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Firm" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm") && (
-                        <p>
-                            (iii) In case of technical capacity of company/firm developed projects outside Haryana:- <span className="text-danger font-weight-bold">*</span>
-                        </p>)} */}
-
-                        <div className="form-group">
-                            <input
-                                type="radio"
-                                value="Y"
-                                checked={technicalCapacityOutsideHaryana === "Y" ? true : false}
-                                id="technicalCapacityOutsideHaryana"
-                                className="mx-2 mt-1"
-                                onChange={(e) => setTechnicalCapacityOutsideHaryana(e.target.value)}
-                                name="technicalCapacityOutsideHaryana"
-                            />
-                            <label for="Yes">Yes</label>
-
-                            <input
-                                type="radio"
-                                value="N"
-                                checked={technicalCapacityOutsideHaryana === "N" ? true : false}
-                                id="technicalCapacityOutsideHaryanaN"
-                                className="mx-2 mt-1"
-                                onChange={(e) => setTechnicalCapacityOutsideHaryana(e.target.value)}
-                                name="technicalCapacityOutsideHaryana"
-                            />
-                            <label for="No">No</label>
-                            {technicalCapacityOutsideHaryana === "Y" && (
-                                <Row>
-                                    <Col md={3} xxl lg="3" className="mb-2">
-                                        <label htmlFor="project" className=""> Name of Project <span className="text-danger font-weight-bold">*</span></label>
-                                        <input
-                                            type="text"
-                                            name="project"
-                                            value={technicalCapacityOutsideHaryanaDetails.project}
-                                            onChange={(e) => setTechnicalCapacityOutsideHaryanaDetails({ ...technicalCapacityOutsideHaryanaDetails, project: e.target.value })}
-                                            placeholder=""
-                                            class="form-control"
-                                        />
-                                        {technicalCapacityOutsideHaryanaDetails.project && technicalCapacityOutsideHaryanaDetails.project.length > 0 &&!technicalCapacityOutsideHaryanaDetails.project.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid details")}</CardLabelError>}
-                                    </Col>
-
-                                    <Col md={3} xxl lg="3" className="mb-2">
-                                        <label htmlFor="authority" className=""> Name of Authority <span className="text-danger font-weight-bold">*</span></label>
-                                        <input
-                                            type="text"
-                                            name="authority"
-                                            value={technicalCapacityOutsideHaryanaDetails.authority}
-                                            onChange={(e) => setTechnicalCapacityOutsideHaryanaDetails({ ...technicalCapacityOutsideHaryanaDetails, authority: e.target.value })}
-                                            placeholder=""
-                                            class="form-control"
-                                        />
-                                        {technicalCapacityOutsideHaryanaDetails.authority && technicalCapacityOutsideHaryanaDetails.authority.length > 0 && !technicalCapacityOutsideHaryanaDetails.authority.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid details")}</CardLabelError>}
-                                    </Col>
-
-                                    <Col md={3} xxl lg="3" className="mb-2">
-                                        <label htmlFor="statusOfDevelopment" className="">Status of Development <span className="text-danger font-weight-bold">*</span></label>
-                                        <input
-                                            type="text"
-                                            name="statusOfDevelopment"
-                                            value={technicalCapacityOutsideHaryanaDetails.statusOfDevelopment}
-                                            onChange={(e) => setTechnicalCapacityOutsideHaryanaDetails({ ...technicalCapacityOutsideHaryanaDetails, statusOfDevelopment: e.target.value })}
-                                            placeholder=""
-                                            class="form-control"
-                                        />
-                                        {technicalCapacityOutsideHaryanaDetails.statusOfDevelopment && technicalCapacityOutsideHaryanaDetails.statusOfDevelopment.length > 0 && !technicalCapacityOutsideHaryanaDetails.statusOfDevelopment.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid details")}</CardLabelError>}
-                                    </Col>
-                                    <Col md={3} xxl lg="3" className="mb-2">
-                                        <label htmlFor="permissionLetterDoc" className="">Permission letter <span className="text-danger font-weight-bold">*</span></label>
-                                       <input
-                                            id="permissionLetterYId"
-                                            type="file"
-                                            className="form-control"
-                                            name="permissionLetterDoc"
-                                            // accept="addplication/pdf"
-                                            onChange={(e) => getDocumentData(e?.target?.files[0], "permissionLetterDoc","outsideHrDocY")}
-                                        />
-                                        {Documents?.permissionLetterDoc ?
-                                            <a onClick={() => getDocShareholding(Documents?.permissionLetterDoc)}>
-                                                <VisibilityIcon color="info" className="icon" />
-                                            </a> : <p></p>
-                                        }
-                                    </Col>
-                                    <Col md={3} xxl lg="3" className="mb-2">
-                                        <label htmlFor="projectArea" className="">Area of the project in acres <span className="text-danger font-weight-bold">*</span></label>
-                                        <input
-                                            type="number"
-                                            name="projectArea"
-                                            value={technicalCapacityOutsideHaryanaDetails.projectArea}
-                                            onChange={(e) => setTechnicalCapacityOutsideHaryanaDetails({ ...technicalCapacityOutsideHaryanaDetails, projectArea: e.target.value })}
-                                            placeholder=""
-                                            class="form-control"
-                                        />
-                                    </Col>
-                                    <Col md={3} xxl lg="3" className="mb-2">
-                                        <label htmlFor="location" className="">Location <span className="text-danger font-weight-bold">*</span></label>
-                                        <input
-                                            type="number"
-                                            name="location"
-                                            value={technicalCapacityOutsideHaryanaDetails.location}
-                                            onChange={(e) => setTechnicalCapacityOutsideHaryanaDetails({ ...technicalCapacityOutsideHaryanaDetails, location: e.target.value })}
-                                            placeholder=""
-                                            class="form-control"
-                                        />
-                                    </Col>
-                                    <Col md={3} xxl lg="3" className="mb-2">
-                                        <label htmlFor="hrDetailAnyDoc" className="">Any other document <span className="text-danger font-weight-bold">*</span></label>
-                                       <input
-                                            id="hrDetailAnyDocId"
-                                            type="file"
-                                            className="form-control"
-                                            name="hrDetailAnyDoc"
-                                            // accept="addplication/pdf"
-                                            onChange={(e) => getDocumentData(e?.target?.files[0], "hrDetailAnyDoc","outsideHrDocY")}
-                                        />
-                                        {Documents?.hrDetailAnyDoc ?
-                                            <a onClick={() => getDocShareholding(Documents?.hrDetailAnyDoc)}>
-                                                <VisibilityIcon color="info" className="icon" />
-                                            </a> : <p></p>
-                                        }
-                                    </Col>
-                                </Row>
-                            )}
-                        </div>
+                        
 
                         <div className="hl"></div>
-                        {!(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual NOT USES" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm NOT USES") && (
+                        {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual NOT USES" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm NOT USES") && (
                             <div>
 
 

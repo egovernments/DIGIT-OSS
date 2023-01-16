@@ -21,6 +21,7 @@ const LocationSelection = () => {
   );
 
   function selectCity(city) {
+    console.log("CITY",city);
     setSelectedCity(city);
     setShowError(false);
   }

@@ -2,51 +2,51 @@ export const newConfig = [
   {
     head: "ES_NEW_APPLICATION_PROPERTY_ASSESSMENT",
     body: [
-      {
-        route: "stakeholder-docs-required",
-        component: "StakeholderDocsRequired",
-        key: "data",
-        nextStep: "provide-license-type"
-      },
+      // {
+      //   route: "stakeholder-docs-required",
+      //   component: "StakeholderDocsRequired",
+      //   key: "data",
+      //   nextStep: "provide-license-type"
+      // },
       {
         type: "component",
         route: "provide-license-type",
         isMandatory: true,
         component: "LicenseType",
         texts: {
-          headerCaption: "BPA_LICENSE_TYPE",
-          header: "",
-          cardText: "BPA_LICENSE_TYPE_TEXT",
-          submitBarLabel: "CS_COMMON_NEXT",
-        },
-        nextStep: "license-details",
-        key: "LicneseType",
-        withoutLabel: true,
-        hideInEmployee: true,
-      },
-      {
-        type: "component",
-        route: "license-details",
-        isMandatory: true,
-        component: "LicenseDetails",
-        texts: {
-          headerCaption: "BPA_LICENSE_DET_CAPTION",
+          headerCaption: "Applicant Type",
           header: "",
           cardText: "",
           submitBarLabel: "CS_COMMON_NEXT",
         },
         nextStep: "license-add-info",
-        key: "LicneseDetails",
+        key: "LicneseType",
         withoutLabel: true,
         hideInEmployee: true,
       },
+      // {
+      //   type: "component",
+      //   route: "license-details",
+      //   isMandatory: true,
+      //   component: "LicenseDetails",
+      //   texts: {
+      //     headerCaption: "Authorized User",
+      //     header: "",
+      //     cardText: "",
+      //     submitBarLabel: "CS_COMMON_NEXT",
+      //   },
+      //   nextStep: "license-add-info",
+      //   key: "LicneseDetails",
+      //   withoutLabel: true,
+      //   hideInEmployee: true,
+      // },
       {
         type: "component",
         route: "license-add-info",
         isMandatory: true,
         component: "LicenseAddInfo",
         texts: {
-        headerCaption: "Add Developer Details",
+        headerCaption: "Applicant Information",
         header: "",
         cardText: "",
         submitBarLabel: "CS_COMMON_NEXT"
@@ -62,7 +62,7 @@ export const newConfig = [
         isMandatory: true,
         component: "AddAuthorizedUser",
         texts: {
-        headerCaption: "Add Authorized User",
+        headerCaption: "Authorized User",
         header: "",
         cardText: "",
         submitBarLabel: "CS_COMMON_NEXT"
