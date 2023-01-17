@@ -51,7 +51,7 @@ const PTAcknowledgement = ({ data, onSuccess }) => {
         ? isPropertyMutation
           ? data
           : convertToProperty(data)
-        : convertToUpdateProperty(data);
+        : convertToUpdateProperty(data,t);
       formdata.Property.tenantId = formdata?.Property?.tenantId || tenantId;
       mutation.mutate(formdata, {
         onSuccess,

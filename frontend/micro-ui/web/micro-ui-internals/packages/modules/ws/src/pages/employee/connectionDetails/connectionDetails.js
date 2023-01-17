@@ -170,7 +170,7 @@ const GetConnectionDetails = () => {
       });
     }
     else{
-        if (billData[0]?.status === "ACTIVE"  || due === "0") {
+        if (billData[0]?.status === "ACTIVE" || applicationDetails?.fetchBillsData?.length <=0 || due === "0") {
           Digit.SessionStorage.set("WS_DISCONNECTION", applicationDetails);
           history.push(`${pathname}`);
         } else {

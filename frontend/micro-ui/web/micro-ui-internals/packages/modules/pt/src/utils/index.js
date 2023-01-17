@@ -706,7 +706,7 @@ export const setUpdatedDocumentDetails = (data) => {
   data.documents = documents;
   return data;
 };
-export const convertToUpdateProperty = (data = {}) => {
+export const convertToUpdateProperty = (data = {}, t) => {
   let isResdential = data.isResdential;
   let propertyType = data.PropertyType;
   let selfOccupied = data.selfOccupied;
@@ -726,6 +726,7 @@ export const convertToUpdateProperty = (data = {}) => {
   data = setUpdateOwnerDetails(data);
   data = setUpdatedDocumentDetails(data);
   data = setPropertyDetails(data);
+  data.address.city = data.address.city ? data.address.city : t(`TENANT_TENANTS_${stringReplaceAll(data?.tenantId.toUpperCase(),".","_")}`);
 
   const formdata = {
     Property: {
