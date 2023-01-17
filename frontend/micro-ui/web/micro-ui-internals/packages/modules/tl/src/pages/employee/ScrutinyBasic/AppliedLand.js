@@ -563,7 +563,7 @@ console.log("AccessInfortech", Purpose);
   target="popup" 
   onclick="window.open({`/digit-ui/WNS/wmsmap.html?latlngs=${DetailsofAppliedLand?.dgpsDetails?.map((element)=>(`${element.latitude},${element.longitude}`,'popup','width:600,height:600'); return false;"
   >
-  Graphic design</a></Button>
+  Map View</a></Button>
  
 
                      

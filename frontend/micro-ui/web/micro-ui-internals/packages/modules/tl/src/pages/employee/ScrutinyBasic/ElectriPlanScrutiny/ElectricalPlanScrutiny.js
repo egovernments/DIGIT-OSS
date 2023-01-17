@@ -309,32 +309,7 @@ const ElectricalPlanScrutiny = (props) => {
               }}
             ></ReportProblemIcon>
                 </div>
-              {/* <div>
-                <Form.Label>
-                  Provision of the electricity distribution in the project area by the instructions of the DHBVN{" "}
-                  <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-                </Form.Label>
-              </div>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="true"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="true"
-                {...register("electricDistribution")}
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="false"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="false"
-                {...register("electricDistribution")}
-                inline
-              ></Form.Check> */}
+            
             </Col>
             <Col className="ms-auto" md={4} xxl lg="4">
             <p className="ml-3">
@@ -653,7 +628,7 @@ const ElectricalPlanScrutiny = (props) => {
                   <h2>Certified copy of the plan verified by a third party.</h2>
                 </td>
                 <td component="th" scope="row">
-                  {/* <input type="file" className="form-control" {...register("verifiedPlan")} /> */}
+               
                   <div className="btn btn-sm col-md-4">
                         <IconButton onClick={()=>getDocShareholding(apiResponse?.verifiedPlan)}>
                         <Visibility color="info" className="icon" />
@@ -683,13 +658,6 @@ const ElectricalPlanScrutiny = (props) => {
             </tbody>
           </div>
 
-          {/* <div class="row">
-            <div class="col-sm-12 text-right">
-              <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
-                Submit
-              </button>
-            </div>
-          </div> */}
         </Card>
       </Card>
       </div>
