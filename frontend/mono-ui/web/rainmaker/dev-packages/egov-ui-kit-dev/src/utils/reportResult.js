@@ -772,8 +772,7 @@ class ShowField extends Component {
         reportResult.reportHeader &&
         reportResult.reportHeader.length &&
         reportResult.reportHeader[i] &&
-        reportResult.reportHeader[i].isLocalisationRequired &&
-        reportResult.reportHeader[i].localisationPrefix
+        reportResult.reportHeader[i].isLocalisationRequired 
       ) {
         if (reportResult.reportHeader[i].localisationPrefix == "ACCESSCONTROL_ROLES_ROLES_") {
           let list = val && val.split(",");
