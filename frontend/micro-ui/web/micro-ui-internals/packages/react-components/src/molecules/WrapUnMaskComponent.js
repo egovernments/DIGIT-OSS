@@ -47,6 +47,7 @@ const WrapUnMaskComponent = React.memo(({ privacy = {}, value, unmaskField, ...r
     },
   ];
   const { isLoading, data, revalidate } = Digit.Hooks.useCustomAPIHook(...requestCriteria);
+  rem?.storeunmask && sessionStorage.setItem("unmaskedData",data);
   useEffect(() => {
     return () => {
       revalidate();
