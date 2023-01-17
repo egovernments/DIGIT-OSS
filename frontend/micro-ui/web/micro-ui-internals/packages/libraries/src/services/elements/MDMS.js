@@ -970,7 +970,6 @@ const getTLStructureType = (MdmsRes) =>
   });
 const getPurposeType = (MdmsRes) =>
   MdmsRes["common-masters"].Purpose.filter((Purpose) => Purpose.active).map((TLSPurposeList) => {
-    console.log("kk", TLSPurposeList);
     return {
       ...TLSPurposeList,
       i18nKey: `COMMON_MASTERS_PURPOSE_${stringReplaceAll(TLSPurposeList.code, ".", "_")}`,

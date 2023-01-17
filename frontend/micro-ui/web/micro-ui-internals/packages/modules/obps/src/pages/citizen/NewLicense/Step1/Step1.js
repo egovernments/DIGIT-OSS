@@ -167,7 +167,7 @@ const ApllicantFormStep1 = (props) => {
       {loader && <Spinner />}
       <form onSubmit={handleSubmit(ApplicantFormSubmitHandlerForm)}>
         <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New Licence </h4>
+          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New Licence Application</h4>
           <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "10px" }}>
             <Form.Group className="justify-content-center" controlId="formBasicEmail">
               <h5 className="card-title fw-bold">Developer Information</h5>

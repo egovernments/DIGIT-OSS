@@ -7,7 +7,6 @@ const electricalPlanService = () => {
   const { register, handleSubmit } = useForm();
   const [developerDataLabel, setDeveloperDataLabel] = useState([]);
   const electricPlan = async (data) => {
-    console.log(data);
     try {
       const postDistrict = {
         requestInfo: {
@@ -36,7 +35,7 @@ const electricalPlanService = () => {
       const Resp = await axios.post("/land-services/electric/plan/_create", postDistrict);
       setDeveloperDataLabel(Resp.data);
     } catch (error) {
-      console.log(error.message);
+      return error;
     }
   };
   return (
@@ -65,7 +64,6 @@ const electricalPlanService = () => {
                 </Form.Label>
 
                 <Form.Check
-                  onChange={(e) => console.log(e)}
                   value="electricalInfrastructure"
                   type="radio"
                   id="default-radio"
@@ -75,7 +73,6 @@ const electricalPlanService = () => {
                   inline
                 ></Form.Check>
                 <Form.Check
-                  onChange={(e) => console.log(e)}
                   value="electricalInfrastructure"
                   type="radio"
                   id="default-radio"
@@ -94,7 +91,6 @@ const electricalPlanService = () => {
                 </Form.Label>
               </div>
               <Form.Check
-                onChange={(e) => console.log(e)}
                 value="electricityDistribution"
                 type="radio"
                 id="default-radio"
@@ -104,7 +100,6 @@ const electricalPlanService = () => {
                 inline
               ></Form.Check>
               <Form.Check
-                onChange={(e) => console.log(e)}
                 value="electricityDistribution"
                 type="radio"
                 id="default-radio"
@@ -121,7 +116,6 @@ const electricalPlanService = () => {
                 </Form.Label>
               </div>
               <Form.Check
-                onChange={(e) => console.log(e)}
                 value="proposedElectricalSubstation"
                 type="radio"
                 id="default-radio"
@@ -131,7 +125,6 @@ const electricalPlanService = () => {
                 inline
               ></Form.Check>
               <Form.Check
-                onChange={(e) => console.log(e)}
                 value="proposedElectricalSubstation"
                 type="radio"
                 id="default-radio"
@@ -149,7 +142,6 @@ const electricalPlanService = () => {
                 </Form.Label>
               </div>
               <Form.Check
-                onChange={(e) => console.log(e)}
                 value="switchingStation"
                 type="radio"
                 id="default-radio"
@@ -159,7 +151,6 @@ const electricalPlanService = () => {
                 inline
               ></Form.Check>
               <Form.Check
-                onChange={(e) => console.log(e)}
                 value="switchingStation"
                 type="radio"
                 id="default-radio"
@@ -176,7 +167,6 @@ const electricalPlanService = () => {
                 </Form.Label>
               </div>
               <Form.Check
-                onChange={(e) => console.log(e)}
                 value="LoadSanctionApproval"
                 type="radio"
                 id="default-radio"
@@ -186,7 +176,6 @@ const electricalPlanService = () => {
                 inline
               ></Form.Check>
               <Form.Check
-                onChange={(e) => console.log(e)}
                 value="LoadSanctionApproval"
                 type="radio"
                 id="default-radio"

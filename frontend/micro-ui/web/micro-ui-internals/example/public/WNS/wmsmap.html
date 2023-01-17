@@ -1,38 +1,37 @@
 <!DOCTYPE html>
-      <html>
-        <head>
-          <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-            <title>TCP Haryana</title>
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.2.0/leaflet.css" type="text/css" crossorigin="">
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.2.0/leaflet.js"></script>
-            <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-            <script src="leaflet.wmslegend.js"></script>
-            <link rel="stylesheet" href="style.css" type="text/css"> 
-            <script type="text/javascript">
-              var getUrlParameter = function getUrlParameter(sParam) {
-                  var sPageURL = window.location.search.substring(1),
-                      sURLVariables = sPageURL.split('&'),
-                      sParameterName,
-                      i;
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>TCP Haryana</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.2.0/leaflet.css" type="text/css" crossorigin="" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.2.0/leaflet.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="leaflet.wmslegend.js"></script>
+    <link rel="stylesheet" href="style.css" type="text/css" />
+    <script type="text/javascript">
+      var getUrlParameter = function getUrlParameter(sParam) {
+        var sPageURL = window.location.search.substring(1),
+          sURLVariables = sPageURL.split("&"),
+          sParameterName,
+          i;
 
-                  for (i = 0; i < sURLVariables.length; i++) {
-                      sParameterName = sURLVariables[i].split('=');
+        for (i = 0; i < sURLVariables.length; i++) {
+          sParameterName = sURLVariables[i].split("=");
 
-                      if (sParameterName[0] === sParam) {
-                          return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
-                      }
-                  }
-                  return false;
-              };
-              
-              var latlngs =getUrlParameter('latlngs');
-              //console.log(latlngs);
-            //Pass the lat long with url in this formate 
-            //29.385044,76.486671 : 29.506174, 76.648015 : 29.686816, 76.218482 : 29.406816, 76.858482 |30.385044, 78.486671 : 30.506174, 78.648015 : 30.686816, 78.218482 
+          if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+          }
+        }
+        return false;
+      };
 
+      var latlngs = getUrlParameter("latlngs");
+      //console.log(latlngs);
+      //Pass the lat long with url in this formate
+      //29.385044,76.486671 : 29.506174, 76.648015 : 29.686816, 76.218482 : 29.406816, 76.858482 |30.385044, 78.486671 : 30.506174, 78.648015 : 30.686816, 78.218482
 
-            var map;
-           /* var latlngs = [
+      var map;
+      /* var latlngs = [
                [29.385044, 76.486671],
                [29.506174, 76.648015],
                [29.686816, 76.218482],
@@ -45,83 +44,88 @@
               
             ];  */
 
-            function init() {
-              // create map and set center and zoom level
+      function init() {
+        // create map and set center and zoom level
 
-              map = new L.map('mapid');
-              map.setView([29.0588,76.0856],6);
+        map = new L.map("mapid");
+        map.setView([29.0588, 76.0856], 6);
 
-              // create tile layer and add it to map
+        // create tile layer and add it to map
 
-              var tiles = L.tileLayer('https://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}',{
-                zIndex: 50, opacity: 0.9, maxZoom: 22, subdomains: ["mt0", "mt1", "mt2", "mt3"]
-              });
-              tiles.addTo(map);
+        var tiles = L.tileLayer("https://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}", {
+          zIndex: 50,
+          opacity: 0.9,
+          maxZoom: 22,
+          subdomains: ["mt0", "mt1", "mt2", "mt3"],
+        });
+        tiles.addTo(map);
 
+        //State Level Layers
+        var tiles1 = L.tileLayer.wms("https://mis.tcpharyana.gov.in/geoserver/gwc/service/wms/", {
+          layers: "geoitanalytics:State_bnd",
+          format: "image/png",
+          transparent: true,
+          zIndex: 1000,
+          opacity: 1,
+        });
+        tiles1.addTo(map);
 
-             //State Level Layers  
-              var tiles1=L.tileLayer.wms("https://mis.tcpharyana.gov.in/geoserver/gwc/service/wms/", {
-                layers: 'geoitanalytics:State_bnd',
-                format: 'image/png',
-                transparent: true,
-                 zIndex:1000, 
-                 opacity:1
-                });
-               tiles1.addTo(map);
+        uri =
+          "https://mis.tcpharyana.gov.in/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=geoitanalytics:State_bnd";
+        L.wmsLegend(uri);
+        /***********************************************************************************/
 
-               uri = "https://mis.tcpharyana.gov.in/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=geoitanalytics:State_bnd";
-               L.wmsLegend(uri);
-               /***********************************************************************************/
-              
-              // District Boundary
+        // District Boundary
 
-                  var tiles2=L.tileLayer.wms("https://mis.tcpharyana.gov.in/geoserver/gwc/service/wms/", {
-                      layers: 'geoitanalytics:Dist_Bnd',
-                      format: 'image/png',
-                      transparent: true,
-                       zIndex:900, 
-                       opacity:1
-                      });
-                     tiles2.addTo(map);
+        var tiles2 = L.tileLayer.wms("https://mis.tcpharyana.gov.in/geoserver/gwc/service/wms/", {
+          layers: "geoitanalytics:Dist_Bnd",
+          format: "image/png",
+          transparent: true,
+          zIndex: 900,
+          opacity: 1,
+        });
+        tiles2.addTo(map);
 
-                     uri2 = "https://mis.tcpharyana.gov.in/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=geoitanalytics:Dist_Bnd";
-                     L.wmsLegend(uri2,{
-                         'title': "District Boundary"
-                     });
+        uri2 =
+          "https://mis.tcpharyana.gov.in/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=geoitanalytics:Dist_Bnd";
+        L.wmsLegend(uri2, {
+          title: "District Boundary",
+        });
 
+        /*************************************************************************************/
 
+        // NCR Boundary
 
-              /*************************************************************************************/
+        var tiles3 = L.tileLayer.wms(
+          "https://mis.tcpharyana.gov.in/geoserver/gwc/service/tms/1.0.0/geoitanalytics:NCR_Bnd@EPSG:900913@png/{z}/{x}/{y}.png",
+          {
+            tms: true,
+            zIndex: 1000,
+            opacity: 0.8,
+          }
+        );
+        tiles3.addTo(map);
 
-              // NCR Boundary
+        uri3 =
+          "https://mis.tcpharyana.gov.in/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=geoitanalytics:NCR_Bnd";
+        L.wmsLegend(uri3, {
+          title: "NCR Boundary",
+        });
 
-                  var tiles3=L.tileLayer.wms("https://mis.tcpharyana.gov.in/geoserver/gwc/service/tms/1.0.0/geoitanalytics:NCR_Bnd@EPSG:900913@png/{z}/{x}/{y}.png", {
-                       tms:true,
-                       zIndex:1000, 
-                       opacity:0.8
-                      });
-                     tiles3.addTo(map);
+        /*************************************************************************************/
 
-                     uri3 = "https://mis.tcpharyana.gov.in/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=geoitanalytics:NCR_Bnd";
-                     L.wmsLegend(uri3,{
-                         'title': "NCR Boundary"
-                     });
+        // Highways
 
+        var tiles4 = L.tileLayer.wms("https://mis.tcpharyana.gov.in/geoserver/wms/", {
+          layers: "geoitanalytics:Highways_Line",
+          format: "image/png",
+          transparent: true,
+          zIndex: 1000,
+          opacity: 1,
+        });
+        tiles4.addTo(map);
 
-              /*************************************************************************************/
-
-              // Highways
-
-                  var tiles4=L.tileLayer.wms("https://mis.tcpharyana.gov.in/geoserver/wms/", {
-                       layers: 'geoitanalytics:Highways_Line',
-                        format: 'image/png',
-                        transparent: true,
-                         zIndex:1000, 
-                         opacity:1
-                      });
-                     tiles4.addTo(map);            
-
-                     /* legend: [
+        /* legend: [
                                 { type: "square", color: "#1cc4a2", text: "Bye-Pass" },
                                 { type: "square", color: "#1cf9a2", text: "MDR" },
                                 { type: "square", color: "#ff4d99", text: "Expressway" },
@@ -130,107 +134,92 @@
                                 { type: "square", color: "#FF5733", text: "Scheduled Road" },
                                
                             ]*/
-                    
-                  //  L.wmsLegend(legend);
-              /*************************************************************************************/ 
 
-                // KMP Expressway
+        //  L.wmsLegend(legend);
+        /*************************************************************************************/
 
-                  var tiles5=L.tileLayer.wms("https://mis.tcpharyana.gov.in/geoserver/gwc/service/wms/", {
-                       layers: 'geoitanalytics:KMP_Expressway_RD',
-                      format: 'image/png',
-                      transparent: true,
-                       zIndex:1000, 
-                       opacity:1
-                      });
-                     tiles5.addTo(map);
+        // KMP Expressway
 
-                     uri5 = "https://mis.tcpharyana.gov.in/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=geoitanalytics:KMP_Expressway_RD";
+        var tiles5 = L.tileLayer.wms("https://mis.tcpharyana.gov.in/geoserver/gwc/service/wms/", {
+          layers: "geoitanalytics:KMP_Expressway_RD",
+          format: "image/png",
+          transparent: true,
+          zIndex: 1000,
+          opacity: 1,
+        });
+        tiles5.addTo(map);
 
-                     L.wmsLegend(uri5,{
-                         'title': "KMP Expressway"
-                     });
+        uri5 =
+          "https://mis.tcpharyana.gov.in/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=geoitanalytics:KMP_Expressway_RD";
 
+        L.wmsLegend(uri5, {
+          title: "KMP Expressway",
+        });
 
-              /*************************************************************************************/
+        /*************************************************************************************/
 
-                    // Railway Line
+        // Railway Line
 
-                   var tiles6=L.tileLayer.wms("https://mis.tcpharyana.gov.in/geoserver/gwc/service/wms/", {
-                      layers: 'geoitanalytics:Railway',
-                      format: 'image/png',
-                      transparent: true,
-                       zIndex:1000, 
-                       opacity:1,
-                       
-                      });
-                      tiles6.addTo(map);
+        var tiles6 = L.tileLayer.wms("https://mis.tcpharyana.gov.in/geoserver/gwc/service/wms/", {
+          layers: "geoitanalytics:Railway",
+          format: "image/png",
+          transparent: true,
+          zIndex: 1000,
+          opacity: 1,
+        });
+        tiles6.addTo(map);
 
-                      uri6 = "https://mis.tcpharyana.gov.in/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=geoitanalytics:Railway" ;
-                       L.wmsLegend(uri6,{
+        uri6 =
+          "https://mis.tcpharyana.gov.in/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=geoitanalytics:Railway";
+        L.wmsLegend(uri6, {
+          title: "Railway Line",
+        });
 
-                          'title': "Railway Line"
-                       });
+        /*************************************************************************************/
 
+        // Railway Line
 
-              /*************************************************************************************/
+        var tiles6 = L.tileLayer.wms("https://mis.tcpharyana.gov.in/geoserver/gwc/service/wms/", {
+          layers: "geoitanalytics:Railway",
+          format: "image/png",
+          transparent: true,
+          zIndex: 1000,
+          opacity: 1,
+        });
+        tiles6.addTo(map);
 
-                  // Railway Line
+        uri6 =
+          "https://mis.tcpharyana.gov.in/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=geoitanalytics:Railway";
+        L.wmsLegend(uri6, {
+          title: "Railway Line",
+        });
 
-                   var tiles6=L.tileLayer.wms("https://mis.tcpharyana.gov.in/geoserver/gwc/service/wms/", {
-                      layers: 'geoitanalytics:Railway',
-                      format: 'image/png',
-                      transparent: true,
-                       zIndex:1000, 
-                       opacity:1,
-                       
-                      });
-                      tiles6.addTo(map);
+        /*************************************************************************************/
 
-                      uri6 = "https://mis.tcpharyana.gov.in/geoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=geoitanalytics:Railway" ;
-                       L.wmsLegend(uri6,{
+        var arrLatlongs = latlngs.split("|");
+        //console.log("arrLatlongs"+arrLatlongs.length);
+        for (var i = 0; i < arrLatlongs.length; i++) {
+          var latlngsdata = [];
+          //console.log(arrLatlongs[i]);
+          var datalatlong = arrLatlongs[i].split(":");
+          var latlngscors = [];
+          for (var j = 0; j < datalatlong.length; j++) {
+            var cordinates = datalatlong[j].split(",");
+            latlngscors.push(cordinates);
+          }
+          latlngsdata.push(latlngscors);
+          var polygon = L.polygon(latlngsdata, { color: "blue" });
+          polygon.addTo(map);
+        }
 
-                          'title': "Railway Line"
-                       });
-
-
-              /*************************************************************************************/
-             
-              
-              var arrLatlongs = latlngs.split('|');
-                //console.log("arrLatlongs"+arrLatlongs.length);
-                for(var i =0; i< arrLatlongs.length; i++){
-                  var latlngsdata =[];
-                  //console.log(arrLatlongs[i]);
-                    var datalatlong = arrLatlongs[i].split(":");
-                     var latlngscors =[];
-                   for(var j= 0; j<datalatlong.length; j++){
-                      var cordinates = datalatlong[j].split(",");
-                      latlngscors.push(cordinates);
-                   }
-                    latlngsdata.push(latlngscors);
-                    console.log("latlngsdata"+ latlngsdata);
-                   
-                   var polygon = L.polygon(latlngsdata, {color: 'blue'});
-                   polygon.addTo(map);
-                }
-
-                   
-                   
-
-                /* var polygon2 = L.polygon(latlngs2, {color: 'red'});
+        /* var polygon2 = L.polygon(latlngs2, {color: 'red'});
                 polygon2.addTo(map);*/
-
-            }
-                  
-          </script>
-        </head>
-        <body onload="init()">
-          <h1 id="title">WMS MAP</h1>
-          <div id="mapid" style="height: 800px;">
-          </div>
-          <div id="docs">
-             
-          </div>
-        </body>
-      </html>
+      }
+    </script>
+  </head>
+  <body onload="init()">
+    <h1 id="title">WMS MAP</h1>
+    <div id="mapid" style="height: 800px"></div>
+    <div id="docs"></div>
+  </body>
+</html>
