@@ -89,7 +89,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       setIncorporation(developerDataGet?.devDetail[0]?.addInfo?.incorporationDate);
       setRegistered(developerDataGet?.devDetail[0]?.addInfo?.registeredAddress);
       setUserEmail(developerDataGet?.devDetail[0]?.addInfo?.email);
-      setUserEmailInd(developerDataGet?.devDetail[0]?.licenceDetails?.email);
+      setUserEmailInd(developerDataGet?.devDetail[0]?.addInfo?.emailId);
+      setDOB(developerDataGet?.devDetail[0]?.addInfo?.dob);
+      setPanNumber(developerDataGet?.devDetail[0]?.addInfo?.PanNumber);
       // setMobile(developerDataGet?.devDetail[0]?.addInfo?.mobileNumber);
       setGST(developerDataGet?.devDetail[0]?.addInfo?.gst_Number);
       setTbName(developerDataGet?.devDetail[0]?.addInfo?.sharName);
@@ -301,8 +303,10 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   function setMobileNo(e) {
     setMobileNumber(e.target.value);
   }
-  function selectRegisteredMobile(value) {
-    setRegisteredMobileNumber(value);
+  function selectRegisteredMobile(e) {
+    if (!e.target.value || e.target.value.match("^[6-90-9]*$")) {
+      setRegisteredMobileNumber(e.target.value)
+    }
   }
   function setUserEmailId(value) {
     setUserEmail(value);
@@ -540,6 +544,21 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     }
   };
 
+  function selectModalName(e) {
+    if(!e.target.value || e.target.value.match("^[a-zA-Z ]*$")){
+      setModalNAme(e.target.value)
+    }
+  }
+  function selectModalDesignition(e) {
+    if(!e.target.value || e.target.value.match("^[a-zA-Z ]*$")){
+      setModaldesignition(e.target.value)
+    }
+  }
+  function selectModalPercentage(e) {
+    if(!e.target.value || e.target.value.match("^[0-9.0-9]*$")){
+      setModalPercentage(e.target.value)
+    }
+  }
 
   const HandleGetMCNdata = async () => {
     try {
@@ -679,6 +698,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         showDevTypeFields: showDevTypeFields,
         name: name,
         mobileNumberUser: mobileNumberUser,
+        dob:dob,
+        PanNumber: PanNumber,
         cin_Number: cin_Number,
         llp_Number: llpNumber,
         csr_Number: csrNumber,
@@ -791,7 +812,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
             // isDisabled={
             //   !showDevTypeFields || (showDevTypeFields === "Individual" && (!name || !mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) || !emailId?.match(Digit.Utils.getPattern('Email')))) || (showDevTypeFields === "Others" && othersArray.length) || (showDevTypeFields === "Proprietorship Firm") || (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others" && (!cin_Number?.match(Digit.Utils.getPattern('CIN')) || !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) || !gst_Number?.match(Digit.Utils.getPattern('GSTNo')) || !((existingColonizer === "N") || (existingColonizer === "Y" && existingColonizerDetails.aggreementBtw && existingColonizerDetails.boardResolution && existingColonizerDetails.dob && existingColonizerDetails.pan && existingColonizerDetails.pan.match(Digit.Utils.getPattern('PAN')) && existingColonizerDetails.licNo && existingColonizerDetails.licDate && existingColonizerDetails.licValidity && existingColonizerDetails.licPurpose))))
             // }
-            isDisabled={(showDevTypeFields === "Individual" || showDevTypeFields === "Proprietorship Firm" || showDevTypeFields === "Hindu Undivided Family") ? !(name && mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) && emailId?.match(Digit.Utils.getPattern('Email'))) : (showDevTypeFields === "Others") ? (!othersArray.length) : (showDevTypeFields === "Proprietorship Firm") ? false : (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others") ?
+            isDisabled={(showDevTypeFields === "Individual" || showDevTypeFields === "Proprietorship Firm" || showDevTypeFields === "Hindu Undivided Family") ? !(name && mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) && emailId?.match(Digit.Utils.getPattern('Email')) && gst_Number?.match(Digit.Utils.getPattern('GSTNo'))) : (showDevTypeFields === "Others") ? (!othersArray.length) : (showDevTypeFields === "Proprietorship Firm") ? false : (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others") ?
               (
                 ((showDevTypeFields === "Trust") ? false : !csrNumber?.match(Digit.Utils.getPattern('CSR')) || (showDevTypeFields === "Company") ? false : !cin_Number?.match(Digit.Utils.getPattern('CIN'))) || !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) || (showDevTypeFields === "Trust" ? false : !gst_Number?.match(Digit.Utils.getPattern('GSTNo'))) || !registeredAddress.match(Digit.Utils.getPattern('Address')) || (!existingColonizerDetails.licNo.match(Digit.Utils.getPattern('OldLicenceNo'))) || !(modalValuesArray?.length) || !(DirectorData.length) || !((existingColonizer === "N") || (existingColonizer === "Y" && existingColonizerDetails.name && existingColonizerDetails.licNo && existingColonizerDetails.licDate))) : true}
             t={t}
@@ -805,7 +826,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                       <div className="form-group row">
                         <div className="col-sm-4">
                           <label htmlFor="name">{`${t("Select Developer's Type")}`} <span className="text-danger font-weight-bold">*</span></label>
-                          <Dropdown
+                          {/* <Dropdown
                             labels="Select Type"
                             className="form-field"
                             selected={{ code: showDevTypeFields, value: showDevTypeFields }}
@@ -818,8 +839,20 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             t={t}
                             required
                             disable
-                          />
-
+                          /> */}
+                          <Select
+                            value={showDevTypeFields}
+                            onChange={setDevType}
+                            className="w-100 form-control"
+                            variant="standard"
+                            disabled
+                          >
+                              {
+                                  arrayDevList?.map((item, index) => (
+                                      <MenuItem value={item.value} >{item?.code}</MenuItem>
+                                  ))
+                              }
+                          </Select>
                         </div>
                       </div>
                     </div>
@@ -836,9 +869,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                     <div className="row">
                       <div className="col col-4">
                         <div className="form-group">
-
                           <label htmlFor="name">Name <span className="text-danger font-weight-bold">*</span></label>
-
                           <input
                             type="text"
                             value={name}
@@ -846,27 +877,24 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             // onChange={SelectName}
                             onChange={(e) => setName(e.target.value)}
                             disabled
-                            className="employee-card-input"
+                            className="form-control"
+
                           />
                         </div>
                       </div>
                       <div className="col col-4">
-                        <div className="form-group ">
+                        <div className="form-group">
                           <label htmlFor="email"> Email <span className="text-danger font-weight-bold">*</span></label>
                           <input
                             type="text"
                             value={emailId}
                             placeholder={emailId}
                             name="emailId"
+                            required={true}
                             onChange={setUserEmailIndVal}
-
-                            className="employee-card-input"
+                            className="form-control"
                           />
-                          {emailId && emailId.length > 0 && !emailId.match(Digit.Utils.getPattern("Email")) && (
-                            <CardLabelError style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
-                              {"Invalid Email Address"}
-                            </CardLabelError>
-                          )}
+                          {emailId && emailId.length > 0 && !emailId.match(Digit.Utils.getPattern('Email')) && <CardLabelError style={{ width: "100%", marginTop: '5px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{("Invalid Email Address")}</CardLabelError>}
                         </div>
                       </div>
                       <div className="col col-4">
@@ -876,15 +904,12 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             value={mobileNumberUser}
                             placeholder={mobileNumberUser}
                             name="mobileNumberUser"
+                            required={true}
                             onChange={(e) => setMobileNumber(e.target.value)}
                             disabled
-                            className="employee-card-input"
+                            className="form-control"
                           />
-                          {mobileNumberUser && mobileNumberUser.length > 0 && !mobileNumberUser.match(Digit.Utils.getPattern("MobileNo")) && (
-                            <CardLabelError style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
-                              {t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID")}
-                            </CardLabelError>
-                          )}
+                          {mobileNumberUser && mobileNumberUser.length > 0 && !mobileNumberUser.match(Digit.Utils.getPattern('MobileNo')) && <CardLabelError style={{ width: "100%", marginTop: '5px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID")}</CardLabelError>}
                         </div>
                       </div>
                       <div className="col col-4">
@@ -894,6 +919,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             type="date"
                             value={dob}
                             date={dob}
+                            required={true}
                             onChange={setDateofBirth}
                             className="form-control"
                             name={dob}
@@ -902,19 +928,21 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                         </div>
                       </div>
                       <div className="col col-4">
-                        <label>{`${t("BPA_APPLICANT_PAN_NO")}`}<span class="text-danger font-weight-bold mx-2">*</span></label>
-                        <input
-                          type="text"
-                          name="PanNumber"
-                          required={true}
-                          value={PanNumber}
-                          className="form-control"
-                          onChange={selectPanNumber}
-                          max={10}
-                          maxlength="10"
-                        />
-                        {PanNumber && PanNumber.length > 0 && !PanNumber.match(Digit.Utils.getPattern('PAN')) && <labelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_PAN_NO")}</labelError>}
-                        <h3 className="error-message" style={{ color: "red" }}>{PanValError}</h3>
+                        <div className="form-group">
+                          <label htmlFor="PanNumber">{`${t("BPA_APPLICANT_PAN_NO")}`}<span class="text-danger font-weight-bold mx-2">*</span></label>
+                          <input
+                            type="text"
+                            name="PanNumber"
+                            required={true}
+                            value={PanNumber}
+                            className="form-control"
+                            onChange={selectPanNumber}
+                            max={10}
+                            maxlength="10"
+                          />
+                          {PanNumber && PanNumber.length > 0 && !PanNumber.match(Digit.Utils.getPattern('PAN')) && <labelError style={{ width: "100%", marginTop: '5px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_PAN_NO")}</labelError>}
+                          <h3 className="error-message" style={{ color: "red" }}>{PanValError}</h3>
+                        </div>
                       </div>
                       <div className="col col-4">
                         <div className="form-group">
@@ -922,13 +950,14 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
                           <input
                             type="text"
+                            required={true}
                             name="registeredAddress"
                             value={registeredAddress}
                             placeholder={registeredAddress}
                             onChange={(e) => setRegistered(e.target.value)}
                             className="form-control"
                           />
-                          {registeredAddress && registeredAddress.length > 0 && !registeredAddress.match(Digit.Utils.getPattern('Address')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Invalid Address")}</CardLabelError>}
+                          {registeredAddress && registeredAddress.length > 0 && !registeredAddress.match(Digit.Utils.getPattern('Address')) && <CardLabelError style={{ width: "100%", marginTop: '5px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Invalid Address")}</CardLabelError>}
                         </div>
                       </div>
                       <div className="col col-4">
@@ -940,9 +969,10 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             placeholder={gst_Number}
                             onChange={(e) => setGST(e.target.value.toUpperCase())}
                             name="gst_Number"
+                            required={true}
                             className="form-control"
                           />
-                          {gst_Number && gst_Number.length > 0 && !gst_Number.match(Digit.Utils.getPattern('GSTNo')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_GST_NO")}</CardLabelError>}
+                          {gst_Number && gst_Number.length > 0 && !gst_Number.match(Digit.Utils.getPattern('GSTNo')) && <CardLabelError style={{ width: "100%", marginTop: '5px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_GST_NO")}</CardLabelError>}
                         </div>
                       </div>
                     </div>
@@ -1294,25 +1324,30 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                   return (
                                     <div className="form-group">
                                       <label htmlFor="name">CIN Number <span className="text-danger font-weight-bold">*</span></label>
-                                      <TextInput
+                                      {/* <TextInput
                                         type="text"
                                         onChange={selectCinNumber}
-                                        // onChange={(e) => setCinNo(e.target.value)}
                                         value={cin_Number}
                                         name="cin_Number"
-                                        // isMendatory={false}
                                         placeholder={cin_Number}
                                         className="employee-card-input text-uppercase"
                                         max={"21"}
                                         {...(validation = {
-                                          // isRequired: true,
                                           pattern: "^[A-Z0-9]*$",
                                           type: "text",
-                                          maxlength: "21",
-                                          title: "Please Enter CIN Number"
+                                          
                                         })}
+                                      /> */}
+                                      <input 
+                                        type="text"
+                                        onChange={selectCinNumber}
+                                        value={cin_Number}
+                                        name="cin_Number"
+                                        className="form-control"
+                                        max={21}
+                                        maxlength="21"
                                       />
-                                      {cin_Number && cin_Number.length > 0 && !cin_Number.match(Digit.Utils.getPattern('CIN')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_CIN_NO")}</CardLabelError>}
+                                      {cin_Number && cin_Number.length > 0 && !cin_Number.match(Digit.Utils.getPattern('CIN')) && <CardLabelError style={{ width: "100%", marginTop: '5px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_CIN_NO")}</CardLabelError>}
                                       <h3 className="error-message" style={{ color: "red" }}>{cinValError}</h3>
                                     </div>
                                   )
@@ -1328,77 +1363,83 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             showDevTypeFields === "Trust" ? "Trust Name" : "Company Name"
                           } <span className="text-danger font-weight-bold">*</span></label>
 
-                          <TextInput
+                          {/* <TextInput
                             type="text"
                             value={companyName}
                             placeholder={companyName}
                             name="companyName"
-
                             onChange={(e) => setCompanyName(e.target.value)}
-                            // disabled="disabled"
                             className="employee-card-input"
-                            // isMendatory={false}
                             {...(validation = {
-                              // isRequired: true,
                               type: "text",
                               maxlength: "50",
                               title: "Please Enter Company Name"
                             })}
                             disabled={showDevTypeFields === "Company"}
+                          /> */}
+
+                          <input 
+                            type="text"
+                            value={companyName}
+                            placeholder={companyName}
+                            name="companyName"
+                            onChange={(e) => setCompanyName(e.target.value)}
+                            className="form-control"
+                            disabled={showDevTypeFields === "Company"}
+                            maxlength="50"
                           />
                         </div>
                       </div>
                       <div className="col col-4">
                         <div className="form-group">
                           <label htmlFor="name">Date of Incorporation <span className="text-danger font-weight-bold">*</span></label>
-                          <DatePicker
-                            // isMandatory={false}
-
+                          {/* <DatePicker
                             date={incorporationDate}
                             name="incorporationDate"
                             onChange={(e) => setIncorporation(e)}
                             disable={false}
                             {...(validation = {
-                              // isRequired: true,
                               type: "date",
                               title: "Please Enter Date of Incorporation"
                             })}
                             disabled={showDevTypeFields === "Company"}
+                          /> */}
+                          <input
+                            type="date"
+                            date={incorporationDate}
+                            value={incorporationDate}
+                            placeholder={incorporationDate}
+                            onChange={(e) => setIncorporation(e)}
+                            className="form-control"
+                            disabled={showDevTypeFields === "Company"}
                           />
-                          {/* <input
-                        type="text"
-                        value={incorporationDate}
-                        placeholder={incorporationDate}
-                        onChange={(e) => setIncorporation(e.target.value)}
-                        // disabled="disabled"
-                        className="employee-card-input"
-                      /> */}
-                          </div>
                         </div>
-                        <div className="col col-4">
-                          <div className="form-group">
-                            <label htmlFor="name">
-                              Registered Address <span className="text-danger font-weight-bold">*</span>
-                            </label>
-                            <TextInput
-                              type="text"
-                              name="registeredAddress"
-                              value={registeredAddress}
-                              placeholder={registeredAddress}
-                              onChange={(e) => setRegistered(e.target.value)}
-                              // disabled="disabled"
-                              className="employee-card-input"
-                              // isMandatory={false}
-
+                      </div>
+                      <div className="col col-4">
+                        <div className="form-group">
+                          <label htmlFor="name">Registered Address <span className="text-danger font-weight-bold">*</span></label>
+                          {/* <TextInput
+                            type="text"
+                            name="registeredAddress"
+                            value={registeredAddress}
+                            placeholder={registeredAddress}
+                            onChange={(e) => setRegistered(e.target.value)}
+                            className="employee-card-input"
                             {...(validation = {
                               isRequired: true,
                               error: "Address is required"
                             })}
                             disabled={showDevTypeFields === "Company"}
+                          /> */}
+                          <input 
+                            type="text"
+                            name="registeredAddress"
+                            value={registeredAddress}
+                            placeholder={registeredAddress}
+                            onChange={(e) => setRegistered(e.target.value)}
+                            className="form-control"
+                            disabled={showDevTypeFields === "Company"}
                           />
-                          {/* {
-                            registeredAddress && registeredAddress.match(Digit.Utils.getPattern('Address'))
-                          } */}
                           {registeredAddress && registeredAddress.length > 0 && !registeredAddress.match(Digit.Utils.getPattern('Address')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Invalid Address")}</CardLabelError>}
                         </div>
                       </div>
@@ -1406,24 +1447,27 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                         <div className="form-group ">
                           <label htmlFor="email"> Email <span className="text-danger font-weight-bold">*</span></label>
 
-                          <TextInput
+                          {/* <TextInput
                             t={t}
                             type={"email"}
-                            // isMandatory={false}
                             optionKey="i18nKey"
                             name="email"
-
                             value={email}
                             placeholder={email}
-                            // onChange={setEmail}
                             onChange={(e) => setUserEmailId(e.target.value)}
-                            //disable={editScreen}
                             {...(validation = {
                               isRequired: true,
                               required: "Email is required"
                             })}
                             disabled={showDevTypeFields === "Company"}
-
+                          /> */}
+                          <input 
+                            type={"email"}
+                            name="email"
+                            value={email}
+                            onChange={(e) => setUserEmailId(e.target.value)}
+                            className="form-control"
+                            disabled={showDevTypeFields === "Company"}
                           />
                           {email && email.length > 0 && !email.match(Digit.Utils.getPattern('Email')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{("Invalid Email Address")}</CardLabelError>}
                         </div>
@@ -1431,68 +1475,49 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                       <div className="col col-4">
                         <div className="form-group">
                           <label htmlFor="name">Mobile No. <span className="text-danger font-weight-bold">*</span></label>
-
-                            {/* <MobileNumber
-                        value={registeredContactNo}
-                        maxlength={"10"}
-                        pattern={"[6-9]{1}[0-9]{9}"}                        
-                        name="registeredContactNo"
-                        onChange={selectRegisteredMobile}
-                        isMandatory={false}
-                        {...(validation = {
-                          isRequired: true,
-                          title: "Please enter Mobile no."
-                        })}
-                        
-                      /> */}
-                          <MobileNumber
+                          {/* <MobileNumber
                             value={registeredContactNo}
                             name="registeredContactNo"
                             maxlength={"10"}
-
                             onChange={selectRegisteredMobile}
-                            // disable={mobileNumber && !isOpenLinkFlow ? true : false}
                             {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
+                          /> */}
+                          <input
+                            type="text"
+                            value={registeredContactNo}
+                            placeholder={registeredContactNo}
+                            name="registeredContactNo"
+                            required={true}
+                            max={10}
+                            maxlength={"10"}
+                            onChange={selectRegisteredMobile}
+                            className="form-control"
                           />
-                          {registeredContactNo && registeredContactNo.length > 0 && !registeredContactNo.match(Digit.Utils.getPattern('MobileNo')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID")}</CardLabelError>}
+                          {registeredContactNo && registeredContactNo.length > 0 && !registeredContactNo.match(Digit.Utils.getPattern('MobileNo')) && <CardLabelError style={{ width: "100%", marginTop: '5px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID")}</CardLabelError>}
                         </div>
                       </div>
                       <div className="col col-4">
                         <div className="form-group">
                           <label htmlFor="name">GST No. {showDevTypeFields !== "Trust" && <span className="text-danger font-weight-bold">*</span>}</label>
-                          <TextInput
+                          {/* <TextInput
                             type="text"
-
                             value={gst_Number}
                             placeholder={gst_Number}
                             onChange={(e) => setGST(e.target.value.toUpperCase())}
                             className="employee-card-input"
                             name="gst_Number"
                             {...{ required: true, maxlength: "15", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
-                          // className={`employee-card-input`}
-                          // placeholder=""
-                          // {...register("name", {
-                          //   required: "Name is required",
-                          //   pattern: {
-                          //     value: /^[a-zA-Z]+$/,
-                          //     message: "Name must be a valid string",
-                          //   },
-                          //   minLength: {
-                          //     value: 3,
-                          //     message:
-                          //       "Name should be greater than 3 characters",
-                          //   },
-                          //   maxLength: {
-                          //     value: 20,
-                          //     message:
-                          //       "Name shouldn't be greater than 20 characters",
-                          //   },
-                          // })}
+                          /> */}
+                          <input
+                            type="text"
+                            value={gst_Number}
+                            placeholder={gst_Number}
+                            onChange={(e) => setGST(e.target.value.toUpperCase())}
+                            name="gst_Number"
+                            required={true}
+                            className="form-control"
                           />
-                          {gst_Number && gst_Number.length > 0 && !gst_Number.match(Digit.Utils.getPattern('GSTNo')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_GST_NO")}</CardLabelError>}
-                          {/* <div className="invalid-feedback">
-                        {errors?.name?.message}
-                      </div> */}
+                          {gst_Number && gst_Number.length > 0 && !gst_Number.match(Digit.Utils.getPattern('GSTNo')) && <CardLabelError style={{ width: "100%", marginTop: '5px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_GST_NO")}</CardLabelError>}
                         </div>
                       </div>
                     </div>
@@ -1624,7 +1649,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             <Row>
                               <Col md={3} xxl lg="4">
                                 <label htmlFor="name" className="text">Name <span className="text-danger font-weight-bold">*</span></label>
-                                <TextInput
+                                {/* <TextInput
                                   type="text"
                                   isMandatory={false}
                                   onChange={(e) => setModalNAme(e.target.value)}
@@ -1636,12 +1661,19 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                     pattern: "^[a-zA-Z ]*$",
                                     type: "text",
                                   })}
+                                /> */}
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  name="modalNAme"
+                                  // onChange={(e) => setModalNAme(e.target.value)}
+                                  onChange={selectModalName}
                                 />
-                                {modalNAme && modalNAme.length > 0 && !modalNAme.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter a valid Name")}</CardLabelError>}
+                                {modalNAme && modalNAme.length > 0 && !modalNAme.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '5px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter a valid Name")}</CardLabelError>}
                               </Col>
                               <Col md={3} xxl lg="4">
                                 <label htmlFor="name" className="text"> Designition <span className="text-danger font-weight-bold">*</span></label>
-                                <TextInput
+                                {/* <TextInput
                                   type="text"
                                   isMandatory={false}
                                   onChange={(e) => setModaldesignition(e.target.value)}
@@ -1652,13 +1684,20 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                     pattern: "^[a-z A-Z ]*$",
                                     type: "text",
                                   })}
+                                /> */}
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  name="modaldesignition"
+                                  // onChange={(e) => setModalNAme(e.target.value)}
+                                  onChange={selectModalDesignition}
                                 />
                                 {modaldesignition && modaldesignition.length > 0 && !modaldesignition.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter a valid Designition")}</CardLabelError>}
                               </Col>
 
                               <Col md={3} xxl lg="4">
                                 <label htmlFor="name" className="text">Percentage "%" <span className="text-danger font-weight-bold">*</span></label>
-                                <TextInput
+                                {/* <TextInput
                                   type="number"
                                   isMandatory={false}
                                   value={modalPercentage}
@@ -1668,20 +1707,20 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                   {...(validation = {
                                     isRequired: true,
                                   })}
+                                /> */}
+                                <input 
+                                  type="text"
+                                  maxlength={"4"}
+                                  max={4}
+                                  onChange={selectModalPercentage}
+                                  className="form-control"
+                                  name="modalPercentage"
                                 />
 
-                                  {/* {
-                              (modalPercentage && (remainingStakeholderPercentage < modalPercentage || modalPercentage<=0 )) &&
-                            <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>Please enter a valid percentage for the stakeholder</CardLabelError>
-                            } */}
-
-                                  {modalPercentage && (remainingStakeholderPercentage < modalPercentage || modalPercentage <= 0) && (
-                                    <CardLabelError
-                                      style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}
-                                    >
-                                      {t("BPA_INVALID_PERCENTAGE")}
-                                    </CardLabelError>
-                                  )}
+                                {
+                                  (modalPercentage && (remainingStakeholderPercentage < modalPercentage || modalPercentage <= 0)) &&
+                                  <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_PERCENTAGE")}</CardLabelError>
+                                }
 
                                   {/* {((modalPercentage && !modalPercentage+"%".match(Digit.Utils.getPattern('Percentage')) )&& (modalPercentage > remainingStakeholderPercentage || modalPercentage > 0 ))&& <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>Please enter a valid percentage fot the stakeholder</CardLabelError>} */}
 
@@ -1695,7 +1734,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                   // value={file}
                                   placeholder=""
                                   name="uploadPdf"
-                                  class="employee-card-input"
+                                  class="form-control"
                                   onChange={(e) => getDocumentData(e?.target?.files[0], "uploadPdf")}
                                   {...(validation = {
                                     isRequired: true,

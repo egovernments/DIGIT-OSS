@@ -268,14 +268,14 @@ const CheckPage = ({ onSubmit, value }) => {
             </StatusTable>
           </Card>
           <Card style={{ paddingRight: "16px" }}>
-            <CardHeader styles={{ fontSize: "24px" }}>{t("Financial Capacity BPA_DOC_DETAILS_SUMMARY")}</CardHeader>
+            <CardHeader styles={{ fontSize: "24px" }}>{t("Financial Capacity Document")}</CardHeader>
             <LinkButton
               label={<EditIcon style={{ marginTop: "-15px", float: "right", position: "relative", bottom: "32px" }} />}
               style={{ width: "100px", display: "inline" }}
               onClick={() => routeTo(`${routeLink}/developer-capacity`)}
             />
             <StatusTable>
-              
+
             </StatusTable>
           </Card>
           <Card style={{ paddingRight: "16px" }}>
