@@ -13,7 +13,7 @@ import Popup from "reactjs-popup";
 //   ModalHeader,
 //   ModalBody,
 //   Row, 
-//   Col,
+//   Col, 
 //   ModalFooter,
 // } from "reactstrap"; 
 import Col from 'react-bootstrap/Col';
@@ -79,21 +79,24 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
       const developerDataGet = getDevDetails?.data; 
       setData(developerDataGet);
       console.log("ADDAUTHUSER",getDevDetails?.data?.devDetail[0]?.aurthorizedUserInfoArray);
-      setAurthorizedUserInfoArray(getDevDetails?.data?.devDetail[0]?.aurthorizedUserInfoArray || [
-        {
-          userName: getDevDetails?.data?.devDetail[0]?.licenceDetails?.mobileNumber,
-          name: getDevDetails?.data?.devDetail[0]?.licenceDetails?.name,
-          gender: getDevDetails?.data?.devDetail[0]?.licenceDetails?.gender,
-          mobileNumber: getDevDetails?.data?.devDetail[0]?.licenceDetails?.mobileNumber,
-          emailId: getDevDetails?.data?.devDetail[0]?.licenceDetails?.email,
-          dob: getDevDetails?.data?.devDetail[0]?.licenceDetails?.dob,
-          pan: getDevDetails?.data?.devDetail[0]?.licenceDetails?.panNumber,
-          uploadBoardResolution: getDevDetails?.data?.devDetail[0]?.licenceDetails?.uploadBoardResolution,
-          uploadDigitalSignaturePdf: getDevDetails?.data?.devDetail[0]?.licenceDetails?.uploadDigitalSignaturePdf
-          ,
-          uuid: userInfo.info.uuid
-        }
-      ]);
+      // setAurthorizedUserInfoArray(getDevDetails?.data?.devDetail[0]?.aurthorizedUserInfoArray || [
+      //   {
+      //     userName: getDevDetails?.data?.devDetail[0]?.licenceDetails?.mobileNumber,
+      //     name: getDevDetails?.data?.devDetail[0]?.licenceDetails?.name,
+      //     gender: getDevDetails?.data?.devDetail[0]?.licenceDetails?.gender,
+      //     mobileNumber: getDevDetails?.data?.devDetail[0]?.licenceDetails?.mobileNumber,
+      //     emailId: getDevDetails?.data?.devDetail[0]?.licenceDetails?.email,
+      //     dob: getDevDetails?.data?.devDetail[0]?.licenceDetails?.dob,
+      //     pan: getDevDetails?.data?.devDetail[0]?.licenceDetails?.panNumber,
+      //     uploadBoardResolution: getDevDetails?.data?.devDetail[0]?.licenceDetails?.uploadBoardResolution,
+      //     uploadDigitalSignaturePdf: getDevDetails?.data?.devDetail[0]?.licenceDetails?.uploadDigitalSignaturePdf
+      //     ,
+      //     uuid: userInfo.info.uuid
+      //   }
+      // ]);
+
+      setAurthorizedUserInfoArray(getDevDetails?.data?.devDetail[0]?.aurthorizedUserInfoArray || [])
+
     } catch (error) {
       console.log(error);
     }
@@ -817,6 +820,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                                 class="employee-card-input"
                                 onChange={(e) => setAurthorizedPan(e.target.value)}
                               /> */}
+                        <div className="d-flex align-items-baseline">
                         <TextInput
                           t={t}
                           type={"text"}
@@ -829,6 +833,8 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                           onChange={selectPanNumber}
                           {...{ required: true, maxlength: "10" }}
                         />
+                        <Button className="ml-3" onClick={panVerification}>Verify</Button>
+                        </div>
                         {aurthorizedPan && aurthorizedPan.length > 0 && !aurthorizedPan.match(Digit.Utils.getPattern('PAN')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px' }}>{t("BPA_INVALID_PAN_NO")}</CardLabelError>}
                         <h3 className="error-message" style={{ color: "red" }}>{PanValError}</h3>
                       </Col>

@@ -41,6 +41,17 @@ const Home = () => {
   // if (tenantId) {
   //   history.push(`/digit-ui/citizen`);
   // }
+  
+  const handleBPAClick = () => {
+    let user = Digit.UserService.getUser();
+    const userRoles = user?.info?.roles?.map((e) => e.code);
+    // console.log("role123...",userRoles)
+    if(userRoles?.includes("BPA_ARCHITECT")){
+      history.push("/digit-ui/citizen/obps/home")
+    } else {
+      history.push("/digit-ui/citizen/obps/stakeholder/apply/provide-license-type")
+    }
+  }
 
   const allCitizenServicesProps = {
     header: t("DASHBOARD_CITIZEN_SERVICES_LABEL"),
@@ -76,7 +87,7 @@ const Home = () => {
       {
         name: t("CS_COMMON_INBOX_BPA"),
         Icon: <OBPSIcon />,
-        onClick: () => history.push("/digit-ui/citizen/obps/stakeholder/apply/provide-license-type"),
+        onClick: handleBPAClick,
       },
       {
         name: t("PROVIDE_LICENSE_TYPE"),

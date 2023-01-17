@@ -14,6 +14,8 @@ import MigrationAppliedTrue from "./MigrationAplliedTrue";
 // import { PlusSquareFill } from "react-bootstrap-icons";
 // import { DashSquareFill } from "react-bootstrap-icons";
 // import { ArrowDownCircleFill } from "react-bootstrap-icons";
+// import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+
 import DDJAYForm from "../ScrutinyBasic/Puropse/DdjayForm";
 import ResidentialPlottedForm from "../ScrutinyBasic/Puropse/ResidentialPlotted";
 import IndustrialPlottedForm from "../ScrutinyBasic/Puropse/IndustrialPlotted";
@@ -67,7 +69,8 @@ const AppliedLandinfo = (props) => {
   const Purpose = props.purpose;
   const [modaldData, setmodaldData] = useState({ label: "", Remarks: "" });
   const [isyesOrNochecked, setYesorNochecked] = useState(true);
-
+  const [modal, setmodal] = useState(false);
+  const [modal1, setmodal1] = useState(false);
   const [urlGetShareHoldingDoc,setDocShareHoldingUrl] = useState("")
 
 
@@ -339,6 +342,11 @@ console.log("AccessInfortech", Purpose);
     setLabelValue("");
   };
 
+   const [showhide19, setShowhide19] = useState("true");
+   const handleshow19 = (e) => {
+    const getshow = e.target.value;
+    setShowhide19(getshow);
+  };
 
   
   // const getDocShareholding = async () => {
@@ -527,7 +535,7 @@ console.log("AccessInfortech", Purpose);
                   // {[...Array(noOfRows)].map((elementInArray, index) => {
                   //   return (
                     // (iv)Add point key={index} &nbsp;
-                    
+                    <div>
                       <div className="row " key={index}>
                         <div className="col col-6">
                           <label className={classes.formLabel} htmlFor="pitentialZone">X:Longiude</label>
@@ -537,13 +545,32 @@ console.log("AccessInfortech", Purpose);
                           <label className={classes.formLabel} htmlFor="pitentialZone">Y:Latitude</label>
                           <input type="number" name="YLatitude" className="form-control" disabled placeholder={item?.longitude} />
                         </div>
-                      </div>
+                        {/* {item?.longitude} */}
+                        {/* <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}><a href="http://localhost:3000/digit-ui/WNS/wmsmap.html?latlngs=29.385044,76.48667120:2029.506174,2076.64801520:2029.686816,2076.21848220:2029.406816,2076.85848220|30.385044,2078.48667120:2030.506174,2078.64801520:30.686816,78.218482" >Graphic design</a></Button> */}
+                        </div>
+                       </div>
+                      
                   //   );
                   // })}
                  
                     ))
                   }
                 </div>
+
+                {/* <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}><a href={`/digit-ui/WNS/wmsmap.html?latlngs=${DetailsofAppliedLand?.dgpsDetails?.map((element)=>(`${element.latitude},${element.longitude}`)).join(":")}`} > Graphic design</a></Button> */}
+   
+                <Button style={{ textAlign: "right" }}>      <a href={`/digit-ui/WNS/wmsmap.html?latlngs=${DetailsofAppliedLand?.dgpsDetails?.map((element)=>(`${element.latitude},${element.longitude}`)).join(":")}`} 
+  target="popup" 
+  onclick="window.open({`/digit-ui/WNS/wmsmap.html?latlngs=${DetailsofAppliedLand?.dgpsDetails?.map((element)=>(`${element.latitude},${element.longitude}`,'popup','width:600,height:600'); return false;">
+  Graphic design</a></Button>
+ 
+
+                     
+                          
+                          
+                           
+                          
+                         
 
                 <hr className="my-3" />
                 {/* <Collapse in={open}>
