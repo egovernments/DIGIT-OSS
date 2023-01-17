@@ -197,9 +197,9 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
   function selectPanNumber(e) {
     if (!e.target.value || /^\w+$/.test(e.target.value)){
       setAurthorizedPan(e.target.value.toUpperCase());
-      if(e.target.value === 10){
-        panVerification();
-      }
+      // if(e.target.value === 10){
+      //   panVerification();
+      // }
     }
   }
   function selectAurthorizedMobileNumber(value){
@@ -283,6 +283,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
       }}) 
       console.log("",panResp.data);
       setPanIsValid(true);
+      setPanValError("");
       setLoading(false);
     } catch(errdata){
       setLoading(false);
@@ -292,11 +293,11 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
     }
   }
   
-  useEffect(() => {
-    if(aurthorizedPan.length === 10){
-      panVerification();
-    }
-  }, [aurthorizedPan])
+  // useEffect(() => {
+  //   if(aurthorizedPan.length === 10){
+  //     panVerification();
+  //   }
+  // }, [aurthorizedPan])
 
   const sendOtp = async (data) => {
     try {
@@ -833,10 +834,10 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                           onChange={selectPanNumber}
                           {...{ required: true, maxlength: "10" }}
                         />
-                        <Button className="ml-3" onClick={panVerification}>Verify</Button>
+                        <Button className="ml-3" onClick={panVerification}>{panIsValid?"Verified":"Verify"}</Button>
                         </div>
                         {aurthorizedPan && aurthorizedPan.length > 0 && !aurthorizedPan.match(Digit.Utils.getPattern('PAN')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px' }}>{t("BPA_INVALID_PAN_NO")}</CardLabelError>}
-                        <h3 className="error-message" style={{ color: "red" }}>{PanValError}</h3>
+                        <h3 className="error-message" style={{ color: "red" }}>{panIsValid ? "" : PanValError }</h3>
                       </Col>
                       <Col md={3} xxl lg="3">
                       {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Hindu Undivided Family") ? (
