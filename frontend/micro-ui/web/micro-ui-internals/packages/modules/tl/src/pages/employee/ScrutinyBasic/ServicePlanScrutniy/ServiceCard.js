@@ -40,7 +40,7 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
   const [isEnableLoader, setIsEnableLoader] = useState(false);
   const [isWarningPop, setWarningPopUp ] = useState(false);
   const [showhide19, setShowhide19] = useState("true");
-  const [businessService, setBusinessService] = useState("NewTL");
+  const [businessService, setBusinessService] = useState("SERVICE_PLAN");
   const [moduleCode,setModuleCode] = useState("TL")
   const [ scrutinyDetails, setScrutinyDetails] = useState();
   // const [applicationNumber,setApplicationNumber] = useState("");
@@ -81,10 +81,19 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
         return response?.data;
       });
     //   console.log("Response From API1", Resp, Resp?.Licenses[0]?.applicationNumber,Resp);
-      setScrutinyDetails(Resp?.servicePlanResponse?.[0]);
+    setScrutinyDetails(Resp?.servicePlanResponse?.[0]);
 
-      console.log("devDel123",Resp?.servicePlanResponse?.[0]);
-      setApplicationData(Resp?.servicePlanResponse?.[0]);
+    console.log("devDel1234",Resp?.servicePlanResponse?.[0]);
+    setApplicationData(Resp?.servicePlanResponse?.[0]);
+    setApplicationDetails({
+      applicationData: Resp?.servicePlanResponse?.[0],
+      workflowCode: Resp?.servicePlanResponse?.[0].businessService
+    })
+    
+      // setScrutinyDetails(Resp?.servicePlanResponse?.[0]);
+
+      // console.log("devDel123",Resp?.servicePlanResponse?.[0]);
+      // setApplicationData(Resp?.servicePlanResponse?.[0]);
     } catch (error) {
       console.log(error);
     }
@@ -150,17 +159,28 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
     try{
       let body = {
         ...data,
-        RequestInfo: {
-          api_id: "1",
-          ver: "1",
-          ts: null,
-          action: "create",
-          did: "",
-          key: "",
-          msg_id: "",
-          requester_id: "",
-          authToken: authToken
-      }
+      //   RequestInfo: {
+      //     api_id: "1",
+      //     ver: "1",
+      //     ts: null,
+      //     action: "create",
+      //     did: "",
+      //     key: "",
+      //     msg_id: "",
+      //     requester_id: "",
+      //     authToken: authToken
+      // }
+      RequestInfo: {
+        api_id: "Rainmaker",
+        ver: "1",
+        ts: null,
+        action: "create",
+        did: "",
+        key: "",
+        msg_id: "",
+        requester_id: "",
+        authToken: authToken
+    }
       }
       const response = await axios.post("/tl-services/serviceplan/_update",body);
       console.log("Update API Response ====> ", response.data);
@@ -171,73 +191,10 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
     closeModal();
   };
 
-  // const submitAction = async (data, nocData = false, isOBPS = {}) => {
-  //   setIsEnableLoader(true);
-  //   if (typeof data?.customFunctionToExecute === "function") {
-  //     data?.customFunctionToExecute({ ...data });
-  //   }
-  //   if (nocData !== false && nocMutation) {
-  //     const nocPrmomises = nocData?.map(noc => {
-  //       return nocMutation?.mutateAsync(noc)
-  //     })
-  //     try {
-  //       setIsEnableLoader(true);
-  //       const values = await Promise.all(nocPrmomises);
-  //       values && values.map((ob) => {
-  //         Digit.SessionStorage.del(ob?.Noc?.[0]?.nocType);
-  //       })
-  //     }
-  //     catch (err) {
-  //       setIsEnableLoader(false);
-  //       let errorValue = err?.response?.data?.Errors?.[0]?.code ? t(err?.response?.data?.Errors?.[0]?.code) : err?.response?.data?.Errors?.[0]?.message || err;
-  //       closeModal();
-  //       setShowToast({ key: "error", error: {message: errorValue}});
-  //       setTimeout(closeToast, 5000);
-  //       return;
-  //     }
-  //   }
-  //   if (mutate) {
-  //     setIsEnableLoader(true);
-  //     mutate(data, {
-  //       onError: (error, variables) => {
-  //         setIsEnableLoader(false);
-  //         setShowToast({ key: "error", error });
-  //         setTimeout(closeToast, 5000);
-  //       },
-  //       onSuccess: (data, variables) => {
-  //         setIsEnableLoader(false);
-  //         if (isOBPS?.bpa) {
-  //           data.selectedAction = selectedAction;
-  //           history.replace(`/digit-ui/employee/obps/response`, { data: data });
-  //         }
-  //         if (isOBPS?.isStakeholder) {
-  //           data.selectedAction = selectedAction;
-  //           history.push(`/digit-ui/employee/obps/stakeholder-response`, { data: data });
-  //         }
-  //         if (isOBPS?.isNoc) {
-  //           history.push(`/digit-ui/employee/noc/response`, { data: data });
-  //         }
-  //         setShowToast({ key: "success", action: selectedAction });
-  //         setTimeout(closeToast, 5000);
-  //         queryClient.clear();
-  //         queryClient.refetchQueries("APPLICATION_SEARCH");
-  //       },
-  //     });
-  //   }
-
-  //   closeModal();
-  // };
-
-  // useEffect(()=>{
-  //   console.log("log123...applicationDetailsAPI",applicationDetailsTemp)
-  //   if(applicationDetailsTemp?.data){
-  //     setApplicationDetails(applicationDetailsTemp?.data)
-  //   }
-  // },[applicationDetailsTemp?.data])
-
+ 
 
   useEffect(() => {
-    console.log("logService...wrkflw",id,workflowDetailsTemp,scrutinyDetails,applicationDetails)
+    console.log("logService...wrkflw12",id,workflowDetailsTemp,scrutinyDetails,applicationDetails)
     if (workflowDetailsTemp?.data?.applicationBusinessService) {
       setWorkflowDetails(workflowDetailsTemp);
       setBusinessService(workflowDetailsTemp?.data?.applicationBusinessService);
@@ -295,8 +252,8 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
 
         {/* <Row> */}
         
-          <div class="col-md-10 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
-          {/* <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}>Submit</Button> */}
+          {/* <div class="col-md-10 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
+          
 
 
           {showModal ? (
@@ -325,20 +282,59 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
             closeWarningPopup={closeWarningPopup}
             />
           ) : null}
-          {/* <ApplicationDetailsToast t={t} showToast={showToast} closeToast={closeToast} businessService={businessService} /> */}
+         
           <ApplicationDetailsActionBar
             workflowDetails={workflowDetails}
             displayMenu={displayMenu}
             onActionSelect={onActionSelect}
             setDisplayMenu={setDisplayMenu}
             businessService={businessService}
-            // forcedActionPrefix={forcedActionPrefix}
+        
             ActionBarStyle={{}}
             MenuStyle={{}}
           />
 
 
-            </div>
+            </div> */}
+          
+            <div class="col-md-10 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
+           {showModal ? (
+            <ActionModal
+              t={t}
+              action={selectedAction}
+              tenantId={tenantId}
+              state={state}
+              id={id}
+              applicationDetails={applicationDetails}
+              applicationData={{...applicationDetails?.applicationData,workflowCode:applicationDetails?.applicationData?.workflowCode || "SERVICE_PLAN"}}
+              closeModal={closeModal}
+              submitAction={submitAction}
+              actionData={workflowDetails?.data?.timeline}
+              businessService={businessService}
+              workflowDetails={workflowDetails}
+              moduleCode={moduleCode}
+            />
+          ) : null}
+          {isWarningPop ? (
+            <ApplicationDetailsWarningPopup 
+            action={selectedAction}
+            workflowDetails={workflowDetails}
+            businessService={businessService}
+            isWarningPop={isWarningPop}
+            closeWarningPopup={closeWarningPopup}
+            />
+          ) : null}
+          
+          <ApplicationDetailsActionBar
+            workflowDetails={workflowDetails}
+            displayMenu={displayMenu}
+            onActionSelect={onActionSelect}
+            setDisplayMenu={setDisplayMenu}
+            businessService={businessService}
+            ActionBarStyle={{}}
+            MenuStyle={{}}
+          />
+   </div>
           
         {/* </Row> */}
         <Row>
