@@ -5,6 +5,10 @@ import { useForm } from "react-hook-form";
 import { DatePicker } from "@egovernments/digit-ui-react-components";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import axios from "axios";
+// import { getDocShareholding } from "../docView/docView.help";
+import FileUpload from "@mui/icons-material/FileUpload";
+import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 function SubmitNew() {
   const [modal, setmodal] = useState(false);
   const [modal1, setmodal1] = useState(false);
@@ -53,22 +57,36 @@ function SubmitNew() {
     }
   };
   const [fileStoreId, setFileStoreId] = useState({});
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [loader, setLoader] = useState(false);
   const getDocumentData = async (file, fieldName) => {
+    if (selectedFiles.includes(file.name)) {
+      setShowToastError({ key: "error" });
+      return;
+    }
     const formData = new FormData();
     formData.append("file", file);
     formData.append("tenantId", "hr");
     formData.append("module", "property-upload");
     formData.append("tag", "tag-property");
-    // setLoader(true);
+    setLoader(true);
     try {
       const Resp = await axios.post("/filestore/v1/files", formData, {});
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
       // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
-      // setLoader(false);
+      if (fieldName === "uploadBg") {
+        setValue("uploadBgFileName", file.name);
+      }
+      if (fieldName === "tcpSubmissionReceived") {
+        setValue("tcpSubmissionReceivedFileName", file.name);
+      }
+      setSelectedFiles([...selectedFiles, file.name]);
+      setLoader(false);
+      setShowToast({ key: "success" });
     } catch (error) {
       setLoader(false);
-      return error;
+      return error.message;
     }
   };
   const [applicantId, setApplicantId] = useState("");
@@ -102,6 +120,9 @@ function SubmitNew() {
   //   setApplicantId(id?.toString());
   //   if (id) getApplicantUserData(id);
   // }, []);
+  //
+
+  const areAllFieldsFilled = existingBgNumber != "";
 
   return (
     <form onSubmit={handleSubmit(bankSubmitNew)}>
@@ -115,7 +136,7 @@ function SubmitNew() {
                   <h2>Enter LOI No. </h2>
                 </Form.Label>
               </div>
-              <input type="text" className="form-control" placeholder="" {...register("loiNumber")} />
+              <input type="text" className="form-control" placeholder="" {...register("loiNumber")} disabled={!areAllFieldsFilled} />
             </Col>
 
             <Col md={4} xxl lg="3">
@@ -240,11 +261,28 @@ function SubmitNew() {
             </Col>
             <Col md={4} xxl lg="3">
               <div>
-                <Form.Label>
-                  <h2>Upload B.G. softcopy</h2>
-                </Form.Label>
+                <label>
+                  <h2>Upload B.G. softcopy </h2>
+                  <FileUpload color="primary" />
+
+                  <input
+                    type="file"
+                    accept="application/pdf/jpeg/png"
+                    style={{ display: "none" }}
+                    required
+                    onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBg")}
+                  />
+                </label>
+                {fileStoreId?.uploadBg ? (
+                  <a onClick={() => getDocShareholding(fileStoreId?.uploadBg)} className="btn btn-sm ">
+                    <VisibilityIcon color="info" className="icon" />
+                  </a>
+                ) : (
+                  <p></p>
+                )}
+                <h3 style={{}}>{watch("uploadBgFileName") ? watch("uploadBgFileName") : null}</h3>
               </div>
-              <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBg")} />
+              {/* <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBg")} /> */}
             </Col>
             <Col md={4} xxl lg="3">
               <div>
@@ -280,8 +318,27 @@ function SubmitNew() {
                           Upload Receipt of Submission.
                           <span style={{ color: "red" }}>*</span>
                         </h2>
+                        <FileUpload color="primary" />
+                        <div>
+                          <input
+                            type="file"
+                            accept="application/pdf/jpeg/png"
+                            style={{ display: "none" }}
+                            required
+                            onChange={(e) => getDocumentData(e?.target?.files[0], "tcpSubmissionReceived")}
+                          />
+                        </div>
                       </label>
-                      <div>
+                      {fileStoreId?.tcpSubmissionReceived ? (
+                        <a onClick={() => getDocShareholding(fileStoreId?.tcpSubmissionReceived)} className="btn btn-sm ">
+                          <VisibilityIcon color="info" className="icon" />
+                        </a>
+                      ) : (
+                        <p></p>
+                      )}
+                      <h3 style={{}}>{watch("tcpSubmissionReceivedFileName") ? watch("tcpSubmissionReceivedFileName") : null}</h3>
+
+                      {/* <div>
                         <input
                           type="file"
                           className="form-control"
@@ -291,7 +348,7 @@ function SubmitNew() {
 
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.tcpSubmissionReceived && errors?.tcpSubmissionReceived?.message}
-                      </h3>
+                      </h3> */}
                     </div>
                   </div>
                 </div>
@@ -321,7 +378,7 @@ function SubmitNew() {
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
-                  <h2>Existing B.G. No. (In case of Replace, Extend and Renew, Enter B.G. No.)</h2>
+                  <h2>Existing B.G. No. (In case of replacement, extension, renewal enter bank guarantee number)</h2>
                 </Form.Label>
               </div>
               <input type="text" className="form-control" placeholder="" {...register("existingBgNumber")} />

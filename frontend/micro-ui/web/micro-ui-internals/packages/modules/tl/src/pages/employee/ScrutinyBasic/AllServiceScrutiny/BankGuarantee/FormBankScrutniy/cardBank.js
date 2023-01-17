@@ -40,7 +40,7 @@ const ScrutinyForm = (props) => {
   const [businessService, setBusinessService] = useState("BG_NEW");
   const [moduleCode, setModuleCode] = useState("TL");
   const [scrutinyDetails, setScrutinyDetails] = useState();
-  // const [applicationNumber,setApplicationNumber] = useState("");
+  // const [applicationNumber, setApplicationNumber] = useState("");
   const [applicationDetails, setApplicationDetails] = useState();
   const [workflowDetails, setWorkflowDetails] = useState();
 
