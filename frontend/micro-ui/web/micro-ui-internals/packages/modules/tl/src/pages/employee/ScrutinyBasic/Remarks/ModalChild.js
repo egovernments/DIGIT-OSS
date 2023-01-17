@@ -8,9 +8,8 @@ import { useParams } from "react-router-dom";
 import { ScrutinyRemarksContext } from "../../../../../context/remarks-data-context";
 
 function ModalChild(props) {
-
   const { handleGetFiledsStatesById, handleGetRemarkssValues } = useContext(ScrutinyRemarksContext);
- const userInfo = Digit.UserService.getUser()?.info || {};
+  const userInfo = Digit.UserService.getUser()?.info || {};
   const classes = useStyles();
   const smShow = props.displaymodal;
   const [RemarksDeveloper, setDeveloperRemarks] = useState("");
@@ -21,8 +20,7 @@ function ModalChild(props) {
   const inputFieldLabel = props.labelValue;
   const dateTime = new Date();
   const authToken = Digit.UserService.getUser()?.access_token || null;
-  const {id} = useParams();
-
+  const { id } = useParams();
 
   const handlemodalsubmit = async () => {
     if (status) {
@@ -45,14 +43,14 @@ function ModalChild(props) {
           comment: RemarksDeveloper.data,
           fieldValue: inputFieldValue,
           fieldIdL: props.labelmodal,
-          isApproved: status==="approved"?true:false,
+          isApproved: status === "approved" ? true : false,
           userid: userInfo?.id || null,
           serviceId: "123",
           documentId: null,
           ts: dateTime.toUTCString(),
         },
       };
-      
+
       try {
         const Resp = await axios.post("/land-services/egscrutiny/_create?status=submit1", postData, {}).then((response) => {
           return response.data;
@@ -71,15 +69,11 @@ function ModalChild(props) {
   console.log("smshow", smShow);
 
   useEffect(() => {
-    console.log("userInfoLog123",userInfo)
-    console.log("loggg", props.selectedFieldData);
     if (props.selectedFieldData) {
-      console.log("loggg changing123...", props.selectedFieldData);
       setStatus(props.selectedFieldData.isApproved ? "approved" : "disapproved");
       setDeveloperRemarks({ data: props.selectedFieldData.comment ? props.selectedFieldData.comment : "" });
       // setDeveloperRemarks({data:props.selectedFieldData.isApproved?"approved":"disapproved"});
     } else {
-      console.log("loggg setting null...", props.selectedFieldData);
       setStatus(null);
       setDeveloperRemarks({ data: "" });
     }

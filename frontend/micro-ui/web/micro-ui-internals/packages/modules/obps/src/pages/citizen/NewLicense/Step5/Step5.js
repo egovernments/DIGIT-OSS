@@ -92,8 +92,10 @@ const FeesChargesForm = (props) => {
       ],
       CalculatorRequest: {
         totalLandSize: 1,
-        potenialZone: stepData?.ApplicantPurpose?.potential,
-        purposeCode: stepData?.ApplicantPurpose?.purpose,
+        // potenialZone: stepData?.ApplicantPurpose?.potential,
+        potenialZone: "HYP",
+        // purposeCode: stepData?.ApplicantPurpose?.purpose,
+        purposeCode: "DDJAY_APHP",
         applicationNumber: applicantId,
       },
     };
@@ -187,6 +189,8 @@ const FeesChargesForm = (props) => {
   }, []);
 
   const [fileStoreId, setFileStoreId] = useState({});
+  const [selectedFiles, setSelectedFiles] = useState([]);
+
   const getDocumentData = async (file, fieldName) => {
     if (selectedFiles.includes(file.name)) {
       setShowToastError({ key: "error" });
@@ -223,6 +227,38 @@ const FeesChargesForm = (props) => {
   const totalAreaAcre =
     dataArea * 0.125 + dataAreaMarla * 0.0062 + dataAreaSarai * 0.00069 + dataAreaBigha * 0.33 + dataAreaBiswa * 0.0309 + dataAreaBiswansi * 0.619;
 
+  // const handleWorkflow = async () => {
+  //   const token = window?.localStorage?.getItem("token");
+  //   setLoader(true);
+  //   const payload = {
+  //     ProcessInstances: [
+  //       {
+  //         businessService: "NewTL",
+  //         documents: null,
+  //         businessId: applicantId,
+  //         tenantId: "hr",
+  //         moduleName: "TL",
+  //         action: "FEESANDCHARGES",
+  //         previousStatus: "LANDDETAILS",
+  //         comment: null,
+  //       },
+  //     ],
+  //     RequestInfo: {
+  //       apiId: "Rainmaker",
+  //       msgId: "1669293303096|en_IN",
+  //       authToken: token,
+  //     },
+  //   };
+  //   try {
+  //     await axios.post("/egov-workflow-v2/egov-wf/process/_transition", payload);
+  //     setLoader(false);
+  //     props?.step4Back();
+  //   } catch (error) {
+  //     setLoader(false);
+  //     return error;
+  //   }
+  // };
+
   const getApplicantUserData = async (id) => {
     const token = window?.localStorage?.getItem("token");
     const payload = {
@@ -255,7 +291,7 @@ const FeesChargesForm = (props) => {
       {loader && <Spinner />}
       <form onSubmit={handleSubmit(FeesChrgesFormSubmitHandler)}>
         <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New Licence </h4>
+          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New Licence Application </h4>
           <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
             <Form.Group className="justify-content-center" controlId="formBasicEmail">
               <Row className="ml-auto" style={{ marginBottom: 5 }}>
@@ -304,14 +340,14 @@ const FeesChargesForm = (props) => {
                           <input type="text" className="form-control" disabled {...register("licenseFee")} />
                         </td>
                       </tr>
-                      <tr>
+                      {/* <tr>
                         <th>
                           Conversion Charges <span style={{ color: "red" }}>*</span>
                         </th>
                         <td>
                           <input type="text" className="form-control" disabled {...register("conversionCharges")} />
                         </td>
-                      </tr>
+                      </tr> */}
                     </tbody>
                   </table>
 
@@ -382,7 +418,6 @@ const FeesChargesForm = (props) => {
                                           style={{ display: "none" }}
                                           onChange={(e) => getDocumentData(e?.target?.files[0], "consentLetter")}
                                           accept="application/pdf/jpeg/png"
-                                          required
                                         />
                                       </label>
                                       {fileStoreId?.consentLetter ? (
@@ -463,7 +498,6 @@ const FeesChargesForm = (props) => {
                         type="checkbox"
                         value=""
                         id="flexCheckDefault"
-                        required
                       />
                       <label className="checkbox" for="flexCheckDefault">
                         I agree and accept the terms and conditions.

@@ -1,16 +1,17 @@
 import axios from "axios";
 
-export const getDocShareholding = async (documentId) => {
-  // console.log("logDocumnentId",documentId)
-  if (documentId !== null || documentId !== undefined) {
+export const getDocShareholding = async (documentId, setLoader) => {
+  setLoader(true);
+  if (documentId != null) {
     try {
       const response = await axios.get(`/filestore/v1/files/url?tenantId=hr&fileStoreIds=${documentId}`, {});
       const FILDATA = response.data?.fileStoreIds[0]?.url;
       // setDocShareHoldingUrl(FILDATA)
-      console.log("log123", FILDATA, response);
+      setLoader(false);
       window.open(FILDATA);
     } catch (error) {
-      console.log(error.message);
+      setLoader(false);
+      return error;
     }
   }
 };
