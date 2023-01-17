@@ -1028,14 +1028,6 @@ const ApllicantPuropseForm = (props) => {
                 </label>
                 <ReactMultiSelect control={control} name="typeLand" placeholder="Type of Land" data={typeOfLand?.data} labels="typeland" required />
               </Col>
-              {/* <Col md={4} xxl lg="4">
-                <div>
-                  <label>
-                    <h2>Same as</h2>
-                  </label>
-                </div>
-                <Form.Control type="checkbox" className="form-control" placeholder="" {...register("landOwnerRegistry")} />
-              </Col> */}
             </Row>
             <br></br>
             <Row className="ml-auto mb-3">
