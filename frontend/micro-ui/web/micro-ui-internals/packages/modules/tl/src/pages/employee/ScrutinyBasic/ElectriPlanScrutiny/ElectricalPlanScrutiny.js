@@ -95,15 +95,15 @@ const ElectricalPlanScrutiny = (props) => {
   const fieldIdList = [
     { label: "LOI Number", key: "loiNumber" },
     { label: "Electrical infrastructure sufficient to cater for the electrical need of the project area", key: "electricalInfra" },
-    { label: "Provision of the electricity distribution in the project area by the instructions of the DHBVN", key: "elecricDistribution" },
+    { label: "Provision of the electricity distribution in the project area by the instructions of the HVPNL", key: "elecricDistribution" },
     { label: "The capacity of the proposed electrical substation as per the requirement", key: "electricalCapacity" },
     { label: "Provision of 33 Kv switching station for the electrical infrastructure as per the approved layout plan", key: "switchingStation" },
     { label: "Load sanction approval as per the requirement", key: "loadSancation" },
-    { label: "Self-certified drawings from empanelled/certified architects that conform to the standard approved template.", key: "selfCenteredDrawings" },
+    { label: "Self-certified drawings from empaneled/certified architects that conform to the standard approved template as per the TCP layout plan / Site plan", key: "selfCenteredDrawings" },
     { label: "Environmental Clearance", key: "environmentalClearance" },
-    { label: "PDF (OCR Compatible) + GIS format (shapefile as per the template uploaded on the department website).", key: "pdfFormat" },
-    { label: "AutoCAD (DXF) file.", key: "autoCad" },
-    { label: "Certified copy of the plan verified by a third party.", key: "verifiedPlan" }
+    { label: "Electrical plan PDF (OCR Compatible) + GIS format.", key: "pdfFormat" },
+    { label: "Electrical plan in AutoCAD (DXF) file.", key: "autoCad" },
+    { label: "Certified copy of the Electrical plan verified by a third party.", key: "verifiedPlan" }
   ];
 
 
@@ -266,7 +266,7 @@ const ElectricalPlanScrutiny = (props) => {
             </Col>
             <Col className="ms-auto" md={4} xxl lg="4">
             <p className="ml-3">
-            Provision of the electricity distribution in the project area by the instructions of the DHBVN{" "}
+            Provision of the electricity distribution in the project area by the instructions of the HVPNL{" "}
                   <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
               </p>
               <div className="ml-3" >
@@ -302,7 +302,7 @@ const ElectricalPlanScrutiny = (props) => {
                 color:fieldIconColors.elecricDistribution }}
               onClick={() => {
                   setOpennedModal("elecricDistribution")
-                  setLabelValue("Provision of the electricity distribution in the project area by the instructions of the DHBVN"),
+                  setLabelValue("Provision of the electricity distribution in the project area by the instructions of the HVPNL"),
                   setSmShow(true),
                   console.log("modal open"),
                   setFieldValue(apiResponse !== null ? apiResponse?.elecricDistributionr : null);
@@ -475,7 +475,7 @@ const ElectricalPlanScrutiny = (props) => {
                   </div>
                 </td>
                 <td component="th" scope="row">
-                  <h2>Self-certified drawings from empanelled/certified architects that conform to the standard approved template.</h2>
+                  <h2>Self-certified drawings from empaneled/certified architects that conform to the standard approved template as per the TCP layout plan / Site plan</h2>
                 </td>
                 <td component="th" scope="row">
                   {/* <input type="file" className="form-control" {...register("selfCenteredDrawings")} /> */}
@@ -496,7 +496,7 @@ const ElectricalPlanScrutiny = (props) => {
                 color:fieldIconColors.selfCenteredDrawings }}
               onClick={() => {
                   setOpennedModal("Selfcertified")
-                  setLabelValue("Self-certified drawings from empanelled/certified architects that conform to the standard approved template."),
+                  setLabelValue("Self-certified drawings from empaneled/certified architects that conform to the standard approved template as per the TCP layout plan / Site plan"),
                   setSmShow(true),
                   console.log("modal open"),
                   setFieldValue(apiResponse !== null ? apiResponse.selfCenteredDrawings : null);
@@ -549,7 +549,7 @@ const ElectricalPlanScrutiny = (props) => {
                   </div>
                 </td>
                 <td component="th" scope="row">
-                  <h2>PDF (OCR Compatible) + GIS format (shapefile as per the template uploaded on the department website).</h2>
+                  <h2>Electrical plan PDF (OCR Compatible) + GIS format.</h2>
 
                  </td>
                 <td component="th" scope="row">
@@ -571,7 +571,7 @@ const ElectricalPlanScrutiny = (props) => {
                 color:fieldIconColors.pdfFormat }}
               onClick={() => {
                   setOpennedModal("pdfFormat")
-                  setLabelValue("PDF (OCR Compatible) + GIS format (shapefile as per the template uploaded on the department website)."),
+                  setLabelValue("Electrical plan PDF (OCR Compatible) + GIS format."),
                   setSmShow(true),
                   console.log("modal open"),
                   setFieldValue(apiResponse !== null ? apiResponse?.pdfFormat : null);
@@ -587,7 +587,7 @@ const ElectricalPlanScrutiny = (props) => {
                   </div>
                 </td>
                 <td component="th" scope="row">
-                  <h2>AutoCAD (DXF) file.</h2>
+                  <h2>Electrical plan in AutoCAD (DXF) file.</h2>
                 </td>
                 <td component="th" scope="row">
                   {/* <input type="file" className="form-control" {...register("autoCad")} /> */}
@@ -609,7 +609,7 @@ const ElectricalPlanScrutiny = (props) => {
                 color:fieldIconColors.autoCad }}
               onClick={() => {
                   setOpennedModal("autoCad")
-                  setLabelValue("AutoCAD (DXF) file."),
+                  setLabelValue("Electrical plan in AutoCAD (DXF) file."),
                   setSmShow(true),
                   console.log("modal open"),
                   setFieldValue(apiResponse !== null ? apiResponse?.autoCad : null);
@@ -625,7 +625,7 @@ const ElectricalPlanScrutiny = (props) => {
                   </div>
                 </td>
                 <td component="th" scope="row">
-                  <h2>Certified copy of the plan verified by a third party.</h2>
+                  <h2>Certified copy of the Electrical plan verified by a third party.</h2>
                 </td>
                 <td component="th" scope="row">
                
