@@ -230,7 +230,7 @@ public class PropertyService {
 					&& !propertyFromSearch.getStatus().equals(Status.INWORKFLOW)) {
 
 				propertyFromSearch.setStatus(Status.INACTIVE);
-				producer.push(config.getUpdatePropertyTopic(), OldPropertyRequest);
+				producer.pushAfterEncrytpion(config.getUpdatePropertyTopic(), OldPropertyRequest);
 				util.saveOldUuidToRequest(request, propertyFromSearch.getId());
 				producer.pushAfterEncrytpion(config.getSavePropertyTopic(), request);
 
@@ -503,10 +503,9 @@ public class PropertyService {
 		//enrichmentService.enrichUpdateRequest(request, propertyFromSearch);
 		util.mergeAdditionalDetails(request, propertyFromSearch);
 		
-		producer.push(config.getUpdatePropertyTopic(), request);
+		producer.pushAfterEncrytpion(config.getUpdatePropertyTopic(), request);
 		
 		request.getProperty().setWorkflow(null);
-		
 		
 		return request.getProperty();
 	}
