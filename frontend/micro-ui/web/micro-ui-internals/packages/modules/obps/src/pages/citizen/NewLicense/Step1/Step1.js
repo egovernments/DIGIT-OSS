@@ -127,7 +127,6 @@ const ApllicantFormStep1 = (props) => {
 
   useEffect(() => {
     if (developerDataLabel) {
-      console.log("developerDataLabel", developerDataLabel);
       setValue("developerName", developerDataLabel?.addInfo?.companyName);
       setValue("developerAddress", developerDataLabel?.addInfo?.registeredAddress);
       setValue("developerEmail", developerDataLabel?.addInfo?.email);

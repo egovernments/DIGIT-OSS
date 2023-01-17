@@ -44,9 +44,9 @@ const ApllicantPuropseForm = (props) => {
       dataIndex: "developmentPlan",
     },
     {
-      key: "zone",
+      key: "potential",
       title: "Zone",
-      dataIndex: "zone",
+      dataIndex: "potential",
     },
     {
       key: "sector",
@@ -241,8 +241,8 @@ const ApllicantPuropseForm = (props) => {
   const [potentialOptons, setPotentialOptions] = useState({ data: [], isLoading: true });
   const [districtOptons, setDistrictOptions] = useState({ data: [], isLoading: true });
   const [devPlanOptons, setDevPlanOptions] = useState({ data: [], isLoading: true });
-  const [ZoneOptons, setZoneOptions] = useState({ data: [], isLoading: true });
-  const [sectorOptons, setSectorOptions] = useState({ data: [], isLoading: true });
+  const [ZoneOptions, setZoneOptions] = useState({ data: [], isLoading: true });
+  const [sectorOptions, setSectorOptions] = useState({ data: [], isLoading: true });
   const [loader, setLoader] = useState(false);
   const [getKhewats, setKhewats] = useState("");
   const [fileStoreId, setFileStoreId] = useState({});
@@ -254,6 +254,11 @@ const ApllicantPuropseForm = (props) => {
   const stateId = Digit.ULBService.getStateId();
   const [typeOfLand, setYypeOfLand] = useState({ data: [], isLoading: true });
   const [showFields, setShowFields] = useState(false);
+  const [getDTCP, setDTCP] = useState(null);
+  const [getDevPlanVal, setDevPlanVal] = useState("");
+  const [getSectorVal, setSectorVal] = useState("");
+  const [getNameRevenueState, setNameRevenueState] = useState("");
+  const [getMustil, setMustil] = useState("");
 
   const resetValues = () => {
     resetField("district");
@@ -311,22 +316,75 @@ const ApllicantPuropseForm = (props) => {
       setValue("nameAuthSign", specificTableData?.nameAuthSign);
       setValue("registeringAuthority", specificTableData?.registeringAuthority);
       setValue("registeringAuthorityDoc", specificTableData?.registeringAuthorityDoc);
-      const districtValue = districtDataLabels?.data?.filter((item) => item?.value === specificTableData?.district);
+      setValue("editRectangleNo", specificTableData?.editRectangleNo);
+      setValue("editKhewats", specificTableData?.editKhewats);
+      setValue("landOwnerRegistry", specificTableData?.landOwnerRegistry);
+      const districtValue = districtOptons?.data?.filter((item) => item?.value === specificTableData?.district);
+      // getDevPlanOption(districtValue?.[0]?.distCodeTCP);
       setValue("district", { label: districtValue?.[0]?.label, value: districtValue?.[0]?.value });
-      const devPlanValue = potentialDataLabels?.data?.filter((item) => item?.value === specificTableData?.potential);
-      setValue("potential", { label: devPlanValue?.[0]?.label, value: devPlanValue?.[0]?.value });
+      if (districtValue?.[0]?.distCodeTCP) setDTCP(districtValue?.[0]);
+      // setValue("potential", { label: devPlanValue?.[0]?.label, value: devPlanValue?.[0]?.value });
       const zoneValue = zoneDataLabels?.data?.filter((item) => item?.value === specificTableData?.zone);
       setValue("zone", { label: zoneValue?.[0]?.label, value: zoneValue?.[0]?.value });
       const sectorValue = sectorDataLabels?.data?.filter((item) => item?.value === specificTableData?.sector);
       setValue("sector", { label: sectorValue?.[0]?.label, value: sectorValue?.[0]?.value });
       const tehsilValue = tehsilDataLabels?.data?.filter((item) => item?.value === specificTableData?.tehsil);
+      setNameRevenueState(tehsilValue?.[0]?.value);
       setValue("tehsil", { label: tehsilValue?.[0]?.label, value: tehsilValue?.[0]?.value });
       const revenueValue = revenueDataLabels?.data?.filter((item) => item?.value === specificTableData?.revenueEstate);
+      setMustil(revenueValue?.[0]?.value);
       setValue("revenueEstate", { label: revenueValue?.[0]?.label, value: revenueValue?.[0]?.value });
       const mustilValue = mustilDataLabels?.data?.filter((item) => item?.value === specificTableData?.rectangleNo);
       setValue("rectangleNo", { label: mustilValue?.[0]?.label, value: mustilValue?.[0]?.value });
+      const typeOfLandValue = typeOfLand?.data?.filter((item) => item?.value === specificTableData?.typeLand);
+      setValue("typeLand", { label: typeOfLandValue?.[0]?.label, value: typeOfLandValue?.[0]?.value });
+      setValue("isChange", JSON.parse(specificTableData?.isChange));
     }
-  }, [specificTableData, districtDataLabels, potentialDataLabels, tehsilDataLabels, revenueDataLabels, mustilDataLabels]);
+  }, [devPlanOptons, specificTableData, districtOptons, potentialDataLabels, tehsilDataLabels, revenueDataLabels, mustilDataLabels, typeOfLand]);
+
+  useEffect(() => {
+    if (getDTCP) {
+      getDevPlanOption(getDTCP?.distCodeTCP);
+      setDistrict(getDTCP?.value);
+      getTehslidata(getDTCP?.value);
+    }
+  }, [getDTCP]);
+
+  useEffect(() => {
+    if (getDevPlanVal) getZoneOption(getDevPlanVal);
+  }, [getDevPlanVal]);
+
+  useEffect(() => {
+    if (getSectorVal) getSectorOptions(getSectorVal);
+  }, [getSectorVal]);
+
+  useEffect(() => {
+    if (getMustil) getMustilData(getMustil);
+  }, [getMustil]);
+
+  useEffect(() => {
+    if (getNameRevenueState) {
+      getRevenuStateData(getNameRevenueState);
+      setTehsilCode(getNameRevenueState);
+    }
+  }, [getNameRevenueState]);
+
+  useEffect(() => {
+    const devPlanValue = devPlanOptons?.data?.filter((item) => item?.value === specificTableData?.developmentPlan);
+    setDevPlanVal(devPlanValue?.[0]?.value);
+    setValue("developmentPlan", { label: devPlanValue?.[0]?.label, value: devPlanValue?.[0]?.value });
+  }, [devPlanOptons, specificTableData]);
+
+  useEffect(() => {
+    const potential = ZoneOptions?.data?.filter((item) => item?.label === specificTableData?.potential);
+    setSectorVal(potential?.[0]?.value);
+    setValue("potential", { label: potential?.[0]?.label, value: potential?.[0]?.value });
+  }, [ZoneOptions, specificTableData]);
+
+  useEffect(() => {
+    const sectorOpt = sectorOptions?.data?.filter((item) => item?.label === specificTableData?.sector);
+    setValue("sector", { label: sectorOpt?.[0]?.label, value: sectorOpt?.[0]?.value });
+  }, [sectorOptions, specificTableData]);
 
   const {
     register,
@@ -365,7 +423,7 @@ const ApllicantPuropseForm = (props) => {
 
   useEffect(() => {
     const district = DistrictType?.["common-masters"]?.District?.map(function (data) {
-      return { value: data?.distCodeTCP, label: data?.name };
+      return { value: data?.districtCode, label: data?.name, distCodeTCP: data?.distCodeTCP };
     });
     setDistrictOptions({ data: district, isLoading: false });
   }, [DistrictType]);
@@ -586,22 +644,18 @@ const ApllicantPuropseForm = (props) => {
   }, []);
 
   const ApplicantPurposeModalData = (modaldata) => {
-    const test = modalData?.filter((item) => item?.rowid === specificTableData?.rowid);
     modaldata["district"] = modaldata?.district?.value;
-    modaldata["potential"] = modaldata?.potential?.value;
-    modaldata["zone"] = modaldata?.zone?.value;
-    modaldata["sector"] = modaldata?.sector?.value;
+    modaldata["potential"] = modaldata?.potential?.label;
+    modaldata["sector"] = modaldata?.sector?.label;
     modaldata["tehsil"] = modaldata?.tehsil?.value;
     modaldata["revenueEstate"] = modaldata?.revenueEstate?.value;
     modaldata["rectangleNo"] = modaldata?.rectangleNo?.value;
     modaldata["typeLand"] = modaldata?.typeLand?.value;
+    modaldata["developmentPlan"] = modaldata?.developmentPlan?.value;
     modaldata["isChange"] = showFields;
 
     // modaldata["registeringAuthorityDoc"] = docId;
-    delete modaldata?.district;
-    delete modaldata?.potential;
     delete modaldata?.purpose;
-    delete modaldata?.state;
 
     if (modaldata?.consolidationType === "consolidated") {
       delete modaldata?.bigha;
@@ -639,6 +693,14 @@ const ApllicantPuropseForm = (props) => {
     // data["district"] = watch("district")?.value;
     // data["state"] = "Haryana";
     delete data?.district;
+    delete data?.developmentPlan;
+    delete data?.typeLand;
+    delete data?.landOwnerRegistry;
+    delete data?.nonConsolidatedTotal;
+    delete data?.consolidatedTotal;
+    delete data?.editKhewats;
+    delete data?.editRectangleNo;
+    delete data?.hadbastNo;
     delete data?.potential;
     delete data?.zone;
     delete data?.sector;
@@ -739,21 +801,12 @@ const ApllicantPuropseForm = (props) => {
   useEffect(() => {
     if (stepData) {
       const data = purposeOptions?.data?.filter((item) => item?.value === stepData?.purpose);
-      // const potientialData = potentialOptons?.data?.filter((item) => item?.value === stepData?.potential);
-      const zoneData = ZoneOptons?.data?.filter((item) => item?.value === stepData?.zonePlan);
-      const devPlanData = devPlanOptons?.data?.filter((item) => item?.value === stepData?.devPlan);
-      const districtsData = districtOptons?.data?.filter((item) => item?.value === stepData?.districts);
       const districtData = districtDataLabels?.data?.filter((item) => item?.value === stepData?.district);
       setValue("purpose", { label: data?.[0]?.label, value: data?.[0]?.value });
-      setValue("zonePlan", { label: zoneData?.[0]?.label, value: zoneData?.[0]?.value });
-      // setValue("potential", { label: potientialData?.[0]?.label, value: potientialData?.[0]?.value });
-      setValue("devPlan", { label: devPlanData?.[0]?.label, value: devPlanData?.[0]?.value });
-      setValue("districts", { label: districtsData?.[0]?.label, value: districtsData?.[0]?.value });
-      setValue("district", { label: districtData?.[0]?.label, value: districtData?.[0]?.distCode });
-      setDistrict(districtData?.[0]?.distCode);
-      if (districtData?.[0]?.distCode) getTehslidata(districtData?.[0]?.distCode);
+      // setDistrict(districtData?.[0]?.distCode);
+      // if (districtData?.[0]?.distCode) getTehslidata(districtData?.[0]?.distCode);
     }
-  }, [stepData, purposeOptions, potentialOptons, ZoneOptons, districtOptons, devPlanOptons, districtDataLabels]);
+  }, [stepData, purposeOptions, districtDataLabels]);
 
   const { data: LandData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["LandType"]);
 
@@ -817,7 +870,7 @@ const ApllicantPuropseForm = (props) => {
     };
     try {
       const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${id}`, payload);
-      const userData = Resp?.data?.newBankGuaranteeList;
+      const userData = Resp?.data?.LicenseDetails?.[0]?.ApplicantPurpose;
       setStepData(userData);
     } catch (error) {
       return error;
@@ -956,7 +1009,7 @@ const ApllicantPuropseForm = (props) => {
                   onChange={(e) => {
                     getTehslidata(e.value);
                     setDistrict(e.value);
-                    getDevPlanOption(e.value);
+                    getDevPlanOption(e.distCodeTCP);
                   }}
                 />
 
@@ -999,11 +1052,11 @@ const ApllicantPuropseForm = (props) => {
                   </div>
                   <ReactMultiSelect
                     control={control}
-                    name="zone"
+                    name="potential"
                     placeholder="zonePlan"
-                    data={ZoneOptons?.data}
+                    data={ZoneOptions?.data}
                     labels="PotentialZone"
-                    loading={ZoneOptons?.isLoading}
+                    loading={ZoneOptions?.isLoading}
                     onChange={(e) => getSectorOptions(e?.value)}
                   />
 
@@ -1012,29 +1065,7 @@ const ApllicantPuropseForm = (props) => {
                   </h3>
                 </Col>
               )}
-              {/* <Col md={4} xxl lg="4">
-                <div>
-                  <Form.Label>
-                    <h2>
-                      Potential Zone<span style={{ color: "red" }}>*</span>
-                    </h2>
-                  </Form.Label>
-                </div>
-                <ReactMultiSelect
-                  control={control}
-                  name="potential"
-                  placeholder="Potential"
-                  data={potentialOptons?.data}
-                  labels="Potential"
-                  onChange={handleChangePotential}
-                  loading={potentialOptons?.isLoading}
-                />
-                <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.potential?.value && errors?.potential?.value?.message}
-                </h3>
-              </Col> */}
-
-              {watch("zone")?.value && (
+              {watch("potential")?.value && (
                 <Col md={4} xxl lg="4">
                   <div>
                     <Form.Label>
@@ -1047,9 +1078,9 @@ const ApllicantPuropseForm = (props) => {
                     control={control}
                     name="sector"
                     placeholder="Sector"
-                    data={sectorOptons?.data}
+                    data={sectorOptions?.data}
                     labels="Sector"
-                    loading={sectorOptons?.isLoading}
+                    loading={sectorOptions?.isLoading}
                   />
 
                   <h3 className="error-message" style={{ color: "red" }}>
@@ -1191,14 +1222,13 @@ const ApllicantPuropseForm = (props) => {
                   onClick={(e) => setShowFields(e.target.checked)}
                   className="form-check-input"
                   formControlName="agreeCheck"
-                  name="isChange"
                   type="checkbox"
                   value=""
                   id="flexCheckDefault"
-                  // required
+                  {...register("isChange")}
                 />
               </div>
-              {showFields && (
+              {watch("isChange") && (
                 <Row className="ml-auto mb-3">
                   <Col md={4} xxl lg="4">
                     <div>
