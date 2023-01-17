@@ -5,14 +5,21 @@ import { TickMark } from "@egovernments/digit-ui-react-components";
 let actions = [];
 
 const getAction = (flow) => {
- switch(flow){
-   case "STAKEHOLDER": actions = [
-    'Applicant Type',
-    'BPA_ADD_INFO_LABEL',
-    'BPA_AUTHORIZED_USER_LABEL',
-    'BPA_DEVELOPER_CAPACITY_LABEL',
-    'BPA_DOC_DETAILS_SUMMARY',
-    'BPA_STEPPER_SUMMARY_HEADER',
+  switch (flow) {
+    case "STAKEHOLDER": actions = [
+      'Applicant Type',
+      'BPA_ADD_INFO_LABEL',
+      'BPA_AUTHORIZED_USER_LABEL',
+      'BPA_DEVELOPER_CAPACITY_LABEL',
+      'BPA_DOC_DETAILS_SUMMARY',
+      'BPA_STEPPER_SUMMARY_HEADER',
+    ]
+      break;
+    case 'ARCHITECT.CLASSA': actions = [
+      'Applicant Type',
+      'Authorized User',
+      'BPA_DOC_DETAILS_SUMMARY',
+      'BPA_STEPPER_SUMMARY_HEADER',
     ]
       break;
     case "OCBPA": actions = [
@@ -28,16 +35,18 @@ const getAction = (flow) => {
       'BPA_NOC_DETAILS_SUMMARY',
       'BPA_STEPPER_SUMMARY_HEADER',
     ]
- }
+  }
 }
-const Timeline = ({ currentStep = 1, flow="", onChangeStep=()=>{console.log("change step function is not passed")} }) => {
+const Timeline = ({ currentStep = 1, flow = "", onChangeStep = () => { console.log("change step function is not passed") }, isAPILoaded = true }) => {
   const { t } = useTranslation();
   const isMobile = window.Digit.Utils.browser.isMobile();
-  getAction(flow);
+  if(isAPILoaded){
+    getAction(flow);
+  }
   return (
-    <div className="timeline-container" style={isMobile?{}:{marginRight:"auto"}} >
+    <div className="timeline-container" style={isMobile ? {} : { marginRight: "auto" }} >
       {actions.map((action, index, arr) => (
-        <div className="timeline-checkpoint" style={{ cursor: index+1<currentStep ? "pointer" : "default" }} key={index} onClick={()=>onChangeStep(index+1)}>
+        <div className="timeline-checkpoint" style={{ cursor: index + 1 < currentStep ? "pointer" : "default" }} key={index} onClick={() => onChangeStep(index + 1)}>
           <div className="timeline-content">
             <span className={`circle ${index <= currentStep - 1 && 'active'}`}>{index < currentStep - 1 ? <TickMark /> : index + 1}</span>
             <span className="secondary-color">{t(action)}</span>

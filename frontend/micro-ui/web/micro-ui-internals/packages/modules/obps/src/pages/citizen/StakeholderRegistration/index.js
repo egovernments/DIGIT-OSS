@@ -39,12 +39,18 @@ const StakeholderRegistration = () => {
     history.push(`${path}/acknowledgement`);
   };
 
-  const handleSelect = (key, data, skipStep, isFromCreateApi) => {
+  const handleSelect = (key, data, skipStep, isFromCreateApi,redirectPath = null) => {
+    console.log("log1234......",redirectPath,key,data)
     if (isFromCreateApi) setParams(data);
     else if(key=== "")
     setParams({...data});
     else setParams({ ...params, ...{ [key]: { ...params[key], ...data }}});
-    goNext(skipStep);
+    if(redirectPath){
+      history.push(redirectPath);
+      return;
+    } else {
+      goNext(skipStep);
+    }
   };
   const handleSkip = () => {};
 

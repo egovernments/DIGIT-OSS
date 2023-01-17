@@ -1,7 +1,7 @@
 import { BackButton, Card, label, labelError, Toast, FormStep, Loader, Dropdown, MobileNumber, RadioButtons, RadioOrSelect, TextInput, TextArea, CheckBox, DatePicker } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import { Form, Row } from "react-bootstrap";
-import { useLocation } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import Timeline from "../components/Timeline";
 import { convertEpochToDate } from "../utils/index";
 import axios from "axios";
@@ -31,7 +31,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
 
   const {setValue, getValues, watch} = useForm();
   const [Documents, setDocumentsData] = useState({});
-  const [LicenseType, setLicenseType] = useState(formData?.LicneseType?.LicenseType || formData?.formData?.LicneseType?.LicenseType || "");
+  const [LicenseType, setLicenseType] = useState();
   const getDeveloperData = async () => {
     try {
       const requestResp = {
@@ -53,6 +53,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
       });
       const licenseDataList = getDevDetails?.data;
       console.log("LICENCE DET",getDevDetails?.data.devDetail[0]?.licenceDetails?.email);
+      setLicenseType(licenseDataList?.devDetail[0]?.applicantType?.licenceType);
       setEmail(licenseDataList?.devDetail[0]?.licenceDetails?.email);
       setDOB(licenseDataList?.devDetail[0]?.licenceDetails?.dob);
       setGender(licenseDataList?.devDetail[0]?.licenceDetails?.gender)
@@ -533,7 +534,11 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
         ]
       }
 
-      onSelect(config.key, licenseDet);
+      if(LicenseType === 'ARCHITECT.CLASSA'){
+        onSelect(config.key, licenseDet,null,null,"stakeholder-document-details");
+      } else {
+        onSelect(config.key, licenseDet);
+      }
       localStorage.setItem("licenceDetails", JSON.stringify(licenseDet));
       Digit.OBPSService.BPAREGCreate(licenseDet, tenantId)
         .then((result, err) => {
@@ -548,7 +553,11 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
             isAddressSame: isAddressSame
           }
           //1, units
-          onSelect("", data, "", true);
+          if(LicenseType === 'ARCHITECT.CLASSA'){
+            onSelect("", formData,"",true,"stakeholder-document-details");
+          } else {
+            onSelect("", formData,"",true);
+          }
 
         })
         .catch((e) => {
@@ -598,7 +607,11 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
         }
 
       }
-      onSelect(config.key, developerRegisterData);
+      if(LicenseType === 'ARCHITECT.CLASSA'){
+        onSelect(config.key, developerRegisterData,null,null,"stakeholder-document-details");
+      } else {
+        onSelect(config.key, developerRegisterData);
+      }
       Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
         .then((result, err) => {
           // console.log("DATA", result?.id);
@@ -614,7 +627,11 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
             isAddressSame: isAddressSame
           }
           //1, units
-          onSelect("", data, "", true);
+          if(LicenseType === 'ARCHITECT.CLASSA'){
+            onSelect("", formData,"",true,"stakeholder-document-details");
+          } else {
+            onSelect("", formData,"",true);
+          }
 
         })
         .catch((e) => {
@@ -636,13 +653,26 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
       formData.addressLineOneCorrespondence = addressLineOneCorrespondence;
       formData.addressSameAsPermanent = addressSameAsPermanent;
       formData.isAddressSame = isAddressSame;
-      onSelect("", formData, "", true);
+      if(LicenseType === 'ARCHITECT.CLASSA'){
+        onSelect("", formData,"",true,"stakeholder-document-details");
+      } else {
+        onSelect("", formData,"",true);
+      }
       // onSelect("", formData)
     }
 
   };
 
+  const navigate = useHistory();
 
+  const changeStep = (step) => {
+    console.log("logger123..",step)
+    switch (step) {
+      case 1 :
+        navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/provide-license-type");
+        break;
+    }
+  }
   
 
   return (
@@ -651,7 +681,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
       <div className={isOpenLinkFlow ? "OpenlinkContainer" : ""}>
 
         {isOpenLinkFlow && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
-        <Timeline currentStep={1} flow="STAKEHOLDER" />
+        <Timeline currentStep={2} flow={ LicenseType === 'ARCHITECT.CLASSA' ? 'ARCHITECT.CLASSA' : "STAKEHOLDER" } onChangeStep={changeStep} isAPILoaded={LicenseType ? true : false} />
         {!isLoading ?
           <FormStep
             config={config}

@@ -125,20 +125,34 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
     const navigate = useHistory();
 
     const changeStep = (step) => {
-      switch (step) {
-        case 1 :
-          navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/provide-license-type");
-          break;
-        case 2 :
-          navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/license-add-info");
-        break;
-        case 3 :
-          navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/add-authorized-user");
-        break;
-        case 4 :
-          navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/developer-capacity");
-        break;
-      }
+        if(tradeType === 'ARCHITECT.CLASSA'){
+            switch (step) {
+                case 1 :
+                  navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/provide-license-type");
+                  break;
+                case 2 :
+                  navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/license-details");
+                break;
+                case 3 :
+                  navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/stakeholder-document-details");
+                break;
+              }
+        } else {
+            switch (step) {
+              case 1 :
+                navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/provide-license-type");
+                break;
+              case 2 :
+                navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/license-add-info");
+              break;
+              case 3 :
+                navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/add-authorized-user");
+              break;
+              case 4 :
+                navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/developer-capacity");
+              break;
+            }
+        }
     }
 
 
@@ -146,7 +160,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
         <div>
             <div className={isopenlink? "OpenlinkContainer":""}>
             {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
-            <Timeline currentStep={5} flow="STAKEHOLDER" onChangeStep={changeStep}/>
+            <Timeline currentStep={tradeType === 'ARCHITECT.CLASSA' ? 3 : 5} flow={tradeType === 'ARCHITECT.CLASSA' ? 'ARCHITECT.CLASSA' : "STAKEHOLDER"} onChangeStep={changeStep} isAPILoaded={tradeType ? true : false} />
             {!isLoading ?
                 <FormStep
                     t={t}
