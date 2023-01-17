@@ -17,6 +17,7 @@ import { getTenantId, setReturnUrl, localStorageSet, localStorageGet } from "ego
 import { LabelContainer } from "egov-ui-framework/ui-containers";
 import { getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
+import { hideSpinner, showSpinner } from "egov-ui-kit/redux/common/actions";
 
 class ShowForm extends Component {
   state = {
@@ -424,6 +425,8 @@ class ShowForm extends Component {
       clearReportHistory,
       decreaseReportIndex,
       toggleSnackbarAndSetText,
+      hideSpinner,
+      showSpinner,
     } = this.props;
     let searchParams = [];
     var tenantId = getTenantId() ? getTenantId() : commonConfig.tenantId;
@@ -501,7 +504,7 @@ class ShowForm extends Component {
           searchParams.push({ name: variable, input });
         }
       }
-
+      showSpinner();
       setSearchParams(searchParams);
 
       clearReportHistory();
@@ -530,12 +533,14 @@ class ShowForm extends Component {
                 ele.filter((e, i) => !hiddenRows.includes(i)).map((ele) => (ele == null ? "" : ele))
               );
             }
+            hideSpinner();
             pushReportHistory({ tenantId: tenantId, reportName: self.state.reportName, searchParams });
             setReportResult(response);
             showTable(true);
             setFlag(1);
           },
           function (err) {
+            hideSpinner();
             showTable(false);
             setError(err);
             // alert(err);
@@ -573,6 +578,7 @@ class ShowForm extends Component {
             }
           );
       } else {
+        showSpinner();
         var reportData = JSON.parse(localStorageGet("searchCriteria"));
         let resulturl = getResultUrl(localStorageGet("moduleName"));
         resulturl &&
@@ -597,12 +603,14 @@ class ShowForm extends Component {
                 self.handleChange({ target: { value: reportData.searchParams[i].name } }, reportData.searchParams[i].input, false, false);
               }
               setSearchParams(reportData.searchParams);
+              hideSpinner();
               setReportResult(response);
 
               showTable(true);
               setFlag(1);
             },
             function (err) {
+              hideSpinner();
               showTable(false);
               setError(err);
               // alert(err);
@@ -833,6 +841,12 @@ const mapDispatchToProps = (dispatch) => ({
   },
   decreaseReportIndex: () => {
     dispatch({ type: "DECREASE_REPORT_INDEX" });
+  },
+  hideSpinner: () => {
+    dispatch(hideSpinner());
+  },
+  showSpinner: () => {
+    dispatch(showSpinner());
   },
 });
 

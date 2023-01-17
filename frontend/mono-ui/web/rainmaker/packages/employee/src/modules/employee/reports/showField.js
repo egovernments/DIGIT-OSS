@@ -4,14 +4,14 @@ import SelectField from "material-ui/SelectField";
 import MenuItem from "material-ui/MenuItem";
 import Checkbox from "material-ui/Checkbox";
 import { translate } from "./commons/common";
-import Grid from '@material-ui/core/Grid';
+import Grid from "@material-ui/core/Grid";
 import Label from "egov-ui-kit/utils/translationNode";
 import UiBoundary from "./components/boundary";
 import boundaryConfig from "./commons/config";
 import isEmpty from "lodash/isEmpty";
 import filter from "lodash/filter";
 import AutoSuggestDropdown from "egov-ui-kit/components/AutoSuggestDropdown";
-import { getLocaleLabels ,getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
+import { getLocaleLabels, getTransformedLocale } from "egov-ui-framework/ui-utils/commons";
 
 export default class ShowField extends Component {
   constructor(props) {
@@ -27,7 +27,7 @@ export default class ShowField extends Component {
 
   renderFields = (obj) => {
     let des = getLocaleLabels(obj.label, obj.label);
-    const {localizationLabels} =this.props;
+    const { localizationLabels } = this.props;
     let { maxDate } = this.state;
     let description = des;
 
@@ -39,29 +39,40 @@ export default class ShowField extends Component {
         label: "RT_ALL",
       });
     }
-
+    //
     if (typeof obj.defaultValue == "object") {
-      for (var variable in obj.defaultValue) {
-        if(obj.isLocalisationRequired){
+      if (obj.name == "applicationStatus" && obj.label === "reports.tl.applicationstatus") {
+        Object.keys(obj.defaultValue).map((key) => {
           dropDownData.push({
-            value: variable,
-            label: obj.name=="ulb"?`TENANT_TENANTS_${getTransformedLocale(variable)}`:obj.defaultValue[variable]&&getTransformedLocale(obj.defaultValue[variable]),
-          // label: obj.name=="ulb"?`TENANT_TENANTS_${getTransformedLocale(variable)}`:`RT_${getTransformedLocale(variable)}`,
+            value: obj.defaultValue[key],
+            label: obj.isLocalisationRequired ? getTransformedLocale(key) : key,
+          });
         });
-        }else{
+      } else {
+        for (var variable in obj.defaultValue) {
+          if (obj.isLocalisationRequired) {
             dropDownData.push({
-            value: variable,
-            label: obj.defaultValue[variable]&&obj.defaultValue[variable]||"",
-        });
+              value: variable,
+              label:
+                obj.name == "ulb"
+                  ? `TENANT_TENANTS_${getTransformedLocale(variable)}`
+                  : obj.defaultValue[variable] && getTransformedLocale(obj.defaultValue[variable]),
+              // label: obj.name=="ulb"?`TENANT_TENANTS_${getTransformedLocale(variable)}`:`RT_${getTransformedLocale(variable)}`,
+            });
+          } else {
+            dropDownData.push({
+              value: variable,
+              label: (obj.defaultValue[variable] && obj.defaultValue[variable]) || "",
+            });
+          }
         }
-       
       }
     }
 
     switch (obj.type) {
       case "string":
         return (
-          <Grid item  xs={12} sm={4} md={4} lg={4}>
+          <Grid item xs={12} sm={4} md={4} lg={4}>
             <TextField
               value={this.props.value}
               id={obj.label.split(".").join("-")}
@@ -158,27 +169,27 @@ export default class ShowField extends Component {
         return (
           <Grid item xs={12} sm={4} md={4} lg={4}>
             <AutoSuggestDropdown
-            dataSource={dropDownData}
-            labelsFromLocalisation={true}
-            value={typeof obj.value === undefined ? "" : getDropdownLabel(obj.value, dropDownData)}
-            hintText={getLocaleLabels("RT_SELECT_PLACEHOLDER","RT_SELECT_PLACEHOLDER")}
-            hintStyle={{fontSize: "14px",color: "#767676"}}
-            floatingLabelText={
-              <div className="rainmaker-displayInline">
-                <Label
-                  className="show-field-label"
-                  label={description}
-                  containerStyle={{ marginRight: "5px" }}
-                  style={{ fontSize: "16px !important" }}
-                />
-                <span style={{ color: "#FF0000" }}>{obj.isMandatory ? " *" : ""}</span>
-              </div>
-            }
-            onChange={(value) => {
-              const e = { target: { value: value.value } };
-              this.props.handler(e, obj.name, obj.isMandatory ? true : false, "");
-            }}
-          />
+              dataSource={dropDownData}
+              labelsFromLocalisation={true}
+              value={typeof obj.value === undefined ? "" : getDropdownLabel(obj.value, dropDownData)}
+              hintText={getLocaleLabels("RT_SELECT_PLACEHOLDER", "RT_SELECT_PLACEHOLDER")}
+              hintStyle={{ fontSize: "14px", color: "#767676" }}
+              floatingLabelText={
+                <div className="rainmaker-displayInline">
+                  <Label
+                    className="show-field-label"
+                    label={description}
+                    containerStyle={{ marginRight: "5px" }}
+                    style={{ fontSize: "16px !important" }}
+                  />
+                  <span style={{ color: "#FF0000" }}>{obj.isMandatory ? " *" : ""}</span>
+                </div>
+              }
+              onChange={(value) => {
+                const e = { target: { value: value.value } };
+                this.props.handler(e, obj.name, obj.isMandatory ? true : false, "");
+              }}
+            />
           </Grid>
         );
 
@@ -197,7 +208,7 @@ export default class ShowField extends Component {
               floatingLabelText={
                 <span>
                   {description} <span style={{ color: "#FF0000" }}>{obj.isMandatory ? " *" : ""}</span>
-                </span>   
+                </span>
               }
               value={typeof obj.value == "undefined" ? "" : obj.value}
               onChange={(event, key, value) => {
@@ -224,10 +235,10 @@ export default class ShowField extends Component {
               multiple={true}
               style={{ height: "auto" }}
               dropDownMenuProps={{
-                anchorOrigin: { 
-                  vertical: 'bottom',
-                  horizontal: 'left'
-              },
+                anchorOrigin: {
+                  vertical: "bottom",
+                  horizontal: "left",
+                },
               }}
               // dropDownMenuProps={{ targetOrigin: { horizontal: "left", vertical: "top" } }}
               floatingLabelFixed={true}
@@ -244,7 +255,7 @@ export default class ShowField extends Component {
               }
               value={typeof obj.value == "undefined" ? "" : obj.value}
               onChange={(event, key, value) => {
-                const dataValue = value[value.length-1]
+                const dataValue = value[value.length - 1];
                 let e = { target: { value } };
                 if (dataValue == "All") {
                   e = { target: { value: [dataValue] } };
@@ -253,11 +264,11 @@ export default class ShowField extends Component {
                 const allValuePresent = value && value.length > 1 && value.includes("All");
                 if (allValuePresent && value.length > 1 && dataValue != "All") {
                   let finalData = [];
-                  value.forEach(value => {
+                  value.forEach((value) => {
                     if (value != "All") {
-                      finalData.push(value)
+                      finalData.push(value);
                     }
-                  })
+                  });
                   e = { target: { value: finalData } };
                 }
                 this.props.handler(e, obj.name, obj.isMandatory ? true : false, "");
@@ -270,7 +281,7 @@ export default class ShowField extends Component {
                   checked={obj.value && obj.value.indexOf(dd.value) > -1 ? true : false}
                   value={translate(dd.value)}
                   key={index}
-                  primaryText={getLocaleLabels(dd.label,dd.label,localizationLabels)}
+                  primaryText={getLocaleLabels(dd.label, dd.label, localizationLabels)}
                 />
               ))}
             </SelectField>
@@ -311,5 +322,5 @@ const getDropdownLabel = (value, data) => {
   if (object.length > 0) {
     label = object[0].label;
   }
-  return label&&getLocaleLabels("NA", label);
+  return label && getLocaleLabels("NA", label);
 };
