@@ -50,13 +50,15 @@ const PermissionCheck = ({ permissions, t }) => {
     })
   }
 
+  const isMobile = window.Digit.Utils.browser.isMobile();
+
   return (
     <div>
       <CardSubHeader style={{ marginBottom: "16px", fontSize: "24px" }}>{t("BPA_PERMIT_CONDITIONS")}</CardSubHeader>
       {approvalChecks?.map((permission, index) => (
         <CheckBox
           key={index}
-          styles={{ margin: "20px 0 40px",maxWidth:"70%" }}
+          styles={{ margin: "20px 0 40px", maxWidth: isMobile ? "100%" : "70%" }}
           label={permission?.label}
           checked={permission?.checked}
           onChange={(event => handleCheck(event, permission?.label, index))}
@@ -65,21 +67,30 @@ const PermissionCheck = ({ permissions, t }) => {
         />
       ))}
       {newApprovals?.map((approval, index) => (
-       <div> <TextInput key={index} value={approval?.label} onChange={event => handleChange(event, index)} textInputStyle={{maxWidth: "830px", width: "830px"}} placeholder={"Enter permit conditions.........."} />
-         {<LinkButton
-          label={
-            <div>
-              <span>
-              <Close style={{float: "right", position: "relative", bottom: "32px", marginTop: "-21px", marginRight: "35%" }}/>
-              </span>
-            </div>
-          }
-          style={{ }}
-          onClick={(e) => handleRemove(index)}
-        />}
-       </div>
+        <div> 
+          <TextInput 
+            key={index} 
+            value={approval?.label} 
+            onChange={event => handleChange(event, index)} 
+            textInputStyle={{ maxWidth: isMobile ? "96%" : "830px", width: isMobile ? "96%" :"830px" }}
+            style={isMobile ? {paddingRight: "10%"} : {}}
+            placeholder={"BPA_ENTER_PERMIT_CONDITIONS_LABEL"} 
+            />
+          {<LinkButton
+            label={
+              <div>
+                <span>
+                  <Close 
+                  style={{ float: "right", position: "relative", bottom: "32px", marginTop: "-22px", marginRight: isMobile ? "5%" : "35%" }} />
+                </span>
+              </div>
+            }
+            style={{}}
+            onClick={(e) => handleRemove(index)}
+          />}
+        </div>
       ))}
-      <LinkButton style={{ color: "#f47738", maxWidth: "10%", /* float: "right", marginTop: "-50px", */ marginRight: "3%" }} label={t(`BPA_ADD_MORE`)} onClick={handleAdd} />
+      <LinkButton style={{ color: "#f47738", maxWidth: isMobile ? "fit-content" : "10%", /* float: "right", marginTop: "-50px", */ marginRight: "3%" }} label={t(`BPA_ADD_MORE`)} onClick={handleAdd} />
     </div>
   )
 }
