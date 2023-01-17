@@ -63,81 +63,7 @@ const releaseStatus = [
     value: "no",
   },
 ];
-const columns = [
-  {
-    key: "previousLicensenumber",
-    title: "Previous Licence Number",
-    dataIndex: "previousLicensenumber",
-  },
-  {
-    key: "areaOfParentLicence",
-    title: "Area of parent licence",
-    dataIndex: "areaOfParentLicence",
-  },
-  {
-    key: "purposeOfParentLicence",
-    title: "Purpose of parent licence",
-    dataIndex: "purposeOfParentLicence",
-  },
-  {
-    key: "validity",
-    title: "Validity of parent licence ",
-    dataIndex: "validity",
-  },
-  {
-    key: "date",
-    title: "Date ",
-    dataIndex: "date",
-  },
-  {
-    key: "areaAppliedmigration",
-    title: "Area applied under migration in acres",
-    dataIndex: "areaAppliedmigration",
-  },
 
-  {
-    key: "khasraNumber",
-    title: "Applied Khasra number ",
-    dataIndex: "khasraNumber",
-  },
-  {
-    key: "area",
-    title: "Area ",
-    dataIndex: "area",
-  },
-  {
-    key: "balanceOfParentLicence",
-    title: "Balance of Parent Licence ",
-    dataIndex: "balanceOfParentLicence",
-  },
-
-  {
-    title: "Action",
-    dataIndex: "",
-    render: (data) => (
-      <div>
-        <EditIcon
-          style={{ cursor: "pointer" }}
-          onClick={() => {
-            setSpecificTableData(data);
-            setmodal(true);
-            setEdit(true);
-          }}
-          color="primary"
-        />
-
-        <DeleteIcon
-          style={{ cursor: "pointer" }}
-          onClick={() => {
-            const filteredData = modalData?.filter((item) => item?.rowid !== data?.rowid);
-            setModalData(filteredData);
-          }}
-          color="error"
-        />
-      </div>
-    ),
-  },
-];
 const LandScheduleForm = (props) => {
   const location = useLocation();
   const [purposeOptions, setPurposeOptions] = useState({ data: [], isLoading: true });
@@ -158,7 +84,81 @@ const LandScheduleForm = (props) => {
   const { data: LandData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["LandType"]);
 
   const { data: PotentialType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["PotentialZone"]);
+  const columns = [
+    {
+      key: "previousLicensenumber",
+      title: "Previous Licence Number",
+      dataIndex: "previousLicensenumber",
+    },
+    {
+      key: "areaOfParentLicence",
+      title: "Area of parent licence",
+      dataIndex: "areaOfParentLicence",
+    },
+    {
+      key: "purposeOfParentLicence",
+      title: "Purpose of parent licence",
+      dataIndex: "purposeOfParentLicence",
+    },
+    {
+      key: "validity",
+      title: "Validity of parent licence ",
+      dataIndex: "validity",
+    },
+    {
+      key: "date",
+      title: "Date ",
+      dataIndex: "date",
+    },
+    {
+      key: "areaAppliedmigration",
+      title: "Area applied under migration in acres",
+      dataIndex: "areaAppliedmigration",
+    },
 
+    {
+      key: "khasraNumber",
+      title: "Applied Khasra number ",
+      dataIndex: "khasraNumber",
+    },
+    {
+      key: "area",
+      title: "Area ",
+      dataIndex: "area",
+    },
+    {
+      key: "balanceOfParentLicence",
+      title: "Balance of Parent Licence ",
+      dataIndex: "balanceOfParentLicence",
+    },
+
+    {
+      title: "Action",
+      dataIndex: "",
+      render: (data) => (
+        <div>
+          <EditIcon
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              setSpecificTableData(data);
+              setmodal(true);
+              setEdit(true);
+            }}
+            color="primary"
+          />
+
+          <DeleteIcon
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              const filteredData = modalData?.filter((item) => item?.rowid !== data?.rowid);
+              setModalData(filteredData);
+            }}
+            color="error"
+          />
+        </div>
+      ),
+    },
+  ];
   useEffect(() => {
     const purpose = PurposeType?.["common-masters"]?.Purpose?.map(function (data) {
       return { value: data?.purposeCode, label: data?.name };
@@ -473,7 +473,7 @@ const LandScheduleForm = (props) => {
       {loader && <Spinner />}
       <form onSubmit={handleSubmit(landScheduleFormSubmitHandler)}>
         <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New Licence </h4>
+          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New Licence Application </h4>
           <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
             <Form.Group className="justify-content-center" controlId="formBasicEmail">
               <Row className="ml-auto" style={{ marginBottom: 5 }}>
@@ -774,6 +774,10 @@ const LandScheduleForm = (props) => {
                       &nbsp;&nbsp; Gair/Marusi &nbsp;&nbsp;
                     </label>
                     <label htmlFor="encumburance">
+                      <input {...register("encumburance")} type="radio" value="anyOther" id="encumburance" />
+                      &nbsp;&nbsp; Any Other &nbsp;&nbsp;
+                    </label>
+                    <label htmlFor="encumburance">
                       <input {...register("encumburance")} type="radio" value="none" id="encumburance" />
                       &nbsp;&nbsp; None &nbsp;&nbsp;
                     </label>
@@ -813,6 +817,31 @@ const LandScheduleForm = (props) => {
                         </div>
                       </div>
                     )}
+                    {watch("encumburance") === "anyOther" && (
+                      <div className="row ">
+                        <div className="col col-6">
+                          <label>
+                            <h2>
+                              Remark <span style={{ color: "red" }}>*</span>
+                            </h2>{" "}
+                          </label>
+                          <input type="text" className="form-control" {...register("anyOtherRemark")} />
+                        </div>
+                      </div>
+                    )}
+                    {watch("encumburance") === "none" && (
+                      <div className="row ">
+                        <div className="col col-6">
+                          <label>
+                            <h2>
+                              Remark <span style={{ color: "red" }}>*</span>
+                            </h2>{" "}
+                          </label>
+                          <input type="text" className="form-control" {...register("noneRemark")} />
+                        </div>
+                      </div>
+                    )}
+
                     <h3 className="error-message" style={{ color: "red" }}>
                       {errors?.encumburance && errors?.encumburance?.message}
                     </h3>
@@ -906,7 +935,7 @@ const LandScheduleForm = (props) => {
                   <br></br>
                   <div>
                     <h6>
-                      (iii) Any insolvency/liquidation proceedings against the land owner(s)/ collaborating developed.
+                      (iii) Any insolvency/liquidation proceedings against the Land Owing Company/Develping Company.
                       <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
                       <label htmlFor="insolvency">
                         <input {...register("insolvency")} type="radio" value="Y" id="insolvency" />
@@ -1035,7 +1064,7 @@ const LandScheduleForm = (props) => {
                             <label>
                               <h2>
                                 {" "}
-                                Width of revenue rasta (in sqm)<span style={{ color: "red" }}>*</span>&nbsp;
+                                Width of Revenue Rasta(In Karam)<span style={{ color: "red" }}>*</span>&nbsp;
                                 <CalculateIcon color="primary" />
                               </h2>
                             </label>
@@ -1108,8 +1137,8 @@ const LandScheduleForm = (props) => {
                   <br></br>
                   <div className="row">
                     <div className="col col-3 ">
-                      <h2 data-toggle="tooltip" data-placement="top" title="If any other owners' land is sandwiched within applied land.">
-                        (e)&nbsp;Whether other land sandwiched <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                      <h2 data-toggle="tooltip" data-placement="top" title="Whether Others Land fall within Applied Land">
+                        (e)&nbsp;Whether Others Land fall <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
                       </h2>{" "}
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="landSandwiched">
@@ -1179,7 +1208,7 @@ const LandScheduleForm = (props) => {
                           <div className="col col-12">
                             <label>
                               <h2>
-                                Date of Reward <span style={{ color: "red" }}>*</span>{" "}
+                                Date of Award <span style={{ color: "red" }}>*</span>{" "}
                               </h2>
                             </label>
                             <input type="date" className="form-control" {...register("rewardDate")} />
@@ -1196,8 +1225,7 @@ const LandScheduleForm = (props) => {
                     <div className="col col-12">
                       <label>
                         <h2>
-                          (g)&nbsp;&nbsp;Whether details/orders of release/exclusion of land uploaded.<span style={{ color: "red" }}>*</span>{" "}
-                          &nbsp;&nbsp;
+                          (g)&nbsp;&nbsp;Whether Land Released/Excluded from aqusition proceeding.<span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
                         </h2>
                       </label>
                       <label htmlFor="orderUpload">
@@ -1330,44 +1358,18 @@ const LandScheduleForm = (props) => {
                       )}
                       {watch("vacant") === "N" && (
                         <div className="row ">
+                          <h4>Construction</h4>
+                          <br></br>
                           <div className="col col">
-                            <h2>
-                              Construction: (Yes/No) <span style={{ color: "red" }}>*</span>
-                            </h2>{" "}
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                            <label htmlFor="construction">
-                              <input {...register("construction")} type="radio" value="Y" id="construction" />
-                              &nbsp; Yes &nbsp;&nbsp;
+                            <label>
+                              <h2>
+                                Remark <span style={{ color: "red" }}>*</span>
+                              </h2>{" "}
                             </label>
-                            <label htmlFor="construction">
-                              <input {...register("construction")} type="radio" value="N" id="construction" />
-                              &nbsp; No &nbsp;&nbsp;
-                            </label>
+                            <input type="text" className="form-control" {...register("typeOfConstruction")} />
                             <h3 className="error-message" style={{ color: "red" }}>
                               {errors?.construction && errors?.construction?.message}
                             </h3>
-                            {watch("construction") === "Y" && (
-                              <div className="row ">
-                                <div className="col col">
-                                  <label>
-                                    Type of Construction <span style={{ color: "red" }}>*</span>
-                                  </label>
-                                  <input type="text" className="form-control" {...register("typeOfConstruction")} />
-                                </div>
-                              </div>
-                            )}
-                            {watch("construction") === "N" && (
-                              <div className="row ">
-                                <div className="col col">
-                                  <label>
-                                    <h2>
-                                      Remark <span style={{ color: "red" }}>*</span>
-                                    </h2>
-                                  </label>
-                                  <input type="text" className="form-control" {...register("constructionRemark")} />
-                                </div>
-                              </div>
-                            )}
                           </div>
                         </div>
                       )}
@@ -1493,8 +1495,8 @@ const LandScheduleForm = (props) => {
                   <br></br>
                   <div className="row ">
                     <div className="col col-3">
-                      <h2>
-                        (e) &nbsp;Any revenue rasta/road:(Yes/No)<span style={{ color: "red" }}>*</span>
+                      <h2 data-toggle="tooltip" data-placement="top" title="Any revenue rasta/road passing through proposed site (Yes/No)">
+                        (e) &nbsp;Any revenue rasta:(Yes/No)<span style={{ color: "red" }}>*</span>
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="road">
@@ -1542,7 +1544,7 @@ const LandScheduleForm = (props) => {
                         </div>
                       )}
                     </div>
-                    <div className="col col-3">
+                    {/* <div className="col col-3">
                       <h2>
                         (f) &nbsp;Any marginal land:(Yes/No) <span style={{ color: "red" }}>*</span>
                       </h2>
@@ -1582,14 +1584,14 @@ const LandScheduleForm = (props) => {
                           </div>
                         </div>
                       )}
-                    </div>
+                    </div> */}
                     <div className="col col-3">
                       <h2
                         data-toggle="tooltip"
                         data-placement="top"
                         title="Whether any utility line passing through the site is incorporated/adjusted in the layout plan (Yes/No)"
                       >
-                        (g)&nbsp;Utility Line <span style={{ color: "red" }}>*</span>
+                        (f)&nbsp;Utility/Permit Line <span style={{ color: "red" }}>*</span>
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="utilityLine">
@@ -1722,9 +1724,7 @@ const LandScheduleForm = (props) => {
                       </h3>
                     </div>
                     <div className="col col-3">
-                      <h2 style={{ display: "flex" }}>
-                        Details of lease / patta <span style={{ color: "red" }}>*</span>
-                      </h2>
+                      <h2 style={{ display: "flex" }}>Details of lease / patta</h2>
                       <label>
                         <FileUpload color="primary" />
                         <input
@@ -1756,7 +1756,7 @@ const LandScheduleForm = (props) => {
                         data-placement="top"
                         title=" Add sales/Deed/exchange/gift deed, mutation, lease/Patta"
                       >
-                        Add sales/Deed/exchange <span style={{ color: "red" }}>*</span>
+                        Sale Deed/Exchange Deed
                       </h2>
                       <label>
                         <FileUpload color="primary" />
@@ -1809,7 +1809,7 @@ const LandScheduleForm = (props) => {
                         {errors?.copyofSpaBoard && errors?.copyofSpaBoard?.message}
                       </h3>
                     </div>
-                    <div className="col col-3">
+                    {/* <div className="col col-3">
                       <h2 style={{ display: "flex" }}>
                         Revised Land Schedule <span style={{ color: "red" }}>*</span>
                       </h2>
@@ -1833,11 +1833,11 @@ const LandScheduleForm = (props) => {
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.revisedLanSchedule && errors?.revisedLanSchedule?.message}
                       </h3>
-                    </div>
+                    </div> */}
 
                     <div className="col col-3">
                       <h2 style={{ display: "flex" }}>
-                        Copy of Shajra Plan <span style={{ color: "red" }}>*</span>
+                        Shajra Plan <span style={{ color: "red" }}>*</span>
                       </h2>
                       <span
                         className="text-primary"

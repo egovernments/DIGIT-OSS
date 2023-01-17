@@ -34,6 +34,26 @@ const ApllicantPuropseForm = (props) => {
   };
   const columns = [
     {
+      key: "district",
+      title: "District",
+      dataIndex: "district",
+    },
+    {
+      key: "potential",
+      title: "Development Plan",
+      dataIndex: "potential",
+    },
+    {
+      key: "zone",
+      title: "Zone",
+      dataIndex: "zone",
+    },
+    {
+      key: "sector",
+      title: "Sector",
+      dataIndex: "sector",
+    },
+    {
       key: "tehsil",
       title: "Tehsil",
       dataIndex: "tehsil",
@@ -194,6 +214,9 @@ const ApllicantPuropseForm = (props) => {
   const [modalData, setModalData] = useState([]);
   const [specificTableData, setSpecificTableData] = useState(null);
   const [districtDataLabels, setDistrictDataLabels] = useState({ data: [], isLoading: true });
+  const [potentialDataLabels, setPotentialDataLabels] = useState({ data: [], isLoading: true });
+  const [zoneDataLabels, setZoneDataLabels] = useState({ data: [], isLoading: true });
+  const [sectorDataLabels, setSectorDataLabels] = useState({ data: [], isLoading: true });
   const [tehsilDataLabels, setTehsilDataLabels] = useState({ data: [], isLoading: true });
   const [revenueDataLabels, setRevenueDataLabels] = useState({ data: [], isLoading: true });
   const [mustilDataLabels, setMustilDataLabels] = useState({ data: [], isLoading: true });
@@ -220,6 +243,10 @@ const ApllicantPuropseForm = (props) => {
   const [showFields, setShowFields] = useState(false);
 
   const resetValues = () => {
+    resetField("district");
+    resetField("potential");
+    resetField("zone");
+    resetField("sector");
     resetField("tehsil");
     resetField("revenueEstate");
     resetField("rectangleNo");
@@ -270,6 +297,14 @@ const ApllicantPuropseForm = (props) => {
       setValue("nameAuthSign", specificTableData?.nameAuthSign);
       setValue("registeringAuthority", specificTableData?.registeringAuthority);
       setValue("registeringAuthorityDoc", specificTableData?.registeringAuthorityDoc);
+      const districtValue = districtDataLabels?.data?.filter((item) => item?.value === specificTableData?.district);
+      setValue("district", { label: districtValue?.[0]?.label, value: districtValue?.[0]?.value });
+      const devPlanValue = potentialDataLabels?.data?.filter((item) => item?.value === specificTableData?.potential);
+      setValue("potential", { label: devPlanValue?.[0]?.label, value: devPlanValue?.[0]?.value });
+      const zoneValue = zoneDataLabels?.data?.filter((item) => item?.value === specificTableData?.zone);
+      setValue("zone", { label: zoneValue?.[0]?.label, value: zoneValue?.[0]?.value });
+      const sectorValue = sectorDataLabels?.data?.filter((item) => item?.value === specificTableData?.sector);
+      setValue("sector", { label: sectorValue?.[0]?.label, value: sectorValue?.[0]?.value });
       const tehsilValue = tehsilDataLabels?.data?.filter((item) => item?.value === specificTableData?.tehsil);
       setValue("tehsil", { label: tehsilValue?.[0]?.label, value: tehsilValue?.[0]?.value });
       const revenueValue = revenueDataLabels?.data?.filter((item) => item?.value === specificTableData?.revenueEstate);
@@ -277,7 +312,7 @@ const ApllicantPuropseForm = (props) => {
       const mustilValue = mustilDataLabels?.data?.filter((item) => item?.value === specificTableData?.rectangleNo);
       setValue("rectangleNo", { label: mustilValue?.[0]?.label, value: mustilValue?.[0]?.value });
     }
-  }, [specificTableData, tehsilDataLabels, revenueDataLabels, mustilDataLabels]);
+  }, [specificTableData, districtDataLabels, potentialDataLabels, tehsilDataLabels, revenueDataLabels, mustilDataLabels]);
 
   const {
     register,
@@ -430,6 +465,10 @@ const ApllicantPuropseForm = (props) => {
 
   const ApplicantPurposeModalData = (modaldata) => {
     const test = modalData?.filter((item) => item?.rowid === specificTableData?.rowid);
+    modaldata["district"] = modaldata?.district?.value;
+    modaldata["potential"] = modaldata?.potential?.value;
+    modaldata["zone"] = modaldata?.zone?.value;
+    modaldata["sector"] = modaldata?.sector?.value;
     modaldata["tehsil"] = modaldata?.tehsil?.value;
     modaldata["revenueEstate"] = modaldata?.revenueEstate?.value;
     modaldata["rectangleNo"] = modaldata?.rectangleNo?.value;
@@ -474,9 +513,13 @@ const ApllicantPuropseForm = (props) => {
   const PurposeFormSubmitHandler = async (data) => {
     const token = window?.localStorage?.getItem("token");
     data["purpose"] = data?.purpose?.value;
-    data["potential"] = data?.potential?.value;
-    data["district"] = watch("district")?.value;
-    data["state"] = "Haryana";
+    // data["potential"] = data?.potential?.value;
+    // data["district"] = watch("district")?.value;
+    // data["state"] = "Haryana";
+    delete data?.district;
+    delete data?.potential;
+    delete data?.zone;
+    delete data?.sector;
     delete data?.tehsil;
     delete data?.revenueEstate;
     delete data?.rectangleNo;
@@ -681,7 +724,7 @@ const ApllicantPuropseForm = (props) => {
       {loader && <Spinner />}
       <form onSubmit={handleSubmit(PurposeFormSubmitHandler)}>
         <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New Licence </h4>
+          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New Licence Application </h4>
           <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
             <Form.Group>
               <Row className="ml-auto" style={{ marginBottom: 5 }}>
@@ -707,7 +750,7 @@ const ApllicantPuropseForm = (props) => {
                     {errors?.purpose?.value && errors?.purpose?.value?.message}
                   </h3>
                 </Col>
-
+                {/* 
                 <Col md={4} xxl lg="3">
                   <div>
                     <Form.Label>
@@ -728,18 +771,7 @@ const ApllicantPuropseForm = (props) => {
                       setDistrict(e.value);
                     }}
                   />
-                  {/* <ReactMultiSelect
-                    control={control}
-                    name="district"
-                    placeholder="District"
-                    data={districtDataLabels?.data}
-                    labels="District"
-                    loading={districtDataLabels?.isLoading}
-                    onChange={(e) => {
-                      getTehslidata(e.value);
-                      setDistrict(e.value);
-                    }}
-                  /> */}
+                  
 
                   <h3 className="error-message" style={{ color: "red" }}>
                     {errors?.district?.value && errors?.district?.value?.message}
@@ -782,12 +814,12 @@ const ApllicantPuropseForm = (props) => {
                     labels="PotentialZone"
                     loading={ZoneOptons?.isLoading}
                   />
-                  {/* <input type="text" className="form-control" name="zone" placeholder="zone" diabled /> */}
+                
 
                   <h3 className="error-message" style={{ color: "red" }}>
                     {errors?.zone?.value && errors?.zone?.value?.message}
                   </h3>
-                </Col>
+                </Col> */}
                 {/* <Col md={4} xxl lg="3">
                   <div>
                     <Form.Label>
@@ -810,7 +842,7 @@ const ApllicantPuropseForm = (props) => {
                   </h3>
                 </Col> */}
               </Row>
-              <Row className="ml-auto" style={{ marginBottom: 5 }}>
+              {/* <Row className="ml-auto" style={{ marginBottom: 5 }}>
                 <Col md={4} xxl lg="3">
                   <div>
                     <Form.Label>
@@ -832,7 +864,7 @@ const ApllicantPuropseForm = (props) => {
                     {errors?.sector?.value && errors?.sector?.value?.message}
                   </h3>
                 </Col>
-              </Row>
+              </Row> */}
 
               <div className="ml-auto" style={{ marginTop: 20 }}>
                 <h5>
@@ -991,7 +1023,7 @@ const ApllicantPuropseForm = (props) => {
                 <div>
                   <label>
                     <h2>
-                      Enter Khewat <span style={{ color: "red" }}>*</span>
+                      Khasra Number <span style={{ color: "red" }}>*</span>
                     </h2>
                   </label>
                 </div>
@@ -1076,7 +1108,7 @@ const ApllicantPuropseForm = (props) => {
                     <div>
                       <label>
                         <h2>
-                          Enter Khewat <span style={{ color: "red" }}>*</span>
+                          Khasra Number <span style={{ color: "red" }}>*</span>
                         </h2>
                       </label>
                     </div>
@@ -1086,7 +1118,7 @@ const ApllicantPuropseForm = (props) => {
                   <Col md={4} xxl lg="4">
                     <div>
                       <label>
-                        <h2>Name of land owner as per registry</h2>
+                        <h2>Name of the Land Ower as per Mutation/Jamabandi</h2>
                       </label>
                     </div>
                     <input autoComplete="off" type="text" className="form-control" placeholder="" {...register("landOwnerRegistry")} />
