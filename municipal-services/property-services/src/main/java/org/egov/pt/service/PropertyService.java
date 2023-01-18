@@ -106,11 +106,14 @@ public class PropertyService {
 			request.getProperty().setStatus(Status.ACTIVE);
 		}
 
+		//Push PLAIN data to fuzzy search index
+		producer.push(config.getSavePropertyFuzzyTopic(), request);
+		//Push data after encryption
 		producer.pushAfterEncrytpion(config.getSavePropertyTopic(), request);
 		request.getProperty().setWorkflow(null);
 
 		/* decrypt here */
-		return encryptionDecryptionUtil.decryptObject(request.getProperty(), "Property", Property.class, request.getRequestInfo());
+		return encryptionDecryptionUtil.decryptObject(request.getProperty(), PTConstants.PROPERTY_MODEL, Property.class, request.getRequestInfo());
 		//return request.getProperty();
 	}
 
@@ -145,8 +148,15 @@ public class PropertyService {
 
 		request.getProperty().setWorkflow(null);
 
+		//Push PLAIN data to fuzzy search index
+		PropertyRequest fuzzyPropertyRequest = new PropertyRequest(request.getRequestInfo(),request.getProperty());
+		fuzzyPropertyRequest.setProperty(encryptionDecryptionUtil.decryptObject(request.getProperty(), PTConstants.PROPERTY_DECRYPT_MODEL,
+				Property.class, request.getRequestInfo()));
+
+		producer.push(config.getSavePropertyFuzzyTopic(), fuzzyPropertyRequest);
+
 		/* decrypt here */
-		return encryptionDecryptionUtil.decryptObject(request.getProperty(), "Property", Property.class, request.getRequestInfo());
+		return encryptionDecryptionUtil.decryptObject(request.getProperty(), PTConstants.PROPERTY_MODEL, Property.class, request.getRequestInfo());
 	}
 	
 	/*
@@ -371,7 +381,7 @@ public class PropertyService {
 		List<Property> properties;
 		/* encrypt here */
 		if(!criteria.getIsRequestForOldDataEncryption())
-			criteria = encryptionDecryptionUtil.encryptObject(criteria, "Property", PropertyCriteria.class);
+			criteria = encryptionDecryptionUtil.encryptObject(criteria, PTConstants.PROPERTY_MODEL, PropertyCriteria.class);
 
 		/*
 		 * throw error if audit request is with no proeprty id or multiple propertyids
@@ -406,9 +416,9 @@ public class PropertyService {
 
 		/* Decrypt here */
 		 if(criteria.getIsSearchInternal())
-			return encryptionDecryptionUtil.decryptObject(properties, "PropertyDecrypDisabled", Property.class, requestInfo);
+			return encryptionDecryptionUtil.decryptObject(properties, PTConstants.PROPERTY_DECRYPT_MODEL, Property.class, requestInfo);
 		else if(!criteria.getIsRequestForOldDataEncryption() && !criteria.isAudit())
-			return encryptionDecryptionUtil.decryptObject(properties, "Property", Property.class, requestInfo);
+			return encryptionDecryptionUtil.decryptObject(properties, PTConstants.PROPERTY_MODEL, Property.class, requestInfo);
 
 		return properties;
 	}

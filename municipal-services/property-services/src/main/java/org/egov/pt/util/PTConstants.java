@@ -420,5 +420,9 @@ public class PTConstants {
 
     public static final String TENANTS_JSONPATH_ROOT = "$.MdmsRes.tenant.tenants";
 
+    public static final String PROPERTY_MODEL = "Property";
+
+    public static final String PROPERTY_DECRYPT_MODEL = "PropertyDecrypDisabled";
+
 }
 

@@ -131,11 +131,12 @@ public class PropertyEncryptionService {
             List<Property> encryptedPropertyList = new LinkedList<>();
             try {
                 propertyList = propertyService.searchPropertyPlainSearch(criteria, requestInfo);
+
                 countPushed = 0;
 
                 for (Property property : propertyList) {
                     /* encrypt here */
-                    property = encryptionDecryptionUtil.encryptObject(property, "Property", Property.class);
+                    property = encryptionDecryptionUtil.encryptObject(property, PTConstants.PROPERTY_MODEL, Property.class);
 
                     PropertyRequest request = PropertyRequest.builder()
                             .requestInfo(requestInfo)

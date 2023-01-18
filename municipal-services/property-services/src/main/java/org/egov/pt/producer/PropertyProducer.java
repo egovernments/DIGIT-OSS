@@ -3,6 +3,7 @@ package org.egov.pt.producer;
 
 import org.egov.pt.models.Property;
 import org.egov.pt.util.EncryptionDecryptionUtil;
+import org.egov.pt.util.PTConstants;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.tracer.kafka.CustomKafkaTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class PropertyProducer {
 	}
 
 	public void pushAfterEncrytpion(String topic, PropertyRequest request) {
-		request.setProperty(encryptionDecryptionUtil.encryptObject(request.getProperty(), "Property", Property.class));
+		request.setProperty(encryptionDecryptionUtil.encryptObject(request.getProperty(), PTConstants.PROPERTY_MODEL, Property.class));
 		push(topic, request);
 	}
 }
