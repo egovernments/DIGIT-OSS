@@ -30,7 +30,7 @@ export let newConfig = [
         isMandatory: true,
         component: "LicenseDetails",
         texts: {
-          headerCaption: "Authorized User",
+          headerCaption: "Personal Details",
           header: "",
           cardText: "",
           submitBarLabel: "CS_COMMON_NEXT",

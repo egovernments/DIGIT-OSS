@@ -69,7 +69,7 @@ const StakeholderRegistration = () => {
     }
   }, []);
 
-  const CheckPage = Digit?.ComponentRegistryService?.getComponent('StakeholderCheckPage') ;
+  const CheckPage = Digit?.ComponentRegistryService?.getComponent('StakeholderCheckPage');
   const StakeholderAcknowledgement = Digit?.ComponentRegistryService?.getComponent('StakeholderAcknowledgement');
 
   return (

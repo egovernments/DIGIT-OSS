@@ -52,9 +52,10 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
         
       });
       const licenseDataList = getDevDetails?.data;
-      console.log("LICENCE DET",getDevDetails?.data.devDetail[0]?.licenceDetails?.email);
+      console.log("LICENCE DET",getDevDetails?.data.devDetail[0]?.licenceDetails?.email , userInfo);
       setLicenseType(licenseDataList?.devDetail[0]?.applicantType?.licenceType);
-      setEmail(licenseDataList?.devDetail[0]?.licenceDetails?.email);
+      setEmail(licenseDataList?.devDetail[0]?.licenceDetails?.email || userInfo.info.emailId);
+      setMobileNumber(licenseDataList?.devDetail[0]?.licenceDetails?.mobileNumber || userInfo.info.mobileNumber)
       setDOB(licenseDataList?.devDetail[0]?.licenceDetails?.dob);
       setGender(licenseDataList?.devDetail[0]?.licenceDetails?.gender)
       setPanNumber(licenseDataList?.devDetail[0]?.licenceDetails?.panNumber);
@@ -688,7 +689,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
             onSelect={goNext}
             onSkip={onSkip}
             t={t}
-            isDisabled={!name || !mobileNumber || !mobileNumber.match(Digit.Utils.getPattern("MobileNo")) || !gender || !dob || !email || !email.match(Digit.Utils.getPattern("Email")) || !PanNumber || !PanNumber.match(Digit.Utils.getPattern("PAN")) || !pincode?.match(Digit.Utils.getPattern('Pincode') || !city || !addressLineOne) || !uploadBoardResolution}
+            isDisabled={ !name || !mobileNumber || !mobileNumber.match(Digit.Utils.getPattern("MobileNo")) || !gender || !dob || !email || !email.match(Digit.Utils.getPattern("Email")) || !PanNumber || !PanNumber.match(Digit.Utils.getPattern("PAN")) || !pincode?.match(Digit.Utils.getPattern('Pincode') || !city || !addressLineOne) }
           >
             <Card className="mb-3">
               {/* <h4></h4> */}
@@ -715,7 +716,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                     name="name"
                     value={name}
                     onChange={SelectName}
-                    disabled="disabled"
+                    // disabled="disabled"
                     className="form-control"
                   />
                 </Form.Group>
@@ -818,7 +819,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   {PanNumber && PanNumber.length > 0 && !PanNumber.match(Digit.Utils.getPattern('PAN')) && <labelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_PAN_NO")}</labelError>}
                   <h3 className="error-message" style={{ color: "red" }}>{PanValError}</h3>
                 </Form.Group>
-                <Form.Group className="col-md-4 mb-2">
+                {/* <Form.Group className="col-md-4 mb-2">
                     <label htmlFor="name" className="text">Upload Board Resolution <span className="text-danger font-weight-bold">*</span></label>
                     <div className="d-flex">
                       <input
@@ -857,7 +858,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                       }
                       </span>
                     </div>
-                </Form.Group>
+                </Form.Group> */}
               </Row>
             </Card>
             <Card className="mb-3">
