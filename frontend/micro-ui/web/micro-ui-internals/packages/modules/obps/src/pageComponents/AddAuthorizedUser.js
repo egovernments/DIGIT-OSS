@@ -72,22 +72,24 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
       const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${userInfo?.info?.id}&isAllData=true`, requestResp, {});
       const developerDataGet = getDevDetails?.data;
       setData(developerDataGet);
-      setAurthorizedUserInfoArray(
-        getDevDetails?.data?.devDetail[0]?.aurthorizedUserInfoArray || [
-          {
-            userName: getDevDetails?.data?.devDetail[0]?.licenceDetails?.mobileNumber,
-            name: getDevDetails?.data?.devDetail[0]?.licenceDetails?.name,
-            gender: getDevDetails?.data?.devDetail[0]?.licenceDetails?.gender,
-            mobileNumber: getDevDetails?.data?.devDetail[0]?.licenceDetails?.mobileNumber,
-            emailId: getDevDetails?.data?.devDetail[0]?.licenceDetails?.email,
-            dob: getDevDetails?.data?.devDetail[0]?.licenceDetails?.dob,
-            pan: getDevDetails?.data?.devDetail[0]?.licenceDetails?.panNumber,
-            uploadBoardResolution: getDevDetails?.data?.devDetail[0]?.licenceDetails?.uploadBoardResolution,
-            uploadDigitalSignaturePdf: getDevDetails?.data?.devDetail[0]?.licenceDetails?.uploadDigitalSignaturePdf,
-            uuid: userInfo.info.uuid,
-          },
-        ]
-      );
+      console.log("ADDAUTHUSER", getDevDetails?.data?.devDetail[0]?.aurthorizedUserInfoArray);
+      // setAurthorizedUserInfoArray(getDevDetails?.data?.devDetail[0]?.aurthorizedUserInfoArray || [
+      //   {
+      //     userName: getDevDetails?.data?.devDetail[0]?.licenceDetails?.mobileNumber,
+      //     name: getDevDetails?.data?.devDetail[0]?.licenceDetails?.name,
+      //     gender: getDevDetails?.data?.devDetail[0]?.licenceDetails?.gender,
+      //     mobileNumber: getDevDetails?.data?.devDetail[0]?.licenceDetails?.mobileNumber,
+      //     emailId: getDevDetails?.data?.devDetail[0]?.licenceDetails?.email,
+      //     dob: getDevDetails?.data?.devDetail[0]?.licenceDetails?.dob,
+      //     pan: getDevDetails?.data?.devDetail[0]?.licenceDetails?.panNumber,
+      //     uploadBoardResolution: getDevDetails?.data?.devDetail[0]?.licenceDetails?.uploadBoardResolution,
+      //     uploadDigitalSignaturePdf: getDevDetails?.data?.devDetail[0]?.licenceDetails?.uploadDigitalSignaturePdf
+      //     ,
+      //     uuid: userInfo.info.uuid
+      //   }
+      // ]);
+
+      setAurthorizedUserInfoArray(getDevDetails?.data?.devDetail[0]?.aurthorizedUserInfoArray || []);
     } catch (error) {
       return error;
     }
@@ -178,9 +180,9 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
   function selectPanNumber(e) {
     if (!e.target.value || /^\w+$/.test(e.target.value)) {
       setAurthorizedPan(e.target.value.toUpperCase());
-      if (e.target.value === 10) {
-        panVerification();
-      }
+      // if(e.target.value === 10){
+      //   panVerification();
+      // }
     }
   }
   function selectAurthorizedMobileNumber(value) {
@@ -259,6 +261,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
         },
       });
       setPanIsValid(true);
+      setPanValError("");
       setLoading(false);
     } catch (errdata) {
       setLoading(false);
@@ -267,11 +270,11 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
     }
   };
 
-  useEffect(() => {
-    if (aurthorizedPan.length === 10) {
-      panVerification();
-    }
-  }, [aurthorizedPan]);
+  // useEffect(() => {
+  //   if(aurthorizedPan.length === 10){
+  //     panVerification();
+  //   }
+  // }, [aurthorizedPan])
 
   const sendOtp = async (data) => {
     try {
@@ -457,48 +460,47 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
 
   const goNext = async (e) => {
     //   e.preventDefault();
-    if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
-      const addAuthUserformData = {
+    // if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
+    const addAuthUserformData = {
+      aurthorizedUserInfoArray: aurthorizedUserInfoArray,
+    };
+    onSelect(config.key, formData);
+    localStorage.setItem("data_user", JSON.stringify(addAuthUserformData));
+
+    const developerRegisterData = {
+      id: userInfo?.info?.id,
+      pageName: "aurthorizedUserInfoArray",
+      createdBy: userInfo?.info?.id,
+      updatedBy: userInfo?.info?.id,
+      devDetail: {
         aurthorizedUserInfoArray: aurthorizedUserInfoArray,
-      };
-      onSelect(config.key, formData);
-      localStorage.setItem("data_user", JSON.stringify(addAuthUserformData));
+      },
+    };
+    Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
+      .then((result, err) => {
+        // localStorage.setItem('devRegId',JSON.stringify(result?.id));
+        setIsDisableForNext(false);
+        let data = {
+          result: result,
+          formData: formData,
+          Correspondenceaddress: Correspondenceaddress,
+          addressLineOneCorrespondence: addressLineOneCorrespondence,
+          addressLineTwoCorrespondence: addressLineTwoCorrespondence,
 
-      const developerRegisterData = {
-        id: userInfo?.info?.id,
-        pageName: "aurthorizedUserInfoArray",
-        createdBy: userInfo?.info?.id,
-        updatedBy: userInfo?.info?.id,
-        devDetail: {
-          aurthorizedUserInfoArray: aurthorizedUserInfoArray,
-        },
-      };
-      Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
-        .then((result, err) => {
-          // localStorage.setItem('devRegId',JSON.stringify(result?.id));
-          setIsDisableForNext(false);
-          let data = {
-            result: result,
-            formData: formData,
-            Correspondenceaddress: Correspondenceaddress,
-            addressLineOneCorrespondence: addressLineOneCorrespondence,
-            addressLineTwoCorrespondence: addressLineTwoCorrespondence,
-
-            isAddressSame: isAddressSame,
-          };
-          //1, units
-          onSelect("", data, "", true);
-        })
-        .catch((e) => {
-          setIsDisableForNext(false);
-          setShowToast({ key: "error" });
-          setError(e?.response?.data?.Errors[0]?.message || null);
-        });
-    } else {
-      let data = formData?.formData;
-      // data.LicneseDetails.addAuthUserformData = addAuthUserformData;
-      onSelect("", formData);
-    }
+          isAddressSame: isAddressSame,
+        };
+        //1, units
+        onSelect("", data, "", true);
+      })
+      .catch((e) => {
+        setIsDisableForNext(false);
+        setShowToast({ key: "error" });
+        setError(e?.response?.data?.Errors[0]?.message || null);
+      });
+    // }else {
+    //   let data = formData?.formData;
+    //   onSelect("", formData)
+    // }
   };
   const onSkip = () => onSelect();
 
@@ -794,25 +796,30 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                                 class="employee-card-input"
                                 onChange={(e) => setAurthorizedPan(e.target.value)}
                               /> */}
-                        <TextInput
-                          t={t}
-                          type={"text"}
-                          isMandatory={false}
-                          optionKey="i18nKey"
-                          name="aurthorizedPan"
-                          value={aurthorizedPan}
-                          placeholder=""
-                          // onChange={(e) => setAurthorizedPan(e.target.value.toUpperCase())}
-                          onChange={selectPanNumber}
-                          {...{ required: true, maxlength: "10" }}
-                        />
+                        <div className="d-flex align-items-baseline">
+                          <TextInput
+                            t={t}
+                            type={"text"}
+                            isMandatory={false}
+                            optionKey="i18nKey"
+                            name="aurthorizedPan"
+                            value={aurthorizedPan}
+                            placeholder=""
+                            // onChange={(e) => setAurthorizedPan(e.target.value.toUpperCase())}
+                            onChange={selectPanNumber}
+                            {...{ required: true, maxlength: "10" }}
+                          />
+                          <Button className="ml-3" onClick={panVerification}>
+                            {panIsValid ? "Verified" : "Verify"}
+                          </Button>
+                        </div>
                         {aurthorizedPan && aurthorizedPan.length > 0 && !aurthorizedPan.match(Digit.Utils.getPattern("PAN")) && (
                           <CardLabelError style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px" }}>
                             {t("BPA_INVALID_PAN_NO")}
                           </CardLabelError>
                         )}
                         <h3 className="error-message" style={{ color: "red" }}>
-                          {PanValError}
+                          {panIsValid ? "" : PanValError}
                         </h3>
                       </Col>
                       <Col md={3} xxl lg="3">

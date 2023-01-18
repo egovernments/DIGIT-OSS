@@ -17,7 +17,7 @@ import {
 } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import { Form, Row } from "react-bootstrap";
-import { useLocation } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import Timeline from "../components/Timeline";
 import { convertEpochToDate } from "../utils/index";
 import axios from "axios";
@@ -34,10 +34,12 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   React.useEffect(async () => {
     const uuid = userInfo?.info?.uuid;
     const usersResponse = await Digit.UserService.userSearch(tenantId, { uuid: [uuid] }, {});
+    // console.log("USERID",usersResponse?.user[0]?.parentId)
     setParentId(usersResponse?.user[0]?.parentId);
     setGenderMF(usersResponse?.user[0]?.gender);
   }, [userInfo?.info?.uuid]);
   const [loader, setLoading] = useState(false);
+  console.log("FORMDATA VAL", formData);
   let validation = {};
   const devRegId = localStorage.getItem("devRegId");
   let isOpenLinkFlow = window.location.href.includes("openlink");
@@ -45,7 +47,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
 
   const { setValue, getValues, watch } = useForm();
   const [Documents, setDocumentsData] = useState({});
-  const [LicenseType, setLicenseType] = useState(formData?.LicneseType?.LicenseType || formData?.formData?.LicneseType?.LicenseType || "");
+  const [LicenseType, setLicenseType] = useState();
   const getDeveloperData = async () => {
     try {
       const requestResp = {
@@ -63,7 +65,10 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
       };
       const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${userInfo?.info?.id}&isAllData=true`, requestResp, {});
       const licenseDataList = getDevDetails?.data;
-      setEmail(licenseDataList?.devDetail[0]?.licenceDetails?.email);
+      console.log("LICENCE DET", getDevDetails?.data.devDetail[0]?.licenceDetails?.email, userInfo);
+      setLicenseType(licenseDataList?.devDetail[0]?.applicantType?.licenceType);
+      setEmail(licenseDataList?.devDetail[0]?.licenceDetails?.email || userInfo.info.emailId);
+      setMobileNumber(licenseDataList?.devDetail[0]?.licenceDetails?.mobileNumber || userInfo.info.mobileNumber);
       setDOB(licenseDataList?.devDetail[0]?.licenceDetails?.dob);
       setGender(licenseDataList?.devDetail[0]?.licenceDetails?.gender);
       setPanNumber(licenseDataList?.devDetail[0]?.licenceDetails?.panNumber);
@@ -91,7 +96,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
       setStateCorrespondence(licenseDataList?.devDetail[0]?.licenceDetails?.stateCorrespondence);
       setDistrictCorrespondence(licenseDataList?.devDetail[0]?.licenceDetails?.districtCorrespondence);
     } catch (error) {
-      return error;
+      console.log(error);
     }
   };
   useEffect(() => {
@@ -210,17 +215,21 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
 
       setLoading(false);
       setShowToast({ key: "success" });
+      console.log(Resp?.data?.files);
 
       // if(formType === "licenceBoardResolution"){
 
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
+      console.log("getValues()=====", getValues(), { ...Documents, ...getValues() }, Documents);
       setDocumentsData({ ...Documents, ...getValues() });
       setBoardResolution(Documents?.uploadBoardResolution);
       setDigitalSign(Documents?.uploadDigitalSignaturePdf);
       // }
     } catch (error) {
       setLoading(false);
+      alert(error?.response?.data?.Errors?.[0]?.description);
+      console.log(error, error?.body, error?.response?.data?.Errors?.[0]?.description);
     }
   };
 
@@ -312,10 +321,13 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
           "Access-Control-Allow-Origin": "*",
         },
       });
+      // console.log("PANDET", panResp?.data);
     } catch (error) {
+      console.log(error?.response?.data?.errorDescription);
       setPanValError(error?.response?.data?.errorDescription);
     }
   };
+  console.log(panValidation);
   useEffect(() => {
     if (PanNumber.length === 10) {
       panVerification;
@@ -329,6 +341,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   //   setEmail(e.target.value);
   // }
   function setGenderName(value) {
+    console.log("GENDER", value);
     setGender(value);
   }
 
@@ -524,145 +537,178 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   }
 
   const goNext = async () => {
-    if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
-      let licenseDet = {
-        Licenses: [
-          {
-            tradeLicenseDetail: {
-              owners: [
-                {
-                  parentid: userInfo?.info?.id,
-                  gender: genderUser,
-                  mobileNumber: mobileNumber,
-                  name: name,
-                  dob: null,
-                  emailId: email,
-                  permanentAddress: PermanentAddress,
-                  correspondenceAddress: Correspondenceaddress,
-                  pan: PanNumber,
-                  uuid: userInfo?.info?.uuid,
-                  // "permanentPinCode": "143001"
-                },
-              ],
-              subOwnerShipCategory: "INDIVIDUAL",
-              tradeType: "BUILDER.CLASSA",
+    // if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
+    let licenseDet = {
+      Licenses: [
+        {
+          tradeLicenseDetail: {
+            owners: [
+              {
+                parentid: userInfo?.info?.id,
+                gender: genderUser,
+                mobileNumber: mobileNumber,
+                name: name,
+                dob: null,
+                emailId: email,
+                permanentAddress: PermanentAddress,
+                correspondenceAddress: Correspondenceaddress,
+                pan: PanNumber,
+                uuid: userInfo?.info?.uuid,
+                // "permanentPinCode": "143001"
+              },
+            ],
+            subOwnerShipCategory: "INDIVIDUAL",
+            tradeType: "BUILDER.CLASSA",
 
-              additionalDetail: {
-                counsilForArchNo: null,
-              },
-              address: {
-                city: "",
-                landmark: "",
-                pincode: "",
-              },
-              institution: null,
-              applicationDocuments: null,
+            additionalDetail: {
+              counsilForArchNo: null,
             },
-            licenseType: "PERMANENT",
-            businessService: "BPAREG",
-            tenantId: stateId,
-            action: "NOWORKFLOW",
+            address: {
+              city: "",
+              landmark: "",
+              pincode: "",
+            },
+            institution: null,
+            applicationDocuments: null,
           },
-        ],
-      };
-
-      onSelect(config.key, licenseDet);
-      localStorage.setItem("licenceDetails", JSON.stringify(licenseDet));
-      Digit.OBPSService.BPAREGCreate(licenseDet, tenantId)
-        .then((result, err) => {
-          setIsDisableForNext(false);
-          let data = {
-            result: result,
-            formData: formData,
-            Correspondenceaddress: Correspondenceaddress,
-            addressLineOneCorrespondence: addressLineOneCorrespondence,
-            addressLineTwoCorrespondence: addressLineTwoCorrespondence,
-
-            isAddressSame: isAddressSame,
-          };
-          //1, units
-          onSelect("", data, "", true);
-        })
-        .catch((e) => {
-          setIsDisableForNext(false);
-          setShowToast({ key: "error" });
-          setError(e?.response?.data?.Errors[0]?.message || null);
-        });
-
-      const developerRegisterData = {
-        createdBy: userInfo?.info?.id,
-        updatedBy: userInfo?.info?.id,
-        id: userInfo?.info?.id,
-        devDetail: {
-          licenceDetails: {
-            name: name,
-            mobileNumber: mobileNumber,
-            gender: gender.value,
-            email: email,
-            dob: dob,
-            PanNumber: PanNumber,
-            uploadBoardResolution: Documents?.uploadBoardResolution,
-            uploadDigitalSignaturePdf: Documents?.uploadDigitalSignaturePdf,
-            addressLineOne: addressLineOne,
-            addressLineTwo: addressLineTwo,
-            addressLineThree: addressLineThree,
-            addressLineFour: addressLineFour,
-            city: city,
-            pincode: pincode,
-            village: village,
-            tehsil: tehsil,
-            state: state,
-            district: district,
-            isAddressSame: isAddressSame,
-            addressLineOneCorrespondence: addressLineOneCorrespondence,
-            addressLineTwoCorrespondence: addressLineTwoCorrespondence,
-            addressLineThreeCorrespondence: addressLineThreeCorrespondence,
-            addressLineFourCorrespondence: addressLineFourCorrespondence,
-            cityCorrespondence: cityCorrespondence,
-            pincodeCorrespondence: pincodeCorrespondence,
-            villageCorrespondence: villageCorrespondence,
-            tehsilCorrespondence: tehsilCorrespondence,
-            stateCorrespondence: stateCorrespondence,
-            districtCorrespondence: districtCorrespondence,
-            addressSameAsPermanent: addressSameAsPermanent,
-          },
+          licenseType: "PERMANENT",
+          businessService: "BPAREG",
+          tenantId: stateId,
+          action: "NOWORKFLOW",
         },
-      };
-      onSelect(config.key, developerRegisterData);
-      Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
-        .then((result, err) => {
-          localStorage.setItem("devRegId", JSON.stringify(result?.id));
-          setIsDisableForNext(false);
-          let data = {
-            result: result,
-            formData: formData,
-            Correspondenceaddress: Correspondenceaddress,
-            addressLineOneCorrespondence: addressLineOneCorrespondence,
-            addressLineTwoCorrespondence: addressLineTwoCorrespondence,
+      ],
+    };
 
-            isAddressSame: isAddressSame,
-          };
-          //1, units
-          onSelect("", data, "", true);
-        })
-        .catch((e) => {
-          setIsDisableForNext(false);
-          setShowToast({ key: "error" });
-          setError(e?.response?.data?.Errors[0]?.message || null);
-        });
+    if (LicenseType === "ARCHITECT.CLASSA") {
+      onSelect(config.key, licenseDet, null, null, "stakeholder-document-details");
     } else {
-      // let data = formData?.formData;
-      formData.name = name;
-      formData.mobileNumber = mobileNumber;
-      formData.gender = gender;
-      formData.email = email;
-      formData.PanNumber = PanNumber;
-      formData.Correspondenceaddress = Correspondenceaddress;
-      formData.addressLineOneCorrespondence = addressLineOneCorrespondence;
-      formData.addressSameAsPermanent = addressSameAsPermanent;
-      formData.isAddressSame = isAddressSame;
-      onSelect("", formData, "", true);
-      // onSelect("", formData)
+      onSelect(config.key, licenseDet);
+    }
+    localStorage.setItem("licenceDetails", JSON.stringify(licenseDet));
+    Digit.OBPSService.BPAREGCreate(licenseDet, tenantId)
+      .then((result, err) => {
+        setIsDisableForNext(false);
+        let data = {
+          result: result,
+          formData: formData,
+          Correspondenceaddress: Correspondenceaddress,
+          addressLineOneCorrespondence: addressLineOneCorrespondence,
+          addressLineTwoCorrespondence: addressLineTwoCorrespondence,
+
+          isAddressSame: isAddressSame,
+        };
+        //1, units
+        if (LicenseType === "ARCHITECT.CLASSA") {
+          onSelect("", formData, "", true, "stakeholder-document-details");
+        } else {
+          onSelect("", formData, "", true);
+        }
+      })
+      .catch((e) => {
+        setIsDisableForNext(false);
+        setShowToast({ key: "error" });
+        setError(e?.response?.data?.Errors[0]?.message || null);
+      });
+
+    const developerRegisterData = {
+      createdBy: userInfo?.info?.id,
+      updatedBy: userInfo?.info?.id,
+      id: userInfo?.info?.id,
+      devDetail: {
+        licenceDetails: {
+          name: name,
+          mobileNumber: mobileNumber,
+          gender: gender.value,
+          email: email,
+          dob: dob,
+          PanNumber: PanNumber,
+          uploadBoardResolution: Documents?.uploadBoardResolution,
+          uploadDigitalSignaturePdf: Documents?.uploadDigitalSignaturePdf,
+          addressLineOne: addressLineOne,
+          addressLineTwo: addressLineTwo,
+          addressLineThree: addressLineThree,
+          addressLineFour: addressLineFour,
+          city: city,
+          pincode: pincode,
+          village: village,
+          tehsil: tehsil,
+          state: state,
+          district: district,
+          isAddressSame: isAddressSame,
+          addressLineOneCorrespondence: addressLineOneCorrespondence,
+          addressLineTwoCorrespondence: addressLineTwoCorrespondence,
+          addressLineThreeCorrespondence: addressLineThreeCorrespondence,
+          addressLineFourCorrespondence: addressLineFourCorrespondence,
+          cityCorrespondence: cityCorrespondence,
+          pincodeCorrespondence: pincodeCorrespondence,
+          villageCorrespondence: villageCorrespondence,
+          tehsilCorrespondence: tehsilCorrespondence,
+          stateCorrespondence: stateCorrespondence,
+          districtCorrespondence: districtCorrespondence,
+          addressSameAsPermanent: addressSameAsPermanent,
+        },
+      },
+    };
+    if (LicenseType === "ARCHITECT.CLASSA") {
+      onSelect(config.key, developerRegisterData, null, null, "stakeholder-document-details");
+    } else {
+      onSelect(config.key, developerRegisterData);
+    }
+    Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
+      .then((result, err) => {
+        // console.log("DATA", result?.id);
+        localStorage.setItem("devRegId", JSON.stringify(result?.id));
+        setIsDisableForNext(false);
+        let data = {
+          result: result,
+          formData: formData,
+          Correspondenceaddress: Correspondenceaddress,
+          addressLineOneCorrespondence: addressLineOneCorrespondence,
+          addressLineTwoCorrespondence: addressLineTwoCorrespondence,
+
+          isAddressSame: isAddressSame,
+        };
+        //1, units
+        if (LicenseType === "ARCHITECT.CLASSA") {
+          onSelect("", formData, "", true, "stakeholder-document-details");
+        } else {
+          onSelect("", formData, "", true);
+        }
+      })
+      .catch((e) => {
+        setIsDisableForNext(false);
+        setShowToast({ key: "error" });
+        setError(e?.response?.data?.Errors[0]?.message || null);
+      });
+
+    // }
+    // else {
+    //   // let data = formData?.formData;
+    //   formData.name = name;
+    //   formData.mobileNumber = mobileNumber;
+    //   formData.gender = gender;
+    //   formData.email = email;
+    //   formData.PanNumber = PanNumber;
+    //   formData.Correspondenceaddress = Correspondenceaddress;
+    //   formData.addressLineOneCorrespondence = addressLineOneCorrespondence;
+    //   formData.addressSameAsPermanent = addressSameAsPermanent;
+    //   formData.isAddressSame = isAddressSame;
+    //   if(LicenseType === 'ARCHITECT.CLASSA'){
+    //     onSelect("", formData,"",true,"stakeholder-document-details");
+    //   } else {
+    //     onSelect("", formData,"",true);
+    //   }
+    // }
+  };
+
+  const navigate = useHistory();
+
+  const changeStep = (step) => {
+    console.log("logger123..", step);
+    switch (step) {
+      case 1:
+        navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/provide-license-type");
+        break;
     }
   };
 
@@ -671,7 +717,12 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
       {loader && <Spinner />}
       <div className={isOpenLinkFlow ? "OpenlinkContainer" : ""}>
         {isOpenLinkFlow && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
-        <Timeline currentStep={1} flow="STAKEHOLDER" />
+        <Timeline
+          currentStep={2}
+          flow={LicenseType === "ARCHITECT.CLASSA" ? "ARCHITECT.CLASSA" : "STAKEHOLDER"}
+          onChangeStep={changeStep}
+          isAPILoaded={LicenseType ? true : false}
+        />
         {!isLoading ? (
           <FormStep
             config={config}
@@ -688,8 +739,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
               !email.match(Digit.Utils.getPattern("Email")) ||
               !PanNumber ||
               !PanNumber.match(Digit.Utils.getPattern("PAN")) ||
-              !pincode?.match(Digit.Utils.getPattern("Pincode") || !city || !addressLineOne) ||
-              !uploadBoardResolution
+              !pincode?.match(Digit.Utils.getPattern("Pincode") || !city || !addressLineOne)
             }
           >
             <Card className="mb-3">
@@ -715,7 +765,14 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                       type: "text",
                     })}
                   /> */}
-                  <input type="text" name="name" value={name} onChange={SelectName} disabled="disabled" className="form-control" />
+                  <input
+                    type="text"
+                    name="name"
+                    value={name}
+                    onChange={SelectName}
+                    // disabled="disabled"
+                    className="form-control"
+                  />
                 </Form.Group>
                 <Form.Group className="col-md-4 mb-2">
                   <label>
@@ -834,54 +891,46 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                     {PanValError}
                   </h3>
                 </Form.Group>
-                <Form.Group className="col-md-4 mb-2">
-                  <label htmlFor="name" className="text">
-                    Upload Board Resolution <span className="text-danger font-weight-bold">*</span>
-                  </label>
-                  <div className="d-flex">
-                    <input
-                      type="file"
-                      name="uploadBoardResolution"
-                      accept="application/pdf"
-                      placeholder=""
-                      class="form-control"
-                      onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBoardResolution", "licenceBoardResolution")}
-                    />
-                    <span>
-                      {uploadBoardResolution ? (
-                        <a onClick={() => getDocShareholding(uploadBoardResolution)} className="btn btn-sm col-md-6">
-                          <VisibilityIcon color="info" className="icon" />
-                        </a>
-                      ) : (
-                        <p></p>
-                      )}
-                    </span>
-                  </div>
+                {/* <Form.Group className="col-md-4 mb-2">
+                    <label htmlFor="name" className="text">Upload Board Resolution <span className="text-danger font-weight-bold">*</span></label>
+                    <div className="d-flex">
+                      <input
+                        type="file"
+                        name="uploadBoardResolution"
+                        accept="application/pdf"
+                        placeholder=""
+                        class="form-control"
+                        onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBoardResolution","licenceBoardResolution")}
+                      />
+                      <span>
+                      {uploadBoardResolution ?
+                          <a onClick={() => getDocShareholding(uploadBoardResolution)} className="btn btn-sm col-md-6">
+                              <VisibilityIcon color="info" className="icon" />
+                          </a> : <p></p>
+                      }
+                      </span>
+                    </div>
                 </Form.Group>
                 <Form.Group className="col-md-4 mb-2">
-                  <label htmlFor="name" className="text">
-                    Upload Digital Signature <span className="text-danger font-weight-bold">*</span>
-                  </label>
-                  <div className="d-flex">
-                    <input
-                      type="file"
-                      name="uploadDigitalSignaturePdf"
-                      accept="application/pdf"
-                      placeholder=""
-                      class="form-control"
-                      onChange={(e) => getDocumentData(e?.target?.files[0], "uploadDigitalSignaturePdf", "licenceBoardResolution")}
-                    />
-                    <span>
-                      {uploadDigitalSignaturePdf ? (
-                        <a onClick={() => getDocShareholding(uploadDigitalSignaturePdf)} className="btn btn-sm col-md-6">
-                          <VisibilityIcon color="info" className="icon" />
-                        </a>
-                      ) : (
-                        <p></p>
-                      )}
-                    </span>
-                  </div>
-                </Form.Group>
+                    <label htmlFor="name" className="text">Upload Digital Signature <span className="text-danger font-weight-bold">*</span></label>
+                    <div className="d-flex">
+                      <input
+                        type="file"
+                        name="uploadDigitalSignaturePdf"
+                        accept="application/pdf"
+                        placeholder=""
+                        class="form-control"
+                        onChange={(e) => getDocumentData(e?.target?.files[0], "uploadDigitalSignaturePdf","licenceBoardResolution")}
+                      />
+                      <span>
+                      {uploadDigitalSignaturePdf ?
+                          <a onClick={() => getDocShareholding(uploadDigitalSignaturePdf)} className="btn btn-sm col-md-6">
+                              <VisibilityIcon color="info" className="icon" />
+                          </a> : <p></p>
+                      }
+                      </span>
+                    </div>
+                </Form.Group> */}
               </Row>
             </Card>
             <Card className="mb-3">

@@ -91,7 +91,7 @@ const getPattern = type => {
     case "Percentage":
       return /^\b(?<!\.)(?!0+(?:\.0+)?%)(?:\d|[1-9]\d|100)(?:(?<!100)\.\d+)?%/i;
     case "LicNumber" :
-      return /^[L]{1}[C]{1}[-]{1}\d{7}[A-Z]{1}/i;
+      return /^[L]{1}[C]{1}[-]{1}\d/i;
     case "architectNumber" :
       return /^[C]{1}[A]{1}[/]{1}\d{4}[/]{1}\d{7}/i;
   }

@@ -1,4 +1,4 @@
-export const newConfig = [
+export let newConfig = [
   {
     head: "ES_NEW_APPLICATION_PROPERTY_ASSESSMENT",
     body: [
@@ -19,27 +19,27 @@ export const newConfig = [
           cardText: "",
           submitBarLabel: "CS_COMMON_NEXT",
         },
-        nextStep: "license-add-info",
+        nextStep: "license-details",
         key: "LicneseType",
         withoutLabel: true,
         hideInEmployee: true,
       },
-      // {
-      //   type: "component",
-      //   route: "license-details",
-      //   isMandatory: true,
-      //   component: "LicenseDetails",
-      //   texts: {
-      //     headerCaption: "Authorized User",
-      //     header: "",
-      //     cardText: "",
-      //     submitBarLabel: "CS_COMMON_NEXT",
-      //   },
-      //   nextStep: "license-add-info",
-      //   key: "LicneseDetails",
-      //   withoutLabel: true,
-      //   hideInEmployee: true,
-      // },
+      {
+        type: "component",
+        route: "license-details",
+        isMandatory: true,
+        component: "LicenseDetails",
+        texts: {
+          headerCaption: "Personal Details",
+          header: "",
+          cardText: "",
+          submitBarLabel: "CS_COMMON_NEXT",
+        },
+        nextStep: "license-add-info",
+        key: "LicneseDetails",
+        withoutLabel: true,
+        hideInEmployee: true,
+      },
       {
         type: "component",
         route: "license-add-info",

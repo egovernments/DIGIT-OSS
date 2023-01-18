@@ -23,7 +23,7 @@ const StakeholderRegistration = () => {
   const goNext = (skipStep) => {
     const currentPath = pathname.split("/").pop();
     const { nextStep } = config.find((routeObj) => routeObj.route === currentPath);
-    let redirectWithHistory = history.push;
+    let redirectWithHistory = history.replace;
     if (nextStep === null) {
       return redirectWithHistory(`${path}/check`);
     }
@@ -36,15 +36,22 @@ const StakeholderRegistration = () => {
     queryClient.invalidateQueries("PT_CREATE_PROPERTY");
   };
   const createApplication = async () => {
-    history.push(`${path}/acknowledgement`);
+    sessionStorage.removeItem("Digit.BUILDING_PERMIT");
+    history.replace(`${path}/acknowledgement`);
   };
 
-  const handleSelect = (key, data, skipStep, isFromCreateApi) => {
+  const handleSelect = (key, data, skipStep, isFromCreateApi,redirectPath = null) => {
+    console.log("log1234......",redirectPath,key,data)
     if (isFromCreateApi) setParams(data);
     else if(key=== "")
     setParams({...data});
     else setParams({ ...params, ...{ [key]: { ...params[key], ...data }}});
-    goNext(skipStep);
+    if(redirectPath){
+      history.replace(redirectPath);
+      return;
+    } else {
+      goNext(skipStep);
+    }
   };
   const handleSkip = () => {};
 
@@ -63,7 +70,7 @@ const StakeholderRegistration = () => {
     }
   }, []);
 
-  const CheckPage = Digit?.ComponentRegistryService?.getComponent('StakeholderCheckPage') ;
+  const CheckPage = Digit?.ComponentRegistryService?.getComponent('StakeholderCheckPage');
   const StakeholderAcknowledgement = Digit?.ComponentRegistryService?.getComponent('StakeholderAcknowledgement');
 
   return (

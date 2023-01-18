@@ -3,7 +3,6 @@ import { Card, Row, Col, Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { getDocShareholding } from "../NewLicense/docView/docView.help";
 import { Dialog } from "@mui/material";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -19,6 +18,7 @@ const ServicePlanService = () => {
   const [docUpload, setDocuploadData] = useState([]);
   const [open, setOpen] = useState(false)
   const [applicationNumber, setApplicationNumber] = useState()
+  const [valid, setValid] = useState("")
   const {
     register,
     handleSubmit,
@@ -51,12 +51,15 @@ const ServicePlanService = () => {
           "userInfo": userInfo.info
         },
 
-        ServicePlanRequest: {
+        ServicePlanRequest: [{
           ...data,
           "action": "APPLY",
           "tenantId":  tenantId,
           "businessService": "SERVICE_PLAN",
-        },
+          "workflowCode": "SERVICE_PLAN",
+          "comment": "",
+          "assignee": null
+        }],
       };
       const Resp = await axios.post("/tl-services/serviceplan/_create", postDistrict);
       setServicePlanDataLabel(Resp.data);
@@ -68,7 +71,32 @@ const ServicePlanService = () => {
     }
   };
   const [fileStoreId, setFileStoreId] = useState({});
+
+  const checkDuplicates = (arr) => {
+    let count = {}
+    for(let i=0; i<arr.length; i++){
+      count[arr[i]] = (count[arr[i]] || 0) + 1
+    }
+    const arr1 = Object.values(count)
+    console.log({count, arr1});
+    if(arr1.some((e) => e > 1)) {
+      return true
+    }
+    return false
+  }
+  
+  const viewDocument = async (documentId) => {
+    try {
+      const response = await axios.get(`/filestore/v1/files/url?tenantId=hr&fileStoreIds=${documentId}`, {});
+      const FILDATA = response.data?.fileStoreIds[0]?.url;
+      window.open(FILDATA);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const getDocumentData = async (file, fieldName) => {
+    setValid((arr) => [...arr, file.name])
     const formData = new FormData();
     formData.append("file", file);
     formData.append("tenantId", "hr");
@@ -80,7 +108,7 @@ const ServicePlanService = () => {
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
       // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
-      console.log("getval======", getValues());
+      // console.log("getval======", getValues());
       // setLoader(false);
     } catch (error) {
       // setLoader(false);
@@ -141,7 +169,7 @@ const ServicePlanService = () => {
                 value={LOCNumber}
               />
             </Col>
-            <Col className="col-4">
+            {/* <Col className="col-4">
               <div>
                 <label>
                   <h2 data-toggle="tooltip" data-placement="top" title=" Is the uploaded Service Plan in accordance to the Standard designs?">
@@ -150,7 +178,7 @@ const ServicePlanService = () => {
                 </label>
               </div>
               <Form.Check
-                value="true"
+                value="Y"
                 type="radio"
                 id="default-radio"
                 label="Yes"
@@ -159,7 +187,7 @@ const ServicePlanService = () => {
                 inline
               ></Form.Check>
               <Form.Check
-                value="false"
+                value="N"
                 type="radio"
                 id="default-radio"
                 label="No"
@@ -167,16 +195,16 @@ const ServicePlanService = () => {
                 {...register("selfCertifiedDrawingsFromCharetedEng")}
                 inline
               ></Form.Check>
-            </Col>
-            <Col className="col-4">
+            </Col> */}
+            {/* <Col className="col-4">
               <div>
                 <label>
                   <h2>Undertaking</h2>
                 </label>
               </div>
-              <Form.Check value="true" type="radio" id="default-radio" label="Yes" name="true" {...register("undertaking")} inline></Form.Check>
-              <Form.Check value="false" type="radio" id="default-radio" label="No" name="false" {...register("undertaking")} inline></Form.Check>
-            </Col>
+              <Form.Check value="Y" type="radio" id="default-radio" label="Yes" name="true" {...register("undertaking")} inline></Form.Check>
+              <Form.Check value="N" type="radio" id="default-radio" label="No" name="false" {...register("undertaking")} inline></Form.Check>
+            </Col> */}
           </Row>
           <br></br>
           <div className="table table-bordered table-responsive">
@@ -195,7 +223,7 @@ const ServicePlanService = () => {
                   </div>
                 </td>
                 <td component="th" scope="row">
-                  <h2>Self-certified drawings from empanelled/certified architects that conform to the standard approved template.</h2>
+                  <h2>Self-certified drawings from empanelled/certified architects that conform to the standard approved template as per the TCP layout plan / Site plan.</h2>
                 </td>
                 <td component="th" scope="row">
                   <input
@@ -203,9 +231,11 @@ const ServicePlanService = () => {
                     className="form-control"
                     onChange={(e) => getDocumentData(e?.target?.files[0], "selfCertifiedDrawingFromEmpaneledDoc")}
                   />
-                  <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.selfCertifiedDrawingFromEmpaneledDoc)}>
+                  {fileStoreId?.selfCertifiedDrawingFromEmpaneledDoc ? 
+                  <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.selfCertifiedDrawingFromEmpaneledDoc)}>
                     {" "}
                   </VisibilityIcon>
+                  : "" }
                 </td>
               </tr>
               <tr>
@@ -224,9 +254,11 @@ const ServicePlanService = () => {
                     // {...register("environmentalClearance")}
                     onChange={(e) => getDocumentData(e?.target?.files[0], "environmentalClearance")}
                   />
-                  <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.environmentalClearance)}>
+                  {fileStoreId?.environmentalClearance ? 
+                  <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.environmentalClearance)}>
                     {" "}
                   </VisibilityIcon>
+                  : ""}
                 </td>
               </tr>
               <tr>
@@ -236,7 +268,7 @@ const ServicePlanService = () => {
                   </div>
                 </td>
                 <td component="th" scope="row">
-                  <h2>PDF (OCR Compatible) + GIS format (shapefile as per the template uploaded on the department website).</h2>
+                  <h2>Service plan in PDF (OCR Compatible) + GIS format.</h2>
                 </td>
                 <td component="th" scope="row">
                   <input
@@ -245,9 +277,11 @@ const ServicePlanService = () => {
                     // {...register("shapeFileAsPerTemplate")}
                     onChange={(e) => getDocumentData(e?.target?.files[0], "shapeFileAsPerTemplate")}
                   />
-                  <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.shapeFileAsPerTemplate)}>
+                  {fileStoreId?.shapeFileAsPerTemplate ? 
+                  <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.shapeFileAsPerTemplate)}>
                     {" "}
                   </VisibilityIcon>
+                    : ""}
                 </td>
               </tr>
               <tr>
@@ -257,7 +291,7 @@ const ServicePlanService = () => {
                   </div>
                 </td>
                 <td component="th" scope="row">
-                  <h2>AutoCAD (DXF) file.</h2>
+                  <h2>Service plan in AutoCAD (DXF) file.</h2>
                 </td>
                 <td component="th" scope="row">
                   <input
@@ -266,9 +300,11 @@ const ServicePlanService = () => {
                     // {...register("autoCadFile")}
                     onChange={(e) => getDocumentData(e?.target?.files[0], "autoCadFile")}
                   />
-                  <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.autoCadFile)}>
+                  {fileStoreId?.autoCadFile ? 
+                  <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.autoCadFile)}>
                     {" "}
                   </VisibilityIcon>
+                  : "" }
                 </td>
               </tr>
               <tr>
@@ -278,7 +314,7 @@ const ServicePlanService = () => {
                   </div>
                 </td>
                 <td component="th" scope="row">
-                  <h2>Certified copy of the plan verified by a third party.</h2>
+                  <h2>Certified copy of the Service plan verified by a third party.</h2>
                 </td>
                 <td component="th" scope="row">
                   <input
@@ -287,9 +323,11 @@ const ServicePlanService = () => {
                     // {...register("certifieadCopyOfThePlan")}
                     onChange={(e) => getDocumentData(e?.target?.files[0], "certifieadCopyOfThePlan")}
                   />
-                  <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.certifieadCopyOfThePlan)}>
+                  {fileStoreId?.certifieadCopyOfThePlan ? 
+                  <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.certifieadCopyOfThePlan)}>
                     {" "}
                   </VisibilityIcon>
+                  : "" }
                 </td>
               </tr>
             </tbody>

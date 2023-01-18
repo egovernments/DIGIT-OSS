@@ -35,6 +35,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
   const { pathname: url } = useLocation();
   let validation = {};
   const userInfo = Digit.UserService.getUser();
+  console.log("USERNAME", userInfo?.info?.name);
   const devRegId = localStorage.getItem("devRegId");
   let isOpenLinkFlow = window.location.href.includes("openlink");
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -46,6 +47,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
     const usersResponse = await Digit.UserService.userSearch(tenantId, { uuid: [uuid] }, {});
     setParentId(usersResponse?.user[0]?.parentId);
     setGenderMF(usersResponse?.user[0]?.gender);
+    console.log("USERID", usersResponse?.user[0]?.gender);
   }, [userInfo?.info?.uuid]);
 
   const { data: optionsArrList } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
@@ -59,6 +61,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
   const { setValue, getValues, watch } = useForm();
 
   const DevelopersAllData = getValues();
+  console.log("DEVEDATAGEGT", DevelopersAllData);
   // const [Documents,getValues] = useState([]);
 
   const onSkip = () => onSelect();
@@ -79,7 +82,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
       };
       const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${userInfo?.info?.id}&isAllData=true`, requestResp, {});
       const developerDataGet = getDevDetails?.data;
+      console.log("log123ergergreg", developerDataGet);
       setData(developerDataGet);
+      console.log("TECHEXP", developerDataGet?.devDetail[0]?.capacityDevelopAColony?.capacityDevelopColonyHdruAct?.sectorAndDevelopmentPlan);
       setValueHrdu(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.permissionGrantedHRDU);
       setValueTechExpert(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.technicalExpert);
       setValueDesignatedDirectors(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.designatedDirectors);
@@ -126,6 +131,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
       setPaidUpCapital(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.paidUpCapital);
       setNetworthPartners(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.networthPartners);
       setNetworthFirm(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.networthFirm);
+      console.log("Developer-Capacity", getDevDetails?.data?.devDetail[0]?.capacityDevelopAColony);
       setPanNumber(developerDataGet?.devDetail[0]?.licenceDetails?.PanNumber);
       setTechnicalCapacityOutsideHaryana(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.technicalCapacityOutsideHaryana);
       setTechnicalCapacityOutsideHaryanaDetails(
@@ -139,8 +145,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
       });
       setDocumentsData(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.documents);
       setTradeType(developerDataGet?.devDetail[0]?.applicantType?.licenceType);
+      console.log("TRADETYPE", developerDataGet?.devDetail[0]?.applicantType?.licenceType);
     } catch (error) {
-      return error;
+      console.log(error);
     }
   };
   useEffect(() => {
@@ -294,12 +301,14 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
     purpose: "",
   });
 
+  // console.log("LIC NO...",technicalCapacitySoughtFromAnyColonizer.licNo)
   const { data: PurposeType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
 
   useEffect(() => {
     const purpose = PurposeType?.["common-masters"]?.Purpose?.map(function (data) {
       return { value: data?.purposeCode, label: data?.name };
     });
+    console.log("log123", purpose);
     setPurposeOptions({ data: purpose, isLoading: false });
   }, [PurposeType]);
 
@@ -323,6 +332,10 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
   function selectCorrespondenceaddress(e) {
     setCorrespondenceaddress(e.target.value);
   }
+
+  // const formSubmit = (data) => {
+  //     console.log("data", data);
+  // };
 
   const [AppliedDetailFormSubmitted, SetAppliedDetailFormSubmitted] = useState(false);
 
@@ -355,24 +368,29 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
   const handleCloseColoniesDeveloped = () => setShowColoniesDeveloped(false);
 
   const changeValueHrdu = (e) => {
+    console.log(e.target.value);
     setValueHrdu(e.target.value);
     setValueDesignatedDirectors("");
     setDocumentsData({ ...Documents, agreementDoc: "", boardDoc: "" });
     setModalCapacityDevelopColonyHdruAct([]);
   };
   const changeTechnicalExpert = (e) => {
+    console.log(e.target.value);
     setValueTechExpert(e.target.value);
   };
   const changeDesignatedDirectors = (e) => {
+    console.log(e.target.value);
     setValueDesignatedDirectors(e.target.value);
     setDocumentsData({ ...Documents, agreementDoc: "", boardDoc: "" });
   };
   const changeAlreadyObtainedLic = (e) => {
+    console.log(e.target.value);
     setValueAlreadyObtainedLic(e.target.value);
   };
 
   const handleshow = (e) => {
     const getshow = e.target.value;
+    console.log(getshow);
   };
   const handleshow0 = (e) => {
     const getshow = e.target.value;
@@ -412,7 +430,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
   //         const docValue = Resp.data?.files[0]?.fileStoreId
   //         setModalDevPlan(docValue);
   //     } catch (error) {
-  //         return error
+  //         console.log(error.message);
   //     }
   //     getDocData();
   // }
@@ -464,8 +482,10 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
 
       setLoading(false);
       setShowToast({ key: "success" });
+      console.log(Resp?.data?.files);
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
+      console.log("getValues()=====", getValues(), { ...Documents, ...getValues() }, Documents);
       setDocumentsData({ ...Documents, ...getValues() });
       //   setLoader(false);
 
@@ -508,6 +528,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
       }
     } catch (error) {
       setLoading(false);
+      console.log(error.message);
     }
   };
 
@@ -520,8 +541,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
         const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${Documents?.sectorAndDevelopmentPlan}`, {});
         const FILDATA = response.data?.fileStoreIds[0]?.url;
         setFIleUrl(FILDATA);
+        console.log("GET DOCUMENT LABEL", FILDATA);
       } catch (error) {
-        return error;
+        console.log(error.message);
       }
     }
   };
@@ -529,267 +551,6 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
   useEffect(() => {
     getDocData();
   }, [Documents?.sectorAndDevelopmentPlan]);
-
-  const getDocValidLic = async () => {
-    if (
-      (Documents?.validatingLicence !== null || Documents?.validatingLicence !== undefined) &&
-      (validatingLicence !== null || validatingLicence !== "")
-    ) {
-      try {
-        const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${Documents?.validatingLicence}`, {});
-        const FILDATA = response.data?.fileStoreIds[0]?.url;
-        setValidateLicUrl(FILDATA);
-      } catch (error) {
-        return error;
-      }
-    }
-  };
-
-  useEffect(() => {
-    getDocValidLic();
-  }, [Documents?.validatingLicence]);
-
-  // COLONIES DEVELOPED GET UPLOADED DOC
-  const getDocStatusDev = async () => {
-    if (
-      (Documents?.statusOfDevelopment !== null || Documents?.statusOfDevelopment !== undefined) &&
-      (statusOfDevelopment !== null || statusOfDevelopment !== "")
-    ) {
-      try {
-        const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${Documents?.statusOfDevelopment}`, {});
-        const FILDATA = response.data?.fileStoreIds[0]?.url;
-        setStatusDevUrl(FILDATA);
-      } catch (error) {
-        return error;
-      }
-    }
-  };
-
-  useEffect(() => {
-    getDocStatusDev();
-  }, [Documents?.statusOfDevelopment]);
-
-  const getOutstandingDues = async () => {
-    if ((Documents?.outstandingDues !== null || Documents?.outstandingDues !== undefined) && (outstandingDues !== null || outstandingDues !== "")) {
-      try {
-        const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${Documents?.outstandingDues}`, {});
-        const FILDATA = response.data?.fileStoreIds[0]?.url;
-        setOutStandingUrl(FILDATA);
-      } catch (error) {
-        return error;
-      }
-    }
-  };
-
-  useEffect(() => {
-    getOutstandingDues();
-  }, [Documents?.outstandingDues]);
-
-  // PARTICULAR OF DOCUMENTS
-
-  const getCompanyBalanceSheet = async () => {
-    if (
-      (DevelopersAllData?.companyBalanceSheet !== null || DevelopersAllData?.companyBalanceSheet !== undefined) &&
-      (companyBalanceSheet !== null || companyBalanceSheet !== "")
-    ) {
-      try {
-        const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${DevelopersAllData?.companyBalanceSheet}`, {});
-        const FILDATA = response.data?.fileStoreIds[0]?.url;
-        setCompanyBalanceSheetUrl(FILDATA);
-      } catch (error) {
-        return error;
-      }
-    }
-  };
-
-  useEffect(() => {
-    getCompanyBalanceSheet();
-  }, [DevelopersAllData?.companyBalanceSheet]);
-
-  const getPaidUpCapital = async () => {
-    if (
-      (DevelopersAllData?.paidUpCapital !== null || DevelopersAllData?.paidUpCapital !== undefined) &&
-      (paidUpCapital !== null || paidUpCapital !== "")
-    ) {
-      try {
-        const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${DevelopersAllData?.paidUpCapital}`, {});
-        const FILDATA = response.data?.fileStoreIds[0]?.url;
-        setPaidUpCapitalUrl(FILDATA);
-      } catch (error) {
-        return error;
-      }
-    }
-  };
-
-  useEffect(() => {
-    getPaidUpCapital();
-  }, [DevelopersAllData?.paidUpCapital]);
-
-  const getIndividualCertificateCA = async () => {
-    if (
-      (DevelopersAllData?.individualCertificateCA !== null || DevelopersAllData?.individualCertificateCA !== undefined) &&
-      (individualCertificateCA !== null || individualCertificateCA !== "")
-    ) {
-      try {
-        const response = await axios.get(
-          `/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${DevelopersAllData?.individualCertificateCA}`,
-          {}
-        );
-        const FILDATA = response.data?.fileStoreIds[0]?.url;
-        setIndividualCertificatCAUrl(FILDATA);
-      } catch (error) {
-        return error;
-      }
-    }
-  };
-
-  useEffect(() => {
-    getIndividualCertificateCA();
-  }, [DevelopersAllData?.individualCertificateCA]);
-
-  // GET TECHNICAL EXPERTS DOCUMENTS
-  const getEngineerSign = async () => {
-    if (
-      (DevelopersAllData?.engineerSign !== null || DevelopersAllData?.engineerSign !== undefined) &&
-      (engineerSign !== null || engineerSign !== "")
-    ) {
-      try {
-        const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${DevelopersAllData?.engineerSign}`, {});
-        const FILDATA = response.data?.fileStoreIds[0]?.url;
-        setEngineerSignUrl(FILDATA);
-      } catch (error) {
-        return error;
-      }
-    }
-  };
-
-  useEffect(() => {
-    getEngineerSign();
-  }, [DevelopersAllData?.engineerSign]);
-
-  const getArchitectSign = async () => {
-    if (
-      (DevelopersAllData?.architectSign !== null || DevelopersAllData?.architectSign !== undefined) &&
-      (architectSign !== null || architectSign !== "")
-    ) {
-      try {
-        const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${DevelopersAllData?.architectSign}`, {});
-        const FILDATA = response.data?.fileStoreIds[0]?.url;
-        setArchitectSignUrl(FILDATA);
-      } catch (error) {
-        return error;
-      }
-    }
-  };
-
-  useEffect(() => {
-    getArchitectSign();
-  }, [DevelopersAllData?.architectSign]);
-
-  const getTownPlannerSign = async () => {
-    if (
-      (DevelopersAllData?.townPlannerSign !== null || DevelopersAllData?.townPlannerSign !== undefined) &&
-      (townPlannerSign !== null || townPlannerSign !== "")
-    ) {
-      try {
-        const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${DevelopersAllData?.townPlannerSign}`, {});
-        const FILDATA = response.data?.fileStoreIds[0]?.url;
-        setTownPlannerSignUrl(FILDATA);
-      } catch (error) {
-        return error;
-      }
-    }
-  };
-
-  useEffect(() => {
-    getTownPlannerSign();
-  }, [DevelopersAllData?.townPlannerSign]);
-
-  const getAgreementDoc = async () => {
-    if (
-      (DevelopersAllData?.agreementDoc !== null || DevelopersAllData?.agreementDoc !== undefined) &&
-      (agreementDoc !== null || agreementDoc !== "")
-    ) {
-      try {
-        const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${DevelopersAllData?.agreementDoc}`, {});
-        const FILDATA = response.data?.fileStoreIds[0]?.url;
-        setAgreementDocUrl(FILDATA);
-      } catch (error) {
-        return error;
-      }
-    }
-  };
-
-  useEffect(() => {
-    getAgreementDoc();
-  }, [DevelopersAllData?.agreementDoc]);
-
-  const getBoardDoc = async () => {
-    if ((DevelopersAllData?.boardDoc !== null || DevelopersAllData?.boardDoc !== undefined) && (boardDoc !== null || boardDoc !== "")) {
-      try {
-        const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${DevelopersAllData?.boardDoc}`, {});
-        const FILDATA = response.data?.fileStoreIds[0]?.url;
-        setBoardDocUrl(FILDATA);
-      } catch (error) {
-        return error;
-      }
-    }
-  };
-
-  useEffect(() => {
-    getBoardDoc();
-  }, [DevelopersAllData?.boardDoc]);
-
-  const getRegisteredDoc = async () => {
-    if (
-      (DevelopersAllData?.registeredDoc !== null || DevelopersAllData?.registeredDoc !== undefined) &&
-      (registeredDoc !== null || registeredDoc !== "")
-    ) {
-      try {
-        const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${DevelopersAllData?.registeredDoc}`, {});
-        const FILDATA = response.data?.fileStoreIds[0]?.url;
-        setRegisteredDocUrl(FILDATA);
-      } catch (error) {
-        return error;
-      }
-    }
-  };
-
-  useEffect(() => {
-    getRegisteredDoc();
-  }, [DevelopersAllData?.registeredDoc]);
-
-  const getBoardDocY = async () => {
-    if ((DevelopersAllData?.boardDocY !== null || DevelopersAllData?.boardDocY !== undefined) && (boardDocY !== null || boardDocY !== "")) {
-      try {
-        const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${DevelopersAllData?.boardDocY}`, {});
-        const FILDATA = response.data?.fileStoreIds[0]?.url;
-        setBoardDocYUrl(FILDATA);
-      } catch (error) {
-        return error;
-      }
-    }
-  };
-
-  useEffect(() => {
-    getBoardDocY();
-  }, [DevelopersAllData?.boardDocY]);
-
-  const getEarlierDocY = async () => {
-    if ((DevelopersAllData?.earlierDocY !== null || DevelopersAllData?.earlierDocY !== undefined) && (earlierDocY !== null || earlierDocY !== "")) {
-      try {
-        const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${DevelopersAllData?.earlierDocY}`, {});
-        const FILDATA = response.data?.fileStoreIds[0]?.url;
-        setEarlierDocYUrl(FILDATA);
-      } catch (error) {
-        return error;
-      }
-    }
-  };
-
-  useEffect(() => {
-    getEarlierDocY();
-  }, [DevelopersAllData?.earlierDocY]);
 
   const setpurposeType = (data) => {
     const getDevTypeValue = data?.value;
@@ -810,8 +571,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
         // townPlannerDegree: Documents?.townPlannerDegree
       };
       setModalCapacityDevelopColonyHdruAct((prev) => [...prev, values]);
-      getDocData();
-      getDocValidLic();
+      console.log("WIHT DOC", values);
+      // getDocData();
+      // getDocValidLic();
       handleCloseCapacityDevelopColony();
       setHrduModalData({
         licNo: "",
@@ -823,7 +585,10 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
         // architectDegree: "",
         // townPlannerDegree: ""
       });
+      // setShowCapacityDevelopColony(false)
     }
+    // setShowCapacityDevelopColony(false)
+    //   console.log("DevCapacityFirst", capacityDevelopColonyHdruAct);
     localStorage.setItem("DevCapacityDetails", JSON.stringify(capacityDevelopColonyHdruAct));
   };
 
@@ -846,6 +611,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
       getDocStatusDev();
       getOutstandingDues();
       handleCloseColoniesDeveloped();
+      console.log("DevCapacityColony", capacityDevelopColonyLawAct);
     }
   };
 
@@ -856,159 +622,162 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
   };
 
   const goNext = async (e) => {
-    if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
-      let payload = {
-        parentId: userInfo?.info?.id,
-        Licenses: [
-          {
-            applicationType: "NEW",
-            tradeLicenseDetail: {
-              owners: [
-                {
-                  parentid: userInfo?.info?.id,
-                  gender: "MALE",
-                  mobileNumber: userInfo?.info?.mobileNumber,
-                  name: userInfo?.info?.name,
-                  dob: null,
-                  emailId: email,
-                  permanentAddress: PermanentAddress,
-                  correspondenceAddress: Correspondenceaddress,
-                  pan: PanNumber,
-                  // "permanentPinCode": "143001"
-                },
-              ],
-              subOwnerShipCategory: "INDIVIDUAL",
-              tradeType: tradeType,
+    // if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
 
-              additionalDetail: {
-                counsilForArchNo: null,
+    let payload = {
+      parentId: userInfo?.info?.id,
+      Licenses: [
+        {
+          applicationType: "NEW",
+          tradeLicenseDetail: {
+            owners: [
+              {
+                parentid: userInfo?.info?.id,
+                gender: "MALE",
+                mobileNumber: userInfo?.info?.mobileNumber,
+                name: userInfo?.info?.name,
+                dob: null,
+                emailId: email,
+                permanentAddress: PermanentAddress,
+                correspondenceAddress: Correspondenceaddress,
+                pan: PanNumber,
+                // "permanentPinCode": "143001"
               },
-              address: {
-                city: "",
-                landmark: "",
-                pincode: "",
-              },
-              institution: null,
-              applicationDocuments: null,
+            ],
+            subOwnerShipCategory: "INDIVIDUAL",
+            tradeType: tradeType,
+
+            additionalDetail: {
+              counsilForArchNo: null,
             },
-            licenseType: "PERMANENT",
-            businessService: "BPAREG",
-            tenantId: stateId,
-            action: "NOWORKFLOW",
+            address: {
+              city: "",
+              landmark: "",
+              pincode: "",
+            },
+            institution: null,
+            applicationDocuments: null,
           },
-        ],
-      };
-
-      Digit.OBPSService.BPAREGCreate(payload, tenantId)
-        .then((result, err) => {
-          setIsDisableForNext(false);
-          let data = { result: result, formData: formData, Correspondenceaddress: Correspondenceaddress, isAddressSame: isAddressSame };
-          //1, units
-          onSelect("", data, "", true);
-        })
-        .catch((e) => {
-          setIsDisableForNext(false);
-          // setShowToast({ key: "error" });
-          setError(e?.response?.data?.Errors[0]?.message || null);
-        });
-
-      const developerRegisterData = {
-        id: userInfo?.info?.id,
-        pageName: "capacityDevelopAColony",
-        createdBy: userInfo?.info?.id,
-        updatedBy: userInfo?.info?.id,
-        devDetail: {
-          capacityDevelopAColony: {
-            individualCertificateCA: individualCertificateCA,
-            companyBalanceSheet: companyBalanceSheet,
-            paidUpCapital: paidUpCapital,
-            networthPartners: networthPartners,
-            networthFirm: networthFirm,
-            permissionGrantedHRDU: permissionGrantedHRDU,
-            technicalExpert: technicalExpert,
-            designatedDirectors: designatedDirectors,
-            alreadtObtainedLic: alreadtObtainedLic,
-            capacityDevelopColonyHdruAct: capacityDevelopColonyHdruAct,
-            // capacityDevelopColonyLawAct: capacityDevelopColonyLawAct,
-            technicalExpertEngaged: [
-              {
-                engineerName: engineerName,
-                engineerQualification: engineerQualification,
-                engineerSign: engineerSign,
-                engineerDegree: engineerDegree,
-                architectName: architectName,
-                architectQualification: architectQualification,
-                architectSign: architectSign,
-                architectDegree: architectDegree,
-                townPlannerName: townPlannerName,
-                townPlannerQualification: townPlannerQualification,
-                townPlannerSign: townPlannerSign,
-                townPlannerDegree: townPlannerDegree,
-                existingDeveloperAgreement: existingDeveloperAgreement,
-                existingDeveloperAgreementDoc: existingDeveloperAgreementDoc,
-                technicalCapacity: technicalCapacity,
-                technicalCapacityDoc: technicalCapacityDoc,
-                engineerNameN: engineerNameN,
-                engineerDocN: engineerDocN,
-                architectNameN: architectNameN,
-                architectDocN: architectDocN,
-                uplaodSpaBoard: uplaodSpaBoard,
-                uplaodSpaBoardDoc: uplaodSpaBoardDoc,
-              },
-            ],
-            designationDirector: [
-              {
-                agreementDoc: agreementDoc,
-                boardDoc: boardDoc,
-              },
-            ],
-            obtainedLicense: [
-              {
-                registeredDoc: registeredDoc,
-                boardDocY: boardDocY,
-                earlierDocY: earlierDocY,
-                boardDocN: boardDocN,
-                earlierDocN: earlierDocN,
-                technicalAssistanceAgreementDoc: technicalAssistanceAgreementDoc,
-                licNo: technicalCapacitySoughtFromAnyColonizer.licNo,
-                dateOfGrantingLic: technicalCapacitySoughtFromAnyColonizer.dateOfGrantingLic,
-                licValidity: technicalCapacitySoughtFromAnyColonizer.licValidity,
-                purpose: technicalCapacitySoughtFromAnyColonizer.purpose,
-              },
-            ],
-            technicalCapacityOutsideHaryana: technicalCapacityOutsideHaryana,
-            technicalCapacityOutsideHaryanaDetails: technicalCapacityOutsideHaryanaDetails,
-            documents: Documents,
-          },
+          licenseType: "PERMANENT",
+          businessService: "BPAREG",
+          tenantId: stateId,
+          action: "NOWORKFLOW",
         },
-      };
+      ],
+    };
 
-      Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
-        .then((result, err) => {
-          // localStorage.setItem('devRegId',JSON.stringify(result?.id));
-          setIsDisableForNext(false);
-          let data = {
-            result: result,
-            formData: formData,
-            Correspondenceaddress: Correspondenceaddress,
-            addressLineOneCorrespondence: addressLineOneCorrespondence,
-            addressLineTwoCorrespondence: addressLineTwoCorrespondence,
+    Digit.OBPSService.BPAREGCreate(payload, tenantId)
+      .then((result, err) => {
+        setIsDisableForNext(false);
+        let data = { result: result, formData: formData, Correspondenceaddress: Correspondenceaddress, isAddressSame: isAddressSame };
+        //1, units
+        onSelect("", data, "", true);
+      })
+      .catch((e) => {
+        setIsDisableForNext(false);
+        // setShowToast({ key: "error" });
+        setError(e?.response?.data?.Errors[0]?.message || null);
+      });
 
-            isAddressSame: isAddressSame,
-          };
-          //1, units
-          onSelect("", data, "", true);
-        })
-        .catch((e) => {
-          setIsDisableForNext(false);
-          // setShowToast({ key: "error" });
-          setError(e?.response?.data?.Errors[0]?.message || null);
-        });
-    } else {
-      formData.Correspondenceaddress = Correspondenceaddress;
-      formData.isAddressSame = isAddressSame;
-      onSelect("", formData, "", true);
-    }
+    const developerRegisterData = {
+      id: userInfo?.info?.id,
+      pageName: "capacityDevelopAColony",
+      createdBy: userInfo?.info?.id,
+      updatedBy: userInfo?.info?.id,
+      devDetail: {
+        capacityDevelopAColony: {
+          individualCertificateCA: individualCertificateCA,
+          companyBalanceSheet: companyBalanceSheet,
+          paidUpCapital: paidUpCapital,
+          networthPartners: networthPartners,
+          networthFirm: networthFirm,
+          permissionGrantedHRDU: permissionGrantedHRDU,
+          technicalExpert: technicalExpert,
+          designatedDirectors: designatedDirectors,
+          alreadtObtainedLic: alreadtObtainedLic,
+          capacityDevelopColonyHdruAct: capacityDevelopColonyHdruAct,
+          // capacityDevelopColonyLawAct: capacityDevelopColonyLawAct,
+          technicalExpertEngaged: [
+            {
+              engineerName: engineerName,
+              engineerQualification: engineerQualification,
+              engineerSign: engineerSign,
+              engineerDegree: engineerDegree,
+              architectName: architectName,
+              architectQualification: architectQualification,
+              architectSign: architectSign,
+              architectDegree: architectDegree,
+              townPlannerName: townPlannerName,
+              townPlannerQualification: townPlannerQualification,
+              townPlannerSign: townPlannerSign,
+              townPlannerDegree: townPlannerDegree,
+              existingDeveloperAgreement: existingDeveloperAgreement,
+              existingDeveloperAgreementDoc: existingDeveloperAgreementDoc,
+              technicalCapacity: technicalCapacity,
+              technicalCapacityDoc: technicalCapacityDoc,
+              engineerNameN: engineerNameN,
+              engineerDocN: engineerDocN,
+              architectNameN: architectNameN,
+              architectDocN: architectDocN,
+              uplaodSpaBoard: uplaodSpaBoard,
+              uplaodSpaBoardDoc: uplaodSpaBoardDoc,
+            },
+          ],
+          designationDirector: [
+            {
+              agreementDoc: agreementDoc,
+              boardDoc: boardDoc,
+            },
+          ],
+          obtainedLicense: [
+            {
+              registeredDoc: registeredDoc,
+              boardDocY: boardDocY,
+              earlierDocY: earlierDocY,
+              boardDocN: boardDocN,
+              earlierDocN: earlierDocN,
+              technicalAssistanceAgreementDoc: technicalAssistanceAgreementDoc,
+              licNo: technicalCapacitySoughtFromAnyColonizer.licNo,
+              dateOfGrantingLic: technicalCapacitySoughtFromAnyColonizer.dateOfGrantingLic,
+              licValidity: technicalCapacitySoughtFromAnyColonizer.licValidity,
+              purpose: technicalCapacitySoughtFromAnyColonizer.purpose,
+            },
+          ],
+          technicalCapacityOutsideHaryana: technicalCapacityOutsideHaryana,
+          technicalCapacityOutsideHaryanaDetails: technicalCapacityOutsideHaryanaDetails,
+          documents: Documents,
+        },
+      },
+    };
+
+    Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
+      .then((result, err) => {
+        console.log("DATA", result?.id);
+        // localStorage.setItem('devRegId',JSON.stringify(result?.id));
+        setIsDisableForNext(false);
+        let data = {
+          result: result,
+          formData: formData,
+          Correspondenceaddress: Correspondenceaddress,
+          addressLineOneCorrespondence: addressLineOneCorrespondence,
+          addressLineTwoCorrespondence: addressLineTwoCorrespondence,
+
+          isAddressSame: isAddressSame,
+        };
+        //1, units
+        onSelect("", data, "", true);
+      })
+      .catch((e) => {
+        setIsDisableForNext(false);
+        // setShowToast({ key: "error" });
+        setError(e?.response?.data?.Errors[0]?.message || null);
+      });
+    // }
+    // else {
+    //     formData.Correspondenceaddress = Correspondenceaddress;
+    //     formData.isAddressSame = isAddressSame;
+    //     onSelect("", formData, "", true);
+    // }
     // sessionStorage.setItem("CurrentFinancialYear", FY);
     // onSelect(config.key, { TradeName });
   };
