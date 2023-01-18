@@ -46,6 +46,7 @@ const Inbox = ({ parentRoute, businessService = "TL", initialStates = {}, filter
     if (isMobile) {
       _new = { ...filterParam };
     } else {
+      window.scrollTo(0,0);
       _new = { ...searchParams, ...filterParam };
     }
     // let _new = { ...searchParams, ...filterParam };
