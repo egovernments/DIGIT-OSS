@@ -72,7 +72,7 @@ const ApplicationDetails = () => {
   return (
     <Fragment>
       <div className="cardHeaderWithOptions" style={isMobile ? {} : {maxWidth:"980px"}}>
-        <Header styles={{ fontSize: "32px", marginLeft: "10px" }}>{t("BPA_TASK_DETAILS_HEADER")}</Header>
+        <Header styles={{ fontSize: "32px", marginLeft: isMobile ? "0px" : "10px" }}>{t("BPA_TASK_DETAILS_HEADER")}</Header>
         {reciept_data?.Payments?.length > 0 && (
           // <div style={{right: "3%", top: "20px", position: "absolute"}}>
           <MultiLink

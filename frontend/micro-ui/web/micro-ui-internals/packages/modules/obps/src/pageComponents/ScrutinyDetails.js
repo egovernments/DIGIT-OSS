@@ -228,6 +228,8 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
             style={{ border: "none" }}
             label={checkingFlow === "OCBPA" ? t("BPA_OC_EDCR_NO_LABEL") : t("BPA_EDCR_NO_LABEL")}
             text={data?.edcrNumber}
+            labelStyle={{wordBreak: "break-all"}} 
+            textStyle={{wordBreak: "break-all"}}
           ></Row>
           <Row
             className="border-none"
