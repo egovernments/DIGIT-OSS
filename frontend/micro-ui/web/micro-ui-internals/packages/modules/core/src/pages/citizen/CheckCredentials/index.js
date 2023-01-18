@@ -24,9 +24,10 @@ export default function CheckCredentials(){
             }
         }
         const response = await axios.post("http://103.166.62.118:80/user/users/_ssoCitizen",body)
-        sessionStorage.setItem("access_token",response.data.access_token);
+        localStorage.setItem("access_token",response?.data?.access_token || response?.data?.TokenId);
+        localStorage.setItem("token",response?.data?.access_token || response?.data?.TokenId);
         // console.log("_ssoCitizen response ",response.data)
-        window.open(response.data.ReturnUrl,"_self");
+        // window.open(response.data.ReturnUrl,"_self");
 
     }
 
