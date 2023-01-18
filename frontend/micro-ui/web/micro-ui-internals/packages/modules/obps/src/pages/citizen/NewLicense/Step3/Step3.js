@@ -1309,21 +1309,417 @@ const LandScheduleForm = (props) => {
                   <div className="row">
                     <div className="col col-12">
                       <h2>
-                        (h)&nbsp;&nbsp;whether the applied site is approachable from the proposed 18/24 m internal sectoral plan road/sector dividing
-                        road (yes/no).<span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                        (h)&nbsp;&nbsp;Details of existing approach as per policy dated 20-10-20.<span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
                         <label htmlFor="siteApproachable">
                           <input {...register("siteApproachable")} type="radio" value="Y" id="siteApproachable" />
-                          &nbsp; Yes &nbsp;&nbsp;
+                          &nbsp; Category-I approach &nbsp;&nbsp;
                         </label>
                         <label htmlFor="siteApproachable">
                           <input {...register("siteApproachable")} type="radio" value="N" id="siteApproachable" />
-                          &nbsp; No &nbsp;&nbsp;
+                          &nbsp; Category-II approach &nbsp;&nbsp;
                         </label>
-                        <h3 className="error-message" style={{ color: "red" }}>
-                          {errors?.siteApproachable && errors?.siteApproachable?.message}
-                        </h3>
                       </h2>
                     </div>
+                    {watch("siteApproachable") === "Y" && (
+                      <div>
+                        <div className="col col-12">
+                          <h2>
+                            (a)&nbsp;&nbsp;Approach available from minimum 4 karam (22 ft) wide revenue rasta.<span style={{ color: "red" }}>*</span>{" "}
+                            &nbsp;&nbsp;
+                            <label htmlFor="minimumApproachFour">
+                              <input {...register("minimumApproachFour")} type="radio" value="Y" id="minimumApproachFour" />
+                              &nbsp; Yes &nbsp;&nbsp;
+                            </label>
+                            <label htmlFor="minimumApproachFour">
+                              <input {...register("minimumApproachFour")} type="radio" value="N" id="minimumApproachFour" />
+                              &nbsp; No &nbsp;&nbsp;
+                            </label>
+                          </h2>
+                        </div>
+                        <div className="col col-12">
+                          <h2>
+                            (b)&nbsp;&nbsp;Approach available from minimum 11 feet wide revenue rasta and applied site abuts acquired alignment of the
+                            sector road and there is no stay regarding construction on the land falling under the abutting sector road.
+                            <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                            <label htmlFor="minimumApproachEleven">
+                              <input {...register("minimumApproachEleven")} type="radio" value="Y" id="minimumApproachEleven" />
+                              &nbsp; Yes &nbsp;&nbsp;
+                            </label>
+                            <label htmlFor="minimumApproachEleven">
+                              <input {...register("minimumApproachEleven")} type="radio" value="N" id="minimumApproachEleven" />
+                              &nbsp; No &nbsp;&nbsp;
+                            </label>
+                          </h2>
+                        </div>
+                        <div className="col col-12">
+                          <h2>
+                            (c)&nbsp;&nbsp;Applied site abouts already constructed sector road or internal circulation road of approved sectoral plan
+                            (of min. 18m/24m width as the case may be) provided its entire stretch required for approach is licenced and is further
+                            leading upto atleast 4 karam wide revenue rasta.<span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                            <label htmlFor="alreadyConstructedSector">
+                              <input {...register("alreadyConstructedSector")} type="radio" value="Y" id="alreadyConstructedSector" />
+                              &nbsp; Yes &nbsp;&nbsp;
+                            </label>
+                            <label htmlFor="alreadyConstructedSector">
+                              <input {...register("alreadyConstructedSector")} type="radio" value="N" id="alreadyConstructedSector" />
+                              &nbsp; No &nbsp;&nbsp;
+                            </label>
+                          </h2>
+                        </div>
+                        <div className="col col-12">
+                          <h2>
+                            (d)&nbsp;&nbsp;Applied land is accessible from a minimum 4 karam wide rasta through adjoining own land of the applicant
+                            (but not applied for licence).<span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                            <label htmlFor="adjoiningOwnLand">
+                              <input {...register("adjoiningOwnLand")} type="radio" value="Y" id="adjoiningOwnLand" />
+                              &nbsp; Yes &nbsp;&nbsp;
+                            </label>
+                            <label htmlFor="adjoiningOwnLand">
+                              <input {...register("adjoiningOwnLand")} type="radio" value="N" id="adjoiningOwnLand" />
+                              &nbsp; No &nbsp;&nbsp;
+                            </label>
+                          </h2>
+                          {watch("adjoiningOwnLand") === "Y" && (
+                            <div>
+                              <h2>
+                                (d1)&nbsp;&nbsp;If applicable, whether the applicant has donated at least 4 karam wide strip from its adjoining own
+                                land in favour of the Gram Panchayat/Municipality, in order to connect the applied site to existing 4 karam rasta?.
+                                <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                                <label htmlFor="applicantHasDonated">
+                                  <input {...register("applicantHasDonated")} type="radio" value="Y" id="applicantHasDonated" />
+                                  &nbsp; Yes &nbsp;&nbsp;
+                                </label>
+                                <label htmlFor="applicantHasDonated">
+                                  <input {...register("applicantHasDonated")} type="radio" value="N" id="applicantHasDonated" />
+                                  &nbsp; No &nbsp;&nbsp;
+                                </label>
+                              </h2>
+
+                              {watch("applicantHasDonated") === "Y" && (
+                                <div className="col col-3">
+                                  <h2 style={{ display: "flex" }}>
+                                    Upload copy of Gift Deed/ Hibbanama <span style={{ color: "red" }}>*</span>
+                                  </h2>
+                                  <label>
+                                    <FileUpload color="primary" />
+                                    <input
+                                      type="file"
+                                      style={{ display: "none" }}
+                                      onChange={(e) => getDocumentData(e?.target?.files[0], "giftDeedHibbanama")}
+                                      accept="application/pdf/jpeg/png"
+                                    />
+                                  </label>
+                                  {fileStoreId?.giftDeedHibbanama ? (
+                                    <a onClick={() => getDocShareholding(fileStoreId?.giftDeedHibbanama)} className="btn btn-sm ">
+                                      <VisibilityIcon color="info" className="icon" />
+                                    </a>
+                                  ) : (
+                                    <p></p>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                        <div className="col col-12">
+                          <h2>
+                            (e)&nbsp;&nbsp;Applied land is accessible from a minimum 4 karam wide rasta through adjoining other’s land
+                            <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                            <label htmlFor="adjoiningOthersLand">
+                              <input {...register("adjoiningOthersLand")} type="radio" value="Y" id="adjoiningOthersLand" />
+                              &nbsp; Yes &nbsp;&nbsp;
+                            </label>
+                            <label htmlFor="adjoiningOthersLand">
+                              <input {...register("adjoiningOthersLand")} type="radio" value="N" id="adjoiningOthersLand" />
+                              &nbsp; No &nbsp;&nbsp;
+                            </label>
+                          </h2>
+                          {watch("adjoiningOthersLand") === "Y" && (
+                            <div>
+                              <h2>
+                                (e1)&nbsp;&nbsp;whether the land-owner of the adjoining land has donated at least 4 karam wide strip of land to the
+                                Gram Panchayat/Municipality, in a manner that the applied site gets connected to existing public rasta of atleast 4
+                                karam width?.
+                                <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                                <label htmlFor="landOwnerDonated">
+                                  <input {...register("landOwnerDonated")} type="radio" value="Y" id="landOwnerDonated" />
+                                  &nbsp; Yes &nbsp;&nbsp;
+                                </label>
+                                <label htmlFor="landOwnerDonated">
+                                  <input {...register("landOwnerDonated")} type="radio" value="N" id="landOwnerDonated" />
+                                  &nbsp; No &nbsp;&nbsp;
+                                </label>
+                              </h2>
+                              {watch("landOwnerDonated") === "Y" && (
+                                <div className="col col-3">
+                                  <h2 style={{ display: "flex" }}>
+                                    Upload copy of Gift Deed/ Hibbanama <span style={{ color: "red" }}>*</span>
+                                  </h2>
+                                  <label>
+                                    <FileUpload color="primary" />
+                                    <input
+                                      type="file"
+                                      style={{ display: "none" }}
+                                      onChange={(e) => getDocumentData(e?.target?.files[0], "giftDeedHibbanama")}
+                                      accept="application/pdf/jpeg/png"
+                                    />
+                                  </label>
+                                  {fileStoreId?.giftDeedHibbanama ? (
+                                    <a onClick={() => getDocShareholding(fileStoreId?.giftDeedHibbanama)} className="btn btn-sm ">
+                                      <VisibilityIcon color="info" className="icon" />
+                                    </a>
+                                  ) : (
+                                    <p></p>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                    {watch("siteApproachable") === "N" && (
+                      <div>
+                        <div className="col col-12">
+                          <div className="col col-3">
+                            <label>
+                              <h2>(a)&nbsp;&nbsp;Width of Constructed ROW of plotted licenced colony</h2>{" "}
+                            </label>
+                            <input type="text" {...register("constructedRowWidth")} className="form-control" />
+                          </div>
+                        </div>
+                        <div className="col col-12">
+                          <h2>
+                            (b)&nbsp;&nbsp;Whether irrevocable consent from such developer/ colonizer for uninterrupted usage of such internal road
+                            for the purpose of development of the colony by the applicant or by its agencies and for usage by its allottees submitted
+                            <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                            <label htmlFor="irrevocableConsent">
+                              <input {...register("irrevocableConsent")} type="radio" value="Y" id="irrevocableConsent" />
+                              &nbsp; Yes &nbsp;&nbsp;
+                            </label>
+                            <label htmlFor="irrevocableConsent">
+                              <input {...register("irrevocableConsent")} type="radio" value="N" id="irrevocableConsent" />
+                              &nbsp; No &nbsp;&nbsp;
+                            </label>
+                          </h2>
+                          {watch("irrevocableConsent") === "Y" && (
+                            <div className="col col-3">
+                              <h2 style={{ display: "flex" }}>
+                                Upload irrevocable consent <span style={{ color: "red" }}>*</span>
+                              </h2>
+                              <label>
+                                <FileUpload color="primary" />
+                                <input
+                                  type="file"
+                                  style={{ display: "none" }}
+                                  onChange={(e) => getDocumentData(e?.target?.files[0], "uploadRrrevocableConsent")}
+                                  accept="application/pdf/jpeg/png"
+                                />
+                              </label>
+                              {fileStoreId?.uploadRrrevocableConsent ? (
+                                <a onClick={() => getDocShareholding(fileStoreId?.uploadRrrevocableConsent)} className="btn btn-sm ">
+                                  <VisibilityIcon color="info" className="icon" />
+                                </a>
+                              ) : (
+                                <p></p>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <br></br>
+                  <br></br>
+                  <div className="row">
+                    <div className="col col-12 mb-4">
+                      <h2>(i)&nbsp;&nbsp;Details of proposed approach.</h2>
+                    </div>
+                    <div className="ml-4">
+                      <h2>
+                        (1)&nbsp;&nbsp; Site approachable from proposed sector road/ Development Plan Road. &nbsp;&nbsp;
+                        <label htmlFor="approachFromProposedSector">
+                          <input {...register("approachFromProposedSector")} type="radio" value="Y" id="approachFromProposedSector" />
+                          &nbsp; Yes &nbsp;&nbsp;
+                        </label>
+                        <label htmlFor="approachFromProposedSector">
+                          <input {...register("approachFromProposedSector")} type="radio" value="N" id="approachFromProposedSector" />
+                          &nbsp; No &nbsp;&nbsp;
+                        </label>
+                      </h2>
+                      {watch("approachFromProposedSector") === "Y" && (
+                        <div>
+                          <div className="col col-5">
+                            <label>(a)&nbsp;&nbsp;Width of sector road/ Development Plan Road</label>
+                            <input type="text" {...register("sectorAndDevelopmentWidth")} className="form-control" />
+                          </div>
+                          <h2>
+                            (b)&nbsp;&nbsp;Whether acquired? &nbsp;&nbsp;
+                            <label htmlFor="whetherAcquired">
+                              <input {...register("whetherAcquired")} type="radio" value="Y" id="whetherAcquired" />
+                              &nbsp; Yes &nbsp;&nbsp;
+                            </label>
+                            <label htmlFor="whetherAcquired">
+                              <input {...register("whetherAcquired")} type="radio" value="N" id="whetherAcquired" />
+                              &nbsp; No &nbsp;&nbsp;
+                            </label>
+                          </h2>
+                          <h2>
+                            (c)&nbsp;&nbsp;Whether constructed? &nbsp;&nbsp;
+                            <label htmlFor="whetherConstructed">
+                              <input {...register("whetherConstructed")} type="radio" value="Y" id="whetherConstructed" />
+                              &nbsp; Yes &nbsp;&nbsp;
+                            </label>
+                            <label htmlFor="whetherConstructed">
+                              <input {...register("whetherConstructed")} type="radio" value="N" id="whetherConstructed" />
+                              &nbsp; No &nbsp;&nbsp;
+                            </label>
+                          </h2>
+                          <h2>
+                            (d)&nbsp;&nbsp;Whether Service road along sector road acquired? &nbsp;&nbsp;
+                            <label htmlFor="serviceSectorRoadAcquired">
+                              <input {...register("serviceSectorRoadAcquired")} type="radio" value="Y" id="serviceSectorRoadAcquired" />
+                              &nbsp; Yes &nbsp;&nbsp;
+                            </label>
+                            <label htmlFor="serviceSectorRoadAcquired">
+                              <input {...register("serviceSectorRoadAcquired")} type="radio" value="N" id="serviceSectorRoadAcquired" />
+                              &nbsp; No &nbsp;&nbsp;
+                            </label>
+                          </h2>
+                          <h2>
+                            (e)&nbsp;&nbsp;Whether Service road along sector road constructed? &nbsp;&nbsp;
+                            <label htmlFor="serviceSectorRoadConstructed">
+                              <input {...register("serviceSectorRoadConstructed")} type="radio" value="Y" id="serviceSectorRoadConstructed" />
+                              &nbsp; Yes &nbsp;&nbsp;
+                            </label>
+                            <label htmlFor="serviceSectorRoadConstructed">
+                              <input {...register("serviceSectorRoadConstructed")} type="radio" value="N" id="serviceSectorRoadConstructed" />
+                              &nbsp; No &nbsp;&nbsp;
+                            </label>
+                          </h2>
+                        </div>
+                      )}
+                    </div>
+                    <div className="mt-4 ml-4">
+                      <h2>
+                        (2)&nbsp;&nbsp;Site approachable from internal circulation / sectoral plan road. &nbsp;&nbsp;
+                        <label htmlFor="approachFromInternalCirculation">
+                          <input {...register("approachFromInternalCirculation")} type="radio" value="Y" id="approachFromInternalCirculation" />
+                          &nbsp; Yes &nbsp;&nbsp;
+                        </label>
+                        <label htmlFor="approachFromInternalCirculation">
+                          <input {...register("approachFromInternalCirculation")} type="radio" value="N" id="approachFromInternalCirculation" />
+                          &nbsp; No &nbsp;&nbsp;
+                        </label>
+                      </h2>
+                      {watch("approachFromInternalCirculation") === "Y" && (
+                        <div>
+                          <div className="col col-3">
+                            <label>(a)&nbsp;&nbsp;Width of internal circulation / sectoral plan road.</label>
+                            <input type="text" {...register("internalAndSectoralWidth")} className="form-control" />
+                          </div>
+                          <h2>
+                            (b)&nbsp;&nbsp;Whether acquired? &nbsp;&nbsp;
+                            <label htmlFor="whetherAcquiredForInternalCirculation">
+                              <input
+                                {...register("whetherAcquiredForInternalCirculation")}
+                                type="radio"
+                                value="Y"
+                                id="whetherAcquiredForInternalCirculation"
+                              />
+                              &nbsp; Yes &nbsp;&nbsp;
+                            </label>
+                            <label htmlFor="whetherAcquiredForInternalCirculation">
+                              <input
+                                {...register("whetherAcquiredForInternalCirculation")}
+                                type="radio"
+                                value="N"
+                                id="whetherAcquiredForInternalCirculation"
+                              />
+                              &nbsp; No &nbsp;&nbsp;
+                            </label>
+                          </h2>
+                          <h2>
+                            (c)&nbsp;&nbsp;Whether constructed? &nbsp;&nbsp;
+                            <label htmlFor="whetherConstructedForInternalCirculation">
+                              <input
+                                {...register("whetherConstructedForInternalCirculation")}
+                                type="radio"
+                                value="Y"
+                                id="whetherConstructedForInternalCirculation"
+                              />
+                              &nbsp; Yes &nbsp;&nbsp;
+                            </label>
+                            <label htmlFor="whetherConstructedForInternalCirculation">
+                              <input
+                                {...register("whetherConstructedForInternalCirculation")}
+                                type="radio"
+                                value="N"
+                                id="whetherConstructedForInternalCirculation"
+                              />
+                              &nbsp; No &nbsp;&nbsp;
+                            </label>
+                          </h2>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <br></br>
+                  <br></br>
+                  <div className="row">
+                    <div className="col col-12">
+                      <h2>
+                        (j)&nbsp;&nbsp;Whether approach from parent licence.<span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                        <label htmlFor="parentLicenceApproach">
+                          <input {...register("parentLicenceApproach")} type="radio" value="Y" id="parentLicenceApproach" />
+                          &nbsp; Yes &nbsp;&nbsp;
+                        </label>
+                        <label htmlFor="parentLicenceApproach">
+                          <input {...register("parentLicenceApproach")} type="radio" value="N" id="parentLicenceApproach" />
+                          &nbsp; No &nbsp;&nbsp;
+                        </label>
+                      </h2>
+                    </div>
+                  </div>
+                  <br></br>
+                  <br></br>
+                  <div className="row">
+                    <div className="col col-12">
+                      <h2>
+                        (k)&nbsp;&nbsp;Any other type of existing approach available.<span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                        <label htmlFor="availableExistingApproach">
+                          <input {...register("availableExistingApproach")} type="radio" value="Y" id="availableExistingApproach" />
+                          &nbsp; Yes &nbsp;&nbsp;
+                        </label>
+                        <label htmlFor="availableExistingApproach">
+                          <input {...register("availableExistingApproach")} type="radio" value="N" id="availableExistingApproach" />
+                          &nbsp; No &nbsp;&nbsp;
+                        </label>
+                      </h2>
+                    </div>
+                    {watch("availableExistingApproach") === "Y" && (
+                      <div className="col col-3">
+                        <h2 style={{ display: "flex" }}>
+                          Upload document. <span style={{ color: "red" }}>*</span>
+                        </h2>
+                        <label>
+                          <FileUpload color="primary" />
+                          <input
+                            type="file"
+                            style={{ display: "none" }}
+                            onChange={(e) => getDocumentData(e?.target?.files[0], "availableExistingApproachDoc")}
+                            accept="application/pdf/jpeg/png"
+                          />
+                        </label>
+                        {fileStoreId?.availableExistingApproachDoc ? (
+                          <a onClick={() => getDocShareholding(fileStoreId?.availableExistingApproachDoc)} className="btn btn-sm ">
+                            <VisibilityIcon color="info" className="icon" />
+                          </a>
+                        ) : (
+                          <p></p>
+                        )}
+                      </div>
+                    )}
                   </div>
                   <br></br>
                   <hr />
