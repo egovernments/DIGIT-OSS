@@ -93,11 +93,11 @@ const ServicePlanService = (props) => {
     { label: "LOI Number", key: "loiNumber" },
     { label: "Uploaded Service Plan", key: "selfCertifiedDrawingsFromCharetedEng" },
     { label: "Undertaking Mobile No", key: "Undertaking" },
-    { label: "Self-certified drawings from empanelled/certified architects that conform to the standard approved template.", key: "Selfcertified" },
+    { label: "Self-certified drawings from empanelled/certified architects that conform to the standard approved template. as per the TCP layout plan / Site plan.", key: "Selfcertified" },
     { label: "Environmental Clearance.", key: "environmental" },
-    { label: "PDF (OCR Compatible) + GIS format (shapefile as per the template uploaded on the department website).", key: "template" },
-    { label: "Certified copy of the plan verified by a third party", key: "certified" },
-    { label: "AutoCAD (DXF) file.", key: "AutoCAD" },
+    { label: "Service plan in PDF (OCR Compatible) + GIS format.", key: "template" },
+    { label: "Certified copy of the Service plan verified by a third party", key: "certified" },
+    { label: "Service plan in AutoCAD (DXF) file", key: "AutoCAD" },
   ];
 
 
@@ -206,10 +206,8 @@ const ServicePlanService = (props) => {
                   </div>
                   {/* </Form.Group> */}
                 </Col>
-                <Col className="col-4">
-                  <Form.Label
-                  // placeholder={personalinfo !== null ? personalinfo.authorizedDeveloper : null}
-                  >
+                {/* <Col className="col-4">
+                  <Form.Label>
                     <div>
                       <label>
                         <h2 data-toggle="tooltip" data-placement="top" title=" Is the uploaded Service Plan in accordance to the Standard designs?">
@@ -237,19 +235,6 @@ const ServicePlanService = (props) => {
                       <label className="m-0 mx-2" for="No">
                         No
                       </label>
-                      {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
-                      {/* <ReportProblemIcon
-                      style={{
-                        color: fieldIconColors.licenceApplied
-                      }}
-                      onClick={() => {
-                        setLabelValue("Whether licence applied for additional area"),
-                          setOpennedModal("licenceApplied")
-                        setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(landScheduleData?.licenseApplied === "Y" ? "Yes" : landScheduleData?.licenseApplied === "N" ? "No" : null);
-                      }}
-                    ></ReportProblemIcon> */}
                       <ReportProblemIcon
                         style={{
                           color: fieldIconColors.selfCertifiedDrawingsFromCharetedEng,
@@ -264,10 +249,9 @@ const ServicePlanService = (props) => {
                       ></ReportProblemIcon>
                     </div>
                   </Form.Label>
-                </Col>
-                <Col className="col-4">
+                </Col> */}
+                {/* <Col className="col-4">
                   <Form.Label
-                  // placeholder={personalinfo !== null ? personalinfo.authorizedDeveloper : null}
                   >
                     <div>
                       <label>
@@ -294,19 +278,6 @@ const ServicePlanService = (props) => {
                       <label className="m-0 mx-2" for="No">
                         No 
                       </label>
-                      {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
-                      {/* <ReportProblemIcon
-                      style={{
-                        color: fieldIconColors.licenceApplied
-                      }}
-                      onClick={() => {
-                        setLabelValue("Whether licence applied for additional area"),
-                          setOpennedModal("licenceApplied")
-                        setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(landScheduleData?.licenseApplied === "Y" ? "Yes" : landScheduleData?.licenseApplied === "N" ? "No" : null);
-                      }}
-                    ></ReportProblemIcon> */}
                       <ReportProblemIcon
                         style={{
                           color: fieldIconColors.Undertaking,
@@ -321,7 +292,7 @@ const ServicePlanService = (props) => {
                       ></ReportProblemIcon>
                     </div>
                   </Form.Label>
-                </Col>
+                </Col> */}
               </Row>
               <br></br>
               <div className="table table-bordered table-responsive">
@@ -340,7 +311,7 @@ const ServicePlanService = (props) => {
                       </div>
                     </td>
                     <td component="th" scope="row">
-                      <h2>Self-certified drawings from empanelled/certified architects that conform to the standard approved template.</h2>
+                      <h2>Self-certified drawings from empanelled/certified architects that conform to the standard approved template. as per the TCP layout plan / Site plan.</h2>
                     </td>
                     <td component="th" scope="row">
                       <div className="btn btn-sm col-md-4">
@@ -361,10 +332,10 @@ const ServicePlanService = (props) => {
                           }}
                           onClick={() => {
                             setOpennedModal(
-                              "Self-certified drawings from empanelled/certified architects that conform to the standard approved template."
+                              "Selfcertified"
                             );
                             setLabelValue(
-                              "Self-certified drawings from empanelled/certified architects that conform to the standard approved template."
+                              "Self-certified drawings from empanelled/certified architects that conform to the standard approved template. as per the TCP layout plan / Site plan."
                             ),
                               setSmShow(true),
                               console.log("modal open"),
@@ -424,7 +395,7 @@ const ServicePlanService = (props) => {
                       </div>
                     </td>
                     <td component="th" scope="row">
-                      <h2>PDF (OCR Compatible) + GIS format (shapefile as per the template uploaded on the department website).</h2>
+                      <h2>Service plan in PDF (OCR Compatible) + GIS format.</h2>
                     </td>
                     <td component="th" scope="row">
                       <div className="btn btn-sm col-md-4">
@@ -444,8 +415,8 @@ const ServicePlanService = (props) => {
                             color: fieldIconColors.template,
                           }}
                           onClick={() => {
-                            setOpennedModal("PDF (OCR Compatible) + GIS format (shapefile as per the template uploaded on the department website).");
-                            setLabelValue("PDF (OCR Compatible) + GIS format (shapefile as per the template uploaded on the department website)."),
+                            setOpennedModal("template");
+                            setLabelValue("Service plan in PDF (OCR Compatible) + GIS format."),
                               setSmShow(true),
                               console.log("modal open"),
                               setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -461,7 +432,7 @@ const ServicePlanService = (props) => {
                       </div>
                     </td>
                     <td component="th" scope="row">
-                      <h2>AutoCAD (DXF) file.</h2>
+                      <h2>Service plan in AutoCAD (DXF) file</h2>
                     </td>
                     <td component="th" scope="row">
                       <div className="btn btn-sm col-md-4">
@@ -481,8 +452,8 @@ const ServicePlanService = (props) => {
                             color: fieldIconColors.AutoCAD,
                           }}
                           onClick={() => {
-                            setOpennedModal("AutoCAD (DXF) file.");
-                            setLabelValue("AutoCAD (DXF) file."),
+                            setOpennedModal("AutoCAD");
+                            setLabelValue("Service plan in AutoCAD (DXF) file"),
                               setSmShow(true),
                               console.log("modal open"),
                               setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -498,7 +469,7 @@ const ServicePlanService = (props) => {
                       </div>
                     </td>
                     <td component="th" scope="row">
-                      <h2>Certified copy of the plan verified by a third party.</h2>
+                      <h2>Certified copy of the Service plan verified by a third party.</h2>
                     </td>
                     <td component="th" scope="row">
                       <div className="btn btn-sm col-md-4">
@@ -518,8 +489,8 @@ const ServicePlanService = (props) => {
                             color: fieldIconColors.certified,
                           }}
                           onClick={() => {
-                            setOpennedModal("Certified copy of the plan verified by a third party");
-                            setLabelValue("Certified copy of the plan verified by a third party"),
+                            setOpennedModal("certified");
+                            setLabelValue("Certified copy of the Service plan verified by a third party"),
                               setSmShow(true),
                               console.log("modal open"),
                               setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);

@@ -5,9 +5,13 @@ import Timeline from "../components/Timeline";
 import { Form, Row } from "react-bootstrap";
 import { MenuItem, Select } from "@mui/material";
 import axios from "axios";
+import { newConfig } from "../config/stakeholderConfig";
+import Spinner from "../components/Loader/index";
 
 const LicenseType = ({ t, config, onSelect, userType, formData }) => {
   const userInfo = Digit.UserService.getUser();
+
+  const [loader, setLoading] = useState(false);
 
   const getDeveloperData = async () => {
     try {
@@ -30,7 +34,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
       });
       const developerDataGet = getDevDetails?.data;
       setShowDevTypeFields(developerDataGet?.devDetail[0]?.applicantType?.developerType || devType);
-      setLicenseType(developerDataGet?.devDetail[0]?.applicantType?.LicneseType?.tradeType);
+      setLicenseType(developerDataGet?.devDetail[0]?.applicantType?.LicneseType);
     } catch (error) {
       console.log(error);
     }
@@ -60,7 +64,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
     setShowDevTypeFields(getDevTypeValue);
     localStorage.setItem('devTypeValueFlag', getDevTypeValue)
     setLicenseTypeCom(`${LicenseType?.tradeType}.${getDevTypeValue}`);
-    // resetForm();
+    // alert(licenceTypeCombined);
   }
 
   
@@ -111,9 +115,10 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
   function goNext() {
     if (!(formData?.result && formData?.result?.Licenses[0]?.id)){
       
+      console.log("log1234...",config,formData,LicenseType?.tradeType);
 
       let applicantType = {
-        "licenceType": licenceTypeCombined,
+        "licenceType": licenceTypeCombined || LicenseType?.tradeType,
         "developerType": showDevTypeFields,
       }
       const developerRegisterData = {
@@ -126,12 +131,19 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
           "applicantType": applicantType
         }
       }
-      onSelect(config.key, applicantType);
+      
+      console.log("logger123",config,applicantType);
+      if(LicenseType?.tradeType === 'ARCHITECT.CLASSA'){
+        onSelect(config.key, applicantType);
+      } else {
+        onSelect(config.key, applicantType,null,null,"license-add-info");
+      }
+      setLoading(true);
       Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
         .then((result, err) => {
           console.log("DATA",result?.id);
           // localStorage.setItem('devRegId',JSON.stringify(result?.id));
-          setIsDisableForNext(false);
+          // setIsDisableForNext(false);
           let data = {
             result: result,
             formData: formData,
@@ -139,13 +151,18 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
             developerType: developerType
           }
           //1, units
-          onSelect("", data, "", true);
-          
-
+          if(LicenseType?.tradeType === 'ARCHITECT.CLASSA'){
+            onSelect("", data, "", true);
+          } else {
+            onSelect("", data, "", true,"license-add-info");
+          }
+          setLoading(false);
         })
+        
         .catch((e) => {
-          setIsDisableForNext(false);
+          // setIsDisableForNext(false);
           // setShowToast({ key: "error" });
+          setLoading(false);
           setError(e?.response?.data?.Errors[0]?.message || null);
         });
     }
@@ -160,20 +177,17 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
 
   return (
     <div>
+      {loader && <Spinner />}
       <div className={isopenlink ? "OpenlinkContainer" : ""}>
         {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
-        <Timeline currentStep={1} flow="STAKEHOLDER" />
-        <FormStep
-          t={t}
-          config={config}
-          onSelect={goNext}
-          onSkip={onSkip}
-          isDisabled={LicenseType && LicenseType?.i18nKey.includes("ARCHITECT") ? !LicenseType || !ArchitectNo : !LicenseType}
-        >
+        <Timeline currentStep={1} flow={LicenseType?.tradeType === 'ARCHITECT.CLASSA'?'ARCHITECT.CLASSA':"STAKEHOLDER"} />
+        <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={LicenseType && LicenseType?.i18nKey.includes("ARCHITECT") ? !LicenseType || !ArchitectNo : !LicenseType}>
           <Row className="justify-content-between">
             <Form.Group className="col-md-5">
-              {/* <CardLabel>{t("BPA_LICENSE_TYPE")} <span className="font-weight-bold text-danger">*</span></CardLabel> */}
+              <CardLabel>{t("Select applicant type")} <span className="font-weight-bold text-danger">*</span></CardLabel>
+              {/* <CardLabel>{t("BPA_LICENSE_TYPE_TEXT")} <span className="font-weight-bold text-danger">*</span></CardLabel> */}
               <div className={"form-pt-dropdown-only"}>
+                {/* {JSON.stringify(LicenseType?.i18nKey)} */}
                 {data && (
                   <div>
                     <RadioOrSelect
