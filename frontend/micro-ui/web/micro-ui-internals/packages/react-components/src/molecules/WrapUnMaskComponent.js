@@ -40,14 +40,17 @@ const WrapUnMaskComponent = React.memo(({ privacy = {}, value, unmaskField, ...r
       cacheTime: 100,
       select: (data) => {
         if (loadData?.d) {
-          return loadData?.d(data, value);
+          let unmaskeddata = loadData?.d(data, value);
+          if(rem?.setunmaskedNumber)
+            rem?.setunmaskedNumber(unmaskeddata);
+          return unmaskeddata;
         }
         return unmaskField ? unmaskField(_.get(data, loadData?.jsonPath, value)) : _.get(data, loadData?.jsonPath, value);
       },
     },
   ];
   const { isLoading, data, revalidate } = Digit.Hooks.useCustomAPIHook(...requestCriteria);
-  rem?.storeunmask && sessionStorage.setItem("unmaskedData",data);
+  
   useEffect(() => {
     return () => {
       revalidate();
