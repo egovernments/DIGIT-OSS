@@ -13,6 +13,7 @@ function SubmitNew() {
   const [modal, setmodal] = useState(false);
   const [modal1, setmodal1] = useState(false);
   const [ServicePlanDataLabel, setServicePlanDataLabel] = useState([]);
+  const [existingBgNumber, setExistingBgNumber] = useState("");
   // const [getShow, setShow] = useState({ submit: false });
   const userInfo = Digit.UserService.getUser()?.info || {};
   const {
@@ -122,8 +123,6 @@ function SubmitNew() {
   // }, []);
   //
 
-  const areAllFieldsFilled = existingBgNumber != "";
-
   return (
     <form onSubmit={handleSubmit(bankSubmitNew)}>
       <Card style={{ width: "126%", border: "5px solid #1266af" }}>
@@ -136,7 +135,13 @@ function SubmitNew() {
                   <h2>Enter LOI No. </h2>
                 </Form.Label>
               </div>
-              <input type="text" className="form-control" placeholder="" {...register("loiNumber")} disabled={!areAllFieldsFilled} />
+              <input
+                type="text"
+                className="form-control"
+                placeholder=""
+                {...register("loiNumber")}
+                disabled={existingBgNumber?.length > 0 ? true : false}
+              />
             </Col>
 
             <Col md={4} xxl lg="3">
@@ -145,7 +150,7 @@ function SubmitNew() {
                   <h2>Type of B.G</h2>
                 </Form.Label>
               </div>
-              <select className="form-control" {...register("typeOfBg")}>
+              <select className="form-control" {...register("typeOfBg")} disabled={existingBgNumber?.length > 0 ? true : false}>
                 <option> IDW</option>
                 <option>EDC</option>
               </select>
@@ -156,7 +161,13 @@ function SubmitNew() {
                   <h2>Amount (in fig)</h2>
                 </Form.Label>
               </div>
-              <input type="text" className="form-control" placeholder="" {...register("amountInFig")} />
+              <input
+                type="text"
+                className="form-control"
+                placeholder=""
+                {...register("amountInFig")}
+                disabled={existingBgNumber?.length > 0 ? true : false}
+              />
             </Col>
             <Col md={4} xxl lg="3">
               <div>
@@ -164,7 +175,13 @@ function SubmitNew() {
                   <h2>Amount (in words)</h2>
                 </Form.Label>
               </div>
-              <input type="text" className="form-control" placeholder="" {...register("amountInWords")} />
+              <input
+                type="text"
+                className="form-control"
+                placeholder=""
+                {...register("amountInWords")}
+                disabled={existingBgNumber?.length > 0 ? true : false}
+              />
             </Col>
           </Row>
           <br></br>
@@ -381,7 +398,13 @@ function SubmitNew() {
                   <h2>Existing B.G. No. (In case of replacement, extension, renewal enter bank guarantee number)</h2>
                 </Form.Label>
               </div>
-              <input type="text" className="form-control" placeholder="" {...register("existingBgNumber")} />
+              <input
+                type="text"
+                className="form-control"
+                placeholder=""
+                {...register("existingBgNumber")}
+                onChange={(e) => setExistingBgNumber(e.target.value)}
+              />
             </Col>
           </Row>
           <Row className="justify-content-end">
