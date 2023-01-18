@@ -564,7 +564,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     }
   }
   function selectModalPercentage(e) {
-    if(!e.target.value || e.target.value.match("^[0-9.0-9]*$")){
+    if(!e.target.value || e.target.value.match("^[0-9.{1}0-9]*$")){
       setModalPercentage(e.target.value)
     }
   }
@@ -702,14 +702,14 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
   // if (isLoading) return <Loader />;
   const goNext = async (e) => {
-    console.log("DIN123",DirectorData.filter((element,index)=>(element.din !== DirectorDataMCA?.[index]?.din)));
+    console.log("DIN123",formData?.result, formData?.result?.Licenses[0]?.id, formData);
     // const cin_match = cin_Number.match(Digit.Utils.getPattern('CIN'));
     // if(!cin_match) {
     //   alert("NOT Matched");
     // } else {
     //   alert("Matched");
     // }
-    if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
+    // if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
       let addInfo = {
         showDevTypeFields: showDevTypeFields,
         name: name,
@@ -749,6 +749,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
           "addInfo": addInfo
         }
       }
+      setLoading(true);
       Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
         .then((result, err) => {
           // console.log("DATA",result?.id);
@@ -765,31 +766,32 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
           }
           //1, units
           onSelect("", data, "", true);
-
+          setLoading(false); 
         })
         .catch((e) => {
+          setLoading(false);
           setIsDisableForNext(false);
           // setShowToast({ key: "error" });
           setError(e?.response?.data?.Errors[0]?.message || null);
         });
-    }
-    else {
-      let data = formData?.formData;
-      data.LicneseDetails.showDevTypeFields = showDevTypeFields,
-        data.LicneseDetails.cin_Number = cin_Number,
-        data.LicneseDetails.companyName = companyName,
-        data.LicneseDetails.incorporationDate = incorporationDate,
-        data.LicneseDetails.registeredAddress = registeredAddress,
-        data.LicneseDetails.email = email,
+    // }
+    // else {
+    //   let data = formData?.formData;
+    //   data.LicenseAddInfo.showDevTypeFields = showDevTypeFields,
+    //   data.LicenseAddInfo.cin_Number = cin_Number,
+    //   data.LicenseAddInfo.companyName = companyName,
+    //   data.LicenseAddInfo.incorporationDate = incorporationDate,
+    //   data.LicenseAddInfo.registeredAddress = registeredAddress,
+    //   data.LicenseAddInfo.email = email,
 
-        data.LicneseDetails.registeredContactNo = registeredContactNo,
-        data.LicneseDetails.gst_Number = gst_Number,
-        data.LicneseDetails.DirectorsInformation = DirectorData,
-        data.LicneseDetails.shareHoldingPatterens = modalValuesArray
-      data.LicneseDetails.othersDetails = othersArray
+    //   data.LicenseAddInfo.registeredContactNo = registeredContactNo,
+    //   data.LicenseAddInfo.gst_Number = gst_Number,
+    //   data.LicenseAddInfo.DirectorsInformation = DirectorData,
+    //   data.LicenseAddInfo.shareHoldingPatterens = modalValuesArray
+    //   data.LicenseAddInfo.othersDetails = othersArray
 
-      onSelect("", formData)
-    }
+    //   onSelect("", formData)
+    // }
 
 
 
@@ -1251,23 +1253,16 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                   return (
                                     <div className="form-group">
                                       <label htmlFor="name">CSR Number <span className="text-danger font-weight-bold">*</span></label>
-                                      <TextInput
+                                      <input 
                                         type="text"
                                         onChange={selectCsrNumber}
-                                        // onChange={(e) => setCinNo(e.target.value)}
                                         value={csrNumber}
-                                        name="csr_Number"
-                                        // isMendatory={false}
-                                        placeholder={csrNumber}
-                                        className="employee-card-input text-uppercase"
-                                        max={"11"}
-                                        {...(validation = {
-                                          // isRequired: true,
-                                          type: "text",
-                                          maxlength: "11",
-                                        })}
+                                        name="csrNumber"
+                                        className="form-control"
+                                        max={12}
+                                        maxlength="12"
                                       />
-                                      {csrNumber && csrNumber.length > 0 && !csrNumber.match(Digit.Utils.getPattern('CSR')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_CSR_NO")}</CardLabelError>}
+                                      {csrNumber && csrNumber.length > 0 && !csrNumber.match(Digit.Utils.getPattern('CSR')) && <CardLabelError style={{ width: "100%", marginTop: '5px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_CSR_NO")}</CardLabelError>}
                                       <h3 className="error-message" style={{ color: "red" }}>{cinValError}</h3>
                                     </div>
                                   )
@@ -1275,21 +1270,14 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                   return (
                                     <div className="form-group">
                                       <label htmlFor="name">LLP Number <span className="text-danger font-weight-bold">*</span></label>
-                                      <TextInput
+                                      <input 
                                         type="text"
                                         onChange={selectLlpNumber}
-                                        // onChange={(e) => setCinNo(e.target.value)}
                                         value={llpNumber}
-                                        name="llp_Number"
-                                        // isMendatory={false}
-                                        placeholder={llpNumber}
-                                        className="employee-card-input text-uppercase"
-                                        max={"8"}
-                                        {...(validation = {
-                                          // isRequired: true,
-                                          type: "text",
-                                          maxlength: "8",
-                                        })}
+                                        name="llpNumber"
+                                        className="form-control"
+                                        max={8}
+                                        maxlength="8"
                                       />
                                       {llpNumber && llpNumber.length > 0 && !llpNumber.match(Digit.Utils.getPattern('LLP')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_LLP_NO")}</CardLabelError>}
                                       <h3 className="error-message" style={{ color: "red" }}>{cinValError}</h3>
@@ -1299,20 +1287,6 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                   return (
                                     <div className="form-group">
                                       <label htmlFor="name">CIN Number <span className="text-danger font-weight-bold">*</span></label>
-                                      {/* <TextInput
-                                        type="text"
-                                        onChange={selectCinNumber}
-                                        value={cin_Number}
-                                        name="cin_Number"
-                                        placeholder={cin_Number}
-                                        className="employee-card-input text-uppercase"
-                                        max={"21"}
-                                        {...(validation = {
-                                          pattern: "^[A-Z0-9]*$",
-                                          type: "text",
-                                          
-                                        })}
-                                      /> */}
                                       <input 
                                         type="text"
                                         onChange={selectCinNumber}
@@ -1337,22 +1311,6 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                           <label htmlFor="name"> {
                             showDevTypeFields === "Trust" ? "Trust Name" : "Company Name"
                           } <span className="text-danger font-weight-bold">*</span></label>
-
-                          {/* <TextInput
-                            type="text"
-                            value={companyName}
-                            placeholder={companyName}
-                            name="companyName"
-                            onChange={(e) => setCompanyName(e.target.value)}
-                            className="employee-card-input"
-                            {...(validation = {
-                              type: "text",
-                              maxlength: "50",
-                              title: "Please Enter Company Name"
-                            })}
-                            disabled={showDevTypeFields === "Company"}
-                          /> */}
-
                           <input 
                             type="text"
                             value={companyName}
@@ -1368,17 +1326,6 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                       <div className="col col-4">
                         <div className="form-group">
                           <label htmlFor="name">Date of Incorporation <span className="text-danger font-weight-bold">*</span></label>
-                          {/* <DatePicker
-                            date={incorporationDate}
-                            name="incorporationDate"
-                            onChange={(e) => setIncorporation(e)}
-                            disable={false}
-                            {...(validation = {
-                              type: "date",
-                              title: "Please Enter Date of Incorporation"
-                            })}
-                            disabled={showDevTypeFields === "Company"}
-                          /> */}
                           <input
                             type="date"
                             date={incorporationDate}
@@ -1393,19 +1340,6 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                       <div className="col col-4">
                         <div className="form-group">
                           <label htmlFor="name">Registered Address <span className="text-danger font-weight-bold">*</span></label>
-                          {/* <TextInput
-                            type="text"
-                            name="registeredAddress"
-                            value={registeredAddress}
-                            placeholder={registeredAddress}
-                            onChange={(e) => setRegistered(e.target.value)}
-                            className="employee-card-input"
-                            {...(validation = {
-                              isRequired: true,
-                              error: "Address is required"
-                            })}
-                            disabled={showDevTypeFields === "Company"}
-                          /> */}
                           <input 
                             type="text"
                             name="registeredAddress"
@@ -1421,21 +1355,6 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                       <div className="col col-4">
                         <div className="form-group ">
                           <label htmlFor="email"> Email <span className="text-danger font-weight-bold">*</span></label>
-
-                          {/* <TextInput
-                            t={t}
-                            type={"email"}
-                            optionKey="i18nKey"
-                            name="email"
-                            value={email}
-                            placeholder={email}
-                            onChange={(e) => setUserEmailId(e.target.value)}
-                            {...(validation = {
-                              isRequired: true,
-                              required: "Email is required"
-                            })}
-                            disabled={showDevTypeFields === "Company"}
-                          /> */}
                           <input 
                             type={"email"}
                             name="email"
@@ -1449,14 +1368,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                       </div>
                       <div className="col col-4">
                         <div className="form-group">
-                          <label htmlFor="name">Mobile No. <span className="text-danger font-weight-bold">*</span></label>
-                          {/* <MobileNumber
-                            value={registeredContactNo}
-                            name="registeredContactNo"
-                            maxlength={"10"}
-                            onChange={selectRegisteredMobile}
-                            {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
-                          /> */}
+                          <label htmlFor="registeredContactNo">Mobile No. <span className="text-danger font-weight-bold">*</span></label>
                           <input
                             type="text"
                             value={registeredContactNo}
@@ -1473,16 +1385,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                       </div>
                       <div className="col col-4">
                         <div className="form-group">
-                          <label htmlFor="name">GST No. {showDevTypeFields !== "Trust" && <span className="text-danger font-weight-bold">*</span>}</label>
-                          {/* <TextInput
-                            type="text"
-                            value={gst_Number}
-                            placeholder={gst_Number}
-                            onChange={(e) => setGST(e.target.value.toUpperCase())}
-                            className="employee-card-input"
-                            name="gst_Number"
-                            {...{ required: true, maxlength: "15", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
-                          /> */}
+                          <label htmlFor="gst_Number">GST No. {showDevTypeFields !== "Trust" && <span className="text-danger font-weight-bold">*</span>}</label>
                           <input
                             type="text"
                             value={gst_Number}
@@ -1523,36 +1426,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                 return (
                                   <tr>
                                     <td>{input + 1}</td>
-                                    <td>
-                                      <input
-                                        type="text"
-                                        value={elementInArray.name}
-                                        placeholder={elementInArray.name}
-                                        readOnly
-                                        disabled="disabled"
-                                        class="employee-card-input"
-                                      />
-                                    </td>
-                                    <td>
-                                      <input
-                                        type="text"
-                                        value={elementInArray.designition}
-                                        placeholder={elementInArray.designition}
-                                        readOnly
-                                        disabled="disabled"
-                                        class="employee-card-input"
-                                      />
-                                    </td>
-                                    <td>
-                                      <input
-                                        type="text"
-                                        value={elementInArray.percentage}
-                                        placeholder={elementInArray.percentage}
-                                        readOnly
-                                        disabled="disabled"
-                                        class="employee-card-input"
-                                      />
-                                    </td>
+                                    <td>{elementInArray.name}</td>
+                                    <td>{elementInArray.designition}</td>
+                                    <td>{elementInArray.percentage}</td>
                                     <td>
                                       <div className="row">
                                         {(elementInArray.uploadPdf) ?
@@ -1626,7 +1502,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                           <form className="text1" id="myForm">
                             <Row>
                               <Col md={3} xxl lg="4">
-                                <label htmlFor="name" className="text">Name <span className="text-danger font-weight-bold">*</span></label>
+                                <label htmlFor="modalNAme" className="text">Name <span className="text-danger font-weight-bold">*</span></label>
                                 {/* <TextInput
                                   type="text"
                                   isMandatory={false}
@@ -1642,15 +1518,17 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                 /> */}
                                 <input
                                   type="text"
-                                  className="form-control"
+                                  value={modalNAme}
                                   name="modalNAme"
-                                  // onChange={(e) => setModalNAme(e.target.value)}
+                                  maxlength={"30"}
+                                  max={30}
                                   onChange={selectModalName}
+                                  className="form-control"
                                 />
                                 {modalNAme && modalNAme.length > 0 && !modalNAme.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '5px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter a valid Name")}</CardLabelError>}
                               </Col>
                               <Col md={3} xxl lg="4">
-                                <label htmlFor="name" className="text"> Designition <span className="text-danger font-weight-bold">*</span></label>
+                                <label htmlFor="modaldesignition" className="text"> Designition <span className="text-danger font-weight-bold">*</span></label>
                                 {/* <TextInput
                                   type="text"
                                   isMandatory={false}
@@ -1663,18 +1541,21 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                     type: "text",
                                   })}
                                 /> */}
+                                
                                 <input
                                   type="text"
-                                  className="form-control"
+                                  value={modaldesignition}
                                   name="modaldesignition"
-                                  // onChange={(e) => setModalNAme(e.target.value)}
+                                  maxlength={"30"}
+                                  max={30}
                                   onChange={selectModalDesignition}
+                                  className="form-control"
                                 />
                                 {modaldesignition && modaldesignition.length > 0 && !modaldesignition.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter a valid Designition")}</CardLabelError>}
                               </Col>
 
                               <Col md={3} xxl lg="4">
-                                <label htmlFor="name" className="text">Percentage "%" <span className="text-danger font-weight-bold">*</span></label>
+                                <label htmlFor="modalPercentage" className="text">Percentage "%" <span className="text-danger font-weight-bold">*</span></label>
                                 {/* <TextInput
                                   type="number"
                                   isMandatory={false}
@@ -1688,16 +1569,17 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                 /> */}
                                 <input 
                                   type="text"
+                                  value={modalPercentage}
+                                  name="modalPercentage"
                                   maxlength={"4"}
                                   max={4}
                                   onChange={selectModalPercentage}
                                   className="form-control"
-                                  name="modalPercentage"
                                 />
 
                                 {
                                   (modalPercentage && (remainingStakeholderPercentage < modalPercentage || modalPercentage <= 0)) &&
-                                  <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_PERCENTAGE")}</CardLabelError>
+                                  <CardLabelError style={{ width: "100%", marginTop: '5px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_PERCENTAGE")}</CardLabelError>
                                 }
 
 
@@ -1707,7 +1589,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
                               </Col>
                               <Col md={3} xxl lg="4">
-                                <label htmlFor="name" className="text">Any Supportive Document</label>
+                                <label htmlFor="uploadPdf" className="text">Any Supportive Document</label>
                                 <input
                                   type="file"
                                   // value={file}
@@ -2125,12 +2007,11 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                 type="text"
                                 value={existingColonizerDetails.licNo}
                                 name="licNo"
-                                // onChange={SelectName}
                                 onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, licNo: e.target.value.toUpperCase() })}
-                                className="employee-card-input"
+                                className="form-control"
                                 maxLength={20}
                               />
-                              {existingColonizerDetails.licNo && existingColonizerDetails.licNo.length > 0 && !existingColonizerDetails.licNo.match(Digit.Utils.getPattern('LicNumber')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Invalid Licence No.")}</CardLabelError>}
+                              {existingColonizerDetails.licNo && existingColonizerDetails.licNo.length > 0 && !existingColonizerDetails.licNo.match(Digit.Utils.getPattern('LicNumber')) && <CardLabelError style={{ width: "100%", marginTop: '5px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Invalid Licence No.")}</CardLabelError>}
                             </div>
                           </div>
 
@@ -2143,10 +2024,10 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                 name="name"
                                 onChange={SelectExistingColonizerName}
                                 // onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, name: e.target.value})}
-                                className="employee-card-input"
+                                className="form-control"
                                 maxLength={10}
                               />
-                              {existingColonizerDetails.name && existingColonizerDetails.name.length > 0 && !existingColonizerDetails.name.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid name.")}</CardLabelError>}
+                              {existingColonizerDetails.name && existingColonizerDetails.name.length > 0 && !existingColonizerDetails.name.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '5px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid name.")}</CardLabelError>}
                             </div>
                           </div>
 
@@ -2159,7 +2040,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                 name="licDate"
                                 // onChange={SelectName}
                                 onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, licDate: e.target.value })}
-                                className="employee-card-input"
+                                className="form-control"
 
                                 max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
                               />

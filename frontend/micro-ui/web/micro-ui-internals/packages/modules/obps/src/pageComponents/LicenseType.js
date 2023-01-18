@@ -107,7 +107,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
   const onSkip = () => onSelect();
 
   function selectLicenseType(value) {
-    console.log("log123", value)
+    // console.log("log123", value)
     setLicenseType(value);
   }
 
@@ -115,12 +115,12 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
     setArchitectNo(e.target.value.toUpperCase()); 
   }
 
-  console.log("++++",`${LicenseType?.tradeType}.${showDevTypeFields}`);
+  // console.log("++++",`${LicenseType?.tradeType}.${showDevTypeFields}`);
 
   function goNext() {
-    if (!(formData?.result && formData?.result?.Licenses[0]?.id)){
+    // if (!(formData?.result && formData?.result?.Licenses[0]?.id)){
       
-      console.log("log1234...",config,formData,LicenseType?.tradeType);
+      // console.log("log1234...",config,formData,LicenseType?.tradeType);
 
       let applicantType = {
         "licenceType": licenceTypeCombined || LicenseType?.tradeType,
@@ -137,7 +137,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
         }
       }
       
-      console.log("logger123",config,applicantType);
+      // console.log("logger123",config,applicantType);
       if(LicenseType?.tradeType === 'ARCHITECT.CLASSA'){
         onSelect(config.key, applicantType);
       } else {
@@ -146,7 +146,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
       setLoading(true);
       Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
         .then((result, err) => {
-          console.log("DATA",result?.id);
+          // console.log("DATA",result?.id);
           // localStorage.setItem('devRegId',JSON.stringify(result?.id));
           // setIsDisableForNext(false);
           let data = {
@@ -170,14 +170,14 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
           setLoading(false);
           setError(e?.response?.data?.Errors[0]?.message || null);
         });
-    }
+    // }
       
-    else {
-      let data = formData?.formData;
-      data.LicneseType.LicenseType = LicenseType;
-      data.LicneseType.ArchitectNo = ArchitectNo;
-      onSelect("", formData)
-    }
+    // else {
+    //   let data = formData?.formData;
+    //   data.LicneseType.LicenseType = LicenseType;
+    //   data.LicneseType.ArchitectNo = ArchitectNo;
+    //   onSelect("", formData)
+    // }
   }
 
 

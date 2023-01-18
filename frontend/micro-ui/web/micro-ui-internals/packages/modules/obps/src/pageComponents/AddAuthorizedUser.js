@@ -503,7 +503,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
 
   const goNext = async (e) => {
     //   e.preventDefault();
-    if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
+    // if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
       const addAuthUserformData = {
         aurthorizedUserInfoArray:aurthorizedUserInfoArray
       }
@@ -543,11 +543,10 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
         setShowToast({ key: "error" });
         setError(e?.response?.data?.Errors[0]?.message || null);
       });
-    }else {
-      let data = formData?.formData;
-      // data.LicneseDetails.addAuthUserformData = addAuthUserformData;
-      onSelect("", formData)
-    }
+    // }else {
+    //   let data = formData?.formData;
+    //   onSelect("", formData)
+    // }
     
 
    

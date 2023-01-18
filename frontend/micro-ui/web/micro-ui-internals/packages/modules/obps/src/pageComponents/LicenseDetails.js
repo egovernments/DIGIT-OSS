@@ -493,7 +493,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
 
   const goNext = async () => {
 
-    if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
+    // if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
       let licenseDet = {
         "Licenses": [
           {
@@ -642,25 +642,24 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
         });
 
 
-    }
-    else {
-      // let data = formData?.formData;
-      formData.name = name;
-      formData.mobileNumber = mobileNumber;
-      formData.gender = gender;
-      formData.email = email;
-      formData.PanNumber = PanNumber;
-      formData.Correspondenceaddress = Correspondenceaddress;
-      formData.addressLineOneCorrespondence = addressLineOneCorrespondence;
-      formData.addressSameAsPermanent = addressSameAsPermanent;
-      formData.isAddressSame = isAddressSame;
-      if(LicenseType === 'ARCHITECT.CLASSA'){
-        onSelect("", formData,"",true,"stakeholder-document-details");
-      } else {
-        onSelect("", formData,"",true);
-      }
-      // onSelect("", formData)
-    }
+    // }
+    // else {
+    //   // let data = formData?.formData;
+    //   formData.name = name;
+    //   formData.mobileNumber = mobileNumber;
+    //   formData.gender = gender;
+    //   formData.email = email;
+    //   formData.PanNumber = PanNumber;
+    //   formData.Correspondenceaddress = Correspondenceaddress;
+    //   formData.addressLineOneCorrespondence = addressLineOneCorrespondence;
+    //   formData.addressSameAsPermanent = addressSameAsPermanent;
+    //   formData.isAddressSame = isAddressSame;
+    //   if(LicenseType === 'ARCHITECT.CLASSA'){
+    //     onSelect("", formData,"",true,"stakeholder-document-details");
+    //   } else {
+    //     onSelect("", formData,"",true);
+    //   }
+    // }
 
   };
 

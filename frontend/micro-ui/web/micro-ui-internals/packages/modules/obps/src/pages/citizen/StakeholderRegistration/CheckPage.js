@@ -31,10 +31,10 @@ const CheckPage = ({ onSubmit, value }) => {
   let isopenlink = window.location.href.includes("/openlink/");
   const isCitizenUrl = Digit.Utils.browser.isMobile() ? true : false;
 
-  if (isopenlink)
-    window.onunload = function () {
-      sessionStorage.removeItem("Digit.BUILDING_PERMIT");
-    };
+  // if (isopenlink)
+  //   window.onunload = function () {
+  //     sessionStorage.removeItem("Digit.BUILDING_PERMIT");
+  //   };
 
 
     const getDeveloperData = async () => {
@@ -163,7 +163,7 @@ const CheckPage = ({ onSubmit, value }) => {
             </StatusTable>
           </Card>
           <Card style={{ paddingRight: "16px", display: "none" }}>
-            <CardHeader styles={{ fontSize: "24px" }}>{t(`BPA_LICENSE_DET_CAPTION`)}</CardHeader>
+            <CardHeader styles={{ fontSize: "24px" }}>{t("Authorized Applicant Detail")}</CardHeader>
             <LinkButton
               label={<EditIcon style={{ marginTop: "-15px", float: "right", position: "relative", bottom: "32px" }} />}
               style={{ width: "100px", display: "inline" }}
