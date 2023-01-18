@@ -21,6 +21,8 @@ import { getDocShareholding } from "../docView/docView.help";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step3";
 import FileUpload from "@mui/icons-material/FileUpload";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import { useLocation } from "react-router-dom";
 import { Toast } from "@egovernments/digit-ui-react-components";
 import WorkingTable from "../../../../components/Table";
@@ -61,76 +63,7 @@ const releaseStatus = [
     value: "no",
   },
 ];
-const columns = [
-  {
-    key: "previousLicensenumber",
-    title: "Previous Licence Number",
-    dataIndex: "tehsil",
-  },
-  {
-    key: "areaOfParentLicence",
-    title: "Area of parent licence",
-    dataIndex: "areaOfParentLicence",
-  },
-  {
-    key: "purposeOfParentLicence",
-    title: "Purpose of parent licence",
-    dataIndex: "purposeOfParentLicence",
-  },
-  {
-    key: "validity",
-    title: "Validity of parent licence ",
-    dataIndex: "validity",
-  },
-  {
-    key: "date",
-    title: "Date ",
-    dataIndex: "date",
-  },
-  {
-    key: "areaAppliedmigration",
-    title: "Area applied under migration in acres",
-    dataIndex: "areaAppliedmigration",
-  },
 
-  {
-    key: "khasraNumber",
-    title: "Applied Khasra number ",
-    dataIndex: "khasraNumber",
-  },
-  {
-    key: "area",
-    title: "Area ",
-    dataIndex: "area",
-  },
-
-  {
-    title: "Action",
-    dataIndex: "",
-    render: (data) => (
-      <div>
-        <EditIcon
-          style={{ cursor: "pointer" }}
-          onClick={() => {
-            setSpecificTableData(data);
-            setmodal(true);
-            setEdit(true);
-          }}
-          color="primary"
-        />
-
-        <DeleteIcon
-          style={{ cursor: "pointer" }}
-          onClick={() => {
-            const filteredData = modalData?.filter((item) => item?.rowid !== data?.rowid);
-            setModalData(filteredData);
-          }}
-          color="error"
-        />
-      </div>
-    ),
-  },
-];
 const LandScheduleForm = (props) => {
   const location = useLocation();
   const [purposeOptions, setPurposeOptions] = useState({ data: [], isLoading: true });
@@ -151,7 +84,81 @@ const LandScheduleForm = (props) => {
   const { data: LandData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["LandType"]);
 
   const { data: PotentialType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["PotentialZone"]);
-  const [specificTableData, setSpecificTableData] = useState(null);
+  const columns = [
+    {
+      key: "previousLicensenumber",
+      title: "Previous Licence Number",
+      dataIndex: "previousLicensenumber",
+    },
+    {
+      key: "areaOfParentLicence",
+      title: "Area of parent licence",
+      dataIndex: "areaOfParentLicence",
+    },
+    {
+      key: "purposeOfParentLicence",
+      title: "Purpose of parent licence",
+      dataIndex: "purposeOfParentLicence",
+    },
+    {
+      key: "validity",
+      title: "Validity of parent licence ",
+      dataIndex: "validity",
+    },
+    {
+      key: "date",
+      title: "Date ",
+      dataIndex: "date",
+    },
+    {
+      key: "areaAppliedmigration",
+      title: "Area applied under migration in acres",
+      dataIndex: "areaAppliedmigration",
+    },
+
+    {
+      key: "khasraNumber",
+      title: "Applied Khasra number ",
+      dataIndex: "khasraNumber",
+    },
+    {
+      key: "area",
+      title: "Area ",
+      dataIndex: "area",
+    },
+    {
+      key: "balanceOfParentLicence",
+      title: "Balance of Parent Licence ",
+      dataIndex: "balanceOfParentLicence",
+    },
+
+    {
+      title: "Action",
+      dataIndex: "",
+      render: (data) => (
+        <div>
+          <EditIcon
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              setSpecificTableData(data);
+              setmodal(true);
+              setEdit(true);
+            }}
+            color="primary"
+          />
+
+          <DeleteIcon
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              const filteredData = modalData?.filter((item) => item?.rowid !== data?.rowid);
+              setModalData(filteredData);
+            }}
+            color="error"
+          />
+        </div>
+      ),
+    },
+  ];
   useEffect(() => {
     const purpose = PurposeType?.["common-masters"]?.Purpose?.map(function (data) {
       return { value: data?.purposeCode, label: data?.name };
@@ -191,7 +198,7 @@ const LandScheduleForm = (props) => {
   });
 
   const [fileStoreId, setFileStoreId] = useState({});
-
+  const [specificTableData, setSpecificTableData] = useState(null);
   const Purpose = localStorage.getItem("purpose");
   const userInfo = Digit.UserService.getUser()?.info || {};
 
@@ -443,7 +450,6 @@ const LandScheduleForm = (props) => {
 
     const length = modalData?.length + 1;
     modaldata["rowid"] = length.toString();
-    console.log("modaldata", modaldata);
     if (specificTableData?.rowid) {
       const filteredRowData = modalData?.filter((item) => item?.rowid !== specificTableData?.rowid);
       setModalData([...filteredRowData, modaldata]);
@@ -466,7 +472,7 @@ const LandScheduleForm = (props) => {
       {loader && <Spinner />}
       <form onSubmit={handleSubmit(landScheduleFormSubmitHandler)}>
         <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New Licence </h4>
+          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New Licence Application </h4>
           <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
             <Form.Group className="justify-content-center" controlId="formBasicEmail">
               <Row className="ml-auto" style={{ marginBottom: 5 }}>
@@ -738,9 +744,11 @@ const LandScheduleForm = (props) => {
                       </div>
                       {watch("migrationLic") === "Y" && (
                         <div>
-                          <div className="applt" style={{ overflow: "auto" }}>
-                            <WorkingTable columns={columns} data={modalData} />
-                          </div>
+                          {modalData.length > 0 && (
+                            <div className="applt" style={{ overflow: "auto" }}>
+                              <WorkingTable columns={columns} data={modalData} />
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
@@ -763,6 +771,10 @@ const LandScheduleForm = (props) => {
                     <label htmlFor="encumburance">
                       <input {...register("encumburance")} type="radio" value="gair" id="encumburance" />
                       &nbsp;&nbsp; Gair/Marusi &nbsp;&nbsp;
+                    </label>
+                    <label htmlFor="encumburance">
+                      <input {...register("encumburance")} type="radio" value="anyOther" id="encumburance" />
+                      &nbsp;&nbsp; Any Other &nbsp;&nbsp;
                     </label>
                     <label htmlFor="encumburance">
                       <input {...register("encumburance")} type="radio" value="none" id="encumburance" />
@@ -804,6 +816,31 @@ const LandScheduleForm = (props) => {
                         </div>
                       </div>
                     )}
+                    {watch("encumburance") === "anyOther" && (
+                      <div className="row ">
+                        <div className="col col-6">
+                          <label>
+                            <h2>
+                              Remark <span style={{ color: "red" }}>*</span>
+                            </h2>{" "}
+                          </label>
+                          <input type="text" className="form-control" {...register("anyOtherRemark")} />
+                        </div>
+                      </div>
+                    )}
+                    {watch("encumburance") === "none" && (
+                      <div className="row ">
+                        <div className="col col-6">
+                          <label>
+                            <h2>
+                              Remark <span style={{ color: "red" }}>*</span>
+                            </h2>{" "}
+                          </label>
+                          <input type="text" className="form-control" {...register("noneRemark")} />
+                        </div>
+                      </div>
+                    )}
+
                     <h3 className="error-message" style={{ color: "red" }}>
                       {errors?.encumburance && errors?.encumburance?.message}
                     </h3>
@@ -828,76 +865,77 @@ const LandScheduleForm = (props) => {
                       </h3>
                     </h6>
                   </div>
-                  <div className="row">
-                    <div className="col col-12 ">
-                      {watch("litigation") === "Y" && (
-                        <div className="row ">
+                  {watch("litigation") === "Y" && (
+                    <div>
+                      <br></br>
+                      <hr />
+                      <br></br>
+                      <div className="row ">
+                        <div className="col col-12 ">
+                          <h6>
+                            Court orders, if any, affecting applied land. <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                            <label htmlFor="court">
+                              <input {...register("court")} type="radio" value="Y" id="court" />
+                              &nbsp; Yes &nbsp;&nbsp;
+                            </label>
+                            <label htmlFor="court">
+                              <input {...register("court")} type="radio" value="N" id="court" />
+                              &nbsp; No &nbsp;&nbsp;
+                            </label>
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.court && errors?.court?.message}
+                            </h3>
+                          </h6>
+                        </div>
+                        <div className="row">
                           <div className="col col-12 ">
-                            <h6>
-                              Court orders, if any, affecting applied land. <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-                              <label htmlFor="court">
-                                <input {...register("court")} type="radio" value="Y" id="court" />
-                                &nbsp; Yes &nbsp;&nbsp;
-                              </label>
-                              <label htmlFor="court">
-                                <input {...register("court")} type="radio" value="N" id="court" />
-                                &nbsp; No &nbsp;&nbsp;
-                              </label>
-                              <h3 className="error-message" style={{ color: "red" }}>
-                                {errors?.court && errors?.court?.message}
-                              </h3>
-                            </h6>
-                          </div>
-                          <div className="row">
-                            <div className="col col-12 ">
-                              {watch("court") === "Y" && (
-                                <div className="row ">
-                                  <div className="col col-6">
-                                    <label>
-                                      <h2>
-                                        Remark/Case No.<span style={{ color: "red" }}>*</span>
-                                      </h2>{" "}
-                                    </label>
-                                    <input type="text" className="form-control" {...register("courtyCaseNo")} />
-                                  </div>
-                                  <div className="col col-6">
-                                    <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"></h2>
-                                    Document Upload <span style={{ color: "red" }}>*</span>
-                                    <label>
-                                      <FileUpload color="primary" />
-                                      <input
-                                        type="file"
-                                        style={{ display: "none" }}
-                                        onChange={(e) => getDocumentData(e?.target?.files[0], "courtDoc")}
-                                        accept="application/pdf/jpeg/png"
-                                      />
-                                    </label>
-                                    {fileStoreId?.courtDoc ? (
-                                      <a onClick={() => getDocShareholding(fileStoreId?.courtDoc)} className="btn btn-sm ">
-                                        <VisibilityIcon color="info" className="icon" />
-                                      </a>
-                                    ) : (
-                                      <p></p>
-                                    )}
-                                    <h3 style={{}}>{watch("courtDocFileName") ? watch("courtDocFileName") : null}</h3>
-                                    <h3 className="error-message" style={{ color: "red" }}>
-                                      {errors?.courtDoc && errors?.courtDoc?.message}
-                                    </h3>
-                                  </div>
+                            {watch("court") === "Y" && (
+                              <div className="row ">
+                                <div className="col col-6">
+                                  <label>
+                                    <h2>
+                                      Remark/Case No.<span style={{ color: "red" }}>*</span>
+                                    </h2>{" "}
+                                  </label>
+                                  <input type="text" className="form-control" {...register("courtyCaseNo")} />
                                 </div>
-                              )}
-                            </div>
+                                <div className="col col-6">
+                                  <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"></h2>
+                                  Document Upload <span style={{ color: "red" }}>*</span>
+                                  <label>
+                                    <FileUpload color="primary" />
+                                    <input
+                                      type="file"
+                                      style={{ display: "none" }}
+                                      onChange={(e) => getDocumentData(e?.target?.files[0], "courtDoc")}
+                                      accept="application/pdf/jpeg/png"
+                                    />
+                                  </label>
+                                  {fileStoreId?.courtDoc ? (
+                                    <a onClick={() => getDocShareholding(fileStoreId?.courtDoc)} className="btn btn-sm ">
+                                      <VisibilityIcon color="info" className="icon" />
+                                    </a>
+                                  ) : (
+                                    <p></p>
+                                  )}
+                                  <h3 style={{}}>{watch("courtDocFileName") ? watch("courtDocFileName") : null}</h3>
+                                  <h3 className="error-message" style={{ color: "red" }}>
+                                    {errors?.courtDoc && errors?.courtDoc?.message}
+                                  </h3>
+                                </div>
+                              </div>
+                            )}
                           </div>
                         </div>
-                      )}
+                      </div>
                     </div>
-                  </div>
+                  )}
                   <br></br>
                   <hr />
                   <br></br>
                   <div>
                     <h6>
-                      (iii) Any insolvency/liquidation proceedings against the land owner(s)/ collaborating developed.
+                      (iii) Any insolvency/liquidation proceedings against the Land Owing Company/Develping Company.
                       <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
                       <label htmlFor="insolvency">
                         <input {...register("insolvency")} type="radio" value="Y" id="insolvency" />
@@ -1026,7 +1064,7 @@ const LandScheduleForm = (props) => {
                             <label>
                               <h2>
                                 {" "}
-                                Width of revenue rasta (in sqm)<span style={{ color: "red" }}>*</span>&nbsp;
+                                Width of Revenue Rasta(In Karam)<span style={{ color: "red" }}>*</span>&nbsp;
                                 <CalculateIcon color="primary" />
                               </h2>
                             </label>
@@ -1099,8 +1137,8 @@ const LandScheduleForm = (props) => {
                   <br></br>
                   <div className="row">
                     <div className="col col-3 ">
-                      <h2 data-toggle="tooltip" data-placement="top" title="If any other owners' land is sandwiched within applied land.">
-                        (e)&nbsp;Whether other land sandwiched <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                      <h2 data-toggle="tooltip" data-placement="top" title="Whether Others Land fall within Applied Land">
+                        (e)&nbsp;Whether Others Land fall within Applied Land<span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
                       </h2>{" "}
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="landSandwiched">
@@ -1170,7 +1208,7 @@ const LandScheduleForm = (props) => {
                           <div className="col col-12">
                             <label>
                               <h2>
-                                Date of Reward <span style={{ color: "red" }}>*</span>{" "}
+                                Date of Award <span style={{ color: "red" }}>*</span>{" "}
                               </h2>
                             </label>
                             <input type="date" className="form-control" {...register("rewardDate")} />
@@ -1183,107 +1221,505 @@ const LandScheduleForm = (props) => {
                     </div>
                   </div>
                   <br></br>
+                  {watch("acquistion") === "Y" && (
+                    <div className="row">
+                      <div className="col col-12">
+                        <label>
+                          <h2>
+                            (g)&nbsp;&nbsp;Whether Land Released/Excluded from aqusition proceeding.<span style={{ color: "red" }}>*</span>{" "}
+                            &nbsp;&nbsp;
+                          </h2>
+                        </label>
+                        <label htmlFor="orderUpload">
+                          <input {...register("orderUpload")} type="radio" value="Y" id="orderUpload" />
+                          &nbsp; Yes &nbsp;&nbsp;
+                        </label>
+                        <label htmlFor="orderUpload">
+                          <input {...register("orderUpload")} type="radio" value="N" id="orderUpload" />
+                          &nbsp; No &nbsp;&nbsp;
+                        </label>
+                        <h3 className="error-message" style={{ color: "red" }}>
+                          {errors?.orderUpload && errors?.orderUpload?.message}
+                        </h3>
+                        {watch("orderUpload") === "Y" && (
+                          <div className="row ">
+                            <div className="col col-3 ">
+                              <h2 data-toggle="tooltip" data-placement="top" title="Whether land compensation received ">
+                                Whether land compensation <span style={{ color: "red" }}>*</span>{" "}
+                              </h2>
+
+                              <label htmlFor="landCompensation">
+                                <input {...register("landCompensation")} type="radio" value="Y" id="landCompensation" />
+                                &nbsp; Yes &nbsp;&nbsp;
+                              </label>
+                              <label htmlFor="landCompensation">
+                                <input {...register("landCompensation")} type="radio" value="N" id="landCompensation" />
+                                &nbsp; No &nbsp;&nbsp;
+                              </label>
+                            </div>
+                            <div className="col col-3">
+                              <label>
+                                <h2>
+                                  Status of release <span style={{ color: "red" }}>*</span>{" "}
+                                </h2>
+                              </label>
+
+                              <ReactMultiSelect
+                                control={control}
+                                name="releaseStatus"
+                                placeholder="Status of release"
+                                data={releaseStatus}
+                                labels="Potential"
+                              />
+                              <div className="invalid-feedback">{errors?.releaseStatus?.message}</div>
+                            </div>
+                            <div className="col col-3">
+                              <label>
+                                <h2>
+                                  Date of Award <span style={{ color: "red" }}>*</span>{" "}
+                                </h2>
+                              </label>
+                              <input type="date" {...register("awardDate")} className="form-control" />
+                              <div className="invalid-feedback">{errors?.awardDate?.message}</div>
+                            </div>
+                            <div className="col col-3">
+                              <label>
+                                <h2>
+                                  Date of Release <span style={{ color: "red" }}>*</span>{" "}
+                                </h2>{" "}
+                              </label>
+                              <input type="date" {...register("releaseDate")} className="form-control" />
+                              <div className="invalid-feedback">{errors?.releaseDate?.message}</div>
+                            </div>
+                            <div className="col col-3">
+                              <label htmlFor="siteDetail">
+                                <h2>
+                                  Site Details <span style={{ color: "red" }}>*</span>
+                                </h2>
+                              </label>
+                              <input type="text" {...register("siteDetail")} className="form-control" minLength={2} maxLength={99} />
+                              <div className="invalid-feedback">{errors?.siteDetail?.message}</div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                  <br></br>
                   <div className="row">
                     <div className="col col-12">
-                      <label>
-                        <h2>
-                          (g)&nbsp;&nbsp;Whether details/orders of release/exclusion of land uploaded.<span style={{ color: "red" }}>*</span>{" "}
-                          &nbsp;&nbsp;
-                        </h2>
-                      </label>
-                      <label htmlFor="orderUpload">
-                        <input {...register("orderUpload")} type="radio" value="Y" id="orderUpload" />
-                        &nbsp; Yes &nbsp;&nbsp;
-                      </label>
-                      <label htmlFor="orderUpload">
-                        <input {...register("orderUpload")} type="radio" value="N" id="orderUpload" />
-                        &nbsp; No &nbsp;&nbsp;
-                      </label>
-                      <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.orderUpload && errors?.orderUpload?.message}
-                      </h3>
-                      {watch("orderUpload") === "Y" && (
-                        <div className="row ">
-                          <div className="col col-3 ">
-                            <h2 data-toggle="tooltip" data-placement="top" title="Whether land compensation received ">
-                              Whether land compensation <span style={{ color: "red" }}>*</span>{" "}
-                            </h2>
-
-                            <label htmlFor="landCompensation">
-                              <input {...register("landCompensation")} type="radio" value="Y" id="landCompensation" />
+                      <h2>
+                        (h)&nbsp;&nbsp;Details of existing approach as per policy dated 20-10-20.<span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                        <label htmlFor="siteApproachable">
+                          <input {...register("siteApproachable")} type="radio" value="Y" id="siteApproachable" />
+                          &nbsp; Category-I approach &nbsp;&nbsp;
+                        </label>
+                        <label htmlFor="siteApproachable">
+                          <input {...register("siteApproachable")} type="radio" value="N" id="siteApproachable" />
+                          &nbsp; Category-II approach &nbsp;&nbsp;
+                        </label>
+                      </h2>
+                    </div>
+                    {watch("siteApproachable") === "Y" && (
+                      <div>
+                        <div className="col col-12">
+                          <h2>
+                            (a)&nbsp;&nbsp;Approach available from minimum 4 karam (22 ft) wide revenue rasta.<span style={{ color: "red" }}>*</span>{" "}
+                            &nbsp;&nbsp;
+                            <label htmlFor="minimumApproachFour">
+                              <input {...register("minimumApproachFour")} type="radio" value="Y" id="minimumApproachFour" />
                               &nbsp; Yes &nbsp;&nbsp;
                             </label>
-                            <label htmlFor="landCompensation">
-                              <input {...register("landCompensation")} type="radio" value="N" id="landCompensation" />
+                            <label htmlFor="minimumApproachFour">
+                              <input {...register("minimumApproachFour")} type="radio" value="N" id="minimumApproachFour" />
                               &nbsp; No &nbsp;&nbsp;
                             </label>
-                          </div>
-                          <div className="col col-3">
-                            <label>
-                              <h2>
-                                Status of release <span style={{ color: "red" }}>*</span>{" "}
-                              </h2>
+                          </h2>
+                        </div>
+                        <div className="col col-12">
+                          <h2>
+                            (b)&nbsp;&nbsp;Approach available from minimum 11 feet wide revenue rasta and applied site abuts acquired alignment of the
+                            sector road and there is no stay regarding construction on the land falling under the abutting sector road.
+                            <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                            <label htmlFor="minimumApproachEleven">
+                              <input {...register("minimumApproachEleven")} type="radio" value="Y" id="minimumApproachEleven" />
+                              &nbsp; Yes &nbsp;&nbsp;
                             </label>
+                            <label htmlFor="minimumApproachEleven">
+                              <input {...register("minimumApproachEleven")} type="radio" value="N" id="minimumApproachEleven" />
+                              &nbsp; No &nbsp;&nbsp;
+                            </label>
+                          </h2>
+                        </div>
+                        <div className="col col-12">
+                          <h2>
+                            (c)&nbsp;&nbsp;Applied site abouts already constructed sector road or internal circulation road of approved sectoral plan
+                            (of min. 18m/24m width as the case may be) provided its entire stretch required for approach is licenced and is further
+                            leading upto atleast 4 karam wide revenue rasta.<span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                            <label htmlFor="alreadyConstructedSector">
+                              <input {...register("alreadyConstructedSector")} type="radio" value="Y" id="alreadyConstructedSector" />
+                              &nbsp; Yes &nbsp;&nbsp;
+                            </label>
+                            <label htmlFor="alreadyConstructedSector">
+                              <input {...register("alreadyConstructedSector")} type="radio" value="N" id="alreadyConstructedSector" />
+                              &nbsp; No &nbsp;&nbsp;
+                            </label>
+                          </h2>
+                        </div>
+                        <div className="col col-12">
+                          <h2>
+                            (d)&nbsp;&nbsp;Applied land is accessible from a minimum 4 karam wide rasta through adjoining own land of the applicant
+                            (but not applied for licence).<span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                            <label htmlFor="adjoiningOwnLand">
+                              <input {...register("adjoiningOwnLand")} type="radio" value="Y" id="adjoiningOwnLand" />
+                              &nbsp; Yes &nbsp;&nbsp;
+                            </label>
+                            <label htmlFor="adjoiningOwnLand">
+                              <input {...register("adjoiningOwnLand")} type="radio" value="N" id="adjoiningOwnLand" />
+                              &nbsp; No &nbsp;&nbsp;
+                            </label>
+                          </h2>
+                          {watch("adjoiningOwnLand") === "Y" && (
+                            <div>
+                              <h2>
+                                (d1)&nbsp;&nbsp;If applicable, whether the applicant has donated at least 4 karam wide strip from its adjoining own
+                                land in favour of the Gram Panchayat/Municipality, in order to connect the applied site to existing 4 karam rasta?.
+                                <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                                <label htmlFor="applicantHasDonated">
+                                  <input {...register("applicantHasDonated")} type="radio" value="Y" id="applicantHasDonated" />
+                                  &nbsp; Yes &nbsp;&nbsp;
+                                </label>
+                                <label htmlFor="applicantHasDonated">
+                                  <input {...register("applicantHasDonated")} type="radio" value="N" id="applicantHasDonated" />
+                                  &nbsp; No &nbsp;&nbsp;
+                                </label>
+                              </h2>
 
-                            <ReactMultiSelect
-                              control={control}
-                              name="releaseStatus"
-                              placeholder="Status of release"
-                              data={releaseStatus}
-                              labels="Potential"
-                            />
-                            <div className="invalid-feedback">{errors?.releaseStatus?.message}</div>
-                          </div>
+                              {watch("applicantHasDonated") === "Y" && (
+                                <div className="col col-3">
+                                  <h2 style={{ display: "flex" }}>
+                                    Upload copy of Gift Deed/ Hibbanama <span style={{ color: "red" }}>*</span>
+                                  </h2>
+                                  <label>
+                                    <FileUpload color="primary" />
+                                    <input
+                                      type="file"
+                                      style={{ display: "none" }}
+                                      onChange={(e) => getDocumentData(e?.target?.files[0], "giftDeedHibbanama")}
+                                      accept="application/pdf/jpeg/png"
+                                    />
+                                  </label>
+                                  {fileStoreId?.giftDeedHibbanama ? (
+                                    <a onClick={() => getDocShareholding(fileStoreId?.giftDeedHibbanama)} className="btn btn-sm ">
+                                      <VisibilityIcon color="info" className="icon" />
+                                    </a>
+                                  ) : (
+                                    <p></p>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                        <div className="col col-12">
+                          <h2>
+                            (e)&nbsp;&nbsp;Applied land is accessible from a minimum 4 karam wide rasta through adjoining other’s land
+                            <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                            <label htmlFor="adjoiningOthersLand">
+                              <input {...register("adjoiningOthersLand")} type="radio" value="Y" id="adjoiningOthersLand" />
+                              &nbsp; Yes &nbsp;&nbsp;
+                            </label>
+                            <label htmlFor="adjoiningOthersLand">
+                              <input {...register("adjoiningOthersLand")} type="radio" value="N" id="adjoiningOthersLand" />
+                              &nbsp; No &nbsp;&nbsp;
+                            </label>
+                          </h2>
+                          {watch("adjoiningOthersLand") === "Y" && (
+                            <div>
+                              <h2>
+                                (e1)&nbsp;&nbsp;whether the land-owner of the adjoining land has donated at least 4 karam wide strip of land to the
+                                Gram Panchayat/Municipality, in a manner that the applied site gets connected to existing public rasta of atleast 4
+                                karam width?.
+                                <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                                <label htmlFor="landOwnerDonated">
+                                  <input {...register("landOwnerDonated")} type="radio" value="Y" id="landOwnerDonated" />
+                                  &nbsp; Yes &nbsp;&nbsp;
+                                </label>
+                                <label htmlFor="landOwnerDonated">
+                                  <input {...register("landOwnerDonated")} type="radio" value="N" id="landOwnerDonated" />
+                                  &nbsp; No &nbsp;&nbsp;
+                                </label>
+                              </h2>
+                              {watch("landOwnerDonated") === "Y" && (
+                                <div className="col col-3">
+                                  <h2 style={{ display: "flex" }}>
+                                    Upload copy of Gift Deed/ Hibbanama <span style={{ color: "red" }}>*</span>
+                                  </h2>
+                                  <label>
+                                    <FileUpload color="primary" />
+                                    <input
+                                      type="file"
+                                      style={{ display: "none" }}
+                                      onChange={(e) => getDocumentData(e?.target?.files[0], "giftDeedHibbanama")}
+                                      accept="application/pdf/jpeg/png"
+                                    />
+                                  </label>
+                                  {fileStoreId?.giftDeedHibbanama ? (
+                                    <a onClick={() => getDocShareholding(fileStoreId?.giftDeedHibbanama)} className="btn btn-sm ">
+                                      <VisibilityIcon color="info" className="icon" />
+                                    </a>
+                                  ) : (
+                                    <p></p>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                    {watch("siteApproachable") === "N" && (
+                      <div>
+                        <div className="col col-12">
                           <div className="col col-3">
                             <label>
-                              <h2>
-                                Date of Award <span style={{ color: "red" }}>*</span>{" "}
+                              <h2>(a)&nbsp;&nbsp;Width of Constructed ROW of plotted licenced colony</h2>{" "}
+                            </label>
+                            <input type="text" {...register("constructedRowWidth")} className="form-control" />
+                          </div>
+                        </div>
+                        <div className="col col-12">
+                          <h2>
+                            (b)&nbsp;&nbsp;Whether irrevocable consent from such developer/ colonizer for uninterrupted usage of such internal road
+                            for the purpose of development of the colony by the applicant or by its agencies and for usage by its allottees submitted
+                            <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                            <label htmlFor="irrevocableConsent">
+                              <input {...register("irrevocableConsent")} type="radio" value="Y" id="irrevocableConsent" />
+                              &nbsp; Yes &nbsp;&nbsp;
+                            </label>
+                            <label htmlFor="irrevocableConsent">
+                              <input {...register("irrevocableConsent")} type="radio" value="N" id="irrevocableConsent" />
+                              &nbsp; No &nbsp;&nbsp;
+                            </label>
+                          </h2>
+                          {watch("irrevocableConsent") === "Y" && (
+                            <div className="col col-3">
+                              <h2 style={{ display: "flex" }}>
+                                Upload irrevocable consent <span style={{ color: "red" }}>*</span>
                               </h2>
-                            </label>
-                            <input type="date" {...register("awardDate")} className="form-control" />
-                            <div className="invalid-feedback">{errors?.awardDate?.message}</div>
+                              <label>
+                                <FileUpload color="primary" />
+                                <input
+                                  type="file"
+                                  style={{ display: "none" }}
+                                  onChange={(e) => getDocumentData(e?.target?.files[0], "uploadRrrevocableConsent")}
+                                  accept="application/pdf/jpeg/png"
+                                />
+                              </label>
+                              {fileStoreId?.uploadRrrevocableConsent ? (
+                                <a onClick={() => getDocShareholding(fileStoreId?.uploadRrrevocableConsent)} className="btn btn-sm ">
+                                  <VisibilityIcon color="info" className="icon" />
+                                </a>
+                              ) : (
+                                <p></p>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <br></br>
+                  <br></br>
+                  <div className="row">
+                    <div className="col col-12 mb-4">
+                      <h2>(i)&nbsp;&nbsp;Details of proposed approach.</h2>
+                    </div>
+                    <div className="ml-4">
+                      <h2>
+                        (1)&nbsp;&nbsp; Site approachable from proposed sector road/ Development Plan Road. &nbsp;&nbsp;
+                        <label htmlFor="approachFromProposedSector">
+                          <input {...register("approachFromProposedSector")} type="radio" value="Y" id="approachFromProposedSector" />
+                          &nbsp; Yes &nbsp;&nbsp;
+                        </label>
+                        <label htmlFor="approachFromProposedSector">
+                          <input {...register("approachFromProposedSector")} type="radio" value="N" id="approachFromProposedSector" />
+                          &nbsp; No &nbsp;&nbsp;
+                        </label>
+                      </h2>
+                      {watch("approachFromProposedSector") === "Y" && (
+                        <div>
+                          <div className="col col-5">
+                            <label>(a)&nbsp;&nbsp;Width of sector road/ Development Plan Road</label>
+                            <input type="text" {...register("sectorAndDevelopmentWidth")} className="form-control" />
                           </div>
+                          <h2>
+                            (b)&nbsp;&nbsp;Whether acquired? &nbsp;&nbsp;
+                            <label htmlFor="whetherAcquired">
+                              <input {...register("whetherAcquired")} type="radio" value="Y" id="whetherAcquired" />
+                              &nbsp; Yes &nbsp;&nbsp;
+                            </label>
+                            <label htmlFor="whetherAcquired">
+                              <input {...register("whetherAcquired")} type="radio" value="N" id="whetherAcquired" />
+                              &nbsp; No &nbsp;&nbsp;
+                            </label>
+                          </h2>
+                          <h2>
+                            (c)&nbsp;&nbsp;Whether constructed? &nbsp;&nbsp;
+                            <label htmlFor="whetherConstructed">
+                              <input {...register("whetherConstructed")} type="radio" value="Y" id="whetherConstructed" />
+                              &nbsp; Yes &nbsp;&nbsp;
+                            </label>
+                            <label htmlFor="whetherConstructed">
+                              <input {...register("whetherConstructed")} type="radio" value="N" id="whetherConstructed" />
+                              &nbsp; No &nbsp;&nbsp;
+                            </label>
+                          </h2>
+                          <h2>
+                            (d)&nbsp;&nbsp;Whether Service road along sector road acquired? &nbsp;&nbsp;
+                            <label htmlFor="serviceSectorRoadAcquired">
+                              <input {...register("serviceSectorRoadAcquired")} type="radio" value="Y" id="serviceSectorRoadAcquired" />
+                              &nbsp; Yes &nbsp;&nbsp;
+                            </label>
+                            <label htmlFor="serviceSectorRoadAcquired">
+                              <input {...register("serviceSectorRoadAcquired")} type="radio" value="N" id="serviceSectorRoadAcquired" />
+                              &nbsp; No &nbsp;&nbsp;
+                            </label>
+                          </h2>
+                          <h2>
+                            (e)&nbsp;&nbsp;Whether Service road along sector road constructed? &nbsp;&nbsp;
+                            <label htmlFor="serviceSectorRoadConstructed">
+                              <input {...register("serviceSectorRoadConstructed")} type="radio" value="Y" id="serviceSectorRoadConstructed" />
+                              &nbsp; Yes &nbsp;&nbsp;
+                            </label>
+                            <label htmlFor="serviceSectorRoadConstructed">
+                              <input {...register("serviceSectorRoadConstructed")} type="radio" value="N" id="serviceSectorRoadConstructed" />
+                              &nbsp; No &nbsp;&nbsp;
+                            </label>
+                          </h2>
+                        </div>
+                      )}
+                    </div>
+                    <div className="mt-4 ml-4">
+                      <h2>
+                        (2)&nbsp;&nbsp;Site approachable from internal circulation / sectoral plan road. &nbsp;&nbsp;
+                        <label htmlFor="approachFromInternalCirculation">
+                          <input {...register("approachFromInternalCirculation")} type="radio" value="Y" id="approachFromInternalCirculation" />
+                          &nbsp; Yes &nbsp;&nbsp;
+                        </label>
+                        <label htmlFor="approachFromInternalCirculation">
+                          <input {...register("approachFromInternalCirculation")} type="radio" value="N" id="approachFromInternalCirculation" />
+                          &nbsp; No &nbsp;&nbsp;
+                        </label>
+                      </h2>
+                      {watch("approachFromInternalCirculation") === "Y" && (
+                        <div>
                           <div className="col col-3">
-                            <label>
-                              <h2>
-                                Date of Release <span style={{ color: "red" }}>*</span>{" "}
-                              </h2>{" "}
-                            </label>
-                            <input type="date" {...register("releaseDate")} className="form-control" />
-                            <div className="invalid-feedback">{errors?.releaseDate?.message}</div>
+                            <label>(a)&nbsp;&nbsp;Width of internal circulation / sectoral plan road.</label>
+                            <input type="text" {...register("internalAndSectoralWidth")} className="form-control" />
                           </div>
-                          <div className="col col-3">
-                            <label htmlFor="siteDetail">
-                              <h2>
-                                Site Details <span style={{ color: "red" }}>*</span>
-                              </h2>
+                          <h2>
+                            (b)&nbsp;&nbsp;Whether acquired? &nbsp;&nbsp;
+                            <label htmlFor="whetherAcquiredForInternalCirculation">
+                              <input
+                                {...register("whetherAcquiredForInternalCirculation")}
+                                type="radio"
+                                value="Y"
+                                id="whetherAcquiredForInternalCirculation"
+                              />
+                              &nbsp; Yes &nbsp;&nbsp;
                             </label>
-                            <input type="text" {...register("siteDetail")} className="form-control" minLength={2} maxLength={99} />
-                            <div className="invalid-feedback">{errors?.siteDetail?.message}</div>
-                          </div>
+                            <label htmlFor="whetherAcquiredForInternalCirculation">
+                              <input
+                                {...register("whetherAcquiredForInternalCirculation")}
+                                type="radio"
+                                value="N"
+                                id="whetherAcquiredForInternalCirculation"
+                              />
+                              &nbsp; No &nbsp;&nbsp;
+                            </label>
+                          </h2>
+                          <h2>
+                            (c)&nbsp;&nbsp;Whether constructed? &nbsp;&nbsp;
+                            <label htmlFor="whetherConstructedForInternalCirculation">
+                              <input
+                                {...register("whetherConstructedForInternalCirculation")}
+                                type="radio"
+                                value="Y"
+                                id="whetherConstructedForInternalCirculation"
+                              />
+                              &nbsp; Yes &nbsp;&nbsp;
+                            </label>
+                            <label htmlFor="whetherConstructedForInternalCirculation">
+                              <input
+                                {...register("whetherConstructedForInternalCirculation")}
+                                type="radio"
+                                value="N"
+                                id="whetherConstructedForInternalCirculation"
+                              />
+                              &nbsp; No &nbsp;&nbsp;
+                            </label>
+                          </h2>
                         </div>
                       )}
                     </div>
                   </div>
                   <br></br>
+                  <br></br>
                   <div className="row">
                     <div className="col col-12">
                       <h2>
-                        (h)&nbsp;&nbsp;whether the applied site is approachable from the proposed 18/24 m internal sectoral plan road/sector dividing
-                        road (yes/no).<span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-                        <label htmlFor="siteApproachable">
-                          <input {...register("siteApproachable")} type="radio" value="Y" id="siteApproachable" />
+                        (j)&nbsp;&nbsp;Whether approach from parent licence.<span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                        <label htmlFor="parentLicenceApproach">
+                          <input {...register("parentLicenceApproach")} type="radio" value="Y" id="parentLicenceApproach" />
                           &nbsp; Yes &nbsp;&nbsp;
                         </label>
-                        <label htmlFor="siteApproachable">
-                          <input {...register("siteApproachable")} type="radio" value="N" id="siteApproachable" />
+                        <label htmlFor="parentLicenceApproach">
+                          <input {...register("parentLicenceApproach")} type="radio" value="N" id="parentLicenceApproach" />
                           &nbsp; No &nbsp;&nbsp;
                         </label>
-                        <h3 className="error-message" style={{ color: "red" }}>
-                          {errors?.siteApproachable && errors?.siteApproachable?.message}
-                        </h3>
                       </h2>
                     </div>
+                  </div>
+                  <br></br>
+                  <br></br>
+                  <div className="row">
+                    <div className="col col-12">
+                      <h2>
+                        (k)&nbsp;&nbsp;Any other type of existing approach available.<span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                        <label htmlFor="availableExistingApproach">
+                          <input {...register("availableExistingApproach")} type="radio" value="Y" id="availableExistingApproach" />
+                          &nbsp; Yes &nbsp;&nbsp;
+                        </label>
+                        <label htmlFor="availableExistingApproach">
+                          <input {...register("availableExistingApproach")} type="radio" value="N" id="availableExistingApproach" />
+                          &nbsp; No &nbsp;&nbsp;
+                        </label>
+                      </h2>
+                    </div>
+                    {watch("availableExistingApproach") === "Y" && (
+                      <div className="col col-3">
+                        <h2 style={{ display: "flex" }}>
+                          Upload document. <span style={{ color: "red" }}>*</span>
+                        </h2>
+                        <label>
+                          <FileUpload color="primary" />
+                          <input
+                            type="file"
+                            style={{ display: "none" }}
+                            onChange={(e) => getDocumentData(e?.target?.files[0], "availableExistingApproachDoc")}
+                            accept="application/pdf/jpeg/png"
+                          />
+                        </label>
+                        {fileStoreId?.availableExistingApproachDoc ? (
+                          <a onClick={() => getDocShareholding(fileStoreId?.availableExistingApproachDoc)} className="btn btn-sm ">
+                            <VisibilityIcon color="info" className="icon" />
+                          </a>
+                        ) : (
+                          <p></p>
+                        )}
+                      </div>
+                    )}
                   </div>
                   <br></br>
                   <hr />
@@ -1322,43 +1758,15 @@ const LandScheduleForm = (props) => {
                       {watch("vacant") === "N" && (
                         <div className="row ">
                           <div className="col col">
-                            <h2>
-                              Construction: (Yes/No) <span style={{ color: "red" }}>*</span>
-                            </h2>{" "}
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                            <label htmlFor="construction">
-                              <input {...register("construction")} type="radio" value="Y" id="construction" />
-                              &nbsp; Yes &nbsp;&nbsp;
+                            <label>
+                              <h2>
+                                Construction Remark <span style={{ color: "red" }}>*</span>
+                              </h2>
                             </label>
-                            <label htmlFor="construction">
-                              <input {...register("construction")} type="radio" value="N" id="construction" />
-                              &nbsp; No &nbsp;&nbsp;
-                            </label>
+                            <input type="text" className="form-control" {...register("typeOfConstruction")} />
                             <h3 className="error-message" style={{ color: "red" }}>
                               {errors?.construction && errors?.construction?.message}
                             </h3>
-                            {watch("construction") === "Y" && (
-                              <div className="row ">
-                                <div className="col col">
-                                  <label>
-                                    Type of Construction <span style={{ color: "red" }}>*</span>
-                                  </label>
-                                  <input type="text" className="form-control" {...register("typeOfConstruction")} />
-                                </div>
-                              </div>
-                            )}
-                            {watch("construction") === "N" && (
-                              <div className="row ">
-                                <div className="col col">
-                                  <label>
-                                    <h2>
-                                      Remark <span style={{ color: "red" }}>*</span>
-                                    </h2>
-                                  </label>
-                                  <input type="text" className="form-control" {...register("constructionRemark")} />
-                                </div>
-                              </div>
-                            )}
                           </div>
                         </div>
                       )}
@@ -1484,8 +1892,8 @@ const LandScheduleForm = (props) => {
                   <br></br>
                   <div className="row ">
                     <div className="col col-3">
-                      <h2>
-                        (e) &nbsp;Any revenue rasta/road:(Yes/No)<span style={{ color: "red" }}>*</span>
+                      <h2 data-toggle="tooltip" data-placement="top" title="Any revenue rasta/road passing through proposed site (Yes/No)">
+                        (e) &nbsp;Any revenue rasta/road passing through proposed site<span style={{ color: "red" }}>*</span>
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="road">
@@ -1533,7 +1941,7 @@ const LandScheduleForm = (props) => {
                         </div>
                       )}
                     </div>
-                    <div className="col col-3">
+                    {/* <div className="col col-3">
                       <h2>
                         (f) &nbsp;Any marginal land:(Yes/No) <span style={{ color: "red" }}>*</span>
                       </h2>
@@ -1573,14 +1981,14 @@ const LandScheduleForm = (props) => {
                           </div>
                         </div>
                       )}
-                    </div>
+                    </div> */}
                     <div className="col col-3">
                       <h2
                         data-toggle="tooltip"
                         data-placement="top"
                         title="Whether any utility line passing through the site is incorporated/adjusted in the layout plan (Yes/No)"
                       >
-                        (g)&nbsp;Utility Line <span style={{ color: "red" }}>*</span>
+                        (f)&nbsp;Utility/Permit Line <span style={{ color: "red" }}>*</span>
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="utilityLine">
@@ -1713,9 +2121,7 @@ const LandScheduleForm = (props) => {
                       </h3>
                     </div>
                     <div className="col col-3">
-                      <h2 style={{ display: "flex" }}>
-                        Details of lease / patta <span style={{ color: "red" }}>*</span>
-                      </h2>
+                      <h2 style={{ display: "flex" }}>Details of lease / patta</h2>
                       <label>
                         <FileUpload color="primary" />
                         <input
@@ -1747,7 +2153,7 @@ const LandScheduleForm = (props) => {
                         data-placement="top"
                         title=" Add sales/Deed/exchange/gift deed, mutation, lease/Patta"
                       >
-                        Add sales/Deed/exchange <span style={{ color: "red" }}>*</span>
+                        Sale Deed/Exchange Deed
                       </h2>
                       <label>
                         <FileUpload color="primary" />
@@ -1800,7 +2206,7 @@ const LandScheduleForm = (props) => {
                         {errors?.copyofSpaBoard && errors?.copyofSpaBoard?.message}
                       </h3>
                     </div>
-                    <div className="col col-3">
+                    {/* <div className="col col-3">
                       <h2 style={{ display: "flex" }}>
                         Revised Land Schedule <span style={{ color: "red" }}>*</span>
                       </h2>
@@ -1824,11 +2230,11 @@ const LandScheduleForm = (props) => {
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.revisedLanSchedule && errors?.revisedLanSchedule?.message}
                       </h3>
-                    </div>
+                    </div> */}
 
                     <div className="col col-3">
                       <h2 style={{ display: "flex" }}>
-                        Copy of Shajra Plan <span style={{ color: "red" }}>*</span>
+                        Shajra Plan <span style={{ color: "red" }}>*</span>
                       </h2>
                       <span
                         className="text-primary"
@@ -1915,7 +2321,7 @@ const LandScheduleForm = (props) => {
           </Card>
         </Card>
       </form>
-      {/* <Modal size="xl" isOpen={modal} toggle={() => setmodal(!modal)}>
+      <Modal size="xl" isOpen={modal} toggle={() => setmodal(!modal)}>
         <div style={{ padding: "4px", textAlign: "right" }}>
           <span
             onClick={() => {
@@ -2048,7 +2454,7 @@ const LandScheduleForm = (props) => {
           </form>
         </ModalBody>
         <ModalFooter toggle={() => setmodal(!modal)}></ModalFooter>
-      </Modal> */}
+      </Modal>
       {showToast && (
         <Toast
           success={showToast?.key === "success" ? true : false}

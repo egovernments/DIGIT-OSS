@@ -8,7 +8,8 @@ const OBPSCard = () => {
     const userRoles = Digit.SessionStorage.get('User')?.info?.roles
     const { t } = useTranslation();
     const tenantId = Digit.ULBService.getCurrentTenantId();
-    const BgRole = ["SO", "AO", "CAO"]
+    const BgRole = ["SO_HQ", "AO_HQ", "CAO_HQ"]
+    const SP_EPRole = ["CTP_HR","AD_HQ", "JD_HQ", "SD_HQ", "ATP_HQ", "DA_HQ", "DDA_HQ", "ADA_HQ", "DTCP_HR", "DTP_HQ", "JE_HQ", "Patwari_HQ", "STP_HQ", "STP_Circle"]
 
     function isBankGuarrantee(){
         let isGuarantee = false
@@ -20,14 +21,14 @@ const OBPSCard = () => {
         return isGuarantee
       }
 
-      function isCTP_HR(){
-        let ctp_hr = false
+      function isServiceOrElectricEmp(){
+        let isSP_EP = false
         for(let i=0; i<userRoles.length; i++){
-          if(userRoles[i].code === "CTP_HR"){
-            ctp_hr = true
+          if(SP_EPRole.includes(userRoles[i].code)){
+            isSP_EP = true
           }
         }
-        return ctp_hr
+        return isSP_EP
       }
         
     const [isStateLocalisation, setIsStateLocalisation] = useState(true);
@@ -46,14 +47,14 @@ const OBPSCard = () => {
           {
             count: "-",
             label: t("SERVICE_PLAN_CARD"),
-            link: `/digit-ui/employee/obps/servicePlanInbox`,
+            link: `/digit-ui/employee/tl/servicePlanInbox`,
           },
         ],
         links: [
           {
             count: "-",
             label: t("ES_TITLE_INBOX"),
-            link: `/digit-ui/employee/obps/servicePlanInbox`,
+            link: `/digit-ui/employee/tl/servicePlanInbox`,
           }
         ],
       };
@@ -65,14 +66,14 @@ const OBPSCard = () => {
           {
             count: "-",
             label: t("ELECTRIC_PLAN_CARD"),
-            link: `/digit-ui/employee/obps/electricPlanInbox`,
+            link: `/digit-ui/employee/tl/electricPlanInbox`,
           },
         ],
         links: [
           {
             count: "-",
             label: t("ES_TITLE_INBOX"),
-            link: `/digit-ui/employee/obps/electricPlanInbox`,
+            link: `/digit-ui/employee/tl/electricPlanInbox`,
           }
         ],
       };
@@ -84,14 +85,14 @@ const OBPSCard = () => {
           {
             count: "-",
             label: t("BANK_GUARANTEE_PLAN"),
-            link: `/digit-ui/employee/obps/bankGuaranteeInbox`,
+            link: `/digit-ui/employee/tl/bankGuaranteeInbox`,
           },
         ],
         links: [
           {
             count: "-",
             label: t("ES_TITLE_INBOX"),
-            link: `/digit-ui/employee/obps/bankGuaranteeInbox`,
+            link: `/digit-ui/employee/tl/bankGuaranteeInbox`,
           },
         ],
       };
@@ -102,7 +103,7 @@ const OBPSCard = () => {
             obpsSubModuleProps.push(propsForBankModuleCard)
         }
     
-        if((Digit.Utils.tlAccess() || isCTP_HR())){
+        if((Digit.Utils.tlAccess() || isServiceOrElectricEmp())){
             obpsSubModuleProps.push(propsForElectricModuleCard, propsForServiceModuleCard)
         }
         return (

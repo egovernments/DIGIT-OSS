@@ -1,4 +1,20 @@
-import { BackButton, CardLabel, CheckBox, CardLabelError, FormStep, Loader, MobileNumber, RadioButtons, Toast, TextInput, ViewsIcon, DownloadIcon, Dropdown, DatePicker, RemoveIcon } from "@egovernments/digit-ui-react-components";
+import {
+  BackButton,
+  CardLabel,
+  CheckBox,
+  CardLabelError,
+  FormStep,
+  Loader,
+  MobileNumber,
+  RadioButtons,
+  Toast,
+  TextInput,
+  ViewsIcon,
+  DownloadIcon,
+  Dropdown,
+  DatePicker,
+  RemoveIcon,
+} from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import Timeline from "../components/Timeline";
@@ -8,7 +24,7 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { useForm } from "react-hook-form";
 // import Select from 'react-bootstrap/Select';
-import { Button, Placeholder } from 'react-bootstrap';
+import { Button, Placeholder } from "react-bootstrap";
 import Popup from "reactjs-popup";
 // import {
 //   Modal,
@@ -29,7 +45,7 @@ import { getDocShareholding } from "../../../tl/src/pages/employee/ScrutinyBasic
 import { MenuItem, Select } from "@mui/material";
 import { convertEpochToDate } from "../utils/index";
 import Spinner from "../components/Loader/index";
-import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControlLabel from "@mui/material/FormControlLabel";
 const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
   let validation = {};
   const { pathname: url } = useLocation();
@@ -52,8 +68,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     licValidity: "",
     licPurpose: "",
     aggreementBtw: "",
-    boardResolution: ""
-  })
+    boardResolution: "",
+  });
   const [llpNumber, setLLPNumber] = useState("");
   const [csrNumber, setCSRNumber] = useState("");
   const devType = localStorage.getItem("devTypeValueFlag");
@@ -81,8 +97,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       const developerDataGetDocs = getDevDetails?.data?.devDetail[0]?.addInfo;
       setDeveloperDataAddinfo(developerDataGetDocs);
 
-
-      // console.log("STAKEHOLDER",getDevDetails?.data?.devDetail[0]?.addInfo?.registeredContactNo); 
+      // console.log("STAKEHOLDER",getDevDetails?.data?.devDetail[0]?.addInfo?.registeredContactNo);
       setShowDevTypeFields(developerDataGet?.devDetail[0]?.applicantType?.developerType || devType);
       // setName(developerDataGet?.devDetail[0]?.addInfo?.name);
       setCompanyName(developerDataGet?.devDetail[0]?.addInfo?.companyName);
@@ -99,7 +114,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       setPercetage(developerDataGet?.devDetail[0]?.addInfo?.percentage);
       setUploadPDF(developerDataGet?.devDetail[0]?.addInfo?.uploadPdf);
       setSerialNumber(developerDataGet?.devDetail[0]?.addInfo?.serialNumber);
-      setDirectorData([...DirectorData,...developerDataGet?.devDetail[0]?.addInfo?.DirectorsInformation]);
+      setDirectorData([...DirectorData, ...developerDataGet?.devDetail[0]?.addInfo?.DirectorsInformation]);
       setDirectorDataMCA(developerDataGet?.devDetail[0]?.addInfo?.DirectorsInformationMCA || []);
       // setDirectorData(developerDataGet?.devDetail[0]?.addInfo?.DirectorsInformationMCA || []);
       setCinNo(developerDataGet?.devDetail[0]?.addInfo?.cin_Number);
@@ -109,19 +124,28 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       setModaldesignition(developerDataGet?.devDetail[0]?.addInfo?.modaldesignition);
       setModalPercentage(developerDataGet?.devDetail[0]?.addInfo?.modalPercentage);
       setModalValuesArray(developerDataGet?.devDetail[0]?.addInfo?.shareHoldingPatterens || []);
-      setOthersArray(developerDataGet?.devDetail[0]?.addInfo?.othersDetails || othersArray)
-      setExistingColonizerDetails(developerDataGet?.devDetail[0]?.addInfo?.existingColonizerData || existingColonizerDetails)
-      setExistingColonizer(developerDataGet?.devDetail[0]?.addInfo?.existingColonizer || "")
-      setExistingDirectors(developerDataGet?.devDetail[0]?.addInfo?.existingDirectors || "")
+      setOthersArray(developerDataGet?.devDetail[0]?.addInfo?.othersDetails || othersArray);
+      setExistingColonizerDetails(developerDataGet?.devDetail[0]?.addInfo?.existingColonizerData || existingColonizerDetails);
+      setExistingColonizer(developerDataGet?.devDetail[0]?.addInfo?.existingColonizer || "");
+      setExistingDirectors(developerDataGet?.devDetail[0]?.addInfo?.existingDirectors || "");
       setFinancialCapacity(developerDataGet?.devDetail[0]?.addInfo?.financialCapacity);
       setIsUndertaken(developerDataGet?.devDetail[0]?.addInfo?.isUndertaken);
-      setRegisteredMobileNumber(developerDataGet?.devDetail[0]?.addInfo?.registeredContactNo)
+      setRegisteredMobileNumber(developerDataGet?.devDetail[0]?.addInfo?.registeredContactNo);
       // setShowDevTypeFields(valueOfDrop);
       let totalRemainingShareholdingPattern = 100;
+      console.log("log123", developerDataGet?.devDetail[0]?.addInfo);
       developerDataGet?.devDetail[0]?.addInfo?.shareHoldingPatterens.forEach((item, index) => {
+        console.log("log123", item, item.percentage, item.percentage.split("%"));
         totalRemainingShareholdingPattern -= Number(item.percentage.split("%")[0]);
+        console.log("log123", item.percentage, item.percentage.split("%")[0], totalRemainingShareholdingPattern);
       });
       setRemainingStakeholderPercentage(Number(totalRemainingShareholdingPattern));
+      console.log(
+        "log123",
+        totalRemainingShareholdingPattern,
+        developerDataGet?.devDetail[0]?.addInfo?.shareHoldingPatterens,
+        developerDataGet?.devDetail[0]?.addInfo?.shareHoldingPatterens[0].percentage.split("%")[0]
+      );
     } catch (error) {
       console.log(error);
     }
@@ -135,16 +159,19 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
   }, []);
 
-
-
-  const [name, setName] = useState((!isOpenLinkFlow ? userInfo?.info?.name : "") || formData?.LicneseDetails?.name || formData?.formData?.LicneseDetails?.name || "");
-  const [mobileNumberUser, setMobileNumber] = useState((!isOpenLinkFlow ? userInfo?.info?.mobileNumber : "") ||
-    formData?.LicneseDetails?.mobileNumberUser || formData?.formData?.LicneseDetails?.mobileNumberUser || ""
+  const [name, setName] = useState(
+    (!isOpenLinkFlow ? userInfo?.info?.name : "") || formData?.LicneseDetails?.name || formData?.formData?.LicneseDetails?.name || ""
   );
-  const [emailId, setUserEmailInd] = useState(formData?.LicneseDetails?.emailId || formData?.formData?.LicneseDetails?.emailId || "")
+  const [mobileNumberUser, setMobileNumber] = useState(
+    (!isOpenLinkFlow ? userInfo?.info?.mobileNumber : "") ||
+      formData?.LicneseDetails?.mobileNumberUser ||
+      formData?.formData?.LicneseDetails?.mobileNumberUser ||
+      ""
+  );
+  const [emailId, setUserEmailInd] = useState(formData?.LicneseDetails?.emailId || formData?.formData?.LicneseDetails?.emailId || "");
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
-  const [developerTypeOptions, setDevTypeOptions] = useState({ data: [], isLoading: true }); 
+  const [developerTypeOptions, setDevTypeOptions] = useState({ data: [], isLoading: true });
 
   const isCitizenUrl = Digit.Utils.browser.isMobile() ? true : false;
 
@@ -191,12 +218,11 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
   const { data: PurposeType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
 
-
-
   useEffect(() => {
     const purpose = PurposeType?.["common-masters"]?.Purpose?.map(function (data) {
       return { value: data?.purposeCode, label: data?.name };
     });
+    console.log("log123", purpose);
     setPurposeOptions({ data: purpose, isLoading: false });
   }, [PurposeType]);
 
@@ -213,9 +239,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     register,
     handleSumit,
     formState: { error },
-  } = useForm([
-    { Sr: "", name: "", mobileNumber: "", email: "", PAN: "", Aadhar: "" },
-  ]);
+  } = useForm([{ Sr: "", name: "", mobileNumber: "", email: "", PAN: "", Aadhar: "" }]);
   const [success, setError] = useState(null);
   const [showToast, setShowToast] = useState(null);
   const [showToastError, setShowToastError] = useState(null);
@@ -232,10 +256,13 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   const [showhide, setShowhide] = useState("No");
   const [cin_Number, setCinNo] = useState(formData?.LicneseDetails?.cin_Number || formData?.formData?.LicneseDetails?.cin_Number || "");
   const [companyName, setCompanyName] = useState(formData?.LicneseDetails?.companyName || formData?.LicneseDetails?.companyName || "");
-  const [incorporationDate, setIncorporation] = useState(formData?.LicneseDetails?.incorporationDate || formData?.LicneseDetails?.incorporationDate || "");
-  const [registeredAddress, setRegistered] = useState(formData?.LicneseDetails?.registeredAddress || formData?.LicneseDetails?.registeredAddress || "");
-  const [PanNumber, setPanNumber] = useState(formData?.LicneseDetails?.PanNumber || formData?.formData?.LicneseDetails?.PanNumber || ""
+  const [incorporationDate, setIncorporation] = useState(
+    formData?.LicneseDetails?.incorporationDate || formData?.LicneseDetails?.incorporationDate || ""
   );
+  const [registeredAddress, setRegistered] = useState(
+    formData?.LicneseDetails?.registeredAddress || formData?.LicneseDetails?.registeredAddress || ""
+  );
+  const [PanNumber, setPanNumber] = useState(formData?.LicneseDetails?.PanNumber || formData?.formData?.LicneseDetails?.PanNumber || "");
   const [dob, setDOB] = useState(formData?.LicneseDetails?.dob || formData?.formData?.LicneseDetails?.dob || "");
   // const [email, setEmail] = useState(formData?.LicneseDetails?.email || formData?.LicneseDetails?.email || "");
   const [email, setUserEmail] = useState(formData?.LicneseDetails?.email || formData?.formData?.LicneseDetails?.email || "");
@@ -305,7 +332,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   }
   function selectRegisteredMobile(e) {
     if (!e.target.value || e.target.value.match("^[6-90-9]*$")) {
-      setRegisteredMobileNumber(e.target.value)
+      setRegisteredMobileNumber(e.target.value);
     }
   }
   function setUserEmailId(value) {
@@ -318,14 +345,14 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     setCinNo(e.target.value.toUpperCase());
   }
   function selectLlpNumber(e) {
-    setLLPNumber(e.target.value.toUpperCase())
+    setLLPNumber(e.target.value.toUpperCase());
   }
   function selectCsrNumber(e) {
-    setCSRNumber(e.target.value.toUpperCase())
+    setCSRNumber(e.target.value.toUpperCase());
   }
   function selectDinNumber(e) {
     if (!e.target.value || e.target.value.match("^[0-9]*$")) {
-      setModalDIN(e.target.value)
+      setModalDIN(e.target.value);
     }
   }
   function setDateofBirth(e) {
@@ -339,7 +366,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     if (!e.target.value || /^\w+$/.test(e.target.value)) {
       setPanNumber(e.target.value.toUpperCase());
       if (e.target.value === 10) {
-        alert("HEY")
+        alert("HEY");
         panVerification();
       }
     }
@@ -348,69 +375,69 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   const panVerification = async () => {
     try {
       const panVal = {
-        "txnId": "f7f1469c-29b0-4325-9dfc-c567200a70f7",
-        "format": "xml",
-        "certificateParameters": {
-          "panno": PanNumber,
-          "PANFullName": name,
-          "FullName": name,
-          "DOB": dob,
-          "GENDER": gender
+        txnId: "f7f1469c-29b0-4325-9dfc-c567200a70f7",
+        format: "xml",
+        certificateParameters: {
+          panno: PanNumber,
+          PANFullName: name,
+          FullName: name,
+          DOB: dob,
+          GENDER: gender,
         },
-        "consentArtifact": {
-          "consent": {
-            "consentId": "ea9c43aa-7f5a-4bf3-a0be-e1caa24737ba",
-            "timestamp": "2022-10-08T06:21:51.321Z",
-            "dataConsumer": {
-              "id": "string"
+        consentArtifact: {
+          consent: {
+            consentId: "ea9c43aa-7f5a-4bf3-a0be-e1caa24737ba",
+            timestamp: "2022-10-08T06:21:51.321Z",
+            dataConsumer: {
+              id: "string",
             },
-            "dataProvider": {
-              "id": "string"
+            dataProvider: {
+              id: "string",
             },
-            "purpose": {
-              "description": "string"
+            purpose: {
+              description: "string",
             },
-            "user": {
-              "idType": "string",
-              "idNumber": "string",
-              "mobile": mobileNumber,
-              "email": email
+            user: {
+              idType: "string",
+              idNumber: "string",
+              mobile: mobileNumber,
+              email: email,
             },
-            "data": {
-              "id": "string"
+            data: {
+              id: "string",
             },
-            "permission": {
-              "access": "string",
-              "dateRange": {
-                "from": "2022-10-08T06:21:51.321Z",
-                "to": "2022-10-08T06:21:51.321Z"
+            permission: {
+              access: "string",
+              dateRange: {
+                from: "2022-10-08T06:21:51.321Z",
+                to: "2022-10-08T06:21:51.321Z",
               },
-              "frequency": {
-                "unit": "string",
-                "value": 0,
-                "repeats": 0
-              }
-            }
+              frequency: {
+                unit: "string",
+                value: 0,
+                repeats: 0,
+              },
+            },
           },
-          "signature": {
-            "signature": "string"
-          }
-        }
-      }
+          signature: {
+            signature: "string",
+          },
+        },
+      };
       const panResp = await axios.post(`/certificate/v3/pan/pancr`, panVal, {
         headers: {
-          'Content-Type': 'application/json',
-          'X-APISETU-APIKEY': 'PDSHazinoV47E18bhNuBVCSEm90pYjEF',
-          'X-APISETU-CLIENTID': 'in.gov.tcpharyana',
-          'Access-Control-Allow-Origin': "*",
-        }
-      })
+          "Content-Type": "application/json",
+          "X-APISETU-APIKEY": "PDSHazinoV47E18bhNuBVCSEm90pYjEF",
+          "X-APISETU-CLIENTID": "in.gov.tcpharyana",
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
       // console.log("PANDET", panResp?.data);
     } catch (error) {
       console.log(error?.response?.data?.errorDescription);
-      setPanValError(error?.response?.data?.errorDescription)
+      setPanValError(error?.response?.data?.errorDescription);
     }
-  }
+  };
   const handleshow0 = (e) => {
     const getshow = e.target.value;
     setShowhide0(getshow);
@@ -419,15 +446,15 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   // console.log("LOCALVAL",localStorage.getItem('devTypeValueFlag'));
 
   const resetForm = () => {
-    setCinNo("")
-    setLLPNumber("")
-    setCSRNumber("")
+    setCinNo("");
+    setLLPNumber("");
+    setCSRNumber("");
     setCompanyName("");
-    setIncorporation("")
-    setRegistered("")
-    setUserEmailId("")
-    setRegisteredMobileNumber("")
-    setGST("")
+    setIncorporation("");
+    setRegistered("");
+    setUserEmailId("");
+    setRegisteredMobileNumber("");
+    setGST("");
     setModalValuesArray([]);
     setRemainingStakeholderPercentage(100);
     setDirectorData([]);
@@ -444,30 +471,30 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       licValidity: "",
       licPurpose: "",
       aggreementBtw: "",
-      boardResolution: ""
-    })
-    setOthersArray([])
-  }
+      boardResolution: "",
+    });
+    setOthersArray([]);
+  };
 
   function SelectExistingColonizerName(e) {
     if (!e.target.value || e.target.value.match("^[a-zA-Z ]*$")) {
-      setExistingColonizerDetails({ ...existingColonizerDetails, name: e.target.value })
+      setExistingColonizerDetails({ ...existingColonizerDetails, name: e.target.value });
     }
   }
 
   const setDevType = (data) => {
     const getDevTypeValue = data?.value;
-    console.log("data123", data)
+    console.log("data123", data);
     setShowDevTypeFields(getDevTypeValue);
     // localStorage.setItem('devTypeValueFlag', getDevTypeValue)
     resetForm();
-  }
+  };
   // function setDevType(value){
   //   setShowDevTypeFields(value)
   //   console.log(value);
   // }
   const getDocumentData = async (file, fieldName, type, index) => {
-    console.log("logFile", file)
+    console.log("logFile", file);
     if (type === "existingColonizer") {
       if (getValues("existingColonizerFiles")?.includes(file.name)) {
         setShowToastError({ key: "error" });
@@ -501,8 +528,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       console.log(Resp?.data?.files?.[0]?.fileStoreId, fieldName, type, index);
 
       if (type === "existingColonizer") {
-        console.log("log123 ====> ", fieldName, Resp?.data?.files?.[0]?.fileStoreId, Resp)
-        setExistingColonizerDetails({ ...existingColonizerDetails, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId })
+        console.log("log123 ====> ", fieldName, Resp?.data?.files?.[0]?.fileStoreId, Resp);
+        setExistingColonizerDetails({ ...existingColonizerDetails, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
         if (getValues("existingColonizerFiles")) {
           setValue("existingColonizerFiles", [...getValues("existingColonizerFiles"), file.name]);
         } else {
@@ -512,7 +539,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         console.log("entered into shareholding case");
         let temp = modalValuesArray;
         temp[index].uploadPdf = Resp?.data?.files?.[0]?.fileStoreId;
-        setModalValuesArray([...temp])
+        setModalValuesArray([...temp]);
         console.log("set into shareholding case", temp, modalValuesArray);
         if (getValues("shareholdingPatternFiles")) {
           setValue("shareholdingPatternFiles", [...getValues("shareholdingPatternFiles"), file.name]);
@@ -523,7 +550,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         console.log("entered into directorInfo case");
         let temp = DirectorData;
         temp[index].uploadPdf = Resp?.data?.files?.[0]?.fileStoreId;
-        setDirectorData([...temp])
+        setDirectorData([...temp]);
         console.log("set into directorInfo case", temp, DirectorData);
         if (getValues("directorInfoPdfFiles")) {
           setValue("directorInfoPdfFiles", [...getValues("directorInfoPdfFiles"), file.name]);
@@ -545,18 +572,18 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   };
 
   function selectModalName(e) {
-    if(!e.target.value || e.target.value.match("^[a-zA-Z ]*$")){
-      setModalNAme(e.target.value)
+    if (!e.target.value || e.target.value.match("^[a-zA-Z ]*$")) {
+      setModalNAme(e.target.value);
     }
   }
   function selectModalDesignition(e) {
-    if(!e.target.value || e.target.value.match("^[a-zA-Z ]*$")){
-      setModaldesignition(e.target.value)
+    if (!e.target.value || e.target.value.match("^[a-zA-Z ]*$")) {
+      setModaldesignition(e.target.value);
     }
   }
   function selectModalPercentage(e) {
-    if(!e.target.value || e.target.value.match("^[0-9.0-9]*$")){
-      setModalPercentage(e.target.value)
+    if (!e.target.value || e.target.value.match("^[0-9.{1}0-9]*$")) {
+      setModalPercentage(e.target.value);
     }
   }
 
@@ -575,12 +602,12 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
         const Directory = await axios.get(`/mca-directors/v1/companies/${cin_Number}`, {
           headers: {
-            'Content-Type': 'application/json',
-            'X-APISETU-APIKEY': 'PDSHazinoV47E18bhNuBVCSEm90pYjEF',
-            'X-APISETU-CLIENTID': 'in.gov.tcpharyana',
-            'Access-Control-Allow-Origin': "*",
-          }
-        })
+            "Content-Type": "application/json",
+            "X-APISETU-APIKEY": "PDSHazinoV47E18bhNuBVCSEm90pYjEF",
+            "X-APISETU-CLIENTID": "in.gov.tcpharyana",
+            "Access-Control-Allow-Origin": "*",
+          },
+        });
         setLoading(false);
         // console.log("CIN",Resp.data)
         // console.log(Directory.data);
@@ -590,13 +617,13 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         //   console.log("log2", DirectorData, Directory.data)
         // }
         setDirectorDataMCA(Directory.data);
-        
-        if(!DirectorData?.length){
-          setDirectorData([...Directory?.data,...DirectorData]);
+
+        if (!DirectorData?.length) {
+          setDirectorData([...Directory?.data, ...DirectorData]);
         }
-        setCompanyName(Resp.data.companyName)
-        setIncorporation(Resp.data.incorporationDate)
-        setUserEmail(Resp.data.email)
+        setCompanyName(Resp.data.companyName);
+        setIncorporation(Resp.data.incorporationDate);
+        setUserEmail(Resp.data.email);
         //console.log(Resp.data.Email)
         setRegistered(Resp.data.registeredAddress);
         setMobile(Resp.data.registeredContactNo);
@@ -666,13 +693,14 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     } else {
       setIsUndertaken(false);
     }
-  };
+  }
 
   const [PanValError, setPanValError] = useState("");
 
   const deleteTableRows = (i) => {
     const rows = [...modalValuesArray];
     let tempRows = rows.splice(i, 1);
+    console.log("log123", tempRows);
     // if(remainingStakeholderPercentage === 100){
     setRemainingStakeholderPercentage(Number(remainingStakeholderPercentage) + Number(tempRows[0].percentage.split("%")[0]));
     // }
@@ -686,96 +714,95 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
   // if (isLoading) return <Loader />;
   const goNext = async (e) => {
-    console.log("DIN123",DirectorData.filter((element,index)=>(element.din !== DirectorDataMCA?.[index]?.din)));
+    console.log("DIN123", formData?.result, formData?.result?.Licenses[0]?.id, formData);
     // const cin_match = cin_Number.match(Digit.Utils.getPattern('CIN'));
     // if(!cin_match) {
     //   alert("NOT Matched");
     // } else {
     //   alert("Matched");
     // }
-    if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
-      let addInfo = {
-        showDevTypeFields: showDevTypeFields,
-        name: name,
-        mobileNumberUser: mobileNumberUser,
-        dob:dob,
-        PanNumber: PanNumber,
-        cin_Number: cin_Number,
-        llp_Number: llpNumber,
-        csr_Number: csrNumber,
-        companyName: companyName,
-        incorporationDate: incorporationDate,
-        registeredAddress: registeredAddress,
-        email: email,
-        emailId: emailId,
-        registeredContactNo: registeredContactNo,
-        gst_Number: gst_Number,
-        DirectorsInformationMCA: DirectorDataMCA,
-        DirectorsInformation: DirectorData,
-        isUndertaken: isUndertaken,
-        shareHoldingPatterens: modalValuesArray,
-        othersDetails: othersArray,
-        existingColonizerData: existingColonizerDetails,
-        existingColonizer: existingColonizer,
-        existingDirectors: existingDirectors,
-      }
-      onSelect(config.key, addInfo);
-      // console.log("DATALICDET",addInfo);
-      // localStorage.setItem("addInfo",JSON.stringify(addInfo));
+    // if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
+    let addInfo = {
+      showDevTypeFields: showDevTypeFields,
+      name: name,
+      mobileNumberUser: mobileNumberUser,
+      dob: dob,
+      PanNumber: PanNumber,
+      cin_Number: cin_Number,
+      llp_Number: llpNumber,
+      csr_Number: csrNumber,
+      companyName: companyName,
+      incorporationDate: incorporationDate,
+      registeredAddress: registeredAddress,
+      email: email,
+      emailId: emailId,
+      registeredContactNo: registeredContactNo,
+      gst_Number: gst_Number,
+      DirectorsInformationMCA: DirectorDataMCA,
+      DirectorsInformation: DirectorData,
+      isUndertaken: isUndertaken,
+      shareHoldingPatterens: modalValuesArray,
+      othersDetails: othersArray,
+      existingColonizerData: existingColonizerDetails,
+      existingColonizer: existingColonizer,
+      existingDirectors: existingDirectors,
+    };
+    onSelect(config.key, addInfo);
+    // console.log("DATALICDET",addInfo);
+    // localStorage.setItem("addInfo",JSON.stringify(addInfo));
 
-      const developerRegisterData = {
-        id: userInfo?.info?.id,
-        pageName: "addInfo",
-        createdBy: userInfo?.info?.id,
-        updatedBy: userInfo?.info?.id,
-        devDetail: {
-          addInfo: addInfo,
-        },
-      };
-      Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
-        .then((result, err) => {
-          // console.log("DATA",result?.id);
-          // localStorage.setItem('devRegId',JSON.stringify(result?.id));
-          setIsDisableForNext(false);
-          let data = {
-            result: result,
-            formData: formData,
-            Correspondenceaddress: Correspondenceaddress,
-            addressLineOneCorrespondence: addressLineOneCorrespondence,
-            addressLineTwoCorrespondence: addressLineTwoCorrespondence,
+    const developerRegisterData = {
+      id: userInfo?.info?.id,
+      pageName: "addInfo",
+      createdBy: userInfo?.info?.id,
+      updatedBy: userInfo?.info?.id,
+      devDetail: {
+        addInfo: addInfo,
+      },
+    };
+    setLoading(true);
+    Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
+      .then((result, err) => {
+        // console.log("DATA",result?.id);
+        // localStorage.setItem('devRegId',JSON.stringify(result?.id));
+        setIsDisableForNext(false);
+        let data = {
+          result: result,
+          formData: formData,
+          Correspondenceaddress: Correspondenceaddress,
+          addressLineOneCorrespondence: addressLineOneCorrespondence,
+          addressLineTwoCorrespondence: addressLineTwoCorrespondence,
 
-            isAddressSame: isAddressSame,
-          };
-          //1, units
-          onSelect("", data, "", true);
-        })
-        .catch((e) => {
-          setIsDisableForNext(false);
-          // setShowToast({ key: "error" });
-          setError(e?.response?.data?.Errors[0]?.message || null);
-        });
-    } else {
-      let data = formData?.formData;
-      (data.LicneseDetails.showDevTypeFields = showDevTypeFields),
-        (data.LicneseDetails.cin_Number = cin_Number),
-        (data.LicneseDetails.companyName = companyName),
-        (data.LicneseDetails.incorporationDate = incorporationDate),
-        (data.LicneseDetails.registeredAddress = registeredAddress),
-        (data.LicneseDetails.email = email),
-        (data.LicneseDetails.registeredContactNo = registeredContactNo),
-        (data.LicneseDetails.gst_Number = gst_Number),
-        (data.LicneseDetails.directorsInformation = DirectorData),
-        (data.LicneseDetails.shareHoldingPatterens = modalValuesArray);
-      data.LicneseDetails.othersDetails = othersArray;
+          isAddressSame: isAddressSame,
+        };
+        //1, units
+        onSelect("", data, "", true);
+        setLoading(false);
+      })
+      .catch((e) => {
+        setLoading(false);
+        setIsDisableForNext(false);
+        // setShowToast({ key: "error" });
+        setError(e?.response?.data?.Errors[0]?.message || null);
+      });
+    // }
+    // else {
+    //   let data = formData?.formData;
+    //   data.LicenseAddInfo.showDevTypeFields = showDevTypeFields,
+    //   data.LicenseAddInfo.cin_Number = cin_Number,
+    //   data.LicenseAddInfo.companyName = companyName,
+    //   data.LicenseAddInfo.incorporationDate = incorporationDate,
+    //   data.LicenseAddInfo.registeredAddress = registeredAddress,
+    //   data.LicenseAddInfo.email = email,
 
-        data.LicneseDetails.registeredContactNo = registeredContactNo,
-        data.LicneseDetails.gst_Number = gst_Number,
-        data.LicneseDetails.DirectorsInformation = DirectorData,
-        data.LicneseDetails.shareHoldingPatterens = modalValuesArray
-      data.LicneseDetails.othersDetails = othersArray
+    //   data.LicenseAddInfo.registeredContactNo = registeredContactNo,
+    //   data.LicenseAddInfo.gst_Number = gst_Number,
+    //   data.LicenseAddInfo.DirectorsInformation = DirectorData,
+    //   data.LicenseAddInfo.shareHoldingPatterens = modalValuesArray
+    //   data.LicenseAddInfo.othersDetails = othersArray
 
-      onSelect("", formData)
-    }
+    //   onSelect("", formData)
+    // }
   };
 
   const onSkip = () => onSelect();
@@ -788,7 +815,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/provide-license-type");
         break;
     }
-  }
+  };
 
   return (
     <div>
@@ -797,7 +824,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         {/* {JSON.stringify(showDevTypeFields)}efewfewfef */}
         {isOpenLinkFlow && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
         <Timeline currentStep={2} flow="STAKEHOLDER" onChangeStep={changeStep} />
-        {!isLoading ?
+        {!isLoading ? (
           <FormStep
             // onSubmit={AddInfoForm}
             config={config}
@@ -812,9 +839,39 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
             // isDisabled={
             //   !showDevTypeFields || (showDevTypeFields === "Individual" && (!name || !mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) || !emailId?.match(Digit.Utils.getPattern('Email')))) || (showDevTypeFields === "Others" && othersArray.length) || (showDevTypeFields === "Proprietorship Firm") || (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others" && (!cin_Number?.match(Digit.Utils.getPattern('CIN')) || !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) || !gst_Number?.match(Digit.Utils.getPattern('GSTNo')) || !((existingColonizer === "N") || (existingColonizer === "Y" && existingColonizerDetails.aggreementBtw && existingColonizerDetails.boardResolution && existingColonizerDetails.dob && existingColonizerDetails.pan && existingColonizerDetails.pan.match(Digit.Utils.getPattern('PAN')) && existingColonizerDetails.licNo && existingColonizerDetails.licDate && existingColonizerDetails.licValidity && existingColonizerDetails.licPurpose))))
             // }
-            isDisabled={(showDevTypeFields === "Individual" || showDevTypeFields === "Proprietorship Firm" || showDevTypeFields === "Hindu Undivided Family") ? !(name && mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) && emailId?.match(Digit.Utils.getPattern('Email')) && gst_Number?.match(Digit.Utils.getPattern('GSTNo'))) : (showDevTypeFields === "Others") ? (!othersArray.length) : (showDevTypeFields === "Proprietorship Firm") ? false : (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others") ?
-              (
-                ((showDevTypeFields === "Trust") ? false : !csrNumber?.match(Digit.Utils.getPattern('CSR')) || (showDevTypeFields === "Company") ? false : !cin_Number?.match(Digit.Utils.getPattern('CIN'))) || !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) || (showDevTypeFields === "Trust" ? false : !gst_Number?.match(Digit.Utils.getPattern('GSTNo'))) || !registeredAddress.match(Digit.Utils.getPattern('Address')) || (!existingColonizerDetails.licNo.match(Digit.Utils.getPattern('OldLicenceNo'))) || !(modalValuesArray?.length) || !(DirectorData.length) || !((existingColonizer === "N") || (existingColonizer === "Y" && existingColonizerDetails.name && existingColonizerDetails.licNo && existingColonizerDetails.licDate))) : true}
+            isDisabled={
+              showDevTypeFields === "Individual" || showDevTypeFields === "Proprietorship Firm" || showDevTypeFields === "Hindu Undivided Family"
+                ? !(
+                    name &&
+                    mobileNumberUser?.match(Digit.Utils.getPattern("MobileNo")) &&
+                    emailId?.match(Digit.Utils.getPattern("Email")) &&
+                    gst_Number?.match(Digit.Utils.getPattern("GSTNo"))
+                  )
+                : showDevTypeFields === "Others"
+                ? !othersArray.length
+                : showDevTypeFields === "Proprietorship Firm"
+                ? false
+                : showDevTypeFields &&
+                  showDevTypeFields !== "Proprietorship Firm" &&
+                  showDevTypeFields !== "Individual" &&
+                  showDevTypeFields !== "Others"
+                ? (showDevTypeFields === "Trust"
+                    ? false
+                    : !csrNumber?.match(Digit.Utils.getPattern("CSR")) || showDevTypeFields === "Company"
+                    ? false
+                    : !cin_Number?.match(Digit.Utils.getPattern("CIN"))) ||
+                  !registeredContactNo?.match(Digit.Utils.getPattern("MobileNo")) ||
+                  (showDevTypeFields === "Trust" ? false : !gst_Number?.match(Digit.Utils.getPattern("GSTNo"))) ||
+                  !registeredAddress.match(Digit.Utils.getPattern("Address")) ||
+                  !existingColonizerDetails.licNo.match(Digit.Utils.getPattern("OldLicenceNo")) ||
+                  !modalValuesArray?.length ||
+                  !DirectorData.length ||
+                  !(
+                    existingColonizer === "N" ||
+                    (existingColonizer === "Y" && existingColonizerDetails.name && existingColonizerDetails.licNo && existingColonizerDetails.licDate)
+                  )
+                : true
+            }
             t={t}
           >
             <div className="happy">
@@ -825,7 +882,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                     <div className="col-sm-12">
                       <div className="form-group row">
                         <div className="col-sm-4">
-                          <label htmlFor="name">{`${t("Select Developer's Type")}`} <span className="text-danger font-weight-bold">*</span></label>
+                          <label htmlFor="name">
+                            {`${t("Select Developer's Type")}`} <span className="text-danger font-weight-bold">*</span>
+                          </label>
                           {/* <Dropdown
                             labels="Select Type"
                             className="form-field"
@@ -840,18 +899,10 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             required
                             disable
                           /> */}
-                          <Select
-                            value={showDevTypeFields}
-                            onChange={setDevType}
-                            className="w-100 form-control"
-                            variant="standard"
-                            disabled
-                          >
-                              {
-                                  arrayDevList?.map((item, index) => (
-                                      <MenuItem value={item.value} >{item?.code}</MenuItem>
-                                  ))
-                              }
+                          <Select value={showDevTypeFields} onChange={setDevType} className="w-100 form-control" variant="standard" disabled>
+                            {arrayDevList?.map((item, index) => (
+                              <MenuItem value={item.value}>{item?.code}</MenuItem>
+                            ))}
                           </Select>
                         </div>
                       </div>
@@ -861,15 +912,18 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
               </div>
 
               {/* FOR INDIVIDUAL */}
-              {(showDevTypeFields === "Individual" || showDevTypeFields == "Proprietorship Firm" || showDevTypeFields == "Hindu Undivided Family") && (
+              {(showDevTypeFields === "Individual" ||
+                showDevTypeFields == "Proprietorship Firm" ||
+                showDevTypeFields == "Hindu Undivided Family") && (
                 <div className="card mb-3">
-
                   <h5 className="card-title fw-bold">Developer Details</h5>
                   <div className="card-body">
                     <div className="row">
                       <div className="col col-4">
                         <div className="form-group">
-                          <label htmlFor="name">Name <span className="text-danger font-weight-bold">*</span></label>
+                          <label htmlFor="name">
+                            Name <span className="text-danger font-weight-bold">*</span>
+                          </label>
                           <input
                             type="text"
                             value={name}
@@ -878,13 +932,15 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             onChange={(e) => setName(e.target.value)}
                             disabled
                             className="form-control"
-
                           />
                         </div>
                       </div>
                       <div className="col col-4">
                         <div className="form-group">
-                          <label htmlFor="email"> Email <span className="text-danger font-weight-bold">*</span></label>
+                          <label htmlFor="email">
+                            {" "}
+                            Email <span className="text-danger font-weight-bold">*</span>
+                          </label>
                           <input
                             type="text"
                             value={emailId}
@@ -894,12 +950,18 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             onChange={setUserEmailIndVal}
                             className="form-control"
                           />
-                          {emailId && emailId.length > 0 && !emailId.match(Digit.Utils.getPattern('Email')) && <CardLabelError style={{ width: "100%", marginTop: '5px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{("Invalid Email Address")}</CardLabelError>}
+                          {emailId && emailId.length > 0 && !emailId.match(Digit.Utils.getPattern("Email")) && (
+                            <CardLabelError style={{ width: "100%", marginTop: "5px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
+                              {"Invalid Email Address"}
+                            </CardLabelError>
+                          )}
                         </div>
                       </div>
                       <div className="col col-4">
                         <div className="form-group">
-                          <label htmlFor="name">Mobile No. <span className="text-danger font-weight-bold">*</span></label>
+                          <label htmlFor="name">
+                            Mobile No. <span className="text-danger font-weight-bold">*</span>
+                          </label>
                           <input
                             value={mobileNumberUser}
                             placeholder={mobileNumberUser}
@@ -909,12 +971,18 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             disabled
                             className="form-control"
                           />
-                          {mobileNumberUser && mobileNumberUser.length > 0 && !mobileNumberUser.match(Digit.Utils.getPattern('MobileNo')) && <CardLabelError style={{ width: "100%", marginTop: '5px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID")}</CardLabelError>}
+                          {mobileNumberUser && mobileNumberUser.length > 0 && !mobileNumberUser.match(Digit.Utils.getPattern("MobileNo")) && (
+                            <CardLabelError style={{ width: "100%", marginTop: "5px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
+                              {t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID")}
+                            </CardLabelError>
+                          )}
                         </div>
                       </div>
                       <div className="col col-4">
                         <div className="form-group">
-                          <label htmlFor="dob">Date of Birth <span className="text-danger font-weight-bold">*</span></label>
+                          <label htmlFor="dob">
+                            Date of Birth <span className="text-danger font-weight-bold">*</span>
+                          </label>
                           <input
                             type="date"
                             value={dob}
@@ -929,7 +997,10 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                       </div>
                       <div className="col col-4">
                         <div className="form-group">
-                          <label htmlFor="PanNumber">{`${t("BPA_APPLICANT_PAN_NO")}`}<span class="text-danger font-weight-bold mx-2">*</span></label>
+                          <label htmlFor="PanNumber">
+                            {`${t("BPA_APPLICANT_PAN_NO")}`}
+                            <span class="text-danger font-weight-bold mx-2">*</span>
+                          </label>
                           <input
                             type="text"
                             name="PanNumber"
@@ -940,13 +1011,21 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             max={10}
                             maxlength="10"
                           />
-                          {PanNumber && PanNumber.length > 0 && !PanNumber.match(Digit.Utils.getPattern('PAN')) && <labelError style={{ width: "100%", marginTop: '5px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_PAN_NO")}</labelError>}
-                          <h3 className="error-message" style={{ color: "red" }}>{PanValError}</h3>
+                          {PanNumber && PanNumber.length > 0 && !PanNumber.match(Digit.Utils.getPattern("PAN")) && (
+                            <labelError style={{ width: "100%", marginTop: "5px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
+                              {t("BPA_INVALID_PAN_NO")}
+                            </labelError>
+                          )}
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {PanValError}
+                          </h3>
                         </div>
                       </div>
                       <div className="col col-4">
                         <div className="form-group">
-                          <label htmlFor="name">Registered Address <span className="text-danger font-weight-bold">*</span></label>
+                          <label htmlFor="name">
+                            Registered Address <span className="text-danger font-weight-bold">*</span>
+                          </label>
 
                           <input
                             type="text"
@@ -957,12 +1036,18 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             onChange={(e) => setRegistered(e.target.value)}
                             className="form-control"
                           />
-                          {registeredAddress && registeredAddress.length > 0 && !registeredAddress.match(Digit.Utils.getPattern('Address')) && <CardLabelError style={{ width: "100%", marginTop: '5px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Invalid Address")}</CardLabelError>}
+                          {registeredAddress && registeredAddress.length > 0 && !registeredAddress.match(Digit.Utils.getPattern("Address")) && (
+                            <CardLabelError style={{ width: "100%", marginTop: "5px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
+                              {t("Invalid Address")}
+                            </CardLabelError>
+                          )}
                         </div>
                       </div>
                       <div className="col col-4">
                         <div className="form-group">
-                          <label htmlFor="name">GST No. {showDevTypeFields !== "Trust" && <span className="text-danger font-weight-bold">*</span>}</label>
+                          <label htmlFor="name">
+                            GST No. {showDevTypeFields !== "Trust" && <span className="text-danger font-weight-bold">*</span>}
+                          </label>
                           <input
                             type="text"
                             value={gst_Number}
@@ -972,7 +1057,11 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             required={true}
                             className="form-control"
                           />
-                          {gst_Number && gst_Number.length > 0 && !gst_Number.match(Digit.Utils.getPattern('GSTNo')) && <CardLabelError style={{ width: "100%", marginTop: '5px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_GST_NO")}</CardLabelError>}
+                          {gst_Number && gst_Number.length > 0 && !gst_Number.match(Digit.Utils.getPattern("GSTNo")) && (
+                            <CardLabelError style={{ width: "100%", marginTop: "5px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
+                              {t("BPA_INVALID_GST_NO")}
+                            </CardLabelError>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -1225,7 +1314,6 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                   disable={false}
                                   max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear() - 18))}
                                 /> */}
-
                               </Col>
                             </Row>
                           </form>
@@ -1257,88 +1345,86 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
               )}
 
               {/* FOR COMPANY */}
-              {(showDevTypeFields && showDevTypeFields !== "Individual" && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Hindu Undivided Family" && showDevTypeFields !== "Others" && showDevTypeFields !== "Society" && showDevTypeFields !== "Firm") && (
-                <div className="card mb-3">
-                  {/* <div className="card-header">
+              {showDevTypeFields &&
+                showDevTypeFields !== "Individual" &&
+                showDevTypeFields !== "Proprietorship Firm" &&
+                showDevTypeFields !== "Hindu Undivided Family" &&
+                showDevTypeFields !== "Others" &&
+                showDevTypeFields !== "Society" &&
+                showDevTypeFields !== "Firm" && (
+                  <div className="card mb-3">
+                    {/* <div className="card-header">
               <h5 className="card-title"> Developer</h5>
             </div> */}
-                  <h5 className="card-title fw-bold">Developer Details</h5>
-                  <div className="card-body">
-                    <div className="row">
-                      {
-                        showDevTypeFields !== "Hindu Undivided Family" &&
-                        <div className="col col-4">
-                          {/* {JSON.stringify(showDevTypeFields)}rgergerg */}
-                          {
-                            (() => {
+                    <h5 className="card-title fw-bold">Developer Details</h5>
+                    <div className="card-body">
+                      <div className="row">
+                        {showDevTypeFields !== "Hindu Undivided Family" && (
+                          <div className="col col-4">
+                            {/* {JSON.stringify(showDevTypeFields)}rgergerg */}
+                            {(() => {
                               switch (showDevTypeFields) {
                                 case "Trust":
                                   return (
                                     <div className="form-group">
-                                      <label htmlFor="name">CSR Number <span className="text-danger font-weight-bold">*</span></label>
-                                      <TextInput
+                                      <label htmlFor="name">
+                                        CSR Number <span className="text-danger font-weight-bold">*</span>
+                                      </label>
+                                      <input
                                         type="text"
                                         onChange={selectCsrNumber}
-                                        // onChange={(e) => setCinNo(e.target.value)}
                                         value={csrNumber}
-                                        name="csr_Number"
-                                        // isMendatory={false}
-                                        placeholder={csrNumber}
-                                        className="employee-card-input text-uppercase"
-                                        max={"11"}
-                                        {...(validation = {
-                                          // isRequired: true,
-                                          type: "text",
-                                          maxlength: "11",
-                                        })}
+                                        name="csrNumber"
+                                        className="form-control"
+                                        max={12}
+                                        maxlength="12"
                                       />
-                                      {csrNumber && csrNumber.length > 0 && !csrNumber.match(Digit.Utils.getPattern('CSR')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_CSR_NO")}</CardLabelError>}
-                                      <h3 className="error-message" style={{ color: "red" }}>{cinValError}</h3>
+                                      {csrNumber && csrNumber.length > 0 && !csrNumber.match(Digit.Utils.getPattern("CSR")) && (
+                                        <CardLabelError
+                                          style={{ width: "100%", marginTop: "5px", fontSize: "16px", marginBottom: "12px", color: "red" }}
+                                        >
+                                          {t("BPA_INVALID_CSR_NO")}
+                                        </CardLabelError>
+                                      )}
+                                      <h3 className="error-message" style={{ color: "red" }}>
+                                        {cinValError}
+                                      </h3>
                                     </div>
-                                  )
+                                  );
                                 case "Limited Liability Partnership":
                                   return (
                                     <div className="form-group">
-                                      <label htmlFor="name">LLP Number <span className="text-danger font-weight-bold">*</span></label>
-                                      <TextInput
+                                      <label htmlFor="name">
+                                        LLP Number <span className="text-danger font-weight-bold">*</span>
+                                      </label>
+                                      <input
                                         type="text"
                                         onChange={selectLlpNumber}
-                                        // onChange={(e) => setCinNo(e.target.value)}
                                         value={llpNumber}
-                                        name="llp_Number"
-                                        // isMendatory={false}
-                                        placeholder={llpNumber}
-                                        className="employee-card-input text-uppercase"
-                                        max={"8"}
-                                        {...(validation = {
-                                          // isRequired: true,
-                                          type: "text",
-                                          maxlength: "8",
-                                        })}
+                                        name="llpNumber"
+                                        className="form-control"
+                                        max={8}
+                                        maxlength="8"
                                       />
-                                      {llpNumber && llpNumber.length > 0 && !llpNumber.match(Digit.Utils.getPattern('LLP')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_LLP_NO")}</CardLabelError>}
-                                      <h3 className="error-message" style={{ color: "red" }}>{cinValError}</h3>
+                                      {llpNumber && llpNumber.length > 0 && !llpNumber.match(Digit.Utils.getPattern("LLP")) && (
+                                        <CardLabelError
+                                          style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}
+                                        >
+                                          {t("BPA_INVALID_LLP_NO")}
+                                        </CardLabelError>
+                                      )}
+                                      <h3 className="error-message" style={{ color: "red" }}>
+                                        {cinValError}
+                                      </h3>
                                     </div>
-                                  )
+                                  );
                                 default:
                                   return (
                                     <div className="form-group">
-                                      <label htmlFor="name">CIN Number <span className="text-danger font-weight-bold">*</span></label>
-                                      {/* <TextInput
-                                        type="text"
-                                        onChange={selectCinNumber}
-                                        value={cin_Number}
-                                        name="cin_Number"
-                                        placeholder={cin_Number}
-                                        className="employee-card-input text-uppercase"
-                                        max={"21"}
-                                        {...(validation = {
-                                          pattern: "^[A-Z0-9]*$",
-                                          type: "text",
-                                          
-                                        })}
-                                      /> */}
-                                      <input 
+                                      <label htmlFor="name">
+                                        CIN Number <span className="text-danger font-weight-bold">*</span>
+                                      </label>
+                                      <input
                                         type="text"
                                         onChange={selectCinNumber}
                                         value={cin_Number}
@@ -1347,247 +1433,201 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                         max={21}
                                         maxlength="21"
                                       />
-                                      {cin_Number && cin_Number.length > 0 && !cin_Number.match(Digit.Utils.getPattern('CIN')) && <CardLabelError style={{ width: "100%", marginTop: '5px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_CIN_NO")}</CardLabelError>}
-                                      <h3 className="error-message" style={{ color: "red" }}>{cinValError}</h3>
+                                      {cin_Number && cin_Number.length > 0 && !cin_Number.match(Digit.Utils.getPattern("CIN")) && (
+                                        <CardLabelError
+                                          style={{ width: "100%", marginTop: "5px", fontSize: "16px", marginBottom: "12px", color: "red" }}
+                                        >
+                                          {t("BPA_INVALID_CIN_NO")}
+                                        </CardLabelError>
+                                      )}
+                                      <h3 className="error-message" style={{ color: "red" }}>
+                                        {cinValError}
+                                      </h3>
                                     </div>
-                                  )
+                                  );
                               }
-                            })()
-                          }
+                            })()}
+                          </div>
+                        )}
+                        <div className="col col-4">
+                          <div className="form-group">
+                            <label htmlFor="name">
+                              {" "}
+                              {showDevTypeFields === "Trust" ? "Trust Name" : "Company Name"} <span className="text-danger font-weight-bold">*</span>
+                            </label>
+                            <input
+                              type="text"
+                              value={companyName}
+                              placeholder={companyName}
+                              name="companyName"
+                              onChange={(e) => setCompanyName(e.target.value)}
+                              className="form-control"
+                              disabled={showDevTypeFields === "Company"}
+                              maxlength="50"
+                            />
+                          </div>
                         </div>
-                      }
-                      <div className="col col-4">
-                        <div className="form-group">
-
-                          <label htmlFor="name"> {
-                            showDevTypeFields === "Trust" ? "Trust Name" : "Company Name"
-                          } <span className="text-danger font-weight-bold">*</span></label>
-
-                          {/* <TextInput
-                            type="text"
-                            value={companyName}
-                            placeholder={companyName}
-                            name="companyName"
-                            onChange={(e) => setCompanyName(e.target.value)}
-                            className="employee-card-input"
-                            {...(validation = {
-                              type: "text",
-                              maxlength: "50",
-                              title: "Please Enter Company Name"
-                            })}
-                            disabled={showDevTypeFields === "Company"}
-                          /> */}
-
-                          <input 
-                            type="text"
-                            value={companyName}
-                            placeholder={companyName}
-                            name="companyName"
-                            onChange={(e) => setCompanyName(e.target.value)}
-                            className="form-control"
-                            disabled={showDevTypeFields === "Company"}
-                            maxlength="50"
-                          />
+                        <div className="col col-4">
+                          <div className="form-group">
+                            <label htmlFor="name">
+                              Date of Incorporation <span className="text-danger font-weight-bold">*</span>
+                            </label>
+                            <input
+                              type="date"
+                              date={incorporationDate}
+                              value={incorporationDate}
+                              placeholder={incorporationDate}
+                              onChange={(e) => setIncorporation(e)}
+                              className="form-control"
+                              disabled={showDevTypeFields === "Company"}
+                            />
+                          </div>
                         </div>
-                      </div>
-                      <div className="col col-4">
-                        <div className="form-group">
-                          <label htmlFor="name">Date of Incorporation <span className="text-danger font-weight-bold">*</span></label>
-                          {/* <DatePicker
-                            date={incorporationDate}
-                            name="incorporationDate"
-                            onChange={(e) => setIncorporation(e)}
-                            disable={false}
-                            {...(validation = {
-                              type: "date",
-                              title: "Please Enter Date of Incorporation"
-                            })}
-                            disabled={showDevTypeFields === "Company"}
-                          /> */}
-                          <input
-                            type="date"
-                            date={incorporationDate}
-                            value={incorporationDate}
-                            placeholder={incorporationDate}
-                            onChange={(e) => setIncorporation(e)}
-                            className="form-control"
-                            disabled={showDevTypeFields === "Company"}
-                          />
+                        <div className="col col-4">
+                          <div className="form-group">
+                            <label htmlFor="name">
+                              Registered Address <span className="text-danger font-weight-bold">*</span>
+                            </label>
+                            <input
+                              type="text"
+                              name="registeredAddress"
+                              value={registeredAddress}
+                              placeholder={registeredAddress}
+                              onChange={(e) => setRegistered(e.target.value)}
+                              className="form-control"
+                              disabled={showDevTypeFields === "Company"}
+                            />
+                            {registeredAddress && registeredAddress.length > 0 && !registeredAddress.match(Digit.Utils.getPattern("Address")) && (
+                              <CardLabelError style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
+                                {t("Invalid Address")}
+                              </CardLabelError>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                      <div className="col col-4">
-                        <div className="form-group">
-                          <label htmlFor="name">Registered Address <span className="text-danger font-weight-bold">*</span></label>
-                          {/* <TextInput
-                            type="text"
-                            name="registeredAddress"
-                            value={registeredAddress}
-                            placeholder={registeredAddress}
-                            onChange={(e) => setRegistered(e.target.value)}
-                            className="employee-card-input"
-                            {...(validation = {
-                              isRequired: true,
-                              error: "Address is required"
-                            })}
-                            disabled={showDevTypeFields === "Company"}
-                          /> */}
-                          <input 
-                            type="text"
-                            name="registeredAddress"
-                            value={registeredAddress}
-                            placeholder={registeredAddress}
-                            onChange={(e) => setRegistered(e.target.value)}
-                            className="form-control"
-                            disabled={showDevTypeFields === "Company"}
-                          />
-                          {registeredAddress && registeredAddress.length > 0 && !registeredAddress.match(Digit.Utils.getPattern('Address')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Invalid Address")}</CardLabelError>}
+                        <div className="col col-4">
+                          <div className="form-group ">
+                            <label htmlFor="email">
+                              {" "}
+                              Email <span className="text-danger font-weight-bold">*</span>
+                            </label>
+                            <input
+                              type={"email"}
+                              name="email"
+                              value={email}
+                              onChange={(e) => setUserEmailId(e.target.value)}
+                              className="form-control"
+                              disabled={showDevTypeFields === "Company"}
+                            />
+                            {email && email.length > 0 && !email.match(Digit.Utils.getPattern("Email")) && (
+                              <CardLabelError style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
+                                {"Invalid Email Address"}
+                              </CardLabelError>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                      <div className="col col-4">
-                        <div className="form-group ">
-                          <label htmlFor="email"> Email <span className="text-danger font-weight-bold">*</span></label>
-
-                          {/* <TextInput
-                            t={t}
-                            type={"email"}
-                            optionKey="i18nKey"
-                            name="email"
-                            value={email}
-                            placeholder={email}
-                            onChange={(e) => setUserEmailId(e.target.value)}
-                            {...(validation = {
-                              isRequired: true,
-                              required: "Email is required"
-                            })}
-                            disabled={showDevTypeFields === "Company"}
-                          /> */}
-                          <input 
-                            type={"email"}
-                            name="email"
-                            value={email}
-                            onChange={(e) => setUserEmailId(e.target.value)}
-                            className="form-control"
-                            disabled={showDevTypeFields === "Company"}
-                          />
-                          {email && email.length > 0 && !email.match(Digit.Utils.getPattern('Email')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{("Invalid Email Address")}</CardLabelError>}
+                        <div className="col col-4">
+                          <div className="form-group">
+                            <label htmlFor="registeredContactNo">
+                              Mobile No. <span className="text-danger font-weight-bold">*</span>
+                            </label>
+                            <input
+                              type="text"
+                              value={registeredContactNo}
+                              placeholder={registeredContactNo}
+                              name="registeredContactNo"
+                              required={true}
+                              max={10}
+                              maxlength={"10"}
+                              onChange={selectRegisteredMobile}
+                              className="form-control"
+                            />
+                            {registeredContactNo &&
+                              registeredContactNo.length > 0 &&
+                              !registeredContactNo.match(Digit.Utils.getPattern("MobileNo")) && (
+                                <CardLabelError style={{ width: "100%", marginTop: "5px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
+                                  {t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID")}
+                                </CardLabelError>
+                              )}
+                          </div>
                         </div>
-                      </div>
-                      <div className="col col-4">
-                        <div className="form-group">
-                          <label htmlFor="name">Mobile No. <span className="text-danger font-weight-bold">*</span></label>
-                          {/* <MobileNumber
-                            value={registeredContactNo}
-                            name="registeredContactNo"
-                            maxlength={"10"}
-                            onChange={selectRegisteredMobile}
-                            {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
-                          /> */}
-                          <input
-                            type="text"
-                            value={registeredContactNo}
-                            placeholder={registeredContactNo}
-                            name="registeredContactNo"
-                            required={true}
-                            max={10}
-                            maxlength={"10"}
-                            onChange={selectRegisteredMobile}
-                            className="form-control"
-                          />
-                          {registeredContactNo && registeredContactNo.length > 0 && !registeredContactNo.match(Digit.Utils.getPattern('MobileNo')) && <CardLabelError style={{ width: "100%", marginTop: '5px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID")}</CardLabelError>}
-                        </div>
-                      </div>
-                      <div className="col col-4">
-                        <div className="form-group">
-                          <label htmlFor="name">GST No. {showDevTypeFields !== "Trust" && <span className="text-danger font-weight-bold">*</span>}</label>
-                          {/* <TextInput
-                            type="text"
-                            value={gst_Number}
-                            placeholder={gst_Number}
-                            onChange={(e) => setGST(e.target.value.toUpperCase())}
-                            className="employee-card-input"
-                            name="gst_Number"
-                            {...{ required: true, maxlength: "15", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
-                          /> */}
-                          <input
-                            type="text"
-                            value={gst_Number}
-                            placeholder={gst_Number}
-                            onChange={(e) => setGST(e.target.value.toUpperCase())}
-                            name="gst_Number"
-                            required={true}
-                            className="form-control"
-                          />
-                          {gst_Number && gst_Number.length > 0 && !gst_Number.match(Digit.Utils.getPattern('GSTNo')) && <CardLabelError style={{ width: "100%", marginTop: '5px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_GST_NO")}</CardLabelError>}
+                        <div className="col col-4">
+                          <div className="form-group">
+                            <label htmlFor="gst_Number">
+                              GST No. {showDevTypeFields !== "Trust" && <span className="text-danger font-weight-bold">*</span>}
+                            </label>
+                            <input
+                              type="text"
+                              value={gst_Number}
+                              placeholder={gst_Number}
+                              onChange={(e) => setGST(e.target.value.toUpperCase())}
+                              name="gst_Number"
+                              required={true}
+                              className="form-control"
+                            />
+                            {gst_Number && gst_Number.length > 0 && !gst_Number.match(Digit.Utils.getPattern("GSTNo")) && (
+                              <CardLabelError style={{ width: "100%", marginTop: "5px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
+                                {t("BPA_INVALID_GST_NO")}
+                              </CardLabelError>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              )}
-              {(showDevTypeFields && showDevTypeFields !== "Individual" && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Hindu Undivided Family" && showDevTypeFields !== "Others" && showDevTypeFields !== "Society" && showDevTypeFields !== "Firm" && showDevTypeFields !== "Limited Liability Partnership") && (
-                <div className="card mb-3">
-                  <h5 className="card-title fw-bold">Shareholding Patterns <span className="text-danger font-weight-bold">*</span></h5>
-                  {/* {JSON.stringify(modalValuesArray)} */}
-                  <div className="card-body">
-                    <div className="table-bd">
-                      <table className="table table-bordered">
-                        <thead>
-                          <tr>
-                            <th>Sr. No</th>
-                            <th>Name</th>
-                            <th>Designition</th>
-                            <th>Percentage</th>
-                            <th>View Document</th>
-                            <th>Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {
-                            (modalValuesArray?.length > 0) ?
+                )}
+              {showDevTypeFields &&
+                showDevTypeFields !== "Individual" &&
+                showDevTypeFields !== "Proprietorship Firm" &&
+                showDevTypeFields !== "Hindu Undivided Family" &&
+                showDevTypeFields !== "Others" &&
+                showDevTypeFields !== "Society" &&
+                showDevTypeFields !== "Firm" &&
+                showDevTypeFields !== "Limited Liability Partnership" && (
+                  <div className="card mb-3">
+                    <h5 className="card-title fw-bold">
+                      Shareholding Patterns <span className="text-danger font-weight-bold">*</span>
+                    </h5>
+                    {/* {JSON.stringify(modalValuesArray)} */}
+                    <div className="card-body">
+                      <div className="table-bd">
+                        <table className="table table-bordered">
+                          <thead>
+                            <tr>
+                              <th>Sr. No</th>
+                              <th>Name</th>
+                              <th>Designition</th>
+                              <th>Percentage</th>
+                              <th>View Document</th>
+                              <th>Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {modalValuesArray?.length > 0 ? (
                               modalValuesArray.map((elementInArray, input) => {
                                 return (
                                   <tr>
                                     <td>{input + 1}</td>
-                                    <td>
-                                      <input
-                                        type="text"
-                                        value={elementInArray.name}
-                                        placeholder={elementInArray.name}
-                                        readOnly
-                                        disabled="disabled"
-                                        class="employee-card-input"
-                                      />
-                                    </td>
-                                    <td>
-                                      <input
-                                        type="text"
-                                        value={elementInArray.designition}
-                                        placeholder={elementInArray.designition}
-                                        readOnly
-                                        disabled="disabled"
-                                        class="employee-card-input"
-                                      />
-                                    </td>
-                                    <td>
-                                      <input
-                                        type="text"
-                                        value={elementInArray.percentage}
-                                        placeholder={elementInArray.percentage}
-                                        readOnly
-                                        disabled="disabled"
-                                        class="employee-card-input"
-                                      />
-                                    </td>
+                                    <td>{elementInArray.name}</td>
+                                    <td>{elementInArray.designition}</td>
+                                    <td>{elementInArray.percentage}</td>
                                     <td>
                                       <div className="row">
-                                        {(elementInArray.uploadPdf) ?
-                                          <button type="button" onClick={() => getDocShareholding(elementInArray?.uploadPdf)} className="btn btn-sm col-md-6">
+                                        {elementInArray.uploadPdf ? (
+                                          <button
+                                            type="button"
+                                            onClick={() => getDocShareholding(elementInArray?.uploadPdf)}
+                                            className="btn btn-sm col-md-6"
+                                          >
                                             <VisibilityIcon color="info" className="icon" />
                                           </button>
-                                          : <p></p>
-                                        }
+                                        ) : (
+                                          <p></p>
+                                        )}
                                         <div className="btn btn-sm col-md-6">
-                                          <label for={"uploadshareholdingPattern" + input}> <FileUpload color="primary" for={"uploadshareholdingPattern" + input} /></label>
+                                          <label for={"uploadshareholdingPattern" + input}>
+                                            {" "}
+                                            <FileUpload color="primary" for={"uploadshareholdingPattern" + input} />
+                                          </label>
                                           <input
                                             id={"uploadshareholdingPattern" + input}
                                             type="file"
@@ -1604,7 +1644,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                     </td>
                                   </tr>
                                 );
-                              }) : (
+                              })
+                            ) : (
                               <p className="text-danger text-center d-none">Click on the Add More Button</p>
                             )}
                           </tbody>
@@ -1624,32 +1665,34 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                   >
                     Add More
                   </button> */}
-                    {/* <div> {remainingStakeholderPercentage} */}
-                    <div>
-                      <button
-                        type="button"
-                        style={{
-                          color: "white",
-                        }}
-                        disabled={Number(remainingStakeholderPercentage) === 0}
-                        className="btn btn-primary mt-3"
-                        // onClick={() => setNoOfRows(noofRows + 1)}
-                        // onClick={() => setmodal(true)}
-                        onClick={handleShowStakeholder}
-                      >
-                        Add More
-                      </button>
-                      <Modal show={showStake} onHide={handleCloseStakeholder} animation={false}>
-                        <Modal.Header closeButton>
-                          <Modal.Title>Add Stakeholders</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                          {/* {JSON.stringify(Documents)}efewfewf */}
-                          <form className="text1" id="myForm">
-                            <Row>
-                              <Col md={3} xxl lg="4">
-                                <label htmlFor="name" className="text">Name <span className="text-danger font-weight-bold">*</span></label>
-                                {/* <TextInput
+                      {/* <div> {remainingStakeholderPercentage} */}
+                      <div>
+                        <button
+                          type="button"
+                          style={{
+                            color: "white",
+                          }}
+                          disabled={Number(remainingStakeholderPercentage) === 0}
+                          className="btn btn-primary mt-3"
+                          // onClick={() => setNoOfRows(noofRows + 1)}
+                          // onClick={() => setmodal(true)}
+                          onClick={handleShowStakeholder}
+                        >
+                          Add More
+                        </button>
+                        <Modal show={showStake} onHide={handleCloseStakeholder} animation={false}>
+                          <Modal.Header closeButton>
+                            <Modal.Title>Add Stakeholders</Modal.Title>
+                          </Modal.Header>
+                          <Modal.Body>
+                            {/* {JSON.stringify(Documents)}efewfewf */}
+                            <form className="text1" id="myForm">
+                              <Row>
+                                <Col md={3} xxl lg="4">
+                                  <label htmlFor="modalNAme" className="text">
+                                    Name <span className="text-danger font-weight-bold">*</span>
+                                  </label>
+                                  {/* <TextInput
                                   type="text"
                                   isMandatory={false}
                                   onChange={(e) => setModalNAme(e.target.value)}
@@ -1662,18 +1705,27 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                     type: "text",
                                   })}
                                 /> */}
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  name="modalNAme"
-                                  // onChange={(e) => setModalNAme(e.target.value)}
-                                  onChange={selectModalName}
-                                />
-                                {modalNAme && modalNAme.length > 0 && !modalNAme.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '5px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter a valid Name")}</CardLabelError>}
-                              </Col>
-                              <Col md={3} xxl lg="4">
-                                <label htmlFor="name" className="text"> Designition <span className="text-danger font-weight-bold">*</span></label>
-                                {/* <TextInput
+                                  <input
+                                    type="text"
+                                    value={modalNAme}
+                                    name="modalNAme"
+                                    maxlength={"30"}
+                                    max={30}
+                                    onChange={selectModalName}
+                                    className="form-control"
+                                  />
+                                  {modalNAme && modalNAme.length > 0 && !modalNAme.match(Digit.Utils.getPattern("Name")) && (
+                                    <CardLabelError style={{ width: "100%", marginTop: "5px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
+                                      {t("Please enter a valid Name")}
+                                    </CardLabelError>
+                                  )}
+                                </Col>
+                                <Col md={3} xxl lg="4">
+                                  <label htmlFor="modaldesignition" className="text">
+                                    {" "}
+                                    Designition <span className="text-danger font-weight-bold">*</span>
+                                  </label>
+                                  {/* <TextInput
                                   type="text"
                                   isMandatory={false}
                                   onChange={(e) => setModaldesignition(e.target.value)}
@@ -1685,19 +1737,30 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                     type: "text",
                                   })}
                                 /> */}
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  name="modaldesignition"
-                                  // onChange={(e) => setModalNAme(e.target.value)}
-                                  onChange={selectModalDesignition}
-                                />
-                                {modaldesignition && modaldesignition.length > 0 && !modaldesignition.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter a valid Designition")}</CardLabelError>}
-                              </Col>
 
-                              <Col md={3} xxl lg="4">
-                                <label htmlFor="name" className="text">Percentage "%" <span className="text-danger font-weight-bold">*</span></label>
-                                {/* <TextInput
+                                  <input
+                                    type="text"
+                                    value={modaldesignition}
+                                    name="modaldesignition"
+                                    maxlength={"30"}
+                                    max={30}
+                                    onChange={selectModalDesignition}
+                                    className="form-control"
+                                  />
+                                  {modaldesignition && modaldesignition.length > 0 && !modaldesignition.match(Digit.Utils.getPattern("Name")) && (
+                                    <CardLabelError
+                                      style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}
+                                    >
+                                      {t("Please enter a valid Designition")}
+                                    </CardLabelError>
+                                  )}
+                                </Col>
+
+                                <Col md={3} xxl lg="4">
+                                  <label htmlFor="modalPercentage" className="text">
+                                    Percentage "%" <span className="text-danger font-weight-bold">*</span>
+                                  </label>
+                                  {/* <TextInput
                                   type="number"
                                   isMandatory={false}
                                   value={modalPercentage}
@@ -1708,142 +1771,161 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                     isRequired: true,
                                   })}
                                 /> */}
-                                <input 
-                                  type="text"
-                                  maxlength={"4"}
-                                  max={4}
-                                  onChange={selectModalPercentage}
-                                  className="form-control"
-                                  name="modalPercentage"
-                                />
+                                  <input
+                                    type="text"
+                                    value={modalPercentage}
+                                    name="modalPercentage"
+                                    maxlength={"4"}
+                                    max={4}
+                                    onChange={selectModalPercentage}
+                                    className="form-control"
+                                  />
 
-                                {
-                                  (modalPercentage && (remainingStakeholderPercentage < modalPercentage || modalPercentage <= 0)) &&
-                                  <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_PERCENTAGE")}</CardLabelError>
-                                }
+                                  {modalPercentage && (remainingStakeholderPercentage < modalPercentage || modalPercentage <= 0) && (
+                                    <CardLabelError style={{ width: "100%", marginTop: "5px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
+                                      {t("BPA_INVALID_PERCENTAGE")}
+                                    </CardLabelError>
+                                  )}
 
                                   {/* {((modalPercentage && !modalPercentage+"%".match(Digit.Utils.getPattern('Percentage')) )&& (modalPercentage > remainingStakeholderPercentage || modalPercentage > 0 ))&& <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>Please enter a valid percentage fot the stakeholder</CardLabelError>} */}
 
-                                {/* {modalPercentage && modalPercentage.length > 0 && !modalPercentage+"%".match(Digit.Utils.getPattern('Percentage')) && modalPercentage <= remainingStakeholderPercentage && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_PERCENTAGE")}</CardLabelError>} */}
-
-                              </Col>
-                              <Col md={3} xxl lg="4">
-                                <label htmlFor="name" className="text">Any Supportive Document</label>
-                                <input
-                                  type="file"
-                                  // value={file}
-                                  placeholder=""
-                                  name="uploadPdf"
-                                  class="form-control"
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "uploadPdf")}
-                                  {...(validation = {
-                                    isRequired: true,
-                                  })}
-                                />
-                              </Col>
-
-                            </Row>
-                          </form>
-                        </Modal.Body>
-                        <Modal.Footer>
-                          <Button variant="secondary" onClick={handleCloseStakeholder}>
-                            Close
-                          </Button>
-                          <Button variant="primary" disabled={!modalNAme || !modalNAme.match(Digit.Utils.getPattern('Name')) || !modaldesignition.match(Digit.Utils.getPattern('Name')) || !modaldesignition || !modalPercentage || (remainingStakeholderPercentage < modalPercentage || modalPercentage <= 0)} onClick={handleArrayValues}>
-                            Save Changes
-                          </Button>
-                        </Modal.Footer>
-                      </Modal>
+                                  {/* {modalPercentage && modalPercentage.length > 0 && !modalPercentage+"%".match(Digit.Utils.getPattern('Percentage')) && modalPercentage <= remainingStakeholderPercentage && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_PERCENTAGE")}</CardLabelError>} */}
+                                </Col>
+                                <Col md={3} xxl lg="4">
+                                  <label htmlFor="uploadPdf" className="text">
+                                    Any Supportive Document
+                                  </label>
+                                  <input
+                                    type="file"
+                                    // value={file}
+                                    placeholder=""
+                                    name="uploadPdf"
+                                    class="form-control"
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "uploadPdf")}
+                                    {...(validation = {
+                                      isRequired: true,
+                                    })}
+                                  />
+                                </Col>
+                              </Row>
+                            </form>
+                          </Modal.Body>
+                          <Modal.Footer>
+                            <Button variant="secondary" onClick={handleCloseStakeholder}>
+                              Close
+                            </Button>
+                            <Button
+                              variant="primary"
+                              disabled={
+                                !modalNAme ||
+                                !modalNAme.match(Digit.Utils.getPattern("Name")) ||
+                                !modaldesignition.match(Digit.Utils.getPattern("Name")) ||
+                                !modaldesignition ||
+                                !modalPercentage ||
+                                remainingStakeholderPercentage < modalPercentage ||
+                                modalPercentage <= 0
+                              }
+                              onClick={handleArrayValues}
+                            >
+                              Save Changes
+                            </Button>
+                          </Modal.Footer>
+                        </Modal>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
-              {(showDevTypeFields && showDevTypeFields !== "Individual" && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Hindu Undivided Family" && showDevTypeFields !== "Others" && showDevTypeFields !== "Society" && showDevTypeFields !== "Firm" && showDevTypeFields !== "Limited Liability Partnership") && (
-                <div className="card mb-3">
-                  <h5 className="card-title fw-bold">Directors Information</h5>
-                  <div className="card-body">
-                    {/* {JSON.stringify(DirectorData)}ewewfewf */}
-                    <div className="table-bd">
-                      <table className="table table-bordered">
-                        <thead>
-                          <tr>
-                            <th>Sr. No</th>
-                            <th>DIN Number</th>
-                            <th>Name</th>
-                            <th>Contact Number</th>
-
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {
-                            (DirectorDataMCA?.length > 0) ?
+                )}
+              {showDevTypeFields &&
+                showDevTypeFields !== "Individual" &&
+                showDevTypeFields !== "Proprietorship Firm" &&
+                showDevTypeFields !== "Hindu Undivided Family" &&
+                showDevTypeFields !== "Others" &&
+                showDevTypeFields !== "Society" &&
+                showDevTypeFields !== "Firm" &&
+                showDevTypeFields !== "Limited Liability Partnership" && (
+                  <div className="card mb-3">
+                    <h5 className="card-title fw-bold">Directors Information</h5>
+                    <div className="card-body">
+                      {/* {JSON.stringify(DirectorData)}ewewfewf */}
+                      <div className="table-bd">
+                        <table className="table table-bordered">
+                          <thead>
+                            <tr>
+                              <th>Sr. No</th>
+                              <th>DIN Number</th>
+                              <th>Name</th>
+                              <th>Contact Number</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {DirectorDataMCA?.length > 0 ? (
                               DirectorDataMCA.map((elementInArray, input) => {
                                 return (
                                   <tr key={input}>
                                     <td>{input + 1}</td>
-                                    <td>
-                                      {elementInArray.din}
-                                    </td>
-                                    <td>
-                                      {elementInArray.name}
-                                    </td>
-                                    <td>
-                                      {elementInArray.contactNumber}
-                                    </td>
+                                    <td>{elementInArray.din}</td>
+                                    <td>{elementInArray.name}</td>
+                                    <td>{elementInArray.contactNumber}</td>
                                   </tr>
                                 );
-                              }) : <p></p>}
-                        </tbody>
-                      </table>
-                    </div>
-                    <p className="ml-2">
-                      If the directors are in addition/modification to data fetched from the MCA portal, then the complete details of existing directors may be provided.
-                    </p>
-                    <div className="form-group ml-2">
-                      <input
-                        type="radio"
-                        value="Y"
-                        checked={existingDirectors === "Y" ? true : false}
-                        id="existingDirectors"
-                        className="mx-2 mt-1"
-                        onChange={(e) => setExistingDirectors(e.target.value)}
-                        name="existingDirectors"
-                      />
-                      <label for="Yes">Yes</label>
+                              })
+                            ) : (
+                              <p></p>
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                      <p className="ml-2">
+                        If the directors are in addition/modification to data fetched from the MCA portal, then the complete details of existing
+                        directors may be provided.
+                      </p>
+                      <div className="form-group ml-2">
+                        <input
+                          type="radio"
+                          value="Y"
+                          checked={existingDirectors === "Y" ? true : false}
+                          id="existingDirectors"
+                          className="mx-2 mt-1"
+                          onChange={(e) => setExistingDirectors(e.target.value)}
+                          name="existingDirectors"
+                        />
+                        <label for="Yes">Yes</label>
 
-                      <input
-                        type="radio"
-                        value="N"
-                        checked={existingDirectors === "N" ? true : false}
-                        id="existingDirectorsN"
-                        className="mx-2 mt-1"
-                        onChange={(e) => setExistingDirectors(e.target.value)}
-                        name="existingDirectors"
-                      />
-                      <label for="No">No</label>
-                      {existingDirectors === 'Y' && (
-                        <div>
+                        <input
+                          type="radio"
+                          value="N"
+                          checked={existingDirectors === "N" ? true : false}
+                          id="existingDirectorsN"
+                          className="mx-2 mt-1"
+                          onChange={(e) => setExistingDirectors(e.target.value)}
+                          name="existingDirectors"
+                        />
+                        <label for="No">No</label>
+                        {existingDirectors === "Y" && (
                           <div>
-                            <button
-                              type="button"
-                              style={{
-                                color: "white",
-                              }}
-                              className="btn btn-primary my-3"
-                              onClick={handleShow}
-                            >
-                              Enter Details
-                            </button>
-                            <Modal show={show} onHide={handleClose} animation={false}>
-                              <Modal.Header closeButton>
-                                <Modal.Title>Add Directors Info</Modal.Title>
-                              </Modal.Header>
-                              <Modal.Body>
-                                <form className="text1">
-                                  <Row>
-                                    <Col md={3} xxl lg="4">
-                                      <label htmlFor="name" className="text">DIN Number <span className="text-danger font-weight-bold">*</span></label>
-                                      {/* <MobileNumber
+                            <div>
+                              <button
+                                type="button"
+                                style={{
+                                  color: "white",
+                                }}
+                                className="btn btn-primary my-3"
+                                onClick={handleShow}
+                              >
+                                Enter Details
+                              </button>
+                              <Modal show={show} onHide={handleClose} animation={false}>
+                                <Modal.Header closeButton>
+                                  <Modal.Title>Add Directors Info</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body>
+                                  <form className="text1">
+                                    <Row>
+                                      <Col md={3} xxl lg="4">
+                                        <label htmlFor="name" className="text">
+                                          DIN Number <span className="text-danger font-weight-bold">*</span>
+                                        </label>
+                                        {/* <MobileNumber
                                         value={modalDIN}
                                         name="modalDIN"
                                         maxlength={"8"}
@@ -1851,115 +1933,150 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                         onChange={selectDinNumber}
                                         {...{ required: true, pattern: "[1-9][0-9]{7}", type: "tel"}}
                                       /> */}
-                                      <input
-                                        type="text"
-                                        value={modalDIN}
-                                        name="modalDIN"
-                                        maxlength={"8"}
-                                        max={8}
-                                        onChange={selectDinNumber}
-                                        className="form-control"
-                                      />
+                                        <input
+                                          type="text"
+                                          value={modalDIN}
+                                          name="modalDIN"
+                                          maxlength={"8"}
+                                          max={8}
+                                          onChange={selectDinNumber}
+                                          className="form-control"
+                                        />
 
-                                      {modalDIN && modalDIN.length > 0 && !modalDIN.match(Digit.Utils.getPattern('DIN')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_DIN_NO")}</CardLabelError>}
-                                    </Col>
-                                    <Col md={3} xxl lg="4">
-                                      <label htmlFor="name" className="text">Name <span className="text-danger font-weight-bold">*</span></label>
-                                      <input
-                                        type="text"
-                                        onChange={(e) => setModalDirectorName(e.target.value)}
-                                        placeholder=""
-                                        class="form-control"
-                                        {...(validation = {
-                                          isRequired: true,
-                                          pattern: "^[a-zA-Z ]*$",
-                                          type: "text",
-                                        })}
-                                      />
-                                      {modalDirectorName && modalDirectorName.length > 0 && !modalDirectorName.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid Name")}</CardLabelError>}
-                                    </Col>
-                                    <Col md={3} xxl lg="4">
-                                      <label htmlFor="name" className="text"> Contact Number <span className="text-danger font-weight-bold">*</span></label>
+                                        {modalDIN && modalDIN.length > 0 && !modalDIN.match(Digit.Utils.getPattern("DIN")) && (
+                                          <CardLabelError
+                                            style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}
+                                          >
+                                            {t("BPA_INVALID_DIN_NO")}
+                                          </CardLabelError>
+                                        )}
+                                      </Col>
+                                      <Col md={3} xxl lg="4">
+                                        <label htmlFor="name" className="text">
+                                          Name <span className="text-danger font-weight-bold">*</span>
+                                        </label>
+                                        <input
+                                          type="text"
+                                          onChange={(e) => setModalDirectorName(e.target.value)}
+                                          placeholder=""
+                                          class="form-control"
+                                          {...(validation = {
+                                            isRequired: true,
+                                            pattern: "^[a-zA-Z ]*$",
+                                            type: "text",
+                                          })}
+                                        />
+                                        {modalDirectorName &&
+                                          modalDirectorName.length > 0 &&
+                                          !modalDirectorName.match(Digit.Utils.getPattern("Name")) && (
+                                            <CardLabelError
+                                              style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}
+                                            >
+                                              {t("Please enter valid Name")}
+                                            </CardLabelError>
+                                          )}
+                                      </Col>
+                                      <Col md={3} xxl lg="4">
+                                        <label htmlFor="name" className="text">
+                                          {" "}
+                                          Contact Number <span className="text-danger font-weight-bold">*</span>
+                                        </label>
 
-                                      <MobileNumber
-                                        value={modalDirectorContact}
-                                        name="modalDirectorContact"
-                                        onChange={selectModalContactDirector}
-                                        // disable={modalDirectorContact && !isOpenLinkFlow ? true : false}
-                                        {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
-                                      />
-                                      {modalDirectorContact && modalDirectorContact.length > 0 && !modalDirectorContact.match(Digit.Utils.getPattern('MobileNo')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID")}</CardLabelError>}
-                                    </Col>
-                                    <Col md={3} xxl lg="4">
-                                      <label htmlFor="name" className="text">Upload document</label>
-                                      <input
-                                        type="file"
-                                        name="uploadPdf"
-                                        class="form-control"
-                                        onChange={(e) => getDocumentData(e?.target?.files[0], "directorInfoPdf")}
-                                        {...(validation = {
-                                          isRequired: true,
-                                          title: "Please upload document"
-                                        })}
-                                      />
-                                    </Col>
-
-                                  </Row>
-                                </form>
-                              </Modal.Body>
-                              <Modal.Footer>
-                                <Button variant="secondary" onClick={handleClose}>
-                                  Close
-                                </Button>
-                                <Button
-                                  variant="primary"
-                                  onClick={handleDirectorsArrayValues}
-                                  disabled={!modalDIN || !modalDIN.match(Digit.Utils.getPattern('DIN')) || !modalDirectorName.match(Digit.Utils.getPattern('Name')) || !modalDirectorContact || !modalDirectorContact.match(Digit.Utils.getPattern('MobileNo'))}
-                                >
-                                  Save Changes
-                                </Button>
-                              </Modal.Footer>
-                            </Modal>
-
-                          </div>
-                          <div className="table-bd">
-                            <table className="table table-bordered">
-                              <thead>
-                                <tr>
-                                  <th>Sr. No</th>
-                                  <th>DIN Number</th>
-                                  <th>Name</th>
-                                  <th>Contact Number</th>
-                                  <th>View Document</th>
-                                  <th>Action</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-
-                                {
-                                  (DirectorData?.length > 0) ?
+                                        <MobileNumber
+                                          value={modalDirectorContact}
+                                          name="modalDirectorContact"
+                                          onChange={selectModalContactDirector}
+                                          // disable={modalDirectorContact && !isOpenLinkFlow ? true : false}
+                                          {...{
+                                            required: true,
+                                            pattern: "[6-9]{1}[0-9]{9}",
+                                            type: "tel",
+                                            title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID"),
+                                          }}
+                                        />
+                                        {modalDirectorContact &&
+                                          modalDirectorContact.length > 0 &&
+                                          !modalDirectorContact.match(Digit.Utils.getPattern("MobileNo")) && (
+                                            <CardLabelError
+                                              style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}
+                                            >
+                                              {t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID")}
+                                            </CardLabelError>
+                                          )}
+                                      </Col>
+                                      <Col md={3} xxl lg="4">
+                                        <label htmlFor="name" className="text">
+                                          Upload document
+                                        </label>
+                                        <input
+                                          type="file"
+                                          name="uploadPdf"
+                                          class="form-control"
+                                          onChange={(e) => getDocumentData(e?.target?.files[0], "directorInfoPdf")}
+                                          {...(validation = {
+                                            isRequired: true,
+                                            title: "Please upload document",
+                                          })}
+                                        />
+                                      </Col>
+                                    </Row>
+                                  </form>
+                                </Modal.Body>
+                                <Modal.Footer>
+                                  <Button variant="secondary" onClick={handleClose}>
+                                    Close
+                                  </Button>
+                                  <Button
+                                    variant="primary"
+                                    onClick={handleDirectorsArrayValues}
+                                    disabled={
+                                      !modalDIN ||
+                                      !modalDIN.match(Digit.Utils.getPattern("DIN")) ||
+                                      !modalDirectorName.match(Digit.Utils.getPattern("Name")) ||
+                                      !modalDirectorContact ||
+                                      !modalDirectorContact.match(Digit.Utils.getPattern("MobileNo"))
+                                    }
+                                  >
+                                    Save Changes
+                                  </Button>
+                                </Modal.Footer>
+                              </Modal>
+                            </div>
+                            <div className="table-bd">
+                              <table className="table table-bordered">
+                                <thead>
+                                  <tr>
+                                    <th>Sr. No</th>
+                                    <th>DIN Number</th>
+                                    <th>Name</th>
+                                    <th>Contact Number</th>
+                                    <th>View Document</th>
+                                    <th>Action</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {DirectorData?.length > 0 ? (
                                     DirectorData.map((elementInArray, input) => {
                                       return (
                                         <tr key={input}>
                                           <td>{input + 1}</td>
-                                          <td>
-                                            {elementInArray.din}
-                                          </td>
-                                          <td>
-                                            {elementInArray.name}
-                                          </td>
-                                          <td>
-                                            {elementInArray.contactNumber}
-                                          </td>
+                                          <td>{elementInArray.din}</td>
+                                          <td>{elementInArray.name}</td>
+                                          <td>{elementInArray.contactNumber}</td>
                                           <td>
                                             <div className="row">
                                               {/* {JSON.stringify(elementInArray?.uploadPdf)} */}
-                                              {(elementInArray?.uploadPdf) ?
-                                                <button type="button" onClick={() => getDocShareholding(elementInArray?.uploadPdf)} className="btn btn-sm col-md-6 text-center">
+                                              {elementInArray?.uploadPdf ? (
+                                                <button
+                                                  type="button"
+                                                  onClick={() => getDocShareholding(elementInArray?.uploadPdf)}
+                                                  className="btn btn-sm col-md-6 text-center"
+                                                >
                                                   <VisibilityIcon color="info" className="icon" />
                                                 </button>
-                                                : <p></p>
-                                              }
+                                              ) : (
+                                                <p></p>
+                                              )}
                                               <div className="btn btn-sm col-md-6">
                                                 <label for={"uploaddirectorInfoPdf" + input}>
                                                   <FileUpload color="primary" for={"uploaddirectorInfoPdf" + input} />
@@ -1974,40 +2091,41 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                             </div>
                                           </td>
                                           <td>
-                                            <a href="javascript:void(0)"
-                                              onClick={() => (deleteDirectorTableRows(-1))}
-                                            >
+                                            <a href="javascript:void(0)" onClick={() => deleteDirectorTableRows(-1)}>
                                               <DeleteIcon color="danger" className="icon" />
                                             </a>
                                           </td>
                                         </tr>
                                       );
-                                    }) : <p></p>}
-                              </tbody>
-                            </table>
+                                    })
+                                  ) : (
+                                    <p></p>
+                                  )}
+                                </tbody>
+                              </table>
+                            </div>
                           </div>
-                        </div>
-                      )}
+                        )}
+                      </div>
                     </div>
-                  </div>
 
-                  <Col md={12} >
-                    <Form.Group className="col-md-12">
-                      <CheckBox
-                        label={t("It is undertaken that the above information is true and correct for all facts and purposes.")}
-                        onChange={(e) => selectChecked(e)}
-                        value={isUndertaken}
-                        checked={isUndertaken}
-                        name={isUndertaken}
-                        style={{ paddingBottom: "10px", paddingTop: "10px" }}
-                      />
-                    </Form.Group>
-                  </Col>
+                    <Col md={12}>
+                      <Form.Group className="col-md-12">
+                        <CheckBox
+                          label={t("It is undertaken that the above information is true and correct for all facts and purposes.")}
+                          onChange={(e) => selectChecked(e)}
+                          value={isUndertaken}
+                          checked={isUndertaken}
+                          name={isUndertaken}
+                          style={{ paddingBottom: "10px", paddingTop: "10px" }}
+                        />
+                      </Form.Group>
+                    </Col>
 
-                  <p className="ml-1">
-                    In case the Partner/director of the applicant firm/company is common with any existing colonizer who has been granted a license under the 1975 act Yes/No.
-
-                  </p>
+                    <p className="ml-1">
+                      In case the Partner/director of the applicant firm/company is common with any existing colonizer who has been granted a license
+                      under the 1975 act Yes/No.
+                    </p>
 
                     <div className="form-group ml-2">
                       <input
@@ -2021,19 +2139,19 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                       />
                       <label for="Yes">Yes</label>
 
-                    <input
-                      type="radio"
-                      value="N"
-                      checked={existingColonizer === "N" ? true : false}
-                      id="existingColonizerN"
-                      className="mx-2 mt-1"
-                      onChange={(e) => setExistingColonizer(e.target.value)}
-                      name="existingColonizer"
-                    />
-                    <label for="No">No</label>
-                    {existingColonizer === "Y" && (
-                      <div>
-                        {/* <div className="row ">
+                      <input
+                        type="radio"
+                        value="N"
+                        checked={existingColonizer === "N" ? true : false}
+                        id="existingColonizerN"
+                        className="mx-2 mt-1"
+                        onChange={(e) => setExistingColonizer(e.target.value)}
+                        name="existingColonizer"
+                      />
+                      <label for="No">No</label>
+                      {existingColonizer === "Y" && (
+                        <div>
+                          {/* <div className="row ">
                           <div className="form-group row">
                             <div className="col-sm-12">
                               <Col xs="12" md="12" sm="12">
@@ -2107,8 +2225,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                           </div>
                         </div> */}
 
-                        <div className="row mx-2">
-                          {/* <div className="col col-4">
+                          <div className="row mx-2">
+                            {/* <div className="col col-4">
                             <div className="form-group">
                               <label htmlFor="dob">DOB <span className="text-danger font-weight-bold">*</span></label>
                               <input
@@ -2123,7 +2241,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             </div>
                           </div> */}
 
-                          {/* <div className="col col-4">
+                            {/* <div className="col col-4">
                             <div className="form-group">
                               <label htmlFor="pan">PAN Number <span className="text-danger font-weight-bold">*</span></label>
                               <input
@@ -2139,55 +2257,71 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             </div>
                           </div> */}
 
-                          <div className="col col-4">
-                            <div className="form-group">
-                              <label htmlFor="licNo">License No. <span className="text-danger font-weight-bold">*</span></label>
-                              <input
-                                type="text"
-                                value={existingColonizerDetails.licNo}
-                                name="licNo"
-                                // onChange={SelectName}
-                                onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, licNo: e.target.value.toUpperCase() })}
-                                className="employee-card-input"
-                                maxLength={20}
-                              />
-                              {existingColonizerDetails.licNo && existingColonizerDetails.licNo.length > 0 && !existingColonizerDetails.licNo.match(Digit.Utils.getPattern('LicNumber')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Invalid Licence No.")}</CardLabelError>}
+                            <div className="col col-4">
+                              <div className="form-group">
+                                <label htmlFor="licNo">
+                                  License No. <span className="text-danger font-weight-bold">*</span>
+                                </label>
+                                <input
+                                  type="text"
+                                  value={existingColonizerDetails.licNo}
+                                  name="licNo"
+                                  onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, licNo: e.target.value.toUpperCase() })}
+                                  className="form-control"
+                                  maxLength={20}
+                                />
+                                {existingColonizerDetails.licNo &&
+                                  existingColonizerDetails.licNo.length > 0 &&
+                                  !existingColonizerDetails.licNo.match(Digit.Utils.getPattern("LicNumber")) && (
+                                    <CardLabelError style={{ width: "100%", marginTop: "5px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
+                                      {t("Invalid Licence No.")}
+                                    </CardLabelError>
+                                  )}
+                              </div>
                             </div>
-                          </div>
 
-                          <div className="col col-4">
-                            <div className="form-group">
-                              <label htmlFor="name">Name of Developer <span className="text-danger font-weight-bold">*</span></label>
-                              <input
-                                type="text"
-                                value={existingColonizerDetails.name}
-                                name="name"
-                                onChange={SelectExistingColonizerName}
-                                // onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, name: e.target.value})}
-                                className="employee-card-input"
-                                maxLength={10}
-                              />
-                              {existingColonizerDetails.name && existingColonizerDetails.name.length > 0 && !existingColonizerDetails.name.match(Digit.Utils.getPattern('Name')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid name.")}</CardLabelError>}
+                            <div className="col col-4">
+                              <div className="form-group">
+                                <label htmlFor="name">
+                                  Name of Developer <span className="text-danger font-weight-bold">*</span>
+                                </label>
+                                <input
+                                  type="text"
+                                  value={existingColonizerDetails.name}
+                                  name="name"
+                                  onChange={SelectExistingColonizerName}
+                                  // onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, name: e.target.value})}
+                                  className="form-control"
+                                  maxLength={10}
+                                />
+                                {existingColonizerDetails.name &&
+                                  existingColonizerDetails.name.length > 0 &&
+                                  !existingColonizerDetails.name.match(Digit.Utils.getPattern("Name")) && (
+                                    <CardLabelError style={{ width: "100%", marginTop: "5px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
+                                      {t("Please enter valid name.")}
+                                    </CardLabelError>
+                                  )}
+                              </div>
                             </div>
-                          </div>
 
-                          <div className="col col-4">
-                            <div className="form-group">
-                              <label htmlFor="licDate">Date of Grant of Licence <span className="text-danger font-weight-bold">*</span></label>
-                              <input
-                                type="date"
-                                value={existingColonizerDetails.licDate}
-                                name="licDate"
-                                // onChange={SelectName}
-                                onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, licDate: e.target.value })}
-                                className="employee-card-input"
-
-                                max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
-                              />
+                            <div className="col col-4">
+                              <div className="form-group">
+                                <label htmlFor="licDate">
+                                  Date of Grant of Licence <span className="text-danger font-weight-bold">*</span>
+                                </label>
+                                <input
+                                  type="date"
+                                  value={existingColonizerDetails.licDate}
+                                  name="licDate"
+                                  // onChange={SelectName}
+                                  onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, licDate: e.target.value })}
+                                  className="form-control"
+                                  max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
+                                />
+                              </div>
                             </div>
-                          </div>
 
-                          {/* <div className="col col-4">
+                            {/* <div className="col col-4">
                             <div className="form-group">
                               <label htmlFor="licValidity">Validity <span className="text-danger font-weight-bold">*</span></label>
                               <input
@@ -2202,7 +2336,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             </div>
                           </div> */}
 
-                          {/* <div className="col col-4">
+                            {/* <div className="col col-4">
                             <div className="form-group">
                               <label htmlFor="licValidity">Select Purpose</label>
                               <Select
@@ -2224,16 +2358,12 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
                             </div>
                           </div> */}
-
-
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
-
-
-                </div>
-              )}
+                )}
 
               {/* FOR COMPANY */}
               {showDevTypeFields === "LLP" && (
@@ -2472,13 +2602,34 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                   </div>
                 </div>
               )}
-
-
-
             </div>
-            {showToast && <Toast success={showToast?.key === "success" ? true : false} label="Document Uploaded Successfully" autoClose={true} isDleteBtn={true} onClose={() => { setShowToast(null); setError(null); }} />}
-            {showToastError && <Toast error={showToastError?.key === "error" ? true : false} label="Duplicate file Selected" isDleteBtn={true} onClose={() => { setShowToastError(null); setError(null); }} />}
-          </FormStep> : <Loader />}
+            {showToast && (
+              <Toast
+                success={showToast?.key === "success" ? true : false}
+                label="Document Uploaded Successfully"
+                autoClose={true}
+                isDleteBtn={true}
+                onClose={() => {
+                  setShowToast(null);
+                  setError(null);
+                }}
+              />
+            )}
+            {showToastError && (
+              <Toast
+                error={showToastError?.key === "error" ? true : false}
+                label="Duplicate file Selected"
+                isDleteBtn={true}
+                onClose={() => {
+                  setShowToastError(null);
+                  setError(null);
+                }}
+              />
+            )}
+          </FormStep>
+        ) : (
+          <Loader />
+        )}
       </div>
     </div>
   );

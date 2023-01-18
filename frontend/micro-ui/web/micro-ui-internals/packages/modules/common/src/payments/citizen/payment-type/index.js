@@ -101,7 +101,6 @@ export const SelectPaymentType = (props) => {
   const billDetails = paymentdetails?.Bill ? paymentdetails?.Bill[0] : {};
 
   const onSubmit = async (d) => {
-    console.log("userInfo", userInfo);
     const filterData = {
       Transaction: {
         tenantId: tenantId,
@@ -141,8 +140,6 @@ export const SelectPaymentType = (props) => {
     try {
       const data = await Digit.PaymentService.createCitizenReciept(tenantId, filterData);
       const redirectUrl = data?.Transaction?.redirectUrl;
-      // window.location.replace(redirectUrl);
-      // console.log("redirectUrl", redirectUrl);
       window.location = redirectUrl;
     } catch (error) {
       let messageToShow = "CS_PAYMENT_UNKNOWN_ERROR_ON_SERVER";

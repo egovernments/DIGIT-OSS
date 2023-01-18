@@ -34,11 +34,6 @@ const GetCluDetails = createProxyMiddleware({
 	target: process.env.REACT_APP_PROXY_SCRUTINY_EG || "http://182.79.97.53:81",
 });
 
-const LicNewRegistration = createProxyMiddleware({
-  target: process.env.REACT_APP_PROXY_NEW_LIC || "http://tcp.abm.com:80",
-  changeOrigin: true,
-});
-
 module.exports = function (app) {
   [
     "/egov-mdms-service",
@@ -95,6 +90,7 @@ module.exports = function (app) {
     "/land-services/new/licenses/_get",
     "/land-services/electric/plan/_create",
     "/land-services/serviceplan/_create",
+    "/tl-services/bank/guarantee/_create",
   ].forEach((location) => app.use(location, createProxy));
   ["/pb-egov-assets"].forEach((location) => app.use(location, assetsProxy));
   ["/mca/v1/companies", "/mca-directors/v1/companies", "/certificate/v3/pan/pancr"].forEach((location) => app.use(location, apiSetuProxy));
@@ -107,4 +103,5 @@ module.exports = function (app) {
 	[ "/api/cis/GetCluDetails",
   "/api/cis/GetLicenceDetails"
  ].forEach((location) => app.use(location, GetCluDetails));
+  ["/land-services/egscrutiny", "/land-services/new/licenses"].forEach((location) => app.use(location, EgScrutinyProxy));
 };
