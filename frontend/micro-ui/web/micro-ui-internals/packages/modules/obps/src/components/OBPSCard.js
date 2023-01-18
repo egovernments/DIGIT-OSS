@@ -98,7 +98,7 @@ const OBPSCard = () => {
 
       const obpsSubModuleProps = []
 
-        if(!isBankGuarrantee()){
+        if(isBankGuarrantee()){
             obpsSubModuleProps.push(propsForBankModuleCard)
         }
     

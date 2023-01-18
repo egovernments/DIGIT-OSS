@@ -3,7 +3,6 @@ import { Card, Row, Col, Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { getDocShareholding } from "../NewLicense/docView/docView.help";
 import { Dialog } from "@mui/material";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -47,12 +46,15 @@ const electricalPlanService = () => {
           authToken: token,
         },
 
-        ElectricPlanRequest: {
+        ElectricPlanRequest: [{
           ...data,
           "action": "APPLY",
           "tenantId":  tenantId,
           "businessService": "ELECTRICAL_PLAN",
-        },
+          "workflowCode": "ELECTRICAL_PLAN",
+          "comment": "",
+          "assignee": null
+        }],
       };
       const Resp = await axios.post("/tl-services/electric/plan/_create", postDistrict);
       setDeveloperDataLabel(Resp.data);
@@ -65,6 +67,16 @@ const electricalPlanService = () => {
   const handleClose = () => {
     setOpen(false)
     window.location.href = `/digit-ui/citizen`
+  }
+
+  const viewDocument = async (documentId) => {
+    try {
+      const response = await axios.get(`/filestore/v1/files/url?tenantId=hr&fileStoreIds=${documentId}`, {});
+      const FILDATA = response.data?.fileStoreIds[0]?.url;
+      window.open(FILDATA);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   const [fileStoreId, setFileStoreId] = useState({});
@@ -80,7 +92,6 @@ const electricalPlanService = () => {
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
       // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
-      console.log("getval======", getValues());
       // setLoader(false);
     } catch (error) {
       // setLoader(false);
@@ -115,7 +126,7 @@ const electricalPlanService = () => {
 
                 <Form.Check
                   onChange={(e) => console.log(e)}
-                  value="true"
+                  value="Y"
                   type="radio"
                   id="default-radio"
                   label="Yes"
@@ -125,7 +136,7 @@ const electricalPlanService = () => {
                 ></Form.Check>
                 <Form.Check
                   onChange={(e) => console.log(e)}
-                  value="false"
+                  value="N"
                   type="radio"
                   id="default-radio"
                   label="No"
@@ -144,7 +155,7 @@ const electricalPlanService = () => {
               </div>
               <Form.Check
                 onChange={(e) => console.log(e)}
-                value="true"
+                value="Y"
                 type="radio"
                 id="default-radio"
                 label="Yes"
@@ -154,7 +165,7 @@ const electricalPlanService = () => {
               ></Form.Check>
               <Form.Check
                 onChange={(e) => console.log(e)}
-                value="false"
+                value="N"
                 type="radio"
                 id="default-radio"
                 label="No"
@@ -171,7 +182,7 @@ const electricalPlanService = () => {
               </div>
               <Form.Check
                 onChange={(e) => console.log(e)}
-                value="true"
+                value="Y"
                 type="radio"
                 id="default-radio"
                 label="Yes"
@@ -181,7 +192,7 @@ const electricalPlanService = () => {
               ></Form.Check>
               <Form.Check
                 onChange={(e) => console.log(e)}
-                value="false"
+                value="N"
                 type="radio"
                 id="default-radio"
                 label="No"
@@ -199,7 +210,7 @@ const electricalPlanService = () => {
               </div>
               <Form.Check
                 onChange={(e) => console.log(e)}
-                value="true"
+                value="Y"
                 type="radio"
                 id="default-radio"
                 label="Yes"
@@ -209,7 +220,7 @@ const electricalPlanService = () => {
               ></Form.Check>
               <Form.Check
                 onChange={(e) => console.log(e)}
-                value="false"
+                value="N"
                 type="radio"
                 id="default-radio"
                 label="No"
@@ -226,7 +237,7 @@ const electricalPlanService = () => {
               </div>
               <Form.Check
                 onChange={(e) => console.log(e)}
-                value="true"
+                value="Y"
                 type="radio"
                 id="default-radio"
                 label="Yes"
@@ -236,7 +247,7 @@ const electricalPlanService = () => {
               ></Form.Check>
               <Form.Check
                 onChange={(e) => console.log(e)}
-                value="false"
+                value="N"
                 type="radio"
                 id="default-radio"
                 label="No"
@@ -264,13 +275,15 @@ const electricalPlanService = () => {
                   </div>
                 </td>
                 <td component="th" scope="row">
-                  <h2>Self-certified drawings from empanelled/certified architects that conform to the standard approved template.</h2>
+                  <h2>Self-certified drawings from empanelled/certified architects that conform to the standard approved template as per the TCP layout plan / Site plan.</h2>
                 </td>
                 <td component="th" scope="row">
                   <input type="file" className="form-control mb-4" onChange={(e) => getDocumentData(e?.target?.files[0], "selfCenteredDrawings")} />
-                  <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.selfCenteredDrawings)}>
+                  {fileStoreId?.selfCenteredDrawings ? 
+                  <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.selfCenteredDrawings)}>
                     {" "}
                   </VisibilityIcon>
+                  : ""}
                 </td>
               </tr>
               <tr>
@@ -284,9 +297,11 @@ const electricalPlanService = () => {
                 </td>
                 <td component="th" scope="row">
                   <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "environmentalClearance")} />
-                  <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.environmentalClearance)}>
+                  {fileStoreId?.environmentalClearance ? 
+                  <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.environmentalClearance)}>
                     {" "}
                   </VisibilityIcon>
+                  : "" }
                 </td>
               </tr>
               <tr>
@@ -296,13 +311,15 @@ const electricalPlanService = () => {
                   </div>
                 </td>
                 <td component="th" scope="row">
-                  <h2>PDF (OCR Compatible) + GIS format (shapefile as per the template uploaded on the department website).</h2>
+                  <h2>Electrical plan PDF (OCR Compatible) + GIS format.</h2>
                 </td>
                 <td component="th" scope="row">
                   <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "pdfFormat")} />
-                  <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.pdfFormat)}>
+                  {fileStoreId?.pdfFormat ? 
+                  <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.pdfFormat)}>
                     {" "}
                   </VisibilityIcon>
+                  : "" }
                 </td>
               </tr>
               <tr>
@@ -312,13 +329,15 @@ const electricalPlanService = () => {
                   </div>
                 </td>
                 <td component="th" scope="row">
-                  <h2>AutoCAD (DXF) file.</h2>
+                  <h2>Electrical plan in AutoCAD (DXF) file.</h2>
                 </td>
                 <td component="th" scope="row">
                   <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "autoCad")} />
-                  <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.autoCad)}>
+                  {fileStoreId?.autoCad ? 
+                  <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.autoCad)}>
                     {" "}
                   </VisibilityIcon>
+                  : ""}
                 </td>
               </tr>
               <tr>
@@ -328,13 +347,15 @@ const electricalPlanService = () => {
                   </div>
                 </td>
                 <td component="th" scope="row">
-                  <h2>Certified copy of the plan verified by a third party.</h2>
+                  <h2>Certified copy of the Electrical plan verified by a third party.</h2>
                 </td>
                 <td component="th" scope="row">
                   <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "verifiedPlan")} />
-                  <VisibilityIcon color="primary" onClick={() => getDocShareholding(fileStoreId?.verifiedPlan)}>
+                  {fileStoreId?.verifiedPlan ? 
+                  <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.verifiedPlan)}>
                     {" "}
                   </VisibilityIcon>
+                  : ""}
                 </td>
               </tr>
             </tbody>
