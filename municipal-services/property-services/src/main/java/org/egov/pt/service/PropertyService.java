@@ -392,27 +392,27 @@ public class PropertyService {
 			throw new CustomException("EG_PT_PROPERTY_AUDIT_ERROR", "Audit can only be provided for a single propertyId");
 		}
 
-		if(criteria.getDoorNo()!=null || criteria.getName()!=null || criteria.getOldPropertyId()!=null){
-			return fuzzySearchService.getProperties(requestInfo, criteria);
-		}
-
-		if (criteria.getMobileNumber() != null || criteria.getName() != null || criteria.getOwnerIds() != null) {
-
-			/* converts owner information to associated property ids */
-			Boolean shouldReturnEmptyList = repository.enrichCriteriaFromUser(criteria, requestInfo);
-
-			if (shouldReturnEmptyList)
-				return Collections.emptyList();
-
-			properties = repository.getPropertiesWithOwnerInfo(criteria, requestInfo, false);
-			filterPropertiesForUser(properties, criteria.getOwnerIds());
+		if (criteria.getDoorNo() != null || criteria.getName() != null || criteria.getOldPropertyId() != null) {
+			properties = fuzzySearchService.getProperties(requestInfo, criteria);
 		} else {
-			properties = repository.getPropertiesWithOwnerInfo(criteria, requestInfo, false);
-		}
+			if (criteria.getMobileNumber() != null || criteria.getName() != null || criteria.getOwnerIds() != null) {
 
-		properties.forEach(property -> {
-			enrichmentService.enrichBoundary(property, requestInfo);
-		});
+				/* converts owner information to associated property ids */
+				Boolean shouldReturnEmptyList = repository.enrichCriteriaFromUser(criteria, requestInfo);
+
+				if (shouldReturnEmptyList)
+					return Collections.emptyList();
+
+				properties = repository.getPropertiesWithOwnerInfo(criteria, requestInfo, false);
+				filterPropertiesForUser(properties, criteria.getOwnerIds());
+			} else {
+				properties = repository.getPropertiesWithOwnerInfo(criteria, requestInfo, false);
+			}
+
+			properties.forEach(property -> {
+				enrichmentService.enrichBoundary(property, requestInfo);
+			});
+		}
 
 		/* Decrypt here */
 		 if(criteria.getIsSearchInternal())
