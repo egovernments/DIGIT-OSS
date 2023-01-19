@@ -52,7 +52,7 @@ const NewSurveyForm = ({ t, index, questionStatement, type, required, options, d
   ];
 
 
-  const selectedType = dropdownOptions.filter(option => option?.value === type) 
+  const selectedType = dropdownOptions.filter(option => option?.value === (typeof type === "object" ? type.value : type))
   
   const [surveyQuestionConfig, setSurveyQuestionConfig] = useState({
     questionStatement, type: type ? selectedType?.[0]  : {
@@ -61,6 +61,15 @@ const NewSurveyForm = ({ t, index, questionStatement, type, required, options, d
       value: "SHORT_ANSWER_TYPE",
     }, required, options:options?.length>0?options:[`${t("CMN_OPTION")} 1`] });
   const { register, formState  } = useFormContext();
+
+  useEffect(() => {
+    setSurveyQuestionConfig({
+      questionStatement, type: type ? selectedType?.[0]  : {
+        title: t("SHORT_ANSWER_TYPE"),
+        i18Key: "SHORT_ANSWER_TYPE",
+        value: "SHORT_ANSWER_TYPE",
+      }, required, options:options?.length>0?options:[`${t("CMN_OPTION")} 1`] })
+  },[questionStatement])
 
   const handleAddOption = () =>
     setSurveyQuestionConfig((prevState) => {

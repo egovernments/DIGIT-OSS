@@ -59,7 +59,7 @@ const SurveyDetails = ({ location, match }) => {
           toTime: format(new Date(surveyObj.endDate), "hh:mm"),
           questions: surveyObj.questions.map(({ questionStatement, type, required, options, uuid, surveyId }) => ({
             questionStatement,
-            type: TypeAnswerEnum[type],
+            type: /*TypeAnswerEnum[type]*/type,
             required,
             options,
             uuid,
