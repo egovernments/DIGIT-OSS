@@ -103,7 +103,7 @@ const OBPSCard = () => {
             obpsSubModuleProps.push(propsForBankModuleCard)
         }
     
-        if((Digit.Utils.tlAccess() || isServiceOrElectricEmp())){
+        if((Digit.Utils.tlAccess() || isServiceOrElectricEmp() || isBankGuarrantee())){
             obpsSubModuleProps.push(propsForElectricModuleCard, propsForServiceModuleCard)
         }
         return (
