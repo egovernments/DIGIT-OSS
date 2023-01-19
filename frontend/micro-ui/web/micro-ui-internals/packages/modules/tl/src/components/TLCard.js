@@ -5,7 +5,20 @@ import { checkForEmployee } from "../utils";
 
 const TLCard = () => {
     sessionStorage.setItem("breadCrumbUrl", "home");
-    if (!Digit.Utils.tlAccess()) {
+    const userRoles = Digit.SessionStorage.get('User')?.info?.roles
+    const TL_Role = ["CTP_HR","AD_HQ", "JD_HQ", "SD_HQ", "ATP_HQ", "DA_HQ", "DDA_HQ", "ADA_HQ", "DTCP_HR", "DTP_HQ", "JE_HQ", "Patwari_HQ", "STP_HQ", "STP_Circle"]
+
+    function isTLRole(){
+        let isTLEmp = false
+        for(let i=0; i<userRoles.length; i++){
+          if(TL_Role.includes(userRoles[i].code)){
+            isTLEmp = true
+          }
+        }
+        return isTLEmp
+      }
+
+    if (!Digit.Utils.tlAccess() && !isTLRole()) {
         return null;
     }
     const { t } = useTranslation();
