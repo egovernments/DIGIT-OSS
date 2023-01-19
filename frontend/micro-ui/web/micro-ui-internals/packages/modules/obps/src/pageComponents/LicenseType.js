@@ -101,6 +101,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
   const onSkip = () => onSelect();
 
   function selectLicenseType(value) {
+    // console.log("log123", value)
     setLicenseType(value);
   }
 
@@ -108,62 +109,68 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
     setArchitectNo(e.target.value.toUpperCase());
   }
 
+  // console.log("++++",`${LicenseType?.tradeType}.${showDevTypeFields}`);
+
   function goNext() {
-    if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
-      console.log("log1234...", config, formData, LicenseType?.tradeType);
+    // if (!(formData?.result && formData?.result?.Licenses[0]?.id)){
 
-      let applicantType = {
-        licenceType: licenceTypeCombined || LicenseType?.tradeType,
-        developerType: showDevTypeFields,
-      };
-      const developerRegisterData = {
-        id: userInfo?.info?.id,
-        pageName: "applicantType",
-        createdBy: userInfo?.info?.id,
-        updatedBy: userInfo?.info?.id,
-        devDetail: {
-          applicantType: applicantType,
-        },
-      };
+    // console.log("log1234...",config,formData,LicenseType?.tradeType);
 
-      console.log("logger123", config, applicantType);
-      if (LicenseType?.tradeType === "ARCHITECT.CLASSA") {
-        onSelect(config.key, applicantType);
-      } else {
-        onSelect(config.key, applicantType, null, null, "license-add-info");
-      }
-      setLoading(true);
-      Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
-        .then((result, err) => {
-          // localStorage.setItem('devRegId',JSON.stringify(result?.id));
-          // setIsDisableForNext(false);
-          let data = {
-            result: result,
-            formData: formData,
-            licenceType: licenceType,
-            developerType: developerType,
-          };
-          //1, units
-          if (LicenseType?.tradeType === "ARCHITECT.CLASSA") {
-            onSelect("", data, "", true);
-          } else {
-            onSelect("", data, "", true, "license-add-info");
-          }
-          setLoading(false);
-        })
+    let applicantType = {
+      licenceType: licenceTypeCombined || LicenseType?.tradeType,
+      developerType: showDevTypeFields,
+    };
+    const developerRegisterData = {
+      id: userInfo?.info?.id,
+      pageName: "applicantType",
+      createdBy: userInfo?.info?.id,
+      updatedBy: userInfo?.info?.id,
+      devDetail: {
+        applicantType: applicantType,
+      },
+    };
 
-        .catch((e) => {
-          // setIsDisableForNext(false);
-          // setShowToast({ key: "error" });
-          setLoading(false);
-          setError(e?.response?.data?.Errors[0]?.message || null);
-        });
+    // console.log("logger123",config,applicantType);
+    if (LicenseType?.tradeType === "ARCHITECT.CLASSA") {
+      onSelect(config.key, applicantType);
     } else {
-      let data = formData?.formData;
-      data.LicneseType.LicenseType = LicenseType;
-      data.LicneseType.ArchitectNo = ArchitectNo;
-      onSelect("", formData);
+      onSelect(config.key, applicantType, null, null, "license-add-info");
     }
+    setLoading(true);
+    Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
+      .then((result, err) => {
+        // console.log("DATA",result?.id);
+        // localStorage.setItem('devRegId',JSON.stringify(result?.id));
+        // setIsDisableForNext(false);
+        let data = {
+          result: result,
+          formData: formData,
+          licenceType: licenceType,
+          developerType: developerType,
+        };
+        //1, units
+        if (LicenseType?.tradeType === "ARCHITECT.CLASSA") {
+          onSelect("", data, "", true);
+        } else {
+          onSelect("", data, "", true, "license-add-info");
+        }
+        setLoading(false);
+      })
+
+      .catch((e) => {
+        // setIsDisableForNext(false);
+        // setShowToast({ key: "error" });
+        setLoading(false);
+        setError(e?.response?.data?.Errors[0]?.message || null);
+      });
+    // }
+
+    // else {
+    //   let data = formData?.formData;
+    //   data.LicneseType.LicenseType = LicenseType;
+    //   data.LicneseType.ArchitectNo = ArchitectNo;
+    //   onSelect("", formData)
+    // }
   }
 
   return (

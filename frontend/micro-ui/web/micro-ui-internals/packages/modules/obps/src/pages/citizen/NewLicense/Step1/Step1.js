@@ -264,7 +264,7 @@ const ApllicantFormStep1 = (props) => {
               </Row>
               <br></br>
 
-              <h5 className="card-title fw-bold">Directors Information</h5>
+              <h5 className="card-title fw-bold">Directors Information as per developer</h5>
               <div className="card-body">
                 <div className="table-bd">
                   <table className="table table-bordered">
@@ -294,6 +294,34 @@ const ApllicantFormStep1 = (props) => {
                             >
                               <VisibilityIcon color="info" className="icon" />
                             </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <h5 className="card-title fw-bold">1. Director Information as per MCA</h5>
+              <div className="card-body">
+                <div className="table-bd">
+                  <table className="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>Sr. No</th>
+                        <th>DIN Number</th>
+                        <th>Name</th>
+                        <th>Contact Number</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {developerDataLabel?.addInfo?.DirectorsInformationMCA?.map((item, index) => {
+                        return (
+                          <tr>
+                            <td>{index + 1}</td>
+                            <td>{item?.din}</td>
+                            <td>{item?.name}</td>
+                            <td>{item?.contactNumber}</td>
                           </tr>
                         );
                       })}

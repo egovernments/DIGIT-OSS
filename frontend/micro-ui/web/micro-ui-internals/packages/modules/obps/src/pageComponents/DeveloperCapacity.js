@@ -35,6 +35,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
   const { pathname: url } = useLocation();
   let validation = {};
   const userInfo = Digit.UserService.getUser();
+  console.log("USERNAME", userInfo?.info?.name);
   const devRegId = localStorage.getItem("devRegId");
   let isOpenLinkFlow = window.location.href.includes("openlink");
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -46,6 +47,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
     const usersResponse = await Digit.UserService.userSearch(tenantId, { uuid: [uuid] }, {});
     setParentId(usersResponse?.user[0]?.parentId);
     setGenderMF(usersResponse?.user[0]?.gender);
+    console.log("USERID", usersResponse?.user[0]?.gender);
   }, [userInfo?.info?.uuid]);
 
   const { data: optionsArrList } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
@@ -59,6 +61,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
   const { setValue, getValues, watch } = useForm();
 
   const DevelopersAllData = getValues();
+  console.log("DEVEDATAGEGT", DevelopersAllData);
   // const [Documents,getValues] = useState([]);
 
   const onSkip = () => onSelect();
@@ -79,7 +82,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
       };
       const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${userInfo?.info?.id}&isAllData=true`, requestResp, {});
       const developerDataGet = getDevDetails?.data;
+      console.log("log123ergergreg", developerDataGet);
       setData(developerDataGet);
+      console.log("TECHEXP", developerDataGet?.devDetail[0]?.capacityDevelopAColony?.capacityDevelopColonyHdruAct?.sectorAndDevelopmentPlan);
       setValueHrdu(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.permissionGrantedHRDU);
       setValueTechExpert(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.technicalExpert);
       setValueDesignatedDirectors(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.designatedDirectors);
@@ -126,6 +131,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
       setPaidUpCapital(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.paidUpCapital);
       setNetworthPartners(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.networthPartners);
       setNetworthFirm(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.networthFirm);
+      console.log("Developer-Capacity", getDevDetails?.data?.devDetail[0]?.capacityDevelopAColony);
       setPanNumber(developerDataGet?.devDetail[0]?.licenceDetails?.PanNumber);
       setTechnicalCapacityOutsideHaryana(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.technicalCapacityOutsideHaryana);
       setTechnicalCapacityOutsideHaryanaDetails(
@@ -139,8 +145,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
       });
       setDocumentsData(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.documents);
       setTradeType(developerDataGet?.devDetail[0]?.applicantType?.licenceType);
+      console.log("TRADETYPE", developerDataGet?.devDetail[0]?.applicantType?.licenceType);
     } catch (error) {
-      return error;
+      console.log(error);
     }
   };
   useEffect(() => {
@@ -294,12 +301,14 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
     purpose: "",
   });
 
+  // console.log("LIC NO...",technicalCapacitySoughtFromAnyColonizer.licNo)
   const { data: PurposeType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
 
   useEffect(() => {
     const purpose = PurposeType?.["common-masters"]?.Purpose?.map(function (data) {
       return { value: data?.purposeCode, label: data?.name };
     });
+    console.log("log123", purpose);
     setPurposeOptions({ data: purpose, isLoading: false });
   }, [PurposeType]);
 
@@ -323,6 +332,10 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
   function selectCorrespondenceaddress(e) {
     setCorrespondenceaddress(e.target.value);
   }
+
+  // const formSubmit = (data) => {
+  //     console.log("data", data);
+  // };
 
   const [AppliedDetailFormSubmitted, SetAppliedDetailFormSubmitted] = useState(false);
 
@@ -355,24 +368,29 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
   const handleCloseColoniesDeveloped = () => setShowColoniesDeveloped(false);
 
   const changeValueHrdu = (e) => {
+    console.log(e.target.value);
     setValueHrdu(e.target.value);
     setValueDesignatedDirectors("");
     setDocumentsData({ ...Documents, agreementDoc: "", boardDoc: "" });
     setModalCapacityDevelopColonyHdruAct([]);
   };
   const changeTechnicalExpert = (e) => {
+    console.log(e.target.value);
     setValueTechExpert(e.target.value);
   };
   const changeDesignatedDirectors = (e) => {
+    console.log(e.target.value);
     setValueDesignatedDirectors(e.target.value);
     setDocumentsData({ ...Documents, agreementDoc: "", boardDoc: "" });
   };
   const changeAlreadyObtainedLic = (e) => {
+    console.log(e.target.value);
     setValueAlreadyObtainedLic(e.target.value);
   };
 
   const handleshow = (e) => {
     const getshow = e.target.value;
+    console.log(getshow);
   };
   const handleshow0 = (e) => {
     const getshow = e.target.value;
@@ -412,7 +430,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
   //         const docValue = Resp.data?.files[0]?.fileStoreId
   //         setModalDevPlan(docValue);
   //     } catch (error) {
-  //         return error
+  //         console.log(error.message);
   //     }
   //     getDocData();
   // }
@@ -464,8 +482,10 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
 
       setLoading(false);
       setShowToast({ key: "success" });
+      console.log(Resp?.data?.files);
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
+      console.log("getValues()=====", getValues(), { ...Documents, ...getValues() }, Documents);
       setDocumentsData({ ...Documents, ...getValues() });
       //   setLoader(false);
 
@@ -508,6 +528,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
       }
     } catch (error) {
       setLoading(false);
+      console.log(error.message);
     }
   };
 
@@ -520,8 +541,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
         const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${Documents?.sectorAndDevelopmentPlan}`, {});
         const FILDATA = response.data?.fileStoreIds[0]?.url;
         setFIleUrl(FILDATA);
+        console.log("GET DOCUMENT LABEL", FILDATA);
       } catch (error) {
-        return error;
+        console.log(error.message);
       }
     }
   };
@@ -549,8 +571,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
         // townPlannerDegree: Documents?.townPlannerDegree
       };
       setModalCapacityDevelopColonyHdruAct((prev) => [...prev, values]);
-      getDocData();
-      getDocValidLic();
+      console.log("WIHT DOC", values);
+      // getDocData();
+      // getDocValidLic();
       handleCloseCapacityDevelopColony();
       setHrduModalData({
         licNo: "",
@@ -562,7 +585,10 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
         // architectDegree: "",
         // townPlannerDegree: ""
       });
+      // setShowCapacityDevelopColony(false)
     }
+    // setShowCapacityDevelopColony(false)
+    //   console.log("DevCapacityFirst", capacityDevelopColonyHdruAct);
     localStorage.setItem("DevCapacityDetails", JSON.stringify(capacityDevelopColonyHdruAct));
   };
 
@@ -585,6 +611,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
       getDocStatusDev();
       getOutstandingDues();
       handleCloseColoniesDeveloped();
+      console.log("DevCapacityColony", capacityDevelopColonyLawAct);
     }
   };
 
@@ -595,159 +622,162 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
   };
 
   const goNext = async (e) => {
-    if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
-      let payload = {
-        parentId: userInfo?.info?.id,
-        Licenses: [
-          {
-            applicationType: "NEW",
-            tradeLicenseDetail: {
-              owners: [
-                {
-                  parentid: userInfo?.info?.id,
-                  gender: "MALE",
-                  mobileNumber: userInfo?.info?.mobileNumber,
-                  name: userInfo?.info?.name,
-                  dob: null,
-                  emailId: email,
-                  permanentAddress: PermanentAddress,
-                  correspondenceAddress: Correspondenceaddress,
-                  pan: PanNumber,
-                  // "permanentPinCode": "143001"
-                },
-              ],
-              subOwnerShipCategory: "INDIVIDUAL",
-              tradeType: tradeType,
+    // if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
 
-              additionalDetail: {
-                counsilForArchNo: null,
+    let payload = {
+      parentId: userInfo?.info?.id,
+      Licenses: [
+        {
+          applicationType: "NEW",
+          tradeLicenseDetail: {
+            owners: [
+              {
+                parentid: userInfo?.info?.id,
+                gender: "MALE",
+                mobileNumber: userInfo?.info?.mobileNumber,
+                name: userInfo?.info?.name,
+                dob: null,
+                emailId: email,
+                permanentAddress: PermanentAddress,
+                correspondenceAddress: Correspondenceaddress,
+                pan: PanNumber,
+                // "permanentPinCode": "143001"
               },
-              address: {
-                city: "",
-                landmark: "",
-                pincode: "",
-              },
-              institution: null,
-              applicationDocuments: null,
+            ],
+            subOwnerShipCategory: "INDIVIDUAL",
+            tradeType: tradeType,
+
+            additionalDetail: {
+              counsilForArchNo: null,
             },
-            licenseType: "PERMANENT",
-            businessService: "BPAREG",
-            tenantId: stateId,
-            action: "NOWORKFLOW",
+            address: {
+              city: "",
+              landmark: "",
+              pincode: "",
+            },
+            institution: null,
+            applicationDocuments: null,
           },
-        ],
-      };
-
-      Digit.OBPSService.BPAREGCreate(payload, tenantId)
-        .then((result, err) => {
-          setIsDisableForNext(false);
-          let data = { result: result, formData: formData, Correspondenceaddress: Correspondenceaddress, isAddressSame: isAddressSame };
-          //1, units
-          onSelect("", data, "", true);
-        })
-        .catch((e) => {
-          setIsDisableForNext(false);
-          // setShowToast({ key: "error" });
-          setError(e?.response?.data?.Errors[0]?.message || null);
-        });
-
-      const developerRegisterData = {
-        id: userInfo?.info?.id,
-        pageName: "capacityDevelopAColony",
-        createdBy: userInfo?.info?.id,
-        updatedBy: userInfo?.info?.id,
-        devDetail: {
-          capacityDevelopAColony: {
-            individualCertificateCA: individualCertificateCA,
-            companyBalanceSheet: companyBalanceSheet,
-            paidUpCapital: paidUpCapital,
-            networthPartners: networthPartners,
-            networthFirm: networthFirm,
-            permissionGrantedHRDU: permissionGrantedHRDU,
-            technicalExpert: technicalExpert,
-            designatedDirectors: designatedDirectors,
-            alreadtObtainedLic: alreadtObtainedLic,
-            capacityDevelopColonyHdruAct: capacityDevelopColonyHdruAct,
-            // capacityDevelopColonyLawAct: capacityDevelopColonyLawAct,
-            technicalExpertEngaged: [
-              {
-                engineerName: engineerName,
-                engineerQualification: engineerQualification,
-                engineerSign: engineerSign,
-                engineerDegree: engineerDegree,
-                architectName: architectName,
-                architectQualification: architectQualification,
-                architectSign: architectSign,
-                architectDegree: architectDegree,
-                townPlannerName: townPlannerName,
-                townPlannerQualification: townPlannerQualification,
-                townPlannerSign: townPlannerSign,
-                townPlannerDegree: townPlannerDegree,
-                existingDeveloperAgreement: existingDeveloperAgreement,
-                existingDeveloperAgreementDoc: existingDeveloperAgreementDoc,
-                technicalCapacity: technicalCapacity,
-                technicalCapacityDoc: technicalCapacityDoc,
-                engineerNameN: engineerNameN,
-                engineerDocN: engineerDocN,
-                architectNameN: architectNameN,
-                architectDocN: architectDocN,
-                uplaodSpaBoard: uplaodSpaBoard,
-                uplaodSpaBoardDoc: uplaodSpaBoardDoc,
-              },
-            ],
-            designationDirector: [
-              {
-                agreementDoc: agreementDoc,
-                boardDoc: boardDoc,
-              },
-            ],
-            obtainedLicense: [
-              {
-                registeredDoc: registeredDoc,
-                boardDocY: boardDocY,
-                earlierDocY: earlierDocY,
-                boardDocN: boardDocN,
-                earlierDocN: earlierDocN,
-                technicalAssistanceAgreementDoc: technicalAssistanceAgreementDoc,
-                licNo: technicalCapacitySoughtFromAnyColonizer.licNo,
-                dateOfGrantingLic: technicalCapacitySoughtFromAnyColonizer.dateOfGrantingLic,
-                licValidity: technicalCapacitySoughtFromAnyColonizer.licValidity,
-                purpose: technicalCapacitySoughtFromAnyColonizer.purpose,
-              },
-            ],
-            technicalCapacityOutsideHaryana: technicalCapacityOutsideHaryana,
-            technicalCapacityOutsideHaryanaDetails: technicalCapacityOutsideHaryanaDetails,
-            documents: Documents,
-          },
+          licenseType: "PERMANENT",
+          businessService: "BPAREG",
+          tenantId: stateId,
+          action: "NOWORKFLOW",
         },
-      };
+      ],
+    };
 
-      Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
-        .then((result, err) => {
-          // localStorage.setItem('devRegId',JSON.stringify(result?.id));
-          setIsDisableForNext(false);
-          let data = {
-            result: result,
-            formData: formData,
-            Correspondenceaddress: Correspondenceaddress,
-            addressLineOneCorrespondence: addressLineOneCorrespondence,
-            addressLineTwoCorrespondence: addressLineTwoCorrespondence,
+    Digit.OBPSService.BPAREGCreate(payload, tenantId)
+      .then((result, err) => {
+        setIsDisableForNext(false);
+        let data = { result: result, formData: formData, Correspondenceaddress: Correspondenceaddress, isAddressSame: isAddressSame };
+        //1, units
+        onSelect("", data, "", true);
+      })
+      .catch((e) => {
+        setIsDisableForNext(false);
+        // setShowToast({ key: "error" });
+        setError(e?.response?.data?.Errors[0]?.message || null);
+      });
 
-            isAddressSame: isAddressSame,
-          };
-          //1, units
-          onSelect("", data, "", true);
-        })
-        .catch((e) => {
-          setIsDisableForNext(false);
-          // setShowToast({ key: "error" });
-          setError(e?.response?.data?.Errors[0]?.message || null);
-        });
-    } else {
-      formData.Correspondenceaddress = Correspondenceaddress;
-      formData.isAddressSame = isAddressSame;
-      onSelect("", formData, "", true);
-    }
+    const developerRegisterData = {
+      id: userInfo?.info?.id,
+      pageName: "capacityDevelopAColony",
+      createdBy: userInfo?.info?.id,
+      updatedBy: userInfo?.info?.id,
+      devDetail: {
+        capacityDevelopAColony: {
+          individualCertificateCA: individualCertificateCA,
+          companyBalanceSheet: companyBalanceSheet,
+          paidUpCapital: paidUpCapital,
+          networthPartners: networthPartners,
+          networthFirm: networthFirm,
+          permissionGrantedHRDU: permissionGrantedHRDU,
+          technicalExpert: technicalExpert,
+          designatedDirectors: designatedDirectors,
+          alreadtObtainedLic: alreadtObtainedLic,
+          capacityDevelopColonyHdruAct: capacityDevelopColonyHdruAct,
+          // capacityDevelopColonyLawAct: capacityDevelopColonyLawAct,
+          technicalExpertEngaged: [
+            {
+              engineerName: engineerName,
+              engineerQualification: engineerQualification,
+              engineerSign: engineerSign,
+              engineerDegree: engineerDegree,
+              architectName: architectName,
+              architectQualification: architectQualification,
+              architectSign: architectSign,
+              architectDegree: architectDegree,
+              townPlannerName: townPlannerName,
+              townPlannerQualification: townPlannerQualification,
+              townPlannerSign: townPlannerSign,
+              townPlannerDegree: townPlannerDegree,
+              existingDeveloperAgreement: existingDeveloperAgreement,
+              existingDeveloperAgreementDoc: existingDeveloperAgreementDoc,
+              technicalCapacity: technicalCapacity,
+              technicalCapacityDoc: technicalCapacityDoc,
+              engineerNameN: engineerNameN,
+              engineerDocN: engineerDocN,
+              architectNameN: architectNameN,
+              architectDocN: architectDocN,
+              uplaodSpaBoard: uplaodSpaBoard,
+              uplaodSpaBoardDoc: uplaodSpaBoardDoc,
+            },
+          ],
+          designationDirector: [
+            {
+              agreementDoc: agreementDoc,
+              boardDoc: boardDoc,
+            },
+          ],
+          obtainedLicense: [
+            {
+              registeredDoc: registeredDoc,
+              boardDocY: boardDocY,
+              earlierDocY: earlierDocY,
+              boardDocN: boardDocN,
+              earlierDocN: earlierDocN,
+              technicalAssistanceAgreementDoc: technicalAssistanceAgreementDoc,
+              licNo: technicalCapacitySoughtFromAnyColonizer.licNo,
+              dateOfGrantingLic: technicalCapacitySoughtFromAnyColonizer.dateOfGrantingLic,
+              licValidity: technicalCapacitySoughtFromAnyColonizer.licValidity,
+              purpose: technicalCapacitySoughtFromAnyColonizer.purpose,
+            },
+          ],
+          technicalCapacityOutsideHaryana: technicalCapacityOutsideHaryana,
+          technicalCapacityOutsideHaryanaDetails: technicalCapacityOutsideHaryanaDetails,
+          documents: Documents,
+        },
+      },
+    };
+
+    Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
+      .then((result, err) => {
+        console.log("DATA", result?.id);
+        // localStorage.setItem('devRegId',JSON.stringify(result?.id));
+        setIsDisableForNext(false);
+        let data = {
+          result: result,
+          formData: formData,
+          Correspondenceaddress: Correspondenceaddress,
+          addressLineOneCorrespondence: addressLineOneCorrespondence,
+          addressLineTwoCorrespondence: addressLineTwoCorrespondence,
+
+          isAddressSame: isAddressSame,
+        };
+        //1, units
+        onSelect("", data, "", true);
+      })
+      .catch((e) => {
+        setIsDisableForNext(false);
+        // setShowToast({ key: "error" });
+        setError(e?.response?.data?.Errors[0]?.message || null);
+      });
+    // }
+    // else {
+    //     formData.Correspondenceaddress = Correspondenceaddress;
+    //     formData.isAddressSame = isAddressSame;
+    //     onSelect("", formData, "", true);
+    // }
     // sessionStorage.setItem("CurrentFinancialYear", FY);
     // onSelect(config.key, { TradeName });
   };

@@ -31,10 +31,10 @@ const CheckPage = ({ onSubmit, value }) => {
   let isopenlink = window.location.href.includes("/openlink/");
   const isCitizenUrl = Digit.Utils.browser.isMobile() ? true : false;
 
-  if (isopenlink)
-    window.onunload = function () {
-      sessionStorage.removeItem("Digit.BUILDING_PERMIT");
-    };
+  // if (isopenlink)
+  //   window.onunload = function () {
+  //     sessionStorage.removeItem("Digit.BUILDING_PERMIT");
+  //   };
 
 
     const getDeveloperData = async () => {
@@ -57,8 +57,9 @@ const CheckPage = ({ onSubmit, value }) => {
 
           });
           const developerDataGet = getDevDetails?.data;
+          setDevData(getDevDetails?.data?.devDetail[0]?.addInfo)
           setShowDevTypeFields(developerDataGet?.devDetail[0]?.applicantType?.developerType);
-          setAurthorizedUserInfoArray(getDevDetails?.data?.devDetail[0]?.aurthorizedUserInfoArray);
+          setAurthorizedUserInfoArray(developerDataGet?.devDetail[0]?.aurthorizedUserInfoArray);
       } catch (error) {
           console.log(error);
       }
@@ -69,6 +70,9 @@ const CheckPage = ({ onSubmit, value }) => {
 
   const [showDevTypeFields, setShowDevTypeFields] = useState("");
   const [aurthorizedUserInfoArray, setAurthorizedUserInfoArray] = useState([]);
+  const [getDevData, setDevData] = useState([]);
+
+  console.log(":::::",getDevData);
 
   const { result, formData, documents } = value; 
   // console.log("form DATA",value);
@@ -143,7 +147,7 @@ const CheckPage = ({ onSubmit, value }) => {
               />
             </StatusTable>
           </Card>
-          <Card style={{ paddingRight: "16px" }}>
+          {/* <Card style={{ paddingRight: "16px" }}>
             <CardHeader styles={{ fontSize: "24px" }}>{t(`BPA_LICENSE_TYPE`)}</CardHeader>
             <LinkButton
               label={<EditIcon style={{ marginTop: "-15px", float: "right", position: "relative", bottom: "32px" }} />}
@@ -155,15 +159,15 @@ const CheckPage = ({ onSubmit, value }) => {
                 className="border-none"
                 label={t(`BPA_LICENSE_TYPE`)}
                 textStyle={{ paddingLeft: "12px" }}
-                text={t(formData?.LicneseType?.LicenseType?.i18nKey)}
+                text={t(getDevData?.showDevTypeFields)}
               />
               {formData?.LicneseType?.LicenseType?.i18nKey.includes("ARCHITECT") && (
                 <Row className="border-none" label={t(`BPA_COUNCIL_NUMBER`)} text={formData?.LicneseType?.ArchitectNo} />
               )}
             </StatusTable>
-          </Card>
+          </Card> */}
           <Card style={{ paddingRight: "16px", display: "none" }}>
-            <CardHeader styles={{ fontSize: "24px" }}>{t(`BPA_LICENSE_DET_CAPTION`)}</CardHeader>
+            <CardHeader styles={{ fontSize: "24px" }}>{t("Authorized Applicant Detail")}</CardHeader>
             <LinkButton
               label={<EditIcon style={{ marginTop: "-15px", float: "right", position: "relative", bottom: "32px" }} />}
               style={{ width: "100px", display: "inline" }}
@@ -207,12 +211,31 @@ const CheckPage = ({ onSubmit, value }) => {
             />
             
             <StatusTable>
-              <Row className="border-none" label={"Developer's type"} text={formData?.LicenseAddInfo?.showDevTypeFields || t("CS_NA")} />
-              <Row className="border-none" label={"CIN Number"} text={formData?.LicenseAddInfo?.cin_Number || t("CS_NA")} />
-              <Row className="border-none" label={"Company Name"} text={formData?.LicenseAddInfo?.companyName || t("CS_NA")} />
-              <Row className="border-none" label={"Email"} text={formData?.LicenseAddInfo?.email || t("CS_NA")} />
-              <Row className="border-none" label={"IncorporationDate"} text={formData?.LicenseAddInfo?.incorporationDate || t("CS_NA")} />
-              <Row className="border-none" label={"Mobile Number"} text={formData?.LicenseAddInfo?.mobileNumberUser || t("CS_NA")} />
+              <Row className="border-none" label={"Developer's type"} text={getDevData?.showDevTypeFields || t("CS_NA")} />
+              {(getDevData?.showDevTypeFields == "Trust") ? (
+                <Row className="border-none" label={"CSR Number"} text={getDevData?.csr_Number || t("CS_NA")} /> && 
+                <Row className="border-none" label={"Trust Name"} text={getDevData?.companyName || t("CS_NA")} /> &&
+                <Row className="border-none" label={"IncorporationDate"} text={getDevData?.incorporationDate || t("CS_NA")} />
+              ) : (getDevData?.showDevTypeFields == "Company") ? (
+                <Row className="border-none" label={"CIN Number"} text={getDevData?.cin_Number || t("CS_NA")} /> &&
+                <Row className="border-none" label={"Company Name"} text={getDevData?.companyName || t("CS_NA")} /> &&
+                <Row className="border-none" label={"IncorporationDate"} text={getDevData?.incorporationDate || t("CS_NA")} />
+              ) : (getDevData?.showDevTypeFields == "Limited Liability Partnership") ? (
+                <Row className="border-none" label={"LLP Number"} text={getDevData?.llp_Number || t("CS_NA")} /> && 
+                <Row className="border-none" label={"IncorporationDate"} text={getDevData?.incorporationDate || t("CS_NA")} />
+              ) : (getDevData?.showDevTypeFields == "Individual") ? (
+                <Row className="border-none" label={"Email"} text={getDevData?.emailId || t("CS_NA")} /> && 
+                <Row className="border-none" label={"PAN Number"} text={getDevData?.PanNumber || t("CS_NA")} />
+              ) : (
+                <Row className="border-none" label={"Email"} text={getDevData?.email || t("CS_NA")} />
+              )}
+              
+              <Row className="border-none" label={"GST Number"} text={getDevData?.gst_Number || t("CS_NA")} />
+              
+              
+              
+              {/* <Row className="border-none" label={"IncorporationDate"} text={getDevData?.incorporationDate || t("CS_NA")} /> */}
+              <Row className="border-none" label={"Mobile Number"} text={getDevData?.mobileNumberUser || t("CS_NA")} />
             </StatusTable>
             {/* <Row className="border-none" text={t(formData?.LicneseDetails?.cin_Number)} /> */}
           </Card>
