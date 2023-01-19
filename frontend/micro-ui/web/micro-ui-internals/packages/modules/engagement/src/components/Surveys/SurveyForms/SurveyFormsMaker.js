@@ -42,7 +42,7 @@ const surveyFormReducer = (state, { type, payload }) => {
       ? surveyState.map((config, index) => {
         return(
         <NewSurveyForm key={index}
-        {...config.formConfig}
+        {...(config.formConfig ? config?.formConfig : config)}
         //  type={config?.formConfig?.type} 
          addOption={addOption} t={t} index={index} disableInputs={disableInputs} dispatch={passingSurveyConfigInDispatch} isPartiallyEnabled={isPartiallyEnabled} formDisabled={formDisabled} controlSurveyForm={controlSurveyForm} />
         )})
