@@ -450,7 +450,6 @@ const LandScheduleForm = (props) => {
 
     const length = modalData?.length + 1;
     modaldata["rowid"] = length.toString();
-    console.log("modaldata", modaldata);
     if (specificTableData?.rowid) {
       const filteredRowData = modalData?.filter((item) => item?.rowid !== specificTableData?.rowid);
       setModalData([...filteredRowData, modaldata]);

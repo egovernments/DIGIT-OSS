@@ -127,7 +127,6 @@ const ApllicantFormStep1 = (props) => {
 
   useEffect(() => {
     if (developerDataLabel) {
-      console.log("developerDataLabel", developerDataLabel);
       setValue("developerName", developerDataLabel?.addInfo?.companyName);
       setValue("developerAddress", developerDataLabel?.addInfo?.registeredAddress);
       setValue("developerEmail", developerDataLabel?.addInfo?.email);
@@ -430,7 +429,7 @@ const ApllicantFormStep1 = (props) => {
                     id="btnSearch"
                     class=""
                   >
-                    Upload Digital Signature <VisibilityIcon color="info" className="icon" />
+                    View Upload Digital Signature <VisibilityIcon color="info" className="icon" />
                   </div>
                 </Col>
                 <Col md={4} xxl lg="4">
@@ -444,7 +443,7 @@ const ApllicantFormStep1 = (props) => {
                     id="btnSearch"
                     class=""
                   >
-                    Upload Board Resolution <VisibilityIcon color="info" className="icon" />
+                    View Upload Board Resolution <VisibilityIcon color="info" className="icon" />
                   </div>
                 </Col>
               </Row>

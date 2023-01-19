@@ -8,7 +8,7 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { useForm } from "react-hook-form";
 // import Select from 'react-bootstrap/Select';
-import { Button, Placeholder } from 'react-bootstrap';
+import { Button, Placeholder } from "react-bootstrap";
 import Popup from "reactjs-popup";
 // import {
 //   Modal,
@@ -29,7 +29,7 @@ import { getDocShareholding } from "../../../tl/src/pages/employee/ScrutinyBasic
 import { MenuItem, Select } from "@mui/material";
 import { convertEpochToDate } from "../utils/index";
 import Spinner from "../components/Loader/index";
-import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControlLabel from "@mui/material/FormControlLabel";
 const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
   let validation = {};
   const { pathname: url } = useLocation();
@@ -52,8 +52,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     licValidity: "",
     licPurpose: "",
     aggreementBtw: "",
-    boardResolution: ""
-  })
+    boardResolution: "",
+  });
   const [llpNumber, setLLPNumber] = useState("");
   const [csrNumber, setCSRNumber] = useState("");
   const devType = localStorage.getItem("devTypeValueFlag");
@@ -81,8 +81,6 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       const developerDataGetDocs = getDevDetails?.data?.devDetail[0]?.addInfo;
       setDeveloperDataAddinfo(developerDataGetDocs);
 
-
-      // console.log("STAKEHOLDER",getDevDetails?.data?.devDetail[0]?.addInfo?.registeredContactNo); 
       setShowDevTypeFields(developerDataGet?.devDetail[0]?.applicantType?.developerType || devType);
       // setName(developerDataGet?.devDetail[0]?.addInfo?.name);
       setCompanyName(developerDataGet?.devDetail[0]?.addInfo?.companyName);
@@ -109,13 +107,13 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       setModaldesignition(developerDataGet?.devDetail[0]?.addInfo?.modaldesignition);
       setModalPercentage(developerDataGet?.devDetail[0]?.addInfo?.modalPercentage);
       setModalValuesArray(developerDataGet?.devDetail[0]?.addInfo?.shareHoldingPatterens || []);
-      setOthersArray(developerDataGet?.devDetail[0]?.addInfo?.othersDetails || othersArray)
-      setExistingColonizerDetails(developerDataGet?.devDetail[0]?.addInfo?.existingColonizerData || existingColonizerDetails)
-      setExistingColonizer(developerDataGet?.devDetail[0]?.addInfo?.existingColonizer || "")
-      setExistingDirectors(developerDataGet?.devDetail[0]?.addInfo?.existingDirectors || "")
+      setOthersArray(developerDataGet?.devDetail[0]?.addInfo?.othersDetails || othersArray);
+      setExistingColonizerDetails(developerDataGet?.devDetail[0]?.addInfo?.existingColonizerData || existingColonizerDetails);
+      setExistingColonizer(developerDataGet?.devDetail[0]?.addInfo?.existingColonizer || "");
+      setExistingDirectors(developerDataGet?.devDetail[0]?.addInfo?.existingDirectors || "");
       setFinancialCapacity(developerDataGet?.devDetail[0]?.addInfo?.financialCapacity);
       setIsUndertaken(developerDataGet?.devDetail[0]?.addInfo?.isUndertaken);
-      setRegisteredMobileNumber(developerDataGet?.devDetail[0]?.addInfo?.registeredContactNo)
+      setRegisteredMobileNumber(developerDataGet?.devDetail[0]?.addInfo?.registeredContactNo);
       // setShowDevTypeFields(valueOfDrop);
       let totalRemainingShareholdingPattern = 100;
       developerDataGet?.devDetail[0]?.addInfo?.shareHoldingPatterens.forEach((item, index) => {
@@ -123,7 +121,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       });
       setRemainingStakeholderPercentage(Number(totalRemainingShareholdingPattern));
     } catch (error) {
-      console.log(error);
+      return error;
     }
   };
 
@@ -141,7 +139,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   const [mobileNumberUser, setMobileNumber] = useState((!isOpenLinkFlow ? userInfo?.info?.mobileNumber : "") ||
     formData?.LicneseDetails?.mobileNumberUser || formData?.formData?.LicneseDetails?.mobileNumberUser || ""
   );
-  const [emailId, setUserEmailInd] = useState(formData?.LicneseDetails?.emailId || formData?.formData?.LicneseDetails?.emailId || "")
+  const [emailId, setUserEmailInd] = useState(formData?.LicneseDetails?.emailId || formData?.formData?.LicneseDetails?.emailId || "");
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
   const [developerTypeOptions, setDevTypeOptions] = useState({ data: [], isLoading: true }); 
@@ -160,7 +158,6 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     genderTypeData["common-masters"].GenderType.filter((data) => data.active).map((genderDetails) => {
       menu.push({ code: `${genderDetails.code}`, value: `${genderDetails.code}` });
     });
-  // console.log("GENDERs",menu);
 
   let arrayDevList = [];
   optionsArrList &&
@@ -172,7 +169,6 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   const [Documents, setDocumentsData] = useState([]);
 
   const DevelopersAllData = getValues();
-  // console.log("DEVEDATAGEGT",DevelopersAllData);
 
   const [modal, setmodal] = useState(false);
   const [modalDirectors, setmodalDirector] = useState(false);
@@ -213,9 +209,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     register,
     handleSumit,
     formState: { error },
-  } = useForm([
-    { Sr: "", name: "", mobileNumber: "", email: "", PAN: "", Aadhar: "" },
-  ]);
+  } = useForm([{ Sr: "", name: "", mobileNumber: "", email: "", PAN: "", Aadhar: "" }]);
   const [success, setError] = useState(null);
   const [showToast, setShowToast] = useState(null);
   const [showToastError, setShowToastError] = useState(null);
@@ -232,10 +226,13 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   const [showhide, setShowhide] = useState("No");
   const [cin_Number, setCinNo] = useState(formData?.LicneseDetails?.cin_Number || formData?.formData?.LicneseDetails?.cin_Number || "");
   const [companyName, setCompanyName] = useState(formData?.LicneseDetails?.companyName || formData?.LicneseDetails?.companyName || "");
-  const [incorporationDate, setIncorporation] = useState(formData?.LicneseDetails?.incorporationDate || formData?.LicneseDetails?.incorporationDate || "");
-  const [registeredAddress, setRegistered] = useState(formData?.LicneseDetails?.registeredAddress || formData?.LicneseDetails?.registeredAddress || "");
-  const [PanNumber, setPanNumber] = useState(formData?.LicneseDetails?.PanNumber || formData?.formData?.LicneseDetails?.PanNumber || ""
+  const [incorporationDate, setIncorporation] = useState(
+    formData?.LicneseDetails?.incorporationDate || formData?.LicneseDetails?.incorporationDate || ""
   );
+  const [registeredAddress, setRegistered] = useState(
+    formData?.LicneseDetails?.registeredAddress || formData?.LicneseDetails?.registeredAddress || ""
+  );
+  const [PanNumber, setPanNumber] = useState(formData?.LicneseDetails?.PanNumber || formData?.formData?.LicneseDetails?.PanNumber || "");
   const [dob, setDOB] = useState(formData?.LicneseDetails?.dob || formData?.formData?.LicneseDetails?.dob || "");
   // const [email, setEmail] = useState(formData?.LicneseDetails?.email || formData?.LicneseDetails?.email || "");
   const [email, setUserEmail] = useState(formData?.LicneseDetails?.email || formData?.formData?.LicneseDetails?.email || "");
@@ -270,8 +267,6 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   const [show, setShow] = useState(false);
   const [showStake, setShowStakeholder] = useState(false);
 
-  // console.log("ADINFO",developerDataAddinfo);
-
   const [urlGetShareHoldingDoc, setDocShareHoldingUrl] = useState("");
   const [urlGetDirectorDoc, setDocDirectorUrl] = useState("");
   const handleShowStakeholder = () => {
@@ -289,7 +284,6 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     setModalDirectorName("");
     setModalContactDirector("");
   };
-  // console.log(devRegId);
   const handleshow = (e) => {
     const getshow = e.target.value;
     setShowhide(getshow);
@@ -318,10 +312,10 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     setCinNo(e.target.value.toUpperCase());
   }
   function selectLlpNumber(e) {
-    setLLPNumber(e.target.value.toUpperCase())
+    setLLPNumber(e.target.value.toUpperCase());
   }
   function selectCsrNumber(e) {
-    setCSRNumber(e.target.value.toUpperCase())
+    setCSRNumber(e.target.value.toUpperCase());
   }
   function selectDinNumber(e) {
     if (!e.target.value || e.target.value.match("^[0-9]*$")) {
@@ -336,7 +330,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     // if(e.target.value === 10){
     //   panVerification();
     // }
-    if (!e.target.value || /^\w+$/.test(e.target.value)) {
+    if (!e.target.value || /^\w+$/.test(e.target.value))  {
       setPanNumber(e.target.value.toUpperCase());
       if (e.target.value === 10) {
         alert("HEY")
@@ -348,86 +342,83 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   const panVerification = async () => {
     try {
       const panVal = {
-        "txnId": "f7f1469c-29b0-4325-9dfc-c567200a70f7",
-        "format": "xml",
-        "certificateParameters": {
-          "panno": PanNumber,
-          "PANFullName": name,
-          "FullName": name,
-          "DOB": dob,
-          "GENDER": gender
+        txnId: "f7f1469c-29b0-4325-9dfc-c567200a70f7",
+        format: "xml",
+        certificateParameters: {
+          panno: PanNumber,
+          PANFullName: name,
+          FullName: name,
+          DOB: dob,
+          GENDER: gender,
         },
-        "consentArtifact": {
-          "consent": {
-            "consentId": "ea9c43aa-7f5a-4bf3-a0be-e1caa24737ba",
-            "timestamp": "2022-10-08T06:21:51.321Z",
-            "dataConsumer": {
-              "id": "string"
+        consentArtifact: {
+          consent: {
+            consentId: "ea9c43aa-7f5a-4bf3-a0be-e1caa24737ba",
+            timestamp: "2022-10-08T06:21:51.321Z",
+            dataConsumer: {
+              id: "string",
             },
-            "dataProvider": {
-              "id": "string"
+            dataProvider: {
+              id: "string",
             },
-            "purpose": {
-              "description": "string"
+            purpose: {
+              description: "string",
             },
-            "user": {
-              "idType": "string",
-              "idNumber": "string",
-              "mobile": mobileNumber,
-              "email": email
+            user: {
+              idType: "string",
+              idNumber: "string",
+              mobile: mobileNumber,
+              email: email,
             },
-            "data": {
-              "id": "string"
+            data: {
+              id: "string",
             },
-            "permission": {
-              "access": "string",
-              "dateRange": {
-                "from": "2022-10-08T06:21:51.321Z",
-                "to": "2022-10-08T06:21:51.321Z"
+            permission: {
+              access: "string",
+              dateRange: {
+                from: "2022-10-08T06:21:51.321Z",
+                to: "2022-10-08T06:21:51.321Z",
               },
-              "frequency": {
-                "unit": "string",
-                "value": 0,
-                "repeats": 0
-              }
-            }
+              frequency: {
+                unit: "string",
+                value: 0,
+                repeats: 0,
+              },
+            },
           },
-          "signature": {
-            "signature": "string"
-          }
-        }
-      }
+          signature: {
+            signature: "string",
+          },
+        },
+      };
       const panResp = await axios.post(`/certificate/v3/pan/pancr`, panVal, {
         headers: {
-          'Content-Type': 'application/json',
-          'X-APISETU-APIKEY': 'PDSHazinoV47E18bhNuBVCSEm90pYjEF',
-          'X-APISETU-CLIENTID': 'in.gov.tcpharyana',
-          'Access-Control-Allow-Origin': "*",
-        }
-      })
-      // console.log("PANDET", panResp?.data);
+          "Content-Type": "application/json",
+          "X-APISETU-APIKEY": "PDSHazinoV47E18bhNuBVCSEm90pYjEF",
+          "X-APISETU-CLIENTID": "in.gov.tcpharyana",
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
     } catch (error) {
-      console.log(error?.response?.data?.errorDescription);
-      setPanValError(error?.response?.data?.errorDescription)
+      setPanValError(error?.response?.data?.errorDescription);
     }
-  }
+  };
   const handleshow0 = (e) => {
     const getshow = e.target.value;
     setShowhide0(getshow);
     localStorage.setItem("devTypeFlag", getshow);
   };
-  // console.log("LOCALVAL",localStorage.getItem('devTypeValueFlag'));
 
   const resetForm = () => {
-    setCinNo("")
-    setLLPNumber("")
-    setCSRNumber("")
+    setCinNo("");
+    setLLPNumber("");
+    setCSRNumber("");
     setCompanyName("");
-    setIncorporation("")
-    setRegistered("")
-    setUserEmailId("")
-    setRegisteredMobileNumber("")
-    setGST("")
+    setIncorporation("");
+    setRegistered("");
+    setUserEmailId("");
+    setRegisteredMobileNumber("");
+    setGST("");
     setModalValuesArray([]);
     setRemainingStakeholderPercentage(100);
     setDirectorData([]);
@@ -457,14 +448,12 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
   const setDevType = (data) => {
     const getDevTypeValue = data?.value;
-    console.log("data123", data)
     setShowDevTypeFields(getDevTypeValue);
     // localStorage.setItem('devTypeValueFlag', getDevTypeValue)
     resetForm();
-  }
+  };
   // function setDevType(value){
   //   setShowDevTypeFields(value)
-  //   console.log(value);
   // }
   const getDocumentData = async (file, fieldName, type, index) => {
     console.log("logFile", file)
@@ -474,12 +463,12 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         return;
       }
     } else if (type === "shareholdingPattern") {
-      if (getValues("shareholdingPatternFiles")?.includes(file.name)) {
+      if  (getValues("shareholdingPatternFiles")?.includes(file.name))  {
         setShowToastError({ key: "error" });
         return;
       }
     } else if (type === "directorInfoPdf") {
-      if (getValues("directorInfoPdfFiles")?.includes(file.name)) {
+      if  (getValues("directorInfoPdfFiles")?.includes(file.name))  {
         setShowToastError({ key: "error" });
         return;
       }
@@ -498,7 +487,6 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       });
       setLoading(false);
       setShowToast({ key: "success" });
-      console.log(Resp?.data?.files?.[0]?.fileStoreId, fieldName, type, index);
 
       if (type === "existingColonizer") {
         console.log("log123 ====> ", fieldName, Resp?.data?.files?.[0]?.fileStoreId, Resp)
@@ -506,10 +494,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         if (getValues("existingColonizerFiles")) {
           setValue("existingColonizerFiles", [...getValues("existingColonizerFiles"), file.name]);
         } else {
-          setValue("existingColonizerFiles", [file.name]);
+          setValue("existingColonizerFiles",  [file.name]);
         }
       } else if (type === "shareholdingPattern") {
-        console.log("entered into shareholding case");
         let temp = modalValuesArray;
         temp[index].uploadPdf = Resp?.data?.files?.[0]?.fileStoreId;
         setModalValuesArray([...temp])
@@ -517,10 +504,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         if (getValues("shareholdingPatternFiles")) {
           setValue("shareholdingPatternFiles", [...getValues("shareholdingPatternFiles"), file.name]);
         } else {
-          setValue("shareholdingPatternFiles", [file.name]);
+          setValue("shareholdingPatternFiles",  [file.name]);
         }
       } else if (type === "directorInfoPdf") {
-        console.log("entered into directorInfo case");
         let temp = DirectorData;
         temp[index].uploadPdf = Resp?.data?.files?.[0]?.fileStoreId;
         setDirectorData([...temp])
@@ -528,19 +514,15 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         if (getValues("directorInfoPdfFiles")) {
           setValue("directorInfoPdfFiles", [...getValues("directorInfoPdfFiles"), file.name]);
         } else {
-          setValue("directorInfoPdfFiles", [file.name]);
+          setValue("directorInfoPdfFiles",  [file.name]);
         }
       } else {
         setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
         // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
-        console.log("getValues()=====", getValues());
         setDocumentsData(getValues());
       }
     } catch (error) {
       setLoading(false);
-      //   setLoader(false);
-      alert(error?.response?.data?.Errors?.[0]?.description);
-      console.log(error);
     }
   };
 
@@ -575,20 +557,14 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
         const Directory = await axios.get(`/mca-directors/v1/companies/${cin_Number}`, {
           headers: {
-            'Content-Type': 'application/json',
-            'X-APISETU-APIKEY': 'PDSHazinoV47E18bhNuBVCSEm90pYjEF',
-            'X-APISETU-CLIENTID': 'in.gov.tcpharyana',
-            'Access-Control-Allow-Origin': "*",
-          }
-        })
+            "Content-Type": "application/json",
+            "X-APISETU-APIKEY": "PDSHazinoV47E18bhNuBVCSEm90pYjEF",
+            "X-APISETU-CLIENTID": "in.gov.tcpharyana",
+            "Access-Control-Allow-Origin": "*",
+          },
+        });
         setLoading(false);
-        // console.log("CIN",Resp.data)
-        // console.log(Directory.data);
-        // if (DirectorData && DirectorData.length) {
-        //   console.log("log1", DirectorData, Directory.data)
-        // } else {
-        //   console.log("log2", DirectorData, Directory.data)
-        // }
+
         setDirectorDataMCA(Directory.data);
         
         if(!DirectorData?.length){
@@ -604,7 +580,6 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       }
     } catch (error) {
       setLoading(false);
-      console.log(error?.response?.data?.error_description);
       setCINValError(error?.response?.data?.error_description);
     }
   };
@@ -655,7 +630,6 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       handleClose();
     }
   };
-  // console.log("FORMARRAYVAL",modalValuesArray);
   useEffect(() => {
     HandleGetMCNdata();
   }, [cin_Number]);
@@ -663,10 +637,10 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   function selectChecked(e) {
     if (isUndertaken == false) {
       setIsUndertaken(true);
-    } else {
+    }  else  {
       setIsUndertaken(false);
     }
-  };
+  }
 
   const [PanValError, setPanValError] = useState("");
 
@@ -712,16 +686,14 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         gst_Number: gst_Number,
         DirectorsInformationMCA: DirectorDataMCA,
         DirectorsInformation: DirectorData,
-        isUndertaken: isUndertaken,
+        isUndertaken:  isUndertaken,
         shareHoldingPatterens: modalValuesArray,
         othersDetails: othersArray,
         existingColonizerData: existingColonizerDetails,
         existingColonizer: existingColonizer,
         existingDirectors: existingDirectors,
-      }
+      };
       onSelect(config.key, addInfo);
-      // console.log("DATALICDET",addInfo);
-      // localStorage.setItem("addInfo",JSON.stringify(addInfo));
 
       const developerRegisterData = {
         id: userInfo?.info?.id,
@@ -734,7 +706,6 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       };
       Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
         .then((result, err) => {
-          // console.log("DATA",result?.id);
           // localStorage.setItem('devRegId',JSON.stringify(result?.id));
           setIsDisableForNext(false);
           let data = {
@@ -768,13 +739,13 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         (data.LicneseDetails.shareHoldingPatterens = modalValuesArray);
       data.LicneseDetails.othersDetails = othersArray;
 
-        data.LicneseDetails.registeredContactNo = registeredContactNo,
-        data.LicneseDetails.gst_Number = gst_Number,
-        data.LicneseDetails.DirectorsInformation = DirectorData,
-        data.LicneseDetails.shareHoldingPatterens = modalValuesArray
-      data.LicneseDetails.othersDetails = othersArray
+      (data.LicneseDetails.registeredContactNo = registeredContactNo),
+        (data.LicneseDetails.gst_Number = gst_Number),
+        (data.LicneseDetails.DirectorsInformation = DirectorData),
+        (data.LicneseDetails.shareHoldingPatterens = modalValuesArray);
+      data.LicneseDetails.othersDetails = othersArray;
 
-      onSelect("", formData)
+      onSelect("", formData);
     }
   };
 
@@ -788,7 +759,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         navigate.replace("/digit-ui/citizen/obps/stakeholder/apply/provide-license-type");
         break;
     }
-  }
+  };
 
   return (
     <div>
@@ -797,7 +768,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         {/* {JSON.stringify(showDevTypeFields)}efewfewfef */}
         {isOpenLinkFlow && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
         <Timeline currentStep={2} flow="STAKEHOLDER" onChangeStep={changeStep} />
-        {!isLoading ?
+        {!isLoading ? (
           <FormStep
             // onSubmit={AddInfoForm}
             config={config}
@@ -861,7 +832,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
               </div>
 
               {/* FOR INDIVIDUAL */}
-              {(showDevTypeFields === "Individual" || showDevTypeFields == "Proprietorship Firm" || showDevTypeFields == "Hindu Undivided Family") && (
+              {(showDevTypeFields === "Individual" ||
+                showDevTypeFields == "Proprietorship Firm" ||
+                showDevTypeFields == "Hindu Undivided Family") && (
                 <div className="card mb-3">
 
                   <h5 className="card-title fw-bold">Developer Details</h5>
@@ -899,7 +872,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                       </div>
                       <div className="col col-4">
                         <div className="form-group">
-                          <label htmlFor="name">Mobile No. <span className="text-danger font-weight-bold">*</span></label>
+                          <label htmlFor="name">
+                            Mobile No. <span className="text-danger font-weight-bold">*</span>
+                          </label>
                           <input
                             value={mobileNumberUser}
                             placeholder={mobileNumberUser}
@@ -962,7 +937,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                       </div>
                       <div className="col col-4">
                         <div className="form-group">
-                          <label htmlFor="name">GST No. {showDevTypeFields !== "Trust" && <span className="text-danger font-weight-bold">*</span>}</label>
+                          <label htmlFor="name">
+                            GST No. {showDevTypeFields !== "Trust" && <span className="text-danger font-weight-bold">*</span>}
+                          </label>
                           <input
                             type="text"
                             value={gst_Number}
@@ -1225,7 +1202,6 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                   disable={false}
                                   max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear() - 18))}
                                 /> */}
-
                               </Col>
                             </Row>
                           </form>
@@ -1257,9 +1233,15 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
               )}
 
               {/* FOR COMPANY */}
-              {(showDevTypeFields && showDevTypeFields !== "Individual" && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Hindu Undivided Family" && showDevTypeFields !== "Others" && showDevTypeFields !== "Society" && showDevTypeFields !== "Firm") && (
-                <div className="card mb-3">
-                  {/* <div className="card-header">
+              {showDevTypeFields &&
+                showDevTypeFields !== "Individual" &&
+                showDevTypeFields !== "Proprietorship Firm" &&
+                showDevTypeFields !== "Hindu Undivided Family" &&
+                showDevTypeFields !== "Others" &&
+                showDevTypeFields !== "Society" &&
+                showDevTypeFields !== "Firm" && (
+                  <div className="card mb-3">
+                    {/* <div className="card-header">
               <h5 className="card-title"> Developer</h5>
             </div> */}
                   <h5 className="card-title fw-bold">Developer Details</h5>
@@ -1275,7 +1257,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                 case "Trust":
                                   return (
                                     <div className="form-group">
-                                      <label htmlFor="name">CSR Number <span className="text-danger font-weight-bold">*</span></label>
+                                      <label htmlFor="name">
+                                        CSR Number <span className="text-danger font-weight-bold">*</span>
+                                      </label>
                                       <TextInput
                                         type="text"
                                         onChange={selectCsrNumber}
@@ -1292,14 +1276,24 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                           maxlength: "11",
                                         })}
                                       />
-                                      {csrNumber && csrNumber.length > 0 && !csrNumber.match(Digit.Utils.getPattern('CSR')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_CSR_NO")}</CardLabelError>}
-                                      <h3 className="error-message" style={{ color: "red" }}>{cinValError}</h3>
+                                      {csrNumber && csrNumber.length > 0 && !csrNumber.match(Digit.Utils.getPattern("CSR")) && (
+                                        <CardLabelError
+                                          style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}
+                                        >
+                                          {t("BPA_INVALID_CSR_NO")}
+                                        </CardLabelError>
+                                      )}
+                                      <h3 className="error-message" style={{ color: "red" }}>
+                                        {cinValError}
+                                      </h3>
                                     </div>
-                                  )
+                                  );
                                 case "Limited Liability Partnership":
                                   return (
                                     <div className="form-group">
-                                      <label htmlFor="name">LLP Number <span className="text-danger font-weight-bold">*</span></label>
+                                      <label htmlFor="name">
+                                        LLP Number <span className="text-danger font-weight-bold">*</span>
+                                      </label>
                                       <TextInput
                                         type="text"
                                         onChange={selectLlpNumber}
@@ -1316,10 +1310,18 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                           maxlength: "8",
                                         })}
                                       />
-                                      {llpNumber && llpNumber.length > 0 && !llpNumber.match(Digit.Utils.getPattern('LLP')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_LLP_NO")}</CardLabelError>}
-                                      <h3 className="error-message" style={{ color: "red" }}>{cinValError}</h3>
+                                      {llpNumber && llpNumber.length > 0 && !llpNumber.match(Digit.Utils.getPattern("LLP")) && (
+                                        <CardLabelError
+                                          style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}
+                                        >
+                                          {t("BPA_INVALID_LLP_NO")}
+                                        </CardLabelError>
+                                      )}
+                                      <h3 className="error-message" style={{ color: "red" }}>
+                                        {cinValError}
+                                      </h3>
                                     </div>
-                                  )
+                                  );
                                 default:
                                   return (
                                     <div className="form-group">
@@ -1580,14 +1582,22 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                     </td>
                                     <td>
                                       <div className="row">
-                                        {(elementInArray.uploadPdf) ?
-                                          <button type="button" onClick={() => getDocShareholding(elementInArray?.uploadPdf)} className="btn btn-sm col-md-6">
+                                        {elementInArray.uploadPdf ? (
+                                          <button
+                                            type="button"
+                                            onClick={() => getDocShareholding(elementInArray?.uploadPdf)}
+                                            className="btn btn-sm col-md-6"
+                                          >
                                             <VisibilityIcon color="info" className="icon" />
                                           </button>
-                                          : <p></p>
-                                        }
+                                        ) : (
+                                          <p></p>
+                                        )}
                                         <div className="btn btn-sm col-md-6">
-                                          <label for={"uploadshareholdingPattern" + input}> <FileUpload color="primary" for={"uploadshareholdingPattern" + input} /></label>
+                                          <label for={"uploadshareholdingPattern" + input}>
+                                            {" "}
+                                            <FileUpload color="primary" for={"uploadshareholdingPattern" + input} />
+                                          </label>
                                           <input
                                             id={"uploadshareholdingPattern" + input}
                                             type="file"
@@ -1604,7 +1614,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                     </td>
                                   </tr>
                                 );
-                              }) : (
+                              })
+                            ) : (
                               <p className="text-danger text-center d-none">Click on the Add More Button</p>
                             )}
                           </tbody>
@@ -1781,35 +1792,33 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                 return (
                                   <tr key={input}>
                                     <td>{input + 1}</td>
-                                    <td>
-                                      {elementInArray.din}
-                                    </td>
-                                    <td>
-                                      {elementInArray.name}
-                                    </td>
-                                    <td>
-                                      {elementInArray.contactNumber}
-                                    </td>
+                                    <td>{elementInArray.din}</td>
+                                    <td>{elementInArray.name}</td>
+                                    <td>{elementInArray.contactNumber}</td>
                                   </tr>
                                 );
-                              }) : <p></p>}
-                        </tbody>
-                      </table>
-                    </div>
-                    <p className="ml-2">
-                      If the directors are in addition/modification to data fetched from the MCA portal, then the complete details of existing directors may be provided.
-                    </p>
-                    <div className="form-group ml-2">
-                      <input
-                        type="radio"
-                        value="Y"
-                        checked={existingDirectors === "Y" ? true : false}
-                        id="existingDirectors"
-                        className="mx-2 mt-1"
-                        onChange={(e) => setExistingDirectors(e.target.value)}
-                        name="existingDirectors"
-                      />
-                      <label for="Yes">Yes</label>
+                              })
+                            ) : (
+                              <p></p>
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                      <p className="ml-2">
+                        If the directors are in addition/modification to data fetched from the MCA portal, then the complete details of existing
+                        directors may be provided.
+                      </p>
+                      <div className="form-group ml-2">
+                        <input
+                          type="radio"
+                          value="Y"
+                          checked={existingDirectors === "Y" ? true : false}
+                          id="existingDirectors"
+                          className="mx-2 mt-1"
+                          onChange={(e) => setExistingDirectors(e.target.value)}
+                          name="existingDirectors"
+                        />
+                        <label for="Yes">Yes</label>
 
                       <input
                         type="radio"
@@ -1942,24 +1951,23 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                       return (
                                         <tr key={input}>
                                           <td>{input + 1}</td>
-                                          <td>
-                                            {elementInArray.din}
-                                          </td>
-                                          <td>
-                                            {elementInArray.name}
-                                          </td>
-                                          <td>
-                                            {elementInArray.contactNumber}
-                                          </td>
+                                          <td>{elementInArray.din}</td>
+                                          <td>{elementInArray.name}</td>
+                                          <td>{elementInArray.contactNumber}</td>
                                           <td>
                                             <div className="row">
                                               {/* {JSON.stringify(elementInArray?.uploadPdf)} */}
-                                              {(elementInArray?.uploadPdf) ?
-                                                <button type="button" onClick={() => getDocShareholding(elementInArray?.uploadPdf)} className="btn btn-sm col-md-6 text-center">
+                                              {elementInArray?.uploadPdf ? (
+                                                <button
+                                                  type="button"
+                                                  onClick={() => getDocShareholding(elementInArray?.uploadPdf)}
+                                                  className="btn btn-sm col-md-6 text-center"
+                                                >
                                                   <VisibilityIcon color="info" className="icon" />
                                                 </button>
-                                                : <p></p>
-                                              }
+                                              ) : (
+                                                <p></p>
+                                              )}
                                               <div className="btn btn-sm col-md-6">
                                                 <label for={"uploaddirectorInfoPdf" + input}>
                                                   <FileUpload color="primary" for={"uploaddirectorInfoPdf" + input} />
@@ -1974,40 +1982,41 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                             </div>
                                           </td>
                                           <td>
-                                            <a href="javascript:void(0)"
-                                              onClick={() => (deleteDirectorTableRows(-1))}
-                                            >
+                                            <a href="javascript:void(0)" onClick={() => deleteDirectorTableRows(-1)}>
                                               <DeleteIcon color="danger" className="icon" />
                                             </a>
                                           </td>
                                         </tr>
                                       );
-                                    }) : <p></p>}
-                              </tbody>
-                            </table>
+                                    })
+                                  ) : (
+                                    <p></p>
+                                  )}
+                                </tbody>
+                              </table>
+                            </div>
                           </div>
-                        </div>
-                      )}
+                        )}
+                      </div>
                     </div>
-                  </div>
 
-                  <Col md={12} >
-                    <Form.Group className="col-md-12">
-                      <CheckBox
-                        label={t("It is undertaken that the above information is true and correct for all facts and purposes.")}
-                        onChange={(e) => selectChecked(e)}
-                        value={isUndertaken}
-                        checked={isUndertaken}
-                        name={isUndertaken}
-                        style={{ paddingBottom: "10px", paddingTop: "10px" }}
-                      />
-                    </Form.Group>
-                  </Col>
+                    <Col md={12}>
+                      <Form.Group className="col-md-12">
+                        <CheckBox
+                          label={t("It is undertaken that the above information is true and correct for all facts and purposes.")}
+                          onChange={(e) => selectChecked(e)}
+                          value={isUndertaken}
+                          checked={isUndertaken}
+                          name={isUndertaken}
+                          style={{ paddingBottom: "10px", paddingTop: "10px" }}
+                        />
+                      </Form.Group>
+                    </Col>
 
-                  <p className="ml-1">
-                    In case the Partner/director of the applicant firm/company is common with any existing colonizer who has been granted a license under the 1975 act Yes/No.
-
-                  </p>
+                    <p className="ml-1">
+                      In case the Partner/director of the applicant firm/company is common with any existing colonizer who has been granted a license
+                      under the 1975 act Yes/No.
+                    </p>
 
                     <div className="form-group ml-2">
                       <input
@@ -2021,19 +2030,19 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                       />
                       <label for="Yes">Yes</label>
 
-                    <input
-                      type="radio"
-                      value="N"
-                      checked={existingColonizer === "N" ? true : false}
-                      id="existingColonizerN"
-                      className="mx-2 mt-1"
-                      onChange={(e) => setExistingColonizer(e.target.value)}
-                      name="existingColonizer"
-                    />
-                    <label for="No">No</label>
-                    {existingColonizer === "Y" && (
-                      <div>
-                        {/* <div className="row ">
+                      <input
+                        type="radio"
+                        value="N"
+                        checked={existingColonizer === "N" ? true : false}
+                        id="existingColonizerN"
+                        className="mx-2 mt-1"
+                        onChange={(e) => setExistingColonizer(e.target.value)}
+                        name="existingColonizer"
+                      />
+                      <label for="No">No</label>
+                      {existingColonizer === "Y" && (
+                        <div>
+                          {/* <div className="row ">
                           <div className="form-group row">
                             <div className="col-sm-12">
                               <Col xs="12" md="12" sm="12">
@@ -2107,8 +2116,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                           </div>
                         </div> */}
 
-                        <div className="row mx-2">
-                          {/* <div className="col col-4">
+                          <div className="row mx-2">
+                            {/* <div className="col col-4">
                             <div className="form-group">
                               <label htmlFor="dob">DOB <span className="text-danger font-weight-bold">*</span></label>
                               <input
@@ -2123,7 +2132,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             </div>
                           </div> */}
 
-                          {/* <div className="col col-4">
+                            {/* <div className="col col-4">
                             <div className="form-group">
                               <label htmlFor="pan">PAN Number <span className="text-danger font-weight-bold">*</span></label>
                               <input
@@ -2171,23 +2180,24 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             </div>
                           </div>
 
-                          <div className="col col-4">
-                            <div className="form-group">
-                              <label htmlFor="licDate">Date of Grant of Licence <span className="text-danger font-weight-bold">*</span></label>
-                              <input
-                                type="date"
-                                value={existingColonizerDetails.licDate}
-                                name="licDate"
-                                // onChange={SelectName}
-                                onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, licDate: e.target.value })}
-                                className="employee-card-input"
-
-                                max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
-                              />
+                            <div className="col col-4">
+                              <div className="form-group">
+                                <label htmlFor="licDate">
+                                  Date of Grant of Licence <span className="text-danger font-weight-bold">*</span>
+                                </label>
+                                <input
+                                  type="date"
+                                  value={existingColonizerDetails.licDate}
+                                  name="licDate"
+                                  // onChange={SelectName}
+                                  onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, licDate: e.target.value })}
+                                  className="employee-card-input"
+                                  max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
+                                />
+                              </div>
                             </div>
-                          </div>
 
-                          {/* <div className="col col-4">
+                            {/* <div className="col col-4">
                             <div className="form-group">
                               <label htmlFor="licValidity">Validity <span className="text-danger font-weight-bold">*</span></label>
                               <input
@@ -2202,7 +2212,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             </div>
                           </div> */}
 
-                          {/* <div className="col col-4">
+                            {/* <div className="col col-4">
                             <div className="form-group">
                               <label htmlFor="licValidity">Select Purpose</label>
                               <Select
@@ -2224,16 +2234,12 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
                             </div>
                           </div> */}
-
-
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
-
-
-                </div>
-              )}
+                )}
 
               {/* FOR COMPANY */}
               {showDevTypeFields === "LLP" && (

@@ -1,4 +1,20 @@
-import { BackButton, Card, label, labelError, Toast, FormStep, Loader, Dropdown, MobileNumber, RadioButtons, RadioOrSelect, TextInput, TextArea, CheckBox, DatePicker } from "@egovernments/digit-ui-react-components";
+import {
+  BackButton,
+  Card,
+  label,
+  labelError,
+  Toast,
+  FormStep,
+  Loader,
+  Dropdown,
+  MobileNumber,
+  RadioButtons,
+  RadioOrSelect,
+  TextInput,
+  TextArea,
+  CheckBox,
+  DatePicker,
+} from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import { Form, Row } from "react-bootstrap";
 import { useHistory, useLocation } from "react-router-dom";
@@ -7,59 +23,54 @@ import { convertEpochToDate } from "../utils/index";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import Spinner from "../components/Loader/index";
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import { getDocShareholding } from "../../../tl/src/pages/employee/ScrutinyBasic/ScrutinyDevelopment/docview.helper";
 const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
   const { pathname: url } = useLocation();
   const userInfo = Digit.UserService.getUser();
-  const USERID = userInfo
+  const USERID = userInfo;
   React.useEffect(async () => {
     const uuid = userInfo?.info?.uuid;
     const usersResponse = await Digit.UserService.userSearch(tenantId, { uuid: [uuid] }, {});
-    // console.log("USERID",usersResponse?.user[0]?.parentId)
     setParentId(usersResponse?.user[0]?.parentId);
     setGenderMF(usersResponse?.user[0]?.gender);
-  },[userInfo?.info?.uuid])
+  }, [userInfo?.info?.uuid]);
   const [loader, setLoading] = useState(false);
-  console.log("FORMDATA VAL",formData)
   let validation = {};
-  const devRegId = localStorage.getItem('devRegId');
+  const devRegId = localStorage.getItem("devRegId");
   let isOpenLinkFlow = window.location.href.includes("openlink");
   // const [id,setId] = useState("");
 
-  const {setValue, getValues, watch} = useForm();
+  const { setValue, getValues, watch } = useForm();
   const [Documents, setDocumentsData] = useState({});
   const [LicenseType, setLicenseType] = useState();
   const getDeveloperData = async () => {
     try {
       const requestResp = {
-
-        "RequestInfo": {
-          "api_id": "1",
-          "ver": "1",
-          "ts": "",
-          "action": "_getDeveloperById",
-          "did": "",
-          "key": "",
-          "msg_id": "",
-          "requester_id": "",
-          "auth_token": ""
+        RequestInfo: {
+          api_id: "1",
+          ver: "1",
+          ts: "",
+          action: "_getDeveloperById",
+          did: "",
+          key: "",
+          msg_id: "",
+          requester_id: "",
+          auth_token: "",
         },
-      }
-      const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${userInfo?.info?.id}&isAllData=true`, requestResp, {
-        
-      });
+      };
+      const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${userInfo?.info?.id}&isAllData=true`, requestResp, {});
       const licenseDataList = getDevDetails?.data;
       console.log("LICENCE DET",getDevDetails?.data.devDetail[0]?.licenceDetails?.email);
       setLicenseType(licenseDataList?.devDetail[0]?.applicantType?.licenceType);
       setEmail(licenseDataList?.devDetail[0]?.licenceDetails?.email);
       setDOB(licenseDataList?.devDetail[0]?.licenceDetails?.dob);
-      setGender(licenseDataList?.devDetail[0]?.licenceDetails?.gender)
+      setGender(licenseDataList?.devDetail[0]?.licenceDetails?.gender);
       setPanNumber(licenseDataList?.devDetail[0]?.licenceDetails?.panNumber);
-      setBoardResolution(licenseDataList?.devDetail[0]?.licenceDetails.uploadBoardResolution)
-      setDigitalSign(licenseDataList?.devDetail[0]?.licenceDetails?.uploadDigitalSignaturePdf)
+      setBoardResolution(licenseDataList?.devDetail[0]?.licenceDetails.uploadBoardResolution);
+      setDigitalSign(licenseDataList?.devDetail[0]?.licenceDetails?.uploadDigitalSignaturePdf);
       setAddressLineOne(licenseDataList?.devDetail[0]?.licenceDetails?.addressLineOne);
       setAddressLineTwo(licenseDataList?.devDetail[0]?.licenceDetails?.addressLineTwo);
       setAddressLineThree(licenseDataList?.devDetail[0]?.licenceDetails?.addressLineThree);
@@ -82,55 +93,93 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
       setStateCorrespondence(licenseDataList?.devDetail[0]?.licenceDetails?.stateCorrespondence);
       setDistrictCorrespondence(licenseDataList?.devDetail[0]?.licenceDetails?.districtCorrespondence);
     } catch (error) {
-      console.log(error);
+      return error;
     }
-  }
+  };
   useEffect(() => {
-    getDeveloperData()
+    getDeveloperData();
   }, []);
   const onSkip = () => onSelect();
 
   const [genderUser, setGenderMF] = useState(formData?.LicneseDetails?.genderUser || formData?.formData?.LicneseDetails?.genderUser || "");
-  const [name, setName] = useState((!isOpenLinkFlow ? userInfo?.info?.name : "") || formData?.LicneseDetails?.name || formData?.formData?.LicneseDetails?.name || "");
-  const [email, setEmail] = useState((!isOpenLinkFlow ? userInfo?.info?.emailId : "") || formData?.LicneseDetails?.email || formData?.formData?.LicneseDetails?.email || "");
+  const [name, setName] = useState(
+    (!isOpenLinkFlow ? userInfo?.info?.name : "") || formData?.LicneseDetails?.name || formData?.formData?.LicneseDetails?.name || ""
+  );
+  const [email, setEmail] = useState(
+    (!isOpenLinkFlow ? userInfo?.info?.emailId : "") || formData?.LicneseDetails?.email || formData?.formData?.LicneseDetails?.email || ""
+  );
   const [gender, setGender] = useState(formData?.LicneseDetails?.gender || formData?.formData?.LicneseDetails?.gender);
-  const [mobileNumber, setMobileNumber] = useState((!isOpenLinkFlow ? userInfo?.info?.mobileNumber : "") ||
-    formData?.LicneseDetails?.mobileNumber || formData?.formData?.LicneseDetails?.mobileNumber || ""
+  const [mobileNumber, setMobileNumber] = useState(
+    (!isOpenLinkFlow ? userInfo?.info?.mobileNumber : "") ||
+      formData?.LicneseDetails?.mobileNumber ||
+      formData?.formData?.LicneseDetails?.mobileNumber ||
+      ""
   );
   const [dob, setDOB] = useState(formData?.LicneseDetails?.dob || formData?.formData?.LicneseDetails?.dob || "");
-  const [PanNumber, setPanNumber] = useState(formData?.LicneseDetails?.PanNumber || formData?.formData?.LicneseDetails?.PanNumber || ""
+  const [PanNumber, setPanNumber] = useState(formData?.LicneseDetails?.PanNumber || formData?.formData?.LicneseDetails?.PanNumber || "");
+  const [uploadBoardResolution, setBoardResolution] = useState(
+    formData?.LicneseDetails?.uploadBoardResolution || formData?.formData?.LicneseDetails?.uploadBoardResolution || ""
   );
-  const [uploadBoardResolution, setBoardResolution] = useState(formData?.LicneseDetails?.uploadBoardResolution || formData?.formData?.LicneseDetails?.uploadBoardResolution || "")
-  const [uploadDigitalSignaturePdf, setDigitalSign] = useState(formData?.LicneseDetails?.uploadDigitalSignaturePdf || formData?.formData?.LicneseDetails?.uploadDigitalSignaturePdf || "")
+  const [uploadDigitalSignaturePdf, setDigitalSign] = useState(
+    formData?.LicneseDetails?.uploadDigitalSignaturePdf || formData?.formData?.LicneseDetails?.uploadDigitalSignaturePdf || ""
+  );
   const [parentId, setParentId] = useState(formData?.LicneseDetails?.parentId || formData?.formData?.LicneseDetails?.parentId);
-  const [PermanentAddress, setPermanentAddress] = useState(formData?.LicneseDetails?.PermanentAddress || formData?.formData?.LicneseDetails?.PermanentAddress);
-  const [addressLineOne, setAddressLineOne] = useState(formData?.LicneseDetails?.addressLineOne || formData?.formData?.LicneseDetails?.addressLineOne || "");
-  const [addressLineTwo, setAddressLineTwo] = useState(formData?.LicneseDetails?.addressLineTwo || formData?.formData?.LicneseDetails?.addressLineTwo || "");
-  const [addressLineThree, setAddressLineThree] = useState(formData?.LicneseDetails?.addressLineThree || formData?.formData?.LicneseDetails?.addressLineThree || "");
-  const [addressLineFour, setAddressLineFour] = useState(formData?.LicneseDetails?.addressLineFour || formData?.formData?.LicneseDetails?.addressLineFour || "");
+  const [PermanentAddress, setPermanentAddress] = useState(
+    formData?.LicneseDetails?.PermanentAddress || formData?.formData?.LicneseDetails?.PermanentAddress
+  );
+  const [addressLineOne, setAddressLineOne] = useState(
+    formData?.LicneseDetails?.addressLineOne || formData?.formData?.LicneseDetails?.addressLineOne || ""
+  );
+  const [addressLineTwo, setAddressLineTwo] = useState(
+    formData?.LicneseDetails?.addressLineTwo || formData?.formData?.LicneseDetails?.addressLineTwo || ""
+  );
+  const [addressLineThree, setAddressLineThree] = useState(
+    formData?.LicneseDetails?.addressLineThree || formData?.formData?.LicneseDetails?.addressLineThree || ""
+  );
+  const [addressLineFour, setAddressLineFour] = useState(
+    formData?.LicneseDetails?.addressLineFour || formData?.formData?.LicneseDetails?.addressLineFour || ""
+  );
   const [city, setCity] = useState(formData?.LicneseDetails?.city || formData?.formData?.LicneseDetails?.city || "");
   const [pincode, setPincode] = useState(formData?.LicneseDetails?.pincode || formData?.formData?.LicneseDetails?.pincode || "");
   const [village, setVillage] = useState(formData?.LicneseDetails?.village || formData?.formData?.LicneseDetails?.village || "");
   const [tehsil, setTehsil] = useState(formData?.LicneseDetails?.tehsil || formData?.formData?.LicneseDetails?.tehsil || "");
   const [state, setState] = useState(formData?.LicneseDetails?.state || formData?.formData?.LicneseDetails?.state || "");
   const [district, setDistrict] = useState(formData?.LicneseDetails?.district || formData?.formData?.LicneseDetails?.district || "");
-  const [addressSameAsPermanent, setSelectedChecked] = useState(formData?.LicenseDetails?.addressSameAsPermanent || formData?.LicenseDetails?.addressSameAsPermanent || "")
-  const [Correspondenceaddress, setCorrespondenceaddress] = useState(formData?.Correspondenceaddress || formData?.formData?.Correspondenceaddress || "");
-  const [addressLineOneCorrespondence, setAddressLineOneCorrespondence] = useState(formData?.addressLineOneCorrespondence || formData?.formData?.addressLineOneCorrespondence || "");
-  const [addressLineTwoCorrespondence, setAddressLineTwoCorrespondence] = useState(formData?.addressLineTwoCorrespondence || formData?.formData?.addressLineTwoCorrespondence || "");
-  const [addressLineThreeCorrespondence, setAddressLineThreeCorrespondence] = useState(formData?.addressLineThreeCorrespondence || formData?.formData?.addressLineThreeCorrespondence || "");
-  const [addressLineFourCorrespondence, setAddressLineFourCorrespondence] = useState(formData?.addressLineFourCorrespondence || formData?.formData?.addressLineFourCorrespondence || "");
+  const [addressSameAsPermanent, setSelectedChecked] = useState(
+    formData?.LicenseDetails?.addressSameAsPermanent || formData?.LicenseDetails?.addressSameAsPermanent || ""
+  );
+  const [Correspondenceaddress, setCorrespondenceaddress] = useState(
+    formData?.Correspondenceaddress || formData?.formData?.Correspondenceaddress || ""
+  );
+  const [addressLineOneCorrespondence, setAddressLineOneCorrespondence] = useState(
+    formData?.addressLineOneCorrespondence || formData?.formData?.addressLineOneCorrespondence || ""
+  );
+  const [addressLineTwoCorrespondence, setAddressLineTwoCorrespondence] = useState(
+    formData?.addressLineTwoCorrespondence || formData?.formData?.addressLineTwoCorrespondence || ""
+  );
+  const [addressLineThreeCorrespondence, setAddressLineThreeCorrespondence] = useState(
+    formData?.addressLineThreeCorrespondence || formData?.formData?.addressLineThreeCorrespondence || ""
+  );
+  const [addressLineFourCorrespondence, setAddressLineFourCorrespondence] = useState(
+    formData?.addressLineFourCorrespondence || formData?.formData?.addressLineFourCorrespondence || ""
+  );
   const [cityCorrespondence, setCityCorrespondence] = useState(formData?.cityCorrespondence || formData?.formData?.cityCorrespondence || "");
-  const [pincodeCorrespondence, setPincodeCorrespondence] = useState(formData?.pincodeCorrespondence || formData?.formData?.pincodeCorrespondence || "");
-  const [villageCorrespondence, setVillageCorrespondence] = useState(formData?.villageCorrespondence || formData?.formData?.villageCorrespondence || "");
+  const [pincodeCorrespondence, setPincodeCorrespondence] = useState(
+    formData?.pincodeCorrespondence || formData?.formData?.pincodeCorrespondence || ""
+  );
+  const [villageCorrespondence, setVillageCorrespondence] = useState(
+    formData?.villageCorrespondence || formData?.formData?.villageCorrespondence || ""
+  );
   const [tehsilCorrespondence, setTehsilCorrespondence] = useState(formData?.tehsilCorrespondence || formData?.formData?.tehsilCorrespondence || "");
   const [stateCorrespondence, setStateCorrespondence] = useState(formData?.stateCorrespondence || formData?.formData?.stateCorrespondence || "");
-  const [districtCorrespondence, setDistrictCorrespondence] = useState(formData?.districtCorrespondence || formData?.formData?.districtCorrespondence || "");
+  const [districtCorrespondence, setDistrictCorrespondence] = useState(
+    formData?.districtCorrespondence || formData?.formData?.districtCorrespondence || ""
+  );
   const [isAddressSame, setisAddressSame] = useState(formData?.isAddressSame || formData?.formData?.isAddressSame || false);
   const [error, setError] = useState(null);
   const [showToast, setShowToast] = useState(null);
   const [showToastError, setShowToastError] = useState(null);
-  const [filsArray,setFilesArray] = useState([]);
+  const [filsArray, setFilesArray] = useState([]);
   const inputs = [
     {
       label: "HR_BIRTH_DATE_LABEL",
@@ -145,7 +194,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   ];
 
   const getDocumentData = async (file, fieldName, index) => {
-    if(getValues("licenceBoardResolution")?.includes(file.name)){
+    if (getValues("licenceBoardResolution")?.includes(file.name)) {
       setShowToastError({ key: "error" });
       return;
     }
@@ -160,37 +209,30 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
       const Resp = await axios.post("/filestore/v1/files", formData, {}).then((response) => {
         return response;
       });
-     
+
       setLoading(false);
       setShowToast({ key: "success" });
-      console.log(Resp?.data?.files);
-      
+
       // if(formType === "licenceBoardResolution"){
-      
-        setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
-        // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
-        console.log("getValues()=====", getValues(), { ...Documents, ...getValues() }, Documents);
-        setDocumentsData({ ...Documents, ...getValues() });
-        setBoardResolution(Documents?.uploadBoardResolution);
-        setDigitalSign(Documents?.uploadDigitalSignaturePdf);
+
+      setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
+      // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
+      setDocumentsData({ ...Documents, ...getValues() });
+      setBoardResolution(Documents?.uploadBoardResolution);
+      setDigitalSign(Documents?.uploadDigitalSignaturePdf);
       // }
-    
     } catch (error) {
       setLoading(false);
-      alert(error?.response?.data?.Errors?.[0]?.description);
-      console.log(error,error?.body,error?.response?.data?.Errors?.[0]?.description);
     }
   };
 
-  const applicantType = () =>{
-
+  const applicantType = () => {
     resetForm();
-  }
-
+  };
 
   const resetForm = () => {
-    setPanValError("")
-  }
+    setPanValError("");
+  };
   const [panValidation, setPanValidation] = useState("");
   const [PanValError, setPanValError] = useState("");
   // function setValue(value, input) {
@@ -201,13 +243,13 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   if (isOpenLinkFlow)
     window.onunload = function () {
       sessionStorage.removeItem("Digit.BUILDING_PERMIT");
-    }
+    };
 
   const { isLoading, data: genderTypeData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["GenderType"]);
 
   let menu = [];
   genderTypeData &&
-    genderTypeData["common-masters"].GenderType.filter(data => data.active).map((genderDetails) => {
+    genderTypeData["common-masters"].GenderType.filter((data) => data.active).map((genderDetails) => {
       menu.push({ i18nKey: `COMMON_GENDER_${genderDetails.code}`, code: `${genderDetails.code}`, value: `${genderDetails.code}` });
     });
   const editScreen = false;
@@ -215,77 +257,73 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   const panVerification = async () => {
     try {
       const panVal = {
-        "txnId": "f7f1469c-29b0-4325-9dfc-c567200a70f7",
-        "format": "xml",
-        "certificateParameters": {
-          "panno": PanNumber,
-          "PANFullName": name,
-          "FullName": name,
-          "DOB": dob,
-          "GENDER": gender
+        txnId: "f7f1469c-29b0-4325-9dfc-c567200a70f7",
+        format: "xml",
+        certificateParameters: {
+          panno: PanNumber,
+          PANFullName: name,
+          FullName: name,
+          DOB: dob,
+          GENDER: gender,
         },
-        "consentArtifact": {
-          "consent": {
-            "consentId": "ea9c43aa-7f5a-4bf3-a0be-e1caa24737ba",
-            "timestamp": "2022-10-08T06:21:51.321Z",
-            "dataConsumer": {
-              "id": "string"
+        consentArtifact: {
+          consent: {
+            consentId: "ea9c43aa-7f5a-4bf3-a0be-e1caa24737ba",
+            timestamp: "2022-10-08T06:21:51.321Z",
+            dataConsumer: {
+              id: "string",
             },
-            "dataProvider": {
-              "id": "string"
+            dataProvider: {
+              id: "string",
             },
-            "purpose": {
-              "description": "string"
+            purpose: {
+              description: "string",
             },
-            "user": {
-              "idType": "string",
-              "idNumber": "string",
-              "mobile": mobileNumber,
-              "email": email
+            user: {
+              idType: "string",
+              idNumber: "string",
+              mobile: mobileNumber,
+              email: email,
             },
-            "data": {
-              "id": "string"
+            data: {
+              id: "string",
             },
-            "permission": {
-              "access": "string",
-              "dateRange": {
-                "from": "2022-10-08T06:21:51.321Z",
-                "to": "2022-10-08T06:21:51.321Z"
+            permission: {
+              access: "string",
+              dateRange: {
+                from: "2022-10-08T06:21:51.321Z",
+                to: "2022-10-08T06:21:51.321Z",
               },
-              "frequency": {
-                "unit": "string",
-                "value": 0,
-                "repeats": 0
-              }
-            }
+              frequency: {
+                unit: "string",
+                value: 0,
+                repeats: 0,
+              },
+            },
           },
-          "signature": {
-            "signature": "string"
-          }
-        }
-      }
+          signature: {
+            signature: "string",
+          },
+        },
+      };
       const panResp = await axios.post(`/certificate/v3/pan/pancr`, panVal, {
         headers: {
-          'Content-Type': 'application/json',
-          'X-APISETU-APIKEY': 'PDSHazinoV47E18bhNuBVCSEm90pYjEF',
-          'X-APISETU-CLIENTID': 'in.gov.tcpharyana',
-          'Access-Control-Allow-Origin': "*",
-        }
-      })
-      // console.log("PANDET", panResp?.data);
+          "Content-Type": "application/json",
+          "X-APISETU-APIKEY": "PDSHazinoV47E18bhNuBVCSEm90pYjEF",
+          "X-APISETU-CLIENTID": "in.gov.tcpharyana",
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
     } catch (error) {
-      console.log(error?.response?.data?.errorDescription);
-      setPanValError(error?.response?.data?.errorDescription)
+      setPanValError(error?.response?.data?.errorDescription);
     }
-  }
-  console.log(panValidation);
+  };
   useEffect(() => {
     if (PanNumber.length === 10) {
-      panVerification
+      panVerification;
     }
   }, [PanNumber]);
 
- 
   function SelectName(e) {
     setName(e.target.value);
   }
@@ -293,7 +331,6 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   //   setEmail(e.target.value);
   // }
   function setGenderName(value) {
-    console.log("GENDER",value);
     setGender(value);
   }
 
@@ -308,10 +345,10 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     // if(e.target.value === 10){
     //   panVerification();
     // }
-    if (!e.target.value || /^\w+$/.test(e.target.value)){
+    if (!e.target.value || /^\w+$/.test(e.target.value)) {
       setPanNumber(e.target.value.toUpperCase());
-      if(e.target.value === 10){
-        alert("HEY")
+      if (e.target.value === 10) {
+        alert("HEY");
         panVerification();
       }
     }
@@ -342,7 +379,6 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     } else {
       setAddressLineThree(e.target.value);
     }
-    
   }
   function selectLocality(e) {
     if (isAddressSame == true) {
@@ -353,7 +389,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     }
   }
   function selectCity(e) {
-    if(!e.target.value || e.target.value.match("^[a-zA-Z ]*$")){
+    if (!e.target.value || e.target.value.match("^[a-zA-Z ]*$")) {
       if (isAddressSame == true) {
         setCity(e.target.value);
         setCityCorrespondence(e.target.value);
@@ -363,7 +399,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     }
   }
   function selectPincode(e) {
-    if(!e.target.value || e.target.value.match("^[1-9][0-9]*$")){
+    if (!e.target.value || e.target.value.match("^[1-9][0-9]*$")) {
       if (isAddressSame == true) {
         setPincode(e.target.value);
         setPincodeCorrespondence(e.target.value);
@@ -373,7 +409,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     }
   }
   function selectVillage(e) {
-    if(!e.target.value || e.target.value.match("^[a-zA-Z ]*$")){
+    if (!e.target.value || e.target.value.match("^[a-zA-Z ]*$")) {
       if (isAddressSame == true) {
         setVillage(e.target.value);
         setVillageCorrespondence(e.target.value);
@@ -383,17 +419,17 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     }
   }
   function selectTehsil(e) {
-    if(!e.target.value || e.target.value.match("^[a-zA-Z ]*$")){
+    if (!e.target.value || e.target.value.match("^[a-zA-Z ]*$")) {
       if (isAddressSame == true) {
         setTehsil(e.target.value);
-        setTehsilCorrespondence(e.target.value)
+        setTehsilCorrespondence(e.target.value);
       } else {
         setTehsil(e.target.value);
       }
     }
   }
   function selectDistrict(e) {
-    if(!e.target.value || e.target.value.match("^[a-zA-Z ]*$")){
+    if (!e.target.value || e.target.value.match("^[a-zA-Z ]*$")) {
       if (isAddressSame == true) {
         setDistrict(e.target.value);
         setDistrictCorrespondence(e.target.value);
@@ -403,7 +439,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     }
   }
   function selectState(e) {
-    if(!e.target.value || e.target.value.match("^[a-zA-Z ]*$")){
+    if (!e.target.value || e.target.value.match("^[a-zA-Z ]*$")) {
       if (isAddressSame == true) {
         setState(e.target.value);
         setStateCorrespondence(e.target.value);
@@ -416,7 +452,9 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     if (isAddressSame == false) {
       setisAddressSame(true);
       // setSelectedChecked(formData?.LicenseDetails?.addressSameAsPermanent ? formData?.LicenseDetails?.addressSameAsPermanent : formData?.LicenseDetails?.addressSameAsPermanent)
-      setCorrespondenceaddress(formData?.LicneseDetails?.PermanentAddress ? formData?.LicneseDetails?.PermanentAddress : formData?.formData?.LicneseDetails?.PermanentAddress);
+      setCorrespondenceaddress(
+        formData?.LicneseDetails?.PermanentAddress ? formData?.LicneseDetails?.PermanentAddress : formData?.formData?.LicneseDetails?.PermanentAddress
+      );
       setAddressLineOneCorrespondence(addressLineOne);
       setAddressLineTwoCorrespondence(addressLineTwo);
       setAddressLineThreeCorrespondence(addressLineThree);
@@ -427,8 +465,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
       setTehsilCorrespondence(tehsil);
       setStateCorrespondence(state);
       setDistrictCorrespondence(district);
-    }
-    else {
+    } else {
       Array.from(document.querySelectorAll("input")).forEach((input) => (input.value = ""));
       setisAddressSame(false);
       setCorrespondenceaddress("");
@@ -460,7 +497,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     setAddressLineFourCorrespondence(e.target.value);
   }
   function selectCityCorrespondence(e) {
-    if(!e.target.value || e.target.value.match("^[a-zA-Z ]*$")){
+    if (!e.target.value || e.target.value.match("^[a-zA-Z ]*$")) {
       setCityCorrespondence(e.target.value);
     }
   }
@@ -468,71 +505,68 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     setPincodeCorrespondence(value);
   }
   function selectVillageCorrespondence(e) {
-    if(!e.target.value || e.target.value.match("^[a-zA-Z ]*$")){
+    if (!e.target.value || e.target.value.match("^[a-zA-Z ]*$")) {
       setVillageCorrespondence(e.target.value);
     }
   }
   function selectTehsilCorrespondence(e) {
-    if(!e.target.value || e.target.value.match("^[a-zA-Z ]*$")){
+    if (!e.target.value || e.target.value.match("^[a-zA-Z ]*$")) {
       setTehsilCorrespondence(e.target.value);
     }
   }
   function selectStateCorrespondence(e) {
-    if(!e.target.value || e.target.value.match("^[a-zA-Z ]*$")){
+    if (!e.target.value || e.target.value.match("^[a-zA-Z ]*$")) {
       setStateCorrespondence(e.target.value);
     }
   }
   function selectDistrictCorrespondence(e) {
-    if(!e.target.value || e.target.value.match("^[a-zA-Z ]*$")){
+    if (!e.target.value || e.target.value.match("^[a-zA-Z ]*$")) {
       setDistrictCorrespondence(e.target.value);
     }
   }
-      
-      
 
   const goNext = async () => {
-
     if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
       let licenseDet = {
-        "Licenses": [
+        Licenses: [
           {
-            "tradeLicenseDetail": {
-              "owners": [
+            tradeLicenseDetail: {
+              owners: [
                 {
-                  "parentid":userInfo?.info?.id,
-                  "gender": genderUser,
-                  "mobileNumber": mobileNumber,
-                  "name": name,
-                  "dob": null,
-                  "emailId": email,
-                  "permanentAddress": PermanentAddress,
-                  "correspondenceAddress": Correspondenceaddress,
-                  "pan":PanNumber,
-                  "uuid":userInfo?.info?.uuid
+                  parentid: userInfo?.info?.id,
+                  gender: genderUser,
+                  mobileNumber: mobileNumber,
+                  name: name,
+                  dob: null,
+                  emailId: email,
+                  permanentAddress: PermanentAddress,
+                  correspondenceAddress: Correspondenceaddress,
+                  pan: PanNumber,
+                  uuid: userInfo?.info?.uuid,
                   // "permanentPinCode": "143001"
-                }
+                },
               ],
-              "subOwnerShipCategory": "INDIVIDUAL",
-              "tradeType": "BUILDER.CLASSA",
-              
-              "additionalDetail": {
-                "counsilForArchNo": null,
+              subOwnerShipCategory: "INDIVIDUAL",
+              tradeType: "BUILDER.CLASSA",
+
+              additionalDetail: {
+                counsilForArchNo: null,
               },
-              "address": {
-                "city": "",
-                "landmark": "",
-                "pincode": ""
+              address: {
+                city: "",
+                landmark: "",
+                pincode: "",
               },
-              "institution": null,
-              "applicationDocuments": null
+              institution: null,
+              applicationDocuments: null,
             },
-            "licenseType": "PERMANENT",
-            "businessService": "BPAREG",
-            "tenantId": stateId,
-            "action": "NOWORKFLOW"
-          }
-        ]
-      }
+            licenseType: "PERMANENT",
+            businessService: "BPAREG",
+            tenantId: stateId,
+            action: "NOWORKFLOW",
+          },
+        ],
+      };
 
       if(LicenseType === 'ARCHITECT.CLASSA'){
         onSelect(config.key, licenseDet,null,null,"stakeholder-document-details");
@@ -550,8 +584,8 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
             addressLineOneCorrespondence: addressLineOneCorrespondence,
             addressLineTwoCorrespondence: addressLineTwoCorrespondence,
 
-            isAddressSame: isAddressSame
-          }
+            isAddressSame: isAddressSame,
+          };
           //1, units
           if(LicenseType === 'ARCHITECT.CLASSA'){
             onSelect("", formData,"",true,"stakeholder-document-details");
@@ -567,12 +601,11 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
         });
 
       const developerRegisterData = {
-        "createdBy":userInfo?.info?.id,
-        "updatedBy":userInfo?.info?.id,
-        "id":userInfo?.info?.id,
-        "devDetail": {
-          
-          "licenceDetails": {
+        createdBy: userInfo?.info?.id,
+        updatedBy: userInfo?.info?.id,
+        id: userInfo?.info?.id,
+        devDetail: {
+          licenceDetails: {
             name: name,
             mobileNumber: mobileNumber,
             gender: gender.value,
@@ -591,7 +624,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
             tehsil: tehsil,
             state: state,
             district: district,
-            isAddressSame:isAddressSame,
+            isAddressSame: isAddressSame,
             addressLineOneCorrespondence: addressLineOneCorrespondence,
             addressLineTwoCorrespondence: addressLineTwoCorrespondence,
             addressLineThreeCorrespondence: addressLineThreeCorrespondence,
@@ -614,8 +647,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
       }
       Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
         .then((result, err) => {
-          // console.log("DATA", result?.id);
-          localStorage.setItem('devRegId', JSON.stringify(result?.id));
+          localStorage.setItem("devRegId", JSON.stringify(result?.id));
           setIsDisableForNext(false);
           let data = {
             result: result,
@@ -624,8 +656,8 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
             addressLineOneCorrespondence: addressLineOneCorrespondence,
             addressLineTwoCorrespondence: addressLineTwoCorrespondence,
 
-            isAddressSame: isAddressSame
-          }
+            isAddressSame: isAddressSame,
+          };
           //1, units
           if(LicenseType === 'ARCHITECT.CLASSA'){
             onSelect("", formData,"",true,"stakeholder-document-details");
@@ -639,10 +671,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
           setShowToast({ key: "error" });
           setError(e?.response?.data?.Errors[0]?.message || null);
         });
-
-
-    }
-    else {
+    } else {
       // let data = formData?.formData;
       formData.name = name;
       formData.mobileNumber = mobileNumber;
@@ -660,7 +689,6 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
       }
       // onSelect("", formData)
     }
-
   };
 
   const navigate = useHistory();
@@ -679,7 +707,6 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     <div>
       {loader && <Spinner />}
       <div className={isOpenLinkFlow ? "OpenlinkContainer" : ""}>
-
         {isOpenLinkFlow && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
         <Timeline currentStep={2} flow={ LicenseType === 'ARCHITECT.CLASSA' ? 'ARCHITECT.CLASSA' : "STAKEHOLDER" } onChangeStep={changeStep} isAPILoaded={LicenseType ? true : false} />
         {!isLoading ?
@@ -688,13 +715,28 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
             onSelect={goNext}
             onSkip={onSkip}
             t={t}
-            isDisabled={!name || !mobileNumber || !mobileNumber.match(Digit.Utils.getPattern("MobileNo")) || !gender || !dob || !email || !email.match(Digit.Utils.getPattern("Email")) || !PanNumber || !PanNumber.match(Digit.Utils.getPattern("PAN")) || !pincode?.match(Digit.Utils.getPattern('Pincode') || !city || !addressLineOne) || !uploadBoardResolution}
+            isDisabled={
+              !name ||
+              !mobileNumber ||
+              !mobileNumber.match(Digit.Utils.getPattern("MobileNo")) ||
+              !gender ||
+              !dob ||
+              !email ||
+              !email.match(Digit.Utils.getPattern("Email")) ||
+              !PanNumber ||
+              !PanNumber.match(Digit.Utils.getPattern("PAN")) ||
+              !pincode?.match(Digit.Utils.getPattern("Pincode") || !city || !addressLineOne) ||
+              !uploadBoardResolution
+            }
           >
             <Card className="mb-3">
               {/* <h4></h4> */}
               <Row className="justify-content-left">
                 <Form.Group className="col-md-4 mb-2">
-                  <label>{`${t("BPA_APPLICANT_NAME_LABEL")}`}<span class="text-danger font-weight-bold mx-2">*</span></label>
+                  <label>
+                    {`${t("BPA_APPLICANT_NAME_LABEL")}`}
+                    <span class="text-danger font-weight-bold mx-2">*</span>
+                  </label>
                   {/* <TextInput
                     t={t}
                     type={"text"}
@@ -710,17 +752,13 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                       type: "text",
                     })}
                   /> */}
-                  <input
-                    type="text"
-                    name="name"
-                    value={name}
-                    onChange={SelectName}
-                    disabled="disabled"
-                    className="form-control"
-                  />
+                  <input type="text" name="name" value={name} onChange={SelectName} disabled="disabled" className="form-control" />
                 </Form.Group>
                 <Form.Group className="col-md-4 mb-2">
-                  <label>{`${t("BPA_APPLICANT_GENDER_LABEL")}`}<span class="text-danger font-weight-bold mx-2">*</span></label>
+                  <label>
+                    {`${t("BPA_APPLICANT_GENDER_LABEL")}`}
+                    <span class="text-danger font-weight-bold mx-2">*</span>
+                  </label>
                   <div className="row">
                     <Dropdown
                       style={{ width: "100%" }}
@@ -749,7 +787,10 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   </div>
                 </Form.Group>
                 <Form.Group className="col-md-4 mb-2">
-                  <label>{`${t("BPA_OWNER_MOBILE_NO_LABEL")}`}<span class="text-danger font-weight-bold mx-2">*</span></label>
+                  <label>
+                    {`${t("BPA_OWNER_MOBILE_NO_LABEL")}`}
+                    <span class="text-danger font-weight-bold mx-2">*</span>
+                  </label>
                   <MobileNumber
                     value={mobileNumber}
                     name="mobileNumber"
@@ -760,7 +801,10 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                 </Form.Group>
                 {inputs?.map((input, index) => (
                   <Form.Group className="col-md-4 mb-2">
-                    <label>{`${"Enter Date of Birth"}`}<span class="text-danger font-weight-bold mx-2">*</span></label>
+                    <label>
+                      {`${"Enter Date of Birth"}`}
+                      <span class="text-danger font-weight-bold mx-2">*</span>
+                    </label>
                     {/* <DatePicker
                       isMandatory={true}
                       date={dob}
@@ -769,7 +813,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                       max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear() - 18))}
                     /> */}
 
-                    <input 
+                    <input
                       type="date"
                       value={dob}
                       date={dob}
@@ -780,10 +824,12 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                       max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear() - 18))}
                     />
                   </Form.Group>
-                )
-                )}
+                ))}
                 <Form.Group className="col-md-4 mb-2">
-                  <label>{`${t("BPA_APPLICANT_EMAIL_LABEL")}`}<span class="text-danger font-weight-bold mx-2">*</span></label>
+                  <label>
+                    {`${t("BPA_APPLICANT_EMAIL_LABEL")}`}
+                    <span class="text-danger font-weight-bold mx-2">*</span>
+                  </label>
                   {/* <TextInput
                     t={t}
                     type={"email"}
@@ -794,17 +840,18 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                     placeholder={email}
                     onChange={(e) => setEmail(e.target.value)}
                   /> */}
-                  <input 
-                    name="email"
-                    value={email}
-                    placeholder={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    class="form-control"
-                  />
-                  {email && email.length > 0 && !email.match(Digit.Utils.getPattern('Email')) && <labelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{("Invalid Email Address")}</labelError>}
+                  <input name="email" value={email} placeholder={email} onChange={(e) => setEmail(e.target.value)} class="form-control" />
+                  {email && email.length > 0 && !email.match(Digit.Utils.getPattern("Email")) && (
+                    <labelError style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
+                      {"Invalid Email Address"}
+                    </labelError>
+                  )}
                 </Form.Group>
                 <Form.Group className="col-md-4 mb-2">
-                  <label>{`${t("BPA_APPLICANT_PAN_NO")}`}<span class="text-danger font-weight-bold mx-2">*</span></label>
+                  <label>
+                    {`${t("BPA_APPLICANT_PAN_NO")}`}
+                    <span class="text-danger font-weight-bold mx-2">*</span>
+                  </label>
                   <input
                     type="text"
                     name="PanNumber"
@@ -815,48 +862,62 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                     max={10}
                     maxlength="10"
                   />
-                  {PanNumber && PanNumber.length > 0 && !PanNumber.match(Digit.Utils.getPattern('PAN')) && <labelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_PAN_NO")}</labelError>}
-                  <h3 className="error-message" style={{ color: "red" }}>{PanValError}</h3>
+                  {PanNumber && PanNumber.length > 0 && !PanNumber.match(Digit.Utils.getPattern("PAN")) && (
+                    <labelError style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
+                      {t("BPA_INVALID_PAN_NO")}
+                    </labelError>
+                  )}
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {PanValError}
+                  </h3>
                 </Form.Group>
                 <Form.Group className="col-md-4 mb-2">
-                    <label htmlFor="name" className="text">Upload Board Resolution <span className="text-danger font-weight-bold">*</span></label>
-                    <div className="d-flex">
-                      <input
-                        type="file"
-                        name="uploadBoardResolution"
-                        accept="application/pdf"
-                        placeholder=""
-                        class="form-control"
-                        onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBoardResolution","licenceBoardResolution")}
-                      />
-                      <span>
-                      {uploadBoardResolution ?
-                          <a onClick={() => getDocShareholding(uploadBoardResolution)} className="btn btn-sm col-md-6">
-                              <VisibilityIcon color="info" className="icon" />
-                          </a> : <p></p>
-                      }
-                      </span>
-                    </div>
+                  <label htmlFor="name" className="text">
+                    Upload Board Resolution <span className="text-danger font-weight-bold">*</span>
+                  </label>
+                  <div className="d-flex">
+                    <input
+                      type="file"
+                      name="uploadBoardResolution"
+                      accept="application/pdf"
+                      placeholder=""
+                      class="form-control"
+                      onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBoardResolution", "licenceBoardResolution")}
+                    />
+                    <span>
+                      {uploadBoardResolution ? (
+                        <a onClick={() => getDocShareholding(uploadBoardResolution)} className="btn btn-sm col-md-6">
+                          <VisibilityIcon color="info" className="icon" />
+                        </a>
+                      ) : (
+                        <p></p>
+                      )}
+                    </span>
+                  </div>
                 </Form.Group>
                 <Form.Group className="col-md-4 mb-2">
-                    <label htmlFor="name" className="text">Upload Digital Signature <span className="text-danger font-weight-bold">*</span></label>
-                    <div className="d-flex">
-                      <input
-                        type="file"
-                        name="uploadDigitalSignaturePdf"
-                        accept="application/pdf"
-                        placeholder=""
-                        class="form-control"
-                        onChange={(e) => getDocumentData(e?.target?.files[0], "uploadDigitalSignaturePdf","licenceBoardResolution")}
-                      />
-                      <span>
-                      {uploadDigitalSignaturePdf ?
-                          <a onClick={() => getDocShareholding(uploadDigitalSignaturePdf)} className="btn btn-sm col-md-6">
-                              <VisibilityIcon color="info" className="icon" />
-                          </a> : <p></p>
-                      }
-                      </span>
-                    </div>
+                  <label htmlFor="name" className="text">
+                    Upload Digital Signature <span className="text-danger font-weight-bold">*</span>
+                  </label>
+                  <div className="d-flex">
+                    <input
+                      type="file"
+                      name="uploadDigitalSignaturePdf"
+                      accept="application/pdf"
+                      placeholder=""
+                      class="form-control"
+                      onChange={(e) => getDocumentData(e?.target?.files[0], "uploadDigitalSignaturePdf", "licenceBoardResolution")}
+                    />
+                    <span>
+                      {uploadDigitalSignaturePdf ? (
+                        <a onClick={() => getDocShareholding(uploadDigitalSignaturePdf)} className="btn btn-sm col-md-6">
+                          <VisibilityIcon color="info" className="icon" />
+                        </a>
+                      ) : (
+                        <p></p>
+                      )}
+                    </span>
+                  </div>
                 </Form.Group>
               </Row>
             </Card>
@@ -876,7 +937,10 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   />
               </Form.Group> */}
                 <Form.Group className="col-md-4 mb-2">
-                  <label>{`${"Address Line 1"}`}<span class="text-danger font-weight-bold mx-2">*</span></label>
+                  <label>
+                    {`${"Address Line 1"}`}
+                    <span class="text-danger font-weight-bold mx-2">*</span>
+                  </label>
                   {/* <TextInput
                     t={t}
                     type={"text"}
@@ -892,13 +956,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                       
                     })}
                   /> */}
-                  <input
-                    type="text"
-                    name="addressLineOne"
-                    value={addressLineOne}
-                    onChange={selectHouseNumber}
-                    className="form-control"
-                  />
+                  <input type="text" name="addressLineOne" value={addressLineOne} onChange={selectHouseNumber} className="form-control" />
                   {/* <Form.Control type="text" placeholder="N/A" {...register("addressLineOne")}   onChange={(e) => setAddressLineOne(e.target.value)} value={addressLineOne}/>
               <h3 className="error-message"style={{color:"red"}}>{errors?.addressLineOne && errors?.addressLineOne?.message}</h3> */}
                 </Form.Group>
@@ -963,7 +1021,10 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   />
                 </Form.Group>
                 <Form.Group className="col-md-4 mb-2">
-                  <label>{`${"City"}`}<span class="text-danger font-weight-bold mx-2">*</span></label>
+                  <label>
+                    {`${"City"}`}
+                    <span class="text-danger font-weight-bold mx-2">*</span>
+                  </label>
                   {/* <TextInput
                     t={t}
                     type={"text"}
@@ -978,13 +1039,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                       type: "text",
                     })}
                   /> */}
-                  <input
-                    name="city"
-                    value={city}
-                    placeholder={city}
-                    onChange={selectCity}
-                    className="form-control"
-                  />
+                  <input name="city" value={city} placeholder={city} onChange={selectCity} className="form-control" />
                 </Form.Group>
                 <Form.Group className="col-md-4 mb-2">
                   <label>{`${"Pincode"}*`}</label>
@@ -1006,7 +1061,11 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                     onChange={selectPincode}
                     className="form-control"
                   />
-                  {pincode && pincode.length > 0 && !pincode.match(Digit.Utils.getPattern('Pincode')) && <labelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid Pincode")}</labelError>}
+                  {pincode && pincode.length > 0 && !pincode.match(Digit.Utils.getPattern("Pincode")) && (
+                    <labelError style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
+                      {t("Please enter valid Pincode")}
+                    </labelError>
+                  )}
                 </Form.Group>
                 <Form.Group className="col-md-4 mb-2">
                   <label>{`${"Village"}`}</label>
@@ -1024,14 +1083,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                       type: "text",
                     })}
                   /> */}
-                  <input
-                    type="text"
-                    name="village"
-                    value={village}
-                    placeholder={village}
-                    onChange={selectVillage}
-                    className="form-control"
-                  />
+                  <input type="text" name="village" value={village} placeholder={village} onChange={selectVillage} className="form-control" />
                 </Form.Group>
                 <Form.Group className="col-md-4 mb-2">
                   <label>{`${"Tehsil"}`}</label>
@@ -1049,14 +1101,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                       type: "text",
                     })}
                   /> */}
-                  <input
-                    type="text"
-                    name="tehsil"
-                    value={tehsil}
-                    placeholder={tehsil}
-                    onChange={selectTehsil}
-                    className="form-control"
-                  />
+                  <input type="text" name="tehsil" value={tehsil} placeholder={tehsil} onChange={selectTehsil} className="form-control" />
                 </Form.Group>
                 <Form.Group className="col-md-4 mb-2">
                   <label>{`${"State"}`}</label>
@@ -1074,14 +1119,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                       type: "text",
                     })}
                   /> */}
-                  <input
-                    type="text"
-                    name="state"
-                    value={state}
-                    placeholder={state}
-                    onChange={selectState}
-                    className="form-control"
-                  />
+                  <input type="text" name="state" value={state} placeholder={state} onChange={selectState} className="form-control" />
                 </Form.Group>
                 <Form.Group className="col-md-4 mb-2">
                   <label>{`${"District"}`}</label>
@@ -1099,14 +1137,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                       type: "text",
                     })}
                   /> */}
-                  <input
-                    type="text"
-                    name="district"
-                    value={district}
-                    placeholder={district}
-                    onChange={selectDistrict}
-                    className="form-control"
-                  />
+                  <input type="text" name="district" value={district} placeholder={district} onChange={selectDistrict} className="form-control" />
                 </Form.Group>
               </Row>
             </Card>
@@ -1124,7 +1155,10 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   />
                 </Form.Group>
                 <Form.Group className="col-md-4 mb-2">
-                  <label>{`${"Address Line 1"}`}<span class="text-danger font-weight-bold mx-2">*</span></label>
+                  <label>
+                    {`${"Address Line 1"}`}
+                    <span class="text-danger font-weight-bold mx-2">*</span>
+                  </label>
                   {/* <TextInput
                     t={t}
                     type={"text"}
@@ -1249,15 +1283,15 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                       onChange={selectPincodeCorrespondence}
                       {...{ required: true, pattern: "[1-9][0-9]{5}", type: "tel"}}
                     /> */}
-                    <input
-                      type="number"
-                      name="pincodeCorrespondence"
-                      value={pincodeCorrespondence}
-                      placeholder={pincodeCorrespondence}
-                      onChange={selectPincodeCorrespondence}
-                      className="form-control"
-                      disabled={isAddressSame ? true : false}
-                    />
+                  <input
+                    type="number"
+                    name="pincodeCorrespondence"
+                    value={pincodeCorrespondence}
+                    placeholder={pincodeCorrespondence}
+                    onChange={selectPincodeCorrespondence}
+                    className="form-control"
+                    disabled={isAddressSame ? true : false}
+                  />
                 </Form.Group>
                 <Form.Group className="col-md-4 mb-2">
                   <label>{`${"Village"}`}</label>
@@ -1369,9 +1403,32 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                 </Form.Group>
               </Row>
             </Card>
-            {showToast && <Toast success={showToast?.key === "success" ? true : false} label="Document Uploaded Successfully" isDleteBtn={true} onClose={() => { setShowToast(null); setError(null); }} />}
-            {showToastError && <Toast error={showToastError?.key === "error" ? true : false} label="Duplicate file Selected" isDleteBtn={true} onClose={() => { setShowToastError(null); setError(null); }} />}
-          </FormStep> : <Loader />}
+            {showToast && (
+              <Toast
+                success={showToast?.key === "success" ? true : false}
+                label="Document Uploaded Successfully"
+                isDleteBtn={true}
+                onClose={() => {
+                  setShowToast(null);
+                  setError(null);
+                }}
+              />
+            )}
+            {showToastError && (
+              <Toast
+                error={showToastError?.key === "error" ? true : false}
+                label="Duplicate file Selected"
+                isDleteBtn={true}
+                onClose={() => {
+                  setShowToastError(null);
+                  setError(null);
+                }}
+              />
+            )}
+          </FormStep>
+        ) : (
+          <Loader />
+        )}
       </div>
     </div>
   );
