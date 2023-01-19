@@ -106,9 +106,8 @@ const LandScheduleForm = (props) => {
       dataIndex: "validity",
     },
     {
-      key: "date",
       title: "Date ",
-      dataIndex: "date",
+      render: (data) => (data?.date ? data?.date : "N/A"),
     },
     {
       key: "areaAppliedmigration",
@@ -126,12 +125,6 @@ const LandScheduleForm = (props) => {
       title: "Area ",
       dataIndex: "area",
     },
-    {
-      key: "balanceOfParentLicence",
-      title: "Balance of Parent Licence ",
-      dataIndex: "balanceOfParentLicence",
-    },
-
     {
       title: "Action",
       dataIndex: "",
@@ -439,33 +432,13 @@ const LandScheduleForm = (props) => {
     if (id) getApplicantUserData(id);
   }, []);
 
-  const handleChange = (event) => {
-    const result = event.target.value.replace(/[^a-z]/gi, "");
-
-    setLitigationRemark(result);
-  };
-
   const LandScheduleModalData = (modaldata) => {
-    const test = modalData?.filter((item) => item?.rowid === specificTableData?.rowid);
-
-    const length = modalData?.length + 1;
-    modaldata["rowid"] = length.toString();
-    if (specificTableData?.rowid) {
-      const filteredRowData = modalData?.filter((item) => item?.rowid !== specificTableData?.rowid);
-      setModalData([...filteredRowData, modaldata]);
-    } else if (stepData?.LandScheduleDetails) {
-      setModalData([...stepData?.LandScheduleDetails, modaldata]);
-    } else {
-      setModalData((prev) => [...prev, modaldata]);
-    }
-    setSpecificTableData(null);
+    console.log(modaldata);
+    setModalData((prev) => [...prev, modaldata]);
     // resetValues();
     setmodal(false);
   };
 
-  useEffect(() => {
-    if (stepData?.LandScheduleDetails) setModalData(stepData?.LandScheduleDetails);
-  }, [stepData?.LandScheduleDetails]);
   return (
     <div>
       <ScrollToTop />
@@ -2346,7 +2319,6 @@ const LandScheduleForm = (props) => {
                   </Form.Label>
                 </div>
                 <input type="text" className="form-control" {...register("previousLicensenumber")} />
-
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.previousLicensenumber?.value && errors?.previousLicensenumber?.value?.message}
                 </h3>
