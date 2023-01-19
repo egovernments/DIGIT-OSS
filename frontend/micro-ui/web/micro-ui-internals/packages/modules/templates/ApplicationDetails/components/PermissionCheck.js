@@ -74,7 +74,7 @@ const PermissionCheck = ({ permissions, t }) => {
             onChange={event => handleChange(event, index)} 
             textInputStyle={{ maxWidth: isMobile ? "96%" : "830px", width: isMobile ? "96%" :"830px" }}
             style={isMobile ? {paddingRight: "10%"} : {}}
-            placeholder={"BPA_ENTER_PERMIT_CONDITIONS_LABEL"} 
+            placeholder={t("BPA_ENTER_PERMIT_CONDITIONS_LABEL")} 
             />
           {<LinkButton
             label={
