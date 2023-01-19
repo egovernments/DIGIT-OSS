@@ -559,7 +559,7 @@ const AppliedDetailForm = (props) => {
                       <thead>
                         <tr>
                           <td>Type of plots</td>
-                          <td>Plot No.</td>
+                          <td>No. of plots</td>
                           <td>
                             Length in mtr <CalculateIcon color="primary" />
                           </td>
@@ -988,7 +988,7 @@ const AppliedDetailForm = (props) => {
                         <thead>
                           <tr>
                             <td>Detail of plots</td>
-                            <td> Plot No.</td>
+                            <td>No. of plots</td>
                             <td>
                               Length (in mtrs) <CalculateIcon color="primary" />
                             </td>

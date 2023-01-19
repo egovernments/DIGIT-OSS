@@ -1167,7 +1167,7 @@ const LandScheduleForm = (props) => {
                     </div>
                     <div className="col col-3 ">
                       <h2>
-                        (f)&nbsp;Acquisition status (Yes/No) <span style={{ color: "red" }}>*</span>
+                        (f)&nbsp;Acquisition status <span style={{ color: "red" }}>*</span>
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="acquistion">
@@ -1483,7 +1483,7 @@ const LandScheduleForm = (props) => {
                         <div className="col col-12">
                           <div className="col col-3">
                             <label>
-                              <h2>(a)&nbsp;&nbsp;Width of Constructed ROW of plotted licenced colony</h2>{" "}
+                              <h2>(a)&nbsp;&nbsp;Width of Constructed ROW of plotted licenced colony (In meters)</h2>{" "}
                             </label>
                             <input type="text" {...register("constructedRowWidth")} className="form-control" />
                           </div>
@@ -1550,7 +1550,7 @@ const LandScheduleForm = (props) => {
                       {watch("approachFromProposedSector") === "Y" && (
                         <div>
                           <div className="col col-5">
-                            <label>(a)&nbsp;&nbsp;Width of sector road/ Development Plan Road</label>
+                            <label>(a)&nbsp;&nbsp;Width of sector road/ Development Plan Road (In meters)</label>
                             <input type="text" {...register("sectorAndDevelopmentWidth")} className="form-control" />
                           </div>
                           <h2>
@@ -1615,7 +1615,7 @@ const LandScheduleForm = (props) => {
                       {watch("approachFromInternalCirculation") === "Y" && (
                         <div>
                           <div className="col col-3">
-                            <label>(a)&nbsp;&nbsp;Width of internal circulation / sectoral plan road.</label>
+                            <label>(a)&nbsp;&nbsp;Width of internal circulation / sectoral plan road (In meters)</label>
                             <input type="text" {...register("internalAndSectoralWidth")} className="form-control" />
                           </div>
                           <h2>

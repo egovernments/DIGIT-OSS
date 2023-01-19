@@ -34,49 +34,40 @@ const ApllicantPuropseForm = (props) => {
   };
   const columns = [
     {
-      key: "district",
       title: "District",
-      dataIndex: "district",
+      render: (data) => (data?.district ? data?.district : "N/A"),
     },
     {
-      key: "developmentPlan",
       title: "Development Plan",
-      dataIndex: "developmentPlan",
+      render: (data) => (data?.developmentPlan ? data?.developmentPlan : "N/A"),
     },
     {
-      key: "potential",
       title: "Zone",
-      dataIndex: "potential",
+      render: (data) => (data?.potential ? data?.potential : "N/A"),
     },
     {
-      key: "sector",
       title: "Sector",
-      dataIndex: "sector",
+      render: (data) => (data?.sector ? data?.sector : "N/A"),
     },
     {
-      key: "tehsil",
       title: "Tehsil",
-      dataIndex: "tehsil",
+      render: (data) => (data?.tehsil ? data?.tehsil : "N/A"),
     },
     {
-      key: "revenueEstate",
       title: "Revenue Estate",
-      dataIndex: "revenueEstate",
+      render: (data) => (data?.revenueEstate ? data?.revenueEstate : "N/A"),
     },
     {
-      key: "hadbastNo",
       title: "Hadbast No.",
-      dataIndex: "hadbastNo",
+      render: (data) => (data?.hadbastNo ? data?.hadbastNo : "N/A"),
     },
     {
-      key: "rectangleNo",
       title: "Rectangle No.",
-      dataIndex: "rectangleNo",
+      render: (data) => (data?.rectangleNo ? data?.rectangleNo : "N/A"),
     },
     {
-      key: "khewats",
       title: "Khasra No.",
-      dataIndex: "khewats",
+      render: (data) => (data?.khewats ? data?.khewats : "N/A"),
     },
     {
       key: "landOwner",
@@ -84,69 +75,57 @@ const ApllicantPuropseForm = (props) => {
       dataIndex: "landOwner",
       render: (data) => (
         <h6 data-toggle="tooltip" data-placement="top" title={data}>
-          {data?.split(" ")?.slice(0, 2)?.join(" ")}
+          {data?.split(" ")?.slice(0, 2)?.join(" ") + "..."}
         </h6>
       ),
     },
     {
-      key: "typeLand",
       title: "Type of land",
-      dataIndex: "typeLand",
+      render: (data) => (data?.typeLand ? data?.typeLand : "N/A"),
     },
     {
-      key: "isChange",
       title: "change in information",
-      dataIndex: "isChange",
+      render: (data) => (data?.isChange ? data?.isChange : "N/A"),
     },
     {
-      key: "editRectangleNo",
       title: "Rectangle No./Mustil(Changed)",
-      dataIndex: "editRectangleNo",
+      render: (data) => (data?.editRectangleNo ? data?.editRectangleNo : "N/A"),
     },
     {
-      key: "editKhewats",
       title: "Khasra Number(Changed)",
-      dataIndex: "editKhewats",
+      render: (data) => (data?.editKhewats ? data?.editKhewats : "N/A"),
     },
     {
-      key: "landOwnerRegistry",
       title: "Name of the Land Ower as per Mutation/Jamabandi",
-      dataIndex: "landOwnerRegistry",
+      render: (data) => (data?.landOwnerRegistry ? data?.landOwnerRegistry : "N/A"),
     },
     {
-      key: "collaboration",
       title: "Whether Khasra been developed in collaboration",
-      dataIndex: "collaboration",
+      render: (data) => (data?.collaboration ? data?.collaboration : "N/A"),
     },
     {
-      key: "developerCompany",
       title: "Name of the developer company",
-      dataIndex: "developerCompany",
+      render: (data) => (data?.developerCompany ? data?.developerCompany : "N/A"),
     },
     {
-      key: "agreementValidFrom",
       title: "Date of registering collaboration agreement",
-      dataIndex: "agreementValidFrom",
+      render: (data) => (data?.agreementValidFrom ? data?.agreementValidFrom : "N/A"),
     },
     {
-      key: "agreementIrrevocialble",
       title: "Whether collaboration agreement irrevocable (Yes/No)",
-      dataIndex: "agreementIrrevocialble",
+      render: (data) => (data?.agreementIrrevocialble ? data?.agreementIrrevocialble : "N/A"),
     },
     {
-      key: "authSignature",
       title: "Name of authorized signatory on behalf of land owner(s)",
-      dataIndex: "authSignature",
+      render: (data) => (data?.authSignature ? data?.authSignature : "N/A"),
     },
     {
-      key: "nameAuthSign",
       title: "Name of authorized signatory on behalf of developer",
-      dataIndex: "nameAuthSign",
+      render: (data) => (data?.nameAuthSign ? data?.nameAuthSign : "N/A"),
     },
     {
-      key: "registeringAuthority",
       title: "Registering Authority",
-      dataIndex: "registeringAuthority",
+      render: (data) => (data?.registeringAuthority ? data?.registeringAuthority : "N/A"),
     },
     {
       key: "registeringAuthorityDoc",
@@ -159,15 +138,14 @@ const ApllicantPuropseForm = (props) => {
               <VisibilityIcon color="info" className="icon" />
             </a>
           ) : (
-            <p></p>
+            <p>N/A</p>
           )}
         </div>
       ),
     },
     {
-      key: "consolidationType",
       title: "Consolidation Type",
-      dataIndex: "consolidationType",
+      render: (data) => (data?.consolidationType ? data?.consolidationType : "N/A"),
     },
     {
       title: "Kanal",
@@ -400,7 +378,7 @@ const ApllicantPuropseForm = (props) => {
     mode: "onChange",
     reValidateMode: "onChange",
     // resolver: yupResolver(VALIDATION_SCHEMA),
-    // resolver: yupResolver(modal ? MODAL_VALIDATION_SCHEMA : VALIDATION_SCHEMA),
+    resolver: yupResolver(modal ? MODAL_VALIDATION_SCHEMA : VALIDATION_SCHEMA),
     shouldFocusError: true,
   });
 
@@ -886,11 +864,13 @@ const ApllicantPuropseForm = (props) => {
   }, []);
 
   useEffect(() => {
-    setValue("consolidatedTotal", watch("marla") * 0.0062 + watch("sarsai") * 0.00069 + watch("kanal") * 0.125);
+    const val = watch("marla") * 0.0062 + watch("sarsai") * 0.00069 + watch("kanal") * 0.125;
+    setValue("consolidatedTotal", val?.toFixed(3));
   }, [watch("sarsai"), watch("marla"), watch("kanal")]);
 
   useEffect(() => {
-    setValue("nonConsolidatedTotal", watch("bigha") * 0.33 + watch("biswa") * 0.0309 + watch("biswansi") * 0.619);
+    const value = watch("bigha") * 0.33 + watch("biswa") * 0.0309 + watch("biswansi") * 0.619;
+    setValue("nonConsolidatedTotal", value?.toFixed(3));
   }, [watch("bigha"), watch("biswa"), watch("biswansi")]);
 
   return (
@@ -973,6 +953,14 @@ const ApllicantPuropseForm = (props) => {
                 </div>
               </div>
               <div class="col-sm-12 text-right">
+                <label className="mr-4">
+                  Total Area:
+                  {getValues()?.nonConsolidatedTotal
+                    ? getValues()?.nonConsolidatedTotal
+                    : 0 + getValues()?.consolidatedTotal
+                    ? getValues()?.consolidatedTotal
+                    : 0}
+                </label>
                 <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
                   Save and Continue
                 </button>
@@ -1182,7 +1170,7 @@ const ApllicantPuropseForm = (props) => {
                   autoComplete="off"
                   type="text"
                   className="form-control"
-                  placeholder="Enter Khewat"
+                  placeholder="Enter Khasra"
                   {...register("khewats")}
                   onChange={(e) => setKhewats(e?.target?.value)}
                 />
@@ -1203,72 +1191,7 @@ const ApllicantPuropseForm = (props) => {
                   {errors?.landOwner && errors?.landOwner?.message}
                 </h3>
               </Col>
-              <Col md={4} xxl lg="4">
-                <label>
-                  <h2>
-                    Type of land<span style={{ color: "red" }}>*</span>
-                  </h2>
-                </label>
-                <ReactMultiSelect control={control} name="typeLand" placeholder="Type of Land" data={typeOfLand?.data} labels="typeland" required />
-              </Col>
-            </Row>
-            <br></br>
-            <Row className="ml-auto mb-3">
-              <div className="form-check">
-                <label style={{ marginRight: "23px" }} className="checkbox" for="flexCheckDefault">
-                  <b>If there is a change in information auto-populated, then the information be provided in the following format.</b>
-                </label>
-                <input
-                  onClick={(e) => setShowFields(e.target.checked)}
-                  className="form-check-input"
-                  formControlName="agreeCheck"
-                  type="checkbox"
-                  value=""
-                  id="flexCheckDefault"
-                  {...register("isChange")}
-                />
-              </div>
-              {watch("isChange") && (
-                <Row className="ml-auto mb-3">
-                  <Col md={4} xxl lg="4">
-                    <div>
-                      <Form.Label>
-                        <h2>
-                          Rectangle No./Mustil <span style={{ color: "red" }}>*</span>
-                        </h2>
-                      </Form.Label>
-                    </div>
-                    <input
-                      autoComplete="off"
-                      type="text"
-                      className="form-control"
-                      placeholder="Rectangle No./Mustil"
-                      {...register("editRectangleNo")}
-                    />
-                  </Col>
-
-                  <Col md={4} xxl lg="4">
-                    <div>
-                      <label>
-                        <h2>
-                          Khasra Number <span style={{ color: "red" }}>*</span>
-                        </h2>
-                      </label>
-                    </div>
-                    <input autoComplete="off" type="text" className="form-control" placeholder="Enter Khewat" {...register("editKhewats")} />
-                  </Col>
-
-                  <Col md={4} xxl lg="4">
-                    <div>
-                      <label>
-                        <h2>Name of the Land Ower as per Mutation/Jamabandi</h2>
-                      </label>
-                    </div>
-                    <input autoComplete="off" type="text" className="form-control" placeholder="" {...register("landOwnerRegistry")} />
-                  </Col>
-                </Row>
-              )}
-              <div className="col col-12">
+              <div className="col col-12 mt-3">
                 <h2>
                   <b>
                     Whether Khasra been developed in collaboration<span style={{ color: "red" }}>*</span>
@@ -1308,6 +1231,9 @@ const ApllicantPuropseForm = (props) => {
                           minlength={2}
                           maxLength={99}
                         />
+                        <h3 className="error-message" style={{ color: "red" }}>
+                          {errors?.developerCompany && errors?.developerCompany?.message}
+                        </h3>
                       </div>
                       <div className="col col-4">
                         <label>
@@ -1357,6 +1283,9 @@ const ApllicantPuropseForm = (props) => {
                           minlength={4}
                           maxLength={99}
                         />
+                        <h3 className="error-message" style={{ color: "red" }}>
+                          {errors?.authSignature && errors?.authSignature?.message}
+                        </h3>
                       </div>
                       <div className="col col-4">
                         <label>
@@ -1377,6 +1306,9 @@ const ApllicantPuropseForm = (props) => {
                           minlength={4}
                           maxLength={99}
                         />
+                        <h3 className="error-message" style={{ color: "red" }}>
+                          {errors?.nameAuthSign && errors?.nameAuthSign?.message}
+                        </h3>
                       </div>
                       <div className="col col-4">
                         <label>
@@ -1385,6 +1317,9 @@ const ApllicantPuropseForm = (props) => {
                           </h2>
                         </label>
                         <Form.Control type="text" className="form-control" placeholder="" {...register("registeringAuthority")} required />
+                        <h3 className="error-message" style={{ color: "red" }}>
+                          {errors?.registeringAuthority && errors?.registeringAuthority?.message}
+                        </h3>
                       </div>
                     </div>
                     <br></br>
@@ -1423,6 +1358,77 @@ const ApllicantPuropseForm = (props) => {
                   </div>
                 )}
               </div>
+              <Col className="mt-3" md={4} xxl lg="4">
+                <label>
+                  <h2>
+                    Type of land<span style={{ color: "red" }}>*</span>
+                  </h2>
+                </label>
+                <ReactMultiSelect control={control} name="typeLand" placeholder="Type of Land" data={typeOfLand?.data} labels="typeland" required />
+              </Col>
+            </Row>
+            <br></br>
+            <Row className="ml-auto mb-3">
+              <div className="form-check">
+                <label style={{ marginRight: "23px" }} className="checkbox" for="flexCheckDefault">
+                  <b>If there is a change in information auto-populated, then the information be provided in the following format.</b>
+                </label>
+                <input
+                  onClick={(e) => setShowFields(e.target.checked)}
+                  className="form-check-input"
+                  formControlName="agreeCheck"
+                  type="checkbox"
+                  value=""
+                  id="flexCheckDefault"
+                  {...register("isChange")}
+                />
+              </div>
+              {watch("isChange") && (
+                <Row className="ml-auto mb-3">
+                  <Col md={4} xxl lg="4">
+                    <div>
+                      <Form.Label>
+                        <h2>
+                          Rectangle No./Mustil <span style={{ color: "red" }}>*</span>
+                        </h2>
+                      </Form.Label>
+                    </div>
+                    <input
+                      autoComplete="off"
+                      type="number"
+                      className="form-control"
+                      placeholder="Rectangle No./Mustil"
+                      {...register("editRectangleNo")}
+                    />
+                  </Col>
+
+                  <Col md={4} xxl lg="4">
+                    <div>
+                      <label>
+                        <h2>
+                          Khasra Number <span style={{ color: "red" }}>*</span>
+                        </h2>
+                      </label>
+                    </div>
+                    <input autoComplete="off" type="text" className="form-control" placeholder="Enter Khewat" {...register("editKhewats")} />
+                    <h3 className="error-message" style={{ color: "red" }}>
+                      {errors?.editKhewats && errors?.editKhewats?.message}
+                    </h3>
+                  </Col>
+
+                  <Col md={4} xxl lg="4">
+                    <div>
+                      <label>
+                        <h2>Name of the Land Ower as per Mutation/Jamabandi</h2>
+                      </label>
+                    </div>
+                    <input autoComplete="off" type="text" className="form-control" placeholder="" {...register("landOwnerRegistry")} />
+                    <h3 className="error-message" style={{ color: "red" }}>
+                      {errors?.landOwnerRegistry && errors?.landOwnerRegistry?.message}
+                    </h3>
+                  </Col>
+                </Row>
+              )}
 
               <Col md={4} xxl lg="12">
                 <div>
@@ -1478,18 +1484,18 @@ const ApllicantPuropseForm = (props) => {
                       <tr>
                         <td>
                           <input type="number" className="form-control  " {...register("kanal")} id="kanal" required maxLength={20} />
-                          <label htmlFor="sum">Total: {watch("kanal") * 0.125}</label>&nbsp;&nbsp;
+                          <label htmlFor="sum">Total: {(watch("kanal") * 0.125)?.toFixed(3)}</label>&nbsp;&nbsp;
                         </td>
                         <td>
                           <input type="number" className="form-control " {...register("marla")} id="marla" required maxLength={20} />
-                          <label htmlFor="summarla">Total: {watch("marla") * 0.0062}</label>&nbsp;&nbsp;
+                          <label htmlFor="summarla">Total: {(watch("marla") * 0.0062)?.toFixed(3)}</label>&nbsp;&nbsp;
                         </td>
                         <td>
                           <input type="number" className="form-control " {...register("sarsai")} id="sarsai" required maxLength={20} />
-                          <label htmlFor="sumsarsai">Total: {watch("sarsai") * 0.00069}</label>&nbsp;&nbsp;
+                          <label htmlFor="sumsarsai">Total: {(watch("sarsai") * 0.00069)?.toFixed(3)}</label>&nbsp;&nbsp;
                         </td>
                         <td>
-                          <input step="any" type="number" className="form-control " {...register("consolidatedTotal")} />
+                          <input step="any" type="number" className="form-control" {...register("consolidatedTotal")} />
                           <label htmlFor="sumsarsai">Total: {watch("consolidatedTotal")}</label>&nbsp;&nbsp;
                         </td>
                       </tr>
@@ -1528,15 +1534,15 @@ const ApllicantPuropseForm = (props) => {
                       <tr>
                         <td>
                           <input type="number" className="form-control" {...register("bigha")} id="bigha" required maxLength={20} />
-                          <label htmlFor="sumBigha">Total: {watch("bigha") * 0.33}</label>&nbsp;&nbsp;
+                          <label htmlFor="sumBigha">Total: {(watch("bigha") * 0.33)?.toFixed(3)}</label>&nbsp;&nbsp;
                         </td>
                         <td>
                           <input type="number" className="form-control" {...register("biswa")} id="biswa" required maxLength={20} />
-                          <label htmlFor="sumBiswa">Total: {watch("biswa") * 0.0309}</label>&nbsp;&nbsp;
+                          <label htmlFor="sumBiswa">Total: {(watch("biswa") * 0.0309)?.toFixed(3)}</label>&nbsp;&nbsp;
                         </td>
                         <td>
                           <input type="number" className="form-control" {...register("biswansi")} id="biswansi" required maxLength={20} />
-                          <label htmlFor="sumBiswansi">Total: {watch("biswansi") * 0.619}</label>&nbsp;&nbsp;
+                          <label htmlFor="sumBiswansi">Total: {(watch("biswansi") * 0.619)?.toFixed(3)}</label>&nbsp;&nbsp;
                         </td>
                         <td>
                           <input step="any" type="number" className="form-control " {...register("nonConsolidatedTotal")} />

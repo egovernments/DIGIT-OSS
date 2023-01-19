@@ -296,7 +296,7 @@ const FeesChargesForm = (props) => {
             <Form.Group className="justify-content-center" controlId="formBasicEmail">
               <Row className="ml-auto" style={{ marginBottom: 5 }}>
                 <Col col-12>
-                  <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))", width: "629px", marginLeft: "273px" }}>
+                  <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))", width: "629px" }}>
                     <thead>
                       <tr>
                         <th>
