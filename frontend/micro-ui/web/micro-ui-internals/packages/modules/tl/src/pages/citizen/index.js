@@ -3,6 +3,9 @@ import React from "react";
 import { Route, Switch, useRouteMatch } from "react-router-dom";
 // import TradeLicense from "../../pageComponents/TradeLicense";
 import MyApplicationsTest from "../../pages/citizen/Applications/Application";
+import BGApplications from "./Applications/BGApplications";
+import EPApplications from "./Applications/EPApllications";
+import SPApplications from "./Applications/SPApplications";
 // import ApplicationDetails from "../../pages/citizen/Applications/ApplicationDetails";
 // import CreateTradeLicence from "./Create";
 // import EditTrade from "./EditTrade";
@@ -58,6 +61,9 @@ const App = () => {
           <PrivateRoute path={`${path}/tradelicence/application/:id/:tenantId`} component={ApplicationDetails} />
           <PrivateRoute path={`${path}/tradelicence/renewal-list`} component={TLList} />
           <PrivateRoute path={`${path}/tradelicence/trade-search`} component={SearchTradeComponent} />
+          <PrivateRoute path={`${path}/servicePlan/my-application`} component={SPApplications} />
+          <PrivateRoute path={`${path}/electricPlan/my-application`} component={EPApplications} />
+          <PrivateRoute path={`${path}/bankGuarantee/my-application`} component={BGApplications} />
         </AppContainer>
       </Switch>
     </span>
