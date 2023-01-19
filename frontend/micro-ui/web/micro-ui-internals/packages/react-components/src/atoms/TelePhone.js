@@ -12,9 +12,9 @@ const TelePhone = ({ mobile, text, privacy }) => {
     <div className="telephone">
       <div className="call">
         <Phone fillcolor={"FFFFFF"} style={{marginLeft:"0px"}} />
-        {!privacy && <a href={() => `tel:${mobile}`}>{"+91"} {mobile}</a>}
+        {!privacy && <a href={`tel:${mobile}`}>{"+91"} {mobile}</a>}
         {privacy && (unmaskedNumber === "") && <span><WrapUnMaskComponent value={`+91 ${mobile}`} iseyevisible={mobile?.includes("*")?true:false} privacy={privacy} style={{marginBottom:"-4px"}} setunmaskedNumber={setunmaskedNumber}></WrapUnMaskComponent></span>}
-        {privacy && unmaskedNumber !== "" && <a href={() => `tel:${unmaskedNumber}`}>{unmaskedNumber}</a>}
+        {privacy && unmaskedNumber !== "" && <a href={`tel:${unmaskedNumber}`}>{unmaskedNumber}</a>}
       </div>
     </div>
   </React.Fragment>
