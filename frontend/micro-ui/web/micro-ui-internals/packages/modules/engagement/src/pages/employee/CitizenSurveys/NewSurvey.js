@@ -31,7 +31,7 @@ export const mapQuestions = (questions =[]) =>{
   return questions.map(({formConfig},index)=>{
       const {options:choices, questionStatement,required, type:stringType} = formConfig;
       const finalQuestion = {questionStatement, required, type: typeof stringType === "object" && stringType !== null ? stringType.value : (stringType.title ?  answerTypeEnum[stringType.title] : answerTypeEnum[stringType])};
-      if(stringType?.title === "Multiple Choice" || stringType?.title ==="Check Boxes") {
+      if((stringType?.title === "Multiple Choice" || stringType?.value === "MULTIPLE_ANSWER_TYPE") || (stringType?.title ==="Check Boxes" || stringType?.value === "CHECKBOX_ANSWER_TYPE")) {
         finalQuestion["options"] = choices;
       }
       return finalQuestion;
