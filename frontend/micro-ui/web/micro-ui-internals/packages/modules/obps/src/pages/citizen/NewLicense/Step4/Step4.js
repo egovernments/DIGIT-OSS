@@ -1888,7 +1888,6 @@ const AppliedDetailForm = (props) => {
             </div>
           </form>
         </ModalBody>
-        <ModalFooter toggle={() => setDGPSModal(!dgpsModal)}></ModalFooter>
       </Modal>
     </div>
   );
