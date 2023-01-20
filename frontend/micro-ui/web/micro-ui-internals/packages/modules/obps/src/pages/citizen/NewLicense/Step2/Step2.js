@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Button, Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import FileUpload from "@mui/icons-material/FileUpload";
-import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import { Modal, ModalBody, ModalFooter } from "reactstrap";
 import axios from "axios";
 import { yupResolver } from "@hookform/resolvers/yup";
 import WorkingTable from "../../../../components/Table";
@@ -18,6 +17,7 @@ import { getDocShareholding } from "../docView/docView.help";
 import { convertEpochToDate } from "../../../../../../tl/src/utils";
 import { useLocation } from "react-router-dom";
 import { Toast } from "@egovernments/digit-ui-react-components";
+
 const ApllicantPuropseForm = (props) => {
   const datapost = {
     RequestInfo: {
@@ -207,16 +207,12 @@ const ApllicantPuropseForm = (props) => {
   const [modalData, setModalData] = useState([]);
   const [specificTableData, setSpecificTableData] = useState(null);
   const [districtDataLabels, setDistrictDataLabels] = useState({ data: [], isLoading: true });
-  const [potentialDataLabels, setPotentialDataLabels] = useState({ data: [], isLoading: true });
-  const [zoneDataLabels, setZoneDataLabels] = useState({ data: [], isLoading: true });
-  const [sectorDataLabels, setSectorDataLabels] = useState({ data: [], isLoading: true });
   const [tehsilDataLabels, setTehsilDataLabels] = useState({ data: [], isLoading: true });
   const [revenueDataLabels, setRevenueDataLabels] = useState({ data: [], isLoading: true });
   const [mustilDataLabels, setMustilDataLabels] = useState({ data: [], isLoading: true });
   const [modal, setmodal] = useState(false);
   const [tehsilCode, setTehsilCode] = useState(null);
   const [purposeOptions, setPurposeOptions] = useState({ data: [], isLoading: true });
-  const [potentialOptons, setPotentialOptions] = useState({ data: [], isLoading: true });
   const [districtOptons, setDistrictOptions] = useState({ data: [], isLoading: true });
   const [devPlanOptons, setDevPlanOptions] = useState({ data: [], isLoading: true });
   const [ZoneOptions, setZoneOptions] = useState({ data: [], isLoading: true });
@@ -301,11 +297,6 @@ const ApllicantPuropseForm = (props) => {
       // getDevPlanOption(districtValue?.[0]?.distCodeTCP);
       setValue("district", { label: districtValue?.[0]?.label, value: districtValue?.[0]?.value });
       if (districtValue?.[0]?.distCodeTCP) setDTCP(districtValue?.[0]);
-      // setValue("potential", { label: devPlanValue?.[0]?.label, value: devPlanValue?.[0]?.value });
-      const zoneValue = zoneDataLabels?.data?.filter((item) => item?.value === specificTableData?.zone);
-      setValue("zone", { label: zoneValue?.[0]?.label, value: zoneValue?.[0]?.value });
-      const sectorValue = sectorDataLabels?.data?.filter((item) => item?.value === specificTableData?.sector);
-      setValue("sector", { label: sectorValue?.[0]?.label, value: sectorValue?.[0]?.value });
       const tehsilValue = tehsilDataLabels?.data?.filter((item) => item?.value === specificTableData?.tehsil);
       setNameRevenueState(tehsilValue?.[0]?.value);
       setValue("tehsil", { label: tehsilValue?.[0]?.label, value: tehsilValue?.[0]?.value });
@@ -318,7 +309,7 @@ const ApllicantPuropseForm = (props) => {
       setValue("typeLand", { label: typeOfLandValue?.[0]?.label, value: typeOfLandValue?.[0]?.value });
       setValue("isChange", JSON.parse(specificTableData?.isChange));
     }
-  }, [devPlanOptons, specificTableData, districtOptons, potentialDataLabels, tehsilDataLabels, revenueDataLabels, mustilDataLabels, typeOfLand]);
+  }, [devPlanOptons, specificTableData, districtOptons, tehsilDataLabels, revenueDataLabels, mustilDataLabels, typeOfLand]);
 
   useEffect(() => {
     if (getDTCP) {
@@ -744,37 +735,46 @@ const ApllicantPuropseForm = (props) => {
     // }
   };
 
-  const handleWorkflow = async () => {
-    const token = window?.localStorage?.getItem("token");
-    setLoader(true);
-    const payload = {
-      ProcessInstances: [
-        {
-          businessService: "NewTL",
-          documents: null,
-          businessId: applicantId,
-          tenantId: "hr",
-          moduleName: "TL",
-          action: "PURPOSE",
-          previousStatus: "INITIATE",
-          comment: null,
-        },
-      ],
-      RequestInfo: {
-        apiId: "Rainmaker",
-        msgId: "1669293303096|en_IN",
-        authToken: token,
-      },
-    };
-    try {
-      await axios.post("/egov-workflow-v2/egov-wf/process/_transition", payload);
-      setLoader(false);
-      props.Step2Back();
-    } catch (error) {
-      setLoader(false);
-      return error;
-    }
-  };
+  // const handleWorkflow = async () => {
+  //   const token = window?.localStorage?.getItem("token");
+  //   setLoader(true);
+  //   const payload = {
+  //     ProcessInstances: [
+  //       {
+  //         businessService: "NewTL",
+  //         documents: null,
+  //         businessId: applicantId,
+  //         tenantId: "hr",
+  //         moduleName: "TL",
+  //         action: "SENDBACK",
+  //         previousStatus: "INITIATED",
+  //         comment: null,
+  //       },
+  //     ],
+  //     RequestInfo: {
+  //       apiId: "Rainmaker",
+  //       msgId: "1669293303096|en_IN",
+  //       authToken: token,
+  //     },
+  //   };
+  //   // try {
+  //   //   const Resp = await axios.post("/tl-services/new/_create", postDistrict);
+  //   //   setLoader(false);
+  //   //   const useData = Resp?.data?.LicenseServiceResponseInfo?.[0]?.LicenseDetails?.[0];
+  //   //   props.Step2Continue(useData);
+  //   // } catch (error) {
+  //   //   setLoader(false);
+  //   //   return error;
+  //   // }
+  //   try {
+  //     await axios.post("/egov-workflow-v2/egov-wf/process/_transition", payload);
+  //     setLoader(false);
+  //     props.Step2Back();
+  //   } catch (error) {
+  //     setLoader(false);
+  //     return error;
+  //   }
+  // };
 
   useEffect(() => {
     if (stepData) {
@@ -948,9 +948,9 @@ const ApllicantPuropseForm = (props) => {
 
             <div class="row">
               <div class="col-sm-12 text-left">
-                <div id="btnClear" class="btn btn-primary btn-md center-block" onClick={() => handleWorkflow()}>
+                {/* <div id="btnClear" class="btn btn-primary btn-md center-block" onClick={() => handleWorkflow()}>
                   Back
-                </div>
+                </div> */}
               </div>
               <div class="col-sm-12 text-right">
                 <label className="mr-4">

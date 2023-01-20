@@ -43,6 +43,7 @@ const AppliedDetailForm = (props) => {
     watch,
     register,
     handleSubmit,
+    resetField,
     control,
     getValues,
     setValue,
@@ -503,7 +504,14 @@ const AppliedDetailForm = (props) => {
             <Form.Group className="justify-content-center" controlId="formBasicEmail">
               <Row className="ml-auto" style={{ marginBottom: 5 }}>
                 <div className="ml-auto">
-                  <Button type="button" variant="primary" onClick={() => setDGPSModal(true)}>
+                  <Button
+                    type="button"
+                    variant="primary"
+                    onClick={() => {
+                      resetField("dgpsDetails");
+                      setDGPSModal(true);
+                    }}
+                  >
                     Enter DGPS points
                   </Button>
                 </div>
@@ -1298,7 +1306,7 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Whether you hosted the existing approved layout plan & in-principle approved layout on the website of your company/organization Yes/No if yes upload"
                       >
-                        Hosted layout plan.<span style={{ color: "red" }}>*</span>
+                        Layout plan<span style={{ color: "red" }}>*</span>
                       </h6>
                       <label>
                         <FileUpload color="primary" />
@@ -1322,7 +1330,7 @@ const AppliedDetailForm = (props) => {
                       </h3>
                     </div>
 
-                    <div className="col col-3">
+                    {/* <div className="col col-3">
                       <h6
                         style={{ display: "flex" }}
                         data-toggle="tooltip"
@@ -1351,10 +1359,10 @@ const AppliedDetailForm = (props) => {
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.consentRera && errors?.consentRera?.message}
                       </h3>
-                    </div>
+                    </div> */}
                     <div className="col col-3">
                       <h6 style={{ display: "flex" }}>
-                        Sectoral Plan.<span style={{ color: "red" }}>*</span>
+                        Sectoral Plan<span style={{ color: "red" }}>*</span>
                       </h6>
                       <label>
                         <FileUpload color="primary" />
@@ -1377,7 +1385,7 @@ const AppliedDetailForm = (props) => {
                         {errors?.sectoralPlan && errors?.sectoralPlan?.message}
                       </h3>
                     </div>
-                    <div className="col col-3">
+                    {/* <div className="col col-3">
                       <h6
                         style={{ display: "flex" }}
                         data-toggle="tooltip"
@@ -1406,10 +1414,10 @@ const AppliedDetailForm = (props) => {
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.detailedElectricSupply && errors?.detailedElectricSupply?.message}
                       </h3>
-                    </div>
+                    </div> */}
                   </div>
                   <br></br>
-                  <div className="row">
+                  {/* <div className="row">
                     <div className="col col-3">
                       <h6
                         style={{ display: "flex" }}
@@ -1531,9 +1539,9 @@ const AppliedDetailForm = (props) => {
                         {errors?.designSewarage && errors?.designSewarage?.message}
                       </h3>
                     </div>
-                  </div>
+                  </div> */}
                   <br></br>
-                  <div className="row">
+                  {/* <div className="row">
                     <div className="col col-3">
                       <h6
                         style={{ display: "flex" }}
@@ -1652,7 +1660,7 @@ const AppliedDetailForm = (props) => {
                         {errors?.reportObjection && errors?.reportObjection?.message}
                       </h3>
                     </div>
-                  </div>
+                  </div> */}
                   <br></br>
                   <div className="row">
                     <div className="col col-3">
@@ -1751,16 +1759,16 @@ const AppliedDetailForm = (props) => {
           </Card>
         </Card>
       </form>
-      <Modal size="xl" isOpen={dgpsModal} toggle={() => setDGPSModal(!dgpsModal)}>
+      <Modal style={{ width: "517px" }} size="sm" isOpen={dgpsModal} toggle={() => setDGPSModal(!dgpsModal)}>
         <div style={{ padding: "4px", textAlign: "right" }}>
           <span onClick={() => setDGPSModal(!dgpsModal)} style={{ cursor: "pointer" }}>
             X
           </span>
         </div>
-        <ModalBody>
+        <ModalBody className="p-0">
           <form onSubmit={handleSubmit(dgpsModalData)}>
-            <Row className="ml-auto mb-3">
-              <Col md={4} xxl lg="4">
+            <Row className="ml-auto">
+              <Col>
                 <h4>
                   1. DGPS points{" "}
                   {/* <span className="text-primary">
@@ -1873,9 +1881,11 @@ const AppliedDetailForm = (props) => {
                 </div>
               </Col>
             </Row>
-            <button type="submit" style={{ float: "right" }} class="btn btn-primary btn-md center-block">
-              Submit
-            </button>
+            <div className="row m-0" style={{ width: "100%", justifyContent: "center" }}>
+              <button type="submit" style={{ width: "190px" }} class="btn btn-primary btn-md center-block mt-3">
+                Submit
+              </button>
+            </div>
           </form>
         </ModalBody>
         <ModalFooter toggle={() => setDGPSModal(!dgpsModal)}></ModalFooter>

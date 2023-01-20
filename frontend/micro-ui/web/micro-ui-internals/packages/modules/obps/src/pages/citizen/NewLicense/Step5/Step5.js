@@ -269,8 +269,9 @@ const FeesChargesForm = (props) => {
     try {
       const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${id}`, payload);
       const userData = Resp?.data?.LicenseDetails?.[0];
+      console.log("test===", userData?.ApplicantPurpose?.AppliedLandDetails);
       setValue("purpose", userData?.ApplicantPurpose?.purpose);
-      setValue("potential", userData?.ApplicantPurpose?.potential);
+      setValue("developmentPlan", userData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.developmentPlan);
       setStepData(userData);
     } catch (error) {
       return error;
@@ -321,7 +322,7 @@ const FeesChargesForm = (props) => {
                           Dev Plan <span style={{ color: "red" }}>*</span>
                         </th>
                         <td>
-                          <input type="text" className="form-control" placeholder="potential" disabled {...register("potential")} />
+                          <input type="text" className="form-control" placeholder="Development Plan" disabled {...register("developmentPlan")} />
                         </td>
                       </tr>
                       <tr>
