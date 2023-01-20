@@ -61,8 +61,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   let isOpenLinkFlow = window.location.href.includes("openlink");
   const [isUndertaken, setIsUndertaken] = useState(formData?.isUndertaken || formData?.formData?.isUndertaken || false);
   const [loader, setLoading] = useState(false);
+  const [ panIsValid, setPanIsValid ] = useState(false);
   const getDeveloperData = async () => {
-
+    setLoading(true);
     try {
       const requestResp = {
 
@@ -81,6 +82,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${userInfo?.info?.id}&isAllData=true`, requestResp, {
 
       });
+      setLoading(false);
       const developerDataGet = getDevDetails?.data;
       const developerDataGetDocs = getDevDetails?.data?.devDetail[0]?.addInfo;
       setDeveloperDataAddinfo(developerDataGetDocs);
@@ -95,6 +97,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       setUserEmail(developerDataGet?.devDetail[0]?.addInfo?.email);
       setUserEmailInd(developerDataGet?.devDetail[0]?.addInfo?.emailId);
       setDOB(developerDataGet?.devDetail[0]?.addInfo?.dob);
+      setGender(licenseDataList?.devDetail[0]?.addInfo?.gender)
       setPanNumber(developerDataGet?.devDetail[0]?.addInfo?.PanNumber);
       // setMobile(developerDataGet?.devDetail[0]?.addInfo?.mobileNumber);
       setGST(developerDataGet?.devDetail[0]?.addInfo?.gst_Number);
@@ -132,6 +135,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       console.log("log123", totalRemainingShareholdingPattern, developerDataGet?.devDetail[0]?.addInfo?.shareHoldingPatterens, developerDataGet?.devDetail[0]?.addInfo?.shareHoldingPatterens[0].percentage.split("%")[0])
 
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   }
@@ -244,6 +248,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   const [companyName, setCompanyName] = useState(formData?.LicneseDetails?.companyName || formData?.LicneseDetails?.companyName || "");
   const [incorporationDate, setIncorporation] = useState(formData?.LicneseDetails?.incorporationDate || formData?.LicneseDetails?.incorporationDate || "");
   const [registeredAddress, setRegistered] = useState(formData?.LicneseDetails?.registeredAddress || formData?.LicneseDetails?.registeredAddress || "");
+  const [gender, setGender] = useState(formData?.LicneseDetails?.gender || formData?.LicneseDetails?.gender);
   const [PanNumber, setPanNumber] = useState(formData?.LicneseDetails?.PanNumber || formData?.formData?.LicneseDetails?.PanNumber || ""
   );
   const [dob, setDOB] = useState(formData?.LicneseDetails?.dob || formData?.formData?.LicneseDetails?.dob || "");
@@ -280,6 +285,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
   // console.log("ADINFO",developerDataAddinfo);
 
+
   const [urlGetShareHoldingDoc, setDocShareHoldingUrl] = useState("")
   const [urlGetDirectorDoc, setDocDirectorUrl] = useState("")
   const handleShowStakeholder = () => {
@@ -306,7 +312,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     setModalContactDirector(value)
   }
   function SelectName(e) {
-    setName(e.target.value);
+    if(!e.target.value || e.target.value.match("^[a-zA-z ]*$")){
+      setName(e.target.value);
+    }
   }
   function setMobileNo(e) {
     setMobileNumber(e.target.value);
@@ -339,6 +347,12 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   function setDateofBirth(e) {
     setDOB(e.target.value);
   }
+
+  function setGenderName(value) {
+    console.log("GENDER", value);
+    setGender(value);
+  }
+
   function selectPanNumber(e) {
     // setPanNumber(e.target.value.toUpperCase());
     // if(e.target.value === 10){
@@ -346,14 +360,15 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     // }
     if (!e.target.value || /^\w+$/.test(e.target.value)) {
       setPanNumber(e.target.value.toUpperCase());
-      if (e.target.value === 10) {
-        alert("HEY")
-        panVerification();
-      }
+      // if (e.target.value === 10) {
+      //   alert("HEY")
+      //   panVerification();
+      // }
     }
   }
 
   const panVerification = async () => {
+    setLoading(true);
     try {
       const panVal = {
         "txnId": "f7f1469c-29b0-4325-9dfc-c567200a70f7",
@@ -363,7 +378,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
           "PANFullName": name,
           "FullName": name,
           "DOB": dob,
-          "GENDER": gender
+          "GENDER": gender?.value
         },
         "consentArtifact": {
           "consent": {
@@ -381,7 +396,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
             "user": {
               "idType": "string",
               "idNumber": "string",
-              "mobile": mobileNumber,
+              "mobile": mobileNumberUser,
               "email": email
             },
             "data": {
@@ -413,8 +428,12 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
           'Access-Control-Allow-Origin': "*",
         }
       })
+      setPanIsValid(true);
+      setPanValError("");
+      setLoading(false);
       // console.log("PANDET", panResp?.data);
     } catch (error) {
+      setLoading(false);
       console.log(error?.response?.data?.errorDescription);
       setPanValError(error?.response?.data?.errorDescription)
     }
@@ -831,7 +850,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
             // isDisabled={
             //   !showDevTypeFields || (showDevTypeFields === "Individual" && (!name || !mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) || !emailId?.match(Digit.Utils.getPattern('Email')))) || (showDevTypeFields === "Others" && othersArray.length) || (showDevTypeFields === "Proprietorship Firm") || (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others" && (!cin_Number?.match(Digit.Utils.getPattern('CIN')) || !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) || !gst_Number?.match(Digit.Utils.getPattern('GSTNo')) || !((existingColonizer === "N") || (existingColonizer === "Y" && existingColonizerDetails.aggreementBtw && existingColonizerDetails.boardResolution && existingColonizerDetails.dob && existingColonizerDetails.pan && existingColonizerDetails.pan.match(Digit.Utils.getPattern('PAN')) && existingColonizerDetails.licNo && existingColonizerDetails.licDate && existingColonizerDetails.licValidity && existingColonizerDetails.licPurpose))))
             // }
-            isDisabled={(showDevTypeFields === "Individual" || showDevTypeFields === "Proprietorship Firm" || showDevTypeFields === "Hindu Undivided Family") ? !(name && mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) && emailId?.match(Digit.Utils.getPattern('Email')) && gst_Number?.match(Digit.Utils.getPattern('GSTNo'))) : (showDevTypeFields === "Others") ? (!othersArray.length) : (showDevTypeFields === "Proprietorship Firm") ? false : (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others") ?
+            isDisabled={(showDevTypeFields === "Individual" || showDevTypeFields === "Proprietorship Firm" || showDevTypeFields === "Hindu Undivided Family") ? !(name && panIsValid && mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) && emailId?.match(Digit.Utils.getPattern('Email')) && gst_Number?.match(Digit.Utils.getPattern('GSTNo'))) : (showDevTypeFields === "Others") ? (!othersArray.length) : (showDevTypeFields === "Proprietorship Firm") ? false : (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others") ?
               (
                 ((showDevTypeFields === "Trust") ? false : !csrNumber?.match(Digit.Utils.getPattern('CSR')) || (showDevTypeFields === "Company") ? false : !cin_Number?.match(Digit.Utils.getPattern('CIN'))) || !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) || (showDevTypeFields === "Trust" ? false : !gst_Number?.match(Digit.Utils.getPattern('GSTNo'))) || !registeredAddress.match(Digit.Utils.getPattern('Address')) || (!existingColonizerDetails.licNo.match(Digit.Utils.getPattern('OldLicenceNo'))) || !(modalValuesArray?.length) || !(DirectorData.length) || !((existingColonizer === "N") || (existingColonizer === "Y" && existingColonizerDetails.name && existingColonizerDetails.licNo && existingColonizerDetails.licDate))) : true}
             t={t}
@@ -893,9 +912,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             type="text"
                             value={name}
                             name="name"
-                            // onChange={SelectName}
-                            onChange={(e) => setName(e.target.value)}
-                            disabled
+                            onChange={SelectName}
+                            // onChange={(e) => setName(e.target.value)}
+                            
                             className="form-control"
 
                           />
@@ -948,19 +967,40 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                       </div>
                       <div className="col col-4">
                         <div className="form-group">
+                          <label htmlFor="dob">Select gender <span className="text-danger font-weight-bold">*</span></label>
+                          <Select
+                            value={gender?.value}
+                            onChange={setGenderName}
+                            className="w-100 form-control"
+                            variant="standard"
+                            
+                          >
+                              {
+                                  menu?.map((item, index) => (
+                                      <MenuItem value={item.value} >{item?.code}</MenuItem>
+                                  ))
+                              }
+                          </Select>
+                        </div>
+                      </div>
+                      <div className="col col-4">
+                        <div className="form-group">
                           <label htmlFor="PanNumber">{`${t("BPA_APPLICANT_PAN_NO")}`}<span class="text-danger font-weight-bold mx-2">*</span></label>
-                          <input
-                            type="text"
-                            name="PanNumber"
-                            required={true}
-                            value={PanNumber}
-                            className="form-control"
-                            onChange={selectPanNumber}
-                            max={10}
-                            maxlength="10"
-                          />
-                          {PanNumber && PanNumber.length > 0 && !PanNumber.match(Digit.Utils.getPattern('PAN')) && <labelError style={{ width: "100%", marginTop: '5px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_PAN_NO")}</labelError>}
-                          <h3 className="error-message" style={{ color: "red" }}>{PanValError}</h3>
+                          <div className="d-flex align-items-baseline">
+                            <input
+                              type="text"
+                              name="PanNumber"
+                              required={true}
+                              value={PanNumber}
+                              className="form-control"
+                              onChange={selectPanNumber}
+                              max={10}
+                              maxlength="10"
+                            />
+                            <Button className="ml-3" onClick={panVerification}>{panIsValid?"Verified":"Verify"}</Button>
+                          </div>
+                          {PanNumber && PanNumber.length > 0 && !PanNumber.match(Digit.Utils.getPattern('PAN')) && <CardLabelError style={{ width: "100%", marginTop: '5px', fontSize: '16px', marginBottom: '12px' }}>{t("BPA_INVALID_PAN_NO")}</CardLabelError>}
+                          <h3 className="error-message" style={{ color: "red" }}>{panIsValid ? "" : PanValError }</h3>
                         </div>
                       </div>
                       <div className="col col-4">
@@ -1259,8 +1299,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                         value={csrNumber}
                                         name="csrNumber"
                                         className="form-control"
-                                        max={12}
-                                        maxlength="12"
+                                        max={11}
+                                        maxlength="11"
                                       />
                                       {csrNumber && csrNumber.length > 0 && !csrNumber.match(Digit.Utils.getPattern('CSR')) && <CardLabelError style={{ width: "100%", marginTop: '5px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_CSR_NO")}</CardLabelError>}
                                       <h3 className="error-message" style={{ color: "red" }}>{cinValError}</h3>

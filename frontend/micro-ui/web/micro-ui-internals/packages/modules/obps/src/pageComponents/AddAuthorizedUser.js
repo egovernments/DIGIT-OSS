@@ -192,6 +192,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
     setShowhide(getshow);
   };
   function setGenderName(value) {
+    console.log("GENDER", value);
     setGender(value);
   }
   function selectPanNumber(e) {
@@ -281,7 +282,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
         'X-APISETU-CLIENTID':'in.gov.tcpharyana',
         'Access-Control-Allow-Origin':"*",
       }}) 
-      console.log("",panResp.data);
+      // console.log("",panResp.data);
       setPanIsValid(true);
       setPanValError("");
       setLoading(false);
