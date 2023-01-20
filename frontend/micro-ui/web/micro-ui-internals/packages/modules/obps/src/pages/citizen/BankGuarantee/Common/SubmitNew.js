@@ -145,7 +145,7 @@ function SubmitNew() {
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
-                  <h2>Enter LOI No. </h2>
+                  <h2>Enter LOI Number </h2>
                 </Form.Label>
               </div>
               <input
