@@ -267,7 +267,10 @@ public class TLConfiguration {
 
     @Value("${egov.usr.events.download.receipt.code}")
     private String downloadReceiptCode;
-	
+
+    @Value("${egov.usr.events.portal.url.code}")
+    private String portalUrlCode;
+
 	@Value("${egov.user.event.notification.enabledForTL}")
 	private Boolean isUserEventsNotificationEnabledForTL;
 

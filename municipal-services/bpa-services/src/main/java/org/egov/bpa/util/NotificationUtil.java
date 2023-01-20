@@ -135,7 +135,7 @@ public class NotificationUtil {
 					BigDecimal amount = getAmountToBePaid(requestInfo, bpa);
 					message = message.replace(AMOUNT_TO_BE_PAID, amount.toString());
 				}
-				message = getLinksReplaced(message,bpa);
+				message = getLinksRemoved(message,bpa);
 			}
 		}
 		return message;
@@ -545,6 +545,27 @@ public class NotificationUtil {
 			link = link.replace("$applicationNo", bpa.getApplicationNo());
 			link = getShortnerURL(link);
 			message = message.replace(DOWNLOAD_PERMIT_LINK_PLACEHOLDER, link);
+		}
+
+		return message;
+	}
+
+	public String getLinksRemoved(String message, BPA bpa)
+	{
+		if (message.contains(DOWNLOAD_OC_LINK_PLACEHOLDER)) {
+			message = message.replace(DOWNLOAD_OC_LINK_PLACEHOLDER, "");
+		}
+
+		if (message.contains(DOWNLOAD_PERMIT_LINK_PLACEHOLDER)) {
+			message = message.replace(DOWNLOAD_PERMIT_LINK_PLACEHOLDER, "");
+		}
+
+		if (message.contains("{RECEIPT_LINK}")) {
+			message = message.replace("{RECEIPT_LINK}", "");
+		}
+
+		if (message.contains("{PAYMENT_LINK}")) {
+			message = message.replace("{PAYMENT_LINK}", "");
 		}
 
 		return message;

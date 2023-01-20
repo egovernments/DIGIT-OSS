@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 
 import static com.jayway.jsonpath.Criteria.where;
 import static com.jayway.jsonpath.Filter.filter;
+import static org.egov.tl.util.BPAConstants.APPROVED_STATUS;
 import static org.egov.tl.util.BPAConstants.BUSINESS_SERVICE_BPAREG;
 import static org.egov.tl.util.TLConstants.*;
 import static org.egov.tl.util.TLConstants.PROPERTY_ID;
@@ -389,7 +390,7 @@ public class TLNotificationService {
 			}
 			else {
 				String localizationMessages = bpaNotificationUtil.getLocalizationMessages(tenantId,request.getRequestInfo());
-				message = bpaNotificationUtil.getCustomizedMsg(request.getRequestInfo(), license, localizationMessages);
+				message = bpaNotificationUtil.getEventCustomizedMsg(request.getRequestInfo(), license, localizationMessages);
 			}
 			if(message == null) continue;
 			Map<String,String > mobileNumberToOwner = new HashMap<>();
@@ -427,6 +428,13 @@ public class TLNotificationService {
 					action = Action.builder().actionUrls(items).build();
 				}
 
+				if (license.getStatus().equals(APPROVED_STATUS)) {
+					List<ActionItem> items = new ArrayList<>();
+					String actionLink = config.getUiAppHost();
+					ActionItem item = ActionItem.builder().actionUrl(actionLink).code(config.getPortalUrlCode()).build();
+					items.add(item);
+					action = Action.builder().actionUrls(items).build();
+				}
 
 				events.add(Event.builder().tenantId(license.getTenantId()).description(mobileNumberToMsg.get(mobile))
 						.eventType(BPAConstants.USREVENTS_EVENT_TYPE).name(BPAConstants.USREVENTS_EVENT_NAME)

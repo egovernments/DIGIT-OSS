@@ -13,6 +13,8 @@ public class BPAConstants {
 
     public static final String PENDINGDOCVERIFICATION_STATUS = "PENDINGDOCVERIFICATION";
 
+    public static final String APPROVED_STATUS = "APPROVED";
+
     public static final String ACTION_STATUS_PENDINGPAYMENT = "APPLY_PENDINGPAYMENT";
 
     public static final String ACTION_STATUS_PENDINGAPPROVAL = "FORWARD_PENDINGAPPROVAL";

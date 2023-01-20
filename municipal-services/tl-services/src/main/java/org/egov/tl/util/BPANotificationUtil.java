@@ -166,6 +166,68 @@ public class BPANotificationUtil {
         return message;
     }
 
+    public String getEventCustomizedMsg(RequestInfo requestInfo, TradeLicense license, String localizationMessage) {
+        String message = null, messageTemplate;
+        String ACTION_STATUS = license.getAction() + "_" + license.getStatus();
+
+        switch (ACTION_STATUS) {
+
+            case ACTION_STATUS_PENDINGPAYMENT:
+                messageTemplate = getMessageTemplate(NOTIFICATION_PENDINGPAYMENT, localizationMessage);
+                message = getLinksRemoved(messageTemplate);
+                message = getReplacedMessage(license, message);
+                BigDecimal amountToBePaid =  notificationUtil.getAmountToBePaid(requestInfo, license);
+
+                if (message.contains("{AMOUNT_TO_BE_PAID}")) {
+                    message = message.replace("{AMOUNT_TO_BE_PAID}", amountToBePaid.toString());
+                }
+                break;
+
+            // payment notification handled in receipt consumer
+//            case ACTION_STATUS_PENDINGDOCVERIFICATION:
+//                break;
+
+            case ACTION_STATUS_PENDINGAPPROVAL:
+                messageTemplate = getMessageTemplate(NOTIFICATION_PENDINGAPPROVAL, localizationMessage);
+                message = getLinksRemoved(messageTemplate);
+                message = getReplacedMessage(license, message);
+                break;
+
+            case ACTION_STATUS_APPROVED:
+                messageTemplate = getMessageTemplate(NOTIFICATION_APPROVED, localizationMessage);
+                message = getLinksRemoved(messageTemplate);
+                message = getReplacedMessage(license, message);
+                break;
+
+
+            case ACTION_STATUS_REJECTED:
+                messageTemplate = getMessageTemplate(NOTIFICATION_REJECTED, localizationMessage);
+                message = getLinksRemoved(messageTemplate);
+                message = getReplacedMessage(license, message);
+                break;
+
+            case ACTION_STATUS_INITIATED:
+                messageTemplate = getMessageTemplate(BPAConstants.NOTIFICATION_PENDINGPAYMENT, localizationMessage);
+                message = getLinksRemoved(messageTemplate);
+                message = getReplacedMessage(license, message);
+                amountToBePaid =  notificationUtil.getAmountToBePaid(requestInfo, license);
+
+                if (message.contains("{AMOUNT_TO_BE_PAID}")) {
+                    message = message.replace("{AMOUNT_TO_BE_PAID}", amountToBePaid.toString());
+                }
+                break;
+
+            case ACTION_STATUS_INITIATED_PARTIAL:
+                messageTemplate = getMessageTemplate(BPAConstants.NOTIFICATION_INITIATED, localizationMessage);
+                message = getLinksRemoved(messageTemplate);
+                message = getReplacedMessage(license, message);
+                break;
+
+        }
+
+        return message;
+    }
+
     public String getEmailCustomizedMsg(RequestInfo requestInfo, TradeLicense license, String localizationMessage) {
 
         String message = null, messageTemplate;
@@ -309,12 +371,30 @@ public class BPANotificationUtil {
         if(message.contains("{PORTAL_LINK}"))
             message = message.replace("{PORTAL_LINK}",egovhost+citizenHomeEndpoint);
 
-
         if(message.contains("{PAYMENT_LINK}"))
         {
             String payEndpoint = commonPayEndpoint.replace("$applicationNo", license.getApplicationNumber()).replace("$tenantId", license.getTenantId());
             message = message.replace("{PAYMENT_LINK}", notificationUtil.getShortenedUrl(egovhost + payEndpoint));
         }
+        return message;
+    }
+
+
+    public String getLinksRemoved(String message)
+    {
+
+        if (message.contains("{RECEIPT_DOWNLOAD_LINK}")) {
+            message = message.replace("{RECEIPT_DOWNLOAD_LINK}", "");
+        }
+
+        if (message.contains("{PAYMENT_LINK}")) {
+            message = message.replace("{PAYMENT_LINK}", "");
+        }
+
+        if (message.contains("{PORTAL_LINK}")) {
+            message = message.replace("{PORTAL_LINK}", "");
+        }
+
         return message;
     }
 
@@ -336,7 +416,9 @@ public class BPANotificationUtil {
     public List<SMSRequest> createSMSRequestForBPA(String message, Map<String, String> mobileNumberToOwnerName,TradeLicense license,String receiptno) {
         List<SMSRequest> smsRequest = new LinkedList<>();
         for (Map.Entry<String, String> entryset : mobileNumberToOwnerName.entrySet()) {
-            String customizedMsg = message.replace("{RECEIPT_DOWNLOAD_LINK}", getRecepitDownloadLink(license,entryset.getKey(),receiptno));
+            String customizedMsg = message;
+            if(customizedMsg.contains("{RECEIPT_DOWNLOAD_LINK}"))
+                customizedMsg = customizedMsg.replace("{RECEIPT_DOWNLOAD_LINK}", getRecepitDownloadLink(license,entryset.getKey(),receiptno));
             customizedMsg = customizedMsg.replace("{1}",entryset.getValue());
             smsRequest.add(new SMSRequest(entryset.getKey(), customizedMsg));
         }
@@ -371,6 +453,10 @@ public class BPANotificationUtil {
                 mobileNumberToOwner.put(owner.getMobileNumber(),owner.getName());
         });
 
+        message = getLinksRemoved(message);
+        message = getReplacedMessage(license, message);
+
+        //get links removed
         List<SMSRequest> smsRequests = createSMSRequestForBPA(message, mobileNumberToOwner,license,receiptno);
         Set<String> mobileNumbers = smsRequests.stream().map(SMSRequest :: getMobileNumber).collect(Collectors.toSet());
         Map<String, String> mapOfPhnoAndUUIDs = notificationUtil.fetchUserUUIDs(mobileNumbers, request.getRequestInfo(), request.getLicenses().get(0).getTenantId());

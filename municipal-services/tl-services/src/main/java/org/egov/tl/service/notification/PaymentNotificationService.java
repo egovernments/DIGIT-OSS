@@ -176,7 +176,7 @@ public class PaymentNotificationService {
                             if(null != config.getIsUserEventsNotificationEnabledForBPA()) {
                                 if(config.getIsUserEventsNotificationEnabledForBPA()) {
                                     TradeLicenseRequest tradeLicenseRequest=TradeLicenseRequest.builder().requestInfo(requestInfo).licenses(Collections.singletonList(license)).build();
-                                    EventRequest eventRequest = bpaNotificationUtil.getEventsForBPA(tradeLicenseRequest,true, message,receiptno, BPAConstants.USREVENTS_EVENT_NAME);
+                                    EventRequest eventRequest = bpaNotificationUtil.getEventsForBPA(tradeLicenseRequest,true, locMessage,receiptno, BPAConstants.USREVENTS_EVENT_NAME);
                                     if(null != eventRequest)
                                         util.sendEventNotification(eventRequest);
                                 }
