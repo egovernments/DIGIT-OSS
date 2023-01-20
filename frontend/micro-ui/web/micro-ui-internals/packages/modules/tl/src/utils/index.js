@@ -575,7 +575,7 @@ export const convertToEditTrade = (data, fy = []) => {
             isSameAsPropertyOwner : isSameAsPropertyOwner},
             tradeGstNo: data?.TradeDetails?.TradeGSTNumber || null,
           auditDetails: data.tradeLicenseDetail.auditDetails,
-          channel: data.tradeLicenseDetail.channel,
+          channel: "CITIZEN",
           id: data.tradeLicenseDetail.id,
           ...(data?.ownershipCategory?.code.includes("INSTITUTIONAL") && {institution: {
             designation: data?.owners?.owners?.[0]?.designation,
@@ -634,7 +634,7 @@ export const convertToResubmitTrade = (data) => {
           tradeUnits: gettradeupdateunits(data),
           additionalDetail: data.tradeLicenseDetail.additionalDetail,
           auditDetails: data.tradeLicenseDetail.auditDetails,
-          channel: data.tradeLicenseDetail.channel,
+          channel: "CITIZEN",
           id: data.tradeLicenseDetail.id,
           institution: data?.ownershipCategory?.code.includes("INSTITUTIONAL") ?{
             designation: data?.owners?.owners?.[0]?.designation,

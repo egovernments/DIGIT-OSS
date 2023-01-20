@@ -36,10 +36,16 @@ function transformTime (time) {
   return time.join (''); // return adjusted time or original string
 }
 
-const getUserData = (data) => {
-    const obj = {}
-    data?.map(ans => {
-        obj[ans.mobileNumber]=ans.emailId
+const getUserData = async (data,tenant) => {
+    let obj = {}
+    let userresponse = [];
+    userresponse = data?.map(ans => {
+        return Digit.UserService.userSearch(tenant, { uuid: [ans?.citizenId] }, {}).then((ob) => {return ob})
+    })
+    //getting user data from citizen uuid
+    userresponse = await Promise.all(userresponse);
+    userresponse && userresponse?.length>0 && userresponse.map((ob) => {
+        obj[ob?.user?.[0]?.mobileNumber] = obj[ob?.user?.[0]?.emailId]
     })
     return obj;
 }
@@ -177,12 +183,13 @@ const SurveyResultsView = ({surveyInfo,responsesInfoMutation}) => {
     
     const { t } = useTranslation();
     const [data,setData]=useState(null);
-    const [userInfo,setUserInfo] = useState(null)
-    useEffect(() => {
+    const [userInfo,setUserInfo] = useState({})
+    const tenant = Digit.ULBService.getCurrentTenantId();
+    useEffect( async() => {
         if(responsesInfoMutation.isSuccess){
         const dp = bindQuesWithAns(surveyInfo?.questions,responsesInfoMutation.data.answers)
         setData(dp)
-        const ue = getUserData(responsesInfoMutation.data.answers)
+        const ue = await getUserData(responsesInfoMutation.data.answers,tenant.split(".")[0])
         setUserInfo(ue);
         }
     },[responsesInfoMutation])
