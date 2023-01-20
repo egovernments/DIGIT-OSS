@@ -11,7 +11,9 @@ import {
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { httpRequest } from "egov-ui-framework/ui-utils/api";
 import { convertEpochToDate } from "egov-ui-framework/ui-config/screens/specs/utils";
-import { downloadReceiptFromFilestoreID, downloadReceipt } from "../utils";
+import {  downloadReceipt } from "../utils";
+import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
+
 
 const getMyApplications = async (action, state, dispatch) => {
   try {
