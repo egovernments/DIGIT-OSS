@@ -18,6 +18,8 @@ import { useHistory, useRouteMatch } from "react-router-dom";
 import Timeline from "../../../components/Timeline";
 import OBPSDocument from "../../../pageComponents/OBPSDocuments";
 import axios from "axios";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import { getDocShareholding } from "../../../../../tl/src/pages/employee/ScrutinyBasic/ScrutinyDevelopment/docview.helper";
 
 const CheckPage = ({ onSubmit, value }) => {
   const { t } = useTranslation();
@@ -58,8 +60,10 @@ const CheckPage = ({ onSubmit, value }) => {
           });
           const developerDataGet = getDevDetails?.data;
           setDevData(getDevDetails?.data?.devDetail[0]?.addInfo)
+          setDevDataFinancialCapacity(getDevDetails?.data?.devDetail[0]?.capacityDevelopAColony?.documents)
           setShowDevTypeFields(developerDataGet?.devDetail[0]?.applicantType?.developerType);
           setAurthorizedUserInfoArray(developerDataGet?.devDetail[0]?.aurthorizedUserInfoArray);
+          // setDocumentsData(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.documents);
       } catch (error) {
           console.log(error);
       }
@@ -71,6 +75,7 @@ const CheckPage = ({ onSubmit, value }) => {
   const [showDevTypeFields, setShowDevTypeFields] = useState("");
   const [aurthorizedUserInfoArray, setAurthorizedUserInfoArray] = useState([]);
   const [getDevData, setDevData] = useState([]);
+  const [getDevDataFinancialCapacity, setDevDataFinancialCapacity] = useState([]);
 
   console.log(":::::",getDevData);
 
@@ -298,7 +303,257 @@ const CheckPage = ({ onSubmit, value }) => {
               onClick={() => routeTo(`${routeLink}/developer-capacity`)}
             />
             <StatusTable>
+              {/* {(getDevDataFinancialCapacity === "Individual") ? () : ()} */}
+              {(getDevData?.showDevTypeFields === "Individual" || getDevData?.showDevTypeFields === "Proprietorship Firm" || getDevData?.showDevTypeFields === "Hindu Undivided Family") && (
+                <div className="card-body">
+                    <div className="form-group row mb-12">
+                        {/* <label className="col-sm-3 col-form-label">Individual</label> */}
+                        <div className="col-sm-12">
+                            {/* <textarea type="text" className="employee-card-input" id="details" placeholder="Enter Details" /> */}
+                            <table className="table table-bordered" size="sm">
+                                <thead>
+                                    <tr>
+                                        <th>S.No.</th>
+                                        <th>Particulars of document</th>
+                                        {/* <th>Details </th> */}
+                                        <th>Annexure </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td> 1 </td>
+                                        <td>
+                                            Net Worth in case of individual certified by CA/ Or Income tax return in case of an individual (for the last three years) <span className="text-danger font-weight-bold">*</span>
+                                        </td>
+                                        {/* <td>
+                                            <input
+                                                type="file"
+                                                name="individualCertificateCA"
+                                                placeholder=""
+                                                class="employee-card-input"
+                                                onChange={(e) => getDocumentData(e?.target?.files[0], "individualCertificateCA")}
+                                            />
+                                        </td> */}
+                                        <td align="center" size="large">
+                                            <div className="row">
+                                                {getDevDataFinancialCapacity?.individualCertificateCA ?
+                                                    <a onClick={() => getDocShareholding(getDevDataFinancialCapacity?.individualCertificateCA)} className="btn btn-sm col-md-6">
+                                                        <VisibilityIcon color="info" className="icon" />
+                                                    </a> : <p></p>
+                                                }
+                                                
+                                            </div>
 
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td> 2 </td>
+                                        <td>
+                                            Bank statement for the last 3 years <span className="text-danger font-weight-bold">*</span>
+                                        </td>
+                                        {/* <td>
+                                            <input
+                                                type="file"
+                                                name="companyBalanceSheet"
+                                                placeholder=""
+                                                class="employee-card-input"
+                                                onChange={(e) => getDocumentData(e?.target?.files[0], "companyBalanceSheet")}
+                                            />
+                                        </td> */}
+                                        <td align="center" size="large">
+                                            <div className="row">
+                                                {getDevDataFinancialCapacity?.companyBalanceSheet ?
+                                                    <a onClick={() => getDocShareholding(getDevDataFinancialCapacity?.companyBalanceSheet)} className="btn btn-sm col-md-6">
+                                                        <VisibilityIcon color="info" className="icon" />
+                                                    </a> : <p></p>
+                                                }
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>)}
+            {(getDevData?.showDevTypeFields === "Company" || getDevData?.showDevTypeFields === "Society" || getDevData?.showDevTypeFields === "Trust" || getDevData?.showDevTypeFields === "Institution") && (
+                <div className="card-body">
+                    <div className="form-group row">
+                        {/* <label className="col-sm-3 col-form-label">Company</label> */}
+                        <div className="col-sm-12">
+                            {/* <input type="text" className="employee-card-input" id="Email" placeholder="Enter Email" /> */}
+                            <table className="table table-bordered" size="sm">
+                                <thead>
+                                    <tr>
+                                        <th>S.No.</th>
+                                        <th>Particulars of document</th>
+                                        {/* <th>Details </th> */}
+                                        <th>Annexure </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td> 1 </td>
+                                        <td>Balance sheet of last 3 years <span className="text-danger font-weight-bold">*</span></td>
+                                        {/* <td>
+                                            <input
+                                                type="file"
+                                                name="companyBalanceSheet"
+                                                placeholder=""
+                                                class="employee-card-input"
+                                                onChange={(e) => getDocumentData(e?.target?.files[0], "companyBalanceSheet")}
+                                            />
+
+                                        </td> */}
+                                        <td align="center" size="large">
+
+                                            <div className="row">
+                                                {getDevDataFinancialCapacity?.companyBalanceSheet ?
+                                                    <a onClick={() => getDocShareholding(getDevDataFinancialCapacity?.companyBalanceSheet)} className="btn btn-sm col-md-6">
+                                                        <VisibilityIcon color="info" className="icon" />
+                                                    </a> : <p></p>
+                                                }
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td> 2 </td>
+                                        <td>Ps-3(Representing Paid-UP capital) <span className="text-danger font-weight-bold">*</span></td>
+
+                                        <td align="center" size="large">
+                                            <div className="row">
+
+                                                {getDevDataFinancialCapacity?.paidUpCapital ?
+                                                    <a onClick={() => getDocShareholding(getDevDataFinancialCapacity?.paidUpCapital)} className="btn btn-sm col-md-6">
+                                                        <VisibilityIcon color="info" className="icon" />
+                                                    </a> : <p></p>
+                                                }
+                                                
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td> 3 </td>
+                                        <td>Reserves and surpluses <span className="text-danger font-weight-bold">*</span></td>
+                                        <td align="center" size="large">
+                                            <div className="row">
+
+                                                {getDevDataFinancialCapacity?.reservesAndSurplus ?
+                                                    <a onClick={() => getDocShareholding(getDevDataFinancialCapacity?.reservesAndSurplus)} className="btn btn-sm col-md-6">
+                                                        <VisibilityIcon color="info" className="icon" />
+                                                    </a> : <p></p>
+                                                }
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td> 4 </td>
+                                        <td>Fully Convertible Debenture </td>
+                                        <td align="center" size="large">
+                                            <div className="row">
+
+                                                {getDevDataFinancialCapacity?.fullyConvertibleDebenture ?
+                                                    <a onClick={() => getDocShareholding(getDevDataFinancialCapacity?.fullyConvertibleDebenture)} className="btn btn-sm col-md-6">
+                                                        <VisibilityIcon color="info" className="icon" />
+                                                    </a> : <p></p>
+                                                }
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td> 5 </td>
+                                        <td>Any other documents</td>
+                                        <td align="center" size="large">
+                                            <div className="row">
+
+                                                {getDevDataFinancialCapacity?.anyOtherDoc ?
+                                                    <a onClick={() => getDocShareholding(getDevDataFinancialCapacity?.anyOtherDoc)} className="btn btn-sm col-md-6">
+                                                        <VisibilityIcon color="info" className="icon" />
+                                                    </a> : <p></p>
+                                                }
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>)}
+            {(getDevData?.showDevTypeFields === "Limited Liability Partnership" || getDevData?.showDevTypeFields === "Firm" || getDevData?.showDevTypeFields === "Partnership Firm") && (
+                <div className="card-body">
+                    <div className="form-group row">
+                        {/* <label className="col-sm-3 col-form-label">LLP</label> */}
+                        <div className="col-sm-12">
+                            {/* <input type="text" className="employee-card-input" id="llp" placeholder="Enter Email" /> */}
+                            <table className="table table-bordered" size="sm">
+                                <thead>
+                                    <tr>
+                                        <th>S.No.</th>
+                                        <th>Particulars of document</th>
+                                        {/* <th>Details </th> */}
+                                        <th>Annexure </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td> 1 </td>
+                                        <td>Networth of partners <span className="text-danger font-weight-bold">*</span></td>
+                                        <td align="center" size="large">
+                                            <div className="row">
+
+                                                {getDevDataFinancialCapacity?.netWorthOfPartners ?
+                                                    <a onClick={() => getDocShareholding(getDevDataFinancialCapacity?.netWorthOfPartners)} className="btn btn-sm col-md-6">
+                                                        <VisibilityIcon color="info" className="icon" />
+                                                    </a> : <p></p>
+                                                }
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td> 2 </td>
+                                        <td>Net worth of firm <span className="text-danger font-weight-bold">*</span></td>
+                                        <td align="center" size="large">
+                                            <div className="row">
+
+                                                {getDevDataFinancialCapacity?.netWorthOfFirm ?
+                                                    <a onClick={() => getDocShareholding(getDevDataFinancialCapacity?.netWorthOfFirm)} className="btn btn-sm col-md-6">
+                                                        <VisibilityIcon color="info" className="icon" />
+                                                    </a> : <p></p>
+                                                }
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td> 3 </td>
+                                        <td>Upload Fully Convertible Debenture <span className="text-danger font-weight-bold">*</span></td>
+                                        <td align="center" size="large">
+                                            <div className="row">
+
+                                                {getDevDataFinancialCapacity?.fullyConvertibleDebenture ?
+                                                    <a onClick={() => getDocShareholding(getDevDataFinancialCapacity?.fullyConvertibleDebenture)} className="btn btn-sm col-md-6">
+                                                        <VisibilityIcon color="info" className="icon" />
+                                                    </a> : <p></p>
+                                                }
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>)}
             </StatusTable>
           </Card>
           <Card style={{ paddingRight: "16px" }}>
