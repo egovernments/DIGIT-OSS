@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import Spinner from "../../../components/Loader";
 import axios from "axios";
+import { convertEpochToDateDMY } from "../../../utils";
 
 const SPApplications = ({ view }) => {
   const { t } = useTranslation();
@@ -39,7 +40,7 @@ const SPApplications = ({ view }) => {
       },
     };
     try {
-      const Resp = await axios.post("/tl-services/v1/_search", data);
+      const Resp = await axios.post("/tl-services/serviceplan/_get", data);
       setLoader(false);
       setData(Resp?.data);
     } catch (error) {
@@ -69,7 +70,7 @@ const SPApplications = ({ view }) => {
               color: "white",
             }}
           >
-            id
+            LOI Number
           </th>
           <th
             style={{
@@ -150,10 +151,10 @@ const SPApplications = ({ view }) => {
             Status
           </th>
         </tr>
-        {data?.Licenses?.map((item, index) => {
+        {data?.servicePlanResponse?.map((item, index) => {
           return (
             <tr key={`table${index}`}>
-              <td style={{ border: "1px solid #ddd", padding: " 8px" }}>{item?.id}</td>
+              <td style={{ border: "1px solid #ddd", padding: " 8px" }}>{item?.loiNumber}</td>
               <td style={{ border: "1px solid #ddd", padding: " 8px" }}>{item?.tenantId}</td>
               <td style={{ border: "1px solid #ddd", padding: " 8px" }}>{item?.businessService}</td>
               <td
@@ -168,7 +169,7 @@ const SPApplications = ({ view }) => {
               >
                 {item?.applicationNumber}
               </td>
-              <td style={{ border: "1px solid #ddd", padding: " 8px" }}>{item?.applicationDate}</td>
+              <td style={{ border: "1px solid #ddd", padding: " 8px" }}>{convertEpochToDateDMY(item?.auditDetails?.createdTime)}</td>
               <td style={{ border: "1px solid #ddd", padding: " 8px" }}>{item?.action}</td>
               <td style={{ border: "1px solid #ddd", padding: " 8px" }}>{item?.status}</td>
             </tr>
