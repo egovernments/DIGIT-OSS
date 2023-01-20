@@ -198,7 +198,6 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
     return obj.label === "the proposed developer company/firm";
   });
 
-  ////////////////////////////////////////////
   const {
     register,
     handleSubmit,

@@ -35,6 +35,8 @@ const Developerinfo = (props) => {
   const userRoles = user?.info?.roles?.map((e) => e.code) || [];
   const hideRemarks = userRoles.some((item)=>item === "CTP_HR" || item === "CTP_HQ" || item === "DTP_HR" || item === "DTP_HQ")
   const hideRemarksPatwari = userRoles.some((item)=>item ==="Patwari_HQ")
+  const hideRemarksJE = userRoles.some((item)=>item ==="JE_HQ" || item === "JE_HR")
+
 
   const [vacant, setVacant] = useState("");
   const [construction, setConstruction] = useState("");

@@ -220,12 +220,7 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
         </div>
       </Card.Header>
       <Row style={{ top: 10, padding: 10 }}>
-        {/* <ScrutitnyForms
-          apiResponse={scrutinyDetails}
-          applicationNumber={id}
-          refreshScrutinyData={getScrutinyData}
-        ></ScrutitnyForms> */}
-         {/* <ElecticalBase/> */}
+      
          <ElecticalBase
          apiResponse={scrutinyDetails}
          applicationNumber={id}
@@ -238,10 +233,7 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
         {/* <Row> */}
         
           <div class="col-md-10 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
-          {/* <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}>Submit</Button> */}
-
-
-          {showModal ? (
+           {showModal ? (
             <ActionModal
               t={t}
               action={selectedAction}
@@ -267,20 +259,17 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
             closeWarningPopup={closeWarningPopup}
             />
           ) : null}
-          {/* <ApplicationDetailsToast t={t} showToast={showToast} closeToast={closeToast} businessService={businessService} /> */}
+          
           <ApplicationDetailsActionBar
             workflowDetails={workflowDetails}
             displayMenu={displayMenu}
             onActionSelect={onActionSelect}
             setDisplayMenu={setDisplayMenu}
             businessService={businessService}
-            // forcedActionPrefix={forcedActionPrefix}
             ActionBarStyle={{}}
             MenuStyle={{}}
           />
-
-
-            </div>
+   </div>
           
         {/* </Row> */}
         <Row>

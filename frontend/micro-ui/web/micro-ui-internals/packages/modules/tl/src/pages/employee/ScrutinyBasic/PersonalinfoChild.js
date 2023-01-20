@@ -5,6 +5,8 @@ import ModalChild from "./Remarks/ModalChild";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import './css/personalInfoChild.style.js'
 import { useStyles } from "./css/personalInfoChild.style.js"
+import AddIcon from "@mui/icons-material/Add";
+import Table from "react-bootstrap/Table";
 
 import Visibility from "@mui/icons-material/Visibility";
 import FileDownload from "@mui/icons-material/FileDownload";
@@ -269,10 +271,44 @@ const PersonalinfoChild = (props) => {
            
           </div>
         </Col>
+        {personalinfo?.devDetail?.addInfo?.showDevTypeFields === "Trust" && 
         <Col md={4} xxl lg="4">
           <div>
             <Form.Label>
-              <h5 className={classes.formLabel}>CIN Number &nbsp;</h5>
+              <h5 className={classes.formLabel}>CSR Number &nbsp;</h5>
+            </Form.Label>
+            <span className={classes.required}>*</span> &nbsp;&nbsp;
+          </div>
+          <div className={classes.fieldContainer}>
+            <Form.Control
+              className={classes.formControl}
+              placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.csr_Number : null}
+              disabled
+            ></Form.Control>
+            &nbsp;&nbsp;
+          
+            <ReportProblemIcon
+              style={{
+                display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                
+                color:fieldIconColors.cin_Number}}
+              onClick={() => {
+                  setOpennedModal("cin_Number")
+                  setLabelValue("CIN Number"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.csr_Number : null);
+              }}
+            ></ReportProblemIcon>
+           
+          </div>
+        </Col>
+         }
+         {personalinfo?.devDetail?.addInfo?.showDevTypeFields === "Company" && 
+        <Col md={4} xxl lg="4">
+          <div>
+            <Form.Label>
+              <h5 className={classes.formLabel}>CSR Number &nbsp;</h5>
             </Form.Label>
             <span className={classes.required}>*</span> &nbsp;&nbsp;
           </div>
@@ -283,8 +319,7 @@ const PersonalinfoChild = (props) => {
               disabled
             ></Form.Control>
             &nbsp;&nbsp;
-            {/* {JSON.stringify(userRoles)} */}
-          {/* {JSON.stringify(hideRemarksPatwari)}  */}
+          
             <ReportProblemIcon
               style={{
                 display: hideRemarks || hideRemarksPatwari ?"none":"block",
@@ -301,9 +336,276 @@ const PersonalinfoChild = (props) => {
            
           </div>
         </Col>
+         }
+         {personalinfo?.devDetail?.addInfo?.showDevTypeFields === "Company" && 
+        <Col md={4} xxl lg="4">
+          <div>
+            <Form.Label>
+              <h5 className={classes.formLabel}>CSR Number &nbsp;</h5>
+            </Form.Label>
+            <span className={classes.required}>*</span> &nbsp;&nbsp;
+          </div>
+          <div className={classes.fieldContainer}>
+            <Form.Control
+              className={classes.formControl}
+              placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.cin_Number : null}
+              disabled
+            ></Form.Control>
+            &nbsp;&nbsp;
+          
+            <ReportProblemIcon
+              style={{
+                display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                
+                color:fieldIconColors.cin_Number}}
+              onClick={() => {
+                  setOpennedModal("cin_Number")
+                  setLabelValue("CIN Number"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.cin_Number : null);
+              }}
+            ></ReportProblemIcon>
+           
+          </div>
+        </Col>
+         }
+       
       </Row>
+      {personalinfo?.devDetail?.addInfo?.showDevTypeFields === "Individual"  && "Limited Liability Partnership"  && "Hindu Undivided Family" && 
+                <div>
+                  <Card style={{ margin: 5 }}>
+                    <h5>Developer Details</h5>
+                    <Row>
+                      <Col md={4} xxl lg="4">
+                        <div>
+                          <Form.Label>
+                            
+                            <h5 className={classes.formLabel}>Name &nbsp;</h5>
+                          </Form.Label>
+                          <span style={{ color: "red" }}>*</span>
+                        </div>
 
-      <br></br>
+                        <div style={{ display: "flex" }}>
+                          <Form.Control className={classes.formControl}
+                            placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.name : null}
+                            disabled></Form.Control>
+                          &nbsp;&nbsp;
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                              color: fieldIconColors.name
+                            }}
+                            onClick={() => {
+                              setOpennedModal("developerName")
+                              setLabelValue("Developer's Name"),
+                                setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.name : null);
+                            }}
+                          ></ReportProblemIcon>
+
+
+
+                        </div>
+                      </Col>
+                      <Col md={4} xxl lg="4">
+                        <div>
+                          <Form.Label>
+                            
+                            <h5 className={classes.formLabel}>Email &nbsp;</h5>
+                          </Form.Label>
+                          <span style={{ color: "red" }}>*</span>
+                        </div>
+
+                        <div style={{ display: "flex" }}>
+                          <Form.Control className={classes.formControl}
+                            placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.emailId : null}
+                            disabled></Form.Control>
+                          &nbsp;&nbsp;
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                              color: fieldIconColors.emailId
+                            }}
+                            onClick={() => {
+                              setOpennedModal("developerEmail")
+                              setLabelValue("Developer's Email"),
+                                setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.emailId : null);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </Col>
+                      <Col md={4} xxl lg="4">
+                        <div>
+                          <Form.Label>
+                     
+                            <h5 className={classes.formLabel}>Mobile No. &nbsp;</h5>
+                          </Form.Label>
+                          <span style={{ color: "red" }}>*</span>
+                        </div>
+
+                        <div style={{ display: "flex" }}>
+                          <Form.Control className={classes.formControl}
+                            placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.mobileNumberUser : null}
+                            disabled ></Form.Control>
+                          &nbsp;&nbsp;
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                              color: fieldIconColors.mobileNumberUser
+                            }}
+                            onClick={() => {
+                              setOpennedModal("developerMobileNo")
+                              setLabelValue("Developer's Mobile No."),
+                                setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.mobileNumberUser : null);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </Col>
+                    </Row>
+                    <Row>
+                    <Col md={4} xxl lg="4">
+                        <div>
+                          <Form.Label>
+                            
+                            <h5 className={classes.formLabel}>Date of Birth &nbsp;</h5>
+                          </Form.Label>
+                          <span style={{ color: "red" }}>*</span>
+                        </div>
+
+                        <div style={{ display: "flex" }}>
+                          <Form.Control className={classes.formControl}
+                            placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.dob : null}
+                            disabled></Form.Control>
+                          &nbsp;&nbsp;
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                              color: fieldIconColors.name
+                            }}
+                            onClick={() => {
+                              setOpennedModal("developerName")
+                              setLabelValue("Developer's Name"),
+                                setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.dob : null);
+                            }}
+                          ></ReportProblemIcon>
+
+
+
+                        </div>
+                      </Col>
+                      <Col md={4} xxl lg="4">
+                        <div>
+                          <Form.Label>
+                            
+                            <h5 className={classes.formLabel}>PAN Number &nbsp;</h5>
+                          </Form.Label>
+                          <span style={{ color: "red" }}>*</span>
+                        </div>
+
+                        <div style={{ display: "flex" }}>
+                          <Form.Control className={classes.formControl}
+                            placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.pan : null}
+                            disabled></Form.Control>
+                          &nbsp;&nbsp;
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                              color: fieldIconColors.name
+                            }}
+                            onClick={() => {
+                              setOpennedModal("developerName")
+                              setLabelValue("Developer's Name"),
+                                setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.pan : null);
+                            }}
+                          ></ReportProblemIcon>
+
+
+
+                        </div>
+                      </Col>
+                      <Col md={4} xxl lg="4">
+                        <div>
+                          <Form.Label>
+                            
+                            <h5 className={classes.formLabel}>Registered Address &nbsp;</h5>
+                          </Form.Label>
+                          <span style={{ color: "red" }}>*</span>
+                        </div>
+
+                        <div style={{ display: "flex" }}>
+                          <Form.Control className={classes.formControl}
+                            placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.registeredAddress : null}
+                            disabled></Form.Control>
+                          &nbsp;&nbsp;
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                              color: fieldIconColors.name
+                            }}
+                            onClick={() => {
+                              setOpennedModal("developerName")
+                              setLabelValue("Developer's Name"),
+                                setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.registeredAddress : null);
+                            }}
+                          ></ReportProblemIcon>
+
+
+
+                        </div>
+                      </Col>
+                    </Row>
+                    <Row>
+                    <Col md={4} xxl lg="4">
+                        <div>
+                          <Form.Label>
+                            
+                            <h5 className={classes.formLabel}>Registered Address &nbsp;</h5>
+                          </Form.Label>
+                          <span style={{ color: "red" }}>*</span>
+                        </div>
+
+                        <div style={{ display: "flex" }}>
+                          <Form.Control className={classes.formControl}
+                            placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.gst : null}
+                            disabled></Form.Control>
+                          &nbsp;&nbsp;
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                              color: fieldIconColors.name
+                            }}
+                            onClick={() => {
+                              setOpennedModal("developerName")
+                              setLabelValue("Developer's Name"),
+                                setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.gst : null);
+                            }}
+                          ></ReportProblemIcon>
+
+
+
+                        </div>
+                      </Col>
+                    </Row>
+                  </Card>
+                </div>
+              }
+  <br></br>
+      {personalinfo?.devDetail?.addInfo?.showDevTypeFields === "Trust" && "Company" && 
+      <div>
                     <h5 className="card-title fw-bold" > &nbsp; &nbsp;&nbsp; Directors Information</h5>
                 <div className="card-body">
                   <div className="table-bd">
@@ -357,8 +659,7 @@ const PersonalinfoChild = (props) => {
                   </div>
                   </div>
                   <br></br>
-                  {/* </Card> */}
-                  {/* <Card style={{ margin: 5 }}> */}
+                  
                   <h5 className="card-title fw-bold"> &nbsp;&nbsp;&nbsp; Shareholding Patterns</h5>
                   <div className="card-body">
                     <div className="table-bd">
@@ -425,6 +726,8 @@ const PersonalinfoChild = (props) => {
                       </table>
                     </div>
                     </div>
+                    </div>
+}
                   {/* </Card> */}
 
        <h5 className="card-title fw-bold" > &nbsp; &nbsp;&nbsp; Authorized Person Information</h5>
