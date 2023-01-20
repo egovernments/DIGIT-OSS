@@ -38,16 +38,17 @@ function ReleaseNew() {
           ver: ".01",
           authToken: token,
         },
-        NewBankGuaranteeRequest: {
-          tenantId: tenantId,
-          additionalDetails: null,
-          additionalDocuments: null,
-          workflowAction: "INITIATE",
-          workflowComment: null,
-          workflowAssignee: null,
-
-          ...data,
-        },
+        NewBankGuaranteeRequest: [
+          {
+            tenantId: tenantId,
+            additionalDetails: null,
+            additionalDocuments: null,
+            action: "PRE_SUBMIT",
+            comment: null,
+            assignee: null,
+            ...data,
+          },
+        ],
       };
       const Resp = await axios.post("/tl-services/bank/guarantee/_create", postDistrict);
       setServicePlanDataLabel(Resp.data);

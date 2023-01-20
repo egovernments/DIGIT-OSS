@@ -139,7 +139,7 @@ function SubmitNew() {
   return (
     <form onSubmit={handleSubmit(bankSubmitNew)}>
       <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}> Bank Guarantee Submission</h4>
+        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}> Bank Guarantee Submission </h4>
         <div className="card">
           <Row className="col-12">
             <Col md={4} xxl lg="3">
