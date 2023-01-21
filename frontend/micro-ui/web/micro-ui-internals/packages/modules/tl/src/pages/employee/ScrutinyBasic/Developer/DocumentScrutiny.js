@@ -146,60 +146,6 @@ const DocumentScrutiny = (props) => {
               <Card style={{ margin: 2 }}>
                 <Row>
                   <Form>
-                    {/* <div className="table-bd">
-                      <table className="table table-bordered">
-                        <thead>
-                          <tr>
-                            <th>Sr. No</th>
-                            <th>Name</th>
-                            <th>Designition</th>
-                            <th>Percentage</th>
-                            <th>View PDF</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {
-                            addInfo?.shareHoldingPatterens?.map((item, index) => (
-
-                              <tr>
-                                <td>
-                                  {item?.serialNumber || index + 1}
-                                </td>
-                                <td>
-                                  <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
-                                   placeholder={item?.name} 
-                                   disabled></Form.Control>
-                                </td>
-                                <td>
-                                  <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
-                                  placeholder={item?.designition} 
-                                  disabled></Form.Control>
-                                </td>
-                                <td>
-                                  <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }}
-                                   placeholder={item?.percentage}
-                                    disabled></Form.Control>
-                                </td>
-                                <td>
-                                  <div className="row">
-                                    <button className="btn btn-sm col-md-6" 
-                                    onClick={() => window.open(item?.uploadPdf)}
-                                     >
-                                      <Visibility color="info" className="icon" />
-                                    </button>
-                                    <button className="btn btn-sm col-md-6" 
-                                    onClick={() => window.open(item?.uploadPdf)} 
-                                    >
-                                      <FileDownload color="primary" />
-                                    </button>
-                                  </div>
-                                </td>
-                              </tr>
-                          ))
-                           } 
-                        </tbody>
-                      </table>
-                    </div> */}
                     <div className="row ">
                       <div className="form-group row">
                         <div className="col-sm-12">
@@ -221,28 +167,7 @@ const DocumentScrutiny = (props) => {
                                       (Copy of Govt approved Identity card with photo attested by a gazetted officer within one month from the data of
                                       application .)
                                     </p>
-                                    {/* <ReportProblemIcon
-                      style={{
-                        color: fieldIconColors.developerType
-                      }}
-                      onClick={() => {
-                        setOpennedModal("IdentityProof")
-                        setLabelValue("Identity Proof"),
-                          setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(item?.boardDoc || null);
-                      }}
-                    ></ReportProblemIcon>
-
-                    <ModalChild
-                      labelmodal={labelValue}
-                      passmodalData={handlemodaldData}
-                      displaymodal={smShow}
-                      onClose={() => setSmShow(false)}
-                      selectedFieldData={selectedFieldData}
-                      fieldValue={fieldValue}
-                      remarksUpdate={currentRemarks}
-                    ></ModalChild> */}
+                                 
                                   </td>
                                   <td>
                                     <div className="row">
@@ -265,22 +190,17 @@ const DocumentScrutiny = (props) => {
                                   <td>Educational Certifiates *</td>
                                   <td>
                                     <div className="row">
-                                      {/* <button className="btn btn-sm col-md-6">
-                                      <VisibilityIcon color="info" className="icon" />
-                                    </button>
-                                    <button className="btn btn-sm col-md-6">
-                                      <FileDownloadIcon color="primary" />
-                                    </button> */}
+                                  
                                       <div className="btn btn-sm col-md-6">
                                         <IconButton
-                                        //  onClick={()=>getDocShareholding(item?.boardDocN)}
+                                         onClick={()=>getDocShareholding(item?.boardDocN)}
                                         >
                                           <VisibilityIcon color="info" className="icon" />
                                         </IconButton>
                                       </div>
                                       <div className="btn btn-sm col-md-6">
                                         <IconButton
-                                        // onClick={()=>getDocShareholding(item?.boardDocN)}
+                                        onClick={()=>getDocShareholding(item?.boardDocN)}
                                         >
                                           <FileDownloadIcon color="info" className="icon" />
                                         </IconButton>

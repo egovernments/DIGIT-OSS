@@ -152,7 +152,7 @@ const Personalinfo = (props) => {
             }}
           >
             <span style={{ color: "#817f7f", fontSize: 14 }} className="">
-              - Personal Info
+              - Applicant info
             </span>
             {open2 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
           </div>
@@ -178,14 +178,14 @@ const Personalinfo = (props) => {
             capacityScrutinyInfo={applicantInfoPersonal?.devDetail?.capacityDevelopAColony ? applicantInfoPersonal?.devDetail?.capacityDevelopAColony : null}
             displayPersonal={open2 ? "block" : "none"}
           />
-          <DocumentScrutiny 
-          />
-          {/* <DocumentScrutiny
+          {/* <DocumentScrutiny 
+          /> */}
+          <DocumentScrutiny
             iconColorState={iconStates}
             showTable={currentRemarklifo}
             capacityScrutinyInfo={applicantInfoPersonal?.devDetail?.capacityDevelopAColony ? applicantInfoPersonal?.devDetail?.capacityDevelopAColony : null}
             displayPersonal={open2 ? "block" : "none"}
-          /> */}
+          />
         </div>
       </Collapse>
       {/* </Card> */}

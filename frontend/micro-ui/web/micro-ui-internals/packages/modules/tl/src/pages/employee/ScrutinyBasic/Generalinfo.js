@@ -543,13 +543,14 @@ const Genarelinfo = (props) => {
             {/* <Collapse in={open}>
         <div id="example-collapse-text"> */}
             <div className="ml-auto" style={{ marginTop: 20 }}>
-              <h2 style={{ fontSize: 24 }}>2. Details of applied land:</h2>
+              <h2 style={{ fontSize: 24 }}> Land schedule</h2>
               <p className="ml-3 mt-1">
-                Note: The term “Collaboration agreement" shall include all Development agreements/ Joint Venture agreements/ Joint Development
-                agreements/ Memorandum of Understanding etc. and similar agreements registered with competent authority.
+             
+
+Note: The term “Collaboration agreement" shall include all Development agreements/ Joint Venture agreements/ Joint Development agreements/ Memorandum of Understanding etc. and similar agreements registered with competent authority.
               </p>
               <p className="ml-3 mt-1">
-                <b>(i) Khasra-wise information to be provided in the following format:</b> 
+                <b>(i) Khasra-wise information to be provided in the following format</b> 
               </p>
             </div>
             <br></br>
@@ -559,24 +560,76 @@ const Genarelinfo = (props) => {
                 <thead>
                   
                   <tr className="border-bottom-0">
+                  <th class="fw-normal pb-0 border-bottom-0 align-top">
+                  District   
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    Development Plan   
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    Zone    
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    Sector    
+                    </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
                       Tehsil    
                     </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      Revenue estate    
+                    Revenue Estate   
                     </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      Hadbast Number  
+                    Hadbast No. 
                     </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      Rectangle No.  
+                    Rectangle No.  
                     </th>
                     
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
-                       Enter Khewat
+                    Khasra No.
                     </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      Land owner 
+                    Name of Land Owner
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    Type of land
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    change in information
+                    </th>
+                    
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    Rectangle No./Mustil(Changed)
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    Khasra Number(Changed)
+                    </th>
+                     <th class="fw-normal pb-0 border-bottom-0 align-top">
+                     Name of the Land Ower as per Mutation/Jamabandi
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    Whether Khasra been developed in collaboration  
+                    </th>
+                     <th class="fw-normal pb-0 border-bottom-0 align-top">
+                     Name of the developer company
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    Date of registering collaboration agreement 
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    Whether collaboration agreement irrevocable (Yes/No)
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    Name of authorized signatory on behalf of land owner(s)
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    Name of authorized signatory on behalf of developer
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    Registering Authority
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    Registering Authority document
                     </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
                       Consolidation Type  
@@ -601,7 +654,7 @@ const Genarelinfo = (props) => {
                       Biswansi 
                     </th>
 
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    {/* <th class="fw-normal pb-0 border-bottom-0 align-top">
                         Collaboration Agreement
                     </th>
 
@@ -623,18 +676,86 @@ const Genarelinfo = (props) => {
 
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
                         Name of Authorized Signatory
-                    </th>
+                    </th> */}
 
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
-                        Name of Authorized Signatory Developer
+                    Total Area
                     </th>
 
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    {/* <th class="fw-normal pb-0 border-bottom-0 align-top">
                         Registering Authority
-                    </th>
+                    </th> */}
 
                   </tr>
                   <tr className="border-top-0">
+                  <th class="fw-normal py-0 border-top-0">
+                      <ReportProblemIcon
+                        style={{
+                          // display: hideRemarks?"none":"block",
+                          // display: hideRemarksPatwari?"none":"block",
+                          display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                          color: fieldIconColors.tehsil
+                        }}
+                        onClick={() => {
+                          setLabelValue("District"),
+                          setOpennedModal("tehsil")
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.tehsil : null);
+                        }}
+                      ></ReportProblemIcon>
+                    </th>
+                    <th class="fw-normal py-0 border-top-0">
+                      <ReportProblemIcon
+                        style={{
+                          // display: hideRemarks?"none":"block",
+                          // display: hideRemarksPatwari?"none":"block",
+                          display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                          color: fieldIconColors.tehsil
+                        }}
+                        onClick={() => {
+                          setLabelValue("Tehsil"),
+                          setOpennedModal("tehsil")
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.tehsil : null);
+                        }}
+                      ></ReportProblemIcon>
+                    </th>
+                    <th class="fw-normal py-0 border-top-0">
+                      <ReportProblemIcon
+                        style={{
+                          // display: hideRemarks?"none":"block",
+                          // display: hideRemarksPatwari?"none":"block",
+                          display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                          color: fieldIconColors.tehsil
+                        }}
+                        onClick={() => {
+                          setLabelValue("Tehsil"),
+                          setOpennedModal("tehsil")
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.tehsil : null);
+                        }}
+                      ></ReportProblemIcon>
+                    </th>
+                    <th class="fw-normal py-0 border-top-0">
+                      <ReportProblemIcon
+                        style={{
+                          // display: hideRemarks?"none":"block",
+                          // display: hideRemarksPatwari?"none":"block",
+                          display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                          color: fieldIconColors.tehsil
+                        }}
+                        onClick={() => {
+                          setLabelValue("Tehsil"),
+                          setOpennedModal("tehsil")
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.tehsil : null);
+                        }}
+                      ></ReportProblemIcon>
+                    </th>
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
@@ -973,6 +1094,18 @@ const Genarelinfo = (props) => {
                     applicantInfoPersonal?.AppliedLandDetails?.map((item,index)=>(
                       
                   <tr key={index}>
+                    <td>
+                      <input type="text" className="form-control" placeholder={item?.district } disabled />
+                    </td>
+                    <td>
+                      <input type="text" className="form-control" placeholder={item?.developerPlan} disabled />
+                    </td>
+                    <td>
+                      <input type="text" className="form-control" placeholder={item?.potential} disabled />
+                    </td>
+                    <td>
+                      <input type="text" className="form-control" placeholder={item?.sector} disabled />
+                    </td>
                     <td>
                       <input type="text" className="form-control" placeholder={item?.tehsil} disabled />
                     </td>
