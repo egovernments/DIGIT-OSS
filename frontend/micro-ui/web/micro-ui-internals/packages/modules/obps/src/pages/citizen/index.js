@@ -20,11 +20,12 @@ import Step5 from "../citizen/NewLicense/Step5/Step5";
 import AddInfoForm from "../citizen/DeveloperRegistration/AddInfoForm/addInfo";
 import MyApplication from "./MyApplication";
 import ApplicationDetails from "./ApplicationDetail";
-import CommonBank from "./Bank Guarantee/Common/Common";
-import SubmitNew from "./Bank Guarantee/Common/SubmitNew";
-import RenewNew from "./Bank Guarantee/Common/Renew";
-import Replace from "./Bank Guarantee/Common/Replace";
-import ReleaseNew from "./Bank Guarantee/Common/Release";
+import CommonBank from "./BankGuarantee/Common/Common";
+import SubmitNew from "./BankGuarantee/Common/SubmitNew";
+import RenewNew from "./BankGuarantee/Common/Renew";
+import Replace from "./BankGuarantee/Common/Replace";
+import ReleaseNew from "./BankGuarantee/Common/Release";
+
 // import LicenseAddInfo from "../../pageComponents/LicenseAddInfo";
 // import OCBuildingPermit from "./OCBuildingPermit";
 // import BpaApplicationDetail from "./BpaApplicationDetail";
