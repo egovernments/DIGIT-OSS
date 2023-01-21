@@ -39,14 +39,14 @@ const ApllicantPuropseForm = (props) => {
       dataIndex: "district",
     },
     {
-      key: "potential",
+      key: "developmentPlan",
       title: "Development Plan",
-      dataIndex: "potential",
+      dataIndex: "developmentPlan",
     },
     {
-      key: "zone",
+      key: "potential",
       title: "Zone",
-      dataIndex: "zone",
+      dataIndex: "potential",
     },
     {
       key: "sector",
@@ -69,51 +69,14 @@ const ApllicantPuropseForm = (props) => {
       dataIndex: "hadbastNo",
     },
     {
-      key: "khewats",
-      title: "Khewat No.",
-      dataIndex: "khewats",
-    },
-    {
       key: "rectangleNo",
       title: "Rectangle No.",
       dataIndex: "rectangleNo",
     },
     {
-      key: "consolidationType",
-      title: "Consolidation Type",
-      dataIndex: "consolidationType",
-    },
-    { key: "kanal", title: "Kanal", dataIndex: "kanal" },
-    {
-      key: "kanal",
-      title: "Bigha",
-      dataIndex: "bigha",
-    },
-    {
-      key: "marla",
-      title: "Marla",
-      dataIndex: "marla",
-    },
-    {
-      key: "biswa",
-      title: "Biswa",
-      dataIndex: "biswa",
-    },
-    {
-      key: "sarsai",
-      title: "Sarsai",
-      dataIndex: "sarsai",
-    },
-    {
-      key: "biswansi",
-      title: "Biswansi",
-      dataIndex: "biswansi",
-    },
-    {
-      // key: "totalArea",
-      title: "Total Area",
-      // dataIndex: "totalArea",
-      render: (data) => data?.nonConsolidatedTotal || data?.consolidatedTotal,
+      key: "khewats",
+      title: "Khasra No.",
+      dataIndex: "khewats",
     },
     {
       key: "landOwner",
@@ -126,28 +89,33 @@ const ApllicantPuropseForm = (props) => {
       ),
     },
     {
-      key: "agreementIrrevocialble",
-      title: "Whether collaboration agreement irrevocable (Yes/No)",
-      dataIndex: "agreementIrrevocialble",
+      key: "typeLand",
+      title: "Type of land",
+      dataIndex: "typeLand",
     },
     {
-      key: "agreementValidFrom",
-      title: "Date of registering collaboration agreement",
-      dataIndex: "agreementValidFrom",
+      key: "isChange",
+      title: "change in information",
+      dataIndex: "isChange",
     },
     {
-      key: "validitydate",
-      title: "Date of validity of collaboration agreement",
-      dataIndex: "validitydate",
+      key: "editRectangleNo",
+      title: "Rectangle No./Mustil(Changed)",
+      dataIndex: "editRectangleNo",
     },
     {
-      key: "authSignature",
-      title: "Name of authorized signatory on behalf of land owner(s)",
-      dataIndex: "authSignature",
+      key: "editKhewats",
+      title: "Khasra Number(Changed)",
+      dataIndex: "editKhewats",
+    },
+    {
+      key: "landOwnerRegistry",
+      title: "Name of the Land Ower as per Mutation/Jamabandi",
+      dataIndex: "landOwnerRegistry",
     },
     {
       key: "collaboration",
-      title: "Collaboration agreement Owner",
+      title: "Whether Khasra been developed in collaboration",
       dataIndex: "collaboration",
     },
     {
@@ -156,18 +124,33 @@ const ApllicantPuropseForm = (props) => {
       dataIndex: "developerCompany",
     },
     {
+      key: "agreementValidFrom",
+      title: "Date of registering collaboration agreement",
+      dataIndex: "agreementValidFrom",
+    },
+    {
+      key: "agreementIrrevocialble",
+      title: "Whether collaboration agreement irrevocable (Yes/No)",
+      dataIndex: "agreementIrrevocialble",
+    },
+    {
+      key: "authSignature",
+      title: "Name of authorized signatory on behalf of land owner(s)",
+      dataIndex: "authSignature",
+    },
+    {
       key: "nameAuthSign",
-      title: " Name of authorized signatory",
+      title: "Name of authorized signatory on behalf of developer",
       dataIndex: "nameAuthSign",
     },
     {
       key: "registeringAuthority",
-      title: "Registring Authority",
+      title: "Registering Authority",
       dataIndex: "registeringAuthority",
     },
     {
       key: "registeringAuthorityDoc",
-      title: "Document",
+      title: "Registering Authority document",
       dataIndex: "",
       render: (data) => (
         <div>
@@ -182,6 +165,39 @@ const ApllicantPuropseForm = (props) => {
       ),
     },
     {
+      key: "consolidationType",
+      title: "Consolidation Type",
+      dataIndex: "consolidationType",
+    },
+    {
+      title: "Kanal",
+      render: (data) => (data?.kanal ? data?.kanal : "N/A"),
+    },
+    {
+      title: "Bigha",
+      render: (data) => (data?.bigha ? data?.bigha : "N/A"),
+    },
+    {
+      title: "Marla",
+      render: (data) => (data?.marla ? data?.marla : "N/A"),
+    },
+    {
+      title: "Biswa",
+      render: (data) => (data?.biswa ? data?.biswa : "N/A"),
+    },
+    {
+      title: "Sarsai",
+      render: (data) => (data?.sarsai ? data?.sarsai : "N/A"),
+    },
+    {
+      title: "Biswansi",
+      render: (data) => (data?.biswansi ? data?.biswansi : "N/A"),
+    },
+    {
+      title: "Total Area",
+      render: (data) => data?.nonConsolidatedTotal || data?.consolidatedTotal,
+    },
+    {
       title: "Action",
       dataIndex: "",
       render: (data) => (
@@ -191,7 +207,6 @@ const ApllicantPuropseForm = (props) => {
             onClick={() => {
               setSpecificTableData(data);
               setmodal(true);
-              setEdit(true);
             }}
             color="primary"
           />
@@ -226,12 +241,10 @@ const ApllicantPuropseForm = (props) => {
   const [potentialOptons, setPotentialOptions] = useState({ data: [], isLoading: true });
   const [districtOptons, setDistrictOptions] = useState({ data: [], isLoading: true });
   const [devPlanOptons, setDevPlanOptions] = useState({ data: [], isLoading: true });
-  const [ZoneOptons, setZoneOptions] = useState({ data: [], isLoading: true });
-  const [sectorOptons, setSectorOptions] = useState({ data: [], isLoading: true });
-  const [docId, setDocId] = useState(null);
+  const [ZoneOptions, setZoneOptions] = useState({ data: [], isLoading: true });
+  const [sectorOptions, setSectorOptions] = useState({ data: [], isLoading: true });
   const [loader, setLoader] = useState(false);
   const [getKhewats, setKhewats] = useState("");
-  const [getEdit, setEdit] = useState(false);
   const [fileStoreId, setFileStoreId] = useState({});
   const [stepData, setStepData] = useState(null);
   const [applicantId, setApplicantId] = useState("");
@@ -241,6 +254,11 @@ const ApllicantPuropseForm = (props) => {
   const stateId = Digit.ULBService.getStateId();
   const [typeOfLand, setYypeOfLand] = useState({ data: [], isLoading: true });
   const [showFields, setShowFields] = useState(false);
+  const [getDTCP, setDTCP] = useState(null);
+  const [getDevPlanVal, setDevPlanVal] = useState("");
+  const [getSectorVal, setSectorVal] = useState("");
+  const [getNameRevenueState, setNameRevenueState] = useState("");
+  const [getMustil, setMustil] = useState("");
 
   const resetValues = () => {
     resetField("district");
@@ -274,6 +292,7 @@ const ApllicantPuropseForm = (props) => {
     resetField("editRectangleNo");
     resetField("landOwnerRegistry");
     resetField("typeLand");
+    resetField("developmentPlan");
   };
 
   useEffect(() => {
@@ -297,22 +316,75 @@ const ApllicantPuropseForm = (props) => {
       setValue("nameAuthSign", specificTableData?.nameAuthSign);
       setValue("registeringAuthority", specificTableData?.registeringAuthority);
       setValue("registeringAuthorityDoc", specificTableData?.registeringAuthorityDoc);
-      const districtValue = districtDataLabels?.data?.filter((item) => item?.value === specificTableData?.district);
+      setValue("editRectangleNo", specificTableData?.editRectangleNo);
+      setValue("editKhewats", specificTableData?.editKhewats);
+      setValue("landOwnerRegistry", specificTableData?.landOwnerRegistry);
+      const districtValue = districtOptons?.data?.filter((item) => item?.value === specificTableData?.district);
+      // getDevPlanOption(districtValue?.[0]?.distCodeTCP);
       setValue("district", { label: districtValue?.[0]?.label, value: districtValue?.[0]?.value });
-      const devPlanValue = potentialDataLabels?.data?.filter((item) => item?.value === specificTableData?.potential);
-      setValue("potential", { label: devPlanValue?.[0]?.label, value: devPlanValue?.[0]?.value });
+      if (districtValue?.[0]?.distCodeTCP) setDTCP(districtValue?.[0]);
+      // setValue("potential", { label: devPlanValue?.[0]?.label, value: devPlanValue?.[0]?.value });
       const zoneValue = zoneDataLabels?.data?.filter((item) => item?.value === specificTableData?.zone);
       setValue("zone", { label: zoneValue?.[0]?.label, value: zoneValue?.[0]?.value });
       const sectorValue = sectorDataLabels?.data?.filter((item) => item?.value === specificTableData?.sector);
       setValue("sector", { label: sectorValue?.[0]?.label, value: sectorValue?.[0]?.value });
       const tehsilValue = tehsilDataLabels?.data?.filter((item) => item?.value === specificTableData?.tehsil);
+      setNameRevenueState(tehsilValue?.[0]?.value);
       setValue("tehsil", { label: tehsilValue?.[0]?.label, value: tehsilValue?.[0]?.value });
       const revenueValue = revenueDataLabels?.data?.filter((item) => item?.value === specificTableData?.revenueEstate);
+      setMustil(revenueValue?.[0]?.value);
       setValue("revenueEstate", { label: revenueValue?.[0]?.label, value: revenueValue?.[0]?.value });
       const mustilValue = mustilDataLabels?.data?.filter((item) => item?.value === specificTableData?.rectangleNo);
       setValue("rectangleNo", { label: mustilValue?.[0]?.label, value: mustilValue?.[0]?.value });
+      const typeOfLandValue = typeOfLand?.data?.filter((item) => item?.value === specificTableData?.typeLand);
+      setValue("typeLand", { label: typeOfLandValue?.[0]?.label, value: typeOfLandValue?.[0]?.value });
+      setValue("isChange", JSON.parse(specificTableData?.isChange));
     }
-  }, [specificTableData, districtDataLabels, potentialDataLabels, tehsilDataLabels, revenueDataLabels, mustilDataLabels]);
+  }, [devPlanOptons, specificTableData, districtOptons, potentialDataLabels, tehsilDataLabels, revenueDataLabels, mustilDataLabels, typeOfLand]);
+
+  useEffect(() => {
+    if (getDTCP) {
+      getDevPlanOption(getDTCP?.distCodeTCP);
+      setDistrict(getDTCP?.value);
+      getTehslidata(getDTCP?.value);
+    }
+  }, [getDTCP]);
+
+  useEffect(() => {
+    if (getDevPlanVal) getZoneOption(getDevPlanVal);
+  }, [getDevPlanVal]);
+
+  useEffect(() => {
+    if (getSectorVal) getSectorOptions(getSectorVal);
+  }, [getSectorVal]);
+
+  useEffect(() => {
+    if (getMustil) getMustilData(getMustil);
+  }, [getMustil]);
+
+  useEffect(() => {
+    if (getNameRevenueState) {
+      getRevenuStateData(getNameRevenueState);
+      setTehsilCode(getNameRevenueState);
+    }
+  }, [getNameRevenueState]);
+
+  useEffect(() => {
+    const devPlanValue = devPlanOptons?.data?.filter((item) => item?.value === specificTableData?.developmentPlan);
+    setDevPlanVal(devPlanValue?.[0]?.value);
+    setValue("developmentPlan", { label: devPlanValue?.[0]?.label, value: devPlanValue?.[0]?.value });
+  }, [devPlanOptons, specificTableData]);
+
+  useEffect(() => {
+    const potential = ZoneOptions?.data?.filter((item) => item?.label === specificTableData?.potential);
+    setSectorVal(potential?.[0]?.value);
+    setValue("potential", { label: potential?.[0]?.label, value: potential?.[0]?.value });
+  }, [ZoneOptions, specificTableData]);
+
+  useEffect(() => {
+    const sectorOpt = sectorOptions?.data?.filter((item) => item?.label === specificTableData?.sector);
+    setValue("sector", { label: sectorOpt?.[0]?.label, value: sectorOpt?.[0]?.value });
+  }, [sectorOptions, specificTableData]);
 
   const {
     register,
@@ -334,10 +406,6 @@ const ApllicantPuropseForm = (props) => {
 
   const { data: PurposeType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
   const { data: DistrictType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["District"]);
-  const { data: DevPlanType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["DevPlan"]);
-  const { data: ZoneType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["PotentialZone"]);
-  const { data: sectorType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Sector"]);
-  // const { data: PotentialType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["PotentialZone"]);
 
   useEffect(() => {
     const purpose = PurposeType?.["common-masters"]?.Purpose?.map(function (data) {
@@ -355,32 +423,144 @@ const ApllicantPuropseForm = (props) => {
 
   useEffect(() => {
     const district = DistrictType?.["common-masters"]?.District?.map(function (data) {
-      return { value: data?.distCodeTCP, label: data?.name };
+      return { value: data?.districtCode, label: data?.name, distCodeTCP: data?.distCodeTCP };
     });
-
     setDistrictOptions({ data: district, isLoading: false });
   }, [DistrictType]);
 
-  useEffect(() => {
-    const devPlan = DevPlanType?.["common-masters"]?.DevPlan?.map(function (data) {
-      return { value: data?.devPlanCode, label: data?.devPlan };
-    });
-    setDevPlanOptions({ data: devPlan, isLoading: false });
-  }, [DevPlanType]);
+  const getDevPlanOption = async (val) => {
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: "v1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msgId: "090909",
+        authToken: "",
+        correlationId: null,
+      },
+      MdmsCriteria: {
+        tenantId: "hr",
+        moduleDetails: [
+          {
+            tenantId: "hr",
+            moduleName: "common-masters",
+            masterDetails: [
+              {
+                name: "DevPlan",
+                filter: `[?(@.distCodeTCP=="${val}")]`,
+              },
+            ],
+          },
+        ],
+      },
+    };
+    try {
+      const Resp = await axios.post("/egov-mdms-service/v1/_search", payload);
+      const devPlan = Resp?.data?.MdmsRes?.["common-masters"]?.DevPlan?.map(function (data) {
+        return { value: data?.devPlanCode, label: data?.devPlan };
+      });
+      setDevPlanOptions({ data: devPlan, isLoading: false });
+    } catch (error) {
+      return error;
+    }
+  };
 
-  useEffect(() => {
-    const zonePlan = ZoneType?.["common-masters"]?.PotentialZone?.map(function (data) {
-      return { value: data?.code, label: data?.potentialZone };
-    });
-    setZoneOptions({ data: zonePlan, isLoading: false });
-  }, [ZoneType]);
+  const getZoneOption = async (val) => {
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: "v1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msgId: "090909",
+        authToken: "",
+        correlationId: null,
+      },
+      MdmsCriteria: {
+        tenantId: "hr",
+        moduleDetails: [
+          {
+            tenantId: "hr",
+            moduleName: "common-masters",
+            masterDetails: [
+              {
+                name: "PotentialZone",
+                filter: `[?(@.devPlanCode=="${val}")]`,
+              },
+            ],
+          },
+        ],
+      },
+    };
+    try {
+      const Resp = await axios.post("/egov-mdms-service/v1/_search", payload);
+      const zonePlan = Resp?.data?.MdmsRes?.["common-masters"]?.PotentialZone?.map(function (data) {
+        return { value: data?.devPlanCode, label: data?.potentialZone };
+      });
+      setZoneOptions({ data: zonePlan, isLoading: false });
+    } catch (error) {
+      return error;
+    }
+  };
 
-  useEffect(() => {
-    const sectorPlan = sectorType?.["common-masters"]?.Sector?.map(function (data) {
-      return { value: data?.devPlanCode, label: data?.sectorNo };
-    });
-    setSectorOptions({ data: sectorPlan, isLoading: false });
-  }, [sectorType]);
+  // useEffect(() => {
+  //   const zonePlan = ZoneType?.["common-masters"]?.PotentialZone?.map(function (data) {
+  //     return { value: data?.code, label: data?.potentialZone };
+  //   });
+  //   setZoneOptions({ data: zonePlan, isLoading: false });
+  // }, [ZoneType]);
+
+  const getSectorOptions = async (val) => {
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: "v1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msgId: "090909",
+        authToken: "",
+        correlationId: null,
+      },
+      MdmsCriteria: {
+        tenantId: "hr",
+        moduleDetails: [
+          {
+            tenantId: "hr",
+            moduleName: "common-masters",
+            masterDetails: [
+              {
+                name: "Sector",
+                filter: `[?(@.devPlanCode=="${val}")]`,
+              },
+            ],
+          },
+        ],
+      },
+    };
+    try {
+      const Resp = await axios.post("/egov-mdms-service/v1/_search", payload);
+      const sectorPlan = Resp?.data?.MdmsRes?.["common-masters"]?.Sector?.map(function (data) {
+        return { value: data?.sectorCode, label: data?.sectorNo };
+      });
+      setSectorOptions({ data: sectorPlan, isLoading: false });
+    } catch (error) {
+      return error;
+    }
+  };
+
+  // useEffect(() => {
+  //   const sectorPlan = sectorType?.["common-masters"]?.Sector?.map(function (data) {
+  //     return { value: data?.devPlanCode, label: data?.sectorNo };
+  //   });
+  //   setSectorOptions({ data: sectorPlan, isLoading: false });
+  // }, [sectorType]);
 
   const DistrictApiCall = async () => {
     try {
@@ -464,21 +644,18 @@ const ApllicantPuropseForm = (props) => {
   }, []);
 
   const ApplicantPurposeModalData = (modaldata) => {
-    const test = modalData?.filter((item) => item?.rowid === specificTableData?.rowid);
     modaldata["district"] = modaldata?.district?.value;
-    modaldata["potential"] = modaldata?.potential?.value;
-    modaldata["zone"] = modaldata?.zone?.value;
-    modaldata["sector"] = modaldata?.sector?.value;
+    modaldata["potential"] = modaldata?.potential?.label;
+    modaldata["sector"] = modaldata?.sector?.label;
     modaldata["tehsil"] = modaldata?.tehsil?.value;
     modaldata["revenueEstate"] = modaldata?.revenueEstate?.value;
     modaldata["rectangleNo"] = modaldata?.rectangleNo?.value;
     modaldata["typeLand"] = modaldata?.typeLand?.value;
-    modaldata["changeInInfo"] = showFields;
+    modaldata["developmentPlan"] = modaldata?.developmentPlan?.value;
+    modaldata["isChange"] = showFields;
+
     // modaldata["registeringAuthorityDoc"] = docId;
-    delete modaldata?.district;
-    delete modaldata?.potential;
     delete modaldata?.purpose;
-    delete modaldata?.state;
 
     if (modaldata?.consolidationType === "consolidated") {
       delete modaldata?.bigha;
@@ -492,7 +669,6 @@ const ApllicantPuropseForm = (props) => {
     }
     const length = modalData?.length + 1;
     modaldata["rowid"] = length.toString();
-    console.log("modaldata", modaldata);
     if (specificTableData?.rowid) {
       const filteredRowData = modalData?.filter((item) => item?.rowid !== specificTableData?.rowid);
       setModalData([...filteredRowData, modaldata]);
@@ -517,6 +693,14 @@ const ApllicantPuropseForm = (props) => {
     // data["district"] = watch("district")?.value;
     // data["state"] = "Haryana";
     delete data?.district;
+    delete data?.developmentPlan;
+    delete data?.typeLand;
+    delete data?.landOwnerRegistry;
+    delete data?.nonConsolidatedTotal;
+    delete data?.consolidatedTotal;
+    delete data?.editKhewats;
+    delete data?.editRectangleNo;
+    delete data?.hadbastNo;
     delete data?.potential;
     delete data?.zone;
     delete data?.sector;
@@ -617,21 +801,12 @@ const ApllicantPuropseForm = (props) => {
   useEffect(() => {
     if (stepData) {
       const data = purposeOptions?.data?.filter((item) => item?.value === stepData?.purpose);
-      // const potientialData = potentialOptons?.data?.filter((item) => item?.value === stepData?.potential);
-      const zoneData = ZoneOptons?.data?.filter((item) => item?.value === stepData?.zonePlan);
-      const devPlanData = devPlanOptons?.data?.filter((item) => item?.value === stepData?.devPlan);
-      const districtsData = districtOptons?.data?.filter((item) => item?.value === stepData?.districts);
       const districtData = districtDataLabels?.data?.filter((item) => item?.value === stepData?.district);
       setValue("purpose", { label: data?.[0]?.label, value: data?.[0]?.value });
-      setValue("zonePlan", { label: zoneData?.[0]?.label, value: zoneData?.[0]?.value });
-      // setValue("potential", { label: potientialData?.[0]?.label, value: potientialData?.[0]?.value });
-      setValue("devPlan", { label: devPlanData?.[0]?.label, value: devPlanData?.[0]?.value });
-      setValue("districts", { label: districtsData?.[0]?.label, value: districtsData?.[0]?.value });
-      setValue("district", { label: districtData?.[0]?.label, value: districtData?.[0]?.distCode });
-      setDistrict(districtData?.[0]?.distCode);
-      if (districtData?.[0]?.distCode) getTehslidata(districtData?.[0]?.distCode);
+      // setDistrict(districtData?.[0]?.distCode);
+      // if (districtData?.[0]?.distCode) getTehslidata(districtData?.[0]?.distCode);
     }
-  }, [stepData, purposeOptions, potentialOptons, ZoneOptons, districtOptons, devPlanOptons, districtDataLabels]);
+  }, [stepData, purposeOptions, districtDataLabels]);
 
   const { data: LandData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["LandType"]);
 
@@ -665,7 +840,6 @@ const ApllicantPuropseForm = (props) => {
       const Resp = await axios.post("/filestore/v1/files", formData, {});
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
-      // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
       if (fieldName === "registeringAuthorityDoc") {
         setValue("registeringAuthorityDocFileName", file.name);
       }
@@ -696,7 +870,7 @@ const ApllicantPuropseForm = (props) => {
     };
     try {
       const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${id}`, payload);
-      const userData = Resp?.data?.newBankGuaranteeList;
+      const userData = Resp?.data?.LicenseDetails?.[0]?.ApplicantPurpose;
       setStepData(userData);
     } catch (error) {
       return error;
@@ -750,121 +924,7 @@ const ApllicantPuropseForm = (props) => {
                     {errors?.purpose?.value && errors?.purpose?.value?.message}
                   </h3>
                 </Col>
-                {/* 
-                <Col md={4} xxl lg="3">
-                  <div>
-                    <Form.Label>
-                      <h2>
-                        District<span style={{ color: "red" }}>*</span>
-                      </h2>
-                    </Form.Label>
-                  </div>
-                  <ReactMultiSelect
-                    control={control}
-                    name="district"
-                    placeholder="District"
-                    data={districtOptons?.data}
-                    labels="District"
-                    loading={districtOptons?.isLoading}
-                    onChange={(e) => {
-                      getTehslidata(e.value);
-                      setDistrict(e.value);
-                    }}
-                  />
-                  
-
-                  <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.district?.value && errors?.district?.value?.message}
-                  </h3>
-                </Col>
-                <Col md={4} xxl lg="3">
-                  <div>
-                    <Form.Label>
-                      <h2>
-                        Development Plan<span style={{ color: "red" }}>*</span>
-                      </h2>
-                    </Form.Label>
-                  </div>
-
-                  <ReactMultiSelect
-                    control={control}
-                    name="potential"
-                    placeholder="DevPlan"
-                    data={devPlanOptons?.data}
-                    labels="DevPlan"
-                    loading={devPlanOptons?.isLoading}
-                  />
-                  <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.potential?.value && errors?.potential?.value?.message}
-                  </h3>
-                </Col>
-                <Col md={4} xxl lg="3">
-                  <div>
-                    <Form.Label>
-                      <h2>
-                        Zone<span style={{ color: "red" }}>*</span>
-                      </h2>
-                    </Form.Label>
-                  </div>
-                  <ReactMultiSelect
-                    control={control}
-                    name="zone"
-                    placeholder="zonePlan"
-                    data={ZoneOptons?.data}
-                    labels="PotentialZone"
-                    loading={ZoneOptons?.isLoading}
-                  />
-                
-
-                  <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.zone?.value && errors?.zone?.value?.message}
-                  </h3>
-                </Col> */}
-                {/* <Col md={4} xxl lg="3">
-                  <div>
-                    <Form.Label>
-                      <h2>
-                        Potential Zone<span style={{ color: "red" }}>*</span>
-                      </h2>
-                    </Form.Label>
-                  </div>
-                  <ReactMultiSelect
-                    control={control}
-                    name="potential"
-                    placeholder="Potential"
-                    data={potentialOptons?.data}
-                    labels="Potential"
-                    onChange={handleChangePotential}
-                    loading={potentialOptons?.isLoading}
-                  />
-                  <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.potential?.value && errors?.potential?.value?.message}
-                  </h3>
-                </Col> */}
               </Row>
-              {/* <Row className="ml-auto" style={{ marginBottom: 5 }}>
-                <Col md={4} xxl lg="3">
-                  <div>
-                    <Form.Label>
-                      <h2>
-                        Sector<span style={{ color: "red" }}>*</span>
-                      </h2>
-                    </Form.Label>
-                  </div>
-                  <ReactMultiSelect
-                    control={control}
-                    name="sector"
-                    placeholder="Sector"
-                    data={sectorOptons?.data}
-                    labels="Sector"
-                    loading={sectorOptons?.isLoading}
-                  />
-
-                  <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.sector?.value && errors?.sector?.value?.message}
-                  </h3>
-                </Col>
-              </Row> */}
 
               <div className="ml-auto" style={{ marginTop: 20 }}>
                 <h5>
@@ -886,7 +946,7 @@ const ApllicantPuropseForm = (props) => {
                   type="button"
                   variant="primary"
                   onClick={() => {
-                    if (!getValues()?.district) alert("Please Select District First To Proceed Further");
+                    if (!getValues()?.purpose) alert("Please Select Purpose First To Proceed Further");
                     else {
                       resetValues();
                       setSpecificTableData(null);
@@ -924,19 +984,110 @@ const ApllicantPuropseForm = (props) => {
 
       <Modal size="xl" isOpen={modal} toggle={() => setmodal(!modal)}>
         <div style={{ padding: "4px", textAlign: "right" }}>
-          <span
-            onClick={() => {
-              // if (!getEdit) resetValues();
-              setmodal(!modal);
-            }}
-            style={{ cursor: "pointer" }}
-          >
+          <span onClick={() => setmodal(!modal)} style={{ cursor: "pointer" }}>
             X
           </span>
         </div>
         <ModalBody>
           <form onSubmit={handleSubmit(ApplicantPurposeModalData)}>
             <Row className="ml-auto mb-3">
+              <Col md={4} xxl lg="4">
+                <div>
+                  <Form.Label>
+                    <h2>
+                      District<span style={{ color: "red" }}>*</span>
+                    </h2>
+                  </Form.Label>
+                </div>
+                <ReactMultiSelect
+                  control={control}
+                  name="district"
+                  placeholder="District"
+                  data={districtOptons?.data}
+                  labels="District"
+                  loading={districtOptons?.isLoading}
+                  onChange={(e) => {
+                    getTehslidata(e.value);
+                    setDistrict(e.value);
+                    getDevPlanOption(e.distCodeTCP);
+                  }}
+                />
+
+                <h3 className="error-message" style={{ color: "red" }}>
+                  {errors?.district?.value && errors?.district?.value?.message}
+                </h3>
+              </Col>
+              {watch("district")?.value && (
+                <Col md={4} xxl lg="4">
+                  <div>
+                    <Form.Label>
+                      <h2>
+                        Development Plan<span style={{ color: "red" }}>*</span>
+                      </h2>
+                    </Form.Label>
+                  </div>
+
+                  <ReactMultiSelect
+                    control={control}
+                    name="developmentPlan"
+                    placeholder="DevPlan"
+                    data={devPlanOptons?.data}
+                    labels="DevPlan"
+                    loading={devPlanOptons?.isLoading}
+                    onChange={(e) => getZoneOption(e?.value)}
+                  />
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.potential?.value && errors?.potential?.value?.message}
+                  </h3>
+                </Col>
+              )}
+              {watch("developmentPlan")?.value && (
+                <Col md={4} xxl lg="4">
+                  <div>
+                    <Form.Label>
+                      <h2>
+                        Zone<span style={{ color: "red" }}>*</span>
+                      </h2>
+                    </Form.Label>
+                  </div>
+                  <ReactMultiSelect
+                    control={control}
+                    name="potential"
+                    placeholder="zonePlan"
+                    data={ZoneOptions?.data}
+                    labels="PotentialZone"
+                    loading={ZoneOptions?.isLoading}
+                    onChange={(e) => getSectorOptions(e?.value)}
+                  />
+
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.zone?.value && errors?.zone?.value?.message}
+                  </h3>
+                </Col>
+              )}
+              {watch("potential")?.value && (
+                <Col md={4} xxl lg="4">
+                  <div>
+                    <Form.Label>
+                      <h2>
+                        Sector<span style={{ color: "red" }}>*</span>
+                      </h2>
+                    </Form.Label>
+                  </div>
+                  <ReactMultiSelect
+                    control={control}
+                    name="sector"
+                    placeholder="Sector"
+                    data={sectorOptions?.data}
+                    labels="Sector"
+                    loading={sectorOptions?.isLoading}
+                  />
+
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.sector?.value && errors?.sector?.value?.message}
+                  </h3>
+                </Col>
+              )}
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
@@ -1060,14 +1211,6 @@ const ApllicantPuropseForm = (props) => {
                 </label>
                 <ReactMultiSelect control={control} name="typeLand" placeholder="Type of Land" data={typeOfLand?.data} labels="typeland" required />
               </Col>
-              {/* <Col md={4} xxl lg="4">
-                <div>
-                  <label>
-                    <h2>Same as</h2>
-                  </label>
-                </div>
-                <Form.Control type="checkbox" className="form-control" placeholder="" {...register("landOwnerRegistry")} />
-              </Col> */}
             </Row>
             <br></br>
             <Row className="ml-auto mb-3">
@@ -1082,10 +1225,10 @@ const ApllicantPuropseForm = (props) => {
                   type="checkbox"
                   value=""
                   id="flexCheckDefault"
-                  required
+                  {...register("isChange")}
                 />
               </div>
-              {showFields && (
+              {watch("isChange") && (
                 <Row className="ml-auto mb-3">
                   <Col md={4} xxl lg="4">
                     <div>

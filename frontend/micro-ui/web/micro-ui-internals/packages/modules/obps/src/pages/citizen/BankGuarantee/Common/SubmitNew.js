@@ -16,6 +16,8 @@ function SubmitNew() {
   const [existingBgNumber, setExistingBgNumber] = useState("");
   // const [getShow, setShow] = useState({ submit: false });
   const userInfo = Digit.UserService.getUser()?.info || {};
+  const [typeOfBg, setTypeOfBg] = useState("");
+  const [licNo, setLicNo] = useState("");
   const {
     register,
     handleSubmit,
@@ -23,6 +25,7 @@ function SubmitNew() {
     control,
     watch,
     setValue,
+    getValues,
   } = useForm({});
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const bankSubmitNew = async (data) => {
@@ -40,15 +43,17 @@ function SubmitNew() {
           ver: ".01",
           authToken: token,
         },
-        NewBankGuaranteeRequest: {
-          tenantId: tenantId,
-          additionalDetails: null,
-          additionalDocuments: null,
-          workflowAction: "INITIATE",
-          workflowComment: null,
-          workflowAssignee: null,
-          ...data,
-        },
+        NewBankGuaranteeRequest: [
+          {
+            tenantId: tenantId,
+            additionalDetails: null,
+            additionalDocuments: null,
+            action: "PRE_SUBMIT",
+            comment: null,
+            assignee: null,
+            ...data,
+          },
+        ],
       };
       const Resp = await axios.post("/tl-services/bank/guarantee/_create", postDistrict);
       setServicePlanDataLabel(Resp.data);
@@ -91,28 +96,37 @@ function SubmitNew() {
     }
   };
   const [applicantId, setApplicantId] = useState("");
-  // const getApplicantUserData = async (id) => {
-  //   const token = window?.localStorage?.getItem("token");
-  //   const payload = {
-  //     RequestInfo: {
-  //       apiId: "Rainmaker",
-  //       action: "_create",
-  //       did: 1,
-  //       key: "",
-  //       msgId: "20170310130900|en_IN",
-  //       ts: 0,
-  //       ver: ".01",
-  //       authToken: token,
-  //     },
-  //   };
-  //   try {
-  //     const Resp = await axios.post(`http://103.166.62.118:80/tl-services/bank/guarantee/_search?applicationNumber=${id}`, payload);
-  //     const userData = Resp?.data?.LicenseDetails?.[0];
-  //     setStepData(userData);
-  //   } catch (error) {
-  //     return error;
-  //   }
-  // };
+
+  const landScheduleFormSubmitHandler = async () => {
+    // const payload = {
+    //   typeOfBg: { ...register("typeOfBg") },
+    // };
+    console.log("log123", getValues());
+    const token = window?.localStorage?.getItem("token");
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        action: "_create",
+        did: 1,
+        key: "",
+        msgId: "20170310130900|en_IN",
+        ts: 0,
+        ver: ".01",
+        authToken: token,
+      },
+    };
+    try {
+      const Resp = await axios.post(
+        `/tl-services/bank/guarantee/_search?typeOfBg=${getValues("typeOfBg")}&loiNumber=${getValues("loiNumber")}`,
+        payload
+      );
+      setValue("amountInFig", Resp.data.newBankGuaranteeList[0].amountInFig);
+      const userData = Resp?.data?.LicenseDetails?.[0];
+      setStepData(userData);
+    } catch (error) {
+      return error;
+    }
+  };
 
   // useEffect(() => {
   //   const search = location?.search;
@@ -121,18 +135,17 @@ function SubmitNew() {
   //   setApplicantId(id?.toString());
   //   if (id) getApplicantUserData(id);
   // }, []);
-  //
 
   return (
     <form onSubmit={handleSubmit(bankSubmitNew)}>
       <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}> Bank Guarantee Submission</h4>
+        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}> Bank Guarantee Submission </h4>
         <div className="card">
           <Row className="col-12">
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
-                  <h2>Enter LOI No. </h2>
+                  <h2>Enter LOI Number </h2>
                 </Form.Label>
               </div>
               <input
@@ -155,6 +168,21 @@ function SubmitNew() {
                 <option>EDC</option>
               </select>
             </Col>
+
+            <Col md={4} xxl lg="3">
+              <div>
+                <button
+                  // id="btnClear"
+                  type="button"
+                  class="btn btn-primary btn-md center-block"
+                  style={{ marginBottom: "-44px" }}
+                  onClick={landScheduleFormSubmitHandler}
+                >
+                  Search
+                </button>
+              </div>
+            </Col>
+
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
@@ -165,10 +193,14 @@ function SubmitNew() {
                 type="text"
                 className="form-control"
                 placeholder=""
+                readOnly
                 {...register("amountInFig")}
                 disabled={existingBgNumber?.length > 0 ? true : false}
               />
             </Col>
+          </Row>
+          <br></br>
+          <Row className="col-12">
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
@@ -183,9 +215,6 @@ function SubmitNew() {
                 disabled={existingBgNumber?.length > 0 ? true : false}
               />
             </Col>
-          </Row>
-          <br></br>
-          <Row className="col-12">
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
@@ -211,6 +240,9 @@ function SubmitNew() {
               </div>
               <input type="datepicker" className="form-control" placeholder="" {...register("validity")} format="yyyy-MM-dd" />
             </Col>
+          </Row>
+          <br></br>
+          <Row className="col-12">
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
@@ -233,9 +265,6 @@ function SubmitNew() {
                 <option> 12</option>
               </select>
             </Col>
-          </Row>
-          <br></br>
-          <Row className="col-12">
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
@@ -286,7 +315,6 @@ function SubmitNew() {
                     type="file"
                     accept="application/pdf/jpeg/png"
                     style={{ display: "none" }}
-                    required
                     onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBg")}
                   />
                 </label>
@@ -341,7 +369,6 @@ function SubmitNew() {
                             type="file"
                             accept="application/pdf/jpeg/png"
                             style={{ display: "none" }}
-                            required
                             onChange={(e) => getDocumentData(e?.target?.files[0], "tcpSubmissionReceived")}
                           />
                         </div>

@@ -11,7 +11,6 @@ const ServicePlanService = () => {
   const [developerDataLabel, setDeveloperDataLabel] = useState([]);
 
   const servicePlan = async (data) => {
-    console.log(data);
     try {
       const postDistrict = {
         requestInfo: {
@@ -40,7 +39,7 @@ const ServicePlanService = () => {
       const Resp = await axios.post("/land-services/serviceplan/_create", postDistrict);
       setDeveloperDataLabel(Resp.data);
     } catch (error) {
-      console.log(error.message);
+      return error;
     }
   };
 
@@ -62,7 +61,7 @@ const ServicePlanService = () => {
 
   //     const Resp = await axios.post(`http://10.1.1.18:8443/land-services/serviceplan/_get?loiNumber=123`, postDistrict);
   //   } catch (error) {
-  //     console.log(error.message);
+  //     return error
   //   }
   // };
   // useEffect(() => {

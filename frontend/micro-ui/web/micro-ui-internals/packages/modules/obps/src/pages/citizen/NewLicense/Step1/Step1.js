@@ -127,7 +127,6 @@ const ApllicantFormStep1 = (props) => {
 
   useEffect(() => {
     if (developerDataLabel) {
-      console.log("developerDataLabel", developerDataLabel);
       setValue("developerName", developerDataLabel?.addInfo?.companyName);
       setValue("developerAddress", developerDataLabel?.addInfo?.registeredAddress);
       setValue("developerEmail", developerDataLabel?.addInfo?.email);
@@ -265,7 +264,7 @@ const ApllicantFormStep1 = (props) => {
               </Row>
               <br></br>
 
-              <h5 className="card-title fw-bold">Directors Information</h5>
+              <h5 className="card-title fw-bold">Directors Information as per developer</h5>
               <div className="card-body">
                 <div className="table-bd">
                   <table className="table table-bordered">
@@ -295,6 +294,34 @@ const ApllicantFormStep1 = (props) => {
                             >
                               <VisibilityIcon color="info" className="icon" />
                             </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <h5 className="card-title fw-bold">1. Director Information as per MCA</h5>
+              <div className="card-body">
+                <div className="table-bd">
+                  <table className="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>Sr. No</th>
+                        <th>DIN Number</th>
+                        <th>Name</th>
+                        <th>Contact Number</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {developerDataLabel?.addInfo?.DirectorsInformationMCA?.map((item, index) => {
+                        return (
+                          <tr>
+                            <td>{index + 1}</td>
+                            <td>{item?.din}</td>
+                            <td>{item?.name}</td>
+                            <td>{item?.contactNumber}</td>
                           </tr>
                         );
                       })}
@@ -430,7 +457,7 @@ const ApllicantFormStep1 = (props) => {
                     id="btnSearch"
                     class=""
                   >
-                    Upload Digital Signature <VisibilityIcon color="info" className="icon" />
+                    View Upload Digital Signature <VisibilityIcon color="info" className="icon" />
                   </div>
                 </Col>
                 <Col md={4} xxl lg="4">
@@ -444,7 +471,7 @@ const ApllicantFormStep1 = (props) => {
                     id="btnSearch"
                     class=""
                   >
-                    Upload Board Resolution <VisibilityIcon color="info" className="icon" />
+                    View Upload Board Resolution <VisibilityIcon color="info" className="icon" />
                   </div>
                 </Col>
               </Row>

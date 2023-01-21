@@ -10,7 +10,6 @@ export const SuccessfulPayment = (props) => {
   //   return null;
   // }
 
-  console.log("here===");
   return <WrapPaymentComponent {...props} />;
 };
 
@@ -26,8 +25,6 @@ const WrapPaymentComponent = (props) => {
     { applicationNo: consumerCode },
     { enabled: window.location.href.includes("bpa") || window.location.href.includes("BPA") }
   );
-
-  console.log(business_service, consumerCode, tenantId);
 
   const { isLoading, data, isError } = Digit.Hooks.usePaymentUpdate({ egId }, business_service, {
     retry: false,
