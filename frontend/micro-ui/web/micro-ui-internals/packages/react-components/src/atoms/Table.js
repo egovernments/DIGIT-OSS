@@ -119,7 +119,7 @@ const Table = ({
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {page.map((row, i) => {
+          {page?.map((row, i) => {
             // rows.slice(0, 10).map((row, i) => {
             prepareRow(row);
             return (
