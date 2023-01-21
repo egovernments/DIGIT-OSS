@@ -15,6 +15,8 @@ import "../../css/personalInfoChild.style.js";
 import { IconButton } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
+import { getDocShareholding } from "../../ScrutinyDevelopment/docview.helper";
 
 const Release = (props) => {
   const [selects, setSelects] = useState();
@@ -70,47 +72,23 @@ const Release = (props) => {
   const [fieldValue, setFieldValue] = useState("");
   const [openedModal, setOpennedModal] = useState("");
   const [fieldIconColors, setFieldIconColors] = useState({
-    developer: Colors.info,
-    authPersonName: Colors.info,
-    authMobileNo1: Colors.info,
-    authMobileNo2: Colors.info,
-    emailId: Colors.info,
-    pan: Colors.info,
-    address: Colors.info,
-    city: Colors.info,
-    pin: Colors.info,
-    tehsil: Colors.info,
-    district: Colors.info,
-    state: Colors.info,
-    type: Colors.info,
-    lciSignedBy: Colors.info,
-    lciNotSigned: Colors.info,
-    parmanentAddress: Colors.info,
-    addressForCommunication: Colors.info,
-    authPerson: Colors.info,
-    emailForCommunication: Colors.info,
+    releaseBankGuarantee: Colors.info,
+    bgNumber: Colors.info,
+    typeOfBg: Colors.info,
+    uploadBg: Colors.info,
+    fullCertificate: Colors.info,
+    tcpSubmissionReceived: Colors.info,
+    partialCertificate: Colors.info,
   });
 
   const fieldIdList = [
-    { label: "Developer", key: "developer" },
-    { label: "Authorized Person Name", key: "authPersonName" },
-    { label: "Autrhoized Mobile No", key: "authMobileNo1" },
-    { label: "Authorized MobileNo. 2 ", key: "authMobileNo2" },
-    { label: "Email ID", key: "emailId" },
-    { label: "PAN No.", key: "pan" },
-    { label: "Address  1", key: "address" },
-    { label: "Village/City", key: "city" },
-    { label: "Pincode", key: "pin" },
-    { label: "Tehsil", key: "tehsil" },
-    { label: "District", key: "district" },
-    { label: "State", key: "state" },
-    { label: "Status (Individual/ Company/ Firm/ LLP etc.)", key: "type" },
-    { label: "LC-I signed by", key: "lciSignedBy" },
-    { label: "If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)", key: "lciNotSigned" },
-    { label: "Permanent address in case of individual/ registered office address in case other than individual", key: "parmanentAddress" },
-    { label: "Address for communication", key: "addressForCommunication" },
-    { label: "Name of the authorized person to sign the application", key: "authPerson" },
-    { label: "Email ID for communication", key: "emailForCommunication" },
+    { label: " Do you want to Replace B.G.?", key: "releaseBankGuarantee" },
+    { label: "Enter Bank Guarantee No.", key: "bgNumber" },
+    { label: "Type of B.G.", key: "typeOfBg" },
+    { label: " Upload New B.G. softcopy ", key: "uploadBg" },
+    { label: "Full Completion Certificate.", key: "fullCertificate" },
+    { label: " Amount", key: "tcpSubmissionReceived" },
+    { label: "Partial Completion Certificate.", key: "partialCertificate" },
   ];
   const item = props.ApiResponseData;
   console.log("digit2...........", apiResponse);
@@ -202,12 +180,12 @@ const Release = (props) => {
                     <Form.Control className={classes.formControl} placeholder={apiResponse?.bgNumber} disabled></Form.Control>
                     <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.loiNumber,
+                        color: fieldIconColors.bgNumber,
                         display: showRemarks ? "block" : "none",
                       }}
                       onClick={() => {
-                        setOpennedModal("loiNumber");
-                        setLabelValue("Enter LOI No"), setSmShow(true), console.log("modal open"), setFieldValue(loiNumber);
+                        setOpennedModal("bgNumber");
+                        setLabelValue("Enter Bank Guarantee No."), setSmShow(true), console.log("modal open"), setFieldValue(bgNumber);
                       }}
                     ></ReportProblemIcon>
                     <ModalChild
@@ -259,8 +237,30 @@ const Release = (props) => {
                             </h2>
                           </label>
                           <div>
-                            <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBg")} />
+                            <div>
+                              <IconButton onClick={() => getDocShareholding(apiResponse?.uploadBg)}>
+                                <DownloadForOfflineIcon color="primary" className="mx-1" />
+                              </IconButton>
+                            </div>
+
+                            <div className={classes.fieldContainer}>
+                              {/* <Form.Control className={classes.formControl} placeholder={apiResponse?.licenseApplied} disabled></Form.Control> */}
+
+                              <ReportProblemIcon
+                                style={{
+                                  color: fieldIconColors.uploadBg,
+                                  display: showRemarks ? "block" : "none",
+                                }}
+                                onClick={() => {
+                                  setOpennedModal("uploadBg");
+                                  setLabelValue(" Upload B.G. softcopy"), setSmShow(true), console.log("modal open"), setFieldValue(uploadBg);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
                           </div>
+                          {/* <div>
+                            <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBg")} />
+                          </div> */}
                         </div>
                       </div>
                     )}
@@ -300,12 +300,37 @@ const Release = (props) => {
                                   </h2>
                                 </label>
                                 <div>
+                                  <div>
+                                    <IconButton onClick={() => getDocShareholding(apiResponse?.fullCertificate)}>
+                                      <DownloadForOfflineIcon color="primary" className="mx-1" />
+                                    </IconButton>
+                                  </div>
+
+                                  <div className={classes.fieldContainer}>
+                                    {/* <Form.Control className={classes.formControl} placeholder={apiResponse?.licenseApplied} disabled></Form.Control> */}
+
+                                    <ReportProblemIcon
+                                      style={{
+                                        color: fieldIconColors.fullCertificate,
+                                        display: showRemarks ? "block" : "none",
+                                      }}
+                                      onClick={() => {
+                                        setOpennedModal("fullCertificate");
+                                        setLabelValue("Full Completion Certificate."),
+                                          setSmShow(true),
+                                          console.log("modal open"),
+                                          setFieldValue(fullCertificate);
+                                      }}
+                                    ></ReportProblemIcon>
+                                  </div>
+                                </div>
+                                {/* <div>
                                   <input
                                     type="file"
                                     className="form-control"
                                     onChange={(e) => getDocumentData(e?.target?.files[0], "fullCertificate")}
                                   />
-                                </div>
+                                </div> */}
                               </div>
                             </div>
                           </div>
@@ -320,9 +345,27 @@ const Release = (props) => {
                                     <span style={{ color: "red" }}>*</span>
                                   </h2>
                                 </label>
-                                <div>
-                                  <input type="text" className="form-control" placeholder="" {...register("tcpSubmissionReceived")} />
+                                <div className={classes.fieldContainer}>
+                                  <Form.Control
+                                    className={classes.formControl}
+                                    placeholder={apiResponse?.tcpSubmissionReceived}
+                                    disabled
+                                  ></Form.Control>
+
+                                  <ReportProblemIcon
+                                    style={{
+                                      color: fieldIconColors.tcpSubmissionReceived,
+                                      display: showRemarks ? "block" : "none",
+                                    }}
+                                    onClick={() => {
+                                      setOpennedModal("tcpSubmissionReceived");
+                                      setLabelValue(" Amount"), setSmShow(true), console.log("modal open"), setFieldValue(tcpSubmissionReceived);
+                                    }}
+                                  ></ReportProblemIcon>
                                 </div>
+                                {/* <div>
+                                  <input type="text" className="form-control" placeholder="" {...register("tcpSubmissionReceived")} />
+                                </div> */}
 
                                 <h3 className="error-message" style={{ color: "red" }}>
                                   {errors?.tcpSubmissionReceived && errors?.tcpSubmissionReceived?.message}
@@ -336,12 +379,37 @@ const Release = (props) => {
                                   </h2>
                                 </label>
                                 <div>
+                                  <div>
+                                    <IconButton onClick={() => getDocShareholding(apiResponse?.partialCertificate)}>
+                                      <DownloadForOfflineIcon color="primary" className="mx-1" />
+                                    </IconButton>
+                                  </div>
+
+                                  <div className={classes.fieldContainer}>
+                                    {/* <Form.Control className={classes.formControl} placeholder={apiResponse?.licenseApplied} disabled></Form.Control> */}
+
+                                    <ReportProblemIcon
+                                      style={{
+                                        color: fieldIconColors.partialCertificate,
+                                        display: showRemarks ? "block" : "none",
+                                      }}
+                                      onClick={() => {
+                                        setOpennedModal("partialCertificate");
+                                        setLabelValue("Partial Completion Certificate."),
+                                          setSmShow(true),
+                                          console.log("modal open"),
+                                          setFieldValue(partialCertificate);
+                                      }}
+                                    ></ReportProblemIcon>
+                                  </div>
+                                </div>
+                                {/* <div>
                                   <input
                                     type="file"
                                     className="form-control"
                                     onChange={(e) => getDocumentData(e?.target?.files[0], "partialCertificate")}
                                   />
-                                </div>
+                                </div> */}
                               </div>
                             </div>
                           </div>
