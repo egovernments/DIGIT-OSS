@@ -734,6 +734,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         name: name,
         mobileNumberUser: mobileNumberUser,
         dob:dob,
+        gender: gender?.value,
         PanNumber: PanNumber,
         cin_Number: cin_Number,
         llp_Number: llpNumber,
