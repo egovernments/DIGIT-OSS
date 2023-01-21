@@ -9,7 +9,7 @@ const OBPSCard = () => {
     const { t } = useTranslation();
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const BgRole = ["SO_HQ", "AO_HQ", "CAO_HQ"]
-    const SP_EPRole = ["CTP_HR","AD_HQ", "JD_HQ", "SD_HQ", "ATP_HQ", "DA_HQ", "DDA_HQ", "ADA_HQ", "DTCP_HR", "DTP_HQ", "JE_HQ", "Patwari_HQ", "STP_HQ", "STP_Circle"]
+    const SP_EPRole = ["CTP_HR","AD_HQ", "JD_HQ", "SD_HQ", "ATP_HQ", "DA_HQ", "DDA_HQ", "ADA_HQ", "DTCP_HR", "DTP_HQ", "JE_HQ", "Patwari_HQ", "STP_HQ", "STP_Circle", "ASST_JE_HQ", "CE_HQ", "HSVP", "GMDA", "FMDA", "PMDA", "EE_HQ"]
 
     function isBankGuarrantee(){
         let isGuarantee = false
@@ -103,7 +103,7 @@ const OBPSCard = () => {
             obpsSubModuleProps.push(propsForBankModuleCard)
         }
     
-        if((Digit.Utils.tlAccess() || isServiceOrElectricEmp())){
+        if((Digit.Utils.tlAccess() || isServiceOrElectricEmp() || isBankGuarrantee())){
             obpsSubModuleProps.push(propsForElectricModuleCard, propsForServiceModuleCard)
         }
         return (
