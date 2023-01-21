@@ -10,7 +10,7 @@ import { ScrutinyRemarksContext } from "../../../../../../../context/remarks-dat
 import SubmitNew from "../SubmitNew";
 import Release from "../Release";
 
-const FormBank = ({ apiResponse, applicationNumber, refreshScrutinyData }) => {
+const ReleaseBank = ({ apiResponse, applicationNumber, refreshScrutinyData }) => {
   const personalInfoRef = useRef();
   // const generalInfoRef = useRef();
   // const developerInfoRef = useRef();
@@ -112,4 +112,4 @@ const FormBank = ({ apiResponse, applicationNumber, refreshScrutinyData }) => {
   );
 };
 
-export default FormBank;
+export default ReleaseBank;
