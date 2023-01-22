@@ -128,13 +128,21 @@ const InboxComposer = ({
       t,
     };
 
+    const getSearchActionText = () => {
+      if (window.location.href.includes("/citizen") && window.location.href.includes("/obps")) {
+        return t("ES_INBOX_COMMON_SEARCH")
+      } else {
+        return t("ES_COMMON_SEARCH")
+      }
+    }
+
     return (
       <div className="InboxComposerWrapper">
         {/* TODO fix design for card */}
         {/* <InboxLinks {...PropsForInboxLinks} /> */}
         <div className="searchBox">
           <SearchAction
-            text={t("ES_COMMON_SEARCH")}
+            text={getSearchActionText()}
             handleActionClick={() => setActiveMobileModal({ type: "set", payload: "SearchFormComponent" })}
           />
           <FilterAction

@@ -9,6 +9,8 @@ const SearchFormFieldsComponent = ({ formState, Controller, register, control, t
   const userInfos = sessionStorage.getItem("Digit.citizen.userRequestObject");
   const userInfo = userInfos ? JSON.parse(userInfos) : {};
   const userInformation = userInfo?.value?.info;
+  const currentUserPhoneNumber = userInformation?.mobileNumber;
+
   const applicationType = useWatch({ control, name: "applicationType" });
   const oldApplicationType = sessionStorage.getItem("search_application") || "";
   if (oldApplicationType && oldApplicationType != "undefined" && JSON.parse(oldApplicationType)?.code !== applicationType?.code)
@@ -181,7 +183,7 @@ const SearchFormFieldsComponent = ({ formState, Controller, register, control, t
           onClick={() => {
             reset({
               applicationNo: "",
-              mobileNumber: "",
+              mobileNumber: window.location.href.includes("/digit-ui/citizen") ? currentUserPhoneNumber : "",
               fromDate: "",
               toDate: "",
               status: "",

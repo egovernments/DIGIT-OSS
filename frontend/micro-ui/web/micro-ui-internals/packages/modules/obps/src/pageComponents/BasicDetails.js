@@ -95,7 +95,7 @@ const BasicDetails = ({ formData, onSelect, config }) => {
     }
   };
 
-  if (scrutinyNumber?.edcrNumber? true : disableVlaue) {
+  if (disableVlaue) {
     let edcrApi = sessionStorage.getItem("isEDCRAPIType");
     edcrApi = edcrApi ? JSON.parse(edcrApi) : false;
     if (!edcrApi || !basicData) {
@@ -116,8 +116,8 @@ const BasicDetails = ({ formData, onSelect, config }) => {
           onChange={event => setScrutinyNumber({ edcrNumber: event.target.value })} 
           value={scrutinyNumber?.edcrNumber} 
           signature={true} 
-          signatureImg={<SearchIconSvg className="signature-img" onClick={!disableVlaue && scrutinyNumber?.edcrNumber ? () => handleSearch() : null} />}
-          disable={scrutinyNumber?.edcrNumber? true : disableVlaue}
+          signatureImg={!disableVlaue && <SearchIconSvg className="signature-img" onClick={!disableVlaue && scrutinyNumber?.edcrNumber ? () => handleSearch() : null} />}
+          disable={disableVlaue}
           style={{ marginBottom: "10px" }}
         />
       </div>
