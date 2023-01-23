@@ -129,7 +129,7 @@ const InboxComposer = ({
     };
 
     const getSearchActionText = () => {
-      if (window.location.href.includes("/citizen") && window.location.href.includes("/obps")) {
+      if (window.location.href.includes("/obps")) {
         return t("ES_INBOX_COMMON_SEARCH")
       } else {
         return t("ES_COMMON_SEARCH")

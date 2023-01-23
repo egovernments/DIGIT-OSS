@@ -200,7 +200,7 @@ const Inbox = ({ parentRoute }) => {
         {t("ES_COMMON_INBOX")}
         {totalCount ? <p className="inbox-count">{totalCount}</p> : null}
       </Header>
-      {Digit.Utils.browser.isMobile() && window.location.href.includes("/citizen") &&
+      {Digit.Utils.browser.isMobile() &&
         <div style={{marginLeft: "12px"}}>
           <Link to={window.location.href.includes("/citizen") ? "/digit-ui/citizen/obps/search/application" : "/digit-ui/employee/obps/search/application"}>
             <span className="link">{t("BPA_SEARCH_PAGE_TITLE")}</span>
