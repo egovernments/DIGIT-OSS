@@ -273,7 +273,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
   };
 
   let menu = [];
-  const { data: Menu } = Digit.Hooks.pt.useGenderMDMS(stateId, "common-masters", "GenderType");
+  const { data: Menu } = Digit.Hooks.useGenderMDMS(stateId, "common-masters", "GenderType");
   Menu &&
     Menu.map((genderDetails) => {
       menu.push({ i18nKey: `PT_COMMON_GENDER_${genderDetails.code}`, code: `${genderDetails.code}`, value: `${genderDetails.code}` });

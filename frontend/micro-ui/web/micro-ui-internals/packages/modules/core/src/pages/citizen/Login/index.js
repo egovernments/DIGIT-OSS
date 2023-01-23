@@ -1,11 +1,11 @@
+import { AppContainer, BackButton, Toast } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { AppContainer, BackButton, Toast } from "@egovernments/digit-ui-react-components";
-import { Route, Switch, useHistory, useRouteMatch, useLocation } from "react-router-dom";
+import { Route, Switch, useHistory, useLocation, useRouteMatch } from "react-router-dom";
 import { loginSteps } from "./config";
 import SelectMobileNumber from "./SelectMobileNumber";
-import SelectOtp from "./SelectOtp";
 import SelectName from "./SelectName";
+import SelectOtp from "./SelectOtp";
 
 const TYPE_REGISTER = { type: "register" };
 const TYPE_LOGIN = { type: "login" };

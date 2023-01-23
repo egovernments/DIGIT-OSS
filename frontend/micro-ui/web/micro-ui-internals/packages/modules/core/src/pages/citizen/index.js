@@ -1,21 +1,22 @@
-import { BackButton, WhatsappIcon, Card, CitizenHomeCard, CitizenInfoLabel } from "@egovernments/digit-ui-react-components";
+import { BackButton, CitizenHomeCard, CitizenInfoLabel } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Route, Switch, useRouteMatch, useHistory, Link } from "react-router-dom";
+import { Route, Switch, useHistory, useRouteMatch } from "react-router-dom";
 import ErrorBoundary from "../../components/ErrorBoundaries";
+import ErrorComponent from "../../components/ErrorComponent";
 import { AppHome, processLinkData } from "../../components/Home";
 import TopBarSideBar from "../../components/TopBarSideBar";
 import StaticCitizenSideBar from "../../components/TopBarSideBar/SideBar/StaticCitizenSideBar";
+import FAQsSection from "./FAQs/FAQs";
 import CitizenHome from "./Home";
 import LanguageSelection from "./Home/LanguageSelection";
 import LocationSelection from "./Home/LocationSelection";
-import Login from "./Login";
 import UserProfile from "./Home/UserProfile";
-import ErrorComponent from "../../components/ErrorComponent";
-import FAQsSection from "./FAQs/FAQs";
 import HowItWorks from "./HowItWorks/howItWorks";
-import StaticDynamicCard from "./StaticDynamicComponent/StaticDynamicCard";
+import Login from "./Login";
 import Search from "./SearchApp";
+import StaticDynamicCard from "./StaticDynamicComponent/StaticDynamicCard";
+
 const sidebarHiddenFor = [
   `${window?.contextPath}/citizen/register/name`,
   `/${window?.contextPath}/citizen/select-language`,
@@ -66,7 +67,7 @@ const Home = ({
     }
   );
 
-  const classname = Digit.Hooks.fsm.useRouteSubscription(pathname);
+  const classname = Digit.Hooks.useRouteSubscription(pathname);
   const { t } = useTranslation();
   const { path } = useRouteMatch();
   const history = useHistory();
@@ -122,7 +123,7 @@ const Home = ({
               )}
               {/* <Links key={index} matchPath={`/digit-ui/citizen/${code.toLowerCase()}`} userType={"citizen"} /> */}
             </div>
-            <StaticDynamicCard moduleCode={code?.toUpperCase()}/>
+            <StaticDynamicCard moduleCode={code?.toUpperCase()} />
           </div>
         </Route>
         <Route key={"faq" + index} path={`${path}/${code.toLowerCase()}-faq`}>
@@ -201,7 +202,7 @@ const Home = ({
           </Route>
 
           <Route path={`${path}/Audit`}>
-            <Search/>
+            <Search />
           </Route>
           <ErrorBoundary initData={initData}>
             {appRoutes}

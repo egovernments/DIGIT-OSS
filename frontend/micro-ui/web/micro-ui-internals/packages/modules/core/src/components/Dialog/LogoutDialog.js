@@ -13,14 +13,17 @@ const Close = () => (
 );
 const CloseBtn = (props) => {
   return (
-    <div onClick={props?.onClick} style={ props?.isMobileView ? { padding: 5} : null}>
-      {
-        props?.isMobileView
-          ? (<CloseSvg />)
-          : (<div className={"icon-bg-secondary"} style={{ backgroundColor: '#505A5F'}}> <Close /> </div>)
-      }
+    <div onClick={props?.onClick} style={props?.isMobileView ? { padding: 5 } : null}>
+      {props?.isMobileView ? (
+        <CloseSvg />
+      ) : (
+        <div className={"icon-bg-secondary"} style={{ backgroundColor: "#505A5F" }}>
+          {" "}
+          <Close />{" "}
+        </div>
+      )}
     </div>
-  )
+  );
 };
 const LogoutDialog = ({ onSelect, onCancel, onDismiss }) => {
   const { t } = useTranslation();
@@ -36,7 +39,7 @@ const LogoutDialog = ({ onSelect, onCancel, onDismiss }) => {
         setIsMobileView(false);
       }
     }
-  }
+  };
   React.useEffect(() => {
     window.addEventListener("resize", () => {
       onResize();
@@ -47,65 +50,65 @@ const LogoutDialog = ({ onSelect, onCancel, onDismiss }) => {
       });
     };
   });
-  return (
-    isMobileView
-      ? <Modal
-        popupStyles={{
-          height: "174px",
-          maxHeight: "174px",
-          width: "324px",
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: 'translate(-50%, -50%)',
-        }}
-        popupModuleActionBarStyles={{
-          display: "flex",
-          flex: 1,
-          justifyContent: "flex-start",
-          width: "100%",
-          position: "absolute",
-          left: 0,
-          bottom: 0,
-          padding: "18px",
-        }}
-        style={{
-          flex: 1,
-        }}
-        popupModuleMianStyles={{
-          padding: "18px",
-        }}
-        headerBarMain={<Heading label={t("CORE_LOGOUT_WEB_HEADER")} />}
-        headerBarEnd={<CloseBtn onClick={onDismiss} isMobileView={isMobileView} />}
-        actionCancelLabel={t("TL_COMMON_NO")}
-        actionCancelOnSubmit={onCancel}
-        actionSaveLabel={t("TL_COMMON_YES")}
-        actionSaveOnSubmit={onSelect}
-        formId="modal-action">
-        <div>
-          <CardText style={{ margin: 0 }}>
-            {t("CORE_LOGOUT_MOBILE_CONFIRMATION_MESSAGE") + " "}
-          </CardText>
-        </div>
-      </Modal>
-      : <Modal
-        popupModuleMianStyles={{
-          paddingTop: "30px",
-        }}
-        headerBarMain={<Heading label={t("CORE_LOGOUT_WEB_HEADER")} />}
-        headerBarEnd={<CloseBtn onClick={onDismiss} isMobileView={false} />}
-        actionCancelLabel={t("CORE_LOGOUT_CANCEL")}
-        actionCancelOnSubmit={onCancel}
-        actionSaveLabel={t("CORE_LOGOUT_WEB_YES")}
-        actionSaveOnSubmit={onSelect}
-        formId="modal-action">
-        <div>
-          <CardText style={{ marginBottom: "54px", marginLeft: "8px", marginRight: "8px" }}>
-            {t("CORE_LOGOUT_WEB_CONFIRMATION_MESSAGE") + " "}
-            <strong>{t("CORE_LOGOUT_MESSAGE")}?</strong>
-          </CardText>
-        </div>
-      </Modal>
-  )
-}
+  return isMobileView ? (
+    <Modal
+      popupStyles={{
+        height: "174px",
+        maxHeight: "174px",
+        width: "324px",
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+      }}
+      popupModuleActionBarStyles={{
+        display: "flex",
+        flex: 1,
+        justifyContent: "flex-start",
+        width: "100%",
+        position: "absolute",
+        left: 0,
+        bottom: 0,
+        padding: "18px",
+      }}
+      style={{
+        flex: 1,
+      }}
+      popupModuleMianStyles={{
+        padding: "18px",
+      }}
+      headerBarMain={<Heading label={t("CORE_LOGOUT_WEB_HEADER")} />}
+      headerBarEnd={<CloseBtn onClick={onDismiss} isMobileView={isMobileView} />}
+      actionCancelLabel={t("TL_COMMON_NO")}
+      actionCancelOnSubmit={onCancel}
+      actionSaveLabel={t("TL_COMMON_YES")}
+      actionSaveOnSubmit={onSelect}
+      formId="modal-action"
+    >
+      <div>
+        <CardText style={{ margin: 0 }}>{t("CORE_LOGOUT_MOBILE_CONFIRMATION_MESSAGE") + " "}</CardText>
+      </div>
+    </Modal>
+  ) : (
+    <Modal
+      popupModuleMianStyles={{
+        paddingTop: "30px",
+      }}
+      headerBarMain={<Heading label={t("CORE_LOGOUT_WEB_HEADER")} />}
+      headerBarEnd={<CloseBtn onClick={onDismiss} isMobileView={false} />}
+      actionCancelLabel={t("CORE_LOGOUT_CANCEL")}
+      actionCancelOnSubmit={onCancel}
+      actionSaveLabel={t("CORE_LOGOUT_WEB_YES")}
+      actionSaveOnSubmit={onSelect}
+      formId="modal-action"
+    >
+      <div>
+        <CardText style={{ marginBottom: "54px", marginLeft: "8px", marginRight: "8px" }}>
+          {t("CORE_LOGOUT_WEB_CONFIRMATION_MESSAGE") + " "}
+          <strong>{t("CORE_LOGOUT_MESSAGE")}?</strong>
+        </CardText>
+      </div>
+    </Modal>
+  );
+};
 export default LogoutDialog;

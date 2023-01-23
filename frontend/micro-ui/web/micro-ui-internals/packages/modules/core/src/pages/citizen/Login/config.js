@@ -44,7 +44,7 @@ export const loginSteps = [
         validation: {
           required: true,
           minLength: 1,
-          pattern: /^[^{0-9}^\$\"<>?\\\\~!@#$%^()+={}\[\]*,/_:;“”‘’]{1,50}$/i
+          pattern: /^[^{0-9}^\$\"<>?\\\\~!@#$%^()+={}\[\]*,/_:;“”‘’]{1,50}$/i,
         },
       },
     ],

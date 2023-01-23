@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Redirect, Route, Switch, useHistory, useLocation } from "react-router-dom";
-import EmployeeApp from "./pages/employee";
 import CitizenApp from "./pages/citizen";
+import EmployeeApp from "./pages/employee";
 
 export const DigitApp = ({ stateCode, modules, appTenants, logoUrl, initData }) => {
   const history = useHistory();

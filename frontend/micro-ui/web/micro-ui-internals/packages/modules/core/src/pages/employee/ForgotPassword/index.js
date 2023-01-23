@@ -1,6 +1,5 @@
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { AppContainer } from "@egovernments/digit-ui-react-components";
 import { Route, Switch, useRouteMatch } from "react-router-dom";
 import { loginConfig } from "./config";
 import ForgotPasswordComponent from "./forgotPassword";

@@ -1,12 +1,9 @@
-import React, { useContext, useEffect } from "react";
-import { Route, Switch, useRouteMatch, Redirect, useLocation } from "react-router-dom";
+import React from "react";
+import { Redirect, Route, Switch, useLocation, useRouteMatch } from "react-router-dom";
 
-import { AppHome } from "./Home";
-import Login from "../pages/citizen/Login";
-import EmployeeLogin from "../pages/employee/Login/index";
 import ChangePassword from "../pages/employee/ChangePassword/index";
 import ForgotPassword from "../pages/employee/ForgotPassword/index";
-import LanguageSelection from "../pages/employee/LanguageSelection";
+import { AppHome } from "./Home";
 // import UserProfile from "./userProfile";
 
 const getTenants = (codes, tenants) => {
@@ -30,9 +27,13 @@ export const AppModules = ({ stateCode, userType, modules, appTenants }) => {
       <Route key={index} path={`${path}/${code.toLowerCase()}`}>
         <Module stateCode={stateCode} moduleCode={code} userType={userType} tenants={getTenants(tenants, appTenants)} />
       </Route>
-    ) :   <Route key={index} path={`${path}/${code.toLowerCase()}`}>
-    <Redirect to={{ pathname: `/${window?.contextPath}/employee/user/error?type=notfound`, state: { from: location.pathname + location.search } }} />
-  </Route>;
+    ) : (
+      <Route key={index} path={`${path}/${code.toLowerCase()}`}>
+        <Redirect
+          to={{ pathname: `/${window?.contextPath}/employee/user/error?type=notfound`, state: { from: location.pathname + location.search } }}
+        />
+      </Route>
+    );
   });
 
   return (
@@ -40,7 +41,7 @@ export const AppModules = ({ stateCode, userType, modules, appTenants }) => {
       <Switch>
         {appRoutes}
         <Route path={`${path}/login`}>
-          <Redirect to={{ pathname:  `/${window?.contextPath}/employee/user/login`, state: { from: location.pathname + location.search } }} />
+          <Redirect to={{ pathname: `/${window?.contextPath}/employee/user/login`, state: { from: location.pathname + location.search } }} />
         </Route>
         <Route path={`${path}/forgot-password`}>
           <ForgotPassword />

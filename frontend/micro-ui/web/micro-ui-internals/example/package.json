@@ -9,10 +9,10 @@
     "start": "react-scripts start"
   },
   "devDependencies": {
-    "@egovernments/digit-ui-libraries": "1.5.0",
-    "@egovernments/digit-ui-module-dss": "1.5.5-alpha.1",
-    "@egovernments/digit-ui-module-core": "1.5.4-alpha.10",
-    "@egovernments/digit-ui-react-components": "^1.5.0",
+    "@egovernments/digit-ui-libraries": "1.5.5",
+    "@egovernments/digit-ui-module-dss": "1.5.5",
+    "@egovernments/digit-ui-module-core": "1.5.5",
+    "@egovernments/digit-ui-react-components": "1.5.5",
     "http-proxy-middleware": "^1.0.5",
     "react": "17.0.2",
     "react-dom": "17.0.2",

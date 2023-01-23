@@ -1,6 +1,5 @@
-import { ActionBar, Button, Dropdown } from "@egovernments/digit-ui-react-components";
+import { CustomButton, Dropdown } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
-import { CustomButton, Menu } from "@egovernments/digit-ui-react-components";
 
 const ChangeLanguage = (prop) => {
   const isDropdown = prop.dropdown || false;

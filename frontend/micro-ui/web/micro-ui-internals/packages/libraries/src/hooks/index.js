@@ -37,7 +37,7 @@ import useInboxData from "./pgr/useInboxData";
 import useLocalities from "./pgr/useLocalities";
 import useServiceDefs from "./pgr/useServiceDefs";
 import usePGRTenants from "./pgr/useTenants";
-
+import useGenderMDMS from "./useGenderMDMS";
 
 import useEmployeeSearch from "./useEmployeeSearch";
 
@@ -185,8 +185,7 @@ const Hooks = {
   events,
   engagement,
   survey,
- 
-  works,
+  useGenderMDMS,
   useRouteSubscription,
   useCustomMDMS,
   useGetHowItWorksJSON,

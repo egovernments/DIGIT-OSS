@@ -1,5 +1,5 @@
-import React, { useState, Fragment } from "react";
-import { ButtonSelector, CardText, FormStep, LinkButton, OTPInput, CardLabelError } from "@egovernments/digit-ui-react-components";
+import { CardLabelError, CardText, FormStep, OTPInput } from "@egovernments/digit-ui-react-components";
+import React, { Fragment, useState } from "react";
 import useInterval from "../../../hooks/useInterval";
 
 const SelectOtp = ({ config, otp, onOtpChange, onResend, onSelect, t, error, userType = "citizen", canSubmit }) => {
