@@ -43,6 +43,20 @@ const SurveyDetails = ({ location, match }) => {
   const [userAction, setUserAction] = useState(undefined);
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const tenantIdForInboxSearch = window?.Digit.SessionStorage?.get("CITIZENSURVEY.INBOX")?.searchForm?.tenantIds?.code || tenantId
+
+  function convertTime12To24(time) {
+    var hours   = Number(time.match(/^(\d+)/)[1]);
+    var minutes = Number(time.match(/:(\d+)/)[1]);
+    var AMPM    = time.match(/\s(.*)$/)[1];
+    if (AMPM === "PM" || AMPM === "pm"  && hours < 12) hours = hours + 12;
+    if (AMPM === "AM" || AMPM === "am" && hours === 12) hours = hours - 12;
+    var sHours   = hours.toString();
+    var sMinutes = minutes.toString();
+    if (hours < 10) sHours = "0" + sHours;
+    if (minutes < 10) sMinutes = "0" + sMinutes;
+    return (sHours + ":" + sMinutes);
+}
+
   const { isLoading, data: surveyData } = Digit.Hooks.survey.useSearch(
     { tenantIds: tenantIdForInboxSearch, uuid: id },
     {
@@ -55,8 +69,8 @@ const SurveyDetails = ({ location, match }) => {
           description: surveyObj.description,
           fromDate: format(new Date(surveyObj.startDate), "yyyy-MM-dd"),
           toDate: format(new Date(surveyObj.endDate), "yyyy-MM-dd"),
-          fromTime: format(new Date(surveyObj.startDate), "hh:mm"),
-          toTime: format(new Date(surveyObj.endDate), "hh:mm"),
+          fromTime: convertTime12To24(new Date(surveyObj.startDate).toLocaleString("en-IN",{hour: "numeric", minute:"numeric",hour12:true})),
+          toTime: convertTime12To24(new Date(surveyObj.endDate).toLocaleString("en-IN",{hour: "numeric", minute:"numeric",hour12:true})),
           questions: surveyObj.questions.map(({ questionStatement, type, required, options, uuid, surveyId }) => ({
             questionStatement,
             type: /*TypeAnswerEnum[type]*/type,

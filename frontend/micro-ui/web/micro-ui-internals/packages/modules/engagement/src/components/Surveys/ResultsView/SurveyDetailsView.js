@@ -30,6 +30,7 @@ const SurveyDetailsView = ({surveyTitle,surveyDesc,t,surveyId}) => {
                     <RemoveableTag
                       key={"tag"}
                       text={userUlbs[0].name}
+                      extraStyles={{tagStyles : {display:"flex"}}}
                     />
             </div>  
         <button

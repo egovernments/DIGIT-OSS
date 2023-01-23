@@ -178,10 +178,11 @@ const NewSurveyForm = ({ t, index, questionStatement, type, required, options, d
       <span className="newSurveyForm_quesno">{`${t("CS_COMMON_QUESTION")} ${index + 1} * `}</span>
       <span className="newSurveyForm_mainsection">
         <div className="newSurveyForm_questions">
-          <div style={{width: "80%"}}>
+          <div style={{width: "75%"}}>
             <TextInput
               placeholder={t("CS_COMMON_TYPE_QUESTION")}
-              value={t(Digit.Utils.locale.getTransformedLocale(surveyQuestionConfig.questionStatement))}
+              //value={t(Digit.Utils.locale.getTransformedLocale(surveyQuestionConfig.questionStatement))}
+              value={surveyQuestionConfig.questionStatement}
               onChange={(ev) => {
                 setSurveyQuestionConfig((prevState) => ({ ...prevState, questionStatement: ev.target.value }));
               }}

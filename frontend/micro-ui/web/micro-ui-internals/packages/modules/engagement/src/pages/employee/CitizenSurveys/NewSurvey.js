@@ -1,5 +1,5 @@
-import { CloseSvg, FormComposer, Header } from "@egovernments/digit-ui-react-components";
-import React, { Fragment, useEffect } from "react";
+import { CloseSvg, FormComposer, Header, Toast } from "@egovernments/digit-ui-react-components";
+import React, { Fragment, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import CreateNewSurvey from "../../../components/Surveys/SurveyForms";
@@ -41,6 +41,14 @@ export const mapQuestions = (questions =[]) =>{
 const NewSurveys = () => {
   const { t } = useTranslation();
   const history = useHistory();
+  const [showToast, setShowToast] = useState(null);
+
+  const closeToast = () => {
+    setShowToast(null);
+  };
+  setTimeout(() => {
+    closeToast();
+  }, 10000);
   
   const onSubmit = (data) => {
     const { collectCitizenInfo, title, description, tenantIds, fromDate, toDate, fromTime, toTime, questions } = data;
@@ -55,7 +63,22 @@ const NewSurveys = () => {
         questions:mappedQuestions
       },
     };
-    history.push("/digit-ui/employee/engagement/surveys/create-response", details)
+    
+    try{
+      let filters = {tenantIds : tenantIds?.[0]?.code, title : title}
+      Digit.Surveys.search(filters).then((ob) => {
+        if(ob?.Surveys?.length>0)
+        {
+          setShowToast({ key: true, label: "SURVEY_SAME_NAME_SURVEY_ALREADY_PRESENT" });
+        }
+        else
+        {
+          history.push("/digit-ui/employee/engagement/surveys/create-response", details)
+        }
+      })
+    }
+    catch(error)
+    {}
   };
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -86,6 +109,7 @@ const NewSurveys = () => {
       <div style={stylesForForm}>
         <CreateNewSurvey t={t} onSubmit={onSubmit} initialFormValues={defaultValues} />
       </div>
+      {showToast && <Toast error={showToast.key} label={t(showToast.label)} onClose={closeToast} />}
     </Fragment>
   );
 };
