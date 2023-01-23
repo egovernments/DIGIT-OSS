@@ -44,7 +44,7 @@ const SubWorkTableDetails = ({data}) => {
                 {row[3] && <td style={getStyles(3)}>
                     <div style={{display:"flex",flexDirection:"row",cursor:"pointer",color:"#F47738"}} onClick={() => history.push(
                         {
-                            pathname: `/works-ui/employee/contracts/create-contract?estimateNumber=${data?.state?.estimateNumber}&task=${data?.state?.estimateDetails[index]?.name}&subEstimate=${data?.state?.estimateDetails[index]?.estimateDetailNumber}`,
+                            pathname: `/digit-ui/employee/contracts/create-contract?estimateNumber=${data?.state?.estimateNumber}&task=${data?.state?.estimateDetails[index]?.name}&subEstimate=${data?.state?.estimateDetails[index]?.estimateDetailNumber}`,
                             state:{index, data}
                         }
                         )}>

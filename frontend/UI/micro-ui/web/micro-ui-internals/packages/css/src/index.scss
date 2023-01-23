@@ -1,6 +1,7 @@
 /*@import 'normalize.css';*/
 
 /*@import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap");*/
+@import "./pages/employee/dss.scss";
 
 @import "tailwindcss/base";
 
@@ -15,8 +16,6 @@
 @import "./components/datatable.scss";
 @import "./components/table.scss";
 @import "./components/filters.scss";
-@import "./components/attendencetable.scss";
-@import "./pages/works/horizontalNav.scss";
 
 @import "./pages/employee/index.scss";
 @import "./components/uploadcomponents.scss";

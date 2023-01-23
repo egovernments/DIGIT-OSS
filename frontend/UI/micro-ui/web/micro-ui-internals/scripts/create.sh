@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./scripts/run.sh works
+./scripts/run.sh dss
