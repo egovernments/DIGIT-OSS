@@ -23,7 +23,6 @@ import { UserService } from "./services/elements/User";
 import HrmsService from "./services/elements/HRMS";
 import { InboxGeneral } from "./services/elements/InboxService";
 import EventsServices from "./services/elements/Events";
-import { WorksService } from "./services/elements/Works";
 
 
 import ShareFiles from "./services/molecules/ShareFiles";
@@ -37,8 +36,6 @@ import Hooks from "./hooks";
 import Utils from "./utils";
 import { subFormRegistry } from "./subFormRegistry";
 import AccessControlService from "./services/elements/Access";
-import BillServices from "./services/elements/Bill";
-import AttendanceService from "./services/elements/Attendance";
 
 const setupLibraries = (Library, props) => {
   window.Digit = window.Digit || {};
@@ -72,7 +69,6 @@ const initLibraries = () => {
   setupLibraries("ComponentRegistryService", ComponentRegistryService);
   setupLibraries("StoreData", StoreData);
   setupLibraries("EventsServices", EventsServices);
-  setupLibraries("WorksService", WorksService)
 
   setupLibraries("InboxGeneral", InboxGeneral);
   setupLibraries("ShareFiles", ShareFiles);
@@ -83,8 +79,6 @@ const initLibraries = () => {
   setupLibraries("Download", Download);
 
   setupLibraries("AccessControlService", AccessControlService);
-  setupLibraries("BillServices", BillServices);
-  setupLibraries("AttendanceService", AttendanceService);
 
   return new Promise((resolve) => {
     initI18n(resolve);
