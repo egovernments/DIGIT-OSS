@@ -303,9 +303,10 @@ export const prepareEditFlow = async (
     []
   );
   if (applicationNumber ) {
-    let edited =getQueryArg(window.location.href, "edited")
+    let edited =getQueryArg(window.location.href, "edited");
+    let isSummaryPage = getQueryArg(window.location.href, "isSummaryPage");
    
-    let response =  edited?{FireNOCs:get(state.screenConfiguration.preparedFinalObject,'FireNOCs')}:await getSearchResults([
+    let response =  edited || isSummaryPage ?{FireNOCs:get(state.screenConfiguration.preparedFinalObject,'FireNOCs')}:await getSearchResults([
       {
         key: "tenantId",
         value: tenantId
@@ -381,7 +382,13 @@ const screenConfig = {
       window.location.href,
       "applicationNumber"
     );
-    const tenantId = getQueryArg(window.location.href, "tenantId");
+    const tenantId = getQueryArg(window.location.href, "tenantId") || get(
+      state.screenConfiguration.preparedFinalObject,
+      "FireNOCs[0].fireNOCDetails.propertyDetails.address.city"
+    ) || getTenantId();
+
+
+
     const step = getQueryArg(window.location.href, "step");
 
     //Set Module Name

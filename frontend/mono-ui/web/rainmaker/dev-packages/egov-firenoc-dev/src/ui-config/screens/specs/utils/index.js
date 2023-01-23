@@ -225,7 +225,7 @@ export const gotoApplyWithStep = (state, dispatch, step) => {
   const applyUrl =
     process.env.REACT_APP_SELF_RUNNING === "true"
       ? `/egov-ui-framework/fire-noc/apply?step=${step}${applicationNumberQueryString}`
-      : `/fire-noc/apply?step=${step}${applicationNumberQueryString}`;
+      : `/fire-noc/apply?step=${step}${applicationNumberQueryString}&isSummaryPage=${true}`;
   dispatch(setRoute(applyUrl));
 };
 
