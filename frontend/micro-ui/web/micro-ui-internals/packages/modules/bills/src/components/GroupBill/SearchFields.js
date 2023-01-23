@@ -117,7 +117,7 @@ const SearchFields = ({ register, control, reset, tenantId, t, formState }) => {
                             t={t}
                             selected={props.value}
                             style={{width:"125%"}}
-                            optionCardStyles={{zIndex:"0"}}
+                            optionCardStyles={{zIndex:"20"}}
                         />
                     )}
                 />

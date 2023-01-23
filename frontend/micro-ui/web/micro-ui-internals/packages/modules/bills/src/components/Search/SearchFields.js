@@ -77,7 +77,7 @@ const SearchFields = ({register, control, reset, tenantId, t, previousPage ,form
             rules={{ required: t("REQUIRED_FIELD") }}
             name="serviceCategory"
             render={(props) => (
-              <Dropdown name="serviceCategory" t={t} option={serviceTypeList} onBlur={props.onBlur} selected={props.value}  select={props.onChange} optionKey={"name"} optionCardStyles={{zIndex:"0"}}  />
+              <Dropdown name="serviceCategory" t={t} option={serviceTypeList} onBlur={props.onBlur} selected={props.value}  select={props.onChange} optionKey={"name"} optionCardStyles={{zIndex:"20"}}  />
             )}
           />
            {formErrors && formErrors?.serviceCategory && formErrors?.serviceCategory?.type === "required" && (
