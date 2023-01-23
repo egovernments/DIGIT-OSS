@@ -1,4 +1,4 @@
-import { Header, Modal, Loader } from "@egovernments/digit-ui-react-components";
+import { Header, Modal, Loader, Toast } from "@egovernments/digit-ui-react-components";
 import React, { Fragment, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, useHistory } from "react-router-dom";
@@ -43,6 +43,14 @@ const SurveyDetails = ({ location, match }) => {
   const [userAction, setUserAction] = useState(undefined);
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const tenantIdForInboxSearch = window?.Digit.SessionStorage?.get("CITIZENSURVEY.INBOX")?.searchForm?.tenantIds?.code || tenantId
+  const [showToast, setShowToast] = useState(null);
+
+  const closeToast = () => {
+    setShowToast(null);
+  };
+  setTimeout(() => {
+    closeToast();
+  }, 10000);
 
   function convertTime12To24(time) {
     var hours   = Number(time.match(/^(\d+)/)[1]);
@@ -142,7 +150,22 @@ const SurveyDetails = ({ location, match }) => {
         //These are not required to update, only status was required that we were not sending..
       },
     };
-    history.push("/digit-ui/employee/engagement/surveys/update-response", details);
+
+    try{
+      let filters = {tenantIds : tenantIds[0]?.code ? tenantIds[0]?.code : surveyData.tenantId.code, title : title}
+      Digit.Surveys.search(filters).then((ob) => {
+        if(ob?.Surveys?.length>0)
+        {
+          setShowToast({ key: true, label: "SURVEY_SAME_NAME_SURVEY_ALREADY_PRESENT" });
+        }
+        else
+        {
+          history.push("/digit-ui/employee/engagement/surveys/update-response", details);
+        }
+      })
+    }
+    catch(error)
+    {}
   };
 
   const handleDelete = () => {
@@ -248,6 +271,7 @@ const SurveyDetails = ({ location, match }) => {
           actionSaveOnSubmit={handleMarkInactive}
         />
       )}
+      {showToast && <Toast error={showToast.key} label={t(showToast.label)} onClose={closeToast} />}
     </Fragment>
   );
 };
