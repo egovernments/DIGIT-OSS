@@ -27,9 +27,9 @@ import TransferLicense from "../employee/ScrutinyBasic/AllServiceScrutiny/Transf
 // import SubmitNew from "../employee/ScrutinyBasic/AllServiceScrutiny/BankGuarantee/SubmitNew";
 // import basicScrutiny from "../employee/ScrutinyBasic/AllServiceScrutiny/BankScrutiny/basicScrutiny";
 // import FormBank from "../employee/ScrutinyBasic/AllServiceScrutiny/BankGuarantee/FormBankScrutniy/FormBank";
-import ServicePlanInbox from "../../../../obps/src/pages/employee/ServicePlan/Inbox";
-import BankGuaranteePlan from "../../../../obps/src/pages/employee/BankGuarantee/Inbox";
-import ElectricalPlanInbox from "../../../../obps/src/pages/employee/ElectricPlan/Inbox";
+import ServicePlanInbox from "../employee/ServicePlan/Inbox/index";
+import BankGuaranteePlan from "../employee/BankGuarantee/Inbox/index";
+import ElectricalPlanInbox from "../employee/ElectricPlan/Inbox/index"
 import ScrutinyForm from "./ScrutinyBasic/AllServiceScrutiny/BankGuarantee/FormBankScrutniy/cardBank";
 import ExtensionCard from "./ScrutinyBasic/AllServiceScrutiny/BankGuarantee/Extensionbank/Extensioncard";
 import ReplaceCard from "./ScrutinyBasic/AllServiceScrutiny/BankGuarantee/Replacebank/ReplaceCard";
