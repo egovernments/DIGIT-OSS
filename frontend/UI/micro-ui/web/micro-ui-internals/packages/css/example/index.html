@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>@egovernments/digit-ui.works-css</title>
+    <!-- map script  -->
+    <script src="./map.js"></script>
+    <!-- all files at https://cdn.jsdelivr.net/npm/@egovernments/digit-ui-works-css/ -->
+    <!-- css prod path https://cdn.jsdelivr.net/npm/@egovernments/digit-ui.works-css/dist/index.min.css -->
+    <link href="index.css" rel="stylesheet" />
+  </head>
+
+  <body class="body-container">
+    <div class="navbar">
+      <!-- Logo png used may switch to html -->
+      <!-- <header class="navbar-header">mSeva</header>
+        <label class="navbar-subheader">Demo</label> -->
+    </div>
+    <div class="app-container">
+      <header class="h1">Quick Pay</header>
+
+      <label class="link-label">Property Tax</label>
+
+      <!-- <div class="back-btn">
+        <label>&#x25c4</label>
+        <p>Back</p>
+      </div> -->
+
+      <div class="back-btn2">
+        <!-- <img src="../svg/arrowleft.svg"/> -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="19px">
+          <path d="M24 0v24H0V0h24z" fill="none" opacity=".87" />
+          <path d="M14 7l-5 5 5 5V7z" />
+        </svg>
+        <p>Back</p>
+      </div>
+
+      <!-- card container   -->
+      <div class="card">
+        <label class="card-caption">Garbage</label>
+        <header class="card-header">Choose Complaint Type</header>
+        <p class="card-text">
+          Select option related to your complaint from the list given below. If the complaint type you are looking for is not listed select others
+        </p>
+
+        <!-- radio select option  -->
+        <h2 class="card-label">Moholla *</h2>
+        <div class="radio-wrap">
+          <div>
+            <span class="radio-btn-wrap">
+              <input class="radio-btn" type="radio" value="streetlights" />
+              <span class="radio-btn-checkmark"></span>
+            </span>
+            <label>Streetlights</label>
+          </div>
+          <div>
+            <span class="radio-btn-wrap">
+              <input class="radio-btn" type="radio" value="streetlights" />
+              <span class="radio-btn-checkmark"></span>
+            </span>
+            <label>Streetlights</label>
+          </div>
+        </div>
+
+        <h2 class="card-label">City *</h2>
+        <h2 class="card-label-error">Enter City</h2>
+        <!-- dropdown select option  -->
+        <div class="select-wrap">
+          <div class="select">
+            <!-- <p>Banglore</p> -->
+            <input type="text" value="Banglore" />
+            <!-- <img src="../svg/arrowdown.svg"/> -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="18px" height="18px">
+              <path d="M0 0h24v24H0V0z" fill="none" />
+              <path d="M7 10l5 5 5-5H7z" />
+            </svg>
+          </div>
+          <div class="options-card">
+            <p>Ahmedabad</p>
+            <p>Banglore</p>
+            <p>Amritsar</p>
+            <p>New Delhi</p>
+          </div>
+        </div>
+
+        <!-- <select class="select">
+            <option>Ahmedabad</option>
+            <option>Banglore</option>
+            <option>Amritsar</option>
+            <option>New Delhi</option>
+          </select> -->
+
+        <!-- text input fields and areas -->
+        <input type="text" class="card-input" />
+        <input type="text" class="card-input-error" />
+        <textarea class="card-textarea"></textarea>
+
+        <!-- upload components -->
+        <div class="upload-wrap">
+          <!-- <img src="../svg/camera.svg">  -->
+          <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24" fill="black" width="46px" height="42px">
+            <rect fill="none" height="24" width="24" />
+            <path
+              d="M3,4V1h2v3h3v2H5v3H3V6H0V4H3z M6,10V7h3V4h7l1.83,2H21c1.1,0,2,0.9,2,2v12c0,1.1-0.9,2-2,2H5c-1.1,0-2-0.9-2-2V10H6z M13,19c2.76,0,5-2.24,5-5s-2.24-5-5-5s-5,2.24-5,5S10.24,19,13,19z M9.8,14c0,1.77,1.43,3.2,3.2,3.2s3.2-1.43,3.2-3.2 s-1.43-3.2-3.2-3.2S9.8,12.23,9.8,14z"
+            />
+          </svg>
+        </div>
+
+        <!-- multi image upload  -->
+        <div class="multi-upload-wrap">
+          <div>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="18px" height="18px" class="delete">
+              <path d="M0 0h24v24H0V0z" fill="#d4351c" />
+              <path
+                d="M18.3 5.71c-.39-.39-1.02-.39-1.41 0L12 10.59 7.11 5.7c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41L10.59 12 5.7 16.89c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0L12 13.41l4.89 4.89c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L13.41 12l4.89-4.89c.38-.38.38-1.02 0-1.4z"
+              />
+            </svg>
+            <!-- <img src="./svg/close.svg" class="delete"/> -->
+          </div>
+          <div>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="18px" height="18px" class="delete">
+              <path d="M0 0h24v24H0V0z" fill="#d4351c" />
+              <path
+                d="M18.3 5.71c-.39-.39-1.02-.39-1.41 0L12 10.59 7.11 5.7c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41L10.59 12 5.7 16.89c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0L12 13.41l4.89 4.89c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L13.41 12l4.89-4.89c.38-.38.38-1.02 0-1.4z"
+              />
+            </svg>
+
+            <!-- <img src="./svg/close.svg" class="delete"/> -->
+          </div>
+          <div class="upload-img-container">
+            <!-- <img src="../svg/camera.svg" class="upload-camera-img"/> -->
+            <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24" fill="black" width="46px" height="42px">
+              <rect fill="none" height="24" width="24" />
+              <path
+                d="M3,4V1h2v3h3v2H5v3H3V6H0V4H3z M6,10V7h3V4h7l1.83,2H21c1.1,0,2,0.9,2,2v12c0,1.1-0.9,2-2,2H5c-1.1,0-2-0.9-2-2V10H6z M13,19c2.76,0,5-2.24,5-5s-2.24-5-5-5s-5,2.24-5,5S10.24,19,13,19z M9.8,14c0,1.77,1.43,3.2,3.2,3.2s3.2-1.43,3.2-3.2 s-1.43-3.2-3.2-3.2S9.8,12.23,9.8,14z"
+              />
+            </svg>
+          </div>
+        </div>
+
+        <!-- successfull submittion card  -->
+        <div class="success-wrap">
+          <header>Complaint Submitted</header>
+          <div>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#00703C">
+              <path d="M0 0h24v24H0V0z" fill="none" />
+              <path
+                d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"
+              />
+            </svg>
+            <!-- <img src="./svg/success.svg"/> -->
+            <h2>Complaint No.</h2>
+            <p>02/09/2020/051705</p>
+          </div>
+        </div>
+
+        <!-- complaint error card -->
+        <div class="error-wrap">
+          <header>Complaint Not Submitted</header>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#d4351c">
+            <path d="M0 0h24v24H0V0z" fill="none" />
+            <circle cx="12" cy="19" r="2" />
+            <path d="M10 3h4v12h-4z" />
+          </svg>
+          <!-- <img src="./svg/error2.svg" alt=""> -->
+        </div>
+
+        <!-- submit / next button bar -->
+        <div class="submit-bar">
+          <header class="submit-header">Next</header>
+        </div>
+
+        <span class="card-link"> Skip and Continue</span>
+      </div>
+
+      <!-- my complaint section  -->
+      <div class="card">
+        <h2 class="card-sub-header">Burning of Garbage</h2>
+        <div class="date-wrap">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="18px" height="18px">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z" />
+          </svg>
+          <!-- <img src="../svg/calendar.svg"> -->
+          <p>2-Aug-2020</p>
+        </div>
+
+        <div class="key-note-pair">
+          <h3>Complaint No.</h3>
+          <p>02/09/2020/051705</p>
+        </div>
+
+        <div class="status-highlight">
+          <p>Open</p>
+        </div>
+
+        <p class="card-text-primary">Complaint Pending for Assignment</p>
+      </div>
+
+      <!-- complaint summary -->
+      <div class="card">
+        <h2 class="card-sub-header">Burning of Garbage</h2>
+        <div class="data-table">
+          <div>
+            <h2>Complaint No.</h2>
+            <p>02/09/2020/051705</p>
+          </div>
+          <div>
+            <h2>Complaint Status</h2>
+            <p>Filed</p>
+          </div>
+          <div>
+            <h2>Filed Date</h2>
+            <p>1-Aug-2020</p>
+          </div>
+          <div class="row-last">
+            <h2>Address</h2>
+            <p>Back side Post Office Patiala Road Ajit Nagar Amritsar</p>
+          </div>
+        </div>
+        <div class="photos-wrap">
+         
+        </div>
+      </div>
+
+      <!-- complaint timeline -->
+      <div class="card">
+        <h2 class="card-sub-header">Complaint Timeline</h2>
+        <div class="checkpoint-done">
+          <h2></h2>
+          <header>Pending for Assignment</header>
+        </div>
+
+        <!-- line connecting dots -->
+        <div class="checkpoint-connect"></div>
+
+        <div class="checkpoint">
+          <h2></h2>
+          <header>
+            Complaint Filed
+            <p>12/08/2020</p>
+          </header>
+        </div>
+      </div>
+
+      <!-- checkbox  -->
+      <div class="card">
+        <p class="card-label">How would you rate your experience with us?</p>
+        <div class="rating-star-wrap">
+          <!-- <img src="./svg/starfilled.svg" alt="">
+          <img src="./svg/starfilled.svg" alt="">
+          <img src="./svg/starfilled.svg" alt="">
+          <img src="./svg/starfilled.svg" alt=""> -->
+          <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24" fill="#F47738" width="48px" height="48px">
+            <g>
+              <path d="M0,0h24v24H0V0z" fill="none" />
+              <path d="M0,0h24v24H0V0z" fill="none" />
+            </g>
+            <g>
+              <path d="M12,17.27L18.18,21l-1.64-7.03L22,9.24l-7.19-0.61L12,2L9.19,8.63L2,9.24l5.46,4.73L5.82,21L12,17.27z" />
+            </g>
+          </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24" fill="#F47738" width="48px" height="48px">
+            <g>
+              <path d="M0,0h24v24H0V0z" fill="none" />
+              <path d="M0,0h24v24H0V0z" fill="none" />
+            </g>
+            <g>
+              <path d="M12,17.27L18.18,21l-1.64-7.03L22,9.24l-7.19-0.61L12,2L9.19,8.63L2,9.24l5.46,4.73L5.82,21L12,17.27z" />
+            </g>
+          </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24" fill="#F47738" width="48px" height="48px">
+            <g>
+              <path d="M0,0h24v24H0V0z" fill="none" />
+              <path d="M0,0h24v24H0V0z" fill="none" />
+            </g>
+            <g>
+              <path d="M12,17.27L18.18,21l-1.64-7.03L22,9.24l-7.19-0.61L12,2L9.19,8.63L2,9.24l5.46,4.73L5.82,21L12,17.27z" />
+            </g>
+          </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24" fill="#F47738" width="48px" height="48px">
+            <g>
+              <path d="M0,0h24v24H0V0z" fill="none" />
+              <path d="M0,0h24v24H0V0z" fill="none" />
+            </g>
+            <g>
+              <path d="M12,17.27L18.18,21l-1.64-7.03L22,9.24l-7.19-0.61L12,2L9.19,8.63L2,9.24l5.46,4.73L5.82,21L12,17.27z" />
+            </g>
+          </svg>
+          <!-- <img src="./svg/starempty.svg" alt=""> -->
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#F47738" width="48px" height="48px">
+            <path d="M0 0h24v24H0V0z" fill="none" />
+            <path
+              d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"
+            />
+          </svg>
+        </div>
+        <p class="card-label">What was Good?</p>
+        <div class="checkbox-wrap">
+          <input type="checkbox" />
+          <p class="custom-checkbox">
+            <!-- <img src="./svg/check.svg" alt=""> -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#F47738">
+              <path d="M0 0h24v24H0z" fill="none" />
+              <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z" />
+            </svg>
+          </p>
+          <p class="label">Service</p>
+        </div>
+      </div>
+
+      <!-- otp verification  -->
+      <div class="card">
+        <header class="card-header">OTP Verification</header>
+        <p class="card-text">Enter the OTP sent to <span>+91 - 9876453444</span></p>
+        <div class="input-otp-wrap">
+          <input type="number" max="1" />
+          <input type="number" max="1" />
+          <input type="number" max="1" />
+          <input type="number" max="1" />
+        </div>
+        <p class="card-text">Request another OTP in <span>25</span> seconds</p>
+        <p class="card-text-button">RESEND</p>
+      </div>
+
+      <!-- warnings  -->
+      <div class="card">
+        <div class="error-message-wrap">
+          <h2>There is a problem</h2>
+          <p>Max 3 complaint photos allowed</p>
+        </div>
+
+        <p class="card-text">
+          Click on the icon below to upload the complaint photos as evidence. You can capture photos directly through your camera or upload from your
+          Gallery. If you do not have complaint photo, you can skip the continue for next step.
+        </p>
+      </div>
+      <!-- <div class="image-viewer-wrap">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="18px" height="18px">
+        <path d="M0 0h24v24H0V0z" fill="none" />
+        <path
+          d="M18.3 5.71c-.39-.39-1.02-.39-1.41 0L12 10.59 7.11 5.7c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41L10.59 12 5.7 16.89c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0L12 13.41l4.89 4.89c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L13.41 12l4.89-4.89c.38-.38.38-1.02 0-1.4z" />
+      </svg>
+      <img src="./garbage.webp" />
+    </div> -->
+
+      <!-- map  -->
+      <div class="card">
+        <header class="card-header">Pin Complaint Location</header>
+        <p class="card-text">
+          Click and hold to drop the pin to complaint location. If you are not able to pin the location you can skip the continue for next step.
+        </p>
+        <div class="map-wrap">
+          <div class="map-search-bar-wrap">
+            <!-- <img src="./svg/searchicon.svg" class="map-search-bar-icon" alt=""> -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#505A5F" width="48px" height="48px" class="map-search-bar-icon">
+              <path d="M0 0h24v24H0z" fill="none" />
+              <path
+                d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+              />
+            </svg>
+            <input id="pac-input" class="map-search-bar" type="text" placeholder="Search Address" />
+          </div>
+          <div id="map" class="map"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

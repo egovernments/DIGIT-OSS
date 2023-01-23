@@ -1,0 +1,61 @@
+.radio-wrap {
+  @apply my-sm block leading-6 mb-md;
+
+  &.flex-row {
+    display: flex;
+    .mg-sm {
+      margin-right: 1rem;
+    }
+  }
+
+  div {
+    @apply block mb-md;
+  }
+
+  .radio-btn-wrap {
+    @apply block float-left relative;
+    &:hover {
+      .radio-btn-checkmark {
+        @apply border-primary-main;
+      }
+    }
+  }
+
+  .radio-btn {
+    @apply opacity-0 absolute cursor-pointer h-6 w-6;
+  }
+
+  .radio-btn-checkmark {
+    @apply h-6 w-6  border-input-border border-solid rounded-full block;
+  }
+
+  label {
+    @apply text-text-primary text-form-field ml-md;
+  }
+
+  .radio-btn-checkmark:after {
+    content: "";
+  }
+
+  .radio-btn-wrap input:checked ~ .radio-btn-checkmark {
+    @apply border-2 border-primary-main;
+  }
+
+  .radio-btn-wrap input:checked ~ .radio-btn-checkmark:after {
+    @apply block bg-primary-main h-3 w-3 rounded-full absolute top-6 left-6;
+  }
+}
+
+
+@screen sm {
+  .radio-wrap {
+    @apply flex-col;
+    gap : 0px !important;
+  }
+}
+
+.reverse-radio-selection-wrapper{
+  div{
+    @apply flex flex-row-reverse place-content-between items-center;    ;
+  }
+}
