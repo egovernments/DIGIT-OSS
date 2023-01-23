@@ -127,7 +127,8 @@ const Inbox = ({ parentRoute }) => {
   );
 
   const FilterFormFields = useCallback(
-    ({ registerRef, controlFilterForm, setFilterFormValue, getFilterFormValue }) => (
+    ({ registerRef, controlFilterForm, setFilterFormValue, getFilterFormValue,applicationStatus, setApplicationStatus,serviceType, setServiceType }) => (
+      // <p>rfregerewfergreg</p>
       <FilterFormFieldsComponent
         {...{
           isInboxLoading,
@@ -136,6 +137,8 @@ const Inbox = ({ parentRoute }) => {
           setFilterFormValue,
           filterFormState: formState?.filterForm,
           getFilterFormValue,
+          applicationStatus, setApplicationStatus,
+          serviceType, setServiceType
         }}
       />
     ),
@@ -148,6 +151,7 @@ const Inbox = ({ parentRoute }) => {
   };
 
   const onFilterFormSubmit = (data) => {
+    // console.log("log123 fiter submit...",data)
     data.hasOwnProperty("") && delete data?.[""];
     dispatch({ action: "mutateFilterForm", data });
   };
@@ -167,6 +171,8 @@ const Inbox = ({ parentRoute }) => {
     resetFilterFormDefaultValues: filterFormDefaultValues,
     onFilterFormReset,
   };
+
+  console.log("log123...",propsForFilterForm)
 
   const propsForInboxTable = useInboxTableConfig({ ...{ parentRoute, onPageSizeChange, formState, totalCount, table, dispatch, onSortingByData } });
 
