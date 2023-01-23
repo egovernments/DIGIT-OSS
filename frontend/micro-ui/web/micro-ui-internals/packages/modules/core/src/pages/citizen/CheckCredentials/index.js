@@ -28,6 +28,10 @@ export default function CheckCredentials() {
   useEffect(() => {
     checkCrednetials();
   }, []);
-  return null;
+  return (
+    <div style={{ height: "100%", width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+      <Loader />
+    </div>
+  );
 }
 }
