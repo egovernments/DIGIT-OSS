@@ -27,7 +27,9 @@ import TransferLicense from "../employee/ScrutinyBasic/AllServiceScrutiny/Transf
 // import SubmitNew from "../employee/ScrutinyBasic/AllServiceScrutiny/BankGuarantee/SubmitNew";
 // import basicScrutiny from "../employee/ScrutinyBasic/AllServiceScrutiny/BankScrutiny/basicScrutiny";
 // import FormBank from "../employee/ScrutinyBasic/AllServiceScrutiny/BankGuarantee/FormBankScrutniy/FormBank";
-
+import ServicePlanInbox from "../employee/ServicePlan/Inbox/index";
+import BankGuaranteePlan from "../employee/BankGuarantee/Inbox/index";
+import ElectricalPlanInbox from "../employee/ElectricPlan/Inbox/index"
 import ScrutinyForm from "./ScrutinyBasic/AllServiceScrutiny/BankGuarantee/FormBankScrutniy/cardBank";
 import ExtensionCard from "./ScrutinyBasic/AllServiceScrutiny/BankGuarantee/Extensionbank/Extensioncard";
 import ReplaceCard from "./ScrutinyBasic/AllServiceScrutiny/BankGuarantee/Replacebank/ReplaceCard";
@@ -237,12 +239,12 @@ const EmployeeApp = ({ path, url, userType }) => {
             <PrivateRoute path={`${path}/CompositionClu`} component={CompositionClu} />
             <PrivateRoute path={`${path}/CompletionLic`} component={CompletionLic} />
             <PrivateRoute path={`${path}/ServiceScrutiny/:id`} component={ServiceScrutiny} />
-            <PrivateRoute path={`${path}/ScrutinyForm`} component={ScrutinyForm} />
+            {/* <PrivateRoute path={`${path}/ScrutinyForm`} component={ScrutinyForm} /> */}
             {/* <PrivateRoute path={`${path}/SubmitNew`} component={SubmitNew} /> */}
             {/* <PrivateRoute path={`${path}/basicScrutiny`} component={basicScrutiny} /> */}
             {/* <PrivateRoute path={`${path}/FormBank`} component={FormBank} /> */}
             <PrivateRoute path={`${path}/ElectricalScrutiny/:id`} component={ElectricalScrutiny} />
-            <PrivateRoute path={`${path}/ScrutinyForm`} component={ScrutinyForm} />
+            <PrivateRoute path={`${path}/ScrutinyForm/:id`} component={ScrutinyForm} />
             <PrivateRoute path={`${path}/ExtensionCard`} component={ExtensionCard} />
             <PrivateRoute path={`${path}/ReplaceCard`} component={ReplaceCard} />
             <PrivateRoute path={`${path}/ReleaseCard`} component={ReleaseCard} />

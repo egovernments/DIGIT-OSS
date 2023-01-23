@@ -7,9 +7,10 @@ import axios from "axios";
 import Scrutiny from "../../BankScrutiny/basicScrutiny";
 import ScrutinyDevelopment from "../../../ScrutinyDevelopment/ScrutinyDevelopment";
 import { ScrutinyRemarksContext } from "../../../../../../../context/remarks-data-context/index";
+import SubmitNew from "../SubmitNew";
 import Release from "../Release";
 
-const ReleaseCardBank = () => {
+const ReleaseBank = ({ apiResponse, applicationNumber, refreshScrutinyData }) => {
   const personalInfoRef = useRef();
   // const generalInfoRef = useRef();
   // const developerInfoRef = useRef();
@@ -82,7 +83,7 @@ const ReleaseCardBank = () => {
       <div style={{ position: "relative", maxWidth: "100%", padding: 2 }}>
         <div>
           <div>
-            <Release />
+            <Release apiResponse={apiResponse} refreshScrutinyData={refreshScrutinyData}></Release>
           </div>
 
           {/* <JeLandinfo jeLandInfoRef={jeLandInfoRef} passUncheckedList={getUncheckedJeLandInfo}></JeLandinfo> */}
@@ -111,4 +112,4 @@ const ReleaseCardBank = () => {
   );
 };
 
-export default ReleaseCardBank;
+export default ReleaseBank;

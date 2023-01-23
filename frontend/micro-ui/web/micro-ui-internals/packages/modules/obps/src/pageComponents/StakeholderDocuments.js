@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import {
-    CardLabel,
-    Dropdown,
-    UploadFile,
-    Toast,
-    Loader,
-    FormStep,
-    CitizenInfoLabel,
-    OpenLinkContainer,
-    BackButton
+  CardLabel,
+  Dropdown,
+  UploadFile,
+  Toast,
+  Loader,
+  FormStep,
+  CitizenInfoLabel,
+  OpenLinkContainer,
+  BackButton,
 } from "@egovernments/digit-ui-react-components";
 import Timeline from "../components/Timeline";
 import { useHistory } from "react-router-dom";
@@ -105,23 +105,22 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
     const onSkip = () => onSelect();
     function onAdd() { }
 
-    useEffect(() => {
-        let count = 0;
-        bpaTaxDocuments.map(doc => {
-            let isRequired = false;
-            documents.map(data => {
-                if (doc.required && data !== null && data && doc.code == `${data.documentType.split('.')[0]}.${data.documentType.split('.')[1]}`) {
-                    isRequired = true;
-                }
-            });
-            if (!isRequired && doc.required) {
-                count = count + 1;
-            }
-        });
-        if ((count == "0" || count == 0) && documents.length > 0) setEnableSubmit(false);
-        else setEnableSubmit(true);
-    }, [documents, checkRequiredFields])
-
+  useEffect(() => {
+    let count = 0;
+    bpaTaxDocuments.map((doc) => {
+      let isRequired = false;
+      documents.map((data) => {
+        if (doc.required && data !== null && data && doc.code == `${data.documentType.split(".")[0]}.${data.documentType.split(".")[1]}`) {
+          isRequired = true;
+        }
+      });
+      if (!isRequired && doc.required) {
+        count = count + 1;
+      }
+    });
+    if ((count == "0" || count == 0) && documents.length > 0) setEnableSubmit(false);
+    else setEnableSubmit(true);
+  }, [documents, checkRequiredFields]);
 
     const navigate = useHistory();
 
@@ -195,103 +194,94 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
     );
 }
 
-function SelectDocument({
-    t,
-    document: doc,
-    setDocuments,
-    error,
-    setError,
-    documents,
-    setCheckRequiredFields,
-    isCitizenUrl
-}) {
+function SelectDocument({ t, document: doc, setDocuments, error, setError, documents, setCheckRequiredFields, isCitizenUrl }) {
+  const filteredDocument = documents?.filter((item) => item?.documentType?.includes(doc?.code))[0];
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const [selectedDocument, setSelectedDocument] = useState(
+    filteredDocument
+      ? { ...filteredDocument, active: true, code: filteredDocument?.documentType, i18nKey: filteredDocument?.documentType }
+      : doc?.dropdownData?.length === 1
+      ? doc?.dropdownData[0]
+      : {}
+  );
+  const [file, setFile] = useState(null);
+  const [uploadedFile, setUploadedFile] = useState(() => filteredDocument?.fileStoreId || null);
 
-    const filteredDocument = documents?.filter((item) => item?.documentType?.includes(doc?.code))[0];
-    const tenantId = Digit.ULBService.getCurrentTenantId();
-    const [selectedDocument, setSelectedDocument] = useState(
-        filteredDocument
-            ? { ...filteredDocument, active: true, code: filteredDocument?.documentType, i18nKey: filteredDocument?.documentType }
-            : doc?.dropdownData?.length === 1
-                ? doc?.dropdownData[0]
-                : {}
-    );
-    const [file, setFile] = useState(null);
-    const [uploadedFile, setUploadedFile] = useState(() => filteredDocument?.fileStoreId || null);
+  const handleSelectDocument = (value) => setSelectedDocument(value);
 
-    const handleSelectDocument = (value) => setSelectedDocument(value);
+  function selectfile(e) {
+    setFile(e.target.files[0]);
+  }
 
-    function selectfile(e) {
-        setFile(e.target.files[0]);
-    }
+  useEffect(() => {
+    setDocuments((prev) => {
+      const filteredDocumentsByDocumentType = prev?.filter((item) => item?.documentType !== doc?.code);
 
-    useEffect(() => {
+      if (uploadedFile?.length === 0 || uploadedFile === null) {
+        return filteredDocumentsByDocumentType;
+      }
 
-        setDocuments((prev) => {
-            const filteredDocumentsByDocumentType = prev?.filter((item) => item?.documentType !== doc?.code);
+      const filteredDocumentsByFileStoreId = filteredDocumentsByDocumentType?.filter((item) => item?.fileStoreId !== uploadedFile);
+      return [
+        ...filteredDocumentsByFileStoreId,
+        {
+          documentType: doc?.code,
+          fileStoreId: uploadedFile,
+          documentUid: uploadedFile,
+          fileName: file?.name || "",
+          info: doc?.info || "",
+        },
+      ];
+    });
+  }, [uploadedFile, file]);
 
-            if (uploadedFile?.length === 0 || uploadedFile === null) {
-                return filteredDocumentsByDocumentType;
+  useEffect(() => {
+    (async () => {
+      setError(null);
+      if (file) {
+        const allowedFileTypesRegex = /(.*?)(jpg|jpeg|png|image|pdf)$/i;
+        if (file.size >= 5242880) {
+          setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
+        } else if (file?.type && !allowedFileTypesRegex.test(file?.type)) {
+          setError(t(`NOT_SUPPORTED_FILE_TYPE`));
+        } else {
+          try {
+            setUploadedFile(null);
+            const response = await Digit.UploadServices.Filestorage("PT", file, tenantId?.split(".")[0]);
+            if (response?.data?.files?.length > 0) {
+              setUploadedFile(response?.data?.files[0]?.fileStoreId);
+            } else {
+              setError(t("CS_FILE_UPLOAD_ERROR"));
             }
+          } catch (err) {
+            setError(t("CS_FILE_UPLOAD_ERROR"));
+          }
+        }
+      }
+    })();
+  }, [file]);
 
-            const filteredDocumentsByFileStoreId = filteredDocumentsByDocumentType?.filter((item) => item?.fileStoreId !== uploadedFile);
-            return [
-                ...filteredDocumentsByFileStoreId,
-                {
-                    documentType: doc?.code,
-                    fileStoreId: uploadedFile,
-                    documentUid: uploadedFile,
-                    fileName: file?.name || "",
-                    info: doc?.info || ""
-                },
-            ];
-        });       
-    }, [uploadedFile,file]);
-
-
-    useEffect(() => {
-        (async () => {
-            setError(null);
-            if (file) {
-                const allowedFileTypesRegex = /(.*?)(jpg|jpeg|png|image|pdf)$/i
-                if (file.size >= 5242880) {
-                    setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
-                } else if (file?.type && !allowedFileTypesRegex.test(file?.type)) {
-                    setError(t(`NOT_SUPPORTED_FILE_TYPE`))
-                } else {
-                    try {
-                        setUploadedFile(null);
-                        const response = await Digit.UploadServices.Filestorage("PT", file, tenantId?.split(".")[0]);
-                        if (response?.data?.files?.length > 0) {
-                            setUploadedFile(response?.data?.files[0]?.fileStoreId);
-                        } else {
-                            setError(t("CS_FILE_UPLOAD_ERROR"));
-                        }
-                    } catch (err) {
-                        setError(t("CS_FILE_UPLOAD_ERROR"));
-                    }
-                }
-            }
-        })();
-    }, [file]);
-
-    return (
-        <div style={{ marginBottom: "24px" }}>
-            <CardLabel style={{marginBottom: "10px"}}>{doc?.required ? `${t(`BPAREG_HEADER_${doc?.code?.replace('.', '_')}`)} *` : `${t(`BPAREG_HEADER_${doc?.code?.replace('.', '_')}`)}`}</CardLabel>
-            {doc?.info ? <div style={{fontSize: "12px", color: "#505A5F", fontWeight: 400, lineHeight: "15px", marginBottom: "10px"}}>{`${t(doc?.info)}`}</div> : null}
-            <UploadFile
-                extraStyleName={"OBPS"}
-                accept="image/*, .pdf, .png, .jpeg, .jpg"
-                onUpload={selectfile}
-                onDelete={() => {
-                    setUploadedFile(null);
-                    setCheckRequiredFields(true);
-                }}
-                message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
-                iserror={error}
-            />
-        </div>
-    );
-
+  return (
+    <div style={{ marginBottom: "24px" }}>
+      <CardLabel style={{ marginBottom: "10px" }}>
+        {doc?.required ? `${t(`BPAREG_HEADER_${doc?.code?.replace(".", "_")}`)} *` : `${t(`BPAREG_HEADER_${doc?.code?.replace(".", "_")}`)}`}
+      </CardLabel>
+      {doc?.info ? (
+        <div style={{ fontSize: "12px", color: "#505A5F", fontWeight: 400, lineHeight: "15px", marginBottom: "10px" }}>{`${t(doc?.info)}`}</div>
+      ) : null}
+      <UploadFile
+        extraStyleName={"OBPS"}
+        accept="image/*, .pdf, .png, .jpeg, .jpg"
+        onUpload={selectfile}
+        onDelete={() => {
+          setUploadedFile(null);
+          setCheckRequiredFields(true);
+        }}
+        message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
+        iserror={error}
+      />
+    </div>
+  );
 }
 
 export default StakeholderDocuments;

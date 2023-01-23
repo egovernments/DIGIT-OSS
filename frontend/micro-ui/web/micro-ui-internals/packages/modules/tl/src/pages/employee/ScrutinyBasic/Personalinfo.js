@@ -9,14 +9,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import InfoIcon from "@mui/icons-material/Info";
-// import BootstrapSwitchButton from "bootstrap-switch-button-react";
-// import Alert from "react-bootstrap/Alert";
-// import ToggleButton from "react-toggle-button";
-// import Toggle from "react-toggle";
-// import "react-toggle/style.css";
-// import WarningIcon from "@material-ui/icons/Warning";
 import PersonalinfoChild from "./PersonalinfoChild";
-import LicenseDetailsScrutiny from "../ScrutinyBasic/Developer/LicenseDetailsScrutiny";
 import CapacityScrutiny from "../ScrutinyBasic/Developer/CapacityScrutiny";
 import DocumentScrutiny from "./Developer/DocumentScrutiny";
 import Collapse from "react-bootstrap/Collapse";
@@ -112,17 +105,9 @@ const Personalinfo = (props) => {
   return (
     <Form
       ref={props.personalInfoRef}
-    // style={{
-    //   width: "100%",
-    //   height: props.heightPersonal,
-    //   overflow: "hidden",
-    //   marginBottom: 20,
-    //   borderColor: "#C3C3C3",
-    //   borderStyle: "solid",
-    //   borderWidth: 2,
-    // }}
+  
     >
-      {/* <Alert variant="warning">{messege}</Alert> */}
+      
       <div
         className="collapse-header"
         onClick={() => setOpen(!open)}
@@ -181,19 +166,20 @@ const Personalinfo = (props) => {
               />
             </div>
           </Collapse>
-          <LicenseDetailsScrutiny
+          {/* <LicenseDetailsScrutiny
             iconColorState={iconStates}
             showTable={currentRemarklifo}
             addInfo={applicantInfoPersonal?.devDetail?.addInfo ? applicantInfoPersonal?.devDetail?.addInfo : null}
             displayPersonal={open2 ? "block" : "none"}
-          />
+          /> */}
           <CapacityScrutiny
             iconColorState={iconStates}
             showTable={currentRemarklifo}
             capacityScrutinyInfo={applicantInfoPersonal?.devDetail?.capacityDevelopAColony ? applicantInfoPersonal?.devDetail?.capacityDevelopAColony : null}
             displayPersonal={open2 ? "block" : "none"}
           />
-          <DocumentScrutiny />
+          <DocumentScrutiny 
+          />
           {/* <DocumentScrutiny
             iconColorState={iconStates}
             showTable={currentRemarklifo}

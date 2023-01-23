@@ -21,7 +21,6 @@ const LocationSelection = () => {
   );
 
   function selectCity(city) {
-    console.log("CITY",city);
     setSelectedCity(city);
     setShowError(false);
   }
@@ -51,9 +50,9 @@ const LocationSelection = () => {
   ) : (
     <>
       {/* <BackButton /> */}
-      <PageBasedInput texts={texts} onSubmit={onSubmit}  style={{ marginTop:4,  border: "5px solid #1266af" }}>
+      <PageBasedInput texts={texts} onSubmit={onSubmit} style={{ marginTop: 4, border: "5px solid #1266af" }}>
         {/* <CardHeader>{t("CS_COMMON_CHOOSE_LOCATION")}</CardHeader> */}
-        <div  style={{ textAlign:"center" }}>{t("CS_COMMON_CHOOSE_LOCATION")}</div>
+        <div style={{ textAlign: "center" }}>{t("CS_COMMON_CHOOSE_LOCATION")}</div>
         <SearchOnRadioButtons {...RadioButtonProps} placeholder={t("COMMON_TABLE_SEARCH")} />
         {showError ? <CardLabelError>{t("CS_COMMON_LOCATION_SELECTION_ERROR")}</CardLabelError> : null}
         {/* <div class="row">

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { size } from "lodash";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Container } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import { Button, Form } from "react-bootstrap";
@@ -9,9 +9,10 @@ import { useQueryClient } from "react-query";
 import { useHistory, useParams } from "react-router-dom";
 import ApplicationDetailsActionBar from "../../../../../templates/ApplicationDetails/components/ApplicationDetailsActionBar";
 import ActionModal from "../../../../../templates/ApplicationDetails/Modal";
-// import { commoncolor, primarycolor } from "../../constants";
+import { ScrutinyRemarksContext } from "../../../../context/remarks-data-context";
+
 import ScrutitnyForms from "../ScrutinyBasic/ScutinyBasic";
-// import { useSearchParams } from "react-router-dom";
+
 
 
 const ScrutinyFormcontainer = (props) => {
@@ -25,9 +26,6 @@ const ScrutinyFormcontainer = (props) => {
 
 const {id} = useParams();
 
-  // const applicationNumber = "HR-TL-2022-12-07-000498"
-
-  // let applicationNumber = "";
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const state = Digit.ULBService.getStateId();
   const { t } = useTranslation();
@@ -39,13 +37,14 @@ const {id} = useParams();
   const [isEnableLoader, setIsEnableLoader] = useState(false);
   const [isWarningPop, setWarningPopUp ] = useState(false);
   const [showhide19, setShowhide19] = useState("true");
-  const [businessService, setBusinessService] = useState("NewTL");
+  const [businessService, setBusinessServices] = useState("NewTL");
   const [moduleCode,setModuleCode] = useState("TL")
   const [ scrutinyDetails, setScrutinyDetails] = useState();
   // const [applicationNumber,setApplicationNumber] = useState("");
   const [applicationDetails, setApplicationDetails] = useState();
   const [workflowDetails, setWorkflowDetails] = useState();
   const [applicationData,setApplicationData] = useState();
+  const {setBusinessService } = useContext(ScrutinyRemarksContext)
 
   const authToken = Digit.UserService.getUser()?.access_token || null;
 
@@ -75,10 +74,11 @@ const {id} = useParams();
       });
       console.log("Response From API1", Resp, Resp?.Licenses[0]?.applicationNumber,Resp?.Licenses[0]?.tradeLicenseDetail?.additionalDetail[0]);
       setScrutinyDetails(Resp?.Licenses[0]?.tradeLicenseDetail?.additionalDetail[0]);
-      // setApplicationNumber(Resp?.Licenses[0]?.applicationNumber);
-      // setApplicationNumber("HR-TL-2022-12-07-000498");
+      
       console.log("devDel123",Resp?.Licenses[0])
       setApplicationData(Resp?.Licenses[0]);
+      console.log("devDel1236",Resp?.Licenses[0]?.businessService)
+      setBusinessService(Resp?.Licenses[0]?.businessService);
     } catch (error) {
       console.log(error);
     }
@@ -100,10 +100,7 @@ const {id} = useParams();
 
 
   const {
-    // isLoading: updatingApplication,
-    // isError: updateApplicationError,
-    // data: updateResponse,
-    // error: updateError,
+    
     mutate,
   } = Digit.Hooks.tl.useApplicationActions(tenantId);
 
@@ -209,7 +206,8 @@ const {id} = useParams();
     console.log("log123...wrkflw",id,workflowDetailsTemp,scrutinyDetails,applicationDetails)
     if (workflowDetailsTemp?.data?.applicationBusinessService) {
       setWorkflowDetails(workflowDetailsTemp);
-      setBusinessService(workflowDetailsTemp?.data?.applicationBusinessService);
+      setBusinessServices(workflowDetailsTemp?.data?.applicationBusinessService);
+      
     }
   }, [workflowDetailsTemp?.data]);
   
@@ -255,46 +253,8 @@ const {id} = useParams();
       <Row style={{ top: 30, padding: "10px 22px" }}>
 
 
-
-        {/* <Form.Group className="mb-3" controlId="exampleForm.ControlInput1"> */}
-          {/* <Card>
-            <Card.Header style={{ fontSize: "17px", lineHeight: "18px", margin: "0px 15px" }}>
-              <Card.Title className="m-0" style={{ fontFamily: "Roboto", fontSize: 20, fontWeight: "bold", textAlign: "center" }}>Summary</Card.Title>
-            </Card.Header>
-            <Col xs={12} md={12}>
-              <Form.Label style={{ margin: 5 }}></Form.Label>
-              <textarea
-                class="form-control"
-                id="exampleFormControlTextarea1"
-                placeholder="Enter the Final Comments"
-                autoFocus
-                onChange={(e) => {
-                  setDeveloperRemarks({ data: e.target.value });
-
-                }}
-                rows="3"
-              />
-            </Col>
-          </Card> */}
-          {/* <div class="card">
-            <h5 class="card-header">Featured</h5>
-            <div class="card-body">
-              <h5 class="card-title">Special title treatment</h5>
-              <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-              <a href="#" class="btn btn-primary">
-                Go somewhere
-              </a>
-            </div>
-          </div> */}
-        {/* </Form.Group> */}
-        {/* <div class="col-md-6 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
-          <Button style={{ textAlign: "right" }}>Submit</Button>
-        </div> */}
         <Row>
-          {/* <div class="col-md-2 bg-light text-left" style={{ position: "relative", marginBottom: 30 }}>
-            <Button style={{ textAlign: "right" }}>Attach Documents</Button>
-           
-          </div> */}
+        
           <div class="col-md-10 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
           <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}>Submit</Button>
 

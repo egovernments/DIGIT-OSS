@@ -11,6 +11,7 @@ const ScrutinyRemarksProvider = ({ children }) => {
 
     const [remarksData, setRemarksData] = useState({});
     const [iconStates,setIconState]= useState(null);
+    const [bussinessService , setBusinessService] = useState("");
   
     const userInfo = Digit.UserService.getUser()?.info || {};
     const authToken = Digit.UserService.getUser()?.access_token || null;
@@ -18,6 +19,7 @@ const ScrutinyRemarksProvider = ({ children }) => {
 
 
     const handleGetRemarkssValues = async (applicationNumber) => {
+        console.log("logger1234...",applicationNumber)
         const dataToSend = {
             RequestInfo: {
                 apiId: "Rainmaker",
@@ -28,7 +30,7 @@ const ScrutinyRemarksProvider = ({ children }) => {
                 ts: 0,
                 ver: ".01",
                 authToken: authToken,
-                userInfo: userInfo,
+               
             },
         };
         try {
@@ -45,6 +47,7 @@ const ScrutinyRemarksProvider = ({ children }) => {
 
 
     const handleGetFiledsStatesById=async(applicationNumber)=>{
+        console.log("logger123...",applicationNumber)
         const dataToPass={
           "RequestInfo": {
               "api_id": "1",
@@ -75,7 +78,7 @@ const ScrutinyRemarksProvider = ({ children }) => {
 
 
     return (
-        <ScrutinyRemarksContext.Provider value={{remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues}}>
+        <ScrutinyRemarksContext.Provider value={{remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues,bussinessService,setBusinessService}}>
             {children}
         </ScrutinyRemarksContext.Provider>
     )

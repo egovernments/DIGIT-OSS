@@ -15,18 +15,22 @@ import "../../css/personalInfoChild.style.js";
 import { IconButton } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
+import { getDocShareholding } from "../../ScrutinyDevelopment/docview.helper";
 
 const SubmitNew = (props) => {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
   const [open2, setOpen2] = useState(false);
   const apiResponse = props.apiResponse;
-
   const handleshowhide = (event) => {
     const getuser = event.target.value;
 
     setShowhide(getuser);
   };
+  let user = Digit.UserService.getUser();
+  const userRoles = user?.info?.roles?.map((e) => e.code);
+  const showRemarks = userRoles.includes("AO_HQ");
 
   const {
     register,
@@ -38,7 +42,7 @@ const SubmitNew = (props) => {
   } = useForm({});
 
   const SubmitNew = (data) => console.log(data);
-
+  const item = props.ApiResponseData;
   const classes = useStyles();
   const currentRemarks = (data) => {
     props.showTable({ data: data.data });
@@ -70,12 +74,16 @@ const SubmitNew = (props) => {
     typeOfBg: Colors.info,
     amountInFig: Colors.info,
     amountInWords: Colors.info,
+    bgNumber: Colors.info,
     bankName: Colors.info,
-    memoNumber: Colors.info,
     validity: Colors.info,
+    claimPeriod: Colors.info,
+    originCountry: Colors.info,
+    indianBankAdvisedCertificate: Colors.info,
     uploadBg: Colors.info,
     licenseApplied: Colors.info,
-    consentLetter: Colors.info,
+    tcpSubmissionReceived: Colors.info,
+    existingBgNumber: Colors.info,
   });
 
   const fieldIdList = [
@@ -83,12 +91,16 @@ const SubmitNew = (props) => {
     { label: "Type of B.G", key: "typeOfBg" },
     { label: "Amount (in fig)", key: "amountInFig" },
     { label: "Amount (in words) ", key: "amountInWords" },
-    { label: "Bank Name", key: "bankName" },
-    { label: "Enter Memo No.", key: "memoNumber" },
-    { label: "Valid Upto", key: "validity" },
-    { label: "Upload B.G.", key: "uploadBg" },
+    { label: "Enter Bank Guarantee No.", key: "bgNumber" },
+    { label: "Enter Bank Name", key: "bankName" },
+    { label: "Expiry Date", key: "validity" },
+    { label: "Claim Period", key: "claimPeriod" },
+    { label: "Country of origin", key: "originCountry" },
+    { label: "Upload Bank Advice Certificate.", key: "indianBankAdvisedCertificate" },
+    { label: "Upload B.G. softcopy", key: "uploadBg" },
     { label: "Hardcopy Submitted at TCP office.", key: "licenseApplied" },
-    { label: "Upload Receipt of Submission.", key: "consentLetter" },
+    { label: "Upload Receipt of Submission.", key: "tcpSubmissionReceived" },
+    { label: "Existing B.G. No.", key: "existingBgNumber" },
   ];
 
   console.log("digit2", apiResponse);
@@ -135,6 +147,7 @@ const SubmitNew = (props) => {
                     <ReportProblemIcon
                       style={{
                         color: fieldIconColors.loiNumber,
+                        display: showRemarks ? "block" : "none",
                       }}
                       onClick={() => {
                         setOpennedModal("loiNumber");
@@ -165,21 +178,13 @@ const SubmitNew = (props) => {
                     <ReportProblemIcon
                       style={{
                         color: fieldIconColors.typeOfBg,
+                        display: showRemarks ? "block" : "none",
                       }}
                       onClick={() => {
                         setOpennedModal("typeOfBg");
                         setLabelValue("Type of B.G"), setSmShow(true), console.log("modal open"), setFieldValue(typeOfBg);
                       }}
                     ></ReportProblemIcon>
-                    <ModalChild
-                      labelmodal={labelValue}
-                      passmodalData={handlemodaldData}
-                      displaymodal={smShow}
-                      onClose={() => setSmShow(false)}
-                      selectedFieldData={selectedFieldData}
-                      fieldValue={fieldValue}
-                      remarksUpdate={currentRemarks}
-                    ></ModalChild>
                   </div>
                   {/* <select className="form-control" {...register("typeOfBg")}>
                     <option> IDW</option>
@@ -198,21 +203,13 @@ const SubmitNew = (props) => {
                     <ReportProblemIcon
                       style={{
                         color: fieldIconColors.amountInFig,
+                        display: showRemarks ? "block" : "none",
                       }}
                       onClick={() => {
                         setOpennedModal("amountInFig");
                         setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"), setFieldValue(amountInFig);
                       }}
                     ></ReportProblemIcon>
-                    <ModalChild
-                      labelmodal={labelValue}
-                      passmodalData={handlemodaldData}
-                      displaymodal={smShow}
-                      onClose={() => setSmShow(false)}
-                      selectedFieldData={selectedFieldData}
-                      fieldValue={fieldValue}
-                      remarksUpdate={currentRemarks}
-                    ></ModalChild>
                   </div>
                   {/* <input type="text" className="form-control" placeholder="" {...register("amountInFig")} /> */}
                 </Form.Group>
@@ -228,30 +225,45 @@ const SubmitNew = (props) => {
                     <ReportProblemIcon
                       style={{
                         color: fieldIconColors.amountInWords,
+                        display: showRemarks ? "block" : "none",
                       }}
                       onClick={() => {
                         setOpennedModal("amountInWords");
                         setLabelValue("Amount (in words)"), setSmShow(true), console.log("modal open"), setFieldValue(amountInWords);
                       }}
                     ></ReportProblemIcon>
-                    <ModalChild
-                      labelmodal={labelValue}
-                      passmodalData={handlemodaldData}
-                      displaymodal={smShow}
-                      onClose={() => setSmShow(false)}
-                      selectedFieldData={selectedFieldData}
-                      fieldValue={fieldValue}
-                      remarksUpdate={currentRemarks}
-                    ></ModalChild>
                   </div>
                   {/* <input type="text" className="form-control" placeholder="" {...register("amountInWords")} /> */}
                 </Form.Group>
               </Row>
+              <br></br>
               <Row className="col-12">
-                <Form.Group as={Col} controlId="formGridLicence">
+                <Col md={4} xxl lg="3">
                   <div>
                     <Form.Label>
-                      <h2>Bank Name </h2>
+                      <h2>Enter Bank Guarantee No. </h2>
+                    </Form.Label>
+                  </div>
+                  <div className={classes.fieldContainer}>
+                    <Form.Control className={classes.formControl} placeholder={apiResponse?.bgNumber} disabled></Form.Control>
+
+                    <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.bgNumber,
+                        display: showRemarks ? "block" : "none",
+                      }}
+                      onClick={() => {
+                        setOpennedModal("bgNumber");
+                        setLabelValue("Enter Bank Guarantee No."), setSmShow(true), console.log("modal open"), setFieldValue(bgNumber);
+                      }}
+                    ></ReportProblemIcon>
+                  </div>
+                  {/* <input type="text" className="form-control" placeholder="" {...register("bgNumber")} /> */}
+                </Col>
+                <Col md={4} xxl lg="3">
+                  <div>
+                    <Form.Label>
+                      <h2>Enter Bank Name </h2>
                     </Form.Label>
                   </div>
                   <div className={classes.fieldContainer}>
@@ -260,58 +272,21 @@ const SubmitNew = (props) => {
                     <ReportProblemIcon
                       style={{
                         color: fieldIconColors.bankName,
+                        display: showRemarks ? "block" : "none",
                       }}
                       onClick={() => {
                         setOpennedModal("bankName");
-                        setLabelValue("Bank Name"), setSmShow(true), console.log("modal open"), setFieldValue(bankName);
+                        setLabelValue("Enter Bank Name"), setSmShow(true), console.log("modal open"), setFieldValue(bankName);
                       }}
                     ></ReportProblemIcon>
-                    <ModalChild
-                      labelmodal={labelValue}
-                      passmodalData={handlemodaldData}
-                      displaymodal={smShow}
-                      onClose={() => setSmShow(false)}
-                      selectedFieldData={selectedFieldData}
-                      fieldValue={fieldValue}
-                      remarksUpdate={currentRemarks}
-                    ></ModalChild>
                   </div>
                   {/* <input type="text" className="form-control" placeholder="" {...register("bankName")} /> */}
-                </Form.Group>
-                <Form.Group as={Col} controlId="formGridLicence">
-                  <div>
-                    <Form.Label>
-                      <h2>Enter Memo No. </h2>
-                    </Form.Label>
-                  </div>
-                  <div className={classes.fieldContainer}>
-                    <Form.Control className={classes.formControl} placeholder={apiResponse?.memoNumber} disabled></Form.Control>
+                </Col>
 
-                    <ReportProblemIcon
-                      style={{
-                        color: fieldIconColors.memoNumber,
-                      }}
-                      onClick={() => {
-                        setOpennedModal("memoNumber");
-                        setLabelValue("Enter Memo No."), setSmShow(true), console.log("modal open"), setFieldValue(memoNumber);
-                      }}
-                    ></ReportProblemIcon>
-                    <ModalChild
-                      labelmodal={labelValue}
-                      passmodalData={handlemodaldData}
-                      displaymodal={smShow}
-                      onClose={() => setSmShow(false)}
-                      selectedFieldData={selectedFieldData}
-                      fieldValue={fieldValue}
-                      remarksUpdate={currentRemarks}
-                    ></ModalChild>
-                  </div>
-                  {/* <input type="text" className="form-control" placeholder="" {...register("enterMemoNumber")} /> */}
-                </Form.Group>
-                <Form.Group as={Col} controlId="formGridLicence">
+                <Col md={4} xxl lg="3">
                   <div>
                     <Form.Label>
-                      <h2>Valid Upto </h2>
+                      <h2>Expiry Date </h2>
                     </Form.Label>
                   </div>
                   <div className={classes.fieldContainer}>
@@ -320,114 +295,206 @@ const SubmitNew = (props) => {
                     <ReportProblemIcon
                       style={{
                         color: fieldIconColors.validity,
+                        display: showRemarks ? "block" : "none",
                       }}
                       onClick={() => {
                         setOpennedModal("validity");
-                        setLabelValue("Valid Upto"), setSmShow(true), console.log("modal open"), setFieldValue(validity);
+                        setLabelValue("Expiry Date"), setSmShow(true), console.log("modal open"), setFieldValue(validity);
                       }}
                     ></ReportProblemIcon>
-                    <ModalChild
-                      labelmodal={labelValue}
-                      passmodalData={handlemodaldData}
-                      displaymodal={smShow}
-                      onClose={() => setSmShow(false)}
-                      selectedFieldData={selectedFieldData}
-                      fieldValue={fieldValue}
-                      remarksUpdate={currentRemarks}
-                    ></ModalChild>
                   </div>
-                  {/* <input type="date" className="form-control" placeholder="" {...register("validity")} /> */}
-                </Form.Group>
-                <Form.Group as={Col} controlId="formGridLicence">
+                  {/* <input type="datepicker" className="form-control" placeholder="" {...register("expiryDate")} format="yyyy-MM-dd" /> */}
+                </Col>
+                <Col md={4} xxl lg="3">
                   <div>
                     <Form.Label>
-                      <h2>Upload B.G. </h2>
+                      <h2>Claim Period</h2>
                     </Form.Label>
                   </div>
-                  <div className="row">
-                    <div className="btn btn-sm col-md-3">
-                      <IconButton onClick={() => getDocShareholding(item?.uploadBg)}>
-                        <VisibilityIcon color="info" className="icon" />
+                  <div className={classes.fieldContainer}>
+                    <Form.Control className={classes.formControl} placeholder={apiResponse?.claimPeriod} disabled></Form.Control>
+
+                    <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.claimPeriod,
+                        display: showRemarks ? "block" : "none",
+                      }}
+                      onClick={() => {
+                        setOpennedModal("claimPeriod");
+                        setLabelValue("Claim Period"), setSmShow(true), console.log("modal open"), setFieldValue(claimPeriod);
+                      }}
+                    ></ReportProblemIcon>
+                  </div>
+                  {/* <select className="form-control" placeholder="" {...register("claimPeriod")}>
+                    <option> 0</option>
+                    <option>1</option>
+                    <option> 2</option>
+                    <option>3</option>
+                    <option> 4</option>
+                    <option>5</option>
+                    <option> 6</option>
+                    <option>7</option>
+                    <option> 8</option>
+                    <option>9</option>
+                    <option> 10</option>
+                    <option>11</option>
+                    <option> 12</option>
+                  </select> */}
+                </Col>
+              </Row>
+              <br></br>
+              <Row className="col-12">
+                <Col md={4} xxl lg="3">
+                  <div>
+                    <Form.Label>
+                      <h2>Country of origin</h2>
+                    </Form.Label>
+                  </div>
+                  <div className={classes.fieldContainer}>
+                    <Form.Control className={classes.formControl} placeholder={apiResponse?.originCountry} disabled></Form.Control>
+
+                    <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.originCountry,
+                        display: showRemarks ? "block" : "none",
+                      }}
+                      onClick={() => {
+                        setOpennedModal("originCountry");
+                        setLabelValue("Country of origin"), setSmShow(true), console.log("modal open"), setFieldValue(originCountry);
+                      }}
+                    ></ReportProblemIcon>
+                  </div>
+                  {/* <select className="form-control" placeholder="" {...register("countryOrigin")}>
+                    <option>------</option>
+                    <option value="1"> Indian</option>
+                    <option value="2">Foreign</option>
+                  </select> */}
+                  {apiResponse?.originCountry === "2" && (
+                    <div>
+                      <div className="row">
+                        <div className="col col-12">
+                          <p>In case of B.G. from other country, you need to upload Indian Bank Advice Certificate.</p>
+                        </div>
+                        <div className="col col-12">
+                          <label>
+                            <h2>
+                              Upload Bank Advice Certificate.
+                              <span style={{ color: "red" }}>*</span>
+                            </h2>
+                          </label>
+                          <div>
+                            <IconButton onClick={() => getDocShareholding(apiResponse?.indianBankAdvisedCertificate)}>
+                              <DownloadForOfflineIcon color="primary" className="mx-1" />
+                            </IconButton>
+                          </div>
+
+                          <div className={classes.fieldContainer}>
+                            {/* <Form.Control className={classes.formControl} placeholder={apiResponse?.licenseApplied} disabled></Form.Control> */}
+
+                            <ReportProblemIcon
+                              style={{
+                                color: fieldIconColors.indianBankAdvisedCertificate,
+                                display: showRemarks ? "block" : "none",
+                              }}
+                              onClick={() => {
+                                setOpennedModal("indianBankAdvisedCertificate");
+                                setLabelValue(" Upload B.G. softcopy"),
+                                  setSmShow(true),
+                                  console.log("modal open"),
+                                  setFieldValue(indianBankAdvisedCertificate);
+                              }}
+                            ></ReportProblemIcon>
+                          </div>
+
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.indianBankAdvisedCertificate && errors?.indianBankAdvisedCertificate?.message}
+                          </h3>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </Col>
+                <Col md={4} xxl lg="3">
+                  <div>
+                    <Form.Label>
+                      <h2>Upload B.G. softcopy</h2>
+                    </Form.Label>
+                  </div>
+                  <div>
+                    <div>
+                      <IconButton onClick={() => getDocShareholding(apiResponse?.uploadBg)}>
+                        <DownloadForOfflineIcon color="primary" className="mx-1" />
                       </IconButton>
                     </div>
-                    <div className="btn btn-sm col-md-3">
-                      <IconButton onClick={() => getDocShareholding(item?.uploadBg)}>
-                        <FileDownloadIcon color="info" className="icon" />
-                      </IconButton>
-                    </div>
-                    <div className="btn btn-sm col-md-4">
+
+                    <div className={classes.fieldContainer}>
+                      {/* <Form.Control className={classes.formControl} placeholder={apiResponse?.licenseApplied} disabled></Form.Control> */}
+
                       <ReportProblemIcon
                         style={{
                           color: fieldIconColors.uploadBg,
+                          display: showRemarks ? "block" : "none",
                         }}
                         onClick={() => {
                           setOpennedModal("uploadBg");
-                          setLabelValue("Upload B.G."), setSmShow(true), console.log("modal open"), setFieldValue(uploadBg);
+                          setLabelValue(" Upload B.G. softcopy"), setSmShow(true), console.log("modal open"), setFieldValue(uploadBg);
                         }}
                       ></ReportProblemIcon>
                     </div>
                   </div>
-                  {/* <input type="file" className="form-control" placeholder="" {...register("uploadBg")} /> */}
-                </Form.Group>
-              </Row>
-              <div className="row">
-                <div className="col col-12 ">
+                  {/* <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBg")} /> */}
+                </Col>
+                <Col md={4} xxl lg="3">
                   <div>
-                    <div className="form-check">
-                      <label>
-                        Hardcopy Submitted at TCP office.{" "}
-                        <label htmlFor="licenseApplied">
-                          <input {...register("licenseApplied")} type="radio" value="Y" id="licenseApplied" disabled />
-                          &nbsp; Yes &nbsp;&nbsp;
-                        </label>
-                        <label htmlFor="licenseApplied">
-                          <input
-                            {...register("licenseApplied")}
-                            type="radio"
-                            value="N"
-                            id="licenseApplied"
-                            className="btn btn-primary"
-                            onClick={() => setmodal1(true)}
-                            disabled
-                          />
-                          &nbsp; No &nbsp;&nbsp;
-                        </label>
-                        <div className={classes.fieldContainer}>
-                          <Form.Control className={classes.formControl} placeholder={apiResponse?.licenseApplied} disabled></Form.Control>
+                    <label>Hardcopy Submitted at TCP office. </label>
+                    <label htmlFor="licenseApplied">
+                      <input
+                        {...register("licenseApplied")}
+                        type="radio"
+                        checked={apiResponse?.licenseApplied === "Y" ? true : false}
+                        id="licenseApplied"
+                        onClick={() => setmodal1(true)}
+                        disabled
+                      />
+                      &nbsp; Yes &nbsp;&nbsp;
+                    </label>
+                    <label htmlFor="licenseApplied">
+                      <input
+                        {...register("licenseApplied")}
+                        type="radio"
+                        checked={apiResponse?.licenseApplied === "N" ? true : false}
+                        id="licenseApplied"
+                        className="btn btn-primary"
+                        disabled
+                      />
+                      &nbsp; No &nbsp;&nbsp;
+                    </label>
+                    <div className={classes.fieldContainer}>
+                      {/* <Form.Control className={classes.formControl} placeholder={apiResponse?.licenseApplied} disabled></Form.Control> */}
 
-                          <ReportProblemIcon
-                            style={{
-                              color: fieldIconColors.licenseApplied,
-                            }}
-                            onClick={() => {
-                              setOpennedModal("licenseApplied");
-                              setLabelValue(" Hardcopy Submitted at TCP office."),
-                                setSmShow(true),
-                                console.log("modal open"),
-                                setFieldValue(licenseApplied);
-                            }}
-                          ></ReportProblemIcon>
-                          <ModalChild
-                            labelmodal={labelValue}
-                            passmodalData={handlemodaldData}
-                            displaymodal={smShow}
-                            onClose={() => setSmShow(false)}
-                            selectedFieldData={selectedFieldData}
-                            fieldValue={fieldValue}
-                            remarksUpdate={currentRemarks}
-                          ></ModalChild>
-                        </div>
-                        <h3 className="error-message" style={{ color: "red" }}>
-                          {errors?.licenseApplied && errors?.licenseApplied?.message}
-                        </h3>
-                      </label>
+                      <ReportProblemIcon
+                        style={{
+                          color: fieldIconColors.licenseApplied,
+                          display: showRemarks ? "block" : "none",
+                        }}
+                        onClick={() => {
+                          setOpennedModal("licenseApplied");
+                          setLabelValue(" Hardcopy Submitted at TCP office."),
+                            setSmShow(true),
+                            console.log("modal open"),
+                            setFieldValue(licenseApplied);
+                        }}
+                      ></ReportProblemIcon>
                     </div>
+                    <h3 className="error-message" style={{ color: "red" }}>
+                      {errors?.licenseApplied && errors?.licenseApplied?.message}
+                    </h3>
                   </div>
 
-                  {watch("licenseApplied") === "Y" && (
+                  {apiResponse?.licenseApplied === "Y" && (
                     <div>
                       <div className="row">
-                        <div className="col col-4">
+                        <div className="col col-12">
                           <label>
                             <h2>
                               Upload Receipt of Submission.
@@ -435,42 +502,30 @@ const SubmitNew = (props) => {
                             </h2>
                           </label>
                           <div>
-                            <div className="row">
-                              <div className="btn btn-sm col-md-4">
-                                <IconButton onClick={() => getDocShareholding(item?.consentLetter)}>
-                                  <VisibilityIcon color="info" className="icon" />
-                                </IconButton>
-                              </div>
-                              <div className="btn btn-sm col-md-4">
-                                <IconButton onClick={() => getDocShareholding(item?.consentLetter)}>
-                                  <FileDownloadIcon color="info" className="icon" />
-                                </IconButton>
-                              </div>
-                              <div className="btn btn-sm col-md-4">
-                                <ReportProblemIcon
-                                  style={{
-                                    color: fieldIconColors.consentLetter,
-                                  }}
-                                  onClick={() => {
-                                    setOpennedModal("consentLetter");
-                                    setLabelValue("Upload Receipt of Submission."),
-                                      setSmShow(true),
-                                      console.log("modal open"),
-                                      setFieldValue(consentLetter);
-                                  }}
-                                ></ReportProblemIcon>
-                              </div>
-                            </div>
-                            {/* <input
-                              type="file"
-                              className="form-control"
-                              required
-                              onChange={(e) => getDocumentData(e?.target?.files[0], "consentLetter")}
-                            /> */}
+                            <IconButton onClick={() => getDocShareholding(apiResponse?.tcpSubmissionReceived)}>
+                              <DownloadForOfflineIcon color="primary" className="mx-1" />
+                            </IconButton>
+                          </div>
+                          <div className={classes.fieldContainer}>
+                            {/* <Form.Control className={classes.formControl} placeholder={apiResponse?.licenseApplied} disabled></Form.Control> */}
+
+                            <ReportProblemIcon
+                              style={{
+                                color: fieldIconColors.tcpSubmissionReceived,
+                                display: showRemarks ? "block" : "none",
+                              }}
+                              onClick={() => {
+                                setOpennedModal("tcpSubmissionReceived");
+                                setLabelValue(" Upload B.G. softcopy"),
+                                  setSmShow(true),
+                                  console.log("modal open"),
+                                  setFieldValue(tcpSubmissionReceived);
+                              }}
+                            ></ReportProblemIcon>
                           </div>
 
                           <h3 className="error-message" style={{ color: "red" }}>
-                            {errors?.consentLetter && errors?.consentLetter?.message}
+                            {errors?.tcpSubmissionReceived && errors?.tcpSubmissionReceived?.message}
                           </h3>
                         </div>
                       </div>
@@ -494,23 +549,33 @@ const SubmitNew = (props) => {
                       </Modal>
                     </div>
                   )}
-                </div>
-              </div>
-
-              {/* <div class="row">
-                <div class="col-sm-12 text-right">
-                  <button type="submit" id="btnClear" class="btn btn-primary btn-md center-block" style={{ marginBottom: "-44px" }}>
-                    Submit
-                  </button>
-                </div>
-                <div class="row">
-                  <div class="col-sm-12 text-right">
-                    <button id="btnSearch" class="btn btn-danger btn-md center-block" style={{ marginRight: "66px", marginTop: "-6px" }}>
-                      Cancel
-                    </button>
+                </Col>
+              </Row>
+              <br></br>
+              <Row className="col-12">
+                <Col md={4} xxl lg="3">
+                  <div>
+                    <Form.Label>
+                      <h2>Existing B.G. No. (In case of Replace, Extend and Renew, Enter B.G. No.)</h2>
+                    </Form.Label>
                   </div>
-                </div>
-              </div> */}
+                  <div className={classes.fieldContainer}>
+                    <Form.Control className={classes.formControl} placeholder={apiResponse?.existingBgNumber} disabled></Form.Control>
+
+                    <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.existingBgNumber,
+                        display: showRemarks ? "block" : "none",
+                      }}
+                      onClick={() => {
+                        setOpennedModal("existingBgNumber");
+                        setLabelValue("Existing B.G. No."), setSmShow(true), console.log("modal open"), setFieldValue(existingBgNumber);
+                      }}
+                    ></ReportProblemIcon>
+                  </div>
+                  {/* <input type="text" className="form-control" placeholder="" {...register("existingBgNumber")} /> */}
+                </Col>
+              </Row>
             </div>
           </Card>
         </div>
