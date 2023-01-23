@@ -106,9 +106,8 @@ const LandScheduleForm = (props) => {
       dataIndex: "validity",
     },
     {
-      key: "date",
       title: "Date ",
-      dataIndex: "date",
+      render: (data) => (data?.date ? data?.date : "N/A"),
     },
     {
       key: "areaAppliedmigration",
@@ -126,12 +125,6 @@ const LandScheduleForm = (props) => {
       title: "Area ",
       dataIndex: "area",
     },
-    {
-      key: "balanceOfParentLicence",
-      title: "Balance of Parent Licence ",
-      dataIndex: "balanceOfParentLicence",
-    },
-
     {
       title: "Action",
       dataIndex: "",
@@ -410,8 +403,8 @@ const LandScheduleForm = (props) => {
           businessId: applicantId,
           tenantId: "hr",
           moduleName: "TL",
-          action: "LANDSCHEDULE",
-          previousStatus: "PURPOSE",
+          action: "SENDBACK",
+          previousStatus: "INITIATED",
           comment: null,
         },
       ],
@@ -439,33 +432,13 @@ const LandScheduleForm = (props) => {
     if (id) getApplicantUserData(id);
   }, []);
 
-  const handleChange = (event) => {
-    const result = event.target.value.replace(/[^a-z]/gi, "");
-
-    setLitigationRemark(result);
-  };
-
   const LandScheduleModalData = (modaldata) => {
-    const test = modalData?.filter((item) => item?.rowid === specificTableData?.rowid);
-
-    const length = modalData?.length + 1;
-    modaldata["rowid"] = length.toString();
-    if (specificTableData?.rowid) {
-      const filteredRowData = modalData?.filter((item) => item?.rowid !== specificTableData?.rowid);
-      setModalData([...filteredRowData, modaldata]);
-    } else if (stepData?.LandScheduleDetails) {
-      setModalData([...stepData?.LandScheduleDetails, modaldata]);
-    } else {
-      setModalData((prev) => [...prev, modaldata]);
-    }
-    setSpecificTableData(null);
+    console.log(modaldata);
+    setModalData((prev) => [...prev, modaldata]);
     // resetValues();
     setmodal(false);
   };
 
-  useEffect(() => {
-    if (stepData?.LandScheduleDetails) setModalData(stepData?.LandScheduleDetails);
-  }, [stepData?.LandScheduleDetails]);
   return (
     <div>
       <ScrollToTop />
@@ -773,6 +746,10 @@ const LandScheduleForm = (props) => {
                       &nbsp;&nbsp; Gair/Marusi &nbsp;&nbsp;
                     </label>
                     <label htmlFor="encumburance">
+                      <input {...register("encumburance")} type="radio" value="loan" id="encumburance" />
+                      &nbsp;&nbsp; Loan &nbsp;&nbsp;
+                    </label>
+                    <label htmlFor="encumburance">
                       <input {...register("encumburance")} type="radio" value="anyOther" id="encumburance" />
                       &nbsp;&nbsp; Any Other &nbsp;&nbsp;
                     </label>
@@ -782,7 +759,7 @@ const LandScheduleForm = (props) => {
                     </label>
                     {watch("encumburance") === "rehan" && (
                       <div className="row ">
-                        <div className="col col-6">
+                        <div className="col col-4">
                           <label>
                             <h2>
                               Remark <span style={{ color: "red" }}>*</span>
@@ -790,11 +767,31 @@ const LandScheduleForm = (props) => {
                           </label>
                           <input type="text" className="form-control" {...register("rehanRemark")} />
                         </div>
+                        <div className="col col-6">
+                          <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"></h2> Document Upload{" "}
+                          <span style={{ color: "red" }}>*</span>
+                          <label>
+                            <FileUpload color="primary" />
+                            <input
+                              type="file"
+                              style={{ display: "none" }}
+                              accept="application/pdf/jpeg/png"
+                              onChange={(e) => getDocumentData(e?.target?.files[0], "rehanDoc")}
+                            />
+                          </label>
+                          {fileStoreId?.rehanDoc ? (
+                            <a onClick={() => getDocShareholding(fileStoreId?.rehanDoc)} className="btn btn-sm ">
+                              <VisibilityIcon color="info" className="icon" />
+                            </a>
+                          ) : (
+                            <p></p>
+                          )}
+                        </div>
                       </div>
                     )}
                     {watch("encumburance") === "patta" && (
                       <div className="row ">
-                        <div className="col col-6">
+                        <div className="col col-4">
                           <label>
                             <h2>
                               Remark <span style={{ color: "red" }}>*</span>
@@ -802,11 +799,31 @@ const LandScheduleForm = (props) => {
                           </label>
                           <input type="text" className="form-control" {...register("pattaRemark")} />
                         </div>
+                        <div className="col col-6">
+                          <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"></h2> Document Upload{" "}
+                          <span style={{ color: "red" }}>*</span>
+                          <label>
+                            <FileUpload color="primary" />
+                            <input
+                              type="file"
+                              style={{ display: "none" }}
+                              accept="application/pdf/jpeg/png"
+                              onChange={(e) => getDocumentData(e?.target?.files[0], "pattaDoc")}
+                            />
+                          </label>
+                          {fileStoreId?.pattaDoc ? (
+                            <a onClick={() => getDocShareholding(fileStoreId?.pattaDoc)} className="btn btn-sm ">
+                              <VisibilityIcon color="info" className="icon" />
+                            </a>
+                          ) : (
+                            <p></p>
+                          )}
+                        </div>
                       </div>
                     )}
                     {watch("encumburance") === "gair" && (
                       <div className="row ">
-                        <div className="col col-6">
+                        <div className="col col-4">
                           <label>
                             <h2>
                               Remark <span style={{ color: "red" }}>*</span>
@@ -814,11 +831,63 @@ const LandScheduleForm = (props) => {
                           </label>
                           <input type="text" className="form-control" {...register("gairRemark")} />
                         </div>
+                        <div className="col col-6">
+                          <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"></h2> Document Upload{" "}
+                          <span style={{ color: "red" }}>*</span>
+                          <label>
+                            <FileUpload color="primary" />
+                            <input
+                              type="file"
+                              style={{ display: "none" }}
+                              accept="application/pdf/jpeg/png"
+                              onChange={(e) => getDocumentData(e?.target?.files[0], "gairDoc")}
+                            />
+                          </label>
+                          {fileStoreId?.gairDoc ? (
+                            <a onClick={() => getDocShareholding(fileStoreId?.gairDoc)} className="btn btn-sm ">
+                              <VisibilityIcon color="info" className="icon" />
+                            </a>
+                          ) : (
+                            <p></p>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                    {watch("encumburance") === "loan" && (
+                      <div className="row ">
+                        <div className="col col-4">
+                          <label>
+                            <h2>
+                              Remark <span style={{ color: "red" }}>*</span>
+                            </h2>{" "}
+                          </label>
+                          <input type="text" className="form-control" {...register("loanRemark")} />
+                        </div>
+                        <div className="col col-6">
+                          <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"></h2> Document Upload{" "}
+                          <span style={{ color: "red" }}>*</span>
+                          <label>
+                            <FileUpload color="primary" />
+                            <input
+                              type="file"
+                              style={{ display: "none" }}
+                              accept="application/pdf/jpeg/png"
+                              onChange={(e) => getDocumentData(e?.target?.files[0], "loanDoc")}
+                            />
+                          </label>
+                          {fileStoreId?.loanDoc ? (
+                            <a onClick={() => getDocShareholding(fileStoreId?.loanDoc)} className="btn btn-sm ">
+                              <VisibilityIcon color="info" className="icon" />
+                            </a>
+                          ) : (
+                            <p></p>
+                          )}
+                        </div>
                       </div>
                     )}
                     {watch("encumburance") === "anyOther" && (
                       <div className="row ">
-                        <div className="col col-6">
+                        <div className="col col-4">
                           <label>
                             <h2>
                               Remark <span style={{ color: "red" }}>*</span>
@@ -826,17 +895,25 @@ const LandScheduleForm = (props) => {
                           </label>
                           <input type="text" className="form-control" {...register("anyOtherRemark")} />
                         </div>
-                      </div>
-                    )}
-                    {watch("encumburance") === "none" && (
-                      <div className="row ">
                         <div className="col col-6">
+                          <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"></h2> Document Upload{" "}
+                          <span style={{ color: "red" }}>*</span>
                           <label>
-                            <h2>
-                              Remark <span style={{ color: "red" }}>*</span>
-                            </h2>{" "}
+                            <FileUpload color="primary" />
+                            <input
+                              type="file"
+                              style={{ display: "none" }}
+                              accept="application/pdf/jpeg/png"
+                              onChange={(e) => getDocumentData(e?.target?.files[0], "anyOtherDoc")}
+                            />
                           </label>
-                          <input type="text" className="form-control" {...register("noneRemark")} />
+                          {fileStoreId?.anyOtherDoc ? (
+                            <a onClick={() => getDocShareholding(fileStoreId?.anyOtherDoc)} className="btn btn-sm ">
+                              <VisibilityIcon color="info" className="icon" />
+                            </a>
+                          ) : (
+                            <p></p>
+                          )}
                         </div>
                       </div>
                     )}
@@ -935,7 +1012,7 @@ const LandScheduleForm = (props) => {
                   <br></br>
                   <div>
                     <h6>
-                      (iii) Any insolvency/liquidation proceedings against the Land Owing Company/Develping Company.
+                      (iii) Any insolvency/liquidation proceedings against the Land Owing Company/Developer Company.
                       <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
                       <label htmlFor="insolvency">
                         <input {...register("insolvency")} type="radio" value="Y" id="insolvency" />
@@ -1075,7 +1152,7 @@ const LandScheduleForm = (props) => {
                     </div>
                     <div className="col col-3 ">
                       <h2 data-toggle="tooltip" data-placement="top" title="Watercourse running along boundary through the applied site ?">
-                        (c)&nbsp;Watercourse running <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                        (c)&nbsp;Watercourse <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="waterCourse">
@@ -1167,7 +1244,7 @@ const LandScheduleForm = (props) => {
                     </div>
                     <div className="col col-3 ">
                       <h2>
-                        (f)&nbsp;Acquisition status (Yes/No) <span style={{ color: "red" }}>*</span>
+                        (f)&nbsp;Acquisition status <span style={{ color: "red" }}>*</span>
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="acquistion">
@@ -1205,7 +1282,7 @@ const LandScheduleForm = (props) => {
                               {errors?.sectionSix && errors?.sectionSix?.message}
                             </h3>
                           </div>
-                          <div className="col col-12">
+                          {/* <div className="col col-12">
                             <label>
                               <h2>
                                 Date of Award <span style={{ color: "red" }}>*</span>{" "}
@@ -1215,7 +1292,7 @@ const LandScheduleForm = (props) => {
                             <h3 className="error-message" style={{ color: "red" }}>
                               {errors?.rewardDate && errors?.rewardDate?.message}
                             </h3>
-                          </div>
+                          </div> */}
                         </div>
                       )}
                     </div>
@@ -1483,7 +1560,7 @@ const LandScheduleForm = (props) => {
                         <div className="col col-12">
                           <div className="col col-3">
                             <label>
-                              <h2>(a)&nbsp;&nbsp;Width of Constructed ROW of plotted licenced colony</h2>{" "}
+                              <h2>(a)&nbsp;&nbsp;Width of Constructed ROW of plotted licenced colony (In meters)</h2>{" "}
                             </label>
                             <input type="text" {...register("constructedRowWidth")} className="form-control" />
                           </div>
@@ -1550,7 +1627,7 @@ const LandScheduleForm = (props) => {
                       {watch("approachFromProposedSector") === "Y" && (
                         <div>
                           <div className="col col-5">
-                            <label>(a)&nbsp;&nbsp;Width of sector road/ Development Plan Road</label>
+                            <label>(a)&nbsp;&nbsp;Width of sector road/ Development Plan Road (In meters)</label>
                             <input type="text" {...register("sectorAndDevelopmentWidth")} className="form-control" />
                           </div>
                           <h2>
@@ -1615,7 +1692,7 @@ const LandScheduleForm = (props) => {
                       {watch("approachFromInternalCirculation") === "Y" && (
                         <div>
                           <div className="col col-3">
-                            <label>(a)&nbsp;&nbsp;Width of internal circulation / sectoral plan road.</label>
+                            <label>(a)&nbsp;&nbsp;Width of internal circulation / sectoral plan road (In meters)</label>
                             <input type="text" {...register("internalAndSectoralWidth")} className="form-control" />
                           </div>
                           <h2>
@@ -1666,21 +1743,23 @@ const LandScheduleForm = (props) => {
                   </div>
                   <br></br>
                   <br></br>
-                  <div className="row">
-                    <div className="col col-12">
-                      <h2>
-                        (j)&nbsp;&nbsp;Whether approach from parent licence.<span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-                        <label htmlFor="parentLicenceApproach">
-                          <input {...register("parentLicenceApproach")} type="radio" value="Y" id="parentLicenceApproach" />
-                          &nbsp; Yes &nbsp;&nbsp;
-                        </label>
-                        <label htmlFor="parentLicenceApproach">
-                          <input {...register("parentLicenceApproach")} type="radio" value="N" id="parentLicenceApproach" />
-                          &nbsp; No &nbsp;&nbsp;
-                        </label>
-                      </h2>
+                  {watch("licenseApplied") === "Y" && (
+                    <div className="row">
+                      <div className="col col-12">
+                        <h2>
+                          (j)&nbsp;&nbsp;Whether approach from parent licence.<span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                          <label htmlFor="parentLicenceApproach">
+                            <input {...register("parentLicenceApproach")} type="radio" value="Y" id="parentLicenceApproach" />
+                            &nbsp; Yes &nbsp;&nbsp;
+                          </label>
+                          <label htmlFor="parentLicenceApproach">
+                            <input {...register("parentLicenceApproach")} type="radio" value="N" id="parentLicenceApproach" />
+                            &nbsp; No &nbsp;&nbsp;
+                          </label>
+                        </h2>
+                      </div>
                     </div>
-                  </div>
+                  )}
                   <br></br>
                   <br></br>
                   <div className="row">
@@ -1698,26 +1777,36 @@ const LandScheduleForm = (props) => {
                       </h2>
                     </div>
                     {watch("availableExistingApproach") === "Y" && (
-                      <div className="col col-3">
-                        <h2 style={{ display: "flex" }}>
-                          Upload document. <span style={{ color: "red" }}>*</span>
-                        </h2>
-                        <label>
-                          <FileUpload color="primary" />
-                          <input
-                            type="file"
-                            style={{ display: "none" }}
-                            onChange={(e) => getDocumentData(e?.target?.files[0], "availableExistingApproachDoc")}
-                            accept="application/pdf/jpeg/png"
-                          />
-                        </label>
-                        {fileStoreId?.availableExistingApproachDoc ? (
-                          <a onClick={() => getDocShareholding(fileStoreId?.availableExistingApproachDoc)} className="btn btn-sm ">
-                            <VisibilityIcon color="info" className="icon" />
-                          </a>
-                        ) : (
-                          <p></p>
-                        )}
+                      <div className="row">
+                        <div className="col col-4">
+                          <label>
+                            <h2>
+                              Remark <span style={{ color: "red" }}>*</span>
+                            </h2>
+                          </label>
+                          <input type="text" className="form-control" {...register("availableExistingApproachRemark")} />
+                        </div>
+                        <div className="col col-3">
+                          <h2 style={{ display: "flex" }}>
+                            Upload document. <span style={{ color: "red" }}>*</span>
+                          </h2>
+                          <label>
+                            <FileUpload color="primary" />
+                            <input
+                              type="file"
+                              style={{ display: "none" }}
+                              onChange={(e) => getDocumentData(e?.target?.files[0], "availableExistingApproachDoc")}
+                              accept="application/pdf/jpeg/png"
+                            />
+                          </label>
+                          {fileStoreId?.availableExistingApproachDoc ? (
+                            <a onClick={() => getDocShareholding(fileStoreId?.availableExistingApproachDoc)} className="btn btn-sm ">
+                              <VisibilityIcon color="info" className="icon" />
+                            </a>
+                          ) : (
+                            <p></p>
+                          )}
+                        </div>
                       </div>
                     )}
                   </div>
@@ -1912,7 +2001,7 @@ const LandScheduleForm = (props) => {
                           <div className="col col-12">
                             <label>
                               <h2>
-                                Width of Revenue rasta/road (in sqm)<span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                                Width of Revenue rasta/road (in ft.)<span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
                                 <CalculateIcon color="primary" />
                               </h2>
                             </label>
@@ -2007,7 +2096,7 @@ const LandScheduleForm = (props) => {
                           <div className="col col-12">
                             <label>
                               <h2>
-                                Width of row (in sqm) <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
+                                Width of ROW (in ft.) <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
                                 <CalculateIcon color="primary" />
                               </h2>
                             </label>
@@ -2346,7 +2435,6 @@ const LandScheduleForm = (props) => {
                   </Form.Label>
                 </div>
                 <input type="text" className="form-control" {...register("previousLicensenumber")} />
-
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.previousLicensenumber?.value && errors?.previousLicensenumber?.value?.message}
                 </h3>
