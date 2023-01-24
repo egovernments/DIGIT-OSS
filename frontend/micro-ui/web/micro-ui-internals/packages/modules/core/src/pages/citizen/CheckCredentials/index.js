@@ -54,22 +54,22 @@ export default function CheckCredentials() {
     sessionStorage.setItem("citizen.userRequestObject",JSON.stringify(response?.data?.Token?.UserRequest));
     console.log("SSoAUTH",response?.data?.Token?.access_token);
 
-    Digit.SessionStorage.set("citizen.userRequestObject", user);
-    Digit.UserService.setUser(user);
+    Digit.SessionStorage.set("citizen.userRequestObject", response?.data?.Token?.UserRequest);
+    Digit.UserService.setUser(response?.data?.Token?.UserRequest);
 
-    if (location.state?.role) {
-      const roleInfo = info.roles.find((userRole) => userRole.code === location.state.role);
-      if (!roleInfo || !roleInfo.code) {
-        setError(t("ES_ERROR_USER_NOT_PERMITTED"));
-        setTimeout(() => history.replace(DEFAULT_REDIRECT_URL), 5000);
-        return;
-      }
-    }
-    if(window?.globalConfigs?.getConfig("ENABLE_SINGLEINSTANCE")){
-    info.tenantId= Digit.ULBService.getStateId();
-    }
+    // if (location.state?.role) {
+    //   const roleInfo = info.roles.find((userRole) => userRole.code === location.state.role);
+    //   if (!roleInfo || !roleInfo.code) {
+    //     setError(t("ES_ERROR_USER_NOT_PERMITTED"));
+    //     setTimeout(() => history.replace(DEFAULT_REDIRECT_URL), 5000);
+    //     return;
+    //   }
+    // }
+    // if(window?.globalConfigs?.getConfig("ENABLE_SINGLEINSTANCE")){
+    // info.tenantId= Digit.ULBService.getStateId();
+    // }
 
-    setUser({ info, ...tokens });
+    // setUser({ info, ...tokens });
     // setCitizenDetail(user?.info,user?.access_token)
     // const redirectPath = location.state?.from || DEFAULT_REDIRECT_URL;
     // history.replace(redirectPath);

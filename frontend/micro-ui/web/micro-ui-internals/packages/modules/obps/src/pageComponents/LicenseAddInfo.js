@@ -1658,7 +1658,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                       </Modal>
                     </div>
                   </div>
-                </div>
+                </div> 
               )}
               {(showDevTypeFields && showDevTypeFields !== "Individual" && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Hindu Undivided Family" && showDevTypeFields !== "Others" && showDevTypeFields !== "Society" && showDevTypeFields !== "Firm" && showDevTypeFields !== "Limited Liability Partnership") && (
                 <div className="card mb-3">
