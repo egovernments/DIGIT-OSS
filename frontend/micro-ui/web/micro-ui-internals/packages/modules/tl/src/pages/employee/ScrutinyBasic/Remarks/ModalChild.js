@@ -7,8 +7,9 @@ import { useStyles } from "./styles/modalChild.style";
 import { useParams } from "react-router-dom";
 import { ScrutinyRemarksContext } from "../../../../../context/remarks-data-context";
 
+
 function ModalChild(props) {
-  const { handleGetFiledsStatesById, handleGetRemarkssValues } = useContext(ScrutinyRemarksContext);
+  const { handleGetFiledsStatesById, handleGetRemarkssValues , bussinessService} = useContext(ScrutinyRemarksContext,);
   const userInfo = Digit.UserService.getUser()?.info || {};
   const classes = useStyles();
   const smShow = props.displaymodal;
@@ -21,6 +22,7 @@ function ModalChild(props) {
   const dateTime = new Date();
   const authToken = Digit.UserService.getUser()?.access_token || null;
   const { id } = useParams();
+
 
   const handlemodalsubmit = async () => {
     if (status) {
@@ -48,6 +50,7 @@ function ModalChild(props) {
           serviceId: "123",
           documentId: null,
           ts: dateTime.toUTCString(),
+          bussinessServiceName : bussinessService
         },
       };
 

@@ -9,20 +9,15 @@ import { useQueryClient } from "react-query";
 import { useHistory, useParams } from "react-router-dom";
 import ApplicationDetailsActionBar from "../../../../../../../../templates/ApplicationDetails/components/ApplicationDetailsActionBar";
 import ActionModal from "../../../../../../../../templates/ApplicationDetails/Modal";
-import ReleaseCard from "../ReleaseBank/ReleaseCardBank";
+import ReleaseBank from "../ReleaseBank/ReleaseCardBank";
 // import { commoncolor, primarycolor } from "../../constants";
 // import ScrutitnyForms from "../ScrutinyBasic/ScutinyBasic";
 // import { useSearchParams } from "react-router-dom";
-
-const ScrutinyForm = (props) => {
-  // const [ApplicantFormshow, SetApplicantForm] = useState(true);
-  // const [PurposeFormshow, SetPurposeForm] = useState(false);
-  // const [LandScheduleFormshow, SetLandScheduleForm] = useState(false);
-  // const [AppliedDetailsFormshow, SetAppliedDetailsForm] = useState(false);
-  // const [FeesChargesFormshow, SetFeesChargesForm] = useState(false);
-
+const ReleaseForm = (props) => {
   const { id } = useParams();
 
+  const userInfo = Digit.UserService.getUser()?.info || {};
+  const authToken = Digit.UserService.getUser()?.access_token || null;
   // const applicationNumber = "HR-TL-2022-12-07-000498"
 
   // let applicationNumber = "";
@@ -43,10 +38,18 @@ const ScrutinyForm = (props) => {
   // const [applicationNumber,setApplicationNumber] = useState("");
   const [applicationDetails, setApplicationDetails] = useState();
   const [workflowDetails, setWorkflowDetails] = useState();
+  const [applicationData, setApplicationData] = useState();
 
-  const authToken = Digit.UserService.getUser()?.access_token || null;
+  const handleshow19 = (e) => {
+    const getshow = e.target.value;
+    setShowhide19(getshow);
+  };
+  const handleChange = (e) => {
+    this.setState({ isRadioSelected: true });
+  };
 
   const getScrutinyData = async () => {
+    console.log("log123... userInfo", authToken);
     let requestInfo = {
       RequestInfo: {
         apiId: "Rainmaker",
@@ -63,13 +66,15 @@ const ScrutinyForm = (props) => {
       const Resp = await axios.post(`/tl-services/bank/guarantee/_search?applicationNumber=${id}`, requestInfo).then((response) => {
         return response?.data;
       });
-      // console.log("Response From API1", Resp, Resp?.Licenses[0]?.applicationNumber, Resp?.Licenses[0]?.tradeLicenseDetail?.additionalDetail[0]);
-      // setScrutinyDetails(Resp?.Licenses[0]?.tradeLicenseDetail?.additionalDetail[0]);
-      console.log("Response From API1", Resp, Resp?.newBankGuaranteeList?.[0]);
+      //   console.log("Response From API1", Resp, Resp?.Licenses[0]?.applicationNumber,Resp);
+      // setScrutinyDetails(Resp?.electricPlanResponse?.[0]);
       setScrutinyDetails(Resp?.newBankGuaranteeList?.[0]);
-      setApplicationNumber(Resp?.newBankGuaranteeList?.[0]);
-      setApplicationDetails({ applicationData: Resp?.newBankGuaranteeList?.[0] });
-      // setApplicationNumber("HR-TL-2022-12-07-000498");Resp?.newBankGuaranteeList?.[0]
+      console.log("devDel123", Resp?.newBankGuaranteeList?.[0]);
+      setApplicationData(Resp?.newBankGuaranteeList?.[0]);
+      setApplicationDetails({
+        applicationData: Resp?.newBankGuaranteeList?.[0],
+        workflowCode: Resp?.newBankGuaranteeList?.[0].businessService,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -85,13 +90,13 @@ const ScrutinyForm = (props) => {
     config: { EditRenewalApplastModifiedTime: EditRenewalApplastModifiedTime },
   });
 
-  const applicationDetailsTemp = Digit.Hooks.tl.useApplicationDetail(t, tenantId, id);
+  // const applicationDetailsTemp = Digit.Hooks.tl.useApplicationDetail(t, tenantId, id);
 
   const {
-    // isLoading: updatingApplication,
-    // isError: updateApplicationError,
-    // data: updateResponse,
-    // error: updateError,
+    isLoading: updatingApplication,
+    isError: updateApplicationError,
+    data: updateResponse,
+    error: updateError,
     mutate,
   } = Digit.Hooks.tl.useApplicationActions(tenantId);
 
@@ -111,7 +116,6 @@ const ScrutinyForm = (props) => {
       }
     }
     setSelectedAction(action);
-    console.log("DelDev123...", action);
     setDisplayMenu(false);
   }
 
@@ -127,71 +131,41 @@ const ScrutinyForm = (props) => {
   };
 
   const submitAction = async (data, nocData = false, isOBPS = {}) => {
-    setIsEnableLoader(true);
-    if (typeof data?.customFunctionToExecute === "function") {
-      data?.customFunctionToExecute({ ...data });
-    }
-    if (nocData !== false && nocMutation) {
-      const nocPrmomises = nocData?.map((noc) => {
-        return nocMutation?.mutateAsync(noc);
-      });
-      try {
-        setIsEnableLoader(true);
-        const values = await Promise.all(nocPrmomises);
-        values &&
-          values.map((ob) => {
-            Digit.SessionStorage.del(ob?.Noc?.[0]?.nocType);
-          });
-      } catch (err) {
-        setIsEnableLoader(false);
-        let errorValue = err?.response?.data?.Errors?.[0]?.code
-          ? t(err?.response?.data?.Errors?.[0]?.code)
-          : err?.response?.data?.Errors?.[0]?.message || err;
-        closeModal();
-        setShowToast({ key: "error", error: { message: errorValue } });
-        setTimeout(closeToast, 5000);
-        return;
-      }
-    }
-    if (mutate) {
-      setIsEnableLoader(true);
-      mutate(data, {
-        onError: (error, variables) => {
-          setIsEnableLoader(false);
-          setShowToast({ key: "error", error });
-          setTimeout(closeToast, 5000);
+    console.log("logger log1223", data);
+
+    try {
+      let body = {
+        ...data,
+        RequestInfo: {
+          api_id: "1",
+          ver: "1",
+          ts: null,
+          action: "create",
+          did: "",
+          key: "",
+          msg_id: "",
+          requester_id: "",
+          authToken: authToken,
         },
-        onSuccess: (data, variables) => {
-          setIsEnableLoader(false);
-          if (isOBPS?.bpa) {
-            data.selectedAction = selectedAction;
-            history.replace(`/digit-ui/employee/obps/response`, { data: data });
-          }
-          if (isOBPS?.isStakeholder) {
-            data.selectedAction = selectedAction;
-            history.push(`/digit-ui/employee/obps/stakeholder-response`, { data: data });
-          }
-          if (isOBPS?.isNoc) {
-            history.push(`/digit-ui/employee/noc/response`, { data: data });
-          }
-          setShowToast({ key: "success", action: selectedAction });
-          setTimeout(closeToast, 5000);
-          queryClient.clear();
-          queryClient.refetchQueries("APPLICATION_SEARCH");
-        },
-      });
+      };
+      const response = await axios.post("/tl-services/bank/guarantee/_update", body);
+      console.log("Update API Response ====> ", response.data);
+    } catch (error) {
+      console.log("Update Error ===> ", error.message);
     }
 
     closeModal();
   };
 
-  useEffect(() => {
-    if (applicationDetailsTemp?.data) {
-      setApplicationDetails(applicationDetailsTemp?.data);
-    }
-  }, [applicationDetailsTemp?.data]);
+  // useEffect(()=>{
+  //   console.log("log123...applicationDetailsAPI",applicationDetailsTemp)
+  //   if(applicationDetailsTemp?.data){
+  //     setApplicationDetails(applicationDetailsTemp?.data)
+  //   }
+  // },[applicationDetailsTemp?.data])
 
   useEffect(() => {
+    console.log("log123...wrkflw", id, workflowDetailsTemp, scrutinyDetails, applicationDetails);
     if (workflowDetailsTemp?.data?.applicationBusinessService) {
       setWorkflowDetails(workflowDetailsTemp);
       setBusinessService(workflowDetailsTemp?.data?.applicationBusinessService);
@@ -199,104 +173,91 @@ const ScrutinyForm = (props) => {
   }, [workflowDetailsTemp?.data]);
 
   useEffect(() => {
+    console.log("Akash124");
     getScrutinyData();
   }, []);
 
   return (
     <Card>
-      <Row style={{ top: 25, padding: 5 }}>
-        <div className="ml-auto">
-          <h2>Application : {id}</h2>
-        </div>
-      </Row>
-      <Row style={{ top: 30, padding: 10 }}>
-        <ReleaseCard apiResponse={scrutinyDetails} applicationNumber={id} refreshScrutinyData={getScrutinyData}></ReleaseCard>
-      </Row>
-      <Row style={{ top: 30, padding: "10px 22px" }}>
-        {/* <Form.Group className="mb-3" controlId="exampleForm.ControlInput1"> */}
-        {/* <Card>
-            <Card.Header style={{ fontSize: "17px", lineHeight: "18px", margin: "0px 15px" }}>
-              <Card.Title className="m-0" style={{ fontFamily: "Roboto", fontSize: 20, fontWeight: "bold", textAlign: "center" }}>Summary</Card.Title>
-            </Card.Header>
-            <Col xs={12} md={12}>
-              <Form.Label style={{ margin: 5 }}></Form.Label>
-              <textarea
-                class="form-control"
-                id="exampleFormControlTextarea1"
-                placeholder="Enter the Final Comments"
-                autoFocus
-                onChange={(e) => {
-                  setDeveloperRemarks({ data: e.target.value });
-
-                }}
-                rows="3"
-              />
-            </Col>
-          </Card> */}
-        {/* <div class="card">
-            <h5 class="card-header">Featured</h5>
-            <div class="card-body">
-              <h5 class="card-title">Special title treatment</h5>
-              <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-              <a href="#" class="btn btn-primary">
-                Go somewhere
-              </a>
-            </div>
-          </div> */}
-        {/* </Form.Group> */}
-        {/* <div class="col-md-6 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
-          <Button style={{ textAlign: "right" }}>Submit</Button>
-        </div> */}
-        <Row>
-          {/* <div class="col-md-2 bg-light text-left" style={{ position: "relative", marginBottom: 30 }}>
-            <Button style={{ textAlign: "right" }}>Attach Documents</Button>
-           
-          </div> */}
-          <div class="col-md-10 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
-            {/* <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}>Submit</Button> */}
-
-            {showModal ? (
-              <ActionModal
-                t={t}
-                action={selectedAction}
-                tenantId={tenantId}
-                state={state}
-                id={id}
-                applicationDetails={applicationDetails}
-                applicationData={{
-                  ...applicationDetails?.applicationData,
-                  workflowCode: applicationDetails?.applicationData?.workflowCode || "BG_NEW",
-                }}
-                closeModal={closeModal}
-                submitAction={submitAction}
-                actionData={workflowDetails?.data?.timeline}
-                businessService={businessService}
-                workflowDetails={workflowDetails}
-                moduleCode={moduleCode}
-              />
-            ) : null}
-            {isWarningPop ? (
-              <ApplicationDetailsWarningPopup
-                action={selectedAction}
-                workflowDetails={workflowDetails}
-                businessService={businessService}
-                isWarningPop={isWarningPop}
-                closeWarningPopup={closeWarningPopup}
-              />
-            ) : null}
-            {/* <ApplicationDetailsToast t={t} showToast={showToast} closeToast={closeToast} businessService={businessService} /> */}
-            <ApplicationDetailsActionBar
-              workflowDetails={workflowDetails}
-              displayMenu={displayMenu}
-              onActionSelect={onActionSelect}
-              setDisplayMenu={setDisplayMenu}
-              businessService={businessService}
-              // forcedActionPrefix={forcedActionPrefix}
-              ActionBarStyle={{}}
-              MenuStyle={{}}
-            />
+      <Card.Header class="fw-normal" style={{ top: 5, padding: 5, fontSize: 14, height: 90, lineHeight: 2 }}>
+        <div className="row">
+          <div className="col-md-3">
+            <p>Application Number:</p>
+            <p class="fw-normal">{id}</p>
           </div>
-        </Row>
+          <div className="col-md-2">
+            <p>Service Id: </p>
+            <p class="fw-normal">{applicationData?.businessService}</p>
+          </div>
+          <div className="col-md-3">
+            <p>TCP Application Number:</p>
+            <p class="fw-normal">{applicationData?.tcpApplicationNumber}</p>
+          </div>
+          <div className="col-md-2">
+            <p>TCP Case Number:</p>
+            <p class="fw-normal">{applicationData?.tcpCaseNumber}</p>
+          </div>
+          <div className="col-md-2">
+            <p>TCP Dairy Number: </p>
+            <p class="fw-normal">{applicationData?.tcpDairyNumber}</p>
+          </div>
+        </div>
+      </Card.Header>
+      <Row style={{ top: 10, padding: 10 }}>
+        <ReleaseBank apiResponse={scrutinyDetails} applicationNumber={id} refreshScrutinyData={getScrutinyData}></ReleaseBank>
+        {/* <ElecticalBase
+         apiResponse={scrutinyDetails}
+         applicationNumber={id}
+         refreshScrutinyData={getScrutinyData}
+         ></ElecticalBase> */}
+      </Row>
+      {/* {JSON.stringify(scrutinyDetails)} */}
+      <Row style={{ top: 10, padding: "10px 22px" }}>
+        {/* <Row> */}
+
+        <div class="col-md-10 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
+          {showModal ? (
+            <ActionModal
+              t={t}
+              action={selectedAction}
+              tenantId={tenantId}
+              state={state}
+              id={id}
+              applicationDetails={applicationDetails}
+              applicationData={{
+                ...applicationDetails?.applicationData,
+                workflowCode: applicationDetails?.applicationData?.workflowCode || "BG_NEW",
+              }}
+              closeModal={closeModal}
+              submitAction={submitAction}
+              actionData={workflowDetails?.data?.timeline}
+              businessService={businessService}
+              workflowDetails={workflowDetails}
+              moduleCode={moduleCode}
+            />
+          ) : null}
+          {isWarningPop ? (
+            <ApplicationDetailsWarningPopup
+              action={selectedAction}
+              workflowDetails={workflowDetails}
+              businessService={businessService}
+              isWarningPop={isWarningPop}
+              closeWarningPopup={closeWarningPopup}
+            />
+          ) : null}
+
+          <ApplicationDetailsActionBar
+            workflowDetails={workflowDetails}
+            displayMenu={displayMenu}
+            onActionSelect={onActionSelect}
+            setDisplayMenu={setDisplayMenu}
+            businessService={businessService}
+            ActionBarStyle={{}}
+            MenuStyle={{}}
+          />
+        </div>
+
+        {/* </Row> */}
         <Row>
           <div class="col-md-12 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
             {/* <Button style={{ textAlign: "right" }}> <a href="http://localhost:3000/digit-ui/citizen/obps/Loi" >Generate LOI</a></Button> */}
@@ -316,4 +277,4 @@ const ScrutinyForm = (props) => {
   );
 };
 
-export default ScrutinyForm;
+export default ReleaseForm;

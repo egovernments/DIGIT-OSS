@@ -7,6 +7,7 @@ import BPAActionModal from "./BPAActionModal";
 import NOCActionModal from "./NOCActionModal";
 import ElectricalPlanModal from "./ElectricalPlanModal";
 import ServicePlanModal from "./ServicePlanModal";
+import BankGuaranteePlan from "./BankGuaranteePlan";
 
 const ActionModal = (props) => {
   if (props?.businessService.includes("PT")) {
@@ -20,6 +21,7 @@ const ActionModal = (props) => {
   if (props?.moduleCode.includes("BPAREG")) {
     return <BPAREGActionModal {...props} />;
   }
+
 
   if (props?.moduleCode.includes("BPA")) {
     return <BPAActionModal {...props} />;
@@ -35,6 +37,9 @@ const ActionModal = (props) => {
 
   if (props?.businessService.includes("SERVICE_PLAN")) {
     return <ServicePlanModal {...props} />;
+  }
+  if (props?.businessService.includes("BG_NEW")) {
+    return <BankGuaranteePlan {...props} />;
   }
   // return <FSMActionModal {...props} />;
 };

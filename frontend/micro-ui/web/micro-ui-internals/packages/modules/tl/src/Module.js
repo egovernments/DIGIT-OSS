@@ -1,4 +1,4 @@
-import { Header, CitizenHomeCard, CaseIcon, HomeLink } from "@egovernments/digit-ui-react-components";
+import { Header, CitizenHomeCard, CaseIcon, HomeLink, DocumentIconSolid } from "@egovernments/digit-ui-react-components";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useRouteMatch } from "react-router-dom";
@@ -26,6 +26,9 @@ import TLAcknowledgement from "./pages/citizen/Create/TLAcknowledgement";
 import MyApplications from "./pages/citizen/Applications/Application";
 import TradeLicenseList  from "./pages/citizen/Renewal/TradeLicenseList";
 import TLWFApplicationTimeline from "./pageComponents/TLWFApplicationTimeline";
+import SPApplications from "./pages/citizen/Applications/SPApplications";
+import EPApplications from "./pages/citizen/Applications/EPApllications";
+import BGApplications from "./pages/citizen/Applications/BGApplications";
 
 import TLOwnerDetailsEmployee from "./pageComponents/TLOwnerDetailsEmployee";
 import TLTradeDetailsEmployee from "./pageComponents/TLTradeDetailsEmployee";
@@ -75,22 +78,85 @@ export const TLLinks = ({ matchPath, userType }) => {
     clearParams();
   }, []);
 
-  const links = [
+
+  const propsForTLModule = {
+    header: t("ACTION_TEST_TRADE_LICENSE"),
+    links: [
+      {
+        link: `${matchPath}/tradelicence/new-application`,
+        i18nKey: t("TL_CREATE_TRADE"),
+      },
+      {
+        link: `${matchPath}/tradelicence/renewal-list`,
+        i18nKey: t("TL_RENEWAL_HEADER"),
+      },
+      {
+        link: `${matchPath}/tradelicence/my-application`,
+        i18nKey: t("TL_MY_APPLICATIONS_HEADER"),
+      },
+    ],
+    // Icon: <CaseIcon />
+  }  
+
+  const propsForServiceModuleCard = {
+    header: t("SERVICE_PLAN_CARD"),
+    links:[
+      {
+        link: `obps/servicePlan`,
+        i18nKey: t("SP_CREATE_TRADE"),
+      },
+      {
+        link: `${matchPath}/servicePlan/my-application`,
+        i18nKey: t("TL_MY_APPLICATIONS_HEADER"),
+      },
+    ],
+    // Icon: <DocumentIconSolid />
+  };
+
+  const propsForElectricModuleCard = {
+    header: t("ELECTRIC_PLAN_CARD"),
+   links: [
     {
-      link: `${matchPath}/tradelicence/new-application`,
-      i18nKey: t("TL_CREATE_TRADE"),
+      link: `obps/electricalPlan`,
+      i18nKey: t("EP_CREATE_TRADE"),
     },
     {
-      link: `${matchPath}/tradelicence/renewal-list`,
-      i18nKey: t("TL_RENEWAL_HEADER"),
-    },
-    {
-      link: `${matchPath}/tradelicence/my-application`,
+      link: `${matchPath}/electricPlan/my-application`,
       i18nKey: t("TL_MY_APPLICATIONS_HEADER"),
     },
-  ];
+   ],
+  //  Icon: <DocumentIconSolid />,
+  };
 
-  return <CitizenHomeCard header={t("ACTION_TEST_TRADE_LICENSE")} links={links} Icon={() => <CaseIcon className="fill-path-primary-main" />} />;
+  const propsForBankModuleCard = {
+    header: t("BANK_GUARANTEE_PLAN"),
+    links: [
+      {
+        link: `obps/SubmitNew`,
+        i18nKey: t("BG_CREATE_TRADE"),
+      },
+      {
+        link: `${matchPath}/bankGuarantee/my-application`,
+        i18nKey: t("TL_MY_APPLICATIONS_HEADER"),
+      },
+     ],
+    //  Icon: <DocumentIconSolid />,
+  };
+
+  const tlModuleProps = [propsForTLModule, propsForServiceModuleCard, propsForElectricModuleCard, propsForBankModuleCard]
+  
+
+  return (
+    <React.Fragment>
+      {
+        tlModuleProps.map((propsForModuleCard, index) => <CitizenHomeCard key={index} Icon={() => <CaseIcon className="fill-path-primary-main" />} {...propsForModuleCard} />)
+      }
+      {/* <CitizenHomeCard header={t("ACTION_TEST_TRADE_LICENSE")} links={links} Icon={() => <CaseIcon className="fill-path-primary-main" />} />; */}
+    </React.Fragment>
+
+  )
+  
+  // <CitizenHomeCard header={t("ACTION_TEST_TRADE_LICENSE")} links={links} Icon={() => <CaseIcon className="fill-path-primary-main" />} />;
 };
 
 const componentsToRegister = {
@@ -120,6 +186,9 @@ const componentsToRegister = {
   TLAcknowledgement,
   TradeLicenseList,
   MyApplications,
+  SPApplications,
+  EPApplications,
+  BGApplications,
   TLOwnerDetailsEmployee,
   TLTradeDetailsEmployee,
   TLTradeUnitsEmployee,

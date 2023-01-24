@@ -175,6 +175,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
   const [showhide, setShowhide] = useState("No");
 
   function setGenderName(value) {
+    console.log("GENDER", value);
     setGender(value);
   }
   function selectPanNumber(e) {
@@ -240,26 +241,25 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                 from: "2022-10-08T06:21:51.321Z",
                 to: "2022-10-08T06:21:51.321Z",
               },
-              frequency: {
-                unit: "string",
-                value: 0,
-                repeats: 0,
-              },
-            },
+              "frequency": {
+                "unit": "string",
+                "value": 0,
+                "repeats": 0
+              }
+            }
           },
-          signature: {
-            signature: "string",
-          },
-        },
-      };
-      const panResp = await axios.post(`/certificate/v3/pan/pancr`, panVal, {
-        headers: {
-          "Content-Type": "application/json",
-          "X-APISETU-APIKEY": "PDSHazinoV47E18bhNuBVCSEm90pYjEF",
-          "X-APISETU-CLIENTID": "in.gov.tcpharyana",
-          "Access-Control-Allow-Origin": "*",
-        },
-      });
+          "signature": {
+            "signature": "string"
+          }
+        }
+      }
+      const panResp = await axios.post(`/certificate/v3/pan/pancr`,panVal, {headers:{
+        'Content-Type': 'application/json',
+        'X-APISETU-APIKEY':'PDSHazinoV47E18bhNuBVCSEm90pYjEF',
+        'X-APISETU-CLIENTID':'in.gov.tcpharyana',
+        'Access-Control-Allow-Origin':"*",
+      }}) 
+      // console.log("",panResp.data);
       setPanIsValid(true);
       setPanValError("");
       setLoading(false);
