@@ -35,6 +35,10 @@
     "deploy:jenkins": "./scripts/jenkins.sh",
     "clean": "rm -rf node_modules"
   },
+  "resolutions": {
+    "**/@babel/runtime": "7.20.1",
+    "**/babel-preset-react-app":"10.0.0"
+  },
   "devDependencies": {
     "husky": "7.0.4",
     "lint-staged": "12.3.7",
