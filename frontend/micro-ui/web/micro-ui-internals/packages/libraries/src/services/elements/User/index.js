@@ -120,7 +120,7 @@ export const UserService = {
   },
   userSearch: async (tenantId, data, filters) => {
     return Request({
-      url: Urls.UserSearch,
+      url: Urls.UserSearch, 
       params: { ...filters },
       method: "POST",
       auth: true,
