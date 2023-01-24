@@ -54,7 +54,7 @@ export default function CheckCredentials() {
 
     Digit.SessionStorage.set("citizen.userRequestObject", user);
     Digit.UserService.setUser(user);
-    setCitizenDetail(user?.info,user?.access_token,stateCode)
+    setCitizenDetail(user?.info,user?.access_token)
     const redirectPath = location.state?.from || DEFAULT_REDIRECT_URL;
     history.replace(redirectPath);
     // console.log("SSoAUTHTOKEN",response?.data);
