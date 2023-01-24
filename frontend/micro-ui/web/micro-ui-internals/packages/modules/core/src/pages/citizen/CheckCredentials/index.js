@@ -57,11 +57,11 @@ export default function CheckCredentials() {
     Digit.SessionStorage.set("citizen.userRequestObject", user);
     Digit.UserService.setUser(user);
     // setCitizenDetail(user?.info,user?.access_token)
-    const redirectPath = location.state?.from || DEFAULT_REDIRECT_URL;
-    history.replace(redirectPath);
+    // const redirectPath = location.state?.from || DEFAULT_REDIRECT_URL;
+    // history.replace(redirectPath);
     // console.log("SSoAUTHTOKEN",response?.data);
     // console.log("_ssoCitizen response ",response.data)
-    // window.open(response?.data?.ReturnUrl,"_self");
+    window.open(response?.data?.ReturnUrl,"_self");
 
     // redirectReturnUrl();
     // setCitizenDetail(user?.info,user?.access_token)
