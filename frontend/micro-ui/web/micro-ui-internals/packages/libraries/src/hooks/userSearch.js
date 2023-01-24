@@ -6,3 +6,4 @@ export const useUserSearch = (tenantId, data, filters, options = {}) => {
   const queryData = useQuery(["USER_SEARCH", filters, data], () => UserService.userSearch(tenantId, data, filters), options);
   return { ...queryData, revalidate: () => client.invalidateQueries(["USER_SEARCH", filters, data]) };
 };
+ 
