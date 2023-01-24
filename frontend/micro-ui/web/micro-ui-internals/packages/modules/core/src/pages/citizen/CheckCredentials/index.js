@@ -7,10 +7,18 @@ import { useHistory, useLocation } from "react-router-dom";
 
 const DEFAULT_REDIRECT_URL = "/digit-ui/citizen";
 
-// const setCitizenDetail=(userObject,token,tenantId)=>{
-//   let locale=JSON.parse(sessionStorage.getItem("Digit.initData"))?.value?.selectedLanguage;
-  
-// }
+const setCitizenDetail=(userObject,token,tenantId)=>{
+  let locale=JSON.parse(sessionStorage.getItem("Digit.initData"))?.value?.selectedLanguage;
+  localStorage.setItem("Citizen.tenant-id",tenantId);
+  localStorage.setItem("tenant-id",tenantId);
+  localStorage.setItem("citizen.userRequestObject",JSON.stringify(userObject));
+  localStorage.setItem("locale",locale);
+  localStorage.setItem("Citizen.locale",locale);
+  localStorage.setItem("token",token);
+  localStorage.setItem("Citizen.token",token);
+  localStorage.setItem("user-info",JSON.stringify(userObject));
+  localStorage.setItem("Citizen.user-info",JSON.stringify(userObject));  
+}
 
 export default function CheckCredentials() {
   const location = useLocation();
