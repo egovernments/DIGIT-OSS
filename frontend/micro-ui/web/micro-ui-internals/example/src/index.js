@@ -2,18 +2,19 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import { initLibraries } from "@egovernments/digit-ui-libraries";
-import { initDSSComponents } from "@egovernments/digit-ui-module-dss";
+import { paymentConfigs, PaymentLinks, PaymentModule } from "@egovernments/digit-ui-module-common";
 import { DigitUI } from "@egovernments/digit-ui-module-core";
+import { initDSSComponents } from "@egovernments/digit-ui-module-dss";
+import { initEngagementComponents } from "@egovernments/digit-ui-module-engagement";
+import { initHRMSComponents } from "@egovernments/digit-ui-module-hrms";
+
 import "@egovernments/digit-ui-ifix-css/example/index.css";
 
-import { pgrCustomizations  } from "./pgr";
+import { pgrCustomizations } from "./pgr";
 
 var Digit = window.Digit || {};
 
-const enabledModules = [
-  "DSS",
-  "NDSS"
-];
+const enabledModules = ["Payment", "QuickPayLinks", "DSS", "HRMS", "Engagement", "NDSS"];
 
 const initTokens = (stateCode) => {
   const userType = window.sessionStorage.getItem("userType") || process.env.REACT_APP_USER_TYPE || "CITIZEN";
@@ -45,11 +46,14 @@ const initDigitUI = () => {
   window.contextPath = window?.globalConfigs?.getConfig("CONTEXT_PATH") || "digit-ui";
 
   window?.Digit.ComponentRegistryService.setupRegistry({
-    // ...pgrComponents,
+    PaymentModule,
+    ...paymentConfigs,
+    PaymentLinks,
   });
 
-  
   initDSSComponents();
+  initHRMSComponents();
+  initEngagementComponents();
 
   const moduleReducers = (initData) => initData;
 

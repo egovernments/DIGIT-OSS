@@ -36,12 +36,7 @@ import DocumentsPreview from "./DocumentsPreview";
 import InfoDetails from "./InfoDetails";
 import ViewBreakup from "./ViewBreakup";
 import SubWorkTableDetails from "./SubWorkTableDetails";
-import WeekAttendence from "../../../AttendenceMgmt/src/pageComponents/WeekAttendence";
-import reducer from "../../../AttendenceMgmt/src/config/attendenceTableReducer";
-import AttendanceDateRange from "../../../AttendenceMgmt/src/pageComponents/AttendanceDateRange";
-import MustorRollDetailsTable from "../../../Expenditure/src/components/ViewBill/MustorRollDetailsTable";
-import StatusTableWithRadio from "../../../Expenditure/src/components/ViewBill/StatusTableWithRadio";
-import ShowTotalValue from "../../../Expenditure/src/components/ViewBill/ShowTotalValue";
+
 
 
 function ApplicationDetailsContent({
@@ -64,8 +59,6 @@ function ApplicationDetailsContent({
   const { t } = useTranslation();
   const [localSearchParams, setLocalSearchParams] = useState(() => ({}));
   
-  const attendanceData = applicationDetails?.applicationDetails[0].additionalDetails?.table?.weekTable?.tableData
-  const [state, dispatch] = useReducer(reducer, attendanceData);
 
   const handleDateRangeChange = useCallback((data) => {
     setLocalSearchParams(() => ({ ...data }));
@@ -361,36 +354,18 @@ function ApplicationDetailsContent({
                 })}
             </StatusTable>
           </div>
-          {detail?.additionalDetails?.statusWithRadio ? (
-            <StatusTableWithRadio
-              config={detail?.additionalDetails?.statusWithRadio?.radioConfig}
-              customClass={detail?.additionalDetails?.statusWithRadio?.customClass}
-            ></StatusTableWithRadio>
-          ) : null}
-          {detail?.additionalDetails?.dateRange ? (
-            <AttendanceDateRange
-              t={t}
-              values={localSearchParams?.range}
-              onFilterChange={handleDateRangeChange}
-              {...detail?.additionalDetails?.dateRange}
-            ></AttendanceDateRange>
-          ) : null}
+   
+          
           {detail?.additionalDetails?.table
             ? detail?.additionalDetails?.table?.weekTable?.tableHeader && (
                 <>
                   <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px", fontSize: "24px" }}>
                     {t(detail?.additionalDetails?.table?.weekTable?.tableHeader)}
                   </CardSectionHeader>
-                  {detail?.additionalDetails?.table.weekTable.renderTable && <WeekAttendence state={state} dispatch={dispatch} modify={modify} setSaveAttendanceState={setSaveAttendanceState} weekDates={detail?.additionalDetails?.table.weekTable.weekDates}/>}
                 </>
               )
             : null}
-            {detail?.additionalDetails?.table
-              ? detail?.additionalDetails?.table?.mustorRollTable && (
-                <MustorRollDetailsTable></MustorRollDetailsTable>
-                )
-            : null}
-            {detail?.additionalDetails?.showTotal && <ShowTotalValue topBreakLine={detail?.additionalDetails?.showTotal?.topBreakLine} bottomBreakLine={detail?.additionalDetails?.showTotal?.bottomBreakLine} label={detail?.additionalDetails?.showTotal?.label} value={detail?.additionalDetails?.showTotal?.value}></ShowTotalValue>}
+            
           {detail?.additionalDetails?.inspectionReport && (
             <ScruntinyDetails scrutinyDetails={detail?.additionalDetails} paymentsList={paymentsList} />
           )}
