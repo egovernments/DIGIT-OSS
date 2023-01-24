@@ -45,7 +45,9 @@ export default function CheckCredentials() {
     Digit.SessionStorage.set("citizen.userRequestObject", response?.data?.Token?.UserRequest);
     Digit.UserService.setUser(response?.data?.Token?.UserRequest);
 
-    
+    const usersResponse = await Digit.UserService.userSearch(response?.data?.Token?.UserRequest?.tenantId, { uuid: [response?.data?.Token?.UserRequest?.uuid] }, {});
+      console.log("GETUSER",usersResponse);
+      setUser(usersResponse);
     
     
 
@@ -79,7 +81,7 @@ export default function CheckCredentials() {
   }
   useEffect(() => {
     checkCrednetials();
-    getUSERCall();
+    // getUSERCall();
   }, []); 
 
   const getUSERCall = async () =>  {
@@ -98,7 +100,7 @@ export default function CheckCredentials() {
       // const respon = await axios.post(`/user/_search?`,apiData);
       const usersResponse = await Digit.UserService.userSearch(response?.data?.Token?.UserRequest?.tenantId, { uuid: [response?.data?.Token?.UserRequest?.uuid] }, {});
       console.log("GETUSER",usersResponse);
-      setUser(respon);
+      setUser(usersResponse);
     }catch (err){
       console.log(err);
     }
