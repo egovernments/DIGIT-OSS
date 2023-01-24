@@ -37,10 +37,10 @@ export default function CheckCredentials() {
     localStorage.setItem("user-info",JSON.stringify(response?.data?.Token?.UserRequest));
     localStorage.setItem("Citizen.user-info",JSON.stringify(response?.data?.Token?.UserRequest));  
     sessionStorage.setItem("citizen.userRequestObject",JSON.stringify(response?.data?.Token?.UserRequest));
-    // console.log("SSoAUTH",response?.data);
+    console.log("SSoAUTH",response?.data?.Token?.access_token);
     // console.log("SSoAUTHTOKEN",response?.data);
     // console.log("_ssoCitizen response ",response.data)
-    window.open(response?.data?.ReturnUrl,"_self");
+    // window.open(response?.data?.ReturnUrl,"_self");
 
     // redirectReturnUrl();
     // setCitizenDetail(user?.info,user?.access_token)
