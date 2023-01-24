@@ -63,7 +63,7 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
   useEffect(() => {
     if (!user) {
       return;
-    }
+    } 
     Digit.SessionStorage.set("citizen.userRequestObject", user);
     Digit.UserService.setUser(user);
     setCitizenDetail(user?.info,user?.access_token,stateCode)
