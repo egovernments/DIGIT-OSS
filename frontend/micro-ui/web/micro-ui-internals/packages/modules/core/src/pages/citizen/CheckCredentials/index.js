@@ -12,7 +12,7 @@ import { useHistory, useLocation } from "react-router-dom";
 export default function CheckCredentials() {
   const history = useHistory();
   const queryParameters = new URLSearchParams(window.location.search);
-  const [user, setUser] = useState(null);
+  // const [user, setUser] = useState(null);
   const checkCrednetials = async () => {
     const body = {
       "SsoCitizen": {
