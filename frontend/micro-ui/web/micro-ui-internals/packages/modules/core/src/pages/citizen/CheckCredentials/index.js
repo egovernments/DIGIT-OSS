@@ -16,18 +16,18 @@ export default function CheckCredentials() {
   const queryParameters = new URLSearchParams(window.location.search);
   // const [user, setUser] = useState(null);
 
-  const setCitizenDetail=(userObject,token,tenantId)=>{
-    let locale=JSON.parse(sessionStorage.getItem("Digit.initData"))?.value?.selectedLanguage;
-    localStorage.setItem("Citizen.tenant-id",tenantId);
-    localStorage.setItem("tenant-id",tenantId);
-    localStorage.setItem("citizen.userRequestObject",JSON.stringify(userObject));
-    localStorage.setItem("locale",locale);
-    localStorage.setItem("Citizen.locale",locale);
-    localStorage.setItem("token",token);
-    localStorage.setItem("Citizen.token",token);
-    localStorage.setItem("user-info",JSON.stringify(userObject));
-    localStorage.setItem("Citizen.user-info",JSON.stringify(userObject));  
-  }
+  // const setCitizenDetail=(userObject,token,tenantId)=>{
+  //   let locale=JSON.parse(sessionStorage.getItem("Digit.initData"))?.value?.selectedLanguage;
+  //   localStorage.setItem("Citizen.tenant-id",tenantId);
+  //   localStorage.setItem("tenant-id",tenantId);
+  //   localStorage.setItem("citizen.userRequestObject",JSON.stringify(userObject));
+  //   localStorage.setItem("locale",locale);
+  //   localStorage.setItem("Citizen.locale",locale);
+  //   localStorage.setItem("token",token);
+  //   localStorage.setItem("Citizen.token",token);
+  //   localStorage.setItem("user-info",JSON.stringify(userObject));
+  //   localStorage.setItem("Citizen.user-info",JSON.stringify(userObject));  
+  // }
   const checkCrednetials = async () => {
     const body = {
       "SsoCitizen": {
@@ -56,7 +56,7 @@ export default function CheckCredentials() {
 
     Digit.SessionStorage.set("citizen.userRequestObject", user);
     Digit.UserService.setUser(user);
-    setCitizenDetail(user?.info,user?.access_token)
+    // setCitizenDetail(user?.info,user?.access_token)
     const redirectPath = location.state?.from || DEFAULT_REDIRECT_URL;
     history.replace(redirectPath);
     // console.log("SSoAUTHTOKEN",response?.data);
