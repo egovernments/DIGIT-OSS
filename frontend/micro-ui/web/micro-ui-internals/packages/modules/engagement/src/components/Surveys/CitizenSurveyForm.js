@@ -1,12 +1,12 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { ActionBar, Header, Loader, SubmitBar } from "@egovernments/digit-ui-react-components";
+import { ActionBar, Header, Loader, SubmitBar, Toast } from "@egovernments/digit-ui-react-components";
 
 import CitizenSurveyQuestion from "./CitizenSurveyQuestion";
 import { useTranslation } from "react-i18next";
 
 
-const CitizenSurveyForm = ({ surveyData, onFormSubmit,submitDisabled,formDisabled,formDefaultValues,isLoading }) => {
+const CitizenSurveyForm = ({ surveyData, onFormSubmit,submitDisabled,formDisabled,formDefaultValues,isLoading, showToast, isSubmitDisabled }) => {
   //need to disable this form and fill with default values if formDisabled is true
   const {
     register: registerRef,
@@ -30,9 +30,9 @@ const CitizenSurveyForm = ({ surveyData, onFormSubmit,submitDisabled,formDisable
       <Header>{surveyData?.title?.toUpperCase()}</Header>
       <form onSubmit={handleSurveyFormSubmit(onFormSubmit)}>
         {surveyData.questions.length ? surveyData.questions.map((config, index) => <CitizenSurveyQuestion key={index} t={t} question={config} control={controlSurveyForm} register={registerRef} values={getSurveyFormValues} formState={surveyFormState} formDisabled={formDisabled}/>) : null}
-
+        {showToast && <Toast error={showToast.key} label={t(showToast.label)} />}
         <ActionBar>
-          {!submitDisabled && <SubmitBar label={t("CS_SUBMIT_SURVEY")} submit="submit" />}
+          {!submitDisabled && <SubmitBar disabled={isSubmitDisabled} label={t("CS_SUBMIT_SURVEY")} submit="submit" />}
         </ActionBar>
       </form>
     </div>

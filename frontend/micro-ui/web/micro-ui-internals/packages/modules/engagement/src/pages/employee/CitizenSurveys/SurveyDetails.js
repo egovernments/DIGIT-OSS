@@ -154,7 +154,7 @@ const SurveyDetails = ({ location, match }) => {
     try{
       let filters = {tenantIds : tenantIds[0]?.code ? tenantIds[0]?.code : surveyData.tenantId.code, title : title}
       Digit.Surveys.search(filters).then((ob) => {
-        if(ob?.Surveys?.length>0)
+        if(ob?.Surveys?.length>0 && data?.title !== surveyData?.title)
         {
           setShowToast({ key: true, label: "SURVEY_SAME_NAME_SURVEY_ALREADY_PRESENT" });
         }

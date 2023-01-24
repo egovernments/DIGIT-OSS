@@ -45,7 +45,7 @@ const getUserData = async (data,tenant) => {
     //getting user data from citizen uuid
     userresponse = await Promise.all(userresponse);
     userresponse && userresponse?.length>0 && userresponse.map((ob) => {
-        obj[ob?.user?.[0]?.mobileNumber] = obj[ob?.user?.[0]?.emailId]
+        obj[ob?.user?.[0]?.mobileNumber] = ob?.user?.[0]?.emailId
     })
     return obj;
 }
