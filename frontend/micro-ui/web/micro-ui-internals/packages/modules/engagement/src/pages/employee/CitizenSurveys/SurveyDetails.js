@@ -18,7 +18,7 @@ const filterQuestion = (question) => {
   // if (question.type !== "Multiple Choice" || question.type !== "Check Boxes") {
   //   delete question.options;
   // }
-  return { ...question, type: answerTypeEnum[question.type],options:question?.options };
+  return { ...question, type: question.type.includes("_") ? question.type : answerTypeEnum[question.type],options:question?.options };
 };
 
 /**TODO : Think of better to do this possibly in service layer */

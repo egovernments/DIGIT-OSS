@@ -52,7 +52,7 @@ const getUserData = async (data,tenant) => {
 
 
 
-const displayResult = (ques,ans,type,resCount=0) => {
+const displayResult = (ques,ans,type,resCount=0,t) => {
         switch(type) {
             case "Short Answer":
                  return (
@@ -72,7 +72,7 @@ const displayResult = (ques,ans,type,resCount=0) => {
                         // </div>
                         <div style={{"margin":"30px"}}>
                             <CardSectionHeader>{ques.questionStatement}</CardSectionHeader>
-                            <header style={{"fontWeight":"bold"}}>{`${resCount} Responses`}</header>
+                            <header style={{"fontWeight":"bold"}}>{`${resCount} ${t("SURVEY_RESPONSES")}`}</header>
                             <div className='responses-container'>
                             {ans?.map(el=> <div className='response-result responses-container-line'>{el}<BreakLine style={{"marginTop":"10px"}} /></div>)}
                             </div>
@@ -255,7 +255,7 @@ const SurveyResultsView = ({surveyInfo,responsesInfoMutation}) => {
             </div>
             <WhoHasResponded t={t} userInfo={userInfo}/>
             {data?.map(element =>( 
-                displayResult(element,element?.answers,element?.type,element?.answers?.length)
+                displayResult(element,element?.answers,element?.type,element?.answers?.length,t)
             ))}
         </Card>
     </div>

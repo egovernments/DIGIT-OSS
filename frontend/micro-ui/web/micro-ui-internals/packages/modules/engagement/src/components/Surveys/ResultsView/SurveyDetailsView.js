@@ -29,7 +29,7 @@ const SurveyDetailsView = ({surveyTitle,surveyDesc,t,surveyId}) => {
                     />
                     <RemoveableTag
                       key={"tag"}
-                      text={userUlbs[0].name}
+                      text={t(userUlbs[0].i18nKey)}
                       extraStyles={{tagStyles : {display:"flex"}}}
                     />
             </div>  

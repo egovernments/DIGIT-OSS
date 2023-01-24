@@ -242,6 +242,7 @@ const Units = ({ t, config, onSelect, userType, formData, setError, formState, c
           stateId={stateId}
           focusIndex={focusIndex}
           setFocusIndex={setFocusIndex}
+          isMobile={isMobile}
           getfloorlistdata={getfloorlistdata}
           floorlist={floorlist}
           occupencyOptions={occupencyOptions}
@@ -275,6 +276,7 @@ function Unit({
   occupencyOptions,
   formData,
   handleRemoveUnit,
+  isMobile,
   stateId,
   formState,
   setError,
