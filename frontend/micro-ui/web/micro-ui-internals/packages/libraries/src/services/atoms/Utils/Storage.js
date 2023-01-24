@@ -24,7 +24,7 @@ const getStorage = (storageClass) => ({
       return window?.eGov?.Storage && window.eGov.Storage[k(key)].value;
     } else {
       return null;
-    } 
+    }
   },
   set: (key, value, ttl = 86400) => {
     const item = {
