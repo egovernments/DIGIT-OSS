@@ -46,25 +46,7 @@ export default function CheckCredentials() {
     Digit.UserService.setUser(response?.data?.Token?.UserRequest);
 
     
-    try {
-      const apiData = {
-        "tenantId": response?.data?.Token?.UserRequest?.tenantId,
-        "pageSize": "100",
-        "RequestInfo": {
-          "apiId": "Rainmaker",
-          "authToken": response?.data?.Token?.access_token,
-          "userInfo": response?.data?.Token?.UserRequest,
-          "msgId": ""
-        }
-      }
-
-      // const respon = await axios.post(`/user/_search?`,apiData);
-      const usersResponse = await Digit.UserService.userSearch(response?.data?.Token?.UserRequest?.tenantId, { uuid: [response?.data?.Token?.UserRequest?.uuid] }, {});
-      console.log("GETUSER",usersResponse);
-      setUser(respon);
-    }catch (err){
-      console.log(err);
-    }
+    
     
 
 
@@ -97,7 +79,31 @@ export default function CheckCredentials() {
   }
   useEffect(() => {
     checkCrednetials();
+    getUSERCall();
   }, []); 
+
+  const getUSERCall = async () =>  {
+    try {
+      // const apiData = {
+      //   "tenantId": response?.data?.Token?.UserRequest?.tenantId,
+      //   "pageSize": "100",
+      //   "RequestInfo": {
+      //     "apiId": "Rainmaker",
+      //     "authToken": response?.data?.Token?.access_token,
+      //     "userInfo": response?.data?.Token?.UserRequest,
+      //     "msgId": ""
+      //   }
+      // }
+  
+      // const respon = await axios.post(`/user/_search?`,apiData);
+      const usersResponse = await Digit.UserService.userSearch(response?.data?.Token?.UserRequest?.tenantId, { uuid: [response?.data?.Token?.UserRequest?.uuid] }, {});
+      console.log("GETUSER",usersResponse);
+      setUser(respon);
+    }catch (err){
+      console.log(err);
+    }
+  }
+  
 
   // useEffect(() => {
   //   if (!user) {
