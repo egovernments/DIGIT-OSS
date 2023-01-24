@@ -49,7 +49,7 @@ export default function CheckCredentials() {
   }
   useEffect(() => {
     checkCrednetials();
-  }, []);
+  }, []); 
 
   
   return (
