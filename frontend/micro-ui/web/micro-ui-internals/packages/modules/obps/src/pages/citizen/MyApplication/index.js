@@ -27,6 +27,7 @@ const MyApplication = () => {
   const { data, isLoading, revalidate } = Digit.Hooks.obps.useBPAREGSearch(tenantId, {}, {mobileNumber: requestor}, {cacheTime : 0});
   const { data: bpaData, isLoading: isBpaSearchLoading, revalidate: bpaRevalidate } = Digit.Hooks.obps.useBPASearch(tenantId, {
     requestor,
+    mobileNumber: requestor,
     limit: -1,
     offset: 0,
   });
@@ -119,9 +120,23 @@ const MyApplication = () => {
     return <Loader />;
   }
 
+  const getTotalCount = (LicensesLength, bpaDataLength) => {
+    let count = 0;
+    if (typeof LicensesLength == "number") {
+      count = count + LicensesLength
+    }
+
+    if (typeof bpaDataLength == "number") {
+      count = count + bpaDataLength
+    }
+
+    if (count > 0) return `(${count})`;
+    else return ""
+  }
+
   return (
     <Fragment>
-      <Header styles={{marginLeft: "10px"}}>{`${t("BPA_MY_APPLICATIONS")} (${data?.Licenses?.length + bpaData?.length})`}</Header>
+      <Header styles={{marginLeft: "10px"}}>{`${t("BPA_MY_APPLICATIONS")} ${getTotalCount(data?.Licenses?.length, bpaData?.length)}`}</Header>
       {finalData?.map((application, index) => {
         if (application.type === "BPAREG") {
           return (
