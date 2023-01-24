@@ -34,7 +34,7 @@ const ScrutinyRemarksProvider = ({ children }) => {
             },
         };
         try {
-            const Resp = await axios.post(`/land-services/egscrutiny/_search?applicationNumber=${applicationNumber}&userId=${userInfo?.id}`, dataToSend).then((response) => {
+            const Resp = await axios.post(`/land-services/egscrutiny/_search?applicationNumber=${applicationNumber}`, dataToSend).then((response) => {
                 return response.data;
             });
 

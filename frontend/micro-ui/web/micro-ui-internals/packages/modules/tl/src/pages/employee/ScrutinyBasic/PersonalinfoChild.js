@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
+
 import ModalChild from "./Remarks/ModalChild";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import './css/personalInfoChild.style.js'
 import { useStyles } from "./css/personalInfoChild.style.js"
 import AddIcon from "@mui/icons-material/Add";
-import Table from "react-bootstrap/Table";
+// import Table from "react-bootstrap/Table";
+import Table from '@mui/material/Table';
 
 import Visibility from "@mui/icons-material/Visibility";
 import FileDownload from "@mui/icons-material/FileDownload";
@@ -271,7 +273,7 @@ const PersonalinfoChild = (props) => {
            
           </div>
         </Col>
-        {personalinfo?.devDetail?.addInfo?.showDevTypeFields === "Trust" && 
+        {/* {personalinfo?.devDetail?.addInfo?.showDevTypeFields === "Trust" && 
         <Col md={4} xxl lg="4">
           <div>
             <Form.Label>
@@ -303,7 +305,7 @@ const PersonalinfoChild = (props) => {
            
           </div>
         </Col>
-         }
+         } */}
          {personalinfo?.devDetail?.addInfo?.showDevTypeFields === "Company" && 
         <Col md={4} xxl lg="4">
           <div>
@@ -372,7 +374,8 @@ const PersonalinfoChild = (props) => {
          }
        
       </Row>
-      {personalinfo?.devDetail?.addInfo?.showDevTypeFields === "Individual"  && "Limited Liability Partnership"  && "Hindu Undivided Family" && 
+      {personalinfo?.devDetail?.addInfo?.showDevTypeFields === "Individual"  && 
+      // "Limited Liability Partnership"  && "Hindu Undivided Family" && "Partnership Firm" &&  "Proprietorship Firm" &&
                 <div>
                   <Card style={{ margin: 5 }}>
                     <h5>Developer Details</h5>
@@ -604,7 +607,7 @@ const PersonalinfoChild = (props) => {
                 </div>
               }
   <br></br>
-      {personalinfo?.devDetail?.addInfo?.showDevTypeFields === "Trust" && "Company" && 
+      {personalinfo?.devDetail?.addInfo?.showDevTypeFields ===  "Company" && 
       <div>
                     <h5 className="card-title fw-bold" > &nbsp; &nbsp;&nbsp; Directors Information</h5>
                 <div className="card-body">
@@ -659,6 +662,59 @@ const PersonalinfoChild = (props) => {
                   </div>
                   </div>
                   <br></br>
+
+                  <h5 className="card-title fw-bold" > &nbsp; 1. Director Information as per MCA</h5>
+                <div className="card-body">
+                  <div className="table-bd">
+                    <table className="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>Sr. No</th>
+                          <th>DIN Number</th>
+                          <th>Name</th>
+                          <th>Contact Number</th>
+                          {/* <th>View PDF</th> */}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {   personalinfo?.devDetail?.addInfo?.DirectorsInformation?.map((item, index) => (
+
+                            <tr
+                            >
+                              <td>{index + 1}</td>
+                              <td>
+                                <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} placeholder={item?.din} disabled></Form.Control>
+                              </td>
+                              <td>
+                                <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} placeholder={item?.name} disabled></Form.Control>
+                              </td>
+                              <td>
+                                <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} placeholder={item?.contactNumber} disabled></Form.Control>
+                              </td>
+                              {/* <td>
+                                <div className="row">
+                                  
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}>
+                                      <Visibility color="info" className="icon" /></IconButton>
+                                  
+                                  </div>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}>
+                                <FileDownload color="primary" className="mx-1" />
+                        </IconButton>
+                        </div>
+                                </div>
+                              </td> */}
+                            </tr>
+                          ))
+                        }
+                        {/* );
+                            })} */}
+                      </tbody>
+                    </table>
+                  </div>
+                  </div>
                   
                   <h5 className="card-title fw-bold"> &nbsp;&nbsp;&nbsp; Shareholding Patterns</h5>
                   <div className="card-body">
