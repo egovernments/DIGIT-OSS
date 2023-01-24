@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col, Card, Container, Form, Button } from "react-bootstrap";
+import { Row, Col, Card, Container, Button } from "react-bootstrap";
 import Collapse from "react-bootstrap/Collapse";
 import AddIcon from "@mui/icons-material/Add";
-import Table from "react-bootstrap/Table";
-// import CancelIcon from "@mui/icons-material/Cancel";
-// import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-// import AddIcon from "@mui/icons-material/Add";
+// import Table from "react-bootstrap/Table";
+import Table from '@mui/material/Table';
+// import Row from '@mui/material/Row';
+// import Card from '@mui/material/Card';
+import FormControl from '@mui/material/FormControl';
+
 import ModalChild from "../Remarks/ModalChild";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -16,7 +18,7 @@ import { IconButton } from "@mui/material";
 import { getDocShareholding } from "../ScrutinyDevelopment/docview.helper";
 // const windowHeight = window !== undefined ? window.innerHeight : null;
 // const [open, setOpen] = useState(false);
-const DocumentScrutiny = (props) => {
+const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addInfo}) => {
   const [open, setOpen] = useState(false);
   const classes = useStyles();
 
@@ -61,8 +63,8 @@ const DocumentScrutiny = (props) => {
     // ,{ label: "Developer's Name", key: "developerName" }, { label: "Developer's Email", key: "developerEmail" }, { label: "Developer's Mobile No.", key: "developerMobileNo" }, { label: "CIN No.", key: "cinNo" }, { label: "Company's Name", key: "companyName" }, { label: "Date of Incorporation", key: "dateOfIncorporation" }, { label: "Registered Address", key: "regAddress" }, { label: "Email", key: "email" }, { label: "Mobile No.", key: "mobileNo" }, { label: "GST No.", key: "gstNo" }
   ];
 
-  const addInfo = props.addInfo;
-  const iconStates = props.iconColorState;
+  // const addInfo = props.addInfo;
+  const iconStates = iconColorState;
 
   const getColorofFieldIcon = () => {
     let tempFieldColorState = fieldIconColors;
@@ -114,6 +116,8 @@ const DocumentScrutiny = (props) => {
   const currentRemarks = (data) => {
     props.showTable({ data: data.data });
   };
+
+  console.log("developerType", addInfo);
   return (
     <div>
       <div
@@ -141,11 +145,12 @@ const DocumentScrutiny = (props) => {
 
       <Collapse in={open}>
         <div id="example-collapse-text" style={{ marginTop: 5, paddingLeft: 5, paddingRight: 5 }}>
-          <Form.Group style={{ margin: 5 }}>
+          <FormControl style={{ margin: 5 }}>
             <div>
               <Card style={{ margin: 2 }}>
                 <Row>
-                  <Form>
+                  <FormControl>
+                  {addInfo?.showDevTypeFields === "Individual" && (
                     <div className="row ">
                       <div className="form-group row">
                         <div className="col-sm-12">
@@ -162,10 +167,8 @@ const DocumentScrutiny = (props) => {
                                 <tr>
                                   <td> 1 </td>
                                   <td>
-                                    Identity Proof
-                                    <p>
-                                      (Copy of Govt approved Identity card with photo attested by a gazetted officer within one month from the data of
-                                      application .)
+                                   <p>
+                                    Any Other Relevant Documents
                                     </p>
                                  
                                   </td>
@@ -185,200 +188,677 @@ const DocumentScrutiny = (props) => {
                                   </td>
                                 </tr>
 
-                                <tr>
-                                  <td> 2 </td>
-                                  <td>Educational Certifiates *</td>
-                                  <td>
-                                    <div className="row">
-                                  
-                                      <div className="btn btn-sm col-md-6">
-                                        <IconButton
-                                         onClick={()=>getDocShareholding(item?.boardDocN)}
-                                        >
-                                          <VisibilityIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                      <div className="btn btn-sm col-md-6">
-                                        <IconButton
-                                        onClick={()=>getDocShareholding(item?.boardDocN)}
-                                        >
-                                          <FileDownloadIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                    </div>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td> 3 </td>
-
-                                  <td>Experience Certifiates *</td>
-                                  <td>
-                                    <div className="row">
-                                      {/* <button className="btn btn-sm col-md-6">
-                                      <VisibilityIcon color="info" className="icon" />
-                                    </button>
-                                    <button className="btn btn-sm col-md-6">
-                                      <FileDownloadIcon color="primary" />
-                                    </button> */}
-                                      <div className="btn btn-sm col-md-6">
-                                        <IconButton
-                                        //  onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}
-                                        >
-                                          <VisibilityIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                      <div className="btn btn-sm col-md-6">
-                                        <IconButton
-                                        // onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}
-                                        >
-                                          <FileDownloadIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                    </div>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td> 4 </td>
-
-                                  <td>
-                                    Recent PassPosrt Size photograph of the applicant *
-                                    <p>
-                                      (Recent passport size photo - Take within six months prior to the date of application shall be uploaded please
-                                      ensure that the photo uploaded is of passport and gives a front and clear view of the face.)
-                                    </p>
-                                  </td>
-                                  <td>
-                                    <div className="row">
-                                      <div className="btn btn-sm col-md-6">
-                                        <IconButton
-                                        //  onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}
-                                        >
-                                          <VisibilityIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                      <div className="btn btn-sm col-md-6">
-                                        <IconButton
-                                        // onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}
-                                        >
-                                          <FileDownloadIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                    </div>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td> 5 </td>
-
-                                  <td>
-                                    Showcause notice *<p>(Details of show cause notice received/cancellations of licence if any )</p>
-                                  </td>
-                                  <td>
-                                    <div className="row">
-                                      <div className="btn btn-sm col-md-6">
-                                        <IconButton
-                                        //  onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}
-                                        >
-                                          <VisibilityIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                      <div className="btn btn-sm col-md-6">
-                                        <IconButton
-                                        // onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}
-                                        >
-                                          <FileDownloadIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                    </div>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td> 6 </td>
-
-                                  <td>
-                                    Income tax statement *<p>(Income Tax Statement of Last Three Consecutive Financial Year)</p>
-                                  </td>
-                                  <td>
-                                    <div className="row">
-                                      <div className="btn btn-sm col-md-6">
-                                        <IconButton
-                                        //  onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}
-                                        >
-                                          <VisibilityIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                      <div className="btn btn-sm col-md-6">
-                                        <IconButton
-                                        // onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}
-                                        >
-                                          <FileDownloadIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                    </div>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td> 7 </td>
-
-                                  <td>other</td>
-                                  <td>
-                                    <div className="row">
-                                      <div className="btn btn-sm col-md-6">
-                                        <IconButton
-                                        //  onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}
-                                        >
-                                          <VisibilityIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                      <div className="btn btn-sm col-md-6">
-                                        <IconButton
-                                        // onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}
-                                        >
-                                          <FileDownloadIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                    </div>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td> 8 </td>
-
-                                  <td>
-                                    Registration Certificate of licence
-                                    <p>
-                                      (Registration certifiate of the licence copy attested by a gazette officer attested within one month prior to
-                                      the date of be scanned and uploaded.(including renewal certifiate if any ))
-                                    </p>
-                                  </td>
-                                  <td>
-                                    <div className="row">
-                                      <div className="btn btn-sm col-md-6">
-                                        <IconButton
-                                        //  onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}
-                                        >
-                                          <VisibilityIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                      <div className="btn btn-sm col-md-6">
-                                        <IconButton
-                                        // onClick={()=>getDocShareholding(item?.permissionGrantedLawAct)}
-                                        >
-                                          <FileDownloadIcon color="info" className="icon" />
-                                        </IconButton>
-                                      </div>
-                                    </div>
-                                  </td>
-                                </tr>
                               </tbody>
                             </Table>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </Form>
+                  )}
+                  {addInfo?.showDevTypeFields === "Proprietorship Firm" && (
+                    <div className="row ">
+                      <div className="form-group row">
+                        <div className="col-sm-12">
+                          <div>
+                            <Table className="table table-bordered ml-2" size="sm">
+                              <thead>
+                                <tr>
+                                  <th class="fw-normal">S.No.</th>
+                                  <th class="fw-normal">Licence Document Details</th>
+                                  <th class="fw-normal">Annexure </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td> 1 </td>
+                                  <td>
+                                   <p>
+                                    Any Other Relevant Documents
+                                    </p>
+                                 
+                                  </td>
+                                  <td>
+                                    <div className="row">
+                                      <div className="btn btn-sm col-md-6">
+                                        <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                          <VisibilityIcon color="info" className="icon" />
+                                        </IconButton>
+                                      </div>
+                                      <div className="btn btn-sm col-md-6">
+                                        <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                          <FileDownloadIcon color="info" className="icon" />
+                                        </IconButton>
+                                      </div>
+                                    </div>
+                                  </td>
+                                </tr>
+
+                              </tbody>
+                            </Table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                   {addInfo?.showDevTypeFields === "Partnership Firm" && (
+                    <div className="row ">
+                      <div className="form-group row">
+                        <div className="col-sm-12">
+                          <div>
+                            <Table className="table table-bordered ml-2" size="sm">
+                              <thead>
+                                <tr>
+                                  <th class="fw-normal">S.No.</th>
+                                  <th class="fw-normal">Licence Document Details</th>
+                                  <th class="fw-normal">Annexure </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td> 1 </td>
+                                  <td>
+                                   <p>
+                                    Any Other Relevant Documents
+                                    </p>
+                                 
+                                  </td>
+                                  <td>
+                                    <div className="row">
+                                      <div className="btn btn-sm col-md-6">
+                                        <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                          <VisibilityIcon color="info" className="icon" />
+                                        </IconButton>
+                                      </div>
+                                      <div className="btn btn-sm col-md-6">
+                                        <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                          <FileDownloadIcon color="info" className="icon" />
+                                        </IconButton>
+                                      </div>
+                                    </div>
+                                  </td>
+                                </tr>
+
+                              </tbody>
+                            </Table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                   {/* || "Trust" || "Hindu Undivided Family" || "Limited Liability Partnership"  Partnership Firm */}
+                  {addInfo?.showDevTypeFields === "Company"  && (
+                     <div className="row ">
+                     <div className="form-group row">
+                       <div className="col-sm-12">
+                         <div>
+                           <Table className="table table-bordered ml-2" size="sm">
+                             <thead>
+                               <tr>
+                                 <th class="fw-normal">S.No.</th>
+                                 <th class="fw-normal">Licence Document Details</th>
+                                 <th class="fw-normal">Annexure </th>
+                               </tr>
+                             </thead>
+                             <tbody>
+                               <tr>
+                                 <td> 1 </td>
+                                 <td>
+                                <p>
+                                   Copy of memorandum/Articles of Association/ any other document of developer
+                                   </p>
+                                
+                                 </td>
+                                 <td>
+                                   <div className="row">
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <VisibilityIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <FileDownloadIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                   </div>
+                                 </td>
+                               </tr>
+                               <tr>
+                                 <td> 2</td>
+                                 <td>
+                                <p>
+                                Memorandum Of Association
+                                   </p>
+                                
+                                 </td>
+                                 <td>
+                                   <div className="row">
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <VisibilityIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <FileDownloadIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                   </div>
+                                 </td>
+                               </tr>
+                               <tr>
+                                 <td> 3</td>
+                                 <td>
+                                <p>
+                                Any Other Relevant Documents
+                                   </p>
+                                
+                                 </td>
+                                 <td>
+                                   <div className="row">
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <VisibilityIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <FileDownloadIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                   </div>
+                                 </td>
+                               </tr>
+                             </tbody>
+                           </Table>
+                         </div>
+                       </div>
+                     </div>
+                   </div>
+                  )}
+                  {addInfo?.showDevTypeFields === "Trust"  && (
+                     <div className="row ">
+                     <div className="form-group row">
+                       <div className="col-sm-12">
+                         <div>
+                           <Table className="table table-bordered ml-2" size="sm">
+                             <thead>
+                               <tr>
+                                 <th class="fw-normal">S.No.</th>
+                                 <th class="fw-normal">Licence Document Details</th>
+                                 <th class="fw-normal">Annexure </th>
+                               </tr>
+                             </thead>
+                             <tbody>
+                               <tr>
+                                 <td> 1 </td>
+                                 <td>
+                                <p>
+                                   Copy of memorandum/Articles of Association/ any other document of developer
+                                   </p>
+                                
+                                 </td>
+                                 <td>
+                                   <div className="row">
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <VisibilityIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <FileDownloadIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                   </div>
+                                 </td>
+                               </tr>
+                               <tr>
+                                 <td> 2</td>
+                                 <td>
+                                <p>
+                                Memorandum Of Association
+                                   </p>
+                                
+                                 </td>
+                                 <td>
+                                   <div className="row">
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <VisibilityIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <FileDownloadIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                   </div>
+                                 </td>
+                               </tr>
+                               <tr>
+                                 <td> 3</td>
+                                 <td>
+                                <p>
+                                Any Other Relevant Documents
+                                   </p>
+                                
+                                 </td>
+                                 <td>
+                                   <div className="row">
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <VisibilityIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <FileDownloadIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                   </div>
+                                 </td>
+                               </tr>
+                             </tbody>
+                           </Table>
+                         </div>
+                       </div>
+                     </div>
+                   </div>
+                  )}
+                  {addInfo?.showDevTypeFields === "Institution"  && (
+                     <div className="row ">
+                     <div className="form-group row">
+                       <div className="col-sm-12">
+                         <div>
+                           <Table className="table table-bordered ml-2" size="sm">
+                             <thead>
+                               <tr>
+                                 <th class="fw-normal">S.No.</th>
+                                 <th class="fw-normal">Licence Document Details</th>
+                                 <th class="fw-normal">Annexure </th>
+                               </tr>
+                             </thead>
+                             <tbody>
+                               <tr>
+                                 <td> 1 </td>
+                                 <td>
+                                <p>
+                                   Copy of memorandum/Articles of Association/ any other document of developer
+                                   </p>
+                                
+                                 </td>
+                                 <td>
+                                   <div className="row">
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <VisibilityIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <FileDownloadIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                   </div>
+                                 </td>
+                               </tr>
+                               <tr>
+                                 <td> 2</td>
+                                 <td>
+                                <p>
+                                Memorandum Of Association
+                                   </p>
+                                
+                                 </td>
+                                 <td>
+                                   <div className="row">
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <VisibilityIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <FileDownloadIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                   </div>
+                                 </td>
+                               </tr>
+                               <tr>
+                                 <td> 3</td>
+                                 <td>
+                                <p>
+                                Any Other Relevant Documents
+                                   </p>
+                                
+                                 </td>
+                                 <td>
+                                   <div className="row">
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <VisibilityIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <FileDownloadIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                   </div>
+                                 </td>
+                               </tr>
+                             </tbody>
+                           </Table>
+                         </div>
+                       </div>
+                     </div>
+                   </div>
+                  )}
+                 {addInfo?.showDevTypeFields === "Hindu Undivided Family"  && (
+                     <div className="row ">
+                     <div className="form-group row">
+                       <div className="col-sm-12">
+                         <div>
+                           <Table className="table table-bordered ml-2" size="sm">
+                             <thead>
+                               <tr>
+                                 <th class="fw-normal">S.No.</th>
+                                 <th class="fw-normal">Licence Document Details</th>
+                                 <th class="fw-normal">Annexure </th>
+                               </tr>
+                             </thead>
+                             <tbody>
+                               <tr>
+                                 <td> 1 </td>
+                                 <td>
+                                <p>
+                                affidavit and PAN Card
+                                   </p>
+                                
+                                 </td>
+                                 <td>
+                                   <div className="row">
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <VisibilityIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <FileDownloadIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                   </div>
+                                 </td>
+                               </tr>
+                               
+                               <tr>
+                                 <td> 2</td>
+                                 <td>
+                                <p>
+                                Any Other Relevant Documents
+                                   </p>
+                                
+                                 </td>
+                                 <td>
+                                   <div className="row">
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <VisibilityIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <FileDownloadIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                   </div>
+                                 </td>
+                               </tr>
+                             </tbody>
+                           </Table>
+                         </div>
+                       </div>
+                     </div>
+                   </div>
+                  )}
+                   {addInfo?.showDevTypeFields === "Limited Liability Partnership"  && (
+                     <div className="row ">
+                     <div className="form-group row">
+                       <div className="col-sm-12">
+                         <div>
+                           <Table className="table table-bordered ml-2" size="sm">
+                             <thead>
+                               <tr>
+                                 <th class="fw-normal">S.No.</th>
+                                 <th class="fw-normal">Licence Document Details</th>
+                                 <th class="fw-normal">Annexure </th>
+                               </tr>
+                             </thead>
+                             <tbody>
+                               <tr>
+                                 <td> 1 </td>
+                                 <td>
+                                <p>
+                                   Copy of memorandum/Articles of Association/ any other document of developer
+                                   </p>
+                                
+                                 </td>
+                                 <td>
+                                   <div className="row">
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <VisibilityIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <FileDownloadIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                   </div>
+                                 </td>
+                               </tr>
+                               <tr>
+                                 <td> 2</td>
+                                 <td>
+                                <p>
+                                Memorandum Of Association
+                                   </p>
+                                
+                                 </td>
+                                 <td>
+                                   <div className="row">
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <VisibilityIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <FileDownloadIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                   </div>
+                                 </td>
+                               </tr>
+                               <tr>
+                                 <td> 3 </td>
+                                 <td>
+                                <p>
+                                copy of registered irrevocable partnership deed
+                                   </p>
+                                
+                                 </td>
+                                 <td>
+                                   <div className="row">
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <VisibilityIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <FileDownloadIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                   </div>
+                                 </td>
+                               </tr>
+                               <tr>
+                                 <td> 4</td>
+                                 <td>
+                                <p>
+                                Any Other Relevant Documents
+                                   </p>
+                                
+                                 </td>
+                                 <td>
+                                   <div className="row">
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <VisibilityIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <FileDownloadIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                   </div>
+                                 </td>
+                               </tr>
+                               
+                             </tbody>
+                           </Table>
+                         </div>
+                       </div>
+                     </div>
+                   </div>
+                  )}
+                   {addInfo?.showDevTypeFields === "Firm"  && (
+                     <div className="row ">
+                     <div className="form-group row">
+                       <div className="col-sm-12">
+                         <div>
+                           <Table className="table table-bordered ml-2" size="sm">
+                             <thead>
+                               <tr>
+                                 <th class="fw-normal">S.No.</th>
+                                 <th class="fw-normal">Licence Document Details</th>
+                                 <th class="fw-normal">Annexure </th>
+                               </tr>
+                             </thead>
+                             <tbody>
+                               <tr>
+                                 <td> 1 </td>
+                                 <td>
+                                <p>
+                                   Copy of memorandum/Articles of Association/ any other document of developer
+                                   </p>
+                                
+                                 </td>
+                                 <td>
+                                   <div className="row">
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <VisibilityIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <FileDownloadIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                   </div>
+                                 </td>
+                               </tr>
+                               <tr>
+                                 <td> 2</td>
+                                 <td>
+                                <p>
+                                Memorandum Of Association
+                                   </p>
+                                
+                                 </td>
+                                 <td>
+                                   <div className="row">
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <VisibilityIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <FileDownloadIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                   </div>
+                                 </td>
+                               </tr>
+                               <tr>
+                                 <td> 3 </td>
+                                 <td>
+                                <p>
+                                copy of registered irrevocable partnership deed
+                                   </p>
+                                
+                                 </td>
+                                 <td>
+                                   <div className="row">
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <VisibilityIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <FileDownloadIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                   </div>
+                                 </td>
+                               </tr>
+                               <tr>
+                                 <td> 4</td>
+                                 <td>
+                                <p>
+                                Any Other Relevant Documents
+                                   </p>
+                                
+                                 </td>
+                                 <td>
+                                   <div className="row">
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <VisibilityIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                     <div className="btn btn-sm col-md-6">
+                                       <IconButton onClick={() => getDocShareholding(item?.boardDoc)}>
+                                         <FileDownloadIcon color="info" className="icon" />
+                                       </IconButton>
+                                     </div>
+                                   </div>
+                                 </td>
+                               </tr>
+                               
+                             </tbody>
+                           </Table>
+                         </div>
+                       </div>
+                     </div>
+                   </div>
+                  )}
+
+                  
+                  </FormControl>
                 </Row>
               </Card>
             </div>
-          </Form.Group>
+          </FormControl>
         </div>
       </Collapse>
     </div>

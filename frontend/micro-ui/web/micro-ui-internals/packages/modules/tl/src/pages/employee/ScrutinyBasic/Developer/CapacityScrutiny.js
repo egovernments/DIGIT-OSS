@@ -407,11 +407,6 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
     setLabelValue("");
   };
 
-
-
-
-
-
   return (
     <div>
       <ModalChild

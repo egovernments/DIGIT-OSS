@@ -17,6 +17,7 @@ import Collapse from "react-bootstrap/Collapse";
 import { IconButton } from "@mui/material";
 import { ScrutinyRemarksContext } from "../../../../../context/remarks-data-context";
 
+
 const ServicePlanService = (props) => {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
@@ -509,7 +510,9 @@ const ServicePlanService = (props) => {
               </button>
             </div>
           </div> */}
+           
             </Card>
+           
           </Card>
         </div>
       </Collapse>
