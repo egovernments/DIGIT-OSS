@@ -32,7 +32,7 @@ const Login = ({ config: propsConfig, t, isDisabled }) => {
 
   useEffect(() => {
     if (!user) {
-      return;
+      return; 
     }
     Digit.SessionStorage.set("citizen.userRequestObject", user);
     const filteredRoles = user?.info?.roles?.filter((role) => role.tenantId === Digit.SessionStorage.get("Employee.tenantId"));

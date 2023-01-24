@@ -80,7 +80,7 @@ export default function CheckCredentials() {
     // redirectReturnUrl();
     // setCitizenDetail(user?.info,user?.access_token)
 
-
+ 
   }
   useEffect(() => {
     checkCrednetials();
