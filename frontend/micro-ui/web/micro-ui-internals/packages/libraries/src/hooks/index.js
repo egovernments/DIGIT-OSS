@@ -389,7 +389,7 @@ const Hooks = {
   useBoundaryLocalities,
   useCommonMDMS,
   useApplicationStatusGeneral,
-  useModuleTenants,
+  useModuleTenants, 
   useRecieptSearch,
   useNewInboxGeneral,
   useEvents,
