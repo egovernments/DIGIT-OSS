@@ -127,5 +127,5 @@ export const UserService = {
       userService: true,
       data: data.pageSize ? { tenantId, ...data } : { tenantId, ...data, pageSize: "100" },
     });
-  },
+  }, 
 };
