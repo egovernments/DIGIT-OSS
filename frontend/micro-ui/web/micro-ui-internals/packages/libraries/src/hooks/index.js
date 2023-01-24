@@ -381,7 +381,7 @@ const Hooks = {
   useWorkflowDetails,
   useInitStore,
   useClickOutside,
-  useUserSearch,
+  useUserSearch, 
   useApplicationsForBusinessServiceSearch,
   useDemandSearch,
   useInboxGeneral,
