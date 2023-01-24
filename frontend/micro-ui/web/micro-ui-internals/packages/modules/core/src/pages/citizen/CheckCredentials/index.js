@@ -25,13 +25,21 @@ export default function CheckCredentials() {
     // console.log("SSoAUTH",response?.data);
     // console.log("SSoAUTHTOKEN",response?.data);
     // console.log("_ssoCitizen response ",response.data)
-    window.open(response?.data?.ReturnUrl,"_self");
+    // window.open(response?.data?.ReturnUrl,"_self");
+
+    // redirectReturnUrl();
+    const redirectReturnUrl = async () => {
+      const resp = await axios.post(`${response?.data?.ReturnUrl}`);
+      console.log("RETURNURL",resp);
+    }
 
 
   }
   useEffect(() => {
     checkCrednetials();
   }, []);
+
+  
   return (
     <div style={{ height: "100%", width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
       <Loader />
