@@ -1,8 +1,11 @@
 // import { CircularProgress } from "@mui/material"
 import { Loader } from "@egovernments/digit-ui-react-components";
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
+
+
+const DEFAULT_REDIRECT_URL = "/digit-ui/citizen";
 
 // const setCitizenDetail=(userObject,token,tenantId)=>{
 //   let locale=JSON.parse(sessionStorage.getItem("Digit.initData"))?.value?.selectedLanguage;
@@ -10,7 +13,9 @@ import { useHistory, useLocation } from "react-router-dom";
 // }
 
 export default function CheckCredentials() {
+  const location = useLocation();
   const history = useHistory();
+  const [user, setUser] = useState(null);
   const queryParameters = new URLSearchParams(window.location.search);
   // const [user, setUser] = useState(null);
   const checkCrednetials = async () => {
@@ -38,6 +43,12 @@ export default function CheckCredentials() {
     localStorage.setItem("Citizen.user-info",JSON.stringify(response?.data?.Token?.UserRequest));  
     sessionStorage.setItem("citizen.userRequestObject",JSON.stringify(response?.data?.Token?.UserRequest));
     console.log("SSoAUTH",response?.data?.Token?.access_token);
+
+    Digit.SessionStorage.set("citizen.userRequestObject", user);
+    Digit.UserService.setUser(user);
+    setCitizenDetail(user?.info,user?.access_token,stateCode)
+    const redirectPath = location.state?.from || DEFAULT_REDIRECT_URL;
+    history.replace(redirectPath);
     // console.log("SSoAUTHTOKEN",response?.data);
     // console.log("_ssoCitizen response ",response.data)
     // window.open(response?.data?.ReturnUrl,"_self");
@@ -51,7 +62,16 @@ export default function CheckCredentials() {
     checkCrednetials();
   }, []); 
 
-  
+  // useEffect(() => {
+  //   if (!user) {
+  //     return;
+  //   }
+  //   Digit.SessionStorage.set("citizen.userRequestObject", user);
+  //   Digit.UserService.setUser(user);
+  //   setCitizenDetail(user?.info,user?.access_token,stateCode)
+  //   const redirectPath = location.state?.from || DEFAULT_REDIRECT_URL;
+  //   history.replace(redirectPath);
+  // }, [user]);
   return (
     <div style={{ height: "100%", width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
       <Loader />
