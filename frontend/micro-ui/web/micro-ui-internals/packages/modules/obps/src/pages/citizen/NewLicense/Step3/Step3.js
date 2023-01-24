@@ -1262,9 +1262,7 @@ const LandScheduleForm = (props) => {
                         <div className="row ">
                           <div className="col col-12">
                             <label>
-                              <h2>
-                                Date of section 4 notification <span style={{ color: "red" }}>*</span>{" "}
-                              </h2>{" "}
+                              <h2>Date of section 4 notification</h2>{" "}
                             </label>
                             <input type="date" {...register("sectionFour")} className="form-control" />
                             <h3 className="error-message" style={{ color: "red" }}>
@@ -1273,9 +1271,7 @@ const LandScheduleForm = (props) => {
                           </div>
                           <div className="col col-12">
                             <label>
-                              <h2>
-                                Date of section 6 notification <span style={{ color: "red" }}>*</span>{" "}
-                              </h2>
+                              <h2>Date of section 6 notification</h2>
                             </label>
                             <input type="date" className="form-control" {...register("sectionSix")} />
                             <h3 className="error-message" style={{ color: "red" }}>
@@ -1322,7 +1318,7 @@ const LandScheduleForm = (props) => {
                           <div className="row ">
                             <div className="col col-3 ">
                               <h2 data-toggle="tooltip" data-placement="top" title="Whether land compensation received ">
-                                Whether land compensation <span style={{ color: "red" }}>*</span>{" "}
+                                Whether land compensation
                               </h2>
 
                               <label htmlFor="landCompensation">
@@ -1336,9 +1332,7 @@ const LandScheduleForm = (props) => {
                             </div>
                             <div className="col col-3">
                               <label>
-                                <h2>
-                                  Status of release <span style={{ color: "red" }}>*</span>{" "}
-                                </h2>
+                                <h2>Status of release</h2>
                               </label>
 
                               <ReactMultiSelect
@@ -1352,27 +1346,21 @@ const LandScheduleForm = (props) => {
                             </div>
                             <div className="col col-3">
                               <label>
-                                <h2>
-                                  Date of Award <span style={{ color: "red" }}>*</span>{" "}
-                                </h2>
+                                <h2>Date of Award</h2>
                               </label>
                               <input type="date" {...register("awardDate")} className="form-control" />
                               <div className="invalid-feedback">{errors?.awardDate?.message}</div>
                             </div>
                             <div className="col col-3">
                               <label>
-                                <h2>
-                                  Date of Release <span style={{ color: "red" }}>*</span>{" "}
-                                </h2>{" "}
+                                <h2>Date of Release</h2>{" "}
                               </label>
                               <input type="date" {...register("releaseDate")} className="form-control" />
                               <div className="invalid-feedback">{errors?.releaseDate?.message}</div>
                             </div>
                             <div className="col col-3">
                               <label htmlFor="siteDetail">
-                                <h2>
-                                  Site Details <span style={{ color: "red" }}>*</span>
-                                </h2>
+                                <h2>Site Details</h2>
                               </label>
                               <input type="text" {...register("siteDetail")} className="form-control" minLength={2} maxLength={99} />
                               <div className="invalid-feedback">{errors?.siteDetail?.message}</div>
@@ -1787,9 +1775,7 @@ const LandScheduleForm = (props) => {
                           <input type="text" className="form-control" {...register("availableExistingApproachRemark")} />
                         </div>
                         <div className="col col-3">
-                          <h2 style={{ display: "flex" }}>
-                            Upload document. <span style={{ color: "red" }}>*</span>
-                          </h2>
+                          <h2 style={{ display: "flex" }}>Upload document.</h2>
                           <label>
                             <FileUpload color="primary" />
                             <input
@@ -1848,9 +1834,7 @@ const LandScheduleForm = (props) => {
                         <div className="row ">
                           <div className="col col">
                             <label>
-                              <h2>
-                                Construction Remark <span style={{ color: "red" }}>*</span>
-                              </h2>
+                              <h2>Construction Remark</h2>
                             </label>
                             <input type="text" className="form-control" {...register("typeOfConstruction")} />
                             <h3 className="error-message" style={{ color: "red" }}>
@@ -1893,9 +1877,7 @@ const LandScheduleForm = (props) => {
                         <div className="row ">
                           <div className="col col">
                             <label>
-                              <h2>
-                                HT Remark <span style={{ color: "red" }}>*</span>
-                              </h2>
+                              <h2>HT Remark</h2>
                             </label>
                             <input type="text" className="form-control" {...register("htRemark")} />
                           </div>
@@ -1932,9 +1914,7 @@ const LandScheduleForm = (props) => {
                       {watch("gas") === "N" && (
                         <div className="row ">
                           <div className="col col">
-                            <label>
-                              IOC Remark <span style={{ color: "red" }}>*</span>
-                            </label>
+                            <label>IOC Remark</label>
                             <input type="text" className="form-control" {...register("gasRemark")} />
                           </div>
                         </div>
@@ -1969,9 +1949,7 @@ const LandScheduleForm = (props) => {
                       {watch("nallah") === "N" && (
                         <div className="row ">
                           <div className="col col">
-                            <label>
-                              Nallah Remark <span style={{ color: "red" }}>*</span>
-                            </label>
+                            <label>Nallah Remark</label>
                             <input type="text" className="form-control" {...register("nallahRemark")} />
                           </div>
                         </div>
@@ -2021,9 +1999,7 @@ const LandScheduleForm = (props) => {
                         <div className="row ">
                           <div className="col col">
                             <label>
-                              <h2>
-                                Remark <span style={{ color: "red" }}>*</span>
-                              </h2>
+                              <h2>Remark</h2>
                             </label>
                             <input type="text" className="form-control" {...register("roadRemark")} />
                           </div>
@@ -2116,9 +2092,7 @@ const LandScheduleForm = (props) => {
                         <div className="row ">
                           <div className="col col">
                             <label>
-                              <h2>
-                                Remark <span style={{ color: "red" }}>*</span>
-                              </h2>
+                              <h2>Remark</h2>
                             </label>
                             <input type="text" className="form-control" {...register("utilityRemark")} />
                           </div>

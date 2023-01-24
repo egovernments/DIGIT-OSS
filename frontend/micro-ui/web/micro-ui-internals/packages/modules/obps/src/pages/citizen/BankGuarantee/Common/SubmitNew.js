@@ -14,10 +14,11 @@ function SubmitNew() {
   const [modal1, setmodal1] = useState(false);
   const [ServicePlanDataLabel, setServicePlanDataLabel] = useState([]);
   const [existingBgNumber, setExistingBgNumber] = useState("");
+
   // const [getShow, setShow] = useState({ submit: false });
   const userInfo = Digit.UserService.getUser()?.info || {};
   const [typeOfBg, setTypeOfBg] = useState("");
-  const [licNo, setLicNo] = useState("");
+  const [SubmissionSearch, setSubmissionSearch] = useState({});
   const {
     register,
     handleSubmit,
@@ -28,11 +29,25 @@ function SubmitNew() {
     getValues,
   } = useForm({});
   const tenantId = Digit.ULBService.getCurrentTenantId();
+
   const bankSubmitNew = async (data) => {
     const token = window?.localStorage?.getItem("token");
+    const userInfo = Digit.UserService.getUser()?.info || {};
     console.log(data);
+    console.log("SubmissionSearch", SubmissionSearch);
     try {
       const postDistrict = {
+        NewBankGuaranteeRequest: [
+          {
+            tenantId: tenantId,
+            additionalDetails: null,
+            additionalDocuments: null,
+            action: null,
+            comment: "test comment",
+            assignee: null,
+            ...SubmissionSearch,
+          },
+        ],
         RequestInfo: {
           apiId: "Rainmaker",
           action: "_create",
@@ -42,22 +57,11 @@ function SubmitNew() {
           ts: 0,
           ver: ".01",
           authToken: token,
+          userInfo: userInfo,
         },
-        NewBankGuaranteeRequest: [
-          {
-            tenantId: tenantId,
-            additionalDetails: null,
-            additionalDocuments: null,
-            action: "PRE_SUBMIT",
-            comment: null,
-            assignee: null,
-            ...data,
-          },
-        ],
       };
       const Resp = await axios.post("/tl-services/bank/guarantee/_create", postDistrict);
       setServicePlanDataLabel(Resp.data);
-      // setShow({ submit: true });
     } catch (error) {
       console.log(error.message);
     }
@@ -96,12 +100,8 @@ function SubmitNew() {
     }
   };
   const [applicantId, setApplicantId] = useState("");
-
+  const [showOption, setShowOption] = useState(false);
   const landScheduleFormSubmitHandler = async () => {
-    // const payload = {
-    //   typeOfBg: { ...register("typeOfBg") },
-    // };
-    console.log("log123", getValues());
     const token = window?.localStorage?.getItem("token");
     const payload = {
       RequestInfo: {
@@ -120,6 +120,9 @@ function SubmitNew() {
         `/tl-services/bank/guarantee/_search?typeOfBg=${getValues("typeOfBg")}&loiNumber=${getValues("loiNumber")}`,
         payload
       );
+
+      console.log("service", Resp?.data?.newBankGuaranteeList[0]);
+      setSubmissionSearch(Resp?.data?.newBankGuaranteeList[0]);
       setValue("amountInFig", Resp.data.newBankGuaranteeList[0].amountInFig);
       const userData = Resp?.data?.LicenseDetails?.[0];
       setStepData(userData);
@@ -164,11 +167,11 @@ function SubmitNew() {
                 </Form.Label>
               </div>
               <select className="form-control" {...register("typeOfBg")} disabled={existingBgNumber?.length > 0 ? true : false}>
-                <option> IDW</option>
-                <option>EDC</option>
+                <option value="IDW"> IDW</option>
+                <option value="EDC">EDC</option>
+                <option value="SPE">SPE</option>
               </select>
             </Col>
-
             <Col md={4} xxl lg="3">
               <div>
                 <button
@@ -182,26 +185,112 @@ function SubmitNew() {
                 </button>
               </div>
             </Col>
-
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>Amount (in fig)</h2>
-                </Form.Label>
-              </div>
-              <input
-                type="text"
-                className="form-control"
-                placeholder=""
-                readOnly
-                {...register("amountInFig")}
-                disabled={existingBgNumber?.length > 0 ? true : false}
-              />
-            </Col>
           </Row>
+          {watch("typeOfBg") === "SPE" && (
+            <div className="row">
+              <Col md={4} xxl lg="3">
+                <div>
+                  <Form.Label>
+                    <h2>Amount (in fig)</h2>
+                  </Form.Label>
+                </div>
+                <input type="text" className="form-control" placeholder="" {...register("amountInFig")} />
+              </Col>
+              <Col md={4} xxl lg="3">
+                <div>
+                  <Form.Label>
+                    <h2>Amount (in words)</h2>
+                  </Form.Label>
+                </div>
+                <input type="text" className="form-control" placeholder="" {...register("amountInWords")} />
+              </Col>
+            </div>
+          )}
+
+          {watch("typeOfBg") === "IDW" && (
+            <div className="row">
+              <Col md={4} xxl lg="3">
+                <div>
+                  <Form.Label>
+                    <h2>Amount (in fig)</h2>
+                  </Form.Label>
+                </div>
+                <input
+                  type="text"
+                  className="form-control"
+                  readOnly
+                  {...register("amountInFig")}
+                  disabled={existingBgNumber?.length > 0 ? true : false}
+                />
+              </Col>
+              <Col md={4} xxl lg="3">
+                <div>
+                  <Form.Label>
+                    <h2>Amount (in words)</h2>
+                  </Form.Label>
+                </div>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder=""
+                  {...register("amountInWords")}
+                  disabled={existingBgNumber?.length > 0 ? true : false}
+                />
+              </Col>
+            </div>
+          )}
+          {watch("typeOfBg") === "EDC" && (
+            <div className="row">
+              <Col md={4} xxl lg="3">
+                <div>
+                  <Form.Label>
+                    <h2>Amount (in fig)</h2>
+                  </Form.Label>
+                </div>
+                <input
+                  type="text"
+                  className="form-control"
+                  readOnly
+                  {...register("amountInFig")}
+                  disabled={existingBgNumber?.length > 0 ? true : false}
+                />
+              </Col>
+              <Col md={4} xxl lg="3">
+                <div>
+                  <Form.Label>
+                    <h2>Amount (in words)</h2>
+                  </Form.Label>
+                </div>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder=""
+                  {...register("amountInWords")}
+                  disabled={existingBgNumber?.length > 0 ? true : false}
+                />
+              </Col>
+            </div>
+          )}
+
+          {/* <Col md={4} xxl lg="3">
+            <div>
+              <Form.Label>
+                <h2>Amount (in fig)</h2>
+              </Form.Label>
+            </div>
+            <input
+              type="text"
+              className="form-control"
+              placeholder=""
+              readOnly
+              {...register("amountInFig")}
+              disabled={existingBgNumber?.length > 0 ? true : false}
+            />
+          </Col> */}
+
           <br></br>
           <Row className="col-12">
-            <Col md={4} xxl lg="3">
+            {/* <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
                   <h2>Amount (in words)</h2>
@@ -214,7 +303,7 @@ function SubmitNew() {
                 {...register("amountInWords")}
                 disabled={existingBgNumber?.length > 0 ? true : false}
               />
-            </Col>
+            </Col> */}
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
@@ -240,9 +329,6 @@ function SubmitNew() {
               </div>
               <input type="datepicker" className="form-control" placeholder="" {...register("validity")} format="yyyy-MM-dd" />
             </Col>
-          </Row>
-          <br></br>
-          <Row className="col-12">
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
@@ -265,6 +351,9 @@ function SubmitNew() {
                 <option> 12</option>
               </select>
             </Col>
+          </Row>
+          <br></br>
+          <Row className="col-12">
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
@@ -416,9 +505,6 @@ function SubmitNew() {
                 </div>
               )}
             </Col>
-          </Row>
-          <br></br>
-          <Row className="col-12">
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
@@ -434,6 +520,8 @@ function SubmitNew() {
               />
             </Col>
           </Row>
+          <br></br>
+
           <Row className="justify-content-end">
             <Button variant="outline-primary" className="col-md-2 my-2 mx-2" aria-label="right-end">
               Cancel

@@ -1143,10 +1143,10 @@ const AppliedDetailForm = (props) => {
                       </div>
                     </div>
                   )}
-                  <div>{Purpose === "DDJAY_APHP" && <DDJAYForm watch={watch} register={register} />}</div>
+                  {/* <div>{Purpose === "DDJAY_APHP" && <DDJAYForm watch={watch} register={register} />}</div> */}
                   <div>{Purpose === "RPL" && <ResidentialPlottedForm register={register} />}</div>
-                  <div>{Purpose === "IPL" && <IndustrialPlottedForm register={register} />}</div>
-                  <div>{Purpose === "CPL" && <CommercialPlottedForm register={register} />}</div>
+                  {/* <div>{Purpose === "IPL" && <IndustrialPlottedForm register={register} />}</div>
+                  <div>{Purpose === "CPL" && <CommercialPlottedForm register={register} />}</div> */}
                   <h5 className="text-black">NILP </h5>
                   <br></br>
                   <div className="table table-bordered table-responsive">
@@ -1693,7 +1693,7 @@ const AppliedDetailForm = (props) => {
                         {errors?.undertaking && errors?.undertaking?.message}
                       </h3>
                     </div>
-                    <div className="col col-9">
+                    {/* <div className="col col-9">
                       {Purpose === "RPL" && <LayoutPlan watch={watch} register={register} />}
                       {Purpose === "IPL" && <LayoutPlan watch={watch} register={register} />}
                       {Purpose === "IPA" && <LayoutPlan watch={watch} register={register} />}
@@ -1719,7 +1719,7 @@ const AppliedDetailForm = (props) => {
                       {Purpose === "SPRPRGH" && <DemarcationPlan watch={watch} register={register} />}
                       {Purpose === "DRH" && <DemarcationPlan watch={watch} register={register} />}
                       {Purpose === "RHP" && <DemarcationPlan watch={watch} register={register} />}
-                    </div>
+                    </div> */}
                   </div>
                   <div class="row">
                     <div class="col-sm-12 text-left">
