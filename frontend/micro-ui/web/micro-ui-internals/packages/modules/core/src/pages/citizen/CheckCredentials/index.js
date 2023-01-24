@@ -56,12 +56,26 @@ export default function CheckCredentials() {
 
     Digit.SessionStorage.set("citizen.userRequestObject", user);
     Digit.UserService.setUser(user);
+
+    if (location.state?.role) {
+      const roleInfo = info.roles.find((userRole) => userRole.code === location.state.role);
+      if (!roleInfo || !roleInfo.code) {
+        setError(t("ES_ERROR_USER_NOT_PERMITTED"));
+        setTimeout(() => history.replace(DEFAULT_REDIRECT_URL), 5000);
+        return;
+      }
+    }
+    if(window?.globalConfigs?.getConfig("ENABLE_SINGLEINSTANCE")){
+    info.tenantId= Digit.ULBService.getStateId();
+    }
+
+    setUser({ info, ...tokens });
     // setCitizenDetail(user?.info,user?.access_token)
     // const redirectPath = location.state?.from || DEFAULT_REDIRECT_URL;
     // history.replace(redirectPath);
     // console.log("SSoAUTHTOKEN",response?.data);
     // console.log("_ssoCitizen response ",response.data)
-    window.open(response?.data?.ReturnUrl,"_self");
+    // window.open(response?.data?.ReturnUrl,"_self");
 
     // redirectReturnUrl();
     // setCitizenDetail(user?.info,user?.access_token)
