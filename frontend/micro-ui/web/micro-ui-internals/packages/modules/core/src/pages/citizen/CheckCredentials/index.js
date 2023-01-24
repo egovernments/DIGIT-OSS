@@ -40,7 +40,7 @@ export default function CheckCredentials() {
     // console.log("SSoAUTH",response?.data);
     // console.log("SSoAUTHTOKEN",response?.data);
     // console.log("_ssoCitizen response ",response.data)
-    // window.open(response?.data?.ReturnUrl,"_self");
+    window.open(response?.data?.ReturnUrl,"_self");
 
     // redirectReturnUrl();
     // setCitizenDetail(user?.info,user?.access_token)
