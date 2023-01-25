@@ -80,17 +80,21 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import Tooltip from '@mui/material/Tooltip';
-import IconButton from '@mui/material/IconButton';
+// import Tooltip from '@mui/material/Tooltip';
+// import IconButton from '@mui/material/IconButton';
+import "../css/personalInfoChild.style.js";
+import { useStyles } from "../css/personalInfoChild.style.js";
 
 // const ServicePlanCivil = () => {
-    function ServicePlanCivil() {
+    function ServicePlanCivil(props) {
 
     const userRoles = Digit.UserService.getUser()?.info?.roles.map((item) => item.code)  || [];
     const showActionButton = userRoles.includes("CE_HQ")
     // console.log("logg123" ,userRoles, showActionButton );
     const [selects, setSelects] = useState();
     const [showhide, setShowhide] = useState("");
+
+    const classes = useStyles();
    
   
     const handleshowhide = (event) => {
@@ -129,11 +133,11 @@ import IconButton from '@mui/material/IconButton';
       {/* <Card > */}
         {/* <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Electrical Plan </h4> */}
         <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "20px", marginBottom: "52px" }}>
-          <Row className="ml-auto" style={{ marginBottom: 3 }}>
+          <Row className={classes.formLabel} style={{ marginTop: 4 , marginBottom: 4 }}>
            
             <Col md={6} xxl lg="6">
               <div>
-                <Form.Label>
+                <Form.Label className={classes.formLabel}>
                   <h2>
                   As per the approved layout plan/building plans 
                     &nbsp;&nbsp;
@@ -173,7 +177,7 @@ import IconButton from '@mui/material/IconButton';
             </Col>
             <Col  md={6} xxl lg="6">
               <div>
-                <Form.Label>
+                <Form.Label className={classes.formLabel}>
                 Level of stormwater and sewer line in conformity with approved EDC infrastructure works{" "}
                   <span style={{ color: "red" }}>*</span>
                   {/* <Tooltip title="Level of stormwater and sewer line in conformity with approved EDC infrastructure works">
@@ -362,7 +366,7 @@ import IconButton from '@mui/material/IconButton';
                   </h2>
                 </Form.Label>
               </div>
-              <input type="number" className="form-control"  disabled={!showActionButton} placeholder="" {...register("loiNumber")} />
+              <input type="number" className={classes.formLabel}  disabled={!showActionButton} placeholder="" {...register("loiNumber")} />
             </Col>
             <br></br>
             <Col  md={6} xxl lg="6">
