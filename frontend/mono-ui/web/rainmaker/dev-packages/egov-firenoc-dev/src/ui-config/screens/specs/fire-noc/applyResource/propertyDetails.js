@@ -188,7 +188,7 @@ uoms.forEach(uom => {
     setMandatory(dispatch, `${path}.${uom}`, true);
   } else {
     dispatch(
-      handleField("apply", path, uom, dynamic(uom, path, buildingIndex))
+      handleField("apply", path, uom, dynamic(uom, path, index))
     );
   }
 });

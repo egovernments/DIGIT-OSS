@@ -536,7 +536,7 @@ export const furnishNocResponse = response => {
     let uoms = get(building, "uoms", []);
     let uomMap = {};
     uoms.forEach(uom => {
-      uomMap[uom.code] = `${uom.value}`;
+      if (uom.active)uomMap[uom.code] = `${uom.value}`;
     });
     set(
       response,
