@@ -19,6 +19,7 @@ function SubmitNew() {
   const userInfo = Digit.UserService.getUser()?.info || {};
   const [typeOfBg, setTypeOfBg] = useState("");
   const [SubmissionSearch, setSubmissionSearch] = useState({});
+  const [searchExistingBg, setSearchExistingBg] = useState({});
   const {
     register,
     handleSubmit,
@@ -33,7 +34,7 @@ function SubmitNew() {
   const bankSubmitNew = async (data) => {
     const token = window?.localStorage?.getItem("token");
     const userInfo = Digit.UserService.getUser()?.info || {};
-    console.log(data);
+    console.log("validity", data);
     console.log("SubmissionSearch", SubmissionSearch);
     try {
       const postDistrict = {
@@ -45,7 +46,8 @@ function SubmitNew() {
             action: null,
             comment: "test comment",
             assignee: null,
-            ...SubmissionSearch,
+            // validity: data?.validity,
+            ...data,
           },
         ],
         RequestInfo: {
@@ -101,7 +103,8 @@ function SubmitNew() {
   };
   const [applicantId, setApplicantId] = useState("");
   const [showOption, setShowOption] = useState(false);
-  const landScheduleFormSubmitHandler = async () => {
+
+  const submitNewFormSubmitHandler = async () => {
     const token = window?.localStorage?.getItem("token");
     const payload = {
       RequestInfo: {
@@ -120,9 +123,9 @@ function SubmitNew() {
         `/tl-services/bank/guarantee/_search?typeOfBg=${getValues("typeOfBg")}&loiNumber=${getValues("loiNumber")}`,
         payload
       );
-
-      console.log("service", Resp?.data?.newBankGuaranteeList[0]);
-      setSubmissionSearch(Resp?.data?.newBankGuaranteeList[0]);
+      const Submitform = Resp?.data?.newBankGuaranteeList[0];
+      console.log("service", Submitform);
+      setSubmissionSearch(Submitform);
       setValue("amountInFig", Resp.data.newBankGuaranteeList[0].amountInFig);
       const userData = Resp?.data?.LicenseDetails?.[0];
       setStepData(userData);
@@ -131,13 +134,74 @@ function SubmitNew() {
     }
   };
 
-  // useEffect(() => {
-  //   const search = location?.search;
-  //   const params = new URLSearchParams(search);
-  //   const id = params.get("id");
-  //   setApplicantId(id?.toString());
-  //   if (id) getApplicantUserData(id);
-  // }, []);
+  const existingBgFormSubmitHandler = async () => {
+    const token = window?.localStorage?.getItem("token");
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        action: "_create",
+        did: 1,
+        key: "",
+        msgId: "20170310130900|en_IN",
+        ts: 0,
+        ver: ".01",
+        authToken: token,
+      },
+    };
+    try {
+      const Resp = await axios.post(
+        `/tl-services/bank/guarantee/_search?bgNumber=${getValues("bgNumber")}&bankName=${getValues("bankName")}`,
+        payload
+      );
+
+      console.log("service", Submitform);
+      setSearchExistingBg(Submitform);
+      setValue("loiNumber", Resp.data.newBankGuaranteeList[0].loiNumber);
+      setValue("typeOfBg", Resp.data.newBankGuaranteeList[0].typeOfBg);
+      setValue("amountInFig", Resp.data.newBankGuaranteeList[0].amountInFig);
+      setValue("amountInWords", Resp.data.newBankGuaranteeList[0].amountInWords);
+      const userData = Resp?.data?.LicenseDetails?.[0];
+      setStepData(userData);
+    } catch (error) {
+      return error;
+    }
+  };
+
+  const updateSubmitFormSubmitHandler = async () => {
+    const token = window?.localStorage?.getItem("token");
+    console.log("SubmissionSearch..........", searchExistingBg);
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        action: "_create",
+        did: 1,
+        key: "",
+        msgId: "20170310130900|en_IN",
+        ts: 0,
+        ver: ".01",
+        authToken: token,
+      },
+      NewBankGuaranteeRequest: [
+        {
+          action: "EXTEND",
+          comment: "test comment",
+          assignee: null,
+          ...searchExistingBg,
+        },
+      ],
+    };
+    try {
+      const Resp = await axios.post(`/tl-services/bank/guarantee/_update`, payload);
+
+      console.log("service......", Submitform);
+      setSearchExistingBg(Submitform);
+
+      const userData = Resp?.data?.LicenseDetails?.[0];
+      setStepData(userData);
+    } catch (error) {
+      return error;
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit(bankSubmitNew)}>
@@ -179,7 +243,7 @@ function SubmitNew() {
                   type="button"
                   class="btn btn-primary btn-md center-block"
                   style={{ marginBottom: "-44px" }}
-                  onClick={landScheduleFormSubmitHandler}
+                  onClick={submitNewFormSubmitHandler}
                 >
                   Search
                 </button>
@@ -521,7 +585,22 @@ function SubmitNew() {
             </Col>
           </Row>
           <br></br>
-
+          <Row className="col-12">
+            <Col md={4} xxl lg="3">
+              <div>
+                <button
+                  // id="btnClear"
+                  type="button"
+                  class="btn btn-primary btn-md center-block"
+                  style={{ marginBottom: "-44px" }}
+                  onClick={existingBgFormSubmitHandler}
+                >
+                  Search
+                </button>
+              </div>
+            </Col>
+          </Row>
+          <br></br>
           <Row className="justify-content-end">
             <Button variant="outline-primary" className="col-md-2 my-2 mx-2" aria-label="right-end">
               Cancel
@@ -529,6 +608,16 @@ function SubmitNew() {
 
             <Button variant="outline-primary" className="col-md-2 my-2 mx-2" type="submit" aria-label="right-end">
               Submit
+            </Button>
+
+            <Button
+              variant="outline-primary"
+              className="col-md-2 my-2 mx-2"
+              type="button"
+              aria-label="right-end"
+              onClick={updateSubmitFormSubmitHandler}
+            >
+              Update
             </Button>
           </Row>
 

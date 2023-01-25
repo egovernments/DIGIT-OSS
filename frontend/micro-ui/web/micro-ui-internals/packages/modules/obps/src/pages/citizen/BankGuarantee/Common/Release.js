@@ -23,11 +23,27 @@ function ReleaseNew() {
     watch,
   } = useForm({});
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const bankRelease = async (data) => {
+  const [SubmissionSearch, setSubmissionSearch] = useState({});
+  // const Submitform = Resp?.data?.newBankGuaranteeList[0];
+  const bankRelease = async (SubmissionSearch) => {
     const token = window?.localStorage?.getItem("token");
-    console.log(data);
+    const userInfo = Digit.UserService.getUser()?.info || {};
+
+    console.log("SubmissionSearch", SubmissionSearch);
     try {
       const postDistrict = {
+        NewBankGuaranteeRequest: [
+          {
+            tenantId: tenantId,
+            additionalDetails: null,
+            additionalDocuments: null,
+            action: "APPLY_FOR_RELEASE",
+            comment: "test comment",
+            assignee: null,
+            // validity: data?.validity,
+            ...SubmissionSearch,
+          },
+        ],
         RequestInfo: {
           apiId: "Rainmaker",
           action: "_create",
@@ -37,21 +53,12 @@ function ReleaseNew() {
           ts: 0,
           ver: ".01",
           authToken: token,
+          userInfo: userInfo,
         },
-        NewBankGuaranteeRequest: [
-          {
-            tenantId: tenantId,
-            additionalDetails: null,
-            additionalDocuments: null,
-            action: "PRE_SUBMIT",
-            comment: null,
-            assignee: null,
-            ...data,
-          },
-        ],
       };
-      const Resp = await axios.post("/tl-services/bank/guarantee/_create", postDistrict);
-      setServicePlanDataLabel(Resp.data);
+      const Resp = await axios.post("/tl-services/bank/guarantee/_update", postDistrict);
+      console.log("hsj", Resp);
+      setSubmissionSearch(Resp.data);
     } catch (error) {
       console.log(error.message);
     }
