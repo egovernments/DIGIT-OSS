@@ -6,7 +6,8 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { join } from "lodash";
-import MobileCancelBill from "../CancelBill/MobileCancelBill";
+//import MobileCancelBill from "../CancelBill/MobileCancelBill";
+import MobileGroupBill from "../GroupBill/MobileGroupBill";
 import { getBillNumber } from "../../utils";
 const GroupBills = ({ tenantId, onSubmit, data, count, isLoading, resultOk,serviceType,locality }) => {
     
@@ -25,6 +26,7 @@ const GroupBills = ({ tenantId, onSubmit, data, count, isLoading, resultOk,servi
     };
 
     const { t } = useTranslation();
+    const { data: tenantlocalties, isLoadingLocalities } = Digit.Hooks.useBoundaryLocalities(tenantId, 'revenue',{}, t);
     const { register, control, handleSubmit, setValue, getValues, reset, formState } = useForm({
         defaultValues: {
             offset: 0,
@@ -55,7 +57,7 @@ const GroupBills = ({ tenantId, onSubmit, data, count, isLoading, resultOk,servi
     const isMobile = window.Digit.Utils.browser.isMobile();
 
     if (isMobile) {
-        return <MobileCancelBill {...{ Controller, register, control, t, reset, handleSubmit, tenantId, data, onSubmit, isLoading, resultOk }} />;
+        return <MobileGroupBill {...{ Controller, register, control, t, reset, handleSubmit, tenantId, data, onSubmit,isLoading,resultOk,serviceType,locality,tenantlocalties }} />;
     }
     const DownloadBtn = (props) => {
         return (
@@ -89,7 +91,7 @@ const GroupBills = ({ tenantId, onSubmit, data, count, isLoading, resultOk,servi
                 Header: serviceType === "WS" || serviceType === "SW" ? t("PDF_STATIC_LABEL_CONSOLIDATED_BILL_CONSUMER_ID") : t("PROPERTY_ID"),
                 disableSortBy: true,
                 Cell: ({ row }) => {
-                    return GetCell(row.original?.user?.name || "NA");
+                    return GetCell(row.original?.consumerCode || "NA");
                 },
             },
             {
@@ -243,7 +245,7 @@ const GroupBills = ({ tenantId, onSubmit, data, count, isLoading, resultOk,servi
                 <span style={{ color: "#505A5F" }}>{t("WS_INFO_VALIDATION")}</span>
             </Card> */}
             <SearchForm className="ws-custom-wrapper" onSubmit={onSubmit} handleSubmit={handleSubmit}>
-                <SearchFields {...{ register, control, reset, tenantId, t, formState }} />
+                <SearchFields {...{ register, control, reset, tenantId, t, formState,tenantlocalties }} />
             </SearchForm>
             {isLoading && <Loader />}
             {data && data?.length == 0 ?  (

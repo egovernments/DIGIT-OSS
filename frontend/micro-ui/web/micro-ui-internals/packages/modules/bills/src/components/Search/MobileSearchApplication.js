@@ -13,7 +13,9 @@ import {
   DownloadBtnCommon
 } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
+import { getBillNumber } from "../../utils";
 import SearchFormFields from "./SearchFields";
+import { printRecieptMobile } from "../../utils";
 // import { convertEpochToDateDMY } from "../../utils";
 
 const MobileSearchApplication = ({ Controller, register, control, t, reset, previousPage, handleSubmit, tenantId, data, onSubmit,isLoading}) => {
@@ -113,9 +115,10 @@ const MobileSearchApplication = ({ Controller, register, control, t, reset, prev
         return (
             <div>
                 <span className="link">
-                    <button onClick={() => { handleBillLinkClick(row) }}>
+                    {/* <button onClick={() => { handleBillLinkClick(row) }}>
                         {row?.["billNumber"] || "NA"}
-                    </button>
+                    </button> */}
+                    {GetCell(getBillNumber(row?.businessService, row?.consumerCode, row?.billNumber))}
                 </span>
             </div>
         )
@@ -128,7 +131,14 @@ const MobileSearchApplication = ({ Controller, register, control, t, reset, prev
                 <span className="link">
                   <Link
                     to={{
-                      pathname: `/digit-ui/citizen/payment/collect/${original?.["businessService"]}/${original?.["consumerCode"]}/tenantId=${original?.["tenantId"]}?workflow=mcollect`,
+                     // pathname: `/digit-ui/citizen/payment/collect/${original?.["businessService"]}/${original?.["consumerCode"]}/tenantId=${original?.["tenantId"]}?workflow=mcollect`,
+                     pathname: `/digit-ui/employee/payment/collect/${original?.["businessService"]}/${
+                      original?.["consumerCode"]?.includes("WS") || original?.["consumerCode"]?.includes("SW")
+                        ? encodeURIComponent(original?.["consumerCode"], "/", "+")
+                        : original?.["consumerCode"]
+                    }/tenantId=${original?.["tenantId"]}?workflow=${
+                      original?.["consumerCode"]?.includes("WS") || original?.["consumerCode"]?.includes("SW") ? "WS" : "mcollect"
+                    }`,
                     }}
                   >
                     {t(`${"ABG_COLLECT"}`)}
@@ -142,7 +152,13 @@ const MobileSearchApplication = ({ Controller, register, control, t, reset, prev
                 <span className="link">
                   <Link
                     to={{
-                      pathname: `/digit-ui/employee/payment/collect/${original?.["businessService"]}/${original?.["consumerCode"]}/tenantId=${original?.["tenantId"]}?workflow=mcollect`,
+                      pathname: `/digit-ui/employee/payment/collect/${original?.["businessService"]}/${
+                        original?.["consumerCode"]?.includes("WS") || original?.["consumerCode"]?.includes("SW")
+                          ? encodeURIComponent(original?.["consumerCode"], "/", "+")
+                          : original?.["consumerCode"]
+                      }/tenantId=${original?.["tenantId"]}?workflow=${
+                        original?.["consumerCode"]?.includes("WS") || original?.["consumerCode"]?.includes("SW") ? "WS" : "mcollect"
+                      }`,
                     }}
                   >
                     {t(`${"ABG_GENERATE_NEW_BILL"}`)}
@@ -200,7 +216,7 @@ const MobileSearchApplication = ({ Controller, register, control, t, reset, prev
 
   return (
     <React.Fragment>
-      <div className="sideContent" style={{ marginLeft:"70%", marginTop:"-12%"}}>
+      <div className="sideContent" style={{ marginLeft:"65%", marginTop:"-12%"}}>
                   <DownloadBtn className="mrlg cursorPointer"  onClick={() => handleExcelDownload(tabledata)}/>
       </div>
             <Header>{t("ABG_SEARCH_BILL_COMMON_HEADER")}:</Header>

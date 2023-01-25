@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { getCancelButton, getRetryButton } from "../../../utils";
-const useSearchApplicationTableConfig = (setShowToast) => {
+const useSearchApplicationTableConfig = (setShowToast,data,isLoading,isMobile) => {
   
   const { t } = useTranslation();
 
@@ -46,7 +46,7 @@ const useSearchApplicationTableConfig = (setShowToast) => {
         return val ? (
           <div>
             <span className="link">
-              <div>{GetCell(getCancelButton(item.jobid, setShowToast))} </div>
+              <div>{GetCell(getCancelButton(item.jobid, setShowToast, t))} </div>
             </span>
           </div>
         ) : (
@@ -58,7 +58,7 @@ const useSearchApplicationTableConfig = (setShowToast) => {
         return (
           <div>
             <span className="link">
-              {GetCell(getRetryButton(item.key, item.tenantId, item.locality, item.isConsolidated, item.bussinessService, setShowToast))}
+              {GetCell(getRetryButton(item.key, item.tenantId, item.locality, item.isConsolidated, item.bussinessService, setShowToast,t))}
             </span>
           </div>
         );
@@ -81,6 +81,37 @@ const useSearchApplicationTableConfig = (setShowToast) => {
     }
   };
 
+  const getbusinessService = (row) => {
+    if (row?.isConsolidated && (row?.bussinessService == "WS" || row?.bussinessService == "SW")) {
+      let replaceKey = row?.bussinessService == "WS" ? "WS" : "SW";
+      let replaceWith = row?.bussinessService == "WS" ? "SW" : "WS";
+      return GetCell(t(`BILLINGSERVICE_BUSINESSSERVICE_${replaceKey}`) + "," + t(`BILLINGSERVICE_BUSINESSSERVICE_${replaceWith}`));
+    }
+    return GetCell(t(`BILLINGSERVICE_BUSINESSSERVICE_${row?.bussinessService}` || "-"));
+  }
+
+ 
+  if(isMobile){
+   return useMemo(() => {
+      
+      if(isLoading){
+          return [];
+      }
+      if(data === "")
+      {
+      return [];
+      }
+      return data?.groupBillrecords?.map((row) => ({
+          [t("TL_DATE_LABEL")]: new Date(Number(row?.createdtime)).toLocaleDateString() ,
+          [t("BUSINESS_SERVICE")]: getbusinessService(row) || "-",
+          [t("ES_INBOX_LOCALITY")]: GetCell(t(`${Digit.Utils.locale.getTransformedLocale(row?.tenantId)}_REVENUE_${row?.locality}`) || "-"),
+          [t("ABG_PT_CONSUMER_CODE_LABEL")]: GetCell(row?.consumerCode || "-"),
+          [t("ABG_COMMON_TABLE_COL_STATUS")]: getStatusColumn(getUpdatedStatus(row)),
+          [t("ABG_COMMON_TABLE_COL_ACTION")]: getActionButton(getUpdatedStatus(row), row),
+      }));
+   }, [data]);
+}
+else{
   return useMemo(
     () => [
       {
@@ -131,6 +162,7 @@ const useSearchApplicationTableConfig = (setShowToast) => {
     ],
     []
   );
+}
 };
 
 export default useSearchApplicationTableConfig;

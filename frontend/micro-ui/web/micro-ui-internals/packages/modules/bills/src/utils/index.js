@@ -133,8 +133,7 @@ export const printRecieptMobile = async (businessService, receiptNumber) => {
   const fileStore = await Digit.PaymentService.printReciept(state, { fileStoreIds: response.filestoreIds[0] });
   window.open(fileStore[response.filestoreIds[0]], "_blank");
 };
-export const getRetryButton = (key, tenantId, locality, isConsolidated, businessService,setShowToast) => {
-  const { t } = useTranslation();
+export const getRetryButton = (key, tenantId, locality, isConsolidated, businessService,setShowToast,t) => {
   return (
     <>
     <div
@@ -152,8 +151,8 @@ export const getRetryButton = (key, tenantId, locality, isConsolidated, business
   );
 };
 
-export const getCancelButton = (jobid,setShowToast) => {
-  const { t } = useTranslation();
+export const getCancelButton = (jobid,setShowToast,t) => {
+  
   return (
     <div
       style={{

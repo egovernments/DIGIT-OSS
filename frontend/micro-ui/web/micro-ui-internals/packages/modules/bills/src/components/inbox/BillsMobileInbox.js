@@ -2,6 +2,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { ApplicationCard } from "./ApplicationCard";
 import { Link } from "react-router-dom";
+import { printRecieptMobile } from "../../utils";
 
 const GetDateCell = (value) => {
   const date = new Date(value);

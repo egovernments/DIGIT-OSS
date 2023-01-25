@@ -2,7 +2,7 @@ import React, { Fragment, useState } from "react";
 import { TextInput, SubmitBar, DatePicker, SearchField, Dropdown, Loader, MobileNumber, CardLabelError } from "@egovernments/digit-ui-react-components";
 import { Controller, useWatch } from "react-hook-form";
 
-const SearchFields = ({ register, control, reset, tenantId, t, formState }) => {
+const SearchFields = ({ register, control, reset, tenantId, t, formState,tenantlocalties }) => {
 
     const formErrors = formState?.errors
     const propsForMobileNumber = {
@@ -32,7 +32,7 @@ const SearchFields = ({ register, control, reset, tenantId, t, formState }) => {
         });
     }
     
-    const { data: tenantlocalties, isLoadingLocalities } = Digit.Hooks.useBoundaryLocalities(tenantId, 'revenue',{}, t);
+    //const { data: tenantlocalties, isLoadingLocalities } = Digit.Hooks.useBoundaryLocalities(tenantId, 'revenue',{}, t);
     
     //const filteredData = generateServiceType?.["common-masters"]?.uiCommonPay.filter(element => element?.cancelBill)
 
@@ -65,13 +65,14 @@ const SearchFields = ({ register, control, reset, tenantId, t, formState }) => {
 
     const serviceCategory = useWatch({ control: control, name: "businesService", defaultValue: "" });
 
-
+    const isMobile = window.Digit.Utils.browser.isMobile();
     const getLabel = () => {
         const service = serviceCategory?.businesService
         if (service === "WS" || service === "SW" || !service)
-            return <label style={{ marginLeft: "-80px", width: "120%" } }>{t("ABG_COMMON_TABLE_COL_CONSUMER_ID")}</label>
+            return <label style={isMobile ? {} : { marginLeft: "-80px", width: "120%" } }>{t("ABG_COMMON_TABLE_COL_CONSUMER_ID")}</label>
         else
-            return <label style={{ marginLeft: "-80px", width: "120%" } }>{t("ABG_COMMON_TABLE_COL_PROPERTY_ID")}</label>
+            return <label style={isMobile ? {} : { marginLeft: "-80px", width: "120%" } }>{t("ABG_COMMON_TABLE_COL_PROPERTY_ID")}</label>
+
     }
 
     const getInputBasedOnServiceCategory = () => {
@@ -116,7 +117,7 @@ const SearchFields = ({ register, control, reset, tenantId, t, formState }) => {
                             onBlur={props.onBlur}
                             t={t}
                             selected={props.value}
-                            style={{width:"125%"}}
+                            style={isMobile?{} : {width:"125%"}}
                             optionCardStyles={{zIndex:"20"}}
                         />
                     )}
@@ -126,7 +127,7 @@ const SearchFields = ({ register, control, reset, tenantId, t, formState }) => {
             </SearchField>
 
             <SearchField>
-                <label style={{ width: "125%", marginLeft: "-40px" }}>
+                <label style={isMobile?{} : { width: "125%", marginLeft: "-40px" }}>
                     {`${t("CS_INBOX_LOCALITY_FILTER")} *`}
                 </label>
 
@@ -144,7 +145,7 @@ const SearchFields = ({ register, control, reset, tenantId, t, formState }) => {
                             onBlur={props.onBlur}
                             t={t}
                             selected={props.value}
-                            style={{ width: "125%",marginLeft:"-40px" }}
+                            style={isMobile? {} : { width: "125%",marginLeft:"-40px" }}
                         />
                     )}
                 />
@@ -153,7 +154,7 @@ const SearchFields = ({ register, control, reset, tenantId, t, formState }) => {
             </SearchField>
             <SearchField>
                 {getLabel()}
-                <TextInput name="consumerCode" style={{marginLeft:"-80px",width:"120%"}}
+                <TextInput name="consumerCode" style={isMobile? {} : {marginLeft:"-80px",width:"120%"}}
                     inputRef={register({})}
                 />
             </SearchField>

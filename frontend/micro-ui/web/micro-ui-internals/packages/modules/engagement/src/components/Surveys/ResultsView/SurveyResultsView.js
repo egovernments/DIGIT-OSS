@@ -84,7 +84,7 @@ const displayResult = (ques,ans,type,resCount=0,t) => {
                         
                         <div style={{"margin":"30px"}}>
                             <CardSectionHeader>{ques.questionStatement}</CardSectionHeader>
-                            <header style={{"fontWeight":"bold"}}>{`${resCount} Responses`}</header>
+                            <header style={{"fontWeight":"bold"}}>{`${resCount} ${t("SURVEY_RESPONSES")}`}</header>
                             {/* <div className="responses-container-date">
                             {ans?.map(el=> <div className='date-time'>{transformDate(el).date}</div>)}
                             </div> */}
@@ -105,7 +105,7 @@ const displayResult = (ques,ans,type,resCount=0,t) => {
                 return (
                         <div style={{"margin":"30px"}}>
                             <CardSectionHeader>{ques.questionStatement}</CardSectionHeader>
-                           <header style={{"fontWeight":"bold"}}>{`${resCount} Responses`}</header>
+                           <header style={{"fontWeight":"bold"}}>{`${resCount} ${t("SURVEY_RESPONSES")}`}</header>
                             {/* <div className='responses-container-date'>
                             {ans?.map(el=> <div className='date-time'><strong>{el}</strong></div>)}
                             </div> */}
@@ -132,7 +132,7 @@ const displayResult = (ques,ans,type,resCount=0,t) => {
                         // </div>
                         <div style={{"margin":"30px"}}>
                             <CardSectionHeader>{ques.questionStatement}</CardSectionHeader>
-                            <header style={{"fontWeight":"bold"}}>{`${resCount} Responses`}</header>
+                            <header style={{"fontWeight":"bold"}}>{`${resCount} ${t("SURVEY_RESPONSES")}`}</header>
                             <div className='responses-container'>
                             {ans?.map(el=> <div className='response-result responses-container-line'>{el}<BreakLine style={{"marginTop":"10px"}} /></div>)}
                             </div>
@@ -154,7 +154,7 @@ const displayResult = (ques,ans,type,resCount=0,t) => {
                         // </div>
                         <div style={{"margin":"30px"}}>
                             <CardSectionHeader>{ques.questionStatement}</CardSectionHeader>
-                            <header style={{"fontWeight":"bold"}}>{`${resCount} Responses`}</header>
+                            <header style={{"fontWeight":"bold"}}>{`${resCount} ${t("SURVEY_RESPONSES")}`}</header>
                             {/* {ans?.map(el=> <p>{el}<BreakLine /></p>)} */}
                             <div className='responses-container' style={{"padding":"30px"}}>
                             <CheckBoxChart data={ques}/>
@@ -166,7 +166,7 @@ const displayResult = (ques,ans,type,resCount=0,t) => {
                 return (
                         <div style={{"margin":"30px"}}>
                             <CardSectionHeader>{ques.questionStatement}</CardSectionHeader>
-                            <header style={{"fontWeight":"bold"}}>{`${resCount} Responses`}</header>
+                            <header style={{"fontWeight":"bold"}}>{`${resCount} ${t("SURVEY_RESPONSES")}`}</header>
                             {/* {ans?.map(el=> <p>{el}<BreakLine /></p>)} */}
                             <div className='responses-container' style={{overflow:"-moz-hidden-unscrollable"}}>
                             <McqChart data={ques}/>

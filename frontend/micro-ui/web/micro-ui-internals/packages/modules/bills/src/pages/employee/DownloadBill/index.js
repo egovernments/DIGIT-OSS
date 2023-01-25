@@ -1,4 +1,4 @@
-import { Header, DownloadIcon, Table, Loader, Toast } from "@egovernments/digit-ui-react-components";
+import { Header, DownloadIcon, Table, Loader, Toast, DetailsCard } from "@egovernments/digit-ui-react-components";
 import React, { useCallback, useEffect, useMemo, useState, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import DesktopInbox from "../../../components/inbox/BillsDesktopInbox";
@@ -8,6 +8,7 @@ import { useFormContext } from "react-hook-form";
 
 const DownloadBillInbox = () => {
   const { t } = useTranslation();
+  const isMobile = window.Digit.Utils.browser.isMobile();
 
   const [showToast, setShowToast] = useState(null);
 
@@ -21,6 +22,10 @@ const DownloadBillInbox = () => {
   };
 
   const { data, isLoading, isError, error } = Digit.Hooks.useBulkPdfDetails({ filters: filters });
+  const showingToastMessage = (message) => {
+    setShowToast(message);
+  };
+  const columns = useSearchApplicationTableConfig(showingToastMessage,data,isLoading,isMobile);
 
   useEffect(() => {
     setTotalRecords(data?.groupBillrecords.length);
@@ -37,11 +42,8 @@ const DownloadBillInbox = () => {
   };
 
 
-  const showingToastMessage = (message) => {
-    setShowToast(message);
-  };
+  
 
-  const columns = useSearchApplicationTableConfig(showingToastMessage);
   const TableComponent = useCallback(() => {
     if (isLoading) {
       return <Loader />;
@@ -56,7 +58,16 @@ const DownloadBillInbox = () => {
               </p>
             ))}
         </Card>
-      ) : (
+      ) :
+      isMobile ? ( <DetailsCard
+        {...{
+            handleSelect: (e) => {},
+            handleDetailCardClick : (e) => {},
+            data: [...columns],
+            serviceRequestIdKey: t("TL_DATE_LABEL"),
+        }}
+    />) :
+      (
         <>
           <Table
             t={t}
