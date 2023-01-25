@@ -300,11 +300,6 @@ export const directMapping = async (
         directArr[i].valJsonPath
       );
       if (
-        directArr[i].val == "NA" &&
-        directArr[i].valJsonPath.includes("billAccountDetails")
-      )
-        directArr[i].val = 0;
-      if (
         directArr[i].val !== "" &&
         directArr[i].localisation &&
         directArr[i].localisation.required
