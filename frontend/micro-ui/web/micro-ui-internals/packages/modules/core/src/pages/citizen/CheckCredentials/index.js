@@ -27,7 +27,7 @@ export default function CheckCredentials() {
         "tokenId": queryParameters.get("TokenId")
       }
     }
-    const response = await axios.post("http://103.166.62.118:80/user/users/_ssoCitizen", body)
+    const {response, UserRequest: info, ...tokens} = await axios.post("http://103.166.62.118:80/user/users/_ssoCitizen", body)
     localStorage.setItem("access_token", response?.data?.Token?.access_token);
     localStorage.setItem("token", response?.data?.Token?.refresh_token);
     localStorage.setItem("Citizen.tenant-id",response?.data?.Token?.UserRequest?.tenantId);
@@ -46,21 +46,34 @@ export default function CheckCredentials() {
     Digit.UserService.setUser(response?.data?.Token?.UserRequest);
 
     // try {
-      const reqBodyUser = 
-        {
-          "tenantId": response?.data?.Token?.UserRequest?.tenantId,
-          "uuid": [response?.data?.Token?.UserRequest?.uuid],
-          "pageSize": "100",
-          "RequestInfo": {
-            "authToken": response?.data?.Token?.access_token,
-            "userInfo": response?.data?.Token?.UserRequest,
+      // const reqBodyUser = 
+      //   {
+      //     "tenantId": response?.data?.Token?.UserRequest?.tenantId,
+      //     "uuid": [response?.data?.Token?.UserRequest?.uuid],
+      //     "pageSize": "100",
+      //     "RequestInfo": {
+      //       "authToken": response?.data?.Token?.access_token,
+      //       "userInfo": response?.data?.Token?.UserRequest,
             
-          }
-        }
+      //     }
+      //   }
       
-      const usersResponse = await axios.post(`/user/_search`,reqBodyUser);
-      console.log("GETUSER",usersResponse);
-      setUser(usersResponse);
+      // const usersResponse = await axios.post(`/user/_search`,reqBodyUser);
+
+      if (location.state?.role) {
+        const roleInfo = info.roles.find((userRole) => userRole.code === location.state.role);
+        if (!roleInfo || !roleInfo.code) {
+          setError(t("ES_ERROR_USER_NOT_PERMITTED"));
+          setTimeout(() => history.replace(DEFAULT_REDIRECT_URL), 5000);
+          return;
+        }
+      }
+      if (window?.globalConfigs?.getConfig("ENABLE_SINGLEINSTANCE")) {
+        info.tenantId = Digit.ULBService.getStateId();
+      }
+      
+      // console.log("GETUSER",usersResponse);
+      setUser({info, ...tokens});
     // }catch{
       
     // }
