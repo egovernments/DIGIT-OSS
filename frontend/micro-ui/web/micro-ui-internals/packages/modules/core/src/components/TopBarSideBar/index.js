@@ -19,6 +19,7 @@ const TopBarSideBar = ({
   islinkDataLoading,
 }) => {
   const [isSidebarOpen, toggleSidebar] = useState(false);
+  const [isSideBarScroll, setSideBarScrollTop] = useState(false);
   const history = useHistory();
   const [showDialog, setShowDialog] = useState(false);
   const handleLogout = () => {
@@ -45,7 +46,9 @@ const TopBarSideBar = ({
         t={t}
         stateInfo={stateInfo}
         toggleSidebar={toggleSidebar}
+        setSideBarScrollTop={setSideBarScrollTop}
         isSidebarOpen={isSidebarOpen}
+        isSideBarScroll={isSideBarScroll}
         handleLogout={handleLogout}
         userDetails={userDetails}
         CITIZEN={CITIZEN}
@@ -65,6 +68,8 @@ const TopBarSideBar = ({
           CITIZEN={CITIZEN}
           isSidebarOpen={isSidebarOpen}
           toggleSidebar={toggleSidebar}
+          isSideBarScroll={isSideBarScroll}
+          setSideBarScrollTop={setSideBarScrollTop}
           handleLogout={handleLogout}
           mobileView={mobileView}
           userDetails={userDetails}

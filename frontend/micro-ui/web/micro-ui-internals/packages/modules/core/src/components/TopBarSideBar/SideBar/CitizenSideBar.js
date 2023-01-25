@@ -88,7 +88,7 @@ const PoweredBy = () => (
 /* 
 Feature :: Citizen Webview sidebar
 */
-export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogout, isEmployee = false, linkData, islinkDataLoading }) => {
+export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogout, isEmployee = false, linkData, islinkDataLoading, isSideBarScroll }) => {
   const { data: storeData, isFetched } = Digit.Hooks.useStore.getInitData();
   const { stateInfo } = storeData || {};
   const user = Digit.UserService.getUser();
@@ -247,6 +247,7 @@ export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogo
       toggleSidebar={toggleSidebar}
       profileItem={profileItem}
       onClose={closeSidebar}
+      isSideBarScroll={isSideBarScroll}
       menuItems={menuItems}
       Footer={<PoweredBy />}
       isEmployee={isEmployee}

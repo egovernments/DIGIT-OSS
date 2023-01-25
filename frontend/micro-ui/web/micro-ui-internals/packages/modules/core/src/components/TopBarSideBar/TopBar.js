@@ -23,6 +23,7 @@ const TopBar = ({
   handleUserDropdownSelection,
   logoUrl,
   showLanguageChange = true,
+  setSideBarScrollTop,
 }) => {
   const [profilePic, setProfilePic] = React.useState(null);
 
@@ -63,6 +64,7 @@ const TopBar = ({
   const updateSidebar = () => {
     if (!Digit.clikOusideFired) {
       toggleSidebar(true);
+      setSideBarScrollTop(true);
     } else {
       Digit.clikOusideFired = false;
     }

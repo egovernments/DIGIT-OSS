@@ -63,12 +63,17 @@ const IconsObject = {
   LanguageIcon: <LanguageIcon className="icon" />,
   LoginIcon: <LoginIcon className="icon" />
 };
-const NavBar = ({ open, toggleSidebar, profileItem, menuItems, onClose, Footer, isEmployee, search, setSearch }) => {
+const NavBar = ({ open, toggleSidebar, profileItem, menuItems, onClose, Footer, isEmployee, search, setSearch,isSideBarScroll }) => {
   const node = useRef();
   const location = useLocation();
   const { pathname } = location;
   const { t } = useTranslation();
   Digit.Hooks.useClickOutside(node, open ? onClose : null, open);
+
+  if(isSideBarScroll &&  !Digit.clikOusideFired)
+  {
+    document.getElementById("sideBarMenu").scrollTo(0,0);
+  }
 
   const MenuItem = ({ item }) => {
     let itemComponent;
@@ -176,7 +181,7 @@ const NavBar = ({ open, toggleSidebar, profileItem, menuItems, onClose, Footer, 
           }}
         >
           {profileItem}
-          <div className="drawer-list">
+          <div className="drawer-list" id="sideBarMenu">
             {isEmployee ? renderSearch() : null}
             {menuItems?.map((item, index) => (
               <div className={`sidebar-list ${pathname === item.link ? "active" : ""}`} key={index}>
