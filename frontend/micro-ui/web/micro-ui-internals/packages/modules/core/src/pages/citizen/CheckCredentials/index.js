@@ -45,7 +45,7 @@ export default function CheckCredentials() {
     Digit.SessionStorage.set("citizen.userRequestObject", response?.data?.Token?.UserRequest);
     Digit.UserService.setUser(response?.data?.Token?.UserRequest);
 
-    const usersResponse = await Digit.UserService.userSearch(response?.data?.Token?.UserRequest?.tenantId, { uuid: [response?.data?.Token?.UserRequest?.uuid] }, {});
+    const usersResponse = await Digit.UserService.userSearch(response?.data?.Token?.UserRequest?.tenantId, { uuid: [response?.data?.Token?.UserRequest?.uuid] }, {RequestInfo :{ userInfo :response?.data?.Token?.UserRequest,apiId:"",authToken:response?.data?.Token?.access_token,msgId:""}});
       console.log("GETUSER",usersResponse);
       setUser(usersResponse);
     
