@@ -397,7 +397,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
               "idType": "string",
               "idNumber": "string",
               "mobile": mobileNumberUser,
-              "email": email
+              "email": emailId
             },
             "data": {
               "id": "string"
