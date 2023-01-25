@@ -9,6 +9,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 
 const ServicePlanService = () => {
   const [file, setFile] = useState(null);
@@ -226,11 +227,19 @@ const ServicePlanService = () => {
                   <h2>Self-certified drawings from empanelled/certified architects that conform to the standard approved template as per the TCP layout plan / Site plan.</h2>
                 </td>
                 <td component="th" scope="row">
+                  <label for='file-input-1'>
+                    <FileUploadIcon 
+                    color="primary"
+                    />
+                  </label>
                   <input
                     type="file"
                     className="form-control"
+                    id="file-input-1"
                     onChange={(e) => getDocumentData(e?.target?.files[0], "selfCertifiedDrawingFromEmpaneledDoc")}
+                    style={{display: "none"}}
                   />
+                    
                   {fileStoreId?.selfCertifiedDrawingFromEmpaneledDoc ? 
                   <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.selfCertifiedDrawingFromEmpaneledDoc)}>
                     {" "}
@@ -248,11 +257,18 @@ const ServicePlanService = () => {
                   <h2>Environmental Clearance.</h2>
                 </td>
                 <td component="th" scope="row">
+                <label for='file-input-2'>
+                    <FileUploadIcon 
+                    color="primary"
+                    />
+                  </label>
                   <input
                     type="file"
                     className="form-control"
+                    id="file-input-2"
                     // {...register("environmentalClearance")}
                     onChange={(e) => getDocumentData(e?.target?.files[0], "environmentalClearance")}
+                    style={{display: "none"}}
                   />
                   {fileStoreId?.environmentalClearance ? 
                   <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.environmentalClearance)}>
@@ -271,11 +287,18 @@ const ServicePlanService = () => {
                   <h2>Service plan in PDF (OCR Compatible) + GIS format.</h2>
                 </td>
                 <td component="th" scope="row">
+                <label for='file-input-3'>
+                    <FileUploadIcon 
+                    color="primary"
+                    />
+                  </label>
                   <input
                     type="file"
                     className="form-control"
                     // {...register("shapeFileAsPerTemplate")}
+                    id="file-input-3"
                     onChange={(e) => getDocumentData(e?.target?.files[0], "shapeFileAsPerTemplate")}
+                    style={{display: "none"}}
                   />
                   {fileStoreId?.shapeFileAsPerTemplate ? 
                   <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.shapeFileAsPerTemplate)}>
@@ -294,11 +317,18 @@ const ServicePlanService = () => {
                   <h2>Service plan in AutoCAD (DXF) file.</h2>
                 </td>
                 <td component="th" scope="row">
+                <label for='file-input-4'>
+                    <FileUploadIcon 
+                    color="primary"
+                    />
+                  </label>
                   <input
                     type="file"
                     className="form-control"
+                    id="file-input-4"
                     // {...register("autoCadFile")}
                     onChange={(e) => getDocumentData(e?.target?.files[0], "autoCadFile")}
+                    style={{display: "none"}}
                   />
                   {fileStoreId?.autoCadFile ? 
                   <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.autoCadFile)}>
@@ -317,11 +347,18 @@ const ServicePlanService = () => {
                   <h2>Certified copy of the Service plan verified by a third party.</h2>
                 </td>
                 <td component="th" scope="row">
+                <label for='file-input-5'>
+                    <FileUploadIcon 
+                    color="primary"
+                    />
+                  </label>
                   <input
                     type="file"
                     className="form-control"
                     // {...register("certifieadCopyOfThePlan")}
+                    id="file-input-5"
                     onChange={(e) => getDocumentData(e?.target?.files[0], "certifieadCopyOfThePlan")}
+                    style={{display: "none"}}
                   />
                   {fileStoreId?.certifieadCopyOfThePlan ? 
                   <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.certifieadCopyOfThePlan)}>

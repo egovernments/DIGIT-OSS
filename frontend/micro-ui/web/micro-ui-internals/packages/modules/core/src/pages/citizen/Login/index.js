@@ -183,6 +183,8 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
           info.tenantId = Digit.ULBService.getStateId();
         }
 
+        console.log("INFOTOK",info,tokens);
+
         setUser({ info, ...tokens });
       }
     } catch (err) {

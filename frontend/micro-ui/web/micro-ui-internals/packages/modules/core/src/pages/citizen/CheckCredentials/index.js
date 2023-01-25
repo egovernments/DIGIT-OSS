@@ -45,9 +45,27 @@ export default function CheckCredentials() {
     Digit.SessionStorage.set("citizen.userRequestObject", response?.data?.Token?.UserRequest);
     Digit.UserService.setUser(response?.data?.Token?.UserRequest);
 
-    const usersResponse = await Digit.UserService.userSearch(response?.data?.Token?.UserRequest?.tenantId, { uuid: [response?.data?.Token?.UserRequest?.uuid] }, {});
+    // try {
+      const reqBodyUser = 
+        {
+          "tenantId": response?.data?.Token?.UserRequest?.tenantId,
+          "uuid": [response?.data?.Token?.UserRequest?.uuid],
+          "pageSize": "100",
+          "RequestInfo": {
+            "authToken": response?.data?.Token?.access_token,
+            "userInfo": response?.data?.Token?.UserRequest,
+            
+          }
+        }
+      
+      const usersResponse = await axios.post(`/user/_search`,reqBodyUser);
       console.log("GETUSER",usersResponse);
       setUser(usersResponse);
+    // }catch{
+      
+    // }
+    
+    
     
       
 
