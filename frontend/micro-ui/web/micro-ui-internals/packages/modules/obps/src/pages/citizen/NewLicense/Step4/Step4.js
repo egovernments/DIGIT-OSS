@@ -103,6 +103,8 @@ const AppliedDetailForm = (props) => {
     // if (!validateDgpsPoint()) {
     //   return;
     // }
+    console.log("data", data);
+    return;
     setLoader(true);
     const token = window?.localStorage?.getItem("token");
     const postDistrict = {
@@ -115,184 +117,182 @@ const AppliedDetailForm = (props) => {
         DetailsofAppliedLand: {
           dgpsDetails: modalData,
           DetailsAppliedLandPlot: {
-            regularOption: data?.regularOption,
-            resplotno: data?.resplotno,
-            reslengthmtr: data?.reslengthmtr,
-            reswidthmtr: data?.reswidthmtr,
-            resareasq: data?.resareasq,
-            npnlplotno: data?.npnlplotno,
-            npnllengthmtr: data?.npnllengthmtr,
-            npnlwidthmtr: data?.npnlwidthmtr,
-            npnlareasq: data?.npnlareasq,
-            ewsplotno: data?.ewsplotno,
-            ewslengthmtr: data?.ewslengthmtr,
-            ewswidthmtr: data?.ewswidthmtr,
-            ewsareasq: data?.ewsareasq,
-            complotno: data?.complotno,
-            comlengthmtr: data?.comlengthmtr,
-            comwidthmtr: data?.comwidthmtr,
-            comareasq: data?.comareasq,
-            siteplotno: data?.siteplotno,
-            sitelengthmtr: data?.sitelengthmtr,
-            sitewidthmtr: data?.sitewidthmtr,
-            siteareasq: data?.siteareasq,
-
-            parkplotno: data?.parkplotno,
-            parklengthmtr: data?.parklengthmtr,
-            parkwidthmtr: data?.parkwidthmtr,
-            parkareasq: data?.parkareasq,
-            publicplotno: data?.publicplotno,
-            publiclengthmtr: data?.publiclengthmtr,
-            publicwidthmtr: data?.publicwidthmtr,
-            publicareasq: data?.publicareasq,
-
-            etpplotno: data?.etpplotno,
-            etplengthmtr: data?.etplengthmtr,
-            etpwidthmtr: data?.etpwidthmtr,
-            etpareasq: data?.etpareasq,
-            wtpplotno: data?.wtpplotno,
-            wtplengthmtr: data?.wtplengthmtr,
-            wtpwidthmtr: data?.wtpwidthmtr,
-            wtpareasq: data?.wtpareasq,
-            ugtplotno: data?.ugtplotno,
-            ugtlengthmtr: data?.ugtlengthmtr,
-            ugtwidthmtr: data?.ugtwidthmtr,
-            ugtareasq: data?.ugtareasq,
-            milkboothplotno: data?.milkboothplotno,
-            milkboothlengthmtr: data?.milkboothlengthmtr,
-            milkboothwidthmtr: data?.milkboothwidthmtr,
-            milkboothareasq: data?.milkboothareasq,
-            gssplotno: data?.gssplotno,
-            gsslengthmtr: data?.gsslengthmtr,
-            gssWidthmtr: data?.gssWidthmtr,
-            gssareasq: data?.gssareasq,
-            resDimension: data?.resDimension,
-            resEnteredArea: data?.resEnteredArea,
-            comDimension: data?.comDimension,
-            comEnteredArea: data?.comEnteredArea,
-            secPlanPlot: data?.secPlanPlot,
-            secPlanLength: data?.secPlanLength,
-            secPlanDim: data?.secPlanDim,
-            secPlanEntered: data?.secPlanEntered,
-            greenBeltPlot: data?.greenBeltPlot,
-            greenBeltLength: data?.greenBeltLength,
-            greenBeltDim: data?.greenBeltDim,
-            greenBeltEntered: data?.greenBeltEntered,
-            internalPlot: data?.internalPlot,
-            internalLength: data?.internalLength,
-            internalDim: data?.internalDim,
-            internalEntered: data?.internalEntered,
-            otherPlot: data?.otherPlot,
-            otherLength: data?.otherLength,
-            otherDim: data?.otherDim,
-            otherEntered: data?.otherEntered,
-            undeterminedPlot: data?.undeterminedPlot,
-            undeterminedLength: data?.undeterminedLength,
-            undeterminedDim: data?.undeterminedDim,
-            undeterminedEntered: data?.undeterminedEntered,
+            // regularOption: data?.regularOption,
+            // resplotno: data?.resplotno,
+            // reslengthmtr: data?.reslengthmtr,
+            // reswidthmtr: data?.reswidthmtr,
+            // resareasq: data?.resareasq,
+            // npnlplotno: data?.npnlplotno,
+            // npnllengthmtr: data?.npnllengthmtr,
+            // npnlwidthmtr: data?.npnlwidthmtr,
+            // npnlareasq: data?.npnlareasq,
+            // ewsplotno: data?.ewsplotno,
+            // ewslengthmtr: data?.ewslengthmtr,
+            // ewswidthmtr: data?.ewswidthmtr,
+            // ewsareasq: data?.ewsareasq,
+            // complotno: data?.complotno,
+            // comlengthmtr: data?.comlengthmtr,
+            // comwidthmtr: data?.comwidthmtr,
+            // comareasq: data?.comareasq,
+            // siteplotno: data?.siteplotno,
+            // sitelengthmtr: data?.sitelengthmtr,
+            // sitewidthmtr: data?.sitewidthmtr,
+            // siteareasq: data?.siteareasq,
+            // parkplotno: data?.parkplotno,
+            // parklengthmtr: data?.parklengthmtr,
+            // parkwidthmtr: data?.parkwidthmtr,
+            // parkareasq: data?.parkareasq,
+            // publicplotno: data?.publicplotno,
+            // publiclengthmtr: data?.publiclengthmtr,
+            // publicwidthmtr: data?.publicwidthmtr,
+            // publicareasq: data?.publicareasq,
+            // etpplotno: data?.etpplotno,
+            // etplengthmtr: data?.etplengthmtr,
+            // etpwidthmtr: data?.etpwidthmtr,
+            // etpareasq: data?.etpareasq,
+            // wtpplotno: data?.wtpplotno,
+            // wtplengthmtr: data?.wtplengthmtr,
+            // wtpwidthmtr: data?.wtpwidthmtr,
+            // wtpareasq: data?.wtpareasq,
+            // ugtplotno: data?.ugtplotno,
+            // ugtlengthmtr: data?.ugtlengthmtr,
+            // ugtwidthmtr: data?.ugtwidthmtr,
+            // ugtareasq: data?.ugtareasq,
+            // milkboothplotno: data?.milkboothplotno,
+            // milkboothlengthmtr: data?.milkboothlengthmtr,
+            // milkboothwidthmtr: data?.milkboothwidthmtr,
+            // milkboothareasq: data?.milkboothareasq,
+            // gssplotno: data?.gssplotno,
+            // gsslengthmtr: data?.gsslengthmtr,
+            // gssWidthmtr: data?.gssWidthmtr,
+            // gssareasq: data?.gssareasq,
+            // resDimension: data?.resDimension,
+            // resEnteredArea: data?.resEnteredArea,
+            // comDimension: data?.comDimension,
+            // comEnteredArea: data?.comEnteredArea,
+            // secPlanPlot: data?.secPlanPlot,
+            // secPlanLength: data?.secPlanLength,
+            // secPlanDim: data?.secPlanDim,
+            // secPlanEntered: data?.secPlanEntered,
+            // greenBeltPlot: data?.greenBeltPlot,
+            // greenBeltLength: data?.greenBeltLength,
+            // greenBeltDim: data?.greenBeltDim,
+            // greenBeltEntered: data?.greenBeltEntered,
+            // internalPlot: data?.internalPlot,
+            // internalLength: data?.internalLength,
+            // internalDim: data?.internalDim,
+            // internalEntered: data?.internalEntered,
+            // otherPlot: data?.otherPlot,
+            // otherLength: data?.otherLength,
+            // otherDim: data?.otherDim,
+            // otherEntered: data?.otherEntered,
+            // undeterminedPlot: data?.undeterminedPlot,
+            // undeterminedLength: data?.undeterminedLength,
+            // undeterminedDim: data?.undeterminedDim,
+            // undeterminedEntered: data?.undeterminedEntered,
           },
-          DetailsAppliedLandDdjay: {
-            frozenNo: data?.frozenNo,
-            frozenArea: data?.frozenArea,
-            organize: data?.organize,
-            organizeArea: data?.organizeArea,
-          },
-          DetailsAppliedLandIndustrial: {
-            colonyfiftyNo: data?.colonyfiftyNo,
-            colonyfiftyArea: data?.colonyfiftyArea,
-            fiftyToTwoNo: data?.fiftyToTwoNo,
-            fiftyToTwoArea: data?.fiftyToTwoArea,
-            twoHundredNo: data?.twoHundredNo,
-            twoHundredArea: data?.twoHundredArea,
-            resiNo: data?.resiNo,
-            resiArea: data?.resiArea,
-            commerNo: data?.commerNo,
-            commerArea: data?.commerArea,
-            labourNo: data?.labourNo,
-            labourArea: data?.labourArea,
-          },
-          DetailsAppliedLandResidential: {
-            npnlNo: data?.npnlNo,
-            npnlArea: data?.npnlArea,
-            ewsNo: data?.ewsNo,
-            ewsArea: data?.ewsArea,
-          },
-          DetailsAppliedLandCommercial: {
-            noOfPlotsSealableOneFifty: data?.noOfPlotsSealableOneFifty,
-            noOfPlotsSealableOneSeventyfive: data?.noOfPlotsSealableOneSeventyfive,
-            scoPlotno: data?.scoPlotno,
-            scoLength: data?.scoLength,
-            scoWidth: data?.scoWidth,
-            scoArea: data?.scoArea,
-            scoSimilarShape: data?.scoSimilarShape,
-            boothPlotno: data?.boothPlotno,
-            boothLength: data?.boothLength,
-            boothWidth: data?.boothWidth,
-            boothArea: data?.boothArea,
-            boothSimilarShape: data?.boothSimilarShape,
-            stpPlotno: data?.stpPlotno,
-            stpLength: data?.stpLength,
-            stpWidth: data?.stpWidth,
-            stpArea: data?.stpArea,
-            stpSimilarShape: data?.stpSimilarShape,
-            wtpPlotno: data?.wtpPlotno,
-            wtpLength: data?.wtpLength,
-            wtpWidth: data?.wtpWidth,
-            wtpArea: data?.wtpArea,
-            wtpSimilarShape: data?.wtpSimilarShape,
-            ugtPlotno: data?.ugtPlotno,
-            ugtLength: data?.ugtLength,
-            ugtWidth: data?.ugtWidth,
-            ugtArea: data?.ugtArea,
-            ugtSimilarShape: data?.ugtSimilarShape,
-            milkPlotno: data?.milkPlotno,
-            milkLength: data?.milkLength,
-            milkWidth: data?.milkWidth,
-            milkArea: data?.milkArea,
-            milkSimilarShape: data?.milkSimilarShape,
-            gssPlotno: data?.gssPlotno,
-            gssLength: data?.gssLength,
-            gssWidth: data?.gssWidth,
-            gssArea: data?.gssArea,
-            gssSimilarShape: data?.gssSimilarShape,
-            etcDim: data?.etcDim,
-            etcArea: data?.etcArea,
-          },
-          DetailsAppliedLandNILP: {
-            surrenderArea: data?.surrenderArea,
-            surrender: data?.surrender,
-            pocketAreaEnter: data?.pocketAreaEnter,
-            pocketProposed: data?.pocketProposed,
-            pocketDim: data?.pocketDim,
-            deposit: data?.deposit,
-            depositArea: data?.depositArea,
-            surrendered: data?.surrendered,
-            surrenderedDim: data?.surrenderedDim,
-          },
-          DetailsAppliedLayoutPlan: {
-            uploadLayoutPlan: data?.uploadLayoutPlan,
-          },
-          DetailsAppliedDemarcationPlan: {
-            demarcationPlan: data?.demarcationPlan,
-          },
-          DetailsAppliedLand: {
-            demarcationPlan: data?.demarcationPlan,
-            democraticPlan: data?.democraticPlan,
-            sectoralPlan: data?.sectoralPlan,
-            planCrossSection: data?.planCrossSection,
-            uploadLayoutPlan: data?.uploadLayoutPlan,
-            publicHealthServices: data?.publicHealthServices,
-            designRoad: data?.designRoad,
-            designSewarage: data?.designSewarage,
-            designDisposal: data?.designDisposal,
-            undertakingChange: data?.undertakingChange,
-            hostedLayoutPlan: data?.hostedLayoutPlan,
-            reportObjection: data?.reportObjection,
-            consentRera: data?.consentRera,
-            undertaking: data?.undertaking,
-            detailedElectricSupply: data?.detailedElectricSupply,
-            proposedColony: data?.proposedColony,
-          },
+          // DetailsAppliedLandDdjay: {
+          //   frozenNo: data?.frozenNo,
+          //   frozenArea: data?.frozenArea,
+          //   organize: data?.organize,
+          //   organizeArea: data?.organizeArea,
+          // },
+          // DetailsAppliedLandIndustrial: {
+          //   colonyfiftyNo: data?.colonyfiftyNo,
+          //   colonyfiftyArea: data?.colonyfiftyArea,
+          //   fiftyToTwoNo: data?.fiftyToTwoNo,
+          //   fiftyToTwoArea: data?.fiftyToTwoArea,
+          //   twoHundredNo: data?.twoHundredNo,
+          //   twoHundredArea: data?.twoHundredArea,
+          //   resiNo: data?.resiNo,
+          //   resiArea: data?.resiArea,
+          //   commerNo: data?.commerNo,
+          //   commerArea: data?.commerArea,
+          //   labourNo: data?.labourNo,
+          //   labourArea: data?.labourArea,
+          // },
+          // DetailsAppliedLandResidential: {
+          //   npnlNo: data?.npnlNo,
+          //   npnlArea: data?.npnlArea,
+          //   ewsNo: data?.ewsNo,
+          //   ewsArea: data?.ewsArea,
+          // },
+          // DetailsAppliedLandCommercial: {
+          //   noOfPlotsSealableOneFifty: data?.noOfPlotsSealableOneFifty,
+          //   noOfPlotsSealableOneSeventyfive: data?.noOfPlotsSealableOneSeventyfive,
+          //   scoPlotno: data?.scoPlotno,
+          //   scoLength: data?.scoLength,
+          //   scoWidth: data?.scoWidth,
+          //   scoArea: data?.scoArea,
+          //   scoSimilarShape: data?.scoSimilarShape,
+          //   boothPlotno: data?.boothPlotno,
+          //   boothLength: data?.boothLength,
+          //   boothWidth: data?.boothWidth,
+          //   boothArea: data?.boothArea,
+          //   boothSimilarShape: data?.boothSimilarShape,
+          //   stpPlotno: data?.stpPlotno,
+          //   stpLength: data?.stpLength,
+          //   stpWidth: data?.stpWidth,
+          //   stpArea: data?.stpArea,
+          //   stpSimilarShape: data?.stpSimilarShape,
+          //   wtpPlotno: data?.wtpPlotno,
+          //   wtpLength: data?.wtpLength,
+          //   wtpWidth: data?.wtpWidth,
+          //   wtpArea: data?.wtpArea,
+          //   wtpSimilarShape: data?.wtpSimilarShape,
+          //   ugtPlotno: data?.ugtPlotno,
+          //   ugtLength: data?.ugtLength,
+          //   ugtWidth: data?.ugtWidth,
+          //   ugtArea: data?.ugtArea,
+          //   ugtSimilarShape: data?.ugtSimilarShape,
+          //   milkPlotno: data?.milkPlotno,
+          //   milkLength: data?.milkLength,
+          //   milkWidth: data?.milkWidth,
+          //   milkArea: data?.milkArea,
+          //   milkSimilarShape: data?.milkSimilarShape,
+          //   gssPlotno: data?.gssPlotno,
+          //   gssLength: data?.gssLength,
+          //   gssWidth: data?.gssWidth,
+          //   gssArea: data?.gssArea,
+          //   gssSimilarShape: data?.gssSimilarShape,
+          //   etcDim: data?.etcDim,
+          //   etcArea: data?.etcArea,
+          // },
+          // DetailsAppliedLandNILP: {
+          //   surrenderArea: data?.surrenderArea,
+          //   surrender: data?.surrender,
+          //   pocketAreaEnter: data?.pocketAreaEnter,
+          //   pocketProposed: data?.pocketProposed,
+          //   pocketDim: data?.pocketDim,
+          //   deposit: data?.deposit,
+          //   depositArea: data?.depositArea,
+          //   surrendered: data?.surrendered,
+          //   surrenderedDim: data?.surrenderedDim,
+          // },
+          // DetailsAppliedLayoutPlan: {
+          //   uploadLayoutPlan: data?.uploadLayoutPlan,
+          // },
+          // DetailsAppliedDemarcationPlan: {
+          //   demarcationPlan: data?.demarcationPlan,
+          // },
+          // DetailsAppliedLand: {
+          //   demarcationPlan: data?.demarcationPlan,
+          //   democraticPlan: data?.democraticPlan,
+          //   sectoralPlan: data?.sectoralPlan,
+          //   planCrossSection: data?.planCrossSection,
+          //   uploadLayoutPlan: data?.uploadLayoutPlan,
+          //   publicHealthServices: data?.publicHealthServices,
+          //   designRoad: data?.designRoad,
+          //   designSewarage: data?.designSewarage,
+          //   designDisposal: data?.designDisposal,
+          //   undertakingChange: data?.undertakingChange,
+          //   hostedLayoutPlan: data?.hostedLayoutPlan,
+          //   reportObjection: data?.reportObjection,
+          //   consentRera: data?.consentRera,
+          //   undertaking: data?.undertaking,
+          //   detailedElectricSupply: data?.detailedElectricSupply,
+          //   proposedColony: data?.proposedColony,
+          // },
         },
       },
       RequestInfo: {
@@ -358,47 +358,47 @@ const AppliedDetailForm = (props) => {
     try {
       const Resp = await axios.post("/filestore/v1/files", formData, {});
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
-      setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
+      // setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
       // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
-      if (fieldName === "hostedLayoutPlan") {
-        setValue("hostedLayoutPlanFileName", file.name);
-      }
-      if (fieldName === "consentRera") {
-        setValue("consentReraFileName", file.name);
-      }
-      if (fieldName === "sectoralPlan") {
-        setValue("sectoralPlanFileName", file.name);
-      }
-      if (fieldName === "detailedElectricSupply") {
-        setValue("detailedElectricSupplyFileName", file.name);
-      }
-      if (fieldName === "planCrossSection") {
-        setValue("planCrossSectionFileName", file.name);
-      }
-      if (fieldName === "publicHealthServices") {
-        setValue("publicHealthServicesFileName", file.name);
-      }
-      if (fieldName === "designRoad") {
-        setValue("designRoadFileName", file.name);
-      }
-      if (fieldName === "designSewarage") {
-        setValue("designSewarageFileName", file.name);
-      }
-      if (fieldName === "designDisposal") {
-        setValue("designDisposalFileName", file.name);
-      }
-      if (fieldName === "undertakingChange") {
-        setValue("undertakingChangeFileName", file.name);
-      }
-      if (fieldName === "proposedColony") {
-        setValue("proposedColonyFileName", file.name);
-      }
-      if (fieldName === "reportObjection") {
-        setValue("reportObjectionFileName", file.name);
-      }
-      if (fieldName === "undertaking") {
-        setValue("undertakingFileName", file.name);
-      }
+      // if (fieldName === "hostedLayoutPlan") {
+      //   setValue("hostedLayoutPlanFileName", file.name);
+      // }
+      // if (fieldName === "consentRera") {
+      //   setValue("consentReraFileName", file.name);
+      // }
+      // if (fieldName === "sectoralPlan") {
+      //   setValue("sectoralPlanFileName", file.name);
+      // }
+      // if (fieldName === "detailedElectricSupply") {
+      //   setValue("detailedElectricSupplyFileName", file.name);
+      // }
+      // if (fieldName === "planCrossSection") {
+      //   setValue("planCrossSectionFileName", file.name);
+      // }
+      // if (fieldName === "publicHealthServices") {
+      //   setValue("publicHealthServicesFileName", file.name);
+      // }
+      // if (fieldName === "designRoad") {
+      //   setValue("designRoadFileName", file.name);
+      // }
+      // if (fieldName === "designSewarage") {
+      //   setValue("designSewarageFileName", file.name);
+      // }
+      // if (fieldName === "designDisposal") {
+      //   setValue("designDisposalFileName", file.name);
+      // }
+      // if (fieldName === "undertakingChange") {
+      //   setValue("undertakingChangeFileName", file.name);
+      // }
+      // if (fieldName === "proposedColony") {
+      //   setValue("proposedColonyFileName", file.name);
+      // }
+      // if (fieldName === "reportObjection") {
+      //   setValue("reportObjectionFileName", file.name);
+      // }
+      // if (fieldName === "undertaking") {
+      //   setValue("undertakingFileName", file.name);
+      // }
       setSelectedFiles([...selectedFiles, file.name]);
       setLoader(false);
       setShowToast({ key: "success" });
@@ -450,6 +450,8 @@ const AppliedDetailForm = (props) => {
     try {
       const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${id}`, payload);
       const userData = Resp?.data?.LicenseDetails?.[0];
+      console.log("userData", userData);
+      setValue("totalAreaScheme", userData?.ApplicantPurpose?.totalArea);
       setStepData(userData);
     } catch (error) {
       return error;
@@ -545,7 +547,7 @@ const AppliedDetailForm = (props) => {
                 <Col col-12>
                   <br></br>
                   <br></br>
-                  <div>
+                  {/* <div>
                     <h5>
                       2.Details of Plots <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
                       <label htmlFor="regularOption">
@@ -561,8 +563,8 @@ const AppliedDetailForm = (props) => {
                         {errors?.regularOption && errors?.regularOption?.message}
                       </h3>
                     </h5>
-                  </div>
-                  {watch("regularOption") === "regular" && (
+                  </div> */}
+                  {/* {watch("regularOption") === "regular" && (
                     <div className="table table-bordered table-responsive">
                       <thead>
                         <tr>
@@ -935,8 +937,8 @@ const AppliedDetailForm = (props) => {
                         </tr>
                       </tbody>
                     </div>
-                  )}
-                  {watch("regularOption") === "Irregular" && (
+                  )} */}
+                  {/* {watch("regularOption") === "Irregular" && (
                     <div>
                       <div className="table table-bordered table-responsive ">
                         <thead>
@@ -1142,12 +1144,22 @@ const AppliedDetailForm = (props) => {
                         </tbody>
                       </div>
                     </div>
-                  )}
-                  <div>{Purpose === "DDJAY_APHP" && <DDJAYForm watch={watch} register={register} />}</div>
-                  <div>{Purpose === "RPL" && <ResidentialPlottedForm register={register} />}</div>
-                  <div>{Purpose === "IPL" && <IndustrialPlottedForm register={register} />}</div>
-                  <div>{Purpose === "CPL" && <CommercialPlottedForm register={register} />}</div>
-                  <h5 className="text-black">NILP </h5>
+                  )} */}
+                  {/* <div>{Purpose === "DDJAY_APHP" && <DDJAYForm watch={watch} register={register} />}</div> */}
+                  <div>
+                    {stepData?.ApplicantPurpose?.purpose === "RPL" && (
+                      <ResidentialPlottedForm
+                        register={register}
+                        getDocumentData={getDocumentData}
+                        watch={watch}
+                        getDocShareholding={getDocShareholding}
+                        setValue={setValue}
+                      />
+                    )}
+                  </div>
+                  {/* <div>{Purpose === "IPL" && <IndustrialPlottedForm register={register} />}</div>
+                  <div>{Purpose === "CPL" && <CommercialPlottedForm register={register} />}</div> */}
+                  {/* <h5 className="text-black">NILP </h5>
                   <br></br>
                   <div className="table table-bordered table-responsive">
                     <thead>
@@ -1293,13 +1305,12 @@ const AppliedDetailForm = (props) => {
                         </td>
                       </tr>
                     </tbody>
-                  </div>
-                  <hr />
+                  </div> */}
                   <br></br>
-                  <h5>Mandatory Documents</h5>
-                  <br></br>
+                  {/* <h5>Mandatory Documents</h5> */}
+                  {/* <br></br> */}
                   <div className="row">
-                    <div className="col col-3">
+                    {/* <div className="col col-3">
                       <h6
                         style={{ display: "flex" }}
                         data-toggle="tooltip"
@@ -1328,7 +1339,7 @@ const AppliedDetailForm = (props) => {
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.hostedLayoutPlan && errors?.hostedLayoutPlan?.message}
                       </h3>
-                    </div>
+                    </div> */}
 
                     {/* <div className="col col-3">
                       <h6
@@ -1360,7 +1371,7 @@ const AppliedDetailForm = (props) => {
                         {errors?.consentRera && errors?.consentRera?.message}
                       </h3>
                     </div> */}
-                    <div className="col col-3">
+                    {/* <div className="col col-3">
                       <h6 style={{ display: "flex" }}>
                         Sectoral Plan<span style={{ color: "red" }}>*</span>
                       </h6>
@@ -1384,7 +1395,7 @@ const AppliedDetailForm = (props) => {
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.sectoralPlan && errors?.sectoralPlan?.message}
                       </h3>
-                    </div>
+                    </div> */}
                     {/* <div className="col col-3">
                       <h6
                         style={{ display: "flex" }}
@@ -1663,37 +1674,9 @@ const AppliedDetailForm = (props) => {
                   </div> */}
                   <br></br>
                   <div className="row">
-                    <div className="col col-3">
-                      <h6
-                        style={{ display: "flex" }}
-                        data-toggle="tooltip"
-                        data-placement="top"
-                        title="Undertaking that no change has been made in the phasing "
-                      >
-                        Undertaking.<span style={{ color: "red" }}>*</span>
-                      </h6>{" "}
-                      <label>
-                        <FileUpload color="primary" />
-                        <input
-                          type="file"
-                          style={{ display: "none" }}
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "undertaking")}
-                          accept="application/pdf/jpeg/png"
-                        />
-                      </label>
-                      {fileStoreId?.undertaking ? (
-                        <a onClick={() => getDocShareholding(fileStoreId?.undertaking)} className="btn btn-sm ">
-                          <VisibilityIcon color="info" className="icon" />
-                        </a>
-                      ) : (
-                        <p></p>
-                      )}
-                      <h3 style={{}}>{watch("undertakingFileName") ? watch("undertakingFileName") : null}</h3>
-                      <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.undertaking && errors?.undertaking?.message}
-                      </h3>
-                    </div>
-                    <div className="col col-9">
+                    {/* residential only */}
+
+                    {/* <div className="col col-9">
                       {Purpose === "RPL" && <LayoutPlan watch={watch} register={register} />}
                       {Purpose === "IPL" && <LayoutPlan watch={watch} register={register} />}
                       {Purpose === "IPA" && <LayoutPlan watch={watch} register={register} />}
@@ -1719,7 +1702,7 @@ const AppliedDetailForm = (props) => {
                       {Purpose === "SPRPRGH" && <DemarcationPlan watch={watch} register={register} />}
                       {Purpose === "DRH" && <DemarcationPlan watch={watch} register={register} />}
                       {Purpose === "RHP" && <DemarcationPlan watch={watch} register={register} />}
-                    </div>
+                    </div> */}
                   </div>
                   <div class="row">
                     <div class="col-sm-12 text-left">

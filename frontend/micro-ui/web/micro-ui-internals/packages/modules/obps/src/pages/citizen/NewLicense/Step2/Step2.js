@@ -661,6 +661,11 @@ const ApllicantPuropseForm = (props) => {
     // data["potential"] = data?.potential?.value;
     // data["district"] = watch("district")?.value;
     // data["state"] = "Haryana";
+    data["totalArea"] = !isNaN(data?.nonConsolidatedTotal)
+      ? data?.nonConsolidatedTotal
+      : 0 + !isNaN(data?.consolidatedTotal)
+      ? data?.consolidatedTotal
+      : 0;
     delete data?.district;
     delete data?.developmentPlan;
     delete data?.typeLand;
@@ -695,44 +700,44 @@ const ApllicantPuropseForm = (props) => {
     delete data?.consolidationType;
     delete data?.khewats;
     delete data?.rowid;
-    // if (!modalData?.length && !stepData?.AppliedLandDetails) alert("Please enter atleast one record");
-    // else {
-    const postDistrict = {
-      pageName: "ApplicantPurpose",
-      action: "PURPOSE",
-      applicationNumber: applicantId,
-      createdBy: userInfo?.id,
-      updatedBy: userInfo?.id,
-      LicenseDetails: {
-        ApplicantPurpose: {
-          ...data,
-          AppliedLandDetails: modalData,
+    if (!modalData?.length && !stepData?.AppliedLandDetails) alert("Please enter atleast one record");
+    else {
+      const postDistrict = {
+        pageName: "ApplicantPurpose",
+        action: "PURPOSE",
+        applicationNumber: applicantId,
+        createdBy: userInfo?.id,
+        updatedBy: userInfo?.id,
+        LicenseDetails: {
+          ApplicantPurpose: {
+            ...data,
+            AppliedLandDetails: modalData,
+          },
         },
-      },
-      RequestInfo: {
-        apiId: "Rainmaker",
-        ver: "v1",
-        ts: 0,
-        action: "_search",
-        did: "",
-        key: "",
-        msgId: "090909",
-        requesterId: "",
-        authToken: token,
-        userInfo: userInfo,
-      },
-    };
-    setLoader(true);
-    try {
-      const Resp = await axios.post("/tl-services/new/_create", postDistrict);
-      setLoader(false);
-      const useData = Resp?.data?.LicenseServiceResponseInfo?.[0]?.LicenseDetails?.[0];
-      props.Step2Continue(useData);
-    } catch (error) {
-      setLoader(false);
-      return error;
+        RequestInfo: {
+          apiId: "Rainmaker",
+          ver: "v1",
+          ts: 0,
+          action: "_search",
+          did: "",
+          key: "",
+          msgId: "090909",
+          requesterId: "",
+          authToken: token,
+          userInfo: userInfo,
+        },
+      };
+      setLoader(true);
+      try {
+        const Resp = await axios.post("/tl-services/new/_create", postDistrict);
+        setLoader(false);
+        const useData = Resp?.data?.LicenseServiceResponseInfo?.[0]?.LicenseDetails?.[0];
+        props.Step2Continue(useData);
+      } catch (error) {
+        setLoader(false);
+        return error;
+      }
     }
-    // }
   };
 
   // const handleWorkflow = async () => {
@@ -952,12 +957,13 @@ const ApllicantPuropseForm = (props) => {
                   Back
                 </div> */}
               </div>
+              {console.log("nonConsolidatedTotal", getValues()?.nonConsolidatedTotal, getValues()?.consolidatedTotal)}
               <div class="col-sm-12 text-right">
                 <label className="mr-4">
                   Total Area:
-                  {getValues()?.nonConsolidatedTotal
+                  {!isNaN(getValues()?.nonConsolidatedTotal)
                     ? getValues()?.nonConsolidatedTotal
-                    : 0 + getValues()?.consolidatedTotal
+                    : 0 + !isNaN(getValues()?.consolidatedTotal)
                     ? getValues()?.consolidatedTotal
                     : 0}
                 </label>

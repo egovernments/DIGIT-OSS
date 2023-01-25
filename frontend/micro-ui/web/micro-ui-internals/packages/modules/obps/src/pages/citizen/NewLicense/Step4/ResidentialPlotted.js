@@ -1,8 +1,10 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import { Row, Col } from "react-bootstrap";
+import FileUpload from "@mui/icons-material/FileUpload";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
-const ResidentialPlottedForm = ({ register }) => {
+const ResidentialPlottedForm = ({ register, getDocumentData, watch, getDocShareholding, setValue }) => {
   return (
     <Row className="ml-auto" style={{ marginBottom: 5 }}>
       <Col col-12>
@@ -18,7 +20,7 @@ const ResidentialPlottedForm = ({ register }) => {
             <tr>
               <td>Total area of the Scheme</td>
               <td>
-                <input type="number" className="form-control" />
+                <input disabled type="number" className="form-control" {...register("totalAreaScheme")} />
               </td>
             </tr>
           </thead>
@@ -30,19 +32,25 @@ const ResidentialPlottedForm = ({ register }) => {
                 </div>
               </td>
               <td align="right">
-                {" "}
-                <input type="number" className="form-control" />
+                <input
+                  type="number"
+                  className="form-control"
+                  {...register("areaUnderSectorRoad")}
+                  onChange={(e) => {
+                    if (e?.target?.value?.length) setValue("balanceAreaAfterDeduction", watch("totalAreaScheme") - e?.target?.value)?.toFixed(3);
+                    else setValue("balanceAreaAfterDeduction", "");
+                  }}
+                />
               </td>
             </tr>
             <tr>
               <td>
                 <div className="px-2">
-                  <p className="mb-2">Balance area</p>
+                  <p className="mb-2">Balance area after deducting area under sector road and Green Belt</p>
                 </div>
               </td>
               <td align="right">
-                {" "}
-                <input type="number" className="form-control" />
+                <input disabled type="number" className="form-control" {...register("balanceAreaAfterDeduction")} />
               </td>
             </tr>
             <tr>
@@ -52,8 +60,7 @@ const ResidentialPlottedForm = ({ register }) => {
                 </div>
               </td>
               <td align="right">
-                {" "}
-                <input type="number" className="form-control" />
+                <input type="number" className="form-control" {...register("areaUnderUndetermined")} />
               </td>
             </tr>
             <tr>
@@ -63,8 +70,14 @@ const ResidentialPlottedForm = ({ register }) => {
                 </div>
               </td>
               <td align="right">
-                {" "}
-                <input type="number" className="form-control" />
+                <input
+                  type="number"
+                  className="form-control"
+                  {...register("areaUnderGH")}
+                  onChange={(e) => {
+                    if (e?.target?.value > (watch("totalAreaScheme") * 10) / 100) console.log("error");
+                  }}
+                />
               </td>
             </tr>
             <tr>
@@ -74,8 +87,7 @@ const ResidentialPlottedForm = ({ register }) => {
                 </div>
               </td>
               <td align="right">
-                {" "}
-                <input type="number" className="form-control" />
+                <input disabled type="number" className="form-control" {...register("balanceArea")} />
               </td>
             </tr>
             <tr>
@@ -85,8 +97,7 @@ const ResidentialPlottedForm = ({ register }) => {
                 </div>
               </td>
               <td align="right">
-                {" "}
-                <input type="number" className="form-control" />
+                <input type="number" className="form-control" {...register("areaUnderSectorAndGreenBelt")} />
               </td>
             </tr>
             <tr>
@@ -96,8 +107,7 @@ const ResidentialPlottedForm = ({ register }) => {
                 </div>
               </td>
               <td align="right">
-                {" "}
-                <input type="number" className="form-control" />
+                <input type="number" className="form-control" {...register("netPlannedArea")} />
               </td>
             </tr>
           </tbody>
@@ -116,8 +126,7 @@ const ResidentialPlottedForm = ({ register }) => {
                 </div>
               </td>
               <td align="right">
-                {" "}
-                <input type="number" className="form-control" />
+                <input type="number" className="form-control" {...register("totalNumberOfPlots")} />
               </td>
             </tr>
             <tr>
@@ -127,8 +136,7 @@ const ResidentialPlottedForm = ({ register }) => {
                 </div>
               </td>
               <td align="right">
-                {" "}
-                <input type="number" className="form-control" />
+                <input type="number" className="form-control" {...register("generalPlots")} />
               </td>
             </tr>
             <tr>
@@ -138,8 +146,7 @@ const ResidentialPlottedForm = ({ register }) => {
                 </div>
               </td>
               <td align="right">
-                {" "}
-                <input type="number" className="form-control" />
+                <input type="number" className="form-control" {...register("requiredNPNLPlots")} />
               </td>
             </tr>
             <tr>
@@ -149,8 +156,7 @@ const ResidentialPlottedForm = ({ register }) => {
                 </div>
               </td>
               <td align="right">
-                {" "}
-                <input type="number" className="form-control" />
+                <input type="number" className="form-control" {...register("requiredEWSPlots")} />
               </td>
             </tr>
             <tr>
@@ -160,8 +166,7 @@ const ResidentialPlottedForm = ({ register }) => {
                 </div>
               </td>
               <td align="right">
-                {" "}
-                <input type="number" className="form-control" />
+                <input disabled type="number" className="form-control" {...register("permissibleDensity")} />
               </td>
             </tr>
             <tr>
@@ -171,8 +176,7 @@ const ResidentialPlottedForm = ({ register }) => {
                 </div>
               </td>
               <td align="right">
-                {" "}
-                <input type="number" className="form-control" />
+                <input type="number" className="form-control" {...register("permissibleCommercialArea")} />
               </td>
             </tr>
             <tr>
@@ -182,8 +186,7 @@ const ResidentialPlottedForm = ({ register }) => {
                 </div>
               </td>
               <td align="right">
-                {" "}
-                <input type="number" className="form-control" />
+                <input type="number" className="form-control" {...register("underPlot")} />
               </td>
             </tr>
             <tr>
@@ -193,8 +196,7 @@ const ResidentialPlottedForm = ({ register }) => {
                 </div>
               </td>
               <td align="right">
-                {" "}
-                <input type="number" className="form-control" />
+                <input type="number" className="form-control" {...register("commercial")} />
               </td>
             </tr>
             <tr>
@@ -204,8 +206,7 @@ const ResidentialPlottedForm = ({ register }) => {
                 </div>
               </td>
               <td align="right">
-                {" "}
-                <input type="number" className="form-control" />
+                <input type="number" className="form-control" {...register("permissibleSaleableArea")} />
               </td>
             </tr>
             <tr>
@@ -215,8 +216,7 @@ const ResidentialPlottedForm = ({ register }) => {
                 </div>
               </td>
               <td align="right">
-                {" "}
-                <input type="number" className="form-control" />
+                <input type="number" className="form-control" {...register("requiredGreenArea")} />
               </td>
             </tr>
           </tbody>
@@ -235,8 +235,7 @@ const ResidentialPlottedForm = ({ register }) => {
                 </div>
               </td>
               <td align="right">
-                {" "}
-                <input type="number" className="form-control" />
+                <input type="number" className="form-control" {...register("communitySites")} />
               </td>
             </tr>
             <tr>
@@ -246,8 +245,7 @@ const ResidentialPlottedForm = ({ register }) => {
                 </div>
               </td>
               <td align="right">
-                {" "}
-                <input type="number" className="form-control" />
+                <input type="number" className="form-control" {...register("provided")} />
               </td>
             </tr>
           </tbody>
@@ -259,10 +257,94 @@ const ResidentialPlottedForm = ({ register }) => {
         </h6>
         <div className="row ">
           <div className="col col-3">
+            <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top">
+              Layout Plan in pdf<span style={{ color: "red" }}>*</span>
+            </h6>
             <label>
-              <h2>Layout Plan</h2>
+              <FileUpload color="primary" />
+              <input
+                type="file"
+                style={{ display: "none" }}
+                onChange={(e) => getDocumentData(e?.target?.files[0], "layoutPlanPdf")}
+                accept="application/pdf/jpeg/png"
+              />
             </label>
-            <input type="file" className="form-control" />
+            {watch("layoutPlanPdf") && (
+              <div>
+                <a onClick={() => getDocShareholding(watch("layoutPlanPdf"))} className="btn btn-sm ">
+                  <VisibilityIcon color="info" className="icon" />
+                </a>
+                <h3>{watch("layoutPlanPdf")}</h3>
+              </div>
+            )}
+          </div>
+          <div className="col col-3">
+            <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top">
+              Layout Plan in dxf<span style={{ color: "red" }}>*</span>
+            </h6>
+            <label>
+              <FileUpload color="primary" />
+              <input
+                type="file"
+                style={{ display: "none" }}
+                onChange={(e) => getDocumentData(e?.target?.files[0], "layoutPlanDxf")}
+                accept="application/pdf/jpeg/png"
+              />
+            </label>
+            {/* {fileStoreId?.undertaking ? (
+              <a onClick={() => getDocShareholding(fileStoreId?.undertaking)} className="btn btn-sm ">
+                <VisibilityIcon color="info" className="icon" />
+              </a>
+            ) : (
+              <p></p>
+            )} */}
+          </div>
+          <div className="col col-3">
+            <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top">
+              Layout Plan in zip<span style={{ color: "red" }}>*</span>
+            </h6>
+            <label>
+              <FileUpload color="primary" />
+              <input
+                type="file"
+                style={{ display: "none" }}
+                onChange={(e) => getDocumentData(e?.target?.files[0], "layoutPlanZip")}
+                accept="application/pdf/jpeg/png"
+              />
+            </label>
+            {/* {fileStoreId?.undertaking ? (
+              <a onClick={() => getDocShareholding(fileStoreId?.undertaking)} className="btn btn-sm ">
+                <VisibilityIcon color="info" className="icon" />
+              </a>
+            ) : (
+              <p></p>
+            )} */}
+          </div>
+          <div className="col col-3">
+            <h6
+              style={{ display: "flex" }}
+              data-toggle="tooltip"
+              data-placement="top"
+              title="Undertaking that no change has been made in the phasing "
+            >
+              Undertaking.<span style={{ color: "red" }}>*</span>
+            </h6>
+            <label>
+              <FileUpload color="primary" />
+              <input
+                type="file"
+                style={{ display: "none" }}
+                onChange={(e) => getDocumentData(e?.target?.files[0], "undertaking")}
+                accept="application/pdf/jpeg/png"
+              />
+            </label>
+            {/* {fileStoreId?.undertaking ? (
+              <a onClick={() => getDocShareholding(fileStoreId?.undertaking)} className="btn btn-sm ">
+                <VisibilityIcon color="info" className="icon" />
+              </a>
+            ) : (
+              <p></p>
+            )} */}
           </div>
         </div>
       </Col>
