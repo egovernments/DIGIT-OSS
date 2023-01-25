@@ -3,7 +3,8 @@ import { Card, Row, Col } from "react-bootstrap";
 import { Button, Form } from "react-bootstrap";
 import axios from "axios";
 import { useForm } from "react-hook-form";
-function ReleaseNew() {
+
+function ReleaseNew(props) {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
   const [modal, setmodal] = useState(false);
@@ -20,28 +21,27 @@ function ReleaseNew() {
     formState: { errors },
     control,
     setValue,
+    getValues,
     watch,
   } = useForm({});
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const [SubmissionSearch, setSubmissionSearch] = useState({});
-  // const Submitform = Resp?.data?.newBankGuaranteeList[0];
-  const bankRelease = async (SubmissionSearch) => {
+  const [searchExistingBg, setSearchExistingBg] = useState({});
+
+  const bankRelease = async () => {
     const token = window?.localStorage?.getItem("token");
     const userInfo = Digit.UserService.getUser()?.info || {};
 
-    console.log("SubmissionSearch", SubmissionSearch);
     try {
       const postDistrict = {
         NewBankGuaranteeRequest: [
           {
-            tenantId: tenantId,
-            additionalDetails: null,
-            additionalDocuments: null,
             action: "APPLY_FOR_RELEASE",
             comment: "test comment",
             assignee: null,
+
             // validity: data?.validity,
-            ...SubmissionSearch,
+            ...searchExistingBg,
+            status: "APPROVED",
           },
         ],
         RequestInfo: {
@@ -57,13 +57,41 @@ function ReleaseNew() {
         },
       };
       const Resp = await axios.post("/tl-services/bank/guarantee/_update", postDistrict);
-      console.log("hsj", Resp);
-      setSubmissionSearch(Resp.data);
+      console.log("Release", Resp);
+      setSubmissionSearch(UserData);
     } catch (error) {
       console.log(error.message);
     }
   };
+  const existingBgFormSubmitHandler = async () => {
+    const token = window?.localStorage?.getItem("token");
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        action: "_create",
+        did: 1,
+        key: "",
+        msgId: "20170310130900|en_IN",
+        ts: 0,
+        ver: ".01",
+        authToken: token,
+      },
+    };
+    try {
+      const Resp = await axios.post(`/tl-services/bank/guarantee/_search?bgNumber=${getValues("bgNumber")}`, payload);
 
+      console.log("service", Resp.data.newBankGuaranteeList[0]);
+      setSearchExistingBg(Resp.data.newBankGuaranteeList[0]);
+
+      const userData = Resp?.data?.LicenseDetails?.[0];
+      setStepData(userData);
+    } catch (error) {
+      return error;
+    }
+  };
+  useEffect(() => {
+    existingBgFormSubmitHandler();
+  }, []);
   const [fileStoreId, setFileStoreId] = useState({});
   const getDocumentData = async (file, fieldName) => {
     const formData = new FormData();

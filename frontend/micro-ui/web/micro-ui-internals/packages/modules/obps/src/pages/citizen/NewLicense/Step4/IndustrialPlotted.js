@@ -6,104 +6,204 @@ const IndustrialPlottedForm = ({ register }) => {
   return (
     <Row className="ml-auto" style={{ marginBottom: 5 }}>
       <Col col-12>
-        <h5 className="text-black">
+        <h6 className="text-black">
           <b>Industrial Plotted</b>
-        </h5>
+        </h6>
+        <br></br>
+        <h6 className="text-black">
+          <b>Detail of land use</b>
+        </h6>
+        <br></br>
+        <Row className="ml-auto" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="3">
+            <div>
+              <Form.Label>
+                <h2>
+                  Total area of the Scheme(in acres)
+                  <span style={{ color: "red" }}>*</span>
+                </h2>
+              </Form.Label>
+            </div>
+            <input type="text" className="form-control" />
+          </Col>
+          <Col md={4} xxl lg="3">
+            <div>
+              <Form.Label>
+                <h2>
+                  Area under Sector Road & Green Belt(in acres)
+                  <span style={{ color: "red" }}>*</span>
+                </h2>
+              </Form.Label>
+            </div>
+            <input type="text" className="form-control" />
+          </Col>
+          <Col md={4} xxl lg="3">
+            <div>
+              <Form.Label>
+                <h2>
+                  Balance area after deducting area under sector road and Green Belt
+                  <span style={{ color: "red" }}>*</span>
+                </h2>
+              </Form.Label>
+            </div>
+            <input type="text" className="form-control" />
+          </Col>
+          <Col md={4} xxl lg="3">
+            <div>
+              <Form.Label>
+                <h2>
+                  Area under undetermined use (in acres)
+                  <span style={{ color: "red" }}>*</span>
+                </h2>
+              </Form.Label>
+            </div>
+            <input type="text" className="form-control" />
+          </Col>
+        </Row>
+        <br></br>
+        <Row className="ml-auto" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="3">
+            <div>
+              <Form.Label>
+                <h2>
+                  Balance area (in acres)
+                  <span style={{ color: "red" }}>*</span>
+                </h2>
+              </Form.Label>
+            </div>
+            <input type="text" className="form-control" />
+          </Col>
+          <Col md={4} xxl lg="3">
+            <div>
+              <Form.Label>
+                <h2>
+                  50% of the Area under Sector Road & Green Belt (in acres)
+                  <span style={{ color: "red" }}>*</span>
+                </h2>
+              </Form.Label>
+            </div>
+            <input type="text" className="form-control" />
+          </Col>
+          <Col md={4} xxl lg="3">
+            <div>
+              <Form.Label>
+                <h2>
+                  Net planned area (A+B)(in acres)
+                  <span style={{ color: "red" }}>*</span>
+                </h2>
+              </Form.Label>
+            </div>
+            <input type="text" className="form-control" />
+          </Col>
+          <Col md={4} xxl lg="3">
+            <div>
+              <Form.Label>
+                <h2>
+                  Area under Industrial use
+                  <span style={{ color: "red" }}>*</span>
+                </h2>
+              </Form.Label>
+            </div>
+            <input type="text" className="form-control" />
+          </Col>
+        </Row>
+        <br></br>
+        <Row className="ml-auto" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="3">
+            <div>
+              <Form.Label>
+                <h2>
+                  Area under Residential plots
+                  <span style={{ color: "red" }}>*</span>
+                </h2>
+              </Form.Label>
+            </div>
+            <input type="text" className="form-control" />
+          </Col>
+          <Col md={4} xxl lg="3">
+            <div>
+              <Form.Label>
+                <h2>
+                  Area under Affordable Industrial Housing
+                  <span style={{ color: "red" }}>*</span>
+                </h2>
+              </Form.Label>
+            </div>
+            <input type="text" className="form-control" />
+          </Col>
+          <Col md={4} xxl lg="3">
+            <div>
+              <Form.Label>
+                <h2>
+                  Area under Commercial
+                  <span style={{ color: "red" }}>*</span>
+                </h2>
+              </Form.Label>
+            </div>
+            <input type="text" className="form-control" />
+          </Col>
+          <Col md={4} xxl lg="3">
+            <div>
+              <Form.Label>
+                <h2>
+                  Total Saleable Area
+                  <span style={{ color: "red" }}>*</span>
+                </h2>
+              </Form.Label>
+            </div>
+            <input type="text" className="form-control" />
+          </Col>
+        </Row>
+        <br></br>
+        <Row className="ml-auto" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="3">
+            <div>
+              <Form.Label>
+                <h2>
+                  Total Residential Plots
+                  <span style={{ color: "red" }}>*</span>
+                </h2>
+              </Form.Label>
+            </div>
+            <input type="text" className="form-control" />
+          </Col>
+          <Col md={4} xxl lg="3">
+            <div>
+              <Form.Label>
+                <h2>
+                  Required EWS Plots
+                  <span style={{ color: "red" }}>*</span>
+                </h2>
+              </Form.Label>
+            </div>
+            <input type="text" className="form-control" />
+          </Col>
+          <Col md={4} xxl lg="3">
+            <div>
+              <Form.Label>
+                <h2>
+                  Total Industrial Plots
+                  <span style={{ color: "red" }}>*</span>
+                </h2>
+              </Form.Label>
+            </div>
+            <input type="text" className="form-control" />
+          </Col>
+        </Row>
 
-        <div className="table table-bordered table-responsive">
-          <thead>
-            <tr>
-              <td>Detail of plots</td>
-              <td>No.</td>
-              <td>Area in Acres</td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <div className="px-2">
-                  <p className="mb-2">Area of the colony, Up to 50 acres</p>
-                </div>
-              </td>
-              <td align="right">
-                {" "}
-                <input type="number" className="form-control" {...register("colonyfiftyNo")} />
-              </td>
-              <td component="th" scope="row">
-                <input type="number" className="form-control" {...register("colonyfiftyArea")} />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <div className="px-2">
-                  <p className="mb-2">More than 50 to 200 acres </p>
-                </div>
-              </td>
-              <td align="right">
-                {" "}
-                <input type="number" className="form-control" {...register("fiftyToTwoNo")} />
-              </td>
-              <td component="th" scope="row">
-                <input type="number" className="form-control" {...register("fiftyToTwoArea")} />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <div className="px-2">
-                  <p className="mb-2">More than 200 acres </p>
-                </div>
-              </td>
-              <td align="right">
-                {" "}
-                <input type="number" className="form-control" {...register("twoHundredNo")} />
-              </td>
-              <td component="th" scope="row">
-                <input type="number" className="form-control" {...register("twoHundredArea")} />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <div className="px-2">
-                  <p className="mb-2">Proposed plots under residential component DDJAY </p>
-                </div>
-              </td>
-              <td align="right">
-                {" "}
-                <input type="number" className="form-control" {...register("resiNo")} />
-              </td>
-              <td component="th" scope="row">
-                <input type="number" className="form-control" {...register("resiArea")} />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <div className="px-2">
-                  <p className="mb-2">Proposed plots under community facilities in DDJAY Area </p>
-                </div>
-              </td>
-              <td align="right">
-                {" "}
-                <input type="number" className="form-control" {...register("commerNo")} />
-              </td>
-              <td component="th" scope="row">
-                <input type="number" className="form-control" {...register("commerArea")} />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <div className="px-2">
-                  <p className="mb-2">Details of plots for Labour dormitories from affordable Industries Housing component </p>
-                </div>
-              </td>
-              <td align="right">
-                {" "}
-                <input type="number" className="form-control" {...register("labourNo")} />
-              </td>
-              <td component="th" scope="row">
-                <input type="number" className="form-control" {...register("labourArea")} />
-              </td>
-            </tr>
-          </tbody>
+        <br></br>
+        <h6 className="text-black">
+          <b>Documents</b>
+        </h6>
+        <br></br>
+        <div className="row ">
+          <div className="col col-3">
+            <h6>
+              Layout Plan <span style={{ color: "red" }}>*</span>
+            </h6>
+
+            <input type="file" className="form-control" accept="application/pdf/jpeg/png" />
+          </div>
         </div>
       </Col>
     </Row>

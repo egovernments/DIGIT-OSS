@@ -1145,7 +1145,7 @@ const AppliedDetailForm = (props) => {
                       </div>
                     </div>
                   )} */}
-                  {/* <div>{Purpose === "DDJAY_APHP" && <DDJAYForm watch={watch} register={register} />}</div> */}
+                  <div>{Purpose === "DDJAY_APHP" && <DDJAYForm watch={watch} register={register} />}</div>
                   <div>
                     {stepData?.ApplicantPurpose?.purpose === "RPL" && (
                       <ResidentialPlottedForm
@@ -1157,8 +1157,8 @@ const AppliedDetailForm = (props) => {
                       />
                     )}
                   </div>
-                  {/* <div>{Purpose === "IPL" && <IndustrialPlottedForm register={register} />}</div>
-                  <div>{Purpose === "CPL" && <CommercialPlottedForm register={register} />}</div> */}
+                  <div>{Purpose === "IPL" && <IndustrialPlottedForm register={register} />}</div>
+                  <div>{Purpose === "CPL" && <CommercialPlottedForm register={register} />}</div>
                   {/* <h5 className="text-black">NILP </h5>
                   <br></br>
                   <div className="table table-bordered table-responsive">

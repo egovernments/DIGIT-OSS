@@ -9,6 +9,7 @@ import axios from "axios";
 import FileUpload from "@mui/icons-material/FileUpload";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import ReleaseNew from "./Release";
 function SubmitNew() {
   const [modal, setmodal] = useState(false);
   const [modal1, setmodal1] = useState(false);
@@ -124,6 +125,7 @@ function SubmitNew() {
         payload
       );
       const Submitform = Resp?.data?.newBankGuaranteeList[0];
+
       console.log("service", Submitform);
       setSubmissionSearch(Submitform);
       setValue("amountInFig", Resp.data.newBankGuaranteeList[0].amountInFig);
@@ -154,14 +156,13 @@ function SubmitNew() {
         payload
       );
 
-      console.log("service", Submitform);
-      setSearchExistingBg(Submitform);
+      console.log("serviceBG", Resp);
+      setSearchExistingBg(Resp.data.newBankGuaranteeList[0]);
       setValue("loiNumber", Resp.data.newBankGuaranteeList[0].loiNumber);
       setValue("typeOfBg", Resp.data.newBankGuaranteeList[0].typeOfBg);
       setValue("amountInFig", Resp.data.newBankGuaranteeList[0].amountInFig);
       setValue("amountInWords", Resp.data.newBankGuaranteeList[0].amountInWords);
-      const userData = Resp?.data?.LicenseDetails?.[0];
-      setStepData(userData);
+      console.log("data", Resp.data.newBankGuaranteeList[0]);
     } catch (error) {
       return error;
     }
@@ -194,10 +195,7 @@ function SubmitNew() {
       const Resp = await axios.post(`/tl-services/bank/guarantee/_update`, payload);
 
       console.log("service......", Submitform);
-      setSearchExistingBg(Submitform);
-
-      const userData = Resp?.data?.LicenseDetails?.[0];
-      setStepData(userData);
+      // setSearchExistingBg(Submitform);
     } catch (error) {
       return error;
     }
