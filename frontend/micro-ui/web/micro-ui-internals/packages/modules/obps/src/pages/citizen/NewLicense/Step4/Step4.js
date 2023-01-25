@@ -1154,6 +1154,7 @@ const AppliedDetailForm = (props) => {
                         watch={watch}
                         getDocShareholding={getDocShareholding}
                         setValue={setValue}
+                        control={control}
                       />
                     )}
                   </div>
