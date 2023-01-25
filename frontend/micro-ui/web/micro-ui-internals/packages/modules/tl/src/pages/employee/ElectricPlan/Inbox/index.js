@@ -36,6 +36,8 @@ const ElectricalPlanInbox = ({
     config: {}
   });
 
+  console.log("ELDATA",data);
+
   useEffect(() => {
     setPageOffset(0);
   }, [searchParams]);
