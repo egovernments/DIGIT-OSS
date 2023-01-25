@@ -319,11 +319,7 @@ public class BPAService {
 			landInfo.forEach(land -> landId.add(land.getId()));
 			criteria.setLandId(landId);
 		}
-		List<String> uuids = new ArrayList<>();
-                if (requestInfo.getUserInfo() != null && !StringUtils.isEmpty(requestInfo.getUserInfo().getUuid())) {
-                        uuids.add(requestInfo.getUserInfo().getUuid());
-                        criteria.setCreatedBy(uuids);
-                }
+
 		bpas = getBPAFromLandId(criteria, requestInfo, null);
 		if (!landInfo.isEmpty()) {
 			for (int i = 0; i < bpas.size(); i++) {
