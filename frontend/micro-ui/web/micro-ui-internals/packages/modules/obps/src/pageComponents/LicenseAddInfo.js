@@ -378,7 +378,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
           "PANFullName": name,
           "FullName": name,
           "DOB": dob,
-          "GENDER": gender?.value
+          "GENDER": "MALE"
         },
         "consentArtifact": {
           "consent": {
