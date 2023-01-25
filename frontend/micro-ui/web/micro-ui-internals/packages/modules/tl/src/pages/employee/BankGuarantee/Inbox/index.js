@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-// import MobileInbox from "../../../../components/Inbox/MobileInbox";
 import MobileInbox from "../../../../components/inbox/MobileInbox";
 import DesktopInbox from "../../../../components/inbox/DesktopInbox";
 import { Header } from "@egovernments/digit-ui-react-components";
