@@ -3,11 +3,11 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
 const createProxy = createProxyMiddleware({
   //target: process.env.REACT_APP_PROXY_API || "https://uat.digit.org",
   // target: process.env.REACT_APP_PROXY_API || "https://qa.digit.org",
-  target: process.env.REACT_APP_PROXY_API || "http://tcp.abm.com:80:80",
+  target: process.env.REACT_APP_PROXY_API || "http://tcp.abm.com:80",
   changeOrigin: true,
 });
 const assetsProxy = createProxyMiddleware({
-  target: process.env.REACT_APP_PROXY_ASSETS || "http://tcp.abm.com:80:80",
+  target: process.env.REACT_APP_PROXY_ASSETS || "http://tcp.abm.com:80",
   changeOrigin: true,
 });
 const apiSetuProxy = createProxyMiddleware({
@@ -15,19 +15,19 @@ const apiSetuProxy = createProxyMiddleware({
   changeOrigin: true,
 });
 const LicProxy = createProxyMiddleware({
-  target: process.env.REACT_APP_PROXY_MDMS || "http://tcp.abm.com:80:80",
+  target: process.env.REACT_APP_PROXY_MDMS || "http://tcp.abm.com:80",
   changeOrigin: true,
 });
 const docUploadProxy = createProxyMiddleware({
-  target: process.env.REACT_APP_PROXY_UPLOAD_DOC || "http://tcp.abm.com:80:80",
+  target: process.env.REACT_APP_PROXY_UPLOAD_DOC || "http://tcp.abm.com:80",
   changeOrigin: true,
 });
 const devRegistration = createProxyMiddleware({
-  target: process.env.REACT_APP_PROXY_DEV_REG || "http://tcp.abm.com:80:80",
+  target: process.env.REACT_APP_PROXY_DEV_REG || "http://tcp.abm.com:80",
   changeOrigin: true,
 });
 const EgScrutinyProxy = createProxyMiddleware({
-  target: process.env.REACT_APP_PROXY_SCRUTINY_EG || "http://tcp.abm.com:80:80",
+  target: process.env.REACT_APP_PROXY_SCRUTINY_EG || "http://tcp.abm.com:80",
   changeOrigin: true,
 });
 
