@@ -133,7 +133,7 @@ import { useStyles } from "../css/personalInfoChild.style.js";
       {/* <Card > */}
         {/* <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Electrical Plan </h4> */}
         <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "20px", marginBottom: "52px" }}>
-          <Row className={classes.formLabel} style={{ marginTop: 4 , marginBottom: 4 }}>
+          <Row  style={{ marginTop: 4 , marginBottom: 4 }}>
            
             <Col md={6} xxl lg="6">
               <div>
@@ -210,7 +210,7 @@ import { useStyles } from "../css/personalInfoChild.style.js";
             <br></br>
             <Col  md={6} xxl lg="6">
               <div>
-                <Form.Label>
+                <Form.Label className={classes.formLabel}>
                 Showing the location of the sewer line, and stormwater line to connect the trunk water supply network <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
 
                 </Form.Label>
@@ -223,7 +223,7 @@ import { useStyles } from "../css/personalInfoChild.style.js";
                 label="Yes"
                 name="true"
                 disabled={!showActionButton}
-                {...register("electricalCapacity")}
+                {...register("sewerLine")}
                 inline
               ></Form.Check>
               <Form.Check
@@ -234,14 +234,14 @@ import { useStyles } from "../css/personalInfoChild.style.js";
                 label="No"
                 name="false"
                 disabled={!showActionButton}
-                {...register("electricalCapacity")}
+                {...register("sewerLine")}
                 inline
               ></Form.Check>
             </Col>
             
             <Col  md={6} xxl lg="6">
               <div>
-                <Form.Label>
+                <Form.Label className={classes.formLabel}>
                 Water supply, sewer, and stormwater network connected with proposed/existing master services
                   <span style={{ color: "red" }}>*</span>
                 </Form.Label>
@@ -254,7 +254,7 @@ import { useStyles } from "../css/personalInfoChild.style.js";
                 label="Yes"
                 name="true"
                 disabled={!showActionButton}
-                {...register("switchingStation")}
+                {...register("stormwater")}
                 inline
               ></Form.Check>
               <Form.Check
@@ -265,14 +265,14 @@ import { useStyles } from "../css/personalInfoChild.style.js";
                 label="No"
                 name="false"
                 disabled={!showActionButton}
-                {...register("switchingStation")}
+                {...register("stormwater")}
                 inline
               ></Form.Check>
             </Col>
             <br></br>
             <Col  md={6} xxl lg="6">
               <div>
-                <Form.Label>
+                <Form.Label className={classes.formLabel}>
                 Proposed source of water supply <span style={{ color: "red" }}>*</span> 
                 </Form.Label>
               </div>
@@ -284,7 +284,7 @@ import { useStyles } from "../css/personalInfoChild.style.js";
                 label="Yes"
                 name="true"
                 disabled={!showActionButton}
-                {...register("LoadSancation")}
+                {...register("sourceWater")}
                 inline
               ></Form.Check>
               <Form.Check
@@ -295,13 +295,13 @@ import { useStyles } from "../css/personalInfoChild.style.js";
                 label="No"
                 name="false"
                 disabled={!showActionButton}
-                {...register("LoadSancation")}
+                {...register("sourceWater")}
                 inline
               ></Form.Check>
             </Col>
-            <Col  md={6} xxl lg="6">
+            <Col  md={6} xxl lg="6" >
               <div>
-                <Form.Label>
+                <Form.Label className={classes.formLabel}>
                 The capacity of UGT as per population norms <span style={{ color: "red" }}>*</span> 
                 </Form.Label>
               </div>
@@ -313,7 +313,7 @@ import { useStyles } from "../css/personalInfoChild.style.js";
                 label="Yes"
                 name="true"
                 disabled={!showActionButton}
-                {...register("ugt")}
+                {...register("capacityUgt")}
                 inline
               ></Form.Check>
               <Form.Check
@@ -324,12 +324,12 @@ import { useStyles } from "../css/personalInfoChild.style.js";
                 label="No"
                 name="false"
                 disabled={!showActionButton}
-                {...register("ugt")}
+                {...register("capacityUgt")}
                 inline
               ></Form.Check>
             </Col>
             <br></br>
-            <Col  md={6} xxl lg="6">
+            <Col  md={6} xxl lg="6" className={classes.formLabel}>
               <div>
                 <Form.Label>
                 The capacity of STP as per population norms <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
@@ -343,7 +343,7 @@ import { useStyles } from "../css/personalInfoChild.style.js";
                 label="Yes"
                 name="true"
                 disabled={!showActionButton}
-                {...register("stp")}
+                {...register("capacityStp")}
                 inline
               ></Form.Check>
               <Form.Check
@@ -354,24 +354,30 @@ import { useStyles } from "../css/personalInfoChild.style.js";
                 label="No"
                 name="false"
                 disabled={!showActionButton}
-                {...register("stp")}
+                {...register("capacityStp")}
                 inline
               ></Form.Check>
             </Col>
             <Col md={6} xxl lg="6">
               <div>
-                <Form.Label>
+                <Form.Label className={classes.formLabel}>
                   <h2>
                   Specifications of the public health department <span style={{ color: "red" }}>*</span>
                   </h2>
                 </Form.Label>
               </div>
-              <input type="number" className={classes.formLabel}  disabled={!showActionButton} placeholder="" {...register("loiNumber")} />
+              {/* <Col md={8} xxl lg="8"> */}
+              <div height={30}
+                          style={{ maxWidth: 320, marginRight: 5 }}>
+              <textarea type="text" className="form-control"  disabled={!showActionButton} placeholder="" {...register("specifications")} />
+              </div>
+              {/* </Col> */}
+              
             </Col>
             <br></br>
             <Col  md={6} xxl lg="6">
               <div>
-                <Form.Label>
+                <Form.Label className={classes.formLabel}>
                 Water supply network <span style={{ color: "red" }}>*</span> 
                 </Form.Label>
               </div>
@@ -383,7 +389,7 @@ import { useStyles } from "../css/personalInfoChild.style.js";
                 label="Yes"
                 name="true"
                 disabled={!showActionButton}
-                {...register("supply")}
+                {...register("waterSupply")}
                 inline
               ></Form.Check>
               <Form.Check
@@ -394,14 +400,14 @@ import { useStyles } from "../css/personalInfoChild.style.js";
                 label="No"
                 name="false"
                 disabled={!showActionButton}
-                {...register("supply")}
+                {...register("waterSupply")}
                 inline
               ></Form.Check>
             </Col>
             
             <Col  md={6} xxl lg="6">
               <div>
-                <Form.Label>
+                <Form.Label className={classes.formLabel}>
                 Sewer network <span style={{ color: "red" }}>*</span> 
                 </Form.Label>
               </div>
@@ -413,7 +419,7 @@ import { useStyles } from "../css/personalInfoChild.style.js";
                 label="Yes"
                 name="true"
                 disabled={!showActionButton}
-                {...register("sewer")}
+                {...register("sewerNetwork")}
                 inline
               ></Form.Check>
               <Form.Check
@@ -423,14 +429,14 @@ import { useStyles } from "../css/personalInfoChild.style.js";
                 id="default-radio"
                 label="No"
                 name="false"
-                {...register("sewer")}
+                {...register("sewerNetwork")}
                 inline
               ></Form.Check>
             </Col>
             <br></br>
             <Col  md={6} xxl lg="6">
               <div>
-                <Form.Label>
+                <Form.Label className={classes.formLabel}>
                 Stormwater drainage <span style={{ color: "red" }}>*</span> 
                 </Form.Label>
               </div>
@@ -442,7 +448,7 @@ import { useStyles } from "../css/personalInfoChild.style.js";
                 label="Yes"
                 name="true"
                 disabled={!showActionButton}
-                {...register("stormwater")}
+                {...register("stormwaterDrainage")}
                 inline
               ></Form.Check>
               <Form.Check
@@ -453,14 +459,14 @@ import { useStyles } from "../css/personalInfoChild.style.js";
                 label="No"
                 name="false"
                 disabled={!showActionButton}
-                {...register("stormwater")}
+                {...register("stormwaterDrainage")}
                 inline
               ></Form.Check>
             </Col>
            
             <Col  md={6} xxl lg="6">
               <div>
-                <Form.Label>
+                <Form.Label className={classes.formLabel}>
                 Roads network <span style={{ color: "red" }}>*</span> 
                 </Form.Label>
               </div>
@@ -472,7 +478,7 @@ import { useStyles } from "../css/personalInfoChild.style.js";
                 label="Yes"
                 name="true"
                 disabled={!showActionButton}
-                {...register("ugt")}
+                {...register("roadNetwork")}
                 inline
               ></Form.Check>
               <Form.Check
@@ -483,14 +489,14 @@ import { useStyles } from "../css/personalInfoChild.style.js";
                 label="No"
                 name="false"
                 disabled={!showActionButton}
-                {...register("ugt")}
+                {...register("roadNetwork")}
                 inline
               ></Form.Check>
             </Col>
             <br></br>
             <Col  md={6} xxl lg="6">
               <div>
-                <Form.Label>
+                <Form.Label className={classes.formLabel}>
                 Horticulture <span style={{ color: "red" }}>*</span> 
                 </Form.Label>
               </div>
@@ -521,7 +527,7 @@ import { useStyles } from "../css/personalInfoChild.style.js";
            
             <Col  md={6} xxl lg="6">
               <div>
-                <Form.Label>
+                <Form.Label className={classes.formLabel}>
                 Street Lightening <span style={{ color: "red" }}>*</span> 
                 </Form.Label>
               </div>
@@ -533,7 +539,7 @@ import { useStyles } from "../css/personalInfoChild.style.js";
                 label="Yes"
                 name="true"
                 disabled={!showActionButton}
-                {...register("street")}
+                {...register("streetLightening")}
                 inline
               ></Form.Check>
               <Form.Check
@@ -544,7 +550,7 @@ import { useStyles } from "../css/personalInfoChild.style.js";
                 label="No"
                 name="false"
                 disabled={!showActionButton}
-                {...register("street")}
+                {...register("streetLightening")}
                 inline
               ></Form.Check>
             </Col>
@@ -576,19 +582,23 @@ import { useStyles } from "../css/personalInfoChild.style.js";
               ></Form.Check>
             </Col> */}
              <br></br>
-            <Col md={6} xxl lg="6">
+            <Col md={6} xxl lg="6" >
               <div>
-                <Form.Label>
+                <Form.Label className={classes.formLabel}>
                   <h2>
                   Per acre cost of internal development works <span style={{ color: "red" }}>*</span>
                   </h2>
                 </Form.Label>
               </div>
+              <div height={30}
+                          style={{ maxWidth: 320, marginRight: 5 }}>
               <input type="number" className="form-control"  disabled={!showActionButton} placeholder="" {...register("acreCost")} />
+              </div>
+              
             </Col>
             <Col  md={6} xxl lg="6">
               <div>
-                <Form.Label>
+                <Form.Label className={classes.formLabel}>
                 Self-certified drawings from chartered engineers that it is by the standard approved template <span style={{ color: "red" }}>*</span> 
                 </Form.Label>
               </div>

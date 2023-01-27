@@ -1172,16 +1172,16 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       <input type="text" className="form-control" title={item?.typeLand} placeholder={item?.typeLand} disabled />
                     </td>
                     <td class="text-center">
-                      <input type="text" className="form-control" title={item?.changeInformation} placeholder={item?.changeInformation} disabled />
+                      <input type="text" className="form-control" title={item?.isChange} placeholder={item?.isChange} disabled />
                     </td>
                     <td class="text-center">
-                      <input type="text" className="form-control" title={item?.Mustil} placeholder={item?.Mustil} disabled />
+                      <input type="text" className="form-control" title={item?.editRectangleNo} placeholder={item?.editRectangleNo} disabled />
                     </td>
                     <td class="text-center">
-                      <input type="text" className="form-control" title={item?.Khasra} placeholder={item?.Khasra} disabled />
+                      <input type="text" className="form-control" title={item?.editKhewats} placeholder={item?.editKhewats} disabled />
                     </td>
                     <td class="text-center">
-                      <input type="text" className="form-control" title={item?.Jamabandi} placeholder={item?.Jamabandi} disabled />
+                      <input type="text" className="form-control" title={item?.landOwnerRegistry} placeholder={item?.landOwnerRegistry} disabled />
                     </td>
                     <td class="text-center">
                       <input type="text" className="form-control" title={item?.collaboration} placeholder={item?.collaboration} disabled />
@@ -1218,35 +1218,35 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       {/* <input type="text" className="form-control" title={item?.registeringAuthorityDoc} placeholder={item?.registeringAuthorityDoc} disabled /> */}
                     </td>
                     <td class="text-center">
-                      <input type="text" className="form-control" placeholder={item?.consolidationType} disabled />
+                      <input type="text" className="form-control" title={item?.consolidationType} placeholder={item?.consolidationType} disabled />
                     </td>
                     <td class="text-center">
                       {" "}
-                      <input type="text" className="form-control" placeholder={item?.kanal} disabled />{" "}
+                      <input type="text" className="form-control" title={item?.kanal} placeholder={item?.kanal} disabled />{" "}
                     </td>
                     <td class="text-center">
-                      <input type="text" className="form-control" placeholder={item?.marla} disabled />
+                      <input type="text" className="form-control" title={item?.marla} placeholder={item?.marla} disabled />
                     </td>
                     <td class="text-center">
-                      <input type="text" className="form-control" placeholder={item?.sarsai} disabled />
+                      <input type="text" className="form-control" title={item?.sarsai} placeholder={item?.sarsai} disabled />
                     </td>
                     <td class="text-center">
-                      <input type="text" className="form-control" placeholder={item?.bigha} disabled />
+                      <input type="text" className="form-control" title={item?.bigha} placeholder={item?.bigha} disabled />
                     </td>
                     <td class="text-center">
-                      <input type="text" className="form-control" placeholder={item?.biswa} disabled />
+                      <input type="text" className="form-control" title={item?.biswa} placeholder={item?.biswa} disabled />
                     </td>
                     <td class="text-center">
-                      <input type="text" className="form-control" placeholder={item?.biswansi} disabled />
+                      <input type="text" className="form-control" title={item?.biswansi} placeholder={item?.biswansi} disabled />
                     </td>
                     {item?.consolidationType == "non-consolidated" && 
                       <td class="text-center">
-                      <input type="text" className="form-control" placeholder={item?.nonConsolidatedTotal} disabled />
+                      <input type="text" className="form-control" title={item?.nonConsolidatedTotal} placeholder={item?.nonConsolidatedTotal} disabled />
                     </td>
                      }
                      {item?.consolidationType == "consolidated" && 
                     <td class="text-center">
-                      <input type="text" className="form-control" placeholder={item?.consolidatedTotal} disabled />
+                      <input type="text" className="form-control" title={item?.consolidatedTotal} placeholder={item?.consolidatedTotal} disabled />
                     </td>
                      }
   </tr>

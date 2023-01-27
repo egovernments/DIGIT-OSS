@@ -248,11 +248,7 @@
 ////////////////////////////////////////////////////////
 
 import React, { useState, useRef, useEffect, useContext } from "react";
-// import Personalinfo from "./Personalinfo";
-// import Genarelinfo from "./Generalinfo";
-// import Developerinfo from "./Developerinfo";
-// import AppliedLandinfo from "./AppliedLand";
-// import Feeandcharges from "./Feeandcharges";
+
 import ServicePlanCivil from "./ServicePlanCivilEng";
 import ServicePlanService from "./ServicePlan";
 // import JeLandinfo from "./Scrutiny LOI/JE/JE";
@@ -269,12 +265,6 @@ import axios from "axios";
 // import AddIcon from "@mui/icons-material/Add";
 
 const ServiceBase = ({apiResponse,applicationNumber,refreshScrutinyData}) => {
-//   const personalInfoRef = useRef();
-//   const generalInfoRef = useRef();
-//   const developerInfoRef = useRef();
-//   const appliedInfoRef = useRef();
-//   const feeandchargesInfoRef = useRef();
-  // const licenseDetailsInfoRef = useRef();
   const [purpose, setPurpose] = useState("");
   const jeLandInfoRef = useRef();
 
@@ -287,8 +277,7 @@ const ServiceBase = ({apiResponse,applicationNumber,refreshScrutinyData}) => {
   const [displayGeneral, setDisplayGeneralInfo] = useState([]);
   const [displayAppliedLand, setDisplayAppliedLandInfo] = useState([]);
   const [displayFeeandCharges, setDisplayFeeandChargesInfo] = useState([]);
-  // const [displayLicenseDetails, setDisplayLicenseDetailsInfo] = useState([]);
-  // const [displayLicenseDetailsCheckedlist, setDisplayCheckedLicenseDetailsList] = useState([]);
+
 const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues } = useContext(ScrutinyRemarksContext);
   const [displayJeLand, setDisplayJeLand] = useState([]);
   const [ActiveKey, setActiveKey] = useState(1);
@@ -298,8 +287,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
   const [defaultheightApplied, setDefaultheightApplied] = useState(0);
   const [defaultheightFee, setDefaultheightFee] = useState(0);
   const [open, setOpen] = useState(false);
-  // const [apiResponse, setApiResponse] = useState({});
-  // const [remarksResponse, setRemarksResponse] = useState({});
+  
   const [sumrol, setSumrol] = useState({});
   const [uncheckedValue, setUncheckedVlue] = useState([]);
   const [remarksChanges, setRemarksChanges] = useState("");
@@ -363,46 +351,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
     setDisplayFeeandChargesInfo(data.data);
     console.log(data);
   };
-  // const handleGetInputFieldsValues = async () => {
-  //   try {
-  //     const Resp = await axios.get("/tl-services/new/licenses/_get?id=702").then((response) => {
-  //       return response.data;
-  //     });
-
-  //     console.log("Response From API", Resp);
-  //     setApiResponse(Resp);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-  // const handleGetFiledsStatesById=async()=>{
-  //     const dataToPass={
-  //       "RequestInfo": {
-  //           "api_id": "1",
-  //           "ver": "1",
-  //           "ts": null,
-  //           "action": "create",
-  //           "did": "",
-  //           "key": "",
-  //           "msg_id": "",
-  //           "requester_id": "",
-  //           "auth_token": authToken,
-  //           "authToken": authToken
-  //       }
-  //   };
-  //   try {
-  //     const Resp = await axios.post(`/land-services/egscrutiny/_search?applicationNumber=${applicationNumber}&userId=${userInfo?.id}`, dataToPass).then((response) => {
-  //       return response.data;
-  //     });
-
-  //     console.log("Response From API", Resp);
-  //     setIconState(Resp);
-  //     // setApiResponse(Resp);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-
-  // }
+  
   const handleGetDisapprovalList = async () => {
     const dataToPass = {
       RequestInfo: {
@@ -430,31 +379,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
       console.log(error);
     }
   };
-  // const handleGetRemarkssValues = async () => {
-  //   const dataToSend = {
-  //     RequestInfo: {
-  //       apiId: "Rainmaker",
-  //       action: "_create",
-  //       did: 1,
-  //       key: "",
-  //       msgId: "20170310130900|en_IN",
-  //       ts: 0,
-  //       ver: ".01",
-  //       authToken: authToken,
-  //       userInfo: userInfo,
-  //     },
-  //   };
-  //   try {
-  //     const Resp = await axios.post(`/land-services/egscrutiny/_search?applicationNumber=${applicationNumber}&userId=${userInfo?.id}`, dataToSend).then((response) => {
-  //       return response.data;
-  //     });
-
-  //     console.log("Response From API", Resp);
-  //     setRemarksResponse(Resp);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+ 
 
   useEffect(() => {
     if(apiResponse?.id){
@@ -571,7 +496,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
          </div>
          
          <div 
-        //  style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}
+       
          >
       <ServicePlanCivil></ServicePlanCivil>
       </div>
