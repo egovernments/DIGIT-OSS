@@ -52,6 +52,7 @@ import SurrenderLic from "./NewLicense/AllService/Module/SurrenderLic/SurrenderL
 import CompositionClu from "./NewLicense/AllService/Module/CompositionClu/CompositionClu";
 import Standard from "./NewLicense/AllService/Module/StandardDesign/StandardDesign";
 import ExtensionCom from "./NewLicense/AllService/Module/ExtensionCommunity/ExtensionCom";
+import LowMedium from "./NewLicense/AllService/Module/BuildingPlanApproval/LowMedium";
 
 const App = ({ path }) => {
   const location = useLocation();
@@ -126,7 +127,7 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/CompositionClu`} component={CompositionClu} />
         <PrivateRoute path={`${path}/Standard`} component={Standard} />
         <PrivateRoute path={`${path}/ExtensionCom`} component={ExtensionCom} />
-
+        <PrivateRoute path={`${path}/BPALowMedium`} component={LowMedium} />
         {/* .............................................................................. */}
 
         {/* <PrivateRoute path={`${path}/Beneficialscrutiny`} component={Beneficialscrutiny} />

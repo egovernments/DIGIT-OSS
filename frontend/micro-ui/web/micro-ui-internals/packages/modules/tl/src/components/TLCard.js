@@ -6,7 +6,7 @@ import { checkForEmployee } from "../utils";
 const TLCard = () => {
     sessionStorage.setItem("breadCrumbUrl", "home");
     const userRoles = Digit.SessionStorage.get('User')?.info?.roles
-    const TL_Role = ["CTP_HR","AD_HQ", "JD_HQ", "SD_HQ", "ATP_HQ", "DA_HQ", "DDA_HQ", "ADA_HQ", "DTCP_HR", "DTP_HQ", "JE_HQ", "Patwari_HQ", "STP_HQ", "STP_Circle"]
+    const TL_Role = ["CTP_HR","AD_HQ", "AO_HQ", "JD_HQ", "SD_HQ", "ATP_HQ", "DA_HQ", "DDA_HQ", "ADA_HQ", "DTCP_HR", "DTP_HQ", "JE_HQ", "Patwari_HQ", "STP_HQ", "STP_Circle"]
 
     function isTLRole(){
         let isTLEmp = false

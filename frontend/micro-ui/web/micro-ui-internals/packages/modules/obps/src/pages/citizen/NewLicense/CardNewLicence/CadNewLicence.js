@@ -122,6 +122,14 @@ const CardNewLicence = (props) => {
               </h2>
             </Card>
           </div>
+          <div className="col col-3">
+            <Card style={{ height: "85px", marginTop: "40px", borderLeft: "2px solid #1266af" }}>
+              {" "}
+              <h2 style={{ textAlign: "center" }}>
+                <a href="/digit-ui/citizen/obps/BPALowMedium">BPA For Low and Medium Risk</a>
+              </h2>
+            </Card>
+          </div>
         </Row>
         <Row></Row>
         <Row></Row>

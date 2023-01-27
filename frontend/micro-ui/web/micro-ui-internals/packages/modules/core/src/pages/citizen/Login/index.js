@@ -64,6 +64,7 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
     if (!user) {
       return;
     }
+    console.log("GETUSERDA",user);
     Digit.SessionStorage.set("citizen.userRequestObject", user);
     Digit.UserService.setUser(user);
     setCitizenDetail(user?.info, user?.access_token, stateCode)
@@ -166,7 +167,7 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
         if (window?.globalConfigs?.getConfig("ENABLE_SINGLEINSTANCE")) {
           info.tenantId = Digit.ULBService.getStateId();
         }
-
+        console.log("INFOTOK",info,tokens);
         setUser({ info, ...tokens });
       } else if (!isUserRegistered) {
         const requestData = {
@@ -183,7 +184,7 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
           info.tenantId = Digit.ULBService.getStateId();
         }
 
-        console.log("INFOTOK",info,tokens);
+        
 
         setUser({ info, ...tokens });
       }
