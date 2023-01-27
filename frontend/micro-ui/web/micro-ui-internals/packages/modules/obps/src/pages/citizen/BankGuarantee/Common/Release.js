@@ -27,7 +27,7 @@ function ReleaseNew(props) {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [searchExistingBg, setSearchExistingBg] = useState({});
 
-  const bankRelease = async () => {
+  const bankRelease = async (data) => {
     const token = window?.localStorage?.getItem("token");
     const userInfo = Digit.UserService.getUser()?.info || {};
 
@@ -41,6 +41,7 @@ function ReleaseNew(props) {
 
             // validity: data?.validity,
             ...searchExistingBg,
+            ...data,
             status: "APPROVED",
           },
         ],
@@ -255,6 +256,19 @@ function ReleaseNew(props) {
                 )}
               </div>
             </div>
+            <Col md={4} xxl lg="3">
+              <div>
+                <button
+                  // id="btnClear"
+                  type="button"
+                  class="btn btn-primary btn-md center-block"
+                  style={{ marginBottom: "-44px" }}
+                  onClick={existingBgFormSubmitHandler}
+                >
+                  Search
+                </button>
+              </div>
+            </Col>
           </Row>
 
           <Row className="justify-content-end">

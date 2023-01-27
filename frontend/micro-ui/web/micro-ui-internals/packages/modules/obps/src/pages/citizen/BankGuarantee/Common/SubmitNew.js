@@ -34,6 +34,7 @@ function SubmitNew() {
 
   const bankSubmitNew = async (data) => {
     const token = window?.localStorage?.getItem("token");
+    console.log("token", token);
     const userInfo = Digit.UserService.getUser()?.info || {};
     console.log("validity", data);
     console.log("SubmissionSearch", SubmissionSearch);
@@ -138,6 +139,7 @@ function SubmitNew() {
 
   const existingBgFormSubmitHandler = async () => {
     const token = window?.localStorage?.getItem("token");
+    console.log("token........", token);
     const payload = {
       RequestInfo: {
         apiId: "Rainmaker",
