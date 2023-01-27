@@ -3,7 +3,8 @@ import { Card, Row, Col } from "react-bootstrap";
 import { Button, Form } from "react-bootstrap";
 import axios from "axios";
 import { useForm } from "react-hook-form";
-function ReleaseNew() {
+
+function ReleaseNew(props) {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
   const [modal, setmodal] = useState(false);
@@ -20,14 +21,30 @@ function ReleaseNew() {
     formState: { errors },
     control,
     setValue,
+    getValues,
     watch,
   } = useForm({});
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const [searchExistingBg, setSearchExistingBg] = useState({});
+
   const bankRelease = async (data) => {
     const token = window?.localStorage?.getItem("token");
-    console.log(data);
+    const userInfo = Digit.UserService.getUser()?.info || {};
+
     try {
       const postDistrict = {
+        NewBankGuaranteeRequest: [
+          {
+            action: "APPLY_FOR_RELEASE",
+            comment: "test comment",
+            assignee: null,
+
+            // validity: data?.validity,
+            ...searchExistingBg,
+            ...data,
+            status: "APPROVED",
+          },
+        ],
         RequestInfo: {
           apiId: "Rainmaker",
           action: "_create",
@@ -37,26 +54,45 @@ function ReleaseNew() {
           ts: 0,
           ver: ".01",
           authToken: token,
+          userInfo: userInfo,
         },
-        NewBankGuaranteeRequest: [
-          {
-            tenantId: tenantId,
-            additionalDetails: null,
-            additionalDocuments: null,
-            action: "PRE_SUBMIT",
-            comment: null,
-            assignee: null,
-            ...data,
-          },
-        ],
       };
-      const Resp = await axios.post("/tl-services/bank/guarantee/_create", postDistrict);
-      setServicePlanDataLabel(Resp.data);
+      const Resp = await axios.post("/tl-services/bank/guarantee/_update", postDistrict);
+      console.log("Release", Resp);
+      setSubmissionSearch(UserData);
     } catch (error) {
       console.log(error.message);
     }
   };
+  const existingBgFormSubmitHandler = async () => {
+    const token = window?.localStorage?.getItem("token");
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        action: "_create",
+        did: 1,
+        key: "",
+        msgId: "20170310130900|en_IN",
+        ts: 0,
+        ver: ".01",
+        authToken: token,
+      },
+    };
+    try {
+      const Resp = await axios.post(`/tl-services/bank/guarantee/_search?bgNumber=${getValues("bgNumber")}`, payload);
 
+      console.log("service", Resp.data.newBankGuaranteeList[0]);
+      setSearchExistingBg(Resp.data.newBankGuaranteeList[0]);
+
+      const userData = Resp?.data?.LicenseDetails?.[0];
+      setStepData(userData);
+    } catch (error) {
+      return error;
+    }
+  };
+  useEffect(() => {
+    existingBgFormSubmitHandler();
+  }, []);
   const [fileStoreId, setFileStoreId] = useState({});
   const getDocumentData = async (file, fieldName) => {
     const formData = new FormData();
@@ -220,6 +256,19 @@ function ReleaseNew() {
                 )}
               </div>
             </div>
+            <Col md={4} xxl lg="3">
+              <div>
+                <button
+                  // id="btnClear"
+                  type="button"
+                  class="btn btn-primary btn-md center-block"
+                  style={{ marginBottom: "-44px" }}
+                  onClick={existingBgFormSubmitHandler}
+                >
+                  Search
+                </button>
+              </div>
+            </Col>
           </Row>
 
           <Row className="justify-content-end">
