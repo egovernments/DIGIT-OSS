@@ -70,7 +70,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
       const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [uuid] }, {});
       usersResponse && usersResponse.user && usersResponse.user.length && setUserDetails(usersResponse.user[0]);
     }
-  };
+  }; 
 
   React.useEffect(() => {
     window.addEventListener("resize", () => setWindowWidth(window.innerWidth));

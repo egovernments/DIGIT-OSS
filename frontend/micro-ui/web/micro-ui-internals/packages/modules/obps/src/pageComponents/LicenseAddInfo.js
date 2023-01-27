@@ -54,7 +54,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     aggreementBtw: "",
     boardResolution: ""
   })
-  const [llpNumber, setLLPNumber] = useState("");
+  const [llp_Number, setLLPNumber] = useState("");
   const [csrNumber, setCSRNumber] = useState("");
   const devType = localStorage.getItem("devTypeValueFlag");
 
@@ -378,7 +378,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
           "PANFullName": name,
           "FullName": name,
           "DOB": dob,
-          "GENDER": gender?.value
+          "GENDER": "MALE"
         },
         "consentArtifact": {
           "consent": {
@@ -397,7 +397,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
               "idType": "string",
               "idNumber": "string",
               "mobile": mobileNumberUser,
-              "email": email
+              "email": emailId
             },
             "data": {
               "id": "string"
@@ -734,9 +734,10 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         name: name,
         mobileNumberUser: mobileNumberUser,
         dob:dob,
+        gender: gender?.value,
         PanNumber: PanNumber,
         cin_Number: cin_Number,
-        llp_Number: llpNumber,
+        llp_Number: llp_Number,
         csr_Number: csrNumber,
         companyName: companyName,
         incorporationDate: incorporationDate,
@@ -1313,14 +1314,14 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                       <input 
                                         type="text"
                                         onChange={selectLlpNumber}
-                                        value={llpNumber}
-                                        name="llpNumber"
+                                        value={llp_Number}
+                                        name="llp_Number"
                                         className="form-control"
                                         max={8}
                                         maxlength="8"
                                       />
-                                      {llpNumber && llpNumber.length > 0 && !llpNumber.match(Digit.Utils.getPattern('LLP')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_LLP_NO")}</CardLabelError>}
-                                      <h3 className="error-message" style={{ color: "red" }}>{cinValError}</h3>
+                                      {llp_Number && llp_Number.length > 0 && !llp_Number.match(Digit.Utils.getPattern('LLP')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_LLP_NO")}</CardLabelError>}
+                                      {/* <h3 className="error-message" style={{ color: "red" }}>{cinValError}</h3> */}
                                     </div>
                                   )
                                 default:
@@ -1657,7 +1658,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                       </Modal>
                     </div>
                   </div>
-                </div>
+                </div> 
               )}
               {(showDevTypeFields && showDevTypeFields !== "Individual" && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Hindu Undivided Family" && showDevTypeFields !== "Others" && showDevTypeFields !== "Society" && showDevTypeFields !== "Firm" && showDevTypeFields !== "Limited Liability Partnership") && (
                 <div className="card mb-3">

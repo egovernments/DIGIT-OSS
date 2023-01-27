@@ -45,7 +45,7 @@ const OCSendBackToCitizen = ({ parentRoute }) => {
       if (bpaData && application && edcrDetails && mdmsData && nocdata) {
         application = bpaData[0];
         if (editApplication) {
-          application.isEditApplication = true;
+          application.isEditApplication = true; 
         }
         sessionStorage.setItem("bpaInitialObject", JSON.stringify({ ...application }));
         let bpaEditDetails = await getBPAEditDetails(application, edcrDetails, mdmsData, nocdata, t);

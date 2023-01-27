@@ -654,7 +654,7 @@ const Developerinfo = (props) => {
             style={{ display: props.displayGeneral, border: "2px solid #e9ecef", margin: 10, padding: 10 }}
             className={`justify-content-center ${classes.formLabel}`}
           >
-            <Row className="ms-auto" style={{ marginBottom: 20 }}>
+            <Row className="ms-auto" style={{ marginBottom: 10 }}>
               <Col className="ms-auto" md={4} xxl lg="12">
                 <Form.Label
                 // placeholder={personalinfo !== null ? personalinfo.authorizedDeveloper : null}
@@ -663,17 +663,17 @@ const Developerinfo = (props) => {
                     {JSON.stringify(hideRemarks)} */}
 
                   (i)Whether licence applied for additional area ?
-
+               
                   <div className="d-flex flex-row">
                     <input type="radio" disabled value="Yes" checked={landScheduleData?.licenseApplied === "Y" ? true : false} />
                     <label className="m-0  mx-2" for="Yes">Yes</label>
                     <input type="radio" disabled value="No" checked={landScheduleData?.licenseApplied === "N" ? true : false} />
                     <label className="m-0 mx-2" for="No">No</label>
-                    {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
+                   
                     <ReportProblemIcon
                       style={{
                         display: hideRemarks?"none":"block",
-                        // display: hideRemarksPatwari?"none":"block",
+                   
                         color: fieldIconColors.licenceApplied
                       }}
                       onClick={() => {
@@ -696,24 +696,24 @@ const Developerinfo = (props) => {
               landScheduleData?.licenseApplied === "Y" && (
 
                 <div>
-                  <Row className="ms-auto" style={{ marginBottom: 20 }}>
+                  <Row className={classes.formLabel} style={{ marginBottom: 20 }} >
                     <Col className="ms-auto" md={4} xxl lg="4">
                       <label>
-                        {/* License No. of Parent License */}
+                        
                         <h5>Licence No. of Parent Licence &nbsp;</h5>
                       </label>
 
                       <div className="d-flex flex-row align-items-center my-1 ">
                         <Form.Control
-                          height={30}
-                          style={{ maxWidth: 200, marginRight: 5 }}
+                          // height={30}
+                          // style={{ maxWidth: 200, marginRight: 5 }}
                           placeholder={landScheduleData !== null ? landScheduleData?.licenseNumber : null}
                           disabled
                         ></Form.Control>
                         <ReportProblemIcon
                           style={{
                             display: hideRemarks?"none":"block",
-                            // display: hideRemarksPatwari?"none":"block",
+                           
                             color: fieldIconColors.licenceNo
                           }}
                           onClick={() => {
@@ -731,14 +731,14 @@ const Developerinfo = (props) => {
                       <label htmlFor="potential">
                         <h6>
                           {/* Potential Zone: */}
-                          <h5>Potential Zone: &nbsp;</h5>
+                          <h5>Development Plan &nbsp;</h5>
                         </h6>
                       </label>
 
                       <div className="d-flex flex-row  align-items-center">
                         <Form.Control
-                          height={30}
-                          style={{ maxWidth: 200, marginRight: 5 }}
+                          // height={30}
+                          // style={{ maxWidth: 200, marginRight: 5 }}
                           placeholder={landScheduleData !== null ? landScheduleData?.potential : null}
                           disabled
                         ></Form.Control>
@@ -780,10 +780,10 @@ const Developerinfo = (props) => {
                     <Col className="ms-auto" md={4} xxl lg="4">
                       <label>
                         {/* Site Location Purpose */}
-                        <h5>Site Location Purpose: &nbsp;</h5>
+                        <h5>Type of colony  &nbsp;</h5>
                       </label>
                       <div className="d-flex flex-row  align-items-center">
-                        <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.siteLoc : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                        <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.siteLoc : null}  disabled></Form.Control>
                         <ReportProblemIcon
                           style={{
                             display: hideRemarks?"none":"block",
@@ -802,53 +802,8 @@ const Developerinfo = (props) => {
                     </Col>
                     </Row>
 
-                    {/* </Row>
-              <Row className="ms-auto" style={{ marginBottom: 20 }}> */}
-                    {/* <Col className="ms-auto" md={4} xxl lg="4">
-                  <label>
-                    
-                    <h5>Approach Type (Type of Policy) &nbsp;</h5>
-                  </label>
-
-                  <div className="d-flex flex-row  align-items-center">
-                    <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.approach : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
-                    <ReportProblemIcon
-                      style={{
-                        display: hideRemarks?"none":"block",
-                        color: fieldIconColors.approachType
-                      }}
-                      onClick={() => {
-                        setLabelValue("Approach Type (Type of Policy)"),
-                          setOpennedModal("approachType")
-                        setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(landScheduleData !== null ? landScheduleData?.approach : null);
-                      }}
-                    ></ReportProblemIcon>
-                  </div>
-                </Col> */}<Row className="ms-auto" style={{ marginBottom: 20 }}>
+                 <Row className="ms-auto" style={{ marginBottom: 20 }}>
                     <div className="col col-12">
-                      {/* {Purpose === "DDJAY_APHP" && <CommercialColonyInResidential watch={watch} register={register} />}
-                              {Purpose === "RPL" && <CommercialColonyInResidential watch={watch} register={register} />}
-                              {Purpose === "NILPC" && <CommercialColonyInResidential watch={watch} register={register} />}
-                              {Purpose === "AHP" && <CommercialColonyInResidential watch={watch} register={register} />}
-                              {Purpose === "CIC" && <CommercialLicense watch={watch} register={register} />}
-                              {Purpose === "LDEF" && <LowDensityEco watch={watch} register={register} />}
-                              {Purpose === "IPL" && <CyberPark watch={watch} register={register} />}
-                              {Purpose === "ITP" && <CyberPark watch={watch} register={register} />}
-                              {Purpose === "ITC" && <CyberPark watch={watch} register={register} />}
-                              {Purpose === "RHP" && <RetirementHousing watch={watch} register={register} />} */}
-
-                      {/* <div>
-                  <CommercialColonyInResidential displayDdjay={Purpose === "DDJAY_APHP" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandDdjay} dataForIcons={dataIcons}></CommercialColonyInResidential>
-                </div>
-                <div>
-                  <CommercialColonyInResidential displayResidential={Purpose === "RPL" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandResidential} dataForIcons={dataIcons} ></CommercialColonyInResidential>
-                </div> */}
-                      {/* <div>
-                  <IndustrialPlottedForm displayIndustrial={Purpose === "IPL" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandIndustrial} dataForIcons={dataIcons} ></IndustrialPlottedForm>
-                </div> */}
-
                       {
                         {
                           'DDJAY_APHP': <div>
@@ -900,13 +855,14 @@ const Developerinfo = (props) => {
                       {/* </select> */}
                     </div>
                     </Row >
-                    <Row className="ms-auto" style={{ marginBottom: 20 }}>
+                    <Row className={classes.formLabel}  style={{ marginBottom: 20 }}>
                     <Col className="ms-auto" md={4} xxl lg="4">
                       <label>
-                        <h6>Area of Parent Licence &nbsp;&nbsp;</h6>{" "}
+                        <h6>Area of parent licence in acres </h6>{" "}
+                       
                       </label>
                       <div className="d-flex flex-row  align-items-center">
-                        <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.areaOfParentLicence : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                        <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.areaOfParentLicence : null} disabled></Form.Control>
                         <ReportProblemIcon
                           style={{
                             display: hideRemarks?"none":"block",
@@ -928,7 +884,7 @@ const Developerinfo = (props) => {
                         <h6>Specify Others</h6>
                       </label>
                       <div className="d-flex flex-row  align-items-center">
-                        <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.specify : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                        <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.specify : null}  disabled></Form.Control>
                         <ReportProblemIcon
                           style={{
                             display: hideRemarks?"none":"block",
@@ -1016,12 +972,12 @@ const Developerinfo = (props) => {
 
 
             {/* )} */}
-            <Row className="ms-auto">
+            <Row className={classes.formLabel}>
               <Col md={4} xxl lg="12">
-                <Form.Label>(ii)Whether licence applied under Migration policy?</Form.Label>
+                <Form.Label> (ii)Whether licence applied under Migration Policy ?</Form.Label>
                 &nbsp;&nbsp;
                 <div className="d-flex flex-row align-items-center my-1 ">
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                 
                   <input type="radio" disabled value="Yes" checked={landScheduleData?.migrationLic === "Y" ? true : false} />
                   <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                   <input type="radio" disabled value="No" checked={landScheduleData?.migrationLic === "N" ? true : false} />
@@ -1029,7 +985,7 @@ const Developerinfo = (props) => {
                   <ReportProblemIcon
                     style={{
                       display: hideRemarks?"none":"block",
-                       // display: hideRemarksPatwari?"none":"block",
+                     
                       color: fieldIconColors.migrationPolicy
                     }}
                     onClick={() => {
@@ -1046,17 +1002,264 @@ const Developerinfo = (props) => {
                   landScheduleData?.migrationLic === "Y" &&
 
                   <div>
-                    <Row className="ms-auto" style={{ marginBottom: 20 }}>
+                     <div style={{overflow:"scroll"}}>
+              <table className="table table-bordered">
+                <thead>
+                  
+                  <tr className="border-bottom-0">
+                  <th class="fw-normal pb-0 border-bottom-0 align-top">
+                  Previous Licence Number  
+                    </th>  
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    Area of parent licence  
+                    </th> 
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    Purpose of parent licence  
+                    </th> 
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    Validity of parent licence
+                    </th> 
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    Date  
+                    </th> 
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    Area applied under migration in acres  
+                    </th>                
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    Applied Khasra number  
+                    </th> 
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    Area  
+                    </th> 
+                  <th class="fw-normal pb-0 border-bottom-0 align-top">
+                  Balance of Parent Licence
+                    </th> 
+                   
+ </tr>
+                  <tr className="border-top-0">
+                    <th class="fw-normal py-0 border-top-0">
+                    <ReportProblemIcon
+                            style={{
+                              display: hideRemarks?"none":"block",
+                              color: fieldIconColors.licenceNo
+                            }}
+                            onClick={() => {
+                              setLabelValue("Licence No."),
+                                setOpennedModal("licenceNo")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(landScheduleData !== null ? landScheduleData?.licNo : null);
+                            }}
+                          ></ReportProblemIcon>
+                    </th>
+                    <th class="fw-normal py-0 border-top-0">
+                    <ReportProblemIcon
+                            style={{
+                              display: hideRemarks?"none":"block",
+                              color: fieldIconColors.areaOfParentLicence
+                            }}
+                            onClick={() => {
+                              setLabelValue("Area of Parent Licence"),
+                                setOpennedModal("areaOfParentLicence")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(landScheduleData !== null ? landScheduleData?.parentLicArea : null);
+                            }}
+                          ></ReportProblemIcon>
+                    </th>
+                    <th class="fw-normal py-0 border-top-0">
+                    <ReportProblemIcon
+                            style={{
+                              display: hideRemarks?"none":"block",
+                              color: fieldIconColors.purposeOfParentLicence
+                            }}
+                            onClick={() => {
+                              setLabelValue("Purpose of Parent Licence"),
+                                setOpennedModal("purposeOfParentLicence")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(landScheduleData !== null ? landScheduleData?.parentLicPurpose : null);
+                            }}
+                          ></ReportProblemIcon>
+                    </th>
+                    <th class="fw-normal py-0 border-top-0">
+                    <ReportProblemIcon
+                            style={{
+                              display: hideRemarks?"none":"block",
+                              color: fieldIconColors.validityOfParentLicence
+                            }}
+                            onClick={() => {
+                              setLabelValue("Validity of Parent Licence")
+                              setOpennedModal("validityOfParentLicence")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(landScheduleData?.validityOfParentLic === "Y" ? "Yes" : landScheduleData?.validityOfParentLic === "N" ? "No" : null);
+                            }}
+                          ></ReportProblemIcon>
+                    </th>
+                    <th class="fw-normal py-0 border-top-0">
+                    <ReportProblemIcon
+                            style={{
+                              display: hideRemarks?"none":"block",
+                              color: fieldIconColors.areaAppliedUnderMigration
+                            }}
+                            onClick={() => {
+                              setLabelValue("Area Applied under Migration"),
+                                setOpennedModal("areaAppliedUnderMigration")
+                              setSmShow(true),
+                                console.log("modal open"),
+                         setFieldValue(landScheduleData !== null ? landScheduleData?.areaAppliedUnderMigration : null);
+                            }}
+                          ></ReportProblemIcon>
+                    </th>
+                    <th class="fw-normal py-0 border-top-0">
+                    <ReportProblemIcon
+                            style={{
+                              display: hideRemarks?"none":"block",
+                              color: fieldIconColors.areaAppliedUnderMigration
+                            }}
+                            onClick={() => {
+                              setLabelValue("Area Applied under Migration"),
+                                setOpennedModal("areaAppliedUnderMigration")
+                              setSmShow(true),
+                                console.log("modal open"),
+                         setFieldValue(landScheduleData !== null ? landScheduleData?.areaAppliedUnderMigration : null);
+                            }}
+                          ></ReportProblemIcon>
+                    </th>
+                    <th class="fw-normal py-0 border-top-0">
+                    <ReportProblemIcon
+                            style={{
+                              display: hideRemarks?"none":"block",
+                              color: fieldIconColors.areaAppliedUnderMigration
+                            }}
+                            onClick={() => {
+                              setLabelValue("Area Applied under Migration"),
+                                setOpennedModal("areaAppliedUnderMigration")
+                              setSmShow(true),
+                                console.log("modal open"),
+                         setFieldValue(landScheduleData !== null ? landScheduleData?.areaAppliedUnderMigration : null);
+                            }}
+                          ></ReportProblemIcon>
+                    </th>
+                    <th class="fw-normal py-0 border-top-0">
+                    <ReportProblemIcon
+                            style={{
+                              display: hideRemarks?"none":"block",
+                              color: fieldIconColors.areaAppliedUnderMigration
+                            }}
+                            onClick={() => {
+                              setLabelValue("Area Applied under Migration"),
+                                setOpennedModal("areaAppliedUnderMigration")
+                              setSmShow(true),
+                                console.log("modal open"),
+                         setFieldValue(landScheduleData !== null ? landScheduleData?.areaAppliedUnderMigration : null);
+                            }}
+                          ></ReportProblemIcon>
+                    </th>
+                    <th class="fw-normal py-0 border-top-0">
+                    <ReportProblemIcon
+                            style={{
+                              display: hideRemarks?"none":"block",
+                              color: fieldIconColors.areaAppliedUnderMigration
+                            }}
+                            onClick={() => {
+                              setLabelValue("Area Applied under Migration"),
+                                setOpennedModal("areaAppliedUnderMigration")
+                              setSmShow(true),
+                                console.log("modal open"),
+                         setFieldValue(landScheduleData !== null ? landScheduleData?.areaAppliedUnderMigration : null);
+                            }}
+                          ></ReportProblemIcon>
+                    </th>
+                   
+                  </tr>
+                </thead>
+                <tbody>
+                {/* {
+                    landScheduleData?.migrationLic?.map((item,index)=>( */}
+                      
+                  <tr  
+                  // key={index}
+                  >
+                    <td>
+                      <input type="text" className="form-control"  
+                      // placeholder={item?.district }
+                       disabled />
+                    </td>
+                    <td>
+                      <input type="text" className="form-control"  
+                      // placeholder={item?.district }
+                       disabled />
+                    </td>
+                    <td>
+                      <input type="text" className="form-control"  
+                      // placeholder={item?.district }
+                       disabled />
+                    </td>
+                    <td>
+                      <input type="text" className="form-control"  
+                      // placeholder={item?.district }
+                       disabled />
+                    </td>
+                    <td>
+                      <input type="text" className="form-control"  
+                      // placeholder={item?.district }
+                       disabled />
+                    </td>
+                    <td>
+                      <input type="text" className="form-control"  
+                      // placeholder={item?.district }
+                       disabled />
+                    </td>
+                    <td>
+                      <input type="text" className="form-control"  
+                      // placeholder={item?.district }
+                       disabled />
+                    </td>
+                    <td>
+                      <input type="text" className="form-control"  
+                      // placeholder={item?.district }
+                       disabled />
+                    </td>
+                    <td>
+                      <input type="text" className="form-control"  
+                      // placeholder={item?.district }
+                       disabled />
+                    </td>
+                   
+                    {/* <td class="text-center">
+                    <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={()=>getDocShareholding(item?.registeringAuthorityDoc)}>
+                                      <Visibility color="info" className="icon" /></IconButton>
+                                  
+                                  </div>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={()=>getDocShareholding(item?.registeringAuthorityDoc)}>
+                                <FileDownload color="primary" className="mx-1" />
+                        </IconButton>
+                        </div>
+                      <input type="text" className="form-control" title={item?.registeringAuthorityDoc} placeholder={item?.registeringAuthorityDoc} disabled />
+                    </td>
+                    */}
+                    
+                  </tr>
+                     {/* ))
+                   } */}
+                </tbody>
+              </table>
+            </div>
+                    <Row className={classes.formLabel} style={{ marginBottom: 20 }}>
                       <Col className="ms-auto" md={4} xxl lg="4">
                         <label>
-                          {/* License No. of Parent License */}
+                      
                           <h5>Area Applied under Migration</h5>
                         </label>
 
                         <div className="d-flex flex-row align-items-center my-1 ">
                           <Form.Control
-                            height={30}
-                            style={{ maxWidth: 200, marginRight: 5 }}
+                            // height={30}
+                            // style={{ maxWidth: 200, marginRight: 5 }}
                             placeholder={landScheduleData !== null ? landScheduleData?.areaUnderMigration : null}
                             disabled
                           ></Form.Control>
@@ -1070,7 +1273,7 @@ const Developerinfo = (props) => {
                                 setOpennedModal("areaAppliedUnderMigration")
                               setSmShow(true),
                                 console.log("modal open"),
-                                setFieldValue(landScheduleData !== null ? landScheduleData?.areaAppliedUnderMigration : null);
+                         setFieldValue(landScheduleData !== null ? landScheduleData?.areaAppliedUnderMigration : null);
                             }}
                           ></ReportProblemIcon>
                         </div>
@@ -1086,8 +1289,8 @@ const Developerinfo = (props) => {
 
                         <div className="d-flex flex-row  align-items-center">
                           <Form.Control
-                            height={30}
-                            style={{ maxWidth: 200, marginRight: 5 }}
+                            // height={30}
+                            // style={{ maxWidth: 200, marginRight: 5 }}
                             placeholder={landScheduleData !== null ? landScheduleData?.purposeParentLic : null}
                             disabled
                           ></Form.Control>
@@ -1112,7 +1315,9 @@ const Developerinfo = (props) => {
                           <h5>Licence No.</h5>
                         </label>
                         <div className="d-flex flex-row  align-items-center">
-                          <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.licNo : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                          <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.licNo : null} 
+                          // height={30} style={{ maxWidth: 200, marginRight: 5 }} 
+                          disabled></Form.Control>
                           <ReportProblemIcon
                             style={{
                               display: hideRemarks?"none":"block",
@@ -1137,7 +1342,9 @@ const Developerinfo = (props) => {
                         </label>
 
                         <div className="d-flex flex-row  align-items-center">
-                          <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.areaofParentLic : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                          <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.areaofParentLic : null}
+                          //  height={30} style={{ maxWidth: 200, marginRight: 5 }} 
+                           disabled></Form.Control>
                           <ReportProblemIcon
                             style={{
                               display: hideRemarks?"none":"block",
@@ -1158,7 +1365,7 @@ const Developerinfo = (props) => {
                           <h6>Validity of Parent Licence</h6>
                         </label>
                         <div className="d-flex flex-row align-items-center my-1 ">
-                          {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                          
                           <input type="radio" disabled value="Yes" checked={landScheduleData?.validityOfParentLic === "Y" ? true : false} />
                           <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                           <input type="radio" disabled value="No" checked={landScheduleData?.validityOfParentLic === "N" ? true : false} />
@@ -1179,10 +1386,12 @@ const Developerinfo = (props) => {
                         </div>
                       </Col> 
                       <Col className="ms-auto" md={4} xxl lg="4">
-                      <div className="col col-4">
+                      {/* <div className="col col-4"> */}
                       <h6>Type of land</h6>{" "}
                       <div className="d-flex flex-row  align-items-center">
-                        <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.typeLand : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                        <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.typeLand : null} 
+                        // height={30} style={{ maxWidth: 200, marginRight: 5 }} 
+                        disabled></Form.Control>
                         <ReportProblemIcon
                           style={{
                             display: hideRemarks?"none":"block",
@@ -1197,14 +1406,16 @@ const Developerinfo = (props) => {
                           }}
                         ></ReportProblemIcon>
                       </div>
-                    </div>
+                    {/* </div> */}
                       </Col>
                       <Col className="ms-auto" md={4} xxl lg="4">
                       <label>
                         <h6>Approach Road Width&nbsp;&nbsp;</h6>{" "}
                       </label>
                       <div className="d-flex flex-row  align-items-center">
-                        <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.approachRoadWidth : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                        <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.approachRoadWidth : null} 
+                        // height={30} style={{ maxWidth: 200, marginRight: 5 }}
+                         disabled></Form.Control>
                         <ReportProblemIcon
                           style={{
                             display: hideRemarks?"none":"block",
@@ -1225,7 +1436,9 @@ const Developerinfo = (props) => {
                         <h6>Area other than Licence&nbsp;&nbsp;</h6>{" "}
                       </label>
                       <div className="d-flex flex-row  align-items-center">
-                        <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.approachRoadWidth : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                        <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.approachRoadWidth : null} 
+                        // height={30} style={{ maxWidth: 200, marginRight: 5 }} 
+                        disabled></Form.Control>
                         <ReportProblemIcon
                           style={{
                             display: hideRemarks?"none":"block",

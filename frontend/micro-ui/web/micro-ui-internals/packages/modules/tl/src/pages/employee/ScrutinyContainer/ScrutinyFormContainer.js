@@ -10,48 +10,79 @@ import { useHistory, useParams } from "react-router-dom";
 import ApplicationDetailsActionBar from "../../../../../templates/ApplicationDetails/components/ApplicationDetailsActionBar";
 import ActionModal from "../../../../../templates/ApplicationDetails/Modal";
 import { ScrutinyRemarksContext } from "../../../../context/remarks-data-context";
-
+import jsPDF from 'jspdf'
 import ScrutitnyForms from "../ScrutinyBasic/ScutinyBasic";
 
 
 
 const ScrutinyFormcontainer = (props) => {
 
-  
+
   // const [ApplicantFormshow, SetApplicantForm] = useState(true);
   // const [PurposeFormshow, SetPurposeForm] = useState(false);
   // const [LandScheduleFormshow, SetLandScheduleForm] = useState(false);
   // const [AppliedDetailsFormshow, SetAppliedDetailsForm] = useState(false);
   // const [FeesChargesFormshow, SetFeesChargesForm] = useState(false);
 
-const {id} = useParams();
+  const { id } = useParams();
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const state = Digit.ULBService.getStateId();
   const { t } = useTranslation();
   const history = useHistory();
-  
+
   const [displayMenu, setDisplayMenu] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [isEnableLoader, setIsEnableLoader] = useState(false);
-  const [isWarningPop, setWarningPopUp ] = useState(false);
+  const [isWarningPop, setWarningPopUp] = useState(false);
   const [showhide19, setShowhide19] = useState("true");
   const [businessService, setBusinessServices] = useState("NewTL");
-  const [moduleCode,setModuleCode] = useState("TL")
-  const [ scrutinyDetails, setScrutinyDetails] = useState();
+  const [moduleCode, setModuleCode] = useState("TL")
+  const [scrutinyDetails, setScrutinyDetails] = useState();
   // const [applicationNumber,setApplicationNumber] = useState("");
   const [applicationDetails, setApplicationDetails] = useState();
   const [workflowDetails, setWorkflowDetails] = useState();
-  const [applicationData,setApplicationData] = useState();
-  const {setBusinessService } = useContext(ScrutinyRemarksContext)
+  const [applicationData, setApplicationData] = useState();
+  const { setBusinessService } = useContext(ScrutinyRemarksContext)
 
   const authToken = Digit.UserService.getUser()?.access_token || null;
+  const userInfo = Digit.UserService.getUser()?.info || {};
 
   // const [showhide19, setShowhide19] = useState("true");
-  const handleshow19 = (e) => {
-    const getshow = e.target.value;
-    setShowhide19(getshow);
+  const handleshow19 = async (e) => {
+    const payload = {
+
+      "RequestInfo": {
+
+        "apiId": "Rainmaker",
+
+        "ver": ".01",
+
+        "ts": null,
+
+        "action": "_update",
+
+        "did": "1",
+
+        "key": "",
+
+        "msgId": "20170310130900|en_IN",
+
+        "authToken": authToken
+
+      }
+    }
+    const Resp = await axios.post(`/tl-services/loi/report/_create?applicationNumber=${id}&userId=${userInfo?.id}`, payload,{responseType:"arraybuffer"})
+
+    console.log("logger12345...", Resp.data, userInfo)
+
+    const pdfBlob = new Blob([Resp.data], { type: 'application/pdf' });
+    const pdfUrl = URL.createObjectURL(pdfBlob);
+    window.open(pdfUrl);
+
+    console.log("logger123456...", pdfBlob,pdfUrl );
+    
   };
   const handleChange = (e) => {
     this.setState({ isRadioSelected: true });
@@ -59,25 +90,25 @@ const {id} = useParams();
 
 
   const getScrutinyData = async () => {
-    console.log("log123... userInfo",authToken);
+    console.log("log123... userInfo", authToken);
     let requestInfo = {
       "RequestInfo": {
         "apiId": "Rainmaker",
         "msgId": "1669293303096|en_IN",
         "authToken": authToken
-       
-    }
+
+      }
     }
     try {
-      const Resp = await axios.post(`/tl-services/v1/_search?tenantId=hr&applicationNumber=${id}`,requestInfo).then((response) => {
+      const Resp = await axios.post(`/tl-services/v1/_search?tenantId=hr&applicationNumber=${id}`, requestInfo).then((response) => {
         return response?.data;
       });
-      console.log("Response From API1", Resp, Resp?.Licenses[0]?.applicationNumber,Resp?.Licenses[0]?.tradeLicenseDetail?.additionalDetail[0]);
+      console.log("Response From API1", Resp, Resp?.Licenses[0]?.applicationNumber, Resp?.Licenses[0]?.tradeLicenseDetail?.additionalDetail[0]);
       setScrutinyDetails(Resp?.Licenses[0]?.tradeLicenseDetail?.additionalDetail[0]);
-      
-      console.log("devDel123",Resp?.Licenses[0])
+
+      console.log("devDel123", Resp?.Licenses[0])
       setApplicationData(Resp?.Licenses[0]);
-      console.log("devDel1236",Resp?.Licenses[0]?.businessService)
+      console.log("devDel1236", Resp?.Licenses[0]?.businessService)
       setBusinessService(Resp?.Licenses[0]?.businessService);
     } catch (error) {
       console.log(error);
@@ -87,27 +118,27 @@ const {id} = useParams();
   let EditRenewalApplastModifiedTime = Digit.SessionStorage.get("EditRenewalApplastModifiedTime");
 
   let workflowDetailsTemp = Digit.Hooks.useWorkflowDetails({
-    tenantId:  tenantId,
+    tenantId: tenantId,
     id: id,
     moduleCode: businessService,
     role: "TL_CEMP",
-    config:{EditRenewalApplastModifiedTime:EditRenewalApplastModifiedTime},
+    config: { EditRenewalApplastModifiedTime: EditRenewalApplastModifiedTime },
   });
-  
+
   const applicationDetailsTemp = Digit.Hooks.tl.useApplicationDetail(t, tenantId, id);
-  
+
 
 
 
   const {
-    
+
     mutate,
   } = Digit.Hooks.tl.useApplicationActions(tenantId);
 
 
   function onActionSelect(action) {
     if (action) {
-      if(action?.isWarningPopUp){
+      if (action?.isWarningPopUp) {
         setWarningPopUp(true);
       }
       else if (action?.redirectionUrll) {
@@ -120,7 +151,7 @@ const {id} = useParams();
           state: { ...action.redirectionUrl?.state },
         });
       }
-    } 
+    }
     setSelectedAction(action);
     setDisplayMenu(false);
   }
@@ -157,7 +188,7 @@ const {id} = useParams();
         setIsEnableLoader(false);
         let errorValue = err?.response?.data?.Errors?.[0]?.code ? t(err?.response?.data?.Errors?.[0]?.code) : err?.response?.data?.Errors?.[0]?.message || err;
         closeModal();
-        setShowToast({ key: "error", error: {message: errorValue}});
+        setShowToast({ key: "error", error: { message: errorValue } });
         setTimeout(closeToast, 5000);
         return;
       }
@@ -194,32 +225,32 @@ const {id} = useParams();
     closeModal();
   };
 
-  useEffect(()=>{
-    console.log("log123...applicationDetailsAPI",applicationDetailsTemp)
-    if(applicationDetailsTemp?.data){
+  useEffect(() => {
+    console.log("log123...applicationDetailsAPI", applicationDetailsTemp)
+    if (applicationDetailsTemp?.data) {
       setApplicationDetails(applicationDetailsTemp?.data)
     }
-  },[applicationDetailsTemp?.data])
+  }, [applicationDetailsTemp?.data])
 
 
   useEffect(() => {
-    console.log("log123...wrkflw",id,workflowDetailsTemp,scrutinyDetails,applicationDetails)
+    console.log("log123...wrkflw", id, workflowDetailsTemp, scrutinyDetails, applicationDetails)
     if (workflowDetailsTemp?.data?.applicationBusinessService) {
       setWorkflowDetails(workflowDetailsTemp);
       setBusinessServices(workflowDetailsTemp?.data?.applicationBusinessService);
-      
+
     }
   }, [workflowDetailsTemp?.data]);
-  
- 
-  useEffect(()=>{
+
+
+  useEffect(() => {
     getScrutinyData();
-  },[])
+  }, [])
 
 
   return (
     <Card>
-      <Card.Header class="fw-normal" style={{ top: 5, padding: 5 , fontSize: 14 ,height:90, lineHeight:2 }}>
+      <Card.Header class="fw-normal" style={{ top: 5, padding: 5, fontSize: 14, height: 90, lineHeight: 2 }}>
         <div className="row">
           <div className="col-md-3">
             <p>Application Number:</p>
@@ -254,66 +285,65 @@ const {id} = useParams();
 
 
         <Row>
-        
+
           <div class="col-md-10 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
-          <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}>Submit</Button>
+           
 
 
-          {showModal ? (
-            <ActionModal
-              t={t}
-              action={selectedAction}
-              tenantId={tenantId}
-              state={state}
-              id={id}
-              applicationDetails={applicationDetails}
-              applicationData={{...applicationDetails?.applicationData,workflowCode:applicationDetails?.applicationData?.workflowCode || "NewTL"}}
-              closeModal={closeModal}
-              submitAction={submitAction}
-              actionData={workflowDetails?.data?.timeline}
-              businessService={businessService}
+            {showModal ? (
+              <ActionModal
+                t={t}
+                action={selectedAction}
+                tenantId={tenantId}
+                state={state}
+                id={id}
+                applicationDetails={applicationDetails}
+                applicationData={{ ...applicationDetails?.applicationData, workflowCode: applicationDetails?.applicationData?.workflowCode || "NewTL" }}
+                closeModal={closeModal}
+                submitAction={submitAction}
+                actionData={workflowDetails?.data?.timeline}
+                businessService={businessService}
+                workflowDetails={workflowDetails}
+                moduleCode={moduleCode}
+              />
+            ) : null}
+            {isWarningPop ? (
+              <ApplicationDetailsWarningPopup
+                action={selectedAction}
+                workflowDetails={workflowDetails}
+                businessService={businessService}
+                isWarningPop={isWarningPop}
+                closeWarningPopup={closeWarningPopup}
+              />
+            ) : null}
+            {/* <ApplicationDetailsToast t={t} showToast={showToast} closeToast={closeToast} businessService={businessService} /> */}
+            <ApplicationDetailsActionBar
               workflowDetails={workflowDetails}
-              moduleCode={moduleCode}
+              displayMenu={displayMenu}
+              onActionSelect={onActionSelect}
+              setDisplayMenu={setDisplayMenu}
+              businessService={businessService}
+              // forcedActionPrefix={forcedActionPrefix}
+              ActionBarStyle={{}}
+              MenuStyle={{}}
             />
-          ) : null}
-          {isWarningPop ? (
-            <ApplicationDetailsWarningPopup 
-            action={selectedAction}
-            workflowDetails={workflowDetails}
-            businessService={businessService}
-            isWarningPop={isWarningPop}
-            closeWarningPopup={closeWarningPopup}
-            />
-          ) : null}
-          {/* <ApplicationDetailsToast t={t} showToast={showToast} closeToast={closeToast} businessService={businessService} /> */}
-          <ApplicationDetailsActionBar
-            workflowDetails={workflowDetails}
-            displayMenu={displayMenu}
-            onActionSelect={onActionSelect}
-            setDisplayMenu={setDisplayMenu}
-            businessService={businessService}
-            // forcedActionPrefix={forcedActionPrefix}
-            ActionBarStyle={{}}
-            MenuStyle={{}}
-          />
 
 
-            </div>
-          
+          </div>
+
         </Row>
         <Row>
-          
-          <div class="col-md-12 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
-          {/* <Button style={{ textAlign: "right" }}> <a href="http://localhost:3000/digit-ui/citizen/obps/Loi" >Generate LOI</a></Button> */}
-          {/* <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow19} /> */}
+              
+          <div class="col-md-12 bg-light text-right" style={{ position: "relative", marginBottom: 20 }}>
+          <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}>Submit</Button>
           </div>
-          {showhide19 === "Submit" && (
-                     <div>
-                       <Button style={{ textAlign: "right" }}> <a href="http://localhost:3000/digit-ui/employee/tl/Loi" >Generate LOI</a></Button>
-                     </div>
-                        )}
-                        
-                    
+          {/* {showhide19 === "Submit" && ( */}
+          {/* <div>
+            <Button style={{ textAlign: "right" }}> <a href="http://localhost:3000/digit-ui/employee/tl/Loi" >Generate LOI</a></Button>
+          </div> */}
+          {/* )} */}
+
+
         </Row>
       </Row>
     </Card>

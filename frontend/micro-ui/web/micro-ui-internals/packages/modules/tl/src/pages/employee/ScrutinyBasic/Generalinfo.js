@@ -1,14 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
-// import {AiFillCheckCircle, AiFillCloseCircle} from "react-icons/ai";
 import Modal from "react-bootstrap/Modal";
-// import TextField from '@mui/material/TextField';
-// import CalculateIcon from '@mui/icons-material/Calculate';
-// import InfoIcon from '@mui/icons-material/Info';
-// import * as Icon from "react-bootstrap-icons";
-// import { XCircleFill } from "react-bootstrap-icons";
-// import { CheckCircleFill } from "react-bootstrap-icons";
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import AddIcon from "@mui/icons-material/Add";
@@ -18,6 +11,10 @@ import Collapse from "react-bootstrap/Collapse";
 import ModalChild from "./Remarks/ModalChild";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import { useStyles } from "./css/personalInfoChild.style";
+import Visibility from "@mui/icons-material/Visibility";
+import FileDownload from "@mui/icons-material/FileDownload";
+import { IconButton } from "@mui/material";
+import { getDocShareholding } from "./ScrutinyDevelopment/docview.helper";
 
 const Genarelinfo = (props) => {
   const [showhide1, setShowhide1] = useState("No");
@@ -359,10 +356,10 @@ const Genarelinfo = (props) => {
         <div id="example-collapse-text">
           <Form.Group className="justify-content-center" controlId="formBasicEmail" style={{ border: "2px solid #e9ecef", margin: 10, padding: 20 }}>
             <Row className="ml-auto" style={{ marginBottom: 5 }}>
-              <Col md={4} xxl lg="3">
+              <Col md={4} xxl lg="3" className={classes.formLabel}>
                 <Form.Label>
-                  {/* <b></b>  */}
-                  <h5 className={classes.formLabel}>
+               
+                  <h5 >
                     Purpose Of Licence  <span style={{ color: "red" }}>*</span>
                   </h5>
                 </Form.Label>
@@ -371,23 +368,12 @@ const Genarelinfo = (props) => {
                   <Form.Control
                     type="text"
                     placeholder={applicantInfoPersonal !== null ? applicantInfoPersonal?.purpose : null}
-                    // onChange={handleChangesetPurpose}
-                    height={30}
-                    style={{ maxWidth: 200, marginRight: 5 }}
+                  
+                    // height={30}
+                    // style={{ maxWidth: 200, marginRight: 5 }}
                     disabled
                   >
-                    {/* <select className="form-control" id="Puropse" name="potential" placeholder="Puropse" onChange={handleChangesetPurpose} readOnly> */}
-                    {/* <option value="">--Purpose--</option>
-                    <option value="01">Plotted Commercial</option>
-                    <option value="02">Group Housing Commercial</option>
-                    <option value="03">AGH </option>
-                    <option value="04">Commercial Integrated </option>
-                    <option value="05">Commercial Plotted</option>
-                    <option value="06">Industrial Colony Commercial</option>
-                    <option value="07">IT Colony Commercial</option>
-                    <option value="08">DDJAY</option>
-                    <option value="12">TOD Group housing</option> */}
-                    {/* </select> */}
+                   
                   </Form.Control>
                   {/* {JSON.stringify(userRoles)}
                     {JSON.stringify(hideRemarks)} */}
@@ -395,7 +381,7 @@ const Genarelinfo = (props) => {
                   <ReportProblemIcon
                     style={{
                       display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                      // display: hideRemarksPatwari?"none":"block",
+                  
                       color: fieldIconColors.purpose
                     }}
                     onClick={() => {
@@ -424,7 +410,7 @@ const Genarelinfo = (props) => {
                   ></ModalChild> */}
                 </div>
               </Col>
-              <div className="col col-3">
+              {/* <div className="col col-3">
                 <label htmlFor="potential">
                   <h5 className={classes.formLabel}>
                     Potential Zone:<span style={{ color: "red" }}>*</span>
@@ -441,19 +427,13 @@ const Genarelinfo = (props) => {
                     name="potential"
                     disabled
                   >
-                    {/* // <option value=""></option>
-                    // <option value="K.Mishra">Hyper</option>
-                    // <option value="potential 1">High I</option>
-                    // <option value="potential 2">High II</option>
-                    // <option value="potential 2">Medium</option>
-                    // <option value="potential 2">Low I</option>
-                    // <option value="potential 2">Low II</option> */}
+                    
                   </Form.Control>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
+                
                   <ReportProblemIcon
                     style={{
                       display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                      // display: hideRemarksPatwari?"none":"block",
+                
                       color: fieldIconColors.potential
                     }}
                     onClick={() => {
@@ -472,7 +452,7 @@ const Genarelinfo = (props) => {
                     <h5 className={classes.formLabel}>
                       District:  <span style={{ color: "red" }}>*</span>
                     </h5>
-                    {/* <span style={{ color: "red" }}>*</span> */}
+                   
                   </Form.Label>
                   
                 </div>
@@ -484,12 +464,12 @@ const Genarelinfo = (props) => {
                       placeholder={applicantInfoPersonal !== null ? applicantInfoPersonal?.district : null}
                       disabled
                     >
-                      {/* <option value="1">no district</option> */}
+                 
                     </Form.Control>
                     <ReportProblemIcon
                       style={{
                         display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                        // display: hideRemarksPatwari?"none":"block",
+
                         color: fieldIconColors.district
                       }}
                       onClick={() => {
@@ -509,7 +489,7 @@ const Genarelinfo = (props) => {
                     <h5 className={classes.formLabel}>
                       State  <span style={{ color: "red" }}>*</span>
                     </h5>
-                    {/* <span style={{ color: "red" }}>*</span> */}
+                  
                   </Form.Label>
                       
                 </div>
@@ -524,7 +504,7 @@ const Genarelinfo = (props) => {
                     <ReportProblemIcon
                       style={{
                         display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                        // display: hideRemarksPatwari?"none":"block",
+                      
                         color: fieldIconColors.state
                       }}
                       onClick={() => {
@@ -537,19 +517,19 @@ const Genarelinfo = (props) => {
                     ></ReportProblemIcon>
                   </div>
                 </div>
-                {/* <Form.Control type="text" defaultValue="Haryana" disabled></Form.Control> */}
-              </Col>
+               
+              </Col> */}
             </Row>
-            {/* <Collapse in={open}>
-        <div id="example-collapse-text"> */}
+     
             <div className="ml-auto" style={{ marginTop: 20 }}>
-              <h2 style={{ fontSize: 24 }}>2. Details of applied land:</h2>
+              <h2 style={{ fontSize: 24 }}> Land schedule</h2>
               <p className="ml-3 mt-1">
-                Note: The term “Collaboration agreement" shall include all Development agreements/ Joint Venture agreements/ Joint Development
-                agreements/ Memorandum of Understanding etc. and similar agreements registered with competent authority.
+             
+
+Note: The term “Collaboration agreement" shall include all Development agreements/ Joint Venture agreements/ Joint Development agreements/ Memorandum of Understanding etc. and similar agreements registered with competent authority.
               </p>
               <p className="ml-3 mt-1">
-                <b>(i) Khasra-wise information to be provided in the following format:</b> 
+                <b>(i) Khasra-wise information to be provided in the following format</b> 
               </p>
             </div>
             <br></br>
@@ -559,24 +539,75 @@ const Genarelinfo = (props) => {
                 <thead>
                   
                   <tr className="border-bottom-0">
+                  <th class="fw-normal pb-0 border-bottom-0 align-top">
+                  District   
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    Development Plan   
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    Zone    
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    Sector    
+                    </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
                       Tehsil    
                     </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      Revenue estate    
+                    Revenue Estate   
                     </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      Hadbast Number  
+                    Hadbast No. 
                     </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      Rectangle No.  
+                    Rectangle No.  
+                    </th>
+                     <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    Khasra No.
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    Name of Land Owner
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    Type of land
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    change in information
                     </th>
                     
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
-                       Enter Khewat
+                    Rectangle No./Mustil(Changed)
                     </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      Land owner 
+                    Khasra Number(Changed)
+                    </th>
+                     <th class="fw-normal pb-0 border-bottom-0 align-top">
+                     Name of the Land Ower as per Mutation/Jamabandi
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    Whether Khasra been developed in collaboration  
+                    </th>
+                     <th class="fw-normal pb-0 border-bottom-0 align-top">
+                     Name of the developer company
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    Date of registering collaboration agreement 
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    Whether collaboration agreement irrevocable (Yes/No)
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    Name of authorized signatory on behalf of land owner(s)
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    Name of authorized signatory on behalf of developer
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    Registering Authority
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    Registering Authority document
                     </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
                       Consolidation Type  
@@ -600,46 +631,77 @@ const Genarelinfo = (props) => {
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
                       Biswansi 
                     </th>
-
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                        Collaboration Agreement
-                    </th>
-
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                        Developer Company
-                    </th>
-
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                        Date of Registering
-                    </th>
-
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                        Date of Validity
-                    </th>
-
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                        Collaboration Agreement Irrevociable
-                    </th>
-
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                        Name of Authorized Signatory
-                    </th>
-
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                        Name of Authorized Signatory Developer
-                    </th>
-
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                        Registering Authority
-                    </th>
-
-                  </tr>
+<th class="fw-normal pb-0 border-bottom-0 align-top">
+                    Total Area
+                    </th> 
+ </tr>
                   <tr className="border-top-0">
+                    <th class="fw-normal py-0 border-top-0">
+                       <ReportProblemIcon
+                      style={{
+                        display: hideRemarks || hideRemarksPatwari ?"none":"block",
+
+                        color: fieldIconColors.district
+                      }}
+                      onClick={() => {
+                        setLabelValue("District"),
+                        setOpennedModal("district")
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.district : null);
+                      }}
+                    ></ReportProblemIcon></th>
+                    <th class="fw-normal py-0 border-top-0">
+                       <ReportProblemIcon
+                      style={{
+                        display: hideRemarks || hideRemarksPatwari ?"none":"block",
+
+                        color: fieldIconColors.district
+                      }}
+                      onClick={() => {
+                        setLabelValue("Development Plan"),
+                        setOpennedModal("district")
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.district : null);
+                      }}
+                    ></ReportProblemIcon></th>
+                  <th class="fw-normal py-0 border-top-0">
+                    <ReportProblemIcon
+                    style={{
+                      display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                
+                      color: fieldIconColors.potential
+                    }}
+                    onClick={() => {
+                      setLabelValue("Potential Zone"),
+                      setOpennedModal("potential")
+                        setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.potential : null);
+                    }}
+                  ></ReportProblemIcon>
+                    </th>
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          // display: hideRemarks?"none":"block",
-                          // display: hideRemarksPatwari?"none":"block",
+                         
+                          display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                          color: fieldIconColors.tehsil
+                        }}
+                        onClick={() => {
+                          setLabelValue("Sector"),
+                          setOpennedModal("tehsil")
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.tehsil : null);
+                        }}
+                      ></ReportProblemIcon>
+                    </th>
+                    <th class="fw-normal py-0 border-top-0">
+                      <ReportProblemIcon
+                        style={{
+                         
                           display: hideRemarks || hideRemarksPatwari ?"none":"block",
                           color: fieldIconColors.tehsil
                         }}
@@ -667,11 +729,11 @@ const Genarelinfo = (props) => {
                         }}
                       ></ReportProblemIcon>
                     </th>
-                    <th class="fw-normal py-0 border-top-0">
+                   <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
                           display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                           // display: hideRemarksPatwari?"none":"block",
+                         
                           color: fieldIconColors.hadbastNo
                         }}
                         onClick={() => {
@@ -732,112 +794,73 @@ const Genarelinfo = (props) => {
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks || hideRemarksJE ?"none":"block",
-                          color: fieldIconColors.consolidationType
+                          // display: hideRemarks?"none":"block",
+                          // display: hideRemarksPatwari?"none":"block",
+                          display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                          color: fieldIconColors.tehsil
                         }}
                         onClick={() => {
-                          setLabelValue("Consolidation Type"),
-                          setOpennedModal("consolidationType")
+                          setLabelValue("Tehsil"),
+                          setOpennedModal("tehsil")
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.consolidationType : null);
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.tehsil : null);
                         }}
                       ></ReportProblemIcon>
                     </th>
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks || hideRemarksJE ?"none":"block",
-                          color: fieldIconColors.kanal
+                          // display: hideRemarks?"none":"block",
+                          // display: hideRemarksPatwari?"none":"block",
+                          display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                          color: fieldIconColors.tehsil
                         }}
                         onClick={() => {
-                          setLabelValue("Kanal"),
-                          setOpennedModal("kanal")
+                          setLabelValue("Tehsil"),
+                          setOpennedModal("tehsil")
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.kanal : null);
-                        }}
-                      ></ReportProblemIcon>
-                      {/* </div> */}
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                      <ReportProblemIcon
-                        style={{
-                          display: hideRemarks || hideRemarksJE ?"none":"block",
-                          color: fieldIconColors.marla
-                        }}
-                        onClick={() => {
-                          setLabelValue("Marla"),
-                          setOpennedModal("marla")
-                          setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.marla : null);
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.tehsil : null);
                         }}
                       ></ReportProblemIcon>
                     </th>
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks || hideRemarksJE ?"none":"block",
-                          color: fieldIconColors.sarsai
+                          
+                          display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                          color: fieldIconColors.tehsil
                         }}
                         onClick={() => {
-                          setLabelValue("Sarsai"),
-                          setOpennedModal("sarsai")
+                          setLabelValue("Tehsil"),
+                          setOpennedModal("tehsil")
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.sarsai : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                      {/* <div className="d-flex flex-row  align-items-center"> */}
-                      {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
-                      <ReportProblemIcon
-                        style={{
-                          display: hideRemarks || hideRemarksJE ?"none":"block",
-                          color: fieldIconColors.bigha
-                        }}
-                        onClick={() => {
-                          setLabelValue("Bigha"),
-                          setOpennedModal("bigha")
-                          setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.bigha : null);
-                        }}
-                      ></ReportProblemIcon>
-                      {/* </div> */}
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                      <ReportProblemIcon
-                        style={{
-                          display: hideRemarks || hideRemarksJE ?"none":"block",
-                          color: fieldIconColors.biswa
-                        }}
-                        onClick={() => {
-                          setLabelValue("Biswa"),
-                          setOpennedModal("biswa")
-                          setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.biswa : null);
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.tehsil : null);
                         }}
                       ></ReportProblemIcon>
                     </th>
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
-                          display: hideRemarks || hideRemarksJE ?"none":"block",
-                          color: fieldIconColors.biswansi
+                          // display: hideRemarks?"none":"block",
+                          // display: hideRemarksPatwari?"none":"block",
+                          display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                          color: fieldIconColors.tehsil
                         }}
                         onClick={() => {
-                          setLabelValue("Biswansi"),
-                          setOpennedModal("biswansi")
+                          setLabelValue("Tehsil"),
+                          setOpennedModal("tehsil")
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.biswansi : null);
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.tehsil : null);
                         }}
                       ></ReportProblemIcon>
                     </th>
+                   
+                    
+                   
                     <th class="fw-normal py-0 border-top-0">
                       {" "}
                       <ReportProblemIcon
@@ -854,6 +877,8 @@ const Genarelinfo = (props) => {
                         }}
                       ></ReportProblemIcon>
                     </th>
+                    
+                    
                     <th class="fw-normal py-0 border-top-0">
                       {" "}
                       <ReportProblemIcon
@@ -966,6 +991,146 @@ const Genarelinfo = (props) => {
                         }}
                       ></ReportProblemIcon>
                     </th>
+                    <th class="fw-normal py-0 border-top-0">
+                      <ReportProblemIcon
+                        style={{
+                          // display: hideRemarks?"none":"block",
+                          // display: hideRemarksPatwari?"none":"block",
+                          display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                          color: fieldIconColors.tehsil
+                        }}
+                        onClick={() => {
+                          setLabelValue("Tehsil"),
+                          setOpennedModal("tehsil")
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.tehsil : null);
+                        }}
+                      ></ReportProblemIcon>
+                    </th>
+                    <th class="fw-normal py-0 border-top-0">
+                      <ReportProblemIcon
+                        style={{
+                          display: hideRemarks || hideRemarksJE ?"none":"block",
+                          color: fieldIconColors.consolidationType
+                        }}
+                        onClick={() => {
+                          setLabelValue("Consolidation Type"),
+                          setOpennedModal("consolidationType")
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.consolidationType : null);
+                        }}
+                      ></ReportProblemIcon>
+                    </th>
+                    <th class="fw-normal py-0 border-top-0">
+                      <ReportProblemIcon
+                        style={{
+                          display: hideRemarks || hideRemarksJE ?"none":"block",
+                          color: fieldIconColors.kanal
+                        }}
+                        onClick={() => {
+                          setLabelValue("Kanal"),
+                          setOpennedModal("kanal")
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.kanal : null);
+                        }}
+                      ></ReportProblemIcon>
+                      
+                    </th>
+                    <th class="fw-normal py-0 border-top-0">
+                      <ReportProblemIcon
+                        style={{
+                          display: hideRemarks || hideRemarksJE ?"none":"block",
+                          color: fieldIconColors.marla
+                        }}
+                        onClick={() => {
+                          setLabelValue("Marla"),
+                          setOpennedModal("marla")
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.marla : null);
+                        }}
+                      ></ReportProblemIcon>
+                    </th>
+                    <th class="fw-normal py-0 border-top-0">
+                      <ReportProblemIcon
+                        style={{
+                          display: hideRemarks || hideRemarksJE ?"none":"block",
+                          color: fieldIconColors.sarsai
+                        }}
+                        onClick={() => {
+                          setLabelValue("Sarsai"),
+                          setOpennedModal("sarsai")
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.sarsai : null);
+                        }}
+                      ></ReportProblemIcon>
+                    </th>
+                    <th class="fw-normal py-0 border-top-0">
+                      <ReportProblemIcon
+                        style={{
+                          display: hideRemarks || hideRemarksJE ?"none":"block",
+                          color: fieldIconColors.bigha
+                        }}
+                        onClick={() => {
+                          setLabelValue("Bigha"),
+                          setOpennedModal("bigha")
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.bigha : null);
+                        }}
+                      ></ReportProblemIcon>
+                     
+                    </th>
+                    <th class="fw-normal py-0 border-top-0">
+                      <ReportProblemIcon
+                        style={{
+                          display: hideRemarks || hideRemarksJE ?"none":"block",
+                          color: fieldIconColors.biswa
+                        }}
+                        onClick={() => {
+                          setLabelValue("Biswa"),
+                          setOpennedModal("biswa")
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.biswa : null);
+                        }}
+                      ></ReportProblemIcon>
+                    </th>
+                    <th class="fw-normal py-0 border-top-0">
+                      <ReportProblemIcon
+                        style={{
+                          display: hideRemarks || hideRemarksJE ?"none":"block",
+                          color: fieldIconColors.biswansi
+                        }}
+                        onClick={() => {
+                          setLabelValue("Biswansi"),
+                          setOpennedModal("biswansi")
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.biswansi : null);
+                        }}
+                      ></ReportProblemIcon>
+                    </th>
+                    <th class="fw-normal py-0 border-top-0">
+                      <ReportProblemIcon
+                        style={{
+                          
+                          display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                          color: fieldIconColors.tehsil
+                        }}
+                        onClick={() => {
+                          setLabelValue("Tehsil"),
+                          setOpennedModal("tehsil")
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.tehsil : null);
+                        }}
+                      ></ReportProblemIcon>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -973,6 +1138,18 @@ const Genarelinfo = (props) => {
                     applicantInfoPersonal?.AppliedLandDetails?.map((item,index)=>(
                       
                   <tr key={index}>
+                    <td>
+                      <input type="text" className="form-control" placeholder={item?.district } disabled />
+                    </td>
+                    <td>
+                      <input type="text" className="form-control" placeholder={item?.developmentPlan} disabled />
+                    </td>
+                    <td>
+                      <input type="text" className="form-control" placeholder={item?.potential} disabled />
+                    </td>
+                    <td>
+                      <input type="text" className="form-control" placeholder={item?.sector} disabled />
+                    </td>
                     <td>
                       <input type="text" className="form-control" placeholder={item?.tehsil} disabled />
                     </td>
@@ -990,6 +1167,55 @@ const Genarelinfo = (props) => {
                     </td>
                     <td class="text-center">
                       <input type="text" className="form-control" title={item?.landOwner} placeholder={item?.landOwner} disabled />
+                    </td>
+                    <td class="text-center">
+                      <input type="text" className="form-control" title={item?.typeLand} placeholder={item?.typeLand} disabled />
+                    </td>
+                    <td class="text-center">
+                      <input type="text" className="form-control" title={item?.changeInformation} placeholder={item?.changeInformation} disabled />
+                    </td>
+                    <td class="text-center">
+                      <input type="text" className="form-control" title={item?.Mustil} placeholder={item?.Mustil} disabled />
+                    </td>
+                    <td class="text-center">
+                      <input type="text" className="form-control" title={item?.Khasra} placeholder={item?.Khasra} disabled />
+                    </td>
+                    <td class="text-center">
+                      <input type="text" className="form-control" title={item?.Jamabandi} placeholder={item?.Jamabandi} disabled />
+                    </td>
+                    <td class="text-center">
+                      <input type="text" className="form-control" title={item?.collaboration} placeholder={item?.collaboration} disabled />
+                    </td>
+                    <td class="text-center">
+                      <input type="text" className="form-control" title={item?.developerCompany} placeholder={item?.developerCompany} disabled />
+                    </td>
+                    <td class="text-center">
+                      <input type="text" className="form-control" title={item?.agreementValidFrom} placeholder={item?.agreementValidFrom} disabled />
+                    </td>
+                    <td class="text-center">
+                      <input type="text" className="form-control" title={item?.agreementIrrevocialble} placeholder={item?.agreementIrrevocialble} disabled />
+                    </td>
+                    <td class="text-center">
+                      <input type="text" className="form-control" title={item?.authSignature} placeholder={item?.authSignature} disabled />
+                    </td>
+                    <td class="text-center">
+                      <input type="text" className="form-control" title={item?.nameAuthSign} placeholder={item?.nameAuthSign} disabled />
+                    </td>
+                    <td class="text-center">
+                      <input type="text" className="form-control" title={item?.registeringAuthority} placeholder={item?.registeringAuthority} disabled />
+                    </td>
+                    <td class="text-center">
+                    <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={()=>getDocShareholding(item?.registeringAuthorityDoc)}>
+                                      <Visibility color="info" className="icon" /></IconButton>
+                                  
+                                  </div>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={()=>getDocShareholding(item?.registeringAuthorityDoc)}>
+                                <FileDownload color="primary" className="mx-1" />
+                        </IconButton>
+                        </div>
+                      {/* <input type="text" className="form-control" title={item?.registeringAuthorityDoc} placeholder={item?.registeringAuthorityDoc} disabled /> */}
                     </td>
                     <td class="text-center">
                       <input type="text" className="form-control" placeholder={item?.consolidationType} disabled />
@@ -1013,32 +1239,17 @@ const Genarelinfo = (props) => {
                     <td class="text-center">
                       <input type="text" className="form-control" placeholder={item?.biswansi} disabled />
                     </td>
-                    <td class="text-center">
-                      <input type="text" className="form-control" placeholder={item?.collaboration} disabled />
+                    {item?.consolidationType == "non-consolidated" && 
+                      <td class="text-center">
+                      <input type="text" className="form-control" placeholder={item?.nonConsolidatedTotal} disabled />
                     </td>
+                     }
+                     {item?.consolidationType == "consolidated" && 
                     <td class="text-center">
-                      <input type="text" className="form-control" placeholder={item?.developerCompany} disabled />
+                      <input type="text" className="form-control" placeholder={item?.consolidatedTotal} disabled />
                     </td>
-                    <td class="text-center">
-                      <input type="text" className="form-control" placeholder={item?.agreementValidFrom} disabled />
-                    </td>
-                    <td class="text-center">
-                      <input type="text" className="form-control" placeholder={item?.validitydate} disabled />
-                    </td>
-                    <td class="text-center">
-                      <input type="text" className="form-control" placeholder={item?.agreementIrrevocialble} disabled />
-                    </td>
-                    <td class="text-center">
-                      <input type="text" className="form-control" placeholder={item?.nameAuthSign} disabled />
-                    </td>
-                    <td class="text-center">
-                      <input type="text" className="form-control" placeholder={item?.nameAuthSign} disabled />
-                    </td><td class="text-center">
-                      <input type="text" className="form-control" placeholder={item?.registeringAuthority} disabled />
-                    </td>
-
-                    
-                  </tr>
+                     }
+  </tr>
                     ))
                   }
                 </tbody>
