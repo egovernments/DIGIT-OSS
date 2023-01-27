@@ -44,8 +44,8 @@ const Home = () => {
   
   const handleBPAClick = () => {
     let user = Digit.UserService.getUser();
+    console.log("role123...",user);
     const userRoles = user?.info?.roles?.map((e) => e.code);
-    // console.log("role123...",userRoles)
     if(userRoles?.includes("BPA_ARCHITECT")){
       history.push("/digit-ui/citizen/obps/home")
     } else {

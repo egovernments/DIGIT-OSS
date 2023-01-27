@@ -10,10 +10,12 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
   const innerWidth = window.innerWidth;
   const cityDetails = Digit.ULBService.getCurrentUlb();
   const userDetails = Digit.UserService.getUser();
+  console.log("USERDETAILS",userDetails);
   const { data: storeData } = Digit.Hooks.useStore.getInitData();
   const { stateInfo } = storeData || {};
   const DSO = Digit.UserService.hasAccess(["FSM_DSO"]);
-  let CITIZEN = userDetails?.info?.type === "CITIZEN" || !window.location.pathname.split("/").includes("employee") ? true : false;
+  let CITIZEN = userDetails?.UserRequest?.type === "CITIZEN" || !window.location.pathname.split("/").includes("employee") ? true : false;
+  // let CITIZEN = userDetails?.info?.type === "CITIZEN" || !window.location.pathname.split("/").includes("employee") ? true : false;
 
   if (window.location.pathname.split("/").includes("employee")) CITIZEN = false;
 

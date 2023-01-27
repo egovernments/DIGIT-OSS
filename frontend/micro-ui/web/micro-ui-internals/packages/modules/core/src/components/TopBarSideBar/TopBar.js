@@ -28,16 +28,17 @@ const TopBar = ({
 
   React.useEffect(async () => {
     const tenant = Digit.ULBService.getCurrentTenantId();
-    const uuid = userDetails?.info?.uuid;
+    const uuid = userDetails?.UserRequest?.uuid;
     if (uuid) {
       const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [uuid] }, {});
+      console.log("USRTOP",usersResponse.user);
       if (usersResponse && usersResponse.user && usersResponse.user.length) {
         const userDetails = usersResponse.user[0];
         const thumbs = userDetails?.photo?.split(",");
         setProfilePic(thumbs?.at(0));
       }
     }
-  }, [profilePic !== null, userDetails?.info?.uuid]);
+  }, [profilePic !== null, userDetails?.UserRequest?.uuid]);
 
   const CitizenHomePageTenantId = Digit.ULBService.getCitizenCurrentTenant(true);
 
@@ -45,8 +46,8 @@ const TopBar = ({
   const { pathname } = useLocation();
 
   const conditionsToDisableNotificationCountTrigger = () => {
-    if (Digit.UserService?.getUser()?.info?.type === "EMPLOYEE") return false;
-    if (Digit.UserService?.getUser()?.info?.type === "CITIZEN") {
+    if (Digit.UserService?.getUser()?.UserRequest?.type === "EMPLOYEE") return false;
+    if (Digit.UserService?.getUser()?.UserRequest?.type === "CITIZEN") {
       if (!CitizenHomePageTenantId) return false;
       else return true;
     }
@@ -138,7 +139,7 @@ const TopBar = ({
                   optionCardStyles={{ overflow: "revert" }}
                   customSelector={
                     profilePic == null ? (
-                      <TextToImg name={userDetails?.info?.name || userDetails?.info?.userInfo?.name || "Employee"} />
+                      <TextToImg name={userDetails?.UserRequest?.name || userDetails?.UserRequest?.userInfo?.name || "Employee"} />
                     ) : (
                       <img src={profilePic} style={{ height: "48px", width: "48px", borderRadius: "50%" }} />
                     )

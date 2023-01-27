@@ -18,6 +18,21 @@ export const UserService = {
       },
     });
   },
+  ssoUser: (details) => {
+    const data = new URLSearchParams();
+    Object.entries(details).forEach(([key, value]) => data.append(key, value));
+    // data.append("scope", "read");
+    // data.append("grant_type", "password");
+    return ServiceRequest({
+      serviceName: "CheckCredentials",
+      url: Urls.ssoLoginUrl,
+      data,
+      headers: {
+        authorization: `Basic ${window?.globalConfigs?.getConfig("JWT_TOKEN")||"ZWdvdi11c2VyLWNsaWVudDo="}`,
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    })
+  },
   logoutUser: () => {
     let user = UserService.getUser();
     if (!user || !user.info || !user.access_token) return false;
@@ -65,6 +80,7 @@ export const UserService = {
       params: { tenantId: stateCode },
     }),
   setUser: (data) => {
+    console.warn("DIGIT-SESSION",data)
     return Digit.SessionStorage.set("User", data);
   },
   setExtraRoleDetails: (data) => {
