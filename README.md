@@ -22,4 +22,4 @@ DIGIT focuses on inclusion and is designed on the principle of enhancing both pl
 
 ### DIGIT Code is open sources under the MIT License and under [Contributor License Agreement](https://forms.gle/nnNZjB7P1YPuEHb69)
 
-### DIGIT is Developed and Maintained by eGovrnments Foundation (A non-profit and non-governmental organisation)
+### DIGIT is Developed and Maintained by eGovernments Foundation (A non-profit and non-governmental organisation)
