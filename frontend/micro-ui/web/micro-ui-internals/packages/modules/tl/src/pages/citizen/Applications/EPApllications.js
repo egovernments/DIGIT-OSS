@@ -162,7 +162,7 @@ const EPApplications = ({ view }) => {
                 onClick={() => {
                   window.localStorage.setItem("ApplicationStatus", item?.status);
                   history.push({
-                    pathname: "/digit-ui/citizen/obps/tab",
+                    pathname: "/digit-ui/citizen/obps/electricalPlan",
                     search: `?id=${item?.applicationNumber}`,
                   });
                 }}
