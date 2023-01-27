@@ -509,6 +509,12 @@ class ShowForm extends Component {
 
       clearReportHistory();
       let resulturl = getResultUrl(this.state.moduleName, this.state.reportName);
+      /* searchForm  */
+      if (metaData && metaData.reportDetails && metaData.reportDetails.reportName === "TLApplicationStatusReport") {
+        searchParams = searchParams.map((ele) =>
+          ele.name == "applicationStatus" ? { ...ele, input: ele.input && ele.input.map((ele) => ele.substr(0, ele.indexOf("-"))) } : { ...ele }
+        );
+      }
       resulturl &&
         commonApiPost(resulturl, {}, { tenantId: tenantId, reportName: this.state.reportName, searchParams }).then(
           function (response) {
