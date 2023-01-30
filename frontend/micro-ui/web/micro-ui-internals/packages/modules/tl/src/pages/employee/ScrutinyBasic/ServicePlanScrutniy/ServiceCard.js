@@ -47,6 +47,7 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
   const [applicationDetails, setApplicationDetails] = useState();
   const [workflowDetails, setWorkflowDetails] = useState();
   const [applicationData,setApplicationData] = useState();
+  const [additionalDetails, setAdditionalDetails] = useState({});
 
 //   const authToken = Digit.UserService.getUser()?.access_token || null;
 
@@ -152,24 +153,16 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
     setWarningPopUp(false);
   }
 
-  const submitAction = async (data, nocData = false, isOBPS = {}) => {
+  const submitAction = async (data={}, nocData = false, isOBPS = {}) => {
+    let tempdata = data || {}
+    tempdata.ServicePlanRequest[0].additionalDetails = additionalDetails;
+    console.log("logger log1223", tempdata)
 
-    console.log("logger log1223", data)
 
     try{
       let body = {
-        ...data,
-      //   RequestInfo: {
-      //     api_id: "1",
-      //     ver: "1",
-      //     ts: null,
-      //     action: "create",
-      //     did: "",
-      //     key: "",
-      //     msg_id: "",
-      //     requester_id: "",
-      //     authToken: authToken
-      // }
+        ...tempdata,
+   
       RequestInfo: {
         api_id: "Rainmaker",
         ver: "1",
@@ -182,6 +175,7 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
         authToken: authToken
     }
       }
+      console.log("logger log1223 body", body);
       const response = await axios.post("/tl-services/serviceplan/_update",body);
       console.log("Update API Response ====> ", response.data);
     } catch (error) {
@@ -246,6 +240,7 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
          apiResponse={scrutinyDetails}
          applicationNumber={id}
          refreshScrutinyData={getScrutinyData}
+         setAdditionalDetails={setAdditionalDetails}
          ></ServiceBase>
       </Row>
       <Row style={{ top: 10, padding: "10px 22px" }}>

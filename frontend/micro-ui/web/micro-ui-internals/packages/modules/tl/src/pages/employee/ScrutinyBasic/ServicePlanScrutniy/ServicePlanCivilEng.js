@@ -80,17 +80,21 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import Tooltip from '@mui/material/Tooltip';
-import IconButton from '@mui/material/IconButton';
+// import Tooltip from '@mui/material/Tooltip';
+// import IconButton from '@mui/material/IconButton';
+import "../css/personalInfoChild.style.js";
+import { useStyles } from "../css/personalInfoChild.style.js";
 
 // const ServicePlanCivil = () => {
-    function ServicePlanCivil() {
+    function ServicePlanCivil(props) {
 
     const userRoles = Digit.UserService.getUser()?.info?.roles.map((item) => item.code)  || [];
     const showActionButton = userRoles.includes("CE_HQ")
     // console.log("logg123" ,userRoles, showActionButton );
     const [selects, setSelects] = useState();
     const [showhide, setShowhide] = useState("");
+    const apiResponse = props.apiResponse
+    const classes = useStyles();
    
   
     const handleshowhide = (event) => {
@@ -105,6 +109,7 @@ import IconButton from '@mui/material/IconButton';
     control,
     setValue,
     watch,
+    getValues,
   } = useForm({
     mode: "onChange",
 
@@ -115,12 +120,44 @@ import IconButton from '@mui/material/IconButton';
 
   const [developerDataLabel, setDeveloperDataLabel] = useState([]);
 
-  const servicePlan = (data) => console.log("tcp18" ,data);
-
+  const servicePlan = (data) => {
+    console.log("tcp18",data)
+  };
+  
   const handleClose = () => {
     setOpen(false)
     window.location.href = `/digit-ui/employee`
   }
+  useEffect(() => {
+    if (developerDataLabel) {
+      setValue("electricInfra", apiResponse?.additionalDetails?.electricInfra);
+      setValue("electricDistribution", apiResponse?.additionalDetails?.electricDistribution);
+      setValue("sewerLine", apiResponse?.additionalDetails?.sewerLine);
+      setValue("stormwater", apiResponse?.additionalDetails?.stormwater);
+      setValue("capacityUgt", apiResponse?.additionalDetails?.capacityUgt);
+      setValue("capacityStp", apiResponse?.additionalDetails?.capacityStp);
+      setValue("specifications", apiResponse?.additionalDetails?.specifications);
+      setValue("waterSupply", apiResponse?.additionalDetails?.waterSupply);
+      setValue("sewerNetwork", apiResponse?.additionalDetails?.sewerNetwork);
+      setValue("stormwaterDrainage", apiResponse?.additionalDetails?.stormwaterDrainage);
+      setValue("roadNetwork", apiResponse?.additionalDetails?.roadNetwork);
+      setValue("horticlture", apiResponse?.additionalDetails?.horticlture);
+      setValue("acreCost", apiResponse?.additionalDetails?.acreCost);
+      setValue("selfCertified", apiResponse?.additionalDetails?.selfCertified);
+      setValue("streetLightening", apiResponse?.additionalDetails?.streetLightening);
+      // setValue("electricDistribution", apiResponse?.additionalDetails?.electricDistribution);
+      // setValue("electricDistribution", apiResponse?.additionalDetails?.electricDistribution);
+      // setValue("electricDistribution", apiResponse?.additionalDetails?.electricDistribution);
+    }})
+  
+  useEffect(()=>{
+    const subscription = watch((value, { name, type }) => {
+      console.log("logger12321",value);
+      props.setAdditionalDetails(value);
+    });
+    return () => subscription.unsubscribe();
+  }, [watch]);
+
  
   return (
     <React.Fragment>
@@ -129,11 +166,11 @@ import IconButton from '@mui/material/IconButton';
       {/* <Card > */}
         {/* <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Electrical Plan </h4> */}
         <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "20px", marginBottom: "52px" }}>
-          <Row className="ml-auto" style={{ marginBottom: 3 }}>
-           
+          <Row  style={{ marginTop: 4 , marginBottom: 4 }}>
+          {/* {JSON.stringify(apiResponse?.additionalDetails?.electricDistribution)} */}
             <Col md={6} xxl lg="6">
               <div>
-                <Form.Label>
+                <Form.Label className={classes.formLabel}>
                   <h2>
                   As per the approved layout plan/building plans 
                     &nbsp;&nbsp;
@@ -173,7 +210,7 @@ import IconButton from '@mui/material/IconButton';
             </Col>
             <Col  md={6} xxl lg="6">
               <div>
-                <Form.Label>
+                <Form.Label className={classes.formLabel}>
                 Level of stormwater and sewer line in conformity with approved EDC infrastructure works{" "}
                   <span style={{ color: "red" }}>*</span>
                   {/* <Tooltip title="Level of stormwater and sewer line in conformity with approved EDC infrastructure works">
@@ -206,7 +243,7 @@ import IconButton from '@mui/material/IconButton';
             <br></br>
             <Col  md={6} xxl lg="6">
               <div>
-                <Form.Label>
+                <Form.Label className={classes.formLabel}>
                 Showing the location of the sewer line, and stormwater line to connect the trunk water supply network <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
 
                 </Form.Label>
@@ -219,7 +256,7 @@ import IconButton from '@mui/material/IconButton';
                 label="Yes"
                 name="true"
                 disabled={!showActionButton}
-                {...register("electricalCapacity")}
+                {...register("sewerLine")}
                 inline
               ></Form.Check>
               <Form.Check
@@ -230,14 +267,14 @@ import IconButton from '@mui/material/IconButton';
                 label="No"
                 name="false"
                 disabled={!showActionButton}
-                {...register("electricalCapacity")}
+                {...register("sewerLine")}
                 inline
               ></Form.Check>
             </Col>
             
             <Col  md={6} xxl lg="6">
               <div>
-                <Form.Label>
+                <Form.Label className={classes.formLabel}>
                 Water supply, sewer, and stormwater network connected with proposed/existing master services
                   <span style={{ color: "red" }}>*</span>
                 </Form.Label>
@@ -250,7 +287,7 @@ import IconButton from '@mui/material/IconButton';
                 label="Yes"
                 name="true"
                 disabled={!showActionButton}
-                {...register("switchingStation")}
+                {...register("stormwater")}
                 inline
               ></Form.Check>
               <Form.Check
@@ -261,14 +298,14 @@ import IconButton from '@mui/material/IconButton';
                 label="No"
                 name="false"
                 disabled={!showActionButton}
-                {...register("switchingStation")}
+                {...register("stormwater")}
                 inline
               ></Form.Check>
             </Col>
             <br></br>
             <Col  md={6} xxl lg="6">
               <div>
-                <Form.Label>
+                <Form.Label className={classes.formLabel}>
                 Proposed source of water supply <span style={{ color: "red" }}>*</span> 
                 </Form.Label>
               </div>
@@ -280,7 +317,7 @@ import IconButton from '@mui/material/IconButton';
                 label="Yes"
                 name="true"
                 disabled={!showActionButton}
-                {...register("LoadSancation")}
+                {...register("sourceWater")}
                 inline
               ></Form.Check>
               <Form.Check
@@ -291,13 +328,13 @@ import IconButton from '@mui/material/IconButton';
                 label="No"
                 name="false"
                 disabled={!showActionButton}
-                {...register("LoadSancation")}
+                {...register("sourceWater")}
                 inline
               ></Form.Check>
             </Col>
-            <Col  md={6} xxl lg="6">
+            <Col  md={6} xxl lg="6" >
               <div>
-                <Form.Label>
+                <Form.Label className={classes.formLabel}>
                 The capacity of UGT as per population norms <span style={{ color: "red" }}>*</span> 
                 </Form.Label>
               </div>
@@ -309,7 +346,7 @@ import IconButton from '@mui/material/IconButton';
                 label="Yes"
                 name="true"
                 disabled={!showActionButton}
-                {...register("ugt")}
+                {...register("capacityUgt")}
                 inline
               ></Form.Check>
               <Form.Check
@@ -320,12 +357,12 @@ import IconButton from '@mui/material/IconButton';
                 label="No"
                 name="false"
                 disabled={!showActionButton}
-                {...register("ugt")}
+                {...register("capacityUgt")}
                 inline
               ></Form.Check>
             </Col>
             <br></br>
-            <Col  md={6} xxl lg="6">
+            <Col  md={6} xxl lg="6" className={classes.formLabel}>
               <div>
                 <Form.Label>
                 The capacity of STP as per population norms <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
@@ -339,7 +376,7 @@ import IconButton from '@mui/material/IconButton';
                 label="Yes"
                 name="true"
                 disabled={!showActionButton}
-                {...register("stp")}
+                {...register("capacityStp")}
                 inline
               ></Form.Check>
               <Form.Check
@@ -350,24 +387,30 @@ import IconButton from '@mui/material/IconButton';
                 label="No"
                 name="false"
                 disabled={!showActionButton}
-                {...register("stp")}
+                {...register("capacityStp")}
                 inline
               ></Form.Check>
             </Col>
             <Col md={6} xxl lg="6">
               <div>
-                <Form.Label>
+                <Form.Label className={classes.formLabel}>
                   <h2>
                   Specifications of the public health department <span style={{ color: "red" }}>*</span>
                   </h2>
                 </Form.Label>
               </div>
-              <input type="number" className="form-control"  disabled={!showActionButton} placeholder="" {...register("loiNumber")} />
+              {/* <Col md={8} xxl lg="8"> */}
+              <div height={30}
+                          style={{ maxWidth: 320, marginRight: 5 }}>
+              <textarea type="text" className="form-control"  disabled={!showActionButton} placeholder="" {...register("specifications")} />
+              </div>
+              {/* </Col> */}
+              
             </Col>
             <br></br>
             <Col  md={6} xxl lg="6">
               <div>
-                <Form.Label>
+                <Form.Label className={classes.formLabel}>
                 Water supply network <span style={{ color: "red" }}>*</span> 
                 </Form.Label>
               </div>
@@ -379,7 +422,7 @@ import IconButton from '@mui/material/IconButton';
                 label="Yes"
                 name="true"
                 disabled={!showActionButton}
-                {...register("supply")}
+                {...register("waterSupply")}
                 inline
               ></Form.Check>
               <Form.Check
@@ -390,14 +433,14 @@ import IconButton from '@mui/material/IconButton';
                 label="No"
                 name="false"
                 disabled={!showActionButton}
-                {...register("supply")}
+                {...register("waterSupply")}
                 inline
               ></Form.Check>
             </Col>
             
             <Col  md={6} xxl lg="6">
               <div>
-                <Form.Label>
+                <Form.Label className={classes.formLabel}>
                 Sewer network <span style={{ color: "red" }}>*</span> 
                 </Form.Label>
               </div>
@@ -409,7 +452,7 @@ import IconButton from '@mui/material/IconButton';
                 label="Yes"
                 name="true"
                 disabled={!showActionButton}
-                {...register("sewer")}
+                {...register("sewerNetwork")}
                 inline
               ></Form.Check>
               <Form.Check
@@ -419,14 +462,15 @@ import IconButton from '@mui/material/IconButton';
                 id="default-radio"
                 label="No"
                 name="false"
-                {...register("sewer")}
+                disabled={!showActionButton}
+                {...register("sewerNetwork")}
                 inline
               ></Form.Check>
             </Col>
             <br></br>
             <Col  md={6} xxl lg="6">
               <div>
-                <Form.Label>
+                <Form.Label className={classes.formLabel}>
                 Stormwater drainage <span style={{ color: "red" }}>*</span> 
                 </Form.Label>
               </div>
@@ -438,7 +482,7 @@ import IconButton from '@mui/material/IconButton';
                 label="Yes"
                 name="true"
                 disabled={!showActionButton}
-                {...register("stormwater")}
+                {...register("stormwaterDrainage")}
                 inline
               ></Form.Check>
               <Form.Check
@@ -449,14 +493,14 @@ import IconButton from '@mui/material/IconButton';
                 label="No"
                 name="false"
                 disabled={!showActionButton}
-                {...register("stormwater")}
+                {...register("stormwaterDrainage")}
                 inline
               ></Form.Check>
             </Col>
            
             <Col  md={6} xxl lg="6">
               <div>
-                <Form.Label>
+                <Form.Label className={classes.formLabel}>
                 Roads network <span style={{ color: "red" }}>*</span> 
                 </Form.Label>
               </div>
@@ -468,7 +512,7 @@ import IconButton from '@mui/material/IconButton';
                 label="Yes"
                 name="true"
                 disabled={!showActionButton}
-                {...register("ugt")}
+                {...register("roadNetwork")}
                 inline
               ></Form.Check>
               <Form.Check
@@ -479,14 +523,14 @@ import IconButton from '@mui/material/IconButton';
                 label="No"
                 name="false"
                 disabled={!showActionButton}
-                {...register("ugt")}
+                {...register("roadNetwork")}
                 inline
               ></Form.Check>
             </Col>
             <br></br>
             <Col  md={6} xxl lg="6">
               <div>
-                <Form.Label>
+                <Form.Label className={classes.formLabel}>
                 Horticulture <span style={{ color: "red" }}>*</span> 
                 </Form.Label>
               </div>
@@ -517,7 +561,7 @@ import IconButton from '@mui/material/IconButton';
            
             <Col  md={6} xxl lg="6">
               <div>
-                <Form.Label>
+                <Form.Label className={classes.formLabel}>
                 Street Lightening <span style={{ color: "red" }}>*</span> 
                 </Form.Label>
               </div>
@@ -529,7 +573,7 @@ import IconButton from '@mui/material/IconButton';
                 label="Yes"
                 name="true"
                 disabled={!showActionButton}
-                {...register("street")}
+                {...register("streetLightening")}
                 inline
               ></Form.Check>
               <Form.Check
@@ -540,7 +584,7 @@ import IconButton from '@mui/material/IconButton';
                 label="No"
                 name="false"
                 disabled={!showActionButton}
-                {...register("street")}
+                {...register("streetLightening")}
                 inline
               ></Form.Check>
             </Col>
@@ -572,19 +616,23 @@ import IconButton from '@mui/material/IconButton';
               ></Form.Check>
             </Col> */}
              <br></br>
-            <Col md={6} xxl lg="6">
+            <Col md={6} xxl lg="6" >
               <div>
-                <Form.Label>
+                <Form.Label className={classes.formLabel}>
                   <h2>
                   Per acre cost of internal development works <span style={{ color: "red" }}>*</span>
                   </h2>
                 </Form.Label>
               </div>
+              <div height={30}
+                          style={{ maxWidth: 320, marginRight: 5 }}>
               <input type="number" className="form-control"  disabled={!showActionButton} placeholder="" {...register("acreCost")} />
+              </div>
+              
             </Col>
             <Col  md={6} xxl lg="6">
               <div>
-                <Form.Label>
+                <Form.Label className={classes.formLabel}>
                 Self-certified drawings from chartered engineers that it is by the standard approved template <span style={{ color: "red" }}>*</span> 
                 </Form.Label>
               </div>

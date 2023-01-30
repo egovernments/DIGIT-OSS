@@ -1176,55 +1176,55 @@ const Developerinfo = (props) => {
                   </tr>
                 </thead>
                 <tbody>
-                {/* {
-                    landScheduleData?.migrationLic?.map((item,index)=>( */}
+                {
+                    landScheduleData?.LandScheduleDetails?.map((item,index)=>(
                       
                   <tr  
-                  // key={index}
+                  key={index}
                   >
                     <td>
                       <input type="text" className="form-control"  
-                      // placeholder={item?.district }
+                      placeholder={item?.previousLicensenumber}
                        disabled />
                     </td>
                     <td>
                       <input type="text" className="form-control"  
-                      // placeholder={item?.district }
+                      placeholder={item?.areaOfParentLicence }
                        disabled />
                     </td>
                     <td>
                       <input type="text" className="form-control"  
-                      // placeholder={item?.district }
+                      placeholder={item?.purposeOfParentLicence }
                        disabled />
                     </td>
                     <td>
                       <input type="text" className="form-control"  
-                      // placeholder={item?.district }
+                      placeholder={item?.validity }
                        disabled />
                     </td>
                     <td>
                       <input type="text" className="form-control"  
-                      // placeholder={item?.district }
+                      placeholder={item?.date }
                        disabled />
                     </td>
                     <td>
                       <input type="text" className="form-control"  
-                      // placeholder={item?.district }
+                      placeholder={item?.areaAppliedmigration }
                        disabled />
                     </td>
                     <td>
                       <input type="text" className="form-control"  
-                      // placeholder={item?.district }
+                      placeholder={item?.khasraNumber }
                        disabled />
                     </td>
                     <td>
                       <input type="text" className="form-control"  
-                      // placeholder={item?.district }
+                      placeholder={item?.area}
                        disabled />
                     </td>
                     <td>
                       <input type="text" className="form-control"  
-                      // placeholder={item?.district }
+                      placeholder={item?.balanceOfParentLicence }
                        disabled />
                     </td>
                    
@@ -1244,8 +1244,8 @@ const Developerinfo = (props) => {
                     */}
                     
                   </tr>
-                     {/* ))
-                   } */}
+                      ))
+                   } 
                 </tbody>
               </table>
             </div>
@@ -1538,12 +1538,17 @@ const Developerinfo = (props) => {
               2. Any encumbrance with respect to following :&nbsp;&nbsp;
               <div className="d-flex mt-2 align-items-center">
                 {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                
+                <input type="radio" disabled value="rehan/mortage" name="rehan/mortage" checked={landScheduleData?.encumburance === "rehan/mortage" ? true : false} />
                 <label className="m-0 mx-2" htmlFor="gen">Rehan / Mortgage</label>
-                <input type="radio" disabled value="1" name="mortage" checked={landScheduleData?.encumburance === "rehan/mortage" ? true : false} />
+                <input type="radio" disabled value="patta" name="patta" checked={landScheduleData?.encumburance === "patta/lease" ? true : false} />
                 <label className="m-0 mx-2" htmlFor="npnl">Patta/Lease</label>
-                <input type="radio" disabled value="2" name="lease" checked={landScheduleData?.encumburance === "patta/lease" ? true : false} />
+                <input type="radio" disabled value="gair/marusi" name="gair/marusi" checked={landScheduleData?.encumburance === "gair/marusi" ? true : false} />
                 <label className="m-0 mx-2" htmlFor="npnl">Gair/Marusi</label>
-                <input type="radio" disabled value="3" name="marusi" checked={landScheduleData?.encumburance === "gair/marusi" ? true : false} />
+                <input type="radio" disabled value="anyOther" name="anyOther" checked={landScheduleData?.encumburance === "anyOther" ? true : false} />
+                <label className="m-0 mx-2" htmlFor="npnl">Any Other</label>
+                <input type="radio" disabled value="none" name="none" checked={landScheduleData?.encumburance === "none" ? true : false} />
+                <label className="m-0 mx-2" htmlFor="npnl">none</label>
                 <ReportProblemIcon
                   className="m-0 mx-2"
                   style={{
@@ -1560,21 +1565,62 @@ const Developerinfo = (props) => {
                 ></ReportProblemIcon>
               </div>
             </h5>
-            <div className="row ml-3 mb-3">
+            { landScheduleData?.encumburance === "rehan/mortage" &&
+              <div className="row ml-3 mb-3">
               <div className="col col-4 m-0 p-0">
                 <label htmlFor="npnl">
-                  <h6>Any other, please specify</h6>
+                  <h6>Rehan/Mortgage Remarks</h6>
                 </label>
-                <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.encumburanceOther : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
-                {/* <input type="text" className="form-control" disabled placeholder={landScheduleData !== null ? landScheduleData?.anyOther : null} /> */}
-              </div>
+                <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.anyOtherRemark : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                     </div>
             </div>
+            }
+             { landScheduleData?.encumburance === "patta/lease" &&
+              <div className="row ml-3 mb-3">
+              <div className="col col-4 m-0 p-0">
+                <label htmlFor="npnl">
+                  <h6>Patta/Lease Remarks</h6>
+                </label>
+                <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.anyOtherRemark : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                     </div>
+            </div>
+            }
+             { landScheduleData?.encumburance === "gair/marusi" &&
+              <div className="row ml-3 mb-3">
+              <div className="col col-4 m-0 p-0">
+                <label htmlFor="npnl">
+                  <h6>Gair/Marusi Remarks</h6>
+                </label>
+                <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.anyOtherRemark : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                     </div>
+            </div>
+            }
+             { landScheduleData?.encumburance === "anyOther" &&
+              <div className="row ml-3 mb-3">
+              <div className="col col-4 m-0 p-0">
+                <label htmlFor="npnl">
+                  <h6>Any other Remarks</h6>
+                </label>
+                <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.anyOtherRemark : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                     </div>
+            </div>
+            }
+            { landScheduleData?.encumburance === "none" &&
+              <div className="row ml-3 mb-3">
+              <div className="col col-4 m-0 p-0">
+                <label htmlFor="npnl">
+                  <h6>None Remarks</h6>
+                </label>
+                <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.anyOtherRemark : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                     </div>
+            </div>
+            }
             <hr />
             <h6 className="mx-3 mt-3">
-              (ii) Existing litigation, if any, concerning applied land including co-sharers and collaborator&nbsp;&nbsp;
+            (ii) Existing litigation, if any, concerning applied land including co-sharers and collaborator.
 
               <div className="d-flex mt-2">
-                {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+               
                 <input type="radio" disabled value="Yes" checked={landScheduleData?.litigation === "Y" ? true : false} />
                 <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                 <input type="radio" disabled value="No" checked={landScheduleData?.litigation === "N" ? true : false} />
@@ -1594,13 +1640,14 @@ const Developerinfo = (props) => {
                 ></ReportProblemIcon>
               </div>
             </h6>
+            <hr />
 
             {
               landScheduleData?.litigation === "Y" &&
               <div className="d-flex ml-3 mb-2">
                 <div className="px-2">
-                  <label>
-                    {/* Site Location Purpose */}
+                  {/* <label>
+                
                     <h5>Remark</h5>
                   </label>
                   <div className="d-flex flex-row  align-items-center">
@@ -1609,25 +1656,47 @@ const Developerinfo = (props) => {
                 </div>
                 <div className="px-2" >
                   <h6>Download Document</h6>
-                  {/* &nbsp;&nbsp; */}
+                
                   <div className="d-flex flex-row align-items-center my-1 ">
 
                     <IconButton onClick={() => getDocShareholding(landScheduleData?.litigationDoc)}>
                       <DownloadForOfflineIcon color="primary" className="mx-1" />
                     </IconButton>
-                  </div>
-                </div>
+                  </div> */}
+                    <h6 className="mx-3 mt-3">
+             Court orders, if any, affecting applied land   </h6>
+
+              <div className="d-flex mt-2">
+             <input type="radio" disabled value="Yes" checked={landScheduleData?.court === "Y" ? true : false} />
+                <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                <input type="radio" disabled value="No" checked={landScheduleData?.court === "N" ? true : false} />
+                <label className="m-0 mx-2" for="No">No</label>
+                <ReportProblemIcon
+                  style={{
+                    display: hideRemarks?"none":"block",
+                    color: fieldIconColors.courtOrders
+                  }}
+                  onClick={() => {
+                    setLabelValue("Court orders, if any, affecting applied land"),
+                      setOpennedModal("courtOrders")
+                    setSmShow(true),
+                      console.log("modal open"),
+                      setFieldValue(landScheduleData?.court === "Y" ? "Yes" : landScheduleData?.court === "N" ? "No" : null);
+                  }}
+                ></ReportProblemIcon>
+              </div>
+            </div>
               </div>
 
             }
 
 
-            <hr />
-            <h6 className="mx-3 mt-3">
+          
+            {/* <h6 className="mx-3 mt-3">
               (iii) Court orders, if any, affecting applied land&nbsp;&nbsp;
 
               <div className="d-flex mt-2">
-                {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+            
                 <input type="radio" disabled value="Yes" checked={landScheduleData?.court === "Y" ? true : false} />
                 <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                 <input type="radio" disabled value="No" checked={landScheduleData?.court === "N" ? true : false} />
@@ -1646,14 +1715,14 @@ const Developerinfo = (props) => {
                   }}
                 ></ReportProblemIcon>
               </div>
-            </h6>
+            </h6> */}
 
             {
               landScheduleData?.court === "Y" &&
               <div className="d-flex ml-3 mb-2">
                 <div className="px-2">
                   <label>
-                    {/* Site Location Purpose */}
+                   
                     <h5>Remark/Case No.</h5>
                   </label>
                   <div className="d-flex flex-row  align-items-center">
@@ -1662,7 +1731,7 @@ const Developerinfo = (props) => {
                 </div>
                 <div className="px-2" >
                   <h6>Download Document</h6>
-                  {/* &nbsp;&nbsp; */}
+                  
                   <div className="d-flex flex-row align-items-center my-1 ">
                     <IconButton onClick={() => getDocShareholding(landScheduleData?.courtDoc)}>
                       <DownloadForOfflineIcon color="primary" className="mx-1" />
@@ -1675,7 +1744,7 @@ const Developerinfo = (props) => {
 
             <hr />
             <h6 className="mx-3 mt-3">
-              (iv) Any insolvency/liquidation proceedings against the land owner(s)/ collaborating developed :&nbsp;&nbsp;
+          (iii) Any insolvency/liquidation proceedings against the Land Owing Company/Develping Company :
 
               <div className="d-flex mt-2">
                 {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
@@ -1723,14 +1792,11 @@ const Developerinfo = (props) => {
               </div>
 
             }
-            {/* <input type="radio" disabled value="Yes"  onChange1={handleChange}  />
-            <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-            <input type="radio" disabled value="No"  onChange1={handleChange}  />
-            <label className="m-0 mx-2" for="No">No</label> */}
+         
             <hr className="mb-3" />
             <h5 className="text-black ml-2 mb-2">3.Shajra Plan</h5>
             <div className="row mx-1">
-              <div className="col col-3 p-1">
+              <div className="col col-4 p-1">
                 <h6>
                   (a)&nbsp;As per applied land&nbsp;
 
@@ -1757,11 +1823,11 @@ const Developerinfo = (props) => {
                 </h6>
 
                 {
-                  landScheduleData?.appliedLand === "Y" &&
+                  landScheduleData?.appliedLand === "N" &&
                   <div className="row ml-1 mr-2">
                     <div className="col  p-1" >
                       <h6>Download Document</h6>
-                      {/* &nbsp;&nbsp; */}
+                  
                       <div className="d-flex flex-row align-items-center my-1 ">
                         <IconButton onClick={() => getDocShareholding(landScheduleData?.appliedLand)}>
                           <DownloadForOfflineIcon color="primary" className="mx-1" />
@@ -1774,14 +1840,15 @@ const Developerinfo = (props) => {
 
               </div>
 
-              <div className="col col-3 p-1">
+              <div className="col col-4 p-1">
                 <h6 data-toggle="tooltip" data-placement="top" title="If any revenue rasta abuts to the applied site ?">
-                  (b)&nbsp;Revenue rasta&nbsp;
-                  {/* <InfoIcon style={{color:"blue"}}/>  */}
-                  &nbsp;&nbsp;
+                  (b)&nbsp;Revenue rasta
+                  {/* &nbsp; */}
+                  </h6>
+                  {/* &nbsp;&nbsp; */}
 
                   <div className="d-flex flex-row align-items-center my-1 ">
-                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                    
                     <input type="radio" disabled value="Yes" checked={landScheduleData?.revenueRasta === "Y" ? true : false} />
                     <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                     <input type="radio" disabled value="No" checked={landScheduleData?.revenueRasta === "N" ? true : false} />
@@ -1800,24 +1867,23 @@ const Developerinfo = (props) => {
                       }}
                     ></ReportProblemIcon>
                   </div>
-                </h6>
+               
 
                 {landScheduleData?.revenueRasta === "Y" && (
                   <div className="row ml-1 mr-2">
                     <div className="col col p-1">
                       <label> Width of revenue rasta </label>
-                      <Form.Control placeholder={landScheduleData?.revenueRastaWidth}height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
-        {/* <input type="number" className="form-control" disabled placeholder={landScheduleData?.revenueRastaWidth} /> */}
+       <Form.Control placeholder={landScheduleData?.revenueRastaWidth}height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+        
                     </div>
                   </div>
                 )}
               </div>
 
-              <div className="col col-3 p-1">
+              <div className="col col-4 p-1">
                 <h6 data-toggle="tooltip" data-placement="top" title="Watercourse running along boundary through the applied site ?">
                   (c)&nbsp;Watercourse running&nbsp;
-                  {/* <InfoIcon style={{color:"blue"}}/>  */}
-                  &nbsp;&nbsp;
+                  </h6>
 
                   <div className="d-flex flex-row align-items-center my-1 ">
                     {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
@@ -1839,7 +1905,7 @@ const Developerinfo = (props) => {
                       }}
                     ></ReportProblemIcon>
                   </div>
-                </h6>
+                
 
                 {landScheduleData?.waterCourse === "Y" && (
                   <div className="row ml-1 mr-2">
@@ -1850,12 +1916,12 @@ const Developerinfo = (props) => {
                   </div>
                 )}
               </div>
-              <div className="col col-3 p-1">
+              <div className="col col-4 p-1">
                 <h6>
                   (d)&nbsp;Whether in Compact Block
-
+                  </h6>
                   <div className="d-flex flex-row align-items-center my-1 ">
-                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                    
                     <input type="radio" disabled value="Yes" checked={landScheduleData?.compactBlock === "Y" ? true : false} />
                     <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                     <input type="radio" disabled value="No" checked={landScheduleData?.compactBlock === "N" ? true : false} />
@@ -1874,31 +1940,27 @@ const Developerinfo = (props) => {
                       }}
                     ></ReportProblemIcon>
                   </div>
-                </h6>
+               
 
                 {landScheduleData?.compactBlock === "Y" && (
                   <div className="row ml-1 mr-2">
                     <div className="col col p-1">
                       <label> Remark </label>
-    {/* <input type="number" className="form-control" disabled placeholder={landScheduleData?.compactBlockRemark} /> */}
+    
                       <Form.Control placeholder={landScheduleData?.compactBlockRemark} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                     </div>
                   </div>
                 )}
 
-                {/* <input type="radio" disabled value="Yes"  onChange1={handleChange}  />
-                <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                <input type="radio" disabled value="No"  onChange1={handleChange}  />
-                <label className="m-0 mx-2" for="No">No</label> */}
+               
               </div>
 
               <br></br>
 
-              <div className="col col-3 p-1">
+              <div className="col col-4 p-1">
                 <h6 data-toggle="tooltip" data-placement="top" title="If any other owners' land is sandwiched within applied land.">
-                  (e)&nbsp;Land Sandwiched&nbsp;
-                  {/* <InfoIcon style={{color:"blue"}}/>  */}
-                  &nbsp;&nbsp;
+                  (e) Whether Others Land fall within Applied Land
+                  </h6>
                   <div className="d-flex flex-row align-items-center my-1 ">
                     <input type="radio" disabled value="Yes" checked={landScheduleData?.landSandwiched === "Y" ? true : false} />
                     <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
@@ -1918,21 +1980,22 @@ const Developerinfo = (props) => {
                       }}
                     ></ReportProblemIcon>
                   </div>
-                </h6>
+               
                 {landScheduleData?.landSandwiched === "Y" && (
                   <div className="row ml-1 mr-2">
                     <div className="col col p-1">
                       <label> Remark </label>
-  {/* <input type="number" className="form-control" disabled placeholder={landScheduleData?.landSandwichedRemark} /> */}
+  
                       <Form.Control placeholder={landScheduleData?.landSandwichedRemark} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                     </div>
                   </div>
                 )}
 
               </div>
-              <div className="col col-3 p-1">
+              <div className="col col-4 p-1">
                 <h6>
-                  (f)&nbsp;Acquisition status&nbsp;
+                  (f) Acquisition status
+                  </h6>
                   <div className="d-flex flex-row align-items-center my-1 ">
                     <input type="radio" disabled value="Yes" checked={landScheduleData?.acquistion === "Y" ? true : false} />
                     <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
@@ -1952,20 +2015,10 @@ const Developerinfo = (props) => {
                       }}
                     ></ReportProblemIcon>
                   </div>
-                </h6>
-
-                {landScheduleData?.acquistion === "Y" && (
-                  <div className="row ml-1 mr-2">
-                    <div className="col col p-1">
-                      <label> Remark </label>
-      {/* <input type="number" className="form-control" disabled placeholder={landScheduleData?.acquistionRemark} /> */}
-                      <Form.Control placeholder={landScheduleData?.acquistionRemark} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
-                    </div>
-                  </div>
-                )}
-
               </div>
-              <div className="col col-3 p-1">
+              {landScheduleData?.acquistion === "Y" && (
+                <div>
+                    <div className="col col-4 p-1">
                 <div>
                   <label className="m-0">Date of section 4 notification </label>
                   <div className="d-flex flex-row align-items-center my-1 ">
@@ -1987,7 +2040,7 @@ const Developerinfo = (props) => {
                   {/* <Form.Control style={{ maxWidth: 200, marginTop: 10 }} disabled></Form.Control> */}
                 </div>
               </div>
-              <div className="col col-3 p-1">
+              <div className="col col-4 p-1">
                 <div>
                   <label className="m-0">Date of section 6 notification</label>
                   <div className="d-flex flex-row align-items-center my-1 ">
@@ -2009,12 +2062,18 @@ const Developerinfo = (props) => {
                   {/* <Form.Control style={{ maxWidth: 200, marginTop: 10 }} disabled></Form.Control> */}
                 </div>
               </div>
-            </div>
-
-            <div className="row mx-1">
+                  <div className="col col-4 p-1">
+                    <div className="col col p-1">
+                      <label> Date of Award </label>
+   
+                      <Form.Control placeholder={landScheduleData?.acquistionRemark} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                    </div>
+                  </div>
+                  <div className="row mx-1">
               <div className="col col-12 p-1">
                 <h6 data-toggle="tooltip" data-placement="top" title="Whether details/orders of release/exclusion of land uploaded.">
-                  (g)&nbsp;Orders Upload
+                (g)  Whether Land Released/Excluded from aqusition proceeding.
+                </h6>
                   {/* <InfoIcon style={{color:"blue"}}/>  */}
                   <div className="d-flex flex-row align-items-center my-1 ">
                     {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
@@ -2036,7 +2095,175 @@ const Developerinfo = (props) => {
                       }}
                     ></ReportProblemIcon>
                   </div>
-                </h6>
+             
+              
+                {landScheduleData?.orderUpload === "Y" && (
+                  <div className="row m-0 mt-2">
+                    <div className="col col-4 p-1">
+                      <h6 data-toggle="tooltip" data-placement="top" title="Whether details/orders of release/exclusion of land uploaded.">
+                        (h) Whether land compensation
+                        </h6>
+                        {/* <InfoIcon style={{color:"blue"}}/>  */}
+                        <div className="d-flex flex-row align-items-center my-1 ">
+                          {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                          <input type="radio" disabled value="Yes" checked={landScheduleData?.landCompensation === "Y" ? true : false} />
+                          <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                          <input type="radio" disabled value="No" checked={landScheduleData?.landCompensation === "N" ? true : false} />
+                          <label className="m-0 mx-2" for="No">No</label>
+
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks?"none":"block",
+                              color: fieldIconColors.landCompensationReceived
+                            }}
+                            onClick={() => {
+                              setLabelValue("Whether land compensation received"),
+                                setOpennedModal("landCompensationReceived")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(landScheduleData?.compensationReceived === "Y" ? "Yes" : landScheduleData?.compensationReceived === "N" ? "No" : null);
+                            }}
+                          ></ReportProblemIcon>
+
+                        </div>
+                     
+                    </div>
+                    <div className="col col-4 p-1">
+                      <div className="form-group">
+                        <label htmlFor="releasestatus">
+                          <h6 style={{ fontWeight: "initial" }} data-toggle="tooltip" data-placement="top" title="Status of release">Status of release</h6>
+                        </label>
+
+                        <div className="d-flex flex-row align-items-center my-1 ">
+                          <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.releaseStatus}></Form.Control>
+
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks?"none":"block",
+                              color: fieldIconColors.statusOfRelease
+                            }}
+                            onClick={() => {
+                              setLabelValue("Status of release"),
+                                setOpennedModal("statusOfRelease")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(landScheduleData?.statusOfRelease);
+                            }}
+                          ></ReportProblemIcon>
+
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col col-4 p-1">
+                      <div className="form-group ">
+                        <label htmlFor="awarddate">
+                          <h6 style={{ fontWeight: "initial" }} data-toggle="tooltip" data-placement="top" title="Date of Award">Date of Award</h6>
+                        </label>
+                        <div className="d-flex flex-row align-items-center my-1 ">
+                          <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.awardDate}></Form.Control>
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks?"none":"block",
+                              color: fieldIconColors.dateOfAward
+                            }}
+                            onClick={() => {
+                              setLabelValue("Date of Award"),
+                                setOpennedModal("dateOfAward")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(landScheduleData?.dateOfAward);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                        {/* comment by me */}
+                      </div>
+                    </div>
+                    <div className="col col-4 p-1">
+                      <div className="form-group ">
+                        <label htmlFor="releasedate">
+                          <h6 style={{ fontWeight: "initial" }} data-toggle="tooltip" data-placement="top" title="Date of Release">Date of Release</h6>{" "}
+                        </label>
+
+                        <div className="d-flex flex-row align-items-center my-1 ">
+                          <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.releaseDate}></Form.Control>
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks?"none":"block",
+                              color: fieldIconColors.dateOfRelease
+                            }}
+                            onClick={() => {
+                              setLabelValue("Date of Release"),
+                                setOpennedModal("dateOfRelease")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(landScheduleData?.dateOfRelease);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col col-4 p-1">
+                      <div className="form-group ">
+                        <label htmlFor="sitedetails">
+                          <h6 style={{ fontWeight: "initial" }} data-toggle="tooltip" data-placement="top" title="Site Details">Site Details</h6>
+                        </label>
+                        <div className="d-flex flex-row align-items-center my-1 ">
+                          <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.siteDetail}></Form.Control>
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks?"none":"block",
+                              color: fieldIconColors.siteDetails
+                            }}
+                            onClick={() => {
+                              setLabelValue("Site Details"),
+                                setOpennedModal("siteDetails")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(landScheduleData?.siteDetails);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+
+
+                        {/* comment by me */}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+                  </div>
+                )}
+            
+            </div>
+                            {/* changes done  */}
+            <div className="row mx-1">
+              <div className="col col-12 p-1">
+                <h6 data-toggle="tooltip" data-placement="top" title="Whether details/orders of release/exclusion of land uploaded.">
+                (h)  Details of existing approach as per policy dated 20-10-20.
+                  {/* <InfoIcon style={{color:"blue"}}/>  */}
+                  </h6>
+                  <div className="d-flex flex-row align-items-center my-1 ">
+                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                    <input type="radio" disabled value="Yes" checked={landScheduleData?.orderUpload === "Y" ? true : false} />
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                    <input type="radio" disabled value="No" checked={landScheduleData?.orderUpload === "N" ? true : false} />
+                    <label className="m-0 mx-2" for="No">No</label>
+                    <ReportProblemIcon
+                      style={{
+                        display: hideRemarks?"none":"block",
+                        color: fieldIconColors.ordersUpload
+                      }}
+                      onClick={() => {
+                        setLabelValue("Orders Upload"),
+                          setOpennedModal("ordersUpload")
+                        setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                      }}
+                    ></ReportProblemIcon>
+                  </div>
+               
                 {/* comment by me */}
                 {landScheduleData?.orderUpload === "Y" && (
                   <div className="row m-0 mt-2">
