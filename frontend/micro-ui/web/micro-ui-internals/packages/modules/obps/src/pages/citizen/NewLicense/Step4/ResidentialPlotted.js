@@ -1,10 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import { Row, Col } from "react-bootstrap";
 import FileUpload from "@mui/icons-material/FileUpload";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import NumberFormat from "react-number-format";
+import TextField from "@mui/material/TextField";
+import NumberInput from "../../../../components/NumberInput";
 
-const ResidentialPlottedForm = ({ register, getDocumentData, watch, getDocShareholding, setValue }) => {
+const ResidentialPlottedForm = ({ register, getDocumentData, watch, getDocShareholding, setValue, control }) => {
+  const [error, setError] = useState({});
+
+  useEffect(() => {
+    console.log("error", error);
+  }, [error]);
+
+  const handleWheel = (e) => e.target.blur();
+
   return (
     <Row className="ml-auto" style={{ marginBottom: 5 }}>
       <Col col-12>
@@ -15,12 +26,15 @@ const ResidentialPlottedForm = ({ register, getDocumentData, watch, getDocShareh
         <h6 className="text-black">
           <b>Detail of land use</b>
         </h6>
+
+        {/* <NumberFormat customInput={TextField} thousandSeparator={false} allowNegative={false} decimalScale={0}  /> */}
+
         <div className="table table-bordered table-responsive">
           <thead>
             <tr>
               <td>Total area of the Scheme</td>
               <td>
-                <input disabled type="number" className="form-control" {...register("totalAreaScheme")} />
+                <NumberInput disabled control={control} name="totalAreaScheme" customInput={TextField} />
               </td>
             </tr>
           </thead>
@@ -36,9 +50,18 @@ const ResidentialPlottedForm = ({ register, getDocumentData, watch, getDocShareh
                   type="number"
                   className="form-control"
                   {...register("areaUnderSectorRoad")}
+                  onWheel={handleWheel}
                   onChange={(e) => {
-                    if (e?.target?.value?.length) setValue("balanceAreaAfterDeduction", watch("totalAreaScheme") - e?.target?.value)?.toFixed(3);
-                    else setValue("balanceAreaAfterDeduction", "");
+                    if (e?.target?.value?.length) {
+                      setValue("balanceAreaAfterDeduction", watch("totalAreaScheme") - e?.target?.value)?.toFixed(3);
+                      setValue("areaUnderSectorAndGreenBelt", (e?.target?.value * 50) / 100);
+                    } else {
+                      setValue("balanceAreaAfterDeduction", "");
+                      setValue("balanceArea", "");
+                      setValue("areaUnderSectorAndGreenBelt", "");
+                      setValue("netPlannedArea", "");
+                      setValue("areaUnderUndetermined", "");
+                    }
                   }}
                 />
               </td>
@@ -60,7 +83,21 @@ const ResidentialPlottedForm = ({ register, getDocumentData, watch, getDocShareh
                 </div>
               </td>
               <td align="right">
-                <input type="number" className="form-control" {...register("areaUnderUndetermined")} />
+                <input
+                  type="number"
+                  className="form-control"
+                  {...register("areaUnderUndetermined")}
+                  onWheel={handleWheel}
+                  onChange={(e) => {
+                    if (e?.target?.value?.length) {
+                      setValue("balanceArea", watch("balanceAreaAfterDeduction") - e?.target?.value)?.toFixed(3);
+                      setValue("netPlannedArea", watch("balanceAreaAfterDeduction") - e?.target?.value + watch("areaUnderSectorAndGreenBelt"));
+                    } else {
+                      setValue("balanceArea", "");
+                      setValue("netPlannedArea", "");
+                    }
+                  }}
+                />
               </td>
             </tr>
             <tr>
@@ -74,8 +111,11 @@ const ResidentialPlottedForm = ({ register, getDocumentData, watch, getDocShareh
                   type="number"
                   className="form-control"
                   {...register("areaUnderGH")}
+                  onWheel={handleWheel}
                   onChange={(e) => {
-                    if (e?.target?.value > (watch("totalAreaScheme") * 10) / 100) console.log("error");
+                    if (e?.target?.value > (watch("totalAreaScheme") * 10) / 100)
+                      setError({ ...error, ["areaUnderGH"]: "Area Under GH cannot exceed 10% of Total Area of scheme" });
+                    else setError({ ...error, ["areaUnderGH"]: "" });
                   }}
                 />
               </td>
@@ -97,7 +137,7 @@ const ResidentialPlottedForm = ({ register, getDocumentData, watch, getDocShareh
                 </div>
               </td>
               <td align="right">
-                <input type="number" className="form-control" {...register("areaUnderSectorAndGreenBelt")} />
+                <input disabled type="number" className="form-control" {...register("areaUnderSectorAndGreenBelt")} />
               </td>
             </tr>
             <tr>
@@ -107,7 +147,7 @@ const ResidentialPlottedForm = ({ register, getDocumentData, watch, getDocShareh
                 </div>
               </td>
               <td align="right">
-                <input type="number" className="form-control" {...register("netPlannedArea")} />
+                <input disabled type="number" className="form-control" {...register("netPlannedArea")} />
               </td>
             </tr>
           </tbody>
@@ -126,7 +166,21 @@ const ResidentialPlottedForm = ({ register, getDocumentData, watch, getDocShareh
                 </div>
               </td>
               <td align="right">
-                <input type="number" className="form-control" {...register("totalNumberOfPlots")} />
+                <NumberInput
+                  control={control}
+                  name="totalNumberOfPlots"
+                  customInput={TextField}
+                  thousandSeparator={false}
+                  allowNegative={false}
+                  decimalScale={0}
+                  onChange={(e) => {
+                    if (!e?.target?.value?.length) {
+                      setValue("generalPlots", "");
+                      setValue("requiredNPNLPlots", "");
+                      setValue("requiredEWSPlots", "");
+                    }
+                  }}
+                />
               </td>
             </tr>
             <tr>
@@ -136,7 +190,19 @@ const ResidentialPlottedForm = ({ register, getDocumentData, watch, getDocShareh
                 </div>
               </td>
               <td align="right">
-                <input type="number" className="form-control" {...register("generalPlots")} />
+                <NumberInput
+                  control={control}
+                  name="generalPlots"
+                  customInput={TextField}
+                  thousandSeparator={false}
+                  allowNegative={false}
+                  decimalScale={0}
+                  onChange={(e) => {
+                    if (e?.target?.value > (watch("totalNumberOfPlots") * 55) / 100)
+                      setError({ ...error, ["generalPlots"]: " Cannot exceed 55% of total number of plots" });
+                    else setError({ ...error, ["generalPlots"]: "" });
+                  }}
+                />
               </td>
             </tr>
             <tr>
@@ -146,7 +212,19 @@ const ResidentialPlottedForm = ({ register, getDocumentData, watch, getDocShareh
                 </div>
               </td>
               <td align="right">
-                <input type="number" className="form-control" {...register("requiredNPNLPlots")} />
+                <NumberInput
+                  control={control}
+                  name="requiredNPNLPlots"
+                  customInput={TextField}
+                  thousandSeparator={false}
+                  allowNegative={false}
+                  decimalScale={0}
+                  onChange={(e) => {
+                    if (e?.target?.value > (watch("totalNumberOfPlots") * 25) / 100)
+                      setError({ ...error, ["requiredNPNLPlots"]: " Cannot exceed 25% of total number of plots" });
+                    else setError({ ...error, ["requiredNPNLPlots"]: "" });
+                  }}
+                />
               </td>
             </tr>
             <tr>
@@ -156,7 +234,26 @@ const ResidentialPlottedForm = ({ register, getDocumentData, watch, getDocShareh
                 </div>
               </td>
               <td align="right">
-                <input type="number" className="form-control" {...register("requiredEWSPlots")} />
+                <NumberInput
+                  control={control}
+                  name="requiredEWSPlots"
+                  customInput={TextField}
+                  thousandSeparator={false}
+                  allowNegative={false}
+                  decimalScale={0}
+                  onChange={(e) => {
+                    const val = (parseInt(watch("generalPlots")) + parseInt(watch("requiredNPNLPlots"))) * 18;
+                    const valA = e?.target?.value * 12;
+                    console.log("val++", (val + valA) / watch("netPlannedArea"));
+                    console.log("calc", watch("netPlannedArea"), typeof watch("netPlannedArea"));
+                    if (e?.target?.value > (watch("totalNumberOfPlots") * 20) / 100)
+                      setError({ ...error, ["requiredEWSPlots"]: " Cannot exceed 20% of total number of plots" });
+                    else {
+                      setValue("permissibleDensity", ((val + valA) / watch("netPlannedArea"))?.toFixed(3));
+                      setError({ ...error, ["requiredEWSPlots"]: "" });
+                    }
+                  }}
+                />
               </td>
             </tr>
             <tr>
@@ -176,7 +273,7 @@ const ResidentialPlottedForm = ({ register, getDocumentData, watch, getDocShareh
                 </div>
               </td>
               <td align="right">
-                <input type="number" className="form-control" {...register("permissibleCommercialArea")} />
+                <input type="number" className="form-control" {...register("permissibleCommercialArea")} onWheel={handleWheel} />
               </td>
             </tr>
             <tr>
@@ -186,7 +283,7 @@ const ResidentialPlottedForm = ({ register, getDocumentData, watch, getDocShareh
                 </div>
               </td>
               <td align="right">
-                <input type="number" className="form-control" {...register("underPlot")} />
+                <input type="number" className="form-control" {...register("underPlot")} onWheel={handleWheel} />
               </td>
             </tr>
             <tr>
@@ -196,7 +293,7 @@ const ResidentialPlottedForm = ({ register, getDocumentData, watch, getDocShareh
                 </div>
               </td>
               <td align="right">
-                <input type="number" className="form-control" {...register("commercial")} />
+                <input type="number" className="form-control" {...register("commercial")} onWheel={handleWheel} />
               </td>
             </tr>
             <tr>
@@ -206,7 +303,7 @@ const ResidentialPlottedForm = ({ register, getDocumentData, watch, getDocShareh
                 </div>
               </td>
               <td align="right">
-                <input type="number" className="form-control" {...register("permissibleSaleableArea")} />
+                <input type="number" className="form-control" {...register("permissibleSaleableArea")} onWheel={handleWheel} />
               </td>
             </tr>
             <tr>
@@ -216,7 +313,7 @@ const ResidentialPlottedForm = ({ register, getDocumentData, watch, getDocShareh
                 </div>
               </td>
               <td align="right">
-                <input type="number" className="form-control" {...register("requiredGreenArea")} />
+                <input type="number" className="form-control" {...register("requiredGreenArea")} onWheel={handleWheel} />
               </td>
             </tr>
           </tbody>
@@ -235,7 +332,7 @@ const ResidentialPlottedForm = ({ register, getDocumentData, watch, getDocShareh
                 </div>
               </td>
               <td align="right">
-                <input type="number" className="form-control" {...register("communitySites")} />
+                <input type="number" className="form-control" {...register("communitySites")} onWheel={handleWheel} />
               </td>
             </tr>
             <tr>
@@ -245,7 +342,7 @@ const ResidentialPlottedForm = ({ register, getDocumentData, watch, getDocShareh
                 </div>
               </td>
               <td align="right">
-                <input type="number" className="form-control" {...register("provided")} />
+                <input type="number" className="form-control" {...register("provided")} onWheel={handleWheel} />
               </td>
             </tr>
           </tbody>
