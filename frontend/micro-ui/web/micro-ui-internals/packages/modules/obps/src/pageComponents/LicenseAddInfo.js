@@ -971,8 +971,6 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                           <label htmlFor="dob">Select gender <span className="text-danger font-weight-bold">*</span></label>
                           <Select
                             value={gender}
-                            selected={gender}
-                            optionKey="code"
                             onChange={setGenderName}
                             className="w-100 form-control"
                             variant="standard"
