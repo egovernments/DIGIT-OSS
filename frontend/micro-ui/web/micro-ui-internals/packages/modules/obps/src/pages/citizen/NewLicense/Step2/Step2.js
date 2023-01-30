@@ -1235,7 +1235,7 @@ const ApllicantPuropseForm = (props) => {
                           {...register("developerCompany")}
                           required
                           minlength={2}
-                          maxLength={99}
+                          maxLength={20}
                         />
                         <h3 className="error-message" style={{ color: "red" }}>
                           {errors?.developerCompany && errors?.developerCompany?.message}
@@ -1489,15 +1489,15 @@ const ApllicantPuropseForm = (props) => {
                     <tbody>
                       <tr>
                         <td>
-                          <input type="number" className="form-control  " {...register("kanal")} id="kanal" required maxLength={20} />
+                          <input type="number" className="form-control  " {...register("kanal")} id="kanal" required maxLength={99} />
                           <label htmlFor="sum">Total: {(watch("kanal") * 0.125)?.toFixed(3)}</label>&nbsp;&nbsp;
                         </td>
                         <td>
-                          <input type="number" className="form-control " {...register("marla")} id="marla" required maxLength={20} />
+                          <input type="number" className="form-control " {...register("marla")} id="marla" required maxLength={99} />
                           <label htmlFor="summarla">Total: {(watch("marla") * 0.0062)?.toFixed(3)}</label>&nbsp;&nbsp;
                         </td>
                         <td>
-                          <input type="number" className="form-control " {...register("sarsai")} id="sarsai" required maxLength={20} />
+                          <input type="number" className="form-control " {...register("sarsai")} id="sarsai" required maxLength={99} />
                           <label htmlFor="sumsarsai">Total: {(watch("sarsai") * 0.00069)?.toFixed(3)}</label>&nbsp;&nbsp;
                         </td>
                         <td>
@@ -1539,15 +1539,15 @@ const ApllicantPuropseForm = (props) => {
                     <tbody>
                       <tr>
                         <td>
-                          <input type="number" className="form-control" {...register("bigha")} id="bigha" required maxLength={20} />
+                          <input type="number" className="form-control" {...register("bigha")} id="bigha" required maxLength={99} />
                           <label htmlFor="sumBigha">Total: {(watch("bigha") * 0.33)?.toFixed(3)}</label>&nbsp;&nbsp;
                         </td>
                         <td>
-                          <input type="number" className="form-control" {...register("biswa")} id="biswa" required maxLength={20} />
+                          <input type="number" className="form-control" {...register("biswa")} id="biswa" required maxLength={99} />
                           <label htmlFor="sumBiswa">Total: {(watch("biswa") * 0.0309)?.toFixed(3)}</label>&nbsp;&nbsp;
                         </td>
                         <td>
-                          <input type="number" className="form-control" {...register("biswansi")} id="biswansi" required maxLength={20} />
+                          <input type="number" className="form-control" {...register("biswansi")} id="biswansi" required maxLength={99} />
                           <label htmlFor="sumBiswansi">Total: {(watch("biswansi") * 0.619)?.toFixed(3)}</label>&nbsp;&nbsp;
                         </td>
                         <td>

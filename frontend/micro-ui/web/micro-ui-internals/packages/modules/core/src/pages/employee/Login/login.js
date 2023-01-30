@@ -32,13 +32,13 @@ const Login = ({ config: propsConfig, t, isDisabled }) => {
 
   useEffect(() => {
     if (!user) {
-      return;
+      return; 
     }
     Digit.SessionStorage.set("citizen.userRequestObject", user);
     const filteredRoles = user?.info?.roles?.filter((role) => role.tenantId === Digit.SessionStorage.get("Employee.tenantId"));
     if (user?.info?.roles?.length > 0) user.info.roles = filteredRoles;
     Digit.UserService.setUser(user);
-    setEmployeeDetail(user?.info, user?.access_token);
+    setEmployeeDetail(user?.info, user?.access_token); 
     let redirectPath = "/digit-ui/employee";
 
     /* logic to redirect back to same screen where we left off  */

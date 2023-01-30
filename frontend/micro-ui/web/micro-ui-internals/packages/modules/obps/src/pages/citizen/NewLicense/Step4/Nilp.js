@@ -1,13 +1,14 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import { Row, Col } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 
-const IndustrialPlottedForm = ({ register }) => {
+const NilpForm = ({ register, watch }) => {
   return (
     <Row className="ml-auto" style={{ marginBottom: 5 }}>
       <Col col-12>
         <h6 className="text-black">
-          <b>Industrial Plotted</b>
+          <b>New Integrated Licencing Policy (NILP) for commercial Use</b>
         </h6>
         <br></br>
         {/* <h6 className="text-black">
@@ -19,7 +20,7 @@ const IndustrialPlottedForm = ({ register }) => {
             <div>
               <Form.Label>
                 <h2>
-                  Total area of the Scheme(in acres)
+                  Total area of the Scheme (in acres)
                   <span style={{ color: "red" }}>*</span>
                 </h2>
               </Form.Label>
@@ -30,7 +31,7 @@ const IndustrialPlottedForm = ({ register }) => {
             <div>
               <Form.Label>
                 <h2>
-                  Area under Sector Road & Green Belt(in acres)
+                  Area under Sector Road & Green Belt (in acres)
                   <span style={{ color: "red" }}>*</span>
                 </h2>
               </Form.Label>
@@ -61,8 +62,8 @@ const IndustrialPlottedForm = ({ register }) => {
           </Col>
         </Row> */}
         <br></br>
-        <Row className="ml-auto" style={{ marginBottom: 5 }}>
-          {/* <Col md={4} xxl lg="3">
+        {/* <Row className="ml-auto" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="3">
             <div>
               <Form.Label>
                 <h2>
@@ -94,102 +95,19 @@ const IndustrialPlottedForm = ({ register }) => {
               </Form.Label>
             </div>
             <input type="text" className="form-control" />
-          </Col> */}
+          </Col>
           <Col md={4} xxl lg="3">
             <div>
               <Form.Label>
                 <h2>
-                  Area under Industrial use
+                  Area to be provided free of cost to the Government for EWS/AH
                   <span style={{ color: "red" }}>*</span>
                 </h2>
               </Form.Label>
             </div>
             <input type="text" className="form-control" />
           </Col>
-        </Row>
-        <br></br>
-        <Row className="ml-auto" style={{ marginBottom: 5 }}>
-          <Col md={4} xxl lg="3">
-            <div>
-              <Form.Label>
-                <h2>
-                  Area under Residential plots
-                  <span style={{ color: "red" }}>*</span>
-                </h2>
-              </Form.Label>
-            </div>
-            <input type="text" className="form-control" />
-          </Col>
-          <Col md={4} xxl lg="3">
-            <div>
-              <Form.Label>
-                <h2>
-                  Area under Affordable Industrial Housing
-                  <span style={{ color: "red" }}>*</span>
-                </h2>
-              </Form.Label>
-            </div>
-            <input type="text" className="form-control" />
-          </Col>
-          <Col md={4} xxl lg="3">
-            <div>
-              <Form.Label>
-                <h2>
-                  Area under Commercial
-                  <span style={{ color: "red" }}>*</span>
-                </h2>
-              </Form.Label>
-            </div>
-            <input type="text" className="form-control" />
-          </Col>
-          <Col md={4} xxl lg="3">
-            <div>
-              <Form.Label>
-                <h2>
-                  Total Saleable Area
-                  <span style={{ color: "red" }}>*</span>
-                </h2>
-              </Form.Label>
-            </div>
-            <input type="text" className="form-control" />
-          </Col>
-        </Row>
-        <br></br>
-        <Row className="ml-auto" style={{ marginBottom: 5 }}>
-          <Col md={4} xxl lg="3">
-            <div>
-              <Form.Label>
-                <h2>
-                  Total Residential Plots
-                  <span style={{ color: "red" }}>*</span>
-                </h2>
-              </Form.Label>
-            </div>
-            <input type="text" className="form-control" />
-          </Col>
-          <Col md={4} xxl lg="3">
-            <div>
-              <Form.Label>
-                <h2>
-                  Required EWS Plots
-                  <span style={{ color: "red" }}>*</span>
-                </h2>
-              </Form.Label>
-            </div>
-            <input type="text" className="form-control" />
-          </Col>
-          <Col md={4} xxl lg="3">
-            <div>
-              <Form.Label>
-                <h2>
-                  Total Industrial Plots
-                  <span style={{ color: "red" }}>*</span>
-                </h2>
-              </Form.Label>
-            </div>
-            <input type="text" className="form-control" />
-          </Col>
-        </Row>
+        </Row> */}
 
         <br></br>
         <h6 className="text-black">
@@ -209,4 +127,5 @@ const IndustrialPlottedForm = ({ register }) => {
     </Row>
   );
 };
-export default IndustrialPlottedForm;
+
+export default NilpForm;

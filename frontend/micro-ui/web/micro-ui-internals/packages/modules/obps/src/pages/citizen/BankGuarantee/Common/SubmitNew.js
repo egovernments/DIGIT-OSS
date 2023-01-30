@@ -9,6 +9,7 @@ import axios from "axios";
 import FileUpload from "@mui/icons-material/FileUpload";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import ReleaseNew from "./Release";
 function SubmitNew() {
   const [modal, setmodal] = useState(false);
   const [modal1, setmodal1] = useState(false);
@@ -19,6 +20,7 @@ function SubmitNew() {
   const userInfo = Digit.UserService.getUser()?.info || {};
   const [typeOfBg, setTypeOfBg] = useState("");
   const [SubmissionSearch, setSubmissionSearch] = useState({});
+  const [searchExistingBg, setSearchExistingBg] = useState({});
   const {
     register,
     handleSubmit,
@@ -32,8 +34,9 @@ function SubmitNew() {
 
   const bankSubmitNew = async (data) => {
     const token = window?.localStorage?.getItem("token");
+    console.log("token", token);
     const userInfo = Digit.UserService.getUser()?.info || {};
-    console.log(data);
+    console.log("validity", data);
     console.log("SubmissionSearch", SubmissionSearch);
     try {
       const postDistrict = {
@@ -45,7 +48,8 @@ function SubmitNew() {
             action: null,
             comment: "test comment",
             assignee: null,
-            ...SubmissionSearch,
+            // validity: data?.validity,
+            ...data,
           },
         ],
         RequestInfo: {
@@ -101,7 +105,8 @@ function SubmitNew() {
   };
   const [applicantId, setApplicantId] = useState("");
   const [showOption, setShowOption] = useState(false);
-  const landScheduleFormSubmitHandler = async () => {
+
+  const submitNewFormSubmitHandler = async () => {
     const token = window?.localStorage?.getItem("token");
     const payload = {
       RequestInfo: {
@@ -120,9 +125,10 @@ function SubmitNew() {
         `/tl-services/bank/guarantee/_search?typeOfBg=${getValues("typeOfBg")}&loiNumber=${getValues("loiNumber")}`,
         payload
       );
+      const Submitform = Resp?.data?.newBankGuaranteeList[0];
 
-      console.log("service", Resp?.data?.newBankGuaranteeList[0]);
-      setSubmissionSearch(Resp?.data?.newBankGuaranteeList[0]);
+      console.log("service", Submitform);
+      setSubmissionSearch(Submitform);
       setValue("amountInFig", Resp.data.newBankGuaranteeList[0].amountInFig);
       const userData = Resp?.data?.LicenseDetails?.[0];
       setStepData(userData);
@@ -131,13 +137,71 @@ function SubmitNew() {
     }
   };
 
-  // useEffect(() => {
-  //   const search = location?.search;
-  //   const params = new URLSearchParams(search);
-  //   const id = params.get("id");
-  //   setApplicantId(id?.toString());
-  //   if (id) getApplicantUserData(id);
-  // }, []);
+  const existingBgFormSubmitHandler = async () => {
+    const token = window?.localStorage?.getItem("token");
+    console.log("token........", token);
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        action: "_create",
+        did: 1,
+        key: "",
+        msgId: "20170310130900|en_IN",
+        ts: 0,
+        ver: ".01",
+        authToken: token,
+      },
+    };
+    try {
+      const Resp = await axios.post(
+        `/tl-services/bank/guarantee/_search?bgNumber=${getValues("bgNumber")}&bankName=${getValues("bankName")}`,
+        payload
+      );
+
+      console.log("serviceBG", Resp);
+      setSearchExistingBg(Resp.data.newBankGuaranteeList[0]);
+      setValue("loiNumber", Resp.data.newBankGuaranteeList[0].loiNumber);
+      setValue("typeOfBg", Resp.data.newBankGuaranteeList[0].typeOfBg);
+      setValue("amountInFig", Resp.data.newBankGuaranteeList[0].amountInFig);
+      setValue("amountInWords", Resp.data.newBankGuaranteeList[0].amountInWords);
+      console.log("data", Resp.data.newBankGuaranteeList[0]);
+    } catch (error) {
+      return error;
+    }
+  };
+
+  const updateSubmitFormSubmitHandler = async () => {
+    const token = window?.localStorage?.getItem("token");
+    console.log("SubmissionSearch..........", searchExistingBg);
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        action: "_create",
+        did: 1,
+        key: "",
+        msgId: "20170310130900|en_IN",
+        ts: 0,
+        ver: ".01",
+        authToken: token,
+      },
+      NewBankGuaranteeRequest: [
+        {
+          action: "EXTEND",
+          comment: "test comment",
+          assignee: null,
+          ...searchExistingBg,
+        },
+      ],
+    };
+    try {
+      const Resp = await axios.post(`/tl-services/bank/guarantee/_update`, payload);
+
+      console.log("service......", Submitform);
+      // setSearchExistingBg(Submitform);
+    } catch (error) {
+      return error;
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit(bankSubmitNew)}>
@@ -173,48 +237,43 @@ function SubmitNew() {
               </select>
             </Col>
             <Col md={4} xxl lg="3">
-              <div>
-                <button
-                  // id="btnClear"
-                  type="button"
-                  class="btn btn-primary btn-md center-block"
-                  style={{ marginBottom: "-44px" }}
-                  onClick={landScheduleFormSubmitHandler}
-                >
-                  Search
-                </button>
-              </div>
+              <br></br>
+              <button
+                // id="btnClear"
+                type="button"
+                class="btn btn-primary btn-md center-block"
+                style={{ marginBottom: "-44px" }}
+                onClick={submitNewFormSubmitHandler}
+              >
+                Search
+              </button>
             </Col>
           </Row>
           {watch("typeOfBg") === "SPE" && (
-            <div className="row">
+            <Row className="col-12">
               <Col md={4} xxl lg="3">
-                <div>
-                  <Form.Label>
-                    <h2>Amount (in fig)</h2>
-                  </Form.Label>
-                </div>
+                <Form.Label>
+                  <h2>Amount (in fig)</h2>
+                </Form.Label>
                 <input type="text" className="form-control" placeholder="" {...register("amountInFig")} />
               </Col>
               <Col md={4} xxl lg="3">
-                <div>
-                  <Form.Label>
-                    <h2>Amount (in words)</h2>
-                  </Form.Label>
-                </div>
+                <Form.Label>
+                  <h2>Amount (in words)</h2>
+                </Form.Label>
+
                 <input type="text" className="form-control" placeholder="" {...register("amountInWords")} />
               </Col>
-            </div>
+            </Row>
           )}
 
           {watch("typeOfBg") === "IDW" && (
-            <div className="row">
+            <Row className="col-12">
               <Col md={4} xxl lg="3">
-                <div>
-                  <Form.Label>
-                    <h2>Amount (in fig)</h2>
-                  </Form.Label>
-                </div>
+                <Form.Label>
+                  <h2>Amount (in fig)</h2>
+                </Form.Label>
+
                 <input
                   type="text"
                   className="form-control"
@@ -224,11 +283,10 @@ function SubmitNew() {
                 />
               </Col>
               <Col md={4} xxl lg="3">
-                <div>
-                  <Form.Label>
-                    <h2>Amount (in words)</h2>
-                  </Form.Label>
-                </div>
+                <Form.Label>
+                  <h2>Amount (in words)</h2>
+                </Form.Label>
+
                 <input
                   type="text"
                   className="form-control"
@@ -237,16 +295,15 @@ function SubmitNew() {
                   disabled={existingBgNumber?.length > 0 ? true : false}
                 />
               </Col>
-            </div>
+            </Row>
           )}
           {watch("typeOfBg") === "EDC" && (
-            <div className="row">
+            <Row className="col-12">
               <Col md={4} xxl lg="3">
-                <div>
-                  <Form.Label>
-                    <h2>Amount (in fig)</h2>
-                  </Form.Label>
-                </div>
+                <Form.Label>
+                  <h2>Amount (in fig)</h2>
+                </Form.Label>
+
                 <input
                   type="text"
                   className="form-control"
@@ -256,11 +313,10 @@ function SubmitNew() {
                 />
               </Col>
               <Col md={4} xxl lg="3">
-                <div>
-                  <Form.Label>
-                    <h2>Amount (in words)</h2>
-                  </Form.Label>
-                </div>
+                <Form.Label>
+                  <h2>Amount (in words)</h2>
+                </Form.Label>
+
                 <input
                   type="text"
                   className="form-control"
@@ -269,7 +325,7 @@ function SubmitNew() {
                   disabled={existingBgNumber?.length > 0 ? true : false}
                 />
               </Col>
-            </div>
+            </Row>
           )}
 
           {/* <Col md={4} xxl lg="3">
@@ -406,15 +462,16 @@ function SubmitNew() {
                     style={{ display: "none" }}
                     onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBg")}
                   />
+
+                  {fileStoreId?.uploadBg ? (
+                    <a onClick={() => getDocShareholding(fileStoreId?.uploadBg)} className="btn btn-sm ">
+                      <VisibilityIcon color="info" className="icon" />
+                    </a>
+                  ) : (
+                    <p></p>
+                  )}
+                  <h3 style={{}}>{watch("uploadBgFileName") ? watch("uploadBgFileName") : null}</h3>
                 </label>
-                {fileStoreId?.uploadBg ? (
-                  <a onClick={() => getDocShareholding(fileStoreId?.uploadBg)} className="btn btn-sm ">
-                    <VisibilityIcon color="info" className="icon" />
-                  </a>
-                ) : (
-                  <p></p>
-                )}
-                <h3 style={{}}>{watch("uploadBgFileName") ? watch("uploadBgFileName") : null}</h3>
               </div>
               {/* <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBg")} /> */}
             </Col>
@@ -453,24 +510,23 @@ function SubmitNew() {
                           <span style={{ color: "red" }}>*</span>
                         </h2>
                         <FileUpload color="primary" />
-                        <div>
-                          <input
-                            type="file"
-                            accept="application/pdf/jpeg/png"
-                            style={{ display: "none" }}
-                            onChange={(e) => getDocumentData(e?.target?.files[0], "tcpSubmissionReceived")}
-                          />
-                        </div>
-                      </label>
-                      {fileStoreId?.tcpSubmissionReceived ? (
-                        <a onClick={() => getDocShareholding(fileStoreId?.tcpSubmissionReceived)} className="btn btn-sm ">
-                          <VisibilityIcon color="info" className="icon" />
-                        </a>
-                      ) : (
-                        <p></p>
-                      )}
-                      <h3 style={{}}>{watch("tcpSubmissionReceivedFileName") ? watch("tcpSubmissionReceivedFileName") : null}</h3>
 
+                        <input
+                          type="file"
+                          accept="application/pdf/jpeg/png"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "tcpSubmissionReceived")}
+                        />
+
+                        {fileStoreId?.tcpSubmissionReceived ? (
+                          <a onClick={() => getDocShareholding(fileStoreId?.tcpSubmissionReceived)} className="btn btn-sm ">
+                            <VisibilityIcon color="info" className="icon" />
+                          </a>
+                        ) : (
+                          <p></p>
+                        )}
+                        <h3 style={{}}>{watch("tcpSubmissionReceivedFileName") ? watch("tcpSubmissionReceivedFileName") : null}</h3>
+                      </label>
                       {/* <div>
                         <input
                           type="file"
@@ -521,7 +577,22 @@ function SubmitNew() {
             </Col>
           </Row>
           <br></br>
-
+          <Row className="col-12">
+            <Col md={4} xxl lg="3">
+              <div>
+                <button
+                  // id="btnClear"
+                  type="button"
+                  class="btn btn-primary btn-md center-block"
+                  style={{ marginBottom: "-44px" }}
+                  onClick={existingBgFormSubmitHandler}
+                >
+                  Search
+                </button>
+              </div>
+            </Col>
+          </Row>
+          <br></br>
           <Row className="justify-content-end">
             <Button variant="outline-primary" className="col-md-2 my-2 mx-2" aria-label="right-end">
               Cancel
@@ -529,6 +600,16 @@ function SubmitNew() {
 
             <Button variant="outline-primary" className="col-md-2 my-2 mx-2" type="submit" aria-label="right-end">
               Submit
+            </Button>
+
+            <Button
+              variant="outline-primary"
+              className="col-md-2 my-2 mx-2"
+              type="button"
+              aria-label="right-end"
+              onClick={updateSubmitFormSubmitHandler}
+            >
+              Update
             </Button>
           </Row>
 

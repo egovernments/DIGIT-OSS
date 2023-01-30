@@ -8,9 +8,9 @@ const OBPSCard = () => {
     const userRoles = Digit.SessionStorage.get('User')?.info?.roles
     const { t } = useTranslation();
     const tenantId = Digit.ULBService.getCurrentTenantId();
-    const BgRole = ["SO_HQ", "AO_HQ", "CAO_HQ"]
-    const SP_EPRole = ["CTP_HR","AD_HQ", "JD_HQ", "SD_HQ", "ATP_HQ", "DA_HQ", "DDA_HQ", "ADA_HQ", "DTCP_HR", "DTP_HQ", "JE_HQ", "Patwari_HQ", "STP_HQ", "STP_Circle", "ASST_JE_HQ", "CE_HQ", "HSVP", "GMDA", "FMDA", "PMDA", "EE_HQ"]
-
+    const BgRole = ["SO_HQ", "AO_HQ", "CAO_HQ", "DTCP_HR"]
+    const SP_Role = ["CTP_HR", "AO_HQ", "JD_HQ", "SD_HQ", "DTCP_HR", "DTP_HQ", "JE_HQ", "STP_HQ", "ASST_JE_HQ", "CE_HQ", "HSVP", "GMDA", "FMDA", "PMDA"]
+    const EP_Role = ["CTP_HR","AO_HQ", "JD_HQ", "SD_HQ","DTCP_HR", "DTP_HQ", "JE_HQ", "STP_HQ", "ASST_JE_HQ", "EE_HQ", "PUD"]
     function isBankGuarrantee(){
         let isGuarantee = false
         for(let i=0; i<userRoles.length; i++){
@@ -21,14 +21,24 @@ const OBPSCard = () => {
         return isGuarantee
       }
 
-      function isServiceOrElectricEmp(){
-        let isSP_EP = false
+      function isServiceEmp(){
+        let isSP = false
         for(let i=0; i<userRoles.length; i++){
-          if(SP_EPRole.includes(userRoles[i].code)){
-            isSP_EP = true
+          if(SP_Role.includes(userRoles[i].code)){
+            isSP = true
           }
         }
-        return isSP_EP
+        return isSP
+      }
+
+      function isElectricEmp(){
+        let isEP = false
+        for(let i=0; i<userRoles.length; i++){
+          if(EP_Role.includes(userRoles[i].code)){
+            isEP = true
+          }
+        }
+        return isEP
       }
         
     const [isStateLocalisation, setIsStateLocalisation] = useState(true);
@@ -103,9 +113,12 @@ const OBPSCard = () => {
             obpsSubModuleProps.push(propsForBankModuleCard)
         }
     
-        if((Digit.Utils.tlAccess() || isServiceOrElectricEmp() || isBankGuarrantee())){
-            obpsSubModuleProps.push(propsForElectricModuleCard, propsForServiceModuleCard)
+        if((Digit.Utils.tlAccess() || isServiceEmp())){
+            obpsSubModuleProps.push(propsForServiceModuleCard)
         }
+        if((Digit.Utils.tlAccess() || isElectricEmp())){
+          obpsSubModuleProps.push(propsForElectricModuleCard)
+      }
         return (
         <React.Fragment>
         {

@@ -3,7 +3,10 @@ import { Card, Row, Col } from "react-bootstrap";
 import { Button, Form } from "react-bootstrap";
 import axios from "axios";
 import { useForm } from "react-hook-form";
-function ReleaseNew() {
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import FileUpload from "@mui/icons-material/FileUpload";
+
+function ReleaseNew(props) {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
   const [modal, setmodal] = useState(false);
@@ -20,14 +23,30 @@ function ReleaseNew() {
     formState: { errors },
     control,
     setValue,
+    getValues,
     watch,
   } = useForm({});
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const [searchExistingBg, setSearchExistingBg] = useState({});
+
   const bankRelease = async (data) => {
     const token = window?.localStorage?.getItem("token");
-    console.log(data);
+    const userInfo = Digit.UserService.getUser()?.info || {};
+
     try {
       const postDistrict = {
+        NewBankGuaranteeRequest: [
+          {
+            action: "APPLY_FOR_RELEASE",
+            comment: "test comment",
+            assignee: null,
+
+            // validity: data?.validity,
+            ...searchExistingBg,
+            ...data,
+            status: "APPROVED",
+          },
+        ],
         RequestInfo: {
           apiId: "Rainmaker",
           action: "_create",
@@ -37,26 +56,42 @@ function ReleaseNew() {
           ts: 0,
           ver: ".01",
           authToken: token,
+          userInfo: userInfo,
         },
-        NewBankGuaranteeRequest: [
-          {
-            tenantId: tenantId,
-            additionalDetails: null,
-            additionalDocuments: null,
-            action: "PRE_SUBMIT",
-            comment: null,
-            assignee: null,
-            ...data,
-          },
-        ],
       };
-      const Resp = await axios.post("/tl-services/bank/guarantee/_create", postDistrict);
-      setServicePlanDataLabel(Resp.data);
+      const Resp = await axios.post("/tl-services/bank/guarantee/_update", postDistrict);
+      console.log("Release", Resp);
+      setSubmissionSearch(UserData);
     } catch (error) {
       console.log(error.message);
     }
   };
+  const existingBgFormSubmitHandler = async () => {
+    const token = window?.localStorage?.getItem("token");
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        action: "_create",
+        did: 1,
+        key: "",
+        msgId: "20170310130900|en_IN",
+        ts: 0,
+        ver: ".01",
+        authToken: token,
+      },
+    };
+    try {
+      const Resp = await axios.post(`/tl-services/bank/guarantee/_search?bgNumber=${getValues("bgNumber")}`, payload);
 
+      console.log("service", Resp.data.newBankGuaranteeList[0]);
+      setSearchExistingBg(Resp.data.newBankGuaranteeList[1]);
+    } catch (error) {
+      return error;
+    }
+  };
+  useEffect(() => {
+    existingBgFormSubmitHandler();
+  }, []);
   const [fileStoreId, setFileStoreId] = useState({});
   const getDocumentData = async (file, fieldName) => {
     const formData = new FormData();
@@ -69,8 +104,15 @@ function ReleaseNew() {
       const Resp = await axios.post("/filestore/v1/files", formData, {});
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
-      // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
-      // setLoader(false);
+      if (fieldName === "uploadBg") {
+        setValue("uploadBgFileName", file.name);
+      }
+      if (fieldName === "fullCertificate") {
+        setValue("fullCertificateFileName", file.name);
+      }
+      if (fieldName === "partialCertificate") {
+        setValue("partialCertificateFileName", file.name);
+      }
     } catch (error) {
       setLoader(false);
       return error;
@@ -125,17 +167,29 @@ function ReleaseNew() {
               <div className="col col-12 ">
                 {watch("releaseBankGuarantee") === "Y" && (
                   <div className="row ">
-                    <div className="col col-4">
-                      <label>
-                        <h2>
-                          Upload New B.G. softcopy
-                          <span style={{ color: "red" }}>*</span>
-                        </h2>
-                      </label>
+                    <Col md={4} xxl lg="3">
                       <div>
-                        <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBg")} />
+                        <label>
+                          <h2>Upload B.G. softcopy </h2>
+                          <FileUpload color="primary" />
+                          <input
+                            type="file"
+                            accept="application/pdf/jpeg/png"
+                            style={{ display: "none" }}
+                            onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBg")}
+                          />
+                          {fileStoreId?.uploadBg ? (
+                            <a onClick={() => getDocShareholding(fileStoreId?.uploadBg)} className="btn btn-sm ">
+                              <VisibilityIcon color="info" className="icon" />
+                            </a>
+                          ) : (
+                            <p></p>
+                          )}
+                          <h3 style={{}}>{watch("uploadBgFileName") ? watch("uploadBgFileName") : null}</h3>{" "}
+                        </label>
                       </div>
-                    </div>
+                      {/* <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBg")} /> */}
+                    </Col>
                   </div>
                 )}
               </div>
@@ -166,17 +220,29 @@ function ReleaseNew() {
                     {watch("typeOfBg") === "1" && (
                       <div>
                         <div className="row">
-                          <div className="col col-4">
-                            <label>
-                              <h2>
-                                Full Completion Certificate.
-                                <span style={{ color: "red" }}>*</span>
-                              </h2>
-                            </label>
+                          <Col md={4} xxl lg="3">
                             <div>
-                              <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "fullCertificate")} />
+                              <label>
+                                <h2>Full Completion Certificate. </h2>
+                                <FileUpload color="primary" />
+                                <input
+                                  type="file"
+                                  accept="application/pdf/jpeg/png"
+                                  style={{ display: "none" }}
+                                  onChange={(e) => getDocumentData(e?.target?.files[0], "fullCertificate")}
+                                />
+                                {fileStoreId?.fullCertificate ? (
+                                  <a onClick={() => getDocShareholding(fileStoreId?.fullCertificate)} className="btn btn-sm ">
+                                    <VisibilityIcon color="info" className="icon" />
+                                  </a>
+                                ) : (
+                                  <p></p>
+                                )}
+                                <h3 style={{}}>{watch("fullCertificateFileName") ? watch("fullCertificateFileName") : null}</h3>{" "}
+                              </label>
                             </div>
-                          </div>
+                            {/* <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBg")} /> */}
+                          </Col>
                         </div>
                       </div>
                     )}
@@ -198,21 +264,29 @@ function ReleaseNew() {
                               {errors?.tcpSubmissionReceived && errors?.tcpSubmissionReceived?.message}
                             </h3>
                           </div>
-                          <div className="col col-4">
-                            <label>
-                              <h2>
-                                Partial Completion Certificate.
-                                <span style={{ color: "red" }}>*</span>
-                              </h2>
-                            </label>
+                          <Col md={4} xxl lg="3">
                             <div>
-                              <input
-                                type="file"
-                                className="form-control"
-                                onChange={(e) => getDocumentData(e?.target?.files[0], "partialCertificate")}
-                              />
+                              <label>
+                                <h2> Partial Completion Certificate. </h2>
+                                <FileUpload color="primary" />
+                                <input
+                                  type="file"
+                                  accept="application/pdf/jpeg/png"
+                                  style={{ display: "none" }}
+                                  onChange={(e) => getDocumentData(e?.target?.files[0], "partialCertificate")}
+                                />
+                                {fileStoreId?.partialCertificate ? (
+                                  <a onClick={() => getDocShareholding(fileStoreId?.partialCertificate)} className="btn btn-sm ">
+                                    <VisibilityIcon color="info" className="icon" />
+                                  </a>
+                                ) : (
+                                  <p></p>
+                                )}
+                                <h3 style={{}}>{watch("partialCertificateFileName") ? watch("partialCertificateFileName") : null}</h3>{" "}
+                              </label>
                             </div>
-                          </div>
+                            {/* <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBg")} /> */}
+                          </Col>
                         </div>
                       </div>
                     )}
@@ -220,6 +294,19 @@ function ReleaseNew() {
                 )}
               </div>
             </div>
+            <Col md={4} xxl lg="3">
+              <div>
+                <button
+                  // id="btnClear"
+                  type="button"
+                  class="btn btn-primary btn-md center-block"
+                  style={{ marginBottom: "-44px" }}
+                  onClick={existingBgFormSubmitHandler}
+                >
+                  Search
+                </button>
+              </div>
+            </Col>
           </Row>
 
           <Row className="justify-content-end">

@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import { useForm, useFieldArray } from "react-hook-form";
 import DDJAYForm from "../Step4/DdjayForm";
+import TextField from "@mui/material/TextField";
 import ResidentialPlottedForm from "./ResidentialPlotted";
 import IndustrialPlottedForm from "./IndustrialPlotted";
 import CommercialPlottedForm from "./CommercialPlotted";
+import NilpForm from "./Nilp";
 import LayoutPlan from "./LayoutPlan";
 import DemarcationPlan from "./DemarcationPlan";
 import { Card, Row, Col, Button, Form } from "react-bootstrap";
@@ -23,6 +25,7 @@ import ScrollToTop from "@egovernments/digit-ui-react-components/src/atoms/Scrol
 import { CardLabelError } from "@egovernments/digit-ui-react-components";
 import { Toast } from "@egovernments/digit-ui-react-components";
 import _ from "lodash";
+import NumberInput from "../../../../components/NumberInput";
 
 const AppliedDetailForm = (props) => {
   const location = useLocation();
@@ -39,6 +42,7 @@ const AppliedDetailForm = (props) => {
   const userInfo = Digit.UserService.getUser()?.info || {};
   const [applicantId, setApplicantId] = useState("");
   const [modalData, setModalData] = useState([]);
+  const [error, setError] = useState({});
   const {
     watch,
     register,
@@ -73,12 +77,23 @@ const AppliedDetailForm = (props) => {
           latitude: "",
         },
       ],
+      detailOfCommunitySites: [
+        {
+          communitySites: "",
+          provided: "",
+        },
+      ],
     },
   });
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: "dgpsDetails",
+  });
+
+  const { fields: detailsArray, append: detailsAppend, remove: detailsRemoce } = useFieldArray({
+    control,
+    name: "detailOfCommunitySites",
   });
 
   // const validateDgpsPoint = () => {
@@ -103,8 +118,8 @@ const AppliedDetailForm = (props) => {
     // if (!validateDgpsPoint()) {
     //   return;
     // }
-    // console.log("data", data);
-    // return;
+    console.log("data", data);
+    return;
     setLoader(true);
     const token = window?.localStorage?.getItem("token");
     const postDistrict = {
@@ -340,6 +355,9 @@ const AppliedDetailForm = (props) => {
       return error;
     }
   };
+
+  const handleWheel = (e) => e.target.blur();
+
   useEffect(() => {
     getSubmitDataLabel();
   }, []);
@@ -492,7 +510,6 @@ const AppliedDetailForm = (props) => {
 
   const dgpsModalData = (data) => {
     setModalData((prev) => [...prev, data?.dgpsDetails]);
-    console.log("data===", data?.dgpsDetails);
     setDGPSModal(!dgpsModal);
   };
 
@@ -1146,7 +1163,179 @@ const AppliedDetailForm = (props) => {
                       </div>
                     </div>
                   )} */}
-                  {/* <div>{Purpose === "DDJAY_APHP" && <DDJAYForm watch={watch} register={register} />}</div> */}
+                  <h6 className="text-black mt-4">
+                    <b>Detail of land use</b>
+                  </h6>
+                  <Col col-12>
+                    <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+                      <Col md={4} xxl lg="3">
+                        <div>
+                          <Form.Label>
+                            <h2>
+                              Total area of the Scheme
+                              <span style={{ color: "red" }}>*</span>
+                            </h2>
+                          </Form.Label>
+                        </div>
+                        <NumberInput disabled control={control} name="totalAreaScheme" customInput={TextField} />
+                      </Col>
+                      <Col md={4} xxl lg="3">
+                        <div>
+                          <Form.Label>
+                            <h2>
+                              Area under Sector Road & Green Belt
+                              <span style={{ color: "red" }}>*</span>
+                            </h2>
+                          </Form.Label>
+                        </div>
+                        <input
+                          type="number"
+                          className="form-control"
+                          {...register("areaUnderSectorRoad")}
+                          onWheel={handleWheel}
+                          onChange={(e) => {
+                            if (e?.target?.value?.length) {
+                              setValue("balanceAreaAfterDeduction", watch("totalAreaScheme") - e?.target?.value)?.toFixed(3);
+                              setValue("areaUnderSectorAndGreenBelt", (e?.target?.value * 50) / 100);
+                            } else {
+                              setValue("balanceAreaAfterDeduction", "");
+                              setValue("balanceArea", "");
+                              setValue("areaUnderSectorAndGreenBelt", "");
+                              setValue("netPlannedArea", "");
+                              setValue("areaUnderUndetermined", "");
+                            }
+                          }}
+                        />
+                      </Col>
+                      <Col md={4} xxl lg="3">
+                        <div>
+                          <Form.Label>
+                            <h2>
+                              Balance area after deducting area under sector road and Green Belt
+                              <span style={{ color: "red" }}>*</span>
+                            </h2>
+                          </Form.Label>
+                        </div>
+                        <input disabled type="number" className="form-control" {...register("balanceAreaAfterDeduction")} />
+                      </Col>
+                      <Col md={4} xxl lg="3">
+                        <div>
+                          <Form.Label>
+                            <h2>
+                              Area under undetermined use
+                              <span style={{ color: "red" }}>*</span>
+                            </h2>
+                          </Form.Label>
+                        </div>
+                        <input
+                          type="number"
+                          className="form-control"
+                          {...register("areaUnderUndetermined")}
+                          onWheel={handleWheel}
+                          onChange={(e) => {
+                            if (e?.target?.value?.length) {
+                              setValue("balanceArea", watch("balanceAreaAfterDeduction") - e?.target?.value)?.toFixed(3);
+                              setValue(
+                                "netPlannedArea",
+                                watch("balanceAreaAfterDeduction") - e?.target?.value + watch("areaUnderSectorAndGreenBelt")
+                              );
+                            } else {
+                              setValue("balanceArea", "");
+                              setValue("netPlannedArea", "");
+                            }
+                          }}
+                        />
+                      </Col>
+                    </Row>
+                    <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+                      {stepData?.ApplicantPurpose?.purpose === "RPL" && (
+                        <Col md={4} xxl lg="3">
+                          <div>
+                            <Form.Label>
+                              <h2>
+                                Area under G.H. = 10% of the total area of the scheme
+                                <span style={{ color: "red" }}>*</span>
+                              </h2>
+                            </Form.Label>
+                          </div>
+                          <input
+                            type="number"
+                            className="form-control"
+                            {...register("areaUnderGH")}
+                            onWheel={handleWheel}
+                            onChange={(e) => {
+                              if (e?.target?.value > (watch("totalAreaScheme") * 10) / 100)
+                                setError({ ...error, ["areaUnderGH"]: "Area Under GH cannot exceed 10% of Total Area of scheme" });
+                              else setError({ ...error, ["areaUnderGH"]: "" });
+                            }}
+                          />
+                        </Col>
+                      )}
+                      <Col md={4} xxl lg="3">
+                        <div>
+                          <Form.Label>
+                            <h2>
+                              Balance area
+                              <span style={{ color: "red" }}>*</span>
+                            </h2>
+                          </Form.Label>
+                        </div>
+                        <input disabled type="number" className="form-control" {...register("balanceArea")} />
+                      </Col>
+                      <Col md={4} xxl lg="3">
+                        <div>
+                          <Form.Label>
+                            <h2>
+                              50% of the Area under Sector Road & Green Belt
+                              <span style={{ color: "red" }}>*</span>
+                            </h2>
+                          </Form.Label>
+                        </div>
+                        <input disabled type="number" className="form-control" {...register("areaUnderSectorAndGreenBelt")} />
+                      </Col>
+                      <Col md={4} xxl lg="3">
+                        <div>
+                          <Form.Label>
+                            <h2>
+                              Net planned area (A+B)
+                              <span style={{ color: "red" }}>*</span>
+                            </h2>
+                          </Form.Label>
+                        </div>
+                        <input disabled type="number" className="form-control" {...register("netPlannedArea")} />
+                      </Col>
+                    </Row>
+                    {stepData?.ApplicantPurpose?.purpose === "NILPC" && (
+                      <Col md={4} xxl lg="3">
+                        <div>
+                          <Form.Label>
+                            <h2>
+                              Area to be provided free of cost to the Government for EWS/AH
+                              <span style={{ color: "red" }}>*</span>
+                            </h2>
+                          </Form.Label>
+                        </div>
+                        <input
+                          disabled
+                          type="number"
+                          className="form-control"
+                          {...register("providedArea")}
+                          onWheel={handleWheel}
+                          onChange={(e) => {
+                            if (e?.target?.value < (watch("netPlannedArea") * 10) / 100)
+                              setError({
+                                ...error,
+                                ["providedArea"]:
+                                  "Minimum 10% area to be provided free of cost to the Government for EWS/Affordable Housing as per amended policy dated 11.05.2022. ",
+                              });
+                            else setError({ ...error, ["providedArea"]: "" });
+                          }}
+                        />
+                        {error?.providedArea && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.providedArea}</h6>}
+                      </Col>
+                    )}
+                  </Col>
+
                   <div>
                     {stepData?.ApplicantPurpose?.purpose === "RPL" && (
                       <ResidentialPlottedForm
@@ -1156,11 +1345,19 @@ const AppliedDetailForm = (props) => {
                         getDocShareholding={getDocShareholding}
                         setValue={setValue}
                         control={control}
+                        fields={detailsArray}
+                        add={detailsAppend}
+                        remove={detailsRemoce}
+                        handleWheel={handleWheel}
+                        setError={setError}
+                        error={error}
                       />
                     )}
                   </div>
-                  {/* <div>{Purpose === "IPL" && <IndustrialPlottedForm register={register} />}</div>
-                  <div>{Purpose === "CPL" && <CommercialPlottedForm register={register} />}</div> */}
+                  <div>{stepData?.ApplicantPurpose?.purpose === "DDJAY_APHP" && <DDJAYForm watch={watch} register={register} />}</div>
+                  <div>{stepData?.ApplicantPurpose?.purpose === "CPL" && <CommercialPlottedForm register={register} />}</div>
+                  <div>{stepData?.ApplicantPurpose?.purpose === "IPL" && <IndustrialPlottedForm register={register} />}</div>
+                  <div>{stepData?.ApplicantPurpose?.purpose === "NILPC" && <NilpForm register={register} />}</div>
                   {/* <h5 className="text-black">NILP </h5>
                   <br></br>
                   <div className="table table-bordered table-responsive">

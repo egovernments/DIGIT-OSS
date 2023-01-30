@@ -43,7 +43,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
   const [data, setData] = useState();
   const [loader, setLoading] = useState(false);
   React.useEffect(async () => {
-    const uuid = userInfo?.info?.uuid;
+    const uuid = userInfo?.info?.uuid; 
     const usersResponse = await Digit.UserService.userSearch(tenantId, { uuid: [uuid] }, {});
     setParentId(usersResponse?.user[0]?.parentId);
     setGenderMF(usersResponse?.user[0]?.gender);

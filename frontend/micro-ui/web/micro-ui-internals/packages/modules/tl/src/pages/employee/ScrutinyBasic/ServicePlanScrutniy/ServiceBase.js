@@ -253,7 +253,7 @@ import React, { useState, useRef, useEffect, useContext } from "react";
 // import Developerinfo from "./Developerinfo";
 // import AppliedLandinfo from "./AppliedLand";
 // import Feeandcharges from "./Feeandcharges";
-
+import ServicePlanCivil from "./ServicePlanCivilEng";
 import ServicePlanService from "./ServicePlan";
 // import JeLandinfo from "./Scrutiny LOI/JE/JE";
 // import DisApprovalList from "./DisApprovalList";
@@ -570,7 +570,11 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
            ></ServicePlanService>
          </div>
          
-
+         <div 
+        //  style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}
+         >
+      <ServicePlanCivil></ServicePlanCivil>
+      </div>
           {/* <JeLandinfo jeLandInfoRef={jeLandInfoRef} passUncheckedList={getUncheckedJeLandInfo}></JeLandinfo> */}
         </div>
       </div>
@@ -596,6 +600,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
           // remarksum={sumrol.egScrutiny !== undefined ? sumrol.egScrutiny : null}
         ></ScrutinyDevelopment>
       </div>
+      
     </div>
   );
 };

@@ -9,6 +9,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 
 const electricalPlanService = () => {
   const {
@@ -278,7 +279,18 @@ const electricalPlanService = () => {
                   <h2>Self-certified drawings from empanelled/certified architects that conform to the standard approved template as per the TCP layout plan / Site plan.</h2>
                 </td>
                 <td component="th" scope="row">
-                  <input type="file" className="form-control mb-4" onChange={(e) => getDocumentData(e?.target?.files[0], "selfCenteredDrawings")} />
+                <label for='file-input-1'>
+                    <FileUploadIcon 
+                    color="primary"
+                    />
+                  </label>
+                  <input 
+                  type="file" 
+                  className="form-control mb-4" 
+                  onChange={(e) => getDocumentData(e?.target?.files[0], "selfCenteredDrawings")} 
+                  id="file-input-1"
+                  style={{display: "none"}}
+                  />
                   {fileStoreId?.selfCenteredDrawings ? 
                   <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.selfCenteredDrawings)}>
                     {" "}
@@ -296,7 +308,18 @@ const electricalPlanService = () => {
                   <h2>Environmental Clearance.</h2>
                 </td>
                 <td component="th" scope="row">
-                  <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "environmentalClearance")} />
+                <label for='file-input-2'>
+                    <FileUploadIcon 
+                    color="primary"
+                    />
+                  </label>
+                  <input 
+                  type="file" 
+                  className="form-control" 
+                  onChange={(e) => getDocumentData(e?.target?.files[0], "environmentalClearance")} 
+                  style={{display: "none"}}
+                  id="file-input-2"
+                  />
                   {fileStoreId?.environmentalClearance ? 
                   <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.environmentalClearance)}>
                     {" "}
@@ -314,7 +337,18 @@ const electricalPlanService = () => {
                   <h2>Electrical plan PDF (OCR Compatible) + GIS format.</h2>
                 </td>
                 <td component="th" scope="row">
-                  <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "pdfFormat")} />
+                <label for='file-input-3'>
+                    <FileUploadIcon 
+                    color="primary"
+                    />
+                  </label>
+                  <input 
+                  type="file" 
+                  className="form-control" 
+                  onChange={(e) => getDocumentData(e?.target?.files[0], "pdfFormat")} 
+                  style={{display: "none"}}
+                  id="file-input-3"
+                  />
                   {fileStoreId?.pdfFormat ? 
                   <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.pdfFormat)}>
                     {" "}
@@ -332,7 +366,18 @@ const electricalPlanService = () => {
                   <h2>Electrical plan in AutoCAD (DXF) file.</h2>
                 </td>
                 <td component="th" scope="row">
-                  <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "autoCad")} />
+                <label for='file-input-4'>
+                    <FileUploadIcon 
+                    color="primary"
+                    />
+                  </label>
+                  <input 
+                  type="file" 
+                  className="form-control" 
+                  onChange={(e) => getDocumentData(e?.target?.files[0], "autoCad")} 
+                  style={{display: "none"}}
+                  id="file-input-4"
+                  />
                   {fileStoreId?.autoCad ? 
                   <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.autoCad)}>
                     {" "}
@@ -350,7 +395,18 @@ const electricalPlanService = () => {
                   <h2>Certified copy of the Electrical plan verified by a third party.</h2>
                 </td>
                 <td component="th" scope="row">
-                  <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "verifiedPlan")} />
+                <label for='file-input-5'>
+                    <FileUploadIcon 
+                    color="primary"
+                    />
+                  </label>
+                  <input 
+                  type="file" 
+                  className="form-control" 
+                  onChange={(e) => getDocumentData(e?.target?.files[0], "verifiedPlan")} 
+                  style={{display: "none"}}
+                  id="file-input-5"
+                  />
                   {fileStoreId?.verifiedPlan ? 
                   <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.verifiedPlan)}>
                     {" "}

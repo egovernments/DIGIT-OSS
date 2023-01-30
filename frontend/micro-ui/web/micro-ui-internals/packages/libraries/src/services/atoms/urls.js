@@ -26,7 +26,7 @@ const Urls = {
   EmployeeSearch: "/egov-hrms/employees/_search",
 
   InboxSearch: "/inbox/v1/_search",
-
+  ssoLoginUrl:"/user/users/_ssoCitizen",
   UserSearch: "/user/_search",
   UserLogout : "/user/_logout",
 

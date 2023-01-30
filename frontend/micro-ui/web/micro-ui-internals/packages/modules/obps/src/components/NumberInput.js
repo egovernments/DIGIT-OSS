@@ -1,5 +1,6 @@
 import React from "react";
 import NumberFormat from "react-number-format";
+// import { NumericFormat } from "react-number-format";
 import { Controller } from "react-hook-form";
 
 const NumberInput = (props) => {

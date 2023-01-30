@@ -1,9 +1,9 @@
 import { Dropdown, FilterFormField, Loader, RadioButtons } from "@egovernments/digit-ui-react-components";
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import { Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
-const FilterFormFieldsComponent = ({ controlFilterForm }) => {
+const FilterFormFieldsComponent = ({ controlFilterForm,applicationStatus, setApplicationStatus, serviceType, setServiceType}) => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { data: applicationTypesOfBPA, isLoading: loadingApplicationTypesOfBPA } = Digit.Hooks.obps.SearchMdmsTypes.useApplicationTypes(tenantId);
@@ -13,13 +13,50 @@ const FilterFormFieldsComponent = ({ controlFilterForm }) => {
     { code: "Not Accepted", name: `${t("EDCR_NOT_ACCEPTED")}` },
   ];
 
+
+
+
   return (
     <>
-      <FilterFormField>
+
+      <div className="filter-label sub-filter-label" style={{ fontWeight: "400", fontSize: "16px" }}>
+        {t("BPA_COMMON_TABLE_COL_APP_STATUS_LABEL")}
+      </div>
+      <RadioButtons
+        onSelect={(e) => {
+          setApplicationStatus(e.code);
+          Digit.SessionStorage.set("EDCR_BACK", "");
+        }}
+        selectedOption={availableOptions.filter((option) => option.code === applicationStatus)?.[0]}
+        optionsKey="name"
+        options={availableOptions}
+      />
+
+
+      <div className="filter-label sub-filter-label" style={{ fontWeight: "400", fontSize: "16px" }}>
+        {t("BPA_BASIC_DETAILS_SERVICE_TYPE_LABEL")}
+      </div>
+      <Dropdown
+        t={t}
+        option={applicationTypesOfBPA}
+        selected={applicationTypesOfBPA?.filter((option) => option.code === serviceType)?.[0]}
+        optionKey={"i18nKey"}
+        select={(e) => {
+          setServiceType(e.code);
+          Digit.SessionStorage.set("EDCR_BACK", "");
+        }}
+      />
+
+
+      {/* <FilterFormField>
         <Controller
           name="status"
           control={controlFilterForm}
-          render={(props) => {
+          render={({
+            field: { onChange, onBlur, value, name, ref },
+            fieldState: { invalid, isTouched, isDirty, error },
+            formState,
+          }) => {
             return (
               <>
                 <div className="filter-label sub-filter-label" style={{ fontWeight: "400", fontSize: "16px" }}>
@@ -27,20 +64,20 @@ const FilterFormFieldsComponent = ({ controlFilterForm }) => {
                 </div>
                 <RadioButtons
                   onSelect={(e) => {
-                    props.onChange(e.code);
+                    onChange(e.code);
                     Digit.SessionStorage.set("EDCR_BACK", "");
                   }}
-                  selectedOption={availableOptions.filter((option) => option.code === props.value)[0]}
+                  selectedOption={availableOptions.filter((option) => option.code === value)?.[0]}
                   optionsKey="name"
-                  name="status"
                   options={availableOptions}
+                  inputRef={ref}
                 />
               </>
             );
           }}
         />
-      </FilterFormField>
-      <FilterFormField>
+      </FilterFormField> */}
+      {/* <FilterFormField>
         <Controller
           name="appliactionType"
           control={controlFilterForm}
@@ -66,7 +103,7 @@ const FilterFormFieldsComponent = ({ controlFilterForm }) => {
             );
           }}
         />
-      </FilterFormField>
+      </FilterFormField> */}
     </>
   );
 };
