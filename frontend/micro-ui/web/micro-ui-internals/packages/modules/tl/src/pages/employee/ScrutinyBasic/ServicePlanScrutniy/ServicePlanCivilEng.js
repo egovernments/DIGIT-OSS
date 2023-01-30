@@ -93,7 +93,7 @@ import { useStyles } from "../css/personalInfoChild.style.js";
     // console.log("logg123" ,userRoles, showActionButton );
     const [selects, setSelects] = useState();
     const [showhide, setShowhide] = useState("");
-
+    const apiResponse = props.apiResponse
     const classes = useStyles();
    
   
@@ -109,6 +109,7 @@ import { useStyles } from "../css/personalInfoChild.style.js";
     control,
     setValue,
     watch,
+    getValues,
   } = useForm({
     mode: "onChange",
 
@@ -119,12 +120,44 @@ import { useStyles } from "../css/personalInfoChild.style.js";
 
   const [developerDataLabel, setDeveloperDataLabel] = useState([]);
 
-  const servicePlan = (data) => console.log("tcp18" ,data);
-
+  const servicePlan = (data) => {
+    console.log("tcp18",data)
+  };
+  
   const handleClose = () => {
     setOpen(false)
     window.location.href = `/digit-ui/employee`
   }
+  useEffect(() => {
+    if (developerDataLabel) {
+      setValue("electricInfra", apiResponse?.additionalDetails?.electricInfra);
+      setValue("electricDistribution", apiResponse?.additionalDetails?.electricDistribution);
+      setValue("sewerLine", apiResponse?.additionalDetails?.sewerLine);
+      setValue("stormwater", apiResponse?.additionalDetails?.stormwater);
+      setValue("capacityUgt", apiResponse?.additionalDetails?.capacityUgt);
+      setValue("capacityStp", apiResponse?.additionalDetails?.capacityStp);
+      setValue("specifications", apiResponse?.additionalDetails?.specifications);
+      setValue("waterSupply", apiResponse?.additionalDetails?.waterSupply);
+      setValue("sewerNetwork", apiResponse?.additionalDetails?.sewerNetwork);
+      setValue("stormwaterDrainage", apiResponse?.additionalDetails?.stormwaterDrainage);
+      setValue("roadNetwork", apiResponse?.additionalDetails?.roadNetwork);
+      setValue("horticlture", apiResponse?.additionalDetails?.horticlture);
+      setValue("acreCost", apiResponse?.additionalDetails?.acreCost);
+      setValue("selfCertified", apiResponse?.additionalDetails?.selfCertified);
+      setValue("streetLightening", apiResponse?.additionalDetails?.streetLightening);
+      // setValue("electricDistribution", apiResponse?.additionalDetails?.electricDistribution);
+      // setValue("electricDistribution", apiResponse?.additionalDetails?.electricDistribution);
+      // setValue("electricDistribution", apiResponse?.additionalDetails?.electricDistribution);
+    }})
+  
+  useEffect(()=>{
+    const subscription = watch((value, { name, type }) => {
+      console.log("logger12321",value);
+      props.setAdditionalDetails(value);
+    });
+    return () => subscription.unsubscribe();
+  }, [watch]);
+
  
   return (
     <React.Fragment>
@@ -134,7 +167,7 @@ import { useStyles } from "../css/personalInfoChild.style.js";
         {/* <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Electrical Plan </h4> */}
         <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "20px", marginBottom: "52px" }}>
           <Row  style={{ marginTop: 4 , marginBottom: 4 }}>
-           
+          {/* {JSON.stringify(apiResponse?.additionalDetails?.electricDistribution)} */}
             <Col md={6} xxl lg="6">
               <div>
                 <Form.Label className={classes.formLabel}>
@@ -429,6 +462,7 @@ import { useStyles } from "../css/personalInfoChild.style.js";
                 id="default-radio"
                 label="No"
                 name="false"
+                disabled={!showActionButton}
                 {...register("sewerNetwork")}
                 inline
               ></Form.Check>
