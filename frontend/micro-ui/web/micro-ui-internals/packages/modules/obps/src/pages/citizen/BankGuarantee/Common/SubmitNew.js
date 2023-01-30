@@ -237,48 +237,43 @@ function SubmitNew() {
               </select>
             </Col>
             <Col md={4} xxl lg="3">
-              <div>
-                <button
-                  // id="btnClear"
-                  type="button"
-                  class="btn btn-primary btn-md center-block"
-                  style={{ marginBottom: "-44px" }}
-                  onClick={submitNewFormSubmitHandler}
-                >
-                  Search
-                </button>
-              </div>
+              <br></br>
+              <button
+                // id="btnClear"
+                type="button"
+                class="btn btn-primary btn-md center-block"
+                style={{ marginBottom: "-44px" }}
+                onClick={submitNewFormSubmitHandler}
+              >
+                Search
+              </button>
             </Col>
           </Row>
           {watch("typeOfBg") === "SPE" && (
-            <div className="row">
+            <Row className="col-12">
               <Col md={4} xxl lg="3">
-                <div>
-                  <Form.Label>
-                    <h2>Amount (in fig)</h2>
-                  </Form.Label>
-                </div>
+                <Form.Label>
+                  <h2>Amount (in fig)</h2>
+                </Form.Label>
                 <input type="text" className="form-control" placeholder="" {...register("amountInFig")} />
               </Col>
               <Col md={4} xxl lg="3">
-                <div>
-                  <Form.Label>
-                    <h2>Amount (in words)</h2>
-                  </Form.Label>
-                </div>
+                <Form.Label>
+                  <h2>Amount (in words)</h2>
+                </Form.Label>
+
                 <input type="text" className="form-control" placeholder="" {...register("amountInWords")} />
               </Col>
-            </div>
+            </Row>
           )}
 
           {watch("typeOfBg") === "IDW" && (
-            <div className="row">
+            <Row className="col-12">
               <Col md={4} xxl lg="3">
-                <div>
-                  <Form.Label>
-                    <h2>Amount (in fig)</h2>
-                  </Form.Label>
-                </div>
+                <Form.Label>
+                  <h2>Amount (in fig)</h2>
+                </Form.Label>
+
                 <input
                   type="text"
                   className="form-control"
@@ -288,11 +283,10 @@ function SubmitNew() {
                 />
               </Col>
               <Col md={4} xxl lg="3">
-                <div>
-                  <Form.Label>
-                    <h2>Amount (in words)</h2>
-                  </Form.Label>
-                </div>
+                <Form.Label>
+                  <h2>Amount (in words)</h2>
+                </Form.Label>
+
                 <input
                   type="text"
                   className="form-control"
@@ -301,16 +295,15 @@ function SubmitNew() {
                   disabled={existingBgNumber?.length > 0 ? true : false}
                 />
               </Col>
-            </div>
+            </Row>
           )}
           {watch("typeOfBg") === "EDC" && (
-            <div className="row">
+            <Row className="col-12">
               <Col md={4} xxl lg="3">
-                <div>
-                  <Form.Label>
-                    <h2>Amount (in fig)</h2>
-                  </Form.Label>
-                </div>
+                <Form.Label>
+                  <h2>Amount (in fig)</h2>
+                </Form.Label>
+
                 <input
                   type="text"
                   className="form-control"
@@ -320,11 +313,10 @@ function SubmitNew() {
                 />
               </Col>
               <Col md={4} xxl lg="3">
-                <div>
-                  <Form.Label>
-                    <h2>Amount (in words)</h2>
-                  </Form.Label>
-                </div>
+                <Form.Label>
+                  <h2>Amount (in words)</h2>
+                </Form.Label>
+
                 <input
                   type="text"
                   className="form-control"
@@ -333,7 +325,7 @@ function SubmitNew() {
                   disabled={existingBgNumber?.length > 0 ? true : false}
                 />
               </Col>
-            </div>
+            </Row>
           )}
 
           {/* <Col md={4} xxl lg="3">
@@ -470,15 +462,16 @@ function SubmitNew() {
                     style={{ display: "none" }}
                     onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBg")}
                   />
+
+                  {fileStoreId?.uploadBg ? (
+                    <a onClick={() => getDocShareholding(fileStoreId?.uploadBg)} className="btn btn-sm ">
+                      <VisibilityIcon color="info" className="icon" />
+                    </a>
+                  ) : (
+                    <p></p>
+                  )}
+                  <h3 style={{}}>{watch("uploadBgFileName") ? watch("uploadBgFileName") : null}</h3>
                 </label>
-                {fileStoreId?.uploadBg ? (
-                  <a onClick={() => getDocShareholding(fileStoreId?.uploadBg)} className="btn btn-sm ">
-                    <VisibilityIcon color="info" className="icon" />
-                  </a>
-                ) : (
-                  <p></p>
-                )}
-                <h3 style={{}}>{watch("uploadBgFileName") ? watch("uploadBgFileName") : null}</h3>
               </div>
               {/* <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBg")} /> */}
             </Col>
@@ -517,24 +510,23 @@ function SubmitNew() {
                           <span style={{ color: "red" }}>*</span>
                         </h2>
                         <FileUpload color="primary" />
-                        <div>
-                          <input
-                            type="file"
-                            accept="application/pdf/jpeg/png"
-                            style={{ display: "none" }}
-                            onChange={(e) => getDocumentData(e?.target?.files[0], "tcpSubmissionReceived")}
-                          />
-                        </div>
-                      </label>
-                      {fileStoreId?.tcpSubmissionReceived ? (
-                        <a onClick={() => getDocShareholding(fileStoreId?.tcpSubmissionReceived)} className="btn btn-sm ">
-                          <VisibilityIcon color="info" className="icon" />
-                        </a>
-                      ) : (
-                        <p></p>
-                      )}
-                      <h3 style={{}}>{watch("tcpSubmissionReceivedFileName") ? watch("tcpSubmissionReceivedFileName") : null}</h3>
 
+                        <input
+                          type="file"
+                          accept="application/pdf/jpeg/png"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "tcpSubmissionReceived")}
+                        />
+
+                        {fileStoreId?.tcpSubmissionReceived ? (
+                          <a onClick={() => getDocShareholding(fileStoreId?.tcpSubmissionReceived)} className="btn btn-sm ">
+                            <VisibilityIcon color="info" className="icon" />
+                          </a>
+                        ) : (
+                          <p></p>
+                        )}
+                        <h3 style={{}}>{watch("tcpSubmissionReceivedFileName") ? watch("tcpSubmissionReceivedFileName") : null}</h3>
+                      </label>
                       {/* <div>
                         <input
                           type="file"
