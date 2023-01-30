@@ -439,21 +439,33 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
     if (formType === "devTypeDocument") {
       if (getValues("devTypeDocument")?.includes(file.name)) {
         setShowToastError({ key: "error" });
+        setTimeout(() => {
+          setShowToastError(null)
+        }, 2000);
         return;
       }
     } else if (formType === "hrduModalActFile") {
       if (getValues("hrduModalActFile")?.includes(file.name)) {
         setShowToastError({ key: "error" });
+        setTimeout(() => {
+          setShowToastError(null)
+        }, 2000);
         return;
       }
     } else if (formType === "designatedDirectorsFile") {
       if (getValues("designatedDirectorsFile")?.includes(file.name)) {
         setShowToastError({ key: "error" });
+        setTimeout(() => {
+          setShowToastError(null)
+        }, 2000);
         return;
       }
     } else if (formType === "alreadyObtaileLicFile") {
       if (getValues("alreadyObtaileLicFile")?.includes(file.name)) {
         setShowToastError({ key: "error" });
+        setTimeout(() => {
+          setShowToastError(null)
+        }, 2000);
         return;
       }
     } else if (formType === "outsideHrDocY") {
@@ -464,6 +476,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
     } else if (formType === "techicalExpertFile") {
       if (getValues("techicalExpertFile")?.includes(file.name)) {
         setShowToastError({ key: "error" });
+        setTimeout(() => {
+          setShowToastError(null)
+        }, 2000);
         return;
       }
     }
@@ -482,6 +497,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
 
       setLoading(false);
       setShowToast({ key: "success" });
+      setTimeout(() => {
+        setShowToast(null)
+      }, 2000);
       console.log(Resp?.data?.files);
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
@@ -570,7 +588,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
         // architectDegree: Documents?.architectDegree,
         // townPlannerDegree: Documents?.townPlannerDegree
       };
-      setModalCapacityDevelopColonyHdruAct((prev) => [...prev, values]);
+      setModalCapacityDevelopColonyHdruAct(values);
       console.log("WIHT DOC", values);
       // getDocData();
       // getDocValidLic();
@@ -825,7 +843,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                 data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm"
               ? !Documents?.netWorthOfPartners || !Documents?.netWorthOfFirm
               : false) ||
-            (permissionGrantedHRDU === "Y" && capacityDevelopColonyHdruAct.length ? false : permissionGrantedHRDU === "N" ? false : true) ||
+            (permissionGrantedHRDU === "Y" && capacityDevelopColonyHdruAct?.length ? false : permissionGrantedHRDU === "N" ? false : true) ||
             (technicalCapacityOutsideHaryana === "Y" &&
             technicalCapacityOutsideHaryanaDetails.authority &&
             technicalCapacityOutsideHaryanaDetails.project &&

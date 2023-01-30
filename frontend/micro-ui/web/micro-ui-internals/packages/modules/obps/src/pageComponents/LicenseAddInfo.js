@@ -90,7 +90,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
       // console.log("STAKEHOLDER",getDevDetails?.data?.devDetail[0]?.addInfo?.registeredContactNo); 
       setShowDevTypeFields(developerDataGet?.devDetail[0]?.applicantType?.developerType || devType);
-      // setName(developerDataGet?.devDetail[0]?.addInfo?.name);
+      setName(developerDataGet?.devDetail[0]?.addInfo?.name);
       setCompanyName(developerDataGet?.devDetail[0]?.addInfo?.companyName);
       setIncorporation(developerDataGet?.devDetail[0]?.addInfo?.incorporationDate);
       setRegistered(developerDataGet?.devDetail[0]?.addInfo?.registeredAddress);
@@ -99,6 +99,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       setDOB(developerDataGet?.devDetail[0]?.addInfo?.dob);
       setGender(developerDataGet?.devDetail[0]?.addInfo?.gender)
       setPanNumber(developerDataGet?.devDetail[0]?.addInfo?.PanNumber);
+      setPanIsValid(developerDataGet?.devDetail[0]?.addInfo?.PanNumber ? true : false);
       // setMobile(developerDataGet?.devDetail[0]?.addInfo?.mobileNumber);
       setGST(developerDataGet?.devDetail[0]?.addInfo?.gst_Number);
       setTbName(developerDataGet?.devDetail[0]?.addInfo?.sharName);
@@ -150,7 +151,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
 
 
-  const [name, setName] = useState((!isOpenLinkFlow ? userInfo?.info?.name : "") || formData?.LicneseDetails?.name || formData?.formData?.LicneseDetails?.name || "");
+  const [name, setName] = useState(formData?.LicneseDetails?.name || formData?.formData?.LicneseDetails?.name || "");
   const [mobileNumberUser, setMobileNumber] = useState((!isOpenLinkFlow ? userInfo?.info?.mobileNumber : "") ||
     formData?.LicneseDetails?.mobileNumberUser || formData?.formData?.LicneseDetails?.mobileNumberUser || ""
   );
@@ -314,6 +315,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   function SelectName(e) {
     if(!e.target.value || e.target.value.match("^[a-zA-z ]*$")){
       setName(e.target.value);
+      setPanIsValid(false);
     }
   }
   function setMobileNo(e) {
@@ -346,11 +348,13 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   }
   function setDateofBirth(e) {
     setDOB(e.target.value);
+    setPanIsValid(false);
   }
 
   function setGenderName(value) {
     console.log("GENDER", value.target.value);
     setGender(value.target.value);
+    setPanIsValid(false);
   }
 
   function selectPanNumber(e) {
@@ -360,6 +364,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     // }
     if (!e.target.value || /^\w+$/.test(e.target.value)) {
       setPanNumber(e.target.value.toUpperCase());
+      setPanIsValid(false);
       // if (e.target.value === 10) {
       //   alert("HEY")
       //   panVerification();
@@ -498,16 +503,25 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     if (type === "existingColonizer") {
       if (getValues("existingColonizerFiles")?.includes(file.name)) {
         setShowToastError({ key: "error" });
+        setTimeout(() => {
+          setShowToastError(null)
+        }, 2000);
         return;
       }
     } else if (type === "shareholdingPattern") {
       if (getValues("shareholdingPatternFiles")?.includes(file.name)) {
         setShowToastError({ key: "error" });
+        setTimeout(() => {
+          setShowToastError(null)
+        }, 2000);
         return;
       }
     } else if (type === "directorInfoPdf") {
       if (getValues("directorInfoPdfFiles")?.includes(file.name)) {
         setShowToastError({ key: "error" });
+        setTimeout(() => {
+          setShowToastError(null)
+        }, 2000);
         return;
       }
     }
@@ -525,6 +539,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       });
       setLoading(false);
       setShowToast({ key: "success" });
+      setTimeout(() => {
+        setShowToast(null)
+      }, 2000);
       console.log(Resp?.data?.files?.[0]?.fileStoreId, fieldName, type, index);
 
       if (type === "existingColonizer") {
@@ -851,9 +868,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
             // isDisabled={
             //   !showDevTypeFields || (showDevTypeFields === "Individual" && (!name || !mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) || !emailId?.match(Digit.Utils.getPattern('Email')))) || (showDevTypeFields === "Others" && othersArray.length) || (showDevTypeFields === "Proprietorship Firm") || (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others" && (!cin_Number?.match(Digit.Utils.getPattern('CIN')) || !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) || !gst_Number?.match(Digit.Utils.getPattern('GSTNo')) || !((existingColonizer === "N") || (existingColonizer === "Y" && existingColonizerDetails.aggreementBtw && existingColonizerDetails.boardResolution && existingColonizerDetails.dob && existingColonizerDetails.pan && existingColonizerDetails.pan.match(Digit.Utils.getPattern('PAN')) && existingColonizerDetails.licNo && existingColonizerDetails.licDate && existingColonizerDetails.licValidity && existingColonizerDetails.licPurpose))))
             // }
-            isDisabled={(showDevTypeFields === "Individual" || showDevTypeFields === "Proprietorship Firm" || showDevTypeFields === "Hindu Undivided Family") ? !(name && panIsValid && mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) && emailId?.match(Digit.Utils.getPattern('Email')) && gst_Number?.match(Digit.Utils.getPattern('GSTNo'))) : (showDevTypeFields === "Others") ? (!othersArray.length) : (showDevTypeFields === "Proprietorship Firm") ? false : (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others") ?
+            isDisabled={(showDevTypeFields === "Individual" || showDevTypeFields === "Proprietorship Firm" || showDevTypeFields === "Hindu Undivided Family") ? !(name && panIsValid && mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) && emailId?.match(Digit.Utils.getPattern('Email')) && gst_Number?.match(Digit.Utils.getPattern('GSTNo'))) : (showDevTypeFields === "Others") ? (!othersArray.length) : (showDevTypeFields === "Proprietorship Firm") ? false : (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others" && showDevTypeFields !== "Limited Liability Partnership")   ?
               (
-                ((showDevTypeFields === "Trust") ? false : !csrNumber?.match(Digit.Utils.getPattern('CSR')) || (showDevTypeFields === "Company") ? false : !cin_Number?.match(Digit.Utils.getPattern('CIN'))) || !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) || (showDevTypeFields === "Trust" ? false : !gst_Number?.match(Digit.Utils.getPattern('GSTNo'))) || !registeredAddress.match(Digit.Utils.getPattern('Address')) || (!existingColonizerDetails.licNo.match(Digit.Utils.getPattern('OldLicenceNo'))) || !(modalValuesArray?.length) || !(DirectorData.length) || !((existingColonizer === "N") || (existingColonizer === "Y" && existingColonizerDetails.name && existingColonizerDetails.licNo && existingColonizerDetails.licDate))) : true}
+                ((showDevTypeFields === "Trust") ? false : !csrNumber?.match(Digit.Utils.getPattern('CSR')) || (showDevTypeFields === "Company") ? false : !cin_Number?.match(Digit.Utils.getPattern('CIN'))) || !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) || (showDevTypeFields === "Trust" ? false : !gst_Number?.match(Digit.Utils.getPattern('GSTNo'))) || !registeredAddress.match(Digit.Utils.getPattern('Address')) || (!existingColonizerDetails.licNo.match(Digit.Utils.getPattern('OldLicenceNo'))) || !(modalValuesArray?.length) || !(DirectorData.length) || !((existingColonizer === "N") || (existingColonizer === "Y" && existingColonizerDetails.name && existingColonizerDetails.licNo && existingColonizerDetails.licDate))) : (showDevTypeFields === "Limited Liability Partnership") ? !(llp_Number && llp_Number.match(Digit.Utils.getPattern('LLP')) && incorporationDate && registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) && email && companyName && registeredContactNo && registeredAddress && gst_Number && gst_Number?.match(Digit.Utils.getPattern('GSTNo'))) : true}
             t={t}
           >
             <div className="happy">
@@ -944,7 +961,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             placeholder={mobileNumberUser}
                             name="mobileNumberUser"
                             required={true}
-                            onChange={(e) => setMobileNumber(e.target.value)}
+                            onChange={(e) => {setMobileNumber(e.target.value); setPanIsValid(false);}}
                             disabled
                             className="form-control"
                           />
@@ -970,7 +987,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                         <div className="form-group">
                           <label htmlFor="dob">Select gender <span className="text-danger font-weight-bold">*</span></label>
                           <Select
-                            value={gender}
+                            value={gender || ''}
                             onChange={setGenderName}
                             className="w-100 form-control"
                             variant="standard"
@@ -1372,7 +1389,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             date={incorporationDate}
                             value={incorporationDate}
                             placeholder={incorporationDate}
-                            onChange={(e) => setIncorporation(e)}
+                            onChange={(e) => setIncorporation(e.target.value)}
                             className="form-control"
                             disabled={showDevTypeFields === "Company"}
                           />
