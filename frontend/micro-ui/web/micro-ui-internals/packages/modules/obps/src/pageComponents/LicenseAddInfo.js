@@ -97,7 +97,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       setUserEmail(developerDataGet?.devDetail[0]?.addInfo?.email);
       setUserEmailInd(developerDataGet?.devDetail[0]?.addInfo?.emailId);
       setDOB(developerDataGet?.devDetail[0]?.addInfo?.dob);
-      setGender(licenseDataList?.devDetail[0]?.addInfo?.gender)
+      setGender(developerDataGet?.devDetail[0]?.addInfo?.gender)
       setPanNumber(developerDataGet?.devDetail[0]?.addInfo?.PanNumber);
       // setMobile(developerDataGet?.devDetail[0]?.addInfo?.mobileNumber);
       setGST(developerDataGet?.devDetail[0]?.addInfo?.gst_Number);
@@ -349,8 +349,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   }
 
   function setGenderName(value) {
-    console.log("GENDER", value);
-    setGender(value);
+    console.log("GENDER", value.target.value);
+    setGender(value.target.value);
   }
 
   function selectPanNumber(e) {
@@ -374,11 +374,11 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         "txnId": "f7f1469c-29b0-4325-9dfc-c567200a70f7",
         "format": "xml",
         "certificateParameters": {
-          "panno": PanNumber,
-          "PANFullName": name,
-          "FullName": name,
-          "DOB": dob,
-          "GENDER": "MALE"
+          panno: PanNumber,
+          PANFullName: name,
+          FullName: name,
+          DOB: dob,
+          GENDER: gender,
         },
         "consentArtifact": {
           "consent": {
@@ -734,7 +734,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         name: name,
         mobileNumberUser: mobileNumberUser,
         dob:dob,
-        gender: gender?.value,
+        gender: gender,
         PanNumber: PanNumber,
         cin_Number: cin_Number,
         llp_Number: llp_Number,
@@ -851,7 +851,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
             // isDisabled={
             //   !showDevTypeFields || (showDevTypeFields === "Individual" && (!name || !mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) || !emailId?.match(Digit.Utils.getPattern('Email')))) || (showDevTypeFields === "Others" && othersArray.length) || (showDevTypeFields === "Proprietorship Firm") || (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others" && (!cin_Number?.match(Digit.Utils.getPattern('CIN')) || !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) || !gst_Number?.match(Digit.Utils.getPattern('GSTNo')) || !((existingColonizer === "N") || (existingColonizer === "Y" && existingColonizerDetails.aggreementBtw && existingColonizerDetails.boardResolution && existingColonizerDetails.dob && existingColonizerDetails.pan && existingColonizerDetails.pan.match(Digit.Utils.getPattern('PAN')) && existingColonizerDetails.licNo && existingColonizerDetails.licDate && existingColonizerDetails.licValidity && existingColonizerDetails.licPurpose))))
             // }
-            isDisabled={(showDevTypeFields === "Individual" || showDevTypeFields === "Proprietorship Firm" || showDevTypeFields === "Hindu Undivided Family") ? !(name && mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) && emailId?.match(Digit.Utils.getPattern('Email')) && gst_Number?.match(Digit.Utils.getPattern('GSTNo'))) : (showDevTypeFields === "Others") ? (!othersArray.length) : (showDevTypeFields === "Proprietorship Firm") ? false : (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others") ?
+            isDisabled={(showDevTypeFields === "Individual" || showDevTypeFields === "Proprietorship Firm" || showDevTypeFields === "Hindu Undivided Family") ? !(name && panIsValid && mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) && emailId?.match(Digit.Utils.getPattern('Email')) && gst_Number?.match(Digit.Utils.getPattern('GSTNo'))) : (showDevTypeFields === "Others") ? (!othersArray.length) : (showDevTypeFields === "Proprietorship Firm") ? false : (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others") ?
               (
                 ((showDevTypeFields === "Trust") ? false : !csrNumber?.match(Digit.Utils.getPattern('CSR')) || (showDevTypeFields === "Company") ? false : !cin_Number?.match(Digit.Utils.getPattern('CIN'))) || !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) || (showDevTypeFields === "Trust" ? false : !gst_Number?.match(Digit.Utils.getPattern('GSTNo'))) || !registeredAddress.match(Digit.Utils.getPattern('Address')) || (!existingColonizerDetails.licNo.match(Digit.Utils.getPattern('OldLicenceNo'))) || !(modalValuesArray?.length) || !(DirectorData.length) || !((existingColonizer === "N") || (existingColonizer === "Y" && existingColonizerDetails.name && existingColonizerDetails.licNo && existingColonizerDetails.licDate))) : true}
             t={t}
@@ -970,7 +970,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                         <div className="form-group">
                           <label htmlFor="dob">Select gender <span className="text-danger font-weight-bold">*</span></label>
                           <Select
-                            value={gender?.value}
+                            value={gender}
+                            selected={gender}
+                            optionKey="code"
                             onChange={setGenderName}
                             className="w-100 form-control"
                             variant="standard"
@@ -1025,10 +1027,10 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                           <label htmlFor="name">GST No. {showDevTypeFields !== "Trust" && <span className="text-danger font-weight-bold">*</span>}</label>
                           <input
                             type="text"
+                            name="gst_Number"
                             value={gst_Number}
                             placeholder={gst_Number}
                             onChange={(e) => setGST(e.target.value.toUpperCase())}
-                            name="gst_Number"
                             required={true}
                             className="form-control"
                           />
