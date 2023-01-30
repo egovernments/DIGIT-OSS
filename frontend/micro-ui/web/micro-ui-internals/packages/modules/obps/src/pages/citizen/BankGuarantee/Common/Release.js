@@ -82,10 +82,7 @@ function ReleaseNew(props) {
       const Resp = await axios.post(`/tl-services/bank/guarantee/_search?bgNumber=${getValues("bgNumber")}`, payload);
 
       console.log("service", Resp.data.newBankGuaranteeList[0]);
-      setSearchExistingBg(Resp.data.newBankGuaranteeList[0]);
-
-      const userData = Resp?.data?.LicenseDetails?.[0];
-      setStepData(userData);
+      setSearchExistingBg(Resp.data.newBankGuaranteeList[1]);
     } catch (error) {
       return error;
     }
