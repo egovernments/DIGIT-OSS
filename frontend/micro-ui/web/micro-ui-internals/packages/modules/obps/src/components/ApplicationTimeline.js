@@ -48,7 +48,7 @@ const ApplicationTimeline = ({ id, tenantId }) => {
     switch (nextAction?.action) {
       case "PAY":
         return (
-          <div style={{ marginTop: "24px" }}>
+          <div style={{ marginTop: "24px" }} className="action-bar-wrap">
             <Link
               to={{ pathname: `/digit-ui/citizen/payment/collect/${data?.processInstances?.[0]?.moduleName}/${data?.processInstances?.[0]?.businessId}`,
               state: { tenantId: data?.processInstances?.[0]?.tenantId },}}
