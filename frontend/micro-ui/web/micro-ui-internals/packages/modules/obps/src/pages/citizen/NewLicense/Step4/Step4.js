@@ -103,8 +103,8 @@ const AppliedDetailForm = (props) => {
     // if (!validateDgpsPoint()) {
     //   return;
     // }
-    console.log("data", data);
-    return;
+    // console.log("data", data);
+    // return;
     setLoader(true);
     const token = window?.localStorage?.getItem("token");
     const postDistrict = {
@@ -117,6 +117,7 @@ const AppliedDetailForm = (props) => {
         DetailsofAppliedLand: {
           dgpsDetails: modalData,
           DetailsAppliedLandPlot: {
+            ...data,
             // regularOption: data?.regularOption,
             // resplotno: data?.resplotno,
             // reslengthmtr: data?.reslengthmtr,
@@ -319,16 +320,16 @@ const AppliedDetailForm = (props) => {
     }
   };
 
-  useEffect(() => {
-    const valueData = stepData?.DetailsofAppliedLand;
-    if (valueData) {
-      Object?.keys(valueData?.DetailsAppliedLandPlot)?.map((item) => setValue(item, valueData?.DetailsAppliedLandPlot[item]));
-      Object?.keys(valueData?.DetailsAppliedLandNILP)?.map((item) => setValue(item, valueData?.DetailsAppliedLandNILP[item]));
-      valueData?.dgpsDetails.map((item, index) => {
-        setValue(`dgpsDetails.${index}.longitude`, item?.longitude), setValue(`dgpsDetails.${index}.latitude`, item?.latitude);
-      });
-    }
-  }, [stepData]);
+  // useEffect(() => {
+  //   const valueData = stepData?.DetailsofAppliedLand;
+  //   if (valueData) {
+  //     Object?.keys(valueData?.DetailsAppliedLandPlot)?.map((item) => setValue(item, valueData?.DetailsAppliedLandPlot[item]));
+  //     Object?.keys(valueData?.DetailsAppliedLandNILP)?.map((item) => setValue(item, valueData?.DetailsAppliedLandNILP[item]));
+  //     valueData?.dgpsDetails.map((item, index) => {
+  //       setValue(`dgpsDetails.${index}.longitude`, item?.longitude), setValue(`dgpsDetails.${index}.latitude`, item?.latitude);
+  //     });
+  //   }
+  // }, [stepData]);
 
   const getSubmitDataLabel = async () => {
     try {
