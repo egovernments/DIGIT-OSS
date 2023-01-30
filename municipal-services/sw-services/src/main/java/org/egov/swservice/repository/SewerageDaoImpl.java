@@ -57,6 +57,9 @@ public class SewerageDaoImpl implements SewerageDao {
 	@Value("${egov.sewerageservice.oldDataEncryptionStatus.topic}")
 	private String encryptionStatusTopic;
 
+	@Value("${egov.sewerageservice.update.oldData.topic}")
+	private String updateOldDataEncTopic;
+
 	@Override
 	public void saveSewerageConnection(SewerageConnectionRequest sewerageConnectionRequest) {
 		sewarageConnectionProducer.push(createSewarageConnection, sewerageConnectionRequest);
@@ -171,7 +174,7 @@ public class SewerageDaoImpl implements SewerageDao {
 	/* Method to push the encrypted data to the 'update' topic  */
 	@Override
 	public void updateOldSewerageConnections(SewerageConnectionRequest sewerageConnectionRequest) {
-		sewarageConnectionProducer.push(updateSewarageConnection, sewerageConnectionRequest);
+		sewarageConnectionProducer.push(updateOldDataEncTopic, sewerageConnectionRequest);
 
 	}
 
