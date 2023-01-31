@@ -2,6 +2,11 @@
 
 All notable changes to this module will be documented in this file.
 
+## 1.7.4 - 2023-01-31
+
+- Improved encryptOldData api with resume functionality
+- Disabled privacy
+
 ## 1.7.4-beta - 2022-11-03
 
 - Added the logic for update workflow if payement is 0

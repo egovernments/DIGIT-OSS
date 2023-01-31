@@ -1,7 +1,7 @@
 
 All notable changes to this module will be documented in this file.
 
-## 1.2.1 - 2023-01-31
+## 1.2.0 - 2023-01-31
 
 - Improved encryptOldData api with resume functionality
 - Disabled privacy
