@@ -45,6 +45,7 @@ import ReceiptsService from "./services/elements/Receipts";
 import { EDCRService } from "./services/elements/EDCR";
 import { OBPSService } from "./services/elements/OBPS";
 import { NOCService } from "./services/elements/NOC";
+import { NOCSearch } from "./services/molecules/NOC/Search";
 import AccessControlService from "./services/elements/Access";
 import BillServices from "./services/elements/Bill";
 
@@ -104,6 +105,7 @@ const initLibraries = () => {
   setupLibraries("Download", Download);
 
   setupLibraries("NOCService", NOCService);
+  setupLibraries("NOCSearch", NOCSearch);
   setupLibraries("AccessControlService", AccessControlService);
   setupLibraries("BillServices", BillServices);
   setupLibraries("AuditService",AuditService);

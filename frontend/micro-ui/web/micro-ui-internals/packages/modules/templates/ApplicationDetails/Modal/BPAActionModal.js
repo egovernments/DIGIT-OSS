@@ -155,7 +155,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     return result;
   }
 
-  function submit(data) {
+  async function submit(data) {
     let workflow = { action: action?.action, comments: data?.comments, businessService, moduleName: moduleCode };
     applicationData = {
       ...applicationData,
@@ -204,6 +204,26 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       }
     })
 
+    let filters = {sourceRefId:nocDetails?.[0]?.Noc?.sourceRefId}
+    const response = await Digit.NOCSearch.all(tenantId, filters)
+
+    let AirportFlag = true;
+    let NocFlag = true;
+    response?.Noc?.map((ob) => {
+      if (
+        (ob?.applicationStatus?.toUpperCase() === "APPROVED" ||
+        ob?.applicationStatus?.toUpperCase() === "AUTO_APPROVED" ||
+        ob?.applicationStatus?.toUpperCase() === "REJECTED" ||
+        ob?.applicationStatus?.toUpperCase() === "AUTO_REJECTED" ||
+        ob?.applicationStatus?.toUpperCase() === "VOIDED") && (AirportFlag == true || NocFlag == true)
+      ) {
+        if(ob?.nocType === "AIRPORT_AUTHORITY")
+        AirportFlag = false
+        else if(ob?.nocType === "FIRE_NOC")
+        NocFlag = false
+      }
+    }) 
+
     let nocData = [];
     if (nocDetails) {
       nocDetails.map(noc => {
@@ -212,7 +232,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
             noc?.Noc?.applicationStatus?.toUpperCase() != "AUTO_APPROVED" &&
             noc?.Noc?.applicationStatus?.toUpperCase() != "REJECTED" &&
             noc?.Noc?.applicationStatus?.toUpperCase() != "AUTO_REJECTED" &&
-            noc?.Noc?.applicationStatus?.toUpperCase() != "VOIDED"
+            noc?.Noc?.applicationStatus?.toUpperCase() != "VOIDED" && (noc?.Noc?.nocType === "AIRPORT_AUTHORITY" && AirportFlag) || (noc?.Noc?.nocType === "FIRE_NOC" && NocFlag)
           ) {
             nocData.push(noc);
           }

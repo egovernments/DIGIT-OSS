@@ -406,7 +406,7 @@ const ConnectionDetails = (_props) => {
                   >
                     <Dropdown
                       className="form-field"
-                      style={checkifPrivacyValid() ? (sessionStorage.getItem("isPrivacyEnabled") !== "true" ? { width: "51.5%" } : {}) : {}}
+                     // style={checkifPrivacyValid() ? (sessionStorage.getItem("isPrivacyEnabled") !== "true" ? { width: "51.5%" } : {}) : {}}
                       selected={getValues("gender")}
                       disable={false}
                       option={menu}
@@ -630,7 +630,7 @@ const ConnectionDetails = (_props) => {
                   >
                     <Dropdown
                       className="form-field"
-                      style={checkifPrivacyValid() ? (sessionStorage.getItem("isPrivacyEnabled") !== "true" ? { width: "51.5%" } : {}) : {}}
+                     // style={checkifPrivacyValid() ? (sessionStorage.getItem("isPrivacyEnabled") !== "true" ? { width: "51.5%" } : {}) : {}}
                       selected={getValues("relationship")}
                       disable={false}
                       option={GuardianOptions}
@@ -773,7 +773,7 @@ const ConnectionDetails = (_props) => {
                   >
                     <Dropdown
                       className="form-field"
-                      style={checkifPrivacyValid() ? (sessionStorage.getItem("isPrivacyEnabled") !== "true" ? { width: "51.5%" } : {}) : {}}
+                     // style={checkifPrivacyValid() ? (sessionStorage.getItem("isPrivacyEnabled") !== "true" ? { width: "51.5%" } : {}) : {}}
                       selected={getValues("ownerType")}
                       disable={false}
                       option={Menu}

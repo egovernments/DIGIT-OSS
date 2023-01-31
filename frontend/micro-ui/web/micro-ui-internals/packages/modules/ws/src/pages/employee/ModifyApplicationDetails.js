@@ -248,7 +248,7 @@ const ModifyApplicationDetails = () => {
           setShowToast={setShowToast}
           closeToast={closeToast}
           timelineStatusPrefix={`WF_${applicationDetails?.processInstancesDetails?.[0]?.businessService?.toUpperCase()}_`}
-          isInfoLabel={true}
+          isInfoLabel={sessionStorage.getItem("isPrivacyEnabled") === "true" ? true : false}
         />
       </div>
     </Fragment>
