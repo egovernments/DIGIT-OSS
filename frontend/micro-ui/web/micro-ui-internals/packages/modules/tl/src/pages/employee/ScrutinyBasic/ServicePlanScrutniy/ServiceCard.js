@@ -143,10 +143,16 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
 
   const queryClient = useQueryClient();
 
+  // const closeModal = () => {
+  //   setOpen(false)
+  //   window.location.href = `/digit-ui/citizen`
+  // }
+
 
   const closeModal = () => {
     setSelectedAction(null);
     setShowModal(false);
+    window.location.href = `/digit-ui/employee/tl/servicePlanInbox`
   };
 
   const closeWarningPopup = () => {

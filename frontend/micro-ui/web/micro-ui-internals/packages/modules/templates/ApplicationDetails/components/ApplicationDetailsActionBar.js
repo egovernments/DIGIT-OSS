@@ -64,7 +64,7 @@ function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSel
         <ActionBar style={{...ActionBarStyle}}>
           <button
               style={{ color: "#FFFFFF", fontSize: "19px" }}
-              className={"submit-bar"}
+              className={"submit-bar abc"}
               name={actions?.[0]?.action}
               value={actions?.[0]?.action}
               onClick={(e) => { onActionSelect(actions?.[0] || {})}}>

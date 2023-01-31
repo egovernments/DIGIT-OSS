@@ -145,10 +145,8 @@ import { useStyles } from "../css/personalInfoChild.style.js";
       setValue("acreCost", apiResponse?.additionalDetails?.acreCost);
       setValue("selfCertified", apiResponse?.additionalDetails?.selfCertified);
       setValue("streetLightening", apiResponse?.additionalDetails?.streetLightening);
-      // setValue("electricDistribution", apiResponse?.additionalDetails?.electricDistribution);
-      // setValue("electricDistribution", apiResponse?.additionalDetails?.electricDistribution);
-      // setValue("electricDistribution", apiResponse?.additionalDetails?.electricDistribution);
-    }})
+     
+    }},[apiResponse]);
   
   useEffect(()=>{
     const subscription = watch((value, { name, type }) => {
@@ -158,6 +156,7 @@ import { useStyles } from "../css/personalInfoChild.style.js";
     return () => subscription.unsubscribe();
   }, [watch]);
 
+  
  
   return (
     <React.Fragment>

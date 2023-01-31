@@ -5,7 +5,7 @@ const SubmitBar = (props) => {
   return (
     <button
       disabled={props.disabled ? true : false}
-      className={`${props.disabled ? "submit-bar-disabled" : "submit-bar"} ${props.className ? props.className : ""}`}
+      className={`${props.disabled ? "submit-bar-disabled" : "submit-bar submit-bar-take-action"} ${props.className ? props.className : ""}`}
       type={props.submit ? "submit" : "button"}
       style={{ ...props.style }}
       onClick={props.onSubmit}

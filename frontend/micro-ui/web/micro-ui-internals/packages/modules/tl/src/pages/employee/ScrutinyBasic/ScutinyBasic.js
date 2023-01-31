@@ -173,7 +173,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
 
       console.log("Response From API", Resp);
       setDisapprovalData(Resp);
-      // setApiResponse(Resp);
+      
     } catch (error) {
       console.log(error);
     }
@@ -286,7 +286,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
   };
   console.log("scrutiny form api get", apiResponse !== undefined ? apiResponse?.ApplicantInfo : apiResponse);
   console.log("scrutiny form api get1", apiResponse !== undefined ? apiResponse?.ApplicantPurpose : apiResponse);
-  // console.log("scrutiny form api get2", apiResponse !== undefined ? apiResponse?.LandSchedule : apiResponse);
+  
   console.log("remarks api", remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null);
 
   console.log("remakes data parsnalinfo", remarksChanges);
@@ -352,23 +352,10 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
             {/* </Col> */}
           </div>
 
-          {/* <JeLandinfo jeLandInfoRef={jeLandInfoRef} passUncheckedList={getUncheckedJeLandInfo}></JeLandinfo> */}
         </div>
       </div>
       <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>
-        {/* <DisApprovalList
-          disapprovallistDeveloper={displayPurpose}
-          disapprovallistGeneral={displayGeneral}
-          disapprovallistAppliedLand={displayAppliedLand}
-          disapprovalCheckedAppliedLand={displayAppliedLandCheckedList}
-          disapprovallistPersonal={displayPersonal}
-          disapprovalCheckedPersonal={displayPersonalCHeckedList}
-          disapprovalCheckedGeneral={displayGeneralCHeckedList}
-          disapprovalCheckedPurpose={displayPurposeCHeckedList}
-          DisApprovalListFeeandCharges={displayFeeandCharges}
-          dataList={disapprovalData}
-        ></DisApprovalList> */}
-        {/* <HistoryList></HistoryList> */}
+       
       </div>
 
       <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>

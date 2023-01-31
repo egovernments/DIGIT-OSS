@@ -1741,6 +1741,12 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
   place-items: center; */
     
       }
+
+      .submit-bar-take-action {
+       width: 370Px !important;
+      
+        }
+
       .action-bar-wrap .menu-wrap div:hover {
         --bg-opacity:1;
         background-color: #eee;

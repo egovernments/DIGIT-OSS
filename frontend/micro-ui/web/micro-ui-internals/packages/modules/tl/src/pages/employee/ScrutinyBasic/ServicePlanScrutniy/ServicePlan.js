@@ -77,17 +77,17 @@ const ServicePlanService = (props) => {
     template: Colors.info,
     certified: Colors.info,
     AutoCAD: Colors.info,
-    pin: Colors.info,
-    tehsil: Colors.info,
-    district: Colors.info,
-    state: Colors.info,
-    type: Colors.info,
-    lciSignedBy: Colors.info,
-    lciNotSigned: Colors.info,
-    parmanentAddress: Colors.info,
-    addressForCommunication: Colors.info,
-    authPerson: Colors.info,
-    emailForCommunication: Colors.info,
+    // pin: Colors.info,
+    // tehsil: Colors.info,
+    // district: Colors.info,
+    // state: Colors.info,
+    // type: Colors.info,
+    // lciSignedBy: Colors.info,
+    // lciNotSigned: Colors.info,
+    // parmanentAddress: Colors.info,
+    // addressForCommunication: Colors.info,
+    // authPerson: Colors.info,
+    // emailForCommunication: Colors.info,
   });
 
   const fieldIdList = [
@@ -340,7 +340,7 @@ const ServicePlanService = (props) => {
                             ),
                               setSmShow(true),
                               console.log("modal open"),
-                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                              setFieldValue(apiResponse !== null ? apiResponse?.selfCertifiedDrawingFromEmpaneledDoc : null);
                           }}
                         ></ReportProblemIcon>
                       </div>
@@ -383,7 +383,7 @@ const ServicePlanService = (props) => {
                             setLabelValue("Environmental Clearance."),
                               setSmShow(true),
                               console.log("modal open"),
-                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                              setFieldValue(apiResponse !== null ? apiResponse?.environmentalClearance : null);
                           }}
                         ></ReportProblemIcon>
                       </div>
@@ -420,7 +420,7 @@ const ServicePlanService = (props) => {
                             setLabelValue("Service plan in PDF (OCR Compatible) + GIS format."),
                               setSmShow(true),
                               console.log("modal open"),
-                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                              setFieldValue(apiResponse !== null ? apiResponse?.shapeFileAsPerTemplate : null);
                           }}
                         ></ReportProblemIcon>
                       </div>
@@ -457,7 +457,7 @@ const ServicePlanService = (props) => {
                             setLabelValue("Service plan in AutoCAD (DXF) file"),
                               setSmShow(true),
                               console.log("modal open"),
-                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                              setFieldValue(apiResponse !== null ? apiResponse?.autoCadFile : null);
                           }}
                         ></ReportProblemIcon>
                       </div>
@@ -494,7 +494,7 @@ const ServicePlanService = (props) => {
                             setLabelValue("Certified copy of the Service plan verified by a third party"),
                               setSmShow(true),
                               console.log("modal open"),
-                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                              setFieldValue(apiResponse !== null ? apiResponse?.certifieadCopyOfThePlan : null);
                           }}
                         ></ReportProblemIcon>
                       </div>
@@ -503,13 +503,7 @@ const ServicePlanService = (props) => {
                 </tbody>
               </div>
 
-              {/* <div class="row">
-            <div class="col-sm-12 text-right">
-              <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
-                Submit
-              </button>
-            </div>
-          </div> */}
+              
            
             </Card>
            

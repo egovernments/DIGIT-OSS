@@ -40,7 +40,7 @@ const ScrutinyFormcontainer = (props) => {
   const [businessService, setBusinessServices] = useState("NewTL");
   const [moduleCode, setModuleCode] = useState("TL")
   const [scrutinyDetails, setScrutinyDetails] = useState();
-  // const [applicationNumber,setApplicationNumber] = useState("");
+ 
   const [applicationDetails, setApplicationDetails] = useState();
   const [workflowDetails, setWorkflowDetails] = useState();
   const [applicationData, setApplicationData] = useState();
@@ -49,7 +49,7 @@ const ScrutinyFormcontainer = (props) => {
   const authToken = Digit.UserService.getUser()?.access_token || null;
   const userInfo = Digit.UserService.getUser()?.info || {};
 
-  // const [showhide19, setShowhide19] = useState("true");
+  
   const handleshow19 = async (e) => {
     const payload = {
 

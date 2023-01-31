@@ -188,7 +188,7 @@ const ServicePlanService = () => {
     }
   };
 
-  const handleClose = () => {
+  const closeModal = () => {
     setOpen(false)
     window.location.href = `/digit-ui/citizen`
   }
