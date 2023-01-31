@@ -10,7 +10,6 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
-import { useParams } from "react-router-dom";
 import FileDownload from "@mui/icons-material/FileDownload";
 import { IconButton } from "@mui/material";
 //import { getDocShareholding } from 'packages/modules/tl/src/pages/employee/ScrutinyBasic/ScrutinyDevelopment/docview.helper.js'
@@ -32,7 +31,7 @@ const ServicePlanService = () => {
   const [docUpload, setDocuploadData] = useState([]);
   const [open, setOpen] = useState(false)
   const [applicationNumber, setApplicationNumber] = useState()
-  const [valid, setValid] = useState("")
+  const [valid, setValid] = useState([])
   const {
     register,
     handleSubmit,
@@ -100,8 +99,7 @@ const ServicePlanService = () => {
             key: "",
             msg_id: "",
             requester_id: "",
-            authToken: token,
-            "userInfo": userInfo.info
+            authToken: token
           },
           ServicePlanRequest: [{
             ...servicePlanRes,
@@ -237,33 +235,6 @@ const ServicePlanService = () => {
         console.log(error)
       } 
    }
-
-
-
-  // const getSubmitDataLabel = async () => {
-  //   try {
-  //     const postDistrict = {
-  //       requestInfo: {
-  //         api_id: "1",
-  //         ver: "1",
-  //         ts: null,
-  //         action: "create",
-  //         did: "",
-  //         key: "",
-  //         msg_id: "",
-  //         requester_id: "",
-  //         auth_token: null,
-  //       },
-  //     };
-
-  //     const Resp = await axios.post(`http://10.1.1.18:80/land-services/serviceplan/_get?loiNumber=123`, postDistrict);
-  //   } catch (error) {
-  //     console.log(error.message);
-  //   }
-  // };
-  // useEffect(() => {
-  //   getSubmitDataLabel();
-  // }, []);
 
   return (
     <React.Fragment>
