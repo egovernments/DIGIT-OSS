@@ -118,8 +118,8 @@ const AppliedDetailForm = (props) => {
     // if (!validateDgpsPoint()) {
     //   return;
     // }
-    console.log("data", data);
-    return;
+    // console.log("data", data);
+    // return;
     setLoader(true);
     const token = window?.localStorage?.getItem("token");
     const postDistrict = {
