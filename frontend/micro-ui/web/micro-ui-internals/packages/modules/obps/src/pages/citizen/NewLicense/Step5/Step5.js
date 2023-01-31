@@ -206,9 +206,9 @@ const FeesChargesForm = (props) => {
       const Resp = await axios.post("/filestore/v1/files", formData, {});
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
-      if (fieldName === "consentLetter") {
-        setValue("consentLetterFileName", file.name);
-      }
+      // if (fieldName === "consentLetter") {
+      //   setValue("consentLetterFileName", file.name);
+      // }
       setSelectedFiles([...selectedFiles, file.name]);
       setLoader(false);
       setShowToast({ key: "success" });
@@ -417,21 +417,19 @@ const FeesChargesForm = (props) => {
                                         <input
                                           type="file"
                                           style={{ display: "none" }}
-                                          onChange={(e) => getDocumentData(e?.target?.files[0], "consentLetter")}
+                                          onChange={(e) => getDocumentData(e?.target?.files[0], "consentLetterFileName")}
                                           accept="application/pdf/jpeg/png"
                                         />
                                       </label>
-                                      {fileStoreId?.consentLetter ? (
-                                        <a onClick={() => getDocShareholding(fileStoreId?.consentLetter)} className="btn btn-sm ">
+                                      {watch("consentLetterFileName") && (
+                                        <a onClick={() => getDocShareholding(watch("consentLetterFileName"))} className="btn btn-sm ">
                                           <VisibilityIcon color="info" className="icon" />
                                         </a>
-                                      ) : (
-                                        <p></p>
                                       )}
-                                      <h3 style={{}}>{watch("consentLetterFileName") ? watch("consentLetterFileName") : null}</h3>
+                                      {/* <h3>{watch('consentLetterFileName')}</h3> */}
 
                                       <h3 className="error-message" style={{ color: "red" }}>
-                                        {errors?.consentLetter && errors?.consentLetter?.message}
+                                        {errors?.consentLetterFileName && errors?.consentLetterFileName?.message}
                                       </h3>
                                     </div>
                                   </div>

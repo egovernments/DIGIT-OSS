@@ -2,8 +2,23 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import { Row, Col } from "react-bootstrap";
 import { Form } from "react-bootstrap";
+import FileUpload from "@mui/icons-material/FileUpload";
 
-const DDJAYForm = ({ register, watch }) => {
+const DDJAYForm = ({
+  register,
+  getDocumentData,
+  watch,
+  getDocShareholding,
+  setLoader,
+  setValue,
+  control,
+  fields,
+  add,
+  remove,
+  handleWheel,
+  setError,
+  error,
+}) => {
   return (
     <Row className="ml-auto" style={{ marginBottom: 5 }}>
       <Col col-12>
@@ -143,13 +158,47 @@ const DDJAYForm = ({ register, watch }) => {
         <h6 className="text-black">
           <b>Documents</b>
         </h6>
-        <br></br>
         <div className="row ">
           <div className="col col-3">
-            <h6>
-              Layout Plan <span style={{ color: "red" }}>*</span>
+            <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top">
+              Layout Plan in pdf<span style={{ color: "red" }}>*</span>
             </h6>
-            <input type="file" className="form-control" accept="application/pdf/jpeg/png" />
+            <label>
+              <FileUpload style={{ cursor: "pointer" }} color="primary" />
+              <input
+                type="file"
+                style={{ display: "none" }}
+                onChange={(e) => getDocumentData(e?.target?.files[0], "layoutPlanPdf")}
+                accept="application/pdf/jpeg/png"
+              />
+            </label>
+            {watch("layoutPlanPdf") && (
+              <div>
+                <a onClick={() => getDocShareholding(watch("layoutPlanPdf"), setLoader)} className="btn btn-sm ">
+                  <VisibilityIcon color="info" className="icon" />
+                </a>
+                {/* <h3>{watch("layoutPlanPdf")}</h3> */}
+              </div>
+            )}
+          </div>
+          <div className="col col-3">
+            <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top">
+              Layout Plan in dxf<span style={{ color: "red" }}>*</span>
+            </h6>
+            <label>
+              <FileUpload style={{ cursor: "pointer" }} color="primary" />
+              <input
+                type="file"
+                style={{ display: "none" }}
+                onChange={(e) => getDocumentData(e?.target?.files[0], "layoutPlanDxf")}
+                accept="application/pdf/jpeg/png"
+              />
+            </label>
+            {watch("layoutPlanDxf") && (
+              <a onClick={() => getDocShareholding(watch("layoutPlanDxf"), setLoader)} className="btn btn-sm ">
+                <VisibilityIcon color="info" className="icon" />
+              </a>
+            )}
           </div>
         </div>
       </Col>

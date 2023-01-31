@@ -21,6 +21,7 @@ const ResidentialPlottedForm = ({
   handleWheel,
   setError,
   error,
+  setLoader,
 }) => {
   const [getABValue, setABValue] = useState("");
 
@@ -327,7 +328,7 @@ const ResidentialPlottedForm = ({
               Layout Plan in pdf<span style={{ color: "red" }}>*</span>
             </h6>
             <label>
-              <FileUpload color="primary" />
+              <FileUpload style={{ cursor: "pointer" }} color="primary" />
               <input
                 type="file"
                 style={{ display: "none" }}
@@ -337,10 +338,10 @@ const ResidentialPlottedForm = ({
             </label>
             {watch("layoutPlanPdf") && (
               <div>
-                <a onClick={() => getDocShareholding(watch("layoutPlanPdf"))} className="btn btn-sm ">
+                <a onClick={() => getDocShareholding(watch("layoutPlanPdf"), setLoader)} className="btn btn-sm ">
                   <VisibilityIcon color="info" className="icon" />
                 </a>
-                <h3>{watch("layoutPlanPdf")}</h3>
+                {/* <h3>{watch("layoutPlanPdf")}</h3> */}
               </div>
             )}
           </div>
@@ -349,7 +350,7 @@ const ResidentialPlottedForm = ({
               Layout Plan in dxf<span style={{ color: "red" }}>*</span>
             </h6>
             <label>
-              <FileUpload color="primary" />
+              <FileUpload style={{ cursor: "pointer" }} color="primary" />
               <input
                 type="file"
                 style={{ display: "none" }}
@@ -357,35 +358,13 @@ const ResidentialPlottedForm = ({
                 accept="application/pdf/jpeg/png"
               />
             </label>
-            {/* {fileStoreId?.undertaking ? (
-              <a onClick={() => getDocShareholding(fileStoreId?.undertaking)} className="btn btn-sm ">
+            {watch("layoutPlanDxf") && (
+              <a onClick={() => getDocShareholding(watch("layoutPlanDxf"), setLoader)} className="btn btn-sm ">
                 <VisibilityIcon color="info" className="icon" />
               </a>
-            ) : (
-              <p></p>
-            )} */}
+            )}
           </div>
-          <div className="col col-3">
-            <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top">
-              Layout Plan in zip<span style={{ color: "red" }}>*</span>
-            </h6>
-            <label>
-              <FileUpload color="primary" />
-              <input
-                type="file"
-                style={{ display: "none" }}
-                onChange={(e) => getDocumentData(e?.target?.files[0], "layoutPlanZip")}
-                accept="application/pdf/jpeg/png"
-              />
-            </label>
-            {/* {fileStoreId?.undertaking ? (
-              <a onClick={() => getDocShareholding(fileStoreId?.undertaking)} className="btn btn-sm ">
-                <VisibilityIcon color="info" className="icon" />
-              </a>
-            ) : (
-              <p></p>
-            )} */}
-          </div>
+
           <div className="col col-3">
             <h6
               style={{ display: "flex" }}
@@ -396,7 +375,7 @@ const ResidentialPlottedForm = ({
               Undertaking.<span style={{ color: "red" }}>*</span>
             </h6>
             <label>
-              <FileUpload color="primary" />
+              <FileUpload style={{ cursor: "pointer" }} color="primary" />
               <input
                 type="file"
                 style={{ display: "none" }}
@@ -404,13 +383,11 @@ const ResidentialPlottedForm = ({
                 accept="application/pdf/jpeg/png"
               />
             </label>
-            {/* {fileStoreId?.undertaking ? (
-              <a onClick={() => getDocShareholding(fileStoreId?.undertaking)} className="btn btn-sm ">
+            {watch("undertaking") && (
+              <a onClick={() => getDocShareholding(watch("undertaking"), setLoader)} className="btn btn-sm ">
                 <VisibilityIcon color="info" className="icon" />
               </a>
-            ) : (
-              <p></p>
-            )} */}
+            )}
           </div>
         </div>
       </Col>
