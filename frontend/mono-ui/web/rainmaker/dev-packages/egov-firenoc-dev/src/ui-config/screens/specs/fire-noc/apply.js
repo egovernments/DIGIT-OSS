@@ -315,11 +315,25 @@ export const prepareEditFlow = async (
     ]);
     // let response = sampleSingleSearch();
 
-    response = furnishNocResponse(response);
+    if (!edited && !isSummaryPage) {
+      response.FireNOCs[0].fireNOCDetails.buildings.reverse();
+    }
+
+    response = await furnishNocResponse(response);
+
+    let buildingTypes = get(response, "FireNOCs[0].fireNOCDetails.buildings", []);
+    let selectedValuesArray = [];
+    buildingTypes.map(bData => {
+      selectedValuesArray.push({
+        buildingSubUsageType: bData.usageType,
+        buildingUsageType: bData.usageType.split(".")[0]
+      })
+    })
+    dispatch(prepareFinalObject("DynamicMdms.firenoc.buildings.selectedValues", selectedValuesArray));
   
     dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
     await onchangeOfTenant({value:tenantId},state,dispatch);
-  await setDocsForEditFlow(state,dispatch);
+    await setDocsForEditFlow(state,dispatch);
     if (applicationNumber) {
       setApplicationNumberBox(state, dispatch, applicationNumber);
     }

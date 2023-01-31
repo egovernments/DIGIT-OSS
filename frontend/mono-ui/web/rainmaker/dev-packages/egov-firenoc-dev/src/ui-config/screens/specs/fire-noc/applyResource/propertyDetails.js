@@ -25,19 +25,16 @@ export const triggerUpdateByKey = (state, keyIndex, value, dispatch) => {
   }
 }
 export const updateUsageType = async ( state, dispatch ) => {  
-  const subUsageType = get( state, "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.buildings[0].usageType", '')||'';
-  const usageType = subUsageType&&subUsageType.split('.')[0];
-  
-  let i = 0;
-  let formObj = {
-    buildingUsageType: usageType, buildingSubUsageType: subUsageType
-  }
-  triggerUpdateByKey(state, i, formObj, 'set');
-  
-  triggerUpdateByKey(state, `buildingSubUsageTypeTransformed.allDropdown[${i}]`, getObjectValues(get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.firenoc.buildings.buildingsTransformed.${usageType}`, [])) , dispatch);
-  // triggerUpdateByKey(state, `buildingSubUsageTypeTransformed.allDropdown[${i}]`, getObjectValues(get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.firenoc.buildings.buildingUsageTypeTransformed.${usageType}`, [])) , dispatch);
+  let buildings = get( state, "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.buildings", []);
 
-  triggerUpdateByKey(state, `selectedValues[${i}]`, formObj , dispatch);
+  for (let i = 0; i < buildings.length; i++) {
+      const subUsageType = get( buildings[i], "usageType", '')||'';
+      const usageType = subUsageType && subUsageType.split('.')[0];
+      let formObj = { buildingUsageType: usageType, buildingSubUsageType: subUsageType }
+      triggerUpdateByKey(state, i, formObj, 'set');
+      triggerUpdateByKey(state, `buildingSubUsageTypeTransformed.allDropdown[${i}]`, getObjectValues(get( state, `screenConfiguration.preparedFinalObject.DynamicMdms.firenoc.buildings.buildingsTransformed.${usageType}`, [])) , dispatch);    
+      triggerUpdateByKey(state, `selectedValues[${i}]`, formObj , dispatch);
+    }
 }
 let previousUoms = [];
 

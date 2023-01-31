@@ -263,8 +263,7 @@ const prepareUoms = (state, dispatch) => {
           labelKey: `NOC_PROPERTY_DETAILS_${item.code}_LABEL`
         },
         {
-          jsonPath: `FireNOCs[0].fireNOCDetails.buildings[0].uomsMap.${item.code
-            }`,
+          jsonPath: `FireNOCs[0].fireNOCDetails.buildings[${index}].uomsMap.${item.code}`,
           callBack: checkValueForNA,
         }
       );
@@ -273,6 +272,15 @@ const prepareUoms = (state, dispatch) => {
         handleField(
           "search-preview",
           "components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardOne.props.scheama.children.cardContent.children.propertyContainer.children",
+          item.code,
+          labelElement
+        )
+      );
+
+      dispatch(
+        handleField(
+          "search-preview",
+          `components.div.children.body.children.cardContent.children.propertySummary.children.cardContent.children.cardOne.props.items[${index}].item${index}.children.cardContent.children.propertyContainer.children`,
           item.code,
           labelElement
         )
@@ -302,6 +310,21 @@ const setSearchResponse = async (
     { key: "applicationNumber", value: applicationNumber }
   ]);
   // const response = sampleSingleSearch();
+  
+  if (response &&
+    response.FireNOCs.length &&
+    response.FireNOCs[0].fireNOCDetails &&
+    response.FireNOCs[0].fireNOCDetails.buildings && !edited) {
+    response.FireNOCs[0].fireNOCDetails.buildings.reverse();
+  }
+
+  response.FireNOCs[0].fireNOCDetails.buildings.forEach(data => {
+    let filterData = data.uoms.filter(uom => uom.active == true);
+    data.uoms = filterData
+  });
+  
+
+
   set(response, 'FireNOCs[0].fireNOCDetails.additionalDetail.assignee[0]', '');
   set(response, 'FireNOCs[0].fireNOCDetails.additionalDetail.comment', '');
   set(response, 'FireNOCs[0].fireNOCDetails.additionalDetail.wfDocuments', []);
@@ -313,30 +336,34 @@ const setSearchResponse = async (
       response,
       "FireNOCs[0].fireNOCDetails.applicantDetails.ownerShipType",
       ""
-    ).startsWith("INSTITUTION")
+    ).includes("INDIVIDUAL")
   ) {
-    dispatch(
-      handleField(
-        "search-preview",
-        "components.div.children.body.children.cardContent.children.applicantSummary",
-        "visible",
-        false
-      )
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.applicantSummary.visible",
+      true
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.institutionSummary.visible",
+      false
     );
   } else {
-    dispatch(
-      handleField(
-        "search-preview",
-        "components.div.children.body.children.cardContent.children.institutionSummary",
-        "visible",
-        false
-      )
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.applicantSummary.visible",
+      false
+    );
+    set(
+      action,
+      "screenConfig.components.div.children.body.children.cardContent.children.institutionSummary.visible",
+      true
     );
   }
 
-  prepareDocumentsView(state, dispatch);
-  prepareUoms(state, dispatch);
+  await prepareDocumentsView(state, dispatch);
   await loadPdfGenerationData(applicationNumber, tenantId);
+
   let status = get(
     state,
     "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.status"
@@ -356,6 +383,7 @@ const setSearchResponse = async (
   if (status) {
     generateBill(dispatch, applicationNumber, tenantId, status);
   }
+  await prepareUoms(state, dispatch);
 };
 
 const screenConfig = {
