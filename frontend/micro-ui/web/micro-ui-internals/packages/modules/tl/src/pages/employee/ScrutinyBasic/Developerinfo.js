@@ -1250,7 +1250,7 @@ const Developerinfo = (props) => {
               </table>
             </div>
                     <Row className={classes.formLabel} style={{ marginBottom: 20 }}>
-                      <Col className="ms-auto" md={4} xxl lg="4">
+                      {/* <Col className="ms-auto" md={4} xxl lg="4">
                         <label>
                       
                           <h5>Area Applied under Migration</h5>
@@ -1258,8 +1258,7 @@ const Developerinfo = (props) => {
 
                         <div className="d-flex flex-row align-items-center my-1 ">
                           <Form.Control
-                            // height={30}
-                            // style={{ maxWidth: 200, marginRight: 5 }}
+                           
                             placeholder={landScheduleData !== null ? landScheduleData?.areaUnderMigration : null}
                             disabled
                           ></Form.Control>
@@ -1277,20 +1276,19 @@ const Developerinfo = (props) => {
                             }}
                           ></ReportProblemIcon>
                         </div>
-                        {/* <input type="number" className="form-control" /> */}
-                      </Col>
-                      <Col className="ms-auto" md={4} xxl lg="4">
+                        
+                      </Col> */}
+                      {/* <Col className="ms-auto" md={4} xxl lg="4">
                         <label htmlFor="potential">
                           <h6>
-                            {/* Potential Zone: */}
+                         
                             <h5>Purpose of Parent Licence</h5>
                           </h6>
                         </label>
 
                         <div className="d-flex flex-row  align-items-center">
                           <Form.Control
-                            // height={30}
-                            // style={{ maxWidth: 200, marginRight: 5 }}
+                            
                             placeholder={landScheduleData !== null ? landScheduleData?.purposeParentLic : null}
                             disabled
                           ></Form.Control>
@@ -1308,15 +1306,15 @@ const Developerinfo = (props) => {
                             }}
                           ></ReportProblemIcon>
                         </div>
-                      </Col>
-                      <Col className="ms-auto" md={4} xxl lg="4">
+                      </Col> */}
+                      {/* <Col className="ms-auto" md={4} xxl lg="4">
                         <label>
-                          {/* Site Location Purpose */}
+                          
                           <h5>Licence No.</h5>
                         </label>
                         <div className="d-flex flex-row  align-items-center">
                           <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.licNo : null} 
-                          // height={30} style={{ maxWidth: 200, marginRight: 5 }} 
+                        
                           disabled></Form.Control>
                           <ReportProblemIcon
                             style={{
@@ -1332,18 +1330,17 @@ const Developerinfo = (props) => {
                             }}
                           ></ReportProblemIcon>
                         </div>
-                      </Col>
-                      {/* </Row>
-              <Row className="ms-auto" style={{ marginBottom: 20 }}> */}
+                      </Col> */}
+                     
                       <Col className="ms-auto" md={4} xxl lg="4">
                         <label>
-                          {/* Approach Type (Type of Policy) */}
+                         
                           <h5>Area of Parent Licence</h5>
                         </label>
 
                         <div className="d-flex flex-row  align-items-center">
                           <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.areaofParentLic : null}
-                          //  height={30} style={{ maxWidth: 200, marginRight: 5 }} 
+                          
                            disabled></Form.Control>
                           <ReportProblemIcon
                             style={{
@@ -1386,11 +1383,11 @@ const Developerinfo = (props) => {
                         </div>
                       </Col> 
                       <Col className="ms-auto" md={4} xxl lg="4">
-                      {/* <div className="col col-4"> */}
+                     
                       <h6>Type of land</h6>{" "}
                       <div className="d-flex flex-row  align-items-center">
                         <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.typeLand : null} 
-                        // height={30} style={{ maxWidth: 200, marginRight: 5 }} 
+                         
                         disabled></Form.Control>
                         <ReportProblemIcon
                           style={{
@@ -1414,7 +1411,7 @@ const Developerinfo = (props) => {
                       </label>
                       <div className="d-flex flex-row  align-items-center">
                         <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.approachRoadWidth : null} 
-                        // height={30} style={{ maxWidth: 200, marginRight: 5 }}
+                       
                          disabled></Form.Control>
                         <ReportProblemIcon
                           style={{
@@ -1437,7 +1434,7 @@ const Developerinfo = (props) => {
                       </label>
                       <div className="d-flex flex-row  align-items-center">
                         <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.approachRoadWidth : null} 
-                        // height={30} style={{ maxWidth: 200, marginRight: 5 }} 
+                        
                         disabled></Form.Control>
                         <ReportProblemIcon
                           style={{
@@ -1481,7 +1478,7 @@ const Developerinfo = (props) => {
                     <Row className="ms-auto" style={{ marginBottom: 20 }}>
                       <div className="col col-4">
                         <h6>Proposed Layout of Plan /site plan for area applied for migration.</h6>
-                        {/* <br/> */}
+                        
                         <div className="d-flex flex-row align-items-center my-1 ">
 
                           <IconButton onClick={() => getDocShareholding(landScheduleData?.proposedLayoutPlan)}>
@@ -1506,7 +1503,7 @@ const Developerinfo = (props) => {
 
                       <div className="col col-4">
                         <h6>Download Previously approved Layout Plan</h6>
-                        {/* <br/> */}
+                        
                         <div className="d-flex flex-row align-items-center my-1 ">
 
                           <IconButton onClick={() => getDocShareholding(landScheduleData?.uploadPreviouslyLayoutPlan)}>
@@ -1537,7 +1534,7 @@ const Developerinfo = (props) => {
             <h5 className={`text-black ml-2 ${classes.formLabel}`}>
               2. Any encumbrance with respect to following :&nbsp;&nbsp;
               <div className="d-flex mt-2 align-items-center">
-                {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+               
                 
                 <input type="radio" disabled value="rehan/mortage" name="rehan/mortage" checked={landScheduleData?.encumburance === "rehan/mortage" ? true : false} />
                 <label className="m-0 mx-2" htmlFor="gen">Rehan / Mortgage</label>
