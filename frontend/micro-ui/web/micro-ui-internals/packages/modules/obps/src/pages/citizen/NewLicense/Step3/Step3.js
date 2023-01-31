@@ -757,8 +757,8 @@ const LandScheduleForm = (props) => {
                       <input {...register("encumburance")} type="radio" value="none" id="encumburance" />
                       &nbsp;&nbsp; None &nbsp;&nbsp;
                     </label>
-                    {watch("encumburance") === "rehan" && (
-                      <div className="row ">
+                    <div className="row ">
+                      {watch("encumburance") === "rehan" && (
                         <div className="col col-4">
                           <label>
                             <h2>
@@ -767,6 +767,48 @@ const LandScheduleForm = (props) => {
                           </label>
                           <input type="text" className="form-control" {...register("rehanRemark")} />
                         </div>
+                      )}
+                      {watch("encumburance") === "patta" && (
+                        <div className="col col-4">
+                          <label>
+                            <h2>
+                              Remark <span style={{ color: "red" }}>*</span>
+                            </h2>{" "}
+                          </label>
+                          <input type="text" className="form-control" {...register("pattaRemark")} />
+                        </div>
+                      )}
+                      {watch("encumburance") === "gair" && (
+                        <div className="col col-4">
+                          <label>
+                            <h2>
+                              Remark <span style={{ color: "red" }}>*</span>
+                            </h2>{" "}
+                          </label>
+                          <input type="text" className="form-control" {...register("gairRemark")} />
+                        </div>
+                      )}
+                      {watch("encumburance") === "loan" && (
+                        <div className="col col-4">
+                          <label>
+                            <h2>
+                              Remark <span style={{ color: "red" }}>*</span>
+                            </h2>{" "}
+                          </label>
+                          <input type="text" className="form-control" {...register("loanRemark")} />
+                        </div>
+                      )}
+                      {watch("encumburance") === "anyOther" && (
+                        <div className="col col-4">
+                          <label>
+                            <h2>
+                              Remark <span style={{ color: "red" }}>*</span>
+                            </h2>{" "}
+                          </label>
+                          <input type="text" className="form-control" {...register("anyOtherRemark")} />
+                        </div>
+                      )}
+                      {watch("encumburance") !== "none" && (
                         <div className="col col-6">
                           <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"></h2> Document Upload{" "}
                           <span style={{ color: "red" }}>*</span>
@@ -776,7 +818,7 @@ const LandScheduleForm = (props) => {
                               type="file"
                               style={{ display: "none" }}
                               accept="application/pdf/jpeg/png"
-                              onChange={(e) => getDocumentData(e?.target?.files[0], "rehanDoc")}
+                              onChange={(e) => getDocumentData(e?.target?.files[0], "encumburanceDoc")}
                             />
                           </label>
                           {fileStoreId?.rehanDoc ? (
@@ -787,136 +829,8 @@ const LandScheduleForm = (props) => {
                             <p></p>
                           )}
                         </div>
-                      </div>
-                    )}
-                    {watch("encumburance") === "patta" && (
-                      <div className="row ">
-                        <div className="col col-4">
-                          <label>
-                            <h2>
-                              Remark <span style={{ color: "red" }}>*</span>
-                            </h2>{" "}
-                          </label>
-                          <input type="text" className="form-control" {...register("pattaRemark")} />
-                        </div>
-                        <div className="col col-6">
-                          <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"></h2> Document Upload{" "}
-                          <span style={{ color: "red" }}>*</span>
-                          <label>
-                            <FileUpload color="primary" />
-                            <input
-                              type="file"
-                              style={{ display: "none" }}
-                              accept="application/pdf/jpeg/png"
-                              onChange={(e) => getDocumentData(e?.target?.files[0], "pattaDoc")}
-                            />
-                          </label>
-                          {fileStoreId?.pattaDoc ? (
-                            <a onClick={() => getDocShareholding(fileStoreId?.pattaDoc)} className="btn btn-sm ">
-                              <VisibilityIcon color="info" className="icon" />
-                            </a>
-                          ) : (
-                            <p></p>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                    {watch("encumburance") === "gair" && (
-                      <div className="row ">
-                        <div className="col col-4">
-                          <label>
-                            <h2>
-                              Remark <span style={{ color: "red" }}>*</span>
-                            </h2>{" "}
-                          </label>
-                          <input type="text" className="form-control" {...register("gairRemark")} />
-                        </div>
-                        <div className="col col-6">
-                          <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"></h2> Document Upload{" "}
-                          <span style={{ color: "red" }}>*</span>
-                          <label>
-                            <FileUpload color="primary" />
-                            <input
-                              type="file"
-                              style={{ display: "none" }}
-                              accept="application/pdf/jpeg/png"
-                              onChange={(e) => getDocumentData(e?.target?.files[0], "gairDoc")}
-                            />
-                          </label>
-                          {fileStoreId?.gairDoc ? (
-                            <a onClick={() => getDocShareholding(fileStoreId?.gairDoc)} className="btn btn-sm ">
-                              <VisibilityIcon color="info" className="icon" />
-                            </a>
-                          ) : (
-                            <p></p>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                    {watch("encumburance") === "loan" && (
-                      <div className="row ">
-                        <div className="col col-4">
-                          <label>
-                            <h2>
-                              Remark <span style={{ color: "red" }}>*</span>
-                            </h2>{" "}
-                          </label>
-                          <input type="text" className="form-control" {...register("loanRemark")} />
-                        </div>
-                        <div className="col col-6">
-                          <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"></h2> Document Upload{" "}
-                          <span style={{ color: "red" }}>*</span>
-                          <label>
-                            <FileUpload color="primary" />
-                            <input
-                              type="file"
-                              style={{ display: "none" }}
-                              accept="application/pdf/jpeg/png"
-                              onChange={(e) => getDocumentData(e?.target?.files[0], "loanDoc")}
-                            />
-                          </label>
-                          {fileStoreId?.loanDoc ? (
-                            <a onClick={() => getDocShareholding(fileStoreId?.loanDoc)} className="btn btn-sm ">
-                              <VisibilityIcon color="info" className="icon" />
-                            </a>
-                          ) : (
-                            <p></p>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                    {watch("encumburance") === "anyOther" && (
-                      <div className="row ">
-                        <div className="col col-4">
-                          <label>
-                            <h2>
-                              Remark <span style={{ color: "red" }}>*</span>
-                            </h2>{" "}
-                          </label>
-                          <input type="text" className="form-control" {...register("anyOtherRemark")} />
-                        </div>
-                        <div className="col col-6">
-                          <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"></h2> Document Upload{" "}
-                          <span style={{ color: "red" }}>*</span>
-                          <label>
-                            <FileUpload color="primary" />
-                            <input
-                              type="file"
-                              style={{ display: "none" }}
-                              accept="application/pdf/jpeg/png"
-                              onChange={(e) => getDocumentData(e?.target?.files[0], "anyOtherDoc")}
-                            />
-                          </label>
-                          {fileStoreId?.anyOtherDoc ? (
-                            <a onClick={() => getDocShareholding(fileStoreId?.anyOtherDoc)} className="btn btn-sm ">
-                              <VisibilityIcon color="info" className="icon" />
-                            </a>
-                          ) : (
-                            <p></p>
-                          )}
-                        </div>
-                      </div>
-                    )}
+                      )}
+                    </div>
 
                     <h3 className="error-message" style={{ color: "red" }}>
                       {errors?.encumburance && errors?.encumburance?.message}

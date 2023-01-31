@@ -274,7 +274,7 @@ const ResidentialPlottedForm = ({
                 <input
                   type="name"
                   className="form-control"
-                  {...register(`detailOfCommunitySites.${index}.communitySites`)}
+                  {...register(`detailOfCommunitySites.${index}.communitySiteName`)}
                   // {...register("communitySites")}
                   onWheel={handleWheel}
                 />
@@ -301,7 +301,7 @@ const ResidentialPlottedForm = ({
                   type="button"
                   style={{ float: "right", marginRight: 15 }}
                   className="btn btn-primary"
-                  onClick={() => add({ communitySites: "", provided: "" })}
+                  onClick={() => add({ communitySiteName: "", provided: "" })}
                 >
                   Add
                 </button>

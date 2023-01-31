@@ -34,11 +34,11 @@ const DDJAYForm = ({ register, watch }) => {
             </div>
             <div>
               <label>Minimum</label>
-              <input type="number" className="form-control" {...register("plotSize")} />
+              <input type="number" className="form-control" {...register("minPlotSize")} />
             </div>
             <div>
               <label>Maximum</label>
-              <input type="number" className="form-control" {...register("plotSize")} />
+              <input type="number" className="form-control" {...register("maxPlotSize")} />
             </div>
           </Col>
           <Col md={4} xxl lg="3">

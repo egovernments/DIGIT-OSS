@@ -79,7 +79,7 @@ const AppliedDetailForm = (props) => {
       ],
       detailOfCommunitySites: [
         {
-          communitySites: "",
+          communitySiteName: "",
           provided: "",
         },
       ],
@@ -563,8 +563,6 @@ const AppliedDetailForm = (props) => {
                 </div>
 
                 <Col col-12>
-                  <br></br>
-                  <br></br>
                   {/* <div>
                     <h5>
                       2.Details of Plots <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
