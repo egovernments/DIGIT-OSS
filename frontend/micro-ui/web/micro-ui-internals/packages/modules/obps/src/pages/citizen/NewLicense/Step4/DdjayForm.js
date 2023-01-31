@@ -10,92 +10,7 @@ const DDJAYForm = ({ register, watch }) => {
         <h6 className="text-black">
           <b>Deen Dayal Jan Awas Yojna (DDJAY)</b>
         </h6>
-        <br></br>
-        <h6 className="text-black">
-          <b>Detail of land use</b>
-        </h6>
-        <br></br>
         <Row className="ml-auto" style={{ marginBottom: 5 }}>
-          <Col md={4} xxl lg="3">
-            <div>
-              <Form.Label>
-                <h2>
-                  Total area of the Scheme
-                  <span style={{ color: "red" }}>*</span>
-                </h2>
-              </Form.Label>
-            </div>
-            <input type="text" className="form-control" />
-          </Col>
-          <Col md={4} xxl lg="3">
-            <div>
-              <Form.Label>
-                <h2>
-                  Area under Sector Road & Green Belt
-                  <span style={{ color: "red" }}>*</span>
-                </h2>
-              </Form.Label>
-            </div>
-            <input type="text" className="form-control" />
-          </Col>
-          <Col md={4} xxl lg="3">
-            <div>
-              <Form.Label>
-                <h2>
-                  Balance area after deducting area under sector road and Green Belt
-                  <span style={{ color: "red" }}>*</span>
-                </h2>
-              </Form.Label>
-            </div>
-            <input type="text" className="form-control" />
-          </Col>
-          <Col md={4} xxl lg="3">
-            <div>
-              <Form.Label>
-                <h2>
-                  Area under undetermined use=
-                  <span style={{ color: "red" }}>*</span>
-                </h2>
-              </Form.Label>
-            </div>
-            <input type="text" className="form-control" />
-          </Col>
-        </Row>
-        <br></br>
-        <Row className="ml-auto" style={{ marginBottom: 5 }}>
-          <Col md={4} xxl lg="3">
-            <div>
-              <Form.Label>
-                <h2>
-                  Balance area
-                  <span style={{ color: "red" }}>*</span>
-                </h2>
-              </Form.Label>
-            </div>
-            <input type="text" className="form-control" />
-          </Col>
-          <Col md={4} xxl lg="3">
-            <div>
-              <Form.Label>
-                <h2>
-                  50% of the Area under Sector Road & Green Belt
-                  <span style={{ color: "red" }}>*</span>
-                </h2>
-              </Form.Label>
-            </div>
-            <input type="text" className="form-control" />
-          </Col>
-          <Col md={4} xxl lg="3">
-            <div>
-              <Form.Label>
-                <h2>
-                  Net planned area (A+B)
-                  <span style={{ color: "red" }}>*</span>
-                </h2>
-              </Form.Label>
-            </div>
-            <input type="text" className="form-control" />
-          </Col>
           <Col md={4} xxl lg="3">
             <div>
               <Form.Label>
@@ -105,21 +20,26 @@ const DDJAYForm = ({ register, watch }) => {
                 </h2>
               </Form.Label>
             </div>
-            <input type="text" className="form-control" />
+            <input type="number" className="form-control" {...register("maxAreaPlots")} />
           </Col>
         </Row>
         <br></br>
         <Row className="ml-auto" style={{ marginBottom: 5 }}>
           <Col md={4} xxl lg="3">
             <div>
-              <Form.Label>
-                <h2>
-                  Size of plot ( in square meters)
-                  <span style={{ color: "red" }}>*</span>
-                </h2>
-              </Form.Label>
+              <h2>
+                Size of plot ( in square meters)
+                <span style={{ color: "red" }}>*</span>
+              </h2>
             </div>
-            <input type="text" className="form-control" />
+            <div>
+              <label>Minimum</label>
+              <input type="number" className="form-control" {...register("plotSize")} />
+            </div>
+            <div>
+              <label>Maximum</label>
+              <input type="number" className="form-control" {...register("plotSize")} />
+            </div>
           </Col>
           <Col md={4} xxl lg="3">
             <div>
@@ -130,7 +50,7 @@ const DDJAYForm = ({ register, watch }) => {
                 </h2>
               </Form.Label>
             </div>
-            <input type="text" className="form-control" />
+            <input type="number" className="form-control" {...register("totalNoOfPlots")} />
           </Col>
           <Col md={4} xxl lg="3">
             <div>
@@ -141,7 +61,7 @@ const DDJAYForm = ({ register, watch }) => {
                 </h2>
               </Form.Label>
             </div>
-            <input type="text" className="form-control" />
+            <input type="number" className="form-control" {...register("permissibleDensityDDJAY")} />
           </Col>
           <Col md={4} xxl lg="3">
             <div>
@@ -152,7 +72,7 @@ const DDJAYForm = ({ register, watch }) => {
                 </h2>
               </Form.Label>
             </div>
-            <input type="text" className="form-control" />
+            <input type="number" className="form-control" {...register("residentialAndCommercialPlots")} />
           </Col>
         </Row>
         <br></br>
@@ -166,7 +86,7 @@ const DDJAYForm = ({ register, watch }) => {
                 </h2>
               </Form.Label>
             </div>
-            <input type="text" className="form-control" />
+            <input type="number" className="form-control" {...register("areaUnderResidentialUse")} />
           </Col>
           <Col md={4} xxl lg="3">
             <div>
@@ -177,7 +97,7 @@ const DDJAYForm = ({ register, watch }) => {
                 </h2>
               </Form.Label>
             </div>
-            <input type="text" className="form-control" />
+            <input type="number" className="form-control" {...register("areaUnderCommercialUse")} />
           </Col>
           <Col md={4} xxl lg="3">
             <div>
@@ -188,7 +108,7 @@ const DDJAYForm = ({ register, watch }) => {
                 </h2>
               </Form.Label>
             </div>
-            <input type="text" className="form-control" />
+            <input type="number" className="form-control" {...register("widthOfInternalRoads")} />
           </Col>
           <Col md={4} xxl lg="3">
             <div>
@@ -199,7 +119,7 @@ const DDJAYForm = ({ register, watch }) => {
                 </h2>
               </Form.Label>
             </div>
-            <input type="text" className="form-control" />
+            <input type="number" className="form-control" {...register("AreaUnderOrganizedSpace")} />
           </Col>
         </Row>
         <br></br>
@@ -216,7 +136,7 @@ const DDJAYForm = ({ register, watch }) => {
                 </h2>
               </label>
             </div>
-            <input type="text" className="form-control" />
+            <input type="number" className="form-control" {...register("transferredArea")} />
           </Col>
         </Row>
         <br></br>
@@ -229,7 +149,6 @@ const DDJAYForm = ({ register, watch }) => {
             <h6>
               Layout Plan <span style={{ color: "red" }}>*</span>
             </h6>
-
             <input type="file" className="form-control" accept="application/pdf/jpeg/png" />
           </div>
         </div>

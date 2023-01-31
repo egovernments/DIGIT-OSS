@@ -11,11 +11,11 @@ const NilpForm = ({ register, watch }) => {
           <b>New Integrated Licencing Policy (NILP) for commercial Use</b>
         </h6>
         <br></br>
-        <h6 className="text-black">
+        {/* <h6 className="text-black">
           <b>Detail of land use</b>
-        </h6>
+        </h6> */}
         <br></br>
-        <Row className="ml-auto" style={{ marginBottom: 5 }}>
+        {/* <Row className="ml-auto" style={{ marginBottom: 5 }}>
           <Col md={4} xxl lg="3">
             <div>
               <Form.Label>
@@ -60,9 +60,9 @@ const NilpForm = ({ register, watch }) => {
             </div>
             <input type="text" className="form-control" />
           </Col>
-        </Row>
+        </Row> */}
         <br></br>
-        <Row className="ml-auto" style={{ marginBottom: 5 }}>
+        {/* <Row className="ml-auto" style={{ marginBottom: 5 }}>
           <Col md={4} xxl lg="3">
             <div>
               <Form.Label>
@@ -107,7 +107,7 @@ const NilpForm = ({ register, watch }) => {
             </div>
             <input type="text" className="form-control" />
           </Col>
-        </Row>
+        </Row> */}
 
         <br></br>
         <h6 className="text-black">

@@ -8,14 +8,25 @@ import { NumericFormat } from "react-number-format";
 import TextField from "@mui/material/TextField";
 import NumberInput from "../../../../components/NumberInput";
 
-const ResidentialPlottedForm = ({ register, getDocumentData, watch, getDocShareholding, setValue, control }) => {
-  const [error, setError] = useState({});
+const ResidentialPlottedForm = ({
+  register,
+  getDocumentData,
+  watch,
+  getDocShareholding,
+  setValue,
+  control,
+  fields,
+  add,
+  remove,
+  handleWheel,
+  setError,
+  error,
+}) => {
+  const [getABValue, setABValue] = useState("");
 
   useEffect(() => {
     console.log("error", error);
   }, [error]);
-
-  const handleWheel = (e) => e.target.blur();
 
   return (
     <Row className="ml-auto" style={{ marginBottom: 5 }}>
@@ -23,154 +34,11 @@ const ResidentialPlottedForm = ({ register, getDocumentData, watch, getDocShareh
         <h6 className="text-black">
           <b>Residential Plotted</b>
         </h6>
-        <br></br>
-        <h6 className="text-black">
-          <b>Detail of land use</b>
-        </h6>
 
-        {/* <NumberFormat customInput={TextField} thousandSeparator={false} allowNegative={false} decimalScale={0}  /> */}
-        <br></br>
-        <Row className="ml-auto" style={{ marginBottom: 5 }}>
-          <Col md={4} xxl lg="3">
-            <div>
-              <Form.Label>
-                <h2>
-                  Total area of the Scheme
-                  <span style={{ color: "red" }}>*</span>
-                </h2>
-              </Form.Label>
-            </div>
-            <NumberInput disabled control={control} name="totalAreaScheme" customInput={TextField} />
-          </Col>
-          <Col md={4} xxl lg="3">
-            <div>
-              <Form.Label>
-                <h2>
-                  Area under Sector Road & Green Belt
-                  <span style={{ color: "red" }}>*</span>
-                </h2>
-              </Form.Label>
-            </div>
-            <input
-              type="number"
-              className="form-control"
-              {...register("areaUnderSectorRoad")}
-              onWheel={handleWheel}
-              onChange={(e) => {
-                if (e?.target?.value?.length) {
-                  setValue("balanceAreaAfterDeduction", watch("totalAreaScheme") - e?.target?.value)?.toFixed(3);
-                  setValue("areaUnderSectorAndGreenBelt", (e?.target?.value * 50) / 100);
-                } else {
-                  setValue("balanceAreaAfterDeduction", "");
-                  setValue("balanceArea", "");
-                  setValue("areaUnderSectorAndGreenBelt", "");
-                  setValue("netPlannedArea", "");
-                  setValue("areaUnderUndetermined", "");
-                }
-              }}
-            />
-          </Col>
-          <Col md={4} xxl lg="3">
-            <div>
-              <Form.Label>
-                <h2>
-                  Balance area after deducting area under sector road and Green Belt
-                  <span style={{ color: "red" }}>*</span>
-                </h2>
-              </Form.Label>
-            </div>
-            <input disabled type="number" className="form-control" {...register("balanceAreaAfterDeduction")} />
-          </Col>
-          <Col md={4} xxl lg="3">
-            <div>
-              <Form.Label>
-                <h2>
-                  Area under undetermined use=
-                  <span style={{ color: "red" }}>*</span>
-                </h2>
-              </Form.Label>
-            </div>
-            <input
-              type="number"
-              className="form-control"
-              {...register("areaUnderUndetermined")}
-              onWheel={handleWheel}
-              onChange={(e) => {
-                if (e?.target?.value?.length) {
-                  setValue("balanceArea", watch("balanceAreaAfterDeduction") - e?.target?.value)?.toFixed(3);
-                  setValue("netPlannedArea", watch("balanceAreaAfterDeduction") - e?.target?.value + watch("areaUnderSectorAndGreenBelt"));
-                } else {
-                  setValue("balanceArea", "");
-                  setValue("netPlannedArea", "");
-                }
-              }}
-            />
-          </Col>
-        </Row>
-        <br></br>
-        <Row className="ml-auto" style={{ marginBottom: 5 }}>
-          <Col md={4} xxl lg="3">
-            <div>
-              <Form.Label>
-                <h2>
-                  Area under G.H. = 10% of the total area of the scheme
-                  <span style={{ color: "red" }}>*</span>
-                </h2>
-              </Form.Label>
-            </div>
-            <input
-              type="number"
-              className="form-control"
-              {...register("areaUnderGH")}
-              onWheel={handleWheel}
-              onChange={(e) => {
-                if (e?.target?.value > (watch("totalAreaScheme") * 10) / 100)
-                  setError({ ...error, ["areaUnderGH"]: "Area Under GH cannot exceed 10% of Total Area of scheme" });
-                else setError({ ...error, ["areaUnderGH"]: "" });
-              }}
-            />
-          </Col>
-          <Col md={4} xxl lg="3">
-            <div>
-              <Form.Label>
-                <h2>
-                  Balance area
-                  <span style={{ color: "red" }}>*</span>
-                </h2>
-              </Form.Label>
-            </div>
-            <input disabled type="number" className="form-control" {...register("balanceArea")} />
-          </Col>
-          <Col md={4} xxl lg="3">
-            <div>
-              <Form.Label>
-                <h2>
-                  50% of the Area under Sector Road & Green Belt
-                  <span style={{ color: "red" }}>*</span>
-                </h2>
-              </Form.Label>
-            </div>
-            <input disabled type="number" className="form-control" {...register("areaUnderSectorAndGreenBelt")} />
-          </Col>
-          <Col md={4} xxl lg="3">
-            <div>
-              <Form.Label>
-                <h2>
-                  Net planned area (A+B)
-                  <span style={{ color: "red" }}>*</span>
-                </h2>
-              </Form.Label>
-            </div>
-            <input disabled type="number" className="form-control" {...register("netPlannedArea")} />
-          </Col>
-        </Row>
-        <br></br>
-
-        <h6 className="text-black">
+        <h6 className="text-black mt-4">
           <b>Detail of the Plots</b>
         </h6>
-        <br></br>
-        <Row className="ml-auto" style={{ marginBottom: 5 }}>
+        <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
           <Col md={4} xxl lg="3">
             <div>
               <Form.Label>
@@ -218,6 +86,7 @@ const ResidentialPlottedForm = ({ register, getDocumentData, watch, getDocShareh
                 else setError({ ...error, ["generalPlots"]: "" });
               }}
             />
+            {error?.generalPlots && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.generalPlots}</h6>}
           </Col>
           <Col md={4} xxl lg="3">
             <div>
@@ -241,6 +110,7 @@ const ResidentialPlottedForm = ({ register, getDocumentData, watch, getDocShareh
                 else setError({ ...error, ["requiredNPNLPlots"]: "" });
               }}
             />
+            {error?.requiredNPNLPlots && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.requiredNPNLPlots}</h6>}
           </Col>
           <Col md={4} xxl lg="3">
             <div>
@@ -261,6 +131,7 @@ const ResidentialPlottedForm = ({ register, getDocumentData, watch, getDocShareh
               onChange={(e) => {
                 const val = (parseInt(watch("generalPlots")) + parseInt(watch("requiredNPNLPlots"))) * 18;
                 const valA = e?.target?.value * 12;
+                setABValue(val + valA);
                 console.log("val++", (val + valA) / watch("netPlannedArea"));
                 console.log("calc", watch("netPlannedArea"), typeof watch("netPlannedArea"));
                 if (e?.target?.value > (watch("totalNumberOfPlots") * 20) / 100)
@@ -271,6 +142,7 @@ const ResidentialPlottedForm = ({ register, getDocumentData, watch, getDocShareh
                 }
               }}
             />
+            {error?.requiredEWSPlots && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.requiredEWSPlots}</h6>}
           </Col>
         </Row>
         <br></br>
@@ -295,7 +167,18 @@ const ResidentialPlottedForm = ({ register, getDocumentData, watch, getDocShareh
                 </h2>
               </Form.Label>
             </div>
-            <input type="number" className="form-control" {...register("permissibleCommercialArea")} onWheel={handleWheel} />
+            <input
+              type="number"
+              className="form-control"
+              {...register("permissibleCommercialArea")}
+              onChange={(e) => {
+                if (e?.target?.value > (watch("netPlannedArea") * 4) / 100)
+                  setError({ ...error, ["permissibleCommercialArea"]: "Permissible Commercial Area  Maximum 4 % of Net planned Area is allowed" });
+                else setError({ ...error, ["permissibleCommercialArea"]: "" });
+              }}
+              onWheel={handleWheel}
+            />
+            {error?.permissibleCommercialArea && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.permissibleCommercialArea}</h6>}
           </Col>
           <Col md={4} xxl lg="3">
             <div>
@@ -317,7 +200,20 @@ const ResidentialPlottedForm = ({ register, getDocumentData, watch, getDocShareh
                 </h2>
               </Form.Label>
             </div>
-            <input type="number" className="form-control" {...register("commercial")} onWheel={handleWheel} />
+            <input
+              type="number"
+              className="form-control"
+              {...register("commercial")}
+              onWheel={handleWheel}
+              onChange={(e) => {
+                if (watch("underPlot") + e?.target?.value > (watch("netPlannedArea") * 55) / 100)
+                  setError({ ...error, ["permissibleSaleableArea"]: "Cannot exceed 55% of Net planned Area" });
+                else {
+                  setValue("permissibleSaleableArea", watch("underPlot") + e?.target?.value);
+                  setError({ ...error, ["permissibleSaleableArea"]: "" });
+                }
+              }}
+            />
           </Col>
         </Row>
         <br></br>
@@ -332,6 +228,7 @@ const ResidentialPlottedForm = ({ register, getDocumentData, watch, getDocShareh
               </Form.Label>
             </div>
             <input type="number" className="form-control" {...register("permissibleSaleableArea")} onWheel={handleWheel} />
+            {error?.permissibleSaleableArea && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.permissibleSaleableArea}</h6>}
           </Col>
           <Col md={4} xxl lg="3">
             <div>
@@ -342,7 +239,18 @@ const ResidentialPlottedForm = ({ register, getDocumentData, watch, getDocShareh
                 </h2>
               </Form.Label>
             </div>
-            <input type="number" className="form-control" {...register("requiredGreenArea")} onWheel={handleWheel} />
+            <input
+              type="number"
+              className="form-control"
+              {...register("requiredGreenArea")}
+              onChange={(e) => {
+                const checkVal = (getABValue * 2.5) / 4047;
+                if (e?.target?.value > checkVal) setError({ ...error, ["requiredGreenArea"]: "2.5 Square meter per person is allowed" });
+                else setError({ ...error, ["requiredGreenArea"]: "" });
+              }}
+              onWheel={handleWheel}
+            />
+            {error?.requiredGreenArea && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.requiredGreenArea}</h6>}
           </Col>
         </Row>
 
@@ -351,30 +259,63 @@ const ResidentialPlottedForm = ({ register, getDocumentData, watch, getDocShareh
           <b>Detail of Community sites.</b>
         </h6>
         <br></br>
-        <Row className="ml-auto" style={{ marginBottom: 5 }}>
-          <Col md={4} xxl lg="3">
-            <div>
-              <Form.Label>
-                <h2>
-                  Name of Community sites
-                  <span style={{ color: "red" }}>*</span>
-                </h2>
-              </Form.Label>
-            </div>
-            <input type="number" className="form-control" {...register("communitySites")} onWheel={handleWheel} />
-          </Col>
-          <Col md={4} xxl lg="3">
-            <div>
-              <Form.Label>
-                <h2>
-                  Provided
-                  <span style={{ color: "red" }}>*</span>
-                </h2>
-              </Form.Label>
-            </div>
-            <input type="number" className="form-control" {...register("provided")} onWheel={handleWheel} />
-          </Col>
-        </Row>
+        {fields?.map((item, index) => {
+          return (
+            <Row key={item?.id} className="ml-auto" style={{ marginBottom: 5 }}>
+              <Col md={4} xxl lg="3">
+                <div>
+                  <Form.Label>
+                    <h2>
+                      Name of Community sites
+                      <span style={{ color: "red" }}>*</span>
+                    </h2>
+                  </Form.Label>
+                </div>
+                <input
+                  type="name"
+                  className="form-control"
+                  {...register(`detailOfCommunitySites.${index}.communitySites`)}
+                  // {...register("communitySites")}
+                  onWheel={handleWheel}
+                />
+              </Col>
+              <Col md={4} xxl lg="3">
+                <div>
+                  <Form.Label>
+                    <h2>
+                      Provided
+                      <span style={{ color: "red" }}>*</span>
+                    </h2>
+                  </Form.Label>
+                </div>
+                <input
+                  type="name"
+                  className="form-control"
+                  {...register(`detailOfCommunitySites.${index}.provided`)}
+                  // {...register("provided")}
+                  onWheel={handleWheel}
+                />
+              </Col>
+              <Col style={{ alignSelf: "center" }} md={2} lg="2">
+                <button
+                  type="button"
+                  style={{ float: "right", marginRight: 15 }}
+                  className="btn btn-primary"
+                  onClick={() => add({ communitySites: "", provided: "" })}
+                >
+                  Add
+                </button>
+              </Col>
+              {index > 0 && (
+                <Col style={{ alignSelf: "center" }} md={2} lg="2">
+                  <button type="button" className="btn btn-primary" onClick={() => remove(index)}>
+                    Delete
+                  </button>
+                </Col>
+              )}
+            </Row>
+          );
+        })}
 
         <br></br>
         <h6 className="text-black">
