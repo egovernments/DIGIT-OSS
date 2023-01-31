@@ -16,7 +16,7 @@ import MultipleChoice from "./AnswerTypes/MultipleChoice";
 // };
 
 
-const NewSurveyForm = ({ t, index, questionStatement, type, required, options, disableInputs, dispatch, isPartiallyEnabled, addOption, formDisabled, controlSurveyForm }) => {
+const NewSurveyForm = ({ t, index, questionStatement, type, uuid, qorder, required, options, disableInputs, dispatch, isPartiallyEnabled, addOption, formDisabled, controlSurveyForm }) => {
   
   const dropdownOptions = [
     {
@@ -59,7 +59,7 @@ const NewSurveyForm = ({ t, index, questionStatement, type, required, options, d
       title: t("SHORT_ANSWER_TYPE"),
       i18Key: "SHORT_ANSWER_TYPE",
       value: "SHORT_ANSWER_TYPE",
-    }, required, options:options?.length>0?options:[`${t("CMN_OPTION")} 1`] });
+    }, required, options:options?.length>0?options:[`${t("CMN_OPTION")} 1`],uuid:uuid, qorder });
   const { register, formState  } = useFormContext();
 
   useEffect(() => {
@@ -68,7 +68,7 @@ const NewSurveyForm = ({ t, index, questionStatement, type, required, options, d
         title: t("SHORT_ANSWER_TYPE"),
         i18Key: "SHORT_ANSWER_TYPE",
         value: "SHORT_ANSWER_TYPE",
-      }, required, options:options?.length>0?options:[`${t("CMN_OPTION")} 1`] })
+      }, required, options:options?.length>0?options:[`${t("CMN_OPTION")} 1`],uuid:uuid, qorder })
   },[questionStatement])
 
   const handleAddOption = () =>

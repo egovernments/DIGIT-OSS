@@ -7,6 +7,8 @@ const defaultFormsConfig = {
   answerType: "Short Answer",
   required: false,
   options: [],
+  uuid : "",
+  qorder : null,
 };
 
 const initialSurveyFormState = [defaultFormsConfig];

@@ -16,7 +16,7 @@ export const answerTypeEnum = {
 
 
 /**TODO NRJ-egov handle this by setting correct state inside the surveyFormMaker */
-export const mapQuestions = (questions =[]) =>{
+export const mapQuestions = (questions =[],initialData) =>{
   //Added this condition to avoid a bug in which the question type is set as undefined when question type dropdown is not touched and create survey form is submitted. 
   questions = questions.map(ques=>{
     if(!ques?.formConfig?.type){
@@ -28,14 +28,23 @@ export const mapQuestions = (questions =[]) =>{
     return ques
   })
   if(!questions.length) return;
-  return questions.map(({formConfig},index)=>{
-      const {options:choices, questionStatement,required, type:stringType} = formConfig;
-      const finalQuestion = {questionStatement, required, type: typeof stringType === "object" && stringType !== null ? stringType.value : (stringType.title ?  answerTypeEnum[stringType.title] : answerTypeEnum[stringType])};
+  let newmappedQues = [];
+  newmappedQues =  questions.map(({formConfig},index)=>{
+      const {options:choices, questionStatement,required, type:stringType, uuid, qorder} = formConfig;
+      const finalQuestion = {questionStatement,uuid : uuid ? uuid : null, qorder, status : "ACTIVE", required, type: typeof stringType === "object" && stringType !== null ? stringType.value : (stringType.title ?  answerTypeEnum[stringType.title] : answerTypeEnum[stringType])};
       if((stringType?.title === "Multiple Choice" || stringType?.value === "MULTIPLE_ANSWER_TYPE") || (stringType?.title ==="Check Boxes" || stringType?.value === "CHECKBOX_ANSWER_TYPE")) {
         finalQuestion["options"] = choices;
       }
       return finalQuestion;
     })
+  
+  initialData && initialData?.questions?.map((ques) => {
+    let found = newmappedQues.length > 0 ? newmappedQues.some(el => el.uuid === ques?.uuid) : false;
+    if(!found) newmappedQues.push({...ques,status:"INACTIVE"});
+  })
+
+  return newmappedQues;
+ 
 }
 
 const NewSurveys = () => {

@@ -79,13 +79,14 @@ const SurveyDetails = ({ location, match }) => {
           toDate: format(new Date(surveyObj.endDate), "yyyy-MM-dd"),
           fromTime: convertTime12To24(new Date(surveyObj.startDate).toLocaleString("en-IN",{hour: "numeric", minute:"numeric",hour12:true})),
           toTime: convertTime12To24(new Date(surveyObj.endDate).toLocaleString("en-IN",{hour: "numeric", minute:"numeric",hour12:true})),
-          questions: surveyObj.questions.map(({ questionStatement, type, required, options, uuid, surveyId }) => ({
+          questions: surveyObj.questions.map(({ questionStatement, type, required, options, uuid, surveyId, qorder }) => ({
             questionStatement,
             type: /*TypeAnswerEnum[type]*/type,
             required,
             options,
             uuid,
-            surveyId
+            surveyId,
+            qorder,
           })),
           status: surveyObj.status,
           tenantId: { code: surveyObj.tenantId },
@@ -130,7 +131,7 @@ const SurveyDetails = ({ location, match }) => {
 
   const onEdit = (data) => {
     const { collectCitizenInfo, title, description, tenantIds, fromDate, toDate, fromTime, toTime, questions } = data;
-    const mappedQuestions = mapQuestions(questions);
+    const mappedQuestions = mapQuestions(questions,surveyData);
     const details = {
       SurveyEntity: {
         uuid: surveyData.uuid,

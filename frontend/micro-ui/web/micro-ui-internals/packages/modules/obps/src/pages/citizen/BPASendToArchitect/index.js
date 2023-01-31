@@ -26,7 +26,7 @@ const getBPAEditDetails = async (data, APIScrutinyDetails,mdmsData,nocdata,t) =>
     let subBlocks = [];
     let subOcc = {};
     unit && unit.map((un, index) => {
-      arr = un?.usageCategory?.split(",");
+      arr = un?.usageCategory ? un?.usageCategory?.split(",") : [];
       subBlocks=[];
       arr && arr.map((ob, ind) => {
         subBlocks.push({
@@ -35,7 +35,7 @@ const getBPAEditDetails = async (data, APIScrutinyDetails,mdmsData,nocdata,t) =>
           name:t(`BPA_SUBOCCUPANCYTYPE_${ob.replaceAll(".","_")}`),
         })
       })
-      subOcc[`Block_${index+1}`]=subBlocks;
+      if(subBlocks) subOcc[`Block_${index+1}`]=subBlocks;
     });
 
     return subOcc;
