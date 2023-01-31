@@ -1,6 +1,11 @@
 
 All notable changes to this module will be documented in this file.
 
+## 1.2.1 - 2023-01-31
+
+- Improved encryptOldData api with resume functionality
+- Disabled privacy
+
 ## 1.2.0-beta - 2022-08-02
 
 - Added privacy changes for Property applications

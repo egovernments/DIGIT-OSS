@@ -106,8 +106,13 @@ public class PropertyService {
 			request.getProperty().setStatus(Status.ACTIVE);
 		}
 
+		/* Fix this.
+		 * For FUZZY-search, This code to be un-commented when privacy is enabled
+		 
 		//Push PLAIN data to fuzzy search index
 		producer.push(config.getSavePropertyFuzzyTopic(), request);
+		*
+		*/
 		//Push data after encryption
 		producer.pushAfterEncrytpion(config.getSavePropertyTopic(), request);
 		request.getProperty().setWorkflow(null);
@@ -153,7 +158,13 @@ public class PropertyService {
 		fuzzyPropertyRequest.setProperty(encryptionDecryptionUtil.decryptObject(request.getProperty(), PTConstants.PROPERTY_DECRYPT_MODEL,
 				Property.class, request.getRequestInfo()));
 
+		/* Fix this.
+		 * For FUZZY-search, This code to be un-commented when privacy is enabled
+		 
+		//Push PLAIN data to fuzzy search index
 		producer.push(config.getSavePropertyFuzzyTopic(), fuzzyPropertyRequest);
+		*
+		*/
 
 		/* decrypt here */
 		return encryptionDecryptionUtil.decryptObject(request.getProperty(), PTConstants.PROPERTY_MODEL, Property.class, request.getRequestInfo());
@@ -467,7 +478,10 @@ public class PropertyService {
 			if (criteria.getPropertyIds() != null)
 				propertyCriteria.setPropertyIds(criteria.getPropertyIds());
 
-		} else {
+		} else if(criteria.getIsRequestForOldDataEncryption()){
+			propertyCriteria.setTenantIds(criteria.getTenantIds());
+		}
+		else {
 			List<String> uuids = repository.fetchIds(criteria, true);
 			if (uuids.isEmpty())
 				return Collections.emptyList();

@@ -22,6 +22,7 @@ import org.egov.pt.validator.PropertyValidator;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.pt.web.contracts.PropertyResponse;
 import org.egov.pt.web.contracts.RequestInfoWrapper;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -181,10 +182,16 @@ public class PropertyController {
     @RequestMapping(value = "/_encryptOldData", method = RequestMethod.POST)
     public ResponseEntity<PropertyResponse> encryptOldData(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
                                                          @Valid @ModelAttribute PropertyCriteria propertyCriteria) {
-        List<Property> properties = propertyEncryptionService.updateOldData(propertyCriteria, requestInfoWrapper.getRequestInfo());
-        PropertyResponse response = PropertyResponse.builder().properties(properties).responseInfo(
-                        responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
-                .build();
-        return new ResponseEntity<>(response, HttpStatus.OK);
+
+        throw new CustomException("EG_PT_ENC_OLD_DATA_ERROR", "The encryption of old data is disabled");
+          /* Un-comment the below code to enable Privacy */
+        
+//        propertyCriteria.setIsRequestForOldDataEncryption(Boolean.TRUE);
+//        List<Property> properties = propertyEncryptionService.updateOldData(propertyCriteria, requestInfoWrapper.getRequestInfo());
+//        PropertyResponse response = PropertyResponse.builder().properties(properties).responseInfo(
+//                        responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
+//                .build();
+//        return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
 }

@@ -367,4 +367,10 @@ public class PropertyConfiguration {
     @Value("${property.oldDataEncryptionStatus.topic}")
     private String encryptionStatusTopic;
 
+    @Value("${persister.update.property.oldData.topic}")
+    private String updatePropertyEncTopic;
+
+    @Value("${persister.update.property.audit.oldData.topic}")
+    private String updatePropertyAuditEncTopic;
+
 }
