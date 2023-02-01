@@ -801,6 +801,7 @@ const ApllicantPuropseForm = (props) => {
   }, [LandData]);
 
   const handleChangePurpose = (data) => {
+    console.log("data", data);
     const purposeSelected = data?.value;
     window?.localStorage.setItem("purpose", purposeSelected);
   };
@@ -823,9 +824,9 @@ const ApllicantPuropseForm = (props) => {
       const Resp = await axios.post("/filestore/v1/files", formData, {});
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
-      if (fieldName === "registeringAuthorityDoc") {
-        setValue("registeringAuthorityDocFileName", file.name);
-      }
+      // if (fieldName === "registeringAuthorityDoc") {
+      //   setValue("registeringAuthorityDocFileName", file.name);
+      // }
       setSelectedFiles([...selectedFiles, file.name]);
       setLoader(false);
       setShowToast({ key: "success" });
@@ -1334,21 +1335,27 @@ const ApllicantPuropseForm = (props) => {
                       <div className="col col-4">
                         <label>
                           <h2 data-toggle="tooltip" data-placement="top" title="Upload Document" style={{ marginTop: "-4px" }}>
-                            Registering Authority document <span style={{ color: "red" }}>*</span> <FileUpload color="primary" />
+                            Registering Authority document <span style={{ color: "red" }}>*</span>{" "}
+                            <FileUpload style={{ cursor: "pointer" }} color="primary" />
                             <div>
                               <input
                                 type="file"
                                 accept="application/pdf/jpeg/png"
                                 style={{ display: "none" }}
                                 required
-                                onChange={(e) => getDocumentData(e?.target?.files[0], "registeringAuthorityDoc")}
+                                onChange={(e) => getDocumentData(e?.target?.files[0], "registeringAuthorityDocFileName")}
                               />
                             </div>
                           </h2>
                         </label>
-                        <h3 style={{}}>{watch("registeringAuthorityDocFileName") ? watch("registeringAuthorityDocFileName") : null}</h3>
+                        {watch("registeringAuthorityDocFileName") && (
+                          <a onClick={() => getDocShareholding(watch("registeringAuthorityDocFileName"), setLoader)} className="btn btn-sm ">
+                            <VisibilityIcon color="info" className="icon" />
+                          </a>
+                        )}
+                        {/* <h3>{watch("registeringAuthorityDocFileName")}</h3> */}
                         <h3 className="error-message" style={{ color: "red" }}>
-                          {errors?.registeringAuthorityDoc && errors?.registeringAuthorityDoc?.message}
+                          {errors?.registeringAuthorityDocFileName && errors?.registeringAuthorityDocFileName?.message}
                         </h3>
 
                         {/* <input

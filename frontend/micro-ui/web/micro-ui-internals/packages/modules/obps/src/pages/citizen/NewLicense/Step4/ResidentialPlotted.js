@@ -21,6 +21,7 @@ const ResidentialPlottedForm = ({
   handleWheel,
   setError,
   error,
+  setLoader,
 }) => {
   const [getABValue, setABValue] = useState("");
 
@@ -34,7 +35,177 @@ const ResidentialPlottedForm = ({
         <h6 className="text-black">
           <b>Residential Plotted</b>
         </h6>
+        <h6 className="text-black mt-4">
+          <b>Detail of land use</b>
+        </h6>
+        <Col col-12>
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>
+                    Total area of the Scheme
+                    <span style={{ color: "red" }}>*</span>
+                  </h2>
+                </Form.Label>
+              </div>
+              <NumberInput disabled control={control} name="totalAreaScheme" customInput={TextField} />
+            </Col>
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>
+                    Area under Sector Road & Green Belt
+                    <span style={{ color: "red" }}>*</span>
+                  </h2>
+                </Form.Label>
+              </div>
+              <input
+                type="number"
+                className="form-control"
+                {...register("areaUnderSectorRoad")}
+                onWheel={handleWheel}
+                onChange={(e) => {
+                  if (e?.target?.value?.length) {
+                    setValue("balanceAreaAfterDeduction", (watch("totalAreaScheme") - e?.target?.value)?.toFixed(3));
+                    setValue("areaUnderSectorAndGreenBelt", (e?.target?.value * 50) / 100);
+                  } else {
+                    setValue("balanceAreaAfterDeduction", "");
+                    setValue("balanceArea", "");
+                    setValue("areaUnderSectorAndGreenBelt", "");
+                    setValue("netPlannedArea", "");
+                    setValue("areaUnderUndetermined", "");
+                  }
+                }}
+              />
+            </Col>
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>
+                    Balance area after deducting area under sector road and Green Belt
+                    <span style={{ color: "red" }}>*</span>
+                  </h2>
+                </Form.Label>
+              </div>
+              <input disabled type="number" className="form-control" {...register("balanceAreaAfterDeduction")} />
+            </Col>
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>
+                    Area under undetermined use
+                    <span style={{ color: "red" }}>*</span>
+                  </h2>
+                </Form.Label>
+              </div>
+              <input
+                type="number"
+                className="form-control"
+                {...register("areaUnderUndetermined")}
+                onWheel={handleWheel}
+                onChange={(e) => {
+                  if (e?.target?.value?.length) {
+                    setValue("balanceArea", (watch("balanceAreaAfterDeduction") - e?.target?.value)?.toFixed(3));
+                    setValue(
+                      "netPlannedArea",
+                      (watch("balanceAreaAfterDeduction") - e?.target?.value + watch("areaUnderSectorAndGreenBelt"))?.toFixed(3)
+                    );
+                  } else {
+                    setValue("balanceArea", "");
+                    setValue("netPlannedArea", "");
+                  }
+                }}
+              />
+            </Col>
+          </Row>
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>
+                    Area under G.H. = 10% of the total area of the scheme
+                    <span style={{ color: "red" }}>*</span>
+                  </h2>
+                </Form.Label>
+              </div>
+              <input
+                type="number"
+                className="form-control"
+                {...register("areaUnderGH")}
+                onWheel={handleWheel}
+                onChange={(e) => {
+                  if (e?.target?.value > (watch("totalAreaScheme") * 10) / 100)
+                    setError({ ...error, ["areaUnderGH"]: "Area Under GH cannot exceed 10% of Total Area of scheme" });
+                  else setError({ ...error, ["areaUnderGH"]: "" });
+                }}
+              />
+            </Col>
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>
+                    Balance area
+                    <span style={{ color: "red" }}>*</span>
+                  </h2>
+                </Form.Label>
+              </div>
+              <input disabled type="number" className="form-control" {...register("balanceArea")} />
+            </Col>
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>
+                    50% of the Area under Sector Road & Green Belt
+                    <span style={{ color: "red" }}>*</span>
+                  </h2>
+                </Form.Label>
+              </div>
+              <input disabled type="number" className="form-control" {...register("areaUnderSectorAndGreenBelt")} />
+            </Col>
 
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>
+                    Net planned area (A+B)
+                    <span style={{ color: "red" }}>*</span>
+                  </h2>
+                </Form.Label>
+              </div>
+              <input disabled type="number" className="form-control" {...register("netPlannedArea")} />
+            </Col>
+          </Row>
+          {stepData?.ApplicantPurpose?.purpose === "NILPC" && (
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>
+                    Area to be provided free of cost to the Government for EWS/AH
+                    <span style={{ color: "red" }}>*</span>
+                  </h2>
+                </Form.Label>
+              </div>
+              <input
+                disabled
+                type="number"
+                className="form-control"
+                {...register("providedArea")}
+                onWheel={handleWheel}
+                onChange={(e) => {
+                  if (e?.target?.value < (watch("netPlannedArea") * 10) / 100)
+                    setError({
+                      ...error,
+                      ["providedArea"]:
+                        "Minimum 10% area to be provided free of cost to the Government for EWS/Affordable Housing as per amended policy dated 11.05.2022. ",
+                    });
+                  else setError({ ...error, ["providedArea"]: "" });
+                }}
+              />
+              {error?.providedArea && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.providedArea}</h6>}
+            </Col>
+          )}
+        </Col>
         <h6 className="text-black mt-4">
           <b>Detail of the Plots</b>
         </h6>
@@ -274,7 +445,7 @@ const ResidentialPlottedForm = ({
                 <input
                   type="name"
                   className="form-control"
-                  {...register(`detailOfCommunitySites.${index}.communitySites`)}
+                  {...register(`detailOfCommunitySites.${index}.communitySiteName`)}
                   // {...register("communitySites")}
                   onWheel={handleWheel}
                 />
@@ -301,7 +472,7 @@ const ResidentialPlottedForm = ({
                   type="button"
                   style={{ float: "right", marginRight: 15 }}
                   className="btn btn-primary"
-                  onClick={() => add({ communitySites: "", provided: "" })}
+                  onClick={() => add({ communitySiteName: "", provided: "" })}
                 >
                   Add
                 </button>
@@ -327,7 +498,7 @@ const ResidentialPlottedForm = ({
               Layout Plan in pdf<span style={{ color: "red" }}>*</span>
             </h6>
             <label>
-              <FileUpload color="primary" />
+              <FileUpload style={{ cursor: "pointer" }} color="primary" />
               <input
                 type="file"
                 style={{ display: "none" }}
@@ -337,10 +508,10 @@ const ResidentialPlottedForm = ({
             </label>
             {watch("layoutPlanPdf") && (
               <div>
-                <a onClick={() => getDocShareholding(watch("layoutPlanPdf"))} className="btn btn-sm ">
+                <a onClick={() => getDocShareholding(watch("layoutPlanPdf"), setLoader)} className="btn btn-sm ">
                   <VisibilityIcon color="info" className="icon" />
                 </a>
-                <h3>{watch("layoutPlanPdf")}</h3>
+                {/* <h3>{watch("layoutPlanPdf")}</h3> */}
               </div>
             )}
           </div>
@@ -349,7 +520,7 @@ const ResidentialPlottedForm = ({
               Layout Plan in dxf<span style={{ color: "red" }}>*</span>
             </h6>
             <label>
-              <FileUpload color="primary" />
+              <FileUpload style={{ cursor: "pointer" }} color="primary" />
               <input
                 type="file"
                 style={{ display: "none" }}
@@ -357,35 +528,13 @@ const ResidentialPlottedForm = ({
                 accept="application/pdf/jpeg/png"
               />
             </label>
-            {/* {fileStoreId?.undertaking ? (
-              <a onClick={() => getDocShareholding(fileStoreId?.undertaking)} className="btn btn-sm ">
+            {watch("layoutPlanDxf") && (
+              <a onClick={() => getDocShareholding(watch("layoutPlanDxf"), setLoader)} className="btn btn-sm ">
                 <VisibilityIcon color="info" className="icon" />
               </a>
-            ) : (
-              <p></p>
-            )} */}
+            )}
           </div>
-          <div className="col col-3">
-            <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top">
-              Layout Plan in zip<span style={{ color: "red" }}>*</span>
-            </h6>
-            <label>
-              <FileUpload color="primary" />
-              <input
-                type="file"
-                style={{ display: "none" }}
-                onChange={(e) => getDocumentData(e?.target?.files[0], "layoutPlanZip")}
-                accept="application/pdf/jpeg/png"
-              />
-            </label>
-            {/* {fileStoreId?.undertaking ? (
-              <a onClick={() => getDocShareholding(fileStoreId?.undertaking)} className="btn btn-sm ">
-                <VisibilityIcon color="info" className="icon" />
-              </a>
-            ) : (
-              <p></p>
-            )} */}
-          </div>
+
           <div className="col col-3">
             <h6
               style={{ display: "flex" }}
@@ -396,7 +545,7 @@ const ResidentialPlottedForm = ({
               Undertaking.<span style={{ color: "red" }}>*</span>
             </h6>
             <label>
-              <FileUpload color="primary" />
+              <FileUpload style={{ cursor: "pointer" }} color="primary" />
               <input
                 type="file"
                 style={{ display: "none" }}
@@ -404,13 +553,11 @@ const ResidentialPlottedForm = ({
                 accept="application/pdf/jpeg/png"
               />
             </label>
-            {/* {fileStoreId?.undertaking ? (
-              <a onClick={() => getDocShareholding(fileStoreId?.undertaking)} className="btn btn-sm ">
+            {watch("undertaking") && (
+              <a onClick={() => getDocShareholding(watch("undertaking"), setLoader)} className="btn btn-sm ">
                 <VisibilityIcon color="info" className="icon" />
               </a>
-            ) : (
-              <p></p>
-            )} */}
+            )}
           </div>
         </div>
       </Col>
