@@ -36,7 +36,9 @@ const useBPASearch = (tenantId, filters = {}, config = {}) => {
   const userInformation = userInfo?.value?.info;
 
   if (window.location.href.includes("/citizen") && window.location.href.includes("/search")) {
-    if (!filters?.createdBy) filters.createdBy = userInformation?.uuid
+    if (!filters?.createdBy) filters.createdBy = userInformation?.uuid;
+    if (!filters?.applicationType) filters.applicationType = "BUILDING_PLAN_SCRUTINY";
+    if (!filters?.serviceType) filters.serviceType = "NEW_CONSTRUCTION";
   }
   
   const client = useQueryClient();
