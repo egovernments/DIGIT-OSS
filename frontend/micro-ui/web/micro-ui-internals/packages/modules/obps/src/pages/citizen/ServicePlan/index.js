@@ -10,7 +10,6 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
-import { useParams } from "react-router-dom";
 import FileDownload from "@mui/icons-material/FileDownload";
 import { IconButton } from "@mui/material";
 //import { getDocShareholding } from 'packages/modules/tl/src/pages/employee/ScrutinyBasic/ScrutinyDevelopment/docview.helper.js'
@@ -32,7 +31,7 @@ const ServicePlanService = () => {
   const [docUpload, setDocuploadData] = useState([]);
   const [open, setOpen] = useState(false)
   const [applicationNumber, setApplicationNumber] = useState()
-  const [valid, setValid] = useState("")
+  const [valid, setValid] = useState([])
   const {
     register,
     handleSubmit,
@@ -100,20 +99,21 @@ const ServicePlanService = () => {
             key: "",
             msg_id: "",
             requester_id: "",
-            authToken: token,
-            "userInfo": userInfo.info
+            authToken: token
           },
           ServicePlanRequest: [{
             ...servicePlanRes,
-            "action": "FORWARD",
-            "tenantId":  tenantId,
-            "businessService": "SERVICE_PLAN",
+            // "action": "FORWARD",
+            // "tenantId":  tenantId,
+            // "businessService": "SERVICE_PLAN",
             "workflowCode": "SERVICE_PLAN",
-            "comment": "",
-            "assignee": null
+            // "comment": "",
+            // "assignee": null
           }],
         }
         const Resp = await axios.post("/tl-services/serviceplan/_update", updateRequest);
+        setOpen(true)
+        setApplicationNumber(Resp.data.servicePlanResponse[0].applicationNumber)
       }
 
     } catch (error) {
@@ -168,7 +168,17 @@ const ServicePlanService = () => {
   }
 
   const getDocumentData = async (file, fieldName) => {
-    setValid((arr) => [...arr, file.name])
+    // setValid((arr) => [...arr, file.name])
+    // console.log(valid, "vvvvvvvvv");
+    //   let duplicateValidity =  checkDuplicates(valid)
+    //   console.log(duplicateValidity);
+    //   if(duplicateValidity){
+    //     alert('Please upload the different image')
+    //     setValid(valid.slice(0, -1))
+    //     duplicateValidity = false
+    //     return null
+    //   }
+    
     const formData = new FormData();
     formData.append("file", file);
     formData.append("tenantId", "hr");
@@ -188,7 +198,7 @@ const ServicePlanService = () => {
     }
   };
 
-  const closeModal = () => {
+  const handleClose = () => {
     setOpen(false)
     window.location.href = `/digit-ui/citizen`
   }
@@ -237,33 +247,6 @@ const ServicePlanService = () => {
         console.log(error)
       } 
    }
-
-
-
-  // const getSubmitDataLabel = async () => {
-  //   try {
-  //     const postDistrict = {
-  //       requestInfo: {
-  //         api_id: "1",
-  //         ver: "1",
-  //         ts: null,
-  //         action: "create",
-  //         did: "",
-  //         key: "",
-  //         msg_id: "",
-  //         requester_id: "",
-  //         auth_token: null,
-  //       },
-  //     };
-
-  //     const Resp = await axios.post(`http://10.1.1.18:80/land-services/serviceplan/_get?loiNumber=123`, postDistrict);
-  //   } catch (error) {
-  //     console.log(error.message);
-  //   }
-  // };
-  // useEffect(() => {
-  //   getSubmitDataLabel();
-  // }, []);
 
   return (
     <React.Fragment>
