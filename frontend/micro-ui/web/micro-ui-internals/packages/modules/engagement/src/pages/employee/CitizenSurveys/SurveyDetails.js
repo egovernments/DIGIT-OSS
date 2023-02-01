@@ -18,7 +18,7 @@ const filterQuestion = (question) => {
   // if (question.type !== "Multiple Choice" || question.type !== "Check Boxes") {
   //   delete question.options;
   // }
-  return { ...question, type: question.type.includes("_") ? question.type : answerTypeEnum[question.type],options:question?.options };
+  return { ...question, type: question.type.includes("_") ? question.type : answerTypeEnum[question.type],options:question?.options, status:question.status ? question.status : "ACTIVE", qorder:question.qorder };
 };
 
 /**TODO : Think of better to do this possibly in service layer */
@@ -79,7 +79,7 @@ const SurveyDetails = ({ location, match }) => {
           toDate: format(new Date(surveyObj.endDate), "yyyy-MM-dd"),
           fromTime: convertTime12To24(new Date(surveyObj.startDate).toLocaleString("en-IN",{hour: "numeric", minute:"numeric",hour12:true})),
           toTime: convertTime12To24(new Date(surveyObj.endDate).toLocaleString("en-IN",{hour: "numeric", minute:"numeric",hour12:true})),
-          questions: surveyObj.questions.map(({ questionStatement, type, required, options, uuid, surveyId, qorder }) => ({
+          questions: surveyObj.questions.map(({ questionStatement, type, required, options, uuid, surveyId, qorder, status }) => ({
             questionStatement,
             type: /*TypeAnswerEnum[type]*/type,
             required,
@@ -87,6 +87,7 @@ const SurveyDetails = ({ location, match }) => {
             uuid,
             surveyId,
             qorder,
+            status
           })),
           status: surveyObj.status,
           tenantId: { code: surveyObj.tenantId },
