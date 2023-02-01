@@ -459,4 +459,31 @@ components:
         additionalDetails:
           type: object
           description: 'Json object to capture any extra information which is not accommodated by model'          
-          
+    Pagination:
+      type: object
+      description: Pagination details 
+      properties:
+        limit:
+          type: number
+          format: integer
+          description: Limit for total no of records in single search
+            max limit should be defined as envirnment variable
+          default: 10
+          maximum: 100
+        offSet:
+          type: number
+          description: offset or page no
+          default: 0
+        totalCount:
+          type: number
+          description: Total count for a perticular criteria
+          readOnly: true
+        sortBy:
+          type: string
+          description: result sorting order
+        order:
+          type: string
+          description: Sorting order 
+          enum:
+            - asc
+            - desc          
