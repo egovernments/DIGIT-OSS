@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { requestInfoToResponseInfo } from "../utils";
-import { mergeSearchResults, searchByMobileNumber } from "../utils/search";
+import { mergeSearchResults, searchByMobileNumber, mapIDsToList } from "../utils/search";
 import isEmpty from "lodash/isEmpty";
 import get from "lodash/get";
 import some from "lodash/some";
@@ -90,14 +90,24 @@ export const searchApiResponse = async (request, next = {}) => {
       queryObj.mobileNumber,
       envVariables.EGOV_DEFAULT_STATE_ID
     );
-     // console.log(userSearchResponse);
+    // console.log(userSearchResponse);
     let searchUserUUID = get(userSearchResponse, "user.0.uuid");
     // if (searchUserUUID) {
     //   // console.log(searchUserUUID);
-    var userSearchResponseJson = JSON.parse(JSON.stringify(userSearchResponse));  
-    var userUUIDArray =[];
-    for(var i =0;i<userSearchResponseJson.user.length;i++){
+    var userSearchResponseJson = JSON.parse(JSON.stringify(userSearchResponse));
+    var userUUIDArray = [];
+    for (var i = 0; i < userSearchResponseJson.user.length; i++) {
       userUUIDArray.push(userSearchResponseJson.user[i].uuid);
+    }
+
+    let firenocIdQuery = `SELECT FN.uuid as FID FROM eg_fn_firenoc FN JOIN eg_fn_firenocdetail FD ON (FN.uuid = FD.firenocuuid) JOIN eg_fn_owner FO ON (FD.uuid = FO.firenocdetailsuuid) where `;
+
+    if (queryObj.tenantId) {
+      if (queryObj.tenantId == envVariables.EGOV_DEFAULT_STATE_ID) {
+        firenocIdQuery = `${firenocIdQuery} FN.tenantid LIKE '${queryObj.tenantId}%' AND`;
+      } else {
+        firenocIdQuery = `${firenocIdQuery} FN.tenantid = '${queryObj.tenantId}' AND`;
+      }
     }
 
     /*
@@ -120,34 +130,49 @@ export const searchApiResponse = async (request, next = {}) => {
         sqlQuery = `${sqlQuery}) AND`;  
     }*/
 
-    sqlQuery = `${sqlQuery} FO.useruuid in (`;
-        if(userUUIDArray.length > 0){
-          for(var j =0;j<userUUIDArray.length;j++){
-            if(j==0)
-              sqlQuery = `${sqlQuery}'${userUUIDArray[j]}'`;
-
-            sqlQuery = `${sqlQuery}, '${userUUIDArray[j]}'`;
-          }      
+    firenocIdQuery = `${firenocIdQuery} FO.useruuid in (`;
+    if (userUUIDArray.length > 0) {
+      for (var j = 0; j < userUUIDArray.length; j++) {
+        if (j == 0) {
+          firenocIdQuery = `${firenocIdQuery}'${userUUIDArray[j]}'`;
+        } else {
+          firenocIdQuery = `${firenocIdQuery}, '${userUUIDArray[j]}'`;
         }
-        else
-          sqlQuery = `${sqlQuery}'${queryObj.mobileNumber}'`;
+      }
+    } else firenocIdQuery = `${firenocIdQuery}'${queryObj.mobileNumber}'`;
 
-        sqlQuery = `${sqlQuery}) AND`;  
+    firenocIdQuery = `${firenocIdQuery} )`;
+    console.log("Firenoc ID Query -> " + firenocIdQuery);
+    const dbResponse = await db.query(firenocIdQuery);
+    let firenocIds = [];
+    console.log("dbResponse" + JSON.stringify(dbResponse));
+    if (dbResponse.err) {
+      console.log(err.stack);
+    } else {
+      firenocIds =
+        dbResponse.rows && !isEmpty(dbResponse.rows)
+          ? mapIDsToList(dbResponse.rows)
+          : [];
+    }
 
-
-    // }
+    if (queryObj.hasOwnProperty("ids")) {
+      queryObj.ids.push(...firenocIds);
+    } else {
+      queryObj.ids = firenocIds.toString();
+    }
   }
   if (queryObj.hasOwnProperty("ids")) {
     // console.log(queryObj.ids.split(","));
     let ids = queryObj.ids.split(",");
+    sqlQuery = `${sqlQuery} FN.uuid IN ( `;
     for (var i = 0; i < ids.length; i++) {
-      if (ids.length > 1) {
-        sqlQuery = `${sqlQuery} FN.uuid = '${ids[i]}' OR`;
-      } else {
-        sqlQuery = `${sqlQuery} FN.uuid = '${ids[i]}' AND`;
-      }
+      sqlQuery = `${sqlQuery} '${ids[i]}' `;
+      if (i != ids.length - 1) sqlQuery = `${sqlQuery} ,`;
     }
+
+    if (ids.length > 1) sqlQuery = `${sqlQuery} ) AND`;
   }
+
   if (queryKeys) {
     queryKeys.forEach(item => {
       if (queryObj[item]) {
