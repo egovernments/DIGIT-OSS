@@ -53,15 +53,15 @@ export const searchApiResponse = async (request, next = {}) => {
     const mobileNumber = get(request.body, "RequestInfo.userInfo.mobileNumber");
     const tenantId = envVariables.EGOV_DEFAULT_STATE_ID;
     
-    
-    //text = `${text} where (FN.createdby = '${userUUID}' OR`;    
-    // text = `${text} where FN.createdby = '${userUUID}' OR`;
-    queryObj.mobileNumber = queryObj.mobileNumber
+    const noFieldsPresent = null == queryObj.applicationNumber 
+      && null == queryObj.createdby;
+
+    if(noFieldsPresent) {
+      queryObj.mobileNumber = queryObj.mobileNumber
       ? queryObj.mobileNumber
       : mobileNumber;
+      }
     queryObj.tenantId = queryObj.tenantId ? queryObj.tenantId : tenantId;
-    //console.log("mobileNumber", mobileNumber);
-    //console.log("tenedrIDD", tenantId);
 
     if(queryObj.tenantId == envVariables.EGOV_DEFAULT_STATE_ID)
       text = `${text} where FN.tenantid LIKE '${queryObj.tenantId}%' AND`;
