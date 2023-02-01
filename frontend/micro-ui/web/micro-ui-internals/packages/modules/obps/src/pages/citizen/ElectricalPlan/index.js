@@ -80,7 +80,6 @@ const electricalPlanService = () => {
         setOpen(true)
       }
       else{
-        console.log(data, "ddddddddddd");
         electricPlanRes.loiNumber = data?.loiNumber ? data?.loiNumber : electricPlanRes.loiNumber
         electricPlanRes.electricInfra = data?.electricInfra ? data?.electricInfra : electricPlanRes.electricInfra
         electricPlanRes.electricDistribution = data?.electricDistribution ? data?.electricDistribution : electricPlanRes.electricDistribution
@@ -92,6 +91,7 @@ const electricalPlanService = () => {
         electricPlanRes.pdfFormat = data?.pdfFormat ? data?.pdfFormat : electricPlanRes.pdfFormat
         electricPlanRes.autoCad = data?.autoCad ? data?.autoCad : electricPlanRes.autoCad
         electricPlanRes.verifiedPlan = data?.verifiedPlan ? data?.verifiedPlan : electricPlanRes.verifiedPlan
+        
         const updateRequest = {
           requestInfo: {
             api_id: "Rainmaker",
@@ -106,18 +106,19 @@ const electricalPlanService = () => {
           },
           ElectricPlanRequest: [{
             ...electricPlanRes,
-            "action": "FORWARD",
-            "tenantId":  tenantId,
-            "businessService": "SERVICE_PLAN",
-            "workflowCode": "SERVICE_PLAN",
-            "comment": "",
-            "assignee": null
+
+            // "action": "FORWARD",
+            // "tenantId":  tenantId,
+            // "businessService": "SERVICE_PLAN",
+            "workflowCode": "ELECTRICAL_PLAN",
+            // "comment": "",
+            // "assignee": null
           }],
         }
         const Resp = await axios.post("/tl-services/electric/plan/_update", updateRequest);
-
-      }
-
+        setOpen(true)
+        setApplicationNumber(Resp.data.electricPlanResponse[0].applicationNumber)
+        }
 
     } catch (error) {
       console.log(error.message);
@@ -263,7 +264,7 @@ const electricalPlanService = () => {
                 </Form.Label>
 
                 <Form.Check
-                  onChange={() => setElectricInfra("Y")}
+                  onChange={(e) => console.log(e)}
                   value="Y"
                   checked={electricInfra === "Y" ? true : null}
                   type="radio"
@@ -274,7 +275,7 @@ const electricalPlanService = () => {
                   inline
                 ></Form.Check>
                 <Form.Check
-                  onChange={() => setElectricInfra("N")}
+                  onChange={(e) => console.log(e)}
                   value="N"
                   checked={electricInfra === "N" ? true : null}
                   type="radio"
@@ -326,7 +327,6 @@ const electricalPlanService = () => {
                 onChange={(e) => console.log(e)}
                 value="Y"
                 checked={electricalCapacity === "Y" ? true : null}
-
                 type="radio"
                 id="default-radio"
                 label="Yes"
@@ -337,7 +337,7 @@ const electricalPlanService = () => {
               <Form.Check
                 onChange={(e) => console.log(e)}
                 value="N"
-                checked={electricDistribution === "N" ? true : null}
+                checked={electricalCapacity === "N" ? true : null}
                 type="radio"
                 id="default-radio"
                 label="No"
