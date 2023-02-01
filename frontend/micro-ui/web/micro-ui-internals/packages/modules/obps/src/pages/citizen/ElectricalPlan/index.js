@@ -80,7 +80,6 @@ const electricalPlanService = () => {
         setOpen(true)
       }
       else{
-        
         electricPlanRes.loiNumber = data?.loiNumber ? data?.loiNumber : electricPlanRes.loiNumber
         electricPlanRes.electricInfra = data?.electricInfra ? data?.electricInfra : electricPlanRes.electricInfra
         electricPlanRes.electricDistribution = data?.electricDistribution ? data?.electricDistribution : electricPlanRes.electricDistribution
@@ -92,8 +91,7 @@ const electricalPlanService = () => {
         electricPlanRes.pdfFormat = data?.pdfFormat ? data?.pdfFormat : electricPlanRes.pdfFormat
         electricPlanRes.autoCad = data?.autoCad ? data?.autoCad : electricPlanRes.autoCad
         electricPlanRes.verifiedPlan = data?.verifiedPlan ? data?.verifiedPlan : electricPlanRes.verifiedPlan
-
-        console.log({data, electricPlanRes}, "ddddddddddd");
+        
         const updateRequest = {
           requestInfo: {
             api_id: "Rainmaker",
@@ -108,6 +106,7 @@ const electricalPlanService = () => {
           },
           ElectricPlanRequest: [{
             ...electricPlanRes,
+
             // "action": "FORWARD",
             // "tenantId":  tenantId,
             // "businessService": "SERVICE_PLAN",
@@ -119,8 +118,7 @@ const electricalPlanService = () => {
         const Resp = await axios.post("/tl-services/electric/plan/_update", updateRequest);
         setOpen(true)
         setApplicationNumber(Resp.data.electricPlanResponse[0].applicationNumber)
-      }
-
+        }
 
     } catch (error) {
       console.log(error.message);
@@ -232,12 +230,6 @@ const electricalPlanService = () => {
         console.log(error)
       } 
    }
-
-  const handlechange = (e) => {
-    console.log(e.target.checked);
-    setElectricInfra('Y')
-  }
-console.log(electricInfra, "=====");
   return (
     <React.Fragment>
     <form onSubmit={handleSubmit(electricPlan)}>
@@ -272,9 +264,9 @@ console.log(electricInfra, "=====");
                 </Form.Label>
 
                 <Form.Check
-                  onChange={(e) => handlechange(e)}
+                  onChange={(e) => console.log(e)}
                   value="Y"
-                  checked={electricInfra === ("Y" || true)? true : null}
+                  checked={electricInfra === "Y" ? true : null}
                   type="radio"
                   id="default-radio"
                   label="Yes"
@@ -283,9 +275,9 @@ console.log(electricInfra, "=====");
                   inline
                 ></Form.Check>
                 <Form.Check
-                  onChange={(e) => handlechange(e)}
+                  onChange={(e) => console.log(e)}
                   value="N"
-                  checked={electricInfra === ("N" || true) ? true : null}
+                  checked={electricInfra === "N" ? true : null}
                   type="radio"
                   id="default-radio"
                   label="No"

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Card, Row, Col, Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
@@ -168,7 +169,7 @@ const ServicePlanService = () => {
   }
 
   const getDocumentData = async (file, fieldName) => {
-    // setValid((arr) => [...arr, file.name])
+    setValid((arr) => [...arr, file.name])
     // console.log(valid, "vvvvvvvvv");
     //   let duplicateValidity =  checkDuplicates(valid)
     //   console.log(duplicateValidity);
@@ -522,3 +523,4 @@ const ServicePlanService = () => {
 };
 
 export default ServicePlanService;
+
