@@ -33,6 +33,7 @@
     "react-dom": "17.0.2",
     "react-hook-form": "7.31.1",
     "react-i18next": "11.16.2",
+    "react-number-format": "4.9.3",
     "react-query": "3.6.1",
     "react-redux": "7.2.8",
     "react-router-dom": "5.3.0",
@@ -40,8 +41,7 @@
     "redux": "4.1.2",
     "redux-thunk": "2.4.1",
     "styled-components": "^5.3.6",
-    "yup": "^0.32.11",
-    "react-number-format": "^4.9.3"
+    "yup": "^0.32.11"
   },
   "author": "",
   "license": "MIT"

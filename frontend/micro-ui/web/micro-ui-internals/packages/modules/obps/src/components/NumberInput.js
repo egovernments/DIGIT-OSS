@@ -1,6 +1,6 @@
 import React from "react";
-// import NumberFormat from "react-number-format";
-import { NumericFormat } from "react-number-format";
+import NumberFormat from "react-number-format";
+// import { NumericFormat } from "react-number-format";
 import { Controller } from "react-hook-form";
 
 const NumberInput = (props) => {
@@ -8,7 +8,7 @@ const NumberInput = (props) => {
     <div className="app-input-text">
       <Controller
         render={({ field: { onChange, value } }) => (
-          <NumericFormat
+          <NumberFormat
             onChange={(e) => {
               onChange(e?.target?.value);
               if (props?.onChangeHandler) props?.onChangeHandler(props?.name, e?.target?.value);
