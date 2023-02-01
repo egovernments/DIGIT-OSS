@@ -7,6 +7,8 @@ import ResidentialPlottedForm from "./ResidentialPlotted";
 import IndustrialPlottedForm from "./IndustrialPlotted";
 import CommercialPlottedForm from "./CommercialPlotted";
 import NilpForm from "./Nilp";
+import ResidentialGroupHousingForm from "./ResidentialGroupHousing";
+import AffordableGroupHousingForm from "./AffordableGroupHousing";
 import LayoutPlan from "./LayoutPlan";
 import DemarcationPlan from "./DemarcationPlan";
 import { Card, Row, Col, Button, Form } from "react-bootstrap";
@@ -618,6 +620,8 @@ const AppliedDetailForm = (props) => {
                     )}
                   </div>
                   <div>{stepData?.ApplicantPurpose?.purpose === "IPL" && <IndustrialPlottedForm register={register} />}</div>
+                  <div>{stepData?.ApplicantPurpose?.purpose === "RGP" && <ResidentialGroupHousingForm register={register} />}</div>
+                  <div>{stepData?.ApplicantPurpose?.purpose === "AGH" && <AffordableGroupHousingForm register={register} />}</div>
                   <div>
                     {(stepData?.ApplicantPurpose?.purpose === "NILPC" || stepData?.ApplicantPurpose?.purpose === "NILP") && (
                       <NilpForm
