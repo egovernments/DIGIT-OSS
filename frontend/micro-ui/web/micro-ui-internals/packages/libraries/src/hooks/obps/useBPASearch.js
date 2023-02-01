@@ -30,6 +30,15 @@ const useBPASearch = (tenantId, filters = {}, config = {}) => {
     if (!filters?.limit) filters.limit = 10;
     if (!filters?.offset) filters.offset = 0;
   }
+
+  const userInfos = sessionStorage.getItem("Digit.citizen.userRequestObject");
+  const userInfo = userInfos ? JSON.parse(userInfos) : {};
+  const userInformation = userInfo?.value?.info;
+
+  if (window.location.href.includes("/citizen") && window.location.href.includes("/search")) {
+    if (!filters?.createdBy) filters.createdBy = userInformation?.uuid
+  }
+  
   const client = useQueryClient();
   return {...useQuery(['BPA_SEARCH', tenantId, filters], async () => {
     const response = await OBPSService.BPASearch(tenantId, { ...filters });

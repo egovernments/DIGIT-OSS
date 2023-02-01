@@ -29,7 +29,8 @@ const OBPSSearchApplication = ({ tenantId, t, onSubmit, data, error, searchData,
   const { register, control, handleSubmit, setValue, getValues, reset, formState } = useForm({
     defaultValues: {
       applicationNo: "",
-      mobileNumber: window.location.href.includes("/digit-ui/citizen") ? currentUserPhoneNumber : "",
+      // mobileNumber: window.location.href.includes("/digit-ui/citizen") ? currentUserPhoneNumber : "",
+      mobileNumber: "",
       fromDate: "",
       toDate: "",
       status: "",
@@ -77,7 +78,8 @@ const OBPSSearchApplication = ({ tenantId, t, onSubmit, data, error, searchData,
       //reset({ ...searchData, isSubmitSuccessful: false });
       reset({
         applicationNo: "",
-       mobileNumber: window.location.href.includes("/digit-ui/citizen") ? Digit.UserService.getUser()?.info?.mobileNumber : "",
+        mobileNumber: "",
+      //  mobileNumber: window.location.href.includes("/digit-ui/citizen") ? Digit.UserService.getUser()?.info?.mobileNumber : "",
         fromDate: "",
         toDate: "",
         status: "",
@@ -216,17 +218,25 @@ const OBPSSearchApplication = ({ tenantId, t, onSubmit, data, error, searchData,
       switch (currentlyActiveMobileModal) {
         case "SearchFormComponent":
           return (
+            <>
             <SearchForm {...props}>
               <MobilePopUpCloseButton />
               <div className="MobilePopupHeadingWrapper">
                 <h2>{t("ES_COMMON_SEARCH_APPLICATION")}:</h2>
               </div>
+                {
+                  window.location.href.includes("/digit-ui/citizen") &&
+                  <div style={{ background: "#ffffff", padding: "20px 0px", color: "#00000099" }}>
+                    <label>{t("BPA_SEARCH_CREATED_BY_STAKEHOLDER_LABEL")}</label>
+                  </div>
+                }
               <SearchFormFieldsComponent {...searchFormFieldsComponentProps} {...{ closeMobilePopupModal }} />
               {/* <SearchField className="submit">
                         <SubmitBar label={t("ES_COMMON_SEARCH")} submit form="search-form"/>
                         <p onClick={onResetSearchForm}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
                     </SearchField> */}
             </SearchForm>
+            </>
           );
         default:
           return <span></span>;
@@ -294,6 +304,12 @@ const OBPSSearchApplication = ({ tenantId, t, onSubmit, data, error, searchData,
   return (
     <React.Fragment>
       <Header>{t("ES_COMMON_SEARCH_APPLICATION")}</Header>
+      {
+        window.location.href.includes("/digit-ui/citizen") && 
+        <div style={{background: "#ffffff", paddingLeft: "25px", paddingTop: "10px", color: "#00000099"}}>
+          <label>{t("BPA_SEARCH_CREATED_BY_STAKEHOLDER_LABEL")}</label>
+        </div>
+      }
       <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>
         <SearchFormFieldsComponent {...searchFormFieldsComponentProps} />
       </SearchForm>
