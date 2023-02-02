@@ -3,16 +3,17 @@ import "bootstrap/dist/css/bootstrap.css";
 import { Row, Col } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import NumberInput from "../../../../components/NumberInput";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import TextField from "@mui/material/TextField";
-import FileUpload from "@mui/icons-material/FileUpload";
 
-const NilpForm = ({ register, getDocumentData, watch, getDocShareholding, setLoader, setValue, control, handleWheel, setError, error }) => {
+const MixedLandUseForm = ({ register, watch, setValue, control, handleWheel, setError, error }) => {
   return (
     <Row className="ml-auto" style={{ marginBottom: 5 }}>
       <Col col-12>
         <h6 className="text-black">
-          <b>New Integrated Licencing Policy (NILP) for commercial Use</b>
+          <b>Residential Group Housing</b>
+        </h6>
+        <h6 className="text-black mt-4">
+          <b>Detail of land use</b>
         </h6>
         <h6 className="text-black mt-4">
           <b>Detail of land use</b>
@@ -127,7 +128,6 @@ const NilpForm = ({ register, getDocumentData, watch, getDocShareholding, setLoa
               </div>
               <input disabled type="number" className="form-control" {...register("areaUnderSectorAndGreenBelt")} />
             </Col>
-
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
@@ -145,7 +145,7 @@ const NilpForm = ({ register, getDocumentData, watch, getDocShareholding, setLoa
           <div>
             <Form.Label>
               <h2>
-                Area to be provided free of cost to the Government for EWS/AH
+                Permissable Commercial
                 <span style={{ color: "red" }}>*</span>
               </h2>
             </Form.Label>
@@ -153,74 +153,19 @@ const NilpForm = ({ register, getDocumentData, watch, getDocShareholding, setLoa
           <input
             type="number"
             className="form-control"
-            {...register("providedArea")}
+            {...register("permissableCommercial")}
             onWheel={handleWheel}
             onChange={(e) => {
-              if (e?.target?.value < (watch("netPlannedArea") * 10) / 100)
-                setError({
-                  ...error,
-                  ["providedArea"]:
-                    "Minimum 10% area to be provided free of cost to the Government for EWS/Affordable Housing as per amended policy dated 11.05.2022. ",
-                });
-              else setError({ ...error, ["providedArea"]: "" });
+              if (e?.target?.value > (watch("netPlannedArea") * 70) / 100) {
+                setError({ ...error, ["permissableCommercial"]: "Maximum 70% of Net planned area is allowed" });
+              } else setError({ ...error, ["permissableCommercial"]: "" });
             }}
           />
-          {error?.providedArea && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.providedArea}</h6>}
+          {error?.permissableCommercial && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.permissableCommercial}</h6>}
         </Col>
-
-        <h6 className="text-black mt-4">
-          <b>Documents</b>
-        </h6>
-        <br></br>
-        <div className="row mt-4">
-          <div className="col col-3">
-            <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top">
-              Layout Plan in pdf<span style={{ color: "red" }}>*</span>
-            </h6>
-            <div className="d-flex">
-              <label>
-                <FileUpload style={{ cursor: "pointer" }} color="primary" />
-                <input
-                  type="file"
-                  style={{ display: "none" }}
-                  onChange={(e) => getDocumentData(e?.target?.files[0], "layoutPlanPdf")}
-                  accept="application/pdf/jpeg/png"
-                />
-              </label>
-              {watch("layoutPlanPdf") && (
-                <div>
-                  <a onClick={() => getDocShareholding(watch("layoutPlanPdf"), setLoader)} className="btn btn-sm ">
-                    <VisibilityIcon color="info" className="icon" />
-                  </a>
-                </div>
-              )}
-            </div>
-          </div>
-          <div className="col col-3">
-            <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top">
-              Layout Plan in dxf<span style={{ color: "red" }}>*</span>
-            </h6>
-            <div className="d-flex">
-              <label>
-                <FileUpload style={{ cursor: "pointer" }} color="primary" />
-                <input
-                  type="file"
-                  style={{ display: "none" }}
-                  onChange={(e) => getDocumentData(e?.target?.files[0], "layoutPlanDxf")}
-                  accept="application/pdf/jpeg/png"
-                />
-              </label>
-              {watch("layoutPlanDxf") && (
-                <a onClick={() => getDocShareholding(watch("layoutPlanDxf"), setLoader)} className="btn btn-sm ">
-                  <VisibilityIcon color="info" className="icon" />
-                </a>
-              )}
-            </div>
-          </div>
-        </div>
       </Col>
     </Row>
   );
 };
 
-export default NilpForm;
+export default MixedLandUseForm;

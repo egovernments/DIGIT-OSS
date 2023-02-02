@@ -801,6 +801,7 @@ const ApllicantPuropseForm = (props) => {
   }, [LandData]);
 
   const handleChangePurpose = (data) => {
+    console.log("data", data);
     const purposeSelected = data?.value;
     window?.localStorage.setItem("purpose", purposeSelected);
   };
