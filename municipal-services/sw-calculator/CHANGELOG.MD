@@ -1,6 +1,10 @@
 # Change log
 All notable changes to this module will be documented in this file.
 
+## 1.4.3 - 2023-02-01
+
+- Transition from 1.4.3-beta version to 1.4.3 version
+
 ## 1.4.3-beta - 2022-11-03
 
 - Enabled adding meter reading till pending for disconnection execution for disconnection flow

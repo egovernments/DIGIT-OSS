@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.1.6 - 2023-02-01
+
+- Transition from 1.1.6_beta version to 1.1.6 version
+- Modify citizen based search with mobileno to only show applications owned by the user
+
 ## 1.1.6-beta
 
 - When demand is not applicable then skip the payment stage
