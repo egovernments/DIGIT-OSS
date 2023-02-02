@@ -620,11 +620,41 @@ const AppliedDetailForm = (props) => {
                     )}
                   </div>
                   <div>{stepData?.ApplicantPurpose?.purpose === "IPL" && <IndustrialPlottedForm register={register} />}</div>
-                  <div>{stepData?.ApplicantPurpose?.purpose === "RGP" && <ResidentialGroupHousingForm register={register} />}</div>
-                  <div>{stepData?.ApplicantPurpose?.purpose === "AGH" && <AffordableGroupHousingForm register={register} />}</div>
                   <div>
                     {(stepData?.ApplicantPurpose?.purpose === "NILPC" || stepData?.ApplicantPurpose?.purpose === "NILP") && (
                       <NilpForm
+                        register={register}
+                        getDocumentData={getDocumentData}
+                        watch={watch}
+                        getDocShareholding={getDocShareholding}
+                        setLoader={setLoader}
+                        setValue={setValue}
+                        control={control}
+                        handleWheel={handleWheel}
+                        setError={setError}
+                        error={error}
+                      />
+                    )}
+                  </div>
+                  <div>
+                    {stepData?.ApplicantPurpose?.purpose === "RGP" && (
+                      <ResidentialGroupHousingForm
+                        register={register}
+                        getDocumentData={getDocumentData}
+                        watch={watch}
+                        getDocShareholding={getDocShareholding}
+                        setLoader={setLoader}
+                        setValue={setValue}
+                        control={control}
+                        handleWheel={handleWheel}
+                        setError={setError}
+                        error={error}
+                      />
+                    )}
+                  </div>
+                  <div>
+                    {stepData?.ApplicantPurpose?.purpose === "AGH" && (
+                      <AffordableGroupHousingForm
                         register={register}
                         getDocumentData={getDocumentData}
                         watch={watch}
