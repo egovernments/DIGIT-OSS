@@ -21,6 +21,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
     const [mobileNumber, setMobileNumber] = useState(formData?.owners?.mobileNumber || "");
     const [showToast, setShowToast] = useState(null);
     const [isDisable, setIsDisable] = useState(false);
+    const [ownerRoleCheck, setownerRoleCheck] = useState({});
     let Webview = !Digit.Utils.browser.isMobile();
     const ismultiple = ownershipCategory?.code.includes("MULTIPLEOWNERS") ? true : false;
     formData?.owners?.owners?.forEach(owner => {
@@ -203,18 +204,19 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
             return;
         }
 
-        if (ownerNo === ownersCopy?.[indexValue]?.userName) {
+        if (ownerNo === ownersCopy?.[indexValue]?.userName && (ownerRoleCheck?.code !== "BPA_ARCHITECT" && ownerRoleCheck?.code !== "BPA_SUPERVISOR")) {
             setShowToast({ key: "true", error: true, message: "ERR_OWNER_ALREADY_ADDED_TOGGLE_MSG" });
             return;
         }
 
         const matchingOwnerIndex = ownersCopy.findIndex(item => item.userName === ownerNo);
 
-        if (matchingOwnerIndex > -1) {
+        if (matchingOwnerIndex > -1 && (ownerRoleCheck?.code !== "BPA_ARCHITECT" && ownerRoleCheck?.code !== "BPA_SUPERVISOR")) {
             setShowToast({ key: "true", error: true, message: "ERR_OWNER_ALREADY_ADDED" });
             return;
         } else {
             const usersResponse = await Digit.UserService.userSearch(Digit.ULBService.getStateId(), { userName: fields?.[indexValue]?.mobileNumber }, {});
+            let found = usersResponse?.user?.[0]?.roles?.filter(el => el.code === "BPA_ARCHITECT" || el.code === "BPA_SUPERVISOR")?.[0];
             if (usersResponse?.user?.length === 0) {
                 setShowToast({ key: "true", warning: true, message: "ERR_MOBILE_NUMBER_NOT_REGISTERED" });
                 return;
@@ -233,12 +235,48 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 setFeilds(values);
                 if(values[indexValue]?.mobileNumber && values[indexValue]?.name && values[indexValue]?.gender?.code) setCanmovenext(true);
                 else setCanmovenext(false);
+
+                if(found){
+                    setCanmovenext(false);
+                    setownerRoleCheck(found);
+                    setShowToast({ key: "true", error: true, message: `BPA_OWNER_VALIDATION_${found?.code}` });
+                    return;
+                }
             }
         }
     }
 
-    const goNext = () => {
+    const getUserData = async (data,tenant) => {
+        let flag = false;
+        let userresponse = [];
+        userresponse = fields?.map((ob,indexValue) => {
+            return Digit.UserService.userSearch(Digit.ULBService.getStateId(), { userName: fields?.[indexValue]?.mobileNumber }, {}).then((ob) => {return ob})
+        })
+        //getting user data from citizen uuid
+        userresponse = await Promise.all(userresponse);
+        let foundMobileNo = [];
+        let found =false;
+        userresponse && userresponse?.length>0 && userresponse.map((ob) => {
+          found = ob?.user?.[0]?.roles?.filter(el => el.code === "BPA_ARCHITECT" || el.code === "BPA_SUPERVISOR")?.[0];
+            if(fields.find((fi) => !(fi?.uuid && !(found)) && ((fi?.name === ob?.user?.[0]?.name && fi?.mobileNumber === ob?.user?.[0]?.mobileNumber) || (fi?.mobileNumber === ob?.user?.[0]?.mobileNumber && found))))
+            {
+                flag = true;
+                foundMobileNo.push(ob?.user?.[0]?.mobileNumber);
+            }
+        })
+
+        if(foundMobileNo?.length > 0)
+        setShowToast({ key: "true", error: true, message: `${t("BPA_OWNER_VALIDATION_1")} ${foundMobileNo?.join(", ")} ${t("BPA_OWNER_VALIDATION_2")}` });
+        if(flag == true)
+        return false;
+        else 
+        return true;
+    }
+
+    const goNext = async () => {
         setError(null);
+        const moveforward = await getUserData();
+       if(moveforward){
         if (ismultiple == true && fields.length == 1) {
             window.scrollTo(0,0);
             setError("BPA_ERROR_MULTIPLE_OWNER");
@@ -332,6 +370,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 onSelect(config.key, ownerStep);
             }
         }
+    }
     };
 
     const onSkip = () => onSelect();
@@ -340,10 +379,23 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
     //     return <Loader />
     // }
 
+    function getCanMoveNextMultiple()
+    {
+        let flag = 0;
+        fields && fields?.map((ob) => {
+            if(flag !== 1 && (!ob?.name || !ob?.mobileNumber || !ob?.gender?.code) )
+            flag = 1;
+        })
+        if(flag == 0)
+        return false;
+        else
+        return true;
+    }
+
     return (
         <div>
         <Timeline currentStep={2} />
-        <FormStep config={config} onSelect={goNext} onSkip={onSkip} t={t} isDisabled={canmovenext || !ownershipCategory || isDisable} forcedError={t(error)}>   
+        <FormStep config={config} onSelect={goNext} onSkip={onSkip} t={t} isDisabled={canmovenext || getCanMoveNextMultiple() || !ownershipCategory || isDisable || showToast} forcedError={t(error)}>   
             {!isLoading ?
                 <div style={{marginBottom: "10px"}}>
                     <div>
