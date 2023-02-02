@@ -3,11 +3,9 @@ import "bootstrap/dist/css/bootstrap.css";
 import { Row, Col } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import NumberInput from "../../../../components/NumberInput";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import TextField from "@mui/material/TextField";
-import FileUpload from "@mui/icons-material/FileUpload";
 
-const AffordableGroupHousingForm = ({ register, watch, setValue, control, handleWheel, setError, error }) => {
+const MixedLandUseForm = ({ register, watch, setValue, control, handleWheel, setError, error }) => {
   return (
     <Row className="ml-auto" style={{ marginBottom: 5 }}>
       <Col col-12>
@@ -143,79 +141,31 @@ const AffordableGroupHousingForm = ({ register, watch, setValue, control, handle
             </Col>
           </Row>
         </Col>
-        <Col col-12>
-          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>
-                    Permissable Ground Coverage
-                    <span style={{ color: "red" }}>*</span>
-                  </h2>
-                </Form.Label>
-              </div>
-              <input
-                type="number"
-                className="form-control"
-                {...register("permissableGroundCoverage")}
-                onWheel={handleWheel}
-                onChange={(e) => {
-                  if (e?.target?.value > (watch("netPlannedArea") * 50) / 100) {
-                    setError({ ...error, ["permissableGroundCoverage"]: "Maximum 50% of Net planned area is allowed" });
-                  } else setError({ ...error, ["permissableGroundCoverage"]: "" });
-                }}
-              />
-              {error?.permissableGroundCoverage && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.permissableGroundCoverage}</h6>}
-            </Col>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>
-                    Permissable Commercial
-                    <span style={{ color: "red" }}>*</span>
-                  </h2>
-                </Form.Label>
-              </div>
-              <input
-                type="number"
-                className="form-control"
-                {...register("permissableCommercial")}
-                onWheel={handleWheel}
-                onChange={(e) => {
-                  if (e?.target?.value > (watch("netPlannedArea") * 8) / 100) {
-                    setError({ ...error, ["permissableCommercial"]: "Maximum 8% of Net planned area is allowed" });
-                  } else setError({ ...error, ["permissableCommercial"]: "" });
-                }}
-              />
-              {error?.permissableCommercial && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.permissableCommercial}</h6>}
-            </Col>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>
-                    Permissable FAR
-                    <span style={{ color: "red" }}>*</span>
-                  </h2>
-                </Form.Label>
-              </div>
-              <input
-                type="number"
-                className="form-control"
-                {...register("permissableFAR")}
-                onWheel={handleWheel}
-                onChange={(e) => {
-                  if (e?.target?.value > (watch("netPlannedArea") * 225) / 100) {
-                    setError({ ...error, ["permissableFAR"]: "Maximum 225% of Net planned area is allowed" });
-                  } else setError({ ...error, ["permissableFAR"]: "" });
-                }}
-              />
-              {error?.permissableFAR && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.permissableFAR}</h6>}
-            </Col>
-          </Row>
+        <Col md={4} xxl lg="3">
+          <div>
+            <Form.Label>
+              <h2>
+                Permissable Commercial
+                <span style={{ color: "red" }}>*</span>
+              </h2>
+            </Form.Label>
+          </div>
+          <input
+            type="number"
+            className="form-control"
+            {...register("permissableCommercial")}
+            onWheel={handleWheel}
+            onChange={(e) => {
+              if (e?.target?.value > (watch("netPlannedArea") * 70) / 100) {
+                setError({ ...error, ["permissableCommercial"]: "Maximum 70% of Net planned area is allowed" });
+              } else setError({ ...error, ["permissableCommercial"]: "" });
+            }}
+          />
+          {error?.permissableCommercial && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.permissableCommercial}</h6>}
         </Col>
       </Col>
     </Row>
   );
 };
 
-export default AffordableGroupHousingForm;
+export default MixedLandUseForm;

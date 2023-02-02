@@ -9,6 +9,11 @@ import CommercialPlottedForm from "./CommercialPlotted";
 import NilpForm from "./Nilp";
 import ResidentialGroupHousingForm from "./ResidentialGroupHousing";
 import AffordableGroupHousingForm from "./AffordableGroupHousing";
+import CommercialIntegratedForm from "./CommercialIntegrated";
+import IILPForm from "./IILPForm";
+import ITCyberCityForm from "./ITCyberCity";
+import MixedLandUseForm from "./MixedLandUse";
+import RetirementHousingForm from "./RetirementHousing";
 import LayoutPlan from "./LayoutPlan";
 import DemarcationPlan from "./DemarcationPlan";
 import { Card, Row, Col, Button, Form } from "react-bootstrap";
@@ -640,10 +645,7 @@ const AppliedDetailForm = (props) => {
                     {stepData?.ApplicantPurpose?.purpose === "RGP" && (
                       <ResidentialGroupHousingForm
                         register={register}
-                        getDocumentData={getDocumentData}
                         watch={watch}
-                        getDocShareholding={getDocShareholding}
-                        setLoader={setLoader}
                         setValue={setValue}
                         control={control}
                         handleWheel={handleWheel}
@@ -656,10 +658,72 @@ const AppliedDetailForm = (props) => {
                     {stepData?.ApplicantPurpose?.purpose === "AGH" && (
                       <AffordableGroupHousingForm
                         register={register}
-                        getDocumentData={getDocumentData}
                         watch={watch}
-                        getDocShareholding={getDocShareholding}
-                        setLoader={setLoader}
+                        setValue={setValue}
+                        control={control}
+                        handleWheel={handleWheel}
+                        setError={setError}
+                        error={error}
+                      />
+                    )}
+                  </div>
+                  <div>
+                    {(stepData?.ApplicantPurpose?.purpose === "CICS" || stepData?.ApplicantPurpose?.purpose === "CIRS") && (
+                      <CommercialIntegratedForm
+                        register={register}
+                        watch={watch}
+                        setValue={setValue}
+                        control={control}
+                        handleWheel={handleWheel}
+                        setError={setError}
+                        error={error}
+                      />
+                    )}
+                  </div>
+                  <div>
+                    {(stepData?.ApplicantPurpose?.purpose === "ITC" || stepData?.ApplicantPurpose?.purpose === "ITP") && (
+                      <ITCyberCityForm
+                        register={register}
+                        watch={watch}
+                        setValue={setValue}
+                        control={control}
+                        handleWheel={handleWheel}
+                        setError={setError}
+                        error={error}
+                      />
+                    )}
+                  </div>
+                  <div>
+                    {stepData?.ApplicantPurpose?.purpose === "IPULP" && (
+                      <IILPForm
+                        register={register}
+                        watch={watch}
+                        setValue={setValue}
+                        control={control}
+                        handleWheel={handleWheel}
+                        setError={setError}
+                        error={error}
+                      />
+                    )}
+                  </div>
+                  <div>
+                    {stepData?.ApplicantPurpose?.purpose === "MLU-CZ" && (
+                      <MixedLandUseForm
+                        register={register}
+                        watch={watch}
+                        setValue={setValue}
+                        control={control}
+                        handleWheel={handleWheel}
+                        setError={setError}
+                        error={error}
+                      />
+                    )}
+                  </div>
+                  <div>
+                    {stepData?.ApplicantPurpose?.purpose === "RHP" && (
+                      <RetirementHousingForm
+                        register={register}
+                        watch={watch}
                         setValue={setValue}
                         control={control}
                         handleWheel={handleWheel}

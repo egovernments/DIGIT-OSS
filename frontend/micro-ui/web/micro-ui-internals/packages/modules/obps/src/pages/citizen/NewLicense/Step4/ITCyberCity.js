@@ -7,7 +7,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import TextField from "@mui/material/TextField";
 import FileUpload from "@mui/icons-material/FileUpload";
 
-const AffordableGroupHousingForm = ({ register, watch, setValue, control, handleWheel, setError, error }) => {
+const ITCyberCityForm = ({ register, watch, setValue, control, handleWheel, setError, error }) => {
   return (
     <Row className="ml-auto" style={{ marginBottom: 5 }}>
       <Col col-12>
@@ -160,34 +160,12 @@ const AffordableGroupHousingForm = ({ register, watch, setValue, control, handle
                 {...register("permissableGroundCoverage")}
                 onWheel={handleWheel}
                 onChange={(e) => {
-                  if (e?.target?.value > (watch("netPlannedArea") * 50) / 100) {
-                    setError({ ...error, ["permissableGroundCoverage"]: "Maximum 50% of Net planned area is allowed" });
+                  if (e?.target?.value > (watch("netPlannedArea") * 40) / 100) {
+                    setError({ ...error, ["permissableGroundCoverage"]: "Maximum 40% of Net planned area is allowed" });
                   } else setError({ ...error, ["permissableGroundCoverage"]: "" });
                 }}
               />
               {error?.permissableGroundCoverage && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.permissableGroundCoverage}</h6>}
-            </Col>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>
-                    Permissable Commercial
-                    <span style={{ color: "red" }}>*</span>
-                  </h2>
-                </Form.Label>
-              </div>
-              <input
-                type="number"
-                className="form-control"
-                {...register("permissableCommercial")}
-                onWheel={handleWheel}
-                onChange={(e) => {
-                  if (e?.target?.value > (watch("netPlannedArea") * 8) / 100) {
-                    setError({ ...error, ["permissableCommercial"]: "Maximum 8% of Net planned area is allowed" });
-                  } else setError({ ...error, ["permissableCommercial"]: "" });
-                }}
-              />
-              {error?.permissableCommercial && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.permissableCommercial}</h6>}
             </Col>
             <Col md={4} xxl lg="3">
               <div>
@@ -204,8 +182,8 @@ const AffordableGroupHousingForm = ({ register, watch, setValue, control, handle
                 {...register("permissableFAR")}
                 onWheel={handleWheel}
                 onChange={(e) => {
-                  if (e?.target?.value > (watch("netPlannedArea") * 225) / 100) {
-                    setError({ ...error, ["permissableFAR"]: "Maximum 225% of Net planned area is allowed" });
+                  if (e?.target?.value > (watch("netPlannedArea") * 250) / 100) {
+                    setError({ ...error, ["permissableFAR"]: "Maximum 250% of Net planned area is allowed" });
                   } else setError({ ...error, ["permissableFAR"]: "" });
                 }}
               />
@@ -218,4 +196,4 @@ const AffordableGroupHousingForm = ({ register, watch, setValue, control, handle
   );
 };
 
-export default AffordableGroupHousingForm;
+export default ITCyberCityForm;

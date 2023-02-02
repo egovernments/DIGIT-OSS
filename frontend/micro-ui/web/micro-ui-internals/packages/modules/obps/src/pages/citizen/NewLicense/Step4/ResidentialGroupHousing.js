@@ -7,18 +7,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import TextField from "@mui/material/TextField";
 import FileUpload from "@mui/icons-material/FileUpload";
 
-const ResidentialGroupHousingForm = ({
-  register,
-  getDocumentData,
-  watch,
-  getDocShareholding,
-  setLoader,
-  setValue,
-  control,
-  handleWheel,
-  setError,
-  error,
-}) => {
+const ResidentialGroupHousingForm = ({ register, watch, setValue, control, handleWheel, setError, error }) => {
   return (
     <Row className="ml-auto" style={{ marginBottom: 5 }}>
       <Col col-12>
@@ -172,7 +161,7 @@ const ResidentialGroupHousingForm = ({
                 onWheel={handleWheel}
                 onChange={(e) => {
                   if (e?.target?.value > (watch("netPlannedArea") * 0.35) / 100) {
-                    setError({ ...error, ["permissableGroundCoverage"]: "Maximum 35% of Net planned area is allowed" });
+                    setError({ ...error, ["permissableGroundCoverage"]: "Maximum 0.35% of Net planned area is allowed" });
                   } else setError({ ...error, ["permissableGroundCoverage"]: "" });
                 }}
               />
@@ -194,7 +183,7 @@ const ResidentialGroupHousingForm = ({
                 onWheel={handleWheel}
                 onChange={(e) => {
                   if (e?.target?.value > (watch("netPlannedArea") * 0.5) / 100) {
-                    setError({ ...error, ["permissableCommercial"]: "Maximum 35% of Net planned area is allowed" });
+                    setError({ ...error, ["permissableCommercial"]: "Maximum 0.5% of Net planned area is allowed" });
                   } else setError({ ...error, ["permissableCommercial"]: "" });
                 }}
               />
@@ -216,7 +205,7 @@ const ResidentialGroupHousingForm = ({
                 onWheel={handleWheel}
                 onChange={(e) => {
                   if (e?.target?.value > (watch("netPlannedArea") * 175) / 100) {
-                    setError({ ...error, ["permissableFAR"]: "Maximum 35% of Net planned area is allowed" });
+                    setError({ ...error, ["permissableFAR"]: "Maximum 175% of Net planned area is allowed" });
                   } else setError({ ...error, ["permissableFAR"]: "" });
                 }}
               />
