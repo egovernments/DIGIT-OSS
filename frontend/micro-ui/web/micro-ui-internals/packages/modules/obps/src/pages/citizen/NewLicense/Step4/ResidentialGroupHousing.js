@@ -3,9 +3,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import { Row, Col } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import NumberInput from "../../../../components/NumberInput";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import TextField from "@mui/material/TextField";
-import FileUpload from "@mui/icons-material/FileUpload";
 
 const ResidentialGroupHousingForm = ({ register, watch, setValue, control, handleWheel, setError, error }) => {
   return (
