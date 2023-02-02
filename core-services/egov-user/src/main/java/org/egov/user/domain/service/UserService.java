@@ -424,7 +424,10 @@ public class UserService {
         updatedUser = encryptionDecryptionUtil.decryptObject(updatedUser, "UserSelf", User.class, requestInfo);
 
         setFileStoreUrlsByFileStoreIds(Collections.singletonList(updatedUser));
-        if(!(updatedUser.getEmailId().equalsIgnoreCase(existingUser.getEmailId()))){
+        String oldEmail = existingUser.getEmailId();
+        String newEmail = updatedUser.getEmailId();
+        if((oldEmail != null && !oldEmail.isEmpty()) && newEmail != null && !(newEmail.equalsIgnoreCase(oldEmail))) {
+            // Sending sms and email to old email to notify that email has been changed
             notificationUtil.sendEmail(requestInfo, existingUser, updatedUser);
         }
         return updatedUser;
