@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.egovsurveyservices.service.NotificationService;
 import org.egov.egovsurveyservices.web.models.SurveyRequest;
+import org.egov.egovsurveyservices.web.models.enums.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -26,10 +27,10 @@ public class NotificationConsumer {
     public void listen(final HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
 
         try {
-
             SurveyRequest request = mapper.convertValue(record, SurveyRequest.class);
             //log.info(request.toString());
-            notificationService.prepareEventAndSend(request);
+            if(request.getSurveyEntity().getStatus().equals(Status.ACTIVE))
+                notificationService.prepareEventAndSend(request);
 
         } catch (final Exception e) {
 
