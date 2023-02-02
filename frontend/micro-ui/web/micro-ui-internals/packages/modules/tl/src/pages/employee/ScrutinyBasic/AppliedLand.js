@@ -370,6 +370,7 @@ console.log("AccessInfortech", Purpose);
   
 
   return (
+    
     <Form
       ref={props.appliedLandInfoRef}
     // style={{
@@ -446,11 +447,11 @@ console.log("AccessInfortech", Purpose);
             <Row className="ml-auto" style={{ marginBottom: 5 }}>
               {/* {JSON.stringify(userRoles)}
                     {JSON.stringify(hideRemarks)} */}
-              <Col col-12>
+              <Col col-10>
                 <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                 
                   1. DGPS points 
-                  {/* <span className="text-primary"> (Click here for instructions to capture DGPS points)</span> */}
+                 
                   <ReportProblemIcon
                     style={{
                       display: hideRemarks || hideRemarksPatwari ?"none":"block",
@@ -467,74 +468,12 @@ console.log("AccessInfortech", Purpose);
                 </div>
                 {/* </h5> */}
  {/* {Purpose} */}
-                {/* <div className="px-2">
-               
-                  (i)Add point 1 &nbsp;
-                  <div className="row ">
-                    <br></br>
-                    <div className="col col-6">
-                      <label className={classes.formLabel} htmlFor="pitentialZone">X:Longitude</label>
-                      <input type="number" name="XLongitude" className="form-control" disabled placeholder={DetailsofAppliedLand?.dgpsDetails?.[0]?.latitude} />
-                    </div>
-                    <div className="col col-6">
-                      <label className={classes.formLabel} htmlFor="pitentialZone">Y:Latitude</label>
-                      <input type="number" name="YLatitude" className="form-control" disabled placeholder={DetailsofAppliedLand?.dgpsDetails?.[0]?.longitude} />
-                    </div>
-                  </div>
-                </div> */}
-                {/* <div className="px-2">
-                  (ii)Add point 2 &nbsp;
-                  <div className="row ">
-                    <br></br>
-                    <div className="col col-6">
-                      <label className={classes.formLabel} htmlFor="pitentialZone">X:Longitude</label>
-                      <input type="number" name="XLongitude" className="form-control" disabled placeholder={DetailsofAppliedLand?.dgpsDetails?.[1]?.latitude} />
-                    </div>
-                    <div className="col col-6">
-                      <label className={classes.formLabel} htmlFor="pitentialZone">Y:Latitude</label>
-                      <input type="number" name="YLatitude" className="form-control" disabled placeholder={DetailsofAppliedLand?.dgpsDetails?.[1]?.longitude} />
-                    </div>
-                  </div>
-                </div> */}
-
-                {/* <div className="px-2">
-                  <div className="text-black">
-                    (iii)Add point 3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <br></br>
-                    <div className="row ">
-                      <div className="col col-6">
-                        <label className={classes.formLabel} htmlFor="pitentialZone">X:Longitude</label>
-                        <input type="number" name="XLongitude" className="form-control" disabled placeholder={DetailsofAppliedLand?.dgpsDetails?.[2]?.latitude} />
-                      </div>
-                      <div className="col col-6">
-                        <label className={classes.formLabel} htmlFor="pitentialZone">Y:Latitude</label>
-                        <input type="number" name="YLatitude" className="form-control" disabled placeholder={DetailsofAppliedLand?.dgpsDetails?.[2]?.longitude} />
-                      </div>
-                    </div>
-                  </div>
-                </div> */}
+             
                 <div className="px-2">
-                  {/* <div className="text-black">
-                    (iv)Add point 4 &nbsp;
-                    <div className="row ">
-                      <br></br>
-                      <div className="col col-6">
-                        <label className={classes.formLabel} htmlFor="pitentialZone">X:Longitude</label>
-                        <input type="number" name="XLongitude" className="form-control" disabled placeholder={DetailsofAppliedLand?.dgpsDetails?.[3]?.latitude} />
-                      </div>
-                      <div className="col col-6">
-                        <label className={classes.formLabel} htmlFor="pitentialZone">Y:Latitude</label>
-                        <input type="number" name="YLatitude" className="form-control" disabled placeholder={DetailsofAppliedLand?.dgpsDetails?.[3]?.longitude} />
-                      </div>
-                    </div>
-                    &nbsp;&nbsp;&nbsp;
-                  </div> */}
+               
  {DetailsofAppliedLand?.dgpsDetails?.map((item,index)=>(
                       
-                  // <tr key={index}></tr>
-                  // {[...Array(noOfRows)].map((elementInArray, index) => {
-                  //   return (
-                    // (iv)Add point key={index} &nbsp;
+                  
                     <div>
                       <div className="row " key={index}>
                         <div className="col col-6">
@@ -545,19 +484,16 @@ console.log("AccessInfortech", Purpose);
                           <label className={classes.formLabel} htmlFor="pitentialZone">Y:Latitude</label>
                           <input type="number" name="YLatitude" className="form-control" disabled placeholder={item?.longitude} />
                         </div>
-                        {/* {item?.longitude} */}
-                        {/* <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}><a href="http://localhost:3000/digit-ui/WNS/wmsmap.html?latlngs=29.385044,76.48667120:2029.506174,2076.64801520:2029.686816,2076.21848220:2029.406816,2076.85848220|30.385044,2078.48667120:2030.506174,2078.64801520:30.686816,78.218482" >Graphic design</a></Button> */}
-                        </div>
+                          </div>
                        </div>
                       
-                  //   );
-                  // })}
+               
                  
                     ))
                   }
                 </div>
 
-                {/* <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}><a href={`/digit-ui/WNS/wmsmap.html?latlngs=${DetailsofAppliedLand?.dgpsDetails?.map((element)=>(`${element.latitude},${element.longitude}`)).join(":")}`} > Graphic design</a></Button> */}
+              
    
                 <Button style={{ textAlign: "right" }}>      <a href={`/digit-ui/WNS/wmsmap.html?latlngs=${DetailsofAppliedLand?.dgpsDetails?.map((element)=>(`${element.latitude},${element.longitude}`)).join(":")}`} 
   target="popup" 
@@ -573,17 +509,16 @@ console.log("AccessInfortech", Purpose);
                           
                          
 
-                <hr className="my-3" />
-                {/* <Collapse in={open}>
-        <div id="example-collapse-text"> */}
+                {/* <hr className="my-3" />
+               
                 <h5 className={`text-black d-flex flex-row align-items-center ${classes.formLabel}`} style={{ marginTop: "3%" }}>
                   2.Details of Plots
                   <div className="ml-3 d-flex flex-row align-items-center">
                     <input type="radio" id="Yes" value="1" name="Yes" disabled checked={DetailsofAppliedLand?.DetailsAppliedLandPlot?.regularOption === "regular" ? true : false} />
-                    {/* <input type="radio"  value="1"  disabled checked={DetailsofAppliedLand?.detailsOfPlots === "1" ? true : false} /> */}
+                  
                     <label className={`${classes.formLabel}  m-0  mx-1`} htmlFor="gen">Regular</label>&nbsp;&nbsp;
                     <input type="radio" id="Yes" value="2" name="Yes" checked={DetailsofAppliedLand?.DetailsAppliedLandPlot?.regularOption === "Irregular" ? true : false} disabled />
-                    {/* <input type="radio"  value="2"  checked={DetailsofAppliedLand?.detailsOfPlots === "2" ? true : false} disabled /> */}
+     
                     <label className={`${classes.formLabel}  m-0  mx-1`} htmlFor="npnl">Irregular</label>
                   </div>
                   <div style={{ margin: 5 }}>
@@ -624,22 +559,7 @@ console.log("AccessInfortech", Purpose);
                             </p>
                           </div>
                           </td>
-                        {/* <td component="th" scope="row">
-                          <input type="text" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.gen?.plotNo} />
-                        </td>
-
-                        <td align="right">
-                          {" "}
-                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.gen?.length} />
-                        </td>
-                        <td align="right">
-                          {" "}
-                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.gen?.width} />
-                        </td>
-                        <td align="right">
-                          {" "}
-                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.gen?.area} />
-                        </td> */}
+                        
                       </tr>
                       <tr>
                         <td>
@@ -717,7 +637,7 @@ console.log("AccessInfortech", Purpose);
                           <div className="px-2">
                             <p
                               className="mb-2"
-                            // onChange={(e)=>setComPlotno(e.target.value)} value={complotno}
+               
                             >
                               Commercial
                             </p>
@@ -745,7 +665,7 @@ console.log("AccessInfortech", Purpose);
                           <div className="px-2">
                             <p
                               className="mb-2"
-                            // onChange={(e)=>setSitePlotno(e.target.value)} value={siteplotno}
+                          
                             >
                               Community Sites
                             </p>
@@ -773,7 +693,7 @@ console.log("AccessInfortech", Purpose);
                           <div className="px-2">
                             <p
                               className="mb-2"
-                            // onChange={(e)=>setParkPlotno(e.target.value)} value={parkplotno}
+              
                             >
                               Parks
                             </p>
@@ -801,7 +721,7 @@ console.log("AccessInfortech", Purpose);
                           <div className="px-2">
                             <p
                               className="mb-2"
-                            // onChange={(e)=>setPublicPlotno(e.target.value)} value={publicplotno}
+                          
                             >
                               Public Utilities
                             </p>
@@ -966,7 +886,7 @@ console.log("AccessInfortech", Purpose);
                             <div className="px-2">
                               <p
                                 className="mb-2"
-                              //  onChange={(e)=>setIrPlotDimen(e.target.value)} value={irPlotDimen}
+                       
                               >
                                 Residential
                               </p>
@@ -986,7 +906,7 @@ console.log("AccessInfortech", Purpose);
                             <div className="px-2">
                               <p
                                 className="mb-2"
-                              // onChange={(e)=>setIrSizeDimen(e.target.value)} value={irSizeDimen}
+                          
                               >
                                 Commercial
                               </p>
@@ -1005,7 +925,7 @@ console.log("AccessInfortech", Purpose);
                     </div>
                     <h5 className="text-black mb-3 mt-4">
                       <div style={{ display: "flex" }}>
-                        {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                       
                         Area Under
                         <ReportProblemIcon
                           style={{
@@ -1038,7 +958,7 @@ console.log("AccessInfortech", Purpose);
                             <div className="px-2">
                               <p
                                 className="mb-2"
-                              // onChange={(e)=>setNpnlNo(e.target.value)} value={npnlNo}
+                             
                               >
                                 Sectoral Plan Road
                               </p>
@@ -1065,7 +985,7 @@ console.log("AccessInfortech", Purpose);
                             <div className="px-2">
                               <p
                                 className="mb-2"
-                              // onChange={(e)=>setEwsNo(e.target.value)} value={ewsNo}
+                       
                               >
                                 Green Belt
                               </p>
@@ -1092,7 +1012,7 @@ console.log("AccessInfortech", Purpose);
                             <div className="px-2">
                               <p
                                 className="mb-2"
-                              // onChange={(e)=>setEwsNo(e.target.value)} value={ewsNo}
+                          
                               >
                                 24/18 mtr wide internal circulation Plan road
                               </p>
@@ -1119,7 +1039,7 @@ console.log("AccessInfortech", Purpose);
                             <div className="px-2">
                               <p
                                 className="mb-2"
-                              //  onChange={(e)=>setEwsNo(e.target.value)} value={ewsNo}
+                  
                               >
                                 Other Roads
                               </p>
@@ -1146,7 +1066,7 @@ console.log("AccessInfortech", Purpose);
                             <div className="px-2">
                               <p
                                 className="mb-2"
-                              // onChange={(e)=>setEwsNo(e.target.value)} value={ewsNo}
+                          
                               >
                                 Undetermined use(UD)
                               </p>
@@ -1171,7 +1091,7 @@ console.log("AccessInfortech", Purpose);
                       </tbody>
                     </div>
                   </div>
-                )}
+                )} */}
                 	 <div>
                   <DDJAYForm displayDdjay={Purpose === "DDJAY_APHP" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandDdjay} dataForIcons={dataIcons}></DDJAYForm>
                 </div>
@@ -1185,33 +1105,12 @@ console.log("AccessInfortech", Purpose);
                   <CommercialPlottedForm displayCommercialPlottedData={Purpose === "CPL" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandCommercial} dataForIcons={dataIcons} ></CommercialPlottedForm>
                 </div>
 
-                {/* <CommercialPlottedForm></CommercialPlottedForm> */}
-                {/* <div>
-                  <DDJAYForm displayDdjay={Purpose === "08" ? "block" : "none"} data={DetailsofAppliedLand?.ddjay}></DDJAYForm>
-                  <DDJAYForm displayDdjay={Purpose !== "DDJAY" ? "block" : "none"} data={DetailsofAppliedLand?.ddjay} dataForIcons={dataIcons}></DDJAYForm>
-                </div>
-                <div>
-                  <ResidentialPlottedForm displayResidential={Purpose === "03" ? "block" : "none"} data={DetailsofAppliedLand?.residential} ></ResidentialPlottedForm>
-                  <ResidentialPlottedForm displayResidential={Purpose !== "Residential Plotted" ? "block" : "none"} data={DetailsofAppliedLand?.residential} dataForIcons={dataIcons} ></ResidentialPlottedForm>
-                </div>
-                <div>
-                  <IndustrialPlottedForm displayIndustrial={Purpose === "06" ? "block" : "none"} data={DetailsofAppliedLand?.industrial}></IndustrialPlottedForm>
-                  <IndustrialPlottedForm displayIndustrial={Purpose !== "Industrial Plotted" ? "block" : "none"} data={DetailsofAppliedLand?.industrial} dataForIcons={dataIcons} ></IndustrialPlottedForm>
-                </div> */}
-                  {/* <div>
-                  <DDJAYForm displayDdjay={Purpose !== "DDJAY" ? "block" : "none"} data={DetailsofAppliedLand?.ddjay} dataForIcons={dataIcons}></DDJAYForm>
-                </div>
-                <div>
-                  <ResidentialPlottedForm displayResidential={Purpose !== "Residential Plotted" ? "block" : "none"} data={DetailsofAppliedLand?.residential} dataForIcons={dataIcons} ></ResidentialPlottedForm>
-                </div>
-                <div>
-                  <IndustrialPlottedForm displayIndustrial={Purpose !== "Industrial Plotted" ? "block" : "none"} data={DetailsofAppliedLand?.industrial} dataForIcons={dataIcons} ></IndustrialPlottedForm>
-                </div> */}
+               
 
-                <h5 className="text-black mt-4">
+                {/* <h5 className="text-black mt-4">
                   <div style={{ display: "flex" }}>
                     NILP :-
-                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                   
                     <ReportProblemIcon
                       style={{
                         display: hideRemarks || hideRemarksPatwari ?"none":"block",
@@ -1425,8 +1324,7 @@ console.log("AccessInfortech", Purpose);
                     <h5 className="d-flex flex-column mb-2">
                       Demarcation Plan
                       <div style={{ display: "flex" }}>
-                        {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
-                        {/* {DetailsofAppliedLand?.DetailsAppliedLand?.demarcationPlan} */}
+                        
                         <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.demarcationPlan)}>
                           <DownloadForOfflineIcon color="primary" className="mx-1"  />
                         </IconButton>
@@ -1445,16 +1343,13 @@ console.log("AccessInfortech", Purpose);
                         ></ReportProblemIcon>
                       </div>
                     </h5>
-                    {/* <input type="file" className="form-control" disabled /> */}
+                   
                   </div>
                   <div className="col col-3">
                   <h5 className="d-flex flex-column mb-2">
                       Democratic Plan.
                       <div style={{ display: "flex" }}>
-                        {/* Site plan. */}
-
-                        {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
-                        {/* {DetailsofAppliedLand?.DetailsAppliedLand?.democraticPlan} */}
+                     
                         <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.democraticPlan)}>
                           <DownloadForOfflineIcon color="primary" className="mx-1"  />
                         </IconButton>
@@ -1473,15 +1368,13 @@ console.log("AccessInfortech", Purpose);
                         ></ReportProblemIcon>
                       </div>
                     </h5>
-                    {/* <input type="file" className="form-control" disabled />
-                    {<DownloadForOfflineIcon color="primary" />} */}
+                    
                   </div>
                   <div className="col col-3">
                     <h5 className="d-flex flex-column mb-2" >Sectoral Plan/Layout Plan.
 
                       <div style={{ display: "flex" }}>
-                        {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
-                        {/* {DetailsofAppliedLand?.DetailsAppliedLand?.sectoralPlan} */}
+                       
                         <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.sectoralPlan)}>
                           <DownloadForOfflineIcon color="primary" className="mx-1"  />
                         </IconButton>
@@ -1500,9 +1393,7 @@ console.log("AccessInfortech", Purpose);
                         ></ReportProblemIcon>
                       </div>
                     </h5>
-                    {/* <input type="file" className="form-control" disabled />
-                    {<DownloadForOfflineIcon color="primary" />} */}
-
+                   
 
                   </div>
                     <div className="col col-3">
@@ -1510,9 +1401,7 @@ console.log("AccessInfortech", Purpose);
                         <h5 className="d-flex flex-column mb-2">
                           Upload Layout Plan
                           <div style={{ display: "flex" }}>
-                            {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
-                            {/* <Form.Control  disabled></Form.Control> */}
-                            {/* {DetailsofAppliedLand?.DetailsAppliedLand?.uploadLayoutPlan} */}
+                        
                         <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.uploadLayoutPlan)}>
                           <DownloadForOfflineIcon color="primary" className="mx-1"  />
                         </IconButton>
@@ -1531,7 +1420,7 @@ console.log("AccessInfortech", Purpose);
                             ></ReportProblemIcon>
                           </div>
                         </h5>
-                        {/* <span className="text-primary"> (Click here for instructions to capture DGPS points)</span> */}
+                       
                       </div>
                     </div>
 
@@ -1539,11 +1428,9 @@ console.log("AccessInfortech", Purpose);
                     <div className="col col-3">
                       <h5 className="d-flex flex-column mb-2">Plans showing cross sections
 
-                        {/* <input type="file" className="form-control" disabled /> */}
-                        {/* {<DownloadForOfflineIcon color="primary" />} */}
+                     
                         <div style={{ display: "flex" }}>
-                          {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
-                          {/* {DetailsofAppliedLand?.DetailsAppliedLand?.planCrossSection} */}
+                       
                         <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.planCrossSection)}>
                           <DownloadForOfflineIcon color="primary" className="mx-1"  />
                         </IconButton>
@@ -1567,11 +1454,8 @@ console.log("AccessInfortech", Purpose);
                     <div className="col col-3">
                       <h5 className="d-flex flex-column mb-2">Plan indicating positions of public health services
 
-                        {/* <input type="file" className="form-control" disabled /> */}
-                        {/* {<DownloadForOfflineIcon color="primary" />} */}
                         <div style={{ display: "flex" }}>
-                          {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
-                          {/* {DetailsofAppliedLand?.DetailsAppliedLand?.publicHealthServices} */}
+                        
                         <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.publicHealthServices)}>
                           <DownloadForOfflineIcon color="primary" className="mx-1"  />
                         </IconButton>
@@ -1594,11 +1478,9 @@ console.log("AccessInfortech", Purpose);
 
                     <div className="col col-3">
                       <h5 className="d-flex flex-column mb-2">Specifications and designs of road works
-                        {/* <input type="file" className="form-control" disabled /> */}
-                        {/* {<DownloadForOfflineIcon color="primary" />} */}
+                     
                         <div style={{ display: "flex" }}>
-                          {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
-                          {/* {DetailsofAppliedLand?.DetailsAppliedLand?.designRoad} */}
+                    
                         <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.designRoad)}>
                           <DownloadForOfflineIcon color="primary" className="mx-1"  />
                         </IconButton>
@@ -1621,11 +1503,9 @@ console.log("AccessInfortech", Purpose);
 
                     <div className="col col-3">
                       <h5 className="d-flex flex-column mb-2">Designs and Sewerage, storm and water supply
-                        {/* <input type="file" className="form-control" disabled /> */}
-                        {/* {<DownloadForOfflineIcon color="primary" />} */}
+                   
                         <div style={{ display: "flex" }}>
-                          {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
-                          {/* {DetailsofAppliedLand?.DetailsAppliedLand?.designSewarage} */}
+       
                         <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.designSewarage)}>
                           <DownloadForOfflineIcon color="primary" className="mx-1"  />
                         </IconButton>
@@ -1652,11 +1532,8 @@ console.log("AccessInfortech", Purpose);
                     <div className="col col-3">
                       <h5 className="d-flex flex-column mb-2">Designs of disposal and treatment of storm
 
-                        {/* <input type="file" className="form-control" disabled /> */}
-                        {/* {<DownloadForOfflineIcon color="primary" />} */}
                         <div style={{ display: "flex" }}>
-                          {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
-                          {/* {DetailsofAppliedLand?.DetailsAppliedLand?.designDisposal} */}
+    
                         <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.designDisposal)}>
                           <DownloadForOfflineIcon color="primary" className="mx-1"  />
                         </IconButton>
@@ -1680,11 +1557,8 @@ console.log("AccessInfortech", Purpose);
                     <div className="col col-3">
                       <h5 className="d-flex flex-column mb-2">Upload Layout Undertaking that no change
 
-                        {/* <input type="file" className="form-control" disabled /> */}
-                        {/* {<DownloadForOfflineIcon color="primary" />} */}
                         <div style={{ display: "flex" }}>
-                          {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
-                          {/* {DetailsofAppliedLand?.DetailsAppliedLand?.undertakingChange} */}
+                  
                         <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.undertakingChange)}>
                           <DownloadForOfflineIcon color="primary" className="mx-1"  />
                         </IconButton>
@@ -1707,11 +1581,9 @@ console.log("AccessInfortech", Purpose);
 
                     <div className="col col-3">
                       <h5 className="d-flex flex-column mb-2">Whether you hosted the existing approved layout plan
-                        {/* <input type="file" className="form-control" disabled /> */}
-                        {/* {<DownloadForOfflineIcon color="primary" />} */}
+                     
                         <div style={{ display: "flex" }}>
-                          {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
-                          {/* {DetailsofAppliedLand?.DetailsAppliedLand?.hostedLayoutPlan} */}
+         
                         <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.hostedLayoutPlan)}>
                           <DownloadForOfflineIcon color="primary" className="mx-1"  />
                         </IconButton>
@@ -1735,11 +1607,9 @@ console.log("AccessInfortech", Purpose);
                     <div className="col col-3">
                       <h5 className="d-flex flex-column mb-2">Report any objection from any of the alottees
 
-                        {/* <input type="file" className="form-control" disabled /> */}
-                        {/* {<DownloadForOfflineIcon color="primary" />} */}
+                
                         <div style={{ display: "flex" }}>
-                          {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
-                          {/* {DetailsofAppliedLand?.DetailsAppliedLand?.reportObjection} */}
+                  
                         <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.reportObjection)}>
                           <DownloadForOfflineIcon color="primary" className="mx-1"  />
                         </IconButton>
@@ -1766,11 +1636,8 @@ console.log("AccessInfortech", Purpose);
                     <div className="col col-3">
                       <h5 className="d-flex flex-column mb-2">Consent of RERA
 
-                        {/* <input type="file" className="form-control" disabled /> */}
-                        {/* {<DownloadForOfflineIcon color="primary" />} */}
                         <div style={{ display: "flex" }}>
-                          {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
-                          {/* {DetailsofAppliedLand?.DetailsAppliedLand?.consentRera} */}
+                       
                         <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.consentRera)}>
                           <DownloadForOfflineIcon color="primary" className="mx-1"  />
                         </IconButton>
@@ -1794,11 +1661,8 @@ console.log("AccessInfortech", Purpose);
                     <div className="col col-3">
                       <h5 className="d-flex flex-column mb-2">Undertaking
 
-                        {/* <input type="file" className="form-control" disabled /> */}
-                        {/* {<DownloadForOfflineIcon color="primary" />} */}
                         <div style={{ display: "flex" }}>
-                          {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
-                          {/* {DetailsofAppliedLand?.DetailsAppliedLand?.undertaking} */}
+                     
                         <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.undertaking)}>
                           <DownloadForOfflineIcon color="primary" className="mx-1"  />
                         </IconButton>
@@ -1822,11 +1686,8 @@ console.log("AccessInfortech", Purpose);
                     <div className="col col-3">
                       <h5 className="d-flex flex-column mb-2">Detailed specification and design for electric supply
 
-                        {/* <input type="file" className="form-control" disabled /> */}
-                        {/* {<DownloadForOfflineIcon color="primary" />} */}
                         <div style={{ display: "flex" }}>
-                          {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
-                          {/* {DetailsofAppliedLand?.DetailsAppliedLand?.detailedElectricSupply} */}
+                        
                         <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.detailedElectricSupply)}>
                           <DownloadForOfflineIcon color="primary" className="mx-1"  />
                         </IconButton>
@@ -1850,11 +1711,9 @@ console.log("AccessInfortech", Purpose);
                     <div className="col col-3">
                       <h5 className="d-flex flex-column mb-2">Salient feature of the proposed colony
 
-                        {/* <input type="file" className="form-control" disabled /> */}
-                        {/* {<DownloadForOfflineIcon color="primary" />} */}
+                      
                         <div style={{ display: "flex" }}>
-                          {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
-                          {/* {DetailsofAppliedLand?.DetailsAppliedLand?.proposedColony} */}
+                      
                         <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.proposedColony)}>
                           <DownloadForOfflineIcon color="primary" className="mx-1"  />
                         </IconButton>
@@ -1877,27 +1736,17 @@ console.log("AccessInfortech", Purpose);
 
                   </div>
 
-                </div>
+                </div> */}
 
-                {/* <Button style={{ alignSelf: "center", marginTop: 20, marginright: 867 }} variant="primary" type="submit">
-                  Save as Draft
-                </Button>
-                <Button style={{ alignSelf: "center", marginTop: 8, marginLeft: 1025 }} variant="primary" type="submit">
-                  Continue
-                </Button> */}
-                {/* </div>
-      </Collapse> */}
+              
               </Col>
             </Row>
-            {/* <div style={{ position: "relative", marginBottom: 40 }}>
-              <Button onClick={() => props.passUncheckedList({ data: uncheckedValue })}>Submit</Button>
-            </div> */}
+          
           </Form.Group>
 
-          {/* <hr></hr> */}
         </div>
       </Collapse>
-      {/* </Card> */}
+ 
     </Form>
   );
 };

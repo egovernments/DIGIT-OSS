@@ -8513,7 +8513,7 @@ img, video {
   width: 100% !important; }
 
 .selector-button-primary {
-  height: 2rem;
+  height: 3rem;
   --bg-opacity:1;
   background-color: #1266af;
   text-align: center;

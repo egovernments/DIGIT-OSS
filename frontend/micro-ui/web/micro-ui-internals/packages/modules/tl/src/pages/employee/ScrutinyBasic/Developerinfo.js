@@ -591,7 +591,7 @@ const Developerinfo = (props) => {
   };
 
   const handlemodaldData = (data) => {
-    // setmodaldData(data.data);
+  
     setSmShow(false);
     console.log("here", openedModal, data);
     if (openedModal && data) {
@@ -605,17 +605,7 @@ const Developerinfo = (props) => {
   return (
     <Form
       ref={props.developerInfoRef}
-    // style={{
-    //   width: "100%",
-    //   height: props.heightDevelper,
-    //   overflow: "hidden",
-    //   marginBottom: 20,
-    //   borderColor: "#C3C3C3",
-    //   borderStyle: "solid",
-    //   borderWidth: 2,
-    //   padding: 2,
-    // }}
-    >
+   >
       <ModalChild
         labelmodal={labelValue}
         passmodalData={handlemodaldData}
@@ -654,8 +644,8 @@ const Developerinfo = (props) => {
             style={{ display: props.displayGeneral, border: "2px solid #e9ecef", margin: 10, padding: 10 }}
             className={`justify-content-center ${classes.formLabel}`}
           >
-            <Row className="ms-auto" style={{ marginBottom: 10 }}>
-              <Col className="ms-auto" md={4} xxl lg="12">
+            <Row className={classes.formLabel}>
+              {/* <Col className="ms-auto" md={4} xxl lg="12"> */}
                 <Form.Label
                 // placeholder={personalinfo !== null ? personalinfo.authorizedDeveloper : null}
                 >
@@ -689,7 +679,7 @@ const Developerinfo = (props) => {
 
                 </Form.Label>
 
-              </Col>
+              {/* </Col> */}
             </Row>
 
             {
@@ -705,8 +695,7 @@ const Developerinfo = (props) => {
 
                       <div className="d-flex flex-row align-items-center my-1 ">
                         <Form.Control
-                          // height={30}
-                          // style={{ maxWidth: 200, marginRight: 5 }}
+                       
                           placeholder={landScheduleData !== null ? landScheduleData?.licenseNumber : null}
                           disabled
                         ></Form.Control>
@@ -725,7 +714,7 @@ const Developerinfo = (props) => {
                           }}
                         ></ReportProblemIcon>
                       </div>
-                      {/* <input type="number" className="form-control" /> */}
+                      
                     </Col>
                     <Col className="ms-auto" md={4} xxl lg="4">
                       <label htmlFor="potential">
@@ -737,8 +726,7 @@ const Developerinfo = (props) => {
 
                       <div className="d-flex flex-row  align-items-center">
                         <Form.Control
-                          // height={30}
-                          // style={{ maxWidth: 200, marginRight: 5 }}
+                    
                           placeholder={landScheduleData !== null ? landScheduleData?.potential : null}
                           disabled
                         ></Form.Control>
@@ -779,7 +767,7 @@ const Developerinfo = (props) => {
                     </Col>
                     <Col className="ms-auto" md={4} xxl lg="4">
                       <label>
-                        {/* Site Location Purpose */}
+                       
                         <h5>Type of colony  &nbsp;</h5>
                       </label>
                       <div className="d-flex flex-row  align-items-center">
@@ -902,7 +890,7 @@ const Developerinfo = (props) => {
                       </div>
                     </Col>
                     <Col className="ms-auto" md={4} xxl lg="4">
-                     <div className="col col-4">
+                     {/* <div className="col col-4"> */}
                       <h6>Third-party right created&nbsp; </h6>
 
                       <div className="d-flex flex-row align-items-center my-1 ">
@@ -933,27 +921,11 @@ const Developerinfo = (props) => {
                         ></ReportProblemIcon>
 
                       </div>
-                    </div>
-                    <div className="col col-8">
-                      {landScheduleData?.thirdParty === "Y" && (
-                        <div className="row ">
-                          {/* <div className="col col-4"> */}
-                            <label> Remark </label>
-                            <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.thirdPartyRemark : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
-                            {/* <input type="text" className="form-control" disabled placeholder={landScheduleData !== null ? landScheduleData?.thirdPartyRemark : null} /> */}
-                          {/* </div> */}
-                          {/* <div className="col col-4"> */}
-                            <label> Document Download </label>
-
-                            <IconButton onClick={() => getDocShareholding(landScheduleData?.thirdPartyDoc)}>
-                              <DownloadForOfflineIcon color="primary" className="mx-1" />
-                            </IconButton>
-
-                          </div>
-                        // </div>
-                      )}
-                    </div>
-                    <div className="col col-4">
+                    {/* </div> */}
+                    {/* <div className="col col-8">
+                      
+                    </div> */}
+                    {/* <div className="col col-4">
                       {landScheduleData?.thirdParty === "N" && (
                         <div className="row ">
                           <div className="col col-4">
@@ -964,14 +936,33 @@ const Developerinfo = (props) => {
                           </div>
                         </div>
                       )}
-                    </div>
+                    </div> */}
+                    </Col>
+                    <Col className="ms-auto" md={4} xxl lg="12">
+                    {landScheduleData?.thirdParty === "N" && (
+                      <div>
+                        <div  className="col col-4">
+                         
+                            <label> Remark </label>
+                            <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.thirdPartyRemark : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                          </div>
+                          <div  className="col col-4">
+                            <label> Document Download </label>
+
+                            <IconButton onClick={() => getDocShareholding(landScheduleData?.thirdPartyDoc)}>
+                              <DownloadForOfflineIcon color="primary" className="mx-1" />
+                            </IconButton>
+
+                          </div>
+                          </div>
+                      )}
                     </Col>
                   </Row>
                 </div>
               )}
 
 
-            {/* )} */}
+       
             <Row className={classes.formLabel}>
               <Col md={4} xxl lg="12">
                 <Form.Label> (ii)Whether licence applied under Migration Policy ?</Form.Label>
@@ -1003,12 +994,12 @@ const Developerinfo = (props) => {
 
                   <div>
                      <div style={{overflow:"scroll"}}>
-              <table className="table table-bordered">
+                <table className="table table-bordered">
                 <thead>
                   
                   <tr className="border-bottom-0">
                   <th class="fw-normal pb-0 border-bottom-0 align-top">
-                  Previous Licence Number  
+                    Previous Licence Number  
                     </th>  
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
                     Area of parent licence  
@@ -1249,7 +1240,7 @@ const Developerinfo = (props) => {
                 </tbody>
               </table>
             </div>
-                    <Row className={classes.formLabel} style={{ marginBottom: 20 }}>
+                    {/* <Row className={classes.formLabel} style={{ marginBottom: 20 }}> */}
                       {/* <Col className="ms-auto" md={4} xxl lg="4">
                         <label>
                       
@@ -1277,8 +1268,8 @@ const Developerinfo = (props) => {
                           ></ReportProblemIcon>
                         </div>
                         
-                      </Col> */}
-                      {/* <Col className="ms-auto" md={4} xxl lg="4">
+                      </Col>
+                      <Col className="ms-auto" md={4} xxl lg="4">
                         <label htmlFor="potential">
                           <h6>
                          
@@ -1306,8 +1297,8 @@ const Developerinfo = (props) => {
                             }}
                           ></ReportProblemIcon>
                         </div>
-                      </Col> */}
-                      {/* <Col className="ms-auto" md={4} xxl lg="4">
+                      </Col>
+                      <Col className="ms-auto" md={4} xxl lg="4">
                         <label>
                           
                           <h5>Licence No.</h5>
@@ -1332,7 +1323,7 @@ const Developerinfo = (props) => {
                         </div>
                       </Col> */}
                      
-                      <Col className="ms-auto" md={4} xxl lg="4">
+                      {/* <Col className="ms-auto" md={4} xxl lg="4">
                         <label>
                          
                           <h5>Area of Parent Licence</h5>
@@ -1356,8 +1347,8 @@ const Developerinfo = (props) => {
                             }}
                           ></ReportProblemIcon>
                         </div>
-                      </Col>
-                      <Col className="ms-auto" md={4} xxl lg="4">
+                      </Col> */}
+                      {/* <Col className="ms-auto" md={4} xxl lg="4">
                         <label>
                           <h6>Validity of Parent Licence</h6>
                         </label>
@@ -1381,8 +1372,8 @@ const Developerinfo = (props) => {
                             }}
                           ></ReportProblemIcon>
                         </div>
-                      </Col> 
-                      <Col className="ms-auto" md={4} xxl lg="4">
+                      </Col>  */}
+                      {/* <Col className="ms-auto" md={4} xxl lg="4">
                      
                       <h6>Type of land</h6>{" "}
                       <div className="d-flex flex-row  align-items-center">
@@ -1403,7 +1394,7 @@ const Developerinfo = (props) => {
                           }}
                         ></ReportProblemIcon>
                       </div>
-                    {/* </div> */}
+                  
                       </Col>
                       <Col className="ms-auto" md={4} xxl lg="4">
                       <label>
@@ -1453,7 +1444,7 @@ const Developerinfo = (props) => {
                     </Col>
                       <Col className="ms-auto" md={4} xxl lg="4">
                         <h6>Approved Layout of Plan/ Site plan for(GH)Showing Area(s)/Proposed migration</h6>
-                        {/* &nbsp;&nbsp; */}
+                       
                         <div className="d-flex flex-row align-items-center my-1 ">
                           <IconButton onClick={() => getDocShareholding(landScheduleData?.approvedLayoutPlan)}>
                             <DownloadForOfflineIcon color="primary" className="mx-1" />
@@ -1473,9 +1464,9 @@ const Developerinfo = (props) => {
                             }}
                           ></ReportProblemIcon>
                         </div>
-                      </Col>
-                    </Row>
-                    <Row className="ms-auto" style={{ marginBottom: 20 }}>
+                      </Col> */}
+                    {/* </Row> */}
+                    {/* <Row className="ms-auto" style={{ marginBottom: 20 }}>
                       <div className="col col-4">
                         <h6>Proposed Layout of Plan /site plan for area applied for migration.</h6>
                         
@@ -1525,7 +1516,7 @@ const Developerinfo = (props) => {
                           ></ReportProblemIcon>
                         </div>
                       </div>
-                    </Row>
+                    </Row> */}
                   </div>
                 }
               </Col>
@@ -1744,7 +1735,7 @@ const Developerinfo = (props) => {
           (iii) Any insolvency/liquidation proceedings against the Land Owing Company/Develping Company :
 
               <div className="d-flex mt-2">
-                {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+            
                 <input type="radio" disabled value="Yes" checked={landScheduleData?.insolvency === "Y" ? true : false} />
                 <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                 <input type="radio" disabled value="No" checked={landScheduleData?.insolvency === "N" ? true : false} />
@@ -1770,7 +1761,7 @@ const Developerinfo = (props) => {
               <div className="d-flex ml-3 mb-2">
                 <div className="px-2">
                   <label>
-                    {/* Site Location Purpose */}
+                  
                     <h5>Remark</h5>
                   </label>
                   <div className="d-flex flex-row  align-items-center">
@@ -1798,7 +1789,7 @@ const Developerinfo = (props) => {
                   (a)&nbsp;As per applied land&nbsp;
 
                   <div className="d-flex flex-row align-items-center my-1 ">
-                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                    
                     <input type="radio" disabled value="Yes" checked={landScheduleData?.appliedLand === "Y" ? true : false} />
                     <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                     <input type="radio" disabled value="No" checked={landScheduleData?.appliedLand === "N" ? true : false} />
@@ -1839,17 +1830,13 @@ const Developerinfo = (props) => {
 
               <div className="col col-4 p-1">
                 <h6 data-toggle="tooltip" data-placement="top" title="If any revenue rasta abuts to the applied site ?">
-                  (b)&nbsp;Revenue rasta
-                  {/* &nbsp; */}
-                  </h6>
-                  {/* &nbsp;&nbsp; */}
-
-                  <div className="d-flex flex-row align-items-center my-1 ">
-                    
-                    <input type="radio" disabled value="Yes" checked={landScheduleData?.revenueRasta === "Y" ? true : false} />
-                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" disabled value="No" checked={landScheduleData?.revenueRasta === "N" ? true : false} />
-                    <label className="m-0 mx-2" for="No">No</label>
+                  (b) Revenue rasta
+                </h6>
+               <div className="d-flex flex-row align-items-center my-1 ">
+               <input type="radio" disabled value="Yes" checked={landScheduleData?.revenueRasta === "Y" ? true : false} />
+              <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                <input type="radio" disabled value="No" checked={landScheduleData?.revenueRasta === "N" ? true : false} />
+                <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
                         display: hideRemarks?"none":"block",
@@ -1864,9 +1851,7 @@ const Developerinfo = (props) => {
                       }}
                     ></ReportProblemIcon>
                   </div>
-               
-
-                {landScheduleData?.revenueRasta === "Y" && (
+                 {landScheduleData?.revenueRasta === "Y" && (
                   <div className="row ml-1 mr-2">
                     <div className="col col p-1">
                       <label> Width of revenue rasta </label>
@@ -1879,11 +1864,11 @@ const Developerinfo = (props) => {
 
               <div className="col col-4 p-1">
                 <h6 data-toggle="tooltip" data-placement="top" title="Watercourse running along boundary through the applied site ?">
-                  (c)&nbsp;Watercourse running&nbsp;
+                  (c) Watercourse running
                   </h6>
 
                   <div className="d-flex flex-row align-items-center my-1 ">
-                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                   
                     <input type="radio" disabled value="Yes" checked={landScheduleData?.waterCourse === "Y" ? true : false} />
                     <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                     <input type="radio" disabled value="No" checked={landScheduleData?.waterCourse === "N" ? true : false} />
@@ -1952,7 +1937,7 @@ const Developerinfo = (props) => {
                
               </div>
 
-              <br></br>
+              {/* <br></br> */}
 
               <div className="col col-4 p-1">
                 <h6 data-toggle="tooltip" data-placement="top" title="If any other owners' land is sandwiched within applied land.">
@@ -2013,6 +1998,8 @@ const Developerinfo = (props) => {
                     ></ReportProblemIcon>
                   </div>
               </div>
+            </div>
+            {/* <div className="col col-4 p-1"> */}
               {landScheduleData?.acquistion === "Y" && (
                 <div>
                     <div className="col col-4 p-1">
@@ -2034,7 +2021,7 @@ const Developerinfo = (props) => {
                       }}
                     ></ReportProblemIcon>
                   </div>
-                  {/* <Form.Control style={{ maxWidth: 200, marginTop: 10 }} disabled></Form.Control> */}
+                
                 </div>
               </div>
               <div className="col col-4 p-1">
@@ -2231,21 +2218,19 @@ const Developerinfo = (props) => {
             </div>
                   </div>
                 )}
-            
-            </div>
-                            {/* changes done  */}
+        
             <div className="row mx-1">
               <div className="col col-12 p-1">
-                <h6 data-toggle="tooltip" data-placement="top" title="Whether details/orders of release/exclusion of land uploaded.">
+                <h6 
+                // data-toggle="tooltip" data-placement="top" title="Whether details/orders of release/exclusion of land uploaded."
+                >
                 (h)  Details of existing approach as per policy dated 20-10-20.
-                  {/* <InfoIcon style={{color:"blue"}}/>  */}
-                  </h6>
+                   </h6>
                   <div className="d-flex flex-row align-items-center my-1 ">
-                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
-                    <input type="radio" disabled value="Yes" checked={landScheduleData?.orderUpload === "Y" ? true : false} />
-                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                  <input type="radio" disabled value="Yes" checked={landScheduleData?.orderUpload === "Y" ? true : false} />
+                    <label className="m-0  mx-2" for="Yes">Category-I approach</label>&nbsp;&nbsp;
                     <input type="radio" disabled value="No" checked={landScheduleData?.orderUpload === "N" ? true : false} />
-                    <label className="m-0 mx-2" for="No">No</label>
+                    <label className="m-0 mx-2" for="No">Category-II approach</label>
                     <ReportProblemIcon
                       style={{
                         display: hideRemarks?"none":"block",
@@ -2260,8 +2245,165 @@ const Developerinfo = (props) => {
                       }}
                     ></ReportProblemIcon>
                   </div>
+                  {landScheduleData?.orderUpload === "Y" && (
+                    <div>
+                  <h6>(a)  Approach available from minimum 4 karam (22 ft) wide revenue rasta</h6>
+                  <div className="d-flex flex-row align-items-center my-1 ">
+                  <input type="radio" disabled value="Yes" checked={landScheduleData?.orderUpload === "Y" ? true : false} />
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                    <input type="radio" disabled value="No" checked={landScheduleData?.orderUpload === "N" ? true : false} />
+                    <label className="m-0 mx-2" for="No">NO</label>
+                    <ReportProblemIcon
+                      style={{
+                        display: hideRemarks?"none":"block",
+                        color: fieldIconColors.ordersUpload
+                      }}
+                      onClick={() => {
+                        setLabelValue("Orders Upload"),
+                          setOpennedModal("ordersUpload")
+                        setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                      }}
+                    ></ReportProblemIcon>
+                  </div>
+
+                  <h6>(b)  Approach available from minimum 11 feet wide revenue rasta and applied site abuts acquired alignment of the sector road and there is no stay regarding construction on the land falling under the abutting sector road</h6>
+                  <div className="d-flex flex-row align-items-center my-1 ">
+                  <input type="radio" disabled value="Yes" checked={landScheduleData?.orderUpload === "Y" ? true : false} />
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                    <input type="radio" disabled value="No" checked={landScheduleData?.orderUpload === "N" ? true : false} />
+                    <label className="m-0 mx-2" for="No">NO</label>
+                    <ReportProblemIcon
+                      style={{
+                        display: hideRemarks?"none":"block",
+                        color: fieldIconColors.ordersUpload
+                      }}
+                      onClick={() => {
+                        setLabelValue("Orders Upload"),
+                          setOpennedModal("ordersUpload")
+                        setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                      }}
+                    ></ReportProblemIcon>
+                  </div>
+
+                  <h6>(c)  Applied site abouts already constructed sector road or internal circulation road of approved sectoral plan (of min. 18m/24m width as the case may be) provided its entire stretch required for approach is licenced and is further leading upto atleast 4 karam wide revenue rasta.</h6>
+                  <div className="d-flex flex-row align-items-center my-1 ">
+                  <input type="radio" disabled value="Yes" checked={landScheduleData?.orderUpload === "Y" ? true : false} />
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                    <input type="radio" disabled value="No" checked={landScheduleData?.orderUpload === "N" ? true : false} />
+                    <label className="m-0 mx-2" for="No">NO</label>
+                    <ReportProblemIcon
+                      style={{
+                        display: hideRemarks?"none":"block",
+                        color: fieldIconColors.ordersUpload
+                      }}
+                      onClick={() => {
+                        setLabelValue("Orders Upload"),
+                          setOpennedModal("ordersUpload")
+                        setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                      }}
+                    ></ReportProblemIcon>
+                  </div>
+
+                  <h6>(d)  Applied land is accessible from a minimum 4 karam wide rasta through adjoining own land of the applicant (but not applied for licence).</h6>
+                  <div className="d-flex flex-row align-items-center my-1 ">
+                  <input type="radio" disabled value="Yes" checked={landScheduleData?.orderUpload === "Y" ? true : false} />
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                    <input type="radio" disabled value="No" checked={landScheduleData?.orderUpload === "N" ? true : false} />
+                    <label className="m-0 mx-2" for="No">NO</label>
+                    <ReportProblemIcon
+                      style={{
+                        display: hideRemarks?"none":"block",
+                        color: fieldIconColors.ordersUpload
+                      }}
+                      onClick={() => {
+                        setLabelValue("Orders Upload"),
+                          setOpennedModal("ordersUpload")
+                        setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                      }}
+                    ></ReportProblemIcon>
+                  </div>
+
+                  {landScheduleData?.orderUpload === "Y" && (
+                    <div>
+                   <h6>(d1)  If applicable, whether the applicant has donated at least 4 karam wide strip from its adjoining own land in favour of the Gram Panchayat/Municipality, in order to connect the applied site to existing 4 karam rasta?</h6>
+                   <div className="d-flex flex-row align-items-center my-1 ">
+                  <input type="radio" disabled value="Yes" checked={landScheduleData?.orderUpload === "Y" ? true : false} />
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                    <input type="radio" disabled value="No" checked={landScheduleData?.orderUpload === "N" ? true : false} />
+                    <label className="m-0 mx-2" for="No">NO</label>
+                    <ReportProblemIcon
+                      style={{
+                        display: hideRemarks?"none":"block",
+                        color: fieldIconColors.ordersUpload
+                      }}
+                      onClick={() => {
+                        setLabelValue("Orders Upload"),
+                          setOpennedModal("ordersUpload")
+                        setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                      }}
+                    ></ReportProblemIcon>
+                   </div>
+                   </div>
+                  )}
+
+                  <h6>(e)  Applied land is accessible from a minimum 4 karam wide rasta through adjoining other’s land</h6>
+                  <div className="d-flex flex-row align-items-center my-1 ">
+                  <input type="radio" disabled value="Yes" checked={landScheduleData?.orderUpload === "Y" ? true : false} />
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                    <input type="radio" disabled value="No" checked={landScheduleData?.orderUpload === "N" ? true : false} />
+                    <label className="m-0 mx-2" for="No">NO</label>
+                    <ReportProblemIcon
+                      style={{
+                        display: hideRemarks?"none":"block",
+                        color: fieldIconColors.ordersUpload
+                      }}
+                      onClick={() => {
+                        setLabelValue("Orders Upload"),
+                          setOpennedModal("ordersUpload")
+                        setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                      }}
+                    ></ReportProblemIcon>
+                  </div>
+                  {landScheduleData?.orderUpload === "Y" && (
+                    <div>
+                  <h6>(e1)  whether the land-owner of the adjoining land has donated at least 4 karam wide strip of land to the Gram Panchayat/Municipality, in a manner that the applied site gets connected to existing public rasta of atleast 4 karam width?</h6>
+                  <div className="d-flex flex-row align-items-center my-1 ">
+                  <input type="radio" disabled value="Yes" checked={landScheduleData?.orderUpload === "Y" ? true : false} />
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                    <input type="radio" disabled value="No" checked={landScheduleData?.orderUpload === "N" ? true : false} />
+                    <label className="m-0 mx-2" for="No">NO</label>
+                    <ReportProblemIcon
+                      style={{
+                        display: hideRemarks?"none":"block",
+                        color: fieldIconColors.ordersUpload
+                      }}
+                      onClick={() => {
+                        setLabelValue("Orders Upload"),
+                          setOpennedModal("ordersUpload")
+                        setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                      }}
+                    ></ReportProblemIcon>
+                  </div>
+                  </div>
+                  )}
+              
+              </div>
+               )}
                
-                {/* comment by me */}
                 {landScheduleData?.orderUpload === "Y" && (
                   <div className="row m-0 mt-2">
                     <div className="col col-3 p-1">
