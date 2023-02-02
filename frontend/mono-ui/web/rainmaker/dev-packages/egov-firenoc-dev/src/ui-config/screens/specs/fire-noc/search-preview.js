@@ -264,7 +264,16 @@ const prepareUoms = (state, dispatch) => {
         },
         {
           jsonPath: `FireNOCs[0].fireNOCDetails.buildings[${index}].uomsMap.${item.code}`,
-          callBack: checkValueForNA,
+          // callBack: checkValueForNA,
+          callBack: value => {
+            if (value == 0 || value == '0') {
+              return "0";
+            } else if (value) {
+              return value
+            } else {
+              return checkValueForNA
+            }
+          }
         }
       );
 
