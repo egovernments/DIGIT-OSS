@@ -439,7 +439,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
       handleCloseAuthuser();
     } catch (error) {
       setLoading(false);
-      setToastError(error?.response?.data?.Errors?.[0]?.message);
+      setToastError(error?.response?.data?.Errors?.[0]?.code);
       setTimeout(() => {
         setToastError(null)
       }, 2000);
