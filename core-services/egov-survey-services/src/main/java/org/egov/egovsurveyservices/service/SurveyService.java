@@ -228,10 +228,11 @@ public class SurveyService {
             }
 
         }
-        log.info("Current Time:" + System.currentTimeMillis() + " start time:" + surveyEntity.getStartDate() + " end time:" + surveyEntity.getEndDate());
+       if(!ObjectUtils.isEmpty(surveyEntity.getStartDate()) && !ObjectUtils.isEmpty(surveyEntity.getEndDate())){
+           if(surveyEntity.getStartDate() < System.currentTimeMillis() && surveyEntity.getEndDate() > System.currentTimeMillis())
+               surveyEntity.setStatus(ACTIVE);
 
-        if(surveyEntity.getStartDate() < System.currentTimeMillis() && surveyEntity.getEndDate() > System.currentTimeMillis())
-            surveyEntity.setStatus(ACTIVE);
+       }
 
         surveyRequest.setSurveyEntity(surveyEntity);
 
