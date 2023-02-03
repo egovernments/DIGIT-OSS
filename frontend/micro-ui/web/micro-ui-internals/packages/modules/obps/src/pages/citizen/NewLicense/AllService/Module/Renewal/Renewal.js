@@ -741,7 +741,7 @@ function renewalClu() {
               </div>
             </Col>
           </Row>
-          <hr></hr>
+          <br></br>
           <Row className="col-12">
             <Col className="col-6">
               <Form.Label>
@@ -756,7 +756,7 @@ function renewalClu() {
               <input type="file" className="form-control" placeholder="" {...register("cacertification")} />
             </Col>
           </Row>
-          <hr></hr>
+          <br></br>
           <Row className="col-12">
             <Col className="col-12">
               <Form.Label>
@@ -789,7 +789,7 @@ function renewalClu() {
               )}
             </Col>
           </Row>
-          <hr></hr>
+          <br></br>
           <Row className="col-12">
             <Col className="col-12">
               <Form.Label>
@@ -823,7 +823,7 @@ function renewalClu() {
               )}
             </Col>
           </Row>
-          <hr></hr>
+          <br></br>
           <Row className="col-12">
             <Col className="col-12">
               <Form.Label>
@@ -856,7 +856,7 @@ function renewalClu() {
               )}
             </Col>
           </Row>
-          <hr></hr>
+          <br></br>
           <Row className="col-12">
             <Col className="col-12">
               <Form.Label>
@@ -889,7 +889,7 @@ function renewalClu() {
               )}
             </Col>
           </Row>
-          <hr></hr>
+          <br></br>
           <Row className="col-12">
             <Col className="col-12">
               <Form.Label>
@@ -1257,7 +1257,7 @@ function renewalClu() {
             </Col>
           </Row>
           <br></br>
-          <hr></hr>
+
           <br></br>
           <Row className="col-12">
             <Col className="col-12">

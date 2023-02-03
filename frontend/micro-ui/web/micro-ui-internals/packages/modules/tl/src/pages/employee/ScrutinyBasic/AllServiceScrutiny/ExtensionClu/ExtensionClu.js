@@ -33,25 +33,26 @@ function ExtensionClu() {
   const [fieldValue, setFieldValue] = useState("");
   const [selectedFieldData, setSelectedFieldData] = useState();
   const [fieldIconColors, setFieldIconColors] = useState({
-    developer: Colors.info,
-    authPersonName: Colors.info,
-    authMobileNo1: Colors.info,
-    authMobileNo2: Colors.info,
-    emailId: Colors.info,
-    pan: Colors.info,
+    caseNo: Colors.info,
+    applicationNo: Colors.info,
+    naturePurpose: Colors.info,
+    totalAreaSq: Colors.info,
+    cluDate: Colors.info,
+    expiryClu: Colors.info,
+    stageConstruction: Colors.info,
+    applicantName: Colors.info,
+    mobile: Colors.info,
+    emailAddress: Colors.info,
     address: Colors.info,
-    city: Colors.info,
-    pin: Colors.info,
+    village: Colors.info,
     tehsil: Colors.info,
-    district: Colors.info,
-    state: Colors.info,
-    type: Colors.info,
-    lciSignedBy: Colors.info,
-    lciNotSigned: Colors.info,
-    parmanentAddress: Colors.info,
-    addressForCommunication: Colors.info,
-    authPerson: Colors.info,
-    emailForCommunication: Colors.info,
+    pinCode: Colors.info,
+    reasonDelay: Colors.info,
+    uploadbrIII: Colors.info,
+    uploadPhotographs: Colors.info,
+    receiptApplication: Colors.info,
+    uploadBuildingPlan: Colors.info,
+    indemnityBond: Colors.info,
   });
 
   const currentRemarks = (data) => {
@@ -109,11 +110,11 @@ function ExtensionClu() {
                     <input type="number" className="form-control" placeholder="" {...register("caseNo")} disabled />
                     <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.developer,
+                        color: fieldIconColors.caseNo,
                       }}
                       onClick={() => {
-                        setOpennedModal("Licence No");
-                        setLabelValue("Licence No"),
+                        setOpennedModal("caseNo");
+                        setLabelValue("Case No."),
                           setSmShow(true),
                           console.log("modal open"),
                           setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -133,11 +134,11 @@ function ExtensionClu() {
                     <input type="number" className="form-control" placeholder="" {...register("applicationNo")} disabled />
                     <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.developer,
+                        color: fieldIconColors.applicationNo,
                       }}
                       onClick={() => {
-                        setOpennedModal("Licence No");
-                        setLabelValue("Licence No"),
+                        setOpennedModal("applicationNo");
+                        setLabelValue("Application Number"),
                           setSmShow(true),
                           console.log("modal open"),
                           setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -157,11 +158,11 @@ function ExtensionClu() {
                     <input type="text" className="form-control" placeholder="" {...register("naturePurpose")} disabled />
                     <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.developer,
+                        color: fieldIconColors.naturePurpose,
                       }}
                       onClick={() => {
-                        setOpennedModal("Licence No");
-                        setLabelValue("Licence No"),
+                        setOpennedModal("naturePurpose");
+                        setLabelValue("Nature (land Use) Purpose"),
                           setSmShow(true),
                           console.log("modal open"),
                           setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -182,11 +183,11 @@ function ExtensionClu() {
                     <input type="number" className="form-control" placeholder="" {...register("totalAreaSq")} disabled />
                     <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.developer,
+                        color: fieldIconColors.totalAreaSq,
                       }}
                       onClick={() => {
-                        setOpennedModal("Licence No");
-                        setLabelValue("Licence No"),
+                        setOpennedModal("totalAreaSq");
+                        setLabelValue("Total Area in Sq. meter."),
                           setSmShow(true),
                           console.log("modal open"),
                           setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -207,11 +208,11 @@ function ExtensionClu() {
                     <input type="Date" className="form-control" placeholder="" {...register("cluDate")} disabled />
                     <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.developer,
+                        color: fieldIconColors.cluDate,
                       }}
                       onClick={() => {
-                        setOpennedModal("Licence No");
-                        setLabelValue("Licence No"),
+                        setOpennedModal("cluDate");
+                        setLabelValue(" Date Of CLU"),
                           setSmShow(true),
                           console.log("modal open"),
                           setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -231,11 +232,11 @@ function ExtensionClu() {
                     <input type="Date" className="form-control" placeholder="" {...register("expiryClu")} disabled />
                     <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.developer,
+                        color: fieldIconColors.expiryClu,
                       }}
                       onClick={() => {
-                        setOpennedModal("Licence No");
-                        setLabelValue("Licence No"),
+                        setOpennedModal("expiryClu");
+                        setLabelValue(" Date of Expiry of CLU"),
                           setSmShow(true),
                           console.log("modal open"),
                           setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -256,11 +257,11 @@ function ExtensionClu() {
                     <input type="text" className="form-control" placeholder="" {...register("stageConstruction")} disabled />
                     <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.developer,
+                        color: fieldIconColors.stageConstruction,
                       }}
                       onClick={() => {
-                        setOpennedModal("Licence No");
-                        setLabelValue("Licence No"),
+                        setOpennedModal("stageConstruction");
+                        setLabelValue("Stage of construction"),
                           setSmShow(true),
                           console.log("modal open"),
                           setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -281,11 +282,11 @@ function ExtensionClu() {
                     <input type="text" className="form-control" placeholder="" {...register("applicantName")} disabled />
                     <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.developer,
+                        color: fieldIconColors.applicantName,
                       }}
                       onClick={() => {
-                        setOpennedModal("Licence No");
-                        setLabelValue("Licence No"),
+                        setOpennedModal("applicantName");
+                        setLabelValue("Name of applicantName"),
                           setSmShow(true),
                           console.log("modal open"),
                           setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -305,11 +306,11 @@ function ExtensionClu() {
                     <input type="number" className="form-control" placeholder="" {...register("mobile")} disabled />
                     <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.developer,
+                        color: fieldIconColors.mobile,
                       }}
                       onClick={() => {
-                        setOpennedModal("Licence No");
-                        setLabelValue("Licence No"),
+                        setOpennedModal("mobile");
+                        setLabelValue("Mobile"),
                           setSmShow(true),
                           console.log("modal open"),
                           setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -330,11 +331,11 @@ function ExtensionClu() {
                     <input type="email" className="form-control" placeholder="" {...register("emailAddress")} disabled />
                     <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.developer,
+                        color: fieldIconColors.emailAddress,
                       }}
                       onClick={() => {
-                        setOpennedModal("Licence No");
-                        setLabelValue("Licence No"),
+                        setOpennedModal("emailAddress");
+                        setLabelValue("Email-Address"),
                           setSmShow(true),
                           console.log("modal open"),
                           setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -355,11 +356,11 @@ function ExtensionClu() {
                     <input type="text" className="form-control" placeholder="" {...register("address")} disabled />
                     <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.developer,
+                        color: fieldIconColors.address,
                       }}
                       onClick={() => {
-                        setOpennedModal("Licence No");
-                        setLabelValue("Licence No"),
+                        setOpennedModal("address");
+                        setLabelValue("Address"),
                           setSmShow(true),
                           console.log("modal open"),
                           setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -378,11 +379,11 @@ function ExtensionClu() {
                     <input type="text" className="form-control" placeholder="" {...register("village")} disabled />
                     <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.developer,
+                        color: fieldIconColors.village,
                       }}
                       onClick={() => {
-                        setOpennedModal("Licence No");
-                        setLabelValue("Licence No"),
+                        setOpennedModal("village");
+                        setLabelValue("Village"),
                           setSmShow(true),
                           console.log("modal open"),
                           setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -404,11 +405,11 @@ function ExtensionClu() {
                     <input type="text" className="form-control" placeholder="" {...register("tehsil")} disabled />
                     <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.developer,
+                        color: fieldIconColors.tehsil,
                       }}
                       onClick={() => {
-                        setOpennedModal("Licence No");
-                        setLabelValue("Licence No"),
+                        setOpennedModal("tehsil");
+                        setLabelValue("Tehsil"),
                           setSmShow(true),
                           console.log("modal open"),
                           setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -429,11 +430,11 @@ function ExtensionClu() {
                     <input type="number" className="form-control" placeholder="" {...register("pinCode")} disabled />
                     <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.developer,
+                        color: fieldIconColors.pinCode,
                       }}
                       onClick={() => {
-                        setOpennedModal("Licence No");
-                        setLabelValue("Licence No"),
+                        setOpennedModal("pinCode");
+                        setLabelValue(" Pin code"),
                           setSmShow(true),
                           console.log("modal open"),
                           setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -454,11 +455,11 @@ function ExtensionClu() {
                     <input type="textarea" className="form-control" placeholder="" {...register("reasonDelay")} disabled />
                     <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.developer,
+                        color: fieldIconColors.reasonDelay,
                       }}
                       onClick={() => {
-                        setOpennedModal("Licence No");
-                        setLabelValue("Licence No"),
+                        setOpennedModal("reasonDelay");
+                        setLabelValue("Reason for Delay"),
                           setSmShow(true),
                           console.log("modal open"),
                           setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -486,23 +487,23 @@ function ExtensionClu() {
                       {/* <input type="file" placeholder="" className="form-control" {...register("reasonRevision")}></input> */}
                       <div className="row">
                         <div className="btn btn-sm col-md-4">
-                          <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                          <IconButton onClick={() => getDocShareholding(item?.uploadbrIII)}>
                             <VisibilityIcon color="info" className="icon" />
                           </IconButton>
                         </div>
                         <div className="btn btn-sm col-md-4">
-                          <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                          <IconButton onClick={() => getDocShareholding(item?.uploadbrIII)}>
                             <FileDownloadIcon color="info" className="icon" />
                           </IconButton>
                         </div>
                         <div className="btn btn-sm col-md-4">
                           <ReportProblemIcon
                             style={{
-                              color: fieldIconColors.developer,
+                              color: fieldIconColors.uploadbrIII,
                             }}
                             onClick={() => {
-                              setOpennedModal("Licence No");
-                              setLabelValue("Licence No"),
+                              setOpennedModal("uploadbrIII");
+                              setLabelValue("Upload BR-III"),
                                 setSmShow(true),
                                 console.log("modal open"),
                                 setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -524,23 +525,23 @@ function ExtensionClu() {
                       {/* <input type="file" className="form-control" placeholder="" {...register("uploadPhotographs")}></input> */}
                       <div className="row">
                         <div className="btn btn-sm col-md-4">
-                          <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                          <IconButton onClick={() => getDocShareholding(item?.uploadPhotographs)}>
                             <VisibilityIcon color="info" className="icon" />
                           </IconButton>
                         </div>
                         <div className="btn btn-sm col-md-4">
-                          <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                          <IconButton onClick={() => getDocShareholding(item?.uploadPhotographs)}>
                             <FileDownloadIcon color="info" className="icon" />
                           </IconButton>
                         </div>
                         <div className="btn btn-sm col-md-4">
                           <ReportProblemIcon
                             style={{
-                              color: fieldIconColors.developer,
+                              color: fieldIconColors.uploadPhotographs,
                             }}
                             onClick={() => {
-                              setOpennedModal("Licence No");
-                              setLabelValue("Licence No"),
+                              setOpennedModal("uploadPhotographs");
+                              setLabelValue(" Upload photographs of building under construction"),
                                 setSmShow(true),
                                 console.log("modal open"),
                                 setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -561,23 +562,23 @@ function ExtensionClu() {
                       {/* <input type="file" className="form-control" placeholder="" {...register("receiptApplication")}></input> */}
                       <div className="row">
                         <div className="btn btn-sm col-md-4">
-                          <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                          <IconButton onClick={() => getDocShareholding(item?.receiptApplication)}>
                             <VisibilityIcon color="info" className="icon" />
                           </IconButton>
                         </div>
                         <div className="btn btn-sm col-md-4">
-                          <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                          <IconButton onClick={() => getDocShareholding(item?.receiptApplication)}>
                             <FileDownloadIcon color="info" className="icon" />
                           </IconButton>
                         </div>
                         <div className="btn btn-sm col-md-4">
                           <ReportProblemIcon
                             style={{
-                              color: fieldIconColors.developer,
+                              color: fieldIconColors.receiptApplication,
                             }}
                             onClick={() => {
-                              setOpennedModal("Licence No");
-                              setLabelValue("Licence No"),
+                              setOpennedModal("receiptApplication");
+                              setLabelValue("Receipt of application"),
                                 setSmShow(true),
                                 console.log("modal open"),
                                 setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -598,23 +599,23 @@ function ExtensionClu() {
                       {/* <input type="file" className="form-control" placeholder="" {...register("uploadBuildingPlan")}></input> */}
                       <div className="row">
                         <div className="btn btn-sm col-md-4">
-                          <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                          <IconButton onClick={() => getDocShareholding(item?.uploadBuildingPlan)}>
                             <VisibilityIcon color="info" className="icon" />
                           </IconButton>
                         </div>
                         <div className="btn btn-sm col-md-4">
-                          <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                          <IconButton onClick={() => getDocShareholding(item?.uploadBuildingPlan)}>
                             <FileDownloadIcon color="info" className="icon" />
                           </IconButton>
                         </div>
                         <div className="btn btn-sm col-md-4">
                           <ReportProblemIcon
                             style={{
-                              color: fieldIconColors.developer,
+                              color: fieldIconColors.uploadBuildingPlan,
                             }}
                             onClick={() => {
-                              setOpennedModal("Licence No");
-                              setLabelValue("Licence No"),
+                              setOpennedModal("uploadBuildingPlan");
+                              setLabelValue(" Upload approved Building Plan"),
                                 setSmShow(true),
                                 console.log("modal open"),
                                 setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -635,23 +636,23 @@ function ExtensionClu() {
                       {/* <input type="file" className="form-control" placeholder="" {...register("indemnityBond")}></input> */}
                       <div className="row">
                         <div className="btn btn-sm col-md-4">
-                          <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                          <IconButton onClick={() => getDocShareholding(item?.indemnityBond)}>
                             <VisibilityIcon color="info" className="icon" />
                           </IconButton>
                         </div>
                         <div className="btn btn-sm col-md-4">
-                          <IconButton onClick={() => getDocShareholding(item?.agreementDoc)}>
+                          <IconButton onClick={() => getDocShareholding(item?.indemnityBond)}>
                             <FileDownloadIcon color="info" className="icon" />
                           </IconButton>
                         </div>
                         <div className="btn btn-sm col-md-4">
                           <ReportProblemIcon
                             style={{
-                              color: fieldIconColors.developer,
+                              color: fieldIconColors.indemnityBond,
                             }}
                             onClick={() => {
-                              setOpennedModal("Licence No");
-                              setLabelValue("Licence No"),
+                              setOpennedModal("indemnityBond");
+                              setLabelValue("Indemnity Bond"),
                                 setSmShow(true),
                                 console.log("modal open"),
                                 setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
