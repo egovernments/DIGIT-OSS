@@ -42,15 +42,91 @@ const electricalPlanService = () => {
   const [autoCad, setAutoCad] = useState("")
   const [verifiedPlan, setVerifiedPlan] = useState("")
   const [electricPlanRes, setElectricPlanRes] = useState([])
+  const [valid, setValid] = useState([])
   
   
+  const getLoiPattern = (loiNumber) => {
+    const pattern = /^(?=\D*\d)[a-zA-Z0-9\/-]{15,30}$/;
+    return pattern.test(loiNumber);
+  }
+
+  const checkValid = (data) => {
+    let isvalid = false
+    if(getLoiPattern(data?.loiNumber)){
+        isvalid = true
+    }
+    else{
+      isvalid = false
+      alert('Please enter valid LOI number')
+      return isvalid
+    }
+    console.log(data?.LoadSancation, "aaaaaaaaa");
+    console.log(data?.electricDistribution, "bbbbb");
+    if(
+      data?.LoadSancation !== null &&
+      data?.electricDistribution !==null && 
+      data?.electricInfra !== null && 
+      data?.electricalCapacity !== null &&
+      data?.switchingStation !== null
+      ){
+        isvalid = true
+      }
+    else{
+      isvalid = false
+      alert('Please check all mandatory points')
+      return isvalid
+    }
+    if(
+      data.hasOwnProperty('selfCenteredDrawings') && 
+      data.hasOwnProperty('environmentalClearance') &&
+      data.hasOwnProperty('pdfFormat') &&
+      data.hasOwnProperty('autoCad') &&
+      data.hasOwnProperty('verifiedPlan')
+      ){
+        isvalid = true
+    }
+    else{
+      isvalid = false
+      alert('Please upload all the mandatory images')
+      return isvalid
+    } 
+    const checkImage = checkDuplicates(valid)
+    if(checkImage){
+      isvalid = false
+      alert('Please upload the seperate image for each and every field')
+      return isvalid
+    }
+    else{
+      isvalid = true
+    }
+    return isvalid
+  }
+
+  const checkDuplicates = (arr) => {
+    let count = {}
+    for(let i=0; i<arr.length; i++){
+      count[arr[i]] = (count[arr[i]] || 0) + 1
+    }
+    const arr1 = Object.values(count)
+    console.log({count, arr1});
+    if(arr1.some((e) => e > 1)) {
+      return true
+    }
+    return false
+  }
+
   const electricPlan = async (data) => {
     const token = window?.localStorage?.getItem("token");
-    console.log(data);
+    console.log(data, "ddddddddd");
     const tenantId = Digit.ULBService.getCurrentTenantId();
 
     try {
       if(!applicationId){
+        const isValid = checkValid(data)
+        if(!isValid){
+          console.log("Dont call create")
+          return null
+        }
         const postDistrict = {
           requestInfo: {
             api_id: "1",
@@ -92,6 +168,13 @@ const electricalPlanService = () => {
         electricPlanRes.autoCad = data?.autoCad ? data?.autoCad : electricPlanRes.autoCad
         electricPlanRes.verifiedPlan = data?.verifiedPlan ? data?.verifiedPlan : electricPlanRes.verifiedPlan
         
+        const isvalidUpdate = checkValid(electricPlanRes)
+        console.log({electricPlanRes, data, isvalidUpdate}, "jjjjjjjjjjjjjj");
+        // if(!isvalidUpdate){
+        //   console.log("Dont call update")
+        //   return null
+        // }
+
         const updateRequest = {
           requestInfo: {
             api_id: "Rainmaker",
@@ -141,6 +224,8 @@ const electricalPlanService = () => {
 
   const [fileStoreId, setFileStoreId] = useState({});
   const getDocumentData = async (file, fieldName) => {
+     setValid(arr => [...arr, file?.name])
+     console.log({valid}, "vvvvvvvvv");
     const formData = new FormData();
     formData.append("file", file);
     formData.append("tenantId", "hr");
@@ -246,7 +331,7 @@ const electricalPlanService = () => {
                 </Form.Label>
               </div>
               <input 
-              type="number" 
+              type="string" 
               className="form-control" 
               placeholder="" 
               {...register("loiNumber")} 

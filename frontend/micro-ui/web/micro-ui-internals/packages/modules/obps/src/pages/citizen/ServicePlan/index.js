@@ -4,7 +4,7 @@ import { Card, Row, Col, Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { Dialog } from "@mui/material";
+import { Dialog, stepIconClasses } from "@mui/material";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
@@ -46,12 +46,58 @@ const ServicePlanService = () => {
     shouldFocusError: true,
   });
   const userInfo = Digit.UserService.getUser();
+
+  const getLoiPattern = (loiNumber) => {
+    const pattern = /^(?=\D*\d)[a-zA-Z0-9\/-]{15,30}$/;
+    return pattern.test(loiNumber);
+  }
+
+  const checkValid = (data) => {
+    let isvalid = false
+    if(getLoiPattern(data?.loiNumber)){
+        isvalid = true
+    }
+    else{
+      isvalid = false
+      alert('Please enter valid LOI number')
+      return isvalid
+    }
+    if(
+      data.hasOwnProperty('selfCertifiedDrawingFromEmpaneledDoc') && 
+      data.hasOwnProperty('environmentalClearance') &&
+      data.hasOwnProperty('shapeFileAsPerTemplate') &&
+      data.hasOwnProperty('autoCadFile') &&
+      data.hasOwnProperty('certifieadCopyOfThePlan')
+      ){
+        isvalid = true
+    }
+    else{
+      isvalid = false
+      alert('Please upload all the mandatory images')
+      return isvalid
+    } 
+    const checkImage = checkDuplicates(valid)
+    if(checkImage){
+      isvalid = false
+      alert('Please upload the seperate image for each and every field')
+      return isvalid
+    }
+    else{
+      isvalid = true
+    }
+    return isvalid
+  }
   const servicePlan = async (data) => {
     const token = window?.localStorage?.getItem("token");
     const tenantId = Digit.ULBService.getCurrentTenantId();
     console.log(data, "service-service");
     try {
       if(!applicationId){
+        const isValid = checkValid(data)
+        // if(!isValid){
+        //   console.log("Dont call create")
+        //   return null
+        // }
         const postDistrict = {
           requestInfo: {
             api_id: "Rainmaker",
@@ -89,7 +135,12 @@ const ServicePlanService = () => {
         servicePlanRes.shapeFileAsPerTemplate = data?.shapeFileAsPerTemplate ? data?.shapeFileAsPerTemplate : servicePlanRes.shapeFileAsPerTemplate
         servicePlanRes.autoCadFile = data?.autoCadFile ? data?.autoCadFile : servicePlanRes.autoCadFile
         servicePlanRes.certifieadCopyOfThePlan = data?.certifieadCopyOfThePlan ? data?.certifieadCopyOfThePlan : servicePlanRes.certifieadCopyOfThePlan
-        console.log({servicePlanRes, data}, "jjjjjjjjjjjjjj");
+        const isvalidUpdate = checkValid(servicePlanRes)
+        console.log({servicePlanRes, data, isvalidUpdate}, "jjjjjjjjjjjjjj");
+        if(!isvalidUpdate){
+          console.log("Dont call update")
+          return null
+        }
         const updateRequest = {
           requestInfo: {
             api_id: "Rainmaker",
@@ -168,9 +219,18 @@ const ServicePlanService = () => {
     }
   }
 
+  // async function updatedState(file) {
+  //   await new Promise(resolve => {
+  //     setValid(arr => [...arr, file.name])
+  //       resolve();
+  //   })
+  //   return valid
+  // }
+
   const getDocumentData = async (file, fieldName) => {
-    setValid((arr) => [...arr, file.name])
-    // console.log(valid, "vvvvvvvvv");
+   
+    setValid(arr => [...arr, file?.name])
+     console.log({valid}, "vvvvvvvvv");
     //   let duplicateValidity =  checkDuplicates(valid)
     //   console.log(duplicateValidity);
     //   if(duplicateValidity){
@@ -265,7 +325,7 @@ const ServicePlanService = () => {
                 </label>
               </div>
               <input
-                type="number"
+                type="string"
                 className="form-control"
                 {...register("loiNumber")}
                 onChange={(e) => setLOCNumber(e.target.value)}
