@@ -1,6 +1,6 @@
 {
   "name": "egov-pdf",
-  "version": "1.2.0_beta",
+  "version": "1.2.0",
   "private": true,
   "main": "index.js",
   "scripts": {
