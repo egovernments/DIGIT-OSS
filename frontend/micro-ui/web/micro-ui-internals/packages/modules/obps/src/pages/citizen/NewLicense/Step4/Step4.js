@@ -645,7 +645,10 @@ const AppliedDetailForm = (props) => {
                     {stepData?.ApplicantPurpose?.purpose === "RGP" && (
                       <ResidentialGroupHousingForm
                         register={register}
+                        getDocumentData={getDocumentData}
                         watch={watch}
+                        getDocShareholding={getDocShareholding}
+                        setLoader={setLoader}
                         setValue={setValue}
                         control={control}
                         handleWheel={handleWheel}
@@ -658,7 +661,10 @@ const AppliedDetailForm = (props) => {
                     {stepData?.ApplicantPurpose?.purpose === "AGH" && (
                       <AffordableGroupHousingForm
                         register={register}
+                        getDocumentData={getDocumentData}
                         watch={watch}
+                        getDocShareholding={getDocShareholding}
+                        setLoader={setLoader}
                         setValue={setValue}
                         control={control}
                         handleWheel={handleWheel}
@@ -671,7 +677,10 @@ const AppliedDetailForm = (props) => {
                     {(stepData?.ApplicantPurpose?.purpose === "CICS" || stepData?.ApplicantPurpose?.purpose === "CIRS") && (
                       <CommercialIntegratedForm
                         register={register}
+                        getDocumentData={getDocumentData}
                         watch={watch}
+                        getDocShareholding={getDocShareholding}
+                        setLoader={setLoader}
                         setValue={setValue}
                         control={control}
                         handleWheel={handleWheel}
@@ -684,7 +693,10 @@ const AppliedDetailForm = (props) => {
                     {(stepData?.ApplicantPurpose?.purpose === "ITC" || stepData?.ApplicantPurpose?.purpose === "ITP") && (
                       <ITCyberCityForm
                         register={register}
+                        getDocumentData={getDocumentData}
                         watch={watch}
+                        getDocShareholding={getDocShareholding}
+                        setLoader={setLoader}
                         setValue={setValue}
                         control={control}
                         handleWheel={handleWheel}
@@ -697,7 +709,10 @@ const AppliedDetailForm = (props) => {
                     {stepData?.ApplicantPurpose?.purpose === "IPULP" && (
                       <IILPForm
                         register={register}
+                        getDocumentData={getDocumentData}
                         watch={watch}
+                        getDocShareholding={getDocShareholding}
+                        setLoader={setLoader}
                         setValue={setValue}
                         control={control}
                         handleWheel={handleWheel}
@@ -710,7 +725,10 @@ const AppliedDetailForm = (props) => {
                     {stepData?.ApplicantPurpose?.purpose === "MLU-CZ" && (
                       <MixedLandUseForm
                         register={register}
+                        getDocumentData={getDocumentData}
                         watch={watch}
+                        getDocShareholding={getDocShareholding}
+                        setLoader={setLoader}
                         setValue={setValue}
                         control={control}
                         handleWheel={handleWheel}
@@ -723,7 +741,10 @@ const AppliedDetailForm = (props) => {
                     {stepData?.ApplicantPurpose?.purpose === "RHP" && (
                       <RetirementHousingForm
                         register={register}
+                        getDocumentData={getDocumentData}
                         watch={watch}
+                        getDocShareholding={getDocShareholding}
+                        setLoader={setLoader}
                         setValue={setValue}
                         control={control}
                         handleWheel={handleWheel}
@@ -740,7 +761,8 @@ const AppliedDetailForm = (props) => {
                       </div>
                     </div>
                     <div class="col-sm-12 text-right">
-                      <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
+                      {console.log("error===", error)}
+                      <button disabled={error ? true : false} type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
                         Save and Continue
                       </button>
                     </div>

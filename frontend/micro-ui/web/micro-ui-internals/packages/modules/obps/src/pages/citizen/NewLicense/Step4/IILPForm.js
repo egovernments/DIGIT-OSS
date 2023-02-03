@@ -5,7 +5,7 @@ import { Form } from "react-bootstrap";
 import NumberInput from "../../../../components/NumberInput";
 import TextField from "@mui/material/TextField";
 
-const IILPForm = ({ register, watch, setValue, control, handleWheel, setError, error }) => {
+const IILPForm = ({ register, getDocumentData, watch, getDocShareholding, setLoader, setValue, control, handleWheel, setError, error }) => {
   return (
     <Row className="ml-auto" style={{ marginBottom: 5 }}>
       <Col col-12>
@@ -147,7 +147,7 @@ const IILPForm = ({ register, watch, setValue, control, handleWheel, setError, e
               <div>
                 <Form.Label>
                   <h2>
-                    Permissable Ground Coverage
+                    Ground Coverage (in Acres)
                     <span style={{ color: "red" }}>*</span>
                   </h2>
                 </Form.Label>
@@ -159,7 +159,7 @@ const IILPForm = ({ register, watch, setValue, control, handleWheel, setError, e
                 onWheel={handleWheel}
                 onChange={(e) => {
                   if (e?.target?.value > (watch("netPlannedArea") * 60) / 100) {
-                    setError({ ...error, ["permissableGroundCoverage"]: "Maximum 60% of Net planned area is allowed" });
+                    setError({ ...error, ["permissableGroundCoverage"]: "Ground Coverage cannot be more than 60% of NPA" });
                   } else setError({ ...error, ["permissableGroundCoverage"]: "" });
                 }}
               />
@@ -169,7 +169,7 @@ const IILPForm = ({ register, watch, setValue, control, handleWheel, setError, e
               <div>
                 <Form.Label>
                   <h2>
-                    Permissable FAR
+                    FAR (in Acres)
                     <span style={{ color: "red" }}>*</span>
                   </h2>
                 </Form.Label>
@@ -180,8 +180,8 @@ const IILPForm = ({ register, watch, setValue, control, handleWheel, setError, e
                 {...register("permissableFAR")}
                 onWheel={handleWheel}
                 onChange={(e) => {
-                  if (e?.target?.value > (watch("netPlannedArea") * 100) / 100) {
-                    setError({ ...error, ["permissableFAR"]: "Maximum 100% of Net planned area is allowed" });
+                  if (e?.target?.value > (watch("netPlannedArea") * 1) / 100) {
+                    setError({ ...error, ["permissableFAR"]: "FAR(In acres) cannot be more than 1% of NPA" });
                   } else setError({ ...error, ["permissableFAR"]: "" });
                 }}
               />
@@ -189,6 +189,56 @@ const IILPForm = ({ register, watch, setValue, control, handleWheel, setError, e
             </Col>
           </Row>
         </Col>
+        <h6 className="text-black mt-4">
+          <b>Documents</b>
+        </h6>
+        <br></br>
+        <div className="row mt-4">
+          <div className="col col-3">
+            <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top">
+              Layout Plan in pdf<span style={{ color: "red" }}>*</span>
+            </h6>
+            <div className="d-flex">
+              <label>
+                <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                <input
+                  type="file"
+                  style={{ display: "none" }}
+                  onChange={(e) => getDocumentData(e?.target?.files[0], "layoutPlanPdf")}
+                  accept="application/pdf/jpeg/png"
+                />
+              </label>
+              {watch("layoutPlanPdf") && (
+                <div>
+                  <a onClick={() => getDocShareholding(watch("layoutPlanPdf"), setLoader)} className="btn btn-sm ">
+                    <VisibilityIcon color="info" className="icon" />
+                  </a>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="col col-3">
+            <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top">
+              Layout Plan in dxf<span style={{ color: "red" }}>*</span>
+            </h6>
+            <div className="d-flex">
+              <label>
+                <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                <input
+                  type="file"
+                  style={{ display: "none" }}
+                  onChange={(e) => getDocumentData(e?.target?.files[0], "layoutPlanDxf")}
+                  accept="application/pdf/jpeg/png"
+                />
+              </label>
+              {watch("layoutPlanDxf") && (
+                <a onClick={() => getDocShareholding(watch("layoutPlanDxf"), setLoader)} className="btn btn-sm ">
+                  <VisibilityIcon color="info" className="icon" />
+                </a>
+              )}
+            </div>
+          </div>
+        </div>
       </Col>
     </Row>
   );
