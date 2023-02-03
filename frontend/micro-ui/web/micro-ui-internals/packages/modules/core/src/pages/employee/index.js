@@ -9,7 +9,7 @@ import ForgotPassword from "./ForgotPassword";
 import LanguageSelection from "./LanguageSelection";
 import EmployeeLogin from "./Login";
 import UserProfile from "../citizen/Home/UserProfile";
-import CheckCredentials from "./CheckEmployeeCredentials";
+import CheckCredentials from "./CheckCredentials";
 
 const EmployeeApp = ({
   stateInfo,
@@ -63,7 +63,7 @@ const EmployeeApp = ({
               <Route path={`${path}/user/login`}>
                 <EmployeeLogin />
               </Route>
-              <Route path={`${path}/sso-login`}>
+              <Route path={`${path}/user/sso-login`}>
                 <CheckCredentials/>
               </Route>
               <Route path={`${path}/user/forgot-password`}>
