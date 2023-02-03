@@ -46,7 +46,7 @@ const electricalPlanService = () => {
   
   
   const getLoiPattern = (loiNumber) => {
-    const pattern = /^(?=\D*\d)[a-zA-Z0-9\/-]{15,30}$/;
+    const pattern = /^(?=\D*\d)(?=.*[/])(?=.*[-])[a-zA-Z0-9\/-]{15,30}$/;
     return pattern.test(loiNumber);
   }
 

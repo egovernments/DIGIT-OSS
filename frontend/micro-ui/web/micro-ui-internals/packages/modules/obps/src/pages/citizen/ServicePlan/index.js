@@ -48,7 +48,7 @@ const ServicePlanService = () => {
   const userInfo = Digit.UserService.getUser();
 
   const getLoiPattern = (loiNumber) => {
-    const pattern = /^(?=\D*\d)[a-zA-Z0-9\/-]{15,30}$/;
+    const pattern = /^(?=\D*\d)(?=.*[/])(?=.*[-])[a-zA-Z0-9\/-]{15,30}$/;
     return pattern.test(loiNumber);
   }
 
@@ -94,10 +94,10 @@ const ServicePlanService = () => {
     try {
       if(!applicationId){
         const isValid = checkValid(data)
-        // if(!isValid){
-        //   console.log("Dont call create")
-        //   return null
-        // }
+        if(!isValid){
+          console.log("Dont call create")
+          return null
+        }
         const postDistrict = {
           requestInfo: {
             api_id: "Rainmaker",
@@ -137,10 +137,10 @@ const ServicePlanService = () => {
         servicePlanRes.certifieadCopyOfThePlan = data?.certifieadCopyOfThePlan ? data?.certifieadCopyOfThePlan : servicePlanRes.certifieadCopyOfThePlan
         const isvalidUpdate = checkValid(servicePlanRes)
         console.log({servicePlanRes, data, isvalidUpdate}, "jjjjjjjjjjjjjj");
-        if(!isvalidUpdate){
-          console.log("Dont call update")
-          return null
-        }
+        // if(!isvalidUpdate){
+        //   console.log("Dont call update")
+        //   return null
+        // }
         const updateRequest = {
           requestInfo: {
             api_id: "Rainmaker",
