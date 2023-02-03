@@ -10,6 +10,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 
 import java.util.HashMap;
 
@@ -29,8 +30,10 @@ public class NotificationConsumer {
         try {
             SurveyRequest request = mapper.convertValue(record, SurveyRequest.class);
             //log.info(request.toString());
-            if(request.getSurveyEntity().getStatus().equals(Status.ACTIVE))
-                notificationService.prepareEventAndSend(request);
+            if(!ObjectUtils.isEmpty(request.getSurveyEntity().getStartDate()) && !ObjectUtils.isEmpty(request.getSurveyEntity().getEndDate())){
+                if(request.getSurveyEntity().getStartDate() < System.currentTimeMillis() && request.getSurveyEntity().getEndDate() > System.currentTimeMillis())
+                    notificationService.prepareEventAndSend(request);
+            }
 
         } catch (final Exception e) {
 
