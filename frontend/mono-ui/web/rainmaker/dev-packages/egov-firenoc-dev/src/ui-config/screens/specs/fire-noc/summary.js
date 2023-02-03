@@ -40,7 +40,7 @@ const prepareDocumentsView = async (state, dispatch) => {
   jp.query(reduxDocuments, "$.*").forEach(doc => {
     if (doc.documents && doc.documents.length > 0) {
       documentsPreview.push({
-        title: getTransformedLocale(doc.documentCode),
+        title: getTransformedLocale(doc.documentSubCode || doc.documentCode),
         name: doc.documents[0].fileName,
         fileStoreId: doc.documents[0].fileStoreId,
         linkText: "View"

@@ -18,6 +18,9 @@ import { documentsSummary } from "./summaryResource/documentsSummary";
 import { estimateSummary } from "./summaryResource/estimateSummary";
 import { nocSummary } from "./summaryResource/nocSummary";
 import { propertySummary } from "./summaryResource/propertySummary";
+import cloneDeep from "lodash/cloneDeep";
+import store from "ui-redux/store";
+
 
 const titlebar = getCommonContainer({
   header: getCommonHeader({
@@ -338,6 +341,8 @@ const setSearchResponse = async (
   set(response, 'FireNOCs[0].fireNOCDetails.additionalDetail.comment', '');
   set(response, 'FireNOCs[0].fireNOCDetails.additionalDetail.wfDocuments', []);
   dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
+  const additionalDocuments = cloneDeep(get(response, "FireNOCs[0].fireNOCDetails.additionalDetail.documents", [])); 
+  dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.additionalDetail.document", additionalDocuments));
 
   // Set Institution/Applicant info card visibility
   if (
@@ -394,6 +399,24 @@ const setSearchResponse = async (
   }
   await prepareUoms(state, dispatch);
 };
+
+
+export const beforeSubmitHook = async () => {
+  let state = store.getState();
+  let fireNocDetails = get(state, "screenConfiguration.preparedFinalObject.FireNOCs", {});
+  let otherDocuments = get(state, "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.additionalDetail.document", []);
+  let allDocuments = get(state, "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.additionalDetail.documents", []);
+  otherDocuments.forEach(data => {
+    allDocuments.map(allData => {
+      if(data.documentType && data.documentType.split('.').length == 2 && allData&& allData.title.includes(data.documentType.split('.')[1]) && allData.fileStoreId != data.fileStoreId) {
+        data.fileStoreId = allData.fileStoreId
+      }
+    })
+  })
+  fireNocDetails[0].fireNOCDetails.additionalDetail.documents = fireNocDetails[0].fireNOCDetails.additionalDetail.document;
+  return fireNocDetails;
+}
+
 
 const screenConfig = {
   uiFramework: "material-ui",
@@ -489,7 +512,8 @@ const screenConfig = {
           props: {
             dataPath: "FireNOCs",
             moduleName: "FIRENOC",
-            updateUrl: "/firenoc-services/v1/_update"
+            updateUrl: "/firenoc-services/v1/_update",
+            beforeSubmitHook: beforeSubmitHook
           }
         },
         body: getCommonCard({
