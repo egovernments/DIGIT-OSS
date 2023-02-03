@@ -55,15 +55,17 @@ export default function CheckCredentials() {
        let body =  {
             "SsoEmployee":{
             "applicantName":queryParameters.get("applicantName"),
-            "mobileNumber":queryParameters.get("mobileNumber"),
-            "uid":queryParameters.get("uid"),
+            "mobileNumber":queryParameters.get("MobileNo"),
+            "uid":"169",
+            // "uid":queryParameters.get("uid"),
             "userName":queryParameters.get("username"),
             "email":queryParameters.get("email"),
             "rtnUrl":queryParameters.get("rtnUrl"),
             "ssoDashboardURL":queryParameters.get("ssoDashboardURL"),
             "tokenId":queryParameters.get("TokenId"),
             "designationID":queryParameters.get("DesignationID"),
-            "designation":queryParameters.get("Designation"),
+            "designation":"STP_Circle",
+            // "designation":queryParameters.get("Designation"),
             "officeID":queryParameters.get("OfficeID"),
             "officeName":queryParameters.get("OfficeName")
             }
@@ -75,7 +77,7 @@ export default function CheckCredentials() {
         Digit.SessionStorage.set("Employee.tenantId", info?.tenantId);
         // const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.ssoUser(body);
         console.log("REINfo",info, resp);
-        setUser({ info, ...resp?.data?.Token });
+        // setUser({ info, ...resp?.data?.Token });
         // console.log("_ssoCitizen response ",response.data) 
         // window.open(response.data.ReturnUrl,"_self");
 
