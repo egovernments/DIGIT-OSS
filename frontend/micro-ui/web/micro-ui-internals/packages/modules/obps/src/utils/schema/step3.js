@@ -7,6 +7,7 @@ const VALIDATION_SCHEMA = Yup.object().shape({
   //     .max(20)
   //     .matches(/^[^\s][a-zA-Z0-9\s]+$/, "Please enter valid input")
   //     .required("This field is required."),
+  landSchedule: Yup.mixed().required("You need to provide a file"),
   // migrationLic: Yup.string().nullable().required("This field is required."),
   // encumburance: Yup.string().nullable().required("This field is required."),
   // litigation: Yup.string().nullable().required("This field is required."),

@@ -206,9 +206,9 @@ const FeesChargesForm = (props) => {
       const Resp = await axios.post("/filestore/v1/files", formData, {});
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
-      if (fieldName === "consentLetter") {
-        setValue("consentLetterFileName", file.name);
-      }
+      // if (fieldName === "consentLetter") {
+      //   setValue("consentLetterFileName", file.name);
+      // }
       setSelectedFiles([...selectedFiles, file.name]);
       setLoader(false);
       setShowToast({ key: "success" });
@@ -269,8 +269,9 @@ const FeesChargesForm = (props) => {
     try {
       const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${id}`, payload);
       const userData = Resp?.data?.LicenseDetails?.[0];
+      console.log("test===", userData?.ApplicantPurpose?.AppliedLandDetails);
       setValue("purpose", userData?.ApplicantPurpose?.purpose);
-      setValue("potential", userData?.ApplicantPurpose?.potential);
+      setValue("developmentPlan", userData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.developmentPlan);
       setStepData(userData);
     } catch (error) {
       return error;
@@ -296,7 +297,7 @@ const FeesChargesForm = (props) => {
             <Form.Group className="justify-content-center" controlId="formBasicEmail">
               <Row className="ml-auto" style={{ marginBottom: 5 }}>
                 <Col col-12>
-                  <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))", width: "629px", marginLeft: "273px" }}>
+                  <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))", width: "629px" }}>
                     <thead>
                       <tr>
                         <th>
@@ -321,7 +322,7 @@ const FeesChargesForm = (props) => {
                           Dev Plan <span style={{ color: "red" }}>*</span>
                         </th>
                         <td>
-                          <input type="text" className="form-control" placeholder="potential" disabled {...register("potential")} />
+                          <input type="text" className="form-control" placeholder="Development Plan" disabled {...register("developmentPlan")} />
                         </td>
                       </tr>
                       <tr>
@@ -416,21 +417,19 @@ const FeesChargesForm = (props) => {
                                         <input
                                           type="file"
                                           style={{ display: "none" }}
-                                          onChange={(e) => getDocumentData(e?.target?.files[0], "consentLetter")}
+                                          onChange={(e) => getDocumentData(e?.target?.files[0], "consentLetterFileName")}
                                           accept="application/pdf/jpeg/png"
                                         />
                                       </label>
-                                      {fileStoreId?.consentLetter ? (
-                                        <a onClick={() => getDocShareholding(fileStoreId?.consentLetter)} className="btn btn-sm ">
+                                      {watch("consentLetterFileName") && (
+                                        <a onClick={() => getDocShareholding(watch("consentLetterFileName"))} className="btn btn-sm ">
                                           <VisibilityIcon color="info" className="icon" />
                                         </a>
-                                      ) : (
-                                        <p></p>
                                       )}
-                                      <h3 style={{}}>{watch("consentLetterFileName") ? watch("consentLetterFileName") : null}</h3>
+                                      {/* <h3>{watch('consentLetterFileName')}</h3> */}
 
                                       <h3 className="error-message" style={{ color: "red" }}>
-                                        {errors?.consentLetter && errors?.consentLetter?.message}
+                                        {errors?.consentLetterFileName && errors?.consentLetterFileName?.message}
                                       </h3>
                                     </div>
                                   </div>

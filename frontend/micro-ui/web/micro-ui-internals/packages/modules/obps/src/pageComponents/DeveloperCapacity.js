@@ -439,21 +439,33 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
     if (formType === "devTypeDocument") {
       if (getValues("devTypeDocument")?.includes(file.name)) {
         setShowToastError({ key: "error" });
+        setTimeout(() => {
+          setShowToastError(null)
+        }, 2000);
         return;
       }
     } else if (formType === "hrduModalActFile") {
       if (getValues("hrduModalActFile")?.includes(file.name)) {
         setShowToastError({ key: "error" });
+        setTimeout(() => {
+          setShowToastError(null)
+        }, 2000);
         return;
       }
     } else if (formType === "designatedDirectorsFile") {
       if (getValues("designatedDirectorsFile")?.includes(file.name)) {
         setShowToastError({ key: "error" });
+        setTimeout(() => {
+          setShowToastError(null)
+        }, 2000);
         return;
       }
     } else if (formType === "alreadyObtaileLicFile") {
       if (getValues("alreadyObtaileLicFile")?.includes(file.name)) {
         setShowToastError({ key: "error" });
+        setTimeout(() => {
+          setShowToastError(null)
+        }, 2000);
         return;
       }
     } else if (formType === "outsideHrDocY") {
@@ -464,6 +476,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
     } else if (formType === "techicalExpertFile") {
       if (getValues("techicalExpertFile")?.includes(file.name)) {
         setShowToastError({ key: "error" });
+        setTimeout(() => {
+          setShowToastError(null)
+        }, 2000);
         return;
       }
     }
@@ -482,6 +497,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
 
       setLoading(false);
       setShowToast({ key: "success" });
+      setTimeout(() => {
+        setShowToast(null)
+      }, 2000);
       console.log(Resp?.data?.files);
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
@@ -580,15 +598,12 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
         dateOfGrantingLic: "",
         purposeOfColony: "",
         licValidity: "",
-        // technicalExpertEngaged: "",
-        // engineerDegree: "",
-        // architectDegree: "",
-        // townPlannerDegree: ""
       });
       // setShowCapacityDevelopColony(false)
     }
     // setShowCapacityDevelopColony(false)
-    //   console.log("DevCapacityFirst", capacityDevelopColonyHdruAct);
+      console.log("DevCapacityTwo", hrduModalData);
+      console.log("DevCapacityFirst", capacityDevelopColonyHdruAct);
     localStorage.setItem("DevCapacityDetails", JSON.stringify(capacityDevelopColonyHdruAct));
   };
 
@@ -623,7 +638,10 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
 
   const goNext = async (e) => {
     // if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
-
+    // if(!capacityDevelopColonyHdruAct?.length){
+    //   alert('Please add details');
+    //   return;
+    // }
     let payload = {
       parentId: userInfo?.info?.id,
       Licenses: [
@@ -825,8 +843,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                 data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm"
               ? !Documents?.netWorthOfPartners || !Documents?.netWorthOfFirm
               : false) ||
-            (permissionGrantedHRDU === "Y" && capacityDevelopColonyHdruAct.length ? false : permissionGrantedHRDU === "N" ? false : true) ||
-            (technicalCapacityOutsideHaryana === "Y" &&
+            ((permissionGrantedHRDU === "Y" && capacityDevelopColonyHdruAct?.length) || permissionGrantedHRDU === "N" ? false : (technicalCapacityOutsideHaryana === "Y" &&
             technicalCapacityOutsideHaryanaDetails.authority &&
             technicalCapacityOutsideHaryanaDetails.project &&
             technicalCapacityOutsideHaryanaDetails.statusOfDevelopment &&
@@ -835,7 +852,8 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
               ? false
               : technicalCapacityOutsideHaryana === "N"
               ? false
-              : true)
+              : true)) 
+            
           }
         >
           {/* <CheckBox
@@ -1291,7 +1309,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                 onChange={changeValueHrdu}
                 name="permissionGrantedHRDU"
               />
-              <label for="Yes">Yes</label>
+              <label for="permissionGrantedHRDU">Yes</label>
 
               <input
                 type="radio"
@@ -1302,7 +1320,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                 onChange={changeValueHrdu}
                 name="permissionGrantedHRDU"
               />
-              <label for="No">No</label>
+              <label for="permissionGrantedHRDUN">No</label>
               {permissionGrantedHRDU === "Y" && (
                 <div className="card-body">
                   {/* <h5 className="card-h">Add/Remove Authorized Users</h5> */}
@@ -1449,7 +1467,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                   hrduModalData.licNo.length > 0 &&
                                   !hrduModalData.licNo.match(Digit.Utils.getPattern("LicNumber")) && (
                                     <CardLabelError
-                                      style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}
+                                      style={{ width: "100%", marginTop: "5px", fontSize: "16px", marginBottom: "12px", color: "red" }}
                                     >
                                       {t("Invalid Licence No.")}
                                     </CardLabelError>
@@ -1480,7 +1498,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                 </label>
 
                                 <Select
-                                  value={purposeOfColony}
+                                  value={purposeOfColony || ""}
                                   onChange={(e) => setShowPurposeType(e.target.value)}
                                   className="w-100 form-control"
                                   variant="standard"
@@ -1608,117 +1626,6 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
 
             {permissionGrantedHRDU === "N" && (
               <div className="ml-1">
-                {/* {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" || data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm") ? (
-                                    <p>
-                                        (a) Whether you hold designation of
-                                        director/partner in any other company/firm who has already
-                                        obtained license(s) under act of 1975: <span className="text-danger font-weight-bold">*</span>
-                                    </p>)
-                                    :
-                                    (
-                                        <p>
-                                            (ii) If director/partner of the proposed
-                                            developer company/firm also holds designation of
-                                            director/partner in any other company/firm who has already
-                                            obtained license(s) under act of 1975: <span className="text-danger font-weight-bold">*</span>
-                                        </p>
-                                    )
-                                }
-
-                                <div className="form-group">
-                                    <input
-                                        type="radio"
-                                        value="Y"
-                                        checked={designatedDirectors === "Y" ? true : false}
-                                        id="designatedDirectors"
-                                        className="mx-2 mt-1"
-                                        onChange={changeDesignatedDirectors}
-                                        name="designatedDirectors"
-                                    />
-                                    <label for="Yes">Yes</label>
-
-                                    <input
-                                        type="radio"
-                                        value="N"
-                                        checked={designatedDirectors === "N" ? true : false}
-                                        id="designatedDirectorsN"
-                                        className="mx-2 mt-1"
-                                        onChange={changeDesignatedDirectors}
-                                        name="designatedDirectors"
-                                    />
-                                    <label for="No">No</label>
-                                    {designatedDirectors === "Y" && (
-                                        <div className="row ">
-                                            <div className="form-group row">
-                                                <div className="col-sm-12">
-                                                    <Col xs="12" md="12" sm="12">
-                                                        <Table className="table table-bordered" size="sm">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>S.No.</th>
-                                                                    <th>Professional </th>
-                                                                    <th> Upload Documents</th>
-                                                                    <th> Annexure</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td> 1 &nbsp;&nbsp;</td>
-                                                                    <td>
-                                                                        {" "}
-                                                                        Agreement between the entities to provide
-                                                                        technical assistance
-                                                                    </td>
-                                                                    <td align="center" size="large">
-                                                                        <label for="agreementDocId"> <FileUpload color="primary" /></label>
-                                                                        <input
-                                                                            id="agreementDocId"
-                                                                            type="file"
-                                                                            name="agreementDoc"
-                                                                            style={{ display: "none" }}
-                                                                            onChange={(e) => getDocumentData(e?.target?.files[0], "agreementDoc","designatedDirectorsFile")}
-                                                                        />
-                                                                    </td>
-                                                                    <td>
-                                                                        {Documents?.agreementDoc ?
-                                                                            <a onClick={() => getDocShareholding(Documents?.agreementDoc)} className="btn btn-sm col-md-6">
-                                                                                <VisibilityIcon color="info" className="icon" />
-                                                                            </a> : <p></p>
-                                                                        }
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td> 2&nbsp;&nbsp; </td>
-                                                                    <td>
-                                                                        Board resolutions of authorized signatory of
-                                                                        firm/company provided technical assistance
-                                                                    </td>
-                                                                    <td align="center" size="large">
-                                                                        <label for="boardDocId"> <FileUpload color="primary" /></label>
-                                                                        <input
-                                                                            id="boardDocId"
-                                                                            type="file"
-                                                                            name="boardDoc"
-                                                                            style={{ display: "none" }}
-                                                                            onChange={(e) => getDocumentData(e?.target?.files[0], "boardDoc","designatedDirectorsFile")}
-                                                                        />
-                                                                    </td>
-                                                                    <td>
-                                                                        {Documents?.boardDoc ?
-                                                                            <a onClick={() => getDocShareholding(Documents?.boardDoc)} className="btn btn-sm col-md-6">
-                                                                                <VisibilityIcon color="info" className="icon" />
-                                                                            </a> : <p></p>
-                                                                        }
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </Table>
-                                                    </Col>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
-                                </div> */}
                 {data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" ||
                 data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm" ? (
                   <p>
@@ -1740,7 +1647,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                     onChange={(e) => setTechnicalCapacityOutsideHaryana(e.target.value)}
                     name="technicalCapacityOutsideHaryana"
                   />
-                  <label for="Yes">Yes</label>
+                  <label for="technicalCapacityOutsideHaryana">Yes</label>
 
                   <input
                     type="radio"
@@ -1751,7 +1658,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                     onChange={(e) => setTechnicalCapacityOutsideHaryana(e.target.value)}
                     name="technicalCapacityOutsideHaryana"
                   />
-                  <label for="No">No</label>
+                  <label for="technicalCapacityOutsideHaryanaN">No</label>
                   {technicalCapacityOutsideHaryana === "Y" && (
                     <Row>
                       <Col md={3} xxl lg="3" className="mb-2">

@@ -90,15 +90,16 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
       // console.log("STAKEHOLDER",getDevDetails?.data?.devDetail[0]?.addInfo?.registeredContactNo); 
       setShowDevTypeFields(developerDataGet?.devDetail[0]?.applicantType?.developerType || devType);
-      // setName(developerDataGet?.devDetail[0]?.addInfo?.name);
+      setName(developerDataGet?.devDetail[0]?.addInfo?.name);
       setCompanyName(developerDataGet?.devDetail[0]?.addInfo?.companyName);
       setIncorporation(developerDataGet?.devDetail[0]?.addInfo?.incorporationDate);
       setRegistered(developerDataGet?.devDetail[0]?.addInfo?.registeredAddress);
       setUserEmail(developerDataGet?.devDetail[0]?.addInfo?.email);
       setUserEmailInd(developerDataGet?.devDetail[0]?.addInfo?.emailId);
       setDOB(developerDataGet?.devDetail[0]?.addInfo?.dob);
-      setGender(licenseDataList?.devDetail[0]?.addInfo?.gender)
+      setGender(developerDataGet?.devDetail[0]?.addInfo?.gender)
       setPanNumber(developerDataGet?.devDetail[0]?.addInfo?.PanNumber);
+      setPanIsValid(developerDataGet?.devDetail[0]?.addInfo?.PanNumber ? true : false);
       // setMobile(developerDataGet?.devDetail[0]?.addInfo?.mobileNumber);
       setGST(developerDataGet?.devDetail[0]?.addInfo?.gst_Number);
       setTbName(developerDataGet?.devDetail[0]?.addInfo?.sharName);
@@ -150,7 +151,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
 
 
-  const [name, setName] = useState((!isOpenLinkFlow ? userInfo?.info?.name : "") || formData?.LicneseDetails?.name || formData?.formData?.LicneseDetails?.name || "");
+  const [name, setName] = useState(formData?.LicneseDetails?.name || formData?.formData?.LicneseDetails?.name || "");
   const [mobileNumberUser, setMobileNumber] = useState((!isOpenLinkFlow ? userInfo?.info?.mobileNumber : "") ||
     formData?.LicneseDetails?.mobileNumberUser || formData?.formData?.LicneseDetails?.mobileNumberUser || ""
   );
@@ -314,6 +315,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   function SelectName(e) {
     if(!e.target.value || e.target.value.match("^[a-zA-z ]*$")){
       setName(e.target.value);
+      setPanIsValid(false);
     }
   }
   function setMobileNo(e) {
@@ -346,11 +348,13 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   }
   function setDateofBirth(e) {
     setDOB(e.target.value);
+    setPanIsValid(false);
   }
 
   function setGenderName(value) {
-    console.log("GENDER", value);
-    setGender(value);
+    console.log("GENDER", value.target.value);
+    setGender(value.target.value);
+    setPanIsValid(false);
   }
 
   function selectPanNumber(e) {
@@ -360,6 +364,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     // }
     if (!e.target.value || /^\w+$/.test(e.target.value)) {
       setPanNumber(e.target.value.toUpperCase());
+      setPanIsValid(false);
       // if (e.target.value === 10) {
       //   alert("HEY")
       //   panVerification();
@@ -374,11 +379,11 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         "txnId": "f7f1469c-29b0-4325-9dfc-c567200a70f7",
         "format": "xml",
         "certificateParameters": {
-          "panno": PanNumber,
-          "PANFullName": name,
-          "FullName": name,
-          "DOB": dob,
-          "GENDER": "MALE"
+          panno: PanNumber,
+          PANFullName: name,
+          FullName: name,
+          DOB: dob,
+          GENDER: gender,
         },
         "consentArtifact": {
           "consent": {
@@ -498,16 +503,25 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     if (type === "existingColonizer") {
       if (getValues("existingColonizerFiles")?.includes(file.name)) {
         setShowToastError({ key: "error" });
+        setTimeout(() => {
+          setShowToastError(null)
+        }, 2000);
         return;
       }
     } else if (type === "shareholdingPattern") {
       if (getValues("shareholdingPatternFiles")?.includes(file.name)) {
         setShowToastError({ key: "error" });
+        setTimeout(() => {
+          setShowToastError(null)
+        }, 2000);
         return;
       }
     } else if (type === "directorInfoPdf") {
       if (getValues("directorInfoPdfFiles")?.includes(file.name)) {
         setShowToastError({ key: "error" });
+        setTimeout(() => {
+          setShowToastError(null)
+        }, 2000);
         return;
       }
     }
@@ -525,6 +539,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       });
       setLoading(false);
       setShowToast({ key: "success" });
+      setTimeout(() => {
+        setShowToast(null)
+      }, 2000);
       console.log(Resp?.data?.files?.[0]?.fileStoreId, fieldName, type, index);
 
       if (type === "existingColonizer") {
@@ -734,7 +751,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         name: name,
         mobileNumberUser: mobileNumberUser,
         dob:dob,
-        gender: gender?.value,
+        gender: gender,
         PanNumber: PanNumber,
         cin_Number: cin_Number,
         llp_Number: llp_Number,
@@ -851,9 +868,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
             // isDisabled={
             //   !showDevTypeFields || (showDevTypeFields === "Individual" && (!name || !mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) || !emailId?.match(Digit.Utils.getPattern('Email')))) || (showDevTypeFields === "Others" && othersArray.length) || (showDevTypeFields === "Proprietorship Firm") || (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others" && (!cin_Number?.match(Digit.Utils.getPattern('CIN')) || !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) || !gst_Number?.match(Digit.Utils.getPattern('GSTNo')) || !((existingColonizer === "N") || (existingColonizer === "Y" && existingColonizerDetails.aggreementBtw && existingColonizerDetails.boardResolution && existingColonizerDetails.dob && existingColonizerDetails.pan && existingColonizerDetails.pan.match(Digit.Utils.getPattern('PAN')) && existingColonizerDetails.licNo && existingColonizerDetails.licDate && existingColonizerDetails.licValidity && existingColonizerDetails.licPurpose))))
             // }
-            isDisabled={(showDevTypeFields === "Individual" || showDevTypeFields === "Proprietorship Firm" || showDevTypeFields === "Hindu Undivided Family") ? !(name && mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) && emailId?.match(Digit.Utils.getPattern('Email')) && gst_Number?.match(Digit.Utils.getPattern('GSTNo'))) : (showDevTypeFields === "Others") ? (!othersArray.length) : (showDevTypeFields === "Proprietorship Firm") ? false : (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others") ?
+            isDisabled={(showDevTypeFields === "Individual" || showDevTypeFields === "Proprietorship Firm" || showDevTypeFields === "Hindu Undivided Family") ? !(name && panIsValid && mobileNumberUser?.match(Digit.Utils.getPattern('MobileNo')) && emailId?.match(Digit.Utils.getPattern('Email')) && gst_Number?.match(Digit.Utils.getPattern('GSTNo'))) : (showDevTypeFields === "Others") ? (!othersArray.length) : (showDevTypeFields === "Proprietorship Firm") ? false : (showDevTypeFields && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Individual" && showDevTypeFields !== "Others" && showDevTypeFields !== "Limited Liability Partnership")   ?
               (
-                ((showDevTypeFields === "Trust") ? false : !csrNumber?.match(Digit.Utils.getPattern('CSR')) || (showDevTypeFields === "Company") ? false : !cin_Number?.match(Digit.Utils.getPattern('CIN'))) || !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) || (showDevTypeFields === "Trust" ? false : !gst_Number?.match(Digit.Utils.getPattern('GSTNo'))) || !registeredAddress.match(Digit.Utils.getPattern('Address')) || (!existingColonizerDetails.licNo.match(Digit.Utils.getPattern('OldLicenceNo'))) || !(modalValuesArray?.length) || !(DirectorData.length) || !((existingColonizer === "N") || (existingColonizer === "Y" && existingColonizerDetails.name && existingColonizerDetails.licNo && existingColonizerDetails.licDate))) : true}
+                ((showDevTypeFields === "Trust") ? false : !csrNumber?.match(Digit.Utils.getPattern('CSR')) || (showDevTypeFields === "Company") ? false : !cin_Number?.match(Digit.Utils.getPattern('CIN'))) || !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) || (showDevTypeFields === "Trust" ? false : !gst_Number?.match(Digit.Utils.getPattern('GSTNo'))) || !registeredAddress.match(Digit.Utils.getPattern('Address')) || (!existingColonizerDetails.licNo.match(Digit.Utils.getPattern('OldLicenceNo'))) || !(modalValuesArray?.length) || !(DirectorData.length) || !(isUndertaken) || !((existingColonizer === "N") || (existingColonizer === "Y" && existingColonizerDetails.name && existingColonizerDetails.licNo && existingColonizerDetails.licDate))) : (showDevTypeFields === "Limited Liability Partnership") ? !(llp_Number && isUndertaken && llp_Number.match(Digit.Utils.getPattern('LLP')) && incorporationDate && registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) && email && companyName && registeredContactNo && registeredAddress && gst_Number && gst_Number?.match(Digit.Utils.getPattern('GSTNo'))) : true}
             t={t}
           >
             <div className="happy">
@@ -944,7 +961,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             placeholder={mobileNumberUser}
                             name="mobileNumberUser"
                             required={true}
-                            onChange={(e) => setMobileNumber(e.target.value)}
+                            onChange={(e) => {setMobileNumber(e.target.value); setPanIsValid(false);}}
                             disabled
                             className="form-control"
                           />
@@ -970,7 +987,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                         <div className="form-group">
                           <label htmlFor="dob">Select gender <span className="text-danger font-weight-bold">*</span></label>
                           <Select
-                            value={gender?.value}
+                            value={gender || ''}
                             onChange={setGenderName}
                             className="w-100 form-control"
                             variant="standard"
@@ -1025,10 +1042,10 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                           <label htmlFor="name">GST No. {showDevTypeFields !== "Trust" && <span className="text-danger font-weight-bold">*</span>}</label>
                           <input
                             type="text"
+                            name="gst_Number"
                             value={gst_Number}
                             placeholder={gst_Number}
                             onChange={(e) => setGST(e.target.value.toUpperCase())}
-                            name="gst_Number"
                             required={true}
                             className="form-control"
                           />
@@ -1320,7 +1337,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                         max={8}
                                         maxlength="8"
                                       />
-                                      {llp_Number && llp_Number.length > 0 && !llp_Number.match(Digit.Utils.getPattern('LLP')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_LLP_NO")}</CardLabelError>}
+                                      {llp_Number && llp_Number.length > 0 && !llp_Number.match(Digit.Utils.getPattern('LLP')) && <CardLabelError style={{ width: "100%", marginTop: '5px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_LLP_NO")}</CardLabelError>}
                                       {/* <h3 className="error-message" style={{ color: "red" }}>{cinValError}</h3> */}
                                     </div>
                                   )
@@ -1372,7 +1389,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                             date={incorporationDate}
                             value={incorporationDate}
                             placeholder={incorporationDate}
-                            onChange={(e) => setIncorporation(e)}
+                            onChange={(e) => setIncorporation(e.target.value)}
                             className="form-control"
                             disabled={showDevTypeFields === "Company"}
                           />
@@ -1893,18 +1910,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                     </div>
                   </div>
 
-                  <Col md={12} >
-                    <Form.Group className="col-md-12">
-                      <CheckBox
-                        label={t("It is undertaken that the above information is true and correct for all facts and purposes.")}
-                        onChange={(e) => selectChecked(e)}
-                        value={isUndertaken}
-                        checked={isUndertaken}
-                        name={isUndertaken}
-                        style={{ paddingBottom: "10px", paddingTop: "10px" }}
-                      />
-                    </Form.Group>
-                  </Col>
+                  
 
                   <p className="ml-1">
                     In case the Partner/director of the applicant firm/company is common with any existing colonizer who has been granted a license under the 1975 act Yes/No.
@@ -2135,244 +2141,21 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
                 </div>
               )}
-
+              
               {/* FOR COMPANY */}
-              {showDevTypeFields === "LLP" && (
-                <div className="card mb-3">
-                  {/* <div className="card-header">
-              <h5 className="card-title"> Developer</h5>
-            </div> */}
-                  <h5 className="card-title fw-bold">Developer Details</h5>
-                  <div className="card-body">
-                    <div className="row">
-                      <div className="col col-4">
-                        <div className="form-group">
-                          <label htmlFor="name">LLP Pin *</label>
-                          <input
-                            type="text"
-                            onChange={(e) => setCinNo(e.target.value)}
-                            value={cin_Number}
-                            className="employee-card-input"
-                            {...(validation = {
-                              isRequired: true,
-                              required: "Name is required",
-                              pattern: "^[a-zA-Z0-9]*$",
-                              type: "text",
-
-                              title: "Please Enter LLP Pin"
-                            })}
-                          // placeholder=""
-                          // {...register("name", {
-                          //   required: "Name is required",
-                          //   pattern: {
-                          //     value: /^[a-zA-Z]+$/,
-                          //     message: "Name must be a valid string",
-                          //   },
-                          //   minLength: {
-                          //     value: 3,
-                          //     message:
-                          //       "Name should be greater than 3 characters",
-                          //   },
-                          //   maxLength: {
-                          //     value: 20,
-                          //     message:
-                          //       "Name shouldn't be greater than 20 characters",
-                          //   },
-                          // })}
-                          />
-                        </div>
-                      </div>
-                      <div className="col col-4">
-                        <div className="form-group">
-
-                          <label htmlFor="name">LLP Name</label>
-
-                          <input
-                            type="text"
-                            disabled="disabled"
-                            value={companyName}
-                            placeholder={companyName}
-                            className="employee-card-input"
-                          // placeholder=""
-                          // {...register("name", {
-                          //   required: "Name is required",
-                          //   pattern: {
-                          //     value: /^[a-zA-Z]+$/,
-                          //     message: "Name must be a valid string",
-                          //   },
-                          //   minLength: {
-                          //     value: 3,
-                          //     message:
-                          //       "Name should be greater than 3 characters",
-                          //   },
-                          //   maxLength: {
-                          //     value: 20,
-                          //     message:
-                          //       "Name shouldn't be greater than 20 characters",
-                          //   },
-                          // })}
-                          />
-                        </div>
-                      </div>
-                      <div className="col col-4">
-                        <div className="form-group">
-                          <label htmlFor="name">Date of Incorporation</label>
-                          <input
-                            type="text"
-                            disabled="disabled"
-                            value={incorporationDate}
-                            placeholder={incorporationDate}
-                            className="employee-card-input"
-                          // placeholder=""
-                          // {...register("name", {
-                          //   required: "Name is required",
-                          //   pattern: {
-                          //     value: /^[a-zA-Z]+$/,
-                          //     message: "Name must be a valid string",
-                          //   },
-                          //   minLength: {
-                          //     value: 3,
-                          //     message:
-                          //       "Name should be greater than 3 characters",
-                          //   },
-                          //   maxLength: {
-                          //     value: 20,
-                          //     message:
-                          //       "Name shouldn't be greater than 20 characters",
-                          //   },
-                          // })}
-                          />
-                        </div>
-                      </div>
-                      <div className="col col-4">
-                        <div className="form-group">
-                          <label htmlFor="name">Registered Address</label>
-                          <input
-                            type="text"
-                            disabled="disabled"
-                            value={registeredAddress}
-                            placeholder={registeredAddress}
-                            className="employee-card-input"
-                          // name="name"
-                          // className={`employee-card-input`}
-                          // placeholder=""
-                          // {...register("name", {
-                          //   required: "Name is required",
-                          //   pattern: {
-                          //     value: /^[a-zA-Z]+$/,
-                          //     message: "Name must be a valid string",
-                          //   },
-                          //   minLength: {
-                          //     value: 3,
-                          //     message:
-                          //       "Name should be greater than 3 characters",
-                          //   },
-                          //   maxLength: {
-                          //     value: 20,
-                          //     message:
-                          //       "Name shouldn't be greater than 20 characters",
-                          //   },
-                          // })}
-                          />
-                        </div>
-                      </div>
-                      <div className="col col-4">
-                        <div className="form-group ">
-                          <label htmlFor="email"> Email </label>
-                          <input
-                            type="text"
-                            disabled="disabled"
-                            value={email}
-                            placeholder={email}
-                            className="employee-card-input"
-                          // name="email"
-                          // className={`employee-card-input`}
-                          // placeholder=""
-                          // {...register("email", {
-                          //   required: "Email is required",
-                          //   pattern: {
-                          //     value: /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/,
-                          //     message: "Email must be a valid email address",
-                          //   },
-                          // })}
-                          />
-                          {/* <div className="invalid-feedback">
-                        {errors?.email?.message}
-                      </div> */}
-                        </div>
-                      </div>
-                      <div className="col col-4">
-                        <div className="form-group">
-                          <label htmlFor="name">Mobile No.</label>
-                          <input
-                            type="text"
-                            disabled="disabled"
-                            value={registeredContactNo}
-                            placeholder={registeredContactNo}
-                            className="employee-card-input"
-                            maxlength={"10"}
-                          // name="name"
-                          // className={`employee-card-input`}
-                          // placeholder=""
-                          // {...register("name", {
-                          //   required: "Name is required",
-                          //   pattern: {
-                          //     value: /^[a-zA-Z]+$/,
-                          //     message: "Name must be a valid string",
-                          //   },
-                          //   minLength: {
-                          //     value: 3,
-                          //     message:
-                          //       "Name should be greater than 3 characters",
-                          //   },
-                          //   maxLength: {
-                          //     value: 20,
-                          //     message:
-                          //       "Name shouldn't be greater than 20 characters",
-                          //   },
-                          // })}
-                          />
-                          {/* <div className="invalid-feedback">
-                        {errors?.name?.message}
-                      </div> */}
-                        </div>
-                      </div>
-                      <div className="col col-4">
-                        <div className="form-group">
-                          <label htmlFor="name">GST No.</label>
-                          <input
-                            type="text"
-                            value={gst_Number}
-                            placeholder={gst_Number}
-                            className="employee-card-input"
-                          // className={`employee-card-input`}
-                          // placeholder=""
-                          // {...register("name", {
-                          //   required: "Name is required",
-                          //   pattern: {
-                          //     value: /^[a-zA-Z]+$/,
-                          //     message: "Name must be a valid string",
-                          //   },
-                          //   minLength: {
-                          //     value: 3,
-                          //     message:
-                          //       "Name should be greater than 3 characters",
-                          //   },
-                          //   maxLength: {
-                          //     value: 20,
-                          //     message:
-                          //       "Name shouldn't be greater than 20 characters",
-                          //   },
-                          // })}
-                          />
-                          {/* <div className="invalid-feedback">
-                        {errors?.name?.message}
-                      </div> */}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              {(showDevTypeFields !== "Individual" && showDevTypeFields !== "Proprietorship Firm" && showDevTypeFields !== "Hindu Undivided Family" && showDevTypeFields !== "Others" && showDevTypeFields !== "Society" && showDevTypeFields !== "Firm") && (
+                <Col md={12} >
+                <Form.Group className="col-md-12">
+                  <CheckBox
+                    label={t("It is undertaken that the above information is true and correct for all facts and purposes.")}
+                    onChange={(e) => selectChecked(e)}
+                    value={isUndertaken}
+                    checked={isUndertaken}
+                    name={isUndertaken}
+                    style={{ paddingBottom: "10px", paddingTop: "10px" }}
+                  />
+                </Form.Group>
+              </Col>
               )}
 
 

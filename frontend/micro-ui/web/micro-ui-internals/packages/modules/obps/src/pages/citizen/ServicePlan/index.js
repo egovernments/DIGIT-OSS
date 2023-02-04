@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Card, Row, Col, Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
@@ -10,16 +11,28 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
+import FileDownload from "@mui/icons-material/FileDownload";
+import { IconButton } from "@mui/material";
+//import { getDocShareholding } from 'packages/modules/tl/src/pages/employee/ScrutinyBasic/ScrutinyDevelopment/docview.helper.js'
+
+
 
 const ServicePlanService = () => {
   const [file, setFile] = useState(null);
   const [LOCNumber, setLOCNumber] = useState("");
+  const [selfCertifiedDrawing, setSelfCertifiedDrawing] = useState("")
+  const [applicationId, setApplicationId] = useState('')
+  const [environmental, setEnviromental] = useState('')
+  const [gisFormat, setGisFormat] = useState('')
+  const [autocad, setAutoCad] = useState('')
+  const [certifiedCopy, setCertifiedCopy] = useState('')
+  const [servicePlanRes, setServicePlanRes] = useState('')
   const [submitDataLabel, setSubmitDataLabel] = useState([]);
   const [ServicePlanDataLabel, setServicePlanDataLabel] = useState([]);
   const [docUpload, setDocuploadData] = useState([]);
   const [open, setOpen] = useState(false)
   const [applicationNumber, setApplicationNumber] = useState()
-  const [valid, setValid] = useState("")
+  const [valid, setValid] = useState([])
   const {
     register,
     handleSubmit,
@@ -38,34 +51,71 @@ const ServicePlanService = () => {
     const tenantId = Digit.ULBService.getCurrentTenantId();
     console.log(data, "service-service");
     try {
-      const postDistrict = {
-        requestInfo: {
-          api_id: "Rainmaker",
-          ver: "1",
-          ts: null,
-          action: "create",
-          did: "",
-          key: "",
-          msg_id: "",
-          requester_id: "",
-          authToken: token,
-          "userInfo": userInfo.info
-        },
-
-        ServicePlanRequest: [{
-          ...data,
-          "action": "APPLY",
-          "tenantId":  tenantId,
-          "businessService": "SERVICE_PLAN",
-          "workflowCode": "SERVICE_PLAN",
-          "comment": "",
-          "assignee": null
-        }],
-      };
-      const Resp = await axios.post("/tl-services/serviceplan/_create", postDistrict);
-      setServicePlanDataLabel(Resp.data);
-      setOpen(true)
-      setApplicationNumber(Resp.data.servicePlanResponse[0].applicationNumber)
+      if(!applicationId){
+        const postDistrict = {
+          requestInfo: {
+            api_id: "Rainmaker",
+            ver: "1",
+            ts: null,
+            action: "create",
+            did: "",
+            key: "",
+            msg_id: "",
+            requester_id: "",
+            authToken: token,
+            "userInfo": userInfo.info
+          },
+  
+          ServicePlanRequest: [{
+            ...data,
+            "action": "APPLY",
+            "tenantId":  tenantId,
+            "businessService": "SERVICE_PLAN",
+            "workflowCode": "SERVICE_PLAN",
+            "comment": "",
+            "assignee": null
+          }],
+        };
+        const Resp = await axios.post("/tl-services/serviceplan/_create", postDistrict);
+        setServicePlanDataLabel(Resp.data);
+        setOpen(true)
+        setApplicationNumber(Resp.data.servicePlanResponse[0].applicationNumber)
+      }
+      else{
+        
+        servicePlanRes.loiNumber = data?.loiNumber ? data?.loiNumber : servicePlanRes.loiNumber
+        servicePlanRes.selfCertifiedDrawingFromEmpaneledDoc = data?.selfCertifiedDrawingFromEmpaneledDoc ? data?.selfCertifiedDrawingFromEmpaneledDoc : servicePlanRes.selfCertifiedDrawingFromEmpaneledDoc
+        servicePlanRes.environmentalClearance = data?.environmentalClearance ? data?.environmentalClearance : servicePlanRes.environmentalClearance
+        servicePlanRes.shapeFileAsPerTemplate = data?.shapeFileAsPerTemplate ? data?.shapeFileAsPerTemplate : servicePlanRes.shapeFileAsPerTemplate
+        servicePlanRes.autoCadFile = data?.autoCadFile ? data?.autoCadFile : servicePlanRes.autoCadFile
+        servicePlanRes.certifieadCopyOfThePlan = data?.certifieadCopyOfThePlan ? data?.certifieadCopyOfThePlan : servicePlanRes.certifieadCopyOfThePlan
+        console.log({servicePlanRes, data}, "jjjjjjjjjjjjjj");
+        const updateRequest = {
+          requestInfo: {
+            api_id: "Rainmaker",
+            ver: "1",
+            ts: null,
+            action: "create",
+            did: "",
+            key: "",
+            msg_id: "",
+            requester_id: "",
+            authToken: token
+          },
+          ServicePlanRequest: [{
+            ...servicePlanRes,
+            // "action": "FORWARD",
+            // "tenantId":  tenantId,
+            // "businessService": "SERVICE_PLAN",
+            "workflowCode": "SERVICE_PLAN",
+            // "comment": "",
+            // "assignee": null
+          }],
+        }
+        const Resp = await axios.post("/tl-services/serviceplan/_update", updateRequest);
+        setOpen(true)
+        setApplicationNumber(Resp.data.servicePlanResponse[0].applicationNumber)
+      }
 
     } catch (error) {
       console.log(error.message);
@@ -96,8 +146,40 @@ const ServicePlanService = () => {
     }
   }
 
+  const downloadDocument = async (documentId) => {
+    try {
+      const response = await axios.get(`/filestore/v1/files/url?tenantId=hr&fileStoreIds=${documentId}`, {});
+      const url = response.data?.fileStoreIds[0]?.url;
+      const res = await fetch(url)
+      if(!res.ok){
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const blob = await res.blob()
+      const link = document.createElement("a")
+      link.style.display = 'none'
+      document.body.appendChild(link)
+      link.href = URL.createObjectURL(blob)
+      link.download = `${documentId}.jpg`
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const getDocumentData = async (file, fieldName) => {
     setValid((arr) => [...arr, file.name])
+    // console.log(valid, "vvvvvvvvv");
+    //   let duplicateValidity =  checkDuplicates(valid)
+    //   console.log(duplicateValidity);
+    //   if(duplicateValidity){
+    //     alert('Please upload the different image')
+    //     setValid(valid.slice(0, -1))
+    //     duplicateValidity = false
+    //     return null
+    //   }
+    
     const formData = new FormData();
     formData.append("file", file);
     formData.append("tenantId", "hr");
@@ -117,35 +199,55 @@ const ServicePlanService = () => {
     }
   };
 
-  const closeModal = () => {
+  const handleClose = () => {
     setOpen(false)
     window.location.href = `/digit-ui/citizen`
   }
+  const getApplicationId = (url) => {
+    const urlParams = new URLSearchParams(url.split('?')[1])
+    return urlParams.get('id')
+ }
 
-  // const getSubmitDataLabel = async () => {
-  //   try {
-  //     const postDistrict = {
-  //       requestInfo: {
-  //         api_id: "1",
-  //         ver: "1",
-  //         ts: null,
-  //         action: "create",
-  //         did: "",
-  //         key: "",
-  //         msg_id: "",
-  //         requester_id: "",
-  //         auth_token: null,
-  //       },
-  //     };
+ const id = getApplicationId(window.location.href)
 
-  //     const Resp = await axios.post(`http://10.1.1.18:80/land-services/serviceplan/_get?loiNumber=123`, postDistrict);
-  //   } catch (error) {
-  //     console.log(error.message);
-  //   }
-  // };
-  // useEffect(() => {
-  //   getSubmitDataLabel();
-  // }, []);
+  useEffect(() => {
+    if(id){
+      getApplicationData()
+    }
+  }, [id])
+
+
+  const getApplicationData = async () => {
+    const token = window?.localStorage?.getItem("token");
+      try {
+        const postDistrict = {
+          requestInfo: {
+            api_id: "Rainmaker",
+            ver: "1",
+            ts: null,
+            action: "create",
+            did: "",
+            key: "",
+            msg_id: "",
+            requester_id: "",
+            authToken: token,
+          },
+        }
+        const response = await axios.post(`/tl-services/serviceplan/_get?applicationNumber=${id}`, postDistrict)
+        console.log(response, "rrrrrrrrrr")
+        setLOCNumber(response?.data?.servicePlanResponse[0].loiNumber)
+        setSelfCertifiedDrawing(response?.data?.servicePlanResponse[0].selfCertifiedDrawingFromEmpaneledDoc)
+        setApplicationId(id)
+        setEnviromental(response?.data?.servicePlanResponse[0].environmentalClearance)
+        setGisFormat(response?.data?.servicePlanResponse[0].shapeFileAsPerTemplate)
+        setAutoCad(response?.data?.servicePlanResponse[0].autoCadFile)
+        setCertifiedCopy(response?.data?.servicePlanResponse[0].certifieadCopyOfThePlan)
+        setServicePlanRes(response?.data?.servicePlanResponse[0])
+
+      } catch (error) {
+        console.log(error)
+      } 
+   }
 
   return (
     <React.Fragment>
@@ -170,42 +272,6 @@ const ServicePlanService = () => {
                 value={LOCNumber}
               />
             </Col>
-            {/* <Col className="col-4">
-              <div>
-                <label>
-                  <h2 data-toggle="tooltip" data-placement="top" title=" Is the uploaded Service Plan in accordance to the Standard designs?">
-                    Uploaded Service Plan <span style={{ color: "red" }}>*</span>
-                  </h2>
-                </label>
-              </div>
-              <Form.Check
-                value="Y"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="true"
-                {...register("selfCertifiedDrawingsFromCharetedEng")}
-                inline
-              ></Form.Check>
-              <Form.Check
-                value="N"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="false"
-                {...register("selfCertifiedDrawingsFromCharetedEng")}
-                inline
-              ></Form.Check>
-            </Col> */}
-            {/* <Col className="col-4">
-              <div>
-                <label>
-                  <h2>Undertaking</h2>
-                </label>
-              </div>
-              <Form.Check value="Y" type="radio" id="default-radio" label="Yes" name="true" {...register("undertaking")} inline></Form.Check>
-              <Form.Check value="N" type="radio" id="default-radio" label="No" name="false" {...register("undertaking")} inline></Form.Check>
-            </Col> */}
           </Row>
           <br></br>
           <div className="table table-bordered table-responsive">
@@ -245,6 +311,16 @@ const ServicePlanService = () => {
                     {" "}
                   </VisibilityIcon>
                   : "" }
+                  {applicationId && (!fileStoreId?.selfCertifiedDrawingFromEmpaneledDoc) &&
+                  <div className="btn btn-sm col-md-4">
+                    <IconButton onClick={()=>downloadDocument(selfCertifiedDrawing)}>
+                        <FileDownload color="primary" className="mx-1" />
+                    </IconButton>
+                      <IconButton onClick={()=>viewDocument(selfCertifiedDrawing)}>
+                        <VisibilityIcon color="info" className="icon" />
+                      </IconButton>
+                  </div> 
+                  }
                 </td>
               </tr>
               <tr>
@@ -275,6 +351,16 @@ const ServicePlanService = () => {
                     {" "}
                   </VisibilityIcon>
                   : ""}
+                   {applicationId && (!fileStoreId?.environmentalClearance) && 
+                  <div className="btn btn-sm col-md-4">
+                    <IconButton onClick={()=>downloadDocument(environmental)}>
+                        <FileDownload color="primary" className="mx-1" />
+                    </IconButton>
+                      <IconButton onClick={()=>viewDocument(environmental)}>
+                        <VisibilityIcon color="info" className="icon" />
+                      </IconButton>
+                  </div> 
+                  }
                 </td>
               </tr>
               <tr>
@@ -305,6 +391,16 @@ const ServicePlanService = () => {
                     {" "}
                   </VisibilityIcon>
                     : ""}
+                   {applicationId && (!fileStoreId?.shapeFileAsPerTemplate) && 
+                  <div className="btn btn-sm col-md-4">
+                    <IconButton onClick={()=>downloadDocument(gisFormat)}>
+                        <FileDownload color="primary" className="mx-1" />
+                    </IconButton>
+                      <IconButton onClick={()=>viewDocument(gisFormat)}>
+                        <VisibilityIcon color="info" className="icon" />
+                      </IconButton>
+                  </div> 
+                  }
                 </td>
               </tr>
               <tr>
@@ -335,6 +431,16 @@ const ServicePlanService = () => {
                     {" "}
                   </VisibilityIcon>
                   : "" }
+                   {applicationId && (!fileStoreId?.autoCadFile) &&
+                  <div className="btn btn-sm col-md-4">
+                    <IconButton onClick={()=>downloadDocument(autocad)}>
+                        <FileDownload color="primary" className="mx-1" />
+                    </IconButton>
+                      <IconButton onClick={()=>viewDocument(autocad)}>
+                        <VisibilityIcon color="info" className="icon" />
+                      </IconButton>
+                  </div> 
+                  }
                 </td>
               </tr>
               <tr>
@@ -365,6 +471,16 @@ const ServicePlanService = () => {
                     {" "}
                   </VisibilityIcon>
                   : "" }
+                   {applicationId && (!fileStoreId?.certifieadCopyOfThePlan) &&
+                  <div className="btn btn-sm col-md-4">
+                    <IconButton onClick={()=>downloadDocument(certifiedCopy)}>
+                        <FileDownload color="primary" className="mx-1" />
+                    </IconButton>
+                      <IconButton onClick={()=>viewDocument(certifiedCopy)}>
+                        <VisibilityIcon color="info" className="icon" />
+                      </IconButton>
+                  </div> 
+                  }
                 </td>
               </tr>
             </tbody>
@@ -407,3 +523,4 @@ const ServicePlanService = () => {
 };
 
 export default ServicePlanService;
+

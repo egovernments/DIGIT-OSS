@@ -177,10 +177,12 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
   function setGenderName(value) {
     console.log("GENDER", value);
     setGender(value);
+    setPanIsValid(false);
   }
   function selectPanNumber(e) {
     if (!e.target.value || /^\w+$/.test(e.target.value)) {
       setAurthorizedPan(e.target.value.toUpperCase());
+      setPanIsValid(false);
       // if(e.target.value === 10){
       //   panVerification();
       // }
@@ -188,6 +190,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
   }
   function selectAurthorizedMobileNumber(value) {
     setAurthorizedMobileNumber(value);
+    setPanIsValid(false);
   }
 
   const { isLoading, data: genderTypeData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["GenderType"]);
@@ -289,11 +292,17 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
     if (fromTable) {
       if (getValues("authorizedUserFiles")?.includes(file.name)) {
         setShowToastError({ key: "error" });
+        setTimeout(() => {
+          setShowToastError(null)
+        }, 2000);
         return;
       }
     } else {
       if (getValues("modalFiles")?.includes(file.name)) {
         setShowToastError({ key: "error" });
+        setTimeout(() => {
+          setShowToastError(null)
+        }, 2000);
         return;
       }
     }
@@ -311,7 +320,9 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
       });
       setLoading(false);
       setShowToast({ key: "success" });
-
+      setTimeout(() => {
+        setShowToast(null)
+      }, 2000);
       if (fromTable) {
         let temp = aurthorizedUserInfoArray;
         temp[index][fieldName] = Resp?.data?.files?.[0]?.fileStoreId;
@@ -343,6 +354,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
   const handleUserNameChange = (e) => {
     if (!e.target.value || e.target.value.match("^[a-zA-Z ]*$")) {
       setAurtorizedUserName(e.target.value);
+      setPanIsValid(false);
     }
   };
 
@@ -423,12 +435,18 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
       }
       setDocumentsData({});
       setLoading(false);
+      setPanIsValid(false);
+      handleCloseAuthuser();
     } catch (error) {
       setLoading(false);
+      setToastError(error?.response?.data?.Errors?.[0]?.code);
+      setTimeout(() => {
+        setToastError(null)
+      }, 2000);
+      console.log("ERROR ====> ",error.response,error);
     }
     // getAdhaarPdf();
     // getDigitalSignPdf();
-    handleCloseAuthuser();
     // }
   };
 
@@ -741,7 +759,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                           // value={aurthorizedEmail}
                           placeholder=""
                           // onChange={setEmail}
-                          onChange={(e) => setAurthorizedEmail(e.target.value)}
+                          onChange={(e) => {setAurthorizedEmail(e.target.value); setPanIsValid(false);}}
                           //disable={editScreen}
                           {...(validation = {
                             isRequired: true,
@@ -781,7 +799,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                           name="dob[]"
                           placeholder=""
                           class="employee-card-input"
-                          onChange={(e) => setAurthorizedDob(e.target.value)}
+                          onChange={(e) => {setAurthorizedDob(e.target.value); setPanIsValid(false);}}
                           max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear() - 18))}
                         />
                       </Col>
@@ -922,7 +940,8 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
             label={toastError}
             isDleteBtn={true}
             onClose={() => {
-              toastError(null);
+              setToastError(null);
+              
             }}
           />
         )}
@@ -933,7 +952,6 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
             isDleteBtn={true}
             onClose={() => {
               setShowToast(null);
-              setError(null);
             }}
           />
         )}

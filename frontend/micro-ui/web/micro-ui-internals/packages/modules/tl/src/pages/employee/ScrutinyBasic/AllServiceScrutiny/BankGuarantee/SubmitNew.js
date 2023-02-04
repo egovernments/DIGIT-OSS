@@ -469,8 +469,8 @@ const SubmitNew = (props) => {
                       />
                       &nbsp; No &nbsp;&nbsp;
                     </label>
-                    <div className={classes.fieldContainer}>
-                      {/* <Form.Control className={classes.formControl} placeholder={apiResponse?.licenseApplied} disabled></Form.Control> */}
+                    {/* <div className={classes.fieldContainer}>
+                     
 
                       <ReportProblemIcon
                         style={{
@@ -485,7 +485,7 @@ const SubmitNew = (props) => {
                             setFieldValue(licenseApplied);
                         }}
                       ></ReportProblemIcon>
-                    </div>
+                    </div> */}
                     <h3 className="error-message" style={{ color: "red" }}>
                       {errors?.licenseApplied && errors?.licenseApplied?.message}
                     </h3>
@@ -516,7 +516,7 @@ const SubmitNew = (props) => {
                               }}
                               onClick={() => {
                                 setOpennedModal("tcpSubmissionReceived");
-                                setLabelValue(" Upload B.G. softcopy"),
+                                setLabelValue(" Upload Receipt of Submission."),
                                   setSmShow(true),
                                   console.log("modal open"),
                                   setFieldValue(tcpSubmissionReceived);

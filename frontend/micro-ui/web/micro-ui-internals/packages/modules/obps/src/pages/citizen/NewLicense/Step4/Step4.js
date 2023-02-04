@@ -2,9 +2,18 @@ import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import { useForm, useFieldArray } from "react-hook-form";
 import DDJAYForm from "../Step4/DdjayForm";
+import TextField from "@mui/material/TextField";
 import ResidentialPlottedForm from "./ResidentialPlotted";
 import IndustrialPlottedForm from "./IndustrialPlotted";
 import CommercialPlottedForm from "./CommercialPlotted";
+import NilpForm from "./Nilp";
+import ResidentialGroupHousingForm from "./ResidentialGroupHousing";
+import AffordableGroupHousingForm from "./AffordableGroupHousing";
+import CommercialIntegratedForm from "./CommercialIntegrated";
+import IILPForm from "./IILPForm";
+import ITCyberCityForm from "./ITCyberCity";
+import MixedLandUseForm from "./MixedLandUse";
+import RetirementHousingForm from "./RetirementHousing";
 import LayoutPlan from "./LayoutPlan";
 import DemarcationPlan from "./DemarcationPlan";
 import { Card, Row, Col, Button, Form } from "react-bootstrap";
@@ -23,6 +32,7 @@ import ScrollToTop from "@egovernments/digit-ui-react-components/src/atoms/Scrol
 import { CardLabelError } from "@egovernments/digit-ui-react-components";
 import { Toast } from "@egovernments/digit-ui-react-components";
 import _ from "lodash";
+import NumberInput from "../../../../components/NumberInput";
 
 const AppliedDetailForm = (props) => {
   const location = useLocation();
@@ -39,10 +49,12 @@ const AppliedDetailForm = (props) => {
   const userInfo = Digit.UserService.getUser()?.info || {};
   const [applicantId, setApplicantId] = useState("");
   const [modalData, setModalData] = useState([]);
+  const [error, setError] = useState({});
   const {
     watch,
     register,
     handleSubmit,
+    resetField,
     control,
     getValues,
     setValue,
@@ -72,12 +84,23 @@ const AppliedDetailForm = (props) => {
           latitude: "",
         },
       ],
+      detailOfCommunitySites: [
+        {
+          communitySiteName: "",
+          provided: "",
+        },
+      ],
     },
   });
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: "dgpsDetails",
+  });
+
+  const { fields: detailsArray, append: detailsAppend, remove: detailsRemoce } = useFieldArray({
+    control,
+    name: "detailOfCommunitySites",
   });
 
   // const validateDgpsPoint = () => {
@@ -102,6 +125,8 @@ const AppliedDetailForm = (props) => {
     // if (!validateDgpsPoint()) {
     //   return;
     // }
+    // console.log("data", data);
+    // return;
     setLoader(true);
     const token = window?.localStorage?.getItem("token");
     const postDistrict = {
@@ -114,184 +139,183 @@ const AppliedDetailForm = (props) => {
         DetailsofAppliedLand: {
           dgpsDetails: modalData,
           DetailsAppliedLandPlot: {
-            regularOption: data?.regularOption,
-            resplotno: data?.resplotno,
-            reslengthmtr: data?.reslengthmtr,
-            reswidthmtr: data?.reswidthmtr,
-            resareasq: data?.resareasq,
-            npnlplotno: data?.npnlplotno,
-            npnllengthmtr: data?.npnllengthmtr,
-            npnlwidthmtr: data?.npnlwidthmtr,
-            npnlareasq: data?.npnlareasq,
-            ewsplotno: data?.ewsplotno,
-            ewslengthmtr: data?.ewslengthmtr,
-            ewswidthmtr: data?.ewswidthmtr,
-            ewsareasq: data?.ewsareasq,
-            complotno: data?.complotno,
-            comlengthmtr: data?.comlengthmtr,
-            comwidthmtr: data?.comwidthmtr,
-            comareasq: data?.comareasq,
-            siteplotno: data?.siteplotno,
-            sitelengthmtr: data?.sitelengthmtr,
-            sitewidthmtr: data?.sitewidthmtr,
-            siteareasq: data?.siteareasq,
-
-            parkplotno: data?.parkplotno,
-            parklengthmtr: data?.parklengthmtr,
-            parkwidthmtr: data?.parkwidthmtr,
-            parkareasq: data?.parkareasq,
-            publicplotno: data?.publicplotno,
-            publiclengthmtr: data?.publiclengthmtr,
-            publicwidthmtr: data?.publicwidthmtr,
-            publicareasq: data?.publicareasq,
-
-            etpplotno: data?.etpplotno,
-            etplengthmtr: data?.etplengthmtr,
-            etpwidthmtr: data?.etpwidthmtr,
-            etpareasq: data?.etpareasq,
-            wtpplotno: data?.wtpplotno,
-            wtplengthmtr: data?.wtplengthmtr,
-            wtpwidthmtr: data?.wtpwidthmtr,
-            wtpareasq: data?.wtpareasq,
-            ugtplotno: data?.ugtplotno,
-            ugtlengthmtr: data?.ugtlengthmtr,
-            ugtwidthmtr: data?.ugtwidthmtr,
-            ugtareasq: data?.ugtareasq,
-            milkboothplotno: data?.milkboothplotno,
-            milkboothlengthmtr: data?.milkboothlengthmtr,
-            milkboothwidthmtr: data?.milkboothwidthmtr,
-            milkboothareasq: data?.milkboothareasq,
-            gssplotno: data?.gssplotno,
-            gsslengthmtr: data?.gsslengthmtr,
-            gssWidthmtr: data?.gssWidthmtr,
-            gssareasq: data?.gssareasq,
-            resDimension: data?.resDimension,
-            resEnteredArea: data?.resEnteredArea,
-            comDimension: data?.comDimension,
-            comEnteredArea: data?.comEnteredArea,
-            secPlanPlot: data?.secPlanPlot,
-            secPlanLength: data?.secPlanLength,
-            secPlanDim: data?.secPlanDim,
-            secPlanEntered: data?.secPlanEntered,
-            greenBeltPlot: data?.greenBeltPlot,
-            greenBeltLength: data?.greenBeltLength,
-            greenBeltDim: data?.greenBeltDim,
-            greenBeltEntered: data?.greenBeltEntered,
-            internalPlot: data?.internalPlot,
-            internalLength: data?.internalLength,
-            internalDim: data?.internalDim,
-            internalEntered: data?.internalEntered,
-            otherPlot: data?.otherPlot,
-            otherLength: data?.otherLength,
-            otherDim: data?.otherDim,
-            otherEntered: data?.otherEntered,
-            undeterminedPlot: data?.undeterminedPlot,
-            undeterminedLength: data?.undeterminedLength,
-            undeterminedDim: data?.undeterminedDim,
-            undeterminedEntered: data?.undeterminedEntered,
+            ...data,
+            // regularOption: data?.regularOption,
+            // resplotno: data?.resplotno,
+            // reslengthmtr: data?.reslengthmtr,
+            // reswidthmtr: data?.reswidthmtr,
+            // resareasq: data?.resareasq,
+            // npnlplotno: data?.npnlplotno,
+            // npnllengthmtr: data?.npnllengthmtr,
+            // npnlwidthmtr: data?.npnlwidthmtr,
+            // npnlareasq: data?.npnlareasq,
+            // ewsplotno: data?.ewsplotno,
+            // ewslengthmtr: data?.ewslengthmtr,
+            // ewswidthmtr: data?.ewswidthmtr,
+            // ewsareasq: data?.ewsareasq,
+            // complotno: data?.complotno,
+            // comlengthmtr: data?.comlengthmtr,
+            // comwidthmtr: data?.comwidthmtr,
+            // comareasq: data?.comareasq,
+            // siteplotno: data?.siteplotno,
+            // sitelengthmtr: data?.sitelengthmtr,
+            // sitewidthmtr: data?.sitewidthmtr,
+            // siteareasq: data?.siteareasq,
+            // parkplotno: data?.parkplotno,
+            // parklengthmtr: data?.parklengthmtr,
+            // parkwidthmtr: data?.parkwidthmtr,
+            // parkareasq: data?.parkareasq,
+            // publicplotno: data?.publicplotno,
+            // publiclengthmtr: data?.publiclengthmtr,
+            // publicwidthmtr: data?.publicwidthmtr,
+            // publicareasq: data?.publicareasq,
+            // etpplotno: data?.etpplotno,
+            // etplengthmtr: data?.etplengthmtr,
+            // etpwidthmtr: data?.etpwidthmtr,
+            // etpareasq: data?.etpareasq,
+            // wtpplotno: data?.wtpplotno,
+            // wtplengthmtr: data?.wtplengthmtr,
+            // wtpwidthmtr: data?.wtpwidthmtr,
+            // wtpareasq: data?.wtpareasq,
+            // ugtplotno: data?.ugtplotno,
+            // ugtlengthmtr: data?.ugtlengthmtr,
+            // ugtwidthmtr: data?.ugtwidthmtr,
+            // ugtareasq: data?.ugtareasq,
+            // milkboothplotno: data?.milkboothplotno,
+            // milkboothlengthmtr: data?.milkboothlengthmtr,
+            // milkboothwidthmtr: data?.milkboothwidthmtr,
+            // milkboothareasq: data?.milkboothareasq,
+            // gssplotno: data?.gssplotno,
+            // gsslengthmtr: data?.gsslengthmtr,
+            // gssWidthmtr: data?.gssWidthmtr,
+            // gssareasq: data?.gssareasq,
+            // resDimension: data?.resDimension,
+            // resEnteredArea: data?.resEnteredArea,
+            // comDimension: data?.comDimension,
+            // comEnteredArea: data?.comEnteredArea,
+            // secPlanPlot: data?.secPlanPlot,
+            // secPlanLength: data?.secPlanLength,
+            // secPlanDim: data?.secPlanDim,
+            // secPlanEntered: data?.secPlanEntered,
+            // greenBeltPlot: data?.greenBeltPlot,
+            // greenBeltLength: data?.greenBeltLength,
+            // greenBeltDim: data?.greenBeltDim,
+            // greenBeltEntered: data?.greenBeltEntered,
+            // internalPlot: data?.internalPlot,
+            // internalLength: data?.internalLength,
+            // internalDim: data?.internalDim,
+            // internalEntered: data?.internalEntered,
+            // otherPlot: data?.otherPlot,
+            // otherLength: data?.otherLength,
+            // otherDim: data?.otherDim,
+            // otherEntered: data?.otherEntered,
+            // undeterminedPlot: data?.undeterminedPlot,
+            // undeterminedLength: data?.undeterminedLength,
+            // undeterminedDim: data?.undeterminedDim,
+            // undeterminedEntered: data?.undeterminedEntered,
           },
-          DetailsAppliedLandDdjay: {
-            frozenNo: data?.frozenNo,
-            frozenArea: data?.frozenArea,
-            organize: data?.organize,
-            organizeArea: data?.organizeArea,
-          },
-          DetailsAppliedLandIndustrial: {
-            colonyfiftyNo: data?.colonyfiftyNo,
-            colonyfiftyArea: data?.colonyfiftyArea,
-            fiftyToTwoNo: data?.fiftyToTwoNo,
-            fiftyToTwoArea: data?.fiftyToTwoArea,
-            twoHundredNo: data?.twoHundredNo,
-            twoHundredArea: data?.twoHundredArea,
-            resiNo: data?.resiNo,
-            resiArea: data?.resiArea,
-            commerNo: data?.commerNo,
-            commerArea: data?.commerArea,
-            labourNo: data?.labourNo,
-            labourArea: data?.labourArea,
-          },
-          DetailsAppliedLandResidential: {
-            npnlNo: data?.npnlNo,
-            npnlArea: data?.npnlArea,
-            ewsNo: data?.ewsNo,
-            ewsArea: data?.ewsArea,
-          },
-          DetailsAppliedLandCommercial: {
-            noOfPlotsSealableOneFifty: data?.noOfPlotsSealableOneFifty,
-            noOfPlotsSealableOneSeventyfive: data?.noOfPlotsSealableOneSeventyfive,
-            scoPlotno: data?.scoPlotno,
-            scoLength: data?.scoLength,
-            scoWidth: data?.scoWidth,
-            scoArea: data?.scoArea,
-            scoSimilarShape: data?.scoSimilarShape,
-            boothPlotno: data?.boothPlotno,
-            boothLength: data?.boothLength,
-            boothWidth: data?.boothWidth,
-            boothArea: data?.boothArea,
-            boothSimilarShape: data?.boothSimilarShape,
-            stpPlotno: data?.stpPlotno,
-            stpLength: data?.stpLength,
-            stpWidth: data?.stpWidth,
-            stpArea: data?.stpArea,
-            stpSimilarShape: data?.stpSimilarShape,
-            wtpPlotno: data?.wtpPlotno,
-            wtpLength: data?.wtpLength,
-            wtpWidth: data?.wtpWidth,
-            wtpArea: data?.wtpArea,
-            wtpSimilarShape: data?.wtpSimilarShape,
-            ugtPlotno: data?.ugtPlotno,
-            ugtLength: data?.ugtLength,
-            ugtWidth: data?.ugtWidth,
-            ugtArea: data?.ugtArea,
-            ugtSimilarShape: data?.ugtSimilarShape,
-            milkPlotno: data?.milkPlotno,
-            milkLength: data?.milkLength,
-            milkWidth: data?.milkWidth,
-            milkArea: data?.milkArea,
-            milkSimilarShape: data?.milkSimilarShape,
-            gssPlotno: data?.gssPlotno,
-            gssLength: data?.gssLength,
-            gssWidth: data?.gssWidth,
-            gssArea: data?.gssArea,
-            gssSimilarShape: data?.gssSimilarShape,
-            etcDim: data?.etcDim,
-            etcArea: data?.etcArea,
-          },
-          DetailsAppliedLandNILP: {
-            surrenderArea: data?.surrenderArea,
-            surrender: data?.surrender,
-            pocketAreaEnter: data?.pocketAreaEnter,
-            pocketProposed: data?.pocketProposed,
-            pocketDim: data?.pocketDim,
-            deposit: data?.deposit,
-            depositArea: data?.depositArea,
-            surrendered: data?.surrendered,
-            surrenderedDim: data?.surrenderedDim,
-          },
-          DetailsAppliedLayoutPlan: {
-            uploadLayoutPlan: data?.uploadLayoutPlan,
-          },
-          DetailsAppliedDemarcationPlan: {
-            demarcationPlan: data?.demarcationPlan,
-          },
-          DetailsAppliedLand: {
-            demarcationPlan: data?.demarcationPlan,
-            democraticPlan: data?.democraticPlan,
-            sectoralPlan: data?.sectoralPlan,
-            planCrossSection: data?.planCrossSection,
-            uploadLayoutPlan: data?.uploadLayoutPlan,
-            publicHealthServices: data?.publicHealthServices,
-            designRoad: data?.designRoad,
-            designSewarage: data?.designSewarage,
-            designDisposal: data?.designDisposal,
-            undertakingChange: data?.undertakingChange,
-            hostedLayoutPlan: data?.hostedLayoutPlan,
-            reportObjection: data?.reportObjection,
-            consentRera: data?.consentRera,
-            undertaking: data?.undertaking,
-            detailedElectricSupply: data?.detailedElectricSupply,
-            proposedColony: data?.proposedColony,
-          },
+          // DetailsAppliedLandDdjay: {
+          //   frozenNo: data?.frozenNo,
+          //   frozenArea: data?.frozenArea,
+          //   organize: data?.organize,
+          //   organizeArea: data?.organizeArea,
+          // },
+          // DetailsAppliedLandIndustrial: {
+          //   colonyfiftyNo: data?.colonyfiftyNo,
+          //   colonyfiftyArea: data?.colonyfiftyArea,
+          //   fiftyToTwoNo: data?.fiftyToTwoNo,
+          //   fiftyToTwoArea: data?.fiftyToTwoArea,
+          //   twoHundredNo: data?.twoHundredNo,
+          //   twoHundredArea: data?.twoHundredArea,
+          //   resiNo: data?.resiNo,
+          //   resiArea: data?.resiArea,
+          //   commerNo: data?.commerNo,
+          //   commerArea: data?.commerArea,
+          //   labourNo: data?.labourNo,
+          //   labourArea: data?.labourArea,
+          // },
+          // DetailsAppliedLandResidential: {
+          //   npnlNo: data?.npnlNo,
+          //   npnlArea: data?.npnlArea,
+          //   ewsNo: data?.ewsNo,
+          //   ewsArea: data?.ewsArea,
+          // },
+          // DetailsAppliedLandCommercial: {
+          //   noOfPlotsSealableOneFifty: data?.noOfPlotsSealableOneFifty,
+          //   noOfPlotsSealableOneSeventyfive: data?.noOfPlotsSealableOneSeventyfive,
+          //   scoPlotno: data?.scoPlotno,
+          //   scoLength: data?.scoLength,
+          //   scoWidth: data?.scoWidth,
+          //   scoArea: data?.scoArea,
+          //   scoSimilarShape: data?.scoSimilarShape,
+          //   boothPlotno: data?.boothPlotno,
+          //   boothLength: data?.boothLength,
+          //   boothWidth: data?.boothWidth,
+          //   boothArea: data?.boothArea,
+          //   boothSimilarShape: data?.boothSimilarShape,
+          //   stpPlotno: data?.stpPlotno,
+          //   stpLength: data?.stpLength,
+          //   stpWidth: data?.stpWidth,
+          //   stpArea: data?.stpArea,
+          //   stpSimilarShape: data?.stpSimilarShape,
+          //   wtpPlotno: data?.wtpPlotno,
+          //   wtpLength: data?.wtpLength,
+          //   wtpWidth: data?.wtpWidth,
+          //   wtpArea: data?.wtpArea,
+          //   wtpSimilarShape: data?.wtpSimilarShape,
+          //   ugtPlotno: data?.ugtPlotno,
+          //   ugtLength: data?.ugtLength,
+          //   ugtWidth: data?.ugtWidth,
+          //   ugtArea: data?.ugtArea,
+          //   ugtSimilarShape: data?.ugtSimilarShape,
+          //   milkPlotno: data?.milkPlotno,
+          //   milkLength: data?.milkLength,
+          //   milkWidth: data?.milkWidth,
+          //   milkArea: data?.milkArea,
+          //   milkSimilarShape: data?.milkSimilarShape,
+          //   gssPlotno: data?.gssPlotno,
+          //   gssLength: data?.gssLength,
+          //   gssWidth: data?.gssWidth,
+          //   gssArea: data?.gssArea,
+          //   gssSimilarShape: data?.gssSimilarShape,
+          //   etcDim: data?.etcDim,
+          //   etcArea: data?.etcArea,
+          // },
+          // DetailsAppliedLandNILP: {
+          //   surrenderArea: data?.surrenderArea,
+          //   surrender: data?.surrender,
+          //   pocketAreaEnter: data?.pocketAreaEnter,
+          //   pocketProposed: data?.pocketProposed,
+          //   pocketDim: data?.pocketDim,
+          //   deposit: data?.deposit,
+          //   depositArea: data?.depositArea,
+          //   surrendered: data?.surrendered,
+          //   surrenderedDim: data?.surrenderedDim,
+          // },
+          // DetailsAppliedLayoutPlan: {
+          //   uploadLayoutPlan: data?.uploadLayoutPlan,
+          // },
+          // DetailsAppliedDemarcationPlan: {
+          //   demarcationPlan: data?.demarcationPlan,
+          // },
+          // DetailsAppliedLand: {
+          //   demarcationPlan: data?.demarcationPlan,
+          //   democraticPlan: data?.democraticPlan,
+          //   sectoralPlan: data?.sectoralPlan,
+          //   planCrossSection: data?.planCrossSection,
+          //   uploadLayoutPlan: data?.uploadLayoutPlan,
+          //   publicHealthServices: data?.publicHealthServices,
+          //   designRoad: data?.designRoad,
+          //   designSewarage: data?.designSewarage,
+          //   designDisposal: data?.designDisposal,
+          //   undertakingChange: data?.undertakingChange,
+          //   hostedLayoutPlan: data?.hostedLayoutPlan,
+          //   reportObjection: data?.reportObjection,
+          //   consentRera: data?.consentRera,
+          //   undertaking: data?.undertaking,
+          //   detailedElectricSupply: data?.detailedElectricSupply,
+          //   proposedColony: data?.proposedColony,
+          // },
         },
       },
       RequestInfo: {
@@ -318,16 +342,16 @@ const AppliedDetailForm = (props) => {
     }
   };
 
-  useEffect(() => {
-    const valueData = stepData?.DetailsofAppliedLand;
-    if (valueData) {
-      Object?.keys(valueData?.DetailsAppliedLandPlot)?.map((item) => setValue(item, valueData?.DetailsAppliedLandPlot[item]));
-      Object?.keys(valueData?.DetailsAppliedLandNILP)?.map((item) => setValue(item, valueData?.DetailsAppliedLandNILP[item]));
-      valueData?.dgpsDetails.map((item, index) => {
-        setValue(`dgpsDetails.${index}.longitude`, item?.longitude), setValue(`dgpsDetails.${index}.latitude`, item?.latitude);
-      });
-    }
-  }, [stepData]);
+  // useEffect(() => {
+  //   const valueData = stepData?.DetailsofAppliedLand;
+  //   if (valueData) {
+  //     Object?.keys(valueData?.DetailsAppliedLandPlot)?.map((item) => setValue(item, valueData?.DetailsAppliedLandPlot[item]));
+  //     Object?.keys(valueData?.DetailsAppliedLandNILP)?.map((item) => setValue(item, valueData?.DetailsAppliedLandNILP[item]));
+  //     valueData?.dgpsDetails.map((item, index) => {
+  //       setValue(`dgpsDetails.${index}.longitude`, item?.longitude), setValue(`dgpsDetails.${index}.latitude`, item?.latitude);
+  //     });
+  //   }
+  // }, [stepData]);
 
   const getSubmitDataLabel = async () => {
     try {
@@ -338,6 +362,9 @@ const AppliedDetailForm = (props) => {
       return error;
     }
   };
+
+  const handleWheel = (e) => e.target.blur();
+
   useEffect(() => {
     getSubmitDataLabel();
   }, []);
@@ -357,47 +384,47 @@ const AppliedDetailForm = (props) => {
     try {
       const Resp = await axios.post("/filestore/v1/files", formData, {});
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
-      setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
+      // setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
       // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
-      if (fieldName === "hostedLayoutPlan") {
-        setValue("hostedLayoutPlanFileName", file.name);
-      }
-      if (fieldName === "consentRera") {
-        setValue("consentReraFileName", file.name);
-      }
-      if (fieldName === "sectoralPlan") {
-        setValue("sectoralPlanFileName", file.name);
-      }
-      if (fieldName === "detailedElectricSupply") {
-        setValue("detailedElectricSupplyFileName", file.name);
-      }
-      if (fieldName === "planCrossSection") {
-        setValue("planCrossSectionFileName", file.name);
-      }
-      if (fieldName === "publicHealthServices") {
-        setValue("publicHealthServicesFileName", file.name);
-      }
-      if (fieldName === "designRoad") {
-        setValue("designRoadFileName", file.name);
-      }
-      if (fieldName === "designSewarage") {
-        setValue("designSewarageFileName", file.name);
-      }
-      if (fieldName === "designDisposal") {
-        setValue("designDisposalFileName", file.name);
-      }
-      if (fieldName === "undertakingChange") {
-        setValue("undertakingChangeFileName", file.name);
-      }
-      if (fieldName === "proposedColony") {
-        setValue("proposedColonyFileName", file.name);
-      }
-      if (fieldName === "reportObjection") {
-        setValue("reportObjectionFileName", file.name);
-      }
-      if (fieldName === "undertaking") {
-        setValue("undertakingFileName", file.name);
-      }
+      // if (fieldName === "hostedLayoutPlan") {
+      //   setValue("hostedLayoutPlanFileName", file.name);
+      // }
+      // if (fieldName === "consentRera") {
+      //   setValue("consentReraFileName", file.name);
+      // }
+      // if (fieldName === "sectoralPlan") {
+      //   setValue("sectoralPlanFileName", file.name);
+      // }
+      // if (fieldName === "detailedElectricSupply") {
+      //   setValue("detailedElectricSupplyFileName", file.name);
+      // }
+      // if (fieldName === "planCrossSection") {
+      //   setValue("planCrossSectionFileName", file.name);
+      // }
+      // if (fieldName === "publicHealthServices") {
+      //   setValue("publicHealthServicesFileName", file.name);
+      // }
+      // if (fieldName === "designRoad") {
+      //   setValue("designRoadFileName", file.name);
+      // }
+      // if (fieldName === "designSewarage") {
+      //   setValue("designSewarageFileName", file.name);
+      // }
+      // if (fieldName === "designDisposal") {
+      //   setValue("designDisposalFileName", file.name);
+      // }
+      // if (fieldName === "undertakingChange") {
+      //   setValue("undertakingChangeFileName", file.name);
+      // }
+      // if (fieldName === "proposedColony") {
+      //   setValue("proposedColonyFileName", file.name);
+      // }
+      // if (fieldName === "reportObjection") {
+      //   setValue("reportObjectionFileName", file.name);
+      // }
+      // if (fieldName === "undertaking") {
+      //   setValue("undertakingFileName", file.name);
+      // }
       setSelectedFiles([...selectedFiles, file.name]);
       setLoader(false);
       setShowToast({ key: "success" });
@@ -449,6 +476,8 @@ const AppliedDetailForm = (props) => {
     try {
       const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${id}`, payload);
       const userData = Resp?.data?.LicenseDetails?.[0];
+      console.log("userData", userData);
+      setValue("totalAreaScheme", userData?.ApplicantPurpose?.totalArea);
       setStepData(userData);
     } catch (error) {
       return error;
@@ -488,7 +517,6 @@ const AppliedDetailForm = (props) => {
 
   const dgpsModalData = (data) => {
     setModalData((prev) => [...prev, data?.dgpsDetails]);
-    console.log("data===", data?.dgpsDetails);
     setDGPSModal(!dgpsModal);
   };
 
@@ -503,7 +531,14 @@ const AppliedDetailForm = (props) => {
             <Form.Group className="justify-content-center" controlId="formBasicEmail">
               <Row className="ml-auto" style={{ marginBottom: 5 }}>
                 <div className="ml-auto">
-                  <Button type="button" variant="primary" onClick={() => setDGPSModal(true)}>
+                  <Button
+                    type="button"
+                    variant="primary"
+                    onClick={() => {
+                      resetField("dgpsDetails");
+                      setDGPSModal(true);
+                    }}
+                  >
                     Enter DGPS points
                   </Button>
                 </div>
@@ -535,1184 +570,169 @@ const AppliedDetailForm = (props) => {
                 </div>
 
                 <Col col-12>
-                  <br></br>
-                  <br></br>
                   <div>
-                    <h5>
-                      2.Details of Plots <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
-                      <label htmlFor="regularOption">
-                        &nbsp;&nbsp;
-                        <input {...register("regularOption")} type="radio" value="regular" id="regularOption" />
-                        &nbsp;&nbsp; Regular &nbsp;&nbsp;
-                      </label>
-                      <label htmlFor="regularOption">
-                        <input {...register("regularOption")} type="radio" value="Irregular" id="regularOption" />
-                        &nbsp;&nbsp; Irregular &nbsp;&nbsp;
-                      </label>
-                      <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.regularOption && errors?.regularOption?.message}
-                      </h3>
-                    </h5>
+                    {stepData?.ApplicantPurpose?.purpose === "RPL" && (
+                      <ResidentialPlottedForm
+                        register={register}
+                        getDocumentData={getDocumentData}
+                        watch={watch}
+                        getDocShareholding={getDocShareholding}
+                        setValue={setValue}
+                        setLoader={setLoader}
+                        control={control}
+                        fields={detailsArray}
+                        add={detailsAppend}
+                        remove={detailsRemoce}
+                        handleWheel={handleWheel}
+                        setError={setError}
+                        error={error}
+                      />
+                    )}
                   </div>
-                  {watch("regularOption") === "regular" && (
-                    <div className="table table-bordered table-responsive">
-                      <thead>
-                        <tr>
-                          <td>Type of plots</td>
-                          <td>Plot No.</td>
-                          <td>
-                            Length in mtr <CalculateIcon color="primary" />
-                          </td>
-                          <td>
-                            Width in mtr <CalculateIcon color="primary" />
-                          </td>
-                          <td>
-                            Area (in sqm) <CalculateIcon color="primary" />
-                          </td>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>
-                            <div className="px-2">
-                              <p className="mb-2">Residential</p>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <div className="px-2">
-                              <p className="mb-2">
-                                Gen <span style={{ color: "red" }}>*</span>
-                              </p>
-                              <h3 className="error-message" style={{ color: "red" }}>
-                                {errors?.resplotno && errors?.resplotno?.message}
-                              </h3>
-                            </div>
-                          </td>
-                          <td component="th" scope="row">
-                            <input type="text" className="form-control" {...register("resplotno")} />
-                          </td>
-
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" {...register("reslengthmtr")} />
-                          </td>
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" {...register("reswidthmtr")} />
-                          </td>
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" {...register("resareasq")} />
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <div className="px-2">
-                              <p className="mb-2">
-                                NPNL <span style={{ color: "red" }}>*</span>
-                              </p>
-                              <h3 className="error-message" style={{ color: "red" }}>
-                                {errors?.npnlplotno && errors?.npnlplotno?.message}
-                              </h3>
-                            </div>
-                          </td>
-                          <td component="th" scope="row">
-                            <input type="text" className="form-control" {...register("npnlplotno")} />
-                          </td>
-
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" {...register("npnllengthmtr")} />
-                          </td>
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" {...register("npnlwidthmtr")} />
-                          </td>
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" {...register("npnlareasq")} />
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <div className="px-2">
-                              <p className="mb-2">
-                                EWS <span style={{ color: "red" }}>*</span>
-                              </p>
-                              <h3 className="error-message" style={{ color: "red" }}>
-                                {errors?.ewsplotno && errors?.ewsplotno?.message}
-                              </h3>
-                            </div>
-                          </td>
-                          <td component="th" scope="row">
-                            <input type="text" className="form-control" {...register("ewsplotno")} />
-                          </td>
-
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" {...register("ewslengthmtr")} />
-                          </td>
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" {...register("ewswidthmtr")} />
-                          </td>
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" {...register("ewsareasq")} />
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <div className="px-2">
-                              <p className="mb-2">
-                                Commercial <span style={{ color: "red" }}>*</span>
-                              </p>
-                              <h3 className="error-message" style={{ color: "red" }}>
-                                {errors?.complotno && errors?.complotno?.message}
-                              </h3>
-                            </div>
-                          </td>
-                          <td component="th" scope="row">
-                            <input type="text" className="form-control" {...register("complotno")} />
-                          </td>
-
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" {...register("comlengthmtr")} />
-                          </td>
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" {...register("comwidthmtr")} />
-                          </td>
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" {...register("comareasq")} />
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <div className="px-2">
-                              <p className="mb-2">
-                                Community Sites <span style={{ color: "red" }}>*</span>
-                              </p>
-                              <h3 className="error-message" style={{ color: "red" }}>
-                                {errors?.siteplotno && errors?.siteplotno?.message}
-                              </h3>
-                            </div>
-                          </td>
-                          <td component="th" scope="row">
-                            <input type="text" className="form-control" {...register("siteplotno")} />
-                          </td>
-
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" {...register("sitelengthmtr")} />
-                          </td>
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" {...register("sitewidthmtr")} />
-                          </td>
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" {...register("siteareasq")} />
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <div className="px-2">
-                              <p className="mb-2">
-                                Parks <span style={{ color: "red" }}>*</span>
-                              </p>
-                              <h3 className="error-message" style={{ color: "red" }}>
-                                {errors?.parkplotno && errors?.parkplotno?.message}
-                              </h3>
-                            </div>
-                          </td>
-                          <td component="th" scope="row">
-                            <input type="text" className="form-control" {...register("parkplotno")} />
-                          </td>
-
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" {...register("parklengthmtr")} />
-                          </td>
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" {...register("parkwidthmtr")} />
-                          </td>
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" {...register("parkareasq")} />
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <div className="px-2">
-                              <p className="mb-2" x>
-                                Public Utilities
-                              </p>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <div className="px-2">
-                              <p className="mb-2">
-                                STP <span style={{ color: "red" }}>*</span>
-                              </p>
-                              <h3 className="error-message" style={{ color: "red" }}>
-                                {errors?.publicplotno && errors?.publicplotno?.message}
-                              </h3>
-                            </div>
-                          </td>
-                          <td component="th" scope="row">
-                            <input type="text" className="form-control" {...register("publicplotno")} />
-                          </td>
-
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" {...register("publiclengthmtr")} />
-                          </td>
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" {...register("publicwidthmtr")} />
-                          </td>
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" {...register("publicareasq")} />
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <div className="px-2">
-                              <p className="mb-2">
-                                ETP <span style={{ color: "red" }}>*</span>
-                              </p>
-
-                              <h3 className="error-message" style={{ color: "red" }}>
-                                {errors?.etpplotno && errors?.etpplotno?.message}
-                              </h3>
-                            </div>
-                          </td>
-                          <td component="th" scope="row">
-                            <input type="text" className="form-control" {...register("etpplotno")} />
-                          </td>
-
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" {...register("etplengthmtr")} />
-                          </td>
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" {...register("etpwidthmtr")} />
-                          </td>
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" {...register("etpareasq")} />
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <div className="px-2">
-                              <p className="mb-2">
-                                WTP <span style={{ color: "red" }}>*</span>
-                              </p>
-                              <h3 className="error-message" style={{ color: "red" }}>
-                                {errors?.wtpplotno && errors?.wtpplotno?.message}
-                              </h3>
-                            </div>
-                          </td>
-                          <td component="th" scope="row">
-                            <input type="text" className="form-control" {...register("wtpplotno")} />
-                          </td>
-
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" {...register("wtplengthmtr")} />
-                          </td>
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" {...register("wtpwidthmtr")} />
-                          </td>
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" {...register("wtpareasq")} />
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <div className="px-2">
-                              <p className="mb-2">
-                                UGT <span style={{ color: "red" }}>*</span>
-                              </p>
-                              <h3 className="error-message" style={{ color: "red" }}>
-                                {errors?.ugtplotno && errors?.ugtplotno?.message}
-                              </h3>
-                            </div>
-                          </td>
-                          <td component="th" scope="row">
-                            <input type="text" className="form-control" {...register("ugtplotno")} />
-                          </td>
-
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" {...register("ugtlengthmtr")} />
-                          </td>
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" {...register("ugtwidthmtr")} />
-                          </td>
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" {...register("ugtareasq")} />
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <div className="px-2">
-                              <p className="mb-2">
-                                Milk Booth <span style={{ color: "red" }}>*</span>
-                              </p>
-                              <h3 className="error-message" style={{ color: "red" }}>
-                                {errors?.milkboothplotno && errors?.milkboothplotno?.message}
-                              </h3>
-                            </div>
-                          </td>
-                          <td component="th" scope="row">
-                            <input type="text" className="form-control" {...register("milkboothplotno")} />
-                          </td>
-
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" {...register("milkboothlengthmtr")} />
-                          </td>
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" {...register("milkboothwidthmtr")} />
-                          </td>
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" {...register("milkboothareasq")} />
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <div className="px-2">
-                              <p className="mb-2">
-                                GSS <span style={{ color: "red" }}>*</span>
-                              </p>
-                              <h3 className="error-message" style={{ color: "red" }}>
-                                {errors?.gssplotno && errors?.gssplotno?.message}
-                              </h3>
-                            </div>
-                          </td>
-                          <td component="th" scope="row">
-                            <input type="text" className="form-control" {...register("gssplotno")} />
-                          </td>
-
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" {...register("gsslengthmtr")} />
-                          </td>
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" {...register("gssWidthmtr")} />
-                          </td>
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" {...register("gssareasq")} />
-                          </td>
-                        </tr>
-                      </tbody>
-                    </div>
-                  )}
-                  {watch("regularOption") === "Irregular" && (
-                    <div>
-                      <div className="table table-bordered table-responsive ">
-                        <thead>
-                          <tr>
-                            <td>Details of Plot</td>
-                            <td>
-                              Dimensions (in mtrs) <CalculateIcon color="primary" />
-                            </td>
-                            <td>Enter Area (in sqm)</td>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>
-                              <div className="px-2">
-                                <p className="mb-2">
-                                  Residential <span style={{ color: "red" }}>*</span>
-                                </p>
-                                <h3 className="error-message" style={{ color: "red" }}>
-                                  {errors?.resDimension && errors?.resDimension?.message}
-                                </h3>
-                              </div>
-                            </td>
-                            <td align="right">
-                              {" "}
-                              <input type="number" className="form-control" {...register("resDimension")} />
-                            </td>
-                            <td align="right">
-                              {" "}
-                              <input type="number" className="form-control" {...register("resEnteredArea")} />
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <div className="px-2">
-                                <p className="mb-2">
-                                  Commercial <span style={{ color: "red" }}>*</span>{" "}
-                                </p>
-                                <h3 className="error-message" style={{ color: "red" }}>
-                                  {errors?.comDimension && errors?.comDimension?.message}
-                                </h3>
-                              </div>
-                            </td>
-                            <td align="right">
-                              {" "}
-                              <input type="number" className="form-control" {...register("comDimension")} />
-                            </td>
-                            <td align="right">
-                              {" "}
-                              <input type="number" className="form-control" {...register("comEnteredArea")} />
-                            </td>
-                          </tr>
-                        </tbody>
-                      </div>
-                      <h5>Area Under</h5>
-                      <div className="table table-bordered table-responsive">
-                        <thead>
-                          <tr>
-                            <td>Detail of plots</td>
-                            <td> Plot No.</td>
-                            <td>
-                              Length (in mtrs) <CalculateIcon color="primary" />
-                            </td>
-                            <td>
-                              Dimension (in mtrs) <CalculateIcon color="primary" />
-                            </td>
-                            <td>Enter Area (in sqm)</td>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>
-                              <div className="px-2">
-                                <p className="mb-2">
-                                  Sectoral Plan Road <span style={{ color: "red" }}>*</span>
-                                </p>
-                                <h3 className="error-message" style={{ color: "red" }}>
-                                  {errors?.secPlanPlot && errors?.secPlanPlot?.message}
-                                </h3>
-                              </div>
-                            </td>
-                            <td align="right">
-                              {" "}
-                              <input type="number" className="form-control" {...register("secPlanPlot")} />{" "}
-                            </td>
-                            <td align="right">
-                              {" "}
-                              <input type="number" className="form-control" {...register("secPlanLength")} />
-                            </td>
-                            <td align="right">
-                              {" "}
-                              <input type="number" className="form-control" {...register("secPlanDim")} />{" "}
-                            </td>
-                            <td component="th" scope="row">
-                              <input type="text" className="form-control" {...register("secPlanEntered")} />
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <div className="px-2">
-                                <p className="mb-2">
-                                  Green Belt <span style={{ color: "red" }}>*</span>
-                                </p>
-                                <h3 className="error-message" style={{ color: "red" }}>
-                                  {errors?.greenBeltPlot && errors?.greenBeltPlot?.message}
-                                </h3>
-                              </div>
-                            </td>
-                            <td align="right">
-                              {" "}
-                              <input type="number" className="form-control" {...register("greenBeltPlot")} />
-                            </td>
-                            <td component="th" scope="row">
-                              <input type="text" className="form-control" {...register("greenBeltLength")} />
-                            </td>
-                            <td align="right">
-                              {" "}
-                              <input type="number" className="form-control" {...register("greenBeltDim")} />
-                            </td>
-                            <td align="right">
-                              {" "}
-                              <input type="number" className="form-control" {...register("greenBeltEntered")} />
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <div className="px-2">
-                                <p className="mb-2">
-                                  24/18 mtr wide internal circulation Plan road <span style={{ color: "red" }}>*</span>
-                                </p>
-                                <h3 className="error-message" style={{ color: "red" }}>
-                                  {errors?.internalPlot && errors?.internalPlot?.message}
-                                </h3>
-                              </div>
-                            </td>
-                            <td align="right">
-                              {" "}
-                              <input type="number" className="form-control" {...register("internalPlot")} />
-                            </td>
-                            <td component="th" scope="row">
-                              <input type="text" className="form-control" {...register("internalLength")} />
-                            </td>
-                            <td align="right">
-                              {" "}
-                              <input type="number" className="form-control" {...register("internalDim")} />
-                            </td>
-                            <td align="right">
-                              {" "}
-                              <input type="number" className="form-control" {...register("internalEntered")} />
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <div className="px-2">
-                                <p className="mb-2">
-                                  Other Roads <span style={{ color: "red" }}>*</span>
-                                </p>
-                                <h3 className="error-message" style={{ color: "red" }}>
-                                  {errors?.otherPlot && errors?.otherPlot?.message}
-                                </h3>
-                              </div>
-                            </td>
-                            <td align="right">
-                              {" "}
-                              <input type="number" className="form-control" {...register("otherPlot")} />
-                            </td>
-                            <td component="th" scope="row">
-                              <input type="text" className="form-control" {...register("otherLength")} />
-                            </td>
-                            <td align="right">
-                              {" "}
-                              <input type="number" className="form-control" {...register("otherDim")} />
-                            </td>
-                            <td align="right">
-                              {" "}
-                              <input type="number" className="form-control" {...register("otherEntered")} />
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <div className="px-2">
-                                <p className="mb-2">
-                                  Undetermined use(UD) <span style={{ color: "red" }}>*</span>
-                                </p>
-                                <h3 className="error-message" style={{ color: "red" }}>
-                                  {errors?.undeterminedPlot && errors?.undeterminedPlot?.message}
-                                </h3>
-                              </div>
-                            </td>
-                            <td align="right">
-                              <input type="number" className="form-control" {...register("undeterminedPlot")} />
-                            </td>
-                            <td component="th" scope="row">
-                              <input type="number" className="form-control" {...register("undeterminedLength")} />
-                            </td>
-                            <td align="right">
-                              <input type="number" className="form-control" {...register("undeterminedDim")} />
-                            </td>
-                            <td align="right">
-                              <input type="number" className="form-control" {...register("undeterminedEntered")} />
-                            </td>
-                          </tr>
-                        </tbody>
-                      </div>
-                    </div>
-                  )}
-                  <div>{Purpose === "DDJAY_APHP" && <DDJAYForm watch={watch} register={register} />}</div>
-                  <div>{Purpose === "RPL" && <ResidentialPlottedForm register={register} />}</div>
-                  <div>{Purpose === "IPL" && <IndustrialPlottedForm register={register} />}</div>
-                  <div>{Purpose === "CPL" && <CommercialPlottedForm register={register} />}</div>
-                  <h5 className="text-black">NILP </h5>
-                  <br></br>
-                  <div className="table table-bordered table-responsive">
-                    <thead>
-                      <tr>
-                        <td>S.No.</td>
-                        <td>NLP Details</td>
-                        <td>Yes/No</td>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>1. </td>
-                        <td>
-                          {" "}
-                          Whether you want to surrender the 10% area of licence colony to Govt. the instead of providing 10% under EWS and NPNL plots
-                          <span style={{ color: "red" }}>*</span>
-                          <h3 className="error-message" style={{ color: "red" }}>
-                            {errors?.surrender && errors?.surrender?.message}
-                          </h3>
-                        </td>
-                        <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
-                          <label htmlFor="surrender">
-                            <input {...register("surrender")} type="radio" value="Y" id="surrender" />
-                            &nbsp; Yes &nbsp;&nbsp;
-                          </label>
-                          <label htmlFor="surrender">
-                            <input {...register("surrender")} type="radio" value="N" id="surrender" />
-                            &nbsp; No &nbsp;&nbsp;
-                          </label>
-
-                          {watch("surrender") === "Y" && (
-                            <div className="row ">
-                              <div className="col col-12">
-                                <label>Area in Acres </label>
-
-                                <input type="text" className="form-control" {...register("surrenderArea")} />
-                              </div>
-                            </div>
-                          )}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>2. </td>
-                        <td>
-                          Whether any pocket proposed to be transferred less than 1 acre <span style={{ color: "red" }}>*</span>
-                          <h3 className="error-message" style={{ color: "red" }}>
-                            {errors?.pocketProposed && errors?.pocketProposed?.message}
-                          </h3>
-                        </td>
-                        <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
-                          <label htmlFor="pocketProposed">
-                            <input {...register("pocketProposed")} type="radio" value="Y" id="pocketProposed" />
-                            &nbsp; Yes &nbsp;&nbsp;
-                          </label>
-                          <label htmlFor="pocketProposed">
-                            <input {...register("pocketProposed")} type="radio" value="N" id="pocketProposed" />
-                            &nbsp; No &nbsp;&nbsp;
-                          </label>
-
-                          {watch("pocketProposed") === "Y" && (
-                            <div className="row ">
-                              <div className="col col-6">
-                                <label>
-                                  Dimension (in mtr)&nbsp;&nbsp;
-                                  <CalculateIcon color="primary" />
-                                </label>
-                                <input type="text" className="form-control" {...register("pocketDim")} />
-                              </div>
-                              <div className="col col-6">
-                                <label> Enter Area </label>
-                                <input type="text" className="form-control" {...register("pocketAreaEnter")} />
-                              </div>
-                            </div>
-                          )}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>3. </td>
-                        <td>
-                          Whether you want to deposit an amount @ of 3 times of collector rate instead of the surrender 10% land to Govt.
-                          <span style={{ color: "red" }}>*</span>{" "}
-                          <h3 className="error-message" style={{ color: "red" }}>
-                            {errors?.deposit && errors?.deposit?.message}
-                          </h3>
-                        </td>
-                        <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
-                          <label htmlFor="deposit">
-                            <input {...register("deposit")} type="radio" value="Y" id="deposit" />
-                            &nbsp; Yes &nbsp;&nbsp;
-                          </label>
-                          <label htmlFor="deposit">
-                            <input {...register("deposit")} type="radio" value="N" id="deposit" />
-                            &nbsp; No &nbsp;&nbsp;
-                          </label>
-
-                          {watch("deposit") === "Y" && (
-                            <div className="row ">
-                              <div className="col col-12">
-                                <label>
-                                  Area in Acres &nbsp;&nbsp;
-                                  <CalculateIcon color="primary" />
-                                </label>
-                                <input type="text" className="form-control" {...register("depositArea")} />
-                              </div>
-                            </div>
-                          )}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>4. </td>
-                        <td>
-                          Whether the surrendered area is having a minimum of 18 mtr independent access <span style={{ color: "red" }}>*</span>
-                          <h3 className="error-message" style={{ color: "red" }}>
-                            {errors?.surrendered && errors?.surrendered?.message}
-                          </h3>
-                        </td>
-                        <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
-                          <label htmlFor="surrendered">
-                            <input {...register("surrendered")} type="radio" value="Y" id="surrendered" />
-                            &nbsp; Yes &nbsp;&nbsp;
-                          </label>
-                          <label htmlFor="surrendered">
-                            <input {...register("surrendered")} type="radio" value="N" id="surrendered" />
-                            &nbsp; No &nbsp;&nbsp;
-                          </label>
-
-                          {watch("surrendered") === "Y" && (
-                            <div className="row ">
-                              <div className="col col-12">
-                                <label>
-                                  Dimension(in mtr) &nbsp;&nbsp;
-                                  <CalculateIcon color="primary" />
-                                </label>
-
-                                <input type="text" className="form-control" {...register("surrenderedDim")} />
-                              </div>
-                              <div className="col col-12">
-                                <label>Enter Area</label>
-                                <input type="text" className="form-control" {...register("area")} />
-                              </div>
-                            </div>
-                          )}
-                        </td>
-                      </tr>
-                    </tbody>
+                  <div>
+                    {stepData?.ApplicantPurpose?.purpose === "DDJAY_APHP" && (
+                      <DDJAYForm
+                        register={register}
+                        getDocumentData={getDocumentData}
+                        watch={watch}
+                        getDocShareholding={getDocShareholding}
+                        setLoader={setLoader}
+                        setValue={setValue}
+                        control={control}
+                        fields={detailsArray}
+                        add={detailsAppend}
+                        remove={detailsRemoce}
+                        handleWheel={handleWheel}
+                        setError={setError}
+                        error={error}
+                      />
+                    )}
                   </div>
-                  <hr />
-                  <br></br>
-                  <h5>Mandatory Documents</h5>
-                  <br></br>
-                  <div className="row">
-                    <div className="col col-3">
-                      <h6
-                        style={{ display: "flex" }}
-                        data-toggle="tooltip"
-                        data-placement="top"
-                        title="Whether you hosted the existing approved layout plan & in-principle approved layout on the website of your company/organization Yes/No if yes upload"
-                      >
-                        Hosted layout plan.<span style={{ color: "red" }}>*</span>
-                      </h6>
-                      <label>
-                        <FileUpload color="primary" />
-                        <input
-                          type="file"
-                          style={{ display: "none" }}
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "hostedLayoutPlan")}
-                          accept="application/pdf/jpeg/png"
-                        />
-                      </label>
-                      {fileStoreId?.hostedLayoutPlan ? (
-                        <a onClick={() => getDocShareholding(fileStoreId?.hostedLayoutPlan)} className="btn btn-sm ">
-                          <VisibilityIcon color="info" className="icon" />
-                        </a>
-                      ) : (
-                        <p></p>
-                      )}
-                      <h3 style={{}}>{watch("hostedLayoutPlanFileName") ? watch("hostedLayoutPlanFileName") : null}</h3>
-                      <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.hostedLayoutPlan && errors?.hostedLayoutPlan?.message}
-                      </h3>
-                    </div>
-
-                    <div className="col col-3">
-                      <h6
-                        style={{ display: "flex" }}
-                        data-toggle="tooltip"
-                        data-placement="top"
-                        title="Consent of RERA if there is any change in the phasing ."
-                      >
-                        Consent of RERA. <span style={{ color: "red" }}>*</span>
-                      </h6>
-                      <label>
-                        <FileUpload color="primary" />
-                        <input
-                          type="file"
-                          style={{ display: "none" }}
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "consentRera")}
-                          accept="application/pdf/jpeg/png"
-                        />
-                      </label>
-                      {fileStoreId?.consentRera ? (
-                        <a onClick={() => getDocShareholding(fileStoreId?.consentRera)} className="btn btn-sm ">
-                          <VisibilityIcon color="info" className="icon" />
-                        </a>
-                      ) : (
-                        <p></p>
-                      )}
-                      <h3 style={{}}>{watch("consentReraFileName") ? watch("consentReraFileName") : null}</h3>
-                      <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.consentRera && errors?.consentRera?.message}
-                      </h3>
-                    </div>
-                    <div className="col col-3">
-                      <h6 style={{ display: "flex" }}>
-                        Sectoral Plan.<span style={{ color: "red" }}>*</span>
-                      </h6>
-                      <label>
-                        <FileUpload color="primary" />
-                        <input
-                          type="file"
-                          style={{ display: "none" }}
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "sectoralPlan")}
-                          accept="application/pdf/jpeg/png"
-                        />
-                      </label>
-                      {fileStoreId?.sectoralPlan ? (
-                        <a onClick={() => getDocShareholding(fileStoreId?.sectoralPlan)} className="btn btn-sm ">
-                          <VisibilityIcon color="info" className="icon" />
-                        </a>
-                      ) : (
-                        <p></p>
-                      )}
-                      <h3 style={{}}>{watch("sectoralPlanFileName") ? watch("sectoralPlanFileName") : null}</h3>
-                      <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.sectoralPlan && errors?.sectoralPlan?.message}
-                      </h3>
-                    </div>
-                    <div className="col col-3">
-                      <h6
-                        style={{ display: "flex" }}
-                        data-toggle="tooltip"
-                        data-placement="top"
-                        title="Copy of detailed specifications and designs for electric supply including street lighting"
-                      >
-                        Designs for electric supply.<span style={{ color: "red" }}>*</span>
-                      </h6>
-                      <label>
-                        <FileUpload color="primary" />
-                        <input
-                          type="file"
-                          style={{ display: "none" }}
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "detailedElectricSupply")}
-                          accept="application/pdf/jpeg/png"
-                        />
-                      </label>
-                      {fileStoreId?.detailedElectricSupply ? (
-                        <a onClick={() => getDocShareholding(fileStoreId?.detailedElectricSupply)} className="btn btn-sm ">
-                          <VisibilityIcon color="info" className="icon" />
-                        </a>
-                      ) : (
-                        <p></p>
-                      )}
-                      <h3 style={{}}>{watch("detailedElectricSupplyFileName") ? watch("detailedElectricSupplyFileName") : null}</h3>
-                      <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.detailedElectricSupply && errors?.detailedElectricSupply?.message}
-                      </h3>
-                    </div>
+                  <div>
+                    {(stepData?.ApplicantPurpose?.purpose === "CPCS" || stepData?.ApplicantPurpose?.purpose === "CPRS") && (
+                      <CommercialPlottedForm
+                        register={register}
+                        getDocumentData={getDocumentData}
+                        watch={watch}
+                        getDocShareholding={getDocShareholding}
+                        setLoader={setLoader}
+                        setValue={setValue}
+                        control={control}
+                        handleWheel={handleWheel}
+                        setError={setError}
+                        error={error}
+                      />
+                    )}
                   </div>
-                  <br></br>
-                  <div className="row">
-                    <div className="col col-3">
-                      <h6
-                        style={{ display: "flex" }}
-                        data-toggle="tooltip"
-                        data-placement="top"
-                        title="Copy of plans showing cross sections of proposed roads indicating, in particular, the width of proposed carriage ways cycle tracks and footpaths etc"
-                      >
-                        Plans showing cross sections.<span style={{ color: "red" }}>*</span>
-                      </h6>
-                      <label>
-                        <FileUpload color="primary" />
-                        <input
-                          type="file"
-                          style={{ display: "none" }}
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "planCrossSection")}
-                          accept="application/pdf/jpeg/png"
-                        />
-                      </label>
-                      {fileStoreId?.planCrossSection ? (
-                        <a onClick={() => getDocShareholding(fileStoreId?.planCrossSection)} className="btn btn-sm ">
-                          <VisibilityIcon color="info" className="icon" />
-                        </a>
-                      ) : (
-                        <p></p>
-                      )}
-                      <h3 style={{}}>{watch("planCrossSectionFileName") ? watch("planCrossSectionFileName") : null}</h3>
-                      <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.planCrossSection && errors?.planCrossSection?.message}
-                      </h3>
-                    </div>
-
-                    <div className="col col-3">
-                      <h6
-                        style={{ display: "flex" }}
-                        data-toggle="tooltip"
-                        data-placement="top"
-                        title="Copy of plans indicating, in addition, the position of sewers, stormwater channels, water supply and any other public health services."
-                      >
-                        Plans indicating position of public.<span style={{ color: "red" }}>*</span>
-                      </h6>
-                      <label>
-                        <FileUpload color="primary" />
-                        <input
-                          type="file"
-                          style={{ display: "none" }}
-                          accept="application/pdf/jpeg/png"
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "publicHealthServices")}
-                        />
-                      </label>
-                      {fileStoreId?.publicHealthServices ? (
-                        <a onClick={() => getDocShareholding(fileStoreId?.publicHealthServices)} className="btn btn-sm ">
-                          <VisibilityIcon color="info" className="icon" />
-                        </a>
-                      ) : (
-                        <p></p>
-                      )}
-                      <h3 style={{}}>{watch("publicHealthServicesFileName") ? watch("publicHealthServicesFileName") : null}</h3>
-                      <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.publicHealthServices && errors?.publicHealthServices?.message}
-                      </h3>
-                    </div>
-                    <div className="col col-3">
-                      <h6
-                        style={{ display: "flex" }}
-                        data-toggle="tooltip"
-                        data-placement="top"
-                        title="Copy of detailed specifications and designs of road works and estimated costs thereof"
-                      >
-                        Specifications and designs.<span style={{ color: "red" }}>*</span>
-                      </h6>
-                      <label>
-                        <FileUpload color="primary" />
-                        <input
-                          type="file"
-                          style={{ display: "none" }}
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "designRoad")}
-                          accept="application/pdf/jpeg/png"
-                        />
-                      </label>
-                      {fileStoreId?.designRoad ? (
-                        <a onClick={() => getDocShareholding(fileStoreId?.designRoad)} className="btn btn-sm ">
-                          <VisibilityIcon color="info" className="icon" />
-                        </a>
-                      ) : (
-                        <p></p>
-                      )}
-                      <h3 style={{}}>{watch("designRoadFileName") ? watch("designRoadFileName") : null}</h3>
-                      <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.designRoad && errors?.designRoad?.message}
-                      </h3>
-                    </div>
-                    <div className="col col-3">
-                      <h6
-                        style={{ display: "flex" }}
-                        data-toggle="tooltip"
-                        data-placement="top"
-                        title="Copy of detailed specifications and designs of sewerage, storm, water and water supply works and estimated costs thereof"
-                      >
-                        Designs of sewerage and storm. <span style={{ color: "red" }}>*</span>
-                      </h6>
-                      <label>
-                        <FileUpload color="primary" />
-                        <input
-                          type="file"
-                          style={{ display: "none" }}
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "designSewarage")}
-                          accept="application/pdf/jpeg/png"
-                        />
-                      </label>
-                      {fileStoreId?.designSewarage ? (
-                        <a onClick={() => getDocShareholding(fileStoreId?.designSewarage)} className="btn btn-sm ">
-                          <VisibilityIcon color="info" className="icon" />
-                        </a>
-                      ) : (
-                        <p></p>
-                      )}
-                      <h3 style={{}}>{watch("designSewarageFileName") ? watch("designSewarageFileName") : null}</h3>
-                      <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.designSewarage && errors?.designSewarage?.message}
-                      </h3>
-                    </div>
+                  <div>{stepData?.ApplicantPurpose?.purpose === "IPL" && <IndustrialPlottedForm register={register} />}</div>
+                  <div>
+                    {(stepData?.ApplicantPurpose?.purpose === "NILPC" || stepData?.ApplicantPurpose?.purpose === "NILP") && (
+                      <NilpForm
+                        register={register}
+                        getDocumentData={getDocumentData}
+                        watch={watch}
+                        getDocShareholding={getDocShareholding}
+                        setLoader={setLoader}
+                        setValue={setValue}
+                        control={control}
+                        handleWheel={handleWheel}
+                        setError={setError}
+                        error={error}
+                      />
+                    )}
                   </div>
-                  <br></br>
-                  <div className="row">
-                    <div className="col col-3">
-                      <h6
-                        style={{ display: "flex" }}
-                        data-toggle="tooltip"
-                        data-placement="top"
-                        title="Copy of detailed specifications and designs for disposal and treatment of storm and sullage water and estimated costs of works."
-                      >
-                        Disposal treatment.<span style={{ color: "red" }}>*</span>
-                      </h6>
-                      <label>
-                        <FileUpload color="primary" />
-                        <input
-                          type="file"
-                          style={{ display: "none" }}
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "designDisposal")}
-                          accept="application/pdf/jpeg/png"
-                        />
-                      </label>
-                      {fileStoreId?.designDisposal ? (
-                        <a onClick={() => getDocShareholding(fileStoreId?.designDisposal)} className="btn btn-sm ">
-                          <VisibilityIcon color="info" className="icon" />
-                        </a>
-                      ) : (
-                        <p></p>
-                      )}
-                      <h3 style={{}}>{watch("designDisposalFileName") ? watch("designDisposalFileName") : null}</h3>
-                      <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.designDisposal && errors?.designDisposal?.message}
-                      </h3>
-                    </div>
-
-                    <div className="col col-3">
-                      <h6
-                        style={{ display: "flex" }}
-                        data-toggle="tooltip"
-                        data-placement="top"
-                        title="Whether intimated each of the allottees through registered post regarding the proposed changes in the layout plan: - If yes selected upload"
-                      >
-                        Undertaking that no change. <span style={{ color: "red" }}>*</span>
-                      </h6>
-                      <label>
-                        <FileUpload color="primary" />
-                        <input
-                          type="file"
-                          style={{ display: "none" }}
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "undertakingChange")}
-                          accept="application/pdf/jpeg/png"
-                        />
-                      </label>
-                      {fileStoreId?.undertakingChange ? (
-                        <a onClick={() => getDocShareholding(fileStoreId?.undertakingChange)} className="btn btn-sm ">
-                          <VisibilityIcon color="info" className="icon" />
-                        </a>
-                      ) : (
-                        <p></p>
-                      )}
-                      <h3 style={{}}>{watch("undertakingChangeFileName") ? watch("undertakingChangeFileName") : null}</h3>
-                      <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.undertakingChange && errors?.undertakingChange?.message}
-                      </h3>
-                    </div>
-
-                    <div className="col col-3">
-                      <h6
-                        style={{ display: "flex" }}
-                        data-toggle="tooltip"
-                        data-placement="top"
-                        title="Explanatory note regarding the salient feature of the proposed colony."
-                      >
-                        Salient feature of the colony. <span style={{ color: "red" }}>*</span>
-                      </h6>
-                      <label>
-                        <FileUpload color="primary" />
-                        <input
-                          type="file"
-                          style={{ display: "none" }}
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "proposedColony")}
-                          accept="application/pdf/jpeg/png"
-                        />
-                      </label>
-                      {fileStoreId?.proposedColony ? (
-                        <a onClick={() => getDocShareholding(fileStoreId?.proposedColony)} className="btn btn-sm ">
-                          <VisibilityIcon color="info" className="icon" />
-                        </a>
-                      ) : (
-                        <p></p>
-                      )}
-                      <h3 style={{}}>{watch("proposedColonyFileName") ? watch("proposedColonyFileName") : null}</h3>
-                      <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.proposedColony && errors?.proposedColony?.message}
-                      </h3>
-                    </div>
-
-                    <div className="col col-3">
-                      <h6 style={{ display: "flex" }}>
-                        Report any objection. <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;&nbsp;
-                      </h6>{" "}
-                      <label>
-                        <FileUpload color="primary" />
-                        <input
-                          type="file"
-                          style={{ display: "none" }}
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "reportObjection")}
-                          accept="application/pdf/jpeg/png"
-                        />
-                      </label>
-                      {fileStoreId?.reportObjection ? (
-                        <a onClick={() => getDocShareholding(fileStoreId?.reportObjection)} className="btn btn-sm ">
-                          <VisibilityIcon color="info" className="icon" />
-                        </a>
-                      ) : (
-                        <p></p>
-                      )}
-                      <h3 style={{}}>{watch("reportObjectionFileName") ? watch("reportObjectionFileName") : null}</h3>
-                      <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.reportObjection && errors?.reportObjection?.message}
-                      </h3>
-                    </div>
+                  <div>
+                    {stepData?.ApplicantPurpose?.purpose === "RGP" && (
+                      <ResidentialGroupHousingForm
+                        register={register}
+                        watch={watch}
+                        setValue={setValue}
+                        control={control}
+                        handleWheel={handleWheel}
+                        setError={setError}
+                        error={error}
+                      />
+                    )}
                   </div>
-                  <br></br>
-                  <div className="row">
-                    <div className="col col-3">
-                      <h6
-                        style={{ display: "flex" }}
-                        data-toggle="tooltip"
-                        data-placement="top"
-                        title="Undertaking that no change has been made in the phasing "
-                      >
-                        Undertaking.<span style={{ color: "red" }}>*</span>
-                      </h6>{" "}
-                      <label>
-                        <FileUpload color="primary" />
-                        <input
-                          type="file"
-                          style={{ display: "none" }}
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "undertaking")}
-                          accept="application/pdf/jpeg/png"
-                        />
-                      </label>
-                      {fileStoreId?.undertaking ? (
-                        <a onClick={() => getDocShareholding(fileStoreId?.undertaking)} className="btn btn-sm ">
-                          <VisibilityIcon color="info" className="icon" />
-                        </a>
-                      ) : (
-                        <p></p>
-                      )}
-                      <h3 style={{}}>{watch("undertakingFileName") ? watch("undertakingFileName") : null}</h3>
-                      <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.undertaking && errors?.undertaking?.message}
-                      </h3>
-                    </div>
-                    <div className="col col-9">
-                      {Purpose === "RPL" && <LayoutPlan watch={watch} register={register} />}
-                      {Purpose === "IPL" && <LayoutPlan watch={watch} register={register} />}
-                      {Purpose === "IPA" && <LayoutPlan watch={watch} register={register} />}
-                      {Purpose === "CPL" && <LayoutPlan watch={watch} register={register} />}
-                      {Purpose === "CIC" && <DemarcationPlan watch={watch} register={register} />}
-                      {Purpose === "ITP" && <DemarcationPlan watch={watch} register={register} />}
-                      {Purpose === "ITC" && <DemarcationPlan watch={watch} register={register} />}
-                      {Purpose === "CIR" && <DemarcationPlan watch={watch} register={register} />}
-                      {Purpose === "RGP" && <DemarcationPlan watch={watch} register={register} />}
-                      {Purpose === "AHP" && <DemarcationPlan watch={watch} register={register} />}
-                      {Purpose === "SGC" && <DemarcationPlan watch={watch} register={register} />}
-                      {Purpose === "CIS" && <DemarcationPlan watch={watch} register={register} />}
-                      {Purpose === "DDJAY_APHP" && <DemarcationPlan watch={watch} register={register} />}
-                      {Purpose === "MLU-CZ" && <DemarcationPlan watch={watch} register={register} />}
-                      {Purpose === "MLU-RZ" && <DemarcationPlan watch={watch} register={register} />}
-                      {Purpose === "NILP" && <DemarcationPlan watch={watch} register={register} />}
-                      {Purpose === "LDEF" && <DemarcationPlan watch={watch} register={register} />}
-                      {Purpose === "NILPC" && <DemarcationPlan watch={watch} register={register} />}
-                      {Purpose === "TODGH" && <DemarcationPlan watch={watch} register={register} />}
-                      {Purpose === "TODCOMM" && <DemarcationPlan watch={watch} register={register} />}
-                      {Purpose === "TODIT" && <DemarcationPlan watch={watch} register={register} />}
-                      {Purpose === "TODMUD" && <DemarcationPlan watch={watch} register={register} />}
-                      {Purpose === "SPRPRGH" && <DemarcationPlan watch={watch} register={register} />}
-                      {Purpose === "DRH" && <DemarcationPlan watch={watch} register={register} />}
-                      {Purpose === "RHP" && <DemarcationPlan watch={watch} register={register} />}
-                    </div>
+                  <div>
+                    {stepData?.ApplicantPurpose?.purpose === "AGH" && (
+                      <AffordableGroupHousingForm
+                        register={register}
+                        watch={watch}
+                        setValue={setValue}
+                        control={control}
+                        handleWheel={handleWheel}
+                        setError={setError}
+                        error={error}
+                      />
+                    )}
                   </div>
+                  <div>
+                    {(stepData?.ApplicantPurpose?.purpose === "CICS" || stepData?.ApplicantPurpose?.purpose === "CIRS") && (
+                      <CommercialIntegratedForm
+                        register={register}
+                        watch={watch}
+                        setValue={setValue}
+                        control={control}
+                        handleWheel={handleWheel}
+                        setError={setError}
+                        error={error}
+                      />
+                    )}
+                  </div>
+                  <div>
+                    {(stepData?.ApplicantPurpose?.purpose === "ITC" || stepData?.ApplicantPurpose?.purpose === "ITP") && (
+                      <ITCyberCityForm
+                        register={register}
+                        watch={watch}
+                        setValue={setValue}
+                        control={control}
+                        handleWheel={handleWheel}
+                        setError={setError}
+                        error={error}
+                      />
+                    )}
+                  </div>
+                  <div>
+                    {stepData?.ApplicantPurpose?.purpose === "IPULP" && (
+                      <IILPForm
+                        register={register}
+                        watch={watch}
+                        setValue={setValue}
+                        control={control}
+                        handleWheel={handleWheel}
+                        setError={setError}
+                        error={error}
+                      />
+                    )}
+                  </div>
+                  <div>
+                    {stepData?.ApplicantPurpose?.purpose === "MLU-CZ" && (
+                      <MixedLandUseForm
+                        register={register}
+                        watch={watch}
+                        setValue={setValue}
+                        control={control}
+                        handleWheel={handleWheel}
+                        setError={setError}
+                        error={error}
+                      />
+                    )}
+                  </div>
+                  <div>
+                    {stepData?.ApplicantPurpose?.purpose === "RHP" && (
+                      <RetirementHousingForm
+                        register={register}
+                        watch={watch}
+                        setValue={setValue}
+                        control={control}
+                        handleWheel={handleWheel}
+                        setError={setError}
+                        error={error}
+                      />
+                    )}
+                  </div>
+
                   <div class="row">
                     <div class="col-sm-12 text-left">
                       <div id="btnClear" class="btn btn-primary btn-md center-block" onClick={() => handleWorkflow()}>
@@ -1751,16 +771,16 @@ const AppliedDetailForm = (props) => {
           </Card>
         </Card>
       </form>
-      <Modal size="xl" isOpen={dgpsModal} toggle={() => setDGPSModal(!dgpsModal)}>
+      <Modal style={{ width: "517px" }} size="sm" isOpen={dgpsModal} toggle={() => setDGPSModal(!dgpsModal)}>
         <div style={{ padding: "4px", textAlign: "right" }}>
           <span onClick={() => setDGPSModal(!dgpsModal)} style={{ cursor: "pointer" }}>
             X
           </span>
         </div>
-        <ModalBody>
+        <ModalBody className="p-0">
           <form onSubmit={handleSubmit(dgpsModalData)}>
-            <Row className="ml-auto mb-3">
-              <Col md={4} xxl lg="4">
+            <Row className="ml-auto">
+              <Col>
                 <h4>
                   1. DGPS points{" "}
                   {/* <span className="text-primary">
@@ -1873,12 +893,13 @@ const AppliedDetailForm = (props) => {
                 </div>
               </Col>
             </Row>
-            <button type="submit" style={{ float: "right" }} class="btn btn-primary btn-md center-block">
-              Submit
-            </button>
+            <div className="row m-0" style={{ width: "100%", justifyContent: "center" }}>
+              <button type="submit" style={{ width: "190px" }} class="btn btn-primary btn-md center-block mt-3">
+                Submit
+              </button>
+            </div>
           </form>
         </ModalBody>
-        <ModalFooter toggle={() => setDGPSModal(!dgpsModal)}></ModalFooter>
       </Modal>
     </div>
   );

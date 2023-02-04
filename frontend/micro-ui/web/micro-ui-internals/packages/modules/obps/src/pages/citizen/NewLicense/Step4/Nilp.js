@@ -7,25 +7,12 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import TextField from "@mui/material/TextField";
 import FileUpload from "@mui/icons-material/FileUpload";
 
-const CommercialPlottedForm = ({
-  register,
-  getDocumentData,
-  watch,
-  getDocShareholding,
-  setLoader,
-  setValue,
-  control,
-  handleWheel,
-  setError,
-  error,
-}) => {
+const NilpForm = ({ register, getDocumentData, watch, getDocShareholding, setLoader, setValue, control, handleWheel, setError, error }) => {
   return (
     <Row className="ml-auto" style={{ marginBottom: 5 }}>
       <Col col-12>
         <h6 className="text-black">
-          <b>
-            Commercial Plotted <span style={{ color: "red" }}>*</span>
-          </b>
+          <b>New Integrated Licencing Policy (NILP) for commercial Use</b>
         </h6>
         <h6 className="text-black mt-4">
           <b>Detail of land use</b>
@@ -133,13 +120,14 @@ const CommercialPlottedForm = ({
               <div>
                 <Form.Label>
                   <h2>
-                    10% of the total site area or the area falling under the sector green belt whichever is less
+                    50% of the Area under Sector Road & Green Belt
                     <span style={{ color: "red" }}>*</span>
                   </h2>
                 </Form.Label>
               </div>
-              <input disabled type="number" className="form-control" {...register("totalSiteArea")} />
+              <input disabled type="number" className="form-control" {...register("areaUnderSectorAndGreenBelt")} />
             </Col>
+
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
@@ -153,83 +141,37 @@ const CommercialPlottedForm = ({
             </Col>
           </Row>
         </Col>
-
-        <h6 className="text-black mt-4">
-          <b>Detail of SCO’s/plots</b>
-        </h6>
-        <br></br>
-        <Row className="ml-auto" style={{ marginBottom: 5 }}>
-          <Col md={4} xxl lg="3">
-            <div>
-              <Form.Label>
-                <h2>
-                  Ground Coverage (in Square Meters)
-                  <span style={{ color: "red" }}>*</span>
-                </h2>
-              </Form.Label>
-            </div>
-            <input
-              type="text"
-              className="form-control"
-              {...register("groundCoverage")}
-              onWheel={handleWheel}
-              onChange={(e) => {
-                if (e?.target?.value > (watch("netPlannedArea") * 35) / 100) {
-                  setError({ ...error, ["groundCoverage"]: "Maximum 35% of Net planned area is allowed" });
-                } else setError({ ...error, ["groundCoverage"]: "" });
-              }}
-            />
-            {error?.groundCoverage && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.groundCoverage}</h6>}
-          </Col>
-          <Col md={4} xxl lg="3">
-            <div>
-              <Form.Label>
-                <h2>
-                  FAR (in Square Meters)
-                  <span style={{ color: "red" }}>*</span>
-                </h2>
-              </Form.Label>
-            </div>
-            <input
-              type="text"
-              className="form-control"
-              {...register("FAR")}
-              onWheel={handleWheel}
-              onChange={(e) => {
-                if (e?.target?.value > (watch("netPlannedArea") * 150) / 100) {
-                  setError({ ...error, ["FAR"]: "Cannot be above 150% of Net planned area" });
-                } else setError({ ...error, ["FAR"]: "" });
-              }}
-            />
-            {error?.FAR && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.FAR}</h6>}
-          </Col>
-          <Col md={4} xxl lg="3">
-            <div>
-              <Form.Label>
-                <h2>
-                  Parking/Open Space/Services (in Square Meters)
-                  <span style={{ color: "red" }}>*</span>
-                </h2>
-              </Form.Label>
-            </div>
-            <input
-              type="text"
-              className="form-control"
-              {...register("parkingSpace")}
-              onWheel={handleWheel}
-              onChange={(e) => {
-                if (e?.target?.value < (watch("netPlannedArea") * 65) / 100) {
-                  setError({ ...error, ["parkingSpace"]: "Cannot be less than 65 % of Net planned area" });
-                } else setError({ ...error, ["parkingSpace"]: "" });
-              }}
-            />
-            {error?.parkingSpace && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.parkingSpace}</h6>}
-          </Col>
-        </Row>
+        <Col md={4} xxl lg="3">
+          <div>
+            <Form.Label>
+              <h2>
+                Area to be provided free of cost to the Government for EWS/AH
+                <span style={{ color: "red" }}>*</span>
+              </h2>
+            </Form.Label>
+          </div>
+          <input
+            type="number"
+            className="form-control"
+            {...register("providedArea")}
+            onWheel={handleWheel}
+            onChange={(e) => {
+              if (e?.target?.value < (watch("netPlannedArea") * 10) / 100)
+                setError({
+                  ...error,
+                  ["providedArea"]:
+                    "Minimum 10% area to be provided free of cost to the Government for EWS/Affordable Housing as per amended policy dated 11.05.2022. ",
+                });
+              else setError({ ...error, ["providedArea"]: "" });
+            }}
+          />
+          {error?.providedArea && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.providedArea}</h6>}
+        </Col>
 
         <h6 className="text-black mt-4">
           <b>Documents</b>
         </h6>
+        <br></br>
         <div className="row mt-4">
           <div className="col col-3">
             <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top">
@@ -280,4 +222,5 @@ const CommercialPlottedForm = ({
     </Row>
   );
 };
-export default CommercialPlottedForm;
+
+export default NilpForm;

@@ -31,7 +31,7 @@ export default function CheckCredentials({stateCode}) {
     if (!user) {
       return;
     }
-    console.log("GETUSERDATA",user);
+    // console.log("GETUSERDATA",user);
     Digit.SessionStorage.set("citizen.userRequestObject", user);
     Digit.UserService.setUser(user);
     setCitizenDetail(user?.UserRequest, user?.access_token, stateCode)
@@ -55,42 +55,6 @@ export default function CheckCredentials({stateCode}) {
     const info = resp?.data?.Token?.UserRequest;
     // const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.ssoUser(body);
     console.log("REINfo",info, resp);
-    // console.log("UserReq",{UserRequest: info});
-    // console.log("UserTok",...tokens);
-    // localStorage.setItem("access_token", ResponseInfo?.data?.Token?.access_token);
-    // localStorage.setItem("token", ResponseInfo?.data?.Token?.refresh_token);
-    // localStorage.setItem("Citizen.tenant-id",ResponseInfo?.data?.Token?.UserRequest?.tenantId);
-    // localStorage.setItem("tenant-id",ResponseInfo?.data?.Token?.UserRequest?.tenantId);
-    // localStorage.setItem("citizen.userRequestObject",JSON.stringify(ResponseInfo?.data?.Token?.UserRequest));
-    // localStorage.setItem("locale",ResponseInfo?.data?.Token?.UserRequest?.locale);
-    // localStorage.setItem("Citizen.locale",ResponseInfo?.data?.Token?.UserRequest?.locale);
-    // localStorage.setItem("token",ResponseInfo?.data?.Token?.access_token);
-    // localStorage.setItem("Citizen.token",ResponseInfo?.data?.Token?.access_token);
-    // localStorage.setItem("user-info",JSON.stringify(ResponseInfo?.data?.Token?.UserRequest));
-    // localStorage.setItem("Citizen.user-info",JSON.stringify(ResponseInfo?.data?.Token?.UserRequest));  
-    // sessionStorage.setItem("citizen.userRequestObject",JSON.stringify(ResponseInfo?.data?.Token?.UserRequest));
-    // Digit.SessionStorage.set("citizen.userRequestObject", JSON.stringify(ResponseInfo?.data?.Token?.UserRequest));
-    // console.log("SSoAUTH",ResponseInfo?.data);
-
-    // Digit.SessionStorage.set("citizen.userRequestObject", ResponseInfo?.data?.Token?.UserRequest);
-    // Digit.UserService.setUser(ResponseInfo?.data?.Token);
-    // const redirectPath = location.state?.from || DEFAULT_REDIRECT_URL;
-    // history.replace(redirectPath);
-
-    // const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.authenticate(requestData);
-
-    // if (location.state?.role) {
-    //   const roleInfo = ResponseInfo?.data?.Token?.UserRequest.roles.find((userRole) => userRole.code === location.state.role);
-    //   if (!roleInfo || !roleInfo.code) {
-    //     setError(t("ES_ERROR_USER_NOT_PERMITTED"));
-    //     setTimeout(() => history.replace(DEFAULT_REDIRECT_URL), 5000);
-    //     return;
-    //   }
-    // }
-    // if (window?.globalConfigs?.getConfig("ENABLE_SINGLEINSTANCE")) {
-    //   ResponseInfo.data.Token.UserRequest.tenantId = Digit.ULBService.getStateId();
-    // }
-    // console.log("INFOTOK",ResponseInfo?.data?.Token?.UserRequest);
     setUser({ info, ...resp?.data?.Token });
    
  
