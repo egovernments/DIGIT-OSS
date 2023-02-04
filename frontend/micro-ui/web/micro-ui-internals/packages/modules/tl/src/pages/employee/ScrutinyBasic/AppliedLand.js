@@ -1,20 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Button, Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
-// import {AiFillCheckCircle, AiFillCloseCircle} from "react-icons/ai";
+
 import MigrationAppliedTrue from "./MigrationAplliedTrue";
-// import CalculateIcon from '@mui/icons-material/Calculate';
-// import InfoIcon from '@mui/icons-material/Info';
-// import { tr, thead, TableContainer, td, tbody, Table, Paper } from '@material-ui/core';
-// import AddIcon from "@material-ui/icons/Add";
-// import DeleteIcon from "@material-ui/icons/Delete";
-// import * as Icon from "react-bootstrap-icons";
-// import { XCircleFill } from "react-bootstrap-icons";
-// import { CheckCircleFill } from "react-bootstrap-icons";
-// import { PlusSquareFill } from "react-bootstrap-icons";
-// import { DashSquareFill } from "react-bootstrap-icons";
-// import { ArrowDownCircleFill } from "react-bootstrap-icons";
-// import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
 import DDJAYForm from "../ScrutinyBasic/Puropse/DdjayForm";
 import ResidentialPlottedForm from "../ScrutinyBasic/Puropse/ResidentialPlotted";
@@ -32,6 +20,9 @@ import { useStyles } from "./css/personalInfoChild.style";
 import { IconButton } from "@mui/material";
 import { getDocShareholding } from "./ScrutinyDevelopment/docview.helper";
 import CommercialPlottedForm from "../ScrutinyBasic/Puropse/CommercialPlottedForm";
+import RetirementHousingForm from "./Puropse/RetirementHousing";
+import ResidentialGroupHousingForm from "./Puropse/ResidentialGroupHousingForm";
+import NilpForm from "./Puropse/Nilp";
 
 const AppliedLandinfo = (props) => {
 
@@ -507,7 +498,7 @@ console.log("AccessInfortech", Purpose);
                           
                            
                           
-                         
+  <hr className="my-3" />      
 
                 {/* <hr className="my-3" />
                
@@ -1104,7 +1095,17 @@ console.log("AccessInfortech", Purpose);
                 <div>
                   <CommercialPlottedForm displayCommercialPlottedData={Purpose === "CPL" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandCommercial} dataForIcons={dataIcons} ></CommercialPlottedForm>
                 </div>
+                <div>
+                  <RetirementHousingForm displayRetrementPlottedData={Purpose === "RHP" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandCommercial} dataForIcons={dataIcons} ></RetirementHousingForm>
+                </div>
+                <div>
+                  <ResidentialGroupHousingForm displayResidentialGroupHousingForm={Purpose === "RHP" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandCommercial} dataForIcons={dataIcons} ></ResidentialGroupHousingForm>
+                </div>
+                <div>
+                  <NilpForm displayResidentialGroupHousingForm={Purpose === "RHP" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandCommercial} dataForIcons={dataIcons} ></NilpForm>
+                </div>
 
+                  {/* <NilpForm></NilpForm> */}
                
 
                 {/* <h5 className="text-black mt-4">

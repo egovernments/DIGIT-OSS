@@ -9,14 +9,14 @@ import { IconButton } from "@mui/material";
 import { getDocShareholding } from "../ScrutinyDevelopment/docview.helper";
 import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
 
-const RetirementHousingForm = (props) => {
+const ResidentialGroupHousingForm = (props) => {
 
 
   const DDJAYFormSubmitHandler = (e) => {
     e.preventDefault();
     SetDdjayFormSubmitted(true);
   }
-//   displayRetrementPlottedData
+//   displayResidentialGroupHousingForm
 
   const ddjayData = props.data;
   const dataIcons = props.dataForIcons;
@@ -111,15 +111,17 @@ const RetirementHousingForm = (props) => {
         remarksUpdate={currentRemarks}
       ></ModalChild>
       <Form.Group className="justify-content-center" controlId="formBasicEmail">
-       <Row className="ml-auto" style={{ marginBottom: 5 }}>
+      <Row className="ml-auto" style={{ marginBottom: 5 }}>
       <Col col-12>
         <h6 className="text-black">
-          <b>Retirement Housing</b>
+          <b>Residential Group Housing</b>
         </h6>
         <h6 className="text-black mt-4">
           <b>Detail of land use</b>
         </h6>
-        
+        {/* <h6 className="text-black mt-4">
+          <b>Detail of land use</b>
+        </h6> */}
         <Col col-12>
           <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
             <Col md={4} xxl lg="3">
@@ -182,7 +184,7 @@ const RetirementHousingForm = (props) => {
                   }
                 }}
               /> */}
-              <div className="d-flex flex-row align-items-center my-1 ">
+                    <div className="d-flex flex-row align-items-center my-1 ">
               <input type="text" className="form-control" placeholder={ddjayData?.areaUnderSectorRoad}  disabled />
               &nbsp;
               <ReportProblemIcon
@@ -255,8 +257,8 @@ const RetirementHousingForm = (props) => {
                   }
                 }}
               /> */}
-               <div className="d-flex flex-row align-items-center my-1 ">
-              <input type="text" className="form-control" placeholder={ddjayData?.areaUnderUndetermined}  disabled />
+              <div className="d-flex flex-row align-items-center my-1 ">
+              <input type="text" className="form-control" placeholder={ddjayData?.areaUnderSectorAndGreenBelt}  disabled />
               &nbsp;
               <ReportProblemIcon
                           style={{
@@ -379,53 +381,14 @@ const RetirementHousingForm = (props) => {
                 {...register("permissableGroundCoverage")}
                 onWheel={handleWheel}
                 onChange={(e) => {
-                  if (e?.target?.value > (watch("netPlannedArea") * 40) / 100) {
-                    setError({ ...error, ["permissableGroundCoverage"]: "Maximum 40% of Net planned area is allowed" });
+                  if (e?.target?.value > (watch("netPlannedArea") * 0.35) / 100) {
+                    setError({ ...error, ["permissableGroundCoverage"]: "Maximum 0.35% of Net planned area is allowed" });
                   } else setError({ ...error, ["permissableGroundCoverage"]: "" });
                 }}
               />
               {error?.permissableGroundCoverage && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.permissableGroundCoverage}</h6>} */}
-               <div className="d-flex flex-row align-items-center my-1 ">
+              <div className="d-flex flex-row align-items-center my-1 ">
               <input type="text" className="form-control" placeholder={ddjayData?.permissableGroundCoverage}  disabled />
-              &nbsp;
-              <ReportProblemIcon
-                          style={{
-                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                            color: fieldIconColors.layoutPlan
-                          }}
-                          onClick={() => {
-                            setLabelValue("Whether one organizes open space/pocket of min area 0.3 acre proposed in the layout plan"),
-                              setOpennedModal("layoutPlan")
-                            setSmShow(true),
-                              console.log("modal open"),
-                              setFieldValue(ddjayData?.minArea==="Y"?"Yes":ddjayData?.organize==="N"?"No":null);
-                          }}
-                        ></ReportProblemIcon>
-                        </div>
-            </Col>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>
-                    Permissable FAR
-                    <span style={{ color: "red" }}>*</span>
-                  </h2>
-                </Form.Label>
-              </div>
-              {/* <input
-                type="number"
-                className="form-control"
-                {...register("permissableFAR")}
-                onWheel={handleWheel}
-                onChange={(e) => {
-                  if (e?.target?.value > (watch("netPlannedArea") * 225) / 100) {
-                    setError({ ...error, ["permissableFAR"]: "Maximum 225% of Net planned area is allowed" });
-                  } else setError({ ...error, ["permissableFAR"]: "" });
-                }}
-              />
-              {error?.permissableFAR && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.permissableFAR}</h6>} */}
-               <div className="d-flex flex-row align-items-center my-1 ">
-              <input type="text" className="form-control" placeholder={ddjayData?.permissableFAR}  disabled />
               &nbsp;
               <ReportProblemIcon
                           style={{
@@ -457,13 +420,13 @@ const RetirementHousingForm = (props) => {
                 {...register("permissableCommercial")}
                 onWheel={handleWheel}
                 onChange={(e) => {
-                  if (e?.target?.value > (watch("permissableFAR") * 4) / 100) {
-                    setError({ ...error, ["permissableCommercial"]: "Maximum 4% of Permissable FAR is allowed" });
+                  if (e?.target?.value > (watch("netPlannedArea") * 0.5) / 100) {
+                    setError({ ...error, ["permissableCommercial"]: "Maximum 0.5% of Net planned area is allowed" });
                   } else setError({ ...error, ["permissableCommercial"]: "" });
                 }}
               />
               {error?.permissableCommercial && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.permissableCommercial}</h6>} */}
-              <div className="d-flex flex-row align-items-center my-1 ">
+        <div className="d-flex flex-row align-items-center my-1 ">
               <input type="text" className="form-control" placeholder={ddjayData?.permissableCommercial}  disabled />
               &nbsp;
               <ReportProblemIcon
@@ -480,6 +443,47 @@ const RetirementHousingForm = (props) => {
                           }}
                         ></ReportProblemIcon>
                         </div>
+
+            </Col>
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>
+                    Permissable FAR
+                    <span style={{ color: "red" }}>*</span>
+                  </h2>
+                </Form.Label>
+              </div>
+              {/* <input
+                type="number"
+                className="form-control"
+                {...register("permissableFAR")}
+                onWheel={handleWheel}
+                onChange={(e) => {
+                  if (e?.target?.value > (watch("netPlannedArea") * 175) / 100) {
+                    setError({ ...error, ["permissableFAR"]: "Maximum 175% of Net planned area is allowed" });
+                  } else setError({ ...error, ["permissableFAR"]: "" });
+                }}
+              />
+              {error?.permissableFAR && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.permissableFAR}</h6>} */}
+                <div className="d-flex flex-row align-items-center my-1 ">
+              <input type="text" className="form-control" placeholder={ddjayData?.permissableFAR}  disabled />
+              &nbsp;
+              <ReportProblemIcon
+                          style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                            color: fieldIconColors.layoutPlan
+                          }}
+                          onClick={() => {
+                            setLabelValue("Whether one organizes open space/pocket of min area 0.3 acre proposed in the layout plan"),
+                              setOpennedModal("layoutPlan")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(ddjayData?.minArea==="Y"?"Yes":ddjayData?.organize==="N"?"No":null);
+                          }}
+                        ></ReportProblemIcon>
+                        </div>
+
             </Col>
           </Row>
         </Col>
@@ -515,9 +519,11 @@ const RetirementHousingForm = (props) => {
        </div>
         </div>
         </div>
+
       </Col>
     </Row>
+     
       </Form.Group>
     </Form>)
 };
-export default RetirementHousingForm;
+export default ResidentialGroupHousingForm;

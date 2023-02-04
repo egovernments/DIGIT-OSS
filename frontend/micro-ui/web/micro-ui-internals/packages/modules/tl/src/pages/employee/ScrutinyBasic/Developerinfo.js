@@ -19,11 +19,11 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import { useStyles } from "./css/personalInfoChild.style";
 import { IconButton } from "@mui/material";
 import { getDocShareholding } from "./ScrutinyDevelopment/docview.helper";
-import CommercialColonyInResidential from "../ScrutinyBasic/Puropse/CommercialColonyResidential";
-import CommercialLicense from "./Puropse/CommercialLicense";
-import LowDensityEco from "./Puropse/LowDensityEco";
-import CyberPark from "./Puropse/CyberPark";
-import RetirementHousing from "./Puropse/RetirementHousing";
+import CommercialColonyInResidential from "../ScrutinyBasic/PuropseStep3/CommercialColonyResidential";
+import CommercialLicense from "./PuropseStep3/CommercialLicense";
+import LowDensityEco from "./PuropseStep3/LowDensityEco";
+import CyberPark from "./PuropseStep3/CyberPark";
+import RetirementHousing from "./PuropseStep3/RetirementHousing";
 // import CommercialPlottedForm from "./Puropse/CommercialPlottedForm";
 
 const Developerinfo = (props) => {
@@ -1596,14 +1596,15 @@ const Developerinfo = (props) => {
               </div>
             </Row>
 
-            <hr className="mb-3" />
+            
 
             <Row className={classes.formLabel}>
               <Col md={4} xxl lg="12">
                 {
                   landScheduleData?.litigation === "Y" && (
-
+                      
                     <div >
+                      <hr className="mb-3" />
                       <h6 > Court orders, if any, affecting applied land   </h6>
 
                       <input type="radio" disabled value="Yes" checked={landScheduleData?.court === "Y" ? true : false} />
