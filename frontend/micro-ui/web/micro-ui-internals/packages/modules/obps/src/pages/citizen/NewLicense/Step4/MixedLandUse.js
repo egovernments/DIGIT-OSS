@@ -142,21 +142,21 @@ const MixedLandUseForm = ({ register, getDocumentData, watch, getDocShareholding
           </Row>
         </Col>
         <Col md={4} xxl lg="3">
-          <h2>Select Option</h2>
+          <h2>Select Mixed Land Use</h2>
           &nbsp;&nbsp;&nbsp;&nbsp;
-          <label htmlFor="appliedLand">
-            <input {...register("appliedLand")} type="radio" value="commercial" id="appliedLand" />
-            &nbsp; Yes &nbsp;&nbsp;
+          <label htmlFor="mixedLandUse">
+            <input {...register("mixedLandUse")} type="radio" value="commercial" id="mixedLandUse" />
+            &nbsp; Commercial &nbsp;&nbsp;
           </label>
-          <label htmlFor="appliedLand">
-            <input {...register("appliedLand")} type="radio" value="residential" id="appliedLand" />
-            &nbsp; No &nbsp;&nbsp;
+          <label htmlFor="mixedLandUse">
+            <input {...register("mixedLandUse")} type="radio" value="residential" id="mixedLandUse" />
+            &nbsp; Residential &nbsp;&nbsp;
           </label>
           {/* <h3 className="error-message" style={{ color: "red" }}>
             {errors?.appliedLand && errors?.appliedLand?.message}
           </h3> */}
         </Col>
-        {watch("appliedLand") === "commercial" && (
+        {watch("mixedLandUse") === "commercial" && (
           <Row>
             <Col md={4} xxl lg="3">
               <div>
@@ -226,7 +226,7 @@ const MixedLandUseForm = ({ register, getDocumentData, watch, getDocShareholding
             </Col>
           </Row>
         )}
-        {watch("appliedLand") === "residential" && (
+        {watch("mixedLandUse") === "residential" && (
           <Row>
             <Col md={4} xxl lg="3">
               <div>
