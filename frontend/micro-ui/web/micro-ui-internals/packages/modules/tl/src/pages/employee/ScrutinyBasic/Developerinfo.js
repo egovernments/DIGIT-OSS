@@ -33,9 +33,9 @@ const Developerinfo = (props) => {
   const Purpose = props.purpose;
   let user = Digit.UserService.getUser();
   const userRoles = user?.info?.roles?.map((e) => e.code) || [];
-  const hideRemarks = userRoles.some((item)=>item === "CTP_HR" || item === "CTP_HQ" || item === "DTP_HR" || item === "DTP_HQ")
-  const hideRemarksPatwari = userRoles.some((item)=>item ==="Patwari_HQ")
-  const hideRemarksJE = userRoles.some((item)=>item ==="JE_HQ" || item === "JE_HR")
+  const hideRemarks = userRoles.some((item) => item === "CTP_HR" || item === "CTP_HQ" || item === "DTP_HR" || item === "DTP_HQ")
+  const hideRemarksPatwari = userRoles.some((item) => item === "Patwari_HQ")
+  const hideRemarksJE = userRoles.some((item) => item === "JE_HQ" || item === "JE_HR")
 
 
   const [vacant, setVacant] = useState("");
@@ -591,7 +591,7 @@ const Developerinfo = (props) => {
   };
 
   const handlemodaldData = (data) => {
-  
+
     setSmShow(false);
     console.log("here", openedModal, data);
     if (openedModal && data) {
@@ -605,7 +605,7 @@ const Developerinfo = (props) => {
   return (
     <Form
       ref={props.developerInfoRef}
-   >
+    >
       <ModalChild
         labelmodal={labelValue}
         passmodalData={handlemodaldData}
@@ -641,68 +641,56 @@ const Developerinfo = (props) => {
       <Collapse in={open}>
         <div id="example-collapse-text">
           <Form.Group
-            style={{ display: props.displayGeneral, border: "2px solid #e9ecef", margin: 10, padding: 10 }}
+            style={{ display: props.displayGeneral, border: "2px solid #e9ecef", margin: 15, padding: 15 }}
             className={`justify-content-center ${classes.formLabel}`}
           >
             <Row className={classes.formLabel}>
-              {/* <Col className="ms-auto" md={4} xxl lg="12"> */}
-                <Form.Label
-                // placeholder={personalinfo !== null ? personalinfo.authorizedDeveloper : null}
-                >
+              <Col md={4} xxl lg="12">
+                <Form.Label >
                   {/* {JSON.stringify(userRoles)}
                     {JSON.stringify(hideRemarks)} */}
-
                   (i)Whether licence applied for additional area ?
-               
-                  <div className="d-flex flex-row">
-                    <input type="radio" disabled value="Yes" checked={landScheduleData?.licenseApplied === "Y" ? true : false} />
-                    <label className="m-0  mx-2" for="Yes">Yes</label>
-                    <input type="radio" disabled value="No" checked={landScheduleData?.licenseApplied === "N" ? true : false} />
-                    <label className="m-0 mx-2" for="No">No</label>
-                   
-                    <ReportProblemIcon
-                      style={{
-                        display: hideRemarks?"none":"block",
-                   
-                        color: fieldIconColors.licenceApplied
-                      }}
-                      onClick={() => {
-                        setLabelValue("Whether licence applied for additional area"),
-                          setOpennedModal("licenceApplied")
-                        setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(landScheduleData?.licenseApplied === "Y" ? "Yes" : landScheduleData?.licenseApplied === "N" ? "No" : null);
-                      }}
-                    ></ReportProblemIcon>
-
-                  </div>
-
                 </Form.Label>
-
-              {/* </Col> */}
+                <div className="d-flex flex-row">
+                  <input type="radio" disabled value="Yes" checked={landScheduleData?.licenseApplied === "Y" ? true : false} />
+                  <label className="m-0  mx-2" for="Yes">Yes</label>
+                  <input type="radio" disabled value="No" checked={landScheduleData?.licenseApplied === "N" ? true : false} />
+                  <label className="m-0 mx-2" for="No">No</label>
+                  <ReportProblemIcon
+                    style={{
+                      display: hideRemarks ? "none" : "block",
+                      color: fieldIconColors.licenceApplied
+                    }}
+                    onClick={() => {
+                      setLabelValue("Whether licence applied for additional area"),
+                        setOpennedModal("licenceApplied")
+                      setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue(landScheduleData?.licenseApplied === "Y" ? "Yes" : landScheduleData?.licenseApplied === "N" ? "No" : null);
+                    }}
+                  ></ReportProblemIcon>
+                </div>
+              </Col>
             </Row>
 
             {
               landScheduleData?.licenseApplied === "Y" && (
 
                 <div>
-                  <Row className={classes.formLabel} style={{ marginBottom: 20 }} >
+                  <Row className={classes.formLabel} style={{ marginBottom: 15 }} >
                     <Col className="ms-auto" md={4} xxl lg="4">
                       <label>
-                        
                         <h5>Licence No. of Parent Licence &nbsp;</h5>
                       </label>
-
                       <div className="d-flex flex-row align-items-center my-1 ">
                         <Form.Control
-                       
                           placeholder={landScheduleData !== null ? landScheduleData?.licenseNumber : null}
                           disabled
                         ></Form.Control>
                         <ReportProblemIcon
                           style={{
-                            display: hideRemarks?"none":"block",
-                           
+                            display: hideRemarks ? "none" : "block",
+
                             color: fieldIconColors.licenceNo
                           }}
                           onClick={() => {
@@ -714,7 +702,7 @@ const Developerinfo = (props) => {
                           }}
                         ></ReportProblemIcon>
                       </div>
-                      
+
                     </Col>
                     <Col className="ms-auto" md={4} xxl lg="4">
                       <label htmlFor="potential">
@@ -726,32 +714,13 @@ const Developerinfo = (props) => {
 
                       <div className="d-flex flex-row  align-items-center">
                         <Form.Control
-                    
+
                           placeholder={landScheduleData !== null ? landScheduleData?.potential : null}
                           disabled
                         ></Form.Control>
-
-                        {/* <Form.Select
-                      type="text"
-                      placeholder={landScheduleData !== null ? landScheduleData?.potential : null}
-                      // onChange={handleChangesetPurpose}
-                      height={30}
-                      style={{ maxWidth: 200, marginRight: 5 }}
-                      disabled
-                    > */}
-                        {/* <select className="form-control" id="Puropse" name="potential" placeholder="Puropse" onChange={handleChangesetPurpose} disabled> */}
-                        {/* <option value="">--Potential Zone--</option>
-                      <option value="K.Mishra">Hyper</option>
-                      <option value="potential 1">High I</option>
-                      <option value="potential 2">High II</option>
-                      <option value="potential 2">Medium</option>
-                      <option value="potential 2">Low I</option>
-                      <option value="potential 2">Low II</option> */}
-                        {/* </select> */}
-                        {/* </Form.Select> */}
                         <ReportProblemIcon
                           style={{
-                            display: hideRemarks?"none":"block",
+                            display: hideRemarks ? "none" : "block",
                             // display: hideRemarksPatwari?"none":"block",
                             color: fieldIconColors.potentialZone
                           }}
@@ -767,14 +736,14 @@ const Developerinfo = (props) => {
                     </Col>
                     <Col className="ms-auto" md={4} xxl lg="4">
                       <label>
-                       
+
                         <h5>Type of colony  &nbsp;</h5>
                       </label>
                       <div className="d-flex flex-row  align-items-center">
-                        <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.siteLoc : null}  disabled></Form.Control>
+                        <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.siteLoc : null} disabled></Form.Control>
                         <ReportProblemIcon
                           style={{
-                            display: hideRemarks?"none":"block",
+                            display: hideRemarks ? "none" : "block",
                             // display: hideRemarksPatwari?"none":"block",
                             color: fieldIconColors.siteLocationPurpose
                           }}
@@ -788,10 +757,10 @@ const Developerinfo = (props) => {
                         ></ReportProblemIcon>
                       </div>
                     </Col>
-                    </Row>
+                  </Row>
+                  <Row className="ms-auto" style={{ marginBottom: 15 }}>
 
-                 <Row className="ms-auto" style={{ marginBottom: 20 }}>
-                    <div className="col col-12">
+                    <Col md={6} xxl lg="12">
                       {
                         {
                           'DDJAY_APHP': <div>
@@ -803,57 +772,43 @@ const Developerinfo = (props) => {
                           "NILPC": <div>
                             <CommercialColonyInResidential dataForIcons={dataIcons} ></CommercialColonyInResidential>
                           </div>,
-                           "AHP": <div>
-                           <CommercialColonyInResidential dataForIcons={dataIcons} ></CommercialColonyInResidential>
-                         </div>,
+                          "AHP": <div>
+                            <CommercialColonyInResidential dataForIcons={dataIcons} ></CommercialColonyInResidential>
+                          </div>,
                           "CIC": <div>
-                          <CommercialLicense dataForIcons={dataIcons} ></CommercialLicense>
-                        </div>,
-                        "LDEF": <div>
-                        <LowDensityEco  dataForIcons={dataIcons} ></LowDensityEco>
-                      </div>,
-                      "IPL": <div>
-                      <CyberPark dataForIcons={dataIcons} ></CyberPark>
-                    </div>,
-                    "ITP": <div>
-                    <CyberPark  dataForIcons={dataIcons} ></CyberPark>
-                  </div>,
-                    "ITC": <div>
-                    <CyberPark dataForIcons={dataIcons} ></CyberPark>
-                  </div>,
-                    "RHP": <div>
-                    <RetirementHousing dataForIcons={dataIcons} ></RetirementHousing>
-                  </div>,
+                            <CommercialLicense dataForIcons={dataIcons} ></CommercialLicense>
+                          </div>,
+                          "LDEF": <div>
+                            <LowDensityEco dataForIcons={dataIcons} ></LowDensityEco>
+                          </div>,
+                          "IPL": <div>
+                            <CyberPark dataForIcons={dataIcons} ></CyberPark>
+                          </div>,
+                          "ITP": <div>
+                            <CyberPark dataForIcons={dataIcons} ></CyberPark>
+                          </div>,
+                          "ITC": <div>
+                            <CyberPark dataForIcons={dataIcons} ></CyberPark>
+                          </div>,
+                          "RHP": <div>
+                            <RetirementHousing dataForIcons={dataIcons} ></RetirementHousing>
+                          </div>,
                         }[Purpose]
                       }
-                      
-                  
+                    </Col>
 
-                      {/* <ReactMultiSelect
-                              control={control}
-                              name="approachType"
-                              placeholder="Approach"
-                              data={potentialOptons}
-                              labels="Potential"
-                            /> */}
-                      {/* <select className="form-control" id="approachType" {...register("approachType")}>
-                                <option>{Purpose === "DDJAY_APHP" && <CommercialColonyInResidential watch={watch} register={register} />}</option> */}
-                      {/* <option value="potential 2">(a) Existing ser-vice road along with sector di-viding road.</option> */}
-                      {/* <option value="potential 2">(c) Constructed sector road or internal circula-tion road of min. 18m/24m (licenced) part of the approved sectoral plan and further leadup up to at least 4 karam wide public ras-ta.</option> */}
-                      {/* </select> */}
-                    </div>
-                    </Row >
-                    <Row className={classes.formLabel}  style={{ marginBottom: 20 }}>
+                  </Row >
+                  <Row className={classes.formLabel} style={{ marginBottom: 15 }}>
                     <Col className="ms-auto" md={4} xxl lg="4">
                       <label>
                         <h6>Area of parent licence in acres </h6>{" "}
-                       
+
                       </label>
                       <div className="d-flex flex-row  align-items-center">
                         <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.areaOfParentLicence : null} disabled></Form.Control>
                         <ReportProblemIcon
                           style={{
-                            display: hideRemarks?"none":"block",
+                            display: hideRemarks ? "none" : "block",
                             // display: hideRemarksPatwari?"none":"block",
                             color: fieldIconColors.approachRoadWidth
                           }}
@@ -872,10 +827,10 @@ const Developerinfo = (props) => {
                         <h6>Specify Others</h6>
                       </label>
                       <div className="d-flex flex-row  align-items-center">
-                        <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.specify : null}  disabled></Form.Control>
+                        <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.specify : null} disabled></Form.Control>
                         <ReportProblemIcon
                           style={{
-                            display: hideRemarks?"none":"block",
+                            display: hideRemarks ? "none" : "block",
                             // display: hideRemarksPatwari?"none":"block",
                             color: fieldIconColors.specifyOthers
                           }}
@@ -890,7 +845,7 @@ const Developerinfo = (props) => {
                       </div>
                     </Col>
                     <Col className="ms-auto" md={4} xxl lg="4">
-                     {/* <div className="col col-4"> */}
+                      {/* <div className="col col-4"> */}
                       <h6>Third-party right created&nbsp; </h6>
 
                       <div className="d-flex flex-row align-items-center my-1 ">
@@ -907,7 +862,7 @@ const Developerinfo = (props) => {
                         </label>
                         <ReportProblemIcon
                           style={{
-                            display: hideRemarks  ?"none":"block",
+                            display: hideRemarks ? "none" : "block",
                             // display: hideRemarksPatwari?"none":"block",
                             color: fieldIconColors.thirdPartyRightCreated
                           }}
@@ -921,11 +876,11 @@ const Developerinfo = (props) => {
                         ></ReportProblemIcon>
 
                       </div>
-                    {/* </div> */}
-                    {/* <div className="col col-8">
+                      {/* </div> */}
+                      {/* <div className="col col-8">
                       
                     </div> */}
-                    {/* <div className="col col-4">
+                      {/* <div className="col col-4">
                       {landScheduleData?.thirdParty === "N" && (
                         <div className="row ">
                           <div className="col col-4">
@@ -938,15 +893,18 @@ const Developerinfo = (props) => {
                       )}
                     </div> */}
                     </Col>
-                    <Col className="ms-auto" md={4} xxl lg="12">
-                    {landScheduleData?.thirdParty === "N" && (
-                      <div>
-                        <div  className="col col-4">
-                         
+                    <Col className="ms-auto" md={6} xxl lg="12">
+                      {landScheduleData?.thirdParty === "N" && (
+                        <div>
+                          <div className="col col-4">
+
                             <label> Remark </label>
-                            <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.thirdPartyRemark : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                            <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.thirdPartyRemark : null}
+                              // height={30} style={{ maxWidth: 200, marginRight: 5 }} 
+                              className={classes.formLabel}
+                              disabled></Form.Control>
                           </div>
-                          <div  className="col col-4">
+                          <div className="col col-4">
                             <label> Document Download </label>
 
                             <IconButton onClick={() => getDocShareholding(landScheduleData?.thirdPartyDoc)}>
@@ -954,29 +912,27 @@ const Developerinfo = (props) => {
                             </IconButton>
 
                           </div>
-                          </div>
+                        </div>
                       )}
                     </Col>
                   </Row>
                 </div>
               )}
 
-
-       
             <Row className={classes.formLabel}>
-              <Col md={4} xxl lg="12">
+              <Col className="ms-auto" md={4} xxl lg="12">
                 <Form.Label> (ii)Whether licence applied under Migration Policy ?</Form.Label>
                 &nbsp;&nbsp;
                 <div className="d-flex flex-row align-items-center my-1 ">
-                 
+
                   <input type="radio" disabled value="Yes" checked={landScheduleData?.migrationLic === "Y" ? true : false} />
                   <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                   <input type="radio" disabled value="No" checked={landScheduleData?.migrationLic === "N" ? true : false} />
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
-                      display: hideRemarks?"none":"block",
-                     
+                      display: hideRemarks ? "none" : "block",
+
                       color: fieldIconColors.migrationPolicy
                     }}
                     onClick={() => {
@@ -988,238 +944,242 @@ const Developerinfo = (props) => {
                     }}
                   ></ReportProblemIcon>
                 </div>
-                <br></br>
+              </Col>
+            </Row>
+
+            <Row className={classes.formLabel}>
+              <Col md={4} xxl lg="12">
                 {
                   landScheduleData?.migrationLic === "Y" &&
 
                   <div>
-                     <div style={{overflow:"scroll"}}>
-                <table className="table table-bordered">
-                <thead>
-                  
-                  <tr className="border-bottom-0">
-                  <th class="fw-normal pb-0 border-bottom-0 align-top">
-                    Previous Licence Number  
-                    </th>  
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                    Area of parent licence  
-                    </th> 
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                    Purpose of parent licence  
-                    </th> 
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                    Validity of parent licence
-                    </th> 
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                    Date  
-                    </th> 
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                    Area applied under migration in acres  
-                    </th>                
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                    Applied Khasra number  
-                    </th> 
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                    Area  
-                    </th> 
-                  <th class="fw-normal pb-0 border-bottom-0 align-top">
-                  Balance of Parent Licence
-                    </th> 
-                   
- </tr>
-                  <tr className="border-top-0">
-                    <th class="fw-normal py-0 border-top-0">
-                    <ReportProblemIcon
-                            style={{
-                              display: hideRemarks?"none":"block",
-                              color: fieldIconColors.licenceNo
-                            }}
-                            onClick={() => {
-                              setLabelValue("Licence No."),
-                                setOpennedModal("licenceNo")
-                              setSmShow(true),
-                                console.log("modal open"),
-                                setFieldValue(landScheduleData !== null ? landScheduleData?.licNo : null);
-                            }}
-                          ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                    <ReportProblemIcon
-                            style={{
-                              display: hideRemarks?"none":"block",
-                              color: fieldIconColors.areaOfParentLicence
-                            }}
-                            onClick={() => {
-                              setLabelValue("Area of Parent Licence"),
-                                setOpennedModal("areaOfParentLicence")
-                              setSmShow(true),
-                                console.log("modal open"),
-                                setFieldValue(landScheduleData !== null ? landScheduleData?.parentLicArea : null);
-                            }}
-                          ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                    <ReportProblemIcon
-                            style={{
-                              display: hideRemarks?"none":"block",
-                              color: fieldIconColors.purposeOfParentLicence
-                            }}
-                            onClick={() => {
-                              setLabelValue("Purpose of Parent Licence"),
-                                setOpennedModal("purposeOfParentLicence")
-                              setSmShow(true),
-                                console.log("modal open"),
-                                setFieldValue(landScheduleData !== null ? landScheduleData?.parentLicPurpose : null);
-                            }}
-                          ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                    <ReportProblemIcon
-                            style={{
-                              display: hideRemarks?"none":"block",
-                              color: fieldIconColors.validityOfParentLicence
-                            }}
-                            onClick={() => {
-                              setLabelValue("Validity of Parent Licence")
-                              setOpennedModal("validityOfParentLicence")
-                              setSmShow(true),
-                                console.log("modal open"),
-                                setFieldValue(landScheduleData?.validityOfParentLic === "Y" ? "Yes" : landScheduleData?.validityOfParentLic === "N" ? "No" : null);
-                            }}
-                          ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                    <ReportProblemIcon
-                            style={{
-                              display: hideRemarks?"none":"block",
-                              color: fieldIconColors.areaAppliedUnderMigration
-                            }}
-                            onClick={() => {
-                              setLabelValue("Area Applied under Migration"),
-                                setOpennedModal("areaAppliedUnderMigration")
-                              setSmShow(true),
-                                console.log("modal open"),
-                         setFieldValue(landScheduleData !== null ? landScheduleData?.areaAppliedUnderMigration : null);
-                            }}
-                          ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                    <ReportProblemIcon
-                            style={{
-                              display: hideRemarks?"none":"block",
-                              color: fieldIconColors.areaAppliedUnderMigration
-                            }}
-                            onClick={() => {
-                              setLabelValue("Area Applied under Migration"),
-                                setOpennedModal("areaAppliedUnderMigration")
-                              setSmShow(true),
-                                console.log("modal open"),
-                         setFieldValue(landScheduleData !== null ? landScheduleData?.areaAppliedUnderMigration : null);
-                            }}
-                          ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                    <ReportProblemIcon
-                            style={{
-                              display: hideRemarks?"none":"block",
-                              color: fieldIconColors.areaAppliedUnderMigration
-                            }}
-                            onClick={() => {
-                              setLabelValue("Area Applied under Migration"),
-                                setOpennedModal("areaAppliedUnderMigration")
-                              setSmShow(true),
-                                console.log("modal open"),
-                         setFieldValue(landScheduleData !== null ? landScheduleData?.areaAppliedUnderMigration : null);
-                            }}
-                          ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                    <ReportProblemIcon
-                            style={{
-                              display: hideRemarks?"none":"block",
-                              color: fieldIconColors.areaAppliedUnderMigration
-                            }}
-                            onClick={() => {
-                              setLabelValue("Area Applied under Migration"),
-                                setOpennedModal("areaAppliedUnderMigration")
-                              setSmShow(true),
-                                console.log("modal open"),
-                         setFieldValue(landScheduleData !== null ? landScheduleData?.areaAppliedUnderMigration : null);
-                            }}
-                          ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                    <ReportProblemIcon
-                            style={{
-                              display: hideRemarks?"none":"block",
-                              color: fieldIconColors.areaAppliedUnderMigration
-                            }}
-                            onClick={() => {
-                              setLabelValue("Area Applied under Migration"),
-                                setOpennedModal("areaAppliedUnderMigration")
-                              setSmShow(true),
-                                console.log("modal open"),
-                         setFieldValue(landScheduleData !== null ? landScheduleData?.areaAppliedUnderMigration : null);
-                            }}
-                          ></ReportProblemIcon>
-                    </th>
-                   
-                  </tr>
-                </thead>
-                <tbody>
-                {
-                    landScheduleData?.LandScheduleDetails?.map((item,index)=>(
-                      
-                  <tr  
-                  key={index}
-                  >
-                    <td>
-                      <input type="text" className="form-control"  
-                      placeholder={item?.previousLicensenumber}
-                       disabled />
-                    </td>
-                    <td>
-                      <input type="text" className="form-control"  
-                      placeholder={item?.areaOfParentLicence }
-                       disabled />
-                    </td>
-                    <td>
-                      <input type="text" className="form-control"  
-                      placeholder={item?.purposeOfParentLicence }
-                       disabled />
-                    </td>
-                    <td>
-                      <input type="text" className="form-control"  
-                      placeholder={item?.validity }
-                       disabled />
-                    </td>
-                    <td>
-                      <input type="text" className="form-control"  
-                      placeholder={item?.date }
-                       disabled />
-                    </td>
-                    <td>
-                      <input type="text" className="form-control"  
-                      placeholder={item?.areaAppliedmigration }
-                       disabled />
-                    </td>
-                    <td>
-                      <input type="text" className="form-control"  
-                      placeholder={item?.khasraNumber }
-                       disabled />
-                    </td>
-                    <td>
-                      <input type="text" className="form-control"  
-                      placeholder={item?.area}
-                       disabled />
-                    </td>
-                    <td>
-                      <input type="text" className="form-control"  
-                      placeholder={item?.balanceOfParentLicence }
-                       disabled />
-                    </td>
-                   
-                    {/* <td class="text-center">
+                    <div style={{ overflow: "scroll" }}>
+                      <table className="table table-bordered">
+                        <thead>
+
+                          <tr className="border-bottom-0">
+                            <th class="fw-normal pb-0 border-bottom-0 align-top">
+                              Previous Licence Number
+                            </th>
+                            <th class="fw-normal pb-0 border-bottom-0 align-top">
+                              Area of parent licence
+                            </th>
+                            <th class="fw-normal pb-0 border-bottom-0 align-top">
+                              Purpose of parent licence
+                            </th>
+                            <th class="fw-normal pb-0 border-bottom-0 align-top">
+                              Validity of parent licence
+                            </th>
+                            <th class="fw-normal pb-0 border-bottom-0 align-top">
+                              Date
+                            </th>
+                            <th class="fw-normal pb-0 border-bottom-0 align-top">
+                              Area applied under migration in acres
+                            </th>
+                            <th class="fw-normal pb-0 border-bottom-0 align-top">
+                              Applied Khasra number
+                            </th>
+                            <th class="fw-normal pb-0 border-bottom-0 align-top">
+                              Area
+                            </th>
+                            <th class="fw-normal pb-0 border-bottom-0 align-top">
+                              Balance of Parent Licence
+                            </th>
+
+                          </tr>
+                          <tr className="border-top-0">
+                            <th class="fw-normal py-0 border-top-0">
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks ? "none" : "block",
+                                  color: fieldIconColors.licenceNo
+                                }}
+                                onClick={() => {
+                                  setLabelValue("Licence No."),
+                                    setOpennedModal("licenceNo")
+                                  setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(landScheduleData !== null ? landScheduleData?.licNo : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </th>
+                            <th class="fw-normal py-0 border-top-0">
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks ? "none" : "block",
+                                  color: fieldIconColors.areaOfParentLicence
+                                }}
+                                onClick={() => {
+                                  setLabelValue("Area of Parent Licence"),
+                                    setOpennedModal("areaOfParentLicence")
+                                  setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(landScheduleData !== null ? landScheduleData?.parentLicArea : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </th>
+                            <th class="fw-normal py-0 border-top-0">
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks ? "none" : "block",
+                                  color: fieldIconColors.purposeOfParentLicence
+                                }}
+                                onClick={() => {
+                                  setLabelValue("Purpose of Parent Licence"),
+                                    setOpennedModal("purposeOfParentLicence")
+                                  setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(landScheduleData !== null ? landScheduleData?.parentLicPurpose : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </th>
+                            <th class="fw-normal py-0 border-top-0">
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks ? "none" : "block",
+                                  color: fieldIconColors.validityOfParentLicence
+                                }}
+                                onClick={() => {
+                                  setLabelValue("Validity of Parent Licence")
+                                  setOpennedModal("validityOfParentLicence")
+                                  setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(landScheduleData?.validityOfParentLic === "Y" ? "Yes" : landScheduleData?.validityOfParentLic === "N" ? "No" : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </th>
+                            <th class="fw-normal py-0 border-top-0">
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks ? "none" : "block",
+                                  color: fieldIconColors.areaAppliedUnderMigration
+                                }}
+                                onClick={() => {
+                                  setLabelValue("Area Applied under Migration"),
+                                    setOpennedModal("areaAppliedUnderMigration")
+                                  setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(landScheduleData !== null ? landScheduleData?.areaAppliedUnderMigration : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </th>
+                            <th class="fw-normal py-0 border-top-0">
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks ? "none" : "block",
+                                  color: fieldIconColors.areaAppliedUnderMigration
+                                }}
+                                onClick={() => {
+                                  setLabelValue("Area Applied under Migration"),
+                                    setOpennedModal("areaAppliedUnderMigration")
+                                  setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(landScheduleData !== null ? landScheduleData?.areaAppliedUnderMigration : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </th>
+                            <th class="fw-normal py-0 border-top-0">
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks ? "none" : "block",
+                                  color: fieldIconColors.areaAppliedUnderMigration
+                                }}
+                                onClick={() => {
+                                  setLabelValue("Area Applied under Migration"),
+                                    setOpennedModal("areaAppliedUnderMigration")
+                                  setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(landScheduleData !== null ? landScheduleData?.areaAppliedUnderMigration : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </th>
+                            <th class="fw-normal py-0 border-top-0">
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks ? "none" : "block",
+                                  color: fieldIconColors.areaAppliedUnderMigration
+                                }}
+                                onClick={() => {
+                                  setLabelValue("Area Applied under Migration"),
+                                    setOpennedModal("areaAppliedUnderMigration")
+                                  setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(landScheduleData !== null ? landScheduleData?.areaAppliedUnderMigration : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </th>
+                            <th class="fw-normal py-0 border-top-0">
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks ? "none" : "block",
+                                  color: fieldIconColors.areaAppliedUnderMigration
+                                }}
+                                onClick={() => {
+                                  setLabelValue("Area Applied under Migration"),
+                                    setOpennedModal("areaAppliedUnderMigration")
+                                  setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(landScheduleData !== null ? landScheduleData?.areaAppliedUnderMigration : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </th>
+
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {
+                            landScheduleData?.LandScheduleDetails?.map((item, index) => (
+
+                              <tr
+                                key={index}
+                              >
+                                <td>
+                                  <input type="text" className="form-control"
+                                    placeholder={item?.previousLicensenumber}
+                                    disabled />
+                                </td>
+                                <td>
+                                  <input type="text" className="form-control"
+                                    placeholder={item?.areaOfParentLicence}
+                                    disabled />
+                                </td>
+                                <td>
+                                  <input type="text" className="form-control"
+                                    placeholder={item?.purposeOfParentLicence}
+                                    disabled />
+                                </td>
+                                <td>
+                                  <input type="text" className="form-control"
+                                    placeholder={item?.validity}
+                                    disabled />
+                                </td>
+                                <td>
+                                  <input type="text" className="form-control"
+                                    placeholder={item?.date}
+                                    disabled />
+                                </td>
+                                <td>
+                                  <input type="text" className="form-control"
+                                    placeholder={item?.areaAppliedmigration}
+                                    disabled />
+                                </td>
+                                <td>
+                                  <input type="text" className="form-control"
+                                    placeholder={item?.khasraNumber}
+                                    disabled />
+                                </td>
+                                <td>
+                                  <input type="text" className="form-control"
+                                    placeholder={item?.area}
+                                    disabled />
+                                </td>
+                                <td>
+                                  <input type="text" className="form-control"
+                                    placeholder={item?.balanceOfParentLicence}
+                                    disabled />
+                                </td>
+
+                                {/* <td class="text-center">
                     <div className="btn btn-sm col-md-6">
                                     <IconButton onClick={()=>getDocShareholding(item?.registeringAuthorityDoc)}>
                                       <Visibility color="info" className="icon" /></IconButton>
@@ -1233,15 +1193,15 @@ const Developerinfo = (props) => {
                       <input type="text" className="form-control" title={item?.registeringAuthorityDoc} placeholder={item?.registeringAuthorityDoc} disabled />
                     </td>
                     */}
-                    
-                  </tr>
-                      ))
-                   } 
-                </tbody>
-              </table>
-            </div>
+
+                              </tr>
+                            ))
+                          }
+                        </tbody>
+                      </table>
+                    </div>
                     {/* <Row className={classes.formLabel} style={{ marginBottom: 20 }}> */}
-                      {/* <Col className="ms-auto" md={4} xxl lg="4">
+                    {/* <Col className="ms-auto" md={4} xxl lg="4">
                         <label>
                       
                           <h5>Area Applied under Migration</h5>
@@ -1322,8 +1282,8 @@ const Developerinfo = (props) => {
                           ></ReportProblemIcon>
                         </div>
                       </Col> */}
-                     
-                      {/* <Col className="ms-auto" md={4} xxl lg="4">
+
+                    {/* <Col className="ms-auto" md={4} xxl lg="4">
                         <label>
                          
                           <h5>Area of Parent Licence</h5>
@@ -1348,7 +1308,7 @@ const Developerinfo = (props) => {
                           ></ReportProblemIcon>
                         </div>
                       </Col> */}
-                      {/* <Col className="ms-auto" md={4} xxl lg="4">
+                    {/* <Col className="ms-auto" md={4} xxl lg="4">
                         <label>
                           <h6>Validity of Parent Licence</h6>
                         </label>
@@ -1373,7 +1333,7 @@ const Developerinfo = (props) => {
                           ></ReportProblemIcon>
                         </div>
                       </Col>  */}
-                      {/* <Col className="ms-auto" md={4} xxl lg="4">
+                    {/* <Col className="ms-auto" md={4} xxl lg="4">
                      
                       <h6>Type of land</h6>{" "}
                       <div className="d-flex flex-row  align-items-center">
@@ -1521,26 +1481,28 @@ const Developerinfo = (props) => {
                 }
               </Col>
             </Row>
+
             <hr className="mb-3"></hr>
-            <h5 className={`text-black ml-2 ${classes.formLabel}`}>
-              2. Any encumbrance with respect to following :&nbsp;&nbsp;
+            <Row className={classes.formLabel}>
+              <h5>
+                2. Any encumbrance with respect to following :&nbsp;&nbsp;
+              </h5>
               <div className="d-flex mt-2 align-items-center">
-               
-                
                 <input type="radio" disabled value="rehan/mortage" name="rehan/mortage" checked={landScheduleData?.encumburance === "rehan/mortage" ? true : false} />
-                <label className="m-0 mx-2" htmlFor="gen">Rehan / Mortgage</label>
-                <input type="radio" disabled value="patta" name="patta" checked={landScheduleData?.encumburance === "patta/lease" ? true : false} />
-                <label className="m-0 mx-2" htmlFor="npnl">Patta/Lease</label>
+                <label className="m-0 mx-2" htmlFor="rehan/mortage">Rehan / Mortgage</label>
+                <input type="radio" disabled value="patta/lease" name="patta/lease" checked={landScheduleData?.encumburance === "patta/lease" ? true : false} />
+                <label className="m-0 mx-2" htmlFor="patta/lease">Patta/Lease</label>
+
                 <input type="radio" disabled value="gair/marusi" name="gair/marusi" checked={landScheduleData?.encumburance === "gair/marusi" ? true : false} />
-                <label className="m-0 mx-2" htmlFor="npnl">Gair/Marusi</label>
+                <label className="m-0 mx-2" htmlFor="gair/marusi">Gair/Marusi</label>
                 <input type="radio" disabled value="anyOther" name="anyOther" checked={landScheduleData?.encumburance === "anyOther" ? true : false} />
-                <label className="m-0 mx-2" htmlFor="npnl">Any Other</label>
+                <label className="m-0 mx-2" htmlFor="anyOther">Any Other</label>
                 <input type="radio" disabled value="none" name="none" checked={landScheduleData?.encumburance === "none" ? true : false} />
-                <label className="m-0 mx-2" htmlFor="npnl">none</label>
+                <label className="m-0 mx-2" htmlFor="none">none</label>
                 <ReportProblemIcon
                   className="m-0 mx-2"
                   style={{
-                    display: hideRemarks?"none":"block",
+                    display: hideRemarks ? "none" : "block",
                     color: fieldIconColors.encumbrance
                   }}
                   onClick={() => {
@@ -1552,18 +1514,23 @@ const Developerinfo = (props) => {
                   }}
                 ></ReportProblemIcon>
               </div>
-            </h5>
-            { landScheduleData?.encumburance === "rehan/mortage" &&
-              <div className="row ml-3 mb-3">
-              <div className="col col-4 m-0 p-0">
-                <label htmlFor="npnl">
-                  <h6>Rehan/Mortgage Remarks</h6>
-                </label>
-                <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.anyOtherRemark : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
-                     </div>
-            </div>
-            }
-             { landScheduleData?.encumburance === "patta/lease" &&
+
+
+              {landScheduleData?.encumburance === "rehan/mortage" && "patta/lease" && "anyOther" && "gair/marusi" && (
+                <div className="row ml-3 mb-3">
+                  <div className="col col-4 m-0 p-0">
+                    <label htmlFor="npnl">
+                      <h6>Rehan/Mortgage Remarks</h6>
+                    </label>
+                    <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.anyOtherRemark : null}
+                      // height={30} style={{ maxWidth: 200, marginRight: 5 }}
+                      className={classes.formLabel}
+                      disabled></Form.Control>
+                  </div>
+                </div>
+              )}
+            </Row>
+            {/* { landScheduleData?.encumburance === "patta/lease" &&
               <div className="row ml-3 mb-3">
               <div className="col col-4 m-0 p-0">
                 <label htmlFor="npnl">
@@ -1602,20 +1569,20 @@ const Developerinfo = (props) => {
                 <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.anyOtherRemark : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                      </div>
             </div>
-            }
-            <hr />
-            <h6 className="mx-3 mt-3">
-            (ii) Existing litigation, if any, concerning applied land including co-sharers and collaborator.
-
+            } */}
+            <hr className="mb-3" />
+            <Row className={classes.formLabel}>
+              <h6 >
+                (ii) Existing litigation, if any, concerning applied land including co-sharers and collaborator.
+              </h6>
               <div className="d-flex mt-2">
-               
                 <input type="radio" disabled value="Yes" checked={landScheduleData?.litigation === "Y" ? true : false} />
                 <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                 <input type="radio" disabled value="No" checked={landScheduleData?.litigation === "N" ? true : false} />
                 <label className="m-0 mx-2" for="No">No</label>
                 <ReportProblemIcon
                   style={{
-                    display: hideRemarks?"none":"block",
+                    display: hideRemarks ? "none" : "block",
                     color: fieldIconColors.existinglitigation
                   }}
                   onClick={() => {
@@ -1627,176 +1594,156 @@ const Developerinfo = (props) => {
                   }}
                 ></ReportProblemIcon>
               </div>
-            </h6>
-            <hr />
+            </Row>
 
-            {
-              landScheduleData?.litigation === "Y" &&
-              <div className="d-flex ml-3 mb-2">
-                <div className="px-2">
-                  {/* <label>
-                
-                    <h5>Remark</h5>
-                  </label>
-                  <div className="d-flex flex-row  align-items-center">
-                    <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.litigationRemark : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
-                  </div>
-                </div>
-                <div className="px-2" >
-                  <h6>Download Document</h6>
-                
-                  <div className="d-flex flex-row align-items-center my-1 ">
-
-                    <IconButton onClick={() => getDocShareholding(landScheduleData?.litigationDoc)}>
-                      <DownloadForOfflineIcon color="primary" className="mx-1" />
-                    </IconButton>
-                  </div> */}
-                    <h6 className="mx-3 mt-3">
-             Court orders, if any, affecting applied land   </h6>
-
-              <div className="d-flex mt-2">
-             <input type="radio" disabled value="Yes" checked={landScheduleData?.court === "Y" ? true : false} />
-                <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                <input type="radio" disabled value="No" checked={landScheduleData?.court === "N" ? true : false} />
-                <label className="m-0 mx-2" for="No">No</label>
-                <ReportProblemIcon
-                  style={{
-                    display: hideRemarks?"none":"block",
-                    color: fieldIconColors.courtOrders
-                  }}
-                  onClick={() => {
-                    setLabelValue("Court orders, if any, affecting applied land"),
-                      setOpennedModal("courtOrders")
-                    setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(landScheduleData?.court === "Y" ? "Yes" : landScheduleData?.court === "N" ? "No" : null);
-                  }}
-                ></ReportProblemIcon>
-              </div>
-            </div>
-              </div>
-
-            }
-
-
-          
-            {/* <h6 className="mx-3 mt-3">
-              (iii) Court orders, if any, affecting applied land&nbsp;&nbsp;
-
-              <div className="d-flex mt-2">
-            
-                <input type="radio" disabled value="Yes" checked={landScheduleData?.court === "Y" ? true : false} />
-                <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                <input type="radio" disabled value="No" checked={landScheduleData?.court === "N" ? true : false} />
-                <label className="m-0 mx-2" for="No">No</label>
-                <ReportProblemIcon
-                  style={{
-                    display: hideRemarks?"none":"block",
-                    color: fieldIconColors.courtOrders
-                  }}
-                  onClick={() => {
-                    setLabelValue("Court orders, if any, affecting applied land"),
-                      setOpennedModal("courtOrders")
-                    setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(landScheduleData?.court === "Y" ? "Yes" : landScheduleData?.court === "N" ? "No" : null);
-                  }}
-                ></ReportProblemIcon>
-              </div>
-            </h6> */}
-
-            {
-              landScheduleData?.court === "Y" &&
-              <div className="d-flex ml-3 mb-2">
-                <div className="px-2">
-                  <label>
-                   
-                    <h5>Remark/Case No.</h5>
-                  </label>
-                  <div className="d-flex flex-row  align-items-center">
-                    <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.courtyCaseNo : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
-                  </div>
-                </div>
-                <div className="px-2" >
-                  <h6>Download Document</h6>
-                  
-                  <div className="d-flex flex-row align-items-center my-1 ">
-                    <IconButton onClick={() => getDocShareholding(landScheduleData?.courtDoc)}>
-                      <DownloadForOfflineIcon color="primary" className="mx-1" />
-                    </IconButton>
-                  </div>
-                </div>
-              </div>
-
-            }
-
-            <hr />
-            <h6 className="mx-3 mt-3">
-          (iii) Any insolvency/liquidation proceedings against the Land Owing Company/Develping Company :
-
-              <div className="d-flex mt-2">
-            
-                <input type="radio" disabled value="Yes" checked={landScheduleData?.insolvency === "Y" ? true : false} />
-                <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                <input type="radio" disabled value="No" checked={landScheduleData?.insolvency === "N" ? true : false} />
-                <label className="m-0 mx-2" for="No">No</label>
-                <ReportProblemIcon
-                  style={{
-                    display: hideRemarks?"none":"block",
-                    color: fieldIconColors.anyInsolvency
-                  }}
-                  onClick={() => {
-                    setLabelValue("Any insolvency/liquidation proceedings against the land owner(s)/ collaborating developed"),
-                      setOpennedModal("anyInsolvency")
-                    setSmShow(true),
-                      console.log("modal open"),
-                      setFieldValue(landScheduleData !== null ? landScheduleData?.typeLand : null);
-                  }}
-                ></ReportProblemIcon>
-              </div>
-            </h6>
-
-            {
-              landScheduleData?.insolvency === "Y" &&
-              <div className="d-flex ml-3 mb-2">
-                <div className="px-2">
-                  <label>
-                  
-                    <h5>Remark</h5>
-                  </label>
-                  <div className="d-flex flex-row  align-items-center">
-                    <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.insolvencyRemark : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
-                  </div>
-                </div>
-                <div className="px-2" >
-                  <h6>Download Document</h6>
-                  {/* &nbsp;&nbsp; */}
-                  <div className="d-flex flex-row align-items-center my-1 ">
-                    <IconButton onClick={() => getDocShareholding(landScheduleData?.insolvencyDoc)}>
-                      <DownloadForOfflineIcon color="primary" className="mx-1" />
-                    </IconButton>
-                  </div>
-                </div>
-              </div>
-
-            }
-         
             <hr className="mb-3" />
+
+            <Row className={classes.formLabel}>
+              <Col md={4} xxl lg="12">
+                {
+                  landScheduleData?.litigation === "Y" && (
+
+                    <div >
+                      <h6 > Court orders, if any, affecting applied land   </h6>
+
+                      <input type="radio" disabled value="Yes" checked={landScheduleData?.court === "Y" ? true : false} />
+                      <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                      <input type="radio" disabled value="No" checked={landScheduleData?.court === "N" ? true : false} />
+                      <label className="m-0 mx-2" for="No">No</label>
+                      <ReportProblemIcon
+                        style={{
+                          display: hideRemarks ? "none" : "block",
+                          color: fieldIconColors.courtOrders
+                        }}
+                        onClick={() => {
+                          setLabelValue("Court orders, if any, affecting applied land"),
+                            setOpennedModal("courtOrders")
+                          setSmShow(true),
+                            console.log("modal open"),
+                            setFieldValue(landScheduleData?.court === "Y" ? "Yes" : landScheduleData?.court === "N" ? "No" : null);
+                        }}
+                      ></ReportProblemIcon>
+                    </div>
+                  )}
+              </Col>
+            </Row>
+
+
+            <Row className={classes.formLabel}>
+
+              {
+                landScheduleData?.court === "Y" && (
+                  <div className="row" >
+                    <Col className="ms-auto" md={4} xxl lg="4">
+                      <label>
+
+                        <h5>Remark/Case No.</h5>
+                      </label>
+                      <Form.Control
+                        placeholder={landScheduleData !== null ? landScheduleData?.courtyCaseNo : null}
+
+                        className={classes.formLabel}
+                        disabled>
+                      </Form.Control>
+                    </Col>
+                    <Col className="ms-auto" md={4} xxl lg="4">
+                      <h6>Download Document</h6>
+                      <IconButton onClick={() => getDocShareholding(landScheduleData?.courtDoc)}>
+                        <DownloadForOfflineIcon color="primary" className="mx-1" />
+                      </IconButton>
+
+                    </Col>
+                    <Col className="ms-auto" md={4} xxl lg="4">
+
+                    </Col>
+                  </div>
+
+                )}
+
+            </Row>
+
+
+            <hr className="mb-3" />
+
+            <Row className={classes.formLabel}>
+              <Col md={4} xxl lg="12">
+                <h6 >
+                  (iii) Any insolvency/liquidation proceedings against the Land Owing Company/Develping Company :
+                </h6>
+                <div className="d-flex mt-2">
+
+                  <input type="radio" disabled value="Yes" checked={landScheduleData?.insolvency === "Y" ? true : false} />
+                  <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                  <input type="radio" disabled value="No" checked={landScheduleData?.insolvency === "N" ? true : false} />
+                  <label className="m-0 mx-2" for="No">No</label>
+                  <ReportProblemIcon
+                    style={{
+                      display: hideRemarks ? "none" : "block",
+                      color: fieldIconColors.anyInsolvency
+                    }}
+                    onClick={() => {
+                      setLabelValue("Any insolvency/liquidation proceedings against the land owner(s)/ collaborating developed"),
+                        setOpennedModal("anyInsolvency")
+                      setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue(landScheduleData !== null ? landScheduleData?.typeLand : null);
+                    }}
+                  ></ReportProblemIcon>
+                </div>
+              </Col>
+            </Row>
+
+            <Row className={classes.formLabel}>
+              {
+                landScheduleData?.insolvency === "Y" && (
+                  <div className="row" >
+                    <Col className="ms-auto" md={4} xxl lg="4">
+                      <label>
+
+                        <h5>Remark</h5>
+                      </label>
+                      <Form.Control
+                        placeholder={landScheduleData !== null ? landScheduleData?.insolvencyRemark : null}
+
+                        className={classes.formLabel}
+                        disabled></Form.Control>
+
+                    </Col>
+                    <Col className="ms-auto" md={4} xxl lg="4">
+
+                      <h6>Download Document</h6>
+                      {/* &nbsp;&nbsp; */}
+
+                      <IconButton onClick={() => getDocShareholding(landScheduleData?.insolvencyDoc)}>
+                        <DownloadForOfflineIcon color="primary" className="mx-1" />
+                      </IconButton>
+                    </Col>
+                    <Col className="ms-auto" md={4} xxl lg="4">
+
+                    </Col>
+                  </div>
+
+                )}
+
+            </Row>
+
+            <hr className="mb-3" />
+            {/* <Row className={classes.formLabel}></Row> */}
             <h5 className="text-black ml-2 mb-2">3.Shajra Plan</h5>
             <div className="row mx-1">
               <div className="col col-4 p-1">
                 <h6>
-                  (a)&nbsp;As per applied land&nbsp;
+                  (a) As per applied land
 
                   <div className="d-flex flex-row align-items-center my-1 ">
-                    
+                    &nbsp;
                     <input type="radio" disabled value="Yes" checked={landScheduleData?.appliedLand === "Y" ? true : false} />
                     <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                     <input type="radio" disabled value="No" checked={landScheduleData?.appliedLand === "N" ? true : false} />
                     <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
-                        display: hideRemarks?"none":"block",
+                        display: hideRemarks ? "none" : "block",
                         color: fieldIconColors.asPerAppliedLand
                       }}
                       onClick={() => {
@@ -1815,7 +1762,7 @@ const Developerinfo = (props) => {
                   <div className="row ml-1 mr-2">
                     <div className="col  p-1" >
                       <h6>Download Document</h6>
-                  
+
                       <div className="d-flex flex-row align-items-center my-1 ">
                         <IconButton onClick={() => getDocShareholding(landScheduleData?.appliedLand)}>
                           <DownloadForOfflineIcon color="primary" className="mx-1" />
@@ -1832,31 +1779,34 @@ const Developerinfo = (props) => {
                 <h6 data-toggle="tooltip" data-placement="top" title="If any revenue rasta abuts to the applied site ?">
                   (b) Revenue rasta
                 </h6>
-               <div className="d-flex flex-row align-items-center my-1 ">
-               <input type="radio" disabled value="Yes" checked={landScheduleData?.revenueRasta === "Y" ? true : false} />
-              <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                <input type="radio" disabled value="No" checked={landScheduleData?.revenueRasta === "N" ? true : false} />
-                <label className="m-0 mx-2" for="No">No</label>
-                    <ReportProblemIcon
-                      style={{
-                        display: hideRemarks?"none":"block",
-                        color: fieldIconColors.revenueRasta
-                      }}
-                      onClick={() => {
-                        setLabelValue("Revenue rasta"),
-                          setOpennedModal("revenueRasta")
-                        setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(landScheduleData?.revenueRasta === "Y" ? "Yes" : landScheduleData?.revenueRasta === "N" ? "No" : null);
-                      }}
-                    ></ReportProblemIcon>
-                  </div>
-                 {landScheduleData?.revenueRasta === "Y" && (
+                <div className="d-flex flex-row align-items-center my-1 ">
+                  <input type="radio" disabled value="Yes" checked={landScheduleData?.revenueRasta === "Y" ? true : false} />
+                  <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                  <input type="radio" disabled value="No" checked={landScheduleData?.revenueRasta === "N" ? true : false} />
+                  <label className="m-0 mx-2" for="No">No</label>
+                  <ReportProblemIcon
+                    style={{
+                      display: hideRemarks ? "none" : "block",
+                      color: fieldIconColors.revenueRasta
+                    }}
+                    onClick={() => {
+                      setLabelValue("Revenue rasta"),
+                        setOpennedModal("revenueRasta")
+                      setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue(landScheduleData?.revenueRasta === "Y" ? "Yes" : landScheduleData?.revenueRasta === "N" ? "No" : null);
+                    }}
+                  ></ReportProblemIcon>
+                </div>
+                {landScheduleData?.revenueRasta === "Y" && (
                   <div className="row ml-1 mr-2">
                     <div className="col col p-1">
                       <label> Width of revenue rasta </label>
-       <Form.Control placeholder={landScheduleData?.revenueRastaWidth}height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
-        
+                      <Form.Control placeholder={landScheduleData?.revenueRastaWidth}
+                        //  height={30} style={{ maxWidth: 200, marginRight: 5 }}
+                        className={classes.formLabel}
+                        disabled></Form.Control>
+
                     </div>
                   </div>
                 )}
@@ -1864,30 +1814,30 @@ const Developerinfo = (props) => {
 
               <div className="col col-4 p-1">
                 <h6 data-toggle="tooltip" data-placement="top" title="Watercourse running along boundary through the applied site ?">
-                  (c) Watercourse running
-                  </h6>
+                  (c) Watercourse
+                </h6>
 
-                  <div className="d-flex flex-row align-items-center my-1 ">
-                   
-                    <input type="radio" disabled value="Yes" checked={landScheduleData?.waterCourse === "Y" ? true : false} />
-                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" disabled value="No" checked={landScheduleData?.waterCourse === "N" ? true : false} />
-                    <label className="m-0 mx-2" for="No">No</label>
-                    <ReportProblemIcon
-                      style={{
-                        display: hideRemarks?"none":"block",
-                        color: fieldIconColors.waterCourseRunning
-                      }}
-                      onClick={() => {
-                        setLabelValue("Watercourse running"),
-                          setOpennedModal("waterCourseRunning")
-                        setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(landScheduleData?.waterCourse === "Y" ? "Yes" : landScheduleData?.waterCourse === "N" ? "No" : null);
-                      }}
-                    ></ReportProblemIcon>
-                  </div>
-                
+                <div className="d-flex flex-row align-items-center my-1 ">
+
+                  <input type="radio" disabled value="Yes" checked={landScheduleData?.waterCourse === "Y" ? true : false} />
+                  <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                  <input type="radio" disabled value="No" checked={landScheduleData?.waterCourse === "N" ? true : false} />
+                  <label className="m-0 mx-2" for="No">No</label>
+                  <ReportProblemIcon
+                    style={{
+                      display: hideRemarks ? "none" : "block",
+                      color: fieldIconColors.waterCourseRunning
+                    }}
+                    onClick={() => {
+                      setLabelValue("Watercourse running"),
+                        setOpennedModal("waterCourseRunning")
+                      setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue(landScheduleData?.waterCourse === "Y" ? "Yes" : landScheduleData?.waterCourse === "N" ? "No" : null);
+                    }}
+                  ></ReportProblemIcon>
+                </div>
+
 
                 {landScheduleData?.waterCourse === "Y" && (
                   <div className="row ml-1 mr-2">
@@ -1901,40 +1851,43 @@ const Developerinfo = (props) => {
               <div className="col col-4 p-1">
                 <h6>
                   (d)&nbsp;Whether in Compact Block
-                  </h6>
-                  <div className="d-flex flex-row align-items-center my-1 ">
-                    
-                    <input type="radio" disabled value="Yes" checked={landScheduleData?.compactBlock === "Y" ? true : false} />
-                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" disabled value="No" checked={landScheduleData?.compactBlock === "N" ? true : false} />
-                    <label className="m-0 mx-2" for="No">No</label>
-                    <ReportProblemIcon
-                      style={{
-                        display: hideRemarks?"none":"block",
-                        color: fieldIconColors.whetherInCompactBlock
-                      }}
-                      onClick={() => {
-                        setLabelValue("Whether in Compact Block"),
-                          setOpennedModal("whetherInCompactBlock")
-                        setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(landScheduleData?.compactBlock === "Y" ? "Yes" : landScheduleData?.compactBlock === "N" ? "No" : null);
-                      }}
-                    ></ReportProblemIcon>
-                  </div>
-               
+                </h6>
+                <div className="d-flex flex-row align-items-center my-1 ">
+
+                  <input type="radio" disabled value="Yes" checked={landScheduleData?.compactBlock === "Y" ? true : false} />
+                  <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                  <input type="radio" disabled value="No" checked={landScheduleData?.compactBlock === "N" ? true : false} />
+                  <label className="m-0 mx-2" for="No">No</label>
+                  <ReportProblemIcon
+                    style={{
+                      display: hideRemarks ? "none" : "block",
+                      color: fieldIconColors.whetherInCompactBlock
+                    }}
+                    onClick={() => {
+                      setLabelValue("Whether in Compact Block"),
+                        setOpennedModal("whetherInCompactBlock")
+                      setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue(landScheduleData?.compactBlock === "Y" ? "Yes" : landScheduleData?.compactBlock === "N" ? "No" : null);
+                    }}
+                  ></ReportProblemIcon>
+                </div>
+
 
                 {landScheduleData?.compactBlock === "Y" && (
                   <div className="row ml-1 mr-2">
                     <div className="col col p-1">
                       <label> Remark </label>
-    
-                      <Form.Control placeholder={landScheduleData?.compactBlockRemark} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+
+                      <Form.Control placeholder={landScheduleData?.compactBlockRemark}
+                        // height={30} style={{ maxWidth: 200, marginRight: 5 }} 
+                        className={classes.formLabel}
+                        disabled></Form.Control>
                     </div>
                   </div>
                 )}
 
-               
+
               </div>
 
               {/* <br></br> */}
@@ -1942,33 +1895,36 @@ const Developerinfo = (props) => {
               <div className="col col-4 p-1">
                 <h6 data-toggle="tooltip" data-placement="top" title="If any other owners' land is sandwiched within applied land.">
                   (e) Whether Others Land fall within Applied Land
-                  </h6>
-                  <div className="d-flex flex-row align-items-center my-1 ">
-                    <input type="radio" disabled value="Yes" checked={landScheduleData?.landSandwiched === "Y" ? true : false} />
-                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" disabled value="No" checked={landScheduleData?.landSandwiched === "N" ? true : false} />
-                    <label className="m-0 mx-2" for="No">No</label>
-                    <ReportProblemIcon
-                      style={{
-                        display: hideRemarks?"none":"block",
-                        color: fieldIconColors.landSandwiche
-                      }}
-                      onClick={() => {
-                        setLabelValue("Land Sandwiched"),
-                          setOpennedModal("landSandwiche")
-                        setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(landScheduleData?.landSandwiched === "Y" ? "Yes" : landScheduleData?.landSandwiched === "N" ? "No" : null);
-                      }}
-                    ></ReportProblemIcon>
-                  </div>
-               
+                </h6>
+                <div className="d-flex flex-row align-items-center my-1 ">
+                  <input type="radio" disabled value="Yes" checked={landScheduleData?.landSandwiched === "Y" ? true : false} />
+                  <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                  <input type="radio" disabled value="No" checked={landScheduleData?.landSandwiched === "N" ? true : false} />
+                  <label className="m-0 mx-2" for="No">No</label>
+                  <ReportProblemIcon
+                    style={{
+                      display: hideRemarks ? "none" : "block",
+                      color: fieldIconColors.landSandwiche
+                    }}
+                    onClick={() => {
+                      setLabelValue("Land Sandwiched"),
+                        setOpennedModal("landSandwiche")
+                      setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue(landScheduleData?.landSandwiched === "Y" ? "Yes" : landScheduleData?.landSandwiched === "N" ? "No" : null);
+                    }}
+                  ></ReportProblemIcon>
+                </div>
+
                 {landScheduleData?.landSandwiched === "Y" && (
                   <div className="row ml-1 mr-2">
                     <div className="col col p-1">
                       <label> Remark </label>
-  
-                      <Form.Control placeholder={landScheduleData?.landSandwichedRemark} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+
+                      <Form.Control placeholder={landScheduleData?.landSandwichedRemark}
+                        // height={30} style={{ maxWidth: 200, marginRight: 5 }} 
+                        className={classes.formLabel}
+                        disabled></Form.Control>
                     </div>
                   </div>
                 )}
@@ -1977,436 +1933,785 @@ const Developerinfo = (props) => {
               <div className="col col-4 p-1">
                 <h6>
                   (f) Acquisition status
-                  </h6>
-                  <div className="d-flex flex-row align-items-center my-1 ">
-                    <input type="radio" disabled value="Yes" checked={landScheduleData?.acquistion === "Y" ? true : false} />
-                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" disabled value="No" checked={landScheduleData?.acquistion === "N" ? true : false} />
-                    <label className="m-0 mx-2" for="No">No</label>
-                    <ReportProblemIcon
-                      style={{
-                        display: hideRemarks?"none":"block",
-                        color: fieldIconColors.acquisitionStatus
-                      }}
-                      onClick={() => {
-                        setLabelValue("Acquisition status"),
-                          setOpennedModal("acquisitionStatus")
-                        setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(landScheduleData?.acquistion === "Y" ? "Yes" : landScheduleData?.acquistion === "N" ? "No" : null);
-                      }}
-                    ></ReportProblemIcon>
-                  </div>
-              </div>
-            </div>
-            {/* <div className="col col-4 p-1"> */}
-              {landScheduleData?.acquistion === "Y" && (
-                <div>
-                    <div className="col col-4 p-1">
-                <div>
-                  <label className="m-0">Date of section 4 notification </label>
-                  <div className="d-flex flex-row align-items-center my-1 ">
-                    <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.sectionFour} ></Form.Control>
-                    <ReportProblemIcon
-                      style={{
-                        display: hideRemarks?"none":"block",
-                        color: fieldIconColors.dateOfSection4Notification
-                      }}
-                      onClick={() => {
-                        setLabelValue("Date of section 4 notification"),
-                          setOpennedModal("dateOfSection4Notification")
-                        setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(landScheduleData !== null ? landScheduleData?.sectionFour : null);
-                      }}
-                    ></ReportProblemIcon>
-                  </div>
-                
+                </h6>
+                <div className="d-flex flex-row align-items-center my-1 ">
+                  <input type="radio" disabled value="Yes" checked={landScheduleData?.acquistion === "Y" ? true : false} />
+                  <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                  <input type="radio" disabled value="No" checked={landScheduleData?.acquistion === "N" ? true : false} />
+                  <label className="m-0 mx-2" for="No">No</label>
+                  <ReportProblemIcon
+                    style={{
+                      display: hideRemarks ? "none" : "block",
+                      color: fieldIconColors.acquisitionStatus
+                    }}
+                    onClick={() => {
+                      setLabelValue("Acquisition status"),
+                        setOpennedModal("acquisitionStatus")
+                      setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue(landScheduleData?.acquistion === "Y" ? "Yes" : landScheduleData?.acquistion === "N" ? "No" : null);
+                    }}
+                  ></ReportProblemIcon>
                 </div>
-              </div>
-              <div className="col col-4 p-1">
-                <div>
-                  <label className="m-0">Date of section 6 notification</label>
-                  <div className="d-flex flex-row align-items-center my-1 ">
-                    <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.sectionSix} ></Form.Control>
-                    <ReportProblemIcon
-                      style={{
-                        display: hideRemarks?"none":"block",
-                        color: fieldIconColors.dateOfSection6Notification
-                      }}
-                      onClick={() => {
-                        setLabelValue("Date of section 6 notification"),
-                          setOpennedModal("dateOfSection6Notification")
-                        setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(landScheduleData !== null ? landScheduleData?.sectionSix : null);
-                      }}
-                    ></ReportProblemIcon>
-                  </div>
-                  {/* <Form.Control style={{ maxWidth: 200, marginTop: 10 }} disabled></Form.Control> */}
-                </div>
-              </div>
-                  <div className="col col-4 p-1">
-                    <div className="col col p-1">
-                      <label> Date of Award </label>
-   
-                      <Form.Control placeholder={landScheduleData?.acquistionRemark} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                {landScheduleData?.acquistion === "Y" && (
+                <div >
+                <div className="row mx-1">
+                  <div className="col col-12">
+                    <div>
+                      <label className="m-0">Date of section 4 notification </label>
+                      <div className="d-flex flex-row align-items-center my-1 ">
+                        <Form.Control
+                          // height={30} style={{ maxWidth: 200, marginRight: 5 }}
+                          className={classes.formLabel}
+                          disabled placeholder={landScheduleData?.sectionFour} ></Form.Control>
+                        <ReportProblemIcon
+                          style={{
+                            display: hideRemarks ? "none" : "block",
+                            color: fieldIconColors.dateOfSection4Notification
+                          }}
+                          onClick={() => {
+                            setLabelValue("Date of section 4 notification"),
+                              setOpennedModal("dateOfSection4Notification")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(landScheduleData !== null ? landScheduleData?.sectionFour : null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
+
                     </div>
+                  </div>
                   </div>
                   <div className="row mx-1">
-              <div className="col col-12 p-1">
-                <h6 data-toggle="tooltip" data-placement="top" title="Whether details/orders of release/exclusion of land uploaded.">
-                (g)  Whether Land Released/Excluded from aqusition proceeding.
-                </h6>
-                  {/* <InfoIcon style={{color:"blue"}}/>  */}
-                  <div className="d-flex flex-row align-items-center my-1 ">
-                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
-                    <input type="radio" disabled value="Yes" checked={landScheduleData?.orderUpload === "Y" ? true : false} />
-                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" disabled value="No" checked={landScheduleData?.orderUpload === "N" ? true : false} />
-                    <label className="m-0 mx-2" for="No">No</label>
-                    <ReportProblemIcon
-                      style={{
-                        display: hideRemarks?"none":"block",
-                        color: fieldIconColors.ordersUpload
-                      }}
-                      onClick={() => {
-                        setLabelValue("Orders Upload"),
-                          setOpennedModal("ordersUpload")
-                        setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
-                      }}
-                    ></ReportProblemIcon>
-                  </div>
-             
-              
-                {landScheduleData?.orderUpload === "Y" && (
-                  <div className="row m-0 mt-2">
-                    <div className="col col-4 p-1">
-                      <h6 data-toggle="tooltip" data-placement="top" title="Whether details/orders of release/exclusion of land uploaded.">
-                        (h) Whether land compensation
-                        </h6>
-                        {/* <InfoIcon style={{color:"blue"}}/>  */}
-                        <div className="d-flex flex-row align-items-center my-1 ">
-                          {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
-                          <input type="radio" disabled value="Yes" checked={landScheduleData?.landCompensation === "Y" ? true : false} />
-                          <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                          <input type="radio" disabled value="No" checked={landScheduleData?.landCompensation === "N" ? true : false} />
-                          <label className="m-0 mx-2" for="No">No</label>
-
-                          <ReportProblemIcon
-                            style={{
-                              display: hideRemarks?"none":"block",
-                              color: fieldIconColors.landCompensationReceived
-                            }}
-                            onClick={() => {
-                              setLabelValue("Whether land compensation received"),
-                                setOpennedModal("landCompensationReceived")
-                              setSmShow(true),
-                                console.log("modal open"),
-                                setFieldValue(landScheduleData?.compensationReceived === "Y" ? "Yes" : landScheduleData?.compensationReceived === "N" ? "No" : null);
-                            }}
-                          ></ReportProblemIcon>
-
-                        </div>
-                     
-                    </div>
-                    <div className="col col-4 p-1">
-                      <div className="form-group">
-                        <label htmlFor="releasestatus">
-                          <h6 style={{ fontWeight: "initial" }} data-toggle="tooltip" data-placement="top" title="Status of release">Status of release</h6>
-                        </label>
-
-                        <div className="d-flex flex-row align-items-center my-1 ">
-                          <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.releaseStatus}></Form.Control>
-
-                          <ReportProblemIcon
-                            style={{
-                              display: hideRemarks?"none":"block",
-                              color: fieldIconColors.statusOfRelease
-                            }}
-                            onClick={() => {
-                              setLabelValue("Status of release"),
-                                setOpennedModal("statusOfRelease")
-                              setSmShow(true),
-                                console.log("modal open"),
-                                setFieldValue(landScheduleData?.statusOfRelease);
-                            }}
-                          ></ReportProblemIcon>
-
-                        </div>
+                  <div className="col col-12">
+                    <div>
+                      <label className="m-0">Date of section 6 notification</label>
+                      <div className="d-flex flex-row align-items-center my-1 ">
+                        <Form.Control
+                          // height={30} style={{ maxWidth: 200, marginRight: 5 }} 
+                          className={classes.formLabel}
+                          disabled placeholder={landScheduleData?.sectionSix} ></Form.Control>
+                        <ReportProblemIcon
+                          style={{
+                            display: hideRemarks ? "none" : "block",
+                            color: fieldIconColors.dateOfSection6Notification
+                          }}
+                          onClick={() => {
+                            setLabelValue("Date of section 6 notification"),
+                              setOpennedModal("dateOfSection6Notification")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(landScheduleData !== null ? landScheduleData?.sectionSix : null);
+                          }}
+                        ></ReportProblemIcon>
                       </div>
-                    </div>
-                    <div className="col col-4 p-1">
-                      <div className="form-group ">
-                        <label htmlFor="awarddate">
-                          <h6 style={{ fontWeight: "initial" }} data-toggle="tooltip" data-placement="top" title="Date of Award">Date of Award</h6>
-                        </label>
-                        <div className="d-flex flex-row align-items-center my-1 ">
-                          <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.awardDate}></Form.Control>
-                          <ReportProblemIcon
-                            style={{
-                              display: hideRemarks?"none":"block",
-                              color: fieldIconColors.dateOfAward
-                            }}
-                            onClick={() => {
-                              setLabelValue("Date of Award"),
-                                setOpennedModal("dateOfAward")
-                              setSmShow(true),
-                                console.log("modal open"),
-                                setFieldValue(landScheduleData?.dateOfAward);
-                            }}
-                          ></ReportProblemIcon>
-                        </div>
-                        {/* comment by me */}
-                      </div>
-                    </div>
-                    <div className="col col-4 p-1">
-                      <div className="form-group ">
-                        <label htmlFor="releasedate">
-                          <h6 style={{ fontWeight: "initial" }} data-toggle="tooltip" data-placement="top" title="Date of Release">Date of Release</h6>{" "}
-                        </label>
-
-                        <div className="d-flex flex-row align-items-center my-1 ">
-                          <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.releaseDate}></Form.Control>
-                          <ReportProblemIcon
-                            style={{
-                              display: hideRemarks?"none":"block",
-                              color: fieldIconColors.dateOfRelease
-                            }}
-                            onClick={() => {
-                              setLabelValue("Date of Release"),
-                                setOpennedModal("dateOfRelease")
-                              setSmShow(true),
-                                console.log("modal open"),
-                                setFieldValue(landScheduleData?.dateOfRelease);
-                            }}
-                          ></ReportProblemIcon>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col col-4 p-1">
-                      <div className="form-group ">
-                        <label htmlFor="sitedetails">
-                          <h6 style={{ fontWeight: "initial" }} data-toggle="tooltip" data-placement="top" title="Site Details">Site Details</h6>
-                        </label>
-                        <div className="d-flex flex-row align-items-center my-1 ">
-                          <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.siteDetail}></Form.Control>
-                          <ReportProblemIcon
-                            style={{
-                              display: hideRemarks?"none":"block",
-                              color: fieldIconColors.siteDetails
-                            }}
-                            onClick={() => {
-                              setLabelValue("Site Details"),
-                                setOpennedModal("siteDetails")
-                              setSmShow(true),
-                                console.log("modal open"),
-                                setFieldValue(landScheduleData?.siteDetails);
-                            }}
-                          ></ReportProblemIcon>
-                        </div>
-
-
-                        {/* comment by me */}
-                      </div>
+                      {/* <Form.Control style={{ maxWidth: 200, marginTop: 10 }} disabled></Form.Control> */}
                     </div>
                   </div>
-                )}
+                  </div>
+                  </div>
+              )}
+
               </div>
+             
+
             </div>
+
+            {landScheduleData?.acquistion === "Y" && (
+              <div >
+                <div className="row mx-1">
+                  <div className="col col-12 p-1">
+                    <h6 data-toggle="tooltip" data-placement="top" title="Whether details/orders of release/exclusion of land uploaded.">
+                      (g)  Whether Land Released/Excluded from aqusition proceeding.
+                    </h6>
+                    {/* <InfoIcon style={{color:"blue"}}/>  */}
+                    <div className="d-flex flex-row align-items-center my-1 ">
+
+                      <input type="radio" disabled value="Yes" checked={landScheduleData?.orderUpload === "Y" ? true : false} />
+                      <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                      <input type="radio" disabled value="No" checked={landScheduleData?.orderUpload === "N" ? true : false} />
+                      <label className="m-0 mx-2" for="No">No</label>
+                      <ReportProblemIcon
+                        style={{
+                          display: hideRemarks ? "none" : "block",
+                          color: fieldIconColors.ordersUpload
+                        }}
+                        onClick={() => {
+                          setLabelValue("Orders Upload"),
+                            setOpennedModal("ordersUpload")
+                          setSmShow(true),
+                            console.log("modal open"),
+                            setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                        }}
+                      ></ReportProblemIcon>
+                    </div>
+
+<br></br>
+
+                    {landScheduleData?.orderUpload === "Y" && (
+                      <div className="row m-0 mt-2">
+                        <div className="col col-4 p-1">
+                          <h6 data-toggle="tooltip" data-placement="top" title="Whether details/orders of release/exclusion of land uploaded.">
+                            Whether land compensation
+                          </h6>
+                          {/* <InfoIcon style={{color:"blue"}}/>  */}
+                          <div className="d-flex flex-row align-items-center my-1 ">
+                            {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                            <input type="radio" disabled value="Yes" checked={landScheduleData?.landCompensation === "Y" ? true : false} />
+                            <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                            <input type="radio" disabled value="No" checked={landScheduleData?.landCompensation === "N" ? true : false} />
+                            <label className="m-0 mx-2" for="No">No</label>
+
+                            <ReportProblemIcon
+                              style={{
+                                display: hideRemarks ? "none" : "block",
+                                color: fieldIconColors.landCompensationReceived
+                              }}
+                              onClick={() => {
+                                setLabelValue("Whether land compensation received"),
+                                  setOpennedModal("landCompensationReceived")
+                                setSmShow(true),
+                                  console.log("modal open"),
+                                  setFieldValue(landScheduleData?.compensationReceived === "Y" ? "Yes" : landScheduleData?.compensationReceived === "N" ? "No" : null);
+                              }}
+                            ></ReportProblemIcon>
+
+                          </div>
+
+                        </div>
+                        <div className="col col-4 p-1">
+                          <div className="form-group">
+                            <label htmlFor="releasestatus">
+                              <h6 style={{ fontWeight: "initial" }} data-toggle="tooltip" data-placement="top" title="Status of release" >Status of release</h6>
+                            </label>
+
+                            <div className="d-flex flex-row align-items-center my-1 ">
+                              <Form.Control
+                                className={classes.formLabel}
+                                disabled
+                                placeholder={landScheduleData?.releaseStatus}
+                              ></Form.Control>
+
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks ? "none" : "block",
+                                  color: fieldIconColors.statusOfRelease
+                                }}
+                                onClick={() => {
+                                  setLabelValue("Status of release"),
+                                    setOpennedModal("statusOfRelease")
+                                  setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(landScheduleData?.statusOfRelease);
+                                }}
+                              ></ReportProblemIcon>
+
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col col-4 p-1">
+                          <div className="form-group ">
+                            <label htmlFor="awarddate">
+                              <h6 style={{ fontWeight: "initial" }} data-toggle="tooltip" data-placement="top" title="Date of Award">Date of Award</h6>
+                            </label>
+                            <div className="d-flex flex-row align-items-center my-1 ">
+                              <Form.Control
+
+                                className={classes.formLabel}
+                                disabled placeholder={landScheduleData?.awardDate}></Form.Control>
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks ? "none" : "block",
+                                  color: fieldIconColors.dateOfAward
+                                }}
+                                onClick={() => {
+                                  setLabelValue("Date of Award"),
+                                    setOpennedModal("dateOfAward")
+                                  setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(landScheduleData?.dateOfAward);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
+                            {/* comment by me */}
+                          </div>
+                        </div>
+                        <div className="col col-4 p-1">
+                          <div className="form-group ">
+                            <label htmlFor="releasedate">
+                              <h6 style={{ fontWeight: "initial" }} data-toggle="tooltip" data-placement="top" title="Date of Release">Date of Release</h6>{" "}
+                            </label>
+
+                            <div className="d-flex flex-row align-items-center my-1 ">
+                              <Form.Control
+                                // height={30} style={{ maxWidth: 200, marginRight: 5 }} 
+                                className={classes.formLabel}
+                                disabled placeholder={landScheduleData?.releaseDate}></Form.Control>
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks ? "none" : "block",
+                                  color: fieldIconColors.dateOfRelease
+                                }}
+                                onClick={() => {
+                                  setLabelValue("Date of Release"),
+                                    setOpennedModal("dateOfRelease")
+                                  setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(landScheduleData?.dateOfRelease);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col col-4 p-1">
+                          <div className="form-group ">
+                            <label htmlFor="sitedetails">
+                              <h6 style={{ fontWeight: "initial" }} data-toggle="tooltip" data-placement="top" title="Site Details">Site Details</h6>
+                            </label>
+                            <div className="d-flex flex-row align-items-center my-1 ">
+                              <Form.Control
+                                // height={30} style={{ maxWidth: 200, marginRight: 5 }} 
+                                className={classes.formLabel}
+                                disabled placeholder={landScheduleData?.siteDetail}></Form.Control>
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks ? "none" : "block",
+                                  color: fieldIconColors.siteDetails
+                                }}
+                                onClick={() => {
+                                  setLabelValue("Site Details"),
+                                    setOpennedModal("siteDetails")
+                                  setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(landScheduleData?.siteDetails);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
+
+
+                            {/* comment by me */}
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                )}
-        
+                </div>
+              </div>
+            )}
+
             <div className="row mx-1">
               <div className="col col-12 p-1">
-                <h6 
+                <h6
                 // data-toggle="tooltip" data-placement="top" title="Whether details/orders of release/exclusion of land uploaded."
                 >
-                (h)  Details of existing approach as per policy dated 20-10-20.
-                   </h6>
-                  <div className="d-flex flex-row align-items-center my-1 ">
-                  <input type="radio" disabled value="Yes" checked={landScheduleData?.orderUpload === "Y" ? true : false} />
-                    <label className="m-0  mx-2" for="Yes">Category-I approach</label>&nbsp;&nbsp;
-                    <input type="radio" disabled value="No" checked={landScheduleData?.orderUpload === "N" ? true : false} />
-                    <label className="m-0 mx-2" for="No">Category-II approach</label>
-                    <ReportProblemIcon
-                      style={{
-                        display: hideRemarks?"none":"block",
-                        color: fieldIconColors.ordersUpload
-                      }}
-                      onClick={() => {
-                        setLabelValue("Orders Upload"),
-                          setOpennedModal("ordersUpload")
-                        setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
-                      }}
-                    ></ReportProblemIcon>
+                  (h)  Details of existing approach as per policy dated 20-10-20.
+                </h6>
+                <div className="d-flex flex-row align-items-center my-1 ">
+                  <input type="radio" disabled value="Yes" checked={landScheduleData?.siteApproachable === "Y" ? true : false} />
+                  <label className="m-0  mx-2" for="Yes">Category-I approach</label>&nbsp;&nbsp;
+                  <input type="radio" disabled value="No" checked={landScheduleData?.siteApproachable === "N" ? true : false} />
+                  <label className="m-0 mx-2" for="No">Category-II approach</label>
+                  <ReportProblemIcon
+                    style={{
+                      display: hideRemarks ? "none" : "block",
+                      color: fieldIconColors.ordersUpload
+                    }}
+                    onClick={() => {
+                      setLabelValue("Orders Upload"),
+                        setOpennedModal("ordersUpload")
+                      setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                    }}
+                  ></ReportProblemIcon>
+                </div>
+                {landScheduleData?.siteApproachable === "Y" && (
+                  <div className="my-2 mx-2">
+                    <h6>(a)  Approach available from minimum 4 karam (22 ft) wide revenue rasta</h6>
+                    <div className="d-flex flex-row align-items-center my-1 ">
+                      &nbsp;&nbsp;
+                      <input type="radio" disabled value="Yes" checked={landScheduleData?.minimumApproachFour === "Y" ? true : false} />
+                      <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                      <input type="radio" disabled value="No" checked={landScheduleData?.minimumApproachFour === "N" ? true : false} />
+                      <label className="m-0 mx-2" for="No">No</label>
+                      <ReportProblemIcon
+                        style={{
+                          display: hideRemarks ? "none" : "block",
+                          color: fieldIconColors.ordersUpload
+                        }}
+                        onClick={() => {
+                          setLabelValue("Orders Upload"),
+                            setOpennedModal("ordersUpload")
+                          setSmShow(true),
+                            console.log("modal open"),
+                            setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                        }}
+                      ></ReportProblemIcon>
+                    </div>
+
+                    <h6>(b)  Approach available from minimum 11 feet wide revenue rasta and applied site abuts acquired alignment of the sector road and there is no stay regarding construction on the land falling under the abutting sector road</h6>
+                    <div className="d-flex flex-row align-items-center my-1 ">
+                      &nbsp;&nbsp;
+                      <input type="radio" disabled value="Yes" checked={landScheduleData?.minimumApproachEleven === "Y" ? true : false} />
+                      <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                      <input type="radio" disabled value="No" checked={landScheduleData?.minimumApproachEleven === "N" ? true : false} />
+                      <label className="m-0 mx-2" for="No">No</label>
+                      <ReportProblemIcon
+                        style={{
+                          display: hideRemarks ? "none" : "block",
+                          color: fieldIconColors.ordersUpload
+                        }}
+                        onClick={() => {
+                          setLabelValue("Orders Upload"),
+                            setOpennedModal("ordersUpload")
+                          setSmShow(true),
+                            console.log("modal open"),
+                            setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                        }}
+                      ></ReportProblemIcon>
+                    </div>
+
+                    <h6>(c)  Applied site abouts already constructed sector road or internal circulation road of approved sectoral plan (of min. 18m/24m width as the case may be) provided its entire stretch required for approach is licenced and is further leading upto atleast 4 karam wide revenue rasta.</h6>
+                    <div className="d-flex flex-row align-items-center my-1 ">
+                      &nbsp;&nbsp;
+                      <input type="radio" disabled value="Yes" checked={landScheduleData?.alreadyConstructedSector === "Y" ? true : false} />
+                      <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                      <input type="radio" disabled value="No" checked={landScheduleData?.alreadyConstructedSector === "N" ? true : false} />
+                      <label className="m-0 mx-2" for="No">No</label>
+                      <ReportProblemIcon
+                        style={{
+                          display: hideRemarks ? "none" : "block",
+                          color: fieldIconColors.ordersUpload
+                        }}
+                        onClick={() => {
+                          setLabelValue("Orders Upload"),
+                            setOpennedModal("ordersUpload")
+                          setSmShow(true),
+                            console.log("modal open"),
+                            setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                        }}
+                      ></ReportProblemIcon>
+                    </div>
+
+                    <h6>(d)  Applied land is accessible from a minimum 4 karam wide rasta through adjoining own land of the applicant (but not applied for licence).</h6>
+                    <div className="d-flex flex-row align-items-center my-1 ">
+                      &nbsp;&nbsp;
+                      <input type="radio" disabled value="Yes" checked={landScheduleData?.adjoiningOwnLand === "Y" ? true : false} />
+                      <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                      <input type="radio" disabled value="No" checked={landScheduleData?.adjoiningOwnLand === "N" ? true : false} />
+                      <label className="m-0 mx-2" for="No">No</label>
+                      <ReportProblemIcon
+                        style={{
+                          display: hideRemarks ? "none" : "block",
+                          color: fieldIconColors.ordersUpload
+                        }}
+                        onClick={() => {
+                          setLabelValue("Orders Upload"),
+                            setOpennedModal("ordersUpload")
+                          setSmShow(true),
+                            console.log("modal open"),
+                            setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                        }}
+                      ></ReportProblemIcon>
+                    </div>
+
+                    {landScheduleData?.adjoiningOwnLand === "Y" && (
+                      <div className="my-2 mx-2">
+                        <h6>(d1)  If applicable, whether the applicant has donated at least 4 karam wide strip from its adjoining own land in favour of the Gram Panchayat/Municipality, in order to connect the applied site to existing 4 karam rasta?</h6>
+                        <div className="d-flex flex-row align-items-center my-1 ">
+                          &nbsp;&nbsp;
+                          <input type="radio" disabled value="Yes" checked={landScheduleData?.applicantHasDonated === "Y" ? true : false} />
+                          <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                          <input type="radio" disabled value="No" checked={landScheduleData?.applicantHasDonated === "N" ? true : false} />
+                          <label className="m-0 mx-2" for="No">NO</label>
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks ? "none" : "block",
+                              color: fieldIconColors.ordersUpload
+                            }}
+                            onClick={() => {
+                              setLabelValue("Orders Upload"),
+                                setOpennedModal("ordersUpload")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                        {landScheduleData?.applicantHasDonated === "Y" && (
+                          <div className="col col-3 p-1">
+
+                            <h6>Upload copy of Gift Deed/ Hibbanama</h6>
+                            <div className="d-flex flex-row align-items-center my-1 ">
+                              &nbsp;&nbsp;
+                              <IconButton onClick={() => getDocShareholding(landScheduleData?.giftDeedHibbanama)}>
+                                <DownloadForOfflineIcon color="primary" className="mx-1" />
+                              </IconButton>
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks ? "none" : "block",
+                                  color: fieldIconColors.copyOfShajraPlan
+                                }}
+                                onClick={() => {
+                                  setLabelValue("Copy of Shajra Plan"),
+                                    setOpennedModal("copyOfShajraPlan")
+                                  setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(landScheduleData !== null ? landScheduleData?.copyOfShajraPlan : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    <h6>(e)  Applied land is accessible from a minimum 4 karam wide rasta through adjoining other’s land</h6>
+                    <div className="d-flex flex-row align-items-center my-1 ">
+                      &nbsp;&nbsp;
+                      <input type="radio" disabled value="Yes" checked={landScheduleData?.adjoiningOthersLand === "Y" ? true : false} />
+                      <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                      <input type="radio" disabled value="No" checked={landScheduleData?.adjoiningOthersLand === "N" ? true : false} />
+                      <label className="m-0 mx-2" for="No">NO</label>
+                      <ReportProblemIcon
+                        style={{
+                          display: hideRemarks ? "none" : "block",
+                          color: fieldIconColors.ordersUpload
+                        }}
+                        onClick={() => {
+                          setLabelValue("Orders Upload"),
+                            setOpennedModal("ordersUpload")
+                          setSmShow(true),
+                            console.log("modal open"),
+                            setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                        }}
+                      ></ReportProblemIcon>
+                    </div>
+                    {landScheduleData?.adjoiningOthersLand === "Y" && (
+                      <div>
+                        <h6>(e1)  whether the land-owner of the adjoining land has donated at least 4 karam wide strip of land to the Gram Panchayat/Municipality, in a manner that the applied site gets connected to existing public rasta of atleast 4 karam width?</h6>
+                        <div className="d-flex flex-row align-items-center my-1 ">
+                          &nbsp;&nbsp;
+                          <input type="radio" disabled value="Yes" checked={landScheduleData?.landOwnerDonated === "Y" ? true : false} />
+                          <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                          <input type="radio" disabled value="No" checked={landScheduleData?.landOwnerDonated === "N" ? true : false} />
+                          <label className="m-0 mx-2" for="No">NO</label>
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks ? "none" : "block",
+                              color: fieldIconColors.ordersUpload
+                            }}
+                            onClick={() => {
+                              setLabelValue("Orders Upload"),
+                                setOpennedModal("ordersUpload")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </div>
+                    )}
+                    {landScheduleData?.landOwnerDonated === "Y" && (
+                      <div className="col col-3 p-1">
+
+                        <h6>Upload copy of Gift Deed/ Hibbanama</h6>
+                        <div className="d-flex flex-row align-items-center my-1 ">
+
+                          <IconButton onClick={() => getDocShareholding(landScheduleData?.giftDeedHibbanama)}>
+                            <DownloadForOfflineIcon color="primary" className="mx-1" />
+                          </IconButton>
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks ? "none" : "block",
+                              color: fieldIconColors.copyOfShajraPlan
+                            }}
+                            onClick={() => {
+                              setLabelValue("Copy of Shajra Plan"),
+                                setOpennedModal("copyOfShajraPlan")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(landScheduleData !== null ? landScheduleData?.copyOfShajraPlan : null);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </div>
+                    )}
+
                   </div>
-                  {landScheduleData?.orderUpload === "Y" && (
-                    <div>
-                  <h6>(a)  Approach available from minimum 4 karam (22 ft) wide revenue rasta</h6>
-                  <div className="d-flex flex-row align-items-center my-1 ">
-                  <input type="radio" disabled value="Yes" checked={landScheduleData?.orderUpload === "Y" ? true : false} />
-                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" disabled value="No" checked={landScheduleData?.orderUpload === "N" ? true : false} />
-                    <label className="m-0 mx-2" for="No">NO</label>
-                    <ReportProblemIcon
-                      style={{
-                        display: hideRemarks?"none":"block",
-                        color: fieldIconColors.ordersUpload
-                      }}
-                      onClick={() => {
-                        setLabelValue("Orders Upload"),
-                          setOpennedModal("ordersUpload")
-                        setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
-                      }}
-                    ></ReportProblemIcon>
+                )}
+
+                {landScheduleData?.siteApproachable === "N" && (
+
+                  <div >
+                    <h5 className="text-black  mb-2">(i)  Details of proposed approach.</h5>
+                    <div className="my-2 mx-2">
+                    <div className="d-flex flex-row align-items-center my-2 ">
+                      <h6>(1)   Site approachable from proposed sector road/ Development Plan Road</h6>
+                      &nbsp;&nbsp;
+                      <input type="radio" disabled value="Yes" checked={landScheduleData?.approachFromProposedSector === "Y" ? true : false} />
+                      <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                      <input type="radio" disabled value="No" checked={landScheduleData?.approachFromProposedSector === "N" ? true : false} />
+                      <label className="m-0 mx-2" for="No">No</label>
+                      <ReportProblemIcon
+                        style={{
+                          display: hideRemarks ? "none" : "block",
+                          color: fieldIconColors.ordersUpload
+                        }}
+                        onClick={() => {
+                          setLabelValue("Orders Upload"),
+                            setOpennedModal("ordersUpload")
+                          setSmShow(true),
+                            console.log("modal open"),
+                            setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                        }}
+                      ></ReportProblemIcon>
+                    </div>
+
+                    {landScheduleData?.approachFromProposedSector === "Y" && (
+
+                      <div >
+                        <h6>(a) Width of Constructed ROW of plotted licenced colony (In meters)</h6>
+                        <div className="my-2 mx-2">
+                        <div className="col col-6 p-1 d-flex align-items-center my-1 " >
+                          <Form.Control
+                            className={classes.formLabel}
+
+                            disabled
+                            placeholder={landScheduleData?.awardDate}
+                          ></Form.Control>
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks ? "none" : "block",
+                              color: fieldIconColors.ordersUpload
+                            }}
+                            onClick={() => {
+                              setLabelValue("Orders Upload"),
+                                setOpennedModal("ordersUpload")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+
+                        {/* <div className="col col-6 p-1 d-flex align-items-center my-3 " >
+
+                          <h6>(a)  Width of Constructed ROW of plotted licenced colony (In meters)</h6>
+                          <Form.Control
+                            className={classes.formLabel}
+
+                            disabled
+                            placeholder={landScheduleData?.awardDate}
+                          ></Form.Control>
+                        
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks ? "none" : "block",
+                              color: fieldIconColors.ordersUpload
+                            }}
+                            onClick={() => {
+                              setLabelValue("Orders Upload"),
+                                setOpennedModal("ordersUpload")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                            }}
+                          ></ReportProblemIcon>
+                        </div> */}
+
+                        <div className="d-flex flex-row align-items-center my-3 ">
+                          <h6>(b)  Whether acquired?  </h6>
+                          &nbsp;&nbsp;
+                          <input type="radio" disabled value="Yes" checked={landScheduleData?.whetherAcquired === "Y" ? true : false} />
+                          <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                          <input type="radio" disabled value="No" checked={landScheduleData?.whetherAcquired === "N" ? true : false} />
+                          <label className="m-0 mx-2" for="No">No</label>
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks ? "none" : "block",
+                              color: fieldIconColors.ordersUpload
+                            }}
+                            onClick={() => {
+                              setLabelValue("Orders Upload"),
+                                setOpennedModal("ordersUpload")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+
+                        <div className="d-flex flex-row align-items-center my-3 ">
+                          <h6>(c)  Whether constructed?  </h6>
+                          &nbsp;&nbsp;
+                          <input type="radio" disabled value="Yes" checked={landScheduleData?.whetherConstructed === "Y" ? true : false} />
+                          <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                          <input type="radio" disabled value="No" checked={landScheduleData?.whetherConstructed === "N" ? true : false} />
+                          <label className="m-0 mx-2" for="No">No</label>
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks ? "none" : "block",
+                              color: fieldIconColors.ordersUpload
+                            }}
+                            onClick={() => {
+                              setLabelValue("Orders Upload"),
+                                setOpennedModal("ordersUpload")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+
+                        <div className="d-flex flex-row align-items-center my-3 ">
+                          <h6>(d)  Whether Service road along sector road acquired?</h6>
+                          &nbsp;&nbsp;
+                          <input type="radio" disabled value="Yes" checked={landScheduleData?.serviceSectorRoadAcquired === "Y" ? true : false} />
+                          <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                          <input type="radio" disabled value="No" checked={landScheduleData?.serviceSectorRoadAcquired === "N" ? true : false} />
+                          <label className="m-0 mx-2" for="No">No</label>
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks ? "none" : "block",
+                              color: fieldIconColors.ordersUpload
+                            }}
+                            onClick={() => {
+                              setLabelValue("Orders Upload"),
+                                setOpennedModal("ordersUpload")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+
+                        <div className="d-flex flex-row align-items-center my-3 ">
+                          <h6>(e)  Whether Service road along sector road constructed?  </h6>
+                          &nbsp;&nbsp;
+                          <input type="radio" disabled value="Yes" checked={landScheduleData?.serviceSectorRoadConstructed === "Y" ? true : false} />
+                          <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                          <input type="radio" disabled value="No" checked={landScheduleData?.serviceSectorRoadConstructed === "N" ? true : false} />
+                          <label className="m-0 mx-2" for="No">No</label>
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks ? "none" : "block",
+                              color: fieldIconColors.ordersUpload
+                            }}
+                            onClick={() => {
+                              setLabelValue("Orders Upload"),
+                                setOpennedModal("ordersUpload")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+
+                      </div>
+                      </div>
+
+                    )}
+                    <h6>(2)  Site approachable from internal circulation / sectoral plan road.</h6>
+                    <div className="d-flex flex-row align-items-center my-2 ">
+                      &nbsp;&nbsp;
+                      <input type="radio" disabled value="Yes" checked={landScheduleData?.approachFromInternalCirculation === "Y" ? true : false} />
+                      <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                      <input type="radio" disabled value="No" checked={landScheduleData?.approachFromInternalCirculation === "N" ? true : false} />
+                      <label className="m-0 mx-2" for="No">No</label>
+                      <ReportProblemIcon
+                        style={{
+                          display: hideRemarks ? "none" : "block",
+                          color: fieldIconColors.ordersUpload
+                        }}
+                        onClick={() => {
+                          setLabelValue("Orders Upload"),
+                            setOpennedModal("ordersUpload")
+                          setSmShow(true),
+                            console.log("modal open"),
+                            setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                        }}
+                      ></ReportProblemIcon>
+                    </div>
+                    {landScheduleData?.approachFromInternalCirculation === "Y" && (
+
+                      <div>
+                        <h6>(a)  Width of internal circulation / sectoral plan road (In meters)</h6>
+                        <div className="my-2 mx-2">
+                        <div className="col col-6 p-1 d-flex align-items-center my-1 " >
+                          <Form.Control
+                            className={classes.formLabel}
+
+                            disabled
+                            placeholder={landScheduleData?.sectorAndDevelopmentWidth}
+                          ></Form.Control>
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks ? "none" : "block",
+                              color: fieldIconColors.ordersUpload
+                            }}
+                            onClick={() => {
+                              setLabelValue("Orders Upload"),
+                                setOpennedModal("ordersUpload")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                        <h6>(b)  Whether acquired? </h6>
+                        <div className="d-flex flex-row align-items-center my-1 ">
+                          <input type="radio" disabled value="Yes" checked={landScheduleData?.sectorAndDevelopmentWidth === "Y" ? true : false} />
+                          <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                          <input type="radio" disabled value="No" checked={landScheduleData?.sectorAndDevelopmentWidth === "N" ? true : false} />
+                          <label className="m-0 mx-2" for="No">No</label>
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks ? "none" : "block",
+                              color: fieldIconColors.ordersUpload
+                            }}
+                            onClick={() => {
+                              setLabelValue("Orders Upload"),
+                                setOpennedModal("ordersUpload")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                        <h6>(c)  Whether constructed?  </h6>
+                        <div className="d-flex flex-row align-items-center my-1 ">
+                          <input type="radio" disabled value="Yes" checked={landScheduleData?.sectorAndDevelopmentWidth === "Y" ? true : false} />
+                          <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                          <input type="radio" disabled value="No" checked={landScheduleData?.sectorAndDevelopmentWidth === "N" ? true : false} />
+                          <label className="m-0 mx-2" for="No">No</label>
+                          <ReportProblemIcon
+                            style={{
+                              display: hideRemarks ? "none" : "block",
+                              color: fieldIconColors.ordersUpload
+                            }}
+                            onClick={() => {
+                              setLabelValue("Orders Upload"),
+                                setOpennedModal("ordersUpload")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+
+                      </div>
+                      </div>
+
+                    )}
+                  </div>
                   </div>
 
-                  <h6>(b)  Approach available from minimum 11 feet wide revenue rasta and applied site abuts acquired alignment of the sector road and there is no stay regarding construction on the land falling under the abutting sector road</h6>
-                  <div className="d-flex flex-row align-items-center my-1 ">
-                  <input type="radio" disabled value="Yes" checked={landScheduleData?.orderUpload === "Y" ? true : false} />
-                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" disabled value="No" checked={landScheduleData?.orderUpload === "N" ? true : false} />
-                    <label className="m-0 mx-2" for="No">NO</label>
-                    <ReportProblemIcon
-                      style={{
-                        display: hideRemarks?"none":"block",
-                        color: fieldIconColors.ordersUpload
-                      }}
-                      onClick={() => {
-                        setLabelValue("Orders Upload"),
-                          setOpennedModal("ordersUpload")
-                        setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
-                      }}
-                    ></ReportProblemIcon>
-                  </div>
+                )}
 
-                  <h6>(c)  Applied site abouts already constructed sector road or internal circulation road of approved sectoral plan (of min. 18m/24m width as the case may be) provided its entire stretch required for approach is licenced and is further leading upto atleast 4 karam wide revenue rasta.</h6>
-                  <div className="d-flex flex-row align-items-center my-1 ">
-                  <input type="radio" disabled value="Yes" checked={landScheduleData?.orderUpload === "Y" ? true : false} />
-                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" disabled value="No" checked={landScheduleData?.orderUpload === "N" ? true : false} />
-                    <label className="m-0 mx-2" for="No">NO</label>
-                    <ReportProblemIcon
-                      style={{
-                        display: hideRemarks?"none":"block",
-                        color: fieldIconColors.ordersUpload
-                      }}
-                      onClick={() => {
-                        setLabelValue("Orders Upload"),
-                          setOpennedModal("ordersUpload")
-                        setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
-                      }}
-                    ></ReportProblemIcon>
-                  </div>
-
-                  <h6>(d)  Applied land is accessible from a minimum 4 karam wide rasta through adjoining own land of the applicant (but not applied for licence).</h6>
-                  <div className="d-flex flex-row align-items-center my-1 ">
-                  <input type="radio" disabled value="Yes" checked={landScheduleData?.orderUpload === "Y" ? true : false} />
-                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" disabled value="No" checked={landScheduleData?.orderUpload === "N" ? true : false} />
-                    <label className="m-0 mx-2" for="No">NO</label>
-                    <ReportProblemIcon
-                      style={{
-                        display: hideRemarks?"none":"block",
-                        color: fieldIconColors.ordersUpload
-                      }}
-                      onClick={() => {
-                        setLabelValue("Orders Upload"),
-                          setOpennedModal("ordersUpload")
-                        setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
-                      }}
-                    ></ReportProblemIcon>
-                  </div>
-
-                  {landScheduleData?.orderUpload === "Y" && (
-                    <div>
-                   <h6>(d1)  If applicable, whether the applicant has donated at least 4 karam wide strip from its adjoining own land in favour of the Gram Panchayat/Municipality, in order to connect the applied site to existing 4 karam rasta?</h6>
-                   <div className="d-flex flex-row align-items-center my-1 ">
-                  <input type="radio" disabled value="Yes" checked={landScheduleData?.orderUpload === "Y" ? true : false} />
-                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" disabled value="No" checked={landScheduleData?.orderUpload === "N" ? true : false} />
-                    <label className="m-0 mx-2" for="No">NO</label>
-                    <ReportProblemIcon
-                      style={{
-                        display: hideRemarks?"none":"block",
-                        color: fieldIconColors.ordersUpload
-                      }}
-                      onClick={() => {
-                        setLabelValue("Orders Upload"),
-                          setOpennedModal("ordersUpload")
-                        setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
-                      }}
-                    ></ReportProblemIcon>
-                   </div>
-                   </div>
-                  )}
-
-                  <h6>(e)  Applied land is accessible from a minimum 4 karam wide rasta through adjoining other’s land</h6>
-                  <div className="d-flex flex-row align-items-center my-1 ">
-                  <input type="radio" disabled value="Yes" checked={landScheduleData?.orderUpload === "Y" ? true : false} />
-                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" disabled value="No" checked={landScheduleData?.orderUpload === "N" ? true : false} />
-                    <label className="m-0 mx-2" for="No">NO</label>
-                    <ReportProblemIcon
-                      style={{
-                        display: hideRemarks?"none":"block",
-                        color: fieldIconColors.ordersUpload
-                      }}
-                      onClick={() => {
-                        setLabelValue("Orders Upload"),
-                          setOpennedModal("ordersUpload")
-                        setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
-                      }}
-                    ></ReportProblemIcon>
-                  </div>
-                  {landScheduleData?.orderUpload === "Y" && (
-                    <div>
-                  <h6>(e1)  whether the land-owner of the adjoining land has donated at least 4 karam wide strip of land to the Gram Panchayat/Municipality, in a manner that the applied site gets connected to existing public rasta of atleast 4 karam width?</h6>
-                  <div className="d-flex flex-row align-items-center my-1 ">
-                  <input type="radio" disabled value="Yes" checked={landScheduleData?.orderUpload === "Y" ? true : false} />
-                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" disabled value="No" checked={landScheduleData?.orderUpload === "N" ? true : false} />
-                    <label className="m-0 mx-2" for="No">NO</label>
-                    <ReportProblemIcon
-                      style={{
-                        display: hideRemarks?"none":"block",
-                        color: fieldIconColors.ordersUpload
-                      }}
-                      onClick={() => {
-                        setLabelValue("Orders Upload"),
-                          setOpennedModal("ordersUpload")
-                        setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
-                      }}
-                    ></ReportProblemIcon>
-                  </div>
-                  </div>
-                  )}
-              
-              </div>
-               )}
-               
                 {landScheduleData?.orderUpload === "Y" && (
                   <div className="row m-0 mt-2">
-                    <div className="col col-3 p-1">
+                    <div className="col col-4 p-1">
                       <h6 data-toggle="tooltip" data-placement="top" title="Whether details/orders of release/exclusion of land uploaded.">
                         (h) Whether land compensation received
                         {/* <InfoIcon style={{color:"blue"}}/>  */}
@@ -2419,7 +2724,7 @@ const Developerinfo = (props) => {
 
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks ? "none" : "block",
                               color: fieldIconColors.landCompensationReceived
                             }}
                             onClick={() => {
@@ -2434,18 +2739,21 @@ const Developerinfo = (props) => {
                         </div>
                       </h6>
                     </div>
-                    <div className="col col-3 p-1">
+                    <div className="col col-4 p-1">
                       <div className="form-group">
                         <label htmlFor="releasestatus">
                           <h6 style={{ fontWeight: "initial" }} data-toggle="tooltip" data-placement="top" title="Status of release">Status of release</h6>
                         </label>
 
                         <div className="d-flex flex-row align-items-center my-1 ">
-                          <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.releaseStatus}></Form.Control>
+                          <Form.Control
+                            //  height={30} style={{ maxWidth: 200, marginRight: 5 }} 
+                            className={classes.formLabel}
+                            disabled placeholder={landScheduleData?.releaseStatus}></Form.Control>
 
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks ? "none" : "block",
                               color: fieldIconColors.statusOfRelease
                             }}
                             onClick={() => {
@@ -2460,16 +2768,19 @@ const Developerinfo = (props) => {
                         </div>
                       </div>
                     </div>
-                    <div className="col col-3 p-1">
+                    <div className="col col-4 p-1">
                       <div className="form-group ">
                         <label htmlFor="awarddate">
                           <h6 style={{ fontWeight: "initial" }} data-toggle="tooltip" data-placement="top" title="Date of Award">Date of Award</h6>
                         </label>
                         <div className="d-flex flex-row align-items-center my-1 ">
-                          <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.awardDate}></Form.Control>
+                          <Form.Control
+                            //  height={30} style={{ maxWidth: 200, marginRight: 5 }} 
+                            className={classes.formLabel}
+                            disabled placeholder={landScheduleData?.awardDate}></Form.Control>
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks ? "none" : "block",
                               color: fieldIconColors.dateOfAward
                             }}
                             onClick={() => {
@@ -2484,17 +2795,20 @@ const Developerinfo = (props) => {
                         {/* comment by me */}
                       </div>
                     </div>
-                    <div className="col col-3 p-1">
+                    <div className="col col-4 p-1">
                       <div className="form-group ">
                         <label htmlFor="releasedate">
                           <h6 style={{ fontWeight: "initial" }} data-toggle="tooltip" data-placement="top" title="Date of Release">Date of Release</h6>{" "}
                         </label>
 
                         <div className="d-flex flex-row align-items-center my-1 ">
-                          <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.releaseDate}></Form.Control>
+                          <Form.Control
+                            //  height={30} style={{ maxWidth: 200, marginRight: 5 }} 
+                            className={classes.formLabel}
+                            disabled placeholder={landScheduleData?.releaseDate}></Form.Control>
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks ? "none" : "block",
                               color: fieldIconColors.dateOfRelease
                             }}
                             onClick={() => {
@@ -2508,16 +2822,19 @@ const Developerinfo = (props) => {
                         </div>
                       </div>
                     </div>
-                    <div className="col col-3 p-1">
+                    <div className="col col-4 p-1">
                       <div className="form-group ">
                         <label htmlFor="sitedetails">
                           <h6 style={{ fontWeight: "initial" }} data-toggle="tooltip" data-placement="top" title="Site Details">Site Details</h6>
                         </label>
                         <div className="d-flex flex-row align-items-center my-1 ">
-                          <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.siteDetail}></Form.Control>
+                          <Form.Control
+                            // height={30} style={{ maxWidth: 200, marginRight: 5 }} 
+                            className={classes.formLabel}
+                            disabled placeholder={landScheduleData?.siteDetail}></Form.Control>
                           <ReportProblemIcon
                             style={{
-                              display: hideRemarks?"none":"block",
+                              display: hideRemarks ? "none" : "block",
                               color: fieldIconColors.siteDetails
                             }}
                             onClick={() => {
@@ -2544,14 +2861,14 @@ const Developerinfo = (props) => {
                 <h6 style={{ fontWeight: "initial" }} >
                   whether the applied site is approachable from the proposed 18/24 m internal sectoral plan road/sector dividing road.
                   <div className="d-flex flex-row align-items-center my-1 ">
-                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                   
                     <input type="radio" disabled value="Yes" checked={landScheduleData?.siteApproachable === "Y" ? true : false} />
                     <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                     <input type="radio" disabled value="No" checked={landScheduleData?.siteApproachable === "N" ? true : false} />
                     <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
-                        display: hideRemarks?"none":"block",
+                        display: hideRemarks ? "none" : "block",
                         color: fieldIconColors.internalSectoralPlan
                       }}
                       onClick={() => {
@@ -2564,64 +2881,71 @@ const Developerinfo = (props) => {
                     ></ReportProblemIcon>
                   </div>
                 </h6>
-                {/* <input type="radio" disabled value="Yes"  onChange1={handleChange}  />
-                <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                <input type="radio" disabled value="No"  onChange1={handleChange}  />
-                <label className="m-0 mx-2" for="No">No</label> */}
+                
               </div>
             </div>
             <hr className="my-3" />
             <h5 className="text-black ml-2 mb-2">4. Site condition</h5>
             <div className="row mx-1">
-              <div className="col col-3 p-1">
+              <div className="col col-4 p-1">
                 <h6>
-                  (a) vacant: (Yes/No){" "}
-                  <div className="d-flex flex-row align-items-center my-1 ">
-                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
-                    <input type="radio" disabled value="Yes" checked={landScheduleData?.vacant === "Y" ? true : false} />
-                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" disabled value="No" checked={landScheduleData?.vacant === "N" ? true : false} />
-                    <label className="m-0 mx-2" for="No">No</label>
-                    <ReportProblemIcon
-                      style={{
-                        display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                        color: fieldIconColors.vacant
-                      }}
-                      onClick={() => {
-                        setLabelValue("vacant"),
-                          setOpennedModal("vacant")
-                        setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(landScheduleData?.vacant === "Y" ? "Yes" : landScheduleData?.vacant === "N" ? "No" : null);
-                      }}
-                    ></ReportProblemIcon>
-                  </div>
-                </h6>
+                  (a) vacant: (Yes/No){" "}</h6>
+                <div className="d-flex flex-row align-items-center my-1 ">
+                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                  <input type="radio" disabled value="Yes" checked={landScheduleData?.vacant === "Y" ? true : false} />
+                  <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                  <input type="radio" disabled value="No" checked={landScheduleData?.vacant === "N" ? true : false} />
+                  <label className="m-0 mx-2" for="No">No</label>
+                  <ReportProblemIcon
+                    style={{
+                      display: hideRemarks || hideRemarksPatwari ? "none" : "block",
+                      color: fieldIconColors.vacant
+                    }}
+                    onClick={() => {
+                      setLabelValue("vacant"),
+                        setOpennedModal("vacant")
+                      setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue(landScheduleData?.vacant === "Y" ? "Yes" : landScheduleData?.vacant === "N" ? "No" : null);
+                    }}
+                  ></ReportProblemIcon>
+                </div>
+
                 {landScheduleData?.vacant === "Y" && (
                   <div className="row ml-1 mr-2">
                     <div className="col col p-1">
                       <label> Vacant Remark </label>
-  {/* <input type="number" className="form-control" disabled placeholder={landScheduleData?.vacantRemark} /> */}
-                      <Form.Control placeholder={landScheduleData?.vacantRemark} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                      {/* <input type="number" className="form-control" disabled placeholder={landScheduleData?.vacantRemark} /> */}
+                      <Form.Control placeholder={landScheduleData?.vacantRemark}
+                        className={classes.formLabel}
+                        disabled></Form.Control>
                     </div>
                   </div>
                 )}
-              
+                {landScheduleData?.vacant === "N" && (
+                  <div className="row ml-1 mr-2">
+                    <div className="col col p-1">
+                      <label> Construction Remark </label>
+                      {/* <input type="number" className="form-control" disabled placeholder={landScheduleData?.vacantRemark} /> */}
+                      <Form.Control
+                        placeholder={landScheduleData?.vacantRemark}
+                        className={classes.formLabel}
+                        disabled></Form.Control>
+                    </div>
+                  </div>
+                )}
+
               </div>
-              {landScheduleData?.vacant === "N" && (
-                  // <div className="row ml-1 mr-2">
-                  //   <div className="col col p-1">
-                  //     <label> Vacant Remark </label>
-                  //     <input type="number" className="form-control" disabled placeholder={landScheduleData?.vacantRemark} />
-                  //   </div>
-                  // </div>
+
+              {/* {landScheduleData?.vacant === "N" && (
+                
                   <div className="col col-3 p-1">
                 <h6 onChange={(e) => setConstruction(e.target.value)} value={construction}>
                   (b) Construction: (Yes/No)
                 </h6>
 
                 <div className="d-flex flex-row align-items-center my-1 ">
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                  
                   <input type="radio" disabled value="Yes" checked={landScheduleData?.construction === "Y" ? true : false} />
                   <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                   <input type="radio" disabled value="No" checked={landScheduleData?.construction === "N" ? true : false} />
@@ -2645,7 +2969,7 @@ const Developerinfo = (props) => {
                   <div className="row ">
                     <div className="col col">
                       <label>Type of Construction</label>
-  {/* <input type="text" className="form-control" disabled placeholder={landScheduleData?.typeOfConstruction} /> */}
+  
                       <Form.Control placeholder={landScheduleData?.typeOfConstruction} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                     </div>
                   </div>
@@ -2654,28 +2978,27 @@ const Developerinfo = (props) => {
                   <div className="row ">
                     <div className="col col">
                       <label>Remark</label>
-      {/* <input type="text" className="form-control" disabled placeholder={landScheduleData?.constructionRemark} /> */}
+      
                       <Form.Control placeholder={landScheduleData?.constructionRemark} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                     </div>
                   </div>
                 )}
               </div>
-                )}
-              
-              <div className="col col-3 p-1">
-                <h6 onChange={(e) => setHt(e.target.value)} value={ht}>
-                  (c) HT line
-                </h6>
+                )} */}
 
+              <div className="col col-4 p-1">
+                <h6 >
+                  (b) HT line
+                </h6>
                 <div className="d-flex flex-row align-items-center my-1 ">
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+
                   <input type="radio" disabled value="Yes" checked={landScheduleData?.ht === "Y" ? true : false} />
                   <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                   <input type="radio" disabled value="No" checked={landScheduleData?.ht === "N" ? true : false} />
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
-                      display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                      display: hideRemarks || hideRemarksPatwari ? "none" : "block",
                       color: fieldIconColors.htLine
                     }}
                     onClick={() => {
@@ -2692,8 +3015,11 @@ const Developerinfo = (props) => {
                   <div className="row ">
                     <div className="col col">
                       <label>HT Remarks</label>
-                      {/* <input type="text" className="form-control" disabled placeholder={landScheduleData?.htRemark} /> */}
-                      <Form.Control placeholder={landScheduleData?.htRemark} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+
+                      <Form.Control
+                        placeholder={landScheduleData?.htRemark}
+                        className={classes.formLabel}
+                        disabled></Form.Control>
                     </div>
                   </div>
                 )}
@@ -2701,15 +3027,18 @@ const Developerinfo = (props) => {
                   <div className="row ">
                     <div className="col col">
                       <label>HT Remarks</label>
-                      {/* <input type="text" className="form-control" disabled placeholder={landScheduleData?.htRemark} /> */}
-                      <Form.Control placeholder={landScheduleData?.htRemark}  height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+
+                      <Form.Control
+                        placeholder={landScheduleData?.htRemark}
+                        className={classes.formLabel}
+                        disabled></Form.Control>
                     </div>
                   </div>
                 )}
               </div>
-              <div className="col col-3 p-1">
-                <h6 onChange={(e) => setGas(e.target.value)} value={gas}>
-                  (d) IOC Gas Pipeline
+              <div className="col col-4 p-1">
+                <h6 >
+                  (C) IOC Gas Pipeline
                 </h6>
 
                 <div className="d-flex flex-row align-items-center my-1 ">
@@ -2719,7 +3048,7 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
-                      display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                      display: hideRemarks || hideRemarksPatwari ? "none" : "block",
                       color: fieldIconColors.iocGasPipeline
                     }}
                     onClick={() => {
@@ -2731,45 +3060,50 @@ const Developerinfo = (props) => {
                     }}
                   ></ReportProblemIcon>
                 </div>
-                {/* <input type="radio" disabled value="Yes"  onChange1={handleChange}  onClick={handleshow6} />
-                <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                <input type="radio" disabled value="No"  onChange1={handleChange}  onClick={handleshow6} />
-                <label className="m-0 mx-2" for="No">No</label> */}
+
                 {landScheduleData?.gas === "Y" && (
                   <div className="row ">
                     <div className="col col">
                       <label>IOC Remark</label>
-                      {/* <input type="text" className="form-control" disabled placeholder={landScheduleData?.gasRemark} /> */}
-                      <Form.Control placeholder={landScheduleData?.gasRemark}  height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+
+                      <Form.Control
+                        placeholder={landScheduleData?.gasRemark}
+                        className={classes.formLabel}
+                        disabled></Form.Control>
                     </div>
                   </div>
                 )}
                 {landScheduleData?.gas === "N" && (
                   <div className="row ">
-                    <div className="col col">
+                    <div className={classes.formLabel} >
                       <label>IOC Remark</label>
-                      {/* <input type="text" className="form-control" disabled placeholder={landScheduleData?.gasRemark} /> */}
-                      <Form.Control placeholder={landScheduleData?.gasRemark} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                      <input type="text" className="form-control" disabled placeholder={landScheduleData?.gasRemark} />
+                      {/* <Form.Control
+                       placeholder={landScheduleData?.gasRemark}
+                       className={classes.formLabel}
+                        disabled>
+
+                        </Form.Control> */}
                     </div>
                   </div>
                 )}
               </div>
             </div>
-            {/* <br></br> */}
+
             <div className="row mx-1">
-              <div className="col col-3 p-1">
-                <h6 onChange={(e) => setNallah(e.target.value)} value={nallah}>
-                  (e) Nallah{" "}
+              <div className="col col-4 p-1">
+                <h6 >
+                  (d) Nallah{" "}
                 </h6>
 
                 <div className="d-flex flex-row align-items-center my-1 ">
                   <input type="radio" disabled value="Yes" checked={landScheduleData?.nallah === "Y" ? true : false} />
                   <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                  <input type="radio" disabled value="No" onChange1={handleChange} checked={landScheduleData?.nallah === "N" ? true : false} />
+                  <input type="radio" disabled value="No" checked={landScheduleData?.nallah === "N" ? true : false} />
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
-                      display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                      display: hideRemarks || hideRemarksPatwari ? "none" : "block",
                       color: fieldIconColors.nallah
                     }}
                     onClick={() => {
@@ -2787,7 +3121,10 @@ const Developerinfo = (props) => {
                     <div className="col col">
                       <label>Nallah Remarks</label>
                       {/* <input type="text" className="form-control" disabled placeholder={landScheduleData?.nallahRemark} /> */}
-                      <Form.Control placeholder={landScheduleData?.nallahRemark} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                      <Form.Control placeholder={landScheduleData?.nallahRemark}
+                        // height={30} style={{ maxWidth: 200, marginRight: 5 }}
+                        className={classes.formLabel}
+                        disabled></Form.Control>
                     </div>
                   </div>
                 )}
@@ -2796,15 +3133,18 @@ const Developerinfo = (props) => {
                     <div className="col col">
                       <label>Nallah Remarks</label>
                       {/* <input type="text" className="form-control" disabled placeholder={landScheduleData?.nallahRemark} /> */}
-                      <Form.Control placeholder={landScheduleData?.nallahRemark}height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                      <Form.Control placeholder={landScheduleData?.nallahRemark}
+                        // height={30} style={{ maxWidth: 200, marginRight: 5 }} 
+                        className={classes.formLabel}
+                        disabled></Form.Control>
                     </div>
                   </div>
                 )}
               </div>
-              <div className="col col-3 p-1">
-                <h6 onChange={(e) => setRoad(e.target.value)} value={road}>
-                  (f) Any revenue rasta/road
-                </h6>{" "}
+              <div className="col col-4 p-1">
+                <h6>
+                  (e)  Any revenue rasta/road passing through proposed site
+                </h6>
                 <div className="d-flex flex-row align-items-center my-1 ">
                   <input type="radio" disabled value="Yes" checked={landScheduleData?.road === "Y" ? true : false} />
                   <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
@@ -2812,7 +3152,7 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
-                      display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                      display: hideRemarks || hideRemarksPatwari ? "none" : "block",
                       color: fieldIconColors.anyRevenueRasta
                     }}
                     onClick={() => {
@@ -2826,41 +3166,50 @@ const Developerinfo = (props) => {
                 </div>
                 {landScheduleData?.road === "Y" && (
                   <div className="row ">
-                    <div className="col col">
-                      <label>Width of Revenue rasta/road (in Sqm)</label>
+                    <div className="col col-12">
+                      <label>Width of Revenue rasta/road (in ft.)</label>
                       {/* <input type="text" className="form-control" disabled placeholder={landScheduleData?.roadWidth} /> */}
-                      <Form.Control placeholder={landScheduleData?.roadWidth} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                      <Form.Control
+                        placeholder={landScheduleData?.roadWidth}
+                        className={classes.formLabel}
+                        disabled></Form.Control>
                     </div>
-                    <div className="col col">
+                    <div className="col col-12">
                       <label>Remark</label>
-                      <Form.Control placeholder={landScheduleData?.roadRemark} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                      <Form.Control
+                        placeholder={landScheduleData?.roadRemark}
+                        className={classes.formLabel}
+                        disabled></Form.Control>
                       {/* <input type="text" className="form-control" disabled placeholder={landScheduleData?.roadRemark} /> */}
                     </div>
                   </div>
                 )}
                 {landScheduleData?.road === "N" && (
                   <div className="row ">
-                    <div className="col col">
+                    <div className="col col-12">
                       <label>Remark</label>
                       {/* <input type="text" className="form-control" disabled placeholder={landScheduleData?.roadRemark} /> */}
-                      <Form.Control placeholder={landScheduleData?.roadRemark} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                      <Form.Control
+                        placeholder={landScheduleData?.roadRemark}
+                        className={classes.formLabel}
+                        disabled></Form.Control>
                     </div>
                   </div>
                 )}
               </div>
-              <div className="col col-3 p-1">
+              <div className="col col-4 p-1">
                 <h6 onChange={(e) => setLand(e.target.value)} value={land}>
-                  (g) Any marginal land
+                (f) Utility/Permit Line
                 </h6>{" "}
                 <div className="d-flex flex-row align-items-center my-1 ">
-                  <input type="radio" disabled value="Yes" checked={landScheduleData?.marginalLand === "Y" ? true : false} />
+                  <input type="radio" disabled value="Yes" checked={landScheduleData?.utilityLine === "Y" ? true : false} />
                   <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                  <input type="radio" disabled value="No" checked={landScheduleData?.marginalLand === "N" ? true : false} />
+                  <input type="radio" disabled value="No" checked={landScheduleData?.utilityLine === "N" ? true : false} />
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
-                      display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                      color: fieldIconColors.anyMarginalLand
+                      display: hideRemarks || hideRemarksPatwari ? "none" : "block",
+                      color: fieldIconColors.utilityLine
                     }}
                     onClick={() => {
                       setLabelValue("Any marginal land"),
@@ -2871,26 +3220,32 @@ const Developerinfo = (props) => {
                     }}
                   ></ReportProblemIcon>
                 </div>
-                {landScheduleData?.marginalLand === "Y" && (
+                {landScheduleData?.utilityLine === "Y" && (
                   <div className="row ">
                     <div className="col col">
-                      <label>Remark of Marginal Land</label>
-      {/* <input type="text" className="form-control" disabled placeholder={landScheduleData?.marginalLandRemark} /> */}
-                      <Form.Control placeholder={landScheduleData?.marginalLandRemark}  height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                      <label>Width of ROW (in ft.) </label>
+                      {/* <input type="text" className="form-control" disabled placeholder={landScheduleData?.marginalLandRemark} /> */}
+                      <Form.Control
+                        placeholder={landScheduleData?.utilityWidth}
+                        className={classes.formLabel}
+                        disabled></Form.Control>
                     </div>
                   </div>
                 )}
-                {landScheduleData?.marginalLand === "N" && (
+                {landScheduleData?.utilityLine === "N" && (
                   <div className="row ">
                     <div className="col col">
-                      <label>Remark of Marginal Land</label>
-    {/* <input type="text" className="form-control" disabled placeholder={landScheduleData?.marginalLandRemark} /> */}
-                      <Form.Control placeholder={landScheduleData?.marginalLandRemark}  height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                      <label>Remark </label>
+                      {/* <input type="text" className="form-control" disabled placeholder={landScheduleData?.marginalLandRemark} /> */}
+                      <Form.Control
+                        placeholder={landScheduleData?.utilityWidth}
+                        className={classes.formLabel}
+                        disabled></Form.Control>
                     </div>
                   </div>
                 )}
               </div>
-              <div className="col col-3 p-1">
+              {/* <div className="col col-4 p-1">
                 <h6
                   data-toggle="tooltip"
                   data-placement="top"
@@ -2906,7 +3261,7 @@ const Developerinfo = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
-                      display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                      display: hideRemarks || hideRemarksPatwari ? "none" : "block",
                       color: fieldIconColors.utilityLine
                     }}
                     onClick={() => {
@@ -2921,27 +3276,36 @@ const Developerinfo = (props) => {
 
                 {landScheduleData?.utilityLine === "Y" && (
                   <div className="row ">
-                    <div className="col col">
+                   <div className="col col-12">
                       <label>Width of row</label>
-                      {/* <input type="text" className="form-control" disabled placeholder={landScheduleData?.utilityWidth} /> */}
-                      <Form.Control placeholder={landScheduleData?.utilityWidth} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+             
+                      <Form.Control placeholder={landScheduleData?.utilityWidth}
+                    
+                        className={classes.formLabel}
+                        disabled></Form.Control>
                     </div>
-                    <div className="col col">
+                    <div className="col col-12">
                       <label>Remark </label>
-                 {/* <input type="text" className="form-control" disabled placeholder={landScheduleData?.utilityRemark} /> */}
-                 <Form.Control placeholder={landScheduleData?.utilityRemark} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                   
+                      <Form.Control placeholder={landScheduleData?.utilityRemark}
+                      
+                        className={classes.formLabel}
+                        disabled></Form.Control>
                     </div>
                   </div>
                 )}
                 {landScheduleData?.utilityLine === "N" && (
                   <div className="col col">
                     <label>Remark </label>
-                    {/* <input type="text" className="form-control" disabled placeholder={landScheduleData?.utilityRemark} /> */}
-                    <Form.Control placeholder={landScheduleData?.utilityRemark} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+            
+                    <Form.Control placeholder={landScheduleData?.utilityRemark}
+                
+                      className={classes.formLabel}
+                      disabled></Form.Control>
                   </div>
 
                 )}
-              </div>
+              </div> */}
             </div>
             <hr className="my-3" />
             <h5 className={`text-black ml-2 mb-2 ${classes.formLabel}`}>
@@ -2950,7 +3314,7 @@ const Developerinfo = (props) => {
                 {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.documentsAsAnnexures}></Form.Control> */}
                 <ReportProblemIcon
                   style={{
-                    display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                    display: hideRemarks || hideRemarksPatwari ? "none" : "block",
                     color: fieldIconColors.documentsAsAnnexures
                   }}
                   onClick={() => {
@@ -2972,7 +3336,7 @@ const Developerinfo = (props) => {
                   </IconButton>
                   <ReportProblemIcon
                     style={{
-                      display: hideRemarks?"none":"block",
+                      display: hideRemarks ? "none" : "block",
                       color: fieldIconColors.landSchedule
                     }}
                     onClick={() => {
@@ -2993,7 +3357,7 @@ const Developerinfo = (props) => {
                   </IconButton>
                   <ReportProblemIcon
                     style={{
-                      display: hideRemarks?"none":"block",
+                      display: hideRemarks ? "none" : "block",
                       color: fieldIconColors.copyOfMutation
                     }}
                     onClick={() => {
@@ -3014,7 +3378,7 @@ const Developerinfo = (props) => {
                   </IconButton>
                   <ReportProblemIcon
                     style={{
-                      display: hideRemarks?"none":"block",
+                      display: hideRemarks ? "none" : "block",
                       color: fieldIconColors.copyOfJamabandi
                     }}
                     onClick={() => {
@@ -3035,7 +3399,7 @@ const Developerinfo = (props) => {
                   </IconButton>
                   <ReportProblemIcon
                     style={{
-                      display: hideRemarks?"none":"block",
+                      display: hideRemarks ? "none" : "block",
                       color: fieldIconColors.detailsOfLease
                     }}
                     onClick={() => {
@@ -3062,7 +3426,7 @@ const Developerinfo = (props) => {
 
                   <ReportProblemIcon
                     style={{
-                      display: hideRemarks?"none":"block",
+                      display: hideRemarks ? "none" : "block",
                       color: fieldIconColors.addSalesDeed
                     }}
                     onClick={() => {
@@ -3083,7 +3447,7 @@ const Developerinfo = (props) => {
                   </IconButton>
                   <ReportProblemIcon
                     style={{
-                      display: hideRemarks?"none":"block",
+                      display: hideRemarks ? "none" : "block",
                       color: fieldIconColors.copyofSpaBoard
                     }}
                     onClick={() => {
@@ -3107,7 +3471,7 @@ const Developerinfo = (props) => {
                   </IconButton>
                   <ReportProblemIcon
                     style={{
-                      display: hideRemarks?"none":"block",
+                      display: hideRemarks ? "none" : "block",
                       color: fieldIconColors.revisedLansSchedule
                     }}
                     onClick={() => {
@@ -3130,7 +3494,7 @@ const Developerinfo = (props) => {
                   </IconButton>
                   <ReportProblemIcon
                     style={{
-                      display: hideRemarks?"none":"block",
+                      display: hideRemarks ? "none" : "block",
                       color: fieldIconColors.copyOfShajraPlan
                     }}
                     onClick={() => {
