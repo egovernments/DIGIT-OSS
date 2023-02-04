@@ -5,7 +5,7 @@ import { Form } from "react-bootstrap";
 import NumberInput from "../../../../components/NumberInput";
 import TextField from "@mui/material/TextField";
 
-const MixedLandUseForm = ({ register, watch, setValue, control, handleWheel, setError, error }) => {
+const MixedLandUseForm = ({ register, getDocumentData, watch, getDocShareholding, setLoader, setValue, control, handleWheel, setError, error }) => {
   return (
     <Row className="ml-auto" style={{ marginBottom: 5 }}>
       <Col col-12>
@@ -142,27 +142,210 @@ const MixedLandUseForm = ({ register, watch, setValue, control, handleWheel, set
           </Row>
         </Col>
         <Col md={4} xxl lg="3">
-          <div>
-            <Form.Label>
-              <h2>
-                Permissable Commercial
-                <span style={{ color: "red" }}>*</span>
-              </h2>
-            </Form.Label>
-          </div>
-          <input
-            type="number"
-            className="form-control"
-            {...register("permissableCommercial")}
-            onWheel={handleWheel}
-            onChange={(e) => {
-              if (e?.target?.value > (watch("netPlannedArea") * 70) / 100) {
-                setError({ ...error, ["permissableCommercial"]: "Maximum 70% of Net planned area is allowed" });
-              } else setError({ ...error, ["permissableCommercial"]: "" });
-            }}
-          />
-          {error?.permissableCommercial && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.permissableCommercial}</h6>}
+          <h2>Select Mixed Land Use</h2>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <label htmlFor="mixedLandUse">
+            <input {...register("mixedLandUse")} type="radio" value="commercial" id="mixedLandUse" />
+            &nbsp; Commercial &nbsp;&nbsp;
+          </label>
+          <label htmlFor="mixedLandUse">
+            <input {...register("mixedLandUse")} type="radio" value="residential" id="mixedLandUse" />
+            &nbsp; Residential &nbsp;&nbsp;
+          </label>
+          {/* <h3 className="error-message" style={{ color: "red" }}>
+            {errors?.appliedLand && errors?.appliedLand?.message}
+          </h3> */}
         </Col>
+        {watch("mixedLandUse") === "commercial" && (
+          <Row>
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>
+                    Commercial (in Acres)
+                    <span style={{ color: "red" }}>*</span>
+                  </h2>
+                </Form.Label>
+              </div>
+              <input
+                type="number"
+                className="form-control"
+                {...register("permissableCommercial")}
+                onWheel={handleWheel}
+                onChange={(e) => {
+                  if (e?.target?.value > (watch("netPlannedArea") * 70) / 100) {
+                    setError({ ...error, ["permissableCommercial"]: "Commercial(In acres) cannot be more than 70% of NPA" });
+                  } else setError({ ...error, ["permissableCommercial"]: "" });
+                }}
+              />
+              {error?.permissableCommercial && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.permissableCommercial}</h6>}
+            </Col>
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>
+                    Residential (in Acres)
+                    <span style={{ color: "red" }}>*</span>
+                  </h2>
+                </Form.Label>
+              </div>
+              <input
+                type="number"
+                className="form-control"
+                {...register("residential")}
+                onWheel={handleWheel}
+                onChange={(e) => {
+                  if (e?.target?.value > (watch("netPlannedArea") * 30) / 100) {
+                    setError({ ...error, ["residential"]: "Residential cannot be more than 30% of NPA" });
+                  } else setError({ ...error, ["residential"]: "" });
+                }}
+              />
+              {error?.residential && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.residential}</h6>}
+            </Col>
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>
+                    FAR (in Acres)
+                    <span style={{ color: "red" }}>*</span>
+                  </h2>
+                </Form.Label>
+              </div>
+              <input
+                type="number"
+                className="form-control"
+                {...register("permissableFAR")}
+                onWheel={handleWheel}
+                onChange={(e) => {
+                  if (e?.target?.value > (watch("netPlannedArea") * 1.75) / 100) {
+                    setError({ ...error, ["permissableFAR"]: "FAR(In acres) cannot be more than 1.75% of NPA" });
+                  } else setError({ ...error, ["permissableFAR"]: "" });
+                }}
+              />
+              {error?.permissableFAR && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.permissableFAR}</h6>}
+            </Col>
+          </Row>
+        )}
+        {watch("mixedLandUse") === "residential" && (
+          <Row>
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>
+                    Commercial (in Acres)
+                    <span style={{ color: "red" }}>*</span>
+                  </h2>
+                </Form.Label>
+              </div>
+              <input
+                type="number"
+                className="form-control"
+                {...register("permissableCommercial")}
+                onWheel={handleWheel}
+                onChange={(e) => {
+                  if (e?.target?.value > (watch("netPlannedArea") * 30) / 100) {
+                    setError({ ...error, ["permissableCommercial"]: "Commercial(In acres) cannot be more than 30% of NPA" });
+                  } else setError({ ...error, ["permissableCommercial"]: "" });
+                }}
+              />
+              {error?.permissableCommercial && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.permissableCommercial}</h6>}
+            </Col>
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>
+                    Residential (in Acres)
+                    <span style={{ color: "red" }}>*</span>
+                  </h2>
+                </Form.Label>
+              </div>
+              <input
+                type="number"
+                className="form-control"
+                {...register("residential")}
+                onWheel={handleWheel}
+                onChange={(e) => {
+                  if (e?.target?.value > (watch("netPlannedArea") * 70) / 100) {
+                    setError({ ...error, ["residential"]: "Residential cannot be more than 70% of NPA" });
+                  } else setError({ ...error, ["residential"]: "" });
+                }}
+              />
+              {error?.residential && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.residential}</h6>}
+            </Col>
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>
+                    FAR (in Acres)
+                    <span style={{ color: "red" }}>*</span>
+                  </h2>
+                </Form.Label>
+              </div>
+              <input
+                type="number"
+                className="form-control"
+                {...register("permissableFAR")}
+                onWheel={handleWheel}
+                onChange={(e) => {
+                  if (e?.target?.value > (watch("netPlannedArea") * 1.75) / 100) {
+                    setError({ ...error, ["permissableFAR"]: "FAR(In acres) cannot be more than 1.75% of NPA" });
+                  } else setError({ ...error, ["permissableFAR"]: "" });
+                }}
+              />
+              {error?.permissableFAR && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.permissableFAR}</h6>}
+            </Col>
+          </Row>
+        )}
+        <h6 className="text-black mt-4">
+          <b>Documents</b>
+        </h6>
+        <br></br>
+        <div className="row mt-4">
+          <div className="col col-3">
+            <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top">
+              Layout Plan in pdf<span style={{ color: "red" }}>*</span>
+            </h6>
+            <div className="d-flex">
+              <label>
+                <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                <input
+                  type="file"
+                  style={{ display: "none" }}
+                  onChange={(e) => getDocumentData(e?.target?.files[0], "layoutPlanPdf")}
+                  accept="application/pdf/jpeg/png"
+                />
+              </label>
+              {watch("layoutPlanPdf") && (
+                <div>
+                  <a onClick={() => getDocShareholding(watch("layoutPlanPdf"), setLoader)} className="btn btn-sm ">
+                    <VisibilityIcon color="info" className="icon" />
+                  </a>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="col col-3">
+            <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top">
+              Layout Plan in dxf<span style={{ color: "red" }}>*</span>
+            </h6>
+            <div className="d-flex">
+              <label>
+                <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                <input
+                  type="file"
+                  style={{ display: "none" }}
+                  onChange={(e) => getDocumentData(e?.target?.files[0], "layoutPlanDxf")}
+                  accept="application/pdf/jpeg/png"
+                />
+              </label>
+              {watch("layoutPlanDxf") && (
+                <a onClick={() => getDocShareholding(watch("layoutPlanDxf"), setLoader)} className="btn btn-sm ">
+                  <VisibilityIcon color="info" className="icon" />
+                </a>
+              )}
+            </div>
+          </div>
+        </div>
       </Col>
     </Row>
   );
