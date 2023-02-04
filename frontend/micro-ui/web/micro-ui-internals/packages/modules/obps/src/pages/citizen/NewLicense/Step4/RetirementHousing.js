@@ -5,7 +5,18 @@ import { Form } from "react-bootstrap";
 import NumberInput from "../../../../components/NumberInput";
 import TextField from "@mui/material/TextField";
 
-const RetirementHousingForm = ({ register, watch, setValue, control, handleWheel, setError, error }) => {
+const RetirementHousingForm = ({
+  register,
+  getDocumentData,
+  watch,
+  getDocShareholding,
+  setLoader,
+  setValue,
+  control,
+  handleWheel,
+  setError,
+  error,
+}) => {
   return (
     <Row className="ml-auto" style={{ marginBottom: 5 }}>
       <Col col-12>
@@ -147,7 +158,7 @@ const RetirementHousingForm = ({ register, watch, setValue, control, handleWheel
               <div>
                 <Form.Label>
                   <h2>
-                    Permissable Ground Coverage
+                    Ground Coverage (in Acres)
                     <span style={{ color: "red" }}>*</span>
                   </h2>
                 </Form.Label>
@@ -159,7 +170,7 @@ const RetirementHousingForm = ({ register, watch, setValue, control, handleWheel
                 onWheel={handleWheel}
                 onChange={(e) => {
                   if (e?.target?.value > (watch("netPlannedArea") * 40) / 100) {
-                    setError({ ...error, ["permissableGroundCoverage"]: "Maximum 40% of Net planned area is allowed" });
+                    setError({ ...error, ["permissableGroundCoverage"]: "Ground Coverage cannot be more than 40% of NPA" });
                   } else setError({ ...error, ["permissableGroundCoverage"]: "" });
                 }}
               />
@@ -169,7 +180,7 @@ const RetirementHousingForm = ({ register, watch, setValue, control, handleWheel
               <div>
                 <Form.Label>
                   <h2>
-                    Permissable FAR
+                    FAR (in Acres)
                     <span style={{ color: "red" }}>*</span>
                   </h2>
                 </Form.Label>
@@ -180,8 +191,8 @@ const RetirementHousingForm = ({ register, watch, setValue, control, handleWheel
                 {...register("permissableFAR")}
                 onWheel={handleWheel}
                 onChange={(e) => {
-                  if (e?.target?.value > (watch("netPlannedArea") * 225) / 100) {
-                    setError({ ...error, ["permissableFAR"]: "Maximum 225% of Net planned area is allowed" });
+                  if (e?.target?.value > (watch("netPlannedArea") * 2.25) / 100) {
+                    setError({ ...error, ["permissableFAR"]: "Permissable FAR cannot be more than 2.25% of NPA" });
                   } else setError({ ...error, ["permissableFAR"]: "" });
                 }}
               />
@@ -191,7 +202,7 @@ const RetirementHousingForm = ({ register, watch, setValue, control, handleWheel
               <div>
                 <Form.Label>
                   <h2>
-                    Permissable Commercial
+                    Commercial (in Acres)
                     <span style={{ color: "red" }}>*</span>
                   </h2>
                 </Form.Label>
@@ -203,7 +214,7 @@ const RetirementHousingForm = ({ register, watch, setValue, control, handleWheel
                 onWheel={handleWheel}
                 onChange={(e) => {
                   if (e?.target?.value > (watch("permissableFAR") * 4) / 100) {
-                    setError({ ...error, ["permissableCommercial"]: "Maximum 4% of Permissable FAR is allowed" });
+                    setError({ ...error, ["permissableCommercial"]: "Commercial(In acres) cannot be more than 4% of FAR" });
                   } else setError({ ...error, ["permissableCommercial"]: "" });
                 }}
               />
@@ -211,6 +222,56 @@ const RetirementHousingForm = ({ register, watch, setValue, control, handleWheel
             </Col>
           </Row>
         </Col>
+        <h6 className="text-black mt-4">
+          <b>Documents</b>
+        </h6>
+        <br></br>
+        <div className="row mt-4">
+          <div className="col col-3">
+            <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top">
+              Layout Plan in pdf<span style={{ color: "red" }}>*</span>
+            </h6>
+            <div className="d-flex">
+              <label>
+                <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                <input
+                  type="file"
+                  style={{ display: "none" }}
+                  onChange={(e) => getDocumentData(e?.target?.files[0], "layoutPlanPdf")}
+                  accept="application/pdf/jpeg/png"
+                />
+              </label>
+              {watch("layoutPlanPdf") && (
+                <div>
+                  <a onClick={() => getDocShareholding(watch("layoutPlanPdf"), setLoader)} className="btn btn-sm ">
+                    <VisibilityIcon color="info" className="icon" />
+                  </a>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="col col-3">
+            <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top">
+              Layout Plan in dxf<span style={{ color: "red" }}>*</span>
+            </h6>
+            <div className="d-flex">
+              <label>
+                <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                <input
+                  type="file"
+                  style={{ display: "none" }}
+                  onChange={(e) => getDocumentData(e?.target?.files[0], "layoutPlanDxf")}
+                  accept="application/pdf/jpeg/png"
+                />
+              </label>
+              {watch("layoutPlanDxf") && (
+                <a onClick={() => getDocShareholding(watch("layoutPlanDxf"), setLoader)} className="btn btn-sm ">
+                  <VisibilityIcon color="info" className="icon" />
+                </a>
+              )}
+            </div>
+          </div>
+        </div>
       </Col>
     </Row>
   );
