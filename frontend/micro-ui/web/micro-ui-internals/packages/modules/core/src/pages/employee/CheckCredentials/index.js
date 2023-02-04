@@ -34,20 +34,6 @@ export default function CheckCredentials() {
         setEmployeeDetail(user?.info, user?.access_token); 
         let redirectPath = "/digit-ui/employee";
     
-        /* logic to redirect back to same screen where we left off  */
-        if (window?.location?.href?.includes("from=")) {
-            redirectPath = decodeURIComponent(window?.location?.href?.split("from=")?.[1]) || "/digit-ui/employee";
-        }
-    
-        /*  RAIN-6489 Logic to navigate to National DSS home incase user has only one role [NATADMIN]*/
-        if (user?.info?.roles && user?.info?.roles?.every((e) => e.code === "NATADMIN")) {
-            redirectPath = "/digit-ui/employee/payment/integration/dss/NURT_DASHBOARD";
-        }
-        /*  RAIN-6489 Logic to navigate to National DSS home incase user has only one role [NATADMIN]*/
-        if (user?.info?.roles && user?.info?.roles?.every((e) => e.code === "STADMIN")) {
-            redirectPath = "/digit-ui/employee/payment/integration/dss/home";
-        }
-    
         history.replace(redirectPath);
     }, [user]);
     const checkCrednetials = async () => {
@@ -73,11 +59,11 @@ export default function CheckCredentials() {
         const resp = await axios.post("/egov-hrms/employees/_ssoEmployee",body)
         // localStorage.setItem("access_token",response?.data?.access_token || response?.data?.TokenId);
         // localStorage.setItem("token",response?.data?.access_token || response?.data?.TokenId);
-        const info = resp?.data?.Token?.UserRequest;
+        const info = resp?.data?.token?.UserRequest;
         Digit.SessionStorage.set("Employee.tenantId", info?.tenantId);
         // const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.ssoUser(body);
         console.log("REINfo",info, resp);
-        // setUser({ info, ...resp?.data?.Token });
+        setUser({ info, ...resp?.data?.token });
         // console.log("_ssoCitizen response ",response.data) 
         // window.open(response.data.ReturnUrl,"_self");
 
