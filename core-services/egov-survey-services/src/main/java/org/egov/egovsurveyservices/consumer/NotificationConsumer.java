@@ -30,10 +30,7 @@ public class NotificationConsumer {
         try {
             SurveyRequest request = mapper.convertValue(record, SurveyRequest.class);
             //log.info(request.toString());
-            if(!ObjectUtils.isEmpty(request.getSurveyEntity().getStartDate()) && !ObjectUtils.isEmpty(request.getSurveyEntity().getEndDate())){
-                if(request.getSurveyEntity().getStartDate() < System.currentTimeMillis() && request.getSurveyEntity().getEndDate() > System.currentTimeMillis())
-                    notificationService.prepareEventAndSend(request);
-            }
+            notificationService.prepareEventAndSend(request);
 
         } catch (final Exception e) {
 
