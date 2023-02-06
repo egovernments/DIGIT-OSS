@@ -15452,3 +15452,25 @@ input[type=number], .checkbox-wrap .input-emp[type=number] {
     background: #f3f3f3;
     border-bottom: 1px dotted;
   }
+/* //////////////////////////////////////////////////////////////// */
+
+.FormLable {
+    margin-bottom: 5px;
+}
+
+.Inputcontrol {
+  width: "100%";
+  height: 45px;
+  
+}
+
+.align-right {
+  text-align: right;
+  border: 0;
+  display:flex;
+  justify-content: right;
+  margin-right: 5px;
+}
+
+
+
