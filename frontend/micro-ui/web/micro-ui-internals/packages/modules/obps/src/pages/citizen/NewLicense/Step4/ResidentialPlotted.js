@@ -417,7 +417,7 @@ const ResidentialPlottedForm = ({
                 <input
                   type="name"
                   className="form-control"
-                  {...register(`detailOfCommunitySite.${index}.communitySiteName`)}
+                  {...register(`DetailOfCommunitySite.${index}.communitySiteName`)}
                   // {...register("communitySites")}
                   onWheel={handleWheel}
                 />
@@ -434,7 +434,7 @@ const ResidentialPlottedForm = ({
                 <input
                   type="name"
                   className="form-control"
-                  {...register(`detailOfCommunitySite.${index}.provided`)}
+                  {...register(`DetailOfCommunitySite.${index}.provided`)}
                   // {...register("provided")}
                   onWheel={handleWheel}
                 />

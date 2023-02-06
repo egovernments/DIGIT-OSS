@@ -81,7 +81,7 @@ const AppliedDetailForm = (props) => {
           latitude: "",
         },
       ],
-      detailOfCommunitySite: [
+      DetailOfCommunitySite: [
         {
           communitySiteName: "",
           provided: "",
@@ -97,7 +97,7 @@ const AppliedDetailForm = (props) => {
 
   const { fields: detailsArray, append: detailsAppend, remove: detailsRemoce } = useFieldArray({
     control,
-    name: "detailOfCommunitySite",
+    name: "DetailOfCommunitySite",
   });
 
   // const validateDgpsPoint = () => {
@@ -340,16 +340,16 @@ const AppliedDetailForm = (props) => {
     }
   };
 
-  // useEffect(() => {
-  //   const valueData = stepData?.DetailsofAppliedLand;
-  //   if (valueData) {
-  //     Object?.keys(valueData?.DetailsAppliedLandPlot)?.map((item) => setValue(item, valueData?.DetailsAppliedLandPlot[item]));
-  //     Object?.keys(valueData?.DetailsAppliedLandNILP)?.map((item) => setValue(item, valueData?.DetailsAppliedLandNILP[item]));
-  //     valueData?.dgpsDetails.map((item, index) => {
-  //       setValue(`dgpsDetails.${index}.longitude`, item?.longitude), setValue(`dgpsDetails.${index}.latitude`, item?.latitude);
-  //     });
-  //   }
-  // }, [stepData]);
+  useEffect(() => {
+    const valueData = stepData?.DetailsofAppliedLand;
+    if (valueData) {
+      Object?.keys(valueData?.DetailsAppliedLandPlot)?.map((item) => setValue(item, valueData?.DetailsAppliedLandPlot[item]));
+      // Object?.keys(valueData?.DetailsAppliedLandNILP)?.map((item) => setValue(item, valueData?.DetailsAppliedLandNILP[item]));
+      // valueData?.dgpsDetails.map((item, index) => {
+      //   setValue(`dgpsDetails.${index}.longitude`, item?.longitude), setValue(`dgpsDetails.${index}.latitude`, item?.latitude);
+      // });
+    }
+  }, [stepData]);
 
   const getSubmitDataLabel = async () => {
     try {
@@ -574,7 +574,7 @@ const AppliedDetailForm = (props) => {
                 </div>
 
                 <Col col-12>
-                  {/* <div>
+                  <div>
                     {stepData?.ApplicantPurpose?.purpose === "RPL" && (
                       <ResidentialPlottedForm
                         register={register}
@@ -592,9 +592,9 @@ const AppliedDetailForm = (props) => {
                         error={error}
                       />
                     )}
-                  </div> */}
+                  </div>
                   <div>
-                    {stepData?.ApplicantPurpose?.purpose === "RPL" && (
+                    {stepData?.ApplicantPurpose?.purpose === "DDJAY_APHP" && (
                       <DDJAYForm
                         register={register}
                         getDocumentData={getDocumentData}
@@ -628,7 +628,22 @@ const AppliedDetailForm = (props) => {
                       />
                     )}
                   </div>
-                  <div>{stepData?.ApplicantPurpose?.purpose === "IPL" && <IndustrialPlottedForm register={register} />}</div>
+                  <div>
+                    {stepData?.ApplicantPurpose?.purpose === "IPL" && (
+                      <IndustrialPlottedForm
+                        register={register}
+                        getDocumentData={getDocumentData}
+                        watch={watch}
+                        getDocShareholding={getDocShareholding}
+                        setLoader={setLoader}
+                        setValue={setValue}
+                        control={control}
+                        handleWheel={handleWheel}
+                        setError={setError}
+                        error={error}
+                      />
+                    )}
+                  </div>
                   <div>
                     {(stepData?.ApplicantPurpose?.purpose === "NILPC" || stepData?.ApplicantPurpose?.purpose === "NILP") && (
                       <NilpForm
