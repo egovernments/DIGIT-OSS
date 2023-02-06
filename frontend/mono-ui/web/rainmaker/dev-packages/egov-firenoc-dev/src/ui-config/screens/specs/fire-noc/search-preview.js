@@ -334,7 +334,10 @@ const setSearchResponse = async (
     let filterData = data.uoms.filter(uom => uom.active == true);
     data.uoms = filterData
   });
-  
+
+  if (!edited) {
+    dispatch(prepareFinalObject("fireNOCsDetailsTemp", cloneDeep(response.FireNOCs[0])));
+  }
 
 
   set(response, 'FireNOCs[0].fireNOCDetails.additionalDetail.assignee[0]', '');
@@ -406,6 +409,7 @@ export const beforeSubmitHook = async () => {
   let fireNocDetails = get(state, "screenConfiguration.preparedFinalObject.FireNOCs", {});
   let otherDocuments = get(state, "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.additionalDetail.document", []);
   let allDocuments = get(state, "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.additionalDetail.documents", []);
+  let fireNOCsDetailsTemp =  get(state, "screenConfiguration.preparedFinalObject.fireNOCsDetailsTemp", {});
   otherDocuments.forEach(data => {
     allDocuments.map(allData => {
       if(data.documentType && data.documentType.split('.').length == 2 && allData&& allData.title.includes(data.documentType.split('.')[1]) && allData.fileStoreId != data.fileStoreId) {
@@ -414,6 +418,24 @@ export const beforeSubmitHook = async () => {
     })
   })
   fireNocDetails[0].fireNOCDetails.additionalDetail.documents = fireNocDetails[0].fireNOCDetails.additionalDetail.document;
+  
+  let oldBuildings = fireNOCsDetailsTemp.fireNOCDetails.buildings || [];
+  let newBuildings = fireNocDetails[0].fireNOCDetails.buildings || []
+  
+  newBuildings.map(newUom => {
+    oldBuildings.map(oldUom => {
+      if (newUom.id == oldUom.id) {
+        newUom.uoms.forEach(nwUM => {
+          oldUom.uoms.map(odUM => {
+            if (nwUM.code == odUM.code) nwUM.id = odUM.id
+          })
+        })
+      }
+    })
+  })
+
+  fireNocDetails[0].fireNOCDetails.buildings = newBuildings;
+  
   return fireNocDetails;
 }
 
