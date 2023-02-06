@@ -842,11 +842,11 @@ class ShowField extends Component {
     return (
       <thead>
         <tr className="report-table-header">
-          <th key={"S. No."} className="report-header-cell" data-orderable="false">
+          <th key={"S. No."} className="report-header-cell">
             <Label className="report-header-row-label" labelStyle={{ wordWrap: "unset", wordBreak: "unset", fontWeight: "bold" }} label={"RT_SNO"} />
           </th>
           {metaData && metaData.reportDetails && metaData.reportDetails.selectiveDownload && (
-            <th key={"testKey"} data-orderable="false">
+            <th key={"testKey"}>
               <input type="checkbox" onChange={checkAllRows} />
             </th>
           )}
@@ -854,7 +854,7 @@ class ShowField extends Component {
             reportResult.reportHeader.map((item, i) => {
               if (item.showColumn) {
                 return (
-                  <th key={i} className="report-header-cell" data-orderable="false">
+                  <th key={i} className="report-header-cell" data-orderable={item && item.label && item.label.includes("date") ? "false" : "true"}>
                     <Label
                       className="report-header-row-label"
                       labelStyle={{ wordWrap: "unset", wordBreak: "unset", fontWeight: "bold" }}
@@ -864,7 +864,7 @@ class ShowField extends Component {
                 );
               } else {
                 return (
-                  <th style={{ display: "none" }} key={i} data-orderable="false">
+                  <th style={{ display: "none" }} key={i} data-orderable={item && item.label && item.label.includes("date") ? "false" : "true"}>
                     <Label
                       className="report-header-row-label"
                       labelStyle={{ wordWrap: "unset", wordBreak: "unset", fontWeight: "bold" }}
