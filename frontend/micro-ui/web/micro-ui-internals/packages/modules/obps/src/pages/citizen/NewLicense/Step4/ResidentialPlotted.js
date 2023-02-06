@@ -140,6 +140,7 @@ const ResidentialPlottedForm = ({
                   else setError({ ...error, ["areaUnderGH"]: "" });
                 }}
               />
+              {error?.areaUnderGH && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.areaUnderGH}</h6>}
             </Col>
             <Col md={4} xxl lg="3">
               <div>
@@ -478,12 +479,9 @@ const ResidentialPlottedForm = ({
               />
             </label>
             {watch("layoutPlanPdf") && (
-              <div>
-                <a onClick={() => getDocShareholding(watch("layoutPlanPdf"), setLoader)} className="btn btn-sm ">
-                  <VisibilityIcon color="info" className="icon" />
-                </a>
-                {/* <h3>{watch("layoutPlanPdf")}</h3> */}
-              </div>
+              <a onClick={() => getDocShareholding(watch("layoutPlanPdf"), setLoader)} className="btn btn-sm ">
+                <VisibilityIcon color="info" className="icon" />
+              </a>
             )}
           </div>
           <div className="col col-3">
