@@ -49,6 +49,10 @@
   border:1px solid #ddd;
 }
 
+table.dataTable thead .sorting_asc:after {
+  content: "" !important;
+}
+
 
 .report-header-row-label {
   font-weight: bold;
