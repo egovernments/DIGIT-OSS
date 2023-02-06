@@ -12,6 +12,9 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { IconButton } from "@mui/material";
 import FileDownload from "@mui/icons-material/FileDownload";
+import ScrollToTop from "@egovernments/digit-ui-react-components/src/atoms/ScrollToTop";
+import Spinner from "../../../components/Loader";
+import { Toast } from "@egovernments/digit-ui-react-components";
 
 const electricalPlanService = () => {
   const {
@@ -46,9 +49,15 @@ const electricalPlanService = () => {
   const [fileStoreId, setFileStoreId] = useState({});
   const [devName, setDevName] = useState("")
   const [purpose, setPurpose] = useState("")
-  const [panNumber, setPanNumber] = useState("")
+  const [developmentPlan, setDevelopmentPlan] = useState("")
   const [gstnumber, setGSTNumber] = useState("")
-  const [mobileNmber, setMobileNumber] = useState("")
+  const [totalArea, setTotalArea] = useState("")
+
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [showToast, setShowToast] = useState(null);
+  const [showToastError, setShowToastError] = useState(null);
+  const [loader, setLoader] = useState(false);
+  
 
   
   const userInfo = Digit.UserService.getUser();
@@ -229,24 +238,52 @@ const electricalPlanService = () => {
     }
   }
 
+  // const getDocumentData = async (file, fieldName) => {
+  //    setValid(arr => [...arr, file?.name])
+  //    console.log({valid}, "vvvvvvvvv");
+  //   const formData = new FormData();
+  //   formData.append("file", file);
+  //   formData.append("tenantId", "hr");
+  //   formData.append("module", "property-upload");
+  //   formData.append("tag", "tag-property");
+ 
+  //   try {
+  //     const Resp = await axios.post("/filestore/v1/files", formData, {});
+  //     setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
+  //     setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
+      
+  //   } catch (error) {
+      
+  //     console.log(error.message);
+  //   }
+  // };
+
   const getDocumentData = async (file, fieldName) => {
-     setValid(arr => [...arr, file?.name])
-     console.log({valid}, "vvvvvvvvv");
+    console.log("documentData", fieldName);
+    if (selectedFiles.includes(file.name)) {
+      setShowToastError({ key: "error" });
+      return;
+    }
+
     const formData = new FormData();
     formData.append("file", file);
     formData.append("tenantId", "hr");
     formData.append("module", "property-upload");
     formData.append("tag", "tag-property");
-    // setLoader(true);
+    setLoader(true);
     try {
       const Resp = await axios.post("/filestore/v1/files", formData, {});
+      console.log("documentData", Resp?.data?.files);
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
-      // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
-      // setLoader(false);
+     
+      setSelectedFiles([...selectedFiles, file.name]);
+
+      setLoader(false);
+      setShowToast({ key: "success" });
     } catch (error) {
-      // setLoader(false);
-      console.log(error.message);
+      setLoader(false);
+      return error.message;
     }
   };
 
@@ -305,10 +342,15 @@ const electricalPlanService = () => {
     }
     const Resp = await axios.post(`/tl-services/v1/_search?loiNumber=${loiNumber}`, loiRequest);
     console.log(Resp, "RRRRRRRRRRR");
+    // setDevName(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantInfo?.devDetail?.addInfo?.name)
+    // setPanNumber(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantInfo?.devDetail?.addInfo?.PanNumber)
+    // setGSTNumber(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantInfo?.devDetail?.addInfo?.gst_Number)
+    // setMobileNumber(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantInfo?.devDetail?.addInfo?.mobileNumberUser)
+
     setDevName(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantInfo?.devDetail?.addInfo?.name)
-    setPanNumber(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantInfo?.devDetail?.addInfo?.PanNumber)
-    setGSTNumber(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantInfo?.devDetail?.addInfo?.gst_Number)
-    setMobileNumber(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantInfo?.devDetail?.addInfo?.mobileNumberUser)
+    setDevelopmentPlan(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.AppliedLandDetails?.[0]?.developmentPlan)
+    setPurpose(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.purpose)
+    setTotalArea(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.AppliedLandDetails?.[0]?.totalArea)
     
   
 
@@ -355,7 +397,10 @@ const electricalPlanService = () => {
       } 
    }
   return (
+    <div>
     <React.Fragment>
+        <ScrollToTop />
+       {loader && <Spinner />}
     <form onSubmit={handleSubmit(electricPlan)}>
       <Card style={{ width: "126%", border: "5px solid #1266af" }}>
         <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Electrical Plan </h4>
@@ -407,16 +452,16 @@ const electricalPlanService = () => {
               <div>
                 <label>
                   <h2>
-                    PanNumber
+                  Development Plan
                   </h2>
                 </label>
               </div>
               <input
                 type="string"
                 className="form-control"
-                {...register("panNumber")}
-                onChange={(e) => setPanNumber(e.target.value)}
-                value={panNumber}
+                {...register("developmentPlan")}
+                onChange={(e) => setDevelopmentPlan(e.target.value)}
+                value={developmentPlan}
                 disabled
               />
             </Col>
@@ -424,16 +469,16 @@ const electricalPlanService = () => {
               <div>
                 <label>
                   <h2>
-                    GST Number
+                  Purpose Of Licence
                   </h2>
                 </label>
               </div>
               <input
                 type="string"
                 className="form-control"
-                {...register("gstNumber")}
-                onChange={(e) => setGSTNumber(e.target.value)}
-                value={gstnumber}
+                {...register("purpose")}
+                onChange={(e) => setPurpose(e.target.value)}
+                value={purpose}
                 disabled
               />
             </Col>
@@ -441,23 +486,23 @@ const electricalPlanService = () => {
               <div>
                 <label>
                   <h2>
-                    Mobile-Nmber
+                  Total Area
                   </h2>
                 </label>
               </div>
               <input
                 type="string"
                 className="form-control"
-                {...register("mobileNumber")}
-                onChange={(e) => setMobileNumber(e.target.value)}
-                value={mobileNmber}
+                {...register("totalArea")}
+                onChange={(e) => setTotalArea(e.target.value)}
+                value={totalArea}
                 disabled
               />
             </Col>
           </Row>
           <br></br>
           <Row>
-            <Col className="col-3">
+            {/* <Col className="col-3">
               <div>
                 <label>
                   <h2>
@@ -524,12 +569,12 @@ const electricalPlanService = () => {
                 value={mobileNmber}
                 disabled
               />
-            </Col>
+            </Col> */}
           </Row>
           <br></br>
           <Row>
             <br></br>
-            <Col className="ms-auto" md={4} xxl lg="4">
+            <Col className="ms-auto" md={12} xxl lg="12">
               <br></br>
               <div>
                 <Form.Label>
@@ -564,14 +609,14 @@ const electricalPlanService = () => {
               </div>
             </Col>
             <br></br>
-            <Col className="ms-auto" md={4} xxl lg="4">
+            <Col className="ms-auto" md={12} xxl lg="12">
               <br></br>
               <div>
                 <Form.Label>
                   Provision of the electricity distribution in the project area by the instructions of the DHBVN{" "}
                   <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
                 </Form.Label>
-              </div>
+             
               <Form.Check
                 onChange={(e) => console.log(e)}
                 value="Y"
@@ -594,15 +639,16 @@ const electricalPlanService = () => {
                 {...register("electricDistribution")}
                 inline
               ></Form.Check>
+               </div>
             </Col>
             <br></br>
-            <Col className="ms-auto" md={4} xxl lg="4">
+            <Col className="ms-auto" md={12} xxl lg="12">
               <br></br>
               <div>
                 <Form.Label>
                   The capacity of the proposed electrical substation as per the requirement <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
                 </Form.Label>
-              </div>
+             
               <Form.Check
                 onChange={(e) => console.log(e)}
                 value="Y"
@@ -625,15 +671,16 @@ const electricalPlanService = () => {
                 {...register("electricalCapacity")}
                 inline
               ></Form.Check>
+               </div>
             </Col>
             <br></br>
-            <Col className="ms-auto" md={6} xxl lg="6">
+            <Col className="ms-auto" md={12} xxl lg="12">
               <div>
                 <Form.Label>
                   Provision of 33 Kv switching station for the electrical infrastructure as per the approved layout plan
                   <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
                 </Form.Label>
-              </div>
+              
               <Form.Check
                 onChange={(e) => console.log(e)}
                 value="Y"
@@ -656,14 +703,15 @@ const electricalPlanService = () => {
                 {...register("switchingStation")}
                 inline
               ></Form.Check>
+              </div>
             </Col>
             <br></br>
-            <Col className="ms-auto" md={6} xxl lg="6">
+            <Col className="ms-auto" md={12} xxl lg="12">
               <div>
                 <Form.Label>
                   Load sanction approval as per the requirement <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
                 </Form.Label>
-              </div>
+              
               <Form.Check
                 onChange={(e) => console.log(e)}
                 value="Y"
@@ -686,6 +734,7 @@ const electricalPlanService = () => {
                 {...register("LoadSancation")}
                 inline
               ></Form.Check>
+              </div>
             </Col>
             <br></br>
             {/* <Col className="ms-auto" md={4} xxl lg="4"></Col> */}
@@ -932,6 +981,29 @@ const electricalPlanService = () => {
 
     </Dialog>
     </React.Fragment>
+    {showToast && (
+        <Toast
+          success={showToast?.key === "success" ? true : false}
+          label="Document Uploaded Successfully"
+          isDleteBtn={true}
+          onClose={() => {
+            setShowToast(null);
+            setError(null);
+          }}
+        />
+      )}
+      {showToastError && (
+        <Toast
+          error={showToastError?.key === "error" ? true : false}
+          label="Duplicate file Selected"
+          isDleteBtn={true}
+          onClose={() => {
+            setShowToastError(null);
+            setError(null);
+          }}
+        />
+      )}
+    </div>
   );
 };
 
