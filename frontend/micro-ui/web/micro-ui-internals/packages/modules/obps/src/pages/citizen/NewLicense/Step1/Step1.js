@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Form } from "react-bootstrap";
-import { Card, Row, Col } from "react-bootstrap";
+import FormControl, { useFormControl } from "@mui/material/FormControl";
 import axios from "axios";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -165,288 +164,360 @@ const ApllicantFormStep1 = (props) => {
     <div>
       {loader && <Spinner />}
       <form onSubmit={handleSubmit(ApplicantFormSubmitHandlerForm)}>
-        <Card style={{ width: "126%", border: "5px solid #1266af" }}>
+        <div className="card" style={{ width: "126%", border: "5px solid #1266af" }}>
           <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New Licence Application</h4>
-          <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "10px" }}>
-            <Form.Group className="justify-content-center" controlId="formBasicEmail">
-              <h5 className="card-title fw-bold">Developer Information</h5>
-              <Row className="ml-auto" style={{ marginBottom: 5 }}>
-                <Col md={4} xxl lg="4">
-                  <div>
-                    <Form.Label>
-                      <h2>
-                        Name <span style={{ color: "red" }}>*</span>
-                      </h2>
-                    </Form.Label>
-                  </div>
-                  <input type="text" className="form-control" placeholder="N/A" disabled {...register("developerName")} />
+          <div className="card" style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "10px" }}>
+            <h5 className="card-title fw-bold">Developer Information</h5>
+            <div className="row-12">
+              <div className="col md={4} xxl lg-4">
+                <FormControl>
+                  <h2>
+                    Name <span style={{ color: "red" }}>*</span>
+                  </h2>
+                  <input
+                    type="text"
+                    className="Inputcontrol"
+                    class="form-control"
+                    id="standard-disabled"
+                    label="Disabled"
+                    placeholder="N/A"
+                    readOnly
+                    {...register("developerName")}
+                  />
                   <h3 className="error-message" style={{ color: "red" }}>
                     {errors?.developerName && errors?.developerName?.message}
                   </h3>
-                </Col>
-                <Col md={4} xxl lg="4">
-                  <div>
-                    <Form.Label>
-                      <h2>
-                        Address<span style={{ color: "red" }}>*</span>
-                      </h2>
-                    </Form.Label>
-                  </div>
+                </FormControl>
+                &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                <FormControl>
+                  <h2>
+                    Address<span style={{ color: "red" }}>*</span>
+                  </h2>
+
                   <Controller
                     control={control}
                     name="developerAddress"
                     render={({ field: { onChange, value } }) => (
-                      <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="developerAddress" />
+                      <input
+                        type="text"
+                        className="Inputcontrol"
+                        class="form-control"
+                        id="standard-disabled"
+                        label="Disabled"
+                        placeholder="N/A"
+                        readOnly
+                        value={value}
+                        name="developerAddress"
+                      />
+                      // <OutlinedInput type="text" value={value} className="form-control" placeholder="N/A" disabled name="developerAddress" />
                     )}
                   />
                   <h3 className="error-message" style={{ color: "red" }}>
                     {errors?.developerAddress && errors?.developerAddress?.message}
                   </h3>
-                </Col>
-                <Col md={4} xxl lg="4">
-                  <div>
-                    <Form.Label>
-                      <h2>
-                        EmailId<span style={{ color: "red" }}>*</span>
-                      </h2>
-                    </Form.Label>
-                  </div>
+                </FormControl>
+                &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                <FormControl>
+                  <h2>
+                    EmailId<span style={{ color: "red" }}>*</span>
+                  </h2>
+
                   <Controller
                     control={control}
                     name="developerEmail"
                     render={({ field: { onChange, value } }) => (
-                      <input type="text" value={value} className="form-control" disabled name="developerEmail" />
+                      <input
+                        type="text"
+                        className="Inputcontrol"
+                        class="form-control"
+                        id="standard-disabled"
+                        label="Disabled"
+                        placeholder="N/A"
+                        readOnly
+                        value={value}
+                        name="developerEmail"
+                      />
+                      // <OutlinedInput type="text" value={value} className="form-control" disabled name="developerEmail" />
                     )}
                   />
                   <h3 className="error-message" style={{ color: "red" }}>
                     {errors?.developerEmail && errors?.developerEmail?.message}
                   </h3>
-                </Col>
-              </Row>
-              <br></br>
-              <Row className="ml-auto" style={{ marginBottom: 5 }}>
-                <Col md={4} xxl lg="4">
-                  <div>
-                    <Form.Label>
-                      <h2>Developer Type</h2>
-                    </Form.Label>
-                  </div>
+                </FormControl>
+                &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                <FormControl>
+                  <h2>Developer Type</h2>
+
                   <Controller
                     control={control}
                     name="developerType"
                     render={({ field: { onChange, value } }) => (
-                      <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="developerType" />
+                      <input
+                        type="text"
+                        className="Inputcontrol"
+                        class="form-control"
+                        id="standard-disabled"
+                        label="Disabled"
+                        placeholder="N/A"
+                        readOnly
+                        value={value}
+                        name="developerType"
+                      />
+                      // <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="developerType" />
                     )}
                   />
                   <h3 className="error-message" style={{ color: "red" }}>
                     {errors?.developerType && errors?.developerType?.message}
                   </h3>
-                </Col>
-                <Col md={4} xxl lg="4">
-                  <div>
-                    <Form.Label>
-                      <h2>
-                        CIN Number<span style={{ color: "red" }}>*</span>
-                      </h2>
-                    </Form.Label>
-                  </div>
+                </FormControl>
+              </div>
+            </div>
+            <br></br>
+
+            <div className="row-12">
+              <div className="col md={4} xxl lg-4">
+                <FormControl>
+                  <h2>
+                    CIN Number<span style={{ color: "red" }}>*</span>
+                  </h2>
+
                   <Controller
                     control={control}
                     name="developerCinNo"
                     render={({ field: { onChange, value } }) => (
-                      <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="developerCinNo" />
+                      <input
+                        type="text"
+                        value={value}
+                        className="Inputcontrol"
+                        class="form-control"
+                        placeholder="N/A"
+                        disabled
+                        name="developerCinNo"
+                      />
                     )}
                   />
                   <h3 className="error-message" style={{ color: "red" }}>
                     {errors?.developerCinNo && errors?.developerCinNo?.message}
                   </h3>
-                </Col>
-              </Row>
-              <br></br>
-
-              <h5 className="card-title fw-bold">Directors Information as per developer</h5>
-              <div className="card-body">
-                <div className="table-bd">
-                  <table className="table table-bordered">
-                    <thead>
-                      <tr>
-                        <th>Sr. No</th>
-                        <th>DIN Number</th>
-                        <th>Name</th>
-                        <th>Contact Number</th>
-                        <th>View Document</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {developerDataLabel?.addInfo?.DirectorsInformation?.map((item, index) => {
-                        return (
-                          <tr>
-                            <td>{index + 1}</td>
-                            <td>{item?.din}</td>
-                            <td>{item?.name}</td>
-                            <td>{item?.contactNumber}</td>
-                            <td
-                              style={{ color: " #1266af", fontSize: " 12px", fontWeight: "bold", cursor: "pointer", textDecorationLine: "underline" }}
-                              onClick={() => {
-                                if (item?.uploadPdf) getDocShareholding(item?.uploadPdf, setLoader);
-                                else setShowToastError({ key: "error" });
-                              }}
-                            >
-                              <VisibilityIcon color="info" className="icon" />
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
+                </FormControl>
               </div>
-
-              <h5 className="card-title fw-bold">1. Director Information as per MCA</h5>
-              <div className="card-body">
-                <div className="table-bd">
-                  <table className="table table-bordered">
-                    <thead>
-                      <tr>
-                        <th>Sr. No</th>
-                        <th>DIN Number</th>
-                        <th>Name</th>
-                        <th>Contact Number</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {developerDataLabel?.addInfo?.DirectorsInformationMCA?.map((item, index) => {
-                        return (
-                          <tr>
-                            <td>{index + 1}</td>
-                            <td>{item?.din}</td>
-                            <td>{item?.name}</td>
-                            <td>{item?.contactNumber}</td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
+            </div>
+            <br></br>
+            <h5 className="card-title fw-bold">Directors Information as per developer</h5>
+            <div className="card-body">
+              <div className="table-bd">
+                <table className="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Sr. No</th>
+                      <th>DIN Number</th>
+                      <th>Name</th>
+                      <th>Contact Number</th>
+                      <th>View Document</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {developerDataLabel?.addInfo?.DirectorsInformation?.map((item, index) => {
+                      return (
+                        <tr>
+                          <td>{index + 1}</td>
+                          <td>{item?.din}</td>
+                          <td>{item?.name}</td>
+                          <td>{item?.contactNumber}</td>
+                          <td
+                            style={{ color: " #1266af", fontSize: " 12px", fontWeight: "bold", cursor: "pointer", textDecorationLine: "underline" }}
+                            onClick={() => {
+                              if (item?.uploadPdf) getDocShareholding(item?.uploadPdf, setLoader);
+                              else setShowToastError({ key: "error" });
+                            }}
+                          >
+                            <VisibilityIcon color="info" className="icon" />
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
-
-              <h5 className="card-title fw-bold">Shareholding Patterns</h5>
-              <div className="card-body">
-                <div className="table-bd">
-                  <table className="table table-bordered">
-                    <thead>
-                      <tr>
-                        <th>Sr. No</th>
-                        <th>Name</th>
-                        <th>Designition</th>
-
-                        <th>Percentage</th>
-                        <th>View Document</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {developerDataLabel?.addInfo?.shareHoldingPatterens?.map((it, ind) => {
-                        return (
-                          <tr>
-                            <td>{ind}</td>
-                            <td>{it?.name}</td>
-                            <td>{it?.designition}</td>
-
-                            <td>{it?.percentage}</td>
-                            <td
-                              style={{ color: " #1266af", fontSize: " 12px", fontWeight: "bold", cursor: "pointer", textDecorationLine: "underline" }}
-                              onClick={() => {
-                                if (it?.uploadPdf) getDocShareholding(it?.uploadPdf, setLoader);
-                                else setShowToastError({ key: "error" });
-                              }}
-                            >
-                              <VisibilityIcon color="info" className="icon" />
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
+            </div>
+            <h5 className="card-title fw-bold">1. Director Information as per MCA</h5>
+            <div className="card-body">
+              <div className="table-bd">
+                <table className="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Sr. No</th>
+                      <th>DIN Number</th>
+                      <th>Name</th>
+                      <th>Contact Number</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {developerDataLabel?.addInfo?.DirectorsInformationMCA?.map((item, index) => {
+                      return (
+                        <tr>
+                          <td>{index + 1}</td>
+                          <td>{item?.din}</td>
+                          <td>{item?.name}</td>
+                          <td>{item?.contactNumber}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
-            </Form.Group>
-          </Card>
-          <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "5px", marginBottom: "52px" }}>
-            <Form.Group className="justify-content-center" controlId="formBasicEmail">
-              <h5 className="card-title fw-bold">Authorized Person Information </h5>
-              <Row className="ml-auto" style={{ marginBottom: 5 }}>
-                <Col md={4} xxl lg="4">
-                  <div>
-                    <Form.Label>
-                      <h2>
-                        Name <span style={{ color: "red" }}>*</span>
-                      </h2>
-                    </Form.Label>
-                  </div>
-                  <input type="text" className="form-control" placeholder="N/A" disabled {...register("authorizedName")} />
+            </div>
+            <h5 className="card-title fw-bold">Shareholding Patterns</h5>
+            <div className="card-body">
+              <div className="table-bd">
+                <table className="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Sr. No</th>
+                      <th>Name</th>
+                      <th>Designition</th>
+
+                      <th>Percentage</th>
+                      <th>View Document</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {developerDataLabel?.addInfo?.shareHoldingPatterens?.map((it, ind) => {
+                      return (
+                        <tr>
+                          <td>{ind}</td>
+                          <td>{it?.name}</td>
+                          <td>{it?.designition}</td>
+
+                          <td>{it?.percentage}</td>
+                          <td
+                            style={{ color: " #1266af", fontSize: " 12px", fontWeight: "bold", cursor: "pointer", textDecorationLine: "underline" }}
+                            onClick={() => {
+                              if (it?.uploadPdf) getDocShareholding(it?.uploadPdf, setLoader);
+                              else setShowToastError({ key: "error" });
+                            }}
+                          >
+                            <VisibilityIcon color="info" className="icon" />
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div className="card" style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "5px", marginBottom: "52px" }}>
+            <h5 className="card-title fw-bold">Authorized Person Information </h5>
+            <div className="row-12">
+              <div className="col md={4} xxl lg-4">
+                <FormControl>
+                  <h2>
+                    Name <span style={{ color: "red" }}>*</span>
+                  </h2>
+                  <input
+                    type="text"
+                    className="Inputcontrol"
+                    class="form-control"
+                    id="standard-disabled"
+                    label="Disabled"
+                    placeholder="N/A"
+                    readOnly
+                    {...register("authorizedName")}
+                  />
+                  {/* <input type="text" className="form-control" placeholder="N/A" disabled {...register("authorizedName")} /> */}
                   <h3 className="error-message" style={{ color: "red" }}>
                     {errors?.authorizedName && errors?.authorizedName?.message}
                   </h3>
-                </Col>
-                <Col md={4} xxl lg="4">
-                  <div>
-                    <Form.Label>
-                      <h2>
-                        Mobile No.<span style={{ color: "red" }}>*</span>
-                      </h2>
-                    </Form.Label>
-                  </div>
+                </FormControl>
+                &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                <FormControl>
+                  <h2>
+                    Mobile No.<span style={{ color: "red" }}>*</span>
+                  </h2>
+
                   <Controller
                     control={control}
                     name="authorizedPerson"
                     render={({ field: { onChange, value } }) => (
-                      <input type="text" value={value} className="form-control" placeholder="N/A" disabled {...register("authorizedMobile")} />
+                      <input
+                        type="text"
+                        className="Inputcontrol"
+                        class="form-control"
+                        id="standard-disabled"
+                        label="Disabled"
+                        placeholder="N/A"
+                        value={value}
+                        readOnly
+                        {...register("authorizedMobile")}
+                      />
+                      // <input type="text" value={value} className="form-control" placeholder="N/A" disabled {...register("authorizedMobile")} />
                     )}
                   />
                   <h3 className="error-message" style={{ color: "red" }}>
                     {errors?.authorizedMobile && errors?.authorizedMobile?.message}
                   </h3>
-                </Col>
-                <Col md={4} xxl lg="4">
-                  <div>
-                    <Form.Label>
-                      <h2>
-                        Emailid for Authorized Signatory<span style={{ color: "red" }}>*</span>
-                      </h2>
-                    </Form.Label>
-                  </div>
+                </FormControl>
+                &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                <FormControl>
+                  <h2>
+                    Emailid for Authorized Signatory<span style={{ color: "red" }}>*</span>
+                  </h2>
+
                   <Controller
                     control={control}
                     name="authorizedEmail"
                     render={({ field: { onChange, value } }) => (
-                      <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="authorizedEmail" />
+                      <input
+                        type="text"
+                        className="Inputcontrol"
+                        class="form-control"
+                        id="standard-disabled"
+                        label="Disabled"
+                        placeholder="N/A"
+                        value={value}
+                        readOnly
+                        {...register("authorizedEmail")}
+                      />
+                      // <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="authorizedEmail" />
                     )}
                   />
                   <h3 className="error-message" style={{ color: "red" }}>
                     {errors?.authorizedEmail && errors?.authorizedEmail?.message}
                   </h3>
-                </Col>
-              </Row>
-              <br></br>
-              <Row className="ml-auto" style={{ marginBottom: 5 }}>
-                <Col md={4} xxl lg="4">
-                  <div>
-                    <Form.Label>
-                      <h2>Pan No.</h2>
-                    </Form.Label>
-                  </div>
+                </FormControl>
+                &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                <FormControl>
+                  <h2>Pan No.</h2>
+
                   <Controller
                     control={control}
                     name="authorizedPan"
                     render={({ field: { onChange, value } }) => (
-                      <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="authorizedPan" />
+                      <input
+                        type="text"
+                        className="Inputcontrol"
+                        class="form-control"
+                        id="standard-disabled"
+                        label="Disabled"
+                        placeholder="N/A"
+                        value={value}
+                        readOnly
+                        {...register("authorizedPan")}
+                      />
+                      // <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="authorizedPan" />
                     )}
                   />
                   <h3 className="error-message" style={{ color: "red" }}>
                     {errors?.authorizedPan && errors?.authorizedPan?.message}
                   </h3>
-                </Col>
-                <Col md={4} xxl lg="4">
+                </FormControl>
+              </div>
+            </div>
+            <br></br>
+            <div className="row-12">
+              <div className="col md={4} xxl lg-4">
+                <FormControl>
                   <div
                     style={{ cursor: "pointer" }}
                     onClick={() => {
@@ -459,8 +530,9 @@ const ApllicantFormStep1 = (props) => {
                   >
                     View Upload Digital Signature <VisibilityIcon color="info" className="icon" />
                   </div>
-                </Col>
-                <Col md={4} xxl lg="4">
+                </FormControl>
+                &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                <FormControl>
                   <div
                     style={{ cursor: "pointer" }}
                     onClick={() => {
@@ -473,10 +545,11 @@ const ApllicantFormStep1 = (props) => {
                   >
                     View Upload Board Resolution <VisibilityIcon color="info" className="icon" />
                   </div>
-                </Col>
-              </Row>
-            </Form.Group>
-          </Card>
+                </FormControl>
+              </div>
+            </div>
+          </div>
+
           <div class="row">
             <div class="col-sm-12 text-right">
               <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
@@ -484,8 +557,9 @@ const ApllicantFormStep1 = (props) => {
               </button>
             </div>
           </div>
-        </Card>
+        </div>
       </form>
+
       {showToastError && (
         <Toast
           error={showToastError?.key === "error" ? true : false}

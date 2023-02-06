@@ -1,18 +1,39 @@
 import React, { useState, useEffect } from "react";
-import { Card, Row, Col } from "react-bootstrap";
-import { Button, Form } from "react-bootstrap";
+import { Button } from "@material-ui/core";
+import FormControl, { useFormControl } from "@mui/material/FormControl";
+import OutlinedInput from "@mui/material/OutlinedInput";
 import { useForm } from "react-hook-form";
-import { DatePicker } from "@egovernments/digit-ui-react-components";
-import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import axios from "axios";
-// import { getDocShareholding } from "../docView/docView.help";
+import { styled } from "@mui/material/styles";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import Typography from "@mui/material/Typography";
 import FileUpload from "@mui/icons-material/FileUpload";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import ReleaseNew from "./Release";
+
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  "& .MuiDialogContent-root": {
+    padding: theme.spacing(2),
+  },
+  "& .MuiDialogActions-root": {
+    padding: theme.spacing(1),
+  },
+}));
 function SubmitNew() {
-  const [modal, setmodal] = useState(false);
-  const [modal1, setmodal1] = useState(false);
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
   const [ServicePlanDataLabel, setServicePlanDataLabel] = useState([]);
   const [existingBgNumber, setExistingBgNumber] = useState("");
 
@@ -205,193 +226,170 @@ function SubmitNew() {
 
   return (
     <form onSubmit={handleSubmit(bankSubmitNew)}>
-      <Card style={{ width: "126%", border: "5px solid #1266af" }}>
+      <div className="card" style={{ width: "126%", border: "5px solid #1266af" }}>
         <h4 style={{ fontSize: "25px", marginLeft: "21px" }}> Bank Guarantee Submission </h4>
         <div className="card">
-          <Row className="col-12">
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>Enter LOI Number </h2>
-                </Form.Label>
-              </div>
-              <input
-                type="text"
-                className="form-control"
-                placeholder=""
-                {...register("loiNumber")}
-                disabled={existingBgNumber?.length > 0 ? true : false}
-              />
-            </Col>
+          <div className="row-12">
+            <div className="Col md={4} xxl lg-4">
+              <FormControl>
+                <h2 className="FormLable">
+                  Enter LOI Number<span style={{ color: "red" }}>*</span>
+                </h2>
 
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>Type of B.G</h2>
-                </Form.Label>
-              </div>
-              <select className="form-control" {...register("typeOfBg")} disabled={existingBgNumber?.length > 0 ? true : false}>
-                <option value="IDW"> IDW</option>
-                <option value="EDC">EDC</option>
-                <option value="SPE">SPE</option>
-              </select>
-            </Col>
-            <Col md={4} xxl lg="3">
-              <br></br>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder=""
+                  {...register("loiNumber")}
+                  disabled={existingBgNumber?.length > 0 ? true : false}
+                />
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">
+                  Type of B.G.<span style={{ color: "red" }}>*</span>
+                </h2>
+
+                <select
+                  className="Inputcontrol"
+                  class="form-control"
+                  placeholder=""
+                  {...register("typeOfBg")}
+                  disabled={existingBgNumber?.length > 0 ? true : false}
+                >
+                  <option value="IDW"> IDW</option>
+                  <option value="EDC">EDC</option>
+                  <option value="SPE">SPE</option>
+                </select>
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
               <button
                 // id="btnClear"
                 type="button"
                 class="btn btn-primary btn-md center-block"
-                style={{ marginBottom: "-44px" }}
-                onClick={submitNewFormSubmitHandler}
+                onClick={existingBgFormSubmitHandler}
               >
                 Search
               </button>
-            </Col>
-          </Row>
-          {watch("typeOfBg") === "SPE" && (
-            <Row className="col-12">
-              <Col md={4} xxl lg="3">
-                <Form.Label>
-                  <h2>Amount (in fig)</h2>
-                </Form.Label>
-                <input type="text" className="form-control" placeholder="" {...register("amountInFig")} />
-              </Col>
-              <Col md={4} xxl lg="3">
-                <Form.Label>
-                  <h2>Amount (in words)</h2>
-                </Form.Label>
-
-                <input type="text" className="form-control" placeholder="" {...register("amountInWords")} />
-              </Col>
-            </Row>
-          )}
-
-          {watch("typeOfBg") === "IDW" && (
-            <Row className="col-12">
-              <Col md={4} xxl lg="3">
-                <Form.Label>
-                  <h2>Amount (in fig)</h2>
-                </Form.Label>
-
-                <input
-                  type="text"
-                  className="form-control"
-                  readOnly
-                  {...register("amountInFig")}
-                  disabled={existingBgNumber?.length > 0 ? true : false}
-                />
-              </Col>
-              <Col md={4} xxl lg="3">
-                <Form.Label>
-                  <h2>Amount (in words)</h2>
-                </Form.Label>
-
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder=""
-                  {...register("amountInWords")}
-                  disabled={existingBgNumber?.length > 0 ? true : false}
-                />
-              </Col>
-            </Row>
-          )}
-          {watch("typeOfBg") === "EDC" && (
-            <Row className="col-12">
-              <Col md={4} xxl lg="3">
-                <Form.Label>
-                  <h2>Amount (in fig)</h2>
-                </Form.Label>
-
-                <input
-                  type="text"
-                  className="form-control"
-                  readOnly
-                  {...register("amountInFig")}
-                  disabled={existingBgNumber?.length > 0 ? true : false}
-                />
-              </Col>
-              <Col md={4} xxl lg="3">
-                <Form.Label>
-                  <h2>Amount (in words)</h2>
-                </Form.Label>
-
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder=""
-                  {...register("amountInWords")}
-                  disabled={existingBgNumber?.length > 0 ? true : false}
-                />
-              </Col>
-            </Row>
-          )}
-
-          {/* <Col md={4} xxl lg="3">
-            <div>
-              <Form.Label>
-                <h2>Amount (in fig)</h2>
-              </Form.Label>
             </div>
-            <input
-              type="text"
-              className="form-control"
-              placeholder=""
-              readOnly
-              {...register("amountInFig")}
-              disabled={existingBgNumber?.length > 0 ? true : false}
-            />
-          </Col> */}
+            {watch("typeOfBg") === "SPE" && (
+              <div className="col-12">
+                <FormControl>
+                  <h2 className="FormLable">
+                    Amount (in fig)<span style={{ color: "red" }}>*</span>
+                  </h2>
 
-          <br></br>
-          <Row className="col-12">
-            {/* <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>Amount (in words)</h2>
-                </Form.Label>
-              </div>
-              <input
-                type="text"
-                className="form-control"
-                placeholder=""
-                {...register("amountInWords")}
-                disabled={existingBgNumber?.length > 0 ? true : false}
-              />
-            </Col> */}
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>Enter Bank Guarantee No. </h2>
-                </Form.Label>
-              </div>
-              <input type="text" className="form-control" placeholder="" {...register("bgNumber")} />
-            </Col>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>Enter Bank Name </h2>
-                </Form.Label>
-              </div>
-              <input type="text" className="form-control" placeholder="" {...register("bankName")} />
-            </Col>
+                  <input type="text" className="form-control" placeholder="" {...register("amountInFig")} />
+                </FormControl>
+                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                <FormControl>
+                  <h2 className="FormLable">
+                    Amount (in words)<span style={{ color: "red" }}>*</span>
+                  </h2>
 
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>Expiry Date </h2>
-                </Form.Label>
+                  <input type="text" className="form-control" placeholder="" {...register("amountInWords")} />
+                </FormControl>
               </div>
-              <input type="datepicker" className="form-control" placeholder="" {...register("validity")} format="yyyy-MM-dd" />
-            </Col>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>Claim Period</h2>
-                </Form.Label>
+            )}
+            {watch("typeOfBg") === "IDW" && (
+              <div className="col-12">
+                <FormControl>
+                  <h2 className="FormLable">
+                    Amount (in fig)<span style={{ color: "red" }}>*</span>
+                  </h2>
+
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="standard-disabled"
+                    label="Disabled"
+                    {...register("amountInFig")}
+                    readOnly
+                    disabled={existingBgNumber?.length > 0 ? true : false}
+                  />
+                </FormControl>
+                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                <FormControl>
+                  <h2 className="FormLable">
+                    Amount (in words)<span style={{ color: "red" }}>*</span>
+                  </h2>
+
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder=""
+                    {...register("amountInWords")}
+                    disabled={existingBgNumber?.length > 0 ? true : false}
+                  />
+                </FormControl>
               </div>
-              <select className="form-control" placeholder="" {...register("claimPeriod")}>
+            )}
+            {watch("typeOfBg") === "EDC" && (
+              <div className="col-12">
+                <FormControl>
+                  <h2 className="FormLable">
+                    Amount (in fig)<span style={{ color: "red" }}>*</span>
+                  </h2>
+
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="standard-disabled"
+                    label="Disabled"
+                    {...register("amountInFig")}
+                    readOnly
+                    disabled={existingBgNumber?.length > 0 ? true : false}
+                  />
+                </FormControl>
+                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                <FormControl>
+                  <h2 className="FormLable">
+                    Amount (in words)<span style={{ color: "red" }}>*</span>
+                  </h2>
+
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder=""
+                    {...register("amountInWords")}
+                    disabled={existingBgNumber?.length > 0 ? true : false}
+                  />
+                </FormControl>
+              </div>
+            )}
+          </div>
+          &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+          <div className="col-12">
+            <FormControl>
+              <h2 className="FormLable">
+                Enter Bank Guarantee No.<span style={{ color: "red" }}>*</span>
+              </h2>
+
+              <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bgNumber")} />
+            </FormControl>
+            &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+            <FormControl>
+              <h2 className="FormLable">
+                Enter Bank Name<span style={{ color: "red" }}>*</span>
+              </h2>
+
+              <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bankName")} />
+            </FormControl>
+            &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+            <FormControl>
+              <h2 className="FormLable">
+                Expiry Date<span style={{ color: "red" }}>*</span>
+              </h2>
+
+              <OutlinedInput type="datepicker" className="Inputcontrol" placeholder="" {...register("validity")} format="yyyy-MM-dd" />
+            </FormControl>
+            &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+            <FormControl>
+              <h2 className="FormLable">
+                Claim Period<span style={{ color: "red" }}>*</span>
+              </h2>
+
+              <select className="Inputcontrol" class="form-control" placeholder="" {...register("claimPeriod")}>
                 <option> 0</option>
                 <option>1</option>
                 <option> 2</option>
@@ -406,128 +404,93 @@ function SubmitNew() {
                 <option>11</option>
                 <option> 12</option>
               </select>
-            </Col>
-          </Row>
-          <br></br>
-          <Row className="col-12">
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>Country of origin</h2>
-                </Form.Label>
-              </div>
-              <select className="form-control" placeholder="" {...register("originCountry")}>
+            </FormControl>
+          </div>
+          &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+          <div className="col-12">
+            <FormControl>
+              <h2 className="FormLable">
+                Country of origin<span style={{ color: "red" }}>*</span>
+              </h2>
+
+              <select className="Inputcontrol" class="form-control" placeholder="" {...register("originCountry")}>
                 <option>------</option>
                 <option value="1"> Indian</option>
                 <option value="2">Foreign</option>
               </select>
-              {watch("originCountry") === "2" && (
-                <div>
-                  <div className="row">
-                    <div className="col col-12">
-                      <p>In case of B.G. from other country, you need to upload Indian Bank Advice Certificate.</p>
-                    </div>
-                    <div className="col col-12">
-                      <label>
-                        <h2>
-                          Upload Bank Advice Certificate.
-                          <span style={{ color: "red" }}>*</span>
-                        </h2>
-                      </label>
-                      <div>
-                        <input
-                          type="file"
-                          className="form-control"
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "indianBankAdvisedCertificate")}
-                        ></input>
-                      </div>
+            </FormControl>
+            &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+            <label>
+              <h2>Upload B.G. softcopy </h2>
+              <FileUpload color="primary" />
 
-                      <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.indianBankAdvisedCertificate && errors?.indianBankAdvisedCertificate?.message}
-                      </h3>
-                    </div>
-                  </div>
-                </div>
+              <input
+                type="file"
+                accept="application/pdf/jpeg/png"
+                style={{ display: "none" }}
+                onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBg")}
+              />
+
+              {fileStoreId?.uploadBg ? (
+                <a onClick={() => getDocShareholding(fileStoreId?.uploadBg)} className="btn btn-sm ">
+                  <VisibilityIcon color="info" className="icon" />
+                </a>
+              ) : (
+                <p></p>
               )}
-            </Col>
-            <Col md={4} xxl lg="3">
+              <h3 style={{}}>{watch("uploadBgFileName") ? watch("uploadBgFileName") : null}</h3>
+            </label>
+            &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+            <label>
+              <h2>Hardcopy Submitted at TCP office. </h2>
+
+              <label htmlFor="licenseApplied">
+                <input {...register("licenseApplied")} type="radio" value="Y" id="licenseApplied" />
+                &nbsp; Yes &nbsp;&nbsp;
+              </label>
+              <label htmlFor="licenseApplied">
+                <input
+                  {...register("licenseApplied")}
+                  type="radio"
+                  value="N"
+                  id="licenseApplied"
+                  className="btn btn-primary"
+                  onClick={handleClickOpen}
+                />
+                &nbsp; No &nbsp;&nbsp;
+              </label>
+              <h3 className="error-message" style={{ color: "red" }}>
+                {errors?.licenseApplied && errors?.licenseApplied?.message}
+              </h3>
+            </label>
+            {watch("licenseApplied") === "Y" && (
               <div>
-                <label>
-                  <h2>Upload B.G. softcopy </h2>
-                  <FileUpload color="primary" />
+                <div className="row">
+                  <div className="col col-12">
+                    <label>
+                      <h2>
+                        Upload Receipt of Submission.
+                        <span style={{ color: "red" }}>*</span>
+                      </h2>
+                      <FileUpload color="primary" />
 
-                  <input
-                    type="file"
-                    accept="application/pdf/jpeg/png"
-                    style={{ display: "none" }}
-                    onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBg")}
-                  />
+                      <input
+                        type="file"
+                        accept="application/pdf/jpeg/png"
+                        style={{ display: "none" }}
+                        onChange={(e) => getDocumentData(e?.target?.files[0], "tcpSubmissionReceived")}
+                      />
 
-                  {fileStoreId?.uploadBg ? (
-                    <a onClick={() => getDocShareholding(fileStoreId?.uploadBg)} className="btn btn-sm ">
-                      <VisibilityIcon color="info" className="icon" />
-                    </a>
-                  ) : (
-                    <p></p>
-                  )}
-                  <h3 style={{}}>{watch("uploadBgFileName") ? watch("uploadBgFileName") : null}</h3>
-                </label>
-              </div>
-              {/* <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBg")} /> */}
-            </Col>
-            <Col md={4} xxl lg="3">
-              <div>
-                <label>
-                  Hardcopy Submitted at TCP office.{" "}
-                  <label htmlFor="licenseApplied">
-                    <input {...register("licenseApplied")} type="radio" value="Y" id="licenseApplied" />
-                    &nbsp; Yes &nbsp;&nbsp;
-                  </label>
-                  <label htmlFor="licenseApplied">
-                    <input
-                      {...register("licenseApplied")}
-                      type="radio"
-                      value="N"
-                      id="licenseApplied"
-                      className="btn btn-primary"
-                      onClick={() => setmodal1(true)}
-                    />
-                    &nbsp; No &nbsp;&nbsp;
-                  </label>
-                  <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.licenseApplied && errors?.licenseApplied?.message}
-                  </h3>
-                </label>
-              </div>
-
-              {watch("licenseApplied") === "Y" && (
-                <div>
-                  <div className="row">
-                    <div className="col col-12">
-                      <label>
-                        <h2>
-                          Upload Receipt of Submission.
-                          <span style={{ color: "red" }}>*</span>
-                        </h2>
-                        <FileUpload color="primary" />
-
-                        <input
-                          type="file"
-                          accept="application/pdf/jpeg/png"
-                          style={{ display: "none" }}
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "tcpSubmissionReceived")}
-                        />
-
-                        {fileStoreId?.tcpSubmissionReceived ? (
-                          <a onClick={() => getDocShareholding(fileStoreId?.tcpSubmissionReceived)} className="btn btn-sm ">
-                            <VisibilityIcon color="info" className="icon" />
-                          </a>
-                        ) : (
-                          <p></p>
-                        )}
-                        <h3 style={{}}>{watch("tcpSubmissionReceivedFileName") ? watch("tcpSubmissionReceivedFileName") : null}</h3>
-                      </label>
-                      {/* <div>
+                      {fileStoreId?.tcpSubmissionReceived ? (
+                        <a onClick={() => getDocShareholding(fileStoreId?.tcpSubmissionReceived)} className="btn btn-sm ">
+                          <VisibilityIcon color="info" className="icon" />
+                        </a>
+                      ) : (
+                        <p></p>
+                      )}
+                      <h3 style={{}}>{watch("tcpSubmissionReceivedFileName") ? watch("tcpSubmissionReceivedFileName") : null}</h3>
+                    </label>
+                    {/* <div>
                         <input
                           type="file"
                           className="form-control"
@@ -538,97 +501,98 @@ function SubmitNew() {
                       <h3 className="error-message" style={{ color: "red" }}>
                         {errors?.tcpSubmissionReceived && errors?.tcpSubmissionReceived?.message}
                       </h3> */}
-                    </div>
                   </div>
                 </div>
-              )}
-              {watch("licenseApplied") === "N" && (
-                <div>
-                  <Modal
-                    size="lg"
-                    isOpen={modal1}
-                    toggle={() => setmodal(!modal1)}
-                    style={{ width: "500px", height: "200px" }}
-                    aria-labelledby="contained-modal-title-vcenter"
-                    centered
-                  >
-                    <ModalHeader toggle={() => setmodal1(!modal1)}></ModalHeader>
-                    <ModalBody style={{ fontSize: 20 }}>
-                      <h2> Submit Hardcopy of B.G. at TCP office.</h2>
-                    </ModalBody>
-                    <ModalFooter toggle={() => setmodal(!modal1)}></ModalFooter>
-                  </Modal>
-                </div>
-              )}
-            </Col>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>Existing B.G. No. (In case of replacement, extension, renewal enter bank guarantee number)</h2>
-                </Form.Label>
               </div>
-              <input
+            )}
+            {watch("licenseApplied") === "N" && (
+              <div>
+                <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
+                  {/* <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
+          Modal title
+        </BootstrapDialogTitle> */}
+                  <DialogContent dividers>
+                    <Typography gutterBottom>Submit Hardcopy of B.G. at TCP office.</Typography>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button autoFocus onClick={handleClose}>
+                      Close
+                    </Button>
+                  </DialogActions>
+                </BootstrapDialog>
+              </div>
+            )}
+            {watch("originCountry") === "2" && (
+              <div>
+                <div className="row">
+                  <div className="col col-4">
+                    <p>In case of B.G. from other country, you need to upload Indian Bank Advice Certificate.</p>
+
+                    <label>
+                      <h2>
+                        Upload Bank Advice Certificate.
+                        <span style={{ color: "red" }}>*</span>
+                      </h2>
+                    </label>
+                    <div>
+                      <input
+                        type="file"
+                        className="Inputcontrol"
+                        class="form-control"
+                        onChange={(e) => getDocumentData(e?.target?.files[0], "indianBankAdvisedCertificate")}
+                      ></input>
+                    </div>
+
+                    <h3 className="error-message" style={{ color: "red" }}>
+                      {errors?.indianBankAdvisedCertificate && errors?.indianBankAdvisedCertificate?.message}
+                    </h3>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+          &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+          <div className="col-3">
+            <FormControl>
+              <h2>Existing B.G. No. (In case of replacement, extension, renewal enter bank guarantee number)</h2>
+              <OutlinedInput
                 type="text"
-                className="form-control"
+                className="Inputcontrol"
                 placeholder=""
                 {...register("existingBgNumber")}
                 onChange={(e) => setExistingBgNumber(e.target.value)}
+                onClick={existingBgFormSubmitHandler}
               />
-            </Col>
-          </Row>
+            </FormControl>
+            {/* &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <button
+                // id="btnClear"
+                type="button"
+                class="btn btn-primary btn-md center-block"
+                onClick={existingBgFormSubmitHandler}
+              >
+                Search
+              </button>{" "} */}
+          </div>
           <br></br>
-          <Row className="col-12">
-            <Col md={4} xxl lg="3">
-              <div>
-                <button
-                  // id="btnClear"
-                  type="button"
-                  class="btn btn-primary btn-md center-block"
-                  style={{ marginBottom: "-44px" }}
-                  onClick={existingBgFormSubmitHandler}
-                >
-                  Search
-                </button>
-              </div>
-            </Col>
-          </Row>
-          <br></br>
-          <Row className="justify-content-end">
-            <Button variant="outline-primary" className="col-md-2 my-2 mx-2" aria-label="right-end">
-              Cancel
-            </Button>
-
-            <Button variant="outline-primary" className="col-md-2 my-2 mx-2" type="submit" aria-label="right-end">
-              Submit
-            </Button>
-
-            <Button
-              variant="outline-primary"
-              className="col-md-2 my-2 mx-2"
-              type="button"
-              aria-label="right-end"
-              onClick={updateSubmitFormSubmitHandler}
-            >
-              Update
-            </Button>
-          </Row>
-
-          {/* <div class="row">
-            <div class="col-sm-12 text-right">
-              <button type="submit" id="btnClear" class="btn btn-primary btn-md center-block" style={{ marginBottom: "-44px" }}>
+          <div class="row-12" className="align-right">
+            <div className="col-4">
+              <Button variant="contained" class="btn btn-primary btn-md center-block">
+                Cancel
+              </Button>
+              &nbsp;
+              <Button variant="contained" type="submit" class="btn btn-primary btn-md center-block">
                 Submit
-              </button>
+              </Button>
+              &nbsp;
+              <Button variant="contained" class="btn btn-primary btn-md center-block" type="button" onClick={updateSubmitFormSubmitHandler}>
+                {" "}
+                Update
+              </Button>
             </div>
-            <div class="row">
-              <div class="col-sm-12 text-right">
-                <button id="btnSearch" class="btn btn-danger btn-md center-block" style={{ marginRight: "66px", marginTop: "-6px" }}>
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </div> */}
+          </div>
         </div>
-      </Card>
+      </div>
     </form>
   );
 }

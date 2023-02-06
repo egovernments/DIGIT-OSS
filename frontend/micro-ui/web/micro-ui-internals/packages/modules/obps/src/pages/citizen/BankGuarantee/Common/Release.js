@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Card, Row, Col } from "react-bootstrap";
-import { Button, Form } from "react-bootstrap";
+import { Button } from "@material-ui/core";
+import FormControl from "@mui/material/FormControl";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import Box from "@mui/material/Box";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -121,13 +123,13 @@ function ReleaseNew(props) {
 
   return (
     <form onSubmit={handleSubmit(bankRelease)}>
-      <Card style={{ width: "126%", border: "5px solid #1266af" }}>
+      <div className="card" style={{ width: "126%", border: "5px solid #1266af" }}>
         <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Release of Bank Guarantee</h4>
         <div className="card">
-          <Row className="col-12">
-            <Col md={4} xxl lg="4">
-              <div>
-                <h6>
+          <div className="row-12">
+            <div className="col md={4} xxl lg-4">
+              <FormControl>
+                <h6 className="FormLable">
                   Do you want to Replace B.G.?
                   <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
                   <label htmlFor="releaseBankGuarantee">
@@ -142,32 +144,26 @@ function ReleaseNew(props) {
                     {errors?.releaseBankGuarantee && errors?.releaseBankGuarantee?.message}
                   </h3>
                 </h6>
-              </div>
-            </Col>
-            <Col md={4} xxl lg="4">
-              <div>
-                <Form.Label>
-                  <h2>Enter Bank Guarantee No. </h2>
-                </Form.Label>
-              </div>
-              <input type="text" className="form-control" placeholder="" {...register("bgNumber")} />
-            </Col>
-            <Col md={4} xxl lg="4">
-              <div>
-                <Form.Label>
-                  <h2>Type of B.G. </h2>
-                </Form.Label>
-              </div>
-              <select className="form-control" placeholder="" {...register("typeOfBg")}>
-                <option value="1"> IDW</option>
-                <option value="2">EDC</option>
-              </select>
-            </Col>
-            <div className="row">
-              <div className="col col-12 ">
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">Enter Bank Guarantee No. </h2>
+                <OutlinedInput type="text" className="Inputcontrol" placeholder="" {...register("bgNumber")} onClick={existingBgFormSubmitHandler} />
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">Type of B.G. </h2>
+                <select className="Inputcontrol" class="form-control" placeholder="" {...register("typeOfBg")}>
+                  <option value="1"> IDW</option>
+                  <option value="2">EDC</option>
+                </select>
+              </FormControl>
+            </div>
+            <div className="row-12">
+              <div className="col md={4} xxl lg-4">
                 {watch("releaseBankGuarantee") === "Y" && (
-                  <div className="row ">
-                    <Col md={4} xxl lg="3">
+                  <div className="row-12">
+                    <div className="col md={4} xxl lg-4">
                       <div>
                         <label>
                           <h2>Upload B.G. softcopy </h2>
@@ -189,24 +185,24 @@ function ReleaseNew(props) {
                         </label>
                       </div>
                       {/* <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBg")} /> */}
-                    </Col>
+                    </div>
                   </div>
                 )}
               </div>
             </div>
-            <div className="row">
-              <div className="col col-12 ">
+            <div className="row-12">
+              <div className="col-12">
                 {watch("releaseBankGuarantee") === "N" && (
                   <div className="row ">
-                    {/* <Col md={4} xxl lg="3">
+                    {/* <col md={4} xxl lg="3">
                         <div>
                           <Form.Label>
                             <h2>Enter B.G. No. </h2>
                           </Form.Label>
                         </div>
                         <input type="text" className="form-control" placeholder="" {...register("bgNo")} />
-                      </Col> */}
-                    {/* <Col md={4} xxl lg="3">
+                      </col> */}
+                    {/* <col md={4} xxl lg="3">
                       <div>
                         <Form.Label>
                           <h2>Type of B.G. </h2>
@@ -216,11 +212,11 @@ function ReleaseNew(props) {
                         <option value="1"> IDW</option>
                         <option value="2">EDC</option>
                       </select>
-                    </Col> */}
+                    </col> */}
                     {watch("typeOfBg") === "1" && (
                       <div>
-                        <div className="row">
-                          <Col md={4} xxl lg="3">
+                        <div className="row-12">
+                          <div className="col md={4} xxl lg-3">
                             <div>
                               <label>
                                 <h2>Full Completion Certificate. </h2>
@@ -242,51 +238,43 @@ function ReleaseNew(props) {
                               </label>
                             </div>
                             {/* <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBg")} /> */}
-                          </Col>
+                          </div>
                         </div>
                       </div>
                     )}
                     {watch("typeOfBg") === "2" && (
                       <div>
-                        <div className="row">
-                          <div className="col col-4">
-                            <label>
+                        <div className="row-12">
+                          <div className="col md={4} xxl lg-4">
+                            <FormControl>
                               <h2>
                                 Amount.
                                 <span style={{ color: "red" }}>*</span>
                               </h2>
-                            </label>
-                            <div>
-                              <input type="text" className="form-control" placeholder="" {...register("tcpSubmissionReceived")} />
-                            </div>
 
-                            <h3 className="error-message" style={{ color: "red" }}>
-                              {errors?.tcpSubmissionReceived && errors?.tcpSubmissionReceived?.message}
-                            </h3>
+                              <input type="text" className="form-control" placeholder="" {...register("tcpSubmissionReceived")} />
+                            </FormControl>
+                            &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                            <label>
+                              <h2> Partial Completion Certificate. </h2>
+                              <FileUpload color="primary" />
+                              <input
+                                type="file"
+                                accept="application/pdf/jpeg/png"
+                                style={{ display: "none" }}
+                                onChange={(e) => getDocumentData(e?.target?.files[0], "partialCertificate")}
+                              />
+                              {fileStoreId?.partialCertificate ? (
+                                <a onClick={() => getDocShareholding(fileStoreId?.partialCertificate)} className="btn btn-sm ">
+                                  <VisibilityIcon color="info" className="icon" />
+                                </a>
+                              ) : (
+                                <p></p>
+                              )}
+                              <h3 style={{}}>{watch("partialCertificateFileName") ? watch("partialCertificateFileName") : null}</h3>{" "}
+                            </label>
                           </div>
-                          <Col md={4} xxl lg="3">
-                            <div>
-                              <label>
-                                <h2> Partial Completion Certificate. </h2>
-                                <FileUpload color="primary" />
-                                <input
-                                  type="file"
-                                  accept="application/pdf/jpeg/png"
-                                  style={{ display: "none" }}
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "partialCertificate")}
-                                />
-                                {fileStoreId?.partialCertificate ? (
-                                  <a onClick={() => getDocShareholding(fileStoreId?.partialCertificate)} className="btn btn-sm ">
-                                    <VisibilityIcon color="info" className="icon" />
-                                  </a>
-                                ) : (
-                                  <p></p>
-                                )}
-                                <h3 style={{}}>{watch("partialCertificateFileName") ? watch("partialCertificateFileName") : null}</h3>{" "}
-                              </label>
-                            </div>
-                            {/* <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBg")} /> */}
-                          </Col>
+                          {/* <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBg")} /> */}
                         </div>
                       </div>
                     )}
@@ -294,31 +282,32 @@ function ReleaseNew(props) {
                 )}
               </div>
             </div>
-            <Col md={4} xxl lg="3">
-              <div>
-                <button
-                  // id="btnClear"
-                  type="button"
-                  class="btn btn-primary btn-md center-block"
-                  style={{ marginBottom: "-44px" }}
-                  onClick={existingBgFormSubmitHandler}
-                >
-                  Search
-                </button>
+            &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+            {/* <div className="row-12">
+              <button
+               
+                type="button"
+                class="btn btn-primary btn-md center-block"
+                onClick={existingBgFormSubmitHandler}
+              >
+                Search
+              </button>
+            </div>
+            <br></br> */}
+            <div class="row-12" className="align-right">
+              <div className="col-4">
+                <Button variant="contained" class="btn btn-primary btn-md center-block">
+                  Cancel
+                </Button>
+                &nbsp;
+                <Button variant="contained" type="submit" class="btn btn-primary btn-md center-block">
+                  Submit
+                </Button>
               </div>
-            </Col>
-          </Row>
-
-          <Row className="justify-content-end">
-            <Button variant="outline-primary" className="col-md-2 my-2 mx-2" aria-label="right-end">
-              Cancel
-            </Button>
-            <Button variant="outline-primary" className="col-md-2 my-2 mx-2" type="submit" aria-label="right-end">
-              Submit
-            </Button>
-          </Row>
+            </div>
+          </div>
         </div>
-      </Card>
+      </div>
     </form>
   );
 }
