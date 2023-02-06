@@ -1488,8 +1488,8 @@ const Developerinfo = (props) => {
                 2. Any encumbrance with respect to following :&nbsp;&nbsp;
               </h5>
               <div className="d-flex mt-2 align-items-center">
-                <input type="radio" disabled value="rehan/mortage" name="rehan/mortage" checked={landScheduleData?.encumburance === "rehan/mortage" ? true : false} />
-                <label className="m-0 mx-2" htmlFor="rehan/mortage">Rehan / Mortgage</label>
+                <input type="radio" disabled value="rehan/mortgage" name="rehan/mortgage" checked={landScheduleData?.encumburance === "rehan/mortgage" ? true : false} />
+                <label className="m-0 mx-2" htmlFor="rehan/mortgage">Rehan / Mortgage</label>
                 <input type="radio" disabled value="patta/lease" name="patta/lease" checked={landScheduleData?.encumburance === "patta/lease" ? true : false} />
                 <label className="m-0 mx-2" htmlFor="patta/lease">Patta/Lease</label>
 
@@ -1516,7 +1516,7 @@ const Developerinfo = (props) => {
               </div>
 
 
-              {landScheduleData?.encumburance === "rehan/mortage" && "patta/lease" && "anyOther" && "gair/marusi" && (
+              {landScheduleData?.encumburance === "rehan/mortgage" && "patta/lease" && "anyOther" && "gair/marusi" && (
                 <div className="row ml-3 mb-3">
                   <div className="col col-4 m-0 p-0">
                     <label htmlFor="npnl">

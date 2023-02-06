@@ -100,7 +100,7 @@ const NilpForm = (props) => {
 
 
   return (
-    <Form onSubmit={DDJAYFormSubmitHandler} style={{ display: props.displayRetrementPlottedData}}>
+    <Form onSubmit={DDJAYFormSubmitHandler} style={{ display: props.displayNilpFormData}}>
       <ModalChild
         labelmodal={labelValue}
         passmodalData={handlemodaldData}

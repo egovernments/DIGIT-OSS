@@ -23,6 +23,13 @@ import CommercialPlottedForm from "../ScrutinyBasic/Puropse/CommercialPlottedFor
 import RetirementHousingForm from "./Puropse/RetirementHousing";
 import ResidentialGroupHousingForm from "./Puropse/ResidentialGroupHousingForm";
 import NilpForm from "./Puropse/Nilp";
+import AffordableGroupHousingForm from "./Puropse/AffordableGroupHousing";
+import CommercialIntegratedForm from "./Puropse/CommercialIntegrated";
+import DemarcationPlanForm from "./Puropse/DemarcationPlan";
+import IILPForm from "./Puropse/IILPForm";
+import LayoutPlanForm from "./Puropse/LayoutPlanForm";
+import MixedLandUseForm from "./Puropse/MixedLandUse";
+import ITCyberCityForm from "./Puropse/ITCyberCityForm";
 
 const AppliedLandinfo = (props) => {
 
@@ -1093,19 +1100,57 @@ console.log("AccessInfortech", Purpose);
                   <IndustrialPlottedForm displayIndustrial={Purpose === "IPL" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandIndustrial} dataForIcons={dataIcons} ></IndustrialPlottedForm>
                 </div>
                 <div>
-                  <CommercialPlottedForm displayCommercialPlottedData={Purpose === "CPL" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandCommercial} dataForIcons={dataIcons} ></CommercialPlottedForm>
+                  <CommercialPlottedForm displayCommercialPlottedData={Purpose === "CPCS"  ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandCommercial} dataForIcons={dataIcons} ></CommercialPlottedForm>
                 </div>
+                <div>
+                  <CommercialPlottedForm displayCommercialPlottedData={Purpose === "CPRS" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandCommercial} dataForIcons={dataIcons} ></CommercialPlottedForm>
+                </div>
+               
                 <div>
                   <RetirementHousingForm displayRetrementPlottedData={Purpose === "RHP" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandCommercial} dataForIcons={dataIcons} ></RetirementHousingForm>
                 </div>
                 <div>
-                  <ResidentialGroupHousingForm displayResidentialGroupHousingForm={Purpose === "RHP" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandCommercial} dataForIcons={dataIcons} ></ResidentialGroupHousingForm>
+                  <ResidentialGroupHousingForm displayResidentialGroupData={Purpose === "RGP" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandCommercial} dataForIcons={dataIcons} ></ResidentialGroupHousingForm>
                 </div>
                 <div>
-                  <NilpForm displayResidentialGroupHousingForm={Purpose === "RHP" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandCommercial} dataForIcons={dataIcons} ></NilpForm>
+                  <NilpForm displayNilpFormData={Purpose === "NILPC"   ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandCommercial} dataForIcons={dataIcons} ></NilpForm>
                 </div>
+                <div>
+                  <NilpForm displayNilpFormData={Purpose === "NILP"  ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandCommercial} dataForIcons={dataIcons} ></NilpForm>
+                </div>
+                <div>
+                  <AffordableGroupHousingForm displayAffordableData={Purpose === "AGH" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandCommercial} dataForIcons={dataIcons} ></AffordableGroupHousingForm>
+                </div>
+                {/* <div>
+                  <CommercialIntegratedForm displayCommericalIntegratedForm={Purpose === "CICS"  || "CIRS" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandCommercial} dataForIcons={dataIcons} ></CommercialIntegratedForm>
+                </div> */}
+                <div>
+                  <CommercialIntegratedForm displayCommericalIntegratedForm={Purpose === "CICS" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandCommercial} dataForIcons={dataIcons} ></CommercialIntegratedForm>
+                </div>
+                <div>
+                  <CommercialIntegratedForm displayCommericalIntegratedForm={Purpose === "CIRS" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandCommercial} dataForIcons={dataIcons} ></CommercialIntegratedForm>
+                </div>
+                <div>
+                  <ITCyberCityForm displayITCyberCityForm={Purpose === "ITC"  ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandCommercial} dataForIcons={dataIcons} ></ITCyberCityForm>
+                </div>
+                <div>
+                  <ITCyberCityForm displayITCyberCityForm={Purpose ===  "ITP" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandCommercial} dataForIcons={dataIcons} ></ITCyberCityForm>
+                </div>
+                <div>
+                  <MixedLandUseForm displayMixedLandUseForm={Purpose === "MLU-CZ" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandCommercial} dataForIcons={dataIcons} ></MixedLandUseForm>
+                </div>
+                {/* <div>
+                  <LayoutPlanForm displayCommericalIntegratedForm={Purpose === "CICS"  || "CIRS" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandCommercial} dataForIcons={dataIcons} ></LayoutPlanForm>
+                </div> */}
+                <div>
+                  <IILPForm displayIILPForm={Purpose === "IPULP"  ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandCommercial} dataForIcons={dataIcons} ></IILPForm>
+                </div>
+                {/* <div>
+                  <DemarcationPlanForm displayCommericalIntegratedForm={Purpose === "CICS"  || "CIRS" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandCommercial} dataForIcons={dataIcons} ></DemarcationPlanForm>
+                </div> */}
 
                   {/* <NilpForm></NilpForm> */}
+                  {/* CPCS */}
                
 
                 {/* <h5 className="text-black mt-4">
