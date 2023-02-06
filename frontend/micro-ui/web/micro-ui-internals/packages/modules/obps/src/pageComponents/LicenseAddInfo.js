@@ -333,6 +333,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     setUserEmailInd(e.target.value);
   }
   function selectCinNumber(e) {
+    resetForm();
     setCinNo(e.target.value.toUpperCase())
   }
   function selectLlpNumber(e) {
