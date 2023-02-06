@@ -119,7 +119,7 @@ const HowItWorks = ({module}) => {
                   <div className="close-button" style={{position:"absolute", right:"15px",top:"10%", zIndex:"1"}}>
                         <CloseVidSvg onClick={onClose}></CloseVidSvg>
                         </div>
-                    <video width={500}  height={500} controls autoPlay style={{position:"fixed", top:"0",left:"0",minWidth:"100%",minHeight:"100%", backgroundColor: "rgba(0,0,0,0.5)"}}>
+                    <video width={500}  height={500} controls autoPlay muted style={{position:"fixed", top:"0",left:"0",minWidth:"100%",minHeight:"100%", backgroundColor: "rgba(0,0,0,0.5)"}}>
                         <source src={vidSrc} type="video/mp4"></source>
                     </video>
                 </div>
