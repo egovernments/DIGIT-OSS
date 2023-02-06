@@ -42,15 +42,98 @@ const electricalPlanService = () => {
   const [autoCad, setAutoCad] = useState("")
   const [verifiedPlan, setVerifiedPlan] = useState("")
   const [electricPlanRes, setElectricPlanRes] = useState([])
+  const [valid, setValid] = useState([])
+  const [fileStoreId, setFileStoreId] = useState({});
+  const [devName, setDevName] = useState("")
+  const [purpose, setPurpose] = useState("")
+  const [panNumber, setPanNumber] = useState("")
+  const [gstnumber, setGSTNumber] = useState("")
+  const [mobileNmber, setMobileNumber] = useState("")
+
   
-  
+  const userInfo = Digit.UserService.getUser();
+  const getLoiPattern = (loiNumber) => {
+    const pattern = /^(?=\D*\d)(?=.*[/])(?=.*[-])[a-zA-Z0-9\/-]{15,30}$/;
+    return pattern.test(loiNumber);
+  }
+
+  const checkValid = (data) => {
+    let isvalid = false
+    if(getLoiPattern(data?.loiNumber)){
+        isvalid = true
+    }
+    else{
+      isvalid = false
+      alert('Please enter valid LOI number')
+      return isvalid
+    }
+    console.log(data?.LoadSancation, "aaaaaaaaa");
+    console.log(data?.electricDistribution, "bbbbb");
+    if(
+      data?.LoadSancation !== null &&
+      data?.electricDistribution !==null && 
+      data?.electricInfra !== null && 
+      data?.electricalCapacity !== null &&
+      data?.switchingStation !== null
+      ){
+        isvalid = true
+      }
+    else{
+      isvalid = false
+      alert('Please check all mandatory points')
+      return isvalid
+    }
+    if(
+      data.hasOwnProperty('selfCenteredDrawings') && 
+      data.hasOwnProperty('environmentalClearance') &&
+      data.hasOwnProperty('pdfFormat') &&
+      data.hasOwnProperty('autoCad') &&
+      data.hasOwnProperty('verifiedPlan')
+      ){
+        isvalid = true
+    }
+    else{
+      isvalid = false
+      alert('Please upload all the mandatory images')
+      return isvalid
+    } 
+    const checkImage = checkDuplicates(valid)
+    if(checkImage){
+      isvalid = false
+      alert('Please upload the seperate image for each and every field')
+      return isvalid
+    }
+    else{
+      isvalid = true
+    }
+    return isvalid
+  }
+
+  const checkDuplicates = (arr) => {
+    let count = {}
+    for(let i=0; i<arr.length; i++){
+      count[arr[i]] = (count[arr[i]] || 0) + 1
+    }
+    const arr1 = Object.values(count)
+    console.log({count, arr1});
+    if(arr1.some((e) => e > 1)) {
+      return true
+    }
+    return false
+  }
+
   const electricPlan = async (data) => {
     const token = window?.localStorage?.getItem("token");
-    console.log(data);
+    console.log(data, "ddddddddd");
     const tenantId = Digit.ULBService.getCurrentTenantId();
 
     try {
       if(!applicationId){
+        const isValid = checkValid(data)
+        if(!isValid){
+          console.log("Dont call create")
+          return null
+        }
         const postDistrict = {
           requestInfo: {
             api_id: "1",
@@ -92,6 +175,13 @@ const electricalPlanService = () => {
         electricPlanRes.autoCad = data?.autoCad ? data?.autoCad : electricPlanRes.autoCad
         electricPlanRes.verifiedPlan = data?.verifiedPlan ? data?.verifiedPlan : electricPlanRes.verifiedPlan
         
+        const isvalidUpdate = checkValid(electricPlanRes)
+        console.log({electricPlanRes, data, isvalidUpdate}, "jjjjjjjjjjjjjj");
+        // if(!isvalidUpdate){
+        //   console.log("Dont call update")
+        //   return null
+        // }
+
         const updateRequest = {
           requestInfo: {
             api_id: "Rainmaker",
@@ -139,8 +229,9 @@ const electricalPlanService = () => {
     }
   }
 
-  const [fileStoreId, setFileStoreId] = useState({});
   const getDocumentData = async (file, fieldName) => {
+     setValid(arr => [...arr, file?.name])
+     console.log({valid}, "vvvvvvvvv");
     const formData = new FormData();
     formData.append("file", file);
     formData.append("tenantId", "hr");
@@ -194,6 +285,39 @@ const electricalPlanService = () => {
     }
   }
 
+  const handleLoiNumber = async (e) => {
+    e.preventDefault()
+    const token = window?.localStorage?.getItem("token");
+   try {
+    const loiRequest = {
+      requestInfo: {
+        api_id: "Rainmaker",
+        ver: "1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msg_id: "090909",
+        requesterId: "",
+        authToken: token,
+        "userInfo": userInfo.info
+      },
+    }
+    const Resp = await axios.post(`/tl-services/v1/_search?loiNumber=${loiNumber}`, loiRequest);
+    console.log(Resp, "RRRRRRRRRRR");
+    setDevName(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantInfo?.devDetail?.addInfo?.name)
+    setPanNumber(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantInfo?.devDetail?.addInfo?.PanNumber)
+    setGSTNumber(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantInfo?.devDetail?.addInfo?.gst_Number)
+    setMobileNumber(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantInfo?.devDetail?.addInfo?.mobileNumberUser)
+    
+  
+
+   } catch (error) {
+    console.log(error)
+   }
+    console.log("loiloiloi")
+  }
+
   const getApplicationData = async () => {
     const token = window?.localStorage?.getItem("token");
       try {
@@ -236,8 +360,8 @@ const electricalPlanService = () => {
       <Card style={{ width: "126%", border: "5px solid #1266af" }}>
         <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Electrical Plan </h4>
         <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
-          <Row className="ml-auto" style={{ marginBottom: 5 }}>
-            <Col md={4} xxl lg="4">
+          <Row>
+            <Col className="col-4">
               <div>
                 <Form.Label>
                   <h2>
@@ -246,7 +370,7 @@ const electricalPlanService = () => {
                 </Form.Label>
               </div>
               <input 
-              type="number" 
+              type="string" 
               className="form-control" 
               placeholder="" 
               {...register("loiNumber")} 
@@ -254,7 +378,159 @@ const electricalPlanService = () => {
               value={loiNumber}
               />
             </Col>
-            <Col md={4} xxl lg="4">
+            <Col className="col-2">
+                <button style={{transform: "translateY(35px)"}} type="submit" onClick={handleLoiNumber} id="btnSearch" class="btn btn-primary btn-md center-block">
+                  Verify
+                </button>
+            </Col>
+          </Row>
+            <br></br>
+          <Row>
+            <Col className="col-3">
+              <div>
+                <label>
+                  <h2>
+                    Name
+                  </h2>
+                </label>
+              </div>
+              <input
+                type="string"
+                className="form-control"
+                {...register("devName")}
+                onChange={(e) => setDevName(e.target.value)}
+                value={devName}
+                disabled
+              />
+            </Col>
+            <Col className="col-3">
+              <div>
+                <label>
+                  <h2>
+                    PanNumber
+                  </h2>
+                </label>
+              </div>
+              <input
+                type="string"
+                className="form-control"
+                {...register("panNumber")}
+                onChange={(e) => setPanNumber(e.target.value)}
+                value={panNumber}
+                disabled
+              />
+            </Col>
+            <Col className="col-3">
+              <div>
+                <label>
+                  <h2>
+                    GST Number
+                  </h2>
+                </label>
+              </div>
+              <input
+                type="string"
+                className="form-control"
+                {...register("gstNumber")}
+                onChange={(e) => setGSTNumber(e.target.value)}
+                value={gstnumber}
+                disabled
+              />
+            </Col>
+            <Col className="col-3">
+              <div>
+                <label>
+                  <h2>
+                    Mobile-Nmber
+                  </h2>
+                </label>
+              </div>
+              <input
+                type="string"
+                className="form-control"
+                {...register("mobileNumber")}
+                onChange={(e) => setMobileNumber(e.target.value)}
+                value={mobileNmber}
+                disabled
+              />
+            </Col>
+          </Row>
+          <br></br>
+          <Row>
+            <Col className="col-3">
+              <div>
+                <label>
+                  <h2>
+                    field5
+                  </h2>
+                </label>
+              </div>
+              <input
+                type="string"
+                className="form-control"
+                {...register("devName")}
+                onChange={(e) => setDevName(e.target.value)}
+                value={devName}
+                disabled
+              />
+            </Col>
+            <Col className="col-3">
+              <div>
+                <label>
+                  <h2>
+                    filed6
+                  </h2>
+                </label>
+              </div>
+              <input
+                type="string"
+                className="form-control"
+                {...register("panNumber")}
+                onChange={(e) => setPanNumber(e.target.value)}
+                value={panNumber}
+                disabled
+              />
+            </Col>
+            <Col className="col-3">
+              <div>
+                <label>
+                  <h2>
+                    field7
+                  </h2>
+                </label>
+              </div>
+              <input
+                type="string"
+                className="form-control"
+                {...register("gstNumber")}
+                onChange={(e) => setGSTNumber(e.target.value)}
+                value={gstnumber}
+                disabled
+              />
+            </Col>
+            <Col className="col-3">
+              <div>
+                <label>
+                  <h2>
+                    Filed8
+                  </h2>
+                </label>
+              </div>
+              <input
+                type="string"
+                className="form-control"
+                {...register("mobileNumber")}
+                onChange={(e) => setMobileNumber(e.target.value)}
+                value={mobileNmber}
+                disabled
+              />
+            </Col>
+          </Row>
+          <br></br>
+          <Row>
+            <br></br>
+            <Col className="ms-auto" md={4} xxl lg="4">
+              <br></br>
               <div>
                 <Form.Label>
                   <h2>
@@ -287,7 +563,9 @@ const electricalPlanService = () => {
                 ></Form.Check>
               </div>
             </Col>
+            <br></br>
             <Col className="ms-auto" md={4} xxl lg="4">
+              <br></br>
               <div>
                 <Form.Label>
                   Provision of the electricity distribution in the project area by the instructions of the DHBVN{" "}
@@ -317,7 +595,9 @@ const electricalPlanService = () => {
                 inline
               ></Form.Check>
             </Col>
+            <br></br>
             <Col className="ms-auto" md={4} xxl lg="4">
+              <br></br>
               <div>
                 <Form.Label>
                   The capacity of the proposed electrical substation as per the requirement <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
@@ -346,7 +626,8 @@ const electricalPlanService = () => {
                 inline
               ></Form.Check>
             </Col>
-            <Col className="ms-auto" md={4} xxl lg="4">
+            <br></br>
+            <Col className="ms-auto" md={6} xxl lg="6">
               <div>
                 <Form.Label>
                   Provision of 33 Kv switching station for the electrical infrastructure as per the approved layout plan
@@ -376,7 +657,8 @@ const electricalPlanService = () => {
                 inline
               ></Form.Check>
             </Col>
-            <Col className="ms-auto" md={4} xxl lg="4">
+            <br></br>
+            <Col className="ms-auto" md={6} xxl lg="6">
               <div>
                 <Form.Label>
                   Load sanction approval as per the requirement <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
@@ -405,8 +687,10 @@ const electricalPlanService = () => {
                 inline
               ></Form.Check>
             </Col>
-            <Col className="ms-auto" md={4} xxl lg="4"></Col>
+            <br></br>
+            {/* <Col className="ms-auto" md={4} xxl lg="4"></Col> */}
           </Row>
+          <br></br>
 
           <div className="table table-bordered table-responsive">
             <thead>

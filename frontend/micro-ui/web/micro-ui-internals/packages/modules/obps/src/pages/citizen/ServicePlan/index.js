@@ -4,7 +4,7 @@ import { Card, Row, Col, Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { Dialog } from "@mui/material";
+import { Dialog, stepIconClasses } from "@mui/material";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
@@ -19,7 +19,7 @@ import { IconButton } from "@mui/material";
 
 const ServicePlanService = () => {
   const [file, setFile] = useState(null);
-  const [LOCNumber, setLOCNumber] = useState("");
+  const [LOINumber, setLOINumber] = useState("");
   const [selfCertifiedDrawing, setSelfCertifiedDrawing] = useState("")
   const [applicationId, setApplicationId] = useState('')
   const [environmental, setEnviromental] = useState('')
@@ -33,6 +33,11 @@ const ServicePlanService = () => {
   const [open, setOpen] = useState(false)
   const [applicationNumber, setApplicationNumber] = useState()
   const [valid, setValid] = useState([])
+  const [devName, setDevName] = useState("")
+  const [purpose, setPurpose] = useState("")
+  const [panNumber, setPanNumber] = useState("")
+  const [gstnumber, setGSTNumber] = useState("")
+  const [mobileNmber, setMobileNumber] = useState("")
   const {
     register,
     handleSubmit,
@@ -46,12 +51,58 @@ const ServicePlanService = () => {
     shouldFocusError: true,
   });
   const userInfo = Digit.UserService.getUser();
+
+  const getLoiPattern = (loiNumber) => {
+    const pattern = /^(?=\D*\d)(?=.*[/])(?=.*[-])[a-zA-Z0-9\/-]{15,30}$/;
+    return pattern.test(loiNumber);
+  }
+
+  const checkValid = (data) => {
+    let isvalid = false
+    if(getLoiPattern(data?.loiNumber)){
+        isvalid = true
+    }
+    else{
+      isvalid = false
+      alert('Please enter valid LOI number')
+      return isvalid
+    }
+    if(
+      data.hasOwnProperty('selfCertifiedDrawingFromEmpaneledDoc') && 
+      data.hasOwnProperty('environmentalClearance') &&
+      data.hasOwnProperty('shapeFileAsPerTemplate') &&
+      data.hasOwnProperty('autoCadFile') &&
+      data.hasOwnProperty('certifieadCopyOfThePlan')
+      ){
+        isvalid = true
+    }
+    else{
+      isvalid = false
+      alert('Please upload all the mandatory images')
+      return isvalid
+    } 
+    const checkImage = checkDuplicates(valid)
+    if(checkImage){
+      isvalid = false
+      alert('Please upload the seperate image for each and every field')
+      return isvalid
+    }
+    else{
+      isvalid = true
+    }
+    return isvalid
+  }
   const servicePlan = async (data) => {
     const token = window?.localStorage?.getItem("token");
     const tenantId = Digit.ULBService.getCurrentTenantId();
     console.log(data, "service-service");
     try {
       if(!applicationId){
+        const isValid = checkValid(data)
+        if(!isValid){
+          console.log("Dont call create")
+          return null
+        }
         const postDistrict = {
           requestInfo: {
             api_id: "Rainmaker",
@@ -89,7 +140,12 @@ const ServicePlanService = () => {
         servicePlanRes.shapeFileAsPerTemplate = data?.shapeFileAsPerTemplate ? data?.shapeFileAsPerTemplate : servicePlanRes.shapeFileAsPerTemplate
         servicePlanRes.autoCadFile = data?.autoCadFile ? data?.autoCadFile : servicePlanRes.autoCadFile
         servicePlanRes.certifieadCopyOfThePlan = data?.certifieadCopyOfThePlan ? data?.certifieadCopyOfThePlan : servicePlanRes.certifieadCopyOfThePlan
-        console.log({servicePlanRes, data}, "jjjjjjjjjjjjjj");
+        const isvalidUpdate = checkValid(servicePlanRes)
+        console.log({servicePlanRes, data, isvalidUpdate}, "jjjjjjjjjjjjjj");
+        // if(!isvalidUpdate){
+        //   console.log("Dont call update")
+        //   return null
+        // }
         const updateRequest = {
           requestInfo: {
             api_id: "Rainmaker",
@@ -168,17 +224,21 @@ const ServicePlanService = () => {
     }
   }
 
+  // async function updatedState(file) {
+  //   await new Promise(resolve => {
+  //     setValid(arr => [...arr, file.name])
+  //       resolve();
+  //   })
+  //   return valid
+  // }
+  
+
   const getDocumentData = async (file, fieldName) => {
-    setValid((arr) => [...arr, file.name])
-    // console.log(valid, "vvvvvvvvv");
-    //   let duplicateValidity =  checkDuplicates(valid)
-    //   console.log(duplicateValidity);
-    //   if(duplicateValidity){
-    //     alert('Please upload the different image')
-    //     setValid(valid.slice(0, -1))
-    //     duplicateValidity = false
-    //     return null
-    //   }
+     
+   
+    setValid(prevFiles => [...prevFiles,file.name])
+     
+    console.log({valid, file}, "vvvvvvvvv");
     
     const formData = new FormData();
     formData.append("file", file);
@@ -190,6 +250,7 @@ const ServicePlanService = () => {
       const Resp = await axios.post("/filestore/v1/files", formData, {});
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
+     
       // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
       // console.log("getval======", getValues());
       // setLoader(false);
@@ -216,6 +277,40 @@ const ServicePlanService = () => {
     }
   }, [id])
 
+  const handleLoiNumber = async (e) => {
+    e.preventDefault()
+    const token = window?.localStorage?.getItem("token");
+   try {
+    const loiRequest = {
+      requestInfo: {
+        api_id: "Rainmaker",
+        ver: "1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msg_id: "090909",
+        requesterId: "",
+        authToken: token,
+        "userInfo": userInfo.info
+      },
+    }
+    const Resp = await axios.post(`/tl-services/v1/_search?loiNumber=${LOINumber}`, loiRequest);
+    console.log(Resp, "RRRRRRRRRRR");
+    setDevName(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantInfo?.devDetail?.addInfo?.name)
+    setPanNumber(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantInfo?.devDetail?.addInfo?.PanNumber)
+    setGSTNumber(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantInfo?.devDetail?.addInfo?.gst_Number)
+    setMobileNumber(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantInfo?.devDetail?.addInfo?.mobileNumberUser)
+    
+  
+
+   } catch (error) {
+    console.log(error)
+   }
+    
+
+    console.log("loiloiloi")
+  }
 
   const getApplicationData = async () => {
     const token = window?.localStorage?.getItem("token");
@@ -235,7 +330,7 @@ const ServicePlanService = () => {
         }
         const response = await axios.post(`/tl-services/serviceplan/_get?applicationNumber=${id}`, postDistrict)
         console.log(response, "rrrrrrrrrr")
-        setLOCNumber(response?.data?.servicePlanResponse[0].loiNumber)
+        setLOINumber(response?.data?.servicePlanResponse[0].loiNumber)
         setSelfCertifiedDrawing(response?.data?.servicePlanResponse[0].selfCertifiedDrawingFromEmpaneledDoc)
         setApplicationId(id)
         setEnviromental(response?.data?.servicePlanResponse[0].environmentalClearance)
@@ -265,14 +360,162 @@ const ServicePlanService = () => {
                 </label>
               </div>
               <input
-                type="number"
+                type="string"
                 className="form-control"
                 {...register("loiNumber")}
-                onChange={(e) => setLOCNumber(e.target.value)}
-                value={LOCNumber}
+                onChange={(e) => setLOINumber(e.target.value)}
+                value={LOINumber}
+              />
+            </Col>
+            <Col className="col-4">
+                <button style={{transform: "translateY(35px)"}} type="submit" onClick={handleLoiNumber} id="btnSearch" class="btn btn-primary btn-md center-block">
+                  Verify
+                </button>
+            </Col>
+          </Row>
+          <br></br>
+          <Row>
+            <Col className="col-3">
+              <div>
+                <label>
+                  <h2>
+                    Name
+                  </h2>
+                </label>
+              </div>
+              <input
+                type="string"
+                className="form-control"
+                {...register("devName")}
+                onChange={(e) => setDevName(e.target.value)}
+                value={devName}
+                disabled
+              />
+            </Col>
+            <Col className="col-3">
+              <div>
+                <label>
+                  <h2>
+                    PanNumber
+                  </h2>
+                </label>
+              </div>
+              <input
+                type="string"
+                className="form-control"
+                {...register("panNumber")}
+                onChange={(e) => setPanNumber(e.target.value)}
+                value={panNumber}
+                disabled
+              />
+            </Col>
+            <Col className="col-3">
+              <div>
+                <label>
+                  <h2>
+                    GST Number
+                  </h2>
+                </label>
+              </div>
+              <input
+                type="string"
+                className="form-control"
+                {...register("gstNumber")}
+                onChange={(e) => setGSTNumber(e.target.value)}
+                value={gstnumber}
+                disabled
+              />
+            </Col>
+            <Col className="col-3">
+              <div>
+                <label>
+                  <h2>
+                    Mobile-Nmber
+                  </h2>
+                </label>
+              </div>
+              <input
+                type="string"
+                className="form-control"
+                {...register("mobileNumber")}
+                onChange={(e) => setMobileNumber(e.target.value)}
+                value={mobileNmber}
+                disabled
               />
             </Col>
           </Row>
+          <br></br>
+          <Row>
+            <Col className="col-3">
+              <div>
+                <label>
+                  <h2>
+                    Field4
+                  </h2>
+                </label>
+              </div>
+              <input
+                type="string"
+                className="form-control"
+                {...register("devName")}
+                onChange={(e) => setDevName(e.target.value)}
+                value={devName}
+                disabled
+              />
+            </Col>
+            <Col className="col-3">
+              <div>
+                <label>
+                  <h2>
+                    field5
+                  </h2>
+                </label>
+              </div>
+              <input
+                type="string"
+                className="form-control"
+                {...register("panNumber")}
+                onChange={(e) => setPanNumber(e.target.value)}
+                value={panNumber}
+                disabled
+              />
+            </Col>
+            <Col className="col-3">
+              <div>
+                <label>
+                  <h2>
+                    filed6
+                  </h2>
+                </label>
+              </div>
+              <input
+                type="string"
+                className="form-control"
+                {...register("gstNumber")}
+                onChange={(e) => setGSTNumber(e.target.value)}
+                value={gstnumber}
+                disabled
+              />
+            </Col>
+            <Col className="col-3">
+              <div>
+                <label>
+                  <h2>
+                    field7
+                  </h2>
+                </label>
+              </div>
+              <input
+                type="string"
+                className="form-control"
+                {...register("mobileNumber")}
+                onChange={(e) => setMobileNumber(e.target.value)}
+                value={mobileNmber}
+                disabled
+              />
+            </Col>
+          </Row>
+          <br></br>
           <br></br>
           <div className="table table-bordered table-responsive">
             <thead>
