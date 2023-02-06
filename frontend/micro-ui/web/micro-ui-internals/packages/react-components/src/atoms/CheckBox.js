@@ -46,7 +46,7 @@ const CheckBox = ({ onChange, label, value, disable, ref, checked, inputRef, pag
             // {(checked ? (checked = { checked }) : null)}
             checked={checked}
           />
-          <p className={userType === "employee" ? "custom-checkbox-emp" : "custom-checkbox"} style={disable ? { opacity: 0.5 } : null}>
+          <p className={userType === "employee" ? "custom-checkbox-emp" : "custom-checkbox"} style={disable ? { opacity: 0.5 } : (props?.checkboxWidth ? {...props?.checkboxWidth} : null)}>
             {/* <img src={check} alt="" /> */}
             <CheckSvg />
           </p>

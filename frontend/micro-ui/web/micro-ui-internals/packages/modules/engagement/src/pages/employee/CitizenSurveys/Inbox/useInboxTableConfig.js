@@ -46,8 +46,8 @@ const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCo
                         fontSize: "small",
                         wordWrap:"break-word",
                         width:"120px",
-                        marginLeft:"20px",
-                        marginBottom:"-180px"
+                        marginLeft:"15px",
+                        marginBottom:"-260px"
                         //overflow:"auto"
                     }}>
                         {`${t(`SURVEY_STATUS_TOOLTIP`)}`}

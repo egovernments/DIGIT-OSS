@@ -53,6 +53,7 @@ const NewSurveyForm = ({ t, index, questionStatement, type, uuid, qorder, requir
 
 
   const selectedType = dropdownOptions.filter(option => option?.value === (typeof type === "object" ? type.value : type))
+  const isInputDisabled = window.location.href.includes("/employee/engagement/")
   
   const [surveyQuestionConfig, setSurveyQuestionConfig] = useState({
     questionStatement, type: type ? selectedType?.[0]  : {
@@ -85,7 +86,7 @@ const NewSurveyForm = ({ t, index, questionStatement, type, uuid, qorder, requir
     });
   };
   const handleRemoveOption = (id) => {
-    if (surveyQuestionConfig.options.length === 1) return;
+    if (surveyQuestionConfig.options.length === 1 || (isPartiallyEnabled ? !isPartiallyEnabled : formDisabled)) return;
     setSurveyQuestionConfig((prevState) => {
       const updatedState = { ...prevState };
       updatedState.options.splice(id, 1);
@@ -102,6 +103,7 @@ const NewSurveyForm = ({ t, index, questionStatement, type, uuid, qorder, requir
         return <div>
           <TextArea 
             placeholder={t("LONG_ANSWER_TYPE")}
+            disabled={isInputDisabled}
             name={"longAnsDescription"}
             inputRef={register({
               maxLength: {
@@ -113,9 +115,9 @@ const NewSurveyForm = ({ t, index, questionStatement, type, uuid, qorder, requir
           {formState?.errors && <CardLabelError>{formState?.errors?.longAnsDescription?.message}</CardLabelError>}
               </div>;
       case "DATE_ANSWER_TYPE":
-        return <DatePicker stylesForInput={{ width: "calc(100% - 290px)" }} style={{width:"202px"}}/>;
+        return <DatePicker stylesForInput={{ width: "calc(100% - 290px)" }} style={{width:"202px"}} disabled={isInputDisabled}/>;
       case "TIME_ANSWER_TYPE":
-        return <TextInput type="time" textInputStyle={{width:"202px"}}/>;
+        return <TextInput type="time" textInputStyle={{width:"202px"}} disable={isInputDisabled}/>;
       case "MULTIPLE_ANSWER_TYPE":
         return (
           <MultipleChoice
@@ -127,6 +129,7 @@ const NewSurveyForm = ({ t, index, questionStatement, type, uuid, qorder, requir
             removeOption={handleRemoveOption}
             options={surveyQuestionConfig?.options}
             createNewSurvey={addOption}
+            isInputDisabled={isInputDisabled}
             isPartiallyEnabled={isPartiallyEnabled}
             formDisabled={formDisabled}
           />
@@ -140,11 +143,13 @@ const NewSurveyForm = ({ t, index, questionStatement, type, uuid, qorder, requir
             updateOption={handleUpdateOption}
             removeOption={handleRemoveOption}
             options={surveyQuestionConfig?.options}
+            isInputDisabled={isInputDisabled}
             isPartiallyEnabled={isPartiallyEnabled}
             createNewSurvey={addOption}
             formDisabled={formDisabled}
             maxLength={60}
             titleHover={t("MAX_LENGTH_60")}
+            labelstyle={{marginLeft:"-20px"}}
             // name={"checkBoxDesc"}
             // inputRef={register({
             //     maxLength: {
@@ -161,6 +166,7 @@ const NewSurveyForm = ({ t, index, questionStatement, type, uuid, qorder, requir
                 <TextInput 
                 placeholder={t("SHORT_ANSWER_TYPE")} 
                 name={"shortAnsDescription"}
+                disabled={isInputDisabled}
                 inputRef={register({
                   maxLength: {
                     value: 200,
@@ -175,7 +181,7 @@ const NewSurveyForm = ({ t, index, questionStatement, type, uuid, qorder, requir
   
   return (
     <div className="newSurveyForm_wrapper">
-      <span className="newSurveyForm_quesno">{`${t("CS_COMMON_QUESTION")} ${index + 1} * `}</span>
+      <span className="newSurveyForm_quesno">{`${t("CS_COMMON_QUESTION")} ${index + 1} `}</span>
       <span className="newSurveyForm_mainsection">
         <div className="newSurveyForm_questions">
           <div style={{width: "75%"}}>

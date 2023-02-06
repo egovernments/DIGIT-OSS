@@ -100,6 +100,8 @@ const CitizenSurveyQuestion = ({ t, question, control, register, values, formSta
                         }}
                         checked={typeof value === "string" ? !!([value]?.find(e => e === option)) : !!value?.find(e => e === option)}
                         label={option}
+                        checkboxWidth = {{width:"34px",height:"34px"}}
+                        style={{marginTop:"5px", overflowWrap:"break-word"}}
                       />
                     );
                   })}
