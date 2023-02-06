@@ -81,7 +81,7 @@ const AppliedDetailForm = (props) => {
           latitude: "",
         },
       ],
-      detailOfCommunitySites: [
+      detailOfCommunitySite: [
         {
           communitySiteName: "",
           provided: "",
@@ -97,7 +97,7 @@ const AppliedDetailForm = (props) => {
 
   const { fields: detailsArray, append: detailsAppend, remove: detailsRemoce } = useFieldArray({
     control,
-    name: "detailOfCommunitySites",
+    name: "detailOfCommunitySite",
   });
 
   // const validateDgpsPoint = () => {
