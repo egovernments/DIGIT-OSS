@@ -40,7 +40,7 @@ const ScrutinyFormcontainer = (props) => {
   const [businessService, setBusinessServices] = useState("NewTL");
   const [moduleCode, setModuleCode] = useState("TL")
   const [scrutinyDetails, setScrutinyDetails] = useState();
- 
+
   const [applicationDetails, setApplicationDetails] = useState();
   const [workflowDetails, setWorkflowDetails] = useState();
   const [applicationData, setApplicationData] = useState();
@@ -193,7 +193,76 @@ const ScrutinyFormcontainer = (props) => {
         return;
       }
     }
+
+    if (data.Licenses[0].action === "APPROVE_PRELIMINARY_SCRUTINY" ){
+
+      let requestInfo = {
+         
+          RequestInfo: {
+              apiId: "Rainmaker",
+              ver: "v1",
+              ts: 0,
+              action: "_search",
+              did: "",
+              key: "",
+              msgId: "090909",
+              requesterId: "",
+              authToken: authToken,
+              userInfo: userInfo
+          
+      }}
+      console.log("TCPaccess" , requestInfo)
+      // return;
+      
+      try {
+        const Resp = await axios.post(`/tl-services/new/getDeptToken?applicationNumber=${id}`, requestInfo).then((response) => {
+          return response?.data;
+        });
+        
+      } catch (error) {
+        console.log(error);
+      }
+      
+        const payload = {
+    
+          "RequestInfo": {
+    
+            "apiId": "Rainmaker",
+    
+            "ver": ".01",
+    
+            "ts": null,
+    
+            "action": "_update",
+    
+            "did": "1",
+    
+            "key": "",
+    
+            "msgId": "20170310130900|en_IN",
+    
+            "authToken": authToken
+    
+          }
+        }
+        const Resp = await axios.post(`/tl-services/loi/report/_create?applicationNumber=${id}&userId=${userInfo?.id}`, payload,{responseType:"arraybuffer"})
+    
+        console.log("logger12345...", Resp.data, userInfo)
+    
+        const pdfBlob = new Blob([Resp.data], { type: 'application/pdf' });
+        const pdfUrl = URL.createObjectURL(pdfBlob);
+        window.open(pdfUrl);
+    
+        console.log("logger123456...", pdfBlob,pdfUrl );
+        
+      
+    }
+    
+
+
     if (mutate) {
+      console.log("TCPac234" , )
+      // return;
       setIsEnableLoader(true);
       mutate(data, {
         onError: (error, variables) => {

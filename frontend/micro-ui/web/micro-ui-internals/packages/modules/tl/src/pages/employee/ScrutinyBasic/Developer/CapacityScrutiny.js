@@ -1015,7 +1015,7 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                     value="Yes"
                     
                     className="mx-2 mt-1"
-                    checked={capacityScrutinyInfo?.designatedDirectors === "Y" ?true:false}
+      checked={capacityScrutinyInfo?.technicalCapacityOutsideHaryana === "Y" ?true:false}
                    
                     disabled
                   />
@@ -1026,7 +1026,7 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                     value="No"
                     
                     className="mx-2 mt-1"
-                    checked={capacityScrutinyInfo?.designatedDirectors === "N" ?true:false}
+                    checked={capacityScrutinyInfo?.technicalCapacityOutsideHaryana === "N" ?true:false}
                   
                     disabled
                   />
@@ -1051,7 +1051,7 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
 
               
 
-                {capacityScrutinyInfo?.designatedDirectors === "Y" && (
+                {capacityScrutinyInfo?.technicalCapacityOutsideHaryana  === "Y" && (
                <div className="row "> 
                   {/* <div className="form-group row"> */}
                     <div className="col-sm-12">

@@ -145,9 +145,9 @@ const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addIn
 
       <Collapse in={open}>
         <div id="example-collapse-text" style={{ marginTop: 5, paddingLeft: 5, paddingRight: 5 }}>
-          <FormControl style={{ margin: 5 }}>
-            <div>
-              <Card style={{ margin: 2 }}>
+          {/* <FormControl >
+            <div> */}
+              <Card >
                 <Row>
                   <FormControl>
                   {addInfo?.showDevTypeFields === "Individual" && (
@@ -858,8 +858,8 @@ const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addIn
                 </Row>
               </Card>
             </div>
-          </FormControl>
-        </div>
+          {/* </FormControl>
+        </div> */}
       </Collapse>
     </div>
   );
