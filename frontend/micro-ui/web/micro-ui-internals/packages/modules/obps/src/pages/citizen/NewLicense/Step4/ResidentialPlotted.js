@@ -176,35 +176,6 @@ const ResidentialPlottedForm = ({
               <input disabled type="number" className="form-control" {...register("netPlannedArea")} />
             </Col>
           </Row>
-          {stepData?.ApplicantPurpose?.purpose === "NILPC" && (
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>
-                    Area to be provided free of cost to the Government for EWS/AH
-                    <span style={{ color: "red" }}>*</span>
-                  </h2>
-                </Form.Label>
-              </div>
-              <input
-                disabled
-                type="number"
-                className="form-control"
-                {...register("providedArea")}
-                onWheel={handleWheel}
-                onChange={(e) => {
-                  if (e?.target?.value < (watch("netPlannedArea") * 10) / 100)
-                    setError({
-                      ...error,
-                      ["providedArea"]:
-                        "Minimum 10% area to be provided free of cost to the Government for EWS/Affordable Housing as per amended policy dated 11.05.2022. ",
-                    });
-                  else setError({ ...error, ["providedArea"]: "" });
-                }}
-              />
-              {error?.providedArea && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.providedArea}</h6>}
-            </Col>
-          )}
         </Col>
         <h6 className="text-black mt-4">
           <b>Detail of the Plots</b>

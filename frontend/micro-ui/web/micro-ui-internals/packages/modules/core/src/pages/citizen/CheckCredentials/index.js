@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 
 
-const DEFAULT_REDIRECT_URL = "/digit-ui/citizen/user/profile";
+const DEFAULT_REDIRECT_URL = "/digit-ui/citizen";
 
 const setCitizenDetail = (userObject, token, tenantId) => {
   let locale = JSON.parse(sessionStorage.getItem("Digit.initData"))?.value?.selectedLanguage;

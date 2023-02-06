@@ -5,7 +5,18 @@ import { Form } from "react-bootstrap";
 import NumberInput from "../../../../components/NumberInput";
 import TextField from "@mui/material/TextField";
 
-const AffordableGroupHousingForm = ({ register, watch, setValue, control, handleWheel, setError, error }) => {
+const AffordableGroupHousingForm = ({
+  register,
+  getDocumentData,
+  watch,
+  getDocShareholding,
+  setLoader,
+  setValue,
+  control,
+  handleWheel,
+  setError,
+  error,
+}) => {
   return (
     <Row className="ml-auto" style={{ marginBottom: 5 }}>
       <Col col-12>
@@ -147,7 +158,7 @@ const AffordableGroupHousingForm = ({ register, watch, setValue, control, handle
               <div>
                 <Form.Label>
                   <h2>
-                    Permissable Ground Coverage
+                    Ground Coverage (in Acres)
                     <span style={{ color: "red" }}>*</span>
                   </h2>
                 </Form.Label>
@@ -159,7 +170,7 @@ const AffordableGroupHousingForm = ({ register, watch, setValue, control, handle
                 onWheel={handleWheel}
                 onChange={(e) => {
                   if (e?.target?.value > (watch("netPlannedArea") * 50) / 100) {
-                    setError({ ...error, ["permissableGroundCoverage"]: "Maximum 50% of Net planned area is allowed" });
+                    setError({ ...error, ["permissableGroundCoverage"]: "Ground Coverage cannot be more than 50% of NPA" });
                   } else setError({ ...error, ["permissableGroundCoverage"]: "" });
                 }}
               />
@@ -169,7 +180,7 @@ const AffordableGroupHousingForm = ({ register, watch, setValue, control, handle
               <div>
                 <Form.Label>
                   <h2>
-                    Permissable Commercial
+                    Commercial (in Acres)
                     <span style={{ color: "red" }}>*</span>
                   </h2>
                 </Form.Label>
@@ -181,7 +192,7 @@ const AffordableGroupHousingForm = ({ register, watch, setValue, control, handle
                 onWheel={handleWheel}
                 onChange={(e) => {
                   if (e?.target?.value > (watch("netPlannedArea") * 8) / 100) {
-                    setError({ ...error, ["permissableCommercial"]: "Maximum 8% of Net planned area is allowed" });
+                    setError({ ...error, ["permissableCommercial"]: "Commercial(In acres) cannot be more than 8% of NPA" });
                   } else setError({ ...error, ["permissableCommercial"]: "" });
                 }}
               />
@@ -191,19 +202,22 @@ const AffordableGroupHousingForm = ({ register, watch, setValue, control, handle
               <div>
                 <Form.Label>
                   <h2>
-                    Permissable FAR
+                    FAR (in Acres)
                     <span style={{ color: "red" }}>*</span>
                   </h2>
                 </Form.Label>
               </div>
-              <input
+              <NumberInput
                 type="number"
                 className="form-control"
-                {...register("permissableFAR")}
-                onWheel={handleWheel}
+                name="permissableFAR"
+                customInput={TextField}
+                thousandSeparator={false}
+                allowNegative={false}
+                decimalScale={2}
                 onChange={(e) => {
-                  if (e?.target?.value > (watch("netPlannedArea") * 225) / 100) {
-                    setError({ ...error, ["permissableFAR"]: "Maximum 225% of Net planned area is allowed" });
+                  if (e?.target?.value > (watch("netPlannedArea") * 2.25) / 100) {
+                    setError({ ...error, ["permissableFAR"]: "Permissable FAR cannot be more than 2.25% of NPA" });
                   } else setError({ ...error, ["permissableFAR"]: "" });
                 }}
               />
@@ -211,6 +225,56 @@ const AffordableGroupHousingForm = ({ register, watch, setValue, control, handle
             </Col>
           </Row>
         </Col>
+        <h6 className="text-black mt-4">
+          <b>Documents</b>
+        </h6>
+        <br></br>
+        <div className="row mt-4">
+          <div className="col col-3">
+            <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top">
+              Layout Plan in pdf<span style={{ color: "red" }}>*</span>
+            </h6>
+            <div className="d-flex">
+              <label>
+                <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                <input
+                  type="file"
+                  style={{ display: "none" }}
+                  onChange={(e) => getDocumentData(e?.target?.files[0], "layoutPlanPdf")}
+                  accept="application/pdf/jpeg/png"
+                />
+              </label>
+              {watch("layoutPlanPdf") && (
+                <div>
+                  <a onClick={() => getDocShareholding(watch("layoutPlanPdf"), setLoader)} className="btn btn-sm ">
+                    <VisibilityIcon color="info" className="icon" />
+                  </a>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="col col-3">
+            <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top">
+              Layout Plan in dxf<span style={{ color: "red" }}>*</span>
+            </h6>
+            <div className="d-flex">
+              <label>
+                <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                <input
+                  type="file"
+                  style={{ display: "none" }}
+                  onChange={(e) => getDocumentData(e?.target?.files[0], "layoutPlanDxf")}
+                  accept="application/pdf/jpeg/png"
+                />
+              </label>
+              {watch("layoutPlanDxf") && (
+                <a onClick={() => getDocShareholding(watch("layoutPlanDxf"), setLoader)} className="btn btn-sm ">
+                  <VisibilityIcon color="info" className="icon" />
+                </a>
+              )}
+            </div>
+          </div>
+        </div>
       </Col>
     </Row>
   );

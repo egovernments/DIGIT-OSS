@@ -10,6 +10,7 @@ import {
   MobileNumber,
   RadioButtons,
   RadioOrSelect,
+ 
   TextInput,
   TextArea,
   CheckBox,
@@ -21,10 +22,13 @@ import { useHistory, useLocation } from "react-router-dom";
 import Timeline from "../components/Timeline";
 import { convertEpochToDate } from "../utils/index";
 import axios from "axios";
+import { MenuItem, Select } from "@mui/material";
 import { useForm } from "react-hook-form";
 import Spinner from "../components/Loader/index";
+import { Button, Placeholder } from 'react-bootstrap';
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { getDocShareholding } from "../../../tl/src/pages/employee/ScrutinyBasic/ScrutinyDevelopment/docview.helper";
+
 const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
@@ -65,13 +69,15 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
       };
       const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${userInfo?.info?.id}&isAllData=true`, requestResp, {});
       const licenseDataList = getDevDetails?.data;
-      console.log("LICENCE DET", getDevDetails?.data.devDetail[0]?.licenceDetails?.email, userInfo);
+      setTradeType(licenseDataList?.devDetail[0]?.applicantType?.licenceType);
+      // console.log("LICENCE DET", getDevDetails?.data.devDetail[0]?.licenceDetails?.email, userInfo);
       setLicenseType(licenseDataList?.devDetail[0]?.applicantType?.licenceType);
       setEmail(licenseDataList?.devDetail[0]?.licenceDetails?.email || userInfo.info.emailId);
       setMobileNumber(licenseDataList?.devDetail[0]?.licenceDetails?.mobileNumber || userInfo.info.mobileNumber);
       setDOB(licenseDataList?.devDetail[0]?.licenceDetails?.dob);
       setGender(licenseDataList?.devDetail[0]?.licenceDetails?.gender);
       setPanNumber(licenseDataList?.devDetail[0]?.licenceDetails?.panNumber);
+      setPanIsValid(licenseDataList?.devDetail[0]?.licenceDetails?.panNumber ? true : false);
       setBoardResolution(licenseDataList?.devDetail[0]?.licenceDetails.uploadBoardResolution);
       setDigitalSign(licenseDataList?.devDetail[0]?.licenceDetails?.uploadDigitalSignaturePdf);
       setAddressLineOne(licenseDataList?.devDetail[0]?.licenceDetails?.addressLineOne);
@@ -103,7 +109,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     getDeveloperData();
   }, []);
   const onSkip = () => onSelect();
-
+  const [tradeType, setTradeType] = useState("");
   const [genderUser, setGenderMF] = useState(formData?.LicneseDetails?.genderUser || formData?.formData?.LicneseDetails?.genderUser || "");
   const [name, setName] = useState(
     (!isOpenLinkFlow ? userInfo?.info?.name : "") || formData?.LicneseDetails?.name || formData?.formData?.LicneseDetails?.name || ""
@@ -180,9 +186,11 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   );
   const [isAddressSame, setisAddressSame] = useState(formData?.isAddressSame || formData?.formData?.isAddressSame || false);
   const [error, setError] = useState(null);
+  const [toastError, setToastError] = useState("");
   const [showToast, setShowToast] = useState(null);
   const [showToastError, setShowToastError] = useState(null);
   const [filsArray, setFilesArray] = useState([]);
+  const [ panIsValid, setPanIsValid ] = useState(false);
   const inputs = [
     {
       label: "HR_BIRTH_DATE_LABEL",
@@ -262,6 +270,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   const editScreen = false;
   // if (isLoading) return <Loader />;
   const panVerification = async () => {
+    setLoading(true);
     try {
       const panVal = {
         txnId: "f7f1469c-29b0-4325-9dfc-c567200a70f7",
@@ -321,35 +330,43 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
           "Access-Control-Allow-Origin": "*",
         },
       });
+      setPanIsValid(true);
+      setPanValError("");
+      setLoading(false);
       // console.log("PANDET", panResp?.data);
     } catch (error) {
+      setLoading(false);
       console.log(error?.response?.data?.errorDescription);
       setPanValError(error?.response?.data?.errorDescription);
     }
   };
-  console.log(panValidation);
-  useEffect(() => {
-    if (PanNumber.length === 10) {
-      panVerification;
-    }
-  }, [PanNumber]);
+  // console.log(panValidation);
+  // useEffect(() => {
+  //   if (PanNumber.length === 10) {
+  //     panVerification;
+  //   }
+  // }, [PanNumber]);
 
   function SelectName(e) {
     setName(e.target.value);
+    setPanIsValid(false);
   }
   // function selectEmail(e) {
   //   setEmail(e.target.value);
   // }
-  function setGenderName(value) {
-    console.log("GENDER", value);
-    setGender(value);
+  function setGenderName(e) {
+    console.log("GENDER", e.target.value);
+    setGender(e.target.value);
+    setPanIsValid(false);
   }
 
   function setMobileNo(e) {
     setMobileNumber(e.target.value);
+    setPanIsValid(false);
   }
   function setDateofBirth(e) {
     setDOB(e.target.value);
+    setPanIsValid(false);
   }
   function selectPanNumber(e) {
     // setPanNumber(e.target.value.toUpperCase());
@@ -358,10 +375,11 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     // }
     if (!e.target.value || /^\w+$/.test(e.target.value)) {
       setPanNumber(e.target.value.toUpperCase());
-      if (e.target.value === 10) {
-        alert("HEY");
-        panVerification();
-      }
+      setPanIsValid(false);
+      // if (e.target.value === 10) {
+      //   alert("HEY");
+      //   panVerification();
+      // }
     }
   }
   function selectPermanentAddress(e) {
@@ -539,26 +557,27 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   const goNext = async () => {
     // if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
     let licenseDet = {
+      parentId: userInfo?.info?.id,
       Licenses: [
         {
+          applicationType: "NEW",
           tradeLicenseDetail: {
             owners: [
               {
                 parentid: userInfo?.info?.id,
-                gender: genderUser,
-                mobileNumber: mobileNumber,
-                name: name,
+                gender: "MALE",
+                mobileNumber: userInfo?.info?.mobileNumber,
+                name: userInfo?.info?.name,
                 dob: null,
                 emailId: email,
                 permanentAddress: PermanentAddress,
                 correspondenceAddress: Correspondenceaddress,
                 pan: PanNumber,
-                uuid: userInfo?.info?.uuid,
                 // "permanentPinCode": "143001"
               },
             ],
             subOwnerShipCategory: "INDIVIDUAL",
-            tradeType: "BUILDER.CLASSA",
+            tradeType: tradeType,
 
             additionalDetail: {
               counsilForArchNo: null,
@@ -599,9 +618,9 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
         };
         //1, units
         if (LicenseType === "ARCHITECT.CLASSA") {
-          onSelect("", formData, "", true, "stakeholder-document-details");
+          onSelect("", data, "", true, "stakeholder-document-details");
         } else {
-          onSelect("", formData, "", true);
+          onSelect("", data, "", true);
         }
       })
       .catch((e) => {
@@ -611,14 +630,15 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
       });
 
     const developerRegisterData = {
-      createdBy: userInfo?.info?.id,
-      updatedBy: userInfo?.info?.id,
-      id: userInfo?.info?.id,
+      "id": userInfo?.info?.id,
+      "pageName": "licenceDetails",
+      "createdBy": userInfo?.info?.id,
+      "updatedBy": userInfo?.info?.id,
       devDetail: {
         licenceDetails: {
           name: name,
           mobileNumber: mobileNumber,
-          gender: gender.value,
+          gender: gender,
           email: email,
           dob: dob,
           PanNumber: PanNumber,
@@ -676,9 +696,11 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
         }
       })
       .catch((e) => {
-        setIsDisableForNext(false);
-        setShowToast({ key: "error" });
+        return;
+        setIsDisableForNext(true);
+        setToastError(e?.response?.data?.Errors?.[0]?.code);
         setError(e?.response?.data?.Errors[0]?.message || null);
+        
       });
 
     // }
@@ -739,6 +761,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
               !email.match(Digit.Utils.getPattern("Email")) ||
               !PanNumber ||
               !PanNumber.match(Digit.Utils.getPattern("PAN")) ||
+              !panIsValid ||
               !pincode?.match(Digit.Utils.getPattern("Pincode") || !city || !addressLineOne)
             }
           >
@@ -750,21 +773,6 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                     {`${t("BPA_APPLICANT_NAME_LABEL")}`}
                     <span class="text-danger font-weight-bold mx-2">*</span>
                   </label>
-                  {/* <TextInput
-                    t={t}
-                    type={"text"}
-                    isMandatory={false}
-                    optionKey="i18nKey"
-                    name="name"
-                    value={name}
-                    onChange={SelectName}
-                    disabled="disabled"
-                    {...(validation = {
-                      isRequired: true,
-                      pattern: "^[a-zA-Z-.`' ]*$",
-                      type: "text",
-                    })}
-                  /> */}
                   <input
                     type="text"
                     name="name"
@@ -780,30 +788,19 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                     <span class="text-danger font-weight-bold mx-2">*</span>
                   </label>
                   <div className="row">
-                    <Dropdown
-                      style={{ width: "100%" }}
-                      className="form-field"
-                      selected={gender?.length === 1 ? gender[0] : gender}
-                      // disable={gender}
-                      option={menu}
-                      select={setGenderName}
-                      value={gender}
-                      placeholder={gender}
-                      optionKey="code"
-                      t={t}
-                      name="gender"
-                    />
-                    {/* <RadioButtons
-                  t={t}
-                  options={menu}
-                  optionsKey="code"
-                  name="gender"
-                  value={gender}
-                  selectedOption={gender}
-                  onSelect={setGenderName}
-                  isDependent={true}
-                  labelKey="COMMON_GENDER"
-                  /> */}
+                    <Select
+                        value={gender || ''}
+                        onChange={setGenderName}
+                        className="w-100 form-control"
+                        variant="standard"
+                        
+                      >
+                          {
+                              menu?.map((item, index) => (
+                                  <MenuItem value={item.value} >{item?.code}</MenuItem>
+                              ))
+                          }
+                      </Select>
                   </div>
                 </Form.Group>
                 <Form.Group className="col-md-4 mb-2">
@@ -811,12 +808,21 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                     {`${t("BPA_OWNER_MOBILE_NO_LABEL")}`}
                     <span class="text-danger font-weight-bold mx-2">*</span>
                   </label>
-                  <MobileNumber
+                  {/* <MobileNumber
                     value={mobileNumber}
                     name="mobileNumber"
                     onChange={(value) => setMobileNo({ target: { value } })}
                     disable={mobileNumber && !isOpenLinkFlow ? true : false}
                     {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel" }}
+                  /> */}
+                  <input
+                    value={mobileNumber}
+                    placeholder={mobileNumber}
+                    name="mobileNumber"
+                    required={true}
+                    onChange={(e) => {setMobileNo(e.target.value); setPanIsValid(false);}}
+                    disabled
+                    className="form-control"
                   />
                 </Form.Group>
                 {inputs?.map((input, index) => (
@@ -872,18 +878,21 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                     {`${t("BPA_APPLICANT_PAN_NO")}`}
                     <span class="text-danger font-weight-bold mx-2">*</span>
                   </label>
-                  <input
-                    type="text"
-                    name="PanNumber"
-                    required={true}
-                    value={PanNumber}
-                    className="form-control"
-                    onChange={selectPanNumber}
-                    max={10}
-                    maxlength="10"
-                  />
+                  <div className="d-flex align-items-baseline">
+                    <input
+                      type="text"
+                      name="PanNumber"
+                      required={true}
+                      value={PanNumber}
+                      className="form-control"
+                      onChange={selectPanNumber}
+                      max={10}
+                      maxlength="10"
+                    />
+                    <Button className="ml-3" onClick={panVerification}>{panIsValid?"Verified":"Verify"}</Button>
+                  </div>
                   {PanNumber && PanNumber.length > 0 && !PanNumber.match(Digit.Utils.getPattern("PAN")) && (
-                    <labelError style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
+                    <labelError style={{ width: "100%", marginTop: "5px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
                       {t("BPA_INVALID_PAN_NO")}
                     </labelError>
                   )}
@@ -1054,7 +1063,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   <input name="city" value={city} placeholder={city} onChange={selectCity} className="form-control" />
                 </Form.Group>
                 <Form.Group className="col-md-4 mb-2">
-                  <label>{`${"Pincode"}*`}</label>
+                  <label>{`${"Pincode"}*`} <span class="text-danger font-weight-bold mx-2">*</span></label>
                   {/* <MobileNumber
                     value={pincode}
                     name="pincode"
@@ -1415,6 +1424,17 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                 </Form.Group>
               </Row>
             </Card>
+            {toastError && (
+              <Toast
+                error={"error" ? true : false}
+                label={toastError}
+                isDleteBtn={true}
+                onClose={() => {
+                  setToastError(null);
+                  
+                }}
+              />
+            )}
             {showToast && (
               <Toast
                 success={showToast?.key === "success" ? true : false}
