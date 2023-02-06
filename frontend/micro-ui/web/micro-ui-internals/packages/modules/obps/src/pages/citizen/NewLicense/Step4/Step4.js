@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import { useForm, useFieldArray } from "react-hook-form";
-import DDJAYForm from "../Step4/DdjayForm";
-import TextField from "@mui/material/TextField";
 import ResidentialPlottedForm from "./ResidentialPlotted";
+import DDJAYForm from "../Step4/DdjayForm";
 import IndustrialPlottedForm from "./IndustrialPlotted";
 import CommercialPlottedForm from "./CommercialPlotted";
 import NilpForm from "./Nilp";
@@ -17,12 +16,8 @@ import RetirementHousingForm from "./RetirementHousing";
 import LayoutPlan from "./LayoutPlan";
 import DemarcationPlan from "./DemarcationPlan";
 import { Card, Row, Col, Button, Form } from "react-bootstrap";
-import CalculateIcon from "@mui/icons-material/Calculate";
-import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
-import FileUpload from "@mui/icons-material/FileUpload";
 import axios from "axios";
 import Spinner from "../../../../components/Loader";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import { getDocShareholding } from "../docView/docView.help";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step4";
@@ -50,6 +45,8 @@ const AppliedDetailForm = (props) => {
   const [applicantId, setApplicantId] = useState("");
   const [modalData, setModalData] = useState([]);
   const [error, setError] = useState({});
+  const [isValid, setIsValid] = useState(false);
+
   const {
     watch,
     register,
@@ -84,7 +81,7 @@ const AppliedDetailForm = (props) => {
           latitude: "",
         },
       ],
-      detailOfCommunitySites: [
+      detailOfCommunitySite: [
         {
           communitySiteName: "",
           provided: "",
@@ -100,7 +97,7 @@ const AppliedDetailForm = (props) => {
 
   const { fields: detailsArray, append: detailsAppend, remove: detailsRemoce } = useFieldArray({
     control,
-    name: "detailOfCommunitySites",
+    name: "detailOfCommunitySite",
   });
 
   // const validateDgpsPoint = () => {
@@ -128,6 +125,7 @@ const AppliedDetailForm = (props) => {
     // console.log("data", data);
     // return;
     setLoader(true);
+    delete data["dgpsDetails"];
     const token = window?.localStorage?.getItem("token");
     const postDistrict = {
       pageName: "DetailsofAppliedLand",
@@ -520,6 +518,12 @@ const AppliedDetailForm = (props) => {
     setDGPSModal(!dgpsModal);
   };
 
+  useEffect(() => {
+    const check = Object?.values(error)?.every((value) => value === null || (typeof value == "string" && !(value || false)));
+    setIsValid(check);
+    console.log("check", check);
+  }, [error]);
+
   return (
     <div>
       <ScrollToTop />
@@ -570,7 +574,7 @@ const AppliedDetailForm = (props) => {
                 </div>
 
                 <Col col-12>
-                  <div>
+                  {/* <div>
                     {stepData?.ApplicantPurpose?.purpose === "RPL" && (
                       <ResidentialPlottedForm
                         register={register}
@@ -588,9 +592,9 @@ const AppliedDetailForm = (props) => {
                         error={error}
                       />
                     )}
-                  </div>
+                  </div> */}
                   <div>
-                    {stepData?.ApplicantPurpose?.purpose === "DDJAY_APHP" && (
+                    {stepData?.ApplicantPurpose?.purpose === "RPL" && (
                       <DDJAYForm
                         register={register}
                         getDocumentData={getDocumentData}
@@ -762,7 +766,7 @@ const AppliedDetailForm = (props) => {
                     </div>
                     <div class="col-sm-12 text-right">
                       {console.log("error===", error)}
-                      <button disabled={error ? true : false} type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
+                      <button disabled={isValid ? false : true} type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
                         Save and Continue
                       </button>
                     </div>
