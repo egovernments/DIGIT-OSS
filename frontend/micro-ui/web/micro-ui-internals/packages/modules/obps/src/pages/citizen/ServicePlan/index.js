@@ -13,6 +13,9 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import FileDownload from "@mui/icons-material/FileDownload";
 import { IconButton } from "@mui/material";
+import ScrollToTop from "@egovernments/digit-ui-react-components/src/atoms/ScrollToTop";
+import Spinner from "../../../components/Loader";
+import { Toast } from "@egovernments/digit-ui-react-components";
 //import { getDocShareholding } from 'packages/modules/tl/src/pages/employee/ScrutinyBasic/ScrutinyDevelopment/docview.helper.js'
 
 
@@ -35,9 +38,17 @@ const ServicePlanService = () => {
   const [valid, setValid] = useState([])
   const [devName, setDevName] = useState("")
   const [purpose, setPurpose] = useState("")
-  const [panNumber, setPanNumber] = useState("")
+  const [developmentPlan, setDevelopmentPlan] = useState("")
   const [gstnumber, setGSTNumber] = useState("")
-  const [mobileNmber, setMobileNumber] = useState("")
+  const [totalArea, setTotalArea] = useState("")
+
+  /////////////
+  // const [stepData, setStepData] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [showToast, setShowToast] = useState(null);
+  const [showToastError, setShowToastError] = useState(null);
+  const [loader, setLoader] = useState(false);
+  
   const {
     register,
     handleSubmit,
@@ -231,34 +242,62 @@ const ServicePlanService = () => {
   //   })
   //   return valid
   // }
-  
-
   const getDocumentData = async (file, fieldName) => {
-     
-   
-    setValid(prevFiles => [...prevFiles,file.name])
-     
-    console.log({valid, file}, "vvvvvvvvv");
-    
+    console.log("documentData", fieldName);
+    if (selectedFiles.includes(file.name)) {
+      setShowToastError({ key: "error" });
+      return;
+    }
+
     const formData = new FormData();
     formData.append("file", file);
     formData.append("tenantId", "hr");
     formData.append("module", "property-upload");
     formData.append("tag", "tag-property");
-    // setLoader(true);
+    setLoader(true);
     try {
       const Resp = await axios.post("/filestore/v1/files", formData, {});
+      console.log("documentData", Resp?.data?.files);
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
      
-      // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
-      // console.log("getval======", getValues());
-      // setLoader(false);
+      setSelectedFiles([...selectedFiles, file.name]);
+
+      setLoader(false);
+      setShowToast({ key: "success" });
     } catch (error) {
-      // setLoader(false);
-      console.log(error.message);
+      setLoader(false);
+      return error.message;
     }
   };
+  
+
+  // const getDocumentData = async (file, fieldName) => {
+     
+   
+  //   setValid(prevFiles => [...prevFiles,file.name])
+     
+  //   console.log({valid, file}, "vvvvvvvvv");
+    
+  //   const formData = new FormData();
+  //   formData.append("file", file);
+  //   formData.append("tenantId", "hr");
+  //   formData.append("module", "property-upload");
+  //   formData.append("tag", "tag-property");
+  //   // setLoader(true);
+  //   try {
+  //     const Resp = await axios.post("/filestore/v1/files", formData, {});
+  //     setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
+  //     setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
+     
+  //     setDocId(Resp?.data?.files?.[0]?.fileStoreId);
+  //     console.log("getval======", getValues());
+  //     setLoader(false);
+  //   } catch (error) {
+  //     setLoader(false);
+  //     console.log(error.message);
+  //   }
+  // };
 
   const handleClose = () => {
     setOpen(false)
@@ -298,9 +337,9 @@ const ServicePlanService = () => {
     const Resp = await axios.post(`/tl-services/v1/_search?loiNumber=${LOINumber}`, loiRequest);
     console.log(Resp, "RRRRRRRRRRR");
     setDevName(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantInfo?.devDetail?.addInfo?.name)
-    setPanNumber(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantInfo?.devDetail?.addInfo?.PanNumber)
-    setGSTNumber(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantInfo?.devDetail?.addInfo?.gst_Number)
-    setMobileNumber(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantInfo?.devDetail?.addInfo?.mobileNumberUser)
+    setDevelopmentPlan(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.AppliedLandDetails?.[0]?.developmentPlan)
+    setPurpose(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.purpose)
+    setTotalArea(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.AppliedLandDetails?.[0]?.totalArea)
     
   
 
@@ -345,7 +384,10 @@ const ServicePlanService = () => {
    }
 
   return (
-    <React.Fragment>
+  <div>
+   <React.Fragment>
+       <ScrollToTop />
+      {loader && <Spinner />}
     <form onSubmit={handleSubmit(servicePlan)}>
       <Card style={{ width: "126%", border: "5px solid #1266af" }}>
         <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Service Plan </h4>
@@ -396,16 +438,16 @@ const ServicePlanService = () => {
               <div>
                 <label>
                   <h2>
-                    PanNumber
+                  Development Plan
                   </h2>
                 </label>
               </div>
               <input
                 type="string"
                 className="form-control"
-                {...register("panNumber")}
-                onChange={(e) => setPanNumber(e.target.value)}
-                value={panNumber}
+                {...register("developmentPlan")}
+                onChange={(e) => setDevelopmentPlan(e.target.value)}
+                value={developmentPlan}
                 disabled
               />
             </Col>
@@ -413,16 +455,16 @@ const ServicePlanService = () => {
               <div>
                 <label>
                   <h2>
-                    GST Number
+                  Purpose Of Licence 
                   </h2>
                 </label>
               </div>
               <input
                 type="string"
                 className="form-control"
-                {...register("gstNumber")}
-                onChange={(e) => setGSTNumber(e.target.value)}
-                value={gstnumber}
+                {...register("purpose")}
+                onChange={(e) => setPurpose(e.target.value)}
+                value={purpose}
                 disabled
               />
             </Col>
@@ -430,23 +472,23 @@ const ServicePlanService = () => {
               <div>
                 <label>
                   <h2>
-                    Mobile-Nmber
+                  Total Area
                   </h2>
                 </label>
               </div>
               <input
                 type="string"
                 className="form-control"
-                {...register("mobileNumber")}
-                onChange={(e) => setMobileNumber(e.target.value)}
-                value={mobileNmber}
+                {...register("totalArea")}
+                onChange={(e) => setTotalArea(e.target.value)}
+                value={totalArea}
                 disabled
               />
             </Col>
           </Row>
           <br></br>
           <Row>
-            <Col className="col-3">
+            {/* <Col className="col-3">
               <div>
                 <label>
                   <h2>
@@ -462,8 +504,8 @@ const ServicePlanService = () => {
                 value={devName}
                 disabled
               />
-            </Col>
-            <Col className="col-3">
+            </Col> */}
+            {/* <Col className="col-3">
               <div>
                 <label>
                   <h2>
@@ -513,7 +555,7 @@ const ServicePlanService = () => {
                 value={mobileNmber}
                 disabled
               />
-            </Col>
+            </Col> */}
           </Row>
           <br></br>
           <br></br>
@@ -762,6 +804,29 @@ const ServicePlanService = () => {
 
     </Dialog>
     </React.Fragment>
+    {showToast && (
+        <Toast
+          success={showToast?.key === "success" ? true : false}
+          label="Document Uploaded Successfully"
+          isDleteBtn={true}
+          onClose={() => {
+            setShowToast(null);
+            setError(null);
+          }}
+        />
+      )}
+      {showToastError && (
+        <Toast
+          error={showToastError?.key === "error" ? true : false}
+          label="Duplicate file Selected"
+          isDleteBtn={true}
+          onClose={() => {
+            setShowToastError(null);
+            setError(null);
+          }}
+        />
+      )}
+    </div>
   );
 };
 
