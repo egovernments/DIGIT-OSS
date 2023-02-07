@@ -9,7 +9,7 @@
   </parent>
   <groupId>org.egov</groupId>
   <artifactId>egov-persister</artifactId>
-  <version>1.1.5_beta-SNAPSHOT</version>
+  <version>1.1.5-SNAPSHOT</version>
   <name>egov-persister</name>
   <description>egov persister framework</description>
   <properties>

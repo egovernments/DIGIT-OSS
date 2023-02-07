@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>org.egov</groupId>
 	<artifactId>national-dashboard-kafka-pipeline</artifactId>
-	<version>1.0.1_beta-SNAPSHOT</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<name>national-dashboard-kafka-pipeline</name>
 	<description>Helps in pushing national dashboard data to kafka connector</description>
 	<properties>

@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.3.0 - 2023-02-06
+
+- Transition from 1.3.0-beta version to 1.3.0 version
+
 ## 1.3.0-beta - 2022-06-22
 
 - Enhanced user service for the implementation of privacy feature.

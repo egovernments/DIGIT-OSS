@@ -11,7 +11,7 @@
     </parent>
     <groupId>org.egov</groupId>
     <artifactId>egov-otp</artifactId>
-    <version>1.2.3_beta-SNAPSHOT</version>
+    <version>1.2.3-SNAPSHOT</version>
     <name>otp</name>
     <description>OTP generator and validation</description>
     <properties>

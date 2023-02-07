@@ -1,6 +1,6 @@
 {
   "name": "pdf-service",
-  "version": "1.2.1_beta",
+  "version": "1.2.1",
   "description": "Starter project for an ES6 RESTful Express API",
   "main": "dist",
   "scripts": {

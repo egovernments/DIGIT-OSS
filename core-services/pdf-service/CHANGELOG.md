@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.2.1 - 2023-02-06
+- Transition from 1.2.1-beta version to 1.2.1 version
+
 ## 1.2.1-beta - 2022-08-09
 - Fixed localisation cache issue.
 

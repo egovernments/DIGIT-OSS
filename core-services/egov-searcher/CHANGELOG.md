@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.1.6 - 2023-02-06
+- Transition from 1.1.6-beta version to 1.1.6 version
+
 ## 1.1.6-beta - 2022-06-22
 - Enhanced searcher service for the implementation of privacy feature.
 - Upgraded spring-boot-starter-parent to 2.2.13 and spring beans to 5.2.20.RELEASE
