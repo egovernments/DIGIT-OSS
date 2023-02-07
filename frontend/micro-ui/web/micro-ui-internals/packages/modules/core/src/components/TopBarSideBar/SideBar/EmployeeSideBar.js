@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
@@ -9,9 +9,16 @@ const ToolTipWrapper = ({ child, label, t }) => (
       <div style={{ background: "#555", width: "100%", padding: "5px", borderRadius: "6px", whiteSpace: "pre" }}>{t(label)}</div>
     </span>
   </span>
+  
 );
 
+
 const EmployeeSideBar = () => {
+  useEffect(()=>{
+    setSSODashUrl(localStorage.getItem('ssoDashboardURL'));
+  },[]);
+  
+  const [SSODashUrl,setSSODashUrl] = useState('')
   const STADMIN = Digit.UserService.hasAccess("STADMIN");
   const NATADMIN = Digit.UserService.hasAccess("NATADMIN");
 
@@ -30,7 +37,7 @@ const EmployeeSideBar = () => {
     else if(STADMIN)
       return "/employee/integration/dss/home";
     else
-      return "/employee";
+      return SSODashUrl;
   }
 
   const { t } = useTranslation();
