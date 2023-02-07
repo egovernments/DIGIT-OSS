@@ -8,21 +8,7 @@ import { NumericFormat } from "react-number-format";
 import TextField from "@mui/material/TextField";
 import NumberInput from "../../../../components/NumberInput";
 
-const DDJAYForm = ({
-  register,
-  getDocumentData,
-  watch,
-  getDocShareholding,
-  setLoader,
-  setValue,
-  control,
-  fields,
-  add,
-  remove,
-  handleWheel,
-  setError,
-  error,
-}) => {
+const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLoader, setValue, control, handleWheel, setError, error }) => {
   return (
     <Row className="ml-auto" style={{ marginBottom: 5 }}>
       <Col col-12>
@@ -390,8 +376,7 @@ const DDJAYForm = ({
             {error?.transferredArea && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.transferredArea}</h6>}
           </Col>
         </Row>
-        <br></br>
-        <h6 className="text-black">
+        <h6 className="text-black mt-4">
           <b>Documents</b>
         </h6>
         <div className="row ">
