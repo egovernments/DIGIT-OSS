@@ -130,7 +130,7 @@ const getAddress = (item) => {
 const getName = (item) =>{
   let name = "-";
   if (item){
-    name = item.owners[0].name;
+    name = item.owners[getIndexofActive(item)].name;
   }
   return (name)
 } 
@@ -138,13 +138,12 @@ const getName = (item) =>{
 const getGurdainName = (item) =>{
   let name = "-";
   if (item){
-    name = item.owners[0].fatherOrHusbandName;
+    name = item.owners[getIndexofActive(item)].fatherOrHusbandName;
   }
   return (name)
 } 
 
-const getIndexofActive = (item) => {
-
+const getIndexofActive = (item) => {debugger
 
   if(item && item.status=="INWORKFLOW")
   {
@@ -166,6 +165,7 @@ const getIndexofActive = (item) => {
       if(item.owners[i].status=='ACTIVE')
       return i;
     }
+    return item.owners.length-1;
   }
 
 }
