@@ -126,6 +126,23 @@ const getAddress = (item) => {
   let city = item.address.city != null ? (item.address.city) : '';
   return (doorNo + buildingName + street + mohalla + city);
 }
+
+const getName = (item) =>{
+  let name = "-";
+  if (item){
+    name = item.owners[0].name;
+  }
+  return (name)
+} 
+
+const getGurdainName = (item) =>{
+  let name = "-";
+  if (item){
+    name = item.owners[0].fatherOrHusbandName;
+  }
+  return (name)
+} 
+
 const getIndexofActive = (item) => {
 
 
@@ -308,14 +325,13 @@ let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && 
       {}
     );
       
-
       // const response = searchSampleResponse();
-      let propertyData = finalResponse.Properties.map(item => ({
+      let propertyData = await finalResponse.Properties.map((item) => ({
+        
         ["PT_COMMON_TABLE_COL_PT_ID"]:
           item.propertyId || "-",
-        ["PT_COMMON_TABLE_COL_OWNER_NAME"]: item.owners[getIndexofActive(item)] && item.owners[getIndexofActive(item)].name || "-",
-        ["PT_GUARDIAN_NAME"]:
-        item.owners[getIndexofActive(item)] && item.owners[getIndexofActive(item)].fatherOrHusbandName || "-",
+        ["PT_COMMON_TABLE_COL_OWNER_NAME"]: getName(item),
+        ["PT_GUARDIAN_NAME"]: getGurdainName(item),
         ["PT_COMMON_COL_EXISTING_PROP_ID"]:
           item.oldPropertyId || "-",
         ["PT_COMMON_COL_ADDRESS"]:
