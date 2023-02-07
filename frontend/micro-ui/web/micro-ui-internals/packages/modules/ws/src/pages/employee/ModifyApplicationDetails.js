@@ -17,9 +17,11 @@ const ModifyApplicationDetails = () => {
   let filters = func.getQueryStringParams(location.search);
   const applicationNumber = filters?.applicationNumber;
   const serviceType = filters?.service;
+  const stateCode = Digit.ULBService.getStateId();
   const menuRef = useRef();
 
   let { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.ws.useWSModifyDetailsPage(t, tenantId, applicationNumber, serviceType, userInfo, { privacy: Digit.Utils.getPrivacyObject() });
+  const { isServicesMasterLoading, data: servicesMasterData } = Digit.Hooks.ws.useMDMS(stateCode, "ws-services-masters", ["WSEditApplicationByConfigUser"]);
 
   let workflowDetails = Digit.Hooks.useWorkflowDetails(
     {
@@ -237,8 +239,8 @@ const ModifyApplicationDetails = () => {
 
         <ApplicationDetailsTemplate
           applicationDetails={applicationDetails}
-          isLoading={isLoading}
-          isDataLoading={isLoading}
+          isLoading={isLoading || isServicesMasterLoading}
+          isDataLoading={isLoading || isServicesMasterLoading}
           applicationData={applicationDetails?.applicationData}
           mutate={mutate}
           workflowDetails={workflowDetails}
