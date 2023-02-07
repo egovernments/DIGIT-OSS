@@ -1,6 +1,10 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import { Row, Col } from "react-bootstrap";
+import FileUpload from "@mui/icons-material/FileUpload";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import NumberInput from "../../../../components/NumberInput";
+import TextField from "@mui/material/TextField";
 
 const IndustrialPlottedForm = ({
   register,
@@ -263,7 +267,7 @@ const IndustrialPlottedForm = ({
           </Row>
         )}
 
-        {watch("totalAreaScheme") <= 50 ||
+        {watch("totalAreaScheme") === 50 ||
           (watch("totalAreaScheme") < 200 && (
             <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
               <Col md={4} xxl lg="3">

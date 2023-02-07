@@ -2,6 +2,8 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import { Row, Col } from "react-bootstrap";
 import { Form } from "react-bootstrap";
+import FileUpload from "@mui/icons-material/FileUpload";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import NumberInput from "../../../../components/NumberInput";
 import TextField from "@mui/material/TextField";
 
