@@ -1,15 +1,23 @@
 import {
   Calender,
   CardBasedOptions,
+  ServiceCardOptions,
   CaseIcon,
   ComplaintIcon,
   DocumentIcon,
   HomeIcon,
+  BPAHomeIcon,
+  BPAIco,
   Loader,
   OBPSIcon,
   PTIcon,
   StandaloneSearchBar,
   WhatsNewCard,
+  BannerAllCard,
+  LicencingIcon,
+  ServicePlanIcon,
+  ElectricPlanIcon,
+  BankGuaranteeIcon,
 } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -60,7 +68,7 @@ const Home = () => {
       onClick: () => history.push("/digit-ui/citizen/all-services"),
     },
     options: [
-      {
+      { 
         name: t("ES_PGR_HEADER_COMPLAINT"),
         Icon: <ComplaintIcon />,
         onClick: () => history.push("/digit-ui/citizen/pgr-home"),
@@ -157,6 +165,150 @@ const Home = () => {
     styles: { display: "flex", flexWrap: "wrap", justifyContent: "flex-start", width: "100%" },
   };
 
+  const allBannerMenuProps = {
+    // sideOption: {
+    //   name: t("DASHBOARD_VIEW_ALL_LABEL"),
+    //   onClick: () => {},
+    // },
+    options:[
+      {
+        name: t("Home"),
+        Icon: <HomeIcon className="home-class" />,
+        onClick: () => history.push("/digit-ui/citizen"),
+      },
+      {
+        name: "Licence",
+        Icon: <LicencingIcon />,
+        onClick: () => history.push("/digit-ui/citizen/obps/card"),
+      },
+      {
+        name: t("CS_COMMON_INBOX_BPA"),
+        Icon: <BPAIco />,
+        onClick: handleBPAClick,
+      },
+    ],
+    styles: { display: "flex", flexWrap: "wrap", justifyContent: "flex-start", width: "100%" },
+  };
+
+  const allCitizenServicesPropsCard = {
+    // header: t("DASHBOARD_CITIZEN_SERVICES_LABEL"),
+    // sideOption: {
+    //   name: t("DASHBOARD_VIEW_ALL_LABEL"),
+    //   onClick: () => history.push("/digit-ui/citizen/all-services"),
+    // },
+    options: [
+      {
+        name: "Licencing Services",
+        Icon: <LicencingIcon className="fill-path-primary-main" />,
+        links : [
+          {
+            link: `/digit-ui/citizen/obps/tab`,
+            i18nKey: t("New Licence Application"),
+          },
+      
+          {
+            link: `/digit-ui/citizen/tl/tradelicence/my-application`,
+            i18nKey: t("TL_MY_APPLICATIONS_HEADER"),
+          },
+        ],
+      },
+      {
+        name: t("SERVICE_PLAN_CARD"),
+        // name: "Service Plan",
+        Icon: <ServicePlanIcon className="fill-path-primary-main" />,
+        links : [
+          {
+            link: `/digit-ui/citizen/obps/servicePlan`,
+            i18nKey: t("SP_CREATE_TRADE"),
+          },
+      
+          {
+            link: `/digit-ui/citizen/tl/servicePlan/my-application`,
+            i18nKey: t("TL_MY_APPLICATIONS_HEADER"),
+          },
+        ],
+        // onClick: () => history.push("/digit-ui/citizen/obps/servicePlan"),
+        // onClick: () => history.push("/digit-ui/citizen/tl-home"),
+      },
+      {
+        name: t("ELECTRIC_PLAN_CARD"),
+        Icon: <ElectricPlanIcon className="fill-path-primary-main" />,
+        links : [
+          {
+            link: `/digit-ui/citizen/obps/electricalPlan`,
+            i18nKey: t("EP_CREATE_TRADE"),
+          },
+      
+          {
+            link: `/digit-ui/citizen/tl/electricPlan/my-application`,
+            i18nKey: t("TL_MY_APPLICATIONS_HEADER"),
+          },
+        ],
+        // onClick: () => history.push("/digit-ui/citizen/obps/electricalPlan"),
+        // onClick: () => history.push("/digit-ui/citizen/pt-home"),
+      },
+      {
+        name: t("ACTION_TEST_BUILDING_PLAN_APPROVAL"),
+        Icon: <BPAIco className="fill-path-primary-main" />,
+        links: [
+          {
+            link: `/digit-ui/citizen/obps/my-applications`,
+            i18nKey: t("BPA_CITIZEN_HOME_VIEW_APP_BY_CITIZEN_LABEL"),
+          },
+          {
+            link: `/digit-ui/citizen/obps/stakeholder/apply/provide-license-type`,
+            i18nKey: t("BPA_CITIZEN_HOME_STAKEHOLDER_LOGIN_LABEL"),
+          },
+          {
+            link: `/digit-ui/citizen/obps/home`,
+            i18nKey: t("BPA_CITIZEN_HOME_ARCHITECT_LOGIN_LABEL"),
+          },
+        ]
+      },
+      {
+        name: t("BANK_GUARANTEE_PLAN"),
+        Icon: <BankGuaranteeIcon className="fill-path-primary-main" />,
+        links: [
+          {
+            link: `/digit-ui/citizen/obps/SubmitNew`,
+            i18nKey: t("BG_CREATE_TRADE"),
+          },
+          {
+            link: `/digit-ui/citizen/tl/bankGuarantee/my-application`,
+            i18nKey: t("TL_MY_APPLICATIONS_HEADER"),
+          },
+         ],
+      },
+      // {
+      //   name: t("PROVIDE_LICENSE_DETAILS"),
+      //   Icon: <CaseIcon className="fill-path-primary-main" />,
+      //   onClick: () => history.push("/digit-ui/citizen/obps/stakeholder/apply/license-details"),
+      // },
+      // {
+      //   name: t("ADD_AUTHORIZED_USER"),
+      //   Icon: <CaseIcon className="fill-path-primary-main" />,
+      //   onClick: () => history.push("/digit-ui/citizen/obps/stakeholder/apply/add-authorized-user"),
+      // },
+      // {
+      //   name: t("DEVELOPER_CAPACITY"),
+      //   Icon: <CaseIcon className="fill-path-primary-main" />,
+      //   onClick: () => history.push("/digit-ui/citizen/obps/stakeholder/apply/developer-capacity"),
+      // },
+      // {
+      //   name: t("STAKEHOLDER_DOCUMENT_DETAILS"),
+      //   Icon: <CaseIcon className="fill-path-primary-main" />,
+      //   onClick: () => history.push("/digit-ui/citizen/obps/stakeholder/apply/stakeholder-document-details"),
+      // },
+      // {
+      //   name: t("REDIRCT"),
+      //   Icon: <CaseIcon className="fill-path-primary-main" />,
+      //   onClick: () => redirectLoading(),
+      // },
+
+    ],
+    styles: { display: "flex", flexWrap: "wrap", justifyContent: "flex-start", width: "100%" },
+  }; 
+
   return isLoading ? (
     <Loader />
   ) : (
@@ -175,14 +327,17 @@ const Home = () => {
         <div className="BannerWithSearch">
           {/* <img src={stateInfo?.bannerUrl} /> */}
           {/* <img src={"http://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/bg-login.jpg"} /> */}
-          <div className="Search">
+          <BannerAllCard {...allBannerMenuProps} />
+          
+          {/* <div className="Search">
             <StandaloneSearchBar placeholder={t("CS_COMMON_SEARCH_PLACEHOLDER")} />
-          </div>
+          </div> */}
         </div>
 
         <div className="ServicesSection">
-          <CardBasedOptions {...allCitizenServicesProps} />
-          <CardBasedOptions {...allInfoAndUpdatesProps} />
+          <ServiceCardOptions {...allCitizenServicesPropsCard} />
+          {/* <CardBasedOptions {...allCitizenServicesProps} />
+          <CardBasedOptions {...allInfoAndUpdatesProps} /> */}
         </div>
 
         {conditionsToDisableNotificationCountTrigger() ? (

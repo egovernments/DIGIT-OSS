@@ -1,6 +1,6 @@
-/*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
+
 button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
-  font-family: inherit;
+  font-family: 'Noto Sans', sans-serif;
   font-size: 100%;
   line-height: 1.15;
   margin: 0; }
@@ -130,7 +130,7 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
   border-bottom: 1px;
   border-color: rgba(11, 12, 12, var(--border-opacity));
   border-style: solid;
-  font-family: Roboto Condensed,sans-serif;
+  font-family: 'Noto Sans', sans-serif;
   color: #0b0c0c;
   color: rgba(11, 12, 12, var(--text-opacity));
   margin-left: 8px;
@@ -161,7 +161,7 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
   border-bottom: 1px;
   border-color: rgba(11, 12, 12, var(--border-opacity));
   border-style: solid;
-  font-family: Roboto Condensed,sans-serif;
+  font-family: 'Noto Sans', sans-serif;
   --text-opacity:1;
   color: #0b0c0c;
   color: rgba(11, 12, 12, var(--text-opacity));
@@ -285,7 +285,7 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
   .card .card-header, .card-emp .card-header {
     font-size: 32px;
     line-height: 40px;
-    font-family: Roboto Condensed,sans-serif;
+    font-family: 'Noto Sans', sans-serif;
     margin-bottom: 16px; }
   .card .card-header, .card-emp .card-header, .card .card-sub-header, .card-emp .card-sub-header {
     --text-opacity:1;
@@ -383,7 +383,7 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
   .employeeCard .card-header {
     font-size: 32px;
     line-height: 40px;
-    font-family: Roboto Condensed,sans-serif;
+    font-family: 'Noto Sans', sans-serif;
     margin-bottom: 16px; }
   .employeeCard .card-header, .employeeCard .card-sub-header, .employeeCard .employee-card-sub-header {
     --text-opacity:1;
@@ -483,7 +483,7 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
   margin: 8px; }
 
 .submit-bar header {
-  font-family: Roboto Condensed,sans-serif;
+  font-family: 'Noto Sans', sans-serif;
   font-weight: 500;
   font-size: 19px;
   line-height: 23px;
@@ -507,7 +507,7 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
 .submit-bar-disabled {
   opacity: .5; }
   .submit-bar-disabled header {
-    font-family: Roboto Condensed,sans-serif;
+    font-family: 'Noto Sans', sans-serif;
     font-weight: 500;
     font-size: 19px;
     line-height: 23px;
@@ -652,7 +652,7 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
     outline: 2px solid transparent;
     outline-offset: 2px; }
   .selector-button-primary h2 {
-    font-family: Roboto Condensed,sans-serif;
+    font-family: 'Noto Sans', sans-serif;
     font-weight: 500;
     font-size: 19px;
     line-height: 23px;
@@ -679,7 +679,7 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
     outline: 2px solid transparent;
     outline-offset: 2px; }
   .selector-button-border h2 {
-    font-family: Roboto Condensed,sans-serif;
+    font-family: 'Noto Sans', sans-serif;
     font-weight: 500;
     font-size: 19px;
     line-height: 23px;
@@ -692,7 +692,7 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
   outline-offset: 2px; }
 
 .input-mirror-selector-button h2 {
-  font-family: Roboto Condensed,sans-serif;
+  font-family: 'Noto Sans', sans-serif;
   font-weight: 500;
   font-size: 19px;
   line-height: 23px;
@@ -720,7 +720,7 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
     outline: 2px solid transparent;
     outline-offset: 2px; }
   .selector-button-primary-disabled h2 {
-    font-family: Roboto Condensed,sans-serif;
+    font-family: 'Noto Sans', sans-serif;
     font-weight: 500;
     font-size: 19px;
     line-height: 23px;
@@ -1135,7 +1135,7 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
   background-color: rgba(0, 112, 60, var(--bg-opacity)); }
   .emp-success-wrap header, .success-wrap header {
     margin-bottom: 8px;
-    font-family: Roboto Condensed,sans-serif;
+    font-family: 'Noto Sans', sans-serif;
     font-weight: 700;
     font-size: 32px;
     line-height: 40px; }
@@ -1199,7 +1199,7 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
   background-color: rgba(212, 53, 28, var(--bg-opacity)); }
   .emp-error-wrap header, .error-wrap header {
     margin-bottom: 8px;
-    font-family: Roboto Condensed,sans-serif;
+    font-family: 'Noto Sans', sans-serif;
     font-weight: 700;
     font-size: 32px;
     line-height: 40px; }
@@ -1726,7 +1726,7 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
       /* --text-opacity:1;
       color: #0b0c0c;
       color: rgba(11, 12, 12, var(--text-opacity));  */
-      /* font-family: 'Poppins', sans-serif;
+      /* font-family: 'Noto Sans', sans-serif;
   font-size: 27px;
   font-weight: 700;
   line-height: 1.5;
@@ -3391,7 +3391,68 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
 @media (min-width: 780px) {
   .CardBasedOptions {
     width: calc(50% - 16px);
-    padding: 16px; } }
+    padding: 16px; } 
+  .ServiceCardOptions{
+    --bg-opacity: 1;
+    background-color: #f3f3e5;
+    /* background-color: rgba(255, 255, 255, var(--bg-opacity)); */
+    margin-bottom: 16px;
+    padding: 16px 8px;
+    margin-left: 8px;
+    margin-right: 8px;
+    border-radius: 0.45rem;
+    width: 100%;
+    box-shadow: 0 10px 20px rgb(0 0 0 / 19%), 0 6px 6px rgb(0 0 0 / 23%);
+  }
+  .ServiceCardData{
+    width: 100%;
+    background: #ffffff;
+    box-shadow: 0.375rem 0.375rem 0.125rem 0 rgb(0 0 0 / 10%);
+    border-radius: 0.65rem;
+    padding: 0.6rem;
+    position: relative;
+  }
+  .ServiceCardHeader{
+    position: relative;
+    background-image: url(https://nulp.niua.org/assets/common-consumption/images/abstract_01.svg);
+    padding: 2rem 0.5rem;
+    border-radius: 0.55rem;
+  }
+  .Icon-side{
+    position: absolute;
+    right: 11px;
+    bottom: -16px;
+    background: #ffffff;
+    padding: 0.55rem;
+    border-radius: 50%;
+    box-shadow: 0.2rem 0.2rem 0.225rem 0rem rgb(0 0 0 / 10%);
+    text-align: center;
+    /* border: 2px solid #024f9d; */
+  }
+  .Icon-side svg{
+    height: 36px;
+    width: 36px;
+    fill: #1266af;
+  }
+  .ServiceCardCaption{
+    margin: 1.2rem 0.2rem;
+  }
+  .ServiceCardCaption h3{
+    font-size: 1rem;
+    font-weight: 500;
+    color: #1266af;
+    margin-bottom: 0.5rem;
+  }
+  .links-redirect{
+    
+  }
+  .links-redirect a{
+    display: block;
+    font-size: 0.8rem;
+    text-decoration: none;
+    margin: 0.2rem 0;
+  }
+}
 
 .WhatsNewCard {
   border-radius: .25rem;
@@ -4620,7 +4681,7 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
   justify-content: normal; }
 
 .dss-switch-tab-selected, .dss-switch-tab-unselected {
-  font-family: Roboto;
+  font-family: 'Noto Sans', sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 22px; }
@@ -5439,7 +5500,7 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
 
 /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
 .checkbox-wrap .input-emp, button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
-  font-family: inherit;
+  font-family: 'Noto Sans', sans-serif;
   font-size: 100%;
   line-height: 1.15;
   margin: 0; }
@@ -5509,7 +5570,7 @@ input::-ms-input-placeholder, .checkbox-wrap .input-emp::-ms-input-placeholder, 
 .card-emp .card-header, .card .card-header, .card-emp .card-header {
   font-size: 32px;
   line-height: 40px;
-  font-family: Roboto Condensed,sans-serif;
+  font-family: 'Noto Sans', sans-serif;
   margin-bottom: 16px; }
 
 .card-emp .card-header, .card-emp .card-sub-header, .card .card-header, .card-emp .card-header, .card .card-sub-header, .card-emp .card-sub-header {
@@ -6959,7 +7020,7 @@ hr {
   overflow: visible; }
 
 pre {
-  font-family: monospace,monospace;
+  font-family: 'Noto Sans', sans-serif;
   font-size: 1em; }
 
 a {
@@ -6975,7 +7036,7 @@ b, strong {
   font-weight: bolder; }
 
 code, kbd, samp {
-  font-family: monospace,monospace;
+  font-family: 'Noto Sans', sans-serif;
   font-size: 1em; }
 
 small {
@@ -6997,7 +7058,7 @@ img {
   border-style: none; }
 
 .checkbox-wrap .input-emp, button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
-  font-family: inherit;
+  font-family: 'Noto Sans', sans-serif;
   font-size: 100%;
   line-height: 1.15;
   margin: 0; }
@@ -7072,7 +7133,7 @@ ol, ul {
   list-style: none; }
 
 html {
-  font-family: Roboto,sans-serif;
+  font-family: 'Noto Sans', sans-serif;
   line-height: 1.5; }
 
 *, :after, :before {
@@ -7148,7 +7209,8 @@ a {
   color: inherit; }
 
 code, kbd, pre, samp {
-  font-family: SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace; }
+  font-family: 'Noto Sans', sans-serif;
+}
 
 audio, canvas, embed, iframe, img, object, svg, video {
   display: inline-block;
@@ -7811,8 +7873,10 @@ img, video {
 
 .body-container, body {
   --bg-opacity:1;
-  background-color: #e3e3e3;
-  background-color: rgba(227, 227, 227, var(--bg-opacity)); }
+  /* background-color: #ffcd39; */
+  background-color: #f3f7fa;
+  /* background-color: rgba(227, 227, 227, var(--bg-opacity)); */
+ }
 
 .body-container {
   height: 100%;
@@ -7855,7 +7919,7 @@ img, video {
   border-bottom: 1px;
   border-color: rgba(11, 12, 12, var(--border-opacity));
   border-style: solid;
-  font-family: Roboto Condensed,sans-serif;
+  font-family: 'Noto Sans', sans-serif;
   color: #0b0c0c;
   color: rgba(11, 12, 12, var(--text-opacity));
   margin-left: 8px;
@@ -7901,7 +7965,7 @@ img, video {
   border-bottom: 1px;
   border-color: rgba(11, 12, 12, var(--border-opacity));
   border-style: solid;
-  font-family: Roboto Condensed,sans-serif;
+  font-family: 'Noto Sans', sans-serif;
   --text-opacity:1;
   color: #0b0c0c;
   color: rgba(11, 12, 12, var(--text-opacity));
@@ -7936,11 +8000,12 @@ img, video {
   color: #fff;
   color: rgba(255, 255, 255, var(--text-opacity));
   --bg-opacity:1;
-  background-color: #1266af;
+  background-color: #000000;
   padding: 5px;
   width: 100%;
   position: fixed;
-  z-index: 99; }
+  z-index: 99;
+  box-shadow: 1px 2px 5px #2b2b2b4d; }
 
 .navbar img {
   min-width: 78px;
@@ -8062,7 +8127,7 @@ img, video {
 .card-emp .card-header, .card .card-header, .card-emp .card-header {
   font-size: 32px;
   line-height: 40px;
-  font-family: Roboto Condensed,sans-serif;
+  font-family: 'Noto Sans', sans-serif;
   margin-bottom: 16px; }
 
 .card-emp .card-header, .card-emp .card-sub-header, .card .card-header, .card-emp .card-header, .card .card-sub-header, .card-emp .card-sub-header {
@@ -8179,7 +8244,7 @@ img, video {
 .employeeCard .card-header {
   font-size: 32px;
   line-height: 40px;
-  font-family: Roboto Condensed,sans-serif;
+  font-family: 'Noto Sans', sans-serif;
   margin-bottom: 16px; }
 
 .employeeCard .card-header, .employeeCard .card-sub-header, .employeeCard .employee-card-sub-header {
@@ -8301,7 +8366,7 @@ img, video {
   box-shadow: inset 0 -2px 0 #0b0c0c; }
 
 .submit-bar header {
-  font-family: Roboto Condensed,sans-serif;
+  font-family: 'Noto Sans', sans-serif;
   font-weight: 500;
   font-size: 19px;
   line-height: 23px;
@@ -8323,7 +8388,7 @@ img, video {
   opacity: .5; }
 
 .submit-bar-disabled header {
-  font-family: Roboto Condensed,sans-serif;
+  font-family: 'Noto Sans', sans-serif;
   font-weight: 500;
   font-size: 19px;
   line-height: 23px;
@@ -8513,7 +8578,7 @@ img, video {
   width: 100% !important; }
 
 .selector-button-primary {
-  height: 3rem;
+  height: 2rem;
   --bg-opacity:1;
   background-color: #1266af;
   text-align: center;
@@ -8530,7 +8595,7 @@ img, video {
   outline-offset: 2px; }
 
 .selector-button-primary h2 {
-  font-family: Roboto Condensed,sans-serif;
+  font-family: 'Noto Sans', sans-serif;
   font-weight: 500;
   font-size: 19px;
   line-height: 23px;
@@ -8557,7 +8622,7 @@ img, video {
   outline-offset: 2px; }
 
 .selector-button-border h2 {
-  font-family: Roboto Condensed,sans-serif;
+  font-family: 'Noto Sans', sans-serif;
   font-weight: 500;
   font-size: 19px;
   line-height: 23px;
@@ -8586,7 +8651,7 @@ img, video {
   outline-offset: 2px; }
 
 .input-mirror-selector-button h2 {
-  font-family: Roboto Condensed,sans-serif;
+  font-family: 'Noto Sans', sans-serif;
   font-weight: 500;
   font-size: 19px;
   line-height: 23px;
@@ -8613,7 +8678,7 @@ img, video {
   outline-offset: 2px; }
 
 .selector-button-primary-disabled h2 {
-  font-family: Roboto Condensed,sans-serif;
+  font-family: 'Noto Sans', sans-serif;
   font-weight: 500;
   font-size: 19px;
   line-height: 23px;
@@ -9132,7 +9197,7 @@ img, video {
 .emp-success-wrap header, .success-wrap header {
   display: block;
   margin-bottom: 8px;
-  font-family: Roboto Condensed,sans-serif;
+  font-family: 'Noto Sans', sans-serif;
   font-weight: 700;
   font-size: 32px;
   line-height: 40px; }
@@ -9186,7 +9251,7 @@ img, video {
 .emp-error-wrap header, .error-wrap header {
   display: block;
   margin-bottom: 8px;
-  font-family: Roboto Condensed,sans-serif;
+  font-family: 'Noto Sans', sans-serif;
   font-weight: 700;
   font-size: 32px;
   line-height: 40px; }
@@ -9605,6 +9670,7 @@ img, video {
 
 .tooltip {
   position: relative;
+  opacity: 1;
   display: inline-block; }
 
 .tooltip .tooltiptext {
@@ -11409,18 +11475,25 @@ img, video {
   padding-bottom: 8px; }
 
 @media (min-width: 780px) {
+  .citizenHomeAllServiceGrid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-gap: 1rem;
+    gap: 1.5rem 1rem; }
   .citizenAllServiceGrid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-gap: 1rem;
-    gap: 1rem; }
+    gap: 1.5rem 0.5rem; }
   .CitizenHomeCard {
     min-width: 40%;
     margin-left: 0;
     display: inline-block;
     margin-right: 24px;
     padding: 24px;
-    vertical-align: top; }
+    vertical-align: top;
+    border-radius: 0.6rem;
+    box-shadow: 0 10px 20px rgb(0 0 0 / 19%), 0 6px 6px rgb(0 0 0 / 23%); }
   .CitizenHomeCard .header {
     padding-bottom: 24px;
     font-size: 36px;
@@ -11724,7 +11797,8 @@ img, video {
   display: flex;
   border-radius: 1.5rem;
   padding: 8px 16px;
-  width: 100%; }
+  width: 100%;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23); }
 
 .StandaloneSearchBar svg {
   fill: #505a5f; }
@@ -11747,8 +11821,9 @@ img, video {
   padding: 16px 8px;
   margin-left: 8px;
   margin-right: 8px;
-  border-radius: .25rem;
-  width: 100%; }
+  border-radius: .45rem;
+  width: 100%;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);}
 
 .CardBasedOptions .headContent {
   display: -webkit-box;
@@ -11785,13 +11860,17 @@ img, video {
 
 .CardBasedOptions .mainContent .CardBasedOptionsMainChildOption {
   width: 25%;
-  text-align: center; }
+  text-align: center;
+  background: #024F9D;
+  border-radius: 0.45rem;
+  padding: 0.5rem;
+  box-shadow: 0 10px 20px rgb(0 0 0 / 19%), 0 6px 6px rgb(0 0 0 / 23%); }
 
 .CardBasedOptions .mainContent .CardBasedOptionsMainChildOption .ChildOptionImageWrapper {
   margin: auto !important;
-  background: rgba(244, 119, 56, 0.12);
+  background: none;
   mix-blend-mode: normal;
-  padding-top: 14px;
+  padding-top: 5px;
   height: 3rem;
   width: 3rem;
   border-radius: 9999px;
@@ -11800,12 +11879,15 @@ img, video {
 .CardBasedOptions .mainContent .CardBasedOptionsMainChildOption .ChildOptionImageWrapper svg {
   height: 20px;
   width: 20px;
-  fill: #1266af;
+  fill: #fff;
   margin: auto; }
 
 .CardBasedOptions .mainContent .CardBasedOptionsMainChildOption .ChildOptionName {
   font-size: 12px;
-  line-height: 14px; }
+  line-height: 14px;
+  color: #fff;
+  font-weight: 500;
+}
 
 @media (min-width: 780px) {
   .CardBasedOptions {
@@ -13412,7 +13494,7 @@ img, video {
   padding: 7px 24px; }
 
 .dss-switch-tab-selected, .dss-switch-tab-unselected {
-  font-family: Roboto;
+  font-family: 'Noto Sans', sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 22px; }
@@ -13462,7 +13544,7 @@ img, video {
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: 'Noto Sans', sans-serif;
   background: #f4f7fb; }
 
 .app-container-iframe {
@@ -13553,7 +13635,8 @@ body {
   margin: 8px; }
 
 .HomePageWrapper {
-  margin-top: -25px; }
+  /* margin-top: -25px;  */
+}
 
 .HomePageWrapper .BannerWithSearch {
   margin-bottom: 40px;
@@ -13646,15 +13729,55 @@ body {
 .moduleLinkHomePageModuleLinks .CitizenHomeCard .header {
   display: none; }
 
+.banner-mid-item{
+  width: 40%;
+  /* background: #ccc; */
+  justify-content: center;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  position: absolute;
+  transform: translate(65%, -50%);
+  grid-gap: 1.5rem 0.5rem;
+}
+.BannerMenu{
+  background: #024F9D;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  box-shadow: 0.375rem 0.375rem 0.125rem 0 rgba(0, 0, 0, 0.1);
+  font-size: .75rem;
+  font-weight: 700;
+  margin-right: 0.75rem;
+  height: 3rem;
+  transition: all ease .3s;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.BannerMenuItems{
+  margin-right: 0.8rem;
+}
+p.BannerMenuCaption{color: #fff;}
+.home-class{
+  width: 28px;
+  fill: #fff;
+}
 @media (min-width: 780px) {
   .HomePageWrapper .BannerWithSearch {
-    margin-bottom: 56px;
-    min-width: 100vw;
-    margin-left: calc(-10vw - 16px); 
-    background-image: url(http://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/bg-login.png);
-    height: 24vw;
+    margin-bottom: 20px;
+    min-width: 100%;
+    margin-left: 0; 
+    /* background-image: url(http://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/bg-login.png); */
+    /* height: 7vw; */
     background-position: top;
     background-size: cover;
+    background: #FFD954;
+    border-top-left-radius: 0.9rem;
+    border-top-right-radius: 0.9rem;
+    padding: 2.6rem 3rem;
+    position: relative;
   }
   .HomePageWrapper .BannerWithSearch .Search {
     width: calc(70% - 32px);
@@ -15405,7 +15528,7 @@ input[type=number], .checkbox-wrap .input-emp[type=number] {
   width: 100vw;
   height: 100vh;
   font-size: 16px;
-  font-family: sans-serif;
+  font-family: 'Noto Sans', sans-serif;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
