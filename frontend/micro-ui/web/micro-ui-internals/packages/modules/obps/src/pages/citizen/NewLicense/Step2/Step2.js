@@ -884,7 +884,10 @@ const ApllicantPuropseForm = (props) => {
       {loader && <Spinner />}
       <form onSubmit={handleSubmit(PurposeFormSubmitHandler)}>
         <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New Licence Application </h4>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New Licence Application </h4>
+            <h6 style={{ display: "flex", alignItems: "center" }}>Application No: {applicantId}</h6>
+          </div>
           <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
             <Form.Group>
               <Row className="ml-auto" style={{ marginBottom: 5 }}>
