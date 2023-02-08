@@ -3394,7 +3394,8 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
     padding: 16px; } 
   .ServiceCardOptions{
     --bg-opacity: 1;
-    background-color: #f3f3e5;
+    background-color: transparent;
+    /* background-color: #f3f3e5; */
     /* background-color: rgba(255, 255, 255, var(--bg-opacity)); */
     margin-bottom: 16px;
     padding: 16px 8px;
@@ -3402,7 +3403,7 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
     margin-right: 8px;
     border-radius: 0.45rem;
     width: 100%;
-    box-shadow: 0 10px 20px rgb(0 0 0 / 19%), 0 6px 6px rgb(0 0 0 / 23%);
+    /* box-shadow: 0 10px 20px rgb(0 0 0 / 19%), 0 6px 6px rgb(0 0 0 / 23%); */
   }
   .ServiceCardData{
     width: 100%;
@@ -3439,8 +3440,8 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
   }
   .ServiceCardCaption h3{
     font-size: 1rem;
-    font-weight: 500;
-    color: #1266af;
+    font-weight: 800;
+    color: #262626;
     margin-bottom: 0.5rem;
   }
   .links-redirect{
@@ -7874,7 +7875,7 @@ img, video {
 .body-container, body {
   --bg-opacity:1;
   /* background-color: #ffcd39; */
-  background-color: #f3f7fa;
+  background-color: #f3f3e5;
   /* background-color: rgba(227, 227, 227, var(--bg-opacity)); */
  }
 
