@@ -23,14 +23,12 @@ const AffordableGroupHousingForm = ({
     <Row className="ml-auto" style={{ marginBottom: 5 }}>
       <Col col-12>
         <h6 className="text-black">
-          <b>Residential Group Housing</b>
+          <b>Affordable Group Housing</b>
         </h6>
         <h6 className="text-black mt-4">
           <b>Detail of land use</b>
         </h6>
-        <h6 className="text-black mt-4">
-          <b>Detail of land use</b>
-        </h6>
+
         <Col col-12>
           <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
             <Col md={4} xxl lg="3">
@@ -211,6 +209,7 @@ const AffordableGroupHousingForm = ({
               </div>
               <NumberInput
                 type="number"
+                control={control}
                 className="form-control"
                 name="permissableFAR"
                 customInput={TextField}

@@ -26,6 +26,8 @@ const FeesChargesForm = (props) => {
   const [showToast, setShowToast] = useState(null);
   const [showToastError, setShowToastError] = useState(null);
   const [getShow, setShow] = useState({ submit: false, payNow: false });
+  const [getData, setData] = useState({ caseNumber: "", dairyNumber: "" });
+
   const {
     register,
     handleSubmit,
@@ -269,7 +271,7 @@ const FeesChargesForm = (props) => {
     try {
       const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${id}`, payload);
       const userData = Resp?.data?.LicenseDetails?.[0];
-      console.log("test===", userData?.ApplicantPurpose?.AppliedLandDetails);
+      setData({ caseNumber: Resp?.data?.caseNumber, dairyNumber: Resp?.data?.dairyNumber });
       setValue("purpose", userData?.ApplicantPurpose?.purpose);
       setValue("developmentPlan", userData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.developmentPlan);
       setStepData(userData);
@@ -296,6 +298,16 @@ const FeesChargesForm = (props) => {
             <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New Licence Application </h4>
             <h6 style={{ display: "flex", alignItems: "center" }}>Application No: {applicantId}</h6>
           </div>
+          {getData?.caseNumber && (
+            <div>
+              <h6 className="mt-1" style={{ marginLeft: "21px" }}>
+                Case No: {getData?.caseNumber}
+              </h6>
+              <h6 className="mt-1" style={{ marginLeft: "21px" }}>
+                Dairy No: {getData?.dairyNumber}
+              </h6>
+            </div>
+          )}
           <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
             <Form.Group className="justify-content-center" controlId="formBasicEmail">
               <Row className="ml-auto" style={{ marginBottom: 5 }}>
@@ -342,6 +354,14 @@ const FeesChargesForm = (props) => {
                         </th>
                         <td>
                           <input type="text" className="form-control" disabled {...register("licenseFee")} />
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>
+                          Payable Licence Fees <span style={{ color: "red" }}>*</span>
+                        </th>
+                        <td>
+                          <input type="text" className="form-control" disabled {...register("payLicenseFee")} />
                         </td>
                       </tr>
                       {/* <tr>
@@ -516,19 +536,19 @@ const FeesChargesForm = (props) => {
                           Submit
                         </button>
                       )}
-                      {getShow?.payNow && (
-                        <div class="my-2">
-                          <button
-                            className="btn btn-primary"
-                            onClick={() => {
-                              history.push(`/digit-ui/citizen/payment/collect/TL/${applicantId}`, {});
-                              setmodal(true);
-                            }}
-                          >
-                            Pay Now
-                          </button>
-                        </div>
-                      )}
+                      {/* {getShow?.payNow && ( */}
+                      <div class="my-2">
+                        <button
+                          className="btn btn-primary"
+                          onClick={() => {
+                            history.push(`/digit-ui/citizen/payment/collect/TL/${applicantId}`, {});
+                            setmodal(true);
+                          }}
+                        >
+                          Pay Now
+                        </button>
+                      </div>
+                      {/* // )} */}
                     </div>
                   </div>
                   {showToast && (

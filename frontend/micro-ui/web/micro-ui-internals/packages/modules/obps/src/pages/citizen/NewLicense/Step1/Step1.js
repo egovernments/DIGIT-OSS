@@ -19,6 +19,7 @@ const ApllicantFormStep1 = (props) => {
   const [developerDataLabel, setDeveloperDataLabel] = useState([]);
   const [loader, setLoader] = useState(false);
   const [showToastError, setShowToastError] = useState(null);
+  const [getData, setData] = useState({ caseNumber: "", dairyNumber: "" });
   // const [getAppliantInfoData, setAppliantInfoData] = useState(null);
   const [applicantId, setApplicantId] = useState("");
 
@@ -153,12 +154,30 @@ const ApllicantFormStep1 = (props) => {
     }
   }, [developerDataLabel]);
 
+  const getApplicantUserData = async (id) => {
+    const token = window?.localStorage?.getItem("token");
+    const payload = {
+      apiId: "Rainmaker",
+      msgId: "1669293303096|en_IN",
+      authToken: token,
+    };
+    try {
+      const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${id}`, payload);
+      const userData = Resp?.data;
+      console.log("userData", userData);
+      setData({ caseNumber: userData?.caseNumber, dairyNumber: userData?.dairyNumber });
+      // setStepData(userData);
+    } catch (error) {
+      return error;
+    }
+  };
+
   useEffect(() => {
     const search = location?.search;
     const params = new URLSearchParams(search);
     const id = params.get("id");
     setApplicantId(id?.toString());
-    // if (id) getApplicantUserData(id);
+    if (id) getApplicantUserData(id);
   }, []);
 
   return (
@@ -166,7 +185,20 @@ const ApllicantFormStep1 = (props) => {
       {loader && <Spinner />}
       <form onSubmit={handleSubmit(ApplicantFormSubmitHandlerForm)}>
         <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New Licence Application</h4>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New Licence Application </h4>
+            <h6 style={{ display: "flex", alignItems: "center" }}>Application No: {applicantId}</h6>
+          </div>
+          {getData?.caseNumber && (
+            <div>
+              <h6 className="mt-1" style={{ marginLeft: "21px" }}>
+                Case No: {getData?.caseNumber}
+              </h6>
+              <h6 className="mt-1" style={{ marginLeft: "21px" }}>
+                Dairy No: {getData?.dairyNumber}
+              </h6>
+            </div>
+          )}
           <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "10px" }}>
             <Form.Group className="justify-content-center" controlId="formBasicEmail">
               <h5 className="card-title fw-bold">Developer Information</h5>
