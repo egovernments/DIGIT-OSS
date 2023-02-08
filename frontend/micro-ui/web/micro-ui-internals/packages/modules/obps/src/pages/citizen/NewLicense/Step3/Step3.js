@@ -82,6 +82,7 @@ const LandScheduleForm = (props) => {
   const { data: PurposeType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
   const [modalData, setModalData] = useState([]);
   const { data: LandData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["LandType"]);
+  const [getData, setData] = useState({ caseNumber: "", dairyNumber: "" });
 
   const { data: PotentialType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["PotentialZone"]);
   const columns = [
@@ -368,6 +369,7 @@ const LandScheduleForm = (props) => {
     try {
       const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${id}`, payload);
       const userData = Resp?.data?.LicenseDetails?.[0];
+      setData({ caseNumber: Resp?.data?.caseNumber, dairyNumber: Resp?.data?.dairyNumber });
       setStepData(userData);
     } catch (error) {
       return error;
@@ -453,6 +455,16 @@ const LandScheduleForm = (props) => {
             <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New Licence Application </h4>
             <h6 style={{ display: "flex", alignItems: "center" }}>Application No: {applicantId}</h6>
           </div>
+          {getData?.caseNumber && (
+            <div>
+              <h6 className="mt-1" style={{ marginLeft: "21px" }}>
+                Case No: {getData?.caseNumber}
+              </h6>
+              <h6 className="mt-1" style={{ marginLeft: "21px" }}>
+                Dairy No: {getData?.dairyNumber}
+              </h6>
+            </div>
+          )}
           <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
             <Form.Group className="justify-content-center" controlId="formBasicEmail">
               <Row className="ml-auto" style={{ marginBottom: 5 }}>

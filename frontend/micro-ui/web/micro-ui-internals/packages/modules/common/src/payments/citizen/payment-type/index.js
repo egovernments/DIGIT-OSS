@@ -128,9 +128,11 @@ export const SelectPaymentType = (props) => {
           tenantId: tenantId,
         },
         // success
-        callbackUrl: window.location.href.includes("mcollect")
-          ? `${window.location.protocol}//${window.location.host}/tl-services/new/transaction/v1/_redirect/${businessService}/${consumerCode}/${tenantId}?workflow=mcollect`
-          : `${window.location.protocol}//${window.location.host}/tl-services/new/transaction/v1/_redirect/${businessService}/${consumerCode}/${tenantId}`,
+        callbackUrl: `http://103.166.62.118:80/tl-services/new/transaction/v1/_redirect`,
+
+        // window.location.href.includes("mcollect")
+        //   ? `${window.location.protocol}//${window.location.host}/tl-services/new/transaction/v1/_redirect/${businessService}/${consumerCode}/${tenantId}?workflow=mcollect`
+        //   : `${window.location.protocol}//${window.location.host}/tl-services/new/transaction/v1/_redirect/${businessService}/${consumerCode}/${tenantId}`,
         additionalDetails: {
           isWhatsapp: false,
         },

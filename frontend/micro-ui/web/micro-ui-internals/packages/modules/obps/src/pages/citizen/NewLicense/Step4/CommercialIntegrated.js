@@ -28,9 +28,7 @@ const CommercialIntegratedForm = ({
         <h6 className="text-black mt-4">
           <b>Detail of land use</b>
         </h6>
-        <h6 className="text-black mt-4">
-          <b>Detail of land use</b>
-        </h6>
+
         <Col col-12>
           <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
             <Col md={4} xxl lg="3">
