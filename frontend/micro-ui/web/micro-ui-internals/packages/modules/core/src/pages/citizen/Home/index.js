@@ -178,7 +178,7 @@ const Home = () => {
       },
       {
         name: "Licence",
-        Icon: <LicencingIcon />,
+        Icon: <LicencingIcon className="home-class" />,
         onClick: () => history.push("/digit-ui/citizen/obps/card"),
       },
       {
