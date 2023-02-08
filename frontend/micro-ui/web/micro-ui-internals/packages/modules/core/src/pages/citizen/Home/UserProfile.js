@@ -108,7 +108,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
     setName(value);
 
     if(!new RegExp(/^[a-zA-Z ]+$/i).test(value) || value.length === 0 || value.length > 50){
-      setErrors({...errors, userName : {type: "pattern", message: "CORE_COMMON_PROFILE_NAME_INVALID"}});
+      setErrors({...errors, userName : {type: "pattern", message: t("CORE_COMMON_PROFILE_NAME_INVALID")}});
     }else{
       setErrors({...errors, userName : null})
     }
@@ -116,9 +116,8 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
 
   const setUserEmailAddress = (value) => {
     setEmail(value);
-
-    if(value.length && !(value.includes("@") && value.includes("."))){
-      setErrors({...errors, emailAddress: {type: "pattern", message: "CORE_COMMON_PROFILE_EMAIL_INVALID"}})
+    if(value.length && /*!(value.includes("@") && value.includes("."))*/ !(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value))){
+      setErrors({...errors, emailAddress: {type: "pattern", message: t("CORE_COMMON_PROFILE_EMAIL_INVALID")}})
     }else{
       setErrors({...errors, emailAddress : null})
     }
@@ -128,7 +127,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
     setMobileNo(value);
 
     if (userType === "employee" && !new RegExp(/^[6-9]{1}[0-9]{9}$/).test(value)) {
-      setErrors({...errors, mobileNumber: {type: 'pattern', message: "CORE_COMMON_PROFILE_MOBILE_NUMBER_INVALID"}})
+      setErrors({...errors, mobileNumber: {type: 'pattern', message: t("CORE_COMMON_PROFILE_MOBILE_NUMBER_INVALID")}})
     }else{
       setErrors({...errors, mobileNumber: null});
     }
@@ -138,7 +137,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
     setCurrentPassword(value);
 
     if (!new RegExp(/^([a-zA-Z0-9@#$%]{8,15})$/i).test(value)) {
-      setErrors({...errors, currentPassword: {type: "pattern", message: "CORE_COMMON_PROFILE_PASSWORD_INVALID"}})
+      setErrors({...errors, currentPassword: {type: "pattern", message: t("CORE_COMMON_PROFILE_PASSWORD_INVALID")}})
     }else{
       setErrors({...errors, currentPassword: null});
     }
@@ -148,7 +147,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
     setNewPassword(value);
 
     if (!new RegExp(/^([a-zA-Z0-9@#$%]{8,15})$/i).test(value)) {
-      setErrors({...errors, newPassword: {type: "pattern", message: "CORE_COMMON_PROFILE_PASSWORD_INVALID"}})
+      setErrors({...errors, newPassword: {type: "pattern", message: t("CORE_COMMON_PROFILE_PASSWORD_INVALID")}})
     }else{
       setErrors({...errors, newPassword: null});
     }
@@ -158,7 +157,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
     setConfirmPassword(value);
 
     if (!new RegExp(/^([a-zA-Z0-9@#$%]{8,15})$/i).test(value)) {
-      setErrors({...errors, confirmPassword: {type: "pattern", message: "CORE_COMMON_PROFILE_PASSWORD_INVALID"}})
+      setErrors({...errors, confirmPassword: {type: "pattern", message: t("CORE_COMMON_PROFILE_PASSWORD_INVALID")}})
     }else{
       setErrors({...errors, confirmPassword: null});
     }
@@ -188,28 +187,28 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
       };
 
       if (!new RegExp(/^([a-zA-Z ])*$/).test(name) || name === "" || name.length > 50 || name.length < 1) {
-        throw JSON.stringify({ type: "error", message: "CORE_COMMON_PROFILE_NAME_INVALID" });
+        throw JSON.stringify({ type: "error", message: t("CORE_COMMON_PROFILE_NAME_INVALID") });
       }
 
       if (userType === "employee" && !new RegExp(/^[6-9]{1}[0-9]{9}$/).test(mobileNumber)) {
-        throw JSON.stringify({ type: "error", message: "CORE_COMMON_PROFILE_MOBILE_NUMBER_INVALID" });
+        throw JSON.stringify({ type: "error", message: t("CORE_COMMON_PROFILE_MOBILE_NUMBER_INVALID") });
       }
 
-      if (email.length && !(email.includes("@") && email.includes("."))) {
-        throw JSON.stringify({ type: "error", message: "CORE_COMMON_PROFILE_EMAIL_INVALID" });
+      if (email.length && !(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))) {
+        throw JSON.stringify({ type: "error", message: t("CORE_COMMON_PROFILE_EMAIL_INVALID") });
       }
 
       if (currentPassword.length || newPassword.length || confirmPassword.length) {
         if (newPassword !== confirmPassword) {
-          throw JSON.stringify({ type: "error", message: "CORE_COMMON_PROFILE_PASSWORD_MISMATCH" });
+          throw JSON.stringify({ type: "error", message: t("CORE_COMMON_PROFILE_PASSWORD_MISMATCH") });
         }
 
         if (!(currentPassword.length && newPassword.length && confirmPassword.length)) {
-          throw JSON.stringify({ type: "error", message: "CORE_COMMON_PROFILE_PASSWORD_INVALID" });
+          throw JSON.stringify({ type: "error", message: t("CORE_COMMON_PROFILE_PASSWORD_INVALID") });
         }
 
         if (!new RegExp(/^([a-zA-Z0-9@#$%]{8,15})$/i).test(newPassword) && !new RegExp(/^([a-zA-Z0-9@#$%]{8,15})$/i).test(confirmPassword)) {
-          throw JSON.stringify({ type: "error", message: "CORE_COMMON_PROFILE_PASSWORD_INVALID" });
+          throw JSON.stringify({ type: "error", message: t("CORE_COMMON_PROFILE_PASSWORD_INVALID") });
         }
       }
       requestData["locale"]=Digit.StoreData.getCurrentLanguage();
@@ -255,11 +254,11 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
           } catch (error) {
             throw JSON.stringify({
               type: "error",
-              message: error.Errors?.at(0)?.description ? error.Errors.at(0).description : "CORE_COMMON_PROFILE_UPDATE_ERROR_WITH_PASSWORD",
+              message: error.Errors?.at(0)?.description ? error.Errors.at(0).description : t("CORE_COMMON_PROFILE_UPDATE_ERROR_WITH_PASSWORD"),
             });
           }
         } else {
-          throw JSON.stringify({ type: "error", message: "CORE_COMMON_PROFILE_ERROR_PASSWORD_NOT_MATCH" });
+          throw JSON.stringify({ type: "error", message: t("CORE_COMMON_PROFILE_ERROR_PASSWORD_NOT_MATCH") });
         }
       } else if (responseInfo?.status && responseInfo.status === "200") {
         showToast("success", t("CORE_COMMON_PROFILE_UPDATE_SUCCESS"), 5000);
