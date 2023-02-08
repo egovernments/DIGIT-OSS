@@ -2,8 +2,10 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import { Row, Col } from "react-bootstrap";
 import { Form } from "react-bootstrap";
-import NumberInput from "../../../../components/NumberInput";
+import FileUpload from "@mui/icons-material/FileUpload";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import TextField from "@mui/material/TextField";
+import NumberInput from "../../../../components/NumberInput";
 
 const RetirementHousingForm = ({
   register,
