@@ -138,6 +138,10 @@ const electricalPlanService = () => {
 
     try {
       if(!applicationId){
+        data.devName = devName
+        data.developmentPlan = developmentPlan
+        data.purpose = purpose
+        data.totalArea = totalArea
         const isValid = checkValid(data)
         if(!isValid){
           console.log("Dont call create")
@@ -350,7 +354,7 @@ const electricalPlanService = () => {
     setDevName(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantInfo?.devDetail?.addInfo?.name)
     setDevelopmentPlan(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.AppliedLandDetails?.[0]?.developmentPlan)
     setPurpose(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.purpose)
-    setTotalArea(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.AppliedLandDetails?.[0]?.totalArea)
+    setTotalArea(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.totalArea)
     
   
 
