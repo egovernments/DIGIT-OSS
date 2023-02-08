@@ -73,7 +73,7 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     getData(action, state, dispatch);
     set(action.screenConfig, "components.div.children.cancelBillDetailsCard.children.cardContent.children.searchContainer.children.reason.props.value", get(state.screenConfiguration.preparedFinalObject, 'UpdateBillCriteria.additionalDetails.reason', ''))
-    set(action.screenConfig, "components.div.children.cancelBillDetailsCard.children.cardContent.children.searchContainer.children.addtionalPenalty.props.value", get(state.screenConfiguration.preparedFinalObject, 'UpdateBillCriteria.additionalDetails.additionalPenalty', ''))
+    // set(action.screenConfig, "components.div.children.cancelBillDetailsCard.children.cardContent.children.searchContainer.children.addtionalPenalty.props.value", get(state.screenConfiguration.preparedFinalObject, 'UpdateBillCriteria.additionalDetails.additionalPenalty', ''))
     const additionalDetailsJson = "components.div.children.cancelBillDetailsCard.children.cardContent.children.searchContainer.children.addtionalDetails";
     if (get(state.screenConfiguration.preparedFinalObject, 'UpdateBillCriteria.additionalDetails.reason', '') == "OTHER") {
       set(action.screenConfig, `${additionalDetailsJson}.required`, true);
