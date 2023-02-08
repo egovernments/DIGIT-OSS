@@ -187,7 +187,7 @@ const ApllicantFormStep1 = (props) => {
         <Card style={{ width: "126%", border: "5px solid #1266af" }}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New Licence Application </h4>
-            <h6 style={{ display: "flex", alignItems: "center" }}>Application No: {applicantId}</h6>
+            {applicantId && <h6 style={{ display: "flex", alignItems: "center" }}>Application No: {applicantId}</h6>}
           </div>
           {getData?.caseNumber && (
             <div>
