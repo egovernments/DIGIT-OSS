@@ -794,7 +794,6 @@ const AppliedDetailForm = (props) => {
                       </div>
                     </div>
                     <div class="col-sm-12 text-right">
-                      {console.log("error===", error)}
                       <button disabled={isValid ? false : true} type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
                         Save and Continue
                       </button>

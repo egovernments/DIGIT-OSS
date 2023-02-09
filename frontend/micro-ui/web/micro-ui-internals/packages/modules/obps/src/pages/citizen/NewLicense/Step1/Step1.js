@@ -164,7 +164,6 @@ const ApllicantFormStep1 = (props) => {
     try {
       const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${id}`, payload);
       const userData = Resp?.data;
-      console.log("userData", userData);
       setData({ caseNumber: userData?.caseNumber, dairyNumber: userData?.dairyNumber });
       // setStepData(userData);
     } catch (error) {
