@@ -6,6 +6,8 @@ import commonConfig from "config/common.js";
 
 
 export const fetchData = async (action, state, dispatch) => {
+  dispatch(prepareFinalObject("searchResults", ""));
+  dispatch(prepareFinalObject("myApplicationsCount", 0));
   let tenantId = getTenantId() || "";
 
   if (process.env.REACT_APP_NAME !== "Employee") {

@@ -68,6 +68,7 @@ export const getSearchResults = async (queryObject, dispatch) => {
         "error"
       )
     );
+    store.dispatch(toggleSpinner());
     throw error;
   }
 };
