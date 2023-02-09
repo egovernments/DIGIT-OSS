@@ -10,6 +10,7 @@ const useBGInbox = ({ tenantId, filters, config }) => {
 		processSearchCriteria: {
             moduleName: "tl-services",
 			businessService: ["BG_NEW"],
+            assignee: USER_UUID,
             ...(applicationStatus?.length > 0 ? {status: applicationStatus} : {}),
             ...(uuid && Object.keys(uuid).length > 0 ? {assignee: uuid.code === "ASSIGNED_TO_ME" ? USER_UUID : ""} : {}),
         },
