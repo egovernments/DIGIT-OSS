@@ -115,9 +115,9 @@ const ResidentialPlottedForm = (props) => {
       ></ModalChild>
       <Form.Group className="justify-content-center" controlId="formBasicEmail">
         
-        <Row className="ml-auto" style={{ marginBottom: 5 }}>
+   <Row className="ml-auto" style={{ marginBottom: 5 }}>
       <Col col-12>
-        <h6 className="text-black">
+        <h6 className="text-black mt-4">
           <b>Residential Plotted</b>
         </h6>
         <h6 className="text-black mt-4">
@@ -569,7 +569,7 @@ const ResidentialPlottedForm = (props) => {
           </Col>
         </Row>
         <br></br>
-        <Row className="ml-auto" style={{ marginBottom: 5 }}>
+        <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
           <Col md={4} xxl lg="3">
             <div>
               <Form.Label>
@@ -706,7 +706,7 @@ const ResidentialPlottedForm = (props) => {
           </Col>
         </Row>
         <br></br>
-        <Row className="ml-auto" style={{ marginBottom: 5 }}>
+        <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
           <Col md={4} xxl lg="3">
             <div>
               <Form.Label>
@@ -798,7 +798,7 @@ const ResidentialPlottedForm = (props) => {
                 </div>
                
                  <div  className="d-flex flex-row align-items-center">
-                  <input type="number" className="form-control" disabled placeholder={residentialData?.communitySiteName} />
+                  <input type="number" className="form-control" disabled placeholder={residentialData?.detailOfCommunitySites?.[0]?.communitySiteName} />
                   <ReportProblemIcon
                           style={{
                             display: hideRemarks || hideRemarksPatwari ?"none":"block",
@@ -825,7 +825,7 @@ const ResidentialPlottedForm = (props) => {
                 </div>
            
                 <div  className="d-flex flex-row align-items-center">
-                  <input type="number" className="form-control" disabled placeholder={residentialData?.communitySiteName} />
+                  <input type="number" className="form-control" disabled placeholder={residentialData?.detailOfCommunitySites?.[0]?.provided} />
                   <ReportProblemIcon
                           style={{
                             display: hideRemarks || hideRemarksPatwari ?"none":"block",
