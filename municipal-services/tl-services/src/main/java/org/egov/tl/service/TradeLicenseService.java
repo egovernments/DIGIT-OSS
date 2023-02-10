@@ -103,6 +103,8 @@ public class TradeLicenseService {
      * @return The list of created traddeLicense
      */
     public List<TradeLicense> create(TradeLicenseRequest tradeLicenseRequest,String businessServicefromPath){
+        //Have implemented a check on CommnecementDate
+        tlValidator.validateCommencementDate(tradeLicenseRequest);
        if(businessServicefromPath==null)
             businessServicefromPath = businessService_TL;
        tlValidator.validateBusinessService(tradeLicenseRequest,businessServicefromPath);
