@@ -357,6 +357,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     setUserEmailId("")
     setRegisteredMobileNumber("")
     setGST("")
+    setExistingDirectors();
+    setExistingColonizer();
     setDirectorData([]);
     setDirectorDataMCA([]);
    
