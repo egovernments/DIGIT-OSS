@@ -19,6 +19,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -98,6 +101,18 @@ public class TLValidator {
                 throw new CustomException("BUSINESSSERVICE_NOTMATCHING", " The business service inside license not matching with the one sent in path variable");
             }
         }
+    }
+
+    public void validateCommencementDate(TradeLicenseRequest tradeLicenseRequest){
+        LocalDateTime ldt = Instant.ofEpochMilli(tradeLicenseRequest.getLicenses().get(0).getCommencementDate())
+                .atZone(ZoneId.systemDefault()).toLocalDateTime();
+        System.out.println(ldt);
+        int diff = ldt.compareTo(LocalDateTime.now());
+        if(diff>0 ) {
+            throw new CustomException("INVALID_DATE_SELECTED", " The Commencement Date selected should be less than or equal to todays date");
+        }
+
+
     }
 
     private void validateTLSpecificNotNullFields(TradeLicenseRequest request) {
