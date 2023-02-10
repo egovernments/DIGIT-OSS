@@ -376,7 +376,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
     setLoading(true);
     // if(aurthorizedMobileNumber!=="" && aurthorizedUserName!=="" && aurthorizedMobileNumber!=="" && aurthorizedEmail!==""){
     const user = {
-      userName: aurthorizedMobileNumber,
+      userName: aurthorizedEmail,
       name: aurthorizedUserName,
       gender: gender.value,
       mobileNumber: aurthorizedMobileNumber,

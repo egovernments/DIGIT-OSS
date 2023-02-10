@@ -664,7 +664,6 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
             ],
             subOwnerShipCategory: "INDIVIDUAL",
             tradeType: tradeType,
-
             additionalDetail: {
               counsilForArchNo: null,
             },
@@ -683,7 +682,6 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
         },
       ],
     };
-
     Digit.OBPSService.BPAREGCreate(payload, tenantId)
       .then((result, err) => {
         setIsDisableForNext(false);
