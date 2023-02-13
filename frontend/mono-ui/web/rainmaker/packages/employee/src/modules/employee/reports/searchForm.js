@@ -515,6 +515,14 @@ class ShowForm extends Component {
           ele.name == "applicationStatus" ? { ...ele, input: ele.input && ele.input.map((ele) => ele.substr(0, ele.indexOf("-"))) } : { ...ele }
         );
       }
+
+      if (metaData && metaData.reportDetails && metaData.reportDetails.reportName === "ObpsApplicationStatusReport") {
+        searchParams = searchParams.map((ele) => {
+          return ele.name == "status" || ele.name == "serviceType" ? { ...ele, input: ele.input && ele.input.map((ele) => ele.replaceAll(",", "_")) } : { ...ele } 
+        }
+        );
+      }
+      
       resulturl &&
         commonApiPost(resulturl, {}, { tenantId: tenantId, reportName: this.state.reportName, searchParams }).then(
           function (response) {
