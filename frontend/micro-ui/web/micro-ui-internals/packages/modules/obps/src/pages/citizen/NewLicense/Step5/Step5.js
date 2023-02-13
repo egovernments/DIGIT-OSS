@@ -26,7 +26,7 @@ const FeesChargesForm = (props) => {
   const [showToast, setShowToast] = useState(null);
   const [showToastError, setShowToastError] = useState(null);
   const [getShow, setShow] = useState({ submit: false, payNow: false });
-  const [getData, setData] = useState({ caseNumber: "", dairyNumber: "" });
+  const [getData, setData] = useState({ caseNumber: "", dairyNumber: "", status: "" });
 
   const {
     register,
@@ -87,22 +87,24 @@ const FeesChargesForm = (props) => {
         authToken: token,
         userInfo: userInfo,
       },
-      CalulationCriteria: [
-        {
-          tenantId: "hr",
-        },
-      ],
-      CalculatorRequest: {
-        totalLandSize: 1,
-        // potenialZone: stepData?.ApplicantPurpose?.potential,
-        potenialZone: "HYP",
-        // purposeCode: stepData?.ApplicantPurpose?.purpose,
-        purposeCode: "DDJAY_APHP",
-        applicationNumber: applicantId,
-      },
+      // CalulationCriteria: [
+      //   {
+      //     tenantId: "hr",
+      //   },
+      // ],
+      // CalculatorRequest: {
+      //   totalLandSize: 1,
+      //   // potenialZone: stepData?.ApplicantPurpose?.potential,
+      //   potenialZone: "HYP",
+      //   // purposeCode: stepData?.ApplicantPurpose?.purpose,
+      //   purposeCode: "DDJAY_APHP",
+      //   applicationNumber: applicantId,
+      // },
     };
+    // http://103.166.62.118:8443/tl-calculator/v1/_getPaymentEstimate?applicationNo=HRTL20230204003630
     try {
-      const Resp = await axios.post("/tl-calculator/v1/_calculator", payload);
+      // const Resp = await axios.post("/tl-calculator/v1/_calculator", payload);
+      const Resp = await axios.post(`/tl-calculator/v1/_getPaymentEstimate?applicationNo=${applicantId}`, payload);
       const charges = Resp.data?.Calculations?.[0]?.tradeTypeBillingIds;
       setValue("scrutinyFee", charges?.scrutinyFeeCharges);
       setValue("licenseFee", charges?.licenseFeeCharges);
@@ -271,7 +273,7 @@ const FeesChargesForm = (props) => {
     try {
       const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${id}`, payload);
       const userData = Resp?.data?.LicenseDetails?.[0];
-      setData({ caseNumber: Resp?.data?.caseNumber, dairyNumber: Resp?.data?.dairyNumber });
+      setData({ caseNumber: Resp?.data?.caseNumber, dairyNumber: Resp?.data?.dairyNumber, status: Resp?.data?.applicationStatus });
       setValue("purpose", userData?.ApplicantPurpose?.purpose);
       setValue("developmentPlan", userData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.developmentPlan);
       setStepData(userData);
@@ -519,6 +521,7 @@ const FeesChargesForm = (props) => {
                         formControlName="agreeCheck"
                         type="checkbox"
                         value=""
+                        checked={getData?.status === "FEESANDCHARGES" ? true : false}
                         id="flexCheckDefault"
                       />
                       <label className="checkbox" for="flexCheckDefault">
@@ -536,19 +539,19 @@ const FeesChargesForm = (props) => {
                           Submit
                         </button>
                       )}
-                      {/* {getShow?.payNow && ( */}
-                      <div class="my-2">
-                        <button
-                          className="btn btn-primary"
-                          onClick={() => {
-                            history.push(`/digit-ui/citizen/payment/collect/TL/${applicantId}`, {});
-                            setmodal(true);
-                          }}
-                        >
-                          Pay Now
-                        </button>
-                      </div>
-                      {/* // )} */}
+                      {(getShow?.payNow || getData?.status === "FEESANDCHARGES") && (
+                        <div class="my-2">
+                          <button
+                            className="btn btn-primary"
+                            onClick={() => {
+                              history.push(`/digit-ui/citizen/payment/collect/TL/${applicantId}`, {});
+                              setmodal(true);
+                            }}
+                          >
+                            Pay Now
+                          </button>
+                        </div>
+                      )}
                     </div>
                   </div>
                   {showToast && (

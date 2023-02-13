@@ -33,8 +33,8 @@ const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLo
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
-                  <h2>
-                    Area under Sector Road & Green Belt
+                  <h2 data-toggle="tooltip" data-placement="top" title="Area under Sector Road & Green Belt">
+                    Area under Sector Road
                     <span style={{ color: "red" }}>*</span>
                   </h2>
                 </Form.Label>
@@ -61,8 +61,8 @@ const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLo
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
-                  <h2>
-                    Balance area after deducting area under sector road and Green Belt
+                  <h2 data-toggle="tooltip" data-placement="top" title=" Balance area after deducting area under sector road and Green Belt">
+                    Balance area
                     <span style={{ color: "red" }}>*</span>
                   </h2>
                 </Form.Label>
@@ -113,8 +113,8 @@ const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLo
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
-                  <h2>
-                    50% of the Area under Sector Road & Green Belt
+                  <h2 data-toggle="tooltip" data-placement="top" title="50% of the Area under Sector Road & Green Belt">
+                    50% of the Area
                     <span style={{ color: "red" }}>*</span>
                   </h2>
                 </Form.Label>
@@ -141,7 +141,7 @@ const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLo
             <div>
               <Form.Label>
                 <h2>
-                  Max area of plots ( in square meters)
+                  Max area of plots ( in sqm)
                   <span style={{ color: "red" }}>*</span>
                 </h2>
               </Form.Label>
@@ -151,7 +151,7 @@ const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLo
               className="form-control"
               {...register("maxAreaPlots")}
               onChange={(e) => {
-                if (e?.target?.value > 150) setError({ ...error, ["maxAreaPlots"]: "Max area of plots Cannot exceed 150 square meters" });
+                if (e?.target?.value > 150) setError({ ...error, ["maxAreaPlots"]: "Max area of plots Cannot exceed 150 sqm" });
                 else setError({ ...error, ["maxAreaPlots"]: "" });
               }}
               onWheel={handleWheel}
@@ -161,7 +161,7 @@ const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLo
           <Col md={4} xxl lg="3">
             <div>
               <h2>
-                Size of plot ( in square meters)
+                Size of plot ( in sqm)
                 <span style={{ color: "red" }}>*</span>
               </h2>
             </div>
@@ -230,7 +230,7 @@ const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLo
             <div>
               <Form.Label>
                 <h2>
-                  Residential Plots & Commercial Plots
+                  Residential & Commercial Plots
                   <span style={{ color: "red" }}>*</span>
                 </h2>
               </Form.Label>
@@ -298,8 +298,8 @@ const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLo
           <Col md={4} xxl lg="3">
             <div>
               <Form.Label>
-                <h2>
-                  Width of Internal roads in the colony (in meters)
+                <h2 data-toggle="tooltip" data-placement="top" title="  Width of Internal roads in the colony (in meters)">
+                  Width of Internal roads
                   <span style={{ color: "red" }}>*</span>
                 </h2>
               </Form.Label>
@@ -320,8 +320,8 @@ const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLo
           <Col md={4} xxl lg="3">
             <div>
               <Form.Label>
-                <h2>
-                  Area under organized Open Space (in acres)
+                <h2 data-toggle="tooltip" data-placement="top" title="   Area under organized Open Space (in acres)">
+                  Area under organized Space
                   <span style={{ color: "red" }}>*</span>
                 </h2>
               </Form.Label>
@@ -354,7 +354,7 @@ const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLo
                   data-placement="top"
                   title="The owner will transfer 10% area of the licenced colony free of cost to the Government for provision of community facilities. "
                 >
-                  Area Transferred to Government for community facilities.
+                  Area Transferred to Government.
                 </h2>
               </label>
             </div>

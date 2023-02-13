@@ -46,8 +46,8 @@ const CommercialPlottedForm = ({
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
-                  <h2>
-                    Area under Sector Road & Green Belt
+                  <h2 data-toggle="tooltip" data-placement="top" title="Area under Sector Road & Green Belt">
+                    Area under Sector Road
                     <span style={{ color: "red" }}>*</span>
                   </h2>
                 </Form.Label>
@@ -79,8 +79,8 @@ const CommercialPlottedForm = ({
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
-                  <h2>
-                    Balance area after deducting area under sector road and Green Belt
+                  <h2 data-toggle="tooltip" data-placement="top" title=" Balance area after deducting area under sector road and Green Belt">
+                    Balance area
                     <span style={{ color: "red" }}>*</span>
                   </h2>
                 </Form.Label>
@@ -132,8 +132,12 @@ const CommercialPlottedForm = ({
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
-                  <h2>
-                    10% of the total site area or the area falling under the sector green belt whichever is less
+                  <h2
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="  10% of the total site area or the area falling under the sector green belt whichever is less"
+                  >
+                    10% of the total site area
                     <span style={{ color: "red" }}>*</span>
                   </h2>
                 </Form.Label>
@@ -162,8 +166,8 @@ const CommercialPlottedForm = ({
           <Col md={4} xxl lg="3">
             <div>
               <Form.Label>
-                <h2>
-                  Ground Coverage (in Square Meters)
+                <h2 data-toggle="tooltip" data-placement="top" title="   Ground Coverage (in Square Meters)">
+                  Ground Coverage (in Sqm)
                   <span style={{ color: "red" }}>*</span>
                 </h2>
               </Form.Label>
@@ -185,7 +189,7 @@ const CommercialPlottedForm = ({
             <div>
               <Form.Label>
                 <h2>
-                  FAR (in Square Meters)
+                  FAR (in Sqm)
                   <span style={{ color: "red" }}>*</span>
                 </h2>
               </Form.Label>
@@ -206,8 +210,8 @@ const CommercialPlottedForm = ({
           <Col md={4} xxl lg="3">
             <div>
               <Form.Label>
-                <h2>
-                  Parking/Open Space/Services (in Square Meters)
+                <h2 data-toggle="tooltip" data-placement="top" title="Parking/Open Space/Services (in Square Meters)">
+                  Parking/Open Space (in Sqm)
                   <span style={{ color: "red" }}>*</span>
                 </h2>
               </Form.Label>

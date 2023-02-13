@@ -217,6 +217,14 @@ const CommonForm = () => {
         setStep(5);
         setStepActive({ step1: true, step2: true, step3: true, step4: true, step5: true });
       }
+      if (appNumber === "FEESANDCHARGES") {
+        setIsStep4(true);
+        setIsStep1(false);
+        setIsStep2(false);
+        setIsStep3(false);
+        setStep(5);
+        setStepActive({ step1: true, step2: true, step3: true, step4: true, step5: true });
+      }
     } catch (error) {
       return error;
     }
