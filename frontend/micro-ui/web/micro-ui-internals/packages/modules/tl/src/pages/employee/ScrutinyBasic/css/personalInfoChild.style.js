@@ -21,7 +21,7 @@ export const useStyles = makeStyles({
         display: "flex"
     },
     formControl:{ 
-        maxWidth: 270, 
+        maxWidth: 260, 
         marginRight: 5, 
         height: 30 
     }

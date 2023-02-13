@@ -58,6 +58,7 @@ import RadioButtons from "./atoms/RadioButtons";
 import Rating from "./atoms/Rating";
 import RoundedLabel from "./atoms/RoundedLabel";
 import SectionalDropdown from "./atoms/SectionalDropdown";
+
 import { LastRow, MediaRow, Row, StatusTable } from "./atoms/StatusTable";
 import SubmitBar from "./atoms/SubmitBar";
 import StandaloneSearchBar from "./atoms/StandaloneSearchBar";
@@ -109,8 +110,13 @@ import {
   UpwardArrow,
   WhatsappIcon,
   OBPSIcon,
+  LicencingIcon,
+  ServicePlanIcon,
+  ElectricPlanIcon,
+  BankGuaranteeIcon,
   EDCRIcon,
   BPAIcon,
+  BPAIco,
   BPAHomeIcon,
   DocumentIcon,
   ExternalLinkIcon,
@@ -152,6 +158,8 @@ import TopBar from "./atoms/TopBar";
 import UploadFile from "./atoms/UploadFile";
 import UploadImages from "./atoms/UploadImages";
 import CardBasedOptions from "./atoms/CardBasedOptions";
+import ServiceCardOptions from "./atoms/ServiceCardOptions";
+import BannerAllCard from "./atoms/BannerAllCard";
 import WhatsNewCard from "./atoms/WhatsNewCard";
 import EventCalendarView from "./atoms/EventCalendarView";
 import InboxLinks from "./atoms/InboxLinks";
@@ -263,6 +271,8 @@ export {
   EmployeeModuleCard,
   StandaloneSearchBar,
   CardBasedOptions,
+  ServiceCardOptions,
+  BannerAllCard,
   WhatsNewCard,
   EventCalendarView,
   InboxLinks,
@@ -358,9 +368,14 @@ export {
   ReceiptIcon,
   AnnouncementIcon,
   OBPSIcon,
+  LicencingIcon,
+  ServicePlanIcon,
+  ElectricPlanIcon,
+  BankGuaranteeIcon,
   CitizenTruck,
   EDCRIcon,
   BPAIcon,
+  BPAIco,
   BPAHomeIcon,
   MapMarker,
   Clock,

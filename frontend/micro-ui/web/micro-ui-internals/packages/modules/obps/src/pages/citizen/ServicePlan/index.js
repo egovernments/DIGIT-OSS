@@ -1,25 +1,28 @@
+
 import React, { useState, useEffect } from "react";
 import { Card, Row, Col, Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { Dialog } from "@mui/material";
+import { Dialog, stepIconClasses } from "@mui/material";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
-import { useParams } from "react-router-dom";
 import FileDownload from "@mui/icons-material/FileDownload";
 import { IconButton } from "@mui/material";
+import ScrollToTop from "@egovernments/digit-ui-react-components/src/atoms/ScrollToTop";
+import Spinner from "../../../components/Loader";
+import { Toast } from "@egovernments/digit-ui-react-components";
 //import { getDocShareholding } from 'packages/modules/tl/src/pages/employee/ScrutinyBasic/ScrutinyDevelopment/docview.helper.js'
 
 
 
 const ServicePlanService = () => {
   const [file, setFile] = useState(null);
-  const [LOCNumber, setLOCNumber] = useState("");
+  const [LOINumber, setLOINumber] = useState("");
   const [selfCertifiedDrawing, setSelfCertifiedDrawing] = useState("")
   const [applicationId, setApplicationId] = useState('')
   const [environmental, setEnviromental] = useState('')
@@ -32,7 +35,20 @@ const ServicePlanService = () => {
   const [docUpload, setDocuploadData] = useState([]);
   const [open, setOpen] = useState(false)
   const [applicationNumber, setApplicationNumber] = useState()
-  const [valid, setValid] = useState("")
+  const [valid, setValid] = useState([])
+  const [devName, setDevName] = useState("")
+  const [purpose, setPurpose] = useState("")
+  const [developmentPlan, setDevelopmentPlan] = useState("")
+  const [gstnumber, setGSTNumber] = useState("")
+  const [totalArea, setTotalArea] = useState("")
+
+  /////////////
+  // const [stepData, setStepData] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [showToast, setShowToast] = useState(null);
+  const [showToastError, setShowToastError] = useState(null);
+  const [loader, setLoader] = useState(false);
+  
   const {
     register,
     handleSubmit,
@@ -46,12 +62,62 @@ const ServicePlanService = () => {
     shouldFocusError: true,
   });
   const userInfo = Digit.UserService.getUser();
+
+  const getLoiPattern = (loiNumber) => {
+    const pattern = /^(?=\D*\d)(?=.*[/])(?=.*[-])[a-zA-Z0-9\/-]{15,30}$/;
+    return pattern.test(loiNumber);
+  }
+
+  const checkValid = (data) => {
+    let isvalid = false
+    if(getLoiPattern(data?.loiNumber)){
+        isvalid = true
+    }
+    else{
+      isvalid = false
+      alert('Please enter valid LOI number')
+      return isvalid
+    }
+    if(
+      data.hasOwnProperty('selfCertifiedDrawingFromEmpaneledDoc') && 
+      data.hasOwnProperty('environmentalClearance') &&
+      data.hasOwnProperty('shapeFileAsPerTemplate') &&
+      data.hasOwnProperty('autoCadFile') &&
+      data.hasOwnProperty('certifieadCopyOfThePlan')
+      ){
+        isvalid = true
+    }
+    else{
+      isvalid = false
+      alert('Please upload all the mandatory images')
+      return isvalid
+    } 
+    const checkImage = checkDuplicates(valid)
+    if(checkImage){
+      isvalid = false
+      alert('Please upload the seperate image for each and every field')
+      return isvalid
+    }
+    else{
+      isvalid = true
+    }
+    return isvalid
+  }
   const servicePlan = async (data) => {
     const token = window?.localStorage?.getItem("token");
     const tenantId = Digit.ULBService.getCurrentTenantId();
     console.log(data, "service-service");
     try {
       if(!applicationId){
+        data.devName = devName
+        data.developmentPlan = developmentPlan
+        data.purpose = purpose
+        data.totalArea = totalArea
+        const isValid = checkValid(data)
+        if(!isValid){
+          console.log("Dont call create")
+          return null
+        }
         const postDistrict = {
           requestInfo: {
             api_id: "Rainmaker",
@@ -89,7 +155,12 @@ const ServicePlanService = () => {
         servicePlanRes.shapeFileAsPerTemplate = data?.shapeFileAsPerTemplate ? data?.shapeFileAsPerTemplate : servicePlanRes.shapeFileAsPerTemplate
         servicePlanRes.autoCadFile = data?.autoCadFile ? data?.autoCadFile : servicePlanRes.autoCadFile
         servicePlanRes.certifieadCopyOfThePlan = data?.certifieadCopyOfThePlan ? data?.certifieadCopyOfThePlan : servicePlanRes.certifieadCopyOfThePlan
-        console.log({servicePlanRes, data}, "jjjjjjjjjjjjjj");
+        const isvalidUpdate = checkValid(servicePlanRes)
+        console.log({servicePlanRes, data, isvalidUpdate}, "jjjjjjjjjjjjjj");
+        // if(!isvalidUpdate){
+        //   console.log("Dont call update")
+        //   return null
+        // }
         const updateRequest = {
           requestInfo: {
             api_id: "Rainmaker",
@@ -100,20 +171,21 @@ const ServicePlanService = () => {
             key: "",
             msg_id: "",
             requester_id: "",
-            authToken: token,
-            "userInfo": userInfo.info
+            authToken: token
           },
           ServicePlanRequest: [{
             ...servicePlanRes,
-            "action": "FORWARD",
-            "tenantId":  tenantId,
-            "businessService": "SERVICE_PLAN",
+            // "action": "FORWARD",
+            // "tenantId":  tenantId,
+            // "businessService": "SERVICE_PLAN",
             "workflowCode": "SERVICE_PLAN",
-            "comment": "",
-            "assignee": null
+            // "comment": "",
+            // "assignee": null
           }],
         }
         const Resp = await axios.post("/tl-services/serviceplan/_update", updateRequest);
+        setOpen(true)
+        setApplicationNumber(Resp.data.servicePlanResponse[0].applicationNumber)
       }
 
     } catch (error) {
@@ -167,28 +239,71 @@ const ServicePlanService = () => {
     }
   }
 
+  // async function updatedState(file) {
+  //   await new Promise(resolve => {
+  //     setValid(arr => [...arr, file.name])
+  //       resolve();
+  //   })
+  //   return valid
+  // }
   const getDocumentData = async (file, fieldName) => {
-    setValid((arr) => [...arr, file.name])
+    console.log("documentData", fieldName);
+    if (selectedFiles.includes(file.name)) {
+      setShowToastError({ key: "error" });
+      return;
+    }
+
     const formData = new FormData();
     formData.append("file", file);
     formData.append("tenantId", "hr");
     formData.append("module", "property-upload");
     formData.append("tag", "tag-property");
-    // setLoader(true);
+    setLoader(true);
     try {
       const Resp = await axios.post("/filestore/v1/files", formData, {});
+      console.log("documentData", Resp?.data?.files);
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
-      // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
-      // console.log("getval======", getValues());
-      // setLoader(false);
+     
+      setSelectedFiles([...selectedFiles, file.name]);
+
+      setLoader(false);
+      setShowToast({ key: "success" });
     } catch (error) {
-      // setLoader(false);
-      console.log(error.message);
+      setLoader(false);
+      return error.message;
     }
   };
+  
 
-  const closeModal = () => {
+  // const getDocumentData = async (file, fieldName) => {
+     
+   
+  //   setValid(prevFiles => [...prevFiles,file.name])
+     
+  //   console.log({valid, file}, "vvvvvvvvv");
+    
+  //   const formData = new FormData();
+  //   formData.append("file", file);
+  //   formData.append("tenantId", "hr");
+  //   formData.append("module", "property-upload");
+  //   formData.append("tag", "tag-property");
+  //   // setLoader(true);
+  //   try {
+  //     const Resp = await axios.post("/filestore/v1/files", formData, {});
+  //     setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
+  //     setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
+     
+  //     setDocId(Resp?.data?.files?.[0]?.fileStoreId);
+  //     console.log("getval======", getValues());
+  //     setLoader(false);
+  //   } catch (error) {
+  //     setLoader(false);
+  //     console.log(error.message);
+  //   }
+  // };
+
+  const handleClose = () => {
     setOpen(false)
     window.location.href = `/digit-ui/citizen`
   }
@@ -205,6 +320,40 @@ const ServicePlanService = () => {
     }
   }, [id])
 
+  const handleLoiNumber = async (e) => {
+    e.preventDefault()
+    const token = window?.localStorage?.getItem("token");
+   try {
+    const loiRequest = {
+      requestInfo: {
+        api_id: "Rainmaker",
+        ver: "1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msg_id: "090909",
+        requesterId: "",
+        authToken: token,
+        "userInfo": userInfo.info
+      },
+    }
+    const Resp = await axios.post(`/tl-services/v1/_search?loiNumber=${LOINumber}`, loiRequest);
+    console.log(Resp, "RRRRRRRRRRR");
+    setDevName(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantInfo?.devDetail?.addInfo?.name)
+    setDevelopmentPlan(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.AppliedLandDetails?.[0]?.developmentPlan)
+    setPurpose(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.purpose)
+    setTotalArea(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.totalArea)
+    
+  console.log({ devName, developmentPlan, purpose, totalArea });
+
+   } catch (error) {
+    console.log(error)
+   }
+    
+
+    console.log("loiloiloi")
+  }
 
   const getApplicationData = async () => {
     const token = window?.localStorage?.getItem("token");
@@ -224,7 +373,7 @@ const ServicePlanService = () => {
         }
         const response = await axios.post(`/tl-services/serviceplan/_get?applicationNumber=${id}`, postDistrict)
         console.log(response, "rrrrrrrrrr")
-        setLOCNumber(response?.data?.servicePlanResponse[0].loiNumber)
+        setLOINumber(response?.data?.servicePlanResponse[0].loiNumber)
         setSelfCertifiedDrawing(response?.data?.servicePlanResponse[0].selfCertifiedDrawingFromEmpaneledDoc)
         setApplicationId(id)
         setEnviromental(response?.data?.servicePlanResponse[0].environmentalClearance)
@@ -238,35 +387,11 @@ const ServicePlanService = () => {
       } 
    }
 
-
-
-  // const getSubmitDataLabel = async () => {
-  //   try {
-  //     const postDistrict = {
-  //       requestInfo: {
-  //         api_id: "1",
-  //         ver: "1",
-  //         ts: null,
-  //         action: "create",
-  //         did: "",
-  //         key: "",
-  //         msg_id: "",
-  //         requester_id: "",
-  //         auth_token: null,
-  //       },
-  //     };
-
-  //     const Resp = await axios.post(`http://10.1.1.18:80/land-services/serviceplan/_get?loiNumber=123`, postDistrict);
-  //   } catch (error) {
-  //     console.log(error.message);
-  //   }
-  // };
-  // useEffect(() => {
-  //   getSubmitDataLabel();
-  // }, []);
-
   return (
-    <React.Fragment>
+  <div>
+   <React.Fragment>
+       <ScrollToTop />
+      {loader && <Spinner />}
     <form onSubmit={handleSubmit(servicePlan)}>
       <Card style={{ width: "126%", border: "5px solid #1266af" }}>
         <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Service Plan </h4>
@@ -281,14 +406,162 @@ const ServicePlanService = () => {
                 </label>
               </div>
               <input
-                type="number"
+                type="string"
                 className="form-control"
                 {...register("loiNumber")}
-                onChange={(e) => setLOCNumber(e.target.value)}
-                value={LOCNumber}
+                onChange={(e) => setLOINumber(e.target.value)}
+                value={LOINumber}
+              />
+            </Col>
+            <Col className="col-4">
+                <button style={{transform: "translateY(35px)"}} type="submit" onClick={handleLoiNumber} id="btnSearch" class="btn btn-primary btn-md center-block">
+                  Verify
+                </button>
+            </Col>
+          </Row>
+          <br></br>
+          <Row>
+            <Col className="col-3">
+              <div>
+                <label>
+                  <h2>
+                    Name
+                  </h2>
+                </label>
+              </div>
+              <input
+                type="string"
+                className="form-control"
+                {...register("devName")}
+                onChange={(e) => setDevName(e.target.value)}
+                value={devName}
+                disabled
+              />
+            </Col>
+            <Col className="col-3">
+              <div>
+                <label>
+                  <h2>
+                  Development Plan
+                  </h2>
+                </label>
+              </div>
+              <input
+                type="string"
+                className="form-control"
+                {...register("developmentPlan")}
+                onChange={(e) => setDevelopmentPlan(e.target.value)}
+                value={developmentPlan}
+                disabled
+              />
+            </Col>
+            <Col className="col-3">
+              <div>
+                <label>
+                  <h2>
+                  Purpose Of Licence 
+                  </h2>
+                </label>
+              </div>
+              <input
+                type="string"
+                className="form-control"
+                {...register("purpose")}
+                onChange={(e) => setPurpose(e.target.value)}
+                value={purpose}
+                disabled
+              />
+            </Col>
+            <Col className="col-3">
+              <div>
+                <label>
+                  <h2>
+                  Total Area
+                  </h2>
+                </label>
+              </div>
+              <input
+                type="string"
+                className="form-control"
+                {...register("totalArea")}
+                onChange={(e) => setTotalArea(e.target.value)}
+                value={totalArea}
+                disabled
               />
             </Col>
           </Row>
+          <br></br>
+          <Row>
+            {/* <Col className="col-3">
+              <div>
+                <label>
+                  <h2>
+                    Field4
+                  </h2>
+                </label>
+              </div>
+              <input
+                type="string"
+                className="form-control"
+                {...register("devName")}
+                onChange={(e) => setDevName(e.target.value)}
+                value={devName}
+                disabled
+              />
+            </Col> */}
+            {/* <Col className="col-3">
+              <div>
+                <label>
+                  <h2>
+                    field5
+                  </h2>
+                </label>
+              </div>
+              <input
+                type="string"
+                className="form-control"
+                {...register("panNumber")}
+                onChange={(e) => setPanNumber(e.target.value)}
+                value={panNumber}
+                disabled
+              />
+            </Col>
+            <Col className="col-3">
+              <div>
+                <label>
+                  <h2>
+                    filed6
+                  </h2>
+                </label>
+              </div>
+              <input
+                type="string"
+                className="form-control"
+                {...register("gstNumber")}
+                onChange={(e) => setGSTNumber(e.target.value)}
+                value={gstnumber}
+                disabled
+              />
+            </Col>
+            <Col className="col-3">
+              <div>
+                <label>
+                  <h2>
+                    field7
+                  </h2>
+                </label>
+              </div>
+              <input
+                type="string"
+                className="form-control"
+                {...register("mobileNumber")}
+                onChange={(e) => setMobileNumber(e.target.value)}
+                value={mobileNmber}
+                disabled
+              />
+            </Col> */}
+          </Row>
+          <br></br>
           <br></br>
           <div className="table table-bordered table-responsive">
             <thead>
@@ -535,7 +808,31 @@ const ServicePlanService = () => {
 
     </Dialog>
     </React.Fragment>
+    {showToast && (
+        <Toast
+          success={showToast?.key === "success" ? true : false}
+          label="Document Uploaded Successfully"
+          isDleteBtn={true}
+          onClose={() => {
+            setShowToast(null);
+            setError(null);
+          }}
+        />
+      )}
+      {showToastError && (
+        <Toast
+          error={showToastError?.key === "error" ? true : false}
+          label="Duplicate file Selected"
+          isDleteBtn={true}
+          onClose={() => {
+            setShowToastError(null);
+            setError(null);
+          }}
+        />
+      )}
+    </div>
   );
 };
 
 export default ServicePlanService;
+

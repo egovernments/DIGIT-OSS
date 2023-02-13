@@ -2,14 +2,10 @@ import React from "react";
 import NumberFormat from "react-number-format";
 // import { NumericFormat } from "react-number-format";
 import { Controller } from "react-hook-form";
-import styles from "../styles/component.css";
 
 const NumberInput = (props) => {
   return (
-    <div
-      className={styles.appInputText}
-      // className="app-input-text"
-    >
+    <div className="appInputText">
       <Controller
         render={({ field: { onChange, value } }) => (
           <NumberFormat

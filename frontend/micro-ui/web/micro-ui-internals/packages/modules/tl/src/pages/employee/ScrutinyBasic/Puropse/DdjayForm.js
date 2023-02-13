@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import 'bootstrap/dist/css/bootstrap.css';
-import { useForm } from "react-hook-form";
-// import { tr, thead, TableContainer, td, tbody, Table, Paper } from '@material-ui/core';
-// import AddIcon from "@material-ui/icons/Add";
-// import DeleteIcon from "@material-ui/icons/Delete";
 import { Button, Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import { useStyles } from "../css/personalInfoChild.style";
 import ModalChild from "../Remarks/ModalChild";
+import { IconButton } from "@mui/material";
+import { getDocShareholding } from "../ScrutinyDevelopment/docview.helper";
+import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
 
 const DDJAYForm = (props) => {
 
@@ -113,9 +112,577 @@ const DDJAYForm = (props) => {
       <Form.Group className="justify-content-center" controlId="formBasicEmail">
         <Row className="ml-auto" style={{ marginBottom: 5 }}>
           <Col col-12>
-            <h5 className="text-black"><h5>Deen Dayal Jan Awas Yojna (DDJAY):-</h5></h5>
+            <h6 className="text-black">
+          <b>Deen Dayal Jan Awas Yojna (DDJAY)</b>
+        </h6>
 
-            <div className="table table-bordered table-responsive">
+        <Col col-12>
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>
+                    Total area of the Scheme
+                    <span style={{ color: "red" }}>*</span>
+                  </h2>
+                </Form.Label>
+              </div>
+              {/* <NumberInput disabled control={control} name="totalAreaScheme" customInput={TextField} /> */}
+              <div className="d-flex flex-row align-items-center my-1 ">
+          
+          <input type="text" className="form-control" placeholder={ddjayData?.totalAreaScheme}  disabled />
+          &nbsp;
+            <ReportProblemIcon
+                        style={{
+                          display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                          color: fieldIconColors.layoutPlan
+                        }}
+                        onClick={() => {
+                          setLabelValue("Whether one organizes open space/pocket of min area 0.3 acre proposed in the layout plan"),
+                            setOpennedModal("layoutPlan")
+                          setSmShow(true),
+                            console.log("modal open"),
+                            setFieldValue(ddjayData?.minArea==="Y"?"Yes":ddjayData?.organize==="N"?"No":null);
+                        }}
+                      ></ReportProblemIcon>
+                      </div>
+            </Col>
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>
+                    Area under Sector Road & Green Belt
+                    <span style={{ color: "red" }}>*</span>
+                  </h2>
+                </Form.Label>
+              </div>
+              {/* <input
+                type="number"
+                className="form-control"
+                {...register("areaUnderSectorRoad")}
+                onWheel={handleWheel}
+                onChange={(e) => {
+                  if (e?.target?.value?.length) {
+                    setValue("balanceAreaAfterDeduction", (watch("totalAreaScheme") - e?.target?.value)?.toFixed(3));
+                    setValue("areaUnderSectorAndGreenBelt", (e?.target?.value * 50) / 100);
+                  } else {
+                    setValue("balanceAreaAfterDeduction", "");
+                    setValue("balanceArea", "");
+                    setValue("areaUnderSectorAndGreenBelt", "");
+                    setValue("netPlannedArea", "");
+                    setValue("areaUnderUndetermined", "");
+                  }
+                }}
+              /> */}
+               <div className="d-flex flex-row align-items-center my-1 ">
+          
+          <input type="text" className="form-control" placeholder={ddjayData?.areaUnderSectorRoad}  disabled />
+          &nbsp;
+            <ReportProblemIcon
+                        style={{
+                          display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                          color: fieldIconColors.layoutPlan
+                        }}
+                        onClick={() => {
+                          setLabelValue("Whether one organizes open space/pocket of min area 0.3 acre proposed in the layout plan"),
+                            setOpennedModal("layoutPlan")
+                          setSmShow(true),
+                            console.log("modal open"),
+                            setFieldValue(ddjayData?.minArea==="Y"?"Yes":ddjayData?.organize==="N"?"No":null);
+                        }}
+                      ></ReportProblemIcon>
+                      </div>
+            </Col>
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>
+                    Balance area after deducting area under sector road and Green Belt
+                    <span style={{ color: "red" }}>*</span>
+                  </h2>
+                </Form.Label>
+              </div>
+              {/* <input disabled type="number" className="form-control" {...register("balanceAreaAfterDeduction")} /> */}
+              <div className="d-flex flex-row align-items-center my-1 ">
+          
+          <input type="text" className="form-control" placeholder={ddjayData?.balanceAreaAfterDeduction}  disabled />
+          &nbsp;
+            <ReportProblemIcon
+                        style={{
+                          display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                          color: fieldIconColors.layoutPlan
+                        }}
+                        onClick={() => {
+                          setLabelValue("Whether one organizes open space/pocket of min area 0.3 acre proposed in the layout plan"),
+                            setOpennedModal("layoutPlan")
+                          setSmShow(true),
+                            console.log("modal open"),
+                            setFieldValue(ddjayData?.minArea==="Y"?"Yes":ddjayData?.organize==="N"?"No":null);
+                        }}
+                      ></ReportProblemIcon>
+                      </div>
+            </Col>
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>
+                    Area under undetermined use
+                    <span style={{ color: "red" }}>*</span>
+                  </h2>
+                </Form.Label>
+              </div>
+              {/* <input
+                type="number"
+                className="form-control"
+                {...register("areaUnderUndetermined")}
+                onWheel={handleWheel}
+                onChange={(e) => {
+                  if (e?.target?.value?.length) {
+                    setValue("balanceArea", (watch("balanceAreaAfterDeduction") - e?.target?.value)?.toFixed(3));
+                    setValue(
+                      "netPlannedArea",
+                      (watch("balanceAreaAfterDeduction") - e?.target?.value + watch("areaUnderSectorAndGreenBelt"))?.toFixed(3)
+                    );
+                  } else {
+                    setValue("balanceArea", "");
+                    setValue("netPlannedArea", "");
+                  }
+                }}
+              /> */}
+               <div className="d-flex flex-row align-items-center my-1 ">
+          
+          <input type="text" className="form-control" placeholder={ddjayData?.areaUnderSectorAndGreenBelt}  disabled />
+          &nbsp;
+            <ReportProblemIcon
+                        style={{
+                          display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                          color: fieldIconColors.layoutPlan
+                        }}
+                        onClick={() => {
+                          setLabelValue("Whether one organizes open space/pocket of min area 0.3 acre proposed in the layout plan"),
+                            setOpennedModal("layoutPlan")
+                          setSmShow(true),
+                            console.log("modal open"),
+                            setFieldValue(ddjayData?.minArea==="Y"?"Yes":ddjayData?.organize==="N"?"No":null);
+                        }}
+                      ></ReportProblemIcon>
+                      </div>
+            </Col>
+          </Row>
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>
+                    Balance area
+                    <span style={{ color: "red" }}>*</span>
+                  </h2>
+                </Form.Label>
+              </div>
+              {/* <input disabled type="number" className="form-control" {...register("balanceArea")} /> */}
+              <div className="d-flex flex-row align-items-center my-1 ">
+          
+          <input type="text" className="form-control" placeholder={ddjayData?.balanceArea}  disabled />
+          &nbsp;
+            <ReportProblemIcon
+                        style={{
+                          display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                          color: fieldIconColors.layoutPlan
+                        }}
+                        onClick={() => {
+                          setLabelValue("Whether one organizes open space/pocket of min area 0.3 acre proposed in the layout plan"),
+                            setOpennedModal("layoutPlan")
+                          setSmShow(true),
+                            console.log("modal open"),
+                            setFieldValue(ddjayData?.minArea==="Y"?"Yes":ddjayData?.organize==="N"?"No":null);
+                        }}
+                      ></ReportProblemIcon>
+                      </div>
+            </Col>
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>
+                    50% of the Area under Sector Road & Green Belt
+                    <span style={{ color: "red" }}>*</span>
+                  </h2>
+                </Form.Label>
+              </div>
+              {/* <input disabled type="number" className="form-control" {...register("areaUnderSectorAndGreenBelt")} /> */}
+              <div className="d-flex flex-row align-items-center my-1 ">
+          
+          <input type="text" className="form-control" placeholder={ddjayData?.areaUnderSectorAndGreenBelt}  disabled />
+          &nbsp;
+            <ReportProblemIcon
+                        style={{
+                          display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                          color: fieldIconColors.layoutPlan
+                        }}
+                        onClick={() => {
+                          setLabelValue("Whether one organizes open space/pocket of min area 0.3 acre proposed in the layout plan"),
+                            setOpennedModal("layoutPlan")
+                          setSmShow(true),
+                            console.log("modal open"),
+                            setFieldValue(ddjayData?.minArea==="Y"?"Yes":ddjayData?.organize==="N"?"No":null);
+                        }}
+                      ></ReportProblemIcon>
+                      </div>
+            </Col>
+
+            <Col md={4} xxl lg="3">
+              <div>
+                <Form.Label>
+                  <h2>
+                    Net planned area (A+B)
+                    <span style={{ color: "red" }}>*</span>
+                  </h2>
+                </Form.Label>
+              </div>
+              {/* <input disabled type="number" className="form-control" {...register("netPlannedArea")} /> */}
+              <div className="d-flex flex-row align-items-center my-1 ">
+          
+          <input type="text" className="form-control" placeholder={ddjayData?.netPlannedArea}  disabled />
+          &nbsp;
+            <ReportProblemIcon
+                        style={{
+                          display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                          color: fieldIconColors.layoutPlan
+                        }}
+                        onClick={() => {
+                          setLabelValue("Whether one organizes open space/pocket of min area 0.3 acre proposed in the layout plan"),
+                            setOpennedModal("layoutPlan")
+                          setSmShow(true),
+                            console.log("modal open"),
+                            setFieldValue(ddjayData?.minArea==="Y"?"Yes":ddjayData?.organize==="N"?"No":null);
+                        }}
+                      ></ReportProblemIcon>
+                      </div>
+            </Col>
+          </Row>
+        </Col>
+
+
+        <Row className="ml-auto" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="3">
+          <div>
+              <Form.Label>
+                <h2>
+                  Max area of plots ( in square meters)
+                  <span style={{ color: "red" }}>*</span>
+                </h2>
+              </Form.Label>
+             
+            </div>
+            <div className="d-flex flex-row align-items-center my-1 ">
+          
+            <input type="text" className="form-control" placeholder={ddjayData?.maxAreaPlots}  disabled />
+            &nbsp;
+              <ReportProblemIcon
+                          style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                            color: fieldIconColors.layoutPlan
+                          }}
+                          onClick={() => {
+                            setLabelValue("Whether one organizes open space/pocket of min area 0.3 acre proposed in the layout plan"),
+                              setOpennedModal("layoutPlan")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(ddjayData?.minArea==="Y"?"Yes":ddjayData?.organize==="N"?"No":null);
+                          }}
+                        ></ReportProblemIcon>
+                        </div>
+          </Col>
+        </Row>
+        <br></br>
+        <Row className="ml-auto" style={{ marginBottom: 5 }}>
+        <div>
+              <h2>
+                Size of plot ( in square meters)
+                <span style={{ color: "red" }}>*</span>
+              </h2>
+            </div>
+          <Col md={4} xxl lg="3">
+           <div>
+              <label>Minimum</label>
+              <div className="d-flex flex-row align-items-center my-1 ">
+              <input type="text" className="form-control" placeholder={ddjayData?.minPlotSize}  disabled />
+              {/* <input type="number" className="form-control" {...register("minPlotSize")} /> */}
+              &nbsp;
+              <ReportProblemIcon
+                          style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                            color: fieldIconColors.layoutPlan
+                          }}
+                          onClick={() => {
+                            setLabelValue("Whether one organizes open space/pocket of min area 0.3 acre proposed in the layout plan"),
+                              setOpennedModal("layoutPlan")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(ddjayData?.minArea==="Y"?"Yes":ddjayData?.organize==="N"?"No":null);
+                          }}
+                        ></ReportProblemIcon>
+                        </div>
+            </div>
+            <div>
+              <label>Maximum</label>
+              <div className="d-flex flex-row align-items-center my-1 ">
+              <input type="text" className="form-control" placeholder={ddjayData?.maxPlotSize}  disabled />
+              {/* <input type="number" className="form-control" {...register("maxPlotSize")} /> */}
+              &nbsp;
+              <ReportProblemIcon
+                          style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                            color: fieldIconColors.layoutPlan
+                          }}
+                          onClick={() => {
+                            setLabelValue("Whether one organizes open space/pocket of min area 0.3 acre proposed in the layout plan"),
+                              setOpennedModal("layoutPlan")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(ddjayData?.minArea==="Y"?"Yes":ddjayData?.organize==="N"?"No":null);
+                          }}
+                        ></ReportProblemIcon>
+                        </div>
+            </div>
+          </Col>
+          <Col md={4} xxl lg="3">
+            <div>
+              <Form.Label>
+                <h2>
+                  Total Nos. of Plots
+                  <span style={{ color: "red" }}>*</span>
+                </h2>
+              </Form.Label>
+              <div className="d-flex flex-row align-items-center my-1 ">
+              <input type="text" className="form-control" placeholder={ddjayData?.totalNoOfPlots}  disabled />
+              &nbsp;
+              <ReportProblemIcon
+                          style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                            color: fieldIconColors.layoutPlan
+                          }}
+                          onClick={() => {
+                            setLabelValue("Whether one organizes open space/pocket of min area 0.3 acre proposed in the layout plan"),
+                              setOpennedModal("layoutPlan")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(ddjayData?.minArea==="Y"?"Yes":ddjayData?.organize==="N"?"No":null);
+                          }}
+                        ></ReportProblemIcon>
+            </div>
+            
+            {/* <input type="number" className="form-control" {...register("totalNoOfPlots")} /> */}
+            </div>
+          </Col>
+          <Col md={4} xxl lg="3">
+            <div>
+              <Form.Label>
+                <h2>
+                  Permissible density
+                  <span style={{ color: "red" }}>*</span>
+                </h2>
+              </Form.Label>
+              <div className="d-flex flex-row align-items-center my-1 ">
+              <input type="text" className="form-control" placeholder={ddjayData?.permissibleDensityDDJAY}  disabled />
+              &nbsp;
+              <ReportProblemIcon
+                          style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                            color: fieldIconColors.layoutPlan
+                          }}
+                          onClick={() => {
+                            setLabelValue("Whether one organizes open space/pocket of min area 0.3 acre proposed in the layout plan"),
+                              setOpennedModal("layoutPlan")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(ddjayData?.minArea==="Y"?"Yes":ddjayData?.organize==="N"?"No":null);
+                          }}
+                        ></ReportProblemIcon>
+            </div>
+          
+            </div>
+            {/* <input type="number" className="form-control" {...register("permissibleDensityDDJAY")} /> */}
+          </Col>
+          <Col md={4} xxl lg="3">
+            <div>
+              <Form.Label>
+                <h2>
+                  Residential Plots & Commercial Plots
+                  <span style={{ color: "red" }}>*</span>
+                </h2>
+              </Form.Label>
+              <div className="d-flex flex-row align-items-center my-1 ">
+              <input type="text" className="form-control" placeholder={ddjayData?.residentialAndCommercialPlots}  disabled />
+              &nbsp;
+              <ReportProblemIcon
+                          style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                            color: fieldIconColors.layoutPlan
+                          }}
+                          onClick={() => {
+                            setLabelValue("Whether one organizes open space/pocket of min area 0.3 acre proposed in the layout plan"),
+                              setOpennedModal("layoutPlan")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(ddjayData?.minArea==="Y"?"Yes":ddjayData?.organize==="N"?"No":null);
+                          }}
+                        ></ReportProblemIcon>
+                        </div>
+            </div>
+            
+            {/* <input type="number" className="form-control" {...register("residentialAndCommercialPlots")} /> */}
+          </Col>
+        </Row>
+        <br></br>
+     <Row className="ml-auto" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="3">
+            <div>
+              <Form.Label>
+                <h2>
+                  Area under Residential Use
+                  <span style={{ color: "red" }}>*</span>
+                </h2>
+              </Form.Label>
+            </div>
+            <div className="d-flex flex-row align-items-center my-1 ">
+              <input type="text" className="form-control" placeholder={ddjayData?.areaUnderResidentialUse}  disabled />
+              &nbsp;
+              <ReportProblemIcon
+                          style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                            color: fieldIconColors.layoutPlan
+                          }}
+                          onClick={() => {
+                            setLabelValue("Whether one organizes open space/pocket of min area 0.3 acre proposed in the layout plan"),
+                              setOpennedModal("layoutPlan")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(ddjayData?.minArea==="Y"?"Yes":ddjayData?.organize==="N"?"No":null);
+                          }}
+                        ></ReportProblemIcon>
+                        </div>
+            {/* <input type="number" className="form-control" {...register("areaUnderResidentialUse")} /> */}
+          </Col>
+          <Col md={4} xxl lg="3">
+            <div>
+              <Form.Label>
+                <h2>
+                  Area under Commercial Use
+                  <span style={{ color: "red" }}>*</span>
+                </h2>
+              </Form.Label>
+            </div>
+            <div className="d-flex flex-row align-items-center my-1 ">
+              <input type="text" className="form-control" placeholder={ddjayData?.areaUnderCommercialUse}  disabled />
+              &nbsp;
+              <ReportProblemIcon
+                          style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                            color: fieldIconColors.layoutPlan
+                          }}
+                          onClick={() => {
+                            setLabelValue("Whether one organizes open space/pocket of min area 0.3 acre proposed in the layout plan"),
+                              setOpennedModal("layoutPlan")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(ddjayData?.minArea==="Y"?"Yes":ddjayData?.organize==="N"?"No":null);
+                          }}
+                        ></ReportProblemIcon>
+                        </div>
+            {/* <input type="number" className="form-control" {...register("areaUnderCommercialUse")} /> */}
+          </Col>
+          <Col md={4} xxl lg="3">
+            <div>
+              <Form.Label>
+                <h2>
+                  Width of Internal roads in the colony (in meters)
+                  <span style={{ color: "red" }}>*</span>
+                </h2>
+              </Form.Label>
+            </div>
+            <div className="d-flex flex-row align-items-center my-1 ">
+              <input type="text" className="form-control" placeholder={ddjayData?.widthOfInternalRoads}  disabled />
+              &nbsp;
+              <ReportProblemIcon
+                          style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                            color: fieldIconColors.layoutPlan
+                          }}
+                          onClick={() => {
+                            setLabelValue("Whether one organizes open space/pocket of min area 0.3 acre proposed in the layout plan"),
+                              setOpennedModal("layoutPlan")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(ddjayData?.minArea==="Y"?"Yes":ddjayData?.organize==="N"?"No":null);
+                          }}
+                        ></ReportProblemIcon>
+                        </div>
+            {/* <input type="number" className="form-control" {...register("widthOfInternalRoads")} /> */}
+          </Col>
+          <Col md={4} xxl lg="3">
+            <div>
+              <Form.Label>
+                <h2>
+                  Area under organized Open Space (in acres)
+                  <span style={{ color: "red" }}>*</span>
+                </h2>
+              </Form.Label>
+            </div>
+            <div className="d-flex flex-row align-items-center my-1 ">
+              <input type="text" className="form-control" placeholder={ddjayData?.AreaUnderOrganizedSpace}  disabled />
+              &nbsp;
+              <ReportProblemIcon
+                          style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                            color: fieldIconColors.layoutPlan
+                          }}
+                          onClick={() => {
+                            setLabelValue("Whether one organizes open space/pocket of min area 0.3 acre proposed in the layout plan"),
+                              setOpennedModal("layoutPlan")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(ddjayData?.minArea==="Y"?"Yes":ddjayData?.organize==="N"?"No":null);
+                          }}
+                        ></ReportProblemIcon>
+                        </div>
+            {/* <input type="number" className="form-control" {...register("AreaUnderOrganizedSpace")} /> */}
+          </Col>
+        </Row>
+        <br></br>
+        <Row className="ml-auto" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="3">
+            <div>
+              <label>
+                <h2
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="The owner will transfer 10% area of the licenced colony free of cost to the Government for provision of community facilities. "
+                >
+                  Area Transferred to Government for community facilities.
+                </h2>
+              </label>
+            </div>
+            <div className="d-flex flex-row align-items-center my-1 ">
+              <input type="text" className="form-control" placeholder={ddjayData?.transferredArea}  disabled />
+              &nbsp;
+              <ReportProblemIcon
+                          style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                            color: fieldIconColors.layoutPlan
+                          }}
+                          onClick={() => {
+                            setLabelValue("Whether one organizes open space/pocket of min area 0.3 acre proposed in the layout plan"),
+                              setOpennedModal("layoutPlan")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(ddjayData?.minArea==="Y"?"Yes":ddjayData?.organize==="N"?"No":null);
+                          }}
+                        ></ReportProblemIcon>
+                        </div>
+          
+          </Col>
+        </Row>
+            {/* <div className="table table-bordered table-responsive">
               <thead>
                 <tr>
                   <td><h5>Detail of plots</h5></td>
@@ -228,7 +795,68 @@ const DDJAYForm = (props) => {
                   )
                 }
               </div>
-            </div>
+            </div> */}
+            <br></br>
+            {/* <hr className="mb-4" /> */}
+
+<h5 className="text-black" style={{ marginBottom: "2%" }}>
+   Documents
+</h5>
+<div className={`${classes.formLabel} row`}>
+  <div className="col col-3">
+    <h5 className="d-flex flex-column mb-2">
+    Layout Plan in pdf
+      <div style={{ display: "flex" }}>
+        
+        <IconButton onClick={()=>getDocShareholding(ddjayData?.layoutPlanPdf)}>
+          <DownloadForOfflineIcon color="primary" className="mx-1"  />
+        </IconButton>
+        <ReportProblemIcon
+          style={{
+            display: hideRemarks || hideRemarksPatwari ?"none":"block",
+            color: fieldIconColors.areaOfPocket
+          }}
+          onClick={() => {
+            setLabelValue("Demarcation plan"),
+              setOpennedModal("demarcationPlan")
+            setSmShow(true),
+              console.log("modal open"),
+              setFieldValue();
+          }}
+        ></ReportProblemIcon>
+      </div>
+    </h5>
+   
+  </div>
+  <div className="col col-3">
+    <h5 className="d-flex flex-column mb-2">
+    Layout Plan in dxf
+      <div style={{ display: "flex" }}>
+        
+        <IconButton onClick={()=>getDocShareholding(ddjayData?.layoutPlanDxf)}>
+          <DownloadForOfflineIcon color="primary" className="mx-1"  />
+        </IconButton>
+        <ReportProblemIcon
+          style={{
+            display: hideRemarks || hideRemarksPatwari ?"none":"block",
+            color: fieldIconColors.areaOfPocket
+          }}
+          onClick={() => {
+            setLabelValue("Demarcation plan"),
+              setOpennedModal("demarcationPlan")
+            setSmShow(true),
+              console.log("modal open"),
+              setFieldValue();
+          }}
+        ></ReportProblemIcon>
+      </div>
+    </h5>
+   
+  </div>
+  </div>
+
+
+
           </Col>
         </Row>
       </Form.Group>

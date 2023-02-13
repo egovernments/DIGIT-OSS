@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import 'bootstrap/dist/css/bootstrap.css';
 import { useForm } from "react-hook-form";
-// import { tr, thead, TableContainer, td, tbody, Table, Paper } from '@material-ui/core';
-// import AddIcon from "@material-ui/icons/Add";
-// import DeleteIcon from "@material-ui/icons/Delete";
+
 import { Button, Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import { useStyles } from "../css/personalInfoChild.style";
 import ModalChild from "../Remarks/ModalChild";
+import { IconButton } from "@mui/material";
+import { getDocShareholding } from "../ScrutinyDevelopment/docview.helper";
+import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
 
 const IndustrialPlottedForm = (props) => {
 
@@ -125,7 +126,7 @@ const IndustrialPlottedForm = (props) => {
         remarksUpdate={currentRemarks}
       ></ModalChild>
       <Form.Group className="justify-content-center" controlId="formBasicEmail">
-        <Row className="ml-auto" style={{ marginBottom: 5 }}>
+        {/* <Row className="ml-auto" style={{ marginBottom: 5 }}>
           <Col col-12>
             <h5 className="text-black"><h5>Industrial Plotted:-</h5></h5>
 
@@ -406,7 +407,281 @@ const IndustrialPlottedForm = (props) => {
             </div>
 
           </Col>
+        </Row> */}
+        <Row className="ml-auto" style={{ marginBottom: 5 }}>
+      <Col col-12>
+        <h6 className="text-black">
+          <b>Industrial Plotted</b>
+        </h6>
+        {/* <br></br>
+        <br></br> */}
+       
+        <br></br>
+        <Row className="ml-auto" style={{ marginBottom: 5 }}>
+         <Col md={4} xxl lg="3">
+            <div>
+              <Form.Label>
+                <h2>
+                  Area under Industrial use
+                  <span style={{ color: "red" }}>*</span>
+                </h2>
+              </Form.Label>
+            </div>
+            {/* <input type="text" className="form-control" /> */}
+            <div  className="d-flex flex-row align-items-center">
+                  <input type="number" className="form-control" disabled placeholder={industrialData?.upTo50?.plotNo} />
+                  <ReportProblemIcon
+                          style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                            color: fieldIconColors.upTo50PlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Area of the colony, Up to 50 acres No."),
+                              setOpennedModal("upTo50PlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(industrialData?.upTo50?.plotNo);
+                          }}
+                        ></ReportProblemIcon>
+                  </div>
+          </Col>
         </Row>
+        <br></br>
+        <Row className="ml-auto" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="3">
+            <div>
+              <Form.Label>
+                <h2>
+                  Area under Residential plots
+                  <span style={{ color: "red" }}>*</span>
+                </h2>
+              </Form.Label>
+            </div>
+            {/* <input type="text" className="form-control" /> */}
+            <div  className="d-flex flex-row align-items-center">
+                  <input type="number" className="form-control" disabled placeholder={industrialData?.upTo50?.plotNo} />
+                  <ReportProblemIcon
+                          style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                            color: fieldIconColors.upTo50PlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Area of the colony, Up to 50 acres No."),
+                              setOpennedModal("upTo50PlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(industrialData?.upTo50?.plotNo);
+                          }}
+                        ></ReportProblemIcon>
+                  </div>
+          </Col>
+          <Col md={4} xxl lg="3">
+            <div>
+              <Form.Label>
+                <h2>
+                  Area under Affordable Industrial Housing
+                  <span style={{ color: "red" }}>*</span>
+                </h2>
+              </Form.Label>
+            </div>
+            {/* <input type="text" className="form-control" /> */}
+            <div  className="d-flex flex-row align-items-center">
+                  <input type="number" className="form-control" disabled placeholder={industrialData?.upTo50?.plotNo} />
+                  <ReportProblemIcon
+                          style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                            color: fieldIconColors.upTo50PlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Area of the colony, Up to 50 acres No."),
+                              setOpennedModal("upTo50PlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(industrialData?.upTo50?.plotNo);
+                          }}
+                        ></ReportProblemIcon>
+                  </div>
+          </Col>
+          <Col md={4} xxl lg="3">
+            <div>
+              <Form.Label>
+                <h2>
+                  Area under Commercial
+                  <span style={{ color: "red" }}>*</span>
+                </h2>
+              </Form.Label>
+            </div>
+            {/* <input type="text" className="form-control" /> */}
+            <div  className="d-flex flex-row align-items-center">
+                  <input type="number" className="form-control" disabled placeholder={industrialData?.upTo50?.plotNo} />
+                  <ReportProblemIcon
+                          style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                            color: fieldIconColors.upTo50PlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Area of the colony, Up to 50 acres No."),
+                              setOpennedModal("upTo50PlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(industrialData?.upTo50?.plotNo);
+                          }}
+                        ></ReportProblemIcon>
+                  </div>
+          </Col>
+          <Col md={4} xxl lg="3">
+            <div>
+              <Form.Label>
+                <h2>
+                  Total Saleable Area
+                  <span style={{ color: "red" }}>*</span>
+                </h2>
+              </Form.Label>
+            </div>
+            {/* <input type="text" className="form-control" /> */}
+            <div  className="d-flex flex-row align-items-center">
+                  <input type="number" className="form-control" disabled placeholder={industrialData?.upTo50?.plotNo} />
+                  <ReportProblemIcon
+                          style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                            color: fieldIconColors.upTo50PlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Area of the colony, Up to 50 acres No."),
+                              setOpennedModal("upTo50PlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(industrialData?.upTo50?.plotNo);
+                          }}
+                        ></ReportProblemIcon>
+                  </div>
+          </Col>
+        </Row>
+        <br></br>
+        <Row className="ml-auto" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="3">
+            <div>
+              <Form.Label>
+                <h2>
+                  Total Residential Plots
+                  <span style={{ color: "red" }}>*</span>
+                </h2>
+              </Form.Label>
+            </div>
+            {/* <input type="text" className="form-control" /> */}
+            <div  className="d-flex flex-row align-items-center">
+                  <input type="number" className="form-control" disabled placeholder={industrialData?.upTo50?.plotNo} />
+                  <ReportProblemIcon
+                          style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                            color: fieldIconColors.upTo50PlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Area of the colony, Up to 50 acres No."),
+                              setOpennedModal("upTo50PlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(industrialData?.upTo50?.plotNo);
+                          }}
+                        ></ReportProblemIcon>
+                  </div>
+          </Col>
+          <Col md={4} xxl lg="3">
+            <div>
+              <Form.Label>
+                <h2>
+                  Required EWS Plots
+                  <span style={{ color: "red" }}>*</span>
+                </h2>
+              </Form.Label>
+            </div>
+            {/* <input type="text" className="form-control" /> */}
+            <div  className="d-flex flex-row align-items-center">
+                  <input type="number" className="form-control" disabled placeholder={industrialData?.upTo50?.plotNo} />
+                  <ReportProblemIcon
+                          style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                            color: fieldIconColors.upTo50PlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Area of the colony, Up to 50 acres No."),
+                              setOpennedModal("upTo50PlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(industrialData?.upTo50?.plotNo);
+                          }}
+                        ></ReportProblemIcon>
+                  </div>
+          </Col>
+          <Col md={4} xxl lg="3">
+            <div>
+              <Form.Label>
+                <h2>
+                  Total Industrial Plots
+                  <span style={{ color: "red" }}>*</span>
+                </h2>
+              </Form.Label>
+            </div>
+            {/* <input type="text" className="form-control" /> */}
+            <div  className="d-flex flex-row align-items-center">
+                  <input type="number" className="form-control" disabled placeholder={industrialData?.upTo50?.plotNo} />
+                  <ReportProblemIcon
+                          style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                            color: fieldIconColors.upTo50PlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Area of the colony, Up to 50 acres No."),
+                              setOpennedModal("upTo50PlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(industrialData?.upTo50?.plotNo);
+                          }}
+                        ></ReportProblemIcon>
+                  </div>
+          </Col>
+        </Row>
+
+        <br></br>
+        <h6 className="text-black">
+          <b>Documents</b>
+        </h6>
+        <br></br>
+        <div className="row ">
+          {/* <div className="col col-3">
+            <h6>
+              Layout Plan <span style={{ color: "red" }}>*</span>
+            </h6>
+
+            <input type="file" className="form-control" accept="application/pdf/jpeg/png" />
+          </div>
+        </div> */}
+        <div className="col col-3">
+          <h5 className="d-flex flex-column mb-2">
+          Layout Plan 
+            </h5>
+          <div style={{ display: "flex" }}>
+         <IconButton onClick={()=>getDocShareholding(industrialData?.layoutPlanDxf)}>
+          <DownloadForOfflineIcon color="primary" className="mx-1"  />
+          </IconButton>
+          <ReportProblemIcon
+                          style={{
+                            display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                            color: fieldIconColors.upTo50PlotNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("Area of the colony, Up to 50 acres No."),
+                              setOpennedModal("upTo50PlotNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(industrialData?.upTo50?.plotNo);
+                          }}
+                        ></ReportProblemIcon>
+       </div>
+        </div>
+        </div>
+      </Col>
+    </Row>
       </Form.Group>
     </Form>)
 };

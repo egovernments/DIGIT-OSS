@@ -36,25 +36,55 @@ function renewalClu() {
   const [fieldValue, setFieldValue] = useState("");
   const [selectedFieldData, setSelectedFieldData] = useState();
   const [fieldIconColors, setFieldIconColors] = useState({
-    developer: Colors.info,
-    authPersonName: Colors.info,
-    authMobileNo1: Colors.info,
-    authMobileNo2: Colors.info,
-    emailId: Colors.info,
-    pan: Colors.info,
-    address: Colors.info,
-    city: Colors.info,
-    pin: Colors.info,
+    licenseNo: Colors.info,
+    validUpto: Colors.info,
+    selectService: Colors.info,
+    colonizerName: Colors.info,
+    colonyType: Colors.info,
+    areaAcres: Colors.info,
+    sectorNo: Colors.info,
+    village: Colors.info,
     tehsil: Colors.info,
     district: Colors.info,
-    state: Colors.info,
-    type: Colors.info,
-    lciSignedBy: Colors.info,
-    lciNotSigned: Colors.info,
-    parmanentAddress: Colors.info,
-    addressForCommunication: Colors.info,
-    authPerson: Colors.info,
-    emailForCommunication: Colors.info,
+    renewalApplied: Colors.info,
+    renewalAmount: Colors.info,
+    completingProject: Colors.info,
+    renewalAppliedFirstTime: Colors.info,
+    colonizer: Colors.info,
+    colonizerUltimatePower: Colors.info,
+    transferredPortion: Colors.info,
+    area: Colors.info,
+    khasraNo: Colors.info,
+    remark: Colors.info,
+    uploadmutation: Colors.info,
+    compilanceLicense: Colors.info,
+    courtCases: Colors.info,
+    edc: Colors.info,
+    principal: Colors.info,
+    interest: Colors.info,
+    penalInterest: Colors.info,
+    total: Colors.info,
+    remark: Colors.info,
+    sidc: Colors.info,
+    enhanceEdc: Colors.info,
+    amount: Colors.info,
+    selectValue: Colors.info,
+    bgNo: Colors.info,
+    amount: Colors.info,
+    validity: Colors.info,
+    bank: Colors.info,
+    component: Colors.info,
+    caCertification: Colors.info,
+    advertisementCopy: Colors.info,
+    annualFinancial: Colors.info,
+    detailAccountNumber: Colors.info,
+    copiesOfCaAccount: Colors.info,
+    date: Colors.info,
+    tower: Colors.info,
+    dodFilled: Colors.info,
+    targetDate: Colors.info,
+    dodFiledDrop: Colors.info,
+    composition: Colors.info,
   });
 
   const currentRemarks = (data) => {
@@ -88,11 +118,11 @@ function renewalClu() {
                 <input disabled type="number" className="form-control" placeholder="" {...register("licenseNo")} />
                 <ReportProblemIcon
                   style={{
-                    color: fieldIconColors.developer,
+                    color: fieldIconColors.licenseNo,
                   }}
                   onClick={() => {
-                    setOpennedModal("Licence No");
-                    setLabelValue("Licence No"),
+                    setOpennedModal("licenseNo");
+                    setLabelValue("Licence No."),
                       setSmShow(true),
                       console.log("modal open"),
                       setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -111,11 +141,11 @@ function renewalClu() {
                 <input disabled type="date" className="form-control" placeholder="" {...register("validUpto")} />
                 <ReportProblemIcon
                   style={{
-                    color: fieldIconColors.developer,
+                    color: fieldIconColors.validUpto,
                   }}
                   onClick={() => {
-                    setOpennedModal("Licence No");
-                    setLabelValue("Licence No"),
+                    setOpennedModal("validUpto");
+                    setLabelValue("Valid Upto"),
                       setSmShow(true),
                       console.log("modal open"),
                       setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -138,11 +168,11 @@ function renewalClu() {
                 </select>
                 <ReportProblemIcon
                   style={{
-                    color: fieldIconColors.developer,
+                    color: fieldIconColors.selectService,
                   }}
                   onClick={() => {
-                    setOpennedModal("Licence No");
-                    setLabelValue("Licence No"),
+                    setOpennedModal("selectService");
+                    setLabelValue(" Renewal For"),
                       setSmShow(true),
                       console.log("modal open"),
                       setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -196,11 +226,11 @@ function renewalClu() {
                 <input disabled type="text" className="form-control" placeholder="" {...register("colonizerName")} />
                 <ReportProblemIcon
                   style={{
-                    color: fieldIconColors.developer,
+                    color: fieldIconColors.colonizerName,
                   }}
                   onClick={() => {
-                    setOpennedModal("Licence No");
-                    setLabelValue("Licence No"),
+                    setOpennedModal("colonizerName");
+                    setLabelValue("Name of Colonizer"),
                       setSmShow(true),
                       console.log("modal open"),
                       setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -220,11 +250,11 @@ function renewalClu() {
                 <input disabled type="text" className="form-control" placeholder="" {...register("colonyType")} />
                 <ReportProblemIcon
                   style={{
-                    color: fieldIconColors.developer,
+                    color: fieldIconColors.colonyType,
                   }}
                   onClick={() => {
-                    setOpennedModal("Licence No");
-                    setLabelValue("Licence No"),
+                    setOpennedModal("colonyType");
+                    setLabelValue("Type of Colony"),
                       setSmShow(true),
                       console.log("modal open"),
                       setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -244,11 +274,11 @@ function renewalClu() {
                 <input disabled type="text" className="form-control" placeholder="" {...register("areaAcres")} />
                 <ReportProblemIcon
                   style={{
-                    color: fieldIconColors.developer,
+                    color: fieldIconColors.areaAcres,
                   }}
                   onClick={() => {
-                    setOpennedModal("Licence No");
-                    setLabelValue("Licence No"),
+                    setOpennedModal("areaAcres");
+                    setLabelValue(" Area in Acres"),
                       setSmShow(true),
                       console.log("modal open"),
                       setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -270,11 +300,11 @@ function renewalClu() {
                 <input disabled type="text" className="form-control" placeholder="" {...register("sectorNo")} />
                 <ReportProblemIcon
                   style={{
-                    color: fieldIconColors.developer,
+                    color: fieldIconColors.sectorNo,
                   }}
                   onClick={() => {
-                    setOpennedModal("Licence No");
-                    setLabelValue("Licence No"),
+                    setOpennedModal("sectorNo");
+                    setLabelValue(" Sector No."),
                       setSmShow(true),
                       console.log("modal open"),
                       setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -295,11 +325,11 @@ function renewalClu() {
                 <input disabled type="text" className="form-control" placeholder="" {...register("village")} />
                 <ReportProblemIcon
                   style={{
-                    color: fieldIconColors.developer,
+                    color: fieldIconColors.village,
                   }}
                   onClick={() => {
-                    setOpennedModal("Licence No");
-                    setLabelValue("Licence No"),
+                    setOpennedModal("village");
+                    setLabelValue("Village"),
                       setSmShow(true),
                       console.log("modal open"),
                       setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -319,11 +349,11 @@ function renewalClu() {
                 <input disabled type="number" className="form-control" placeholder="" {...register("tehsil")} />
                 <ReportProblemIcon
                   style={{
-                    color: fieldIconColors.developer,
+                    color: fieldIconColors.tehsil,
                   }}
                   onClick={() => {
-                    setOpennedModal("Licence No");
-                    setLabelValue("Licence No"),
+                    setOpennedModal("tehsil");
+                    setLabelValue("Tehsil"),
                       setSmShow(true),
                       console.log("modal open"),
                       setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -345,11 +375,11 @@ function renewalClu() {
                 <input disabled type="email" className="form-control" placeholder="" {...register("district")} />
                 <ReportProblemIcon
                   style={{
-                    color: fieldIconColors.developer,
+                    color: fieldIconColors.district,
                   }}
                   onClick={() => {
-                    setOpennedModal("Licence No");
-                    setLabelValue("Licence No"),
+                    setOpennedModal("district");
+                    setLabelValue("District"),
                       setSmShow(true),
                       console.log("modal open"),
                       setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -378,11 +408,11 @@ function renewalClu() {
                 </label>
                 <ReportProblemIcon
                   style={{
-                    color: fieldIconColors.developer,
+                    color: fieldIconColors.renewalApplied,
                   }}
                   onClick={() => {
-                    setOpennedModal("Licence No");
-                    setLabelValue("Licence No"),
+                    setOpennedModal("renewalApplied");
+                    setLabelValue(" Whether renewal applied within the stipulated period."),
                       setSmShow(true),
                       console.log("modal open"),
                       setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -423,11 +453,11 @@ function renewalClu() {
                 <input disabled type="email" className="form-control" placeholder="" {...register("renewalAmount")} />
                 <ReportProblemIcon
                   style={{
-                    color: fieldIconColors.developer,
+                    color: fieldIconColors.renewalAmount,
                   }}
                   onClick={() => {
-                    setOpennedModal("Licence No");
-                    setLabelValue("Licence No"),
+                    setOpennedModal("renewalAmount");
+                    setLabelValue(" Renewal Amount"),
                       setSmShow(true),
                       console.log("modal open"),
                       setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -449,11 +479,11 @@ function renewalClu() {
               <textarea disabled className="form-control" placeholder="" {...register("completingProject")} rows="3" />
               <ReportProblemIcon
                 style={{
-                  color: fieldIconColors.developer,
+                  color: fieldIconColors.completingProject,
                 }}
                 onClick={() => {
-                  setOpennedModal("Licence No");
-                  setLabelValue("Licence No"),
+                  setOpennedModal("completingProject");
+                  setLabelValue(" Reason for not completing the project within the initial validity period of the license."),
                     setSmShow(true),
                     console.log("modal open"),
                     setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -481,11 +511,11 @@ function renewalClu() {
                   </label>
                   <ReportProblemIcon
                     style={{
-                      color: fieldIconColors.developer,
+                      color: fieldIconColors.renewalAppliedFirstTime,
                     }}
                     onClick={() => {
-                      setOpennedModal("Licence No");
-                      setLabelValue("Licence No"),
+                      setOpennedModal("renewalAppliedFirstTime");
+                      setLabelValue("Whether the renewal applied is the first time ? (Yes/No)"),
                         setSmShow(true),
                         console.log("modal open"),
                         setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -574,11 +604,13 @@ function renewalClu() {
                 </label>
                 <ReportProblemIcon
                   style={{
-                    color: fieldIconColors.developer,
+                    color: fieldIconColors.colonizer,
                   }}
                   onClick={() => {
-                    setOpennedModal("Licence No");
-                    setLabelValue("Licence No"),
+                    setOpennedModal("colonizer");
+                    setLabelValue(
+                      " Whether the colonizer has obtained approval/NOC from the competent authority in pursuance of MOEF notified dated 14.09.2006 before stating the development works."
+                    ),
                       setSmShow(true),
                       console.log("modal open"),
                       setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -630,11 +662,13 @@ function renewalClu() {
                 </label>
                 <ReportProblemIcon
                   style={{
-                    color: fieldIconColors.developer,
+                    color: fieldIconColors.colonizerUltimatePower,
                   }}
                   onClick={() => {
-                    setOpennedModal("Licence No");
-                    setLabelValue("Licence No"),
+                    setOpennedModal("colonizerUltimatePower");
+                    setLabelValue(
+                      " Whether the colonizer has conveyed the ultimate power load requiremet of the project to the power utility within two months from the date of grant of license."
+                    ),
                       setSmShow(true),
                       console.log("modal open"),
                       setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -685,11 +719,13 @@ function renewalClu() {
                 </label>
                 <ReportProblemIcon
                   style={{
-                    color: fieldIconColors.developer,
+                    color: fieldIconColors.transferredPortion,
                   }}
                   onClick={() => {
-                    setOpennedModal("Licence No");
-                    setLabelValue("Licence No"),
+                    setOpennedModal("transferredPortion");
+                    setLabelValue(
+                      " Whether colonizer has transferred portion of sector/master plans roads forming part of the licensed area free of cost to the Govt of not in compilance of condition of license."
+                    ),
                       setSmShow(true),
                       console.log("modal open"),
                       setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -706,11 +742,11 @@ function renewalClu() {
                       <input disabled type="text" className="form-control" placeholder="" {...register("area")} />
                       <ReportProblemIcon
                         style={{
-                          color: fieldIconColors.developer,
+                          color: fieldIconColors.area,
                         }}
                         onClick={() => {
-                          setOpennedModal("Licence No");
-                          setLabelValue("Licence No"),
+                          setOpennedModal("area");
+                          setLabelValue("Area"),
                             setSmShow(true),
                             console.log("modal open"),
                             setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -726,11 +762,11 @@ function renewalClu() {
                       <input disabled type="text" className="form-control" placeholder="" {...register("khasraNo")} />
                       <ReportProblemIcon
                         style={{
-                          color: fieldIconColors.developer,
+                          color: fieldIconColors.khasraNo,
                         }}
                         onClick={() => {
-                          setOpennedModal("Licence No");
-                          setLabelValue("Licence No"),
+                          setOpennedModal("khasraNo");
+                          setLabelValue("Khasra No"),
                             setSmShow(true),
                             console.log("modal open"),
                             setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -746,11 +782,11 @@ function renewalClu() {
                       <input disabled type="text" className="form-control" placeholder="" {...register("remark")} />
                       <ReportProblemIcon
                         style={{
-                          color: fieldIconColors.developer,
+                          color: fieldIconColors.remark,
                         }}
                         onClick={() => {
-                          setOpennedModal("Licence No");
-                          setLabelValue("Licence No"),
+                          setOpennedModal("remark");
+                          setLabelValue("Remarks"),
                             setSmShow(true),
                             console.log("modal open"),
                             setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -766,11 +802,11 @@ function renewalClu() {
                       <input disabled type="file" className="form-control" placeholder="" {...register("uploadmutation")} />
                       <ReportProblemIcon
                         style={{
-                          color: fieldIconColors.developer,
+                          color: fieldIconColors.uploadmutation,
                         }}
                         onClick={() => {
-                          setOpennedModal("Licence No");
-                          setLabelValue("Licence No"),
+                          setOpennedModal("uploadmutation");
+                          setLabelValue("Upload copy of mutation"),
                             setSmShow(true),
                             console.log("modal open"),
                             setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -804,11 +840,11 @@ function renewalClu() {
                 </label>
                 <ReportProblemIcon
                   style={{
-                    color: fieldIconColors.developer,
+                    color: fieldIconColors.compilanceLicense,
                   }}
                   onClick={() => {
-                    setOpennedModal("Licence No");
-                    setLabelValue("Licence No"),
+                    setOpennedModal("compilanceLicense");
+                    setLabelValue("Compilance with special conditions, if imposed in the license and agrrements."),
                       setSmShow(true),
                       console.log("modal open"),
                       setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -859,11 +895,11 @@ function renewalClu() {
                 </label>
                 <ReportProblemIcon
                   style={{
-                    color: fieldIconColors.developer,
+                    color: fieldIconColors.courtCases,
                   }}
                   onClick={() => {
-                    setOpennedModal("Licence No");
-                    setLabelValue("Licence No"),
+                    setOpennedModal("courtCases");
+                    setLabelValue(" Complaints/court cases pending if any."),
                       setSmShow(true),
                       console.log("modal open"),
                       setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -914,11 +950,11 @@ function renewalClu() {
                     </label>
                     <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.developer,
+                        color: fieldIconColors.edc,
                       }}
                       onClick={() => {
-                        setOpennedModal("Licence No");
-                        setLabelValue("Licence No"),
+                        setOpennedModal("edc");
+                        setLabelValue("EDC"),
                           setSmShow(true),
                           console.log("modal open"),
                           setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -968,27 +1004,73 @@ function renewalClu() {
                           </th>
                           <td style={{ textAlign: "center" }}>
                             <input disabled type="text" className="form-control" placeholder="" {...register("principal")} />
+                            <ReportProblemIcon
+                              style={{
+                                color: fieldIconColors.principal,
+                              }}
+                              onClick={() => {
+                                setOpennedModal("principal");
+                                setLabelValue("Principal"),
+                                  setSmShow(true),
+                                  console.log("modal open"),
+                                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                              }}
+                            />
                           </td>
                           <td style={{ textAlign: "center" }}>
                             <input disabled type="text" className="form-control" placeholder="" {...register("interest")} />
+                            <ReportProblemIcon
+                              style={{
+                                color: fieldIconColors.interest,
+                              }}
+                              onClick={() => {
+                                setOpennedModal("Interest");
+                                setLabelValue("interest"),
+                                  setSmShow(true),
+                                  console.log("modal open"),
+                                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                              }}
+                            />
                           </td>
                           <td style={{ textAlign: "center" }}>
                             <input disabled type="text" className="form-control" placeholder="" {...register("penalInterest")} />
+                            <ReportProblemIcon
+                              style={{
+                                color: fieldIconColors.penalInterest,
+                              }}
+                              onClick={() => {
+                                setOpennedModal("penalInterest");
+                                setLabelValue("Penal Interest"),
+                                  setSmShow(true),
+                                  console.log("modal open"),
+                                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                              }}
+                            />
                           </td>
                           <td style={{ textAlign: "center" }}>
                             <input disabled type="text" className="form-control" placeholder="" {...register("total")} />
+                            <ReportProblemIcon
+                              style={{
+                                color: fieldIconColors.total,
+                              }}
+                              onClick={() => {
+                                setOpennedModal("total");
+                                setLabelValue("Total"),
+                                  setSmShow(true),
+                                  console.log("modal open"),
+                                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                              }}
+                            />
                           </td>
                           <td style={{ textAlign: "center" }}>
                             <input disabled type="text" className="form-control" placeholder="" {...register("remark")} />
-                          </td>
-                          <td style={{ textAlign: "center" }}>
                             <ReportProblemIcon
                               style={{
-                                color: fieldIconColors.developer,
+                                color: fieldIconColors.remark,
                               }}
                               onClick={() => {
-                                setOpennedModal("Licence No");
-                                setLabelValue("Licence No"),
+                                setOpennedModal("remark");
+                                setLabelValue("Remark"),
                                   setSmShow(true),
                                   console.log("modal open"),
                                   setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -1002,27 +1084,73 @@ function renewalClu() {
                           </th>
                           <td style={{ textAlign: "center" }}>
                             <input disabled type="text" className="form-control" placeholder="" {...register("principal")} />
+                            <ReportProblemIcon
+                              style={{
+                                color: fieldIconColors.principal,
+                              }}
+                              onClick={() => {
+                                setOpennedModal("principal");
+                                setLabelValue("Principal"),
+                                  setSmShow(true),
+                                  console.log("modal open"),
+                                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                              }}
+                            />
                           </td>
                           <td style={{ textAlign: "center" }}>
                             <input disabled type="text" className="form-control" placeholder="" {...register("interest")} />
+                            <ReportProblemIcon
+                              style={{
+                                color: fieldIconColors.interest,
+                              }}
+                              onClick={() => {
+                                setOpennedModal("Interest");
+                                setLabelValue("interest"),
+                                  setSmShow(true),
+                                  console.log("modal open"),
+                                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                              }}
+                            />
                           </td>
                           <td style={{ textAlign: "center" }}>
                             <input disabled type="text" className="form-control" placeholder="" {...register("penalInterest")} />
+                            <ReportProblemIcon
+                              style={{
+                                color: fieldIconColors.penalInterest,
+                              }}
+                              onClick={() => {
+                                setOpennedModal("penalInterest");
+                                setLabelValue("Penal Interest"),
+                                  setSmShow(true),
+                                  console.log("modal open"),
+                                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                              }}
+                            />
                           </td>
                           <td style={{ textAlign: "center" }}>
                             <input disabled type="text" className="form-control" placeholder="" {...register("total")} />
+                            <ReportProblemIcon
+                              style={{
+                                color: fieldIconColors.total,
+                              }}
+                              onClick={() => {
+                                setOpennedModal("total");
+                                setLabelValue("Total"),
+                                  setSmShow(true),
+                                  console.log("modal open"),
+                                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                              }}
+                            />
                           </td>
                           <td style={{ textAlign: "center" }}>
                             <input disabled type="text" className="form-control" placeholder="" {...register("remark")} />
-                          </td>
-                          <td style={{ textAlign: "center" }}>
                             <ReportProblemIcon
                               style={{
-                                color: fieldIconColors.developer,
+                                color: fieldIconColors.remark,
                               }}
                               onClick={() => {
-                                setOpennedModal("Licence No");
-                                setLabelValue("Licence No"),
+                                setOpennedModal("remark");
+                                setLabelValue("Remark"),
                                   setSmShow(true),
                                   console.log("modal open"),
                                   setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -1055,11 +1183,11 @@ function renewalClu() {
                     </label>
                     <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.developer,
+                        color: fieldIconColors.sidc,
                       }}
                       onClick={() => {
-                        setOpennedModal("Licence No");
-                        setLabelValue("Licence No"),
+                        setOpennedModal("sidc");
+                        setLabelValue("Sidc"),
                           setSmShow(true),
                           console.log("modal open"),
                           setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -1109,27 +1237,73 @@ function renewalClu() {
                           </th>
                           <td style={{ textAlign: "center" }}>
                             <input disabled type="text" className="form-control" placeholder="" {...register("principal")} />
+                            <ReportProblemIcon
+                              style={{
+                                color: fieldIconColors.principal,
+                              }}
+                              onClick={() => {
+                                setOpennedModal("principal");
+                                setLabelValue("Principal"),
+                                  setSmShow(true),
+                                  console.log("modal open"),
+                                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                              }}
+                            />
                           </td>
                           <td style={{ textAlign: "center" }}>
                             <input disabled type="text" className="form-control" placeholder="" {...register("interest")} />
+                            <ReportProblemIcon
+                              style={{
+                                color: fieldIconColors.interest,
+                              }}
+                              onClick={() => {
+                                setOpennedModal("Interest");
+                                setLabelValue("interest"),
+                                  setSmShow(true),
+                                  console.log("modal open"),
+                                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                              }}
+                            />
                           </td>
                           <td style={{ textAlign: "center" }}>
                             <input disabled type="text" className="form-control" placeholder="" {...register("penalInterest")} />
+                            <ReportProblemIcon
+                              style={{
+                                color: fieldIconColors.penalInterest,
+                              }}
+                              onClick={() => {
+                                setOpennedModal("penalInterest");
+                                setLabelValue("Penal Interest"),
+                                  setSmShow(true),
+                                  console.log("modal open"),
+                                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                              }}
+                            />
                           </td>
                           <td style={{ textAlign: "center" }}>
                             <input disabled type="text" className="form-control" placeholder="" {...register("total")} />
+                            <ReportProblemIcon
+                              style={{
+                                color: fieldIconColors.total,
+                              }}
+                              onClick={() => {
+                                setOpennedModal("total");
+                                setLabelValue("Total"),
+                                  setSmShow(true),
+                                  console.log("modal open"),
+                                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                              }}
+                            />
                           </td>
                           <td style={{ textAlign: "center" }}>
                             <input disabled type="text" className="form-control" placeholder="" {...register("remark")} />
-                          </td>
-                          <td style={{ textAlign: "center" }}>
                             <ReportProblemIcon
                               style={{
-                                color: fieldIconColors.developer,
+                                color: fieldIconColors.remark,
                               }}
                               onClick={() => {
-                                setOpennedModal("Licence No");
-                                setLabelValue("Licence No"),
+                                setOpennedModal("remark");
+                                setLabelValue("Remark"),
                                   setSmShow(true),
                                   console.log("modal open"),
                                   setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -1162,11 +1336,11 @@ function renewalClu() {
                     </label>
                     <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.developer,
+                        color: fieldIconColors.enhanceEdc,
                       }}
                       onClick={() => {
-                        setOpennedModal("Licence No");
-                        setLabelValue("Licence No"),
+                        setOpennedModal("enhanceEdc");
+                        setLabelValue("Enhance EDC"),
                           setSmShow(true),
                           console.log("modal open"),
                           setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -1189,11 +1363,11 @@ function renewalClu() {
                       <input disabled type="text" className="form-control" placeholder="" {...register("amount")} />
                       <ReportProblemIcon
                         style={{
-                          color: fieldIconColors.developer,
+                          color: fieldIconColors.amount,
                         }}
                         onClick={() => {
-                          setOpennedModal("Licence No");
-                          setLabelValue("Licence No"),
+                          setOpennedModal("amount");
+                          setLabelValue("Amount"),
                             setSmShow(true),
                             console.log("modal open"),
                             setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -1210,18 +1384,18 @@ function renewalClu() {
                       </h2>
                     </Form.Label>
                     <div style={{ display: "flex" }}>
-                      <select className="form-control" {...register("selectService")}>
+                      <select className="form-control" {...register("selectValue")}>
                         <option value=" ">----Select value-----</option>
                         <option value="1">NA</option>
                         <option value="2">Under Stay</option>
                       </select>
                       <ReportProblemIcon
                         style={{
-                          color: fieldIconColors.developer,
+                          color: fieldIconColors.selectValue,
                         }}
                         onClick={() => {
-                          setOpennedModal("Licence No");
-                          setLabelValue("Licence No"),
+                          setOpennedModal("selectValue");
+                          setLabelValue("Select value"),
                             setSmShow(true),
                             console.log("modal open"),
                             setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -1269,15 +1443,71 @@ function renewalClu() {
                   <tr>
                     <th className="fw-normal" style={{ textAlign: "center" }}>
                       <input disabled type="text" className="form-control" placeholder="" {...register("bgNo")} />
+                      <td>
+                        <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.bgNo,
+                          }}
+                          onClick={() => {
+                            setOpennedModal("bgNo");
+                            setLabelValue("BG.No."),
+                              setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                          }}
+                        />
+                      </td>
                     </th>
                     <td style={{ textAlign: "center" }}>
                       <input disabled type="text" className="form-control" placeholder="" {...register("amount")} />
+                      <td>
+                        <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.amount,
+                          }}
+                          onClick={() => {
+                            setOpennedModal("amount");
+                            setLabelValue("Amount"),
+                              setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                          }}
+                        />
+                      </td>
                     </td>
                     <td style={{ textAlign: "center" }}>
                       <input disabled type="text" className="form-control" placeholder="" {...register("validity")} />
+                      <td>
+                        <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.validity,
+                          }}
+                          onClick={() => {
+                            setOpennedModal("validity");
+                            setLabelValue("Validity"),
+                              setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                          }}
+                        />
+                      </td>
                     </td>
                     <td style={{ textAlign: "center" }}>
                       <input disabled type="text" className="form-control" placeholder="" {...register("bank")} />
+                      <td>
+                        <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.bank,
+                          }}
+                          onClick={() => {
+                            setOpennedModal("bank");
+                            setLabelValue("Bank"),
+                              setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                          }}
+                        />
+                      </td>
                     </td>
                     <td style={{ textAlign: "center" }}>
                       <select className="form-control" {...register("component")}>
@@ -1289,11 +1519,11 @@ function renewalClu() {
                     <td>
                       <ReportProblemIcon
                         style={{
-                          color: fieldIconColors.developer,
+                          color: fieldIconColors.component,
                         }}
                         onClick={() => {
-                          setOpennedModal("Licence No");
-                          setLabelValue("Licence No"),
+                          setOpennedModal("component");
+                          setLabelValue("Component"),
                             setSmShow(true),
                             console.log("modal open"),
                             setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -1349,14 +1579,14 @@ function renewalClu() {
             </Col>
             <Col className="col-6">
               <div style={{ display: "flex" }}>
-                <input disabled type="file" className="form-control" placeholder="" {...register("cacertification")} />
+                <input disabled type="file" className="form-control" placeholder="" {...register("caCertification")} />
                 <ReportProblemIcon
                   style={{
-                    color: fieldIconColors.developer,
+                    color: fieldIconColors.caCertification,
                   }}
                   onClick={() => {
-                    setOpennedModal("Licence No");
-                    setLabelValue("Licence No"),
+                    setOpennedModal("caCertification");
+                    setLabelValue(" CA certificate regarding non collection of stamp duty and registration charges."),
                       setSmShow(true),
                       console.log("modal open"),
                       setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -1389,11 +1619,13 @@ function renewalClu() {
                 </label>
                 <ReportProblemIcon
                   style={{
-                    color: fieldIconColors.developer,
+                    color: fieldIconColors.advertisementCopy,
                   }}
                   onClick={() => {
-                    setOpennedModal("Licence No");
-                    setLabelValue("Licence No"),
+                    setOpennedModal("advertisementCopy");
+                    setLabelValue(
+                      "Copies of advertisement for the sale of flat (Sec 24) along with register containing authenticated copies of Agreement entered between colonizer."
+                    ),
                       setSmShow(true),
                       console.log("modal open"),
                       setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -1451,11 +1683,11 @@ function renewalClu() {
                 </label>
                 <ReportProblemIcon
                   style={{
-                    color: fieldIconColors.developer,
+                    color: fieldIconColors.annualFinancial,
                   }}
                   onClick={() => {
-                    setOpennedModal("Licence No");
-                    setLabelValue("Licence No"),
+                    setOpennedModal("annualFinancial");
+                    setLabelValue(" Annual Financial statements duly audited/certifie and signed by Chartened Accountant."),
                       setSmShow(true),
                       console.log("modal open"),
                       setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -1512,11 +1744,11 @@ function renewalClu() {
                 </label>
                 <ReportProblemIcon
                   style={{
-                    color: fieldIconColors.developer,
+                    color: fieldIconColors.detailAccountNumber,
                   }}
                   onClick={() => {
-                    setOpennedModal("Licence No");
-                    setLabelValue("Licence No"),
+                    setOpennedModal("detailAccountNumber");
+                    setLabelValue("Detail of account number of schedule bank."),
                       setSmShow(true),
                       console.log("modal open"),
                       setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -1533,11 +1765,11 @@ function renewalClu() {
                       <input disabled type="text" className="form-control" placeholder="" />
                       <ReportProblemIcon
                         style={{
-                          color: fieldIconColors.developer,
+                          color: fieldIconColors.remark,
                         }}
                         onClick={() => {
-                          setOpennedModal("Licence No");
-                          setLabelValue("Licence No"),
+                          setOpennedModal("remark");
+                          setLabelValue("Remark"),
                             setSmShow(true),
                             console.log("modal open"),
                             setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -1573,11 +1805,11 @@ function renewalClu() {
                 </label>
                 <ReportProblemIcon
                   style={{
-                    color: fieldIconColors.developer,
+                    color: fieldIconColors.copiesOfCaAccount,
                   }}
                   onClick={() => {
-                    setOpennedModal("Licence No");
-                    setLabelValue("Licence No"),
+                    setOpennedModal("copiesOfCaAccount");
+                    setLabelValue("Copies of form AC account."),
                       setSmShow(true),
                       console.log("modal open"),
                       setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -1594,11 +1826,11 @@ function renewalClu() {
                       <input disabled type="text" className="form-control" placeholder="" />
                       <ReportProblemIcon
                         style={{
-                          color: fieldIconColors.developer,
+                          color: fieldIconColors.remark,
                         }}
                         onClick={() => {
-                          setOpennedModal("Licence No");
-                          setLabelValue("Licence No"),
+                          setOpennedModal("remark");
+                          setLabelValue("Remark"),
                             setSmShow(true),
                             console.log("modal open"),
                             setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
@@ -1652,12 +1884,48 @@ function renewalClu() {
                     </th>
                     <td style={{ textAlign: "center" }}>
                       <input disabled type="date" className="form-control" placeholder="" {...register("date")} />
+                      <ReportProblemIcon
+                        style={{
+                          color: fieldIconColors.date,
+                        }}
+                        onClick={() => {
+                          setOpennedModal("date");
+                          setLabelValue("Date of grant of OC"),
+                            setSmShow(true),
+                            console.log("modal open"),
+                            setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                        }}
+                      />
                     </td>
                     <td style={{ textAlign: "center" }}>
                       <input disabled type="text" className="form-control" readOnly placeholder="" {...register("tower")} />
+                      <ReportProblemIcon
+                        style={{
+                          color: fieldIconColors.tower,
+                        }}
+                        onClick={() => {
+                          setOpennedModal("tower");
+                          setLabelValue("Tower"),
+                            setSmShow(true),
+                            console.log("modal open"),
+                            setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                        }}
+                      />
                     </td>
                     <td style={{ textAlign: "center" }}>
                       <input disabled type="text" className="form-control" readOnly placeholder="" {...register("targetDate")} />
+                      <ReportProblemIcon
+                        style={{
+                          color: fieldIconColors.targetDate,
+                        }}
+                        onClick={() => {
+                          setOpennedModal("targetDate");
+                          setLabelValue("Target date for filling DOD"),
+                            setSmShow(true),
+                            console.log("modal open"),
+                            setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                        }}
+                      />
                     </td>
                     <td style={{ textAlign: "center" }}>
                       <label htmlFor=" dodFilled">
@@ -1669,6 +1937,18 @@ function renewalClu() {
                         &nbsp;&nbsp;
                         <input disabled {...register("dodFilled")} type="radio" value="2" id="no" /> &nbsp; No
                       </label>
+                      <ReportProblemIcon
+                        style={{
+                          color: fieldIconColors.dodFilled,
+                        }}
+                        onClick={() => {
+                          setOpennedModal("dodFilled");
+                          setLabelValue("Whether DOD filled or not"),
+                            setSmShow(true),
+                            console.log("modal open"),
+                            setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                        }}
+                      />
                       {watch("dodFilled") === "1" && (
                         <Row className="col-12">
                           <Col className="col-12">
@@ -1678,6 +1958,18 @@ function renewalClu() {
                               <option value="2">Delayed</option>
                               <option value="3">NA</option>
                             </select>
+                            <ReportProblemIcon
+                              style={{
+                                color: fieldIconColors.dodFiledDrop,
+                              }}
+                              onClick={() => {
+                                setOpennedModal("dodFiledDrop");
+                                setLabelValue("Select value"),
+                                  setSmShow(true),
+                                  console.log("modal open"),
+                                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                              }}
+                            />
                           </Col>
                         </Row>
                       )}
@@ -1692,23 +1984,21 @@ function renewalClu() {
                               </h2>
                             </Form.Label>{" "}
                             <input disabled type="text" placeholder="" className="form-control" readOnly {...register("composition")} />
+                            <ReportProblemIcon
+                              style={{
+                                color: fieldIconColors.composition,
+                              }}
+                              onClick={() => {
+                                setOpennedModal("composition");
+                                setLabelValue("Composition"),
+                                  setSmShow(true),
+                                  console.log("modal open"),
+                                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+                              }}
+                            />
                           </Col>
                         </Row>
                       )}
-                    </td>
-                    <td>
-                      <ReportProblemIcon
-                        style={{
-                          color: fieldIconColors.developer,
-                        }}
-                        onClick={() => {
-                          setOpennedModal("Licence No");
-                          setLabelValue("Licence No"),
-                            setSmShow(true),
-                            console.log("modal open"),
-                            setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
-                        }}
-                      />
                     </td>
                   </tr>
                 </tbody>
