@@ -165,12 +165,16 @@ const ServicePlanService = () => {
         servicePlanRes.shapeFileAsPerTemplate = data?.shapeFileAsPerTemplate ? data?.shapeFileAsPerTemplate : servicePlanRes.shapeFileAsPerTemplate
         servicePlanRes.autoCadFile = data?.autoCadFile ? data?.autoCadFile : servicePlanRes.autoCadFile
         servicePlanRes.certifieadCopyOfThePlan = data?.certifieadCopyOfThePlan ? data?.certifieadCopyOfThePlan : servicePlanRes.certifieadCopyOfThePlan
+        servicePlanRes.devName = devName
+        servicePlanRes.developmentPlan = developmentPlan
+        servicePlanRes.purpose = purpose
+        servicePlanRes.totalArea = totalArea
         const isvalidUpdate = checkValid(servicePlanRes)
         console.log({servicePlanRes, data, isvalidUpdate}, "jjjjjjjjjjjjjj");
-        // if(!isvalidUpdate){
-        //   console.log("Dont call update")
-        //   return null
-        // }
+        if(!isvalidUpdate){
+          console.log("Dont call update")
+          return null
+        }
         const updateRequest = {
           requestInfo: {
             api_id: "Rainmaker",

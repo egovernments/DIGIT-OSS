@@ -209,13 +209,16 @@ const electricalPlanService = () => {
         electricPlanRes.pdfFormat = data?.pdfFormat ? data?.pdfFormat : electricPlanRes.pdfFormat
         electricPlanRes.autoCad = data?.autoCad ? data?.autoCad : electricPlanRes.autoCad
         electricPlanRes.verifiedPlan = data?.verifiedPlan ? data?.verifiedPlan : electricPlanRes.verifiedPlan
-        
+        electricPlanRes.devName = devName
+        electricPlanRes.developmentPlan = developmentPlan
+        electricPlanRes.purpose = purpose
+        electricPlanRes.totalArea = totalArea
         const isvalidUpdate = checkValid(electricPlanRes)
         console.log({electricPlanRes, data, isvalidUpdate}, "jjjjjjjjjjjjjj");
-        // if(!isvalidUpdate){
-        //   console.log("Dont call update")
-        //   return null
-        // }
+        if(!isvalidUpdate){
+            console.log("Dont call update")
+          return null
+        }
 
         const updateRequest = {
           requestInfo: {
