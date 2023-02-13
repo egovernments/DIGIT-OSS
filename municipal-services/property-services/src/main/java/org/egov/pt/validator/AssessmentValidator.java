@@ -120,7 +120,9 @@ public class AssessmentValidator {
 		if (assessmentFromDB!=null && !CollectionUtils.isEmpty(assessmentFromDB.getDocuments()) && assessmentFromDB.getDocuments().size() > assessment.getDocuments().size()) {
 			errorMap.put("MISSING_DOCUMENTS", "Please send all the documents belonging to this assessment");
 		}
-		if (assessmentFromDB!=null && !CollectionUtils.isEmpty(assessmentFromDB.getUnitUsageList()) && assessmentFromDB.getUnitUsageList().size() > assessment.getUnitUsageList().size()) {
+		// When a property is converted from residential to VACANT land the property unit usage data won't be there
+		// in this case we have to skip this validation for this property type condition was introduced.
+		if (!property.getPropertyType().equalsIgnoreCase("VACANT") && assessmentFromDB!=null && !CollectionUtils.isEmpty(assessmentFromDB.getUnitUsageList()) && assessmentFromDB.getUnitUsageList().size() > assessment.getUnitUsageList().size()) {
 			errorMap.put("MISSING_UNITS", "Please send all the units belonging to this assessment");
 		}
 
