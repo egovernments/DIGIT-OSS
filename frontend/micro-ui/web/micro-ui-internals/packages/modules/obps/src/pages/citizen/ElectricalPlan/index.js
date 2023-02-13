@@ -33,6 +33,7 @@ const electricalPlanService = () => {
   const [applicationNumber, setApplicationNumber] = useState()
   const [applicationId, setApplicationId] = useState('')
   const [loiNumber, setLoiNumber] = useState("")
+  const [loiPatternErr, setLoiPatternErr] = useState(false)
   const [electricInfra, setElectricInfra] = useState("")
   const [electricDistribution, setElectricDistribution] = useState("")
   const [electricalCapacity, setElectricalCapacity] = useState("")
@@ -50,9 +51,21 @@ const electricalPlanService = () => {
   const [devName, setDevName] = useState("")
   const [purpose, setPurpose] = useState("")
   const [developmentPlan, setDevelopmentPlan] = useState("")
-  const [gstnumber, setGSTNumber] = useState("")
   const [totalArea, setTotalArea] = useState("")
-
+  const [drawingErr, setDrawingErr] = useState({
+    'selfCenteredDrawings': false,
+    'environmentalClearance': false,
+    'pdfFormat': false,
+    'autoCad': false,
+    'verifiedPlan': false
+  })
+  const [booleanErr, setBooleanErr] = useState({
+    'electricInfra': false,
+    'electricDistribution': false,
+    'electricalCapacity': false,
+    'switchingStation': false,
+    'LoadSancation': false
+  })
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [showToast, setShowToast] = useState(null);
   const [showToastError, setShowToastError] = useState(null);
@@ -66,6 +79,37 @@ const electricalPlanService = () => {
     return pattern.test(loiNumber);
   }
 
+  const checkUploadedImages = (data) => {
+    const keys = Object.keys(data)
+    const arr = ['selfCenteredDrawings','environmentalClearance', 'pdfFormat', 'autoCad', 'verifiedPlan']
+    for(let i=0; i<arr.length; i++){
+      if(!keys.includes(arr[i])){
+        drawingErr[arr[i]] = true
+        setDrawingErr({...drawingErr, [arr[i]]: true})
+      }
+    }
+    return true
+  }
+
+  const checkBoolean = (data) => {
+    const {electricInfra, electricDistribution, electricalCapacity, switchingStation, LoadSancation} = data
+    if(electricInfra === null){
+      setBooleanErr({...booleanErr, ['electricInfra']: true})
+    }
+    else if(electricDistribution === null){
+      setBooleanErr({...booleanErr, ['electricDistribution']: true})
+    }
+    else if(electricalCapacity === null){
+      setBooleanErr({...booleanErr, ['electricalCapacity']: true})
+    }
+    else if(switchingStation === null){
+      setBooleanErr({...booleanErr, ['switchingStation']: true})
+    }
+    else if(LoadSancation === null){
+      setBooleanErr({...booleanErr, ['LoadSancation']: true})
+    }
+  }
+
   const checkValid = (data) => {
     let isvalid = false
     if(getLoiPattern(data?.loiNumber)){
@@ -73,11 +117,9 @@ const electricalPlanService = () => {
     }
     else{
       isvalid = false
-      alert('Please enter valid LOI number')
+      setLoiPatternErr(true)
       return isvalid
     }
-    console.log(data?.LoadSancation, "aaaaaaaaa");
-    console.log(data?.electricDistribution, "bbbbb");
     if(
       data?.LoadSancation !== null &&
       data?.electricDistribution !==null && 
@@ -89,7 +131,8 @@ const electricalPlanService = () => {
       }
     else{
       isvalid = false
-      alert('Please check all mandatory points')
+      checkBoolean(data)
+      alert('Please select all boolean points')
       return isvalid
     }
     if(
@@ -103,33 +146,12 @@ const electricalPlanService = () => {
     }
     else{
       isvalid = false
-      alert('Please upload all the mandatory images')
+      checkUploadedImages(data)
       return isvalid
     } 
-    const checkImage = checkDuplicates(valid)
-    if(checkImage){
-      isvalid = false
-      alert('Please upload the seperate image for each and every field')
-      return isvalid
-    }
-    else{
-      isvalid = true
-    }
     return isvalid
   }
 
-  const checkDuplicates = (arr) => {
-    let count = {}
-    for(let i=0; i<arr.length; i++){
-      count[arr[i]] = (count[arr[i]] || 0) + 1
-    }
-    const arr1 = Object.values(count)
-    console.log({count, arr1});
-    if(arr1.some((e) => e > 1)) {
-      return true
-    }
-    return false
-  }
 
   const electricPlan = async (data) => {
     const token = window?.localStorage?.getItem("token");
@@ -242,25 +264,6 @@ const electricalPlanService = () => {
     }
   }
 
-  // const getDocumentData = async (file, fieldName) => {
-  //    setValid(arr => [...arr, file?.name])
-  //    console.log({valid}, "vvvvvvvvv");
-  //   const formData = new FormData();
-  //   formData.append("file", file);
-  //   formData.append("tenantId", "hr");
-  //   formData.append("module", "property-upload");
-  //   formData.append("tag", "tag-property");
- 
-  //   try {
-  //     const Resp = await axios.post("/filestore/v1/files", formData, {});
-  //     setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
-  //     setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
-      
-  //   } catch (error) {
-      
-  //     console.log(error.message);
-  //   }
-  // };
 
   const getDocumentData = async (file, fieldName) => {
     console.log("documentData", fieldName);
@@ -268,7 +271,7 @@ const electricalPlanService = () => {
       setShowToastError({ key: "error" });
       return;
     }
-
+    setDrawingErr({...drawingErr, [fieldName]: false})
     const formData = new FormData();
     formData.append("file", file);
     formData.append("tenantId", "hr");
@@ -328,7 +331,13 @@ const electricalPlanService = () => {
 
   const handleLoiNumber = async (e) => {
     e.preventDefault()
+    const isValidPattern = getLoiPattern(loiNumber)
+    if(!isValidPattern){
+      setLoiPatternErr(true)
+      return null
+    }
     const token = window?.localStorage?.getItem("token");
+    setLoiPatternErr(false)
    try {
     const loiRequest = {
       requestInfo: {
@@ -426,6 +435,7 @@ const electricalPlanService = () => {
               onChange={(e) => setLoiNumber(e.target.value)}
               value={loiNumber}
               />
+              {loiPatternErr ? <p style={{color: 'red'}}>Please Enter the valid LOI Number*</p> : " "}
             </Col>
             <Col className="col-2">
                 <button style={{transform: "translateY(35px)"}} type="submit" onClick={handleLoiNumber} id="btnSearch" class="btn btn-primary btn-md center-block">
@@ -587,9 +597,9 @@ const electricalPlanService = () => {
                     &nbsp;&nbsp;
                   </h2>
                 </Form.Label>
-
+                {/* {booleanErr?.electricInfra ? <p style={{color: 'red'}}>Please select electrical infrastructure*</p> : " "} */}
                 <Form.Check
-                  onChange={(e) => console.log(e)}
+                  onChange={(e) => setBooleanErr({...booleanErr, ['electricInfra']: false})}
                   value="Y"
                   checked={electricInfra === "Y" ? true : null}
                   type="radio"
@@ -600,7 +610,7 @@ const electricalPlanService = () => {
                   inline
                 ></Form.Check>
                 <Form.Check
-                  onChange={(e) => console.log(e)}
+                  onChange={(e) => setBooleanErr({...booleanErr, ['electricInfra']: false})}
                   value="N"
                   checked={electricInfra === "N" ? true : null}
                   type="radio"
@@ -620,7 +630,7 @@ const electricalPlanService = () => {
                   Provision of the electricity distribution in the project area by the instructions of the DHBVN{" "}
                   <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
                 </Form.Label>
-             
+                {/* {booleanErr?.electricDistribution ? <p style={{color: 'red'}}>Please select electrical distribution*</p> : " "} */}
               <Form.Check
                 onChange={(e) => console.log(e)}
                 value="Y"
@@ -652,7 +662,7 @@ const electricalPlanService = () => {
                 <Form.Label>
                   The capacity of the proposed electrical substation as per the requirement <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
                 </Form.Label>
-             
+                {/* {booleanErr?.electricalCapacity ? <p style={{color: 'red'}}>Please select electrical capacity*</p> : " "} */}
               <Form.Check
                 onChange={(e) => console.log(e)}
                 value="Y"
@@ -684,7 +694,7 @@ const electricalPlanService = () => {
                   Provision of 33 Kv switching station for the electrical infrastructure as per the approved layout plan
                   <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
                 </Form.Label>
-              
+                {/* {booleanErr?.LoadSancation ? <p style={{color: 'red'}}>Please select layout plan*</p> : " "} */}
               <Form.Check
                 onChange={(e) => console.log(e)}
                 value="Y"
@@ -715,7 +725,7 @@ const electricalPlanService = () => {
                 <Form.Label>
                   Load sanction approval as per the requirement <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
                 </Form.Label>
-              
+                {/* {booleanErr?.LoadSancation ? <p style={{color: 'red'}}>Please select load sanction*</p> : " "} */}
               <Form.Check
                 onChange={(e) => console.log(e)}
                 value="Y"
@@ -762,6 +772,7 @@ const electricalPlanService = () => {
                 </td>
                 <td component="th" scope="row">
                   <h2>Self-certified drawings from empanelled/certified architects that conform to the standard approved template as per the TCP layout plan / Site plan.</h2>
+                  {drawingErr.selfCenteredDrawings ? <p style={{color: 'red'}}>Please upload self-certified drawings from empanelled/certified architects*</p> : " "}
                 </td>
                 <td component="th" scope="row">
                 <label for='file-input-1'>
@@ -801,6 +812,8 @@ const electricalPlanService = () => {
                 </td>
                 <td component="th" scope="row">
                   <h2>Environmental Clearance.</h2>
+                  {drawingErr.environmentalClearance ? <p style={{color: 'red'}}>Please upload environmental clearance drawings*</p> : " "}
+
                 </td>
                 <td component="th" scope="row">
                 <label for='file-input-2'>
@@ -840,6 +853,7 @@ const electricalPlanService = () => {
                 </td>
                 <td component="th" scope="row">
                   <h2>Electrical plan PDF (OCR Compatible) + GIS format.</h2>
+                  {drawingErr.pdfFormat ? <p style={{color: 'red'}}>Please upload electrical plan pdf and gis format*</p> : " "}
                 </td>
                 <td component="th" scope="row">
                 <label for='file-input-3'>
@@ -879,6 +893,8 @@ const electricalPlanService = () => {
                 </td>
                 <td component="th" scope="row">
                   <h2>Electrical plan in AutoCAD (DXF) file.</h2>
+                  {drawingErr.autoCad ? <p style={{color: 'red'}}>Please upload electrical plan in autocad file*</p> : " "}
+
                 </td>
                 <td component="th" scope="row">
                 <label for='file-input-4'>
@@ -918,6 +934,7 @@ const electricalPlanService = () => {
                 </td>
                 <td component="th" scope="row">
                   <h2>Certified copy of the Electrical plan verified by a third party.</h2>
+                  {drawingErr.verifiedPlan ? <p style={{color: 'red'}}>Please upload certified copy of the electrical plan*</p> : " "}
                 </td>
                 <td component="th" scope="row">
                 <label for='file-input-5'>
@@ -992,7 +1009,6 @@ const electricalPlanService = () => {
           isDleteBtn={true}
           onClose={() => {
             setShowToast(null);
-            setError(null);
           }}
         />
       )}
@@ -1003,7 +1019,6 @@ const electricalPlanService = () => {
           isDleteBtn={true}
           onClose={() => {
             setShowToastError(null);
-            setError(null);
           }}
         />
       )}
