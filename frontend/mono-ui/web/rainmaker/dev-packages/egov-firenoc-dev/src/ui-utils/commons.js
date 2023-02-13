@@ -211,7 +211,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       let finalUoms = [];
       allUoms.forEach(uom => {
         let value = get(building.uomsMap, uom);
-        value &&
+        (value|| value == 0) &&
           finalUoms.push({
             code: uom,
             value: parseInt(value),
