@@ -33,8 +33,10 @@ const PersonalinfoChild = (props) => {
   const [smShow, setSmShow] = useState(false);
   const [labelValue, setLabelValue] = useState("");
   const Colors = {
+    conditional:"#2874A6",
     approved:"#09cb3d",
     disapproved:"#ff0000",
+   
     info:"#FFB602"
   }
   const [selectedFieldData,setSelectedFieldData] = useState();
@@ -45,9 +47,12 @@ const PersonalinfoChild = (props) => {
     authPersonName: Colors.info,
     authMobileNo1: Colors.info,
     authMobileNo2: Colors.info,
-    emailId: Colors.info,
+    developerEmail: Colors.info,
+    developerMobileNo :Colors.info,
+    developerdob : Colors.info,
+    developeremail:Colors.info,
     pan: Colors.info,
-    address: Colors.info,
+    registeredAddress: Colors.info,
     city: Colors.info,
     pin: Colors.info,
     tehsil: Colors.info,
@@ -59,18 +64,30 @@ const PersonalinfoChild = (props) => {
     parmanentAddress: Colors.info,
     addressForCommunication: Colors.info,
     authPerson: Colors.info,
+    authPan: Colors.info,
     emailForCommunication: Colors.info,
     authorized : Colors.info,
     developerType: Colors.info,
     Address:Colors.info,
     cin_Number: Colors.info,
-    developeremail: Colors.info
+    developeremail: Colors.info,
+    developerName: Colors.info,
+    developerPan: Colors.info,
+    registeredAddress2: Colors.info,
+    gst_Number: Colors.info,
+    emailId: Colors.info,
+    uploadDigitalSignaturePdf: Colors.info,
+    uploadBoardResolution: Colors.info,
+    shareholdingPatterns : Colors.info,
+    DirectorsInformation : Colors.info,
+    directorsInformation : Colors.info
+    
     })
 
-  const fieldIdList = [{label:"Developer",key:"developer"},{label:"Authorized Person Name",key:"authPersonName"},{label:"Autrhoized Mobile No",key:"authMobileNo1"},{label:"Alternate MobileNo. 2 ",key:"authMobileNo2"},{label:"Email ID",key:"emailId"},{label:"PAN No.",key:"pan"},{label:"Address  1",key:"address"},{label:"Village/City",key:"city"},{label:"Pincode",key:"pin"},{label:"Tehsil",key:"tehsil"},{label:"District",key:"district"},{label:"State",key:"state"},{label:"Status (Individual/ Company/ Firm/ LLP etc.)",key:"type"},{label:"LC-I signed by",key:"lciSignedBy"},{label:"If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)",key:"lciNotSigned"},{label: "Permanent address in case of individual/ registered office address in case other than individual", key:"parmanentAddress"},{label:"Address for communication",key:"addressForCommunication"},{label:"Name of the authorized person to sign the application",key:"authorized"},{label:"Email ID for communication",key:"emailForCommunication"}, {label:"Developer Type",key:"developerType"},{label:"Address",key:"Address"},{label:"Developer",key:"cin_Number"}, {label:"Email Id",key:"developeremail"} ]
+  const fieldIdList = [{label:"Developer",key:"developer"},{label:"Authorized Person Name",key:"authPersonName"},{label:"Autrhoized Mobile No",key:"authMobileNo1"},{label:"Alternate MobileNo. 2 ",key:"authMobileNo2"},{label:"Developer's Email",key:"developerEmail"},{label:"PAN No.",key:"pan"},{label:"Village/City",key:"city"},{label:"Pincode",key:"pin"},{label:"Tehsil",key:"tehsil"},{label:"District",key:"district"},{label:"State",key:"state"},{label:"Status (Individual/ Company/ Firm/ LLP etc.)",key:"type"},{label:"LC-I signed by",key:"lciSignedBy"},{label:"If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)",key:"lciNotSigned"},{label: "Permanent address in case of individual/ registered office address in case other than individual", key:"parmanentAddress"},{label:"Address for communication",key:"addressForCommunication"},{label:"Name of the authorized person to sign the application",key:"authorized"},{label:"Emailid for Authorized signatory",key:"emailForCommunication"}, {label:"Developer Type",key:"developerType"},{label:"Address",key:"registeredAddress"},{label:"CSR Number",key:"cin_Number"}, {label:"Email Id",key:"developeremail"},{label:"Developer's Name",key:"developerName"},{label:"Developer's PAN",key:"developerPan"},{label:"Registered Address",key:"registeredAddress2"},{label:"GST Number",key:"gst_Number"},{label:"Board Resolution",key:"uploadBoardResolution"},{label:"Digital Signature",key:"uploadDigitalSignaturePdf"},{label:"Developer's Mobile No",key:"developerMobileNo"},{label:"Developer's DOB",key:"developerdob"},{label:"Pan No",key:"authPan"} ,{label:"Shareholding Patterns",key:"shareholdingPatterns"},{label:"Director Information as per MCA",key:"DirectorsInformation"},{label:"Director Information",key:"directorsInformation"}]
 
 
-
+  
 
 
   const personalinfo = props.personalinfo;
@@ -86,7 +103,7 @@ const PersonalinfoChild = (props) => {
         console.log("filteration value", fieldPresent,fieldPresent[0]?.isApproved);
         if(fieldPresent && fieldPresent.length){
           console.log("filteration value1", fieldPresent,fieldPresent[0]?.isApproved);
-          tempFieldColorState = {...tempFieldColorState,[item.key]:fieldPresent[0].isApproved?Colors.approved:Colors.disapproved}
+          tempFieldColorState = {...tempFieldColorState,[item.key]:fieldPresent[0].isApproved === "approved" ?Colors.approved: fieldPresent[0].isApproved === "disapproved" ? Colors.disapproved:fieldPresent[0].isApproved === "conditional" ? Colors.conditional:Colors.info}
          
         }
       }
@@ -123,6 +140,9 @@ const PersonalinfoChild = (props) => {
     console.log("here",openedModal,data);
     if(openedModal && data){
       setFieldIconColors({...fieldIconColors,[openedModal]:data.data.isApproved?Colors.approved:Colors.disapproved})
+
+      
+      // fieldPresent[0].isApproved === "approved" ?Colors.approved: fieldPresent[0].isApproved === "disapproved" ? Colors.disapproved:fieldPresent[0].isApproved === "conditional" ? Colors.conditional:Colors.info
     }
       setOpennedModal("");
       setLabelValue("");
@@ -144,7 +164,7 @@ const PersonalinfoChild = (props) => {
           <div className={classes.fieldContainer}>
             <Form.Control
               className={classes.formControl}
-              placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.companyName : null}
+              placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.name : null}
               disabled
             ></Form.Control>
             &nbsp;&nbsp;
@@ -156,13 +176,17 @@ const PersonalinfoChild = (props) => {
                 
                 color:fieldIconColors.developer}}
               onClick={() => {
-                  setOpennedModal("developer")
+                  // if(false){
+                    setOpennedModal("developer")
                   setLabelValue("Developer"),
                   setSmShow(true),
                   console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.companyName : null);
+                  setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.name : null);
+                  // }
+                  
+
               }}
-            ></ReportProblemIcon>
+          ></ReportProblemIcon>
             <ModalChild
               labelmodal={labelValue}
               passmodalData={handlemodaldData}
@@ -194,9 +218,9 @@ const PersonalinfoChild = (props) => {
               style={{
                 display: hideRemarks || hideRemarksPatwari ?"none":"block",
                 
-                color:fieldIconColors.developer}}
+                color:fieldIconColors.registeredAddress}}
               onClick={() => {
-                  setOpennedModal("Address")
+                  setOpennedModal("registeredAddress")
                   setLabelValue("Address"),
                   setSmShow(true),
                   console.log("modal open"),
@@ -216,7 +240,7 @@ const PersonalinfoChild = (props) => {
           <div className={classes.fieldContainer}>
             <Form.Control
               className={classes.formControl}
-              placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.email : null}
+              placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.emailId : null}
               disabled
             ></Form.Control>
             &nbsp;&nbsp;
@@ -232,7 +256,7 @@ const PersonalinfoChild = (props) => {
                   setLabelValue("Email Id"),
                   setSmShow(true),
                   console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.email: null);
+                  setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.emailId: null);
               }}
             ></ReportProblemIcon>
            
@@ -310,7 +334,7 @@ const PersonalinfoChild = (props) => {
         <Col md={4} xxl lg="4">
           <div>
             <Form.Label>
-              <h5 className={classes.formLabel}>CSR Number &nbsp;</h5>
+              <h5 className={classes.formLabel}>CIN Number &nbsp;</h5>
             </Form.Label>
             <span className={classes.required}>*</span> &nbsp;&nbsp;
           </div>
@@ -339,7 +363,7 @@ const PersonalinfoChild = (props) => {
           </div>
         </Col>
          }
-         {personalinfo?.devDetail?.addInfo?.showDevTypeFields === "Company" && 
+         {/* {personalinfo?.devDetail?.addInfo?.showDevTypeFields === "Company" && 
         <Col md={4} xxl lg="4">
           <div>
             <Form.Label>
@@ -372,7 +396,7 @@ const PersonalinfoChild = (props) => {
           </div>
         </Col>
          }
-       
+        */}
       </Row>
       {personalinfo?.devDetail?.addInfo?.showDevTypeFields === "Individual"  && 
       // "Limited Liability Partnership"  && "Hindu Undivided Family" && "Partnership Firm" &&  "Proprietorship Firm" &&
@@ -397,7 +421,7 @@ const PersonalinfoChild = (props) => {
                           <ReportProblemIcon
                             style={{
                               display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                              color: fieldIconColors.name
+                              color: fieldIconColors.developerName
                             }}
                             onClick={() => {
                               setOpennedModal("developerName")
@@ -429,7 +453,7 @@ const PersonalinfoChild = (props) => {
                           <ReportProblemIcon
                             style={{
                               display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                              color: fieldIconColors.emailId
+                              color: fieldIconColors.developerEmail
                             }}
                             onClick={() => {
                               setOpennedModal("developerEmail")
@@ -458,11 +482,11 @@ const PersonalinfoChild = (props) => {
                           <ReportProblemIcon
                             style={{
                               display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                              color: fieldIconColors.mobileNumberUser
+                              color: fieldIconColors.developerMobileNo
                             }}
                             onClick={() => {
                               setOpennedModal("developerMobileNo")
-                              setLabelValue("Developer's Mobile No."),
+                              setLabelValue("Developer's Mobile No"),
                                 setSmShow(true),
                                 console.log("modal open"),
                                 setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.mobileNumberUser : null);
@@ -489,11 +513,11 @@ const PersonalinfoChild = (props) => {
                           <ReportProblemIcon
                             style={{
                               display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                              color: fieldIconColors.name
+                              color: fieldIconColors.developerdob 
                             }}
                             onClick={() => {
-                              setOpennedModal("developerName")
-                              setLabelValue("Developer's Name"),
+                              setOpennedModal("developerdob")
+                              setLabelValue("Developer's DOB"),
                                 setSmShow(true),
                                 console.log("modal open"),
                                 setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.dob : null);
@@ -515,20 +539,20 @@ const PersonalinfoChild = (props) => {
 
                         <div style={{ display: "flex" }}>
                           <Form.Control className={classes.formControl}
-                            placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.pan : null}
+                            placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.PanNumber : null}
                             disabled></Form.Control>
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
                               display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                              color: fieldIconColors.name
+                              color: fieldIconColors.developerPan
                             }}
                             onClick={() => {
-                              setOpennedModal("developerName")
-                              setLabelValue("Developer's Name"),
+                              setOpennedModal("developerPan")
+                              setLabelValue("Developer's PAN"),
                                 setSmShow(true),
                                 console.log("modal open"),
-                                setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.pan : null);
+                                setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.PanNumber : null);
                             }}
                           ></ReportProblemIcon>
 
@@ -553,11 +577,11 @@ const PersonalinfoChild = (props) => {
                           <ReportProblemIcon
                             style={{
                               display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                              color: fieldIconColors.name
+                              color: fieldIconColors.registeredAddress2
                             }}
                             onClick={() => {
-                              setOpennedModal("developerName")
-                              setLabelValue("Developer's Name"),
+                              setOpennedModal("registeredAddress2")
+                              setLabelValue("Registered Address"),
                                 setSmShow(true),
                                 console.log("modal open"),
                                 setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.registeredAddress : null);
@@ -574,27 +598,27 @@ const PersonalinfoChild = (props) => {
                         <div>
                           <Form.Label>
                             
-                            <h5 className={classes.formLabel}>Registered Address &nbsp;</h5>
+                            <h5 className={classes.formLabel}>GST Number &nbsp;</h5>
                           </Form.Label>
                           <span style={{ color: "red" }}>*</span>
                         </div>
 
                         <div style={{ display: "flex" }}>
                           <Form.Control className={classes.formControl}
-                            placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.gst : null}
+                            placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.gst_Number : null}
                             disabled></Form.Control>
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
                               display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                              color: fieldIconColors.name
+                              color: fieldIconColors.gst_Number
                             }}
                             onClick={() => {
-                              setOpennedModal("developerName")
-                              setLabelValue("Developer's Name"),
+                              setOpennedModal("gst_Number")
+                              setLabelValue("GST Number"),
                                 setSmShow(true),
                                 console.log("modal open"),
-                                setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.gst : null);
+                                setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.gst_Number : null);
                             }}
                           ></ReportProblemIcon>
 
@@ -609,7 +633,26 @@ const PersonalinfoChild = (props) => {
   <br></br>
       {personalinfo?.devDetail?.addInfo?.showDevTypeFields ===  "Company" && 
       <div>
-                    <h5 className="card-title fw-bold" > &nbsp; &nbsp;&nbsp; Directors Information</h5>
+        <div div style={{ display: "flex" }}>
+        <h5 className="card-title fw-bold" > &nbsp; &nbsp;&nbsp; Directors Information &nbsp;&nbsp;</h5>
+
+                  {/* <div className="btn btn-sm col-md-4"> */}
+                        <ReportProblemIcon
+              style={{
+                display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                
+                color: fieldIconColors.directorsInformation}}
+              onClick={() => {
+                setOpennedModal("directorsInformation")
+                setLabelValue("Director Information"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution: null);
+              }}
+            ></ReportProblemIcon>
+                        {/* </div> */}
+                        </div>
+                    
                 <div className="card-body">
                   <div className="table-bd">
                     <table className="table table-bordered">
@@ -662,8 +705,26 @@ const PersonalinfoChild = (props) => {
                   </div>
                   </div>
                   <br></br>
+                  <div div style={{ display: "flex" }}>
+                  <h5 className="card-title fw-bold" > &nbsp;&nbsp; 1. Director Information as per MCA &nbsp;&nbsp;</h5>
 
-                  <h5 className="card-title fw-bold" > &nbsp; 1. Director Information as per MCA</h5>
+                  {/* <div className="btn btn-sm col-md-4"> */}
+                        <ReportProblemIcon
+              style={{
+                display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                
+                color: fieldIconColors.DirectorsInformation}}
+              onClick={() => {
+                setOpennedModal("DirectorsInformation")
+                setLabelValue("Director Information as per MCA"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution: null);
+              }}
+            ></ReportProblemIcon>
+                        {/* </div> */}
+                        </div>
+                  
                 <div className="card-body">
                   <div className="table-bd">
                     <table className="table table-bordered">
@@ -715,8 +776,25 @@ const PersonalinfoChild = (props) => {
                     </table>
                   </div>
                   </div>
-                  
-                  <h5 className="card-title fw-bold"> &nbsp;&nbsp;&nbsp; Shareholding Patterns</h5>
+                  <div div style={{ display: "flex" }}>
+                  <h5 className="card-title fw-bold"> &nbsp;&nbsp;&nbsp; Shareholding Patterns &nbsp;&nbsp; </h5>
+
+                  {/* <div className="btn btn-sm col-md-4"> */}
+                        <ReportProblemIcon
+              style={{
+                display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                
+                color: fieldIconColors.shareholdingPatterns}}
+              onClick={() => {
+                setOpennedModal("shareholdingPatterns")
+                setLabelValue("Shareholding Patterns"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution: null);
+              }}
+            ></ReportProblemIcon>
+                        {/* </div> */}
+                        </div>
                   <div className="card-body">
                     <div className="table-bd">
                       <table className="table table-bordered">
@@ -758,21 +836,7 @@ const PersonalinfoChild = (props) => {
                                 <FileDownload color="primary" className="mx-1" />
                         </IconButton>
                         </div>
-                        <div className="btn btn-sm col-md-4">
-                        <ReportProblemIcon
-              style={{
-                display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                
-                color: fieldIconColors.pin}}
-              onClick={() => {
-                setOpennedModal("pin")
-                setLabelValue("Pincode"),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution: null);
-              }}
-            ></ReportProblemIcon>
-                        </div>
+                       
                                   </div>
                                 </td>
                               </tr>
@@ -903,11 +967,11 @@ const PersonalinfoChild = (props) => {
               style={{
                 display: hideRemarks || hideRemarksPatwari ?"none":"block",
                 
-                color: fieldIconColors.pan
+                color: fieldIconColors.authPan
               }}
               onClick={() => {
-                setOpennedModal("pan")
-                setLabelValue("Pan No."),
+                setOpennedModal("authPan")
+                setLabelValue("Pan No"),
                   setSmShow(true),
                   console.log("modal open"),
                   setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.pan : null);
@@ -947,10 +1011,10 @@ const PersonalinfoChild = (props) => {
               style={{
                 display: hideRemarks || hideRemarksPatwari ?"none":"block",
                 
-                color: fieldIconColors.city}}
+                color: fieldIconColors.uploadDigitalSignaturePdf}}
               onClick={() => {
-                setOpennedModal("city")
-                setLabelValue("Village/City"),
+                setOpennedModal("uploadDigitalSignaturePdf")
+                setLabelValue("Digital Signature"),
                   setSmShow(true),
                   console.log("modal open"),
                   setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf : null);
@@ -996,8 +1060,8 @@ const PersonalinfoChild = (props) => {
                 
                 color: fieldIconColors.pin}}
               onClick={() => {
-                setOpennedModal("pin")
-                setLabelValue("Pincode"),
+                setOpennedModal("uploadBoardResolution")
+                setLabelValue("Board Resolution"),
                   setSmShow(true),
                   console.log("modal open"),
                   setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution: null);

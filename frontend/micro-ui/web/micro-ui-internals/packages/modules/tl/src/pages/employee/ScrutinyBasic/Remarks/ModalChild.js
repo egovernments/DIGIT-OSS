@@ -45,7 +45,8 @@ function ModalChild(props) {
           comment: RemarksDeveloper.data,
           fieldValue: inputFieldValue,
           fieldIdL: props.labelmodal,
-          isApproved: status === "approved" ? true : false,
+          isApproved: status,
+          isLOIPart: status === "disapproved" ? false : true ,
           userid: userInfo?.id || null,
           serviceId: "123",
           documentId: null,
@@ -81,6 +82,8 @@ function ModalChild(props) {
       setDeveloperRemarks({ data: "" });
     }
   }, [props.selectedFieldData]);
+
+  console.log("Isdata" , status )
 
   return (
     <Modal
@@ -136,6 +139,18 @@ function ModalChild(props) {
           id="default-radio"
           // label={<CancelIcon color="error" />}
           label="Disapproved"
+          name="group0"
+          inline
+        ></Form.Check>
+        <Form.Check
+          checked={status === "conditional"}
+          onChange={() => {
+            setStatus("conditional");
+          }}
+          type="radio"
+          id="default-radio"
+          // label={<CheckCircleIcon color="success"></CheckCircleIcon>}
+          label="conditional"
           name="group0"
           inline
         ></Form.Check>

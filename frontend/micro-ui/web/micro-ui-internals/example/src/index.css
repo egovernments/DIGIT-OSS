@@ -15595,6 +15595,58 @@ input[type=number], .checkbox-wrap .input-emp[type=number] {
   justify-content: right;
   margin-right: 5px;
 }
+/* //////////////////////////////////////////////////////////////////// */
 
+.head-application{
+  top: 77px;
+  left: 132px;
+  padding: 5px;
+  font-size: 14px;
+  height: 60px;
+  line-height: var(--bg-opacity) -50 !important;
+  position: fixed;
+  z-index: 9;
+  background-color: rgb(255, 217, 84);
+  margin-bottom: 2px;
+ 
+  max-width: 89%;
+  min-width: 89%;
+  margin: 2;
+  margin-top: 10px;
+  border-radius: 2px;
+}
+/* .{style={{top: 80, height:1500 }}} */
+.head-font{
+  font-size: 15px;
+  padding-left: 10px;
+  
+  
+}
+/* .formColorEmp {
+ background-color: #efecbe;
+} */
+/* .head-application {
+ 
+  top: 77px;
+  left: 132px;
+ 
+  padding-bottom: -17px;
+  font-size: 14px;
+  height: 100px;
+  line-height: 2;
+  position: fixed;
+  z-index: 9;
+  background-color: black;
+ 
+  max-width: 94%;
+  min-width: 89%;
+  margin: 2;
+} */
+/* .colorfrom {
+  background-color: antiquewhite;
+} */
 
-
+.formlist{
+  /* margin-top: 2%; */
+  padding: 10;
+}

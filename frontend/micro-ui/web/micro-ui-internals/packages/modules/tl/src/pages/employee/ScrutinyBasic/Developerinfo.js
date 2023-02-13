@@ -203,276 +203,276 @@ const Developerinfo = (props) => {
 
   console.log(uncheckedValue.indexOf("developer"));
 
-  const developerInputFiledColor = uncheckedValue.filter((obj) => {
-    return obj.label === "Whether licence applied for additional area ?";
-  });
-  const developerInputCheckedFiledColor = checkValue.filter((obj) => {
-    return obj.label === "Whether licence applied for additional area ?";
-  });
-  // console.log("color from array", developerInputFiledColor);
+  // const developerInputFiledColor = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Whether licence applied for additional area ?";
+  // });
+  // const developerInputCheckedFiledColor = checkValue.filter((obj) => {
+  //   return obj.label === "Whether licence applied for additional area ?";
+  // });
+  // // console.log("color from array", developerInputFiledColor);
 
-  const developerInputFiledColor1 = uncheckedValue.filter((obj) => {
-    return obj.label === "License No. of Parent License";
-  });
-  const developerInputCheckedFiledColor1 = checkValue.filter((obj) => {
-    return obj.label === "License No. of Parent License";
-  });
-  const developerInputFiledColor2 = uncheckedValue.filter((obj) => {
-    return obj.label === "Potential Zone:";
-  });
-  const developerInputCheckedFiledColor2 = checkValue.filter((obj) => {
-    return obj.label === "Potential Zone:";
-  });
-  const developerInputFiledColor3 = uncheckedValue.filter((obj) => {
-    return obj.label === "Site Location Purpose";
-  });
-  const developerInputCheckedFiledColor3 = checkValue.filter((obj) => {
-    return obj.label === "Site Location Purpose";
-  });
-  const developerInputFiledColor4 = uncheckedValue.filter((obj) => {
-    return obj.label === "Approach Type (Type of Policy)";
-  });
-  const developerInputCheckedFiledColor4 = checkValue.filter((obj) => {
-    return obj.label === "Approach Type (Type of Policy)";
-  });
-  const developerInputFiledColor5 = uncheckedValue.filter((obj) => {
-    return obj.label === "Approach Road Width";
-  });
-  const developerInputCheckedFiledColor5 = checkValue.filter((obj) => {
-    return obj.label === "Approach Road Width";
-  });
-  const developerInputFiledColor6 = uncheckedValue.filter((obj) => {
-    return obj.label === "Specify Other";
-  });
-  const developerInputCheckedFiledColor6 = checkValue.filter((obj) => {
-    return obj.label === "Specify Other";
-  });
-  const developerInputFiledColor7 = uncheckedValue.filter((obj) => {
-    return obj.label === "Type of land";
-  });
-  const developerInputCheckedFiledColor7 = checkValue.filter((obj) => {
-    return obj.label === "Type of land";
-  });
-  const developerInputFiledColor8 = uncheckedValue.filter((obj) => {
-    return obj.label === "Third-party right created";
-  });
-  const developerInputCheckedFiledColor8 = checkValue.filter((obj) => {
-    return obj.label === "Third-party right created";
-  });
-  const developerInputFiledColor9 = uncheckedValue.filter((obj) => {
-    return obj.label === "(ii)Whether licence applied under Migration policy?";
-  });
-  const developerInputCheckedFiledColor9 = checkValue.filter((obj) => {
-    return obj.label === "(ii)Whether licence applied under Migration policy?";
-  });
-  const developerInputFiledColor10 = uncheckedValue.filter((obj) => {
-    return obj.label === "2. Any encumbrance with respect to following";
-  });
-  const developerInputCheckedFiledColor10 = checkValue.filter((obj) => {
-    return obj.label === "2. Any encumbrance with respect to following";
-  });
-  const developerInputFiledColor11 = uncheckedValue.filter((obj) => {
-    return obj.label === "(ii) Existing litigation, if any, concerning applied land including co-sharers and collaborator";
-  });
-  const developerInputCheckedFiledColor11 = checkValue.filter((obj) => {
-    return obj.label === "(ii) Existing litigation, if any, concerning applied land including co-sharers and collaborator";
-  });
-  const developerInputFiledColor12 = uncheckedValue.filter((obj) => {
-    return obj.label === "(iii) Court orders, if any, affecting applied land";
-  });
-  const developerInputCheckedFiledColor12 = checkValue.filter((obj) => {
-    return obj.label === "(iii) Court orders, if any, affecting applied land";
-  });
-  const developerInputFiledColor13 = uncheckedValue.filter((obj) => {
-    return obj.label === "(iv) Any insolvency/liquidation proceedings against the land owner(s)/ collaborating developed ";
-  });
-  const developerInputCheckedFiledColor13 = checkValue.filter((obj) => {
-    return obj.label === "(iv) Any insolvency/liquidation proceedings against the land owner(s)/ collaborating developed ";
-  });
-  const developerInputFiledColor14 = uncheckedValue.filter((obj) => {
-    return obj.label === "(a)As per applied land (Yes/No)";
-  });
-  const developerInputCheckedFiledColor14 = checkValue.filter((obj) => {
-    return obj.label === "(a)As per applied land (Yes/No)";
-  });
-  const developerInputFiledColor15 = uncheckedValue.filter((obj) => {
-    return obj.label === "Revenue rasta";
-  });
-  const developerInputCheckedFiledColor15 = checkValue.filter((obj) => {
-    return obj.label === "Revenue rasta";
-  });
-  const developerInputFiledColor16 = uncheckedValue.filter((obj) => {
-    return obj.label === "Watercourse running";
-  });
-  const developerInputCheckedFiledColor16 = checkValue.filter((obj) => {
-    return obj.label === "Watercourse running";
-  });
-  const developerInputFiledColor17 = uncheckedValue.filter((obj) => {
-    return obj.label === "(d)Whether in Compact Block (Yes/No)";
-  });
-  const developerInputCheckedFiledColor17 = checkValue.filter((obj) => {
-    return obj.label === "(d)Whether in Compact Block (Yes/No)";
-  });
-  const developerInputFiledColor18 = uncheckedValue.filter((obj) => {
-    return obj.label === "Land Sandwiched";
-  });
-  const developerInputCheckedFiledColor18 = checkValue.filter((obj) => {
-    return obj.label === "Land Sandwiched";
-  });
-  const developerInputFiledColor19 = uncheckedValue.filter((obj) => {
-    return obj.label === "(f)Acquisition status (Yes/No)";
-  });
-  const developerInputCheckedFiledColor19 = checkValue.filter((obj) => {
-    return obj.label === "(f)Acquisition status (Yes/No)";
-  });
-  const developerInputFiledColor20 = uncheckedValue.filter((obj) => {
-    return obj.label === "Date of section 6 notification";
-  });
-  const developerInputCheckedFiledColor20 = checkValue.filter((obj) => {
-    return obj.label === "Date of section 6 notification";
-  });
-  const developerInputFiledColor21 = uncheckedValue.filter((obj) => {
-    return obj.label === "Orders Upload";
-  });
-  const developerInputCheckedFiledColor21 = checkValue.filter((obj) => {
-    return obj.label === "Orders Upload";
-  });
-  const developerInputFiledColor22 = uncheckedValue.filter((obj) => {
-    return obj.label === "(h) Whether land compensation received";
-  });
-  const developerInputCheckedFiledColor22 = checkValue.filter((obj) => {
-    return obj.label === "(h) Whether land compensation received";
-  });
-  const developerInputFiledColor23 = uncheckedValue.filter((obj) => {
-    return obj.label === "Status of release";
-  });
-  const developerInputCheckedFiledColor23 = checkValue.filter((obj) => {
-    return obj.label === "Status of release";
-  });
-  const developerInputFiledColor24 = uncheckedValue.filter((obj) => {
-    return obj.label === "Date of Award";
-  });
-  const developerInputCheckedFiledColor24 = checkValue.filter((obj) => {
-    return obj.label === "Date of Award";
-  });
-  const developerInputFiledColor25 = uncheckedValue.filter((obj) => {
-    return obj.label === "Date of Release";
-  });
-  const developerInputCheckedFiledColor25 = checkValue.filter((obj) => {
-    return obj.label === "Date of Release";
-  });
-  const developerInputFiledColor26 = uncheckedValue.filter((obj) => {
-    return obj.label === "Site Details";
-  });
-  const developerInputCheckedFiledColor26 = checkValue.filter((obj) => {
-    return obj.label === "Site Details";
-  });
-  const developerInputFiledColor27 = uncheckedValue.filter((obj) => {
-    return (
-      obj.label === "whether the applied site is approachable from the proposed 18/24 m internal sectoral plan road/sector dividing road. (yes/no)"
-    );
-  });
-  const developerInputCheckedFiledColor27 = checkValue.filter((obj) => {
-    return (
-      obj.label === "whether the applied site is approachable from the proposed 18/24 m internal sectoral plan road/sector dividing road. (yes/no)"
-    );
-  });
-  const developerInputFiledColor28 = uncheckedValue.filter((obj) => {
-    return obj.label === "(a)vacant: (Yes/No)";
-  });
-  const developerInputCheckedFiledColor28 = checkValue.filter((obj) => {
-    return obj.label === "(a)vacant: (Yes/No)";
-  });
-  const developerInputFiledColor29 = uncheckedValue.filter((obj) => {
-    return obj.label === "(b)Construction: (Yes/No)";
-  });
-  const developerInputCheckedFiledColor29 = checkValue.filter((obj) => {
-    return obj.label === "(b)Construction: (Yes/No)";
-  });
-  const developerInputFiledColor30 = uncheckedValue.filter((obj) => {
-    return obj.label === "(c)HT line";
-  });
-  const developerInputCheckedFiledColor30 = checkValue.filter((obj) => {
-    return obj.label === "(c)HT line";
-  });
-  const developerInputFiledColor31 = uncheckedValue.filter((obj) => {
-    return obj.label === "(d) IOC Gas Pipeline";
-  });
-  const developerInputCheckedFiledColor31 = checkValue.filter((obj) => {
-    return obj.label === "(d) IOC Gas Pipeline";
-  });
-  const developerInputFiledColor32 = uncheckedValue.filter((obj) => {
-    return obj.label === "(e)Nallah";
-  });
-  const developerInputCheckedFiledColor32 = checkValue.filter((obj) => {
-    return obj.label === "(e)Nallah";
-  });
-  const developerInputFiledColor33 = uncheckedValue.filter((obj) => {
-    return obj.label === "(f)Any revenue rasta/road";
-  });
-  const developerInputCheckedFiledColor33 = checkValue.filter((obj) => {
-    return obj.label === "(f)Any revenue rasta/road";
-  });
-  const developerInputFiledColor34 = uncheckedValue.filter((obj) => {
-    return obj.label === "(g)Any marginal land";
-  });
-  const developerInputCheckedFiledColor34 = checkValue.filter((obj) => {
-    return obj.label === "(g)Any marginal land";
-  });
-  const developerInputFiledColor35 = uncheckedValue.filter((obj) => {
-    return obj.label === "Utility Line";
-  });
-  const developerInputCheckedFiledColor35 = checkValue.filter((obj) => {
-    return obj.label === "Utility Line";
-  });
-  const developerInputFiledColor36 = uncheckedValue.filter((obj) => {
-    return obj.label === "5. Enclose the following documents as Annexures";
-  });
-  const developerInputCheckedFiledColor36 = checkValue.filter((obj) => {
-    return obj.label === "5. Enclose the following documents as Annexures";
-  });
-  const developerInputFiledColor37 = uncheckedValue.filter((obj) => {
-    return obj.label === "Land schedule";
-  });
-  const developerInputCheckedFiledColor37 = checkValue.filter((obj) => {
-    return obj.label === "Land schedule";
-  });
-  const developerInputFiledColor38 = uncheckedValue.filter((obj) => {
-    return obj.label === "Copy of Mutation";
-  });
-  const developerInputCheckedFiledColor38 = checkValue.filter((obj) => {
-    return obj.label === "Copy of Mutation";
-  });
-  const developerInputFiledColor39 = uncheckedValue.filter((obj) => {
-    return obj.label === "Copy of Jamabandi";
-  });
-  const developerInputCheckedFiledColor39 = checkValue.filter((obj) => {
-    return obj.label === "Copy of Jamabandi";
-  });
-  const developerInputFiledColor40 = uncheckedValue.filter((obj) => {
-    return obj.label === "Details of lease / patta, if any";
-  });
-  const developerInputCheckedFiledColor40 = checkValue.filter((obj) => {
-    return obj.label === "Details of lease / patta, if any";
-  });
-  const developerInputFiledColor41 = uncheckedValue.filter((obj) => {
-    return obj.label === "Approved Layout of Plan/ Site plan for(GH)Showing Area(s)/Proposed migration";
-  });
-  const developerInputCheckedFiledColor41 = checkValue.filter((obj) => {
-    return obj.label === "Approved Layout of Plan/ Site plan for(GH)Showing Area(s)/Proposed migration";
-  });
-  const developerInputFiledColor42 = uncheckedValue.filter((obj) => {
-    return obj.label === "Proposed Layout of Plan /site plan for area applied for migration.";
-  });
-  const developerInputCheckedFiledColor42 = checkValue.filter((obj) => {
-    return obj.label === "Proposed Layout of Plan /site plan for area applied for migration.";
-  });
-  const developerInputFiledColor43 = uncheckedValue.filter((obj) => {
-    return obj.label === "Revised Land Schedule";
-  });
-  const developerInputCheckedFiledColor43 = checkValue.filter((obj) => {
-    return obj.label === "Revised Land Schedule";
-  });
+  // const developerInputFiledColor1 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "License No. of Parent License";
+  // });
+  // const developerInputCheckedFiledColor1 = checkValue.filter((obj) => {
+  //   return obj.label === "License No. of Parent License";
+  // });
+  // const developerInputFiledColor2 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Potential Zone:";
+  // });
+  // const developerInputCheckedFiledColor2 = checkValue.filter((obj) => {
+  //   return obj.label === "Potential Zone:";
+  // });
+  // const developerInputFiledColor3 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Site Location Purpose";
+  // });
+  // const developerInputCheckedFiledColor3 = checkValue.filter((obj) => {
+  //   return obj.label === "Site Location Purpose";
+  // });
+  // const developerInputFiledColor4 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Approach Type (Type of Policy)";
+  // });
+  // const developerInputCheckedFiledColor4 = checkValue.filter((obj) => {
+  //   return obj.label === "Approach Type (Type of Policy)";
+  // });
+  // const developerInputFiledColor5 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Approach Road Width";
+  // });
+  // const developerInputCheckedFiledColor5 = checkValue.filter((obj) => {
+  //   return obj.label === "Approach Road Width";
+  // });
+  // const developerInputFiledColor6 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Specify Other";
+  // });
+  // const developerInputCheckedFiledColor6 = checkValue.filter((obj) => {
+  //   return obj.label === "Specify Other";
+  // });
+  // const developerInputFiledColor7 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Type of land";
+  // });
+  // const developerInputCheckedFiledColor7 = checkValue.filter((obj) => {
+  //   return obj.label === "Type of land";
+  // });
+  // const developerInputFiledColor8 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Third-party right created";
+  // });
+  // const developerInputCheckedFiledColor8 = checkValue.filter((obj) => {
+  //   return obj.label === "Third-party right created";
+  // });
+  // const developerInputFiledColor9 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "(ii)Whether licence applied under Migration policy?";
+  // });
+  // const developerInputCheckedFiledColor9 = checkValue.filter((obj) => {
+  //   return obj.label === "(ii)Whether licence applied under Migration policy?";
+  // });
+  // const developerInputFiledColor10 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "2. Any encumbrance with respect to following";
+  // });
+  // const developerInputCheckedFiledColor10 = checkValue.filter((obj) => {
+  //   return obj.label === "2. Any encumbrance with respect to following";
+  // });
+  // const developerInputFiledColor11 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "(ii) Existing litigation, if any, concerning applied land including co-sharers and collaborator";
+  // });
+  // const developerInputCheckedFiledColor11 = checkValue.filter((obj) => {
+  //   return obj.label === "(ii) Existing litigation, if any, concerning applied land including co-sharers and collaborator";
+  // });
+  // const developerInputFiledColor12 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "(iii) Court orders, if any, affecting applied land";
+  // });
+  // const developerInputCheckedFiledColor12 = checkValue.filter((obj) => {
+  //   return obj.label === "(iii) Court orders, if any, affecting applied land";
+  // });
+  // const developerInputFiledColor13 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "(iv) Any insolvency/liquidation proceedings against the land owner(s)/ collaborating developed ";
+  // });
+  // const developerInputCheckedFiledColor13 = checkValue.filter((obj) => {
+  //   return obj.label === "(iv) Any insolvency/liquidation proceedings against the land owner(s)/ collaborating developed ";
+  // });
+  // const developerInputFiledColor14 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "(a)As per applied land (Yes/No)";
+  // });
+  // const developerInputCheckedFiledColor14 = checkValue.filter((obj) => {
+  //   return obj.label === "(a)As per applied land (Yes/No)";
+  // });
+  // const developerInputFiledColor15 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Revenue rasta";
+  // });
+  // const developerInputCheckedFiledColor15 = checkValue.filter((obj) => {
+  //   return obj.label === "Revenue rasta";
+  // });
+  // const developerInputFiledColor16 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Watercourse running";
+  // });
+  // const developerInputCheckedFiledColor16 = checkValue.filter((obj) => {
+  //   return obj.label === "Watercourse running";
+  // });
+  // const developerInputFiledColor17 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "(d)Whether in Compact Block (Yes/No)";
+  // });
+  // const developerInputCheckedFiledColor17 = checkValue.filter((obj) => {
+  //   return obj.label === "(d)Whether in Compact Block (Yes/No)";
+  // });
+  // const developerInputFiledColor18 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Land Sandwiched";
+  // });
+  // const developerInputCheckedFiledColor18 = checkValue.filter((obj) => {
+  //   return obj.label === "Land Sandwiched";
+  // });
+  // const developerInputFiledColor19 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "(f)Acquisition status (Yes/No)";
+  // });
+  // const developerInputCheckedFiledColor19 = checkValue.filter((obj) => {
+  //   return obj.label === "(f)Acquisition status (Yes/No)";
+  // });
+  // const developerInputFiledColor20 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Date of section 6 notification";
+  // });
+  // const developerInputCheckedFiledColor20 = checkValue.filter((obj) => {
+  //   return obj.label === "Date of section 6 notification";
+  // });
+  // const developerInputFiledColor21 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Orders Upload";
+  // });
+  // const developerInputCheckedFiledColor21 = checkValue.filter((obj) => {
+  //   return obj.label === "Orders Upload";
+  // });
+  // const developerInputFiledColor22 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "(h) Whether land compensation received";
+  // });
+  // const developerInputCheckedFiledColor22 = checkValue.filter((obj) => {
+  //   return obj.label === "(h) Whether land compensation received";
+  // });
+  // const developerInputFiledColor23 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Status of release";
+  // });
+  // const developerInputCheckedFiledColor23 = checkValue.filter((obj) => {
+  //   return obj.label === "Status of release";
+  // });
+  // const developerInputFiledColor24 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Date of Award";
+  // });
+  // const developerInputCheckedFiledColor24 = checkValue.filter((obj) => {
+  //   return obj.label === "Date of Award";
+  // });
+  // const developerInputFiledColor25 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Date of Release";
+  // });
+  // const developerInputCheckedFiledColor25 = checkValue.filter((obj) => {
+  //   return obj.label === "Date of Release";
+  // });
+  // const developerInputFiledColor26 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Site Details";
+  // });
+  // const developerInputCheckedFiledColor26 = checkValue.filter((obj) => {
+  //   return obj.label === "Site Details";
+  // });
+  // const developerInputFiledColor27 = uncheckedValue.filter((obj) => {
+  //   return (
+  //     obj.label === "whether the applied site is approachable from the proposed 18/24 m internal sectoral plan road/sector dividing road. (yes/no)"
+  //   );
+  // });
+  // const developerInputCheckedFiledColor27 = checkValue.filter((obj) => {
+  //   return (
+  //     obj.label === "whether the applied site is approachable from the proposed 18/24 m internal sectoral plan road/sector dividing road. (yes/no)"
+  //   );
+  // });
+  // const developerInputFiledColor28 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "(a)vacant: (Yes/No)";
+  // });
+  // const developerInputCheckedFiledColor28 = checkValue.filter((obj) => {
+  //   return obj.label === "(a)vacant: (Yes/No)";
+  // });
+  // const developerInputFiledColor29 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "(b)Construction: (Yes/No)";
+  // });
+  // const developerInputCheckedFiledColor29 = checkValue.filter((obj) => {
+  //   return obj.label === "(b)Construction: (Yes/No)";
+  // });
+  // const developerInputFiledColor30 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "(c)HT line";
+  // });
+  // const developerInputCheckedFiledColor30 = checkValue.filter((obj) => {
+  //   return obj.label === "(c)HT line";
+  // });
+  // const developerInputFiledColor31 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "(d) IOC Gas Pipeline";
+  // });
+  // const developerInputCheckedFiledColor31 = checkValue.filter((obj) => {
+  //   return obj.label === "(d) IOC Gas Pipeline";
+  // });
+  // const developerInputFiledColor32 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "(e)Nallah";
+  // });
+  // const developerInputCheckedFiledColor32 = checkValue.filter((obj) => {
+  //   return obj.label === "(e)Nallah";
+  // });
+  // const developerInputFiledColor33 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "(f)Any revenue rasta/road";
+  // });
+  // const developerInputCheckedFiledColor33 = checkValue.filter((obj) => {
+  //   return obj.label === "(f)Any revenue rasta/road";
+  // });
+  // const developerInputFiledColor34 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "(g)Any marginal land";
+  // });
+  // const developerInputCheckedFiledColor34 = checkValue.filter((obj) => {
+  //   return obj.label === "(g)Any marginal land";
+  // });
+  // const developerInputFiledColor35 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Utility Line";
+  // });
+  // const developerInputCheckedFiledColor35 = checkValue.filter((obj) => {
+  //   return obj.label === "Utility Line";
+  // });
+  // const developerInputFiledColor36 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "5. Enclose the following documents as Annexures";
+  // });
+  // const developerInputCheckedFiledColor36 = checkValue.filter((obj) => {
+  //   return obj.label === "5. Enclose the following documents as Annexures";
+  // });
+  // const developerInputFiledColor37 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Land schedule";
+  // });
+  // const developerInputCheckedFiledColor37 = checkValue.filter((obj) => {
+  //   return obj.label === "Land schedule";
+  // });
+  // const developerInputFiledColor38 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Copy of Mutation";
+  // });
+  // const developerInputCheckedFiledColor38 = checkValue.filter((obj) => {
+  //   return obj.label === "Copy of Mutation";
+  // });
+  // const developerInputFiledColor39 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Copy of Jamabandi";
+  // });
+  // const developerInputCheckedFiledColor39 = checkValue.filter((obj) => {
+  //   return obj.label === "Copy of Jamabandi";
+  // });
+  // const developerInputFiledColor40 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Details of lease / patta, if any";
+  // });
+  // const developerInputCheckedFiledColor40 = checkValue.filter((obj) => {
+  //   return obj.label === "Details of lease / patta, if any";
+  // });
+  // const developerInputFiledColor41 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Approved Layout of Plan/ Site plan for(GH)Showing Area(s)/Proposed migration";
+  // });
+  // const developerInputCheckedFiledColor41 = checkValue.filter((obj) => {
+  //   return obj.label === "Approved Layout of Plan/ Site plan for(GH)Showing Area(s)/Proposed migration";
+  // });
+  // const developerInputFiledColor42 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Proposed Layout of Plan /site plan for area applied for migration.";
+  // });
+  // const developerInputCheckedFiledColor42 = checkValue.filter((obj) => {
+  //   return obj.label === "Proposed Layout of Plan /site plan for area applied for migration.";
+  // });
+  // const developerInputFiledColor43 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Revised Land Schedule";
+  // });
+  // const developerInputCheckedFiledColor43 = checkValue.filter((obj) => {
+  //   return obj.label === "Revised Land Schedule";
+  // });
 
   console.log("Akash1", Purpose);
 
@@ -482,9 +482,11 @@ const Developerinfo = (props) => {
   const [smShow, setSmShow] = useState(false);
   const [labelValue, setLabelValue] = useState("");
   const Colors = {
-    approved: "#09cb3d",
-    disapproved: "#ff0000",
-    info: "#FFB602"
+    conditional:"#2874A6",
+    approved:"#09cb3d",
+    disapproved:"#ff0000",
+   
+    info:"#FFB602"
   }
   const [selectedFieldData, setSelectedFieldData] = useState();
   const [fieldValue, setFieldValue] = useState("");
@@ -547,7 +549,60 @@ const Developerinfo = (props) => {
     areaOfParentLicence: Colors.info
   })
 
-  const fieldIdList = [{ label: "Whether licence applied for additional area", key: "licenceApplied" }, { label: "License No. of Parent License", key: "licenceNo" }, { label: "Potential Zone", key: "potentialZone" }, { label: "Site Location Purpose", key: "siteLocationPurpose" }, { label: "Approach Type (Type of Policy)", key: "approachType" }, { label: "Approach Road Width", key: "approachRoadWidth" }, { label: "Specify Others", key: "specifyOthers" }, { label: "Type of land", key: "typeOfLand" }, { label: "Third-party right created ", key: "thirdPartyRightCreated" }, { label: "Whether licence applied under Migration policy", key: "migrationPolicy" }, { label: "Any encumbrance with respect to following", key: "encumbrance" }, { label: "Existing litigation, if any, concerning applied land including co-sharers and collaborator", key: "existinglitigation" }, { label: "Court orders, if any, affecting applied land", key: "courtOrders" }, { label: "Any insolvency/liquidation proceedings against the land owner(s)/ collaborating developed", key: "anyInsolvency" }, { label: "As per applied land", key: "asPerAppliedLand" }, { label: "Revenue rasta", key: "revenueRasta" }, { label: "Watercourse running", key: "waterCourseRunning" }, { label: "Whether in Compact Block", key: "whetherInCompactBlock" }, { label: "Land Sandwiched", key: "landSandwiche" }, { label: "Acquisition status", key: "acquisitionStatus" }, { label: "Date of section 4 notification", key: "dateOfSection4Notification" }, { label: "Date of section 6 notification", key: "dateOfSection6Notification" }, { label: "Orders Upload", key: "ordersUpload" }, { label: "whether the applied site is approachable from the proposed 18/24 m internal sectoral plan road/sector dividing road", key: "internalSectoralPlan" }, { label: "vacant", key: "vacant" }, { label: "Construction", key: "construction" }, { label: "HT line", key: "htLine" }, { label: "IOC Gas Pipeline", key: "iocGasPipeline" }, { label: "Nallah", key: "nallah" }, { label: "Any revenue rasta/road", key: "anyRevenueRasta" }, { label: "Any marginal land", key: "anyMarginalLand" }, { label: "Utility Line", key: "utilityLine" }, { label: "Enclose the following documents as Annexures", key: "documentsAsAnnexures" }, { label: "Land schedule", key: "landSchedule" }, { label: "Copy of Mutation", key: "copyOfMutation" }, { label: "Copy of Jamabandi", key: "copyOfJamabandi" }, { label: "Details of lease / patta, if any", key: "detailsOfLease" }, { label: "Add Sales/deed/exchange", key: "addSalesDeed" }, { label: "Copy of spa/GPA/board resolution", key: "copyofSpaBoard" }, { label: "Revised Land Schedule", key: "revisedLansSchedule" }, { label: "Copy of Shajra Plan", key: "copyOfShajraPlan" }, { label: "Area Applied under Migration", key: "areaAppliedUnderMigration" }, { label: "Purpose of Parent Licence", key: "purposeOfParentLicence" }, { label: "Licence No.", key: "licenceNo" }, { label: "Area of Parent Licence", key: "areaOfParentLicence" }, { label: "Proposed Layout of Plan /site plan for area applied for migration.", key: "proposedLayoutOfPlan" }, { label: "Download Previously approved Layout Plan", key: "uploadPreviouslyLayoutPlan" }, { label: "Validity of Parent Licence", key: "validityOfParentLicence" }, { label: "Approved Layout of Plan/ Site plan for(GH)Showing Area(s)/Proposed migration", key: "approvedLayoutOfPlan" }, { label: "Whether land compensation received", key: "landCompensationReceived" }, { label: "Status of release", key: "statusOfRelease" }, { label: "Date of Award", key: "dateOfAward" }, { label: "Date of Release", key: "dateOfRelease" }, { label: "Site Details", key: "siteDetails" }, { label: "Area of Parent Licence", key: "areaOfParentLicence" },];
+  const fieldIdList = [{ label: "Whether licence applied for additional area", key: "licenceApplied" },
+  { label: "License No. of Parent License", key: "licenceNo" },
+  { label: "Potential Zone", key: "potentialZone" },
+  { label: "Site Location Purpose", key: "siteLocationPurpose" },
+  { label: "Approach Type (Type of Policy)", key: "approachType" },
+  { label: "Approach Road Width", key: "approachRoadWidth" },
+  { label: "Specify Others", key: "specifyOthers" },
+  { label: "Type of land", key: "typeOfLand" },
+  { label: "Third-party right created ", key: "thirdPartyRightCreated" },
+  { label: "Whether licence applied under Migration policy", key: "migrationPolicy" },
+  { label: "Any encumbrance with respect to following", key: "encumbrance" },
+  { label: "Existing litigation, if any, concerning applied land including co-sharers and collaborator", key: "existinglitigation" },
+  { label: "Court orders, if any, affecting applied land", key: "courtOrders" },
+  { label: "Any insolvency/liquidation proceedings against the land owner(s)/ collaborating developed", key: "anyInsolvency" },
+  { label: "As per applied land", key: "asPerAppliedLand" }, { label: "Revenue rasta", key: "revenueRasta" },
+  { label: "Watercourse running", key: "waterCourseRunning" },
+  { label: "Whether in Compact Block", key: "whetherInCompactBlock" },
+  { label: "Land Sandwiched", key: "landSandwiche" },
+  { label: "Acquisition status", key: "acquisitionStatus" },
+  { label: "Date of section 4 notification", key: "dateOfSection4Notification" },
+  { label: "Date of section 6 notification", key: "dateOfSection6Notification" },
+  { label: "Orders Upload", key: "ordersUpload" },
+  { label: "whether the applied site is approachable from the proposed 18/24 m internal sectoral plan road/sector dividing road", key: "internalSectoralPlan" },
+  { label: "vacant", key: "vacant" },
+  { label: "Construction", key: "construction" },
+  { label: "HT line", key: "htLine" },
+  { label: "IOC Gas Pipeline", key: "iocGasPipeline" },
+  { label: "Nallah", key: "nallah" },
+  { label: "Any revenue rasta/road", key: "anyRevenueRasta" },
+  { label: "Any marginal land", key: "anyMarginalLand" },
+  { label: "Utility Line", key: "utilityLine" },
+  { label: "Enclose the following documents as Annexures", key: "documentsAsAnnexures" },
+  { label: "Land schedule", key: "landSchedule" },
+  { label: "Copy of Mutation", key: "copyOfMutation" },
+  { label: "Copy of Jamabandi", key: "copyOfJamabandi" },
+  { label: "Details of lease / patta, if any", key: "detailsOfLease" },
+  { label: "Add Sales/deed/exchange", key: "addSalesDeed" },
+  { label: "Copy of spa/GPA/board resolution", key: "copyofSpaBoard" },
+  { label: "Revised Land Schedule", key: "revisedLansSchedule" },
+  { label: "Copy of Shajra Plan", key: "copyOfShajraPlan" },
+  { label: "Area Applied under Migration", key: "areaAppliedUnderMigration" },
+  { label: "Purpose of Parent Licence", key: "purposeOfParentLicence" },
+  { label: "Licence No.", key: "licenceNo" },
+  { label: "Area of Parent Licence", key: "areaOfParentLicence" },
+  { label: "Proposed Layout of Plan /site plan for area applied for migration.", key: "proposedLayoutOfPlan" },
+  { label: "Download Previously approved Layout Plan", key: "uploadPreviouslyLayoutPlan" },
+  { label: "Validity of Parent Licence", key: "validityOfParentLicence" },
+  { label: "Approved Layout of Plan/ Site plan for(GH)Showing Area(s)/Proposed migration", key: "approvedLayoutOfPlan" },
+  { label: "Whether land compensation received", key: "landCompensationReceived" },
+  { label: "Status of release", key: "statusOfRelease" },
+  { label: "Date of Award", key: "dateOfAward" },
+  { label: "Date of Release", key: "dateOfRelease" },
+  { label: "Site Details", key: "siteDetails" },
+  { label: "Area of Parent Licence", key: "areaOfParentLicence" },];
 
 
   const getColorofFieldIcon = () => {
@@ -559,7 +614,7 @@ const Developerinfo = (props) => {
         console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
         if (fieldPresent && fieldPresent.length) {
           console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
-          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved ? Colors.approved : Colors.disapproved }
+          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved === "approved" ? Colors.approved : fieldPresent[0].isApproved === "disapproved" ? Colors.disapproved : fieldPresent[0].isApproved === "conditional" ? Colors.conditional : Colors.info }
 
         }
       }
@@ -1596,13 +1651,13 @@ const Developerinfo = (props) => {
               </div>
             </Row>
 
-            
+
 
             <Row className={classes.formLabel}>
               <Col md={4} xxl lg="12">
                 {
                   landScheduleData?.litigation === "Y" && (
-                      
+
                     <div >
                       <hr className="mb-3" />
                       <h6 > Court orders, if any, affecting applied land   </h6>
@@ -1955,66 +2010,66 @@ const Developerinfo = (props) => {
                   ></ReportProblemIcon>
                 </div>
                 {landScheduleData?.acquistion === "Y" && (
-                <div >
-                <div className="row mx-1">
-                  <div className="col col-12">
-                    <div>
-                      <label className="m-0">Date of section 4 notification </label>
-                      <div className="d-flex flex-row align-items-center my-1 ">
-                        <Form.Control
-                          // height={30} style={{ maxWidth: 200, marginRight: 5 }}
-                          className={classes.formLabel}
-                          disabled placeholder={landScheduleData?.sectionFour} ></Form.Control>
-                        <ReportProblemIcon
-                          style={{
-                            display: hideRemarks ? "none" : "block",
-                            color: fieldIconColors.dateOfSection4Notification
-                          }}
-                          onClick={() => {
-                            setLabelValue("Date of section 4 notification"),
-                              setOpennedModal("dateOfSection4Notification")
-                            setSmShow(true),
-                              console.log("modal open"),
-                              setFieldValue(landScheduleData !== null ? landScheduleData?.sectionFour : null);
-                          }}
-                        ></ReportProblemIcon>
-                      </div>
+                  <div >
+                    <div className="row mx-1">
+                      <div className="col col-12">
+                        <div>
+                          <label className="m-0">Date of section 4 notification </label>
+                          <div className="d-flex flex-row align-items-center my-1 ">
+                            <Form.Control
+                              // height={30} style={{ maxWidth: 200, marginRight: 5 }}
+                              className={classes.formLabel}
+                              disabled placeholder={landScheduleData?.sectionFour} ></Form.Control>
+                            <ReportProblemIcon
+                              style={{
+                                display: hideRemarks ? "none" : "block",
+                                color: fieldIconColors.dateOfSection4Notification
+                              }}
+                              onClick={() => {
+                                setLabelValue("Date of section 4 notification"),
+                                  setOpennedModal("dateOfSection4Notification")
+                                setSmShow(true),
+                                  console.log("modal open"),
+                                  setFieldValue(landScheduleData !== null ? landScheduleData?.sectionFour : null);
+                              }}
+                            ></ReportProblemIcon>
+                          </div>
 
-                    </div>
-                  </div>
-                  </div>
-                  <div className="row mx-1">
-                  <div className="col col-12">
-                    <div>
-                      <label className="m-0">Date of section 6 notification</label>
-                      <div className="d-flex flex-row align-items-center my-1 ">
-                        <Form.Control
-                          // height={30} style={{ maxWidth: 200, marginRight: 5 }} 
-                          className={classes.formLabel}
-                          disabled placeholder={landScheduleData?.sectionSix} ></Form.Control>
-                        <ReportProblemIcon
-                          style={{
-                            display: hideRemarks ? "none" : "block",
-                            color: fieldIconColors.dateOfSection6Notification
-                          }}
-                          onClick={() => {
-                            setLabelValue("Date of section 6 notification"),
-                              setOpennedModal("dateOfSection6Notification")
-                            setSmShow(true),
-                              console.log("modal open"),
-                              setFieldValue(landScheduleData !== null ? landScheduleData?.sectionSix : null);
-                          }}
-                        ></ReportProblemIcon>
+                        </div>
                       </div>
-                      {/* <Form.Control style={{ maxWidth: 200, marginTop: 10 }} disabled></Form.Control> */}
+                    </div>
+                    <div className="row mx-1">
+                      <div className="col col-12">
+                        <div>
+                          <label className="m-0">Date of section 6 notification</label>
+                          <div className="d-flex flex-row align-items-center my-1 ">
+                            <Form.Control
+                              // height={30} style={{ maxWidth: 200, marginRight: 5 }} 
+                              className={classes.formLabel}
+                              disabled placeholder={landScheduleData?.sectionSix} ></Form.Control>
+                            <ReportProblemIcon
+                              style={{
+                                display: hideRemarks ? "none" : "block",
+                                color: fieldIconColors.dateOfSection6Notification
+                              }}
+                              onClick={() => {
+                                setLabelValue("Date of section 6 notification"),
+                                  setOpennedModal("dateOfSection6Notification")
+                                setSmShow(true),
+                                  console.log("modal open"),
+                                  setFieldValue(landScheduleData !== null ? landScheduleData?.sectionSix : null);
+                              }}
+                            ></ReportProblemIcon>
+                          </div>
+                          {/* <Form.Control style={{ maxWidth: 200, marginTop: 10 }} disabled></Form.Control> */}
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  </div>
-                  </div>
-              )}
+                )}
 
               </div>
-             
+
 
             </div>
 
@@ -2047,7 +2102,7 @@ const Developerinfo = (props) => {
                       ></ReportProblemIcon>
                     </div>
 
-<br></br>
+                    <br></br>
 
                     {landScheduleData?.orderUpload === "Y" && (
                       <div className="row m-0 mt-2">
@@ -2447,56 +2502,56 @@ const Developerinfo = (props) => {
                   <div >
                     <h5 className="text-black  mb-2">(i)  Details of proposed approach.</h5>
                     <div className="my-2 mx-2">
-                    <div className="d-flex flex-row align-items-center my-2 ">
-                      <h6>(1)   Site approachable from proposed sector road/ Development Plan Road</h6>
-                      &nbsp;&nbsp;
-                      <input type="radio" disabled value="Yes" checked={landScheduleData?.approachFromProposedSector === "Y" ? true : false} />
-                      <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                      <input type="radio" disabled value="No" checked={landScheduleData?.approachFromProposedSector === "N" ? true : false} />
-                      <label className="m-0 mx-2" for="No">No</label>
-                      <ReportProblemIcon
-                        style={{
-                          display: hideRemarks ? "none" : "block",
-                          color: fieldIconColors.ordersUpload
-                        }}
-                        onClick={() => {
-                          setLabelValue("Orders Upload"),
-                            setOpennedModal("ordersUpload")
-                          setSmShow(true),
-                            console.log("modal open"),
-                            setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </div>
+                      <div className="d-flex flex-row align-items-center my-2 ">
+                        <h6>(1)   Site approachable from proposed sector road/ Development Plan Road</h6>
+                        &nbsp;&nbsp;
+                        <input type="radio" disabled value="Yes" checked={landScheduleData?.approachFromProposedSector === "Y" ? true : false} />
+                        <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                        <input type="radio" disabled value="No" checked={landScheduleData?.approachFromProposedSector === "N" ? true : false} />
+                        <label className="m-0 mx-2" for="No">No</label>
+                        <ReportProblemIcon
+                          style={{
+                            display: hideRemarks ? "none" : "block",
+                            color: fieldIconColors.ordersUpload
+                          }}
+                          onClick={() => {
+                            setLabelValue("Orders Upload"),
+                              setOpennedModal("ordersUpload")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
 
-                    {landScheduleData?.approachFromProposedSector === "Y" && (
+                      {landScheduleData?.approachFromProposedSector === "Y" && (
 
-                      <div >
-                        <h6>(a) Width of Constructed ROW of plotted licenced colony (In meters)</h6>
-                        <div className="my-2 mx-2">
-                        <div className="col col-6 p-1 d-flex align-items-center my-1 " >
-                          <Form.Control
-                            className={classes.formLabel}
+                        <div >
+                          <h6>(a) Width of Constructed ROW of plotted licenced colony (In meters)</h6>
+                          <div className="my-2 mx-2">
+                            <div className="col col-6 p-1 d-flex align-items-center my-1 " >
+                              <Form.Control
+                                className={classes.formLabel}
 
-                            disabled
-                            placeholder={landScheduleData?.awardDate}
-                          ></Form.Control>
-                          <ReportProblemIcon
-                            style={{
-                              display: hideRemarks ? "none" : "block",
-                              color: fieldIconColors.ordersUpload
-                            }}
-                            onClick={() => {
-                              setLabelValue("Orders Upload"),
-                                setOpennedModal("ordersUpload")
-                              setSmShow(true),
-                                console.log("modal open"),
-                                setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
-                            }}
-                          ></ReportProblemIcon>
-                        </div>
+                                disabled
+                                placeholder={landScheduleData?.awardDate}
+                              ></Form.Control>
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks ? "none" : "block",
+                                  color: fieldIconColors.ordersUpload
+                                }}
+                                onClick={() => {
+                                  setLabelValue("Orders Upload"),
+                                    setOpennedModal("ordersUpload")
+                                  setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
 
-                        {/* <div className="col col-6 p-1 d-flex align-items-center my-3 " >
+                            {/* <div className="col col-6 p-1 d-flex align-items-center my-3 " >
 
                           <h6>(a)  Width of Constructed ROW of plotted licenced colony (In meters)</h6>
                           <Form.Control
@@ -2521,191 +2576,191 @@ const Developerinfo = (props) => {
                           ></ReportProblemIcon>
                         </div> */}
 
-                        <div className="d-flex flex-row align-items-center my-3 ">
-                          <h6>(b)  Whether acquired?  </h6>
-                          &nbsp;&nbsp;
-                          <input type="radio" disabled value="Yes" checked={landScheduleData?.whetherAcquired === "Y" ? true : false} />
-                          <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                          <input type="radio" disabled value="No" checked={landScheduleData?.whetherAcquired === "N" ? true : false} />
-                          <label className="m-0 mx-2" for="No">No</label>
-                          <ReportProblemIcon
-                            style={{
-                              display: hideRemarks ? "none" : "block",
-                              color: fieldIconColors.ordersUpload
-                            }}
-                            onClick={() => {
-                              setLabelValue("Orders Upload"),
-                                setOpennedModal("ordersUpload")
-                              setSmShow(true),
-                                console.log("modal open"),
-                                setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
-                            }}
-                          ></ReportProblemIcon>
+                            <div className="d-flex flex-row align-items-center my-3 ">
+                              <h6>(b)  Whether acquired?  </h6>
+                              &nbsp;&nbsp;
+                              <input type="radio" disabled value="Yes" checked={landScheduleData?.whetherAcquired === "Y" ? true : false} />
+                              <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                              <input type="radio" disabled value="No" checked={landScheduleData?.whetherAcquired === "N" ? true : false} />
+                              <label className="m-0 mx-2" for="No">No</label>
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks ? "none" : "block",
+                                  color: fieldIconColors.ordersUpload
+                                }}
+                                onClick={() => {
+                                  setLabelValue("Orders Upload"),
+                                    setOpennedModal("ordersUpload")
+                                  setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
+
+                            <div className="d-flex flex-row align-items-center my-3 ">
+                              <h6>(c)  Whether constructed?  </h6>
+                              &nbsp;&nbsp;
+                              <input type="radio" disabled value="Yes" checked={landScheduleData?.whetherConstructed === "Y" ? true : false} />
+                              <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                              <input type="radio" disabled value="No" checked={landScheduleData?.whetherConstructed === "N" ? true : false} />
+                              <label className="m-0 mx-2" for="No">No</label>
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks ? "none" : "block",
+                                  color: fieldIconColors.ordersUpload
+                                }}
+                                onClick={() => {
+                                  setLabelValue("Orders Upload"),
+                                    setOpennedModal("ordersUpload")
+                                  setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
+
+                            <div className="d-flex flex-row align-items-center my-3 ">
+                              <h6>(d)  Whether Service road along sector road acquired?</h6>
+                              &nbsp;&nbsp;
+                              <input type="radio" disabled value="Yes" checked={landScheduleData?.serviceSectorRoadAcquired === "Y" ? true : false} />
+                              <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                              <input type="radio" disabled value="No" checked={landScheduleData?.serviceSectorRoadAcquired === "N" ? true : false} />
+                              <label className="m-0 mx-2" for="No">No</label>
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks ? "none" : "block",
+                                  color: fieldIconColors.ordersUpload
+                                }}
+                                onClick={() => {
+                                  setLabelValue("Orders Upload"),
+                                    setOpennedModal("ordersUpload")
+                                  setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
+
+                            <div className="d-flex flex-row align-items-center my-3 ">
+                              <h6>(e)  Whether Service road along sector road constructed?  </h6>
+                              &nbsp;&nbsp;
+                              <input type="radio" disabled value="Yes" checked={landScheduleData?.serviceSectorRoadConstructed === "Y" ? true : false} />
+                              <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                              <input type="radio" disabled value="No" checked={landScheduleData?.serviceSectorRoadConstructed === "N" ? true : false} />
+                              <label className="m-0 mx-2" for="No">No</label>
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks ? "none" : "block",
+                                  color: fieldIconColors.ordersUpload
+                                }}
+                                onClick={() => {
+                                  setLabelValue("Orders Upload"),
+                                    setOpennedModal("ordersUpload")
+                                  setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
+
+                          </div>
                         </div>
 
-                        <div className="d-flex flex-row align-items-center my-3 ">
-                          <h6>(c)  Whether constructed?  </h6>
-                          &nbsp;&nbsp;
-                          <input type="radio" disabled value="Yes" checked={landScheduleData?.whetherConstructed === "Y" ? true : false} />
-                          <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                          <input type="radio" disabled value="No" checked={landScheduleData?.whetherConstructed === "N" ? true : false} />
-                          <label className="m-0 mx-2" for="No">No</label>
-                          <ReportProblemIcon
-                            style={{
-                              display: hideRemarks ? "none" : "block",
-                              color: fieldIconColors.ordersUpload
-                            }}
-                            onClick={() => {
-                              setLabelValue("Orders Upload"),
-                                setOpennedModal("ordersUpload")
-                              setSmShow(true),
-                                console.log("modal open"),
-                                setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
-                            }}
-                          ></ReportProblemIcon>
-                        </div>
-
-                        <div className="d-flex flex-row align-items-center my-3 ">
-                          <h6>(d)  Whether Service road along sector road acquired?</h6>
-                          &nbsp;&nbsp;
-                          <input type="radio" disabled value="Yes" checked={landScheduleData?.serviceSectorRoadAcquired === "Y" ? true : false} />
-                          <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                          <input type="radio" disabled value="No" checked={landScheduleData?.serviceSectorRoadAcquired === "N" ? true : false} />
-                          <label className="m-0 mx-2" for="No">No</label>
-                          <ReportProblemIcon
-                            style={{
-                              display: hideRemarks ? "none" : "block",
-                              color: fieldIconColors.ordersUpload
-                            }}
-                            onClick={() => {
-                              setLabelValue("Orders Upload"),
-                                setOpennedModal("ordersUpload")
-                              setSmShow(true),
-                                console.log("modal open"),
-                                setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
-                            }}
-                          ></ReportProblemIcon>
-                        </div>
-
-                        <div className="d-flex flex-row align-items-center my-3 ">
-                          <h6>(e)  Whether Service road along sector road constructed?  </h6>
-                          &nbsp;&nbsp;
-                          <input type="radio" disabled value="Yes" checked={landScheduleData?.serviceSectorRoadConstructed === "Y" ? true : false} />
-                          <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                          <input type="radio" disabled value="No" checked={landScheduleData?.serviceSectorRoadConstructed === "N" ? true : false} />
-                          <label className="m-0 mx-2" for="No">No</label>
-                          <ReportProblemIcon
-                            style={{
-                              display: hideRemarks ? "none" : "block",
-                              color: fieldIconColors.ordersUpload
-                            }}
-                            onClick={() => {
-                              setLabelValue("Orders Upload"),
-                                setOpennedModal("ordersUpload")
-                              setSmShow(true),
-                                console.log("modal open"),
-                                setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
-                            }}
-                          ></ReportProblemIcon>
-                        </div>
-
+                      )}
+                      <h6>(2)  Site approachable from internal circulation / sectoral plan road.</h6>
+                      <div className="d-flex flex-row align-items-center my-2 ">
+                        &nbsp;&nbsp;
+                        <input type="radio" disabled value="Yes" checked={landScheduleData?.approachFromInternalCirculation === "Y" ? true : false} />
+                        <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                        <input type="radio" disabled value="No" checked={landScheduleData?.approachFromInternalCirculation === "N" ? true : false} />
+                        <label className="m-0 mx-2" for="No">No</label>
+                        <ReportProblemIcon
+                          style={{
+                            display: hideRemarks ? "none" : "block",
+                            color: fieldIconColors.ordersUpload
+                          }}
+                          onClick={() => {
+                            setLabelValue("Orders Upload"),
+                              setOpennedModal("ordersUpload")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                          }}
+                        ></ReportProblemIcon>
                       </div>
-                      </div>
+                      {landScheduleData?.approachFromInternalCirculation === "Y" && (
 
-                    )}
-                    <h6>(2)  Site approachable from internal circulation / sectoral plan road.</h6>
-                    <div className="d-flex flex-row align-items-center my-2 ">
-                      &nbsp;&nbsp;
-                      <input type="radio" disabled value="Yes" checked={landScheduleData?.approachFromInternalCirculation === "Y" ? true : false} />
-                      <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                      <input type="radio" disabled value="No" checked={landScheduleData?.approachFromInternalCirculation === "N" ? true : false} />
-                      <label className="m-0 mx-2" for="No">No</label>
-                      <ReportProblemIcon
-                        style={{
-                          display: hideRemarks ? "none" : "block",
-                          color: fieldIconColors.ordersUpload
-                        }}
-                        onClick={() => {
-                          setLabelValue("Orders Upload"),
-                            setOpennedModal("ordersUpload")
-                          setSmShow(true),
-                            console.log("modal open"),
-                            setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
-                        }}
-                      ></ReportProblemIcon>
+                        <div>
+                          <h6>(a)  Width of internal circulation / sectoral plan road (In meters)</h6>
+                          <div className="my-2 mx-2">
+                            <div className="col col-6 p-1 d-flex align-items-center my-1 " >
+                              <Form.Control
+                                className={classes.formLabel}
+
+                                disabled
+                                placeholder={landScheduleData?.sectorAndDevelopmentWidth}
+                              ></Form.Control>
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks ? "none" : "block",
+                                  color: fieldIconColors.ordersUpload
+                                }}
+                                onClick={() => {
+                                  setLabelValue("Orders Upload"),
+                                    setOpennedModal("ordersUpload")
+                                  setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
+                            <h6>(b)  Whether acquired? </h6>
+                            <div className="d-flex flex-row align-items-center my-1 ">
+                              <input type="radio" disabled value="Yes" checked={landScheduleData?.sectorAndDevelopmentWidth === "Y" ? true : false} />
+                              <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                              <input type="radio" disabled value="No" checked={landScheduleData?.sectorAndDevelopmentWidth === "N" ? true : false} />
+                              <label className="m-0 mx-2" for="No">No</label>
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks ? "none" : "block",
+                                  color: fieldIconColors.ordersUpload
+                                }}
+                                onClick={() => {
+                                  setLabelValue("Orders Upload"),
+                                    setOpennedModal("ordersUpload")
+                                  setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
+                            <h6>(c)  Whether constructed?  </h6>
+                            <div className="d-flex flex-row align-items-center my-1 ">
+                              <input type="radio" disabled value="Yes" checked={landScheduleData?.sectorAndDevelopmentWidth === "Y" ? true : false} />
+                              <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                              <input type="radio" disabled value="No" checked={landScheduleData?.sectorAndDevelopmentWidth === "N" ? true : false} />
+                              <label className="m-0 mx-2" for="No">No</label>
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks ? "none" : "block",
+                                  color: fieldIconColors.ordersUpload
+                                }}
+                                onClick={() => {
+                                  setLabelValue("Orders Upload"),
+                                    setOpennedModal("ordersUpload")
+                                  setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </div>
+
+                          </div>
+                        </div>
+
+                      )}
                     </div>
-                    {landScheduleData?.approachFromInternalCirculation === "Y" && (
-
-                      <div>
-                        <h6>(a)  Width of internal circulation / sectoral plan road (In meters)</h6>
-                        <div className="my-2 mx-2">
-                        <div className="col col-6 p-1 d-flex align-items-center my-1 " >
-                          <Form.Control
-                            className={classes.formLabel}
-
-                            disabled
-                            placeholder={landScheduleData?.sectorAndDevelopmentWidth}
-                          ></Form.Control>
-                          <ReportProblemIcon
-                            style={{
-                              display: hideRemarks ? "none" : "block",
-                              color: fieldIconColors.ordersUpload
-                            }}
-                            onClick={() => {
-                              setLabelValue("Orders Upload"),
-                                setOpennedModal("ordersUpload")
-                              setSmShow(true),
-                                console.log("modal open"),
-                                setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
-                            }}
-                          ></ReportProblemIcon>
-                        </div>
-                        <h6>(b)  Whether acquired? </h6>
-                        <div className="d-flex flex-row align-items-center my-1 ">
-                          <input type="radio" disabled value="Yes" checked={landScheduleData?.sectorAndDevelopmentWidth === "Y" ? true : false} />
-                          <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                          <input type="radio" disabled value="No" checked={landScheduleData?.sectorAndDevelopmentWidth === "N" ? true : false} />
-                          <label className="m-0 mx-2" for="No">No</label>
-                          <ReportProblemIcon
-                            style={{
-                              display: hideRemarks ? "none" : "block",
-                              color: fieldIconColors.ordersUpload
-                            }}
-                            onClick={() => {
-                              setLabelValue("Orders Upload"),
-                                setOpennedModal("ordersUpload")
-                              setSmShow(true),
-                                console.log("modal open"),
-                                setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
-                            }}
-                          ></ReportProblemIcon>
-                        </div>
-                        <h6>(c)  Whether constructed?  </h6>
-                        <div className="d-flex flex-row align-items-center my-1 ">
-                          <input type="radio" disabled value="Yes" checked={landScheduleData?.sectorAndDevelopmentWidth === "Y" ? true : false} />
-                          <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                          <input type="radio" disabled value="No" checked={landScheduleData?.sectorAndDevelopmentWidth === "N" ? true : false} />
-                          <label className="m-0 mx-2" for="No">No</label>
-                          <ReportProblemIcon
-                            style={{
-                              display: hideRemarks ? "none" : "block",
-                              color: fieldIconColors.ordersUpload
-                            }}
-                            onClick={() => {
-                              setLabelValue("Orders Upload"),
-                                setOpennedModal("ordersUpload")
-                              setSmShow(true),
-                                console.log("modal open"),
-                                setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
-                            }}
-                          ></ReportProblemIcon>
-                        </div>
-
-                      </div>
-                      </div>
-
-                    )}
-                  </div>
                   </div>
 
                 )}
@@ -2862,7 +2917,7 @@ const Developerinfo = (props) => {
                 <h6 style={{ fontWeight: "initial" }} >
                   whether the applied site is approachable from the proposed 18/24 m internal sectoral plan road/sector dividing road.
                   <div className="d-flex flex-row align-items-center my-1 ">
-                   
+
                     <input type="radio" disabled value="Yes" checked={landScheduleData?.siteApproachable === "Y" ? true : false} />
                     <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                     <input type="radio" disabled value="No" checked={landScheduleData?.siteApproachable === "N" ? true : false} />
@@ -2882,7 +2937,7 @@ const Developerinfo = (props) => {
                     ></ReportProblemIcon>
                   </div>
                 </h6>
-                
+
               </div>
             </div>
             <hr className="my-3" />
@@ -3200,7 +3255,7 @@ const Developerinfo = (props) => {
               </div>
               <div className="col col-4 p-1">
                 <h6 onChange={(e) => setLand(e.target.value)} value={land}>
-                (f) Utility/Permit Line
+                  (f) Utility/Permit Line
                 </h6>{" "}
                 <div className="d-flex flex-row align-items-center my-1 ">
                   <input type="radio" disabled value="Yes" checked={landScheduleData?.utilityLine === "Y" ? true : false} />

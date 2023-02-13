@@ -255,9 +255,11 @@ console.log("AccessInfortech", Purpose);
   const [smShow, setSmShow] = useState(false);
   const [labelValue, setLabelValue] = useState("");
   const Colors = {
-    approved: "#09cb3d",
-    disapproved: "#ff0000",
-    info: "#FFB602"
+    conditional:"#2874A6",
+    approved:"#09cb3d",
+    disapproved:"#ff0000",
+   
+    info:"#FFB602"
   }
   const [selectedFieldData, setSelectedFieldData] = useState();
   const [fieldValue, setFieldValue] = useState("");
@@ -298,7 +300,7 @@ console.log("AccessInfortech", Purpose);
         console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
         if (fieldPresent && fieldPresent.length) {
           console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
-          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved ? Colors.approved : Colors.disapproved }
+          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved === "approved" ? Colors.approved : fieldPresent[0].isApproved === "disapproved" ? Colors.disapproved : fieldPresent[0].isApproved === "conditional" ? Colors.conditional : Colors.info }
 
         }
       }
@@ -471,7 +473,7 @@ console.log("AccessInfortech", Purpose);
                 {/* </h5> */}
  {/* {Purpose} */}
              
-                <div className="px-2">
+                <div >
                   {/* {JSON.stringify(DetailsofAppliedLand?.dgpsDetails?.[0]?.[0]?.latitude)}  */}
                
                   {DetailsofAppliedLand?.dgpsDetails?.map((item, index) => (
@@ -480,35 +482,68 @@ console.log("AccessInfortech", Purpose);
 
 
 
-                    <div className="row " key={index}>
-
+                    <div className="row" key={index}>
+                         <Row>
+                          {/* <Col className="col col-1">
+                            <label>
+                              S.No
+                            </label>
+                          <input type="text" className="form-control" placeholder={index + 1} disabled />
+                         
+                          </Col > */}
+                          <Col className="col col-4">
+                            <label>
+                            Latitude
+                            </label>
+                         
+                         
+                          </Col >
+                          <Col className="col col-4">
+                            <label>
+                            Longitude
+                            </label>
+                 
+                         
+                          </Col >
+                        </Row>
 
                       {DetailsofAppliedLand?.dgpsDetails?.[index]?.map((item, index) => (
 
-                        <div>
-                          <table className="table table-bordered">
-                            <thead>
 
-                              <tr className="border-bottom-0">
+                       
+                        <div style={{ marginLeft:50 }}>
+                          <Row >
+                          {/* <Col className="col col-2">
+                            
+                          <input type="text" className="form-control" placeholder={index + 1} disabled />
+                         
+                          </Col > */}
+                          <Col className="col col-4">
+                          {/* <input type="text" value="N/A" > {item?.latitude}</input> */}
+                          
+                          <input type="text" className="form-control" placeholder={item?.latitude}  disabled />
+                          </Col>
+                          <Col className="col col-4" >
+                          {/* <input type="text" value="N/A" > {item?.longitude}</input> */}
+                          <input type="text" className="form-control" placeholder={item?.longitude}  disabled />
+                          </Col>
+                          
+                          </Row>
+                          
 
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <th class="fw-normal pb-0 border-bottom-0 align-top">
+                               {/* <input disabled type="number" className="form-control" {...register("netPlannedArea")} /> */}
+                              {/* </th>
+                              <th class="fw-normal pb-0 border-bottom-0 align-top"> */}
+                                
+                              {/* </th>
+                              <th class="fw-normal pb-0 border-bottom-0 align-top"> */}
+                                
 
-                                {index + 1}
-                              </th>
-                              <th class="fw-normal pb-0 border-bottom-0 align-top">
-                                {item?.latitude}
-                              </th>
-                              <th class="fw-normal pb-0 border-bottom-0 align-top">
-                                {item?.longitude}
-
-                              </th>
+                              {/* </th>
 
 
                             </tbody>
-                          </table>
+                          </table> */}
                         </div>
                       ))
                       }
