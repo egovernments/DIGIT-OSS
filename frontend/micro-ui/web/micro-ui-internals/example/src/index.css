@@ -15598,3 +15598,86 @@ input[type=number], .checkbox-wrap .input-emp[type=number] {
 
 
 
+.banner-row .css-h0q0iv-MuiButtonBase-root-MuiTab-root.Mui-selected{
+  background-color: #024f9d;
+  color: #fff;
+}
+
+.banner-row .css-h0q0iv-MuiButtonBase-root-MuiTab-root svg{
+  fill: #024f9d;
+  width: 28px;
+  height: 32px;
+}
+.banner-row .css-h0q0iv-MuiButtonBase-root-MuiTab-root.Mui-selected svg{
+  fill: #fff;
+  width: 28px;
+  height: 32px;
+}
+
+.banner-row .css-h0q0iv-MuiButtonBase-root-MuiTab-root {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  position: relative;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  background-color: #fff;
+  outline: 0;
+  border: 0;
+  margin: 0 0.5rem;
+  border-radius: 0.45rem;
+  padding: 0;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  vertical-align: middle;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  color: inherit;
+  font-family: "Roboto","Helvetica","Arial",sans-serif;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.25;
+  letter-spacing: 0.02857em;
+  text-transform: uppercase;
+  max-width: 360px;
+  min-width: 90px;
+  position: relative;
+  min-height: 40px;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  padding: 8px 16px;
+  overflow: hidden;
+  white-space: normal;
+  text-align: center;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  color: rgb(2 79 157);
+  box-shadow: 0.375rem 0.375rem 0.125rem 0 rgb(0 0 0 / 10%);
+}
+
+.css-jpln7h-MuiTabs-scroller{
+  border-radius: 0.65rem;
+  background: #ffd954;
+  padding: 1.6rem 1rem;
+}
+
+.css-heg063-MuiTabs-flexContainer{
+  justify-content: center;
+  align-items: center;
+}

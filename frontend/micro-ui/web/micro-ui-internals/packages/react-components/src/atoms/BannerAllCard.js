@@ -7,9 +7,9 @@ const Option = ({name, Icon, onClick, className }) => {
     </div>
 }
 
-const BannerAllCard = ({header, sideOption, options, styles={}}) => {
+const BannerAllCard = ({header, sideOption, dataoptions, styles={}}) => {
     return <div className="banner-mid-item">
-            {options.map( (props, index) => 
+            {dataoptions.map( (props, index) => 
                 <Option key={index} {...props} />
             )}
         </div>

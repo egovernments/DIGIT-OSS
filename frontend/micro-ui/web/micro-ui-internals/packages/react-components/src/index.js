@@ -62,6 +62,7 @@ import SectionalDropdown from "./atoms/SectionalDropdown";
 import { LastRow, MediaRow, Row, StatusTable } from "./atoms/StatusTable";
 import SubmitBar from "./atoms/SubmitBar";
 import StandaloneSearchBar from "./atoms/StandaloneSearchBar";
+import LabTabs from "./atoms/LabTabs";
 import {
   AnnouncementIcon,
   ArrowDown,
@@ -117,6 +118,10 @@ import {
   EDCRIcon,
   BPAIcon,
   BPAIco,
+  RenewLic,
+  SurrenderLic,
+  TransferLic,
+  StandardDesign,
   BPAHomeIcon,
   DocumentIcon,
   ExternalLinkIcon,
@@ -277,6 +282,7 @@ export {
   EventCalendarView,
   InboxLinks,
   PopupHeadingLabel,
+  LabTabs,
   // Icons
   GetApp,
   ArrowLeft,
@@ -376,6 +382,10 @@ export {
   EDCRIcon,
   BPAIcon,
   BPAIco,
+  RenewLic,
+  TransferLic,
+  SurrenderLic,
+  StandardDesign,
   BPAHomeIcon,
   MapMarker,
   Clock,

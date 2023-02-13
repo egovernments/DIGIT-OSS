@@ -18,6 +18,11 @@ import {
   ServicePlanIcon,
   ElectricPlanIcon,
   BankGuaranteeIcon,
+  RenewLic,
+  LabTabs,
+  TransferLic,
+  SurrenderLic,
+  StandardDesign
 } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -26,6 +31,7 @@ const Home = () => {
   const { t } = useTranslation();
   const history = useHistory(); 
   const tenantId = "hr.ambala";
+  const [active,setActive] = useState('1')
   // const tenantId = Digit.ULBService.getCitizenCurrentTenant(true);
   const { data: { stateInfo } = {}, isLoading } = Digit.Hooks.useStore.getInitData();
   const [isLoaderOn, setIsLoaderOn] = useState(false);
@@ -61,6 +67,11 @@ const Home = () => {
     }
   }
 
+  const handleChange = (event, newValue) => {
+    console.log(event.value,newValue);
+    setActive(newValue);
+  };
+
   const allCitizenServicesProps = {
     header: t("DASHBOARD_CITIZEN_SERVICES_LABEL"),
     sideOption: {
@@ -68,137 +79,8 @@ const Home = () => {
       onClick: () => history.push("/digit-ui/citizen/all-services"),
     },
     options: [
-      { 
-        name: t("ES_PGR_HEADER_COMPLAINT"),
-        Icon: <ComplaintIcon />,
-        onClick: () => history.push("/digit-ui/citizen/pgr-home"),
-      },
       {
-        // name: t("MODULE_PT"),
-        name: "Application for  Electrical Plan",
-        Icon: <PTIcon className="fill-path-primary-main" />,
-        onClick: () => history.push("/digit-ui/citizen/obps/electricalPlan"),
-        // onClick: () => history.push("/digit-ui/citizen/pt-home"),
-      },
-      {
-        // name: t("MODULE_TL"),
-        name: "Application for  Service Plan",
-        Icon: <CaseIcon className="fill-path-primary-main" />,
-        onClick: () => history.push("/digit-ui/citizen/obps/servicePlan"),
-        // onClick: () => history.push("/digit-ui/citizen/tl-home"),
-      },
-      {
-        name: "Licencing Services",
-        Icon: <CaseIcon className="fill-path-primary-main" />,
-        onClick: () => history.push("/digit-ui/citizen/obps/card"),
-      },
-      {
-        name: t("CS_COMMON_INBOX_BPA"),
-        Icon: <OBPSIcon />,
-        onClick: handleBPAClick,
-      },
-      {
-        name: t("PROVIDE_LICENSE_TYPE"),
-        Icon: <CaseIcon className="fill-path-primary-main" />,
-        onClick: () => history.push("/digit-ui/citizen/obps/stakeholder/apply/provide-license-type"),
-      },
-      {
-        name: t("PROVIDE_LICENSE_DETAILS"),
-        Icon: <CaseIcon className="fill-path-primary-main" />,
-        onClick: () => history.push("/digit-ui/citizen/obps/stakeholder/apply/license-details"),
-      },
-      {
-        name: t("ADD_AUTHORIZED_USER"),
-        Icon: <CaseIcon className="fill-path-primary-main" />,
-        onClick: () => history.push("/digit-ui/citizen/obps/stakeholder/apply/add-authorized-user"),
-      },
-      {
-        name: t("DEVELOPER_CAPACITY"),
-        Icon: <CaseIcon className="fill-path-primary-main" />,
-        onClick: () => history.push("/digit-ui/citizen/obps/stakeholder/apply/developer-capacity"),
-      },
-      {
-        name: t("STAKEHOLDER_DOCUMENT_DETAILS"),
-        Icon: <CaseIcon className="fill-path-primary-main" />,
-        onClick: () => history.push("/digit-ui/citizen/obps/stakeholder/apply/stakeholder-document-details"),
-      },
-      // {
-      //   name: t("REDIRCT"),
-      //   Icon: <CaseIcon className="fill-path-primary-main" />,
-      //   onClick: () => redirectLoading(),
-      // },
-
-    ],
-    styles: { display: "flex", flexWrap: "wrap", justifyContent: "flex-start", width: "100%" },
-  };
-  const allInfoAndUpdatesProps = {
-    header: t("CS_COMMON_DASHBOARD_INFO_UPDATES"),
-    sideOption: {
-      name: t("DASHBOARD_VIEW_ALL_LABEL"),
-      onClick: () => {},
-    },
-    options: [
-      {
-        name: t("CS_HEADER_MYCITY"),
-        Icon: <HomeIcon />,
-      },
-      {
-        name: t("EVENTS_EVENTS_HEADER"),
-        Icon: <Calender />,
-        onClick: () => history.push("/digit-ui/citizen/engagement/events"),
-      },
-      {
-        name: t("CS_COMMON_DOCUMENTS"),
-        Icon: <DocumentIcon />,
-        onClick: () => history.push("/digit-ui/citizen/engagement/docs"),
-      },
-      {
-        name: t("CS_COMMON_SURVEYS"),
-        Icon: <DocumentIcon />,
-        onClick: () => history.push("/digit-ui/citizen/engagement/surveys/list"),
-      },
-      // {
-      //     name: t("CS_COMMON_HELP"),
-      //     Icon: <HelpIcon/>
-      // }
-    ],
-    styles: { display: "flex", flexWrap: "wrap", justifyContent: "flex-start", width: "100%" },
-  };
-
-  const allBannerMenuProps = {
-    // sideOption: {
-    //   name: t("DASHBOARD_VIEW_ALL_LABEL"),
-    //   onClick: () => {},
-    // },
-    options:[
-      {
-        name: t("Home"),
-        Icon: <HomeIcon className="home-class" />,
-        onClick: () => history.push("/digit-ui/citizen"),
-      },
-      {
-        name: "Licence",
-        Icon: <LicencingIcon className="home-class" />,
-        onClick: () => history.push("/digit-ui/citizen/obps/card"),
-      },
-      {
-        name: t("CS_COMMON_INBOX_BPA"),
-        Icon: <BPAIco />,
-        onClick: handleBPAClick,
-      },
-    ],
-    styles: { display: "flex", flexWrap: "wrap", justifyContent: "flex-start", width: "100%" },
-  };
-
-  const allCitizenServicesPropsCard = {
-    // header: t("DASHBOARD_CITIZEN_SERVICES_LABEL"),
-    // sideOption: {
-    //   name: t("DASHBOARD_VIEW_ALL_LABEL"),
-    //   onClick: () => history.push("/digit-ui/citizen/all-services"),
-    // },
-    options: [
-      {
-        name: "Licencing Services",
+        name: "New Licence",
         Icon: <LicencingIcon className="fill-path-primary-main" />,
         links : [
           {
@@ -216,6 +98,7 @@ const Home = () => {
         name: t("SERVICE_PLAN_CARD"),
         // name: "Service Plan",
         Icon: <ServicePlanIcon className="fill-path-primary-main" />,
+        value: "2",
         links : [
           {
             link: `/digit-ui/citizen/obps/servicePlan`,
@@ -233,6 +116,277 @@ const Home = () => {
       {
         name: t("ELECTRIC_PLAN_CARD"),
         Icon: <ElectricPlanIcon className="fill-path-primary-main" />,
+        value: "3",
+        links : [
+          {
+            link: `/digit-ui/citizen/obps/electricalPlan`,
+            i18nKey: t("EP_CREATE_TRADE"),
+          },
+      
+          {
+            link: `/digit-ui/citizen/tl/electricPlan/my-application`,
+            i18nKey: t("TL_MY_APPLICATIONS_HEADER"),
+          },
+        ],
+        // onClick: () => history.push("/digit-ui/citizen/obps/electricalPlan"),
+        // onClick: () => history.push("/digit-ui/citizen/pt-home"),
+      },
+      // {
+      //   name: t("ACTION_TEST_BUILDING_PLAN_APPROVAL"),
+      //   Icon: <BPAIco className="fill-path-primary-main" />,
+      //   links: [
+      //     {
+      //       link: `/digit-ui/citizen/obps/my-applications`,
+      //       i18nKey: t("BPA_CITIZEN_HOME_VIEW_APP_BY_CITIZEN_LABEL"),
+      //     },
+      //     {
+      //       link: `/digit-ui/citizen/obps/stakeholder/apply/provide-license-type`,
+      //       i18nKey: t("BPA_CITIZEN_HOME_STAKEHOLDER_LOGIN_LABEL"),
+      //     },
+      //     {
+      //       link: `/digit-ui/citizen/obps/home`,
+      //       i18nKey: t("BPA_CITIZEN_HOME_ARCHITECT_LOGIN_LABEL"),
+      //     },
+      //   ]
+      // },
+      {
+        name: t("BANK_GUARANTEE_PLAN"),
+        Icon: <BankGuaranteeIcon className="fill-path-primary-main" />,
+        links: [
+          {
+            link: `/digit-ui/citizen/obps/SubmitNew`,
+            i18nKey: t("BG_CREATE_TRADE"),
+          },
+          {
+            link: `/digit-ui/citizen/tl/bankGuarantee/my-application`,
+            i18nKey: t("TL_MY_APPLICATIONS_HEADER"),
+          },
+         ],
+      },
+      {
+        name: t("Renewal of Licence"),
+        Icon: <RenewLic className="fill-path-primary-main" />,
+        links: [
+          {
+            link: `/digit-ui/citizen/obps/renewalClu`,
+            i18nKey: t("Renew Licence"),
+          },
+         ],
+      },
+      {
+        name: t("Transfer of License"),
+        Icon: <TransferLic className="fill-path-primary-main" />,
+        links: [
+          {
+            link: `/digit-ui/citizen/obps/TransferLicense`,
+            i18nKey: t("Transfer of License"),
+          },
+         ],
+      },
+      {
+        name: t("Surrender of License"),
+        Icon: <SurrenderLic className="fill-path-primary-main" />,
+        links: [
+          {
+            link: `/digit-ui/citizen/obps/SurrenderLic`,
+            i18nKey: t("Surrender of License"),
+          },
+         ],
+      },
+      {
+        name: t("Approval of Standard Design"),
+        Icon: <StandardDesign className="fill-path-primary-main" />,
+        links: [
+          {
+            link: `/digit-ui/citizen/obps/Standard`,
+            i18nKey: t("Approval of Standard Design"),
+          },
+         ],
+      },
+      {
+        name: t("Demarcation cum zoning plan"),
+        Icon: <StandardDesign className="fill-path-primary-main" />,
+        links: [
+          {
+            link: `/digit-ui/citizen/obps/ZoningPlan`,
+            i18nKey: t("Demarcation cum zoning plan"),
+          },
+         ],
+      },
+      {
+        name: t("Revised Layout Plan"),
+        Icon: <StandardDesign className="fill-path-primary-main" />,
+        links: [
+          {
+            link: `/digit-ui/citizen/obps/LayoutPlanClu`,
+            i18nKey: t("Revised Layout Plan"),
+          },
+         ],
+      },
+      {
+        name: t("Extension of time"),
+        Icon: <StandardDesign className="fill-path-primary-main" />,
+        links: [
+          {
+            link: `/digit-ui/citizen/obps/ExtensionCom`,
+            i18nKey: t("Extension of time"),
+          },
+         ],
+      },
+      {
+        name: t("Extension of CLU permission"),
+        Icon: <StandardDesign className="fill-path-primary-main" />,
+        links: [
+          {
+            link: ``,
+            i18nKey: t("Extension of CLU permission"),
+          },
+         ],
+      },
+      {
+        name: t("Composition of urban Area Violation"),
+        Icon: <StandardDesign className="fill-path-primary-main" />,
+        links: [
+          {
+            link: `/digit-ui/citizen/obps/CompositionClu`,
+            i18nKey: t("Composition of urban Area Violation"),
+          },
+         ],
+      },
+      {
+        name: t("Completion Certificate In Licence Colony"),
+        Icon: <StandardDesign className="fill-path-primary-main" />,
+        links: [
+          {
+            link: ``,
+            i18nKey: t("Completion Certificate In Licence Colony"),
+          },
+         ],
+      },
+      {
+        name: t("Change in Beneficial Interest"),
+        Icon: <StandardDesign className="fill-path-primary-main" />,
+        links: [
+          {
+            link: `/digit-ui/citizen/obps/Beneficial`,
+            i18nKey: t("Change in Beneficial Interest"),
+          },
+         ],
+      },
+      {
+        name: t("Building Plan Approval for Low and Medium Risk"),
+        Icon: <StandardDesign className="fill-path-primary-main" />,
+        links: [
+          {
+            link: `/digit-ui/citizen/obps/BPALowMedium`,
+            i18nKey: t("Building Plan Approval for Low and Medium Risk"),
+          },
+         ],
+      },
+    ],
+    styles: { display: "flex", flexWrap: "wrap", justifyContent: "flex-start", width: "100%" },
+  };
+  const allInfoAndUpdatesProps = {
+    header: t("CS_COMMON_DASHBOARD_INFO_UPDATES"),
+    sideOption: {
+      name: t("DASHBOARD_VIEW_ALL_LABEL"),
+      onClick: () => {},
+    },
+    options: [
+      {
+        name: t("ACTION_TEST_BUILDING_PLAN_APPROVAL"),
+        Icon: <BPAIco className="fill-path-primary-main" />,
+        links: [
+          {
+            link: `/digit-ui/citizen/obps/my-applications`,
+            i18nKey: t("BPA_CITIZEN_HOME_VIEW_APP_BY_CITIZEN_LABEL"),
+          },
+          {
+            link: `/digit-ui/citizen/obps/stakeholder/apply/provide-license-type`,
+            i18nKey: t("BPA_CITIZEN_HOME_STAKEHOLDER_LOGIN_LABEL"),
+          },
+          {
+            link: `/digit-ui/citizen/obps/home`,
+            i18nKey: t("BPA_CITIZEN_HOME_ARCHITECT_LOGIN_LABEL"),
+          },
+        ]
+      },
+      
+    ],
+    styles: { display: "flex", flexWrap: "wrap", justifyContent: "flex-start", width: "100%" },
+  };
+
+  const allBannerMenuProps = {
+    // sideOption: {
+    //   name: t("DASHBOARD_VIEW_ALL_LABEL"),
+    //   onClick: () => {},
+    // },
+    dataoptions:[
+      {
+        name: t("Home"),
+        Icon: <HomeIcon className="home-class" />,
+        value: '1',
+      },
+      {
+        name: "Licence",
+        Icon: <LicencingIcon className="home-class" />,
+        value: '2',
+      },
+      {
+        name: t("CS_COMMON_INBOX_BPA"),
+        Icon: <BPAIco />,
+        value: '3',
+      },
+    ],
+    styles: { display: "flex", flexWrap: "wrap", justifyContent: "flex-start", width: "100%" },
+  };
+
+  const allCitizenServicesPropsCard = {
+    // header: t("DASHBOARD_CITIZEN_SERVICES_LABEL"),
+    // sideOption: {
+    //   name: t("DASHBOARD_VIEW_ALL_LABEL"),
+    //   onClick: () => history.push("/digit-ui/citizen/all-services"),
+    // },
+    options: [
+      {
+        name: "Licencing Services",
+        Icon: <LicencingIcon className="fill-path-primary-main" />,
+        value: "1",
+        links : [
+          {
+            link: `/digit-ui/citizen/obps/tab`,
+            i18nKey: t("New Licence Application"),
+          },
+      
+          {
+            link: `/digit-ui/citizen/tl/tradelicence/my-application`,
+            i18nKey: t("TL_MY_APPLICATIONS_HEADER"),
+          },
+        ],
+      },
+      {
+        name: t("SERVICE_PLAN_CARD"),
+        // name: "Service Plan",
+        Icon: <ServicePlanIcon className="fill-path-primary-main" />,
+        value: "2",
+        links : [
+          {
+            link: `/digit-ui/citizen/obps/servicePlan`,
+            i18nKey: t("SP_CREATE_TRADE"),
+          },
+      
+          {
+            link: `/digit-ui/citizen/tl/servicePlan/my-application`,
+            i18nKey: t("TL_MY_APPLICATIONS_HEADER"),
+          },
+        ],
+        // onClick: () => history.push("/digit-ui/citizen/obps/servicePlan"),
+        // onClick: () => history.push("/digit-ui/citizen/tl-home"),
+      },
+      {
+        name: t("ELECTRIC_PLAN_CARD"),
+        Icon: <ElectricPlanIcon className="fill-path-primary-main" />,
+        value: "3",
         links : [
           {
             link: `/digit-ui/citizen/obps/electricalPlan`,
@@ -309,6 +463,23 @@ const Home = () => {
     styles: { display: "flex", flexWrap: "wrap", justifyContent: "flex-start", width: "100%" },
   }; 
 
+  const allServicesCardOption = {
+    menuOption: [
+      {
+        value: '1',
+        list:allCitizenServicesPropsCard,
+      },
+      {
+        value: '2',
+        list:allCitizenServicesProps,
+      },
+      {
+        value: '3',
+        list:allInfoAndUpdatesProps,
+      },
+    ]
+  };
+
   return isLoading ? (
     <Loader />
   ) : (
@@ -324,18 +495,14 @@ const Home = () => {
       ) : (
       <div className="HomePageWrapper">
         
-        <div className="BannerWithSearch">
-          {/* <img src={stateInfo?.bannerUrl} /> */}
-          {/* <img src={"http://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/bg-login.jpg"} /> */}
+        {/* <div className="BannerWithSearch">
           <BannerAllCard {...allBannerMenuProps} />
-          
-          {/* <div className="Search">
-            <StandaloneSearchBar placeholder={t("CS_COMMON_SEARCH_PLACEHOLDER")} />
-          </div> */}
-        </div>
+        </div> */}
 
         <div className="ServicesSection">
-          <ServiceCardOptions {...allCitizenServicesPropsCard} />
+          {/* <ServiceCardOptions active="1" {...allCitizenServicesPropsCard} /> */}
+          <LabTabs {...allBannerMenuProps}{...allServicesCardOption} />
+          {/* <HomeTabs {...allBannerMenuProps}{...allServicesCardOption} /> */}
           {/* <CardBasedOptions {...allCitizenServicesProps} />
           <CardBasedOptions {...allInfoAndUpdatesProps} /> */}
         </div>
