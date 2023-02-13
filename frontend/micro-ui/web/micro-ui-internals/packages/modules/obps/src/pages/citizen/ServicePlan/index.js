@@ -23,12 +23,20 @@ import { Toast } from "@egovernments/digit-ui-react-components";
 const ServicePlanService = () => {
   const [file, setFile] = useState(null);
   const [LOINumber, setLOINumber] = useState("");
+  const [loiPatternErr, setLoiPatternErr] = useState(false)
   const [selfCertifiedDrawing, setSelfCertifiedDrawing] = useState("")
   const [applicationId, setApplicationId] = useState('')
   const [environmental, setEnviromental] = useState('')
   const [gisFormat, setGisFormat] = useState('')
   const [autocad, setAutoCad] = useState('')
   const [certifiedCopy, setCertifiedCopy] = useState('')
+  const [drawingErr, setDrawingErr] = useState({
+    'selfCertifiedDrawingFromEmpaneledDoc': false,
+    'environmentalClearance': false,
+    'shapeFileAsPerTemplate': false,
+    'autoCadFile': false,
+    'certifieadCopyOfThePlan': false
+  })
   const [servicePlanRes, setServicePlanRes] = useState('')
   const [submitDataLabel, setSubmitDataLabel] = useState([]);
   const [ServicePlanDataLabel, setServicePlanDataLabel] = useState([]);
@@ -41,14 +49,12 @@ const ServicePlanService = () => {
   const [developmentPlan, setDevelopmentPlan] = useState("")
   const [gstnumber, setGSTNumber] = useState("")
   const [totalArea, setTotalArea] = useState("")
-
-  /////////////
   // const [stepData, setStepData] = useState(null);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [showToast, setShowToast] = useState(null);
   const [showToastError, setShowToastError] = useState(null);
   const [loader, setLoader] = useState(false);
-  
+  const [fileStoreId, setFileStoreId] = useState({});
   const {
     register,
     handleSubmit,
@@ -68,6 +74,18 @@ const ServicePlanService = () => {
     return pattern.test(loiNumber);
   }
 
+  const checkUploadedImages = (data) => {
+    const keys = Object.keys(data)
+    const arr = ['selfCertifiedDrawingFromEmpaneledDoc','environmentalClearance', 'shapeFileAsPerTemplate', 'autoCadFile', 'certifieadCopyOfThePlan']
+    for(let i=0; i<arr.length; i++){
+      if(!keys.includes(arr[i])){
+        drawingErr[arr[i]] = true
+        setDrawingErr({...drawingErr, [arr[i]]: true})
+      }
+    }
+    return true
+  }
+
   const checkValid = (data) => {
     let isvalid = false
     if(getLoiPattern(data?.loiNumber)){
@@ -75,9 +93,10 @@ const ServicePlanService = () => {
     }
     else{
       isvalid = false
-      alert('Please enter valid LOI number')
+      setLoiPatternErr(true)
       return isvalid
     }
+    
     if(
       data.hasOwnProperty('selfCertifiedDrawingFromEmpaneledDoc') && 
       data.hasOwnProperty('environmentalClearance') &&
@@ -88,19 +107,10 @@ const ServicePlanService = () => {
         isvalid = true
     }
     else{
+      checkUploadedImages(data)
       isvalid = false
-      alert('Please upload all the mandatory images')
       return isvalid
     } 
-    const checkImage = checkDuplicates(valid)
-    if(checkImage){
-      isvalid = false
-      alert('Please upload the seperate image for each and every field')
-      return isvalid
-    }
-    else{
-      isvalid = true
-    }
     return isvalid
   }
   const servicePlan = async (data) => {
@@ -155,12 +165,16 @@ const ServicePlanService = () => {
         servicePlanRes.shapeFileAsPerTemplate = data?.shapeFileAsPerTemplate ? data?.shapeFileAsPerTemplate : servicePlanRes.shapeFileAsPerTemplate
         servicePlanRes.autoCadFile = data?.autoCadFile ? data?.autoCadFile : servicePlanRes.autoCadFile
         servicePlanRes.certifieadCopyOfThePlan = data?.certifieadCopyOfThePlan ? data?.certifieadCopyOfThePlan : servicePlanRes.certifieadCopyOfThePlan
+        servicePlanRes.devName = devName
+        servicePlanRes.developmentPlan = developmentPlan
+        servicePlanRes.purpose = purpose
+        servicePlanRes.totalArea = totalArea
         const isvalidUpdate = checkValid(servicePlanRes)
         console.log({servicePlanRes, data, isvalidUpdate}, "jjjjjjjjjjjjjj");
-        // if(!isvalidUpdate){
-        //   console.log("Dont call update")
-        //   return null
-        // }
+        if(!isvalidUpdate){
+          console.log("Dont call update")
+          return null
+        }
         const updateRequest = {
           requestInfo: {
             api_id: "Rainmaker",
@@ -192,21 +206,7 @@ const ServicePlanService = () => {
       console.log(error.message);
     }
   };
-  const [fileStoreId, setFileStoreId] = useState({});
 
-  const checkDuplicates = (arr) => {
-    let count = {}
-    for(let i=0; i<arr.length; i++){
-      count[arr[i]] = (count[arr[i]] || 0) + 1
-    }
-    const arr1 = Object.values(count)
-    console.log({count, arr1});
-    if(arr1.some((e) => e > 1)) {
-      return true
-    }
-    return false
-  }
-  
   const viewDocument = async (documentId) => {
     try {
       const response = await axios.get(`/filestore/v1/files/url?tenantId=hr&fileStoreIds=${documentId}`, {});
@@ -239,20 +239,13 @@ const ServicePlanService = () => {
     }
   }
 
-  // async function updatedState(file) {
-  //   await new Promise(resolve => {
-  //     setValid(arr => [...arr, file.name])
-  //       resolve();
-  //   })
-  //   return valid
-  // }
   const getDocumentData = async (file, fieldName) => {
     console.log("documentData", fieldName);
     if (selectedFiles.includes(file.name)) {
       setShowToastError({ key: "error" });
       return;
     }
-
+    setDrawingErr({...drawingErr, [fieldName]: false})
     const formData = new FormData();
     formData.append("file", file);
     formData.append("tenantId", "hr");
@@ -275,34 +268,6 @@ const ServicePlanService = () => {
     }
   };
   
-
-  // const getDocumentData = async (file, fieldName) => {
-     
-   
-  //   setValid(prevFiles => [...prevFiles,file.name])
-     
-  //   console.log({valid, file}, "vvvvvvvvv");
-    
-  //   const formData = new FormData();
-  //   formData.append("file", file);
-  //   formData.append("tenantId", "hr");
-  //   formData.append("module", "property-upload");
-  //   formData.append("tag", "tag-property");
-  //   // setLoader(true);
-  //   try {
-  //     const Resp = await axios.post("/filestore/v1/files", formData, {});
-  //     setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
-  //     setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
-     
-  //     setDocId(Resp?.data?.files?.[0]?.fileStoreId);
-  //     console.log("getval======", getValues());
-  //     setLoader(false);
-  //   } catch (error) {
-  //     setLoader(false);
-  //     console.log(error.message);
-  //   }
-  // };
-
   const handleClose = () => {
     setOpen(false)
     window.location.href = `/digit-ui/citizen`
@@ -322,7 +287,13 @@ const ServicePlanService = () => {
 
   const handleLoiNumber = async (e) => {
     e.preventDefault()
+    const isValidPattern = getLoiPattern(LOINumber)
+    if(!isValidPattern){
+      setLoiPatternErr(true)
+      return null
+    }
     const token = window?.localStorage?.getItem("token");
+    setLoiPatternErr(false)
    try {
     const loiRequest = {
       requestInfo: {
@@ -412,6 +383,7 @@ const ServicePlanService = () => {
                 onChange={(e) => setLOINumber(e.target.value)}
                 value={LOINumber}
               />
+              {loiPatternErr ? <p style={{color: 'red'}}>Please enter the valid LOI Number*</p> : " "}
             </Col>
             <Col className="col-4">
                 <button style={{transform: "translateY(35px)"}} type="submit" onClick={handleLoiNumber} id="btnSearch" class="btn btn-primary btn-md center-block">
@@ -580,6 +552,7 @@ const ServicePlanService = () => {
                 </td>
                 <td component="th" scope="row">
                   <h2>Self-certified drawings from empanelled/certified architects that conform to the standard approved template as per the TCP layout plan / Site plan.</h2>
+                  {drawingErr.selfCertifiedDrawingFromEmpaneledDoc ? <p style={{color: 'red'}}>Please upload self-certified drawings from empanelled/certified architects*</p> : " "}
                 </td>
                 <td component="th" scope="row">
                   <label for='file-input-1'>
@@ -620,6 +593,7 @@ const ServicePlanService = () => {
                 </td>
                 <td component="th" scope="row">
                   <h2>Environmental Clearance.</h2>
+                  {drawingErr.environmentalClearance ? <p style={{color: 'red'}}>Please upload environmental clearance drawings*</p> : " "}
                 </td>
                 <td component="th" scope="row">
                 <label for='file-input-2'>
@@ -660,6 +634,8 @@ const ServicePlanService = () => {
                 </td>
                 <td component="th" scope="row">
                   <h2>Service plan in PDF (OCR Compatible) + GIS format.</h2>
+                  {drawingErr.shapeFileAsPerTemplate ? <p style={{color: 'red'}}>Please upload service plan pdf and gis format*</p> : " "}
+
                 </td>
                 <td component="th" scope="row">
                 <label for='file-input-3'>
@@ -700,6 +676,7 @@ const ServicePlanService = () => {
                 </td>
                 <td component="th" scope="row">
                   <h2>Service plan in AutoCAD (DXF) file.</h2>
+                  {drawingErr.autoCadFile ? <p style={{color: 'red'}}>Please upload autocad file*</p> : " "}
                 </td>
                 <td component="th" scope="row">
                 <label for='file-input-4'>
@@ -740,6 +717,8 @@ const ServicePlanService = () => {
                 </td>
                 <td component="th" scope="row">
                   <h2>Certified copy of the Service plan verified by a third party.</h2>
+                  {drawingErr.certifieadCopyOfThePlan ? <p style={{color: 'red'}}>Please upload certified copy of the plan*</p> : " "}
+
                 </td>
                 <td component="th" scope="row">
                 <label for='file-input-5'>
@@ -815,7 +794,7 @@ const ServicePlanService = () => {
           isDleteBtn={true}
           onClose={() => {
             setShowToast(null);
-            setError(null);
+            // setError(null);
           }}
         />
       )}
@@ -826,7 +805,7 @@ const ServicePlanService = () => {
           isDleteBtn={true}
           onClose={() => {
             setShowToastError(null);
-            setError(null);
+            // setError(null);
           }}
         />
       )}
