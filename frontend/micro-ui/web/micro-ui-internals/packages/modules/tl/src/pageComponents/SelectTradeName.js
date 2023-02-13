@@ -22,7 +22,22 @@ const SelectTradeName = ({ t, config, onSelect, value, userType, formData }) => 
   }, []);
 
   const goNext = () => {
-    sessionStorage.setItem("CurrentFinancialYear", FY);
+    const getCurrentFinancialYear = () => {
+      var today = new Date();
+      var curMonth = today.getMonth();
+      var fiscalYr = "";
+      if (curMonth > 3) {
+        var nextYr1 = (today.getFullYear() + 1).toString();
+        fiscalYr = today.getFullYear().toString() + "-" + nextYr1;
+      } else {
+        var nextYr2 = today.getFullYear().toString();
+        fiscalYr = (today.getFullYear() - 1).toString() + "-" + nextYr2.slice(-2);
+      }
+      return fiscalYr;
+    };
+
+    // sessionStorage.setItem("CurrentFinancialYear", FY);
+    sessionStorage.setItem("CurrentFinancialYear", getCurrentFinancialYear());
     onSelect(config.key, { TradeName });
   };
   if (isLoading) {
