@@ -228,9 +228,11 @@ const Genarelinfo = (props) => {
   const [smShow, setSmShow] = useState(false);
   const [labelValue, setLabelValue] = useState("");
   const Colors = {
-    approved: "#09cb3d",
-    disapproved: "#ff0000",
-    info: "#FFB602"
+    conditional:"#2874A6",
+    approved:"#09cb3d",
+    disapproved:"#ff0000",
+   
+    info:"#FFB602"
   }
   const [selectedFieldData, setSelectedFieldData] = useState();
   const [fieldValue, setFieldValue] = useState("");
@@ -239,7 +241,9 @@ const Genarelinfo = (props) => {
     purpose: Colors.info,
     potential: Colors.info,
     district: Colors.info,
+    developmentPlan : Colors.info,
     state: Colors.info,
+
     tehsil: Colors.info,
     revenue: Colors.info,
     rectangle: Colors.info,
@@ -263,9 +267,10 @@ const Genarelinfo = (props) => {
     nameOfAuthSignatoryDeveloper : Colors.info,
     registeringAuthority : Colors.info,
     hadbastNo : Colors.info,
+    sector : Colors.info,
   })
 
-  const fieldIdList = [{ label: "Purpose Of License", key: "purpose" }, { label: "Potential Zone", key: "potential" }, { label: "District", key: "district" }, { label: "State", key: "state" }, { label: "Tehsil", key: "tehsil" }, { label: "Revenue estate", key: "revenue" }, { label: "Rectangle No.", key: "rectangleNo" }, { label: "Killa", key: "killa" }, { label: "Land Owner", key: "landOwner" }, { label: "Consolidation Type", key: "consolidationType" }, { label: "Kanal", key: "kanal" }, { label: "Marla", key: "marla" }, { label: "Sarsai", key: "sarsai" }, { label: "Bigha", key: "bigha" }, { label: "Biswa", key: "biswa" }, { label: "Biswansi", key: "biswansi" }, { label: "Collaboration Agreement", key: "collabrationAgreement" }, { label: "Developer Company", key: "developerCompany" }, { label: "Date of Registering", key: "dateOfRegistering" }, { label: "Date of Validity", key: "dateOfValidity" }, { label: "Collaboration Agreement Irrevociable", key: "agreementIrrevocialble" }, { label: "Name of Authorized Signatory Developer", key: "nameOfAuthSignatory" }, { label: "Name of Authorized Signatory Developer", key: "nameOfAuthSignatoryDeveloper" }, { label: "Registering Authority", key: "registeringAuthority" }, { label: "Hadbast Number", key: "hadbastNo" } ];
+  const fieldIdList = [{ label: "Purpose Of License", key: "purpose" }, { label: "District", key: "district" }, { label: "State", key: "state" },{ label: "Development Plan", key: "developmentPlan" }, { label: "Potential Zone", key: "potential" },{ label: "Sector", key: "sector" }, { label: "Tehsil", key: "tehsil" }, { label: "Revenue estate", key: "revenue" }, { label: "Rectangle No", key: "rectangleNo" }, { label: "Killa", key: "killa" }, { label: "Land Owner", key: "landOwner" }, { label: "Consolidation Type", key: "consolidationType" }, { label: "Kanal", key: "kanal" }, { label: "Marla", key: "marla" }, { label: "Sarsai", key: "sarsai" }, { label: "Bigha", key: "bigha" }, { label: "Biswa", key: "biswa" }, { label: "Biswansi", key: "biswansi" }, { label: "Collaboration Agreement", key: "collabrationAgreement" }, { label: "Developer Company", key: "developerCompany" }, { label: "Date of Registering", key: "dateOfRegistering" }, { label: "Date of Validity", key: "dateOfValidity" }, { label: "Collaboration Agreement Irrevociable", key: "agreementIrrevocialble" }, { label: "Name of Authorized Signatory Developer", key: "nameOfAuthSignatory" }, { label: "Name of Authorized Signatory Developer", key: "nameOfAuthSignatoryDeveloper" }, { label: "Registering Authority", key: "registeringAuthority" }, { label: "Hadbast Number", key: "hadbastNo" } ];
 
 
   const getColorofFieldIcon = () => {
@@ -277,7 +282,7 @@ const Genarelinfo = (props) => {
         console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
         if (fieldPresent && fieldPresent.length) {
           console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
-          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved ? Colors.approved : Colors.disapproved }
+          tempFieldColorState = {...tempFieldColorState,[item.key]:fieldPresent[0].isApproved === "approved" ?Colors.approved: fieldPresent[0].isApproved === "disapproved" ? Colors.disapproved:fieldPresent[0].isApproved === "conditional" ? Colors.conditional:Colors.info}
 
         }
       }
@@ -564,7 +569,8 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     Rectangle No.  
                     </th>
                      <th class="fw-normal pb-0 border-bottom-0 align-top">
-                    Khasra No.
+                    {/* Khasra No. */}
+                    khewats No
                     </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
                     Name of Land Owner
@@ -580,7 +586,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     Rectangle No./Mustil(Changed)
                     </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
-                    Khasra Number(Changed)
+                    khewats No(Changed)
                     </th>
                      <th class="fw-normal pb-0 border-bottom-0 align-top">
                      Name of the Land Ower as per Mutation/Jamabandi
@@ -656,11 +662,11 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       style={{
                         display: hideRemarks || hideRemarksPatwari ?"none":"block",
 
-                        color: fieldIconColors.district
+                        color: fieldIconColors.developmentPlan
                       }}
                       onClick={() => {
                         setLabelValue("Development Plan"),
-                        setOpennedModal("district")
+                        setOpennedModal("developmentPlan")
                           setSmShow(true),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.district : null);
@@ -687,11 +693,11 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                         style={{
                          
                           display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                          color: fieldIconColors.tehsil
+                          color: fieldIconColors.sector
                         }}
                         onClick={() => {
                           setLabelValue("Sector"),
-                          setOpennedModal("tehsil")
+                          setOpennedModal("sector")
                           setSmShow(true),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.tehsil : null);
@@ -753,7 +759,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           color: fieldIconColors.rectangleNo
                         }}
                         onClick={() => {
-                          setLabelValue("Rectangle No."),
+                          setLabelValue("Rectangle No"),
                           setOpennedModal("rectangeNo")
                           setSmShow(true),
                           console.log("modal open"),
@@ -768,11 +774,11 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           color: fieldIconColors.rectaNo
                         }}
                         onClick={() => {
-                          setLabelValue("Rectangle No."),
-                          setOpennedModal("rectangeNo")
+                          setLabelValue("khewats No"),
+                          setOpennedModal("khewatsNo")
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.rectaNo : null);
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.khewats : null);
                         }}
                       ></ReportProblemIcon>
                     </th>
@@ -1163,7 +1169,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       <input type="text" className="form-control" placeholder={item?.rectangleNo} disabled />
                     </td>
                     <td>
-                      <input type="text" className="form-control" placeholder={item?.rectaNo} disabled />
+                      <input type="text" className="form-control" placeholder={item?.khewats} disabled />
                     </td>
                     <td class="text-center">
                       <input type="text" className="form-control" title={item?.landOwner} placeholder={item?.landOwner} disabled />
