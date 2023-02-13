@@ -74,8 +74,8 @@ const IndustrialPlottedForm = ({
           <Col md={4} xxl lg="3">
             <div>
               <Form.Label>
-                <h2>
-                  Area under Sector Road & Green Belt
+                <h2 data-toggle="tooltip" data-placement="top" title="Area under Sector Road & Green Belt">
+                  Area under Sector Road
                   <span style={{ color: "red" }}>*</span>
                 </h2>
               </Form.Label>
@@ -102,8 +102,8 @@ const IndustrialPlottedForm = ({
           <Col md={4} xxl lg="3">
             <div>
               <Form.Label>
-                <h2>
-                  Balance area after deducting area under sector road and Green Belt
+                <h2 data-toggle="tooltip" data-placement="top" title=" Balance area after deducting area under sector road and Green Belt">
+                  Balance area
                   <span style={{ color: "red" }}>*</span>
                 </h2>
               </Form.Label>
@@ -154,8 +154,8 @@ const IndustrialPlottedForm = ({
           <Col md={4} xxl lg="3">
             <div>
               <Form.Label>
-                <h2>
-                  50% of the Area under Sector Road & Green Belt
+                <h2 data-toggle="tooltip" data-placement="top" title="  50% of the Area under Sector Road & Green Belt">
+                  50% of the Area
                   <span style={{ color: "red" }}>*</span>
                 </h2>
               </Form.Label>
@@ -220,8 +220,8 @@ const IndustrialPlottedForm = ({
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
-                  <h2>
-                    Area under Affordable Industrial Housing
+                  <h2 data-toggle="tooltip" data-placement="top" title="  Area under Affordable Industrial Housing">
+                    Area under Affordable Housing
                     <span style={{ color: "red" }}>*</span>
                   </h2>
                 </Form.Label>
