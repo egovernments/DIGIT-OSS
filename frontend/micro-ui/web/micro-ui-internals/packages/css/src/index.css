@@ -20495,5 +20495,10 @@ input[type=number],
 
 input[type=text]:disabled {
   background: #f3f3f3;
-  border-bottom: 1px dotted;
+  /* border-bottom: 1px dotted; */
+}
+
+.app-input-text > input {
+  height: 36px;
+  padding: 0 0 0 8px !important;
 }
