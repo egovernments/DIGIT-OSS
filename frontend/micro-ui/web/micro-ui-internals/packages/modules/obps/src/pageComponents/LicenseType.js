@@ -3,6 +3,7 @@ import {
   Dropdown,
   FormStep,
   RadioOrSelect,
+  MuiRadio,
   TextInput,
   OpenLinkContainer,
   CardLabelError,
@@ -16,7 +17,6 @@ import { MenuItem, Select } from "@mui/material";
 import axios from "axios";
 import { newConfig } from "../config/stakeholderConfig";
 import Spinner from "../components/Loader/index";
-
 const LicenseType = ({ t, config, onSelect, userType, formData }) => {
   const userInfo = Digit.UserService.getUser();
 
@@ -40,7 +40,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
       const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${userInfo?.info?.id}&isAllData=true`, requestResp, {});
       const developerDataGet = getDevDetails?.data;
       setShowDevTypeFields(developerDataGet?.devDetail[0]?.applicantType?.developerType || devType);
-      setLicenseType(developerDataGet?.devDetail[0]?.applicantType?.LicneseType);
+      setLicenseTypeCom(developerDataGet?.devDetail[0]?.applicantType?.LicneseType);
     } catch (error) {
       return error;
     }
@@ -58,9 +58,9 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
 
-  const setDevType = (data) => {
-    console.log("DEVTYPE",data?.value);
-    const getDevTypeValue = data?.value;
+  const setDevType = (e) => {
+    console.log("DEVTYPE",e.target.value);
+    const getDevTypeValue = e.target.value;
     setShowDevTypeFields(getDevTypeValue);
     localStorage.setItem("devTypeValueFlag", getDevTypeValue);
     setLicenseTypeCom(`${LicenseType?.tradeType}.${getDevTypeValue}`);
@@ -102,15 +102,17 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
   const onSkip = () => onSelect();
 
   function selectLicenseType(value) {
-    console.log("log123", value?.tradeType)
+    
     setLicenseType(value);
+    setLicenseTypeCom(`${value?.tradeType}.${showDevTypeFields}`);
+    console.log("log123", licenceTypeCombined);
   }
 
   function selectArchitectNo(e) {
     setArchitectNo(e.target.value.toUpperCase());
   }
 
-  // console.log("++++",`${LicenseType?.tradeType}.${showDevTypeFields}`);
+  // console.log("++++",licenceTypeCombined);
 
   function goNext() {
     // if (!(formData?.result && formData?.result?.Licenses[0]?.id)){
@@ -178,7 +180,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
     <div>
       {loader && <Spinner />}
       <div className={isopenlink ? "OpenlinkContainer" : ""}>
-        {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
+        {/* {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>} */}
         <Timeline currentStep={1} flow={LicenseType?.tradeType === "ARCHITECT.CLASSA" ? "ARCHITECT.CLASSA" : "STAKEHOLDER"} />
         <FormStep
           t={t}
@@ -200,7 +202,6 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
                     <RadioOrSelect
                       t={t}
                       optionKey="i18nKey"
-                      value={LicenseType}
                       isMandatory={config.isMandatory}
                       options={getLicenseType() || {}}
                       selectedOption={LicenseType}
@@ -242,7 +243,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
                     {`${t("Select Developer Type")}`} <span className="font-weight-bold text-danger">*</span>
                   </CardLabel>
 
-                  <Dropdown
+                  {/* <Dropdown
                     labels="Select Type"
                     className="form-field"
                     selected={{ code: showDevTypeFields, value: showDevTypeFields }}
@@ -254,7 +255,21 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
                     style={{ width: "100%" }}
                     t={t}
                     required
-                  />
+                  /> */}
+
+                  <Select
+                      value={showDevTypeFields || ''}
+                      onChange={setDevType}
+                      className="w-100 form-control"
+                      variant="standard"
+                      
+                    >
+                        {
+                            arrayDevList?.map((item, index) => (
+                                <MenuItem value={item.value} >{item?.code}</MenuItem>
+                            ))
+                        }
+                    </Select>
                 </div>
               )}
             </Form.Group>
