@@ -439,7 +439,7 @@ const LandScheduleForm = (props) => {
   }, []);
 
   const LandScheduleModalData = (modaldata) => {
-    console.log(modaldata);
+    console.log("modaldata", modaldata);
     setModalData((prev) => [...prev, modaldata]);
     // resetValues();
     setmodal(false);
