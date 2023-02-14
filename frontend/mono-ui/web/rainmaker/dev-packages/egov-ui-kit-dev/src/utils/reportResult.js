@@ -1166,7 +1166,8 @@ class ShowField extends Component {
         metaData.reportDetails &&
         (metaData.reportDetails.reportName == "TLApplicationStatusReport" ||
           metaData.reportDetails.reportName == "TLRegistryReport" ||
-          metaData.reportDetails.reportName == "TLRenewalPendingReport")
+          metaData.reportDetails.reportName == "TLRenewalPendingReport" ||
+          metaData.reportDetails.reportName == "ObpsApplicationStatusReport" )
       ) {
         isFooterexist = false;
       }

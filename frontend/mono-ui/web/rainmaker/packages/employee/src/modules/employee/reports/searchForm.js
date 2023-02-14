@@ -518,7 +518,7 @@ class ShowForm extends Component {
 
       if (metaData && metaData.reportDetails && metaData.reportDetails.reportName === "ObpsApplicationStatusReport") {
         searchParams = searchParams.map((ele) => {
-          return ele.name == "status" || ele.name == "serviceType" ? { ...ele, input: ele.input && ele.input.map((ele) => ele.replaceAll(",", "_")) } : { ...ele } 
+          return (ele.name == "status" || ele.name == "serviceType" || ele.name == "applicationType" || ele.name == "applicationChannel") ? { ...ele, input: ele.input && ele.input.map((ele) => ele.replaceAll(",", "_")) } : { ...ele } 
         }
         );
       }
