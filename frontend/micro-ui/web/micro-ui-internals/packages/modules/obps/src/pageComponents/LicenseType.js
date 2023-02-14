@@ -59,6 +59,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
   const stateId = Digit.ULBService.getStateId();
 
   const setDevType = (data) => {
+    console.log("DEVTYPE",data?.value);
     const getDevTypeValue = data?.value;
     setShowDevTypeFields(getDevTypeValue);
     localStorage.setItem("devTypeValueFlag", getDevTypeValue);
@@ -101,7 +102,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
   const onSkip = () => onSelect();
 
   function selectLicenseType(value) {
-    // console.log("log123", value)
+    console.log("log123", value?.tradeType)
     setLicenseType(value);
   }
 
@@ -199,6 +200,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
                     <RadioOrSelect
                       t={t}
                       optionKey="i18nKey"
+                      value={LicenseType}
                       isMandatory={config.isMandatory}
                       options={getLicenseType() || {}}
                       selectedOption={LicenseType}
