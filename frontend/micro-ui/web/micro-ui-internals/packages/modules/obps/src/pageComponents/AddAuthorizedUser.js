@@ -1,4 +1,4 @@
-import { FormStep, TextInput, MobileNumber, CardLabel, CardLabelError, Dropdown, Toast, RemoveIcon } from "@egovernments/digit-ui-react-components";
+import { FormStep, TextInput, MobileNumber, CardLabel, CardLabelError, Dropdown, Toast, RemoveIcon,MuiTables } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Table from "react-bootstrap/Table";
@@ -376,7 +376,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
     setLoading(true);
     // if(aurthorizedMobileNumber!=="" && aurthorizedUserName!=="" && aurthorizedMobileNumber!=="" && aurthorizedEmail!==""){
     const user = {
-      userName: aurthorizedEmail,
+      userName: aurthorizedMobileNumber,
       name: aurthorizedUserName,
       gender: gender.value,
       mobileNumber: aurthorizedMobileNumber,
@@ -475,6 +475,8 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
         return error;
       });
   };
+
+  
 
   const goNext = async (e) => {
     //   e.preventDefault();
