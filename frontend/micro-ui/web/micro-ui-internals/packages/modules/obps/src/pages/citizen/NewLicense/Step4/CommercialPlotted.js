@@ -32,7 +32,7 @@ const CommercialPlottedForm = ({
         </h6>
         <Col col-12>
           <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
-            <Col md={4} xxl lg="3">
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2>
@@ -41,9 +41,13 @@ const CommercialPlottedForm = ({
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <NumberInput disabled control={control} name="totalAreaScheme" customInput={TextField} />
             </Col>
-            <Col md={4} xxl lg="3">
+          </Row>
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2 data-toggle="tooltip" data-placement="top" title="Area under Sector Road & Green Belt">
@@ -52,6 +56,8 @@ const CommercialPlottedForm = ({
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input
                 type="number"
                 className="form-control"
@@ -76,7 +82,9 @@ const CommercialPlottedForm = ({
                 }}
               />
             </Col>
-            <Col md={4} xxl lg="3">
+          </Row>
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2 data-toggle="tooltip" data-placement="top" title=" Balance area after deducting area under sector road and Green Belt">
@@ -85,9 +93,13 @@ const CommercialPlottedForm = ({
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input disabled type="number" className="form-control" {...register("balanceAreaAfterDeduction")} />
             </Col>
-            <Col md={4} xxl lg="3">
+          </Row>
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2>
@@ -96,6 +108,8 @@ const CommercialPlottedForm = ({
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input
                 type="number"
                 className="form-control"
@@ -117,7 +131,7 @@ const CommercialPlottedForm = ({
             </Col>
           </Row>
           <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
-            <Col md={4} xxl lg="3">
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2>
@@ -126,10 +140,13 @@ const CommercialPlottedForm = ({
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input disabled type="number" className="form-control" {...register("balanceArea")} />
             </Col>
-
-            <Col md={4} xxl lg="3">
+          </Row>
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2
@@ -142,9 +159,13 @@ const CommercialPlottedForm = ({
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input disabled type="number" className="form-control" {...register("totalSiteArea")} />
             </Col>
-            <Col md={4} xxl lg="3">
+          </Row>
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2>
@@ -153,6 +174,8 @@ const CommercialPlottedForm = ({
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input disabled type="number" className="form-control" {...register("netPlannedArea")} />
             </Col>
           </Row>
@@ -163,7 +186,7 @@ const CommercialPlottedForm = ({
         </h6>
         <br></br>
         <Row className="ml-auto" style={{ marginBottom: 5 }}>
-          <Col md={4} xxl lg="3">
+          <Col md={4} xxl lg="4">
             <div>
               <Form.Label>
                 <h2 data-toggle="tooltip" data-placement="top" title="   Ground Coverage (in Square Meters)">
@@ -172,6 +195,8 @@ const CommercialPlottedForm = ({
                 </h2>
               </Form.Label>
             </div>
+          </Col>
+          <Col md={4} xxl lg="4">
             <input
               type="text"
               className="form-control"
@@ -183,9 +208,13 @@ const CommercialPlottedForm = ({
                 } else setError({ ...error, ["groundCoverage"]: "" });
               }}
             />
+          </Col>
+          <Col md={4} xxl lg="4">
             {error?.groundCoverage && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.groundCoverage}</h6>}
           </Col>
-          <Col md={4} xxl lg="3">
+        </Row>
+        <Row className="ml-auto" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="4">
             <div>
               <Form.Label>
                 <h2>
@@ -194,6 +223,8 @@ const CommercialPlottedForm = ({
                 </h2>
               </Form.Label>
             </div>
+          </Col>
+          <Col md={4} xxl lg="4">
             <input
               type="text"
               className="form-control"
@@ -205,9 +236,13 @@ const CommercialPlottedForm = ({
                 } else setError({ ...error, ["FAR"]: "" });
               }}
             />
+          </Col>
+          <Col md={4} xxl lg="4">
             {error?.FAR && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.FAR}</h6>}
           </Col>
-          <Col md={4} xxl lg="3">
+        </Row>
+        <Row className="ml-auto" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="4">
             <div>
               <Form.Label>
                 <h2 data-toggle="tooltip" data-placement="top" title="Parking/Open Space/Services (in Square Meters)">
@@ -216,6 +251,8 @@ const CommercialPlottedForm = ({
                 </h2>
               </Form.Label>
             </div>
+          </Col>
+          <Col md={4} xxl lg="4">
             <input
               type="text"
               className="form-control"

@@ -38,8 +38,9 @@ const ResidentialPlottedForm = ({
           <b>Detail of land use</b>
         </h6>
         <Col col-12>
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}></Row>
           <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
-            <Col md={4} xxl lg="3">
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2>
@@ -48,9 +49,13 @@ const ResidentialPlottedForm = ({
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <NumberInput disabled control={control} name="totalAreaScheme" customInput={TextField} />
             </Col>
-            <Col md={4} xxl lg="3">
+          </Row>
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2 data-toggle="tooltip" data-placement="top" title="Area under Sector Road & Green Belt">
@@ -59,6 +64,8 @@ const ResidentialPlottedForm = ({
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input
                 type="number"
                 className="form-control"
@@ -78,7 +85,9 @@ const ResidentialPlottedForm = ({
                 }}
               />
             </Col>
-            <Col md={4} xxl lg="3">
+          </Row>
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2 data-toggle="tooltip" data-placement="top" title=" Balance area after deducting area under sector road and Green Belt">
@@ -87,9 +96,13 @@ const ResidentialPlottedForm = ({
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input disabled type="number" className="form-control" {...register("balanceAreaAfterDeduction")} />
             </Col>
-            <Col md={4} xxl lg="3">
+          </Row>
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2>
@@ -98,6 +111,8 @@ const ResidentialPlottedForm = ({
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input
                 type="number"
                 className="form-control"
@@ -119,7 +134,7 @@ const ResidentialPlottedForm = ({
             </Col>
           </Row>
           <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
-            <Col md={4} xxl lg="3">
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2 data-toggle="tooltip" data-placement="top" title="   Area under G.H. = 10% of the total area of the scheme">
@@ -128,6 +143,8 @@ const ResidentialPlottedForm = ({
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input
                 type="number"
                 className="form-control"
@@ -141,7 +158,9 @@ const ResidentialPlottedForm = ({
               />
               {error?.areaUnderGH && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.areaUnderGH}</h6>}
             </Col>
-            <Col md={4} xxl lg="3">
+          </Row>
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2>
@@ -150,9 +169,13 @@ const ResidentialPlottedForm = ({
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input disabled type="number" className="form-control" {...register("balanceArea")} />
             </Col>
-            <Col md={4} xxl lg="3">
+          </Row>
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2 data-toggle="tooltip" data-placement="top" title="  50% of the Area under Sector Road & Green Belt">
@@ -161,10 +184,13 @@ const ResidentialPlottedForm = ({
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input disabled type="number" className="form-control" {...register("areaUnderSectorAndGreenBelt")} />
             </Col>
-
-            <Col md={4} xxl lg="3">
+          </Row>
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2>
@@ -173,6 +199,8 @@ const ResidentialPlottedForm = ({
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input disabled type="number" className="form-control" {...register("netPlannedArea")} />
             </Col>
           </Row>
@@ -180,8 +208,9 @@ const ResidentialPlottedForm = ({
         <h6 className="text-black mt-4">
           <b>Detail of the Plots</b>
         </h6>
+
         <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
-          <Col md={4} xxl lg="3">
+          <Col md={4} xxl lg="4">
             <div>
               <Form.Label>
                 <h2>
@@ -190,6 +219,8 @@ const ResidentialPlottedForm = ({
                 </h2>
               </Form.Label>
             </div>
+          </Col>
+          <Col md={4} xxl lg="4">
             <NumberInput
               control={control}
               name="totalNumberOfPlots"
@@ -206,7 +237,9 @@ const ResidentialPlottedForm = ({
               }}
             />
           </Col>
-          <Col md={4} xxl lg="3">
+        </Row>
+        <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="4">
             <div>
               <Form.Label>
                 <h2>
@@ -215,6 +248,8 @@ const ResidentialPlottedForm = ({
                 </h2>
               </Form.Label>
             </div>
+          </Col>
+          <Col md={4} xxl lg="4">
             <NumberInput
               control={control}
               name="generalPlots"
@@ -228,9 +263,13 @@ const ResidentialPlottedForm = ({
                 else setError({ ...error, ["generalPlots"]: "" });
               }}
             />
+          </Col>
+          <Col md={4} xxl lg="4">
             {error?.generalPlots && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.generalPlots}</h6>}
           </Col>
-          <Col md={4} xxl lg="3">
+        </Row>
+        <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="4">
             <div>
               <Form.Label>
                 <h2>
@@ -239,6 +278,8 @@ const ResidentialPlottedForm = ({
                 </h2>
               </Form.Label>
             </div>
+          </Col>
+          <Col md={4} xxl lg="4">
             <NumberInput
               control={control}
               name="requiredNPNLPlots"
@@ -252,9 +293,13 @@ const ResidentialPlottedForm = ({
                 else setError({ ...error, ["requiredNPNLPlots"]: "" });
               }}
             />
+          </Col>
+          <Col md={4} xxl lg="4">
             {error?.requiredNPNLPlots && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.requiredNPNLPlots}</h6>}
           </Col>
-          <Col md={4} xxl lg="3">
+        </Row>
+        <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="4">
             <div>
               <Form.Label>
                 <h2>
@@ -263,6 +308,8 @@ const ResidentialPlottedForm = ({
                 </h2>
               </Form.Label>
             </div>
+          </Col>
+          <Col md={4} xxl lg="4">
             <NumberInput
               control={control}
               name="requiredEWSPlots"
@@ -284,12 +331,15 @@ const ResidentialPlottedForm = ({
                 }
               }}
             />
+          </Col>
+          <Col md={4} xxl lg="4">
             {error?.requiredEWSPlots && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.requiredEWSPlots}</h6>}
           </Col>
         </Row>
         <br></br>
-        <Row className="ml-auto" style={{ marginBottom: 5 }}>
-          <Col md={4} xxl lg="3">
+
+        <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="4">
             <div>
               <Form.Label>
                 <h2>
@@ -298,9 +348,13 @@ const ResidentialPlottedForm = ({
                 </h2>
               </Form.Label>
             </div>
+          </Col>
+          <Col md={4} xxl lg="4">
             <input disabled type="number" className="form-control" {...register("permissibleDensity")} />
           </Col>
-          <Col md={4} xxl lg="3">
+        </Row>
+        <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="4">
             <div>
               <Form.Label>
                 <h2>
@@ -309,6 +363,8 @@ const ResidentialPlottedForm = ({
                 </h2>
               </Form.Label>
             </div>
+          </Col>
+          <Col md={4} xxl lg="4">
             <input
               type="number"
               className="form-control"
@@ -320,9 +376,13 @@ const ResidentialPlottedForm = ({
               }}
               onWheel={handleWheel}
             />
+          </Col>
+          <Col md={4} xxl lg="4">
             {error?.permissibleCommercialArea && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.permissibleCommercialArea}</h6>}
           </Col>
-          <Col md={4} xxl lg="3">
+        </Row>
+        <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="4">
             <div>
               <Form.Label>
                 <h2>
@@ -331,9 +391,13 @@ const ResidentialPlottedForm = ({
                 </h2>
               </Form.Label>
             </div>
+          </Col>
+          <Col md={4} xxl lg="4">
             <input type="number" className="form-control" {...register("underPlot")} onWheel={handleWheel} />
           </Col>
-          <Col md={4} xxl lg="3">
+        </Row>
+        <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="4">
             <div>
               <Form.Label>
                 <h2>
@@ -342,6 +406,8 @@ const ResidentialPlottedForm = ({
                 </h2>
               </Form.Label>
             </div>
+          </Col>
+          <Col md={4} xxl lg="4">
             <input
               type="number"
               className="form-control"
@@ -359,8 +425,9 @@ const ResidentialPlottedForm = ({
           </Col>
         </Row>
         <br></br>
-        <Row className="ml-auto" style={{ marginBottom: 5 }}>
-          <Col md={4} xxl lg="3">
+
+        <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="4">
             <div>
               <Form.Label>
                 <h2>
@@ -369,10 +436,16 @@ const ResidentialPlottedForm = ({
                 </h2>
               </Form.Label>
             </div>
+          </Col>
+          <Col md={4} xxl lg="4">
             <input type="number" className="form-control" {...register("permissibleSaleableArea")} onWheel={handleWheel} />
+          </Col>
+          <Col md={4} xxl lg="4">
             {error?.permissibleSaleableArea && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.permissibleSaleableArea}</h6>}
           </Col>
-          <Col md={4} xxl lg="3">
+        </Row>
+        <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="4">
             <div>
               <Form.Label>
                 <h2 data-toggle="tooltip" data-placement="top" title="  Required green area on applied land">
@@ -381,6 +454,8 @@ const ResidentialPlottedForm = ({
                 </h2>
               </Form.Label>
             </div>
+          </Col>
+          <Col md={4} xxl lg="4">
             <input
               type="number"
               className="form-control"
@@ -392,6 +467,8 @@ const ResidentialPlottedForm = ({
               }}
               onWheel={handleWheel}
             />
+          </Col>
+          <Col md={4} xxl lg="4">
             {error?.requiredGreenArea && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.requiredGreenArea}</h6>}
           </Col>
         </Row>
@@ -403,8 +480,8 @@ const ResidentialPlottedForm = ({
         <br></br>
         {fields?.map((item, index) => {
           return (
-            <Row key={item?.id} className="ml-auto" style={{ marginBottom: 5 }}>
-              <Col md={4} xxl lg="3">
+            <Row key={item?.id} className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+              <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
                     <h2>
@@ -413,6 +490,8 @@ const ResidentialPlottedForm = ({
                     </h2>
                   </Form.Label>
                 </div>
+              </Col>
+              <Col md={4} xxl lg="4">
                 <input
                   type="name"
                   className="form-control"
@@ -421,40 +500,45 @@ const ResidentialPlottedForm = ({
                   onWheel={handleWheel}
                 />
               </Col>
-              <Col md={4} xxl lg="3">
-                <div>
-                  <Form.Label>
-                    <h2>
-                      Provided
-                      <span style={{ color: "red" }}>*</span>
-                    </h2>
-                  </Form.Label>
-                </div>
-                <input
-                  type="name"
-                  className="form-control"
-                  {...register(`detailOfCommunitySites.${index}.provided`)}
-                  // {...register("provided")}
-                  onWheel={handleWheel}
-                />
-              </Col>
-              <Col style={{ alignSelf: "center" }} md={2} lg="2">
-                <button
-                  type="button"
-                  style={{ float: "right", marginRight: 15 }}
-                  className="btn btn-primary"
-                  onClick={() => add({ communitySiteName: "", provided: "" })}
-                >
-                  Add
-                </button>
-              </Col>
-              {index > 0 && (
-                <Col style={{ alignSelf: "center" }} md={2} lg="2">
-                  <button type="button" className="btn btn-primary" onClick={() => remove(index)}>
-                    Delete
+
+              <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+                <Col md={4} xxl lg="4">
+                  <div>
+                    <Form.Label>
+                      <h2>
+                        Provided
+                        <span style={{ color: "red" }}>*</span>
+                      </h2>
+                    </Form.Label>
+                  </div>
+                </Col>
+                <Col md={4} xxl lg="4">
+                  <input
+                    type="name"
+                    className="form-control"
+                    {...register(`detailOfCommunitySites.${index}.provided`)}
+                    // {...register("provided")}
+                    onWheel={handleWheel}
+                  />
+                </Col>
+                <Col md={4} xxl lg="4">
+                  <button
+                    type="button"
+                    style={{ float: "right", marginRight: 15 }}
+                    className="btn btn-primary"
+                    onClick={() => add({ communitySiteName: "", provided: "" })}
+                  >
+                    Add
                   </button>
                 </Col>
-              )}
+                {index > 0 && (
+                  <Col style={{ alignSelf: "center" }} md={2} lg="2">
+                    <button type="button" className="btn btn-primary" onClick={() => remove(index)}>
+                      Delete
+                    </button>
+                  </Col>
+                )}
+              </Row>
             </Row>
           );
         })}
