@@ -55,10 +55,16 @@ public class DiffService {
         changes.forEach(change -> {
 			log.info("Field  " + change.getPropertyName() + " changed from " + change.getLeft() + " to "
 					+ change.getRight());
-            if (!FIELDS_TO_IGNORE.contains(change.getPropertyName())) {
+
+            //if (!FIELDS_TO_IGNORE.contains(change.getPropertyName())) {
                 updatedFields.add(change.getPropertyName());
-            }
+            //}
         });
+        if(FIELDS_TO_IGNORE.stream().anyMatch(updatedFields::contains))
+            throw new CustomException("EG_PT_MUTATION_ERROR",
+                    "The property mutation doesnt allow change of these fields " + updatedFields);
+
+
         return updatedFields;
     }
 
