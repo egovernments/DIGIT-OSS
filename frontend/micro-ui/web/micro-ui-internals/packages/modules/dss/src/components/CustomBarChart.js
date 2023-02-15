@@ -55,6 +55,7 @@ const CustomBarChart = ({
   data,
   title,
   setChartDenomination,
+  moduleCode,
 }) => {
   const { id } = data;
   const { t } = useTranslation();
@@ -68,6 +69,7 @@ const CustomBarChart = ({
     tenantId,
     requestDate: { ...value?.requestDate, startDate: value?.range?.startDate?.getTime(), endDate: value?.range?.endDate?.getTime() },
     filters: value?.filters,
+    moduleLevel: value?.moduleLevel || moduleCode,
   });
   const chartData = useMemo(() => {
     if (!response) return null;
@@ -127,7 +129,6 @@ const CustomBarChart = ({
             label={<CustomLabel stroke={COLORS[fillColor]} maxValue={maxValue} />}
             radius={[8, 8, 8, 8]}
             isAnimationActive={false}
-            maxBarSize={8}
           />
         </BarChart>
       </ResponsiveContainer>

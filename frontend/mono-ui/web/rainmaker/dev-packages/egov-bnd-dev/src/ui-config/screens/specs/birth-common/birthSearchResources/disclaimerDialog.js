@@ -15,17 +15,54 @@ import { showHideConfirmationPopup } from "./birthSearchCard";
 
 const dSignAgreePath = "bnd.birth.iAgree";
 export const disclaimerDialog = getCommonContainer({
-  header0: getCommonHeader(
-    {
-      labelName: "",
-      labelKey: "BND_IMPORTANT",
-    },
-    {
+  headerDiv: {
+    uiFramework: "custom-atoms",
+    componentPath: "Div",
+    props: {
       style: {
-        fontSize: "20px",
+        width: "100%",
+        marginBottom: "10px",
       },
-    }
-  ),
+    },
+    children: {
+      header0: getCommonHeader(
+        {
+          labelName: "",
+          labelKey: "BND_IMPORTANT",
+        },
+        {
+          style: {
+            fontSize: "20px",
+            display: "inline",
+          },
+        }
+      ),
+      closeButton: {
+        componentPath: "Button",
+        props: {
+          style: {
+            margin: "-10px",
+            float: "right",
+            color: "rgba(0, 0, 0, 0.60)",
+          },
+        },
+        children: {
+          previousButtonIcon: {
+            uiFramework: "custom-atoms",
+            componentPath: "Icon",
+            props: {
+              iconName: "close",
+            },
+          },
+        },
+        onClickDefination: {
+          action: "condition",
+          callBack: (state, dispatch) =>
+            showHideConfirmationPopup(state, dispatch, "getCertificate"),
+        },
+      },
+    },
+  },
   divider1: getDivider(),
   downloadNote: getCommonContainer({
     value0: getCommonCaption(

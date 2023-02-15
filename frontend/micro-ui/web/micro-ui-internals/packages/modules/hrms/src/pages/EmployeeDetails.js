@@ -67,7 +67,7 @@ const Details = () => {
         <Header>{t("HR_NEW_EMPLOYEE_FORM_HEADER")}</Header>
       </div>
       {!isLoading && data?.Employees.length > 0 ? (
-        <div style={{ maxHeight: "calc(100vh - 12em)" }}>
+        <div>
           <Card>
             <StatusTable>
               <Row

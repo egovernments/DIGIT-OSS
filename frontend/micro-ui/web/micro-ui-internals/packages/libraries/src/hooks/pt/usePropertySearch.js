@@ -17,7 +17,7 @@ const usePropertySearch = ({ tenantId, filters, auth,searchedFrom="" }, config =
     return data;
   };
 
-  const { isLoading, error, data, isSuccess } = useQuery(["propertySearchList", tenantId, filters, auth], () => Digit.PTService.search(args), {
+  const { isLoading, error, data, isSuccess } = useQuery(["propertySearchList", tenantId, filters, auth, config], () => Digit.PTService.search(args), {
     select: defaultSelect,
     ...config,
   });

@@ -23,7 +23,7 @@ public class SewerageCessUtil {
 		return calculateSewerageCess(sewerageCharge, CessMap);
 	}
 
-	private BigDecimal calculateSewerageCess(BigDecimal sewerageCharge, Object config) {
+	public BigDecimal calculateSewerageCess(BigDecimal sewerageCharge, Object config) {
 
 		BigDecimal currentApplicable = BigDecimal.ZERO;
 

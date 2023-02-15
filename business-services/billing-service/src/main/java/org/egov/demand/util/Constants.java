@@ -145,6 +145,8 @@ public class Constants {
 	 * Amendment Constants
 	 */
 	
+	public static final String AMENDMENT_STRING_CONSTANT = "AMENDMENT";
+	
 	public static final String NOTETYPE_REPLACE_STRING = "NOTETYPE";
 
 	public static final String CONSUMERCODE_REPLACE_STRING = "CONSUMERCODE";

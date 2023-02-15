@@ -15,30 +15,40 @@ const ApplicationTimeline = ({ id, tenantId }) => {
     return <Loader />;
   }
 
+  function OpenImage(imageSource, index,thumbnailsToShow){
+    window.open(thumbnailsToShow?.fullImage?.[0],"_blank");
+  }
+
   const getTimelineCaptions = (checkpoint) => {
-    if (checkpoint.state === "INITIATE") {
+    // if (checkpoint.state === "INITIATE") {
+    //   const caption = {
+    //     date: Digit.DateUtils.ConvertTimestampToDate(props.application?.auditDetails?.createdTime),
+    //     source: props.application?.tradeLicenseDetail?.channel || "",
+    //   };
+    //   return <BPACaption data={caption} />;
+    // }  
+    // else {
       const caption = {
-        date: Digit.DateUtils.ConvertTimestampToDate(props.application?.auditDetails?.createdTime),
-        source: props.application?.tradeLicenseDetail?.channel || "",
-      };
-      return <BPACaption data={caption} />;
-    }  
-    else {
-      const caption = {
+        // date: checkpoint?.auditDetails?.lastModified,
+        // name: checkpoint?.assignes?.[0]?.name,
+        // mobileNumber: checkpoint?.assignes?.[0]?.mobileNumber,
+        // comment: t(checkpoint?.comment),
         date: checkpoint?.auditDetails?.lastModified,
         name: checkpoint?.assignes?.[0]?.name,
         mobileNumber: checkpoint?.assignes?.[0]?.mobileNumber,
         comment: t(checkpoint?.comment),
+        wfComment : checkpoint.wfComment,
+        thumbnailsToShow : checkpoint?.thumbnailsToShow,
       };
-      return <BPACaption data={caption} />;
-    }
+    //}
+  return <BPACaption data={caption} OpenImage={OpenImage} />;
   };
 
   const showNextActions = (nextAction) => {
     switch (nextAction?.action) {
       case "PAY":
         return (
-          <div style={{ marginTop: "24px" }}>
+          <div style={{ marginTop: "24px" }} className="action-bar-wrap">
             <Link
               to={{ pathname: `/digit-ui/citizen/payment/collect/${data?.processInstances?.[0]?.moduleName}/${data?.processInstances?.[0]?.businessId}`,
               state: { tenantId: data?.processInstances?.[0]?.tenantId },}}
@@ -77,12 +87,21 @@ const ApplicationTimeline = ({ id, tenantId }) => {
             <ConnectingCheckPoints>
               {data?.timeline &&
                 data?.timeline.map((checkpoint, index, arr) => {
+                  let timelineStatusPostfix = "";
+                  if (window.location.href.includes("/obps")) {
+                    if(data?.timeline[index-1]?.state?.includes("BACK_FROM") || data?.timeline[index-1]?.state?.includes("SEND_TO_CITIZEN"))
+                        timelineStatusPostfix = `_NOT_DONE`
+                    else if(checkpoint?.performedAction === "SEND_TO_ARCHITECT")
+                        timelineStatusPostfix = `_BY_ARCHITECT_DONE`
+                    else
+                        timelineStatusPostfix = index == 0 ? "" : `_DONE`;
+                  }
                   return (
                     <React.Fragment key={index}>
                       <CheckPoint
                         keyValue={index}
                         isCompleted={index === 0}
-                        label={checkpoint.state ? t(`WF_ARCHITECT_${checkpoint.state}`) : "NA"}
+                        label={checkpoint.state ? t(`WF_ARCHITECT_${checkpoint.state}${timelineStatusPostfix}`) : "NA"}
                         customChild={getTimelineCaptions(checkpoint)}
                       />
                     </React.Fragment>

@@ -11,6 +11,10 @@ public class BPAConstants {
 
     public static final String MDMS_ENDSTATEPATH = "$.MdmsRes.StakeholderRegistraition.TradeTypetoRoleMapping.*.endstate";
 
+    public static final String PENDINGDOCVERIFICATION_STATUS = "PENDINGDOCVERIFICATION";
+
+    public static final String APPROVED_STATUS = "APPROVED";
+
     public static final String ACTION_STATUS_PENDINGPAYMENT = "APPLY_PENDINGPAYMENT";
 
     public static final String ACTION_STATUS_PENDINGAPPROVAL = "FORWARD_PENDINGAPPROVAL";
@@ -59,4 +63,7 @@ public class BPAConstants {
 
     public static final String BUSINESS_SERVICE_BPAREG = "BPAREG";
 
+    public static final String MDMS_MODULE_TENANT = "tenant";
+
+    public static final String MDMS_TENANTS = "tenants";
 }

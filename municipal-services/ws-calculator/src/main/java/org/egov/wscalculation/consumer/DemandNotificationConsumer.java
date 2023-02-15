@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 
+import org.egov.wscalculation.config.WSCalculationConfiguration;
 import org.egov.wscalculation.web.models.DemandNotificationObj;
 import org.egov.wscalculation.service.DemandNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class DemandNotificationConsumer {
 	@Autowired
 	private ObjectMapper mapper;
 
+	@Autowired
+	private WSCalculationConfiguration config;
+
 	/**
 	 * 
 	 * @param request Topic Message
@@ -34,7 +38,12 @@ public class DemandNotificationConsumer {
 		DemandNotificationObj notificationObj;
 		try {
 			notificationObj = mapper.convertValue(request, DemandNotificationObj.class);
-			notificationService.process(notificationObj, topic);
+			String tenantId= notificationObj.getTenantId();
+			if (config.getIsLocalizationStateLevel())
+				tenantId = tenantId.split("\\.")[0];
+			notificationObj.setTenantId(tenantId);
+
+//			notificationService.process(notificationObj, topic);
 		} catch (final Exception e) {
 			log.error("Error while listening to value: " + request + " on topic: " + topic + ": " + e);
 		}

@@ -1,20 +1,10 @@
 package org.egov.swservice.service;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.DocumentContext;
+import com.jayway.jsonpath.JsonPath;
+import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.common.contract.request.User;
@@ -25,18 +15,11 @@ import org.egov.swservice.util.NotificationUtil;
 import org.egov.swservice.util.SWConstants;
 import org.egov.swservice.util.SewerageServicesUtil;
 import org.egov.swservice.validator.ValidateProperty;
-import org.egov.swservice.web.models.Action;
-import org.egov.swservice.web.models.Event;
-import org.egov.swservice.web.models.EventRequest;
-import org.egov.swservice.web.models.Property;
-import org.egov.swservice.web.models.Recepient;
-import org.egov.swservice.web.models.SMSRequest;
-import org.egov.swservice.web.models.SearchCriteria;
-import org.egov.swservice.web.models.SewerageConnection;
-import org.egov.swservice.web.models.SewerageConnectionRequest;
-import org.egov.swservice.web.models.Source;
+import org.egov.swservice.web.models.*;
 import org.egov.swservice.web.models.collection.PaymentDetail;
 import org.egov.swservice.web.models.collection.PaymentRequest;
+import org.egov.swservice.web.models.users.UserDetailResponse;
+import org.egov.swservice.web.models.workflow.ProcessInstance;
 import org.egov.swservice.workflow.WorkflowIntegrator;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,12 +27,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jayway.jsonpath.DocumentContext;
-import com.jayway.jsonpath.JsonPath;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import lombok.extern.slf4j.Slf4j;
+import static org.egov.swservice.util.SWConstants.*;
 
 @Slf4j
 @Service
@@ -100,7 +86,7 @@ public class PaymentUpdateService {
 			boolean isServiceMatched = false;
 			for (PaymentDetail paymentDetail : paymentRequest.getPayment().getPaymentDetails()) {
 				if (paymentDetail.getBusinessService().equalsIgnoreCase(config.getReceiptBusinessservice()) ||
-						SWConstants.SEWERAGE_SERVICE_BUSINESS_ID.equals(paymentDetail.getBusinessService())) {
+						SEWERAGE_SERVICE_BUSINESS_ID.equals(paymentDetail.getBusinessService())) {
 					isServiceMatched = true;
 				}
 			}
@@ -110,10 +96,19 @@ public class PaymentUpdateService {
 					paymentRequest.getRequestInfo().getUserInfo().getUuid(), paymentRequest.getRequestInfo()));
 			for (PaymentDetail paymentDetail : paymentRequest.getPayment().getPaymentDetails()) {
 				log.info("Consuming Business Service: {}", paymentDetail.getBusinessService());
-				if (paymentDetail.getBusinessService().equalsIgnoreCase(config.getReceiptBusinessservice())) {
-					SearchCriteria criteria = SearchCriteria.builder()
+				SearchCriteria criteria = new SearchCriteria();
+				if (paymentDetail.getBusinessService().equalsIgnoreCase(config.getReceiptDisconnectionBusinessservice())) {
+					criteria = SearchCriteria.builder()
 							.tenantId(paymentRequest.getPayment().getTenantId())
-							.applicationNumber(paymentDetail.getBill().getConsumerCode()).build();
+							.connectionNumber(Stream.of(paymentDetail.getBill().getConsumerCode().toString()).collect(Collectors.toSet()))
+							.applicationStatus(Collections.singleton(PENDING_FOR_PAYMENT_STATUS_CODE)).build();
+				}
+				if (paymentDetail.getBusinessService().equalsIgnoreCase(config.getReceiptBusinessservice())) {
+					criteria = SearchCriteria.builder()
+							.tenantId(paymentRequest.getPayment().getTenantId())
+							.applicationNumber(Stream.of(paymentDetail.getBill().getConsumerCode().toString()).collect(Collectors.toSet())).build();
+				}
+				criteria.setIsInternalCall(Boolean.TRUE);
 					List<SewerageConnection> sewerageConnections = sewerageService.search(criteria,
 							paymentRequest.getRequestInfo());
 					if (CollectionUtils.isEmpty(sewerageConnections)) {
@@ -140,7 +135,6 @@ public class PaymentUpdateService {
 					wfIntegrator.callWorkFlow(sewerageConnectionRequest, property);
 					enrichmentService.enrichFileStoreIds(sewerageConnectionRequest);
 					repo.updateSewerageConnection(sewerageConnectionRequest, false);
-				}
 			}
 			sendNotificationForPayment(paymentRequest);
 		} catch (Exception ex) {
@@ -184,7 +178,8 @@ public class PaymentUpdateService {
 			log.info("Payment Notification consumer :");
 			boolean isServiceMatched = false;
 			for (PaymentDetail paymentDetail : paymentRequest.getPayment().getPaymentDetails()) {
-				if (SWConstants.SEWERAGE_SERVICE_BUSINESS_ID.equals(paymentDetail.getBusinessService())) {
+                String businessservice = paymentDetail.getBusinessService();
+                if (SEWERAGE_SERVICE_BUSINESS_ID.equals(businessservice) || SEWERAGE_SERVICE_ONE_TIME_FEE_BUSINESS_ID.equals(businessservice)) {
 					isServiceMatched = true;
 				}
 			}
@@ -192,18 +187,19 @@ public class PaymentUpdateService {
 				return;
 			for (PaymentDetail paymentDetail : paymentRequest.getPayment().getPaymentDetails()) {
 				log.info("Consuming Business Service : {}", paymentDetail.getBusinessService());
-				if (SWConstants.SEWERAGE_SERVICE_BUSINESS_ID.equals(paymentDetail.getBusinessService()) ||
+				if (SEWERAGE_SERVICE_BUSINESS_ID.equals(paymentDetail.getBusinessService()) ||
 						config.getReceiptBusinessservice().equals(paymentDetail.getBusinessService())) {
 					SearchCriteria criteria = new SearchCriteria();
-					if (SWConstants.SEWERAGE_SERVICE_BUSINESS_ID.equals(paymentDetail.getBusinessService())) {
+					if (SEWERAGE_SERVICE_BUSINESS_ID.equals(paymentDetail.getBusinessService())) {
 						criteria = SearchCriteria.builder()
 								.tenantId(paymentRequest.getPayment().getTenantId())
-								.connectionNumber(paymentDetail.getBill().getConsumerCode()).build();
+								.connectionNumber(Stream.of(paymentDetail.getBill().getConsumerCode().toString()).collect(Collectors.toSet())).build();
 					} else {
 						criteria = SearchCriteria.builder()
 								.tenantId(paymentRequest.getPayment().getTenantId())
-								.applicationNumber(paymentDetail.getBill().getConsumerCode()).build();
+								.applicationNumber(Stream.of(paymentDetail.getBill().getConsumerCode().toString()).collect(Collectors.toSet())).build();
 					}
+					criteria.setIsInternalCall(Boolean.TRUE);
 					List<SewerageConnection> sewerageConnections = sewerageService.search(criteria,
 							paymentRequest.getRequestInfo());
 					if (CollectionUtils.isEmpty(sewerageConnections)) {
@@ -230,20 +226,41 @@ public class PaymentUpdateService {
 	 * @param paymentDetail
 	 */
 	public void sendPaymentNotification(SewerageConnectionRequest sewerageConnectionRequest, PaymentDetail paymentDetail) {
+		User userInfoCopy = sewerageConnectionRequest.getRequestInfo().getUserInfo();
+		User userInfo = notificationUtil.getInternalMicroserviceUser(sewerageConnectionRequest.getSewerageConnection().getTenantId());
+		sewerageConnectionRequest.getRequestInfo().setUserInfo(userInfo);
 		Property property = validateProperty.getOrValidateProperty(sewerageConnectionRequest);
-		if (config.getIsUserEventsNotificationEnabled() != null && config.getIsUserEventsNotificationEnabled()) {
-			EventRequest eventRequest = getEventRequest(sewerageConnectionRequest, property, paymentDetail);
-			if (eventRequest != null) {
-				notificationUtil.sendEventNotification(eventRequest);
+		sewerageConnectionRequest.getRequestInfo().setUserInfo(userInfoCopy);
+
+		List<String> configuredChannelNames =  notificationUtil.fetchChannelList(sewerageConnectionRequest.getRequestInfo(), sewerageConnectionRequest.getSewerageConnection().getTenantId(), SEWERAGE_SERVICE_BUSINESS_ID, sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction());
+
+		if(configuredChannelNames.contains(CHANNEL_NAME_EVENT)) {
+			if (config.getIsUserEventsNotificationEnabled() != null && config.getIsUserEventsNotificationEnabled()) {
+				EventRequest eventRequest = getEventRequest(sewerageConnectionRequest, property, paymentDetail);
+				if (eventRequest != null) {
+					notificationUtil.sendEventNotification(eventRequest);
+				}
 			}
 		}
-		if (config.getIsSMSEnabled() != null && config.getIsSMSEnabled()) {
-			List<SMSRequest> smsRequests = getSmsRequest(sewerageConnectionRequest, property, paymentDetail);
-			if (!CollectionUtils.isEmpty(smsRequests)) {
-				notificationUtil.sendSMS(smsRequests);
+		if(configuredChannelNames.contains(CHANNEL_NAME_SMS)) {
+			if (config.getIsSMSEnabled() != null && config.getIsSMSEnabled()) {
+				List<SMSRequest> smsRequests = getSmsRequest(sewerageConnectionRequest, property, paymentDetail);
+				if (!CollectionUtils.isEmpty(smsRequests)) {
+					notificationUtil.sendSMS(smsRequests);
+				}
+			}
+		}
+
+		if(configuredChannelNames.contains(CHANNEL_NAME_EMAIL)) {
+			if (config.getIsEmailNotificationEnabled() != null && config.getIsEmailNotificationEnabled()) {
+				List<EmailRequest> emailRequests = getEmailRequest(sewerageConnectionRequest, property, paymentDetail);
+				if (!CollectionUtils.isEmpty(emailRequests)) {
+					notificationUtil.sendEmail(emailRequests);
+				}
 			}
 		}
 	}
+
 	/**
 	 *
 	 * @param request
@@ -251,31 +268,74 @@ public class PaymentUpdateService {
 	 * @return
 	 */
 	private EventRequest getEventRequest(SewerageConnectionRequest request, Property property, PaymentDetail paymentDetail) {
+
+		if(paymentDetail.getTotalAmountPaid().intValue() == 0)
+			return null;
+
 		String localizationMessage = notificationUtil
 				.getLocalizationMessages(property.getTenantId(), request.getRequestInfo());
-		String message = notificationUtil.getMessageTemplate(SWConstants.PAYMENT_NOTIFICATION_APP, localizationMessage);
+
+		String applicationStatus = request.getSewerageConnection().getApplicationStatus();
+		String notificationTemplate = SWConstants.PAYMENT_NOTIFICATION_APP;
+		ProcessInstance workflow = request.getSewerageConnection().getProcessInstance();
+		StringBuilder builder = new StringBuilder();
+		int reqType;
+
+		//Condition to assign Disconnection application Payment Notification code
+		if ((!workflow.getAction().equalsIgnoreCase(SWConstants.ACTIVATE_CONNECTION)) &&
+				(!workflow.getAction().equalsIgnoreCase(APPROVE_CONNECTION)) && sewerageServicesUtil.isDisconnectConnectionRequest(request)) {
+			reqType = DISCONNECT_CONNECTION;
+			notificationTemplate = notificationUtil.getCustomizedMsgForInAppForPayment(workflow.getAction(), applicationStatus, reqType);
+		}
+
+		String message = notificationUtil.getMessageTemplate(notificationTemplate, localizationMessage);
+
 		if (message == null) {
 			log.info("No message template found for, {} " + SWConstants.PAYMENT_NOTIFICATION_APP);
 			return null;
 		}
+
 		Map<String, String> mobileNumbersAndNames = new HashMap<>();
+		Map<String, String> mapOfPhnoAndUUIDs = new HashMap<>();
+
+		Set<String> ownersMobileNumbers = new HashSet<>();
+
 		property.getOwners().forEach(owner -> {
 			if (owner.getMobileNumber() != null)
-				mobileNumbersAndNames.put(owner.getMobileNumber(), owner.getName());
+				ownersMobileNumbers.add(owner.getMobileNumber());
 		});
 		//send the notification to the connection holders
 		if (!CollectionUtils.isEmpty(request.getSewerageConnection().getConnectionHolders())) {
 			request.getSewerageConnection().getConnectionHolders().forEach(holder -> {
 				if (!StringUtils.isEmpty(holder.getMobileNumber())) {
-					mobileNumbersAndNames.put(holder.getMobileNumber(), holder.getName());
+					ownersMobileNumbers.add(holder.getMobileNumber());
 				}
 			});
 		}
+
+		for(String mobileNumber:ownersMobileNumbers) {
+			UserDetailResponse userDetailResponse = workflowNotificationService.fetchUserByUsername(mobileNumber, request.getRequestInfo(), request.getSewerageConnection().getTenantId());
+			if(!CollectionUtils.isEmpty(userDetailResponse.getUser()))
+			{
+				OwnerInfo user = userDetailResponse.getUser().get(0);
+				mobileNumbersAndNames.put(user.getMobileNumber(),user.getName());
+				mapOfPhnoAndUUIDs.put(user.getMobileNumber(),user.getUuid());
+			}
+			else
+			{	log.info("No User for mobile {} skipping event", mobileNumber);}
+		}
+
+		//Send the notification to applicant
+		if(!org.apache.commons.lang.StringUtils.isEmpty(request.getRequestInfo().getUserInfo().getMobileNumber()))
+		{
+			mobileNumbersAndNames.put(request.getRequestInfo().getUserInfo().getMobileNumber(), request.getRequestInfo().getUserInfo().getName());
+			mapOfPhnoAndUUIDs.put(request.getRequestInfo().getUserInfo().getMobileNumber(), request.getRequestInfo().getUserInfo().getUuid());
+		}
+
 		Map<String, String> getReplacedMessage = workflowNotificationService.getMessageForMobileNumber(mobileNumbersAndNames, request,
 				message, property);
 		Map<String, String> mobileNumberAndMesssage = replacePaymentInfo(getReplacedMessage, paymentDetail);
 		Set<String> mobileNumbers = mobileNumberAndMesssage.keySet().stream().collect(Collectors.toSet());
-		Map<String, String> mapOfPhnoAndUUIDs = workflowNotificationService.fetchUserUUIDs(mobileNumbers, request.getRequestInfo(), property.getTenantId());
 		if (CollectionUtils.isEmpty(mapOfPhnoAndUUIDs.keySet())) {
 			log.info("UUID search failed!");
 		}
@@ -310,9 +370,28 @@ public class PaymentUpdateService {
 	 */
 	private List<SMSRequest> getSmsRequest(SewerageConnectionRequest sewerageConnectionRequest,
 										   Property property, PaymentDetail paymentDetail) {
+
+		if(paymentDetail.getTotalAmountPaid().intValue() == 0)
+			return null;
+
 		String localizationMessage = notificationUtil.getLocalizationMessages(property.getTenantId(),
 				sewerageConnectionRequest.getRequestInfo());
-		String message = notificationUtil.getMessageTemplate(SWConstants.PAYMENT_NOTIFICATION_SMS, localizationMessage);
+
+		String applicationStatus = sewerageConnectionRequest.getSewerageConnection().getApplicationStatus();
+		String notificationTemplate = SWConstants.PAYMENT_NOTIFICATION_APP;
+		ProcessInstance workflow = sewerageConnectionRequest.getSewerageConnection().getProcessInstance();
+		StringBuilder builder = new StringBuilder();
+		int reqType;
+
+		//Condition to assign Disconnection application Payment Notification code
+		if ((!workflow.getAction().equalsIgnoreCase(SWConstants.ACTIVATE_CONNECTION)) &&
+				(!workflow.getAction().equalsIgnoreCase(APPROVE_CONNECTION)) && sewerageServicesUtil.isDisconnectConnectionRequest(sewerageConnectionRequest)) {
+			reqType = DISCONNECT_CONNECTION;
+			notificationTemplate = notificationUtil.getCustomizedMsgForSMSForPayment(workflow.getAction(), applicationStatus, reqType);
+		}
+
+		String message = notificationUtil.getMessageTemplate(notificationTemplate, localizationMessage);
+
 		if (message == null) {
 			log.info("No message template found for, {} " + SWConstants.PAYMENT_NOTIFICATION_SMS);
 			return Collections.emptyList();
@@ -330,6 +409,13 @@ public class PaymentUpdateService {
 				}
 			});
 		}
+
+		//Send the notification to applicant
+		if(!StringUtils.isEmpty(sewerageConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber()))
+		{
+			mobileNumbersAndNames.put(sewerageConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber(), sewerageConnectionRequest.getRequestInfo().getUserInfo().getName());
+		}
+
 		Map<String, String> getReplacedMessage = workflowNotificationService.getMessageForMobileNumber(mobileNumbersAndNames,
 				sewerageConnectionRequest, message, property);
 		Map<String, String> mobileNumberAndMessage = replacePaymentInfo(getReplacedMessage, paymentDetail);
@@ -339,6 +425,99 @@ public class PaymentUpdateService {
 			smsRequest.add(req);
 		});
 		return smsRequest;
+	}
+
+	/**
+	 * Creates email request for each owner
+	 *
+	 * @param sewerageConnectionRequest Sewerage Connection Request
+	 * @param property Property Object
+	 * @param paymentDetail Payment Detail Object
+	 * @return List of EmailRequest
+	 */
+	private List<EmailRequest> getEmailRequest(SewerageConnectionRequest sewerageConnectionRequest,
+											   Property property, PaymentDetail paymentDetail) {
+
+		if(paymentDetail.getTotalAmountPaid().intValue() == 0)
+			return null;
+		
+		String localizationMessage = notificationUtil.getLocalizationMessages(property.getTenantId(),
+				sewerageConnectionRequest.getRequestInfo());
+
+		String applicationStatus = sewerageConnectionRequest.getSewerageConnection().getApplicationStatus();
+		String notificationTemplate = PAYMENT_NOTIFICATION_EMAIL;
+		ProcessInstance workflow = sewerageConnectionRequest.getSewerageConnection().getProcessInstance();
+		StringBuilder builder = new StringBuilder();
+		int reqType;
+
+		//Condition to assign Disconnection application Payment Notification code
+		if ((!workflow.getAction().equalsIgnoreCase(SWConstants.ACTIVATE_CONNECTION)) &&
+				(!workflow.getAction().equalsIgnoreCase(APPROVE_CONNECTION)) && sewerageServicesUtil.isDisconnectConnectionRequest(sewerageConnectionRequest)) {
+			reqType = DISCONNECT_CONNECTION;
+			notificationTemplate = notificationUtil.getCustomizedMsgForEmailForPayment(workflow.getAction(), applicationStatus, reqType);
+		}
+
+		String message = notificationUtil.getMessageTemplate(notificationTemplate, localizationMessage);
+
+		if (message == null) {
+			log.info("No message template found for, {} " + SWConstants.PAYMENT_NOTIFICATION_EMAIL);
+			return Collections.emptyList();
+		}
+
+		Map<String, String> mobileNumbersAndNames = new HashMap<>();
+		Set<String> mobileNumbers = new HashSet<>();
+
+		//Send the notification to all owners
+		Set<String> ownersUuids = new HashSet<>();
+
+		property.getOwners().forEach(owner -> {
+			if (owner.getUuid() != null)
+				ownersUuids.add(owner.getUuid());
+		});
+
+		//send the notification to the connection holders
+		if (!CollectionUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionHolders())) {
+			sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().forEach(holder -> {
+				if (!org.apache.commons.lang.StringUtils.isEmpty(holder.getUuid())) {
+					ownersUuids.add(holder.getUuid());
+				}
+			});
+		}
+
+		UserDetailResponse userDetailResponse = workflowNotificationService.fetchUserByUUID(ownersUuids, sewerageConnectionRequest.getRequestInfo(), sewerageConnectionRequest.getSewerageConnection().getTenantId());
+		for (OwnerInfo user : userDetailResponse.getUser()) {
+			mobileNumbersAndNames.put(user.getMobileNumber(), user.getName());
+		}
+
+		mobileNumbers.addAll(mobileNumbersAndNames.keySet());
+
+		Map<String, String> mobileNumberAndEmailId = new HashMap<>();
+		for (OwnerInfo user : userDetailResponse.getUser()) {
+			mobileNumberAndEmailId.put(user.getMobileNumber(), user.getEmailId());
+		}
+
+		//Send the notification to applicant
+		if (!StringUtils.isEmpty(sewerageConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber())) {
+			mobileNumbersAndNames.put(sewerageConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber(), sewerageConnectionRequest.getRequestInfo().getUserInfo().getName());
+			mobileNumbers.add(sewerageConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber());
+			mobileNumberAndEmailId.put(sewerageConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber(), sewerageConnectionRequest.getRequestInfo().getUserInfo().getEmailId());
+		}
+
+		Map<String, String> getReplacedMessage = workflowNotificationService.getMessageForMobileNumber(mobileNumbersAndNames,
+				sewerageConnectionRequest, message, property);
+
+		Map<String, String> mobileNumberAndMessage = replacePaymentInfo(getReplacedMessage, paymentDetail);
+		List<EmailRequest> emailRequest = new LinkedList<>();
+		for (Map.Entry<String, String> entryset : mobileNumberAndEmailId.entrySet()) {
+			String customizedMsg = mobileNumberAndMessage.get(entryset.getKey());
+			String subject = customizedMsg.substring(customizedMsg.indexOf("<h2>")+4,customizedMsg.indexOf("</h2>"));
+			String body = customizedMsg.substring(customizedMsg.indexOf("</h2>")+5);
+			Email emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(true).body(body).subject(subject).build();
+			EmailRequest email = new EmailRequest(sewerageConnectionRequest.getRequestInfo(),emailobj);
+			emailRequest.add(email);
+		}
+		return emailRequest;
+
 	}
 
 	/**
@@ -371,7 +550,7 @@ public class PaymentUpdateService {
 				message = message.replace("{Billing Period}", billingPeriod);
 			}
 			if (message.contains("{receipt download link}")){
-				String link = config.getNotificationUrl() + config.getReceiptDownloadLink();
+				String link = config.getNotificationUrl() + config.getMyPaymentsLink();
 				link = link.replace("$consumerCode", paymentDetail.getBill().getConsumerCode());
 				link = link.replace("$tenantId", paymentDetail.getTenantId());
 				link = link.replace("$businessService",paymentDetail.getBusinessService());
@@ -383,5 +562,34 @@ public class PaymentUpdateService {
 			messageToReturn.put(mobAndMesg.getKey(), message);
 		}
 		return messageToReturn;
+	}
+
+	public void noPaymentWorkflow(SewerageConnectionRequest request, Property property, RequestInfo requestInfo) {
+		//Updating the workflow from approve for disconnection to pending for disconnection execution when there are no dues
+		SearchCriteria criteria = new SearchCriteria();
+		SewerageConnection sewerageRequest = request.getSewerageConnection();
+		criteria = SearchCriteria.builder()
+				.tenantId(sewerageRequest.getTenantId())
+				.connectionNumber(Stream.of(sewerageRequest.getConnectionNo().toString()).collect(Collectors.toSet()))
+				.applicationStatus(Collections.singleton(PENDING_FOR_PAYMENT_STATUS_CODE)).build();
+		List<SewerageConnection> sewerageConnections = sewerageService.search(criteria,
+				requestInfo);
+		sewerageConnections.forEach(sewerageConnection -> sewerageConnection.getProcessInstance().setAction((SWConstants.ACTION_PAY)));
+		Optional<SewerageConnection> connections = sewerageConnections.stream().findFirst();
+		SewerageConnection connection = connections.get();
+		SewerageConnectionRequest sewerageConnectionRequest = SewerageConnectionRequest.builder()
+				.sewerageConnection(connection).requestInfo(requestInfo)
+				.build();
+		ProcessInstance processInstanceReq = sewerageConnectionRequest.getSewerageConnection().getProcessInstance();
+		processInstanceReq.setComment(WORKFLOW_NO_PAYMENT_CODE + " : " +WORKFLOW_NODUE_COMMENT);
+		// Enrich tenantId in userInfo for workflow call
+		Role role = Role.builder().code("SYSTEM_PAYMENT").tenantId(property.getTenantId()).build();
+		Role counterEmployeeRole = Role.builder().name(COUNTER_EMPLOYEE_ROLE_NAME).code(COUNTER_EMPLOYEE_ROLE_CODE).tenantId(property.getTenantId()).build();
+		requestInfo.getUserInfo().getRoles().add(role);
+		requestInfo.getUserInfo().getRoles().add(counterEmployeeRole);
+		//move the workflow
+		wfIntegrator.callWorkFlow(sewerageConnectionRequest, property);
+		enrichmentService.enrichFileStoreIds(sewerageConnectionRequest);
+		repo.updateSewerageConnection(sewerageConnectionRequest, false);
 	}
 }

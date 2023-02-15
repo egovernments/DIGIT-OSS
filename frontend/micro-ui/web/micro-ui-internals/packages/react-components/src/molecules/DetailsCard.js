@@ -8,7 +8,7 @@ const Details = ({ label, name, onClick }) => {
       <span className="label">
         <h2>{label}</h2>
       </span>
-      <span className="name">{name}</span>
+      <span className="name" style={{overflowWrap:"break-word"}}>{name}</span>
     </div>
   );
 };

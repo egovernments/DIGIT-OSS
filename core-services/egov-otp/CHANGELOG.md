@@ -1,7 +1,15 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.2.3 - 2023-02-06
+- Transition from 1.2.3-beta version to 1.2.3 version
+
+## 1.2.3-beta - 2022-09-20
+
+- Upgraded spring-boot-starter-parent to 2.2.13 and spring beans to 5.2.20.RELEASE
+
 ## 1.2.2 - 2022-01-13
+
 - Updated to log4j2 version 2.17.1
 
 ## 1.2.1 - 2021-05-11

@@ -6,8 +6,10 @@ import get from "lodash/get";
 
 const styles = theme => ({
   button: {
-    margin: theme.spacing.unit,
-    padding: "8px 38px"
+    // margin: theme.spacing.unit,
+    // padding: "8px 38px"
+    margin: "0px",
+    padding: "0px"
   },
   input: {
     display: "none !important"

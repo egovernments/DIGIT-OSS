@@ -157,8 +157,10 @@ export const nocDetails = getCommonCard({
             handleField(
               "apply",
               "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.provisionalNocNumber",
-              "props.style",
-              { visibility: "hidden" }
+              "visible",
+              false
+              // "props.style", 
+              // { visibility: "hidden" }
             )
           );
         } else {
@@ -166,8 +168,10 @@ export const nocDetails = getCommonCard({
             handleField(
               "apply",
               "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.provisionalNocNumber",
-              "props.style",
-              {}
+              "visible",
+              true
+              // "props.style",
+              // {}
             )
           );
         }

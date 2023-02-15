@@ -92,9 +92,9 @@ const Search = ({ path }) => {
       let payload1 = {
         applicationType: "BUILDING_PLAN_SCRUTINY",
         serviceType: "NEW_CONSTRUCTION",
-        ...(window.location.href.includes("/digit-ui/citizen") && {
-          mobileNumber: Digit.UserService.getUser()?.info?.mobileNumber,
-        }),
+        // ...(window.location.href.includes("/digit-ui/citizen") && {
+        //   mobileNumber: Digit.UserService.getUser()?.info?.mobileNumber,
+        // }),
       };
 
       setPayload({ ...payload, ...payload1 });

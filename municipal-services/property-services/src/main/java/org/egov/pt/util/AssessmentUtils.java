@@ -19,10 +19,13 @@ public class AssessmentUtils extends CommonUtils {
 
 
     private PropertyService propertyService;
+    
+    private UnmaskingUtil unmaskingUtil;
 
     @Autowired
-    public AssessmentUtils(PropertyService propertyService) {
+    public AssessmentUtils(PropertyService propertyService, UnmaskingUtil unmaskingUtil) {
         this.propertyService = propertyService;
+        this.unmaskingUtil = unmaskingUtil;
     }
 
     public Property getPropertyForAssessment(AssessmentRequest assessmentRequest){
@@ -34,11 +37,14 @@ public class AssessmentUtils extends CommonUtils {
                 .propertyIds(Collections.singleton(assessment.getPropertyId()))
                 .build();
         List<Property> properties = propertyService.searchProperty(criteria, requestInfo);
-
         if(CollectionUtils.isEmpty(properties))
             throw new CustomException("PROPERTY_NOT_FOUND","The property with id: "+assessment.getPropertyId()+" is not found");
 
-        return properties.get(0);
+        Property property = properties.get(0);
+        
+        unmaskingUtil.getOwnerDetailsUnmasked(property, requestInfo);
+        
+        return property;
     }
 
 

@@ -4,7 +4,7 @@ export const setAddressDetailsLW = (data) => {
   let propAddress = {
     city: locationDet?.cityCode?.name,
     doorNo: locationDet?.houseDoorNo,
-    buildingName: locationDet?.buildingColonyName,
+    street: locationDet?.buildingColonyName,
     landmark: locationDet?.landmarkName,
     locality: {
       code: locationDet?.locality?.code || "NA",
@@ -89,24 +89,24 @@ export const setOwnerDetailsLW = (data) => {
   owner = [],
   document = [];
 
-  data.ownershipCategory = data?.owners?.ownershipCategory?.value;
+  data.ownershipCategory = data?.owners?.[0]?.ownershipCategory;
   
-  if (data?.owners?.ownershipCategory?.value === "INSTITUTIONALPRIVATE" || data?.owners?.ownershipCategory?.value === "INSTITUTIONALGOVERNMENT") {
-    institution.designation = owners?.designation;
-    institution.name = owners?.inistitutionName;
-    institution.nameOfAuthorizedPerson = owners?.name;
-    institution.tenantId = locationDet?.city?.code;
-    institution.type = owners?.inistitutetype?.value;
+  if (data.ownershipCategory.includes("INSTITUTIONALPRIVATE") || data.ownershipCategory.includes("INSTITUTIONALGOVERNMENT")) {
+    institution.designation = owners?.[0]?.designation;
+    institution.name = owners?.[0]?.institutionName;
+    institution.type = owners?.[0]?.institutionType?.code?.split(".")?.[1];
+    institution.landlineNumber = owners?.[0]?.altContactNumber;
+    institution.tenantId = locationDet?.cityCode?.code;
     
     owner.push({
-      altContactNumber: owners?.altContactNumber,
-      permanentAddress: owners?.permanentAddress,
-      designation: owners?.designation,
-      emailId: owners?.emailId,
-      sameAsPropertyAddress: owners?.isCorrespondenceAddress,
-      mobileNumber: owners?.mobileNumber,
-      name: owners?.name,
-      ownerType: owners?.ownerType?.code || "NONE",
+      altContactNumber: owners?.[0]?.altContactNumber,
+      permanentAddress: owners?.[0]?.permanentAddress,
+      correspondenceAddress: owners?.[0]?.permanentAddress,
+      sameAsPropertyAddress: owners?.[0]?.isCorrespondenceAddress || owners?.[0]?.isCoresAddr,
+      mobileNumber: owners?.[0]?.mobileNumber,
+      name: owners?.[0]?.name,
+      ownerType: "NONE",
+      status: "ACTIVE",
       documents: document,
     });
     data.institution = institution;
@@ -117,7 +117,7 @@ export const setOwnerDetailsLW = (data) => {
         emailId: own?.emailId,
         fatherOrHusbandName: own?.fatherOrHusbandName,
         gender: own?.gender?.value,
-        sameAsPropertyAddress: own?.isCorrespondenceAddress,
+        sameAsPropertyAddress: own?.isCorrespondenceAddress || owners?.[0]?.isCoresAddr,
         mobileNumber: own?.mobileNumber,
         name: own?.name,
         ownerType: own?.ownerType?.code || "NONE",
@@ -158,8 +158,7 @@ export const setPropertyDetailsLW = (data) => {
 
 export const convertToPropertyLightWeight = (data = {}) => {
   let propertyType = data.PropertyType;
-  // let subusagetype = data.subusagetype || null;
-  let noOfFloors = 1; // data?.noOfFloors;
+  let noOfFloors = 1;
   let ownershipCategory= data?.owners?.[0]?.ownershipCategory;
   data = setOwnerDetailsLW(data);
   data = setAddressDetailsLW(data);
@@ -183,6 +182,10 @@ export const convertToPropertyLightWeight = (data = {}) => {
       channel: "SYSTEM",
     },
   };
+  
+  if (ownershipCategory.includes("INSTITUTIONALPRIVATE") || ownershipCategory.includes("INSTITUTIONALGOVERNMENT")) {
+    formdata.Property.institution = data?.institution;
+  }
   return formdata;
 };
 

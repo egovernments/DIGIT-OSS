@@ -4,6 +4,8 @@ import PopUp from "../atoms/PopUp";
 import HeaderBar from "../atoms/HeaderBar";
 import ButtonSelector from "../atoms/ButtonSelector";
 import Toast from "../atoms/Toast";
+import ActionBar from "../atoms/ActionBar";
+import SubmitBar from "../atoms/SubmitBar";
 
 const Modal = ({
   headerBarMain,
@@ -14,6 +16,8 @@ const Modal = ({
   actionCancelOnSubmit,
   actionSaveLabel,
   actionSaveOnSubmit,
+  actionSingleLabel,
+  actionSingleSubmit,
   error,
   setError,
   formId,
@@ -55,6 +59,12 @@ const Modal = ({
             {!hideSubmit ? (
               <ButtonSelector label={actionSaveLabel} onSubmit={actionSaveOnSubmit} formId={formId} isDisabled={isDisabled} style={style} />
             ) : null}
+            {actionSingleLabel ? 
+             <ActionBar style={{ position: mobileView ? "absolute" : "relative", boxShadow: "none", minWidth: "240px", maxWidth: "360px", margin: "16px" }}>
+             <div style={{ width: "100%" }}>
+               <SubmitBar style={{ width: "100%" }} label={actionSingleLabel} onSubmit={actionSingleSubmit} />
+             </div>
+           </ActionBar> : null}
           </div>
         </div>
       </div>

@@ -15,7 +15,7 @@ const useInboxMobileCardsData = ({parentRoute, table }) => {
             // [t("ES_INBOX_LOCALITY")]: locality,
             [t("NOC_STATUS_LABEL")]: t(status),
             [t("WF_INBOX_HEADER_CURRENT_OWNER")]: owner,
-            [t("ES_INBOX_SLA_DAYS_REMAINING")]: sla
+            [t("ES_INBOX_SLA_DAYS_REMAINING")]: t(sla)
     }))
 
     const MobileSortFormValues = () => {

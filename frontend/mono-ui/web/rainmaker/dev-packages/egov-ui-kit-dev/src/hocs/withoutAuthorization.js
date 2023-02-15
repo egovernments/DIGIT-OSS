@@ -1,18 +1,19 @@
+import { AppBar, DropDown } from "components";
+import { isPublicSearch } from "egov-ui-framework/ui-utils/commons";
+import digitLogo from "egov-ui-kit/assets/images/Digit_logo.png";
+import msevaLogo from "egov-ui-kit/assets/images/mseva-punjab.png";
+import { fetchLocalizationLabel, setLocalizationLabels } from "egov-ui-kit/redux/app/actions";
+import { getQueryArg } from "egov-ui-kit/utils/commons";
+import { getLocale, getTenantId, getUserInfo, setLocale, setStoredModulesList } from "egov-ui-kit/utils/localStorageUtils";
+import Label from "egov-ui-kit/utils/translationNode";
+import get from "lodash/get";
+import Toolbar from "material-ui/Toolbar";
 import React from "react";
 import { connect } from "react-redux";
+import { getModuleName } from "../utils/commons";
+import { getStoredModulesList, setModule } from "../utils/localStorageUtils";
 // import AppBar from "@material-ui/core/AppBar";
 import "./index.css";
-import { getLocale, getTenantId, getUserInfo, setStoredModulesList, setLocale } from "egov-ui-kit/utils/localStorageUtils";
-import digitLogo from "egov-ui-kit/assets/images/Digit_logo.png";
-import Label from "egov-ui-kit/utils/translationNode";
-import { isPublicSearch } from "egov-ui-framework/ui-utils/commons";
-import get from "lodash/get";
-import { fetchLocalizationLabel, setLocalizationLabels } from "egov-ui-kit/redux/app/actions";
-import { DropDown, AppBar } from "components";
-import { getQueryArg } from "egov-ui-kit/utils/commons";
-import Toolbar from "material-ui/Toolbar";
-import msevaLogo from "egov-ui-kit/assets/images/mseva-punjab.png";
-import { getModuleName } from "../utils/commons";
 
 const getUlbGradeLabel = (ulbGrade) => {
   if (ulbGrade) {
@@ -27,7 +28,7 @@ const getUlbGradeLabel = (ulbGrade) => {
 const withoutAuthorization = (redirectionUrl) => (Component) => {
   class Wrapper extends React.Component {
     state = {
-      languageSelected: getLocale(),
+      languageSelected: getLocale()||"en_IN",
     };
     style = {
       baseStyle: {
@@ -67,18 +68,19 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
       titleStyle: { fontSize: "20px", fontWeight: 500 },
       headerStyle: {
         position: "absolute",
-        width: "100%"
-      }
+        width: "100%",
+      },
     };
 
     componentDidMount() {
       if (this.props.authenticated && !isPublicSearch()) {
-        if(!this.props.isOpenLink){
+        if (!this.props.isOpenLink) {
           this.props.history.push(redirectionUrl);
         }
       }
-      if(isPublicSearch()){
-        const locale=getQueryArg(window.location.href, "locale") || 'en_IN';
+      setModule(getModuleName());
+      const locale = getQueryArg(window.location.href, "locale") || "en_IN";
+      if (isPublicSearch() && locale !== "en_IN") {
         setLocale(locale);
         this.onLanguageChange(locale);
       }
@@ -95,25 +97,24 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
         tenantId = userInfo && userInfo.permanentCity;
         tenantId = tenantInfo ? tenantInfo : tenantId;
       }
-      var resetList=[];
-      var newList =JSON.stringify(resetList);
+      var resetList = [];
+      var newList = JSON.stringify(resetList);
       setStoredModulesList(newList);
-      let locale= getLocale();
-      let resultArray=[];
+      let locale = getLocale();
+      let resultArray = [];
       setLocalizationLabels(locale, resultArray);
       this.props.fetchLocalizationLabel(value, tenantId, tenantId);
     };
 
-
     checkForPublicSeach = () => {
       return isPublicSearch();
-    }
+    };
 
     render() {
       const { isOpenLink, ulbLogo, defaultTitle, ulbName, hasLocalisation, languages, ...rest } = this.props;
       const { languageSelected } = this.state;
       const isPublicSearch = this.checkForPublicSeach();
-      const logoClassName = isPublicSearch ? "citizen-header-logo public-search-logo" : "citizen-header-logo"
+      const logoClassName = isPublicSearch ? "citizen-header-logo public-search-logo" : "citizen-header-logo";
       const { style } = this;
       return (
         <div>
@@ -128,18 +129,20 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
                       <div className={logoClassName}>
                         <img src={ulbLogo ? ulbLogo : pbLogo} onError={(event) => event.target.setAttribute("src", pbLogo)} />
                       </div>
-                      {!isPublicSearch && <div className="rainmaker-displayInline">
-                        <Label
-                          containerStyle={{ marginLeft: "10px" }}
-                          className="screenHeaderLabelStyle appbar-municipal-label"
-                          label={ulbName && `TENANT_TENANTS_${ulbName.toUpperCase().replace(/[.]/g, "_")}`}
-                        />
-                        <Label
-                          containerStyle={{ marginLeft: "4px" }}
-                          className="screenHeaderLabelStyle appbar-municipal-label"
-                          label={defaultTitle}
-                        />
-                      </div>}
+                      {!isPublicSearch && (
+                        <div className="rainmaker-displayInline">
+                          <Label
+                            containerStyle={{ marginLeft: "10px" }}
+                            className="screenHeaderLabelStyle appbar-municipal-label"
+                            label={ulbName && `TENANT_TENANTS_${ulbName.toUpperCase().replace(/[.]/g, "_")}`}
+                          />
+                          <Label
+                            containerStyle={{ marginLeft: "4px" }}
+                            className="screenHeaderLabelStyle appbar-municipal-label"
+                            label={defaultTitle}
+                          />
+                        </div>
+                      )}
                     </div>
                   }
                   titleStyle={style.titleStyle}
@@ -172,7 +175,6 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
           ) : (
             <Component {...this.props} />
           )}
-          
         </div>
       );
     }
@@ -189,7 +191,11 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
     const ulbGrade = userTenant && get(userTenant[0], "city.ulbGrade");
     const ulbName = userTenant && get(userTenant[0], "code");
     const defaultTitle = ulbGrade && getUlbGradeLabel(ulbGrade);
-    const ulbLogo = isPublicSearch() ? msevaLogo : (userTenant.length > 0 ? get(userTenant[0], "logoId") : "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.amritsar/logo.png");
+    const ulbLogo = isPublicSearch()
+      ? msevaLogo
+      : userTenant.length > 0
+      ? get(userTenant[0], "logoId")
+      : "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.amritsar/logo.png";
     if (stateInfoById && stateInfoById.length > 0) {
       hasLocalisation = stateInfoById[0].hasLocalisation;
       defaultUrl = stateInfoById[0].defaultUrl;
@@ -206,10 +212,7 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
     };
   };
 
-  return connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(Wrapper);
+  return connect(mapStateToProps, mapDispatchToProps)(Wrapper);
 };
 
 export default withoutAuthorization;

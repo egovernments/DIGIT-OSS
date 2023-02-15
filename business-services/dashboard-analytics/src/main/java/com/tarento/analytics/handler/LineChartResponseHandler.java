@@ -211,6 +211,7 @@ public class LineChartResponseHandler implements IResponseHandler {
             Double currentValue = finalPlotMap.get(key);
             multiAggrPlotMap.put(key, previousValue + currentValue);
         });
+
         if(isCumulative) {
             Double previousValue = 0.0;
             for (String key : multiAggrPlotMap.keySet()) {

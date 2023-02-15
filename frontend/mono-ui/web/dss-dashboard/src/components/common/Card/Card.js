@@ -7,7 +7,7 @@ import history from '../../../utils/web.history';
 
 
 /* Enabled modules will get redirected to new digit - ui , will revisit this constant to move into some mdms config  */
-const enabledModulesInDigitUI = ["fsm","mCollect","ws","noc","obps","national-firenoc","national-mcollect","national-ws","nss-obps","national-overview","national-propertytax","national-tradelicense","national-pgr","national-overview","nss-birth-death","birth-death"];
+const enabledModulesInDigitUI = ["fsm","mCollect","ws","noc","obps","national-firenoc","national-mcollect","national-ws","nss-obps","national-overview","national-propertytax","national-tradelicense","national-pgr","national-overview","nss-birth-death","birth-death","finance"];
 
 const useStyles = makeStyles(styles);
 

@@ -1,8 +1,7 @@
 package org.egov.waterconnection.util;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import net.minidev.json.JSONObject;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.mdms.model.MasterDetail;
@@ -11,15 +10,10 @@ import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.mdms.model.ModuleDetail;
 import org.egov.tracer.model.CustomException;
 import org.egov.waterconnection.config.WSConfiguration;
-import org.egov.waterconnection.web.models.AuditDetails;
-import org.egov.waterconnection.web.models.Property;
-import org.egov.waterconnection.web.models.PropertyCriteria;
-import org.egov.waterconnection.web.models.PropertyResponse;
-import org.egov.waterconnection.web.models.RequestInfoWrapper;
-import org.egov.waterconnection.web.models.SearchCriteria;
-import org.egov.waterconnection.web.models.WaterConnectionRequest;
-import org.egov.waterconnection.web.models.workflow.BusinessService;
+import org.egov.waterconnection.constants.WCConstants;
 import org.egov.waterconnection.repository.ServiceRequestRepository;
+import org.egov.waterconnection.web.models.*;
+import org.egov.waterconnection.web.models.workflow.BusinessService;
 import org.egov.waterconnection.workflow.WorkflowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,9 +21,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import net.minidev.json.JSONObject;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class WaterServicesUtil {
@@ -67,7 +60,8 @@ public class WaterServicesUtil {
 	private String locality = "locality=";
 	private String URL = "url";
 	private String localityCode = "locality";
-
+	private String doorNo = "doorNo=";
+	private String name = "name=";
 	
 
 	/**
@@ -101,7 +95,14 @@ public class WaterServicesUtil {
 			propertyCriteria.setTenantId(waterConnectionRequest.getWaterConnection().getTenantId());
 		}
 		if (waterConnectionRequest.getRequestInfo().getUserInfo() != null
-				&& "SYSTEM".equalsIgnoreCase(waterConnectionRequest.getRequestInfo().getUserInfo().getType())) {
+				&& "SYSTEM".equalsIgnoreCase(waterConnectionRequest.getRequestInfo().getUserInfo().getType())
+		        && "INTERNAL_MICROSERVICE_ROLE".equalsIgnoreCase(waterConnectionRequest.getRequestInfo().getUserInfo().getRoles().get(0).getCode()) )
+		{
+			propertyCriteria.setTenantId(waterConnectionRequest.getWaterConnection().getTenantId());
+		}
+		if (waterConnectionRequest.getRequestInfo().getUserInfo() != null
+				&& "SYSTEM".equalsIgnoreCase(waterConnectionRequest.getRequestInfo().getUserInfo().getType())
+				&& !("INTERNAL_MICROSERVICE_ROLE".equalsIgnoreCase(waterConnectionRequest.getRequestInfo().getUserInfo().getRoles().get(0).getCode()))) {
 			waterConnectionRequest.getRequestInfo().getUserInfo().setType("EMPLOYEE");
 			List<Role> oldRoles = waterConnectionRequest.getRequestInfo().getUserInfo().getRoles();
 			List<Role>  newRoles = new ArrayList<>();
@@ -136,6 +137,8 @@ public class WaterServicesUtil {
 	public List<Property> propertySearchOnCriteria(SearchCriteria waterConnectionSearchCriteria,
 			RequestInfo requestInfo) {
 		if (StringUtils.isEmpty(waterConnectionSearchCriteria.getMobileNumber())
+				&& StringUtils.isEmpty(waterConnectionSearchCriteria.getDoorNo())
+				&& StringUtils.isEmpty(waterConnectionSearchCriteria.getOwnerName())
 				&& StringUtils.isEmpty(waterConnectionSearchCriteria.getPropertyId())) {
 			return Collections.emptyList();
 		}
@@ -145,6 +148,12 @@ public class WaterServicesUtil {
 		}
 		if (!StringUtils.isEmpty(waterConnectionSearchCriteria.getMobileNumber())) {
 			propertyCriteria.setMobileNumber(waterConnectionSearchCriteria.getMobileNumber());
+		}
+		if (!StringUtils.isEmpty(waterConnectionSearchCriteria.getDoorNo())) {
+			propertyCriteria.setDoorNo(waterConnectionSearchCriteria.getDoorNo());
+		}
+		if (!StringUtils.isEmpty(waterConnectionSearchCriteria.getOwnerName())) {
+			propertyCriteria.setName(waterConnectionSearchCriteria.getOwnerName());
 		}
 		if (!StringUtils.isEmpty(waterConnectionSearchCriteria.getPropertyId())) {
 			HashSet<String> propertyIds = new HashSet<>();
@@ -231,6 +240,16 @@ public class WaterServicesUtil {
 			isanyparametermatch = true;
 			url.append(mobileNumber).append(criteria.getMobileNumber());
 		}
+		if (!StringUtils.isEmpty(criteria.getDoorNo())) {
+			if (isanyparametermatch)url.append("&");
+			isanyparametermatch = true;
+			url.append(doorNo).append(criteria.getDoorNo());
+		}
+		if (!StringUtils.isEmpty(criteria.getName())) {
+			if (isanyparametermatch)url.append("&");
+			isanyparametermatch = true;
+			url.append(name).append(criteria.getName());
+		}
 		if (!StringUtils.isEmpty(criteria.getLocality())) {
 			if (isanyparametermatch)url.append("&");
 			isanyparametermatch = true;
@@ -294,6 +313,20 @@ public class WaterServicesUtil {
 	
 	public boolean isModifyConnectionRequest(WaterConnectionRequest waterConnectionRequest) {
 		return !StringUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionNo());
+	}
+
+	public boolean isModifyConnectionRequestForNotification(WaterConnectionRequest waterConnectionRequest) {
+		if(waterConnectionRequest.getWaterConnection().getApplicationType().equalsIgnoreCase(WCConstants.MODIFY_WATER_CONNECTION))
+			return !StringUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionNo());
+
+		return false;
+	}
+
+	public boolean isDisconnectConnectionRequest(WaterConnectionRequest waterConnectionRequest) {
+		if(waterConnectionRequest.getWaterConnection().getApplicationType().equalsIgnoreCase(WCConstants.DISCONNECT_WATER_CONNECTION))
+			return !StringUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionNo());
+
+		return false;
 	}
 
 	public StringBuilder getcollectionURL() {

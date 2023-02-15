@@ -15,7 +15,7 @@ import {
   StatusTable,
   Row,
   LabelFieldPair,
-  Menu
+  Menu,
 } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
@@ -35,7 +35,7 @@ const totalconfig = {
 };
 
 const FstpOperatorDetails = () => {
-  const stateId = Digit.ULBService.getStateId()
+  const stateId = Digit.ULBService.getStateId();
   let isMobile = window.Digit.Utils.browser.isMobile();
   const { t } = useTranslation();
   const history = useHistory();
@@ -70,7 +70,7 @@ const FstpOperatorDetails = () => {
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(Array);
   const [error, setError] = useState(null);
-  const [newVehicleNumber, setNewVehicleNumber] = useState(null);
+  const [newVehicleNumber, setNewVehicleNumber] = useState(applicationNos);
   const [newLocality, setNewLocality] = useState(null);
   const [newDsoName, setNewDsoName] = useState(null);
   const [comments, setComments] = useState();
@@ -89,20 +89,24 @@ const FstpOperatorDetails = () => {
 
   const { isLoading: totalload, isSuccess: totalsuccess, data: totalvehicle } = Digit.Hooks.fsm.useVehicleSearch({ tenantId, totalconfig });
   const { isLoading, isSuccess, data: vehicle } = Digit.Hooks.fsm.useVehicleSearch({ tenantId, filters, config });
-  const { isLoading: isSearchLoading, isIdle, data: { data: { table: tripDetails } = {} } = {} } = Digit.Hooks.fsm.useSearchAll(tenantId, searchParams, null, {
-    enabled: !!isVehicleSearchCompleted,
-  });
+  const { isLoading: isSearchLoading, isIdle, data: { data: { table: tripDetails } = {} } = {} } = Digit.Hooks.fsm.useSearchAll(
+    tenantId,
+    searchParams,
+    null,
+    {
+      enabled: !!isVehicleSearchCompleted,
+    }
+  );
 
   useEffect(() => {
-    filterVehicle?.length == 0 ? setCurrentTrip(1) : setCurrentTrip((tripNo - filterVehicle?.length) + 1)
+    filterVehicle?.length == 0 ? setCurrentTrip(1) : setCurrentTrip(tripNo - filterVehicle?.length + 1);
   }, [tripNo, filterVehicle, totalvehicle, totalsuccess, isSuccess]);
-
 
   const workflowDetails = Digit.Hooks.useWorkflowDetails({
     tenantId: tenantId,
-    id: location.pathname.includes("fstp-operator-details") ? applicationNos : "",
+    id: location.pathname.includes("fstp-operator-details") ? applicationNos : null,
     moduleCode: "FSM_VEHICLE_TRIP",
-    role: "FSM_EMP_FSTPO"
+    role: "FSM_EMP_FSTPO",
   });
 
   const mutation = Digit.Hooks.fsm.useVehicleUpdate(tenantId);
@@ -117,11 +121,10 @@ const FstpOperatorDetails = () => {
     }
   }, [isSuccess]);
 
-
   useEffect(() => {
     if (!isIdle && !isSearchLoading && tripDetails) {
-      setTripNo(tripDetails[0]?.noOfTrips)
-      setAppId(tripDetails[0]?.applicationNo)
+      setTripNo(tripDetails[0]?.noOfTrips);
+      setAppId(tripDetails[0]?.applicationNo);
     }
   }, [isSearchLoading, isIdle, tripDetails]);
 
@@ -131,10 +134,10 @@ const FstpOperatorDetails = () => {
         return setShowModal(true);
       case "DISPOSE":
       case "READY_FOR_DISPOSAL":
-        setSelectedAction(null)
-        history.location.pathname.includes("new") ? handleCreate() : handleSubmit()
+        setSelectedAction(null);
+        history.location.pathname.includes("new") ? handleCreate() : handleSubmit();
       default:
-        setSelectedAction()
+        setSelectedAction();
         console.debug("default case");
         break;
     }
@@ -142,34 +145,35 @@ const FstpOperatorDetails = () => {
 
   useEffect(() => {
     if (totalsuccess) {
-      const temp = totalvehicle?.vehicleTrip?.filter((c, i, r) => c?.tripDetails[0]?.referenceNo === appId && c?.applicationStatus === "WAITING_FOR_DISPOSAL");
-      setFilterVehicle(temp)
+      const temp = totalvehicle?.vehicleTrip?.filter(
+        (c, i, r) => c?.tripDetails[0]?.referenceNo === appId && c?.applicationStatus === "WAITING_FOR_DISPOSAL"
+      );
+      setFilterVehicle(temp);
     }
   }, [totalsuccess, totalvehicle, isSuccess, isIdle, appId]);
-
 
   const handleSubmit = () => {
     const wasteCombined = tripDetails.reduce((acc, trip) => acc + trip.volume, 0);
     if (applicationNos && (!wasteCollected || wasteCollected > wasteCombined || wasteCollected > vehicle.vehicle.tankCapacity)) {
       setErrors({ wasteRecieved: "ES_FSTP_INVALID_WASTE_AMOUNT" });
-      wasteRecievedRef.current.scrollIntoView({ behavior: "smooth", block: "center" })
+      wasteRecievedRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
     if (tripStartTime === null) {
       setErrors({ tripStartTime: "ES_FSTP_INVALID_START_TIME" });
-      tripStartTimeRef.current.scrollIntoView({ behavior: "smooth", block: "center" })
+      tripStartTimeRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
 
     if (tripTime === null) {
       setErrors({ tripTime: "ES_FSTP_INVALID_TRIP_TIME" });
-      tripTimeRef.current.scrollIntoView({ behavior: "smooth", block: "center" })
+      tripTimeRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
 
     if (tripStartTime === tripTime || tripStartTime > tripTime) {
       setErrors({ tripTime: "ES_FSTP_INVALID_TRIP_TIME" });
-      tripTimeRef.current.scrollIntoView({ behavior: "smooth", block: "center" })
+      tripTimeRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
 
@@ -178,14 +182,14 @@ const FstpOperatorDetails = () => {
     const d = new Date();
     const timeStamp = Date.parse(new Date(d.toString().split(":")[0].slice(0, -2) + tripTime)) / 1000;
     const tripStartTimestamp = Date.parse(new Date(d.toString().split(":")[0].slice(0, -2) + tripStartTime)) / 1000;
-    const tripDetail = { tripNo: currentTrip }
+    const tripDetail = { tripNo: currentTrip };
     vehicle.tripStartTime = tripStartTimestamp;
     vehicle.fstpEntryTime = tripStartTimestamp;
     vehicle.tripEndTime = timeStamp;
     vehicle.fstpExitTime = timeStamp;
     vehicle.volumeCarried = wasteCollected;
-    vehicle.tripDetails[0].additionalDetails = tripDetail
-    vehicle.additionalDetails = { fileStoreId: uploadedFile, comments: comments }
+    vehicle.tripDetails[0].additionalDetails = tripDetail;
+    vehicle.additionalDetails = { fileStoreId: uploadedFile, comments: comments };
 
     const details = {
       vehicleTrip: [vehicle],
@@ -201,6 +205,13 @@ const FstpOperatorDetails = () => {
   };
 
   const handleCreate = () => {
+    if (newVehicleNumber === null || newVehicleNumber?.trim()?.length === 0) {
+      setShowToast({ key: "error", action: `ES_FSTP_INVALID_VEHICLE_NUMBER` });
+      setTimeout(() => {
+        closeToast();
+      }, 2000);
+      return;
+    }
     if (newDsoName === null || newDsoName?.trim()?.length === 0) {
       setShowToast({ key: "error", action: `ES_FSTP_INVALID_DSO_NAME` });
       setTimeout(() => {
@@ -217,7 +228,7 @@ const FstpOperatorDetails = () => {
     }
     if (tripStartTime === null) {
       setErrors({ tripStartTime: "ES_FSTP_INVALID_START_TIME" });
-      tripStartTimeRef.current.scrollIntoView({ behavior: "smooth", block: "center" })
+      tripStartTimeRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
 
@@ -231,34 +242,42 @@ const FstpOperatorDetails = () => {
 
     if (tripTime === null) {
       setErrors({ tripTime: "ES_FSTP_INVALID_TRIP_TIME" });
-      tripTimeRef.current.scrollIntoView({ behavior: "smooth", block: "center" })
+      tripTimeRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
 
     if (tripStartTime === tripTime || tripStartTime > tripTime) {
       setErrors({ tripTime: "ES_FSTP_INVALID_TRIP_TIME" });
-      tripTimeRef.current.scrollIntoView({ behavior: "smooth", block: "center" })
+      tripTimeRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
 
     setErrors({});
 
-    let temp = {}
+    let temp = {};
     const d = new Date();
     const timeStamp = Date.parse(new Date(d.toString().split(":")[0].slice(0, -2) + tripTime)) / 1000;
     const tripStartTimestamp = Date.parse(new Date(d.toString().split(":")[0].slice(0, -2) + tripStartTime)) / 1000;
-    const tripDetail = { tripNo: 1 }
+    const tripDetail = { tripNo: 1 };
     temp.tenantId = tenantId;
     temp.status = "ACTIVE";
     temp.tripStartTime = tripStartTimestamp;
     temp.tripEndTime = timeStamp;
     temp.volumeCarried = wasteCollected;
-    temp.additionalDetails = { vehicleNumber: applicationNos, dsoName: newDsoName, locality: newLocality, fileStoreId: uploadedFile, comments: comments };
+    temp.additionalDetails = {
+      vehicleNumber: newVehicleNumber || applicationNos,
+      dsoName: newDsoName,
+      locality: newLocality,
+      fileStoreId: uploadedFile,
+      comments: comments,
+    };
     temp.businessService = "FSM_VEHICLE_TRIP";
-    temp.tripDetails = [{
-      tenantId: tenantId,
-      status: "ACTIVE"
-    }]
+    temp.tripDetails = [
+      {
+        tenantId: tenantId,
+        status: "ACTIVE",
+      },
+    ];
 
     const details = {
       vehicleTrip: [temp],
@@ -273,7 +292,7 @@ const FstpOperatorDetails = () => {
   const handleDecline = (data) => {
     vehicle.additionalDetails = {
       comments: data?.workflow?.comments,
-      vehicleDeclineReason: data?.workflow?.fstpoRejectionReason
+      vehicleDeclineReason: data?.workflow?.fstpoRejectionReason,
     };
     const details = {
       vehicleTrip: [vehicle],
@@ -294,7 +313,7 @@ const FstpOperatorDetails = () => {
 
   const handleSuccess = () => {
     if (selectedAction === "DECLINEVEHICLE") {
-      setShowModal(false)
+      setShowModal(false);
     }
     /* Show Toast on success */
     queryClient.invalidateQueries("FSM_VEHICLE_DATA");
@@ -307,7 +326,7 @@ const FstpOperatorDetails = () => {
 
   const handleError = () => {
     if (selectedAction === "DECLINEVEHICLE") {
-      setShowModal(false)
+      setShowModal(false);
       setSelectedAction(null);
     }
     /* Show Toast on error */
@@ -317,7 +336,6 @@ const FstpOperatorDetails = () => {
       closeToast();
     }, 5000);
   };
-
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -335,31 +353,41 @@ const FstpOperatorDetails = () => {
   const vehicleData = [
     {
       title: `${t("ES_INBOX_VEHICLE_NO")} *`,
-      value: vehicle?.vehicle?.registrationNumber || applicationNos,
+      value: vehicle?.vehicle?.registrationNumber || applicationNos || (
+        <TextInput
+          //style={{ width: "40%" }}
+          onChange={(e) => onChangeVehicleNumber(e.target.value)}
+          value={newVehicleNumber}
+        />
+      ),
     },
     {
       title: `${t("ES_INBOX_DSO_NAME")} *`,
-      value: vehicle?.tripOwner?.name || <TextInput
-        //style={{ width: "40%" }}
-        onChange={(e) => onChangeDsoName(e.target.value)}
-        value={newDsoName}
-      />,
+      value: vehicle?.tripOwner?.name || (
+        <TextInput
+          //style={{ width: "40%" }}
+          onChange={(e) => onChangeDsoName(e.target.value)}
+          value={newDsoName}
+        />
+      ),
     },
     {
       title: `${t("ES_INBOX_LOCALITY")} *`,
-      value: tripDetails && tripDetails[0]?.address?.locality?.name || <TextInput
-        //style={{ width: "40%" }}
-        onChange={(e) => onChangeLocality(e.target.value)}
-        value={newLocality}
-      />,
+      value: (tripDetails && tripDetails[0]?.address?.locality?.name) || (
+        <TextInput
+          //style={{ width: "40%" }}
+          onChange={(e) => onChangeLocality(e.target.value)}
+          value={newLocality}
+        />
+      ),
     },
   ];
 
   const handleTimeChange = (value, cb) => {
-    if (typeof value === 'string') {
+    if (typeof value === "string") {
       cb(value);
     }
-  }
+  };
 
   function onActionSelect(action) {
     setSelectedAction(action);
@@ -373,8 +401,8 @@ const FstpOperatorDetails = () => {
 
   function selectfile(e) {
     if (e) {
-      let temp = [...uploadedFile, e?.fileStoreId?.fileStoreId]
-      setUploadedFile(temp)
+      let temp = [...uploadedFile, e?.fileStoreId?.fileStoreId];
+      setUploadedFile(temp);
       e && setFile(e.file);
     }
   }
@@ -383,7 +411,7 @@ const FstpOperatorDetails = () => {
     let data = Object.fromEntries(state);
     let newArr = Object.values(data);
     selectfile(newArr[newArr.length - 1]);
-  }
+  };
 
   return (
     <div>
@@ -391,13 +419,17 @@ const FstpOperatorDetails = () => {
       <Card>
         <StatusTable>
           {vehicleData?.map((row, index) => (
-            <Row rowContainerStyle={isMobile && history.location.pathname.includes("new-vehicle-entry") ? { display: "block" } : { justifyContent: "space-between" }}
+            <Row
+              rowContainerStyle={
+                isMobile && history.location.pathname.includes("new-vehicle-entry") ? { display: "block" } : { justifyContent: "space-between" }
+              }
               textStyle={isMobile && history.location.pathname.includes("new-vehicle-entry") ? { width: "100%" } : {}}
-              key={row.title} label={row.title}
+              key={row.title}
+              label={row.title}
               text={row.value || "N/A"}
               last={false}
-              labelStyle={{ fontWeight: "normal" }} />
-
+              labelStyle={{ fontWeight: "normal" }}
+            />
           ))}
           <div ref={tripStartTimeRef}>
             <CardLabelError>{t(errors.tripStartTime)}</CardLabelError>
@@ -411,7 +443,7 @@ const FstpOperatorDetails = () => {
               rowContainerStyle={isMobile ? { display: "block" } : { justifyContent: "space-between" }}
               text={
                 <div>
-                  <CustomTimePicker name="tripStartTime" onChange={val => handleTimeChange(val, setTripStartTime)} value={tripStartTime} />
+                  <CustomTimePicker name="tripStartTime" onChange={(val) => handleTimeChange(val, setTripStartTime)} value={tripStartTime} />
                 </div>
               }
             />
@@ -425,12 +457,7 @@ const FstpOperatorDetails = () => {
               textStyle={isMobile ? { width: "100%" } : {}}
               text={
                 <div>
-                  <TextInput
-                    type="number"
-                    name="wasteRecieved"
-                    value={wasteCollected}
-                    onChange={handleChange}
-                  />
+                  <TextInput type="number" name="wasteRecieved" value={wasteCollected} onChange={handleChange} />
                 </div>
               }
               rowContainerStyle={isMobile ? { display: "block" } : { justifyContent: "space-between" }}
@@ -446,7 +473,7 @@ const FstpOperatorDetails = () => {
               rowContainerStyle={isMobile ? { display: "block" } : { justifyContent: "space-between" }}
               text={
                 <div>
-                  <CustomTimePicker name="tripTime" onChange={val => handleTimeChange(val, setTripTime)} value={tripTime} />
+                  <CustomTimePicker name="tripTime" onChange={(val) => handleTimeChange(val, setTripTime)} value={tripTime} />
                 </div>
               }
             />
@@ -471,16 +498,17 @@ const FstpOperatorDetails = () => {
               </Row> : null} */}
             <div className={!isMobile && "row"} style={isMobile ? {} : { diplay: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <CardLabel style={{ fontWeight: "normal" }}> {t("ES_FSM_ADDITIONAL_DETAILS")} </CardLabel>
-              <TextArea className="form-field"
+              <TextArea
+                className="form-field"
                 onChange={(e) => {
                   if (e.target.value.length > 1024) {
-                    null
+                    null;
                   } else {
-                    setComments(e.target.value)
+                    setComments(e.target.value);
                   }
-                }
-                }
-                style={isMobile ? { width: "100%" } : { width: "100%", marginLeft: "35%" }} />
+                }}
+                style={isMobile ? { width: "100%" } : { width: "100%", marginLeft: "35%" }}
+              />
             </div>
 
             <Row
@@ -489,14 +517,7 @@ const FstpOperatorDetails = () => {
               labelStyle={{ minWidth: "fit-content", fontWeight: "normal" }}
               textStyle={isMobile ? { width: "100%" } : {}}
               rowContainerStyle={isMobile ? { display: "block" } : { justifyContent: "space-between", alignItems: "center" }}
-              text={
-                <MultiUploadWrapper
-                  t={t}
-                  module="fsm"
-                  tenantId={stateId}
-                  getFormState={e => getData(e)}
-                />
-              }
+              text={<MultiUploadWrapper t={t} module="fsm" tenantId={stateId} getFormState={(e) => getData(e)} />}
             />
 
             {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && (

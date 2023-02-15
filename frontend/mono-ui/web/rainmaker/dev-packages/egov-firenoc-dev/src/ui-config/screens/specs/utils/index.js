@@ -177,6 +177,20 @@ export const getCurrentFinancialYear = () => {
   return fiscalYr;
 };
 
+export const getCurrentFinancialYearForFireNoc = () => {
+  var today = new Date();
+  var curMonth = today.getMonth();
+  var fiscalYr = "";
+  if (curMonth > 3) {
+    var nextYr1 = (today.getFullYear() + 1).toString();
+    fiscalYr = today.getFullYear().toString() + "-" + nextYr1;
+  } else {
+    var nextYr2 = today.getFullYear().toString();
+    fiscalYr = (today.getFullYear() - 1).toString() + "-" + nextYr2.slice(-2);
+  }
+  return fiscalYr;
+};
+
 export const getFinancialYearDates = (format, et) => {
   /** Return the starting date and ending date (1st April to 31st March)
    *  of the financial year of the given date in ET. If no ET given then
@@ -225,7 +239,7 @@ export const gotoApplyWithStep = (state, dispatch, step) => {
   const applyUrl =
     process.env.REACT_APP_SELF_RUNNING === "true"
       ? `/egov-ui-framework/fire-noc/apply?step=${step}${applicationNumberQueryString}`
-      : `/fire-noc/apply?step=${step}${applicationNumberQueryString}`;
+      : `/fire-noc/apply?step=${step}${applicationNumberQueryString}&isSummaryPage=${true}`;
   dispatch(setRoute(applyUrl));
 };
 

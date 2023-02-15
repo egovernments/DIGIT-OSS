@@ -45,3 +45,6 @@
     @apply font-rc font-medium text-legend text-white;
   }
 }
+.submit-bar:focus {
+  @apply outline-none !important;
+}

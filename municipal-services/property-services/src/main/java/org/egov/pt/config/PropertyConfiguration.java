@@ -46,6 +46,9 @@ public class PropertyConfiguration {
     @Value("${persister.save.property.topic}")
     private String savePropertyTopic;
 
+    @Value("${persister.save.property.fuzzy.topic}")
+    private String savePropertyFuzzyTopic;
+    
     @Value("${persister.update.property.topic}")
     private String updatePropertyTopic;
 
@@ -67,6 +70,9 @@ public class PropertyConfiguration {
     
     @Value("${egov.user.search.path}")
     private String userSearchEndpoint;
+
+    @Value("${egov.internal.microservice.user.uuid}")
+    private String egovInternalMicroserviceUserUuid;
 
 
     //IDGEN config
@@ -356,5 +362,15 @@ public class PropertyConfiguration {
 
     @Value("${inbox.property.search.allowed}")
     private Boolean isInboxSearchAllowed;
+
+    //encryptOldDataStatus topic
+    @Value("${property.oldDataEncryptionStatus.topic}")
+    private String encryptionStatusTopic;
+
+    @Value("${persister.update.property.oldData.topic}")
+    private String updatePropertyEncTopic;
+
+    @Value("${persister.update.property.audit.oldData.topic}")
+    private String updatePropertyAuditEncTopic;
 
 }

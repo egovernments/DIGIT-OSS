@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.swcalculation.constants.SWCalculationConstant;
 import org.egov.swcalculation.service.MasterDataService;
 import org.egov.swcalculation.util.CalculatorUtils;
 import org.egov.swcalculation.web.models.Property;
@@ -65,13 +66,13 @@ public class SWCalculationWorkflowValidator {
     }
 
     public void sewerageConnectionValidation(RequestInfo requestInfo,String tenantId, String sewerageApplicationNumber,Map<String,String> errorMap){
-        Boolean isApplicationApproved = workflowValidation(requestInfo,tenantId,sewerageApplicationNumber);
-        if(!isApplicationApproved)
+        Boolean isAddingMeterReadingAllowed = workflowValidation(requestInfo,tenantId,sewerageApplicationNumber);
+        if(!isAddingMeterReadingAllowed)
             errorMap.put("SEWERAGE_APPLICATION_ERROR","Demand cannot be generated as sewerage connection application with application number "+sewerageApplicationNumber+" is in workflow and not approved yet");
     }
 
     public void propertyValidation(RequestInfo requestInfo,String tenantId, Property property,Map<String,String> errorMap){
-        Boolean isApplicationApproved = workflowValidation(requestInfo,tenantId,property.getAcknowldgementNumber());
+        Boolean isApplicationApproved = propertyWorkflowValidation(requestInfo,tenantId,property.getAcknowldgementNumber());
         JSONObject mdmsResponse=getWnsPTworkflowConfig(requestInfo,tenantId);
         if(mdmsResponse.getBoolean("inWorkflowStatusAllowed")&&!isApplicationApproved){
             if(property.getStatus().equals(Status.INWORKFLOW))
@@ -84,11 +85,29 @@ public class SWCalculationWorkflowValidator {
 
     public Boolean workflowValidation(RequestInfo requestInfo,String tenantId, String businessIds){
     	List<ProcessInstance> processInstancesList = util.getWorkFlowProcessInstance(requestInfo,tenantId,businessIds);
-        Boolean isApplicationApproved = false;
+        Boolean isAddingMeterReadingAllowed = false;
 
         for(ProcessInstance processInstances : processInstancesList){
-            if(processInstances.getState().getIsTerminateState()){
-                isApplicationApproved=true;
+            if (((processInstances.getBusinessService().equals(SWCalculationConstant.NEWSEWERAGE_BUSINESS_SERVICE)
+                    || processInstances.getBusinessService().equals(SWCalculationConstant.MODIFY_BUSINESS_SERVICE))
+                    && processInstances.getState().getIsTerminateState())
+                    || (processInstances.getBusinessService().equals(SWCalculationConstant.DISCONNECTION_BUSINESS_SERVICE)
+                    && !(processInstances.getState().getState().equals(SWCalculationConstant.PENDING_FOR_DISCONNECTION_EXECUTION)
+                    || processInstances.getState().getState().equals(SWCalculationConstant.DISCONNECTION_EXECUTED)))) {
+                isAddingMeterReadingAllowed = true;
+            }
+        }
+
+        return isAddingMeterReadingAllowed;
+    }
+
+    public Boolean propertyWorkflowValidation(RequestInfo requestInfo, String tenantId, String businessIds) {
+        List<ProcessInstance> processInstancesList = util.getWorkFlowProcessInstance(requestInfo,tenantId,businessIds);
+        Boolean isApplicationApproved = false;
+
+        for (ProcessInstance processInstances : processInstancesList) {
+            if (processInstances.getState().getIsTerminateState()) {
+                isApplicationApproved = true;
             }
         }
 

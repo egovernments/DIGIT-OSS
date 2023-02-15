@@ -62,6 +62,8 @@ public class PaymentNotificationService {
 	String totalBillAmount = "billAmount";
 	String dueDate = "dueDate";
 
+	String applicationNumberReplacer = "$applicationNumber";
+
 	@SuppressWarnings("unchecked")
 	public void process(HashMap<String, Object> record, String topic) {
 		try {
@@ -72,6 +74,10 @@ public class PaymentNotificationService {
 			Map<String, Object> info = (Map<String, Object>) record.get("requestInfo");
 			RequestInfo requestInfo = mapper.convertValue(info, RequestInfo.class);
 
+			org.egov.common.contract.request.User userInfoCopy = requestInfo.getUserInfo();
+			org.egov.common.contract.request.User userInfo = util.getInternalMicroserviceUser(requestInfo.getUserInfo().getTenantId());
+			requestInfo.setUserInfo(userInfo);
+
 			List<SewerageConnection> sewerageConnectionList = calculatorUtils.getSewerageConnection(requestInfo,
 					mappedRecord.get(consumerCode), mappedRecord.get(tenantId));
 			int size = sewerageConnectionList.size();
@@ -80,6 +86,8 @@ public class PaymentNotificationService {
 			SewerageConnectionRequest sewerageConnectionRequest = SewerageConnectionRequest.builder()
 					.sewerageConnection(sewerageConnection).requestInfo(requestInfo).build();
 			Property property = sWCalculationUtil.getProperty(sewerageConnectionRequest);
+
+			sewerageConnectionRequest.getRequestInfo().setUserInfo(userInfoCopy);
 
 			List<String> configuredChannelNames = util.fetchChannelList(sewerageConnectionRequest.getRequestInfo(), sewerageConnectionRequest.getSewerageConnection().getTenantId(), SERVICE_FIELD_VALUE_SW, sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction());
 
@@ -131,6 +139,12 @@ public class PaymentNotificationService {
 	 */
 	private List<SMSRequest> getSmsRequest(HashMap<String, String> mappedRecord, SewerageConnectionRequest sewerageConnectionRequest,
 			String topic, Property property) {
+
+		//If bill amount is 0 then do not send any notification
+		Double zero = Double.valueOf(0);
+		if(Double.parseDouble(mappedRecord.get(totalBillAmount)) == zero)
+			return null;
+
 		String localizationMessage = util.getLocalizationMessages(mappedRecord.get(tenantId), sewerageConnectionRequest.getRequestInfo());
 		String message = util.getCustomizedMsgForSMS(topic, localizationMessage);
 		if (message == null) {
@@ -159,11 +173,14 @@ public class PaymentNotificationService {
 		Map<String, String> mobileNumberAndMessage = getMessageForMobileNumber(mobileNumbersAndNames, mappedRecord,
 				message);
 		List<SMSRequest> smsRequest = new ArrayList<>();
+		String connectionNo = sewerageConnectionRequest.getSewerageConnection().getConnectionNo();
+
 		mobileNumberAndMessage.forEach((mobileNumber, msg) -> {
 			if (msg.contains("{Link to Bill}")) {
-				String actionLink = config.getSmsNotificationLink()
-						.replace("$consumerCode", sewerageConnectionRequest.getSewerageConnection().getConnectionNo())
-						.replace("$tenantId", property.getTenantId());
+				String actionLink = config.getBillDetailsLink()
+						.replace("$consumerCode", connectionNo.replace("/", "+"))
+						.replace("$tenantId", property.getTenantId())
+						.replace("$consumerName", mobileNumbersAndNames.get(mobileNumber));
 				actionLink = config.getNotificationUrl() + actionLink;
 				msg = msg.replace("{Link to Bill}", actionLink);
 			}
@@ -193,6 +210,11 @@ public class PaymentNotificationService {
 	 */
 	private EventRequest getEventRequest(HashMap<String, String> mappedRecord, SewerageConnectionRequest sewerageConnectionRequest,
 			String topic, Property property) {
+
+		//If bill amount is 0 then do not send any notification
+		Double zero = Double.valueOf(0);
+		if(Double.parseDouble(mappedRecord.get(totalBillAmount)) == zero)
+			return null;
 
 		String localizationMessages = util.getLocalizationMessages(mappedRecord.get(tenantId), sewerageConnectionRequest.getRequestInfo());
 		String message = util.getCustomizedMsgForInApp(topic, localizationMessages);
@@ -241,9 +263,13 @@ public class PaymentNotificationService {
 			// Arrays.asList(config.getPayTriggers().split("[,]"));
 			Action action;
 			List<ActionItem> items = new ArrayList<>();
-			String actionLink = config.getPayLink().replace("$mobile", mobile)
-					.replace("$consumerCode", sewerageConnectionRequest.getSewerageConnection().getConnectionNo())
-					.replace("$tenantId", property.getTenantId());
+
+			String connectionNo = sewerageConnectionRequest.getSewerageConnection().getConnectionNo();
+			String actionLink = config.getBillDetailsLink()
+					.replace("$consumerCode", connectionNo.replace("/", "+"))
+					.replace("$tenantId", property.getTenantId())
+					.replace("$consumerName", mobileNumbersAndNames.get(mobile));
+
 			actionLink = config.getNotificationUrl() + actionLink;
 			ActionItem item = ActionItem.builder().actionUrl(actionLink).code(config.getPayCode()).build();
 			items.add(item);

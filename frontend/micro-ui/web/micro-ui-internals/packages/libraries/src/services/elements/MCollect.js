@@ -84,4 +84,13 @@ export const MCollectService = {
       userService: true,
       params: { tenantId },
     }),
+  MCollectOpenSearch: ({ tenantId, filters }) =>
+    Request({
+      url: Urls.mcollect.search,
+      useCache: false,
+      method: "POST",
+      auth: false ,
+      userService: false,
+      params: { tenantId, ...filters },
+  }),
 };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CardLabel, DatePicker, TypeSelectCard } from "@egovernments/digit-ui-react-components";
 import { FormStep, RadioOrSelect, RadioButtons } from "@egovernments/digit-ui-react-components";
 import Timeline from "../components/TLTimeline";
@@ -8,6 +8,15 @@ const SelectCommencementDate = ({ t, config, onSelect, userType, formData }) => 
   const isEdit = window.location.href.includes("/edit-application/")||window.location.href.includes("renew-trade");
 
   const onSkip = () => onSelect();
+  useEffect(() => {
+
+    if(window.location.href.includes("/tl/tradelicence/renew-trade") || window.location.href.includes("/tl/tradelicence/edit-application") && formData?.TradeDetails?.CommencementDate)
+    {
+      let newdate = Date.parse(CommencementDate);
+      newdate =  new Date(newdate).getFullYear().toString() + "-"+`${new Date(newdate).getMonth() + 1>9 ? 1 : 0}` + (new Date(newdate).getMonth() + 1).toString() + "-"+`${new Date(newdate).getDate()>9 ? '' : 0}` + new Date(newdate).getDate().toString() 
+      setCommencementDate(newdate);
+    }
+  },[CommencementDate])
 
   function selectCommencementDate(value) {
     setCommencementDate(value);

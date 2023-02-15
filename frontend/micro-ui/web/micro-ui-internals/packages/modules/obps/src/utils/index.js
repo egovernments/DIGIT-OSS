@@ -349,6 +349,11 @@ export const getBPAOwners = (data, isOCBPA) => {
   return bpaownerarray;
 };
 
+export const getOwnerShipCategory = (data, isOCBPA) => {
+    if(isOCBPA) return data?.landInfo?.ownershipCategory
+    return data.owners.ownershipCategory.code || data?.landInfo?.ownershipCategory
+}
+
 export const convertToBPAObject = (data, isOCBPA = false, isSendBackTOCitizen = false) => {
   if (isOCBPA) {
     data.landInfo = data.landInfo;
@@ -360,9 +365,12 @@ export const convertToBPAObject = (data, isOCBPA = false, isSendBackTOCitizen = 
       data.landInfo.owners[index].gender = owner?.gender?.code;
     });
 
+    data.landInfo.address.pincode = data?.address?.pincode;
+    data.landInfo.address.city = data?.address?.city?.code;
+    data.landInfo.address.locality = data?.address?.locality;
     data.landInfo.address.landmark = data?.address?.landmark;
     data.landInfo.address.street = data?.address?.street ? data?.address?.street : null;
-    data.landInfo.address.city = data?.landInfo?.address?.city?.code;
+    data.landInfo.address.city = data?.landInfo?.address?.city?.code || data?.landInfo?.address?.tenantId;
 
     data.landInfo.unit =
       data?.landInfo?.unit && data?.landInfo?.unit.length > 0
@@ -387,7 +395,7 @@ export const convertToBPAObject = (data, isOCBPA = false, isSendBackTOCitizen = 
       applicationDate: data?.applicationDate,
       status: isSendBackTOCitizen ? data.status : data.status ? data.status : "INITIATED",
       documents: getDocumentforBPA(data?.documents?.documents, data?.PrevStateDocuments),
-      landInfo: isOCBPA ? data?.landInfo : { ...data?.landInfo, owners: getBPAOwners(data, isOCBPA), unit: getBPAUnit(data) },
+      landInfo: isOCBPA ? data?.landInfo : { ...data?.landInfo, ownershipCategory: getOwnerShipCategory(data, isOCBPA), owners: getBPAOwners(data, isOCBPA), unit: getBPAUnit(data) },
       assignee: isSendBackTOCitizen ? data.assignee : [],
       workflow: {
         action: "SEND_TO_CITIZEN",

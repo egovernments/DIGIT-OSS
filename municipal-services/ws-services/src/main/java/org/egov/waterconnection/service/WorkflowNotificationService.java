@@ -8,6 +8,7 @@ import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.contract.request.User;
 import org.egov.tracer.model.CustomException;
 import org.egov.waterconnection.config.WSConfiguration;
 import org.egov.waterconnection.constants.WCConstants;
@@ -17,7 +18,10 @@ import org.egov.waterconnection.util.WaterServicesUtil;
 import org.egov.waterconnection.validator.ValidateProperty;
 import org.egov.waterconnection.web.models.*;
 import org.egov.waterconnection.web.models.collection.PaymentResponse;
+import org.egov.waterconnection.web.models.users.UserDetailResponse;
+import org.egov.waterconnection.web.models.users.UserSearchRequest;
 import org.egov.waterconnection.web.models.workflow.BusinessService;
+import org.egov.waterconnection.web.models.workflow.ProcessInstance;
 import org.egov.waterconnection.web.models.workflow.State;
 import org.egov.waterconnection.workflow.WorkflowService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +63,9 @@ public class WorkflowNotificationService {
     @Autowired
     private ValidateProperty validateProperty;
 
+    @Autowired
+    private UserService userService;
+
     String tenantIdReplacer = "$tenantId";
     String urlReplacer = "url";
     String requestInfoReplacer = "RequestInfo";
@@ -87,12 +94,13 @@ public class WorkflowNotificationService {
         try {
             String applicationStatus = request.getWaterConnection().getApplicationStatus();
             List<String> configuredChannelNames =  notificationUtil.fetchChannelList(request.getRequestInfo(), request.getWaterConnection().getTenantId(), WATER_SERVICE_BUSINESS_ID, request.getWaterConnection().getProcessInstance().getAction());
-            if (!WCConstants.NOTIFICATION_ENABLE_FOR_STATUS.contains(request.getWaterConnection().getProcessInstance().getAction()+"_"+applicationStatus)) {
-                log.info("Notification Disabled For State :" + applicationStatus);
-                return;
-            }
+            User userInfoCopy = request.getRequestInfo().getUserInfo();
+            User userInfo = notificationUtil.getInternalMicroserviceUser(request.getWaterConnection().getTenantId());
+            request.getRequestInfo().setUserInfo(userInfo);
+
             Property property = validateProperty.getOrValidateProperty(request);
 
+            request.getRequestInfo().setUserInfo(userInfoCopy);
             if(configuredChannelNames.contains(CHANNEL_NAME_EVENT)){
                 if (config.getIsUserEventsNotificationEnabled() != null && config.getIsUserEventsNotificationEnabled()) {
                     EventRequest eventRequest = getEventRequest(request, topic, property, applicationStatus);
@@ -114,10 +122,10 @@ public class WorkflowNotificationService {
                         notificationUtil.sendEmail(emailRequests);
                     }
                 }}
-
         } catch (Exception ex) {
             log.error("Error occured while processing the record from topic : " + topic, ex);
         }
+
     }
 
     /**
@@ -131,39 +139,76 @@ public class WorkflowNotificationService {
     private EventRequest getEventRequest(WaterConnectionRequest request, String topic, Property property, String applicationStatus) {
         String localizationMessage = notificationUtil
                 .getLocalizationMessages(property.getTenantId(), request.getRequestInfo());
+        ProcessInstance workflow = request.getWaterConnection().getProcessInstance();
+
         int reqType = WCConstants.UPDATE_APPLICATION;
-        if ((!request.getWaterConnection().getProcessInstance().getAction().equalsIgnoreCase(WCConstants.ACTIVATE_CONNECTION))
-                && waterServiceUtil.isModifyConnectionRequest(request)) {
+        if ((!workflow.getAction().equalsIgnoreCase(WCConstants.ACTIVATE_CONNECTION))
+                && waterServiceUtil.isModifyConnectionRequestForNotification(request)) {
             reqType = WCConstants.MODIFY_CONNECTION;
         }
-        String message = notificationUtil.getCustomizedMsgForInApp(request.getWaterConnection().getProcessInstance().getAction(), applicationStatus,
+        if((!workflow.getAction().equalsIgnoreCase(WCConstants.ACTIVATE_CONNECTION)) &&
+            (!workflow.getAction().equalsIgnoreCase(APPROVE_CONNECTION)) &&
+                waterServiceUtil.isDisconnectConnectionRequest(request))
+        {
+            reqType = DISCONNECT_CONNECTION;
+        }
+
+        String message = notificationUtil.getCustomizedMsgForInApp(workflow.getAction(), applicationStatus,
                 localizationMessage, reqType);
+        if(workflow.getAction().equalsIgnoreCase(APPROVE_DISCONNECTION_CONST) && workflow.getComment()!=null
+                && workflow.getComment().contains(WORKFLOW_NO_PAYMENT_CODE))
+        {
+            message = notificationUtil.getCustomizedMsgForInApp(workflow.getAction(), PENDING_FOR_DISCONNECTION_EXECUTION_STATUS_CODE,
+                    localizationMessage, reqType);
+        }
+        if(workflow.getAction().equalsIgnoreCase(ACTION_PAY) && workflow.getComment()!=null
+                && workflow.getComment().contains(WORKFLOW_NO_PAYMENT_CODE))
+        {
+           log.info("Skipping for action status -> "+workflow.getAction().equalsIgnoreCase(ACTION_PAY)+"_"+request.getWaterConnection().getApplicationStatus()
+                   +" because -> "+workflow.getComment());
+           return null;
+        }
+
         if (message == null) {
             log.info("No message Found For Topic : " + topic);
             return null;
         }
 
         Map<String, String> mobileNumbersAndNames = new HashMap<>();
+        Map<String, String> mapOfPhoneNoAndUUIDs = new HashMap<>();
 
-            //Send the notification to all owners
-            property.getOwners().forEach(owner -> {
-                if (owner.getMobileNumber() != null)
-                    mobileNumbersAndNames.put(owner.getMobileNumber(), owner.getName());
+        Set<String> ownersMobileNumbers = new HashSet<>();
+        //Send the notification to all owners
+        property.getOwners().forEach(owner -> {
+            if (owner.getMobileNumber() != null)
+                ownersMobileNumbers.add(owner.getMobileNumber());
+        });
+
+        //send the notification to the connection holders
+        if (!CollectionUtils.isEmpty(request.getWaterConnection().getConnectionHolders())) {
+            request.getWaterConnection().getConnectionHolders().forEach(holder -> {
+                if (!StringUtils.isEmpty(holder.getMobileNumber())) {
+                    ownersMobileNumbers.add(holder.getMobileNumber());
+                }
             });
+        }
 
-            //send the notification to the connection holders
-            if (!CollectionUtils.isEmpty(request.getWaterConnection().getConnectionHolders())) {
-                request.getWaterConnection().getConnectionHolders().forEach(holder -> {
-                    if (!StringUtils.isEmpty(holder.getMobileNumber())) {
-                        mobileNumbersAndNames.put(holder.getMobileNumber(), holder.getName());
-                    }
-                });
+        for (String mobileNumber : ownersMobileNumbers) {
+            UserDetailResponse userDetailResponse = fetchUserByUsername(mobileNumber, request.getRequestInfo(), request.getWaterConnection().getTenantId());
+            if (!CollectionUtils.isEmpty(userDetailResponse.getUser())) {
+                OwnerInfo user = userDetailResponse.getUser().get(0);
+                mobileNumbersAndNames.put(user.getMobileNumber(), user.getName());
+                mapOfPhoneNoAndUUIDs.put(user.getMobileNumber(), user.getUuid());
+            } else {
+                log.info("No User for mobile {} skipping event", mobileNumber);
             }
-            //Send the notification to applicant
-            if(!StringUtils.isEmpty(request.getRequestInfo().getUserInfo().getMobileNumber()))
-            {
-                mobileNumbersAndNames.put(request.getRequestInfo().getUserInfo().getMobileNumber(), request.getRequestInfo().getUserInfo().getName());
-            }
+        }
+
+        //Send the notification to applicant
+        if (!StringUtils.isEmpty(request.getRequestInfo().getUserInfo().getMobileNumber())) {
+            mobileNumbersAndNames.put(request.getRequestInfo().getUserInfo().getMobileNumber(), request.getRequestInfo().getUserInfo().getName());
+            mapOfPhoneNoAndUUIDs.put(request.getRequestInfo().getUserInfo().getMobileNumber(), request.getRequestInfo().getUserInfo().getUuid());
+        }
 
 
         Map<String, String> mobileNumberAndMessage = getMessageForMobileNumber(mobileNumbersAndNames, request,
@@ -171,8 +216,6 @@ public class WorkflowNotificationService {
         if (message.contains("{receipt download link}"))
             mobileNumberAndMessage = setRecepitDownloadLink(mobileNumberAndMessage, request, message, property);
         Set<String> mobileNumbers = mobileNumberAndMessage.keySet().stream().collect(Collectors.toSet());
-        Map<String, String> mapOfPhoneNoAndUUIDs = fetchUserUUIDs(mobileNumbers, request.getRequestInfo(), property.getTenantId());
-//		Map<String, String> mapOfPhnoAndUUIDs = waterConnection.getProperty().getOwners().stream().collect(Collectors.toMap(OwnerInfo::getMobileNumber, OwnerInfo::getUuid));
 
         if (CollectionUtils.isEmpty(mapOfPhoneNoAndUUIDs.keySet())) {
             log.info("UUID search failed here !");
@@ -189,7 +232,7 @@ public class WorkflowNotificationService {
             // List<String> payTriggerList =
             // Arrays.asList(config.getPayTriggers().split("[,]"));
 
-            Action  action = getActionForEventNotification(mobileNumberAndMessage, mobile, request, property);
+            Action action = getActionForEventNotification(mobileNumberAndMessage, mobile, request, property);
             events.add(Event.builder().tenantId(property.getTenantId())
                     .description(mobileNumberAndMessage.get(mobile)).eventType(WCConstants.USREVENTS_EVENT_TYPE)
                     .name(WCConstants.USREVENTS_EVENT_NAME).postedBy(WCConstants.USREVENTS_EVENT_POSTEDBY)
@@ -222,33 +265,14 @@ public class WorkflowNotificationService {
             String actionLink = "";
             if (code.equalsIgnoreCase("Download Application")) {
                 actionLink = config.getNotificationUrl() + config.getViewHistoryLink();
-                actionLink = actionLink.replace(mobileNoReplacer, mobileNumber);
                 actionLink = actionLink.replace(applicationNumberReplacer, connectionRequest.getWaterConnection().getApplicationNo());
-                actionLink = actionLink.replace(tenantIdReplacer, property.getTenantId());
             }
-            if (code.equalsIgnoreCase("PAY NOW")) {
-                actionLink = config.getNotificationUrl() + config.getUserEventApplicationPayLink();
-                actionLink = actionLink.replace(mobileNoReplacer, mobileNumber);
-                actionLink = actionLink.replace(consumerCodeReplacer, connectionRequest.getWaterConnection().getApplicationNo());
-                actionLink = actionLink.replace(tenantIdReplacer, property.getTenantId());
+            if (code.equalsIgnoreCase("PAY NOW")||code.equalsIgnoreCase("Pay Dues")) {
+                actionLink = config.getNotificationUrl() + config.getViewHistoryLink();
+                actionLink = actionLink.replace(applicationNumberReplacer, connectionRequest.getWaterConnection().getApplicationNo());
             }
             if (code.equalsIgnoreCase("DOWNLOAD RECEIPT")) {
-                String receiptNumber = getReceiptNumber(connectionRequest);
-                String consumerCode,service;
-                if(StringUtils.isEmpty(connectionRequest.getWaterConnection().getConnectionNo())){
-                    consumerCode = connectionRequest.getWaterConnection().getApplicationNo();
-                    service = businessService;
-                }
-                else{
-                    consumerCode = connectionRequest.getWaterConnection().getConnectionNo();
-                    service = "WS";
-                }
-                actionLink = config.getNotificationUrl() + config.getUserEventReceiptDownloadLink();
-                actionLink = actionLink.replace("$consumerCode", consumerCode);
-                actionLink = actionLink.replace("$tenantId", property.getTenantId());
-                actionLink = actionLink.replace("$businessService", service);
-                actionLink = actionLink.replace("$receiptNumber", receiptNumber);
-                actionLink = actionLink.replace("$mobile", mobileNumber);
+                actionLink = config.getNotificationUrl() + config.getMyPaymentsLink();
             }
             if (code.equalsIgnoreCase("View History Link")) {
                 actionLink = config.getNotificationUrl() + config.getViewHistoryLink();
@@ -258,9 +282,7 @@ public class WorkflowNotificationService {
             }
             if (code.equalsIgnoreCase("Connection Detail Page")) {
                 actionLink = config.getNotificationUrl() + config.getConnectionDetailsLink();
-                actionLink = actionLink.replace(connectionNoReplacer, connectionRequest.getWaterConnection().getConnectionNo());
-                actionLink = actionLink.replace(tenantIdReplacer, property.getTenantId());
-                actionLink = actionLink.replace(mobileNoReplacer, mobileNumber);
+                actionLink = actionLink.replace(applicationNumberReplacer, connectionRequest.getWaterConnection().getApplicationNo());
             }
             ActionItem item = ActionItem.builder().actionUrl(actionLink).code(code).build();
             items.add(item);
@@ -281,40 +303,65 @@ public class WorkflowNotificationService {
                                            Property property, String applicationStatus) {
         String localizationMessage = notificationUtil.getLocalizationMessages(property.getTenantId(),
                 waterConnectionRequest.getRequestInfo());
+        ProcessInstance workflow = waterConnectionRequest.getWaterConnection().getProcessInstance();
+
         int reqType = WCConstants.UPDATE_APPLICATION;
-        if ((!waterConnectionRequest.getWaterConnection().getProcessInstance().getAction().equalsIgnoreCase(WCConstants.ACTIVATE_CONNECTION))
-                && waterServiceUtil.isModifyConnectionRequest(waterConnectionRequest)) {
+        if ((!workflow.getAction().equalsIgnoreCase(WCConstants.ACTIVATE_CONNECTION))
+                && waterServiceUtil.isModifyConnectionRequestForNotification(waterConnectionRequest)) {
             reqType = WCConstants.MODIFY_CONNECTION;
         }
+        if((!workflow.getAction().equalsIgnoreCase(WCConstants.ACTIVATE_CONNECTION)) &&
+                (!workflow.getAction().equalsIgnoreCase(APPROVE_CONNECTION)) &&
+                waterServiceUtil.isDisconnectConnectionRequest(waterConnectionRequest))
+        {
+            reqType = DISCONNECT_CONNECTION;
+        }
+
         String message = notificationUtil.getCustomizedMsgForSMS(
-                waterConnectionRequest.getWaterConnection().getProcessInstance().getAction(), applicationStatus,
+                workflow.getAction(), applicationStatus,
                 localizationMessage, reqType);
+        if(workflow.getAction().equalsIgnoreCase(APPROVE_DISCONNECTION_CONST) && workflow.getComment()!=null
+                && workflow.getComment().contains(WORKFLOW_NO_PAYMENT_CODE))
+        {
+            message = notificationUtil.getCustomizedMsgForSMS(workflow.getAction(), PENDING_FOR_DISCONNECTION_EXECUTION_STATUS_CODE,
+                    localizationMessage, reqType);
+        }
+        if(workflow.getAction().equalsIgnoreCase(ACTION_PAY) && workflow.getComment()!=null
+                && workflow.getComment().contains(WORKFLOW_NO_PAYMENT_CODE))
+        {
+            log.info("Skipping for action status -> "+workflow.getAction().equalsIgnoreCase(ACTION_PAY)+"_"+waterConnectionRequest.getWaterConnection().getApplicationStatus()
+                    +" because -> "+workflow.getComment());
+            return Collections.emptyList();
+        }
         if (message == null) {
             log.info("No message Found For Topic : " + topic);
             return Collections.emptyList();
         }
-        Map<String, String> mobileNumbersAndNames = new HashMap<>();
 
-
-            //Send the notification to all owners
+           //Send the notification to all owners
+            Map<String, String> mobileNumbersAndNames = new HashMap<>();
             property.getOwners().forEach(owner -> {
                 if (owner.getMobileNumber() != null)
-                    mobileNumbersAndNames.put(owner.getMobileNumber(), owner.getName());
+                {
+                    mobileNumbersAndNames.put(owner.getMobileNumber(),owner.getName());
+                }
             });
 
             //send the notification to the connection holders
             if (!CollectionUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionHolders())) {
                 waterConnectionRequest.getWaterConnection().getConnectionHolders().forEach(holder -> {
                     if (!StringUtils.isEmpty(holder.getMobileNumber())) {
-                        mobileNumbersAndNames.put(holder.getMobileNumber(), holder.getName());
+                        mobileNumbersAndNames.put(holder.getMobileNumber(),holder.getName());
                     }
                 });
             }
+
             //Send the notification to applicant
             if(!StringUtils.isEmpty(waterConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber()))
             {
                 mobileNumbersAndNames.put(waterConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber(), waterConnectionRequest.getRequestInfo().getUserInfo().getName());
             }
+
 
         Map<String, String> mobileNumberAndMessage = getMessageForMobileNumber(mobileNumbersAndNames,
                 waterConnectionRequest, message, property);
@@ -341,50 +388,83 @@ public class WorkflowNotificationService {
                                            Property property, String applicationStatus) {
         String localizationMessage = notificationUtil.getLocalizationMessages(property.getTenantId(),
                 waterConnectionRequest.getRequestInfo());
+        ProcessInstance workflow = waterConnectionRequest.getWaterConnection().getProcessInstance();
+
         int reqType = WCConstants.UPDATE_APPLICATION;
-        if ((!waterConnectionRequest.getWaterConnection().getProcessInstance().getAction().equalsIgnoreCase(WCConstants.ACTIVATE_CONNECTION))
-                && waterServiceUtil.isModifyConnectionRequest(waterConnectionRequest)) {
+        if ((!workflow.getAction().equalsIgnoreCase(WCConstants.ACTIVATE_CONNECTION))
+                && waterServiceUtil.isModifyConnectionRequestForNotification(waterConnectionRequest)) {
             reqType = WCConstants.MODIFY_CONNECTION;
         }
+        if((!workflow.getAction().equalsIgnoreCase(WCConstants.ACTIVATE_CONNECTION)) &&
+                (!workflow.getAction().equalsIgnoreCase(APPROVE_CONNECTION)) &&
+                waterServiceUtil.isDisconnectConnectionRequest(waterConnectionRequest))
+        {
+            reqType = DISCONNECT_CONNECTION;
+        }
+
         String message = notificationUtil.getCustomizedMsgForEmail(
-                waterConnectionRequest.getWaterConnection().getProcessInstance().getAction(), applicationStatus,
+                workflow.getAction(), applicationStatus,
                 localizationMessage, reqType);
+        if(workflow.getAction().equalsIgnoreCase(APPROVE_DISCONNECTION_CONST) && workflow.getComment()!=null
+                && workflow.getComment().contains(WORKFLOW_NO_PAYMENT_CODE))
+        {
+            message = notificationUtil.getCustomizedMsgForEmail(workflow.getAction(), PENDING_FOR_DISCONNECTION_EXECUTION_STATUS_CODE,
+                    localizationMessage, reqType);
+        }
+        if(workflow.getAction().equalsIgnoreCase(ACTION_PAY) && workflow.getComment()!=null
+                && workflow.getComment().contains(WORKFLOW_NO_PAYMENT_CODE))
+        {
+            log.info("Skipping for action status -> "+workflow.getAction().equalsIgnoreCase(ACTION_PAY)+"_"+waterConnectionRequest.getWaterConnection().getApplicationStatus()
+                    +" because -> "+workflow.getComment());
+            return Collections.emptyList();
+        }
         if (message == null) {
             log.info("No message Found For Topic : " + topic);
             return Collections.emptyList();
         }
-        Map<String, String> mobileNumbersAndNames = new HashMap<>();
-        Set<String> mobileNumbers = new HashSet<>();
 
         //Send the notification to all owners
+        Set<String> ownersUuids = new HashSet<>();
+
         property.getOwners().forEach(owner -> {
-            if (owner.getMobileNumber() != null)
-                mobileNumbersAndNames.put(owner.getMobileNumber(), owner.getName());
-                mobileNumbers.add(owner.getMobileNumber());
+            if (owner.getUuid() != null)
+                ownersUuids.add(owner.getUuid());
         });
 
         //send the notification to the connection holders
         if (!CollectionUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionHolders())) {
             waterConnectionRequest.getWaterConnection().getConnectionHolders().forEach(holder -> {
-                if (!StringUtils.isEmpty(holder.getMobileNumber())) {
-                    mobileNumbersAndNames.put(holder.getMobileNumber(), holder.getName());
-                    mobileNumbers.add(holder.getMobileNumber());
-
+                if (!StringUtils.isEmpty(holder.getUuid())) {
+                    ownersUuids.add(holder.getUuid());
                 }
             });
         }
+
+        UserDetailResponse userDetailResponse = fetchUserByUUID(ownersUuids,waterConnectionRequest.getRequestInfo(),waterConnectionRequest.getWaterConnection().getTenantId());
+        Map<String, String> mobileNumbersAndNames = new HashMap<>();
+        for(OwnerInfo user:userDetailResponse.getUser())
+        {
+            mobileNumbersAndNames.put(user.getMobileNumber(),user.getName());
+        }
+
+        Set<String> mobileNumbers = new HashSet<String>();
+        mobileNumbers.addAll(mobileNumbersAndNames.keySet());
+
+        Map<String,String> mobileNumberAndEmailId = new HashMap<>();
+        for(OwnerInfo user:userDetailResponse.getUser()) {
+            mobileNumberAndEmailId.put(user.getMobileNumber(), user.getEmailId());
+        }
+
         //Send the notification to applicant
         if(!StringUtils.isEmpty(waterConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber()))
         {
             mobileNumbersAndNames.put(waterConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber(), waterConnectionRequest.getRequestInfo().getUserInfo().getName());
             mobileNumbers.add(waterConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber());
-
+            mobileNumberAndEmailId.put(waterConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber(), waterConnectionRequest.getRequestInfo().getUserInfo().getEmailId());
         }
 
         Map<String, String> mobileNumberAndMessage = getMessageForMobileNumber(mobileNumbersAndNames,
                 waterConnectionRequest, message, property);
-
-        Map<String,String> mobileNumberAndEmailId = notificationUtil.fetchUserEmailIds(mobileNumbers,waterConnectionRequest.getRequestInfo(),waterConnectionRequest.getWaterConnection().getTenantId());
 
         if (message.contains("{receipt download link}"))
             mobileNumberAndMessage = setRecepitDownloadLink(mobileNumberAndMessage, waterConnectionRequest, message, property);
@@ -393,7 +473,7 @@ public class WorkflowNotificationService {
         for (Map.Entry<String, String> entryset : mobileNumberAndEmailId.entrySet()) {
             String customizedMsg = mobileNumberAndMessage.get(entryset.getKey());
             String subject = customizedMsg.substring(customizedMsg.indexOf("<h2>")+4,customizedMsg.indexOf("</h2>"));
-            String body = customizedMsg.substring(customizedMsg.indexOf("</h2>")+4);
+            String body = customizedMsg.substring(customizedMsg.indexOf("</h2>")+5);
             Email emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(true).body(body).subject(subject).build();
             EmailRequest email = new EmailRequest(waterConnectionRequest.getRequestInfo(),emailobj);
             emailRequest.add(email);
@@ -407,12 +487,14 @@ public class WorkflowNotificationService {
         Map<String, String> messageToReturn = new HashMap<>();
         for (Entry<String, String> mobileAndName : mobileNumbersAndNames.entrySet()) {
             String messageToReplace = message;
+            Boolean isConnectionNoPresent = !StringUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionNo());
+
             if (messageToReplace.contains("{Owner Name}"))
                 messageToReplace = messageToReplace.replace("{Owner Name}", mobileAndName.getValue());
             if (messageToReplace.contains("{Service}"))
                 messageToReplace = messageToReplace.replace("{Service}", WCConstants.SERVICE_FIELD_VALUE_NOTIFICATION);
 
-            if (messageToReplace.contains("{Plumber Info}"))
+            if (messageToReplace.contains("{Plumb Info}"))
                 messageToReplace = getMessageForPlumberInfo(waterConnectionRequest.getWaterConnection(), messageToReplace);
 
             if (messageToReplace.contains("{SLA}"))
@@ -422,11 +504,16 @@ public class WorkflowNotificationService {
                 messageToReplace = messageToReplace.replace("{Application number}", waterConnectionRequest.getWaterConnection().getApplicationNo());
 
             if (messageToReplace.contains("{Connection number}"))
-                messageToReplace = messageToReplace.replace("{Connection number}",  waterConnectionRequest.getWaterConnection().getConnectionNo());
+                messageToReplace = messageToReplace.replace("{Connection number}", isConnectionNoPresent ? waterConnectionRequest.getWaterConnection().getConnectionNo() : "NA");
 
-            if (messageToReplace.contains("{Application download link}"))
-                messageToReplace = messageToReplace.replace("{Application download link}",
-                        waterServiceUtil.getShortnerURL(getApplicationDownloadLink(waterConnectionRequest, property)));
+            if(messageToReplace.contains("{Reason for Rejection}"))
+                messageToReplace = messageToReplace.replace("{Reason for Rejection}",  waterConnectionRequest.getWaterConnection().getProcessInstance().getComment());
+
+            if (messageToReplace.contains("{Application download link}")) {
+                String actionLink = config.getNotificationUrl() + config.getViewHistoryLink();
+                actionLink = actionLink.replace(applicationNumberReplacer, waterConnectionRequest.getWaterConnection().getApplicationNo());
+                messageToReplace = messageToReplace.replace("{Application download link}", waterServiceUtil.getShortnerURL(actionLink));
+            }
 
             if (messageToReplace.contains("{mseva URL}"))
                 messageToReplace = messageToReplace.replace("{mseva URL}",
@@ -445,9 +532,9 @@ public class WorkflowNotificationService {
                         waterServiceUtil.getShortnerURL(historyLink));
             }
             if (messageToReplace.contains("{payment link}")) {
-                String paymentLink = config.getNotificationUrl() + config.getApplicationPayLink();
+                String paymentLink = config.getNotificationUrl() +  config.getViewHistoryLink();
                 paymentLink = paymentLink.replace(mobileNoReplacer, mobileAndName.getKey());
-                paymentLink = paymentLink.replace(consumerCodeReplacer, waterConnectionRequest.getWaterConnection().getApplicationNo());
+                paymentLink = paymentLink.replace(applicationNumberReplacer, waterConnectionRequest.getWaterConnection().getApplicationNo());
                 paymentLink = paymentLink.replace(tenantIdReplacer, property.getTenantId());
                 messageToReplace = messageToReplace.replace("{payment link}",
                         waterServiceUtil.getShortnerURL(paymentLink));
@@ -458,10 +545,8 @@ public class WorkflowNotificationService {
 			}*/
             if (messageToReplace.contains("{connection details page}")) {
                 String connectionDetaislLink = config.getNotificationUrl() + config.getConnectionDetailsLink();
-                connectionDetaislLink = connectionDetaislLink.replace(connectionNoReplacer,
-                        waterConnectionRequest.getWaterConnection().getConnectionNo());
-                connectionDetaislLink = connectionDetaislLink.replace(tenantIdReplacer,
-                        property.getTenantId());
+                connectionDetaislLink = connectionDetaislLink.replace(applicationNumberReplacer,
+                        waterConnectionRequest.getWaterConnection().getApplicationNo());
                 messageToReplace = messageToReplace.replace("{connection details page}",
                         waterServiceUtil.getShortnerURL(connectionDetaislLink));
             }
@@ -499,27 +584,27 @@ public class WorkflowNotificationService {
         if(!StringUtils.isEmpty(String.valueOf(addDetail.get(WCConstants.DETAILS_PROVIDED_BY)))){
             String detailsProvidedBy = String.valueOf(addDetail.get(WCConstants.DETAILS_PROVIDED_BY));
             if ( StringUtils.isEmpty(detailsProvidedBy) || detailsProvidedBy.equalsIgnoreCase(WCConstants.SELF)) {
-                String code = StringUtils.substringBetween(messageTemplate, "{Plumber Info}", "{/Plumber Info}");
-                messageTemplate = messageTemplate.replace("{Plumber Info}", "");
-                messageTemplate = messageTemplate.replace("{/Plumber Info}", "");
+                String code = StringUtils.substringBetween(messageTemplate, "{Plumb Info}", "{/Plumb Info}");
+                messageTemplate = messageTemplate.replace("{Plumb Info}", "");
+                messageTemplate = messageTemplate.replace("{/Plumb Info}", "");
                 messageTemplate = messageTemplate.replace(code, "");
             } else {
-                messageTemplate = messageTemplate.replace("{Plumber Info}", "").replace("{/Plumber Info}", "");
-                messageTemplate = messageTemplate.replace("{Plumber name}",
+                messageTemplate = messageTemplate.replace("{Plumb Info}", "").replace("{/Plumb Info}", "");
+                messageTemplate = messageTemplate.replace("{Plumb name}",
                         StringUtils.isEmpty(waterConnection.getPlumberInfo().get(0).getName()) ? ""
                                 : waterConnection.getPlumberInfo().get(0).getName());
-                messageTemplate = messageTemplate.replace("{Plumber Licence No.}",
+                messageTemplate = messageTemplate.replace("{Plumb Licence No.}",
                         StringUtils.isEmpty(waterConnection.getPlumberInfo().get(0).getLicenseNo()) ? ""
                                 : waterConnection.getPlumberInfo().get(0).getLicenseNo());
-                messageTemplate = messageTemplate.replace("{Plumber Mobile No.}",
+                messageTemplate = messageTemplate.replace("{Plumb Mobile No.}",
                         StringUtils.isEmpty(waterConnection.getPlumberInfo().get(0).getMobileNumber()) ? ""
                                 : waterConnection.getPlumberInfo().get(0).getMobileNumber());
             }
 
         }else{
-            String code = StringUtils.substringBetween(messageTemplate, "{Plumber Info}", "{/Plumber Info}");
-            messageTemplate = messageTemplate.replace("{Plumber Info}", "");
-            messageTemplate = messageTemplate.replace("{/Plumber Info}", "");
+            String code = StringUtils.substringBetween(messageTemplate, "{Plumb Info}", "{/Plumb Info}");
+            messageTemplate = messageTemplate.replace("{Plumb Info}", "");
+            messageTemplate = messageTemplate.replace("{/Plumb Info}", "");
             messageTemplate = messageTemplate.replace(code, "");
         }
         return messageTemplate;
@@ -681,25 +766,9 @@ public class WorkflowNotificationService {
         String receiptNumber = getReceiptNumber(waterConnectionRequest);
         for (Entry<String, String> mobileAndMsg : mobileNumberAndMessage.entrySet()) {
             String messageToReplace = mobileAndMsg.getValue();
-            String consumerCode,service;
-            if(StringUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionNo())){
-                consumerCode = waterConnectionRequest.getWaterConnection().getApplicationNo();
-                service = businessService;
-            }
-            else{
-                consumerCode = waterConnectionRequest.getWaterConnection().getConnectionNo();
-                service = "WS";
-            }
-
-            String link = config.getNotificationUrl() + config.getReceiptDownloadLink();
-            link = link.replace("$consumerCode", consumerCode);
-            link = link.replace("$tenantId", property.getTenantId());
-            link = link.replace("$businessService", service);
-            link = link.replace("$receiptNumber", receiptNumber);
-            link = link.replace("$mobile", mobileAndMsg.getKey());
+            String link = config.getNotificationUrl() + config.getMyPaymentsLink();
             link = waterServiceUtil.getShortnerURL(link);
             messageToReplace = messageToReplace.replace("{receipt download link}", link);
-
             messageToReturn.put(mobileAndMsg.getKey(), messageToReplace);
 
         }
@@ -724,6 +793,50 @@ public class WorkflowNotificationService {
         Object response = serviceRequestRepository.fetchResult(URL,requestInfoWrapper);
         PaymentResponse paymentResponse = mapper.convertValue(response, PaymentResponse.class);
         return paymentResponse.getPayments().get(0).getPaymentDetails().get(0).getReceiptNumber();
+    }
+
+    /**
+     * Fetches User Object based on the UUID.
+     *
+     * @param uuids - set of UUIDs of User
+     * @param requestInfo - Request Info Object
+     * @param tenantId - Tenant Id
+     * @return - Returns User object with given UUID
+     */
+    public UserDetailResponse fetchUserByUUID(Set<String> uuids, RequestInfo requestInfo, String tenantId) {
+        User userInfoCopy = requestInfo.getUserInfo();
+
+        User userInfo = notificationUtil.getInternalMicroserviceUser(tenantId);
+        requestInfo.setUserInfo(userInfo);
+
+        UserSearchRequest userSearchRequest = userService.getBaseUserSearchRequest(tenantId, requestInfo);
+        userSearchRequest.setUuid(uuids);
+
+        UserDetailResponse userDetailResponse = userService.getUser(userSearchRequest);
+        requestInfo.setUserInfo(userInfoCopy);
+        return userDetailResponse;
+    }
+
+    /**
+     * Fetches User Object based on the UUID.
+     *
+     * @param username - username of User
+     * @param requestInfo - Request Info Object
+     * @param tenantId - Tenant Id
+     * @return - Returns User object with given UUID
+     */
+    public UserDetailResponse fetchUserByUsername(String username, RequestInfo requestInfo, String tenantId) {
+        User userInfoCopy = requestInfo.getUserInfo();
+
+        User userInfo = notificationUtil.getInternalMicroserviceUser(tenantId);
+        requestInfo.setUserInfo(userInfo);
+
+        UserSearchRequest userSearchRequest = userService.getBaseUserSearchRequest(tenantId, requestInfo);
+        userSearchRequest.setUserName(username);
+
+        UserDetailResponse userDetailResponse = userService.getUser(userSearchRequest);
+        requestInfo.setUserInfo(userInfoCopy);
+        return userDetailResponse;
     }
 
 }

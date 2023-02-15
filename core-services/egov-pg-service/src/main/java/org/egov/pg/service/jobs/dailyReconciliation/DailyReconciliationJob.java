@@ -35,7 +35,9 @@ public class DailyReconciliationJob implements Job {
                 .type("SYSTEM")
                 .roles(Collections.emptyList()).id(0L).build();
 
-        requestInfo = new RequestInfo("", "", 0L, "", "", "", "", "", "", userInfo);
+        requestInfo = new RequestInfo();
+        requestInfo.setUserInfo(userInfo);
+    //("", "", 0L, "", "", "", "", "", "", userInfo);
     }
 
     @Autowired

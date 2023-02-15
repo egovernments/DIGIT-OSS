@@ -1,4 +1,4 @@
-import { Header } from "@egovernments/digit-ui-react-components";
+import { Header, MultiLink } from "@egovernments/digit-ui-react-components";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -7,14 +7,18 @@ import ApplicationDetailsTemplate from "../../../../templates/ApplicationDetails
 import { newConfigMutate } from "../../config/Mutate/config";
 import TransfererDetails from "../../pageComponents/Mutate/TransfererDetails";
 import MutationApplicationDetails from "./MutationApplicatinDetails";
+import getPTAcknowledgementData from "../../getPTAcknowledgementData";
 
 
 const ApplicationDetails = () => {
   const { t } = useTranslation();
+  const { data: storeData } = Digit.Hooks.useStore.getInitData();
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const { tenants } = storeData || {};
   const { id: propertyId } = useParams();
   const [showToast, setShowToast] = useState(null);
   const [appDetailsToShow, setAppDetailsToShow] = useState({});
+  const [showOptions, setShowOptions] = useState(false);
   const [enableAudit, setEnableAudit] = useState(false);
   const [businessService, setBusinessService] = useState("PT.CREATE");
   sessionStorage.setItem("applicationNoinAppDetails",propertyId);
@@ -168,6 +172,21 @@ const ApplicationDetails = () => {
       },
     ];
   }
+  const handleDownloadPdf = async () => {
+    const Property = appDetailsToShow?.applicationData ;
+    const tenantInfo  = tenants.find((tenant) => tenant.code === Property.tenantId);
+
+    const data = await getPTAcknowledgementData(Property, tenantInfo, t);
+    Digit.Utils.pdf.generate(data);
+  };
+
+  const propertyDetailsPDF = {
+    order: 1,
+    label: t("PT_APPLICATION"),
+    onClick: () => handleDownloadPdf(),
+  };
+  let dowloadOptions = [propertyDetailsPDF];
+
  if (applicationDetails?.applicationData?.creationReason === "MUTATION"){
    return(
     <MutationApplicationDetails 
@@ -181,7 +200,20 @@ const ApplicationDetails = () => {
 
   return (
     <div>
-      <Header>{t("PT_APPLICATION_TITLE")}</Header>
+        <div className={"employee-application-details"} style={{ marginBottom: "15px" }}>
+      <Header styles={{ marginLeft: "0px", paddingTop: "10px", fontSize: "32px" }}>{t("PT_APPLICATION_TITLE")}</Header>
+      {dowloadOptions && dowloadOptions.length > 0 && (
+            <MultiLink
+              className="multilinkWrapper employee-mulitlink-main-div"
+              onHeadClick={() => setShowOptions(!showOptions)}
+              displayOptions={showOptions}
+              options={dowloadOptions}
+              downloadBtnClassName={"employee-download-btn-className"}
+              optionsClassName={"employee-options-btn-className"}
+              // ref={menuRef}
+            />
+          )}
+          </div>
       <ApplicationDetailsTemplate
         applicationDetails={appDetailsToShow}
         isLoading={isLoading}
@@ -197,6 +229,7 @@ const ApplicationDetails = () => {
         timelineStatusPrefix={"ES_PT_COMMON_STATUS_"}
         forcedActionPrefix={"WF_EMPLOYEE_PT.CREATE"}
         statusAttribute={"state"}
+        MenuStyle={{ color: "#FFFFFF", fontSize: "18px" }}
       />
     
     </div>

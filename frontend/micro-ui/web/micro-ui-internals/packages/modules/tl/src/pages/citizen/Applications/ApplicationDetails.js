@@ -22,9 +22,8 @@ import TLDocument from "../../../pageComponents/TLDocumets";
 const getAddress = (address, t) => {
   return `${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${
     address?.landmark ? `${address?.landmark}, ` : ""
-  }${t(address?.locality.code)}, ${t(address?.city.code)},${t(address?.pincode) ? `${address.pincode}` : " "}`
-} 
-
+  }${t(address?.locality?.code)}, ${t(address?.city?.code)},${t(address?.pincode) ? `${address?.pincode}` : " "}`;
+};
 
 const TLApplicationDetails = () => {
   const { t } = useTranslation();
@@ -35,6 +34,7 @@ const TLApplicationDetails = () => {
   const { data: storeData } = Digit.Hooks.useStore.getInitData();
   const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("CITIZEN_TL_MUTATION_HAPPENED", false);
   const { tenants } = storeData || {};
+  const isMobile = window.Digit.Utils.browser.isMobile();
   let multiBoxStyle = {
     border: "groove",
     background: "#FAFAFA",
@@ -58,6 +58,7 @@ const TLApplicationDetails = () => {
   );
 
   useEffect(() => {
+    localStorage.setItem("TLAppSubmitEnabled", "true");
     setMutationHappened(false);
   }, []);
 
@@ -75,20 +76,24 @@ const TLApplicationDetails = () => {
   const [showOptions, setShowOptions] = useState(false);
   useEffect(() => {}, [application, errorApplication]);
 
-  const businessService= application?.[0]?.businessService;
-  const { isLoading : iswfLoading, data : wfdata } = Digit.Hooks.useWorkflowDetails({
+  const businessService = application?.[0]?.businessService;
+  const { isLoading: iswfLoading, data: wfdata } = Digit.Hooks.useWorkflowDetails({
     tenantId: application?.[0]?.tenantId,
     id: id,
     moduleCode: businessService,
   });
 
-let workflowDocs = [];
-if(wfdata)
-{
-  wfdata?.timeline?.map((ob) => {
-    if(ob?.wfDocuments?.length>0) workflowDocs.push(ob?.wfDocuments?.[0])
-  })
-}
+  let workflowDocs = [];
+  if (wfdata) {
+    wfdata?.timeline?.map((ob) => {
+      if (ob?.wfDocuments?.length > 0)
+      {
+        ob?.wfDocuments?.map((doc) => {
+          workflowDocs.push(doc)
+        })
+      }
+    });
+  }
 
   if (isLoading || iswfLoading) {
     return <Loader />;
@@ -129,11 +134,12 @@ if(wfdata)
 
   let propertyAddress = "";
   if (PTData && PTData?.Properties?.length) {
-    propertyAddress=getAddress(PTData?.Properties[0]?.address,t);
+    propertyAddress = getAddress(PTData?.Properties[0]?.address, t);
   }
 
   const dowloadOptions =
-    paymentsHistory?.Payments?.length > 0
+    paymentsHistory?.Payments?.length > 0 && application?.[0]?.status !== "EXPIRED" && application?.[0]?.status !== "CANCELLED" && application?.[0]?.status !== "PENDINGPAYMENT"
+    && application?.[0]?.status !=="MANUALEXPIRED"
       ? [
           {
             label: t("TL_CERTIFICATE"),
@@ -143,17 +149,21 @@ if(wfdata)
             label: t("CS_COMMON_PAYMENT_RECEIPT"),
             onClick: downloadPaymentReceipt,
           },
+          {
+            label: t("TL_APPLICATION"),
+            onClick: handleDownloadPdf,
+          },
         ]
       : [
           {
-            label: t("CS_COMMON_APPLICATION_ACKNOWLEDGEMENT"),
+            label: t("TL_APPLICATION"),
             onClick: handleDownloadPdf,
           },
         ];
 
   return (
     <React.Fragment>
-      <div className="cardHeaderWithOptions">
+      <div className="cardHeaderWithOptions" style={isMobile ? {} : {maxWidth:"960px"}}>
         <Header>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
         <MultiLink
           className="multilinkWrapper"
@@ -167,29 +177,66 @@ if(wfdata)
           return (
             <div key={index} className="employee-data-table">
               <Row
-                className="employee-data-table"
+                // className="employee-data-table"
+                className="border-none"
                 label={t("TL_COMMON_TABLE_COL_APP_NO")}
                 text={application?.applicationNumber}
-                textStyle={{ whiteSpace: "pre", border: "none" }}
+                // textStyle={{ border: "none", wordBreak:"break-word" }}
+                textStyle={{wordBreak:"break-word"}}
               />
-              <Row label={t("TL_APPLICATION_CATEGORY")} text={t("ACTION_TEST_TRADE_LICENSE")} textStyle={{ whiteSpace: "pre" }} />
+              {application?.licenseNumber && <Row
+                className="border-none"
+                label={t("TL_COMMON_TABLE_COL_LICENSE_NO")}
+                text={application?.licenseNumber}
+                textStyle={{wordBreak:"break-word"}}
+              />}
+              <Row className="border-none" label={t("TL_APPLICATION_CATEGORY")} text={t("ACTION_TEST_TRADE_LICENSE")} textStyle={{ wordBreak:"break-word" }} />
               <Row
-                style={{ border: "none" }}
+                className="border-none"
+                // style={{ border: "none" }}
                 label={t("TL_COMMON_TABLE_COL_STATUS")}
                 text={t(`WF_NEWTL_${application?.status}`)}
-                textStyle={{ whiteSpace: "pre-wrap", width: "70%" }}
+                // textStyle={{ whiteSpace: "pre-wrap", width: "70%", wordBreak:"break-word" }}
+                textStyle={{wordBreak:"break-word"}}
               />
               <Row
-                style={{ border: "none" }}
+                className="border-none"
+                // style={{ border: "none" }}
                 label={t("TL_COMMON_TABLE_COL_SLA_NAME")}
                 text={`${Math.round(application?.SLA / (1000 * 60 * 60 * 24))} ${t("TL_SLA_DAYS")}`}
-                textStyle={{ whiteSpace: "pre" }}
+                textStyle={{ wordBreak:"break-word" }}
               />
               <Row
-                style={{ border: "none" }}
+                className="border-none"
+                // style={{ border: "none" }}
                 label={t("TL_COMMON_TABLE_COL_TRD_NAME")}
                 text={application?.tradeName}
-                textStyle={{ whiteSpace: "pre-wrap", width: "70%" }}
+                // textStyle={{ whiteSpace: "pre-wrap", width: "70%", wordBreak:"break-word" }}
+                textStyle={{wordBreak:"break-word"}}
+              />
+              <Row
+                className="border-none"
+                // style={{ border: "none" }}
+                label={t("TL_TRADE_GST_NO")}
+                text={application?.tradeLicenseDetail?.additionalDetail?.tradeGstNo || application?.tradeLicenseDetail?.additionalDetail?.gstNo || t("CS_NA")}
+                // textStyle={{ whiteSpace: "pre-wrap", width: "70%", wordBreak:"break-word" }}
+                textStyle={{wordBreak:"break-word"}}
+              />
+              <Row
+                className="border-none"
+                // style={{ border: "none" }}
+                label={t("TL_OPERATIONAL_AREA")}
+                text={application?.tradeLicenseDetail?.operationalArea || t("CS_NA")}
+                // textStyle={{ whiteSpace: "pre-wrap", width: "70%", wordBreak:"break-word" }}
+                textStyle={{wordBreak:"break-word"}}
+              />
+              <Row
+                className="border-none"
+                // style={{ border: "none" }}
+                label={t("TL_NO_OF_EMPLOYEES")}
+                text={application?.tradeLicenseDetail?.noOfEmployees || t("CS_NA")}
+                // textStyle={{ whiteSpace: "pre-wrap", width: "70%", wordBreak:"break-word" }}
+                textStyle={{wordBreak:"break-word"}}
               />
               <CardSectionHeader>{t("TL_OWNERSHIP_DETAILS_HEADER")}</CardSectionHeader>
               {application?.tradeLicenseDetail.owners.map((ele, index) => {
@@ -197,36 +244,39 @@ if(wfdata)
                   <div key={index} style={multiBoxStyle}>
                     <CardSectionHeader style={multiHeaderStyle}>{`${t("TL_PAYMENT_PAID_BY_PLACEHOLDER")} - ` + (index + 1)}</CardSectionHeader>
                     <Row
+                      className="border-none"
                       label={`${t("TL_INSTITUTION_NAME_LABEL")}`}
                       text={t(application?.tradeLicenseDetail?.institution?.instituionName)}
-                      textStyle={{ whiteSpace: "pre" }}
+                      textStyle={{ wordBreak:"break-word" }}
                     />
                     <Row
                       label={`${t("TL_INSTITUTION_TYPE_LABEL")}`}
                       text={t(`TL_${application?.tradeLicenseDetail?.subOwnerShipCategory}`)}
-                      textStyle={{ whiteSpace: "pre" }}
+                      textStyle={{ wordBreak:"break-word" }}
                     />
-                    <Row label={`${t("TL_MOBILE_NUMBER_LABEL")}`} text={t(ele.mobileNumber)} textStyle={{ whiteSpace: "pre" }} />
+                    <Row className="border-none" label={`${t("TL_MOBILE_NUMBER_LABEL")}`} text={t(ele.mobileNumber)} textStyle={{ whiteSpace: "pre" }} />
                     <Row
+                      className="border-none"
                       label={`${t("TL_TELEPHONE_NUMBER_LABEL")}`}
                       text={t(application?.tradeLicenseDetail?.institution?.contactNo || t("CS_NA"))}
-                      textStyle={{ whiteSpace: "pre" }}
+                      textStyle={{ wordBreak:"break-word" }}
                     />
                     <Row
+                      className="border-none"
                       label={`${t("TL_LOCALIZATION_OWNER_NAME")}`}
                       text={t(ele.fatherOrHusbandName || application?.tradeLicenseDetail?.institution?.name)}
-                      textStyle={{ whiteSpace: "pre" }}
+                      textStyle={{ wordBreak:"break-word" }}
                     />
-                    <Row label={`${t("TL_LOCALIZATION_EMAIL_ID")}`} text={t(ele.emailId || t("CS_NA"))} textStyle={{ whiteSpace: "pre" }} />
+                    <Row className="border-none" label={`${t("TL_LOCALIZATION_EMAIL_ID")}`} text={t(ele.emailId || t("CS_NA"))} textStyle={{ wordBreak:"break-word" }} />
                   </div>
                 ) : (
                   <div key={index} style={multiBoxStyle}>
                     <CardSectionHeader style={multiHeaderStyle}>{`${t("TL_PAYMENT_PAID_BY_PLACEHOLDER")} - ` + (index + 1)}</CardSectionHeader>
-                    <Row label={`${t("TL_COMMON_TABLE_COL_OWN_NAME")}`} text={t(ele.name)} textStyle={{ whiteSpace: "pre" }} />
-                    <Row label={`${t("TL_NEW_OWNER_DETAILS_GENDER_LABEL")}`} text={t(ele.gender)} textStyle={{ whiteSpace: "pre" }} />
-                    <Row label={`${t("TL_MOBILE_NUMBER_LABEL")}`} text={t(ele.mobileNumber)} textStyle={{ whiteSpace: "pre" }} />
-                    <Row label={`${t("TL_GUARDIAN_S_NAME_LABEL")}`} text={t(ele.fatherOrHusbandName)} textStyle={{ whiteSpace: "pre" }} />
-                    <Row label={`${t("TL_RELATIONSHIP_WITH_GUARDIAN_LABEL")}`} text={t(ele.relationship)} textStyle={{ whiteSpace: "pre" }} />
+                    <Row className="border-none" label={`${t("TL_COMMON_TABLE_COL_OWN_NAME")}`} text={t(ele.name)} textStyle={{ wordBreak:"break-word" }} />
+                    <Row className="border-none" label={`${t("TL_NEW_OWNER_DETAILS_GENDER_LABEL")}`} text={t(ele.gender)} textStyle={{ wordBreak:"break-word" }} />
+                    <Row className="border-none" label={`${t("TL_MOBILE_NUMBER_LABEL")}`} text={t(ele.mobileNumber)} textStyle={{ wordBreak:"break-word" }} />
+                    <Row className="border-none" label={`${t("TL_GUARDIAN_S_NAME_LABEL")}`} text={t(ele.fatherOrHusbandName)} textStyle={{ wordBreak:"break-word" }} />
+                    <Row className="border-none" label={`${t("TL_RELATIONSHIP_WITH_GUARDIAN_LABEL")}`} text={t(ele.relationship)} textStyle={{ wordBreak:"break-word" }} />
                   </div>
                 );
               })}
@@ -238,21 +288,25 @@ if(wfdata)
                       {t("TL_UNIT_HEADER")} {index + 1}
                     </CardSectionHeader>
                     <Row
+                      className="border-none"
                       label={t("TL_NEW_TRADE_DETAILS_TRADE_CAT_LABEL")}
                       text={t(`TRADELICENSE_TRADETYPE_${ele?.tradeType.split(".")[0]}`)}
-                      textStyle={{ whiteSpace: "pre" }}
+                      textStyle={{ wordBreak:"break-word" }}
                     />
                     <Row
-                      style={{ border: "none" }}
+                      className="border-none"
+                      // style={{ border: "none" }}
                       label={t("TL_NEW_TRADE_DETAILS_TRADE_TYPE_LABEL")}
                       text={t(`TRADELICENSE_TRADETYPE_${ele?.tradeType.split(".")[1]}`)}
-                      textStyle={{ whiteSpace: "pre" }}
+                      textStyle={{ wordBreak:"break-word" }}
                     />
                     <Row
-                      style={{ border: "none" }}
+                      className="border-none"
+                      // style={{ border: "none" }}
                       label={t("TL_NEW_TRADE_DETAILS_TRADE_SUBTYPE_LABEL")}
                       text={t(`TL_${ele?.tradeType}`)}
-                      textStyle={{ whiteSpace: "pre-wrap", width: "70%" }}
+                      textStyle={{wordBreak:"break-word"}}
+                      // textStyle={{ whiteSpace: "pre-wrap", width: "70%", wordBreak:"break-word" }}
                     />
                   </div>
                 );
@@ -269,23 +323,24 @@ if(wfdata)
                         {t("TL_ACCESSORY_LABEL")} {index + 1}
                       </CardSectionHeader>
                       <Row
-                        style={{ border: "none" }}
+                        className="border-none"
+                        // style={{ border: "none" }}
                         label={t("TL_REVIEWACCESSORY_TYPE_LABEL")}
                         text={t(`TL_${ele?.accessoryCategory.split("-").join("_")}`)}
-                        textStyle={{ whiteSpace: "pre" }}
+                        textStyle={{ wordBreak:"break-word" }}
                       />
-                      <Row label={t("TL_NEW_TRADE_ACCESSORY_COUNT_LABEL")} text={ele?.count} textStyle={{ whiteSpace: "pre" }} />
-                      <Row label={t("TL_NEW_TRADE_ACCESSORY_UOM_LABEL")} text={ele?.uom} textStyle={{ whiteSpace: "pre" }} />
-                      <Row label={t("TL_NEW_TRADE_ACCESSORY_UOMVALUE_LABEL")} text={ele?.uomValue} textStyle={{ whiteSpace: "pre" }} />
+                      <Row className="border-none" label={t("TL_NEW_TRADE_ACCESSORY_COUNT_LABEL")} text={ele?.count} textStyle={{ wordBreak:"break-word" }} />
+                      <Row className="border-none" label={t("TL_NEW_TRADE_ACCESSORY_UOM_LABEL")} text={ele?.uom} textStyle={{ wordBreak:"break-word" }} />
+                      <Row className="border-none" label={t("TL_NEW_TRADE_ACCESSORY_UOMVALUE_LABEL")} text={ele?.uomValue} textStyle={{ wordBreak:"break-word" }} />
                     </div>
                   );
                 })}
               {PTData?.Properties && PTData?.Properties.length > 0 && (
                 <div>
                   <CardSubHeader>{t("PT_DETAILS")}</CardSubHeader>
-                  <Row label={t("TL_PROPERTY_ID")} text={PTData?.Properties?.[0]?.propertyId} textStyle={{ whiteSpace: "pre" }} />
-                  <Row label={t("PT_OWNER_NAME")} text={PTData?.Properties?.[0]?.owners[0]?.name} textStyle={{ whiteSpace: "pre" }} />
-                  <Row label={t("PROPERTY_ADDRESS")} text={propertyAddress} />
+                  <Row className="border-none" label={t("TL_PROPERTY_ID")} text={PTData?.Properties?.[0]?.propertyId} textStyle={{ wordBreak:"break-word" }} />
+                  <Row className="border-none" label={t("PT_OWNER_NAME")} text={PTData?.Properties?.[0]?.owners[0]?.name} textStyle={{ wordBreak:"break-word" }} />
+                  <Row className="border-none" label={t("PROPERTY_ADDRESS")} text={propertyAddress} />
                   <LinkButton
                     style={{ textAlign: "left" }}
                     label={t("TL_VIEW_PROPERTY_DETAIL")}
@@ -298,40 +353,46 @@ if(wfdata)
                 </div>
               )}
               <Row label="" />
-             { !(PTData?.Properties && PTData?.Properties.length > 0 )&&<Row
-                style={{ border: "none" }}
-                label={t("TL_NEW_TRADE_ADDRESS_LABEL")}
-                text={`${
-                  application?.tradeLicenseDetail?.address?.doorNo?.trim() ? `${application?.tradeLicenseDetail?.address?.doorNo?.trim()}, ` : ""
-                } ${
-                  application?.tradeLicenseDetail?.address?.street?.trim() ? `${application?.tradeLicenseDetail?.address?.street?.trim()}, ` : ""
-                }${t(application?.tradeLicenseDetail?.address?.locality?.name)}, ${t(application?.tradeLicenseDetail?.address?.city)} ${
-                  application?.tradeLicenseDetail?.address?.pincode?.trim() ? `,${application?.tradeLicenseDetail?.address?.pincode?.trim()}` : ""
-                }`}
-                textStyle={{ whiteSpace: "pre-wrap", width: "70%" }}
-              />}
+              {!(PTData?.Properties && PTData?.Properties.length > 0) && (
+                <Row
+                  className="border-none"
+                  // style={{ border: "none" }}
+                  label={t("TL_NEW_TRADE_ADDRESS_LABEL")}
+                  text={`${
+                    application?.tradeLicenseDetail?.address?.doorNo?.trim() ? `${application?.tradeLicenseDetail?.address?.doorNo?.trim()}, ` : ""
+                  } ${
+                    application?.tradeLicenseDetail?.address?.street?.trim() ? `${application?.tradeLicenseDetail?.address?.street?.trim()}, ` : ""
+                  }${t(application?.tradeLicenseDetail?.address?.locality?.name)}, ${t(application?.tradeLicenseDetail?.address?.city)} ${
+                    application?.tradeLicenseDetail?.address?.pincode?.trim() ? `,${application?.tradeLicenseDetail?.address?.pincode?.trim()}` : ""
+                  }`}
+                  textStyle={{wordBreak:"break-word"}}
+                  // textStyle={{ whiteSpace: "pre-wrap", width: "70%", wordBreak:"break-word" }}
+                />
+              )}
               <CardSubHeader>{t("TL_COMMON_DOCS")}</CardSubHeader>
               <div>
                 {application?.tradeLicenseDetail?.applicationDocuments?.length > 0 ? (
-                  <TLDocument value={{...application}}></TLDocument>
+                  <TLDocument value={{ ...application }}></TLDocument>
                 ) : (
                   <StatusTable>
                     <Row text={t("TL_NO_DOCUMENTS_MSG")} />
                   </StatusTable>
                 )}
               </div>
-              {workflowDocs?.length > 0 && <div>
-              <CardSubHeader>{t("TL_TIMELINE_DOCS")}</CardSubHeader>
-              <div>
-                {workflowDocs?.length > 0 ? (
-                  <TLDocument value={{"workflowDocs":workflowDocs}}></TLDocument>
-                ) : (
-                  <StatusTable>
-                    <Row text={t("TL_NO_DOCUMENTS_MSG")} />
-                  </StatusTable>
-                )}
-              </div>
-              </div>}
+              {workflowDocs?.length > 0 && (
+                <div>
+                  <CardSubHeader>{t("TL_TIMELINE_DOCS")}</CardSubHeader>
+                  <div>
+                    {workflowDocs?.length > 0 ? (
+                      <TLDocument value={{ workflowDocs: workflowDocs }}></TLDocument>
+                    ) : (
+                      <StatusTable>
+                        <Row text={t("TL_NO_DOCUMENTS_MSG")} />
+                      </StatusTable>
+                    )}
+                  </div>
+                </div>
+              )}
               <TLWFApplicationTimeline application={application} id={id} />
               {application?.status === "CITIZENACTIONREQUIRED" ? (
                 <Link

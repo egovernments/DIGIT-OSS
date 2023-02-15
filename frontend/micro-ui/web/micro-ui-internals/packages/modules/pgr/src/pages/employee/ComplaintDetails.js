@@ -130,6 +130,7 @@ const ComplaintDetailsModal = ({ workflowDetails, complaintDetails, close, popup
   }
 
   function addComment(e) {
+    setError(null);
     setComments(e.target.value);
   }
 
@@ -169,6 +170,9 @@ const ComplaintDetailsModal = ({ workflowDetails, complaintDetails, close, popup
               : t("CS_COMMON_RESOLVE")
       }
       actionSaveOnSubmit={() => {
+        if(selectedAction === "REJECT" && !comments)
+        setError(t("CS_MANDATORY_COMMENTS"));
+        else
         onAssign(selectedEmployee, comments, uploadedFile);
       }}
       error={error}
@@ -406,7 +410,7 @@ export const ComplaintDetails = (props) => {
     <React.Fragment>
       <Card>
         <CardSubHeader>{t(`CS_HEADER_COMPLAINT_SUMMARY`)}</CardSubHeader>
-        <CardLabel>{t(`CS_COMPLAINT_DETAILS_COMPLAINT_DETAILS`)}</CardLabel>
+        <CardLabel style={{fontWeight:"700"}}>{t(`CS_COMPLAINT_DETAILS_COMPLAINT_DETAILS`)}</CardLabel>
         {isLoading ? (
           <Loader />
         ) : (

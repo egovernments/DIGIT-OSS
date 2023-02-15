@@ -1,10 +1,11 @@
 FROM egovio/alpine-node-builder-14:yarn AS build
-# FROM ghcr.io/egovernments/alpine-node-builder-14:yarn AS build
+#FROM ghcr.io/egovernments/alpine-node-builder-14:yarn AS build
 RUN apk update && apk upgrade
 RUN apk add --no-cache git>2.30.0
 ARG WORK_DIR
 WORKDIR /app
-ENV NODE_OPTIONS "--max-old-space-size=3792"
+ENV NODE_OPTIONS "--max-old-space-size=4096"
+ENV GENERATE_SOURCEMAP "false"
 
 COPY ${WORK_DIR} .
 RUN ls -lah
@@ -12,6 +13,7 @@ RUN ls -lah
 #RUN node web/envs.js
 RUN cd web/ \
     && node envs.js \
+    && node -e 'console.log(v8.getHeapStatistics().heap_size_limit/(1024*1024))' \
     &&  ./install-deps.sh \
     && yarn install \
     && yarn build 

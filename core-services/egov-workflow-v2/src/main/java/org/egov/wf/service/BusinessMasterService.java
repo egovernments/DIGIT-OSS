@@ -7,6 +7,7 @@ import org.egov.wf.repository.BusinessServiceRepository;
 import org.egov.wf.web.models.BusinessService;
 import org.egov.wf.web.models.BusinessServiceRequest;
 import org.egov.wf.web.models.BusinessServiceSearchCriteria;
+import org.egov.wf.web.models.ProcessInstanceSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
@@ -15,6 +16,7 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,6 +92,18 @@ public class BusinessMasterService {
 
     private void evictAllCacheValues(String cacheName) {
         cacheManager.getCache(cacheName).clear();
+    }
+    
+    public Long getMaxBusinessServiceSla(ProcessInstanceSearchCriteria criteria) {
+        BusinessServiceSearchCriteria searchCriteria = new BusinessServiceSearchCriteria();
+        String tenantId = criteria.getTenantId();
+        searchCriteria.setTenantId(tenantId);
+        searchCriteria.setBusinessServices(Collections.singletonList(criteria.getBusinessService()));
+        List<BusinessService> businessServices = repository.getBusinessServices(searchCriteria);
+        enrichmentService.enrichTenantIdForStateLevel(tenantId,businessServices);
+
+        Long maxSla = businessServices.get(0).getBusinessServiceSla();
+        return maxSla;
     }
 
 

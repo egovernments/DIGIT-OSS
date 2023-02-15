@@ -103,7 +103,7 @@ export const UserService = {
   changePassword: (details, stateCode) =>
     ServiceRequest({
       serviceName: "changePassword",
-      url: Urls.ChangePassword1,
+      url: Digit.SessionStorage.get("User") ? Urls.ChangePassword1 : Urls.ChangePassword,
       data: {
         ...details,
       },

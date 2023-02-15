@@ -60,8 +60,8 @@ public class WSCalculationWorkflowValidator {
 
 	public void waterConnectionValidation(RequestInfo requestInfo, String tenantId, String waterApplicationNumber,
 			Map<String, String> errorMap) {
-		Boolean isApplicationApproved = workflowValidation(requestInfo, tenantId, waterApplicationNumber);
-		if (!isApplicationApproved)
+		Boolean isAddingMeterReadingAllowed = workflowValidation(requestInfo, tenantId, waterApplicationNumber);
+		if (!isAddingMeterReadingAllowed)
 			errorMap.put("WATER_APPLICATION_ERROR",
 					"Demand cannot be generated as water connection application with application number "
 							+ waterApplicationNumber + " is in workflow and not approved yet");
@@ -69,7 +69,7 @@ public class WSCalculationWorkflowValidator {
 
 	public void propertyValidation(RequestInfo requestInfo, String tenantId, Property property,
 			Map<String, String> errorMap) {
-		Boolean isApplicationApproved = workflowValidation(requestInfo, tenantId, property.getAcknowldgementNumber());
+		Boolean isApplicationApproved = propertyWorkflowValidation(requestInfo, tenantId, property.getAcknowldgementNumber());
 		JSONObject mdmsResponse=getWnsPTworkflowConfig(requestInfo,tenantId);
 		if(mdmsResponse.getBoolean("inWorkflowStatusAllowed")&&!isApplicationApproved){
 			if(property.getStatus().equals(Status.INWORKFLOW))
@@ -83,6 +83,25 @@ public class WSCalculationWorkflowValidator {
 	}
 
 	public Boolean workflowValidation(RequestInfo requestInfo, String tenantId, String businessIds) {
+		List<ProcessInstance> processInstancesList = util.getWorkFlowProcessInstance(requestInfo,tenantId,businessIds);
+		Boolean isAddingMeterReadingAllowed = false;
+
+		for (ProcessInstance processInstances : processInstancesList) {
+			if (((processInstances.getBusinessService().equals(WSCalculationConstant.NEWWATER_BUSINESS_SERVICE)
+					|| processInstances.getBusinessService().equals(WSCalculationConstant.MODIFY_BUSINESS_SERVICE))
+					&& processInstances.getState().getIsTerminateState())
+
+					|| (processInstances.getBusinessService().equals(WSCalculationConstant.DISCONNECTION_BUSINESS_SERVICE)
+					&& !(processInstances.getState().getState().equals(WSCalculationConstant.PENDING_FOR_DISCONNECTION_EXECUTION)
+					|| processInstances.getState().getState().equals(WSCalculationConstant.DISCONNECTION_EXECUTED)))) {
+				isAddingMeterReadingAllowed = true;
+			}
+		}
+
+		return isAddingMeterReadingAllowed;
+	}
+
+	public Boolean propertyWorkflowValidation(RequestInfo requestInfo, String tenantId, String businessIds) {
 		List<ProcessInstance> processInstancesList = util.getWorkFlowProcessInstance(requestInfo,tenantId,businessIds);
 		Boolean isApplicationApproved = false;
 

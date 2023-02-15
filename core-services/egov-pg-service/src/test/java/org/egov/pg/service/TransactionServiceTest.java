@@ -69,7 +69,8 @@ public class TransactionServiceTest {
     @Before
     public void setUp() {
         user = User.builder().userName("USER001").mobileNumber("9XXXXXXXXX").name("XYZ").tenantId("pb").emailId("").build();
-        requestInfo = new RequestInfo("", "", 0L, "", "", "", "", "", "", null);
+        requestInfo = new RequestInfo();
+        //("", "", 0L, "", "", "", "", "", "", null);
         lenient().when(gatewayService.getTxnId(any(Map.class))).thenReturn(Optional.of("ORDERID"));
         lenient().doNothing().when(producer).push(any(String.class), any(Object.class));
         lenient().doNothing().when(enrichmentService).enrichCreateTransaction(any(TransactionRequest.class));

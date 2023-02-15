@@ -1,41 +1,60 @@
 import React, { useEffect, Fragment, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { EmployeeModuleCard, DocumentIconSolid, EventsIconSolid, PMBIconSolid, SurveyIconSolid, PropertyHouse } from "@egovernments/digit-ui-react-components";
+import {
+  EmployeeModuleCard,
+  DocumentIconSolid,
+  EventsIconSolid,
+  PMBIconSolid,
+  SurveyIconSolid,
+  PropertyHouse,
+} from "@egovernments/digit-ui-react-components";
 
 const EngagementCard = () => {
-  const userRoles = Digit.SessionStorage.get('User')?.info?.roles
-  const isEmployee = userRoles.find((role) => role.code === 'EMPLOYEE');
-  
+  const userRoles = Digit.SessionStorage.get("User")?.info?.roles;
+  const isEmployee = userRoles.find((role) => role.code === "EMPLOYEE");
+
   useEffect(() => {
-    Digit.SessionStorage.set("CITIZENSURVEY.INBOX", null)
-  },[])
+    Digit.SessionStorage.set("CITIZENSURVEY.INBOX", null);
+  }, []);
 
   if (!isEmployee) return null;
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const { data: documentsCount, isLoading: isLoadingDocs, } = Digit.Hooks.engagement.useDocSearch({ tenantIds: tenantId }, {
-    select: (data) => {
-      return data?.totalCount;
+  const { data: documentsCount, isLoading: isLoadingDocs } = Digit.Hooks.engagement.useDocSearch(
+    { tenantIds: tenantId },
+    {
+      select: (data) => {
+        return data?.totalCount;
+      },
     }
-  });
-  const { data: MessagesCount, isLoading: isLoadingMessages } = Digit.Hooks.events.useInbox(tenantId, {},
+  );
+  const { data: MessagesCount, isLoading: isLoadingMessages } = Digit.Hooks.events.useInbox(
+    tenantId,
+    {},
     { status: "ACTIVE,INACTIVE", eventTypes: "BROADCAST" },
     {
-      select: (data) => data?.totalCount
-    });
+      select: (data) => data?.totalCount,
+    }
+  );
 
-  const { data: totalEvents, isLoading: isLoadingEvents } = Digit.Hooks.events.useInbox(tenantId, {},
+  const { data: totalEvents, isLoading: isLoadingEvents } = Digit.Hooks.events.useInbox(
+    tenantId,
+    {},
     { eventTypes: "EVENTSONGROUND" },
     {
-      select: (data) => data?.totalCount
-    });
+      select: (data) => data?.totalCount,
+    }
+  );
 
-  const { data: surveysCount, isLoading: isLoadingSurveys } = Digit.Hooks.survey.useSearch({ tenantIds: tenantId }, { select: (data) => data?.TotalCount })
+  const { data: surveysCount, isLoading: isLoadingSurveys } = Digit.Hooks.survey.useSearch(
+    { tenantIds: tenantId },
+    { select: (data) => data?.TotalCount }
+  );
 
-  const totalDocsCount = useMemo(() => (isLoadingDocs ? "-" : documentsCount), [isLoadingDocs, documentsCount])
-  const totalEventsCount = useMemo(() => (isLoadingEvents ? "-" : totalEvents), [isLoadingEvents, totalEvents])
-  const totalMessagesCount = useMemo(() => (isLoadingMessages ? "-" : MessagesCount), [isLoadingMessages, MessagesCount])
-  const totalSurveysCount = useMemo(() => (isLoadingSurveys ? "-" : surveysCount), [isLoadingSurveys, surveysCount])
+  const totalDocsCount = useMemo(() => (isLoadingDocs ? "-" : documentsCount), [isLoadingDocs, documentsCount]);
+  const totalEventsCount = useMemo(() => (isLoadingEvents ? "-" : totalEvents), [isLoadingEvents, totalEvents]);
+  const totalMessagesCount = useMemo(() => (isLoadingMessages ? "-" : MessagesCount), [isLoadingMessages, MessagesCount]);
+  const totalSurveysCount = useMemo(() => (isLoadingSurveys ? "-" : surveysCount), [isLoadingSurveys, surveysCount]);
 
   const { t } = useTranslation();
   let result = null;
@@ -47,21 +66,21 @@ const EngagementCard = () => {
       {
         count: totalSurveysCount,
         label: t("TOTAL_SURVEYS"),
-        link: `/digit-ui/employee/engagement/surveys/inbox`
-      }
+        link: `/digit-ui/employee/engagement/surveys/inbox`,
+      },
     ],
     links: [
       {
         count: totalSurveysCount,
         label: t("ES_TITLE_INBOX"),
-        link: `/digit-ui/employee/engagement/surveys/inbox`
+        link: `/digit-ui/employee/engagement/surveys/inbox`,
       },
       {
         label: t("CS_COMMON_NEW_SURVEY"),
         link: `/digit-ui/employee/engagement/surveys/create`,
       },
-    ]
-  }
+    ],
+  };
 
   const propsForPMBModuleCard = {
     Icon: <PMBIconSolid />,
@@ -70,7 +89,7 @@ const EngagementCard = () => {
       {
         count: totalMessagesCount,
         label: t("TOTAL_MESSAGES"),
-        link: `/digit-ui/employee/engagement/messages/inbox`
+        link: `/digit-ui/employee/engagement/messages/inbox`,
       },
     ],
 
@@ -84,8 +103,8 @@ const EngagementCard = () => {
         label: t("NEW_PUBLIC_MESSAGE_BUTTON_LABEL"),
         link: `/digit-ui/employee/engagement/messages/create`,
       },
-    ]
-  }
+    ],
+  };
   const propsForEventsModuleCard = {
     Icon: <EventsIconSolid />,
     moduleName: t("TOTAL_EVENTS"),
@@ -93,7 +112,7 @@ const EngagementCard = () => {
       {
         count: totalEventsCount,
         label: t("TOTAL_EVENTS"),
-        link: `/digit-ui/employee/engagement/event/inbox`
+        link: `/digit-ui/employee/engagement/event/inbox`,
       },
     ],
 
@@ -101,14 +120,14 @@ const EngagementCard = () => {
       {
         count: totalEventsCount,
         label: t("ES_TITLE_INBOX"),
-        link: `/digit-ui/employee/engagement/event/inbox`
+        link: `/digit-ui/employee/engagement/event/inbox`,
       },
       {
         label: t("ES_TITLE_NEW_EVENTS"),
-        link: `/digit-ui/employee/engagement/event/new-event`
+        link: `/digit-ui/employee/engagement/event/new-event`,
       },
-    ]
-  }
+    ],
+  };
   const propsForDocumentModuleCard = {
     Icon: <DocumentIconSolid />,
     moduleName: t("ES_TITLE_DOCS"),
@@ -132,13 +151,14 @@ const EngagementCard = () => {
     ],
   };
 
-  const engagementSubModulesProps = [propsForDocumentModuleCard, propsForEventsModuleCard, propsForPMBModuleCard, propsForSurveyModuleCard]
+  const engagementSubModulesProps = [propsForDocumentModuleCard, propsForEventsModuleCard, propsForPMBModuleCard, propsForSurveyModuleCard];
 
-
-  if (isEmployee) result = (
+  if (isEmployee)
+    result = (
       <>
-      {engagementSubModulesProps.map((propsForModuleCard, index) => <EmployeeModuleCard key={index} {...propsForModuleCard} />)
-      }
+        {engagementSubModulesProps.map((propsForModuleCard, index) => (
+          <EmployeeModuleCard key={index} longModuleName={true} {...propsForModuleCard} />
+        ))}
       </>
     );
 

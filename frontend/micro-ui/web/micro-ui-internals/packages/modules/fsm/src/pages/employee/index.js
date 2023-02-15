@@ -1,4 +1,14 @@
-import { BreadCrumb, ShippingTruck, EmployeeModuleCard, PrivateRoute, BackButton, AddNewIcon, ViewReportIcon, InboxIcon, ULBHomeCard } from "@egovernments/digit-ui-react-components";
+import {
+  BreadCrumb,
+  ShippingTruck,
+  EmployeeModuleCard,
+  PrivateRoute,
+  BackButton,
+  AddNewIcon,
+  ViewReportIcon,
+  InboxIcon,
+  ULBHomeCard,
+} from "@egovernments/digit-ui-react-components";
 import React, { Fragment, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Switch, useLocation } from "react-router-dom";
@@ -26,9 +36,9 @@ export const FsmBreadCrumb = ({ location }) => {
       setSearch(false);
     }
     if (location?.pathname) {
-      let path = location?.pathname.split("/")
-      let id = path[path.length - 1]
-      setId(id)
+      let path = location?.pathname.split("/");
+      let id = path[path.length - 1];
+      setId(id);
     }
   }, [location]);
 
@@ -86,7 +96,16 @@ const EmployeeApp = ({ path, url, userType }) => {
     <Switch>
       <React.Fragment>
         <div className="ground-container">
-          {FSTPO ? <BackButton isCommonPTPropertyScreen={location.pathname.includes("new") ? true : false} getBackPageNumber={location.pathname.includes("new") ? () => -2 : null}>{t("CS_COMMON_BACK")}</BackButton> : <BreadCrumbComp location={location} />}
+          {FSTPO ? (
+            <BackButton
+              isCommonPTPropertyScreen={location.pathname.includes("new") ? true : false}
+              getBackPageNumber={location.pathname.includes("new") ? () => -2 : null}
+            >
+              {t("CS_COMMON_BACK")}
+            </BackButton>
+          ) : (
+            <BreadCrumbComp location={location} />
+          )}
           <PrivateRoute exact path={`${path}/`} component={() => <FSMLinks matchPath={path} userType={userType} />} />
           <PrivateRoute path={`${path}/inbox`} component={() => <Inbox parentRoute={path} isInbox={true} />} />
           <PrivateRoute path={`${path}/fstp-inbox`} component={() => <FstpInbox parentRoute={path} />} />
@@ -106,7 +125,8 @@ const EmployeeApp = ({ path, url, userType }) => {
           <PrivateRoute exact path={`${path}/fstp-add-vehicle`} component={() => <FstpAddVehicle />} />
           <PrivateRoute exact path={`${path}/fstp-fsm-request/:id`} component={() => <FstpServiceRequest />} />
           <PrivateRoute exact path={`${path}/home`} component={() => <ULBHomeCard module={module} />} />
-          <PrivateRoute path={`${path}/fstp/new-vehicle-entry/:id`} component={FstpOperatorDetails} />
+          <PrivateRoute exact path={`${path}/fstp/new-vehicle-entry`} component={FstpOperatorDetails} />
+          <PrivateRoute exact path={`${path}/fstp/new-vehicle-entry/:id`} component={FstpOperatorDetails} />
         </div>
       </React.Fragment>
     </Switch>

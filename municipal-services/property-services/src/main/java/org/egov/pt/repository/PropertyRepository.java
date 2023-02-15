@@ -8,19 +8,22 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.validation.Valid;
-
+import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.pt.models.EncryptionCount;
 import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
 import org.egov.pt.models.user.User;
 import org.egov.pt.models.user.UserDetailResponse;
 import org.egov.pt.models.user.UserSearchRequest;
+import org.egov.pt.models.PropertyAudit;
 import org.egov.pt.repository.builder.PropertyQueryBuilder;
+import org.egov.pt.repository.rowmapper.EncryptionCountRowMapper;
 import org.egov.pt.repository.rowmapper.OpenPropertyRowMapper;
 import org.egov.pt.repository.rowmapper.PropertyAuditRowMapper;
 import org.egov.pt.repository.rowmapper.PropertyRowMapper;
+import org.egov.pt.repository.rowmapper.PropertyAuditEncRowMapper;
 import org.egov.pt.service.UserService;
 import org.egov.pt.util.PropertyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +35,7 @@ import org.springframework.util.ObjectUtils;
 
 import com.google.common.collect.Sets;
 
+@Slf4j
 @Repository
 public class PropertyRepository {
 
@@ -55,6 +59,12 @@ public class PropertyRepository {
 	
     @Autowired
     private UserService userService;
+
+	@Autowired
+	private EncryptionCountRowMapper encryptionCountRowMapper;
+
+	@Autowired
+	private PropertyAuditEncRowMapper propertyAuditEncRowMapper;
     
 	public List<String> getPropertyIds(Set<String> ownerIds, String tenantId) {
 
@@ -108,7 +118,7 @@ public class PropertyRepository {
 			if(!ObjectUtils.isEmpty(tenantIds))
 			{
 				builder.append(" where tenantid IN (").append(createQuery(tenantIds)).append(")");
-				preparedStmtList.add(tenantIds);
+				addToPreparedStatement(preparedStmtList, tenantIds);
 			}
 		}
 		else
@@ -243,12 +253,47 @@ public class PropertyRepository {
 		return false;
 	}
 
-	public Integer getCount(@Valid PropertyCriteria propertyCriteria, RequestInfo requestInfo) {
-		Boolean isOpenSearch = false ? false : util.isPropertySearchOpen(requestInfo.getUserInfo());
+	public Integer getCount(PropertyCriteria propertyCriteria, RequestInfo requestInfo) {
+		
         List<Object> preparedStmtList = new ArrayList<>();
-        String query = queryBuilder.getCountQuery(propertyCriteria, preparedStmtList, isOpenSearch);
+        String query = queryBuilder.getPropertySearchQuery(propertyCriteria, preparedStmtList, false, false);
         Integer count =  jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
         return count;
     }
 
+	/** Method to find the total count of applications present in dB */
+	public Integer getTotalApplications(PropertyCriteria criteria) {
+		List<Object> preparedStatement = new ArrayList<>();
+		String query = queryBuilder.getTotalApplicationsCountQueryString(criteria, preparedStatement);
+		if (query == null)
+			return 0;
+		Integer count = jdbcTemplate.queryForObject(query, preparedStatement.toArray(), Integer.class);
+		return count;
+	}
+	
+	private void addToPreparedStatement(List<Object> preparedStmtList, Set<String> ids) {
+		ids.forEach(id -> {
+			preparedStmtList.add(id);
+		});
+	}
+
+	/* Method to find the last execution details in dB */
+	public EncryptionCount getLastExecutionDetail(PropertyCriteria criteria) {
+
+		List<Object> preparedStatement = new ArrayList<>();
+		String query = queryBuilder.getLastExecutionDetail(criteria, preparedStatement);
+
+		log.info("\nQuery executed:" + query);
+		if (query == null)
+			return null;
+		EncryptionCount encryptionCount = jdbcTemplate.query(query, preparedStatement.toArray(), encryptionCountRowMapper);
+		return encryptionCount;
+	}
+
+
+	public List<PropertyAudit> getPropertyAuditForEnc(PropertyCriteria criteria) {
+
+		String query = queryBuilder.getpropertyAuditEncQuery();
+		return jdbcTemplate.query(query, criteria.getPropertyIds().toArray(), propertyAuditEncRowMapper);
+	}
 }

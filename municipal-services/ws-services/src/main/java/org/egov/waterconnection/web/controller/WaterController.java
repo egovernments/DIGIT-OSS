@@ -3,6 +3,8 @@ package org.egov.waterconnection.web.controller;
 import java.util.List;
 import javax.validation.Valid;
 
+import org.egov.tracer.model.CustomException;
+import org.egov.waterconnection.service.WaterEncryptionService;
 import org.egov.waterconnection.web.models.RequestInfoWrapper;
 import org.egov.waterconnection.web.models.SearchCriteria;
 import org.egov.waterconnection.web.models.WaterConnection;
@@ -37,9 +39,13 @@ public class WaterController {
 	@Autowired
 	private final ResponseInfoFactory responseInfoFactory;
 
+	@Autowired
+	WaterEncryptionService waterEncryptionService;
+
 	@RequestMapping(value = "/_create", method = RequestMethod.POST, produces = "application/json")
 	public ResponseEntity<WaterConnectionResponse> createWaterConnection(
 			@Valid @RequestBody WaterConnectionRequest waterConnectionRequest) {
+		waterConnectionRequest.setCreateCall(true);
 		List<WaterConnection> waterConnection = waterService.createWaterConnection(waterConnectionRequest);
 		WaterConnectionResponse response = WaterConnectionResponse.builder().waterConnection(waterConnection)
 				.responseInfo(responseInfoFactory
@@ -52,8 +58,9 @@ public class WaterController {
 	public ResponseEntity<WaterConnectionResponse> search(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
 			@Valid @ModelAttribute SearchCriteria criteria) {
 		List<WaterConnection> waterConnectionList = waterService.search(criteria, requestInfoWrapper.getRequestInfo());
+		Integer count = waterService.countAllWaterApplications(criteria, requestInfoWrapper.getRequestInfo());
 		WaterConnectionResponse response = WaterConnectionResponse.builder().waterConnection(waterConnectionList)
-				.totalCount(waterConnectionList.size())
+				.totalCount(count)
 				.responseInfo(responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(),
 						true))
 				.build();
@@ -73,14 +80,33 @@ public class WaterController {
 	}
 
 	@RequestMapping(value = "/_plainsearch", method = RequestMethod.POST)
-	public ResponseEntity<WaterConnectionResponse> planeSearch(
+	public ResponseEntity<WaterConnectionResponse> plainSearch(
 			@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
 			@Valid @ModelAttribute SearchCriteria criteria) {
-		WaterConnectionResponse response = waterService.planeSearch(criteria, requestInfoWrapper.getRequestInfo());
+		WaterConnectionResponse response = waterService.plainSearch(criteria, requestInfoWrapper.getRequestInfo());
 		response.setResponseInfo(
 				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true));
 		return new ResponseEntity<>(response, HttpStatus.OK);
 
+	}
+
+	/**
+	 * Encrypts existing Water records
+	 *
+	 * @param requestInfoWrapper RequestInfoWrapper
+	 * @param criteria SearchCriteria
+	 * @return list of updated encrypted data
+	 */
+	/* To be executed only once */
+	@RequestMapping(value = "/_encryptOldData", method = RequestMethod.POST)
+	public ResponseEntity<WaterConnectionResponse> encryptOldData(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+			@Valid @ModelAttribute SearchCriteria criteria){
+		throw new CustomException("EG_WS_ENC_OLD_DATA_ERROR", "Privacy disabled: The encryption of old data is disabled");
+		/* Un-comment the below code to enable Privacy */
+/*		WaterConnectionResponse waterConnectionResponse = waterEncryptionService.updateOldData(criteria, requestInfoWrapper.getRequestInfo());
+		waterConnectionResponse.setResponseInfo(
+				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true));
+		return new ResponseEntity<>(waterConnectionResponse, HttpStatus.OK);*/
 	}
 
 }

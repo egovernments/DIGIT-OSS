@@ -104,6 +104,12 @@ const CreateProperty = ({ parentRoute }) => {
     redirectWithHistory(nextPage);
   };
 
+  if(params && Object.keys(params).length>0 && window.location.href.includes("/info") && sessionStorage.getItem("docReqScreenByBack") !== "true")
+    {
+      clearParams();
+      queryClient.invalidateQueries("PT_CREATE_PROPERTY");
+    }
+
   const createProperty = async () => {
     history.push(`${match.path}/acknowledgement`);
   };

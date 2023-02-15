@@ -246,7 +246,7 @@ function SelectDocument({
 }) {
 
   const filteredDocument = nocDocuments?.filter((item) => item?.documentType?.includes(doc?.code))[0];
-  const tenantId = Digit.ULBService.getCurrentTenantId(doc);
+  const tenantId = Digit.ULBService.getStateId(); //Digit.ULBService.getCurrentTenantId(doc);
   const [selectedDocument, setSelectedDocument] = useState(doc?.dropdownData?.[0]);
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(() => filteredDocument?.fileStoreId || null);

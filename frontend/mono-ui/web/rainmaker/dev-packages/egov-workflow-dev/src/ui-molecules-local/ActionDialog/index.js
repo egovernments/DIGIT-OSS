@@ -104,7 +104,12 @@ class ActionDialog extends React.Component {
     } = dialogData;
     const { getButtonLabelName } = this;
     let fullscreen = false;
-    const showAssignee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
+    let showAssignee = process.env.REACT_APP_NAME === "Citizen" ? false : true;
+
+    if (dialogData.buttonLabel == "APPROVE" && dialogData.moduleName == "FIRENOC") {
+      showAssignee = false;
+    }
+
     if (window.innerWidth <= 768) {
       fullscreen = true;
     }

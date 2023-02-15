@@ -91,6 +91,22 @@
     }
   }
 }
+.fsm-registry-dropdown {
+  .select {
+    @apply flex;
+    input {
+      @apply text-center;
+    }
+  }
+  .select-active {
+    text-align: left;
+  }
+  .options-card {
+    .profile-dropdown--item {
+      justify-content: center;
+    }
+  }
+}
 
 .employee-select-wrap--elipses {
   width: 85% !important;
@@ -101,6 +117,7 @@
 
 .select-wrap {
   @apply mb-lg relative;
+  max-width: 540px;
 
   .select {
     @apply relative block w-full h-10 border border-solid border-input-border;

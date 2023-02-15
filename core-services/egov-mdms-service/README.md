@@ -12,7 +12,7 @@ Master Data Management Service is a core service that is made available on the D
 ### Swagger API Contract
 
 Please refer to the  below Swagger API contarct for MDMS service to understand the structure of APIs and to have visualization of all internal APIs.
-https://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/DIGIT-OSS/master/core-services/docs/mdms-contract.yml#!/
+http://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/egov-services/master/docs/mdms/contract/v1-0-0.yml#!/
 
 
 ## Service Details

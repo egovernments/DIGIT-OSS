@@ -3,6 +3,7 @@ import { Header, ResponseComposer, Loader, Modal, Card, KeyNote, SubmitBar, Citi
 import PropTypes from "prop-types";
 import { useHistory, Link, useLocation, useRouteMatch } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import _ from "lodash";
 const TYPE_REGISTER = { type: "register" };
 const TYPE_LOGIN = { type: "login" };
 const DEFAULT_USER = "digit-user";
@@ -11,9 +12,24 @@ const DEFAULT_REDIRECT_URL = "/digit-ui/citizen";
 const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation, onSelect, config, clearParams = () => {}, stateCode, redirectToUrl, searchQuery }) => {
   const { t } = useTranslation();
   const modalRef = useRef();
-  const { mobileNumber, propertyIds, oldPropertyIds, locality, city,doorNo,name } = Digit.Hooks.useQueryParams();
+  const { mobileNumber, propertyIds, oldPropertyIds, locality, city,doorNo,name, PToffset } = Digit.Hooks.useQueryParams();
   const filters = {};
   const [modalData, setShowModal] = useState(false);
+
+  const PrivacyInfoLabel = Digit.ComponentRegistryService.getComponent("WSInfoLabel");
+
+  let OfsetForSearch = PToffset;
+  let t1;
+  let off;
+  if (!isNaN(parseInt(OfsetForSearch))) {
+    off = OfsetForSearch;
+    t1 = parseInt(OfsetForSearch) + 5;
+  } else {
+    t1 = 5;
+  }
+  let filter1 = !isNaN(parseInt(OfsetForSearch))
+    ? { limit: "5", sortOrder: "ASC", sortBy: "createdTime", offset: off }
+    : { limit: "5", sortOrder: "ASC", sortBy: "createdTime", offset: "0" };
 
   const closeModal = () => {
     setShowModal(false);
@@ -26,6 +42,12 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
   if (locality || ( searchQuery && searchQuery.locality ) ) filters.locality = locality ? locality : searchQuery?.locality;
   if (doorNo || ( searchQuery && searchQuery.doorNo ) ) filters.doorNo = doorNo ? doorNo : searchQuery?.doorNo;
   if (name || ( searchQuery && searchQuery.name ) ) filters.name = name ? name : searchQuery?.name;
+  if (locality || ( searchQuery && searchQuery.locality ) ){
+    filters.limit = filter1.limit;
+    filters.sortOrder = filter1.sortOrder;
+    filters.sortBy = filter1.sortBy;
+    filters.offset = filter1.offset;
+  }
   
   const [owners, setOwners, clearOwners] = Digit.Hooks.useSessionStorage("PT_MUTATE_MULTIPLE_OWNERS", null);
   // const [params, setParams, ] = Digit.Hooks.useSessionStorage("PT_MUTATE_PROPERTY");
@@ -44,7 +66,7 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const scity = city ? city : searchQuery?.city;
   const searchArgs = scity ? { tenantId: scity, filters, auth } : { filters, auth };
-  const result = Digit.Hooks.pt.usePropertySearch(searchArgs);
+  const result = Digit.Hooks.pt.usePropertySearch(searchArgs,{privacy: Digit.Utils.getPrivacyObject()});
   const consumerCode = result?.data?.Properties?.map((a) => a.propertyId).join(",");
 
   const fetchBillParams = mobileNumber ? { mobileNumber, consumerCode } : { consumerCode };
@@ -104,14 +126,31 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
     return {
       property_id: property?.propertyId,
       owner_name: (property?.owners || [])[0]?.name,
-      property_address: [addr.doorNo || "", addr.buildingName || "", addr.street || "", addr.locality?.name || "", addr.city || ""]
+      property_address: [addr.doorNo || "", addr.buildingName || "", addr.street || "", t(`TENANTS_MOHALLA_${addr.locality?.code}`) || "", t(addr.tenantId) || ""]
         .filter((a) => a)
         .join(", "),
       total_due: payment[property?.propertyId]?.total_due || 0,
       bil_due__date: payment[property?.propertyId]?.bil_due__date || t("N/A"),
-      status:property.status,
+      status:t(property.status),
       owner_mobile: (property?.owners || [])[0]?.mobileNumber,
-    };
+      privacy: {
+        property_address : {
+          uuid: property?.owners?.[0]?.uuid, 
+          fieldName: ["doorNo" , "street" , "landmark"], 
+          model: "Property",showValue: true,
+          loadData: {
+            serviceName: "/property-services/property/_search",
+            requestBody: {},
+            requestParam: { tenantId : property?.tenantId, propertyIds : property?.propertyId },
+            jsonPath: "Properties[0].address.street",
+            isArray: false,
+            d: (res) => {
+              let resultString = (_.get(res,"Properties[0].address.doorNo") ?  `${_.get(res,"Properties[0].address.doorNo")}, ` : "") + (_.get(res,"Properties[0].address.street")? `${_.get(res,"Properties[0].address.street")}, ` : "") + (_.get(res,"Properties[0].address.landmark") ? `${_.get(res,"Properties[0].address.landmark")}`:"")
+              return resultString;
+            }
+          },
+        }
+      }  };
   });
   const getUserType = () => Digit.UserService.getType();
 
@@ -162,6 +201,7 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
             {t(header)} ({searchResults?.length})
           </Header>
         )}
+        { <PrivacyInfoLabel t={t} /> }
         <ResponseComposer data={searchResults} template={template} actionButtonLabel={actionButtonLabel}
         onSubmit={sendOtpToUser} />
       </div>
@@ -198,6 +238,15 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
           </div>
         </Modal>
       ) : null}
+      {!searchResults?.length > 0 && <p style={{ marginLeft: "16px", marginTop: "16px" }}>{t("PT_NO_PROP_FOUND_MSG")}</p>}
+      {searchResults?.length !== 0 && (searchResults?.length == 5 || searchResults?.length == 50) && (locality || ( searchQuery && searchQuery.locality )) && (
+          <div>
+            <p style={{ marginLeft: "16px", marginTop: "16px" }}>
+              {t("PT_LOAD_MORE_MSG")}{" "}
+              <span className="link">{<Link to={`/digit-ui/citizen/pt/property/search-results?mobileNumber=${mobileNumber || searchQuery.mobileNumber ?mobileNumber || searchQuery?.mobileNumber:""}&propertyIds=${propertyIds || searchQuery?.propertyIds ?propertyIds || searchQuery?.propertyIds:""}&oldPropertyIds=${oldPropertyIds || searchQuery?.oldPropertyIds?oldPropertyIds || searchQuery?.oldPropertyIds:""}&doorNo=${doorNo || searchQuery?.doorNo?doorNo || searchQuery?.doorNo:""}&name=${name || searchQuery?.name?name || searchQuery?.name:""}&city=${city?city:""}&locality=${locality || searchQuery?.locality?locality || searchQuery?.locality:""}&PToffset=${t1}`}>{t("PT_COMMON_CLICK_HERE")}</Link>}</span>
+            </p>
+          </div>
+        )}
     </div>
   );
 };

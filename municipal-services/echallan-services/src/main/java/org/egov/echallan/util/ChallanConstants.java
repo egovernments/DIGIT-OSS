@@ -50,6 +50,48 @@ public class ChallanConstants {
 
     public static final String LOCALITY_CODE_PATH = "$.TenantBoundary.[*].boundary[?(@.label==\"Locality\")].code";
 
+    // notification constants
+    public static final String CHANNEL_NAME_SMS = "SMS";
+
+    public static final String CHANNEL_NAME_EVENT = "EVENT";
+
+    public static final String CHANNEL_NAME_EMAIL = "EMAIL";
+
+    public static final String MODULE = "module";
+
+    public static final String ACTION = "action";
+
+    public static final String CHANNEL_LIST = "channelList";
+
+    public static final String CHANNEL = "Channel";
+
+    public static final String MCOLLECT_BUSINESSSERVICE = "MCOLLECT";
+
+    public static final String CREATE_ACTION = "CREATE";
+    public static final String UPDATE_ACTION = "UPDATE";
+    public static final String CANCEL_ACTION = "CANCEL";
+    public static final String PAYMENT_ACTION = "PAYMENT";
+
+    public static final String CREATE_CODE = "echallan.create.sms";
+    public static final String UPDATE_CODE = "echallan.update.sms";
+    public static final String CANCEL_CODE = "echallan.cancel.sms";
+    public static final String PAYMENT_CODE = "echallan.payment.sms";
+
+    public static final String CREATE_CODE_INAPP = "echallan.create.inapp";
+    public static final String UPDATE_CODE_INAPP = "echallan.update.inapp";
+    public static final String CANCEL_CODE_INAPP = "echallan.cancel.inapp";
+    public static final String PAYMENT_CODE_INAPP= "echallan.payment.inapp";
+
+    public static final String CREATE_CODE_EMAIL = "echallan.create.email";
+    public static final String UPDATE_CODE_EMAIL = "echallan.update.email";
+    public static final String CANCEL_CODE_EMAIL = "echallan.cancel.email";
+    public static final String PAYMENT_CODE_EMAIL = "echallan.payment.email";
+
+    public static final String DOWNLOAD_RECEIPT_CODE = "DOWNLOAD RECEIPT";
+    
+    public static final String TOTAL_COLLECTION = "totalCollection";
+
+    public static final String TOTAL_SERVICES = "totalServices";
 
     public ChallanConstants() {}
 

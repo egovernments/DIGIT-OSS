@@ -16,6 +16,7 @@ import {
 } from "../../ui-utils/commons";
 import { getDownloadItems } from "./downloadItems";
 import "./index.css";
+import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 class Footer extends React.Component {
   state = {
@@ -83,6 +84,12 @@ class Footer extends React.Component {
       handleFieldChange(`${dataPath}[0].comment`, "");
       handleFieldChange(`${dataPath}[0].wfDocuments`, []);
       handleFieldChange(`${dataPath}[0].assignee`, []);
+    }
+
+    const applicationNumber = getQueryArg( window.location.href, "applicationNumber" );
+    const tenantId = getQueryArg( window.location.href, "tenantId" );
+    if (item.moduleName == "FIRENOC" && item.buttonLabel == "APPLY") {
+      setRoute(`/fire-noc/apply?applicationNumber=${applicationNumber}&tenantId=${tenantId}`);
     }
 
     if (item.isLast) {

@@ -83,7 +83,7 @@ const GenericChart = ({
         <div>
           {showHeader && (
             <CardLabel className={"dss-header-label"}>
-              <span className={`tooltip ${headerName?.length < (isMobile ? 20 : 30) ? "dss-white-pre" : "dss-white-pre-line"}`}>
+              <span className={`tooltip ${headerName?.length < (isMobile ? 20 : 30) ? "dss-white-pre" : "dss-white-pre-line"}`} style={{whiteSpace:"break-spaces"}}>
                 {headerName}
                 {chartDenomination?.toLowerCase() === "amount" && (
                   <span style={{ whiteSpace: "pre" }}> ({t(`DSS_${Digit.Utils.locale.getTransformedLocale(value?.denomination)}`)})</span>

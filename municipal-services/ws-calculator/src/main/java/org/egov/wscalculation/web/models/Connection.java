@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.*;
 import org.egov.wscalculation.web.models.workflow.ProcessInstance;
 import org.springframework.validation.annotation.Validated;
 
@@ -23,6 +24,11 @@ import java.util.Objects;
  */
 @ApiModel(description = "This is lightweight property object that can be used as reference by definitions needing property linking. Actual Property Object extends this to include more elaborate attributes of the property.")
 @Validated
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-03-11T12:10:14.583+05:30[Asia/Kolkata]")
 public class Connection {
 	@JsonProperty("id")
@@ -125,6 +131,9 @@ public class Connection {
 	@JsonProperty("connectionHolders")
 	@Valid
 	private List<OwnerInfo> connectionHolders;
+
+	@JsonProperty("disconnectionExecutionDate")
+	private Long disconnectionExecutionDate = null;
 
 	public Connection id(String id) {
 		this.id = id;

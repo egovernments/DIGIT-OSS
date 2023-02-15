@@ -32,6 +32,9 @@ public class UserService {
 	@Autowired
 	private ObjectMapper mapper;
 
+	@Autowired
+	private EnrichmentService enrichmentService;
+
 	/**
 	 * Creates user of the connection holders of sewerage connection if it is not
 	 * created already
@@ -75,6 +78,9 @@ public class UserService {
 
 					StringBuilder uri = new StringBuilder(configuration.getUserHost())
 							.append(configuration.getUserContextPath()).append(configuration.getUserUpdateEndPoint());
+					if (userDetailResponse.getUser() != null && holderInfo.getRelationship().contains("*")) {
+						holderInfo.setRelationship(userDetailResponse.getUser().get(0).getRelationship());
+					}
 					userDetailResponse = userCall(new ConnectionUserRequest(request.getRequestInfo(), holderInfo), uri);
 					if (userDetailResponse.getUser().get(0).getUuid() == null) {
 						throw new CustomException("INVALID_USER_RESPONSE", "The user updated has uuid as null");
@@ -105,6 +111,54 @@ public class UserService {
 	private Set<String> getMobileNumbers(SewerageConnectionRequest sewerageConnectionRequest) {
 		Set<String> listOfMobileNumbers = sewerageConnectionRequest.getSewerageConnection().getConnectionHolders()
 				.stream().map(OwnerInfo::getMobileNumber).collect(Collectors.toSet());
+
+		OwnerInfo maskedConnectionHolder = null;
+		OwnerInfo plainConnectionHolderFromDb = null;
+		OwnerInfo connectionHolder = sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().get(0);
+
+		SewerageConnection newSewerageConnection;
+		/*
+		 * Replacing the requestBody connectionHolder data and data from dB for those fields that come as masked (data containing "*" is
+		 * identified as masked) in requestBody
+		 *
+		 * */
+		if (!listOfMobileNumbers.isEmpty()) {
+			newSewerageConnection = sewerageConnectionRequest.getSewerageConnection();
+			maskedConnectionHolder = connectionHolder;
+
+
+			/*
+			 * If it is not _create call/connectionNo already exists (for Modify and Disconnection Applications),
+			 * then a connHolder comparison with existing connHolder for application happens
+			 * */
+
+			if (!sewerageConnectionRequest.isCreateCall() || !StringUtils.isEmpty(newSewerageConnection.getConnectionNo())) {
+				// Check if connHolder already exists
+				if (maskedConnectionHolder != null && !StringUtils.isEmpty(maskedConnectionHolder.getUuid())) {
+
+					plainConnectionHolderFromDb = enrichmentService.getConnectionHolderDetailsForUpdateCall(newSewerageConnection,
+							sewerageConnectionRequest.getRequestInfo());
+					if (maskedConnectionHolder.getMobileNumber().contains("*")) {
+						connectionHolder.setMobileNumber(plainConnectionHolderFromDb.getMobileNumber());
+					}
+					if (!StringUtils.isEmpty(maskedConnectionHolder.getFatherOrHusbandName())
+							&& maskedConnectionHolder.getFatherOrHusbandName().contains("*")) {
+						connectionHolder.setFatherOrHusbandName(plainConnectionHolderFromDb.getFatherOrHusbandName());
+					}
+					if (!StringUtils.isEmpty(maskedConnectionHolder.getCorrespondenceAddress())
+							&& maskedConnectionHolder.getCorrespondenceAddress().contains("*")) {
+						connectionHolder.setCorrespondenceAddress(plainConnectionHolderFromDb.getCorrespondenceAddress());
+					}
+					if (maskedConnectionHolder.getUserName().contains("*")) {
+						connectionHolder.setUserName(plainConnectionHolderFromDb.getUserName());
+					}
+					if (maskedConnectionHolder.getName().contains("*")) {
+						connectionHolder.setName(plainConnectionHolderFromDb.getName());
+					}
+				}
+			}
+		}
+
 		StringBuilder uri = new StringBuilder(configuration.getUserHost())
 				.append(configuration.getUserSearchEndpoint());
 		UserSearchRequest userSearchRequest = UserSearchRequest.builder()
@@ -317,11 +371,11 @@ public class UserService {
 	 * @param requestInfo
 	 * @return
 	 */
-	public Set<String> getUUIDForUsers(String mobileNumber, String tenantId, RequestInfo requestInfo) {
+	public Set<String> getUUIDForUsers(String mobileNumber, String ownerName, String tenantId, RequestInfo requestInfo) {
 		//TenantId is not mandatory when Citizen searches. So it can be empty. Refer the value from UserInfo
 		tenantId = StringUtils.isEmpty(tenantId) ? requestInfo.getUserInfo().getTenantId() : tenantId;
 		UserSearchRequest userSearchRequest = UserSearchRequest.builder().requestInfo(requestInfo).userType("CITIZEN")
-				.tenantId(tenantId).mobileNumber(mobileNumber).build();
+				.tenantId(tenantId).mobileNumber(mobileNumber).name(ownerName).build();
 		return getUsersUUID(userSearchRequest);
 	}
 

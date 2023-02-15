@@ -3,6 +3,7 @@ package org.egov.pt.calculator.web.models;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import org.egov.common.contract.request.RequestInfo;
 
@@ -24,11 +25,14 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 public class BillingSlabReq   {
+	
         @JsonProperty("RequestInfo")
+        @NotNull
         private RequestInfo requestInfo;
 
         @JsonProperty("BillingSlab")
         @Valid
+        @NotNull
         private List<BillingSlab> billingSlab;
 
 

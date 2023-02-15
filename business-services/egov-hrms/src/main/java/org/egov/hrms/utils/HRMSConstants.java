@@ -47,4 +47,16 @@ public class HRMSConstants {
 	public static final String HRMS_USER_SERACH_CRITERIA_USERTYPE = "EMPLOYEE";
 	public static final String HRMS_USER_SERACH_CRITERIA_USERTYPE_CODE = "userType";
 
+	public static final String INTERNALMICROSERVICEROLE_NAME = "Internal Microservice Role";
+
+	public static final String INTERNALMICROSERVICEROLE_CODE = "INTERNAL_MICROSERVICE_ROLE";
+
+	public static final String INTERNALMICROSERVICEUSER_NAME = "Internal Microservice User";
+
+	public static final String INTERNALMICROSERVICEUSER_USERNAME = "INTERNAL_USER";
+
+	public static final String INTERNALMICROSERVICEUSER_MOBILENO = "9999999999";
+
+	public static final String INTERNALMICROSERVICEUSER_TYPE = "SYSTEM";
+
 }

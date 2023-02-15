@@ -159,7 +159,7 @@ import {
     return (
     <React.Fragment>
     <Timeline currentStep={4} />
-    <Header>{t("BPA_STEPPER_SUMMARY_HEADER")}</Header>
+    <Header styles={{marginLeft: "10px"}}>{t("BPA_STEPPER_SUMMARY_HEADER")}</Header>
     <Card style={{paddingRight:"16px"}}>
         <StatusTable>
           <Row className="border-none" label={t(`BPA_APPLICATION_NUMBER_LABEL`)} text={applicationNo?applicationNo:""} />
@@ -177,13 +177,13 @@ import {
         </StatusTable>
     </Card>
     <Card style={{paddingRight:"16px"}}>
+    <StatusTable>
     <CardHeader>{t("BPA_PLOT_DETAILS_TITLE")}</CardHeader>
     <LinkButton
           label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
           style={{ width: "100px", display:"inline" }}
           onClick={() => routeTo(`${routeLink}/plot-details`)}
         />
-    <StatusTable>
           <Row className="border-none" textStyle={{paddingLeft:"12px"}} label={t(`BPA_BOUNDARY_PLOT_AREA_LABEL`)} text={datafromAPI?.planDetail?.planInformation?.plotArea ? `${datafromAPI?.planDetail?.planInformation?.plotArea} ${t(`BPA_SQ_FT_LABEL`)}` : t("CS_NA")} />
           <Row className="border-none" label={t(`BPA_PLOT_NUMBER_LABEL`)} text={datafromAPI?.planDetail?.planInformation?.plotNo || t("CS_NA")} />
           <Row className="border-none" label={t(`BPA_KHATHA_NUMBER_LABEL`)} text={datafromAPI?.planDetail?.planInformation?.khataNo || t("CS_NA")}/>
@@ -250,13 +250,13 @@ import {
       </StatusTable>
       </Card>
       <Card style={{paddingRight:"16px"}}>
+      <StatusTable>
       <CardHeader>{t("BPA_NEW_TRADE_DETAILS_HEADER_DETAILS")}</CardHeader>
           <LinkButton
             label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
             style={{ width: "100px", display: "inline" }}
             onClick={() => routeTo(`${routeLink}/location`)}
           />
-      <StatusTable>
           <Row className="border-none" textStyle={{paddingLeft:"12px"}} label={t(`BPA_DETAILS_PIN_LABEL`)} text={address?.pincode || t("CS_NA")} />
           <Row className="border-none" label={t(`BPA_CITY_LABEL`)} text={address?.city?.name || t("CS_NA")} />
           <Row className="border-none" label={t(`BPA_LOC_MOHALLA_LABEL`)} text={address?.locality?.name || t("CS_NA")} />
@@ -265,6 +265,7 @@ import {
       </StatusTable>
       </Card>
       <Card style={{paddingRight:"16px"}}>
+      <StatusTable>
         <CardHeader>{t("BPA_APPLICANT_DETAILS_HEADER")}</CardHeader>
           <LinkButton
             label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
@@ -281,8 +282,10 @@ import {
         <Row className="border-none" label={t(`BPA_IS_PRIMARY_OWNER_LABEL`)} text={`${ob?.isPrimaryOwner}`} /> 
         </StatusTable>
         </div>))}
+        </StatusTable>
       </Card>
       <Card style={{paddingRight:"16px"}}>
+      <StatusTable>
         <CardHeader>{t("BPA_DOCUMENT_DETAILS_LABEL")}</CardHeader>
           <LinkButton
             label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
@@ -290,8 +293,10 @@ import {
             onClick={() => routeTo(`${routeLink}/document-details`)}
           />
         {<DocumentsPreview documents={getOrderDocuments(applicationDocs)} svgStyles = {{}} isSendBackFlow = {false} isHrLine = {true} titleStyles ={{fontSize: "18px", lineHeight: "24px", "fontWeight": 700, marginBottom: "10px"}}/>}
+        </StatusTable>
       </Card>
       <Card style={{paddingRight:"16px"}}>
+      <StatusTable>
       <CardHeader>{t("BPA_NOC_DETAILS_SUMMARY")}</CardHeader>
           <LinkButton
             label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
@@ -312,6 +317,7 @@ import {
         </StatusTable>
       </div>
       ))}
+      </StatusTable>
       </Card>
       <Card style={{paddingRight:"16px"}}>
       <CardSubHeader>{t("BPA_SUMMARY_FEE_EST")}</CardSubHeader> 

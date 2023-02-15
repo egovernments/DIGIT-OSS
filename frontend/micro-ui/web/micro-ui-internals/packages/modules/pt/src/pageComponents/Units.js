@@ -8,6 +8,7 @@ import { useLocation } from "react-router-dom";
 const Units = ({ t, config, onSelect, userType, formData, setError, formState, clearErrors }) => {
   const { pathname } = useLocation();
   const presentInModifyApplication = pathname.includes("modify");
+  let isMobile = window.Digit.Utils.browser.isMobile();
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [units, setUnits] = useState(
@@ -241,6 +242,7 @@ const Units = ({ t, config, onSelect, userType, formData, setError, formState, c
           stateId={stateId}
           focusIndex={focusIndex}
           setFocusIndex={setFocusIndex}
+          isMobile={isMobile}
           getfloorlistdata={getfloorlistdata}
           floorlist={floorlist}
           occupencyOptions={occupencyOptions}
@@ -274,6 +276,7 @@ function Unit({
   occupencyOptions,
   formData,
   handleRemoveUnit,
+  isMobile,
   stateId,
   formState,
   setError,
@@ -361,7 +364,7 @@ function Unit({
   }, [formValue]);
 
   const { errors } = localFormState;
-  const errorStyle = { width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" };
+  const errorStyle = isMobile ? {width: "70%", marginLeft: "4%", fontSize: "12px"} : { width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" };
 
   return (
     <div style={{ marginBottom: "16px" }}>

@@ -49,6 +49,10 @@
   border:1px solid #ddd;
 }
 
+// table.dataTable thead .sorting_asc:after {
+//   content: "" !important;
+// }
+
 
 .report-header-row-label {
   font-weight: bold;
@@ -86,15 +90,47 @@
 @media only screen and (max-width: 704px) {
   #reportTable_wrapper {
     overflow: scroll;
-    .col-xs-12 .text-center{
-position: unset;
-    }
   }
-  .unique-jk-report-btns{
-    position: unset!important;
+  #reportTable_wrapper .col-xs-12 .text-center {
+    position: unset;
   }
-}
+  .unique-jk-report-btns {
+    position: unset !important;
+  }
 
+  .dataTable thead tr th {
+    /* display: unset !important; */
+  }
+  .dataTables_scrollHeadInner{
+    width: 100%;
+
+  }
+.table .table-striped .table-bordered .dataTable{
+width: 100%;
+}
+.report-table-header{
+  width:100%;
+  overflow:auto;
+  display:flex;
+}
+  .dataTable tbody tr td {
+    display: unset !important;
+    width: 65px !important;
+    word-break: break-all;
+
+  }
+  .report-header-cell{
+    
+    display: unset!important;
+  }
+  th.report-header-cell {
+    width: 40px !important;
+}
+.label-container .label-text{
+      text-overflow: unset;
+     overflow: initial;
+}
+}
 
 
 .dt-button-collection{
@@ -108,3 +144,11 @@ position: unset;
 justify-content: end;
 cursor: pointer;
 }
+
+
+table.dataTable th {
+  padding-right: 20px;
+  word-break: break-word; }
+table.dataTable td {
+  padding: 5px;
+  word-break: break-word; }

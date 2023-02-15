@@ -26,13 +26,13 @@ public class CalculatorConstants {
 
  	public static final String PROPERTY_TYPE = "PropertyType";
  	public static final String FSM_CONFIG = "Config";
-	
+
 	// Error messages in FSM Calculator
 	
 	public static final String PARSING_ERROR = "PARSING ERROR";
 	
 	public static final String INVALID_PRICE = "INVALID PRICE";
-	
+		
 	public static final String INVALID_CAPACITY = "INVALID CAPACITY";
 	
 	public static final String INVALID_UPDATE = "INVALID UPDATE";

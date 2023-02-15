@@ -5,11 +5,11 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.2.6.RELEASE</version>
+    <version>2.2.13.RELEASE</version>
   </parent>
   <groupId>org.egov.services</groupId>
   <artifactId>egov-searcher</artifactId>
-  <version>1.1.5-SNAPSHOT</version>
+  <version>1.1.6-SNAPSHOT</version>
   <name>eGov Data Retrieval Framework</name>
   <description>Common library providing search operation on the Database</description>
   <distributionManagement>
@@ -31,9 +31,19 @@
   </properties>
   <dependencies>
     <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-beans</artifactId>
+      <version>5.2.20.RELEASE</version>
+    </dependency>
+    <dependency>
       <groupId>org.egov.services</groupId>
       <artifactId>services-common</artifactId>
-      <version>1.0.0-RELEASE</version>
+      <version>1.1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.egov</groupId>
+      <artifactId>enc-client</artifactId>
+      <version>2.0.3-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.webjars</groupId>
@@ -77,7 +87,7 @@
     <dependency>
       <groupId>org.egov.services</groupId>
       <artifactId>tracer</artifactId>
-      <version>2.0.0-SNAPSHOT</version>
+      <version>1.2.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>

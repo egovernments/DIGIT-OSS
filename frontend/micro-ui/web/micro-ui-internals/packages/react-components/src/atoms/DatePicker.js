@@ -23,22 +23,27 @@ const DatePicker = (props) => {
     // setDate(date);
     props?.onChange?.(date);
   };
-
+  let addStyle = {};
+  if (Digit.UserService.getType() === "citizen") {
+    addStyle = { maxWidth: "540px" };
+  }
   return (
-    <div style={{ position: "relative", width: "100%" }}>
+    <div style={{ position: "relative", width: "100%", cursor: "pointer", ...addStyle, ...(props?.style ? props.style : {}) }}>
       <React.Fragment>
-        <input
+        {/* <input
           type="text"
           disabled={props.disabled}
           value={getDatePrint() ? getDatePrint() : "DD/MM/YYYY"}
           readOnly
           className={`employee-card-input ${props.disabled ? "disabled" : ""}`}
-          style={{ width: "calc(100%-62px)" }}
-        />
-        <CalendarIcon isdisabled={props.disabled ? true : false} style={{ right: "6px", zIndex: "10", top: 6, position: "absolute" }} />
+          style={{ width: "calc(100%-62px)"}}
+        /> 
+         <CalendarIcon isdisabled={props.disabled ? true : false} style={{ right: "6px", zIndex: "10", top: 6, position: "absolute" }} /> */}
         <input
-          className={`${props.disabled ? "disabled" : ""}`}
-          style={{ right: "6px", zIndex: "100", top: 6, position: "absolute", opacity: 0, width: "100%" }}
+          className={`employee-card-input ${props.disabled ? "disabled" : ""}`}
+          // className={`${props.disabled ? "disabled" : ""}`}
+          style={{ width: "calc(100%-62px)" }}
+          // style={{ right: "6px", zIndex: "100", top: 6, position: "absolute", opacity: 0, width: "100%" }}
           value={props.date ? props.date : ""}
           type="date"
           ref={dateInp}

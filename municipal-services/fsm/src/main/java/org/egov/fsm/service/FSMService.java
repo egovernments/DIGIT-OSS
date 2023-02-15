@@ -395,8 +395,22 @@ public class FSMService {
 		fsmsearch.setMobileNumber(userDetailResponse.getUser().get(0).getMobileNumber());
 		fsmsearch.setOwnerIds(null);
 		userDetailResponse = userService.getUser(fsmsearch, null);
-		fsmRequest.getWorkflow()
-				.setAssignes(userDetailResponse.getUser().stream().map(User::getUuid).collect(Collectors.toList()));
+
+		List<String> uuidList = new ArrayList<>();
+		userDetailResponse.getUser().forEach(userInfo -> {
+
+			List<Role> roleList = userInfo.getRoles().stream()
+					.filter(findCitizenRole -> findCitizenRole.getCode().contains(FSMConstants.CITIZEN))
+					.collect(Collectors.toList());
+
+			if (!roleList.isEmpty()) {
+				uuidList.add(userInfo.getUuid());
+
+			}
+
+		});
+
+		fsmRequest.getWorkflow().setAssignes(uuidList);
 
 		if (fsmRequest.getFsm().getPaymentPreference() != null && !(FSMConstants.FSM_PAYMENT_PREFERENCE_POST_PAY
 				.equalsIgnoreCase(fsmRequest.getFsm().getPaymentPreference()))) {

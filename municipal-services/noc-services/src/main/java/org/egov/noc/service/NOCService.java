@@ -105,13 +105,21 @@ public class NOCService {
 			additionalDetails = nocValidator.getOrValidateBussinessService(nocRequest.getNoc(), mdmsData);
 		}
 		Noc searchResult = getNocForUpdate(nocRequest);
+		if(searchResult.getApplicationStatus().equalsIgnoreCase("AUTO_APPROVED")
+				&& nocRequest.getNoc().getApplicationStatus().equalsIgnoreCase("INPROGRESS"))
+		{
+			log.info("NOC_UPDATE_ERROR_AUTO_APPROVED_TO_INPROGRESS_NOTALLOWED");
+			throw new CustomException("AutoApproveException","NOC_UPDATE_ERROR_AUTO_APPROVED_TO_INPROGRESS_NOTALLOWED");
+		}
 		nocValidator.validateUpdate(nocRequest, searchResult, additionalDetails.get(NOCConstants.MODE), mdmsData);
 		enrichmentService.enrichNocUpdateRequest(nocRequest, searchResult);
 		
-		if(!ObjectUtils.isEmpty(nocRequest.getNoc().getWorkflow()) && !StringUtils.isEmpty(nocRequest.getNoc().getWorkflow().getAction())) {
+		if(!ObjectUtils.isEmpty(nocRequest.getNoc().getWorkflow())
+				&& !StringUtils.isEmpty(nocRequest.getNoc().getWorkflow().getAction())) {
 		   wfIntegrator.callWorkFlow(nocRequest, additionalDetails.get(NOCConstants.WORKFLOWCODE));
 		   enrichmentService.postStatusEnrichment(nocRequest, additionalDetails.get(NOCConstants.WORKFLOWCODE));
-		   BusinessService businessService = workflowService.getBusinessService(nocRequest.getNoc(), nocRequest.getRequestInfo(), additionalDetails.get(NOCConstants.WORKFLOWCODE));
+		   BusinessService businessService = workflowService.getBusinessService(nocRequest.getNoc(),
+				   nocRequest.getRequestInfo(), additionalDetails.get(NOCConstants.WORKFLOWCODE));
 		   if(businessService == null)
 			   nocRepository.update(nocRequest, true);
 		   else

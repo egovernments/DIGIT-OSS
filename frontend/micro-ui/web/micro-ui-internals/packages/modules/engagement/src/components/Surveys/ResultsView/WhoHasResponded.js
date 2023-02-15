@@ -22,11 +22,11 @@ const WhoHasResponded = ({t,userInfo}) => {
                         "marginTop": "20px",
                         "marginBottom": "20px"}}>
                 <div style={{"flex":"50%","padding":"10px"}}>
-                    <header style={{"fontWeight":"bold","fontSize":"25px"}}>Email</header>
+                    <header style={{"fontWeight":"bold","fontSize":"25px"}}>{t("SURVEY_EMAIL")}</header>
                     {data.map(user=> <p style={{"margin":"10px 0px 10px 0px"}}>{user[1]}</p>)}
                 </div>
                 <div style={{"flex":"50%","padding":"10px"}}>
-                    <header style={{"fontWeight":"bold","fontSize":"25px"}}>Phone Number</header>
+                    <header style={{"fontWeight":"bold","fontSize":"25px"}}>{t("SURVEY_PHONE_NUMBER")}</header>
                     {data.map(user=> <p style={{"margin":"10px 0px 10px 0px"}}>{user[0]}</p>)}
                 </div>
                 

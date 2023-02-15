@@ -17,6 +17,7 @@ const CreatePropertyForm = ({ config, onSelect,value, userType, redirectUrl }) =
   const history = useHistory();
   const match = useRouteMatch();
   sessionStorage.setItem("VisitedCommonPTSearch",true);
+  sessionStorage.setItem("VisitedLightCreate",true);
   const isMobile = window.Digit.Utils.browser.isMobile();
 
   const allCities = Digit.Hooks.pt.useTenants()?.sort((a, b) => a?.i18nKey?.localeCompare?.(b?.i18nKey));
@@ -39,7 +40,7 @@ const CreatePropertyForm = ({ config, onSelect,value, userType, redirectUrl }) =
   }
 
   const onSubmit = async () => {
-    if(formValue?.owners?.[0]?.ownershipCategory?.includes("MULTIPLEOWNERS") && formValue?.owners?.length==1){
+    if((formValue?.owners?.ownershipCategory?.includes("MULTIPLEOWNERS") || formValue?.owners?.[0]?.ownershipCategory?.code?.includes("MULTIPLEOWNERS")) && formValue?.owners?.length==1){
       setShowToast({ key: true, label: "PT_COMMON_ONE_MORE_OWNER_INFROMATION_REQUIRED" });
     }else{
 

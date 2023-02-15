@@ -13,12 +13,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.egov.pt.config.PropertyConfiguration;
-import org.egov.pt.models.Assessment;
-import org.egov.pt.models.AuditDetails;
-import org.egov.pt.models.Document;
-import org.egov.pt.models.Property;
-import org.egov.pt.models.Unit;
-import org.egov.pt.models.UnitUsage;
+import org.egov.pt.models.*;
 import org.egov.pt.models.enums.Status;
 import org.egov.pt.models.user.User;
 import org.egov.pt.models.workflow.BusinessService;
@@ -136,7 +131,7 @@ public class AssessmentEnrichmentService {
     	
         if(request.getAssessment().getWorkflow().getAction().equalsIgnoreCase(WORKFLOW_SENDBACK_CITIZEN)){
 
-           List<User> owners = assessmentUtils.getUserForWorkflow(property);
+           List<OwnerInfo> owners = assessmentUtils.getUserForWorkflow(property);
 
            request.getAssessment().getWorkflow().setAssignes(owners);
         }

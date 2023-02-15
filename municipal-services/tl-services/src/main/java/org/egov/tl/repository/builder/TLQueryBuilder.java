@@ -366,6 +366,60 @@ public class TLQueryBuilder {
         return addPaginationWrapper(builder.toString(), preparedStmtList, criteria);
 
     }
+    
+    public String getApplicationsCountQuery(TradeLicenseSearchCriteria criteria, List<Object> preparedStmtList, String applicationType) {
+    	
+    	StringBuilder query = new StringBuilder("");
+    	
+    	if(criteria.getAccountId()!=null) {
+    		query.append("select count(*) from eg_tl_tradelicense where tenantid = (select tl.tenantid from eg_tl_tradelicense tl INNER JOIN eg_tl_tradelicensedetail tld ON tld.tradelicenseid = tl.id INNER JOIN eg_tl_owner tlowner on tlowner.tradelicensedetailid = tld.id where tl.accountid=? ");
+    		preparedStmtList.add(criteria.getAccountId());
+    		
+    		List<String> ownerIds = criteria.getOwnerIds();
+    		
+            if(!CollectionUtils.isEmpty(ownerIds)) {
+            	
+                query.append(" OR (tlowner.id IN (").append(createQuery(ownerIds)).append(")");
+                addToPreparedStatement(preparedStmtList,ownerIds);
+                
+                query.append(" AND tlowner.active = ? )");
+                preparedStmtList.add(true);
+            }   
+    		
+    		query.append("and tl.businessservice= ? limit 1) and createdtime> ? AND applicationtype= ? ");
+    		
+    		preparedStmtList.add(TLConstants.TRADE_LICENSE_MODULE_CODE);
+    		
+    		 
+    	}
+    	
+    	else if(criteria.getTenantId()!=null) {
+    		query.append("select count(*) from eg_tl_tradelicense where tenantid = ? and createdtime > ? AND applicationtype= ? ");
+    		preparedStmtList.add(criteria.getTenantId());
+    	}
+    	
+    	// In order to get data of last 12 months, the months variables is pre-configured in application properties
+    	int months = Integer.valueOf(config.getNumberOfMonths()) ;
+    	
+    	Calendar calendar = Calendar.getInstance();
+    	
+    	// To subtract 12 months from current time, we are adding -12 to the calendar instance, as subtract function is not in-built
+    	calendar.add(Calendar.MONTH, -1*months);
+    	
+    	// Converting the timestamp to milliseconds and adding it to prepared statement list
+    	preparedStmtList.add(calendar.getTimeInMillis());
+    	
+    	preparedStmtList.add(applicationType);
+    	
+    	addClauseIfRequired(preparedStmtList, query);
+        query.append(" businessservice = ? ");
+        preparedStmtList.add(TLConstants.TRADE_LICENSE_MODULE_CODE);
+    	
+    	
+    	return query.toString();
+    	
+    	
+    }
 
 
 

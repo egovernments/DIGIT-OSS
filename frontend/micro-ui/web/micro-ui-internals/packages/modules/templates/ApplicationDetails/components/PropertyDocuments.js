@@ -23,15 +23,21 @@ function PropertyDocuments({ documents, svgStyles = {}, isSendBackFlow=false }) 
   }, [documents]);
 
   useEffect(() => {
-    if(filesArray?.length)
+     if (filesArray?.length && documents?.[0]?.BS === "BillAmend") {
+      Digit.UploadServices.Filefetch(filesArray, Digit.ULBService.getCurrentTenantId()).then((res) => {
+        setPdfFiles(res?.data);
+      });
+    }
+    else if(filesArray?.length)
    { 
      Digit.UploadServices.Filefetch(filesArray, Digit.ULBService.getStateId()).then((res) => {
       setPdfFiles(res?.data);
      });
     }
+    
   }, [filesArray]);
 
-  const checkLocation = window.location.href.includes("employee/tl") || window.location.href.includes("/obps");
+  const checkLocation = window.location.href.includes("employee/tl") || window.location.href.includes("/obps") || window.location.href.includes("employee/ws");
   const isStakeholderApplication = window.location.href.includes("stakeholder");
 
   return (

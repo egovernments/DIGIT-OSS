@@ -1,0 +1,71 @@
+.how-it-works-page{
+    width: 92%;
+    margin: 16px;
+    .how-it-works-page-header{
+        margin-bottom: 15px;
+    }
+}
+
+.video-icon{
+    float: left;
+    background-color: #6F6F6F;
+    height: 60px;
+    width: 100px;
+    cursor: pointer;
+    margin: 5px;
+
+    .vid-svg{
+        padding-left: 35px;
+        padding-top: 18px;
+    }
+}
+
+.how-it-works-header-description{
+    padding: 5px;
+    overflow-wrap: break-word;
+    h2{
+        font-size: 16px;
+        font-weight: 400;
+    }
+    p{
+        font-size: 12px;
+        font-weight: 400;
+    }
+}
+
+.how-it-works-pdf-section{
+    display: flex;
+    justify-content: space-between;
+    .pdf-icon-header-desc{
+        float: left;
+        .pdf-icon{
+            display: inline-block;
+        }
+        .pdf-header-desc{
+            display: inline-block;
+            position: absolute;
+            padding: 5px;
+            overflow-wrap: break-word;
+            h2{
+                font-size: 16px;
+                font-weight: 400;
+            }
+            p{
+                font-size: 12px;
+                font-weight: 400;
+            }
+        }
+    }
+    .download-icon{
+        float: right;
+    }
+}
+
+.how-it-works-video-play{
+    display: inline-block;
+    .close-button{
+        float: right;
+        cursor: pointer;
+    }
+}
+

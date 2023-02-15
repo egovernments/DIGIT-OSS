@@ -104,7 +104,7 @@ const SelectDocument = React.memo(function MyComponent({
     beforeUploadDocuments
 }) {
     const filteredDocument = documents?.filter((item) => item?.documentType?.includes(doc?.code))[0] || beforeUploadDocuments?.filter((item) => item?.documentType?.includes(doc?.code))[0];
-    const tenantId = Digit.ULBService.getCurrentTenantId();
+    const tenantId = Digit.ULBService.getStateId(); //Digit.ULBService.getCurrentTenantId();
     const [selectedDocument, setSelectedDocument] = useState(
         filteredDocument
             ? { ...filteredDocument, active: true, code: filteredDocument?.documentType, i18nKey: filteredDocument?.documentType }

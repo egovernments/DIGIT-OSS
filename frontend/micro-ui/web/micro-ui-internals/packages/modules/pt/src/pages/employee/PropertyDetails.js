@@ -129,7 +129,7 @@ const PropertyDetails = () => {
           e.additionalDetails.owners.map((owner, ind) => {
             owner.values.map((value) => {
               if (value.title == "PT_OWNERSHIP_INFO_MOBILE_NO") {
-                value.textStyle = { display: "flex" };
+                value.textStyle = { display: "flex", wordBreak:"revert" };
                 value.caption = (
                   <span
                     onClick={() => {
@@ -173,7 +173,7 @@ const PropertyDetails = () => {
         asSectionHeader: true,
         belowComponent: () => (
           <LinkLabel
-            onClick={() => history.push({ pathname: `/digit-ui/employee/pt/ptsearch/payment-details/${applicationNumber}` })}
+            onClick={() => history.push({ pathname: `/digit-ui/employee/pt/payment-details/${applicationNumber}`})}
             style={isMobile ? { marginTop: "15px", marginLeft: "0px" } : { marginTop: "15px" }}
           >
             {t("PT_VIEW_PAYMENT")}

@@ -17,6 +17,6 @@ public class TaxHeadEstimate {
     private String taxHeadCode;
 
     private BigDecimal estimateAmount;
-
+    
     private Category category;
 }

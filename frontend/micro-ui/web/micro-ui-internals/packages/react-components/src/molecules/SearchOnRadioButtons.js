@@ -19,7 +19,7 @@ const SearchOnRadioButtons = ({options,optionsKey,additionalWrapperClass,onSelec
     }
 
     return <div className="SearchOnRadioButton">
-        <TextInput signature={true} signatureImg={<SignatureImage />} onChange={onSearchQueryChange || defaultSearchQueryChange} value={SearchQueryValue} placeholder={placeholder} />
+        <TextInput textInputStyle={{maxWidth:"100%"}} signature={true} signatureImg={<SignatureImage />} onChange={onSearchQueryChange || defaultSearchQueryChange} value={SearchQueryValue} placeholder={placeholder} />
         <RadioButtons {...{options: filteredOptions,optionsKey,additionalWrapperClass,onSelect,selectedOption}} />
     </div>
 }

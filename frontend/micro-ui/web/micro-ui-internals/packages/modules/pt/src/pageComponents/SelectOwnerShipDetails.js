@@ -11,6 +11,7 @@ import {
 } from "@egovernments/digit-ui-react-components";
 import { cardBodyStyle } from "../utils";
 import { useLocation } from "react-router-dom";
+import Timeline from "../components/TLTimeline";
 
 const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlur, formState, setError, clearErrors }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -160,21 +161,24 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlu
   }
 
   return (
-    <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!ownershipCategory}>
-      <div>
-        <RadioButtons
-          isMandatory={config.isMandatory}
-          options={getDropdwonForProperty(ownerShipdropDown) || []}
-          selectedOption={ownershipCategory}
-          optionsKey="i18nKey"
-          onSelect={selectedValue}
-          value={ownershipCategory}
-          labelKey="PT_OWNERSHIP"
-          isDependent={true}
-          disabled={isUpdateProperty || isEditProperty}
-        />
-      </div>
-    </FormStep>
+    <React.Fragment>
+      {window.location.href.includes("/citizen/pt/property/property-mutation") ? <Timeline currentStep={1} flow="PT_MUTATE" /> : <Timeline currentStep={2} />}
+      <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!ownershipCategory}>
+        <div>
+          <RadioButtons
+            isMandatory={config.isMandatory}
+            options={getDropdwonForProperty(ownerShipdropDown) || []}
+            selectedOption={ownershipCategory}
+            optionsKey="i18nKey"
+            onSelect={selectedValue}
+            value={ownershipCategory}
+            labelKey="PT_OWNERSHIP"
+            isDependent={true}
+            disabled={isUpdateProperty || isEditProperty}
+          />
+        </div>
+      </FormStep>
+    </React.Fragment>
   );
 };
 

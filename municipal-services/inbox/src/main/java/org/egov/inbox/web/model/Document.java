@@ -1,5 +1,6 @@
 package org.egov.inbox.web.model;
 
+import java.util.Map;
 import java.util.Objects;
 
 import javax.validation.constraints.Size;
@@ -31,6 +32,15 @@ public class Document   {
 
   @JsonProperty("additionalDetails")
   private Object additionalDetails = null;
+
+  @JsonProperty("tenantId")
+  private String tenantId;
+
+  @JsonProperty("fileStoreId")
+  private String fileStoreId;
+
+  @JsonProperty("auditDetails")
+  private Map<String, Object> auditDetails;
 
   public Document id(String id) {
     this.id = id;

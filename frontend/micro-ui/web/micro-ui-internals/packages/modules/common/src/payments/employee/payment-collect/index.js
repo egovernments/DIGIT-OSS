@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { RadioButtons, FormComposer, Dropdown, CardSectionHeader, Loader, Toast, Card, Header } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
-import { useHistory, useParams, useRouteMatch } from "react-router-dom";
+import { useHistory, useParams, useRouteMatch, useLocation } from "react-router-dom";
 import { useQueryClient } from "react-query";
 import { useCashPaymentDetails } from "./ManualReciept";
 import { useCardPaymentDetails } from "./card";
@@ -11,16 +11,23 @@ import { BillDetailsFormConfig } from "./Bill-details/billDetails";
 
 export const CollectPayment = (props) => {
   // const { formData, addParams } = props;
-  const { workflow: ModuleWorkflow } = Digit.Hooks.useQueryParams();
+  const { workflow: ModuleWorkflow, IsDisconnectionFlow } = Digit.Hooks.useQueryParams();
   const { t } = useTranslation();
   const history = useHistory();
   const queryClient = useQueryClient();
 
   const { path: currentPath } = useRouteMatch();
-  const { consumerCode, businessService } = useParams();
+  let { consumerCode, businessService } = useParams();
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const search = useLocation().search;
+  if (window.location.href.includes("ISWSAPP")) consumerCode = new URLSearchParams(search).get("applicationNumber");
+  if (window.location.href.includes("ISWSCON") || ModuleWorkflow === "WS") consumerCode = decodeURIComponent(consumerCode);
+
   const { data: paymentdetails, isLoading } = Digit.Hooks.useFetchPayment({ tenantId: tenantId, consumerCode, businessService });
   const bill = paymentdetails?.Bill ? paymentdetails?.Bill[0] : {};
+  const { data: applicationData } = Digit.Hooks.fsm.useSearch(tenantId, { applicationNos: consumerCode }, { staleTime: Infinity, enabled: businessService?.toUpperCase()?.includes("FSM") ? true : false });
+
+  const advanceBill = applicationData?.advanceAmount;
 
   // const { isLoading: storeLoading, data: store } = Digit.Services.useStore({
   //   stateCode: props.stateCode,
@@ -34,6 +41,12 @@ export const CollectPayment = (props) => {
 
   const [formState, setFormState] = useState({});
   const [toast, setToast] = useState(null);
+
+  useEffect(() => {
+    if (paymentdetails?.Bill && paymentdetails.Bill.length === 0) {
+      setToast({ key: "error", action: "CS_BILL_NOT_FOUND" });
+    }
+  }, [paymentdetails]);
 
   const defaultPaymentModes = [
     { code: "CASH", label: t("COMMON_MASTERS_PAYMENTMODE_CASH") },
@@ -60,13 +73,14 @@ export const CollectPayment = (props) => {
     { code: "OTHER", name: t("COMMON_OTHER") },
   ];
   const [selectedPaymentMode, setPaymentMode] = useState(formState?.selectedPaymentMode || getPaymentModes()[0]);
+  const [selectedPaidBy, setselectedPaidBy] = useState(formState?.paidBy || { code: "OWNER", name: t("COMMON_OWNER") });
 
   const onSubmit = async (data) => {
     bill.totalAmount = Math.round(bill.totalAmount);
     data.paidBy = data.paidBy.code;
 
     if (
-      BillDetailsFormConfig({ consumerCode, businessService }, t)[ModuleWorkflow ? ModuleWorkflow : businessService] &&
+      BillDetailsFormConfig({ consumerCode, businessService }, t)[ModuleWorkflow ? (businessService === "SW" && ModuleWorkflow === "WS"? businessService : ModuleWorkflow) : businessService] &&
       !data?.amount?.paymentAllowed
     ) {
       let action =
@@ -84,7 +98,7 @@ export const CollectPayment = (props) => {
     const { ManualRecieptDetails, paymentModeDetails, ...rest } = data;
     const { errorObj, ...details } = paymentModeDetails || {};
 
-    const recieptRequest = {
+    let recieptRequest = {
       Payment: {
         mobileNumber: data.payerMobile,
         paymentDetails: [
@@ -103,6 +117,11 @@ export const CollectPayment = (props) => {
         paidBy: data.paidBy,
       },
     };
+    if (advanceBill !== null && applicationData?.applicationStatus === "PENDING_APPL_FEE_PAYMENT") {
+      (recieptRequest.Payment.paymentDetails[0].totalAmountPaid = advanceBill),
+        (recieptRequest.Payment.totalAmountPaid = advanceBill),
+        (recieptRequest.Payment.totalDue = bill.totalAmount);
+    }
 
     if (data.ManualRecieptDetails.manualReceiptDate) {
       recieptRequest.Payment.paymentDetails[0].manualReceiptDate = new Date(ManualRecieptDetails.manualReceiptDate).getTime();
@@ -158,7 +177,7 @@ export const CollectPayment = (props) => {
       history.push(
         `${props.basePath}/success/${businessService}/${resposne?.Payments[0]?.paymentDetails[0]?.receiptNumber.replace(/\//g, "%2F")}/${
           resposne?.Payments[0]?.paymentDetails[0]?.bill?.consumerCode
-        }`
+        }?IsDisconnectionFlow=${IsDisconnectionFlow}`
       );
     } catch (error) {
       setToast({ key: "error", action: error?.response?.data?.Errors?.map((e) => t(e.code)) })?.join(" , ");
@@ -172,7 +191,7 @@ export const CollectPayment = (props) => {
     document?.querySelector("#paymentInfo + .label-field-pair input")?.focus();
   }, [selectedPaymentMode]);
 
-  const config = [
+  let config = [
     {
       head: !ModuleWorkflow && businessService !== "TL" ? t("COMMON_PAYMENT_HEAD") : "",
       body: [
@@ -205,6 +224,7 @@ export const CollectPayment = (props) => {
                     props.setValue("payerMobile", "");
                   }
                   props.onChange(d);
+                  setselectedPaidBy(d);
                 }}
               />
             ),
@@ -214,6 +234,7 @@ export const CollectPayment = (props) => {
         {
           label: t("PAYMENT_PAYER_NAME_LABEL"),
           isMandatory: true,
+          disable : selectedPaidBy?.code === "OWNER" && (bill?.payerName || formState?.payerName) ? true : false,
           type: "text",
           populators: {
             name: "payerName",
@@ -238,7 +259,6 @@ export const CollectPayment = (props) => {
             },
             error: t("PAYMENT_INVALID_MOBILE"),
             className: "payment-form-text-input-correction",
-            defaultValue: bill?.mobileNumber || formState?.payerMobile || "",
           },
         },
       ],
@@ -275,23 +295,24 @@ export const CollectPayment = (props) => {
 
   const getDefaultValues = () => ({
     payerName: bill?.payerName || formState?.payerName || "",
-    payerMobile: bill?.mobileNumber || formState?.payerMobile || "",
   });
 
   const getFormConfig = () => {
     if (
-      BillDetailsFormConfig({ consumerCode, businessService }, t)[ModuleWorkflow ? ModuleWorkflow : businessService] ||
+      BillDetailsFormConfig({ consumerCode, businessService }, t)[ModuleWorkflow ? (businessService === "SW" && ModuleWorkflow === "WS"? businessService : ModuleWorkflow) : businessService] ||
       ModuleWorkflow ||
-      businessService === "TL"
+      businessService === "TL" ||
+      businessService.includes("ONE_TIME_FEE")
     ) {
       config.splice(0, 1);
     }
     let conf = config.concat(formConfigMap[formState?.paymentMode?.code] || []);
     conf = conf?.concat(cashConfig);
-    return BillDetailsFormConfig({ consumerCode, businessService }, t)[ModuleWorkflow ? ModuleWorkflow : businessService]
-      ? BillDetailsFormConfig({ consumerCode, businessService }, t)[ModuleWorkflow ? ModuleWorkflow : businessService].concat(conf)
+    return BillDetailsFormConfig({ consumerCode, businessService }, t)[ModuleWorkflow ? (businessService === "SW" && ModuleWorkflow === "WS"? businessService : ModuleWorkflow) : businessService]
+      ? BillDetailsFormConfig({ consumerCode, businessService }, t)[ModuleWorkflow ? (businessService === "SW" && ModuleWorkflow === "WS"? businessService : ModuleWorkflow) : businessService].concat(conf)
       : conf;
   };
+  const checkFSM = window.location.href.includes("FSM");
 
   if (isLoading) {
     return <Loader />;
@@ -299,7 +320,7 @@ export const CollectPayment = (props) => {
 
   return (
     <React.Fragment>
-      <Header styles={{ marginLeft: "15px" }}>{t("PAYMENT_COLLECT")}</Header>
+      <Header styles={{ marginLeft: "15px" }}>{checkFSM ? t("PAYMENT_COLLECT_LABEL") : t("PAYMENT_COLLECT")}</Header>
       <FormComposer
         cardStyle={{ paddingBottom: "100px" }}
         label={t("PAYMENT_COLLECT_LABEL")}
@@ -307,7 +328,7 @@ export const CollectPayment = (props) => {
         onSubmit={onSubmit}
         formState={formState}
         defaultValues={getDefaultValues()}
-        isDisabled={bill?.totalAmount ? !bill.totalAmount > 0 : true}
+        isDisabled={IsDisconnectionFlow ? false : (bill?.totalAmount ? !bill.totalAmount > 0 : true)}
         // isDisabled={BillDetailsFormConfig({ consumerCode }, t)[businessService] ? !}
         onFormValueChange={(setValue, formValue) => {
           if (!isEqual(formValue.paymentMode, selectedPaymentMode)) {

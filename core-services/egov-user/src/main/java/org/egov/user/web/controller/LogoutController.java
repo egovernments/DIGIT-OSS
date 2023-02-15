@@ -24,7 +24,7 @@ public class LogoutController {
     /**
      * End-point to logout the session.
      *
-     * @param accessToken
+     * @param
      * @return
      * @throws Exception
      */
@@ -33,14 +33,14 @@ public class LogoutController {
         String accessToken = tokenWrapper.getAccessToken();
         OAuth2AccessToken redisToken = tokenStore.readAccessToken(accessToken);
         tokenStore.removeAccessToken(redisToken);
-        return new ResponseInfo("", "", new Date().toString(), "", "", "Logout successfully");
+        return new ResponseInfo("", "", System.currentTimeMillis(), "", "", "Logout successfully");
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleError(Exception ex) {
         ex.printStackTrace();
         ErrorResponse response = new ErrorResponse();
-        ResponseInfo responseInfo = new ResponseInfo("", "", new Date().toString(), "", "", "Logout failed");
+        ResponseInfo responseInfo = new ResponseInfo("", "", System.currentTimeMillis(), "", "", "Logout failed");
         response.setResponseInfo(responseInfo);
         Error error = new Error();
         error.setCode(400);

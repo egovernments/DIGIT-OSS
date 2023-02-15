@@ -116,7 +116,7 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
         }
       />
     </FilterFormField>
-    {selectedApplicationType?.length > 0 ? <FilterFormField>
+    {(selectedApplicationType?.length > 0 && selectedApplicationType != "BUILDING_OC_PLAN_SCRUTINY") ? <FilterFormField>
       <Controller
           name="businessService"
           control={controlFilterForm}
@@ -136,7 +136,7 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
         }
         />
     </FilterFormField> : null}
-    {selectedApplicationType?.length > 0 && selectedBusinessService?.length > 0 ? <FilterFormField>
+    {(selectedApplicationType == "BUILDING_OC_PLAN_SCRUTINY" || (selectedApplicationType?.length > 0 && selectedBusinessService?.length > 0)) ? <FilterFormField>
       <div className="filter-label sub-filter-label" style={{fontSize: "18px", fontWeight: "600"}}>{t("ACTION_TEST_APPLICATION_STATUS")}</div>
       <Controller
         name="applicationStatus"
@@ -146,19 +146,33 @@ const FilterFormFieldsComponent = ({statuses, isInboxLoading, registerRef, contr
             props.onChange(value)
           }
           const renderStatusCheckBoxes = useMemo(()=>statuses?.filter( e => {
-            let value = cloneDeep(selectedBusinessService);
-            if (value == "BPA_OC_LOW") value = "BPA_OC"
-            return e.businessservice === value
+              let value = cloneDeep(selectedBusinessService);
+              if (selectedApplicationType == "BUILDING_OC_PLAN_SCRUTINY") {
+                value = "BPA_OC"
+              }
+              return e.businessservice === value
+            
           } )?.map( (status, index) => {
             return <CheckBox
-              style={{marginTop: "10px"}}
+              //style={{marginTop: "10px"}}
               key={index}
-              onChange={(e) => e.target.checked ? changeItemCheckStatus([...props?.value, status?.statusid]) : changeItemCheckStatus(props?.value?.filter( id => id !== status?.statusid)) }
+              onChange={(e) => 
+                // e.target.checked ? changeItemCheckStatus([...props?.value, status?.statusid]) : changeItemCheckStatus(props?.value?.filter( id => id !== status?.statusid)) 
+                {
+                  if (e.target.checked && props?.value) {
+                    changeItemCheckStatus([...props?.value, status?.statusid])
+                  } else if (e.target.checked) {
+                    changeItemCheckStatus([status?.statusid])
+                  } else {
+                    changeItemCheckStatus(props?.value?.filter( id => id !== status?.statusid))
+                  }
+                }
+              }
               checked={props?.value?.includes(status?.statusid)}
-              label={`${t(`WF_STATE_${status.businessservice}_${status.applicationstatus}`)}`}
+              label={`${t(`WF_STATE_${status.businessservice}_${status.applicationstatus}`)} (${status.count})`}
               //Hidden due to RAIN-5010 percieved as wrong count here
               // (${status.count})`}
-            />}),[props.value, statuses, selectedBusinessService])
+            />}),[props.value, statuses, selectedBusinessService, selectedApplicationType])
           return <>
             {isInboxLoading ? <Loader /> : <>{renderStatusCheckBoxes}</>}
           </>

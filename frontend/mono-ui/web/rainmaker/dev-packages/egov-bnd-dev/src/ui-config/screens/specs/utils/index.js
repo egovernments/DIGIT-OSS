@@ -24,6 +24,7 @@ import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
 import store from "ui-redux/store";
 import { downloadConReceipt } from "egov-common/ui-utils/commons";
+import { downloadReceiptFromFilestoreID } from "egov-common/ui-utils/commons";
 
 import { httpRequest } from "../../../../ui-utils";
 
@@ -52,17 +53,6 @@ export const downloadPdf = (link, openIn = "_blank") => {
   }
 };
 
-export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId) => {
-  getFileUrlFromAPI(fileStoreId, tenantId).then(async (fileRes) => {
-    if (mode === "download") {
-      downloadPdf(fileRes[fileStoreId], "_blank");
-    } else if (mode === "open") {
-      openPdf(fileRes[fileStoreId], "_self");
-    } else {
-      printPdf(fileRes[fileStoreId]);
-    }
-  });
-};
 
 export const convertEpochToDateCustom = (dateEpoch) => {
   // Returning null in else case because new Date(null) returns initial date from calender

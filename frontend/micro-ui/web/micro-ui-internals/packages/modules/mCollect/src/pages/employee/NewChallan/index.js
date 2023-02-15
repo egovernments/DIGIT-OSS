@@ -20,16 +20,16 @@ const getformDataforEdit = (ChallanData,fetchBillData) => {
     fromDate : ChallanData[0]
         ? new Date(ChallanData[0].taxPeriodFrom).getFullYear().toString() +
           "-" +
-          (new Date(ChallanData[0].taxPeriodFrom).getMonth() + 1) +
+          `${(new Date(ChallanData[0].taxPeriodFrom).getMonth() + 1) < 10?"0":""}${(new Date(ChallanData[0].taxPeriodFrom).getMonth() + 1)}` +
           "-" +
-          new Date(ChallanData[0].taxPeriodFrom).getDate()
+          `${(new Date(ChallanData[0].taxPeriodFrom).getDate() < 10?"0":"")}${new Date(ChallanData[0].taxPeriodFrom).getDate()}`
         : null,
     toDate : ChallanData[0]
         ? new Date(ChallanData[0].taxPeriodTo).getFullYear().toString() +
           "-" +
-          (new Date(ChallanData[0].taxPeriodTo).getMonth() + 1) +
+          `${(new Date(ChallanData[0].taxPeriodTo).getMonth() + 1) < 10?"0":""}${(new Date(ChallanData[0].taxPeriodTo).getMonth() + 1)}` +
           "-" +
-          new Date(ChallanData[0].taxPeriodTo).getDate()
+          `${(new Date(ChallanData[0].taxPeriodTo).getDate() < 10?"0":"")}${new Date(ChallanData[0].taxPeriodTo).getDate()}`
         : null
   };
   defaultval[`${ChallanData[0]?.businessService.split(".")[0]}`] = {};
@@ -183,7 +183,7 @@ const NewChallan = ({ChallanData}) => {
             });
           }
         })
-        .catch((e) => setShowToast({ key: true, label: e?.response?.data?.Errors[0].message }));
+        .catch((e) => setShowToast({ key: "error", label: e?.response?.data?.Errors[0].message }));
     } else {
       Digit.MCollectService.create({ Challan: Challan }, tenantId)
         .then((result, err) => {
@@ -200,7 +200,7 @@ const NewChallan = ({ChallanData}) => {
             });
           }
         })
-        .catch((e) => {setShowToast({ key: true, label: e?.response?.data?.Errors[0].message })});
+        .catch((e) => {setShowToast({ key: "error", label: e?.response?.data?.Errors[0].message })});
     }
   };
   let configs = newConfig || [];
@@ -248,7 +248,7 @@ const NewChallan = ({ChallanData}) => {
         onFormValueChange={onFormValueChange}
         breaklineStyle={{ border: "0px" }}
       />}
-      {showToast && <Toast error={showToast?.key === "error" ? true : false} label={error} onClose={closeToast} />}
+      {showToast && <Toast error={showToast?.key === "error" ? true : false} label={showToast?.label} onClose={closeToast} />}
     </div>
   );
 };

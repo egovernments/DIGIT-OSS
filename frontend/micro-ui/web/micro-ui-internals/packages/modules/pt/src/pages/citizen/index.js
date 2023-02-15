@@ -14,6 +14,9 @@ const hideBackButtonConfig = [
 const App = () => {
   const { path, url, ...match } = useRouteMatch();
   const { t } = useTranslation();
+  const inboxInitialState = {
+    searchParams: {},
+  };
 
   const CreateProperty = Digit?.ComponentRegistryService?.getComponent("PTCreateProperty");
   const EditProperty = Digit?.ComponentRegistryService?.getComponent("PTEditProperty");

@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./scripts/run.sh commonPt tl
+./scripts/run.sh ws pt

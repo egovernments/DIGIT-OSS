@@ -19,6 +19,7 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
   );
   const [AccCountError, setAccCountError] = useState(null);
   const [AccUOMError, setAccUOMError] = useState(null);
+  const [enableUOM, setenableUOM] = useState(false);
   const TenantId = Digit.ULBService.getCitizenCurrentTenant();
 
   //const isUpdateProperty = formData?.isUpdateProperty || false;
@@ -32,13 +33,16 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
 
   const { isLoading, data: Data = {} } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "TradeLicense", "AccessoryCategory");
   const [accessories, SetAccessories] = useState([]);
-  const { data: billingSlabData } = Digit.Hooks.tl.useTradeLicenseBillingslab({ tenantId: TenantId, filters: {} });
+  const { data: billingSlabData } = Digit.Hooks.tl.useTradeLicenseBillingslab({ tenantId: TenantId, filters: {} }, {
+    select: (data) => {
+    return data?.billingSlab.filter((e) => e.accessoryCategory && (window.location.href.includes("renew-trade") ? "RENEWAL" : "NEW") && e.uom);
+    }});
 
   useEffect(() => {
-    if (billingSlabData && billingSlabData?.billingSlab && billingSlabData?.billingSlab?.length > 0) {
+    if (billingSlabData  && billingSlabData?.length > 0) {
       const processedData =
-        billingSlabData.billingSlab &&
-        billingSlabData.billingSlab.reduce(
+        billingSlabData &&
+        billingSlabData.reduce(
           (acc, item) => {
             let accessory = { active: true };
             let tradeType = { active: true };
@@ -47,12 +51,16 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
               accessory.uom = item.uom;
               accessory.rate = item.rate;
               item.rate && item.rate > 0 && acc.accessories.push(accessory);
+              accessory.fromUom = item.fromUom;
+              accessory.toUom = item.toUom;
             } else if (item.accessoryCategory === null && item.tradeType) {
               tradeType.code = item.tradeType;
               tradeType.uom = item.uom;
               tradeType.structureType = item.structureType;
               tradeType.licenseType = item.licenseType;
               tradeType.rate = item.rate;
+              tradeType.fromUom = item.fromUom;
+              tradeType.toUom = item.toUom;
               !isUndefined(item.rate) && item.rate !== null && acc.tradeTypeData.push(tradeType);
             }
             return acc;
@@ -113,15 +121,16 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
     setFeilds(acc);
     acc[i].accessorycount = "";
     acc[i].uom = "";
-    acc[i].unit = null;
+    setenableUOM(true);
+    acc[i].unit = value?.uom != null ?  value.uom : "";
     Array.from(document.querySelectorAll("input")).forEach((input) => (input.value = ""));
-    setUnitOfMeasure(null);
-    Data?.TradeLicense?.AccessoriesCategory.map((ob) => {
-      if (value.code === ob.code && ob.uom != null) {
-        acc[i].unit = ob.uom;
-        setUnitOfMeasure(ob.uom);
-      }
-    });
+    setUnitOfMeasure(value?.uom != null ? value.uom : null);
+    // Data?.TradeLicense?.AccessoriesCategory.map((ob) => {
+    //   if (value.code === ob.code && ob.uom != null) {
+    //     acc[i].unit = ob.uom;
+    //     setUnitOfMeasure(ob.uom);
+    //   }
+    // });
   }
   function selectAccessoryCount(i, e) {
     setAccCountError(null);
@@ -140,6 +149,30 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
   function selectUomValue(i, e) {
     setAccUOMError(null);
     if (isNaN(e.target.value)) setAccUOMError("TL_ONLY_NUM_ALLOWED");
+    if(!(e.target.value && parseFloat(e.target.value) > 0)){
+      setAccUOMError(t("TL_UOM_VALUE_GREATER_O"))
+      window.setTimeout(function(){
+        window.scrollTo(0,0);
+      }, 0);
+    }
+    else{
+    if(fields?.[i]?.accessory && Number.isInteger(fields?.[i]?.accessory?.fromUom)){
+      if(!(e.target.value && parseInt(e.target.value) >= fields?.[i]?.accessory?.fromUom)){
+        setAccUOMError(`${t("TL_FILL_CORRECT_UOM_VALUE")} ${fields?.[i]?.accessory?.fromUom} - ${fields?.[i]?.accessory?.toUom}`);
+        window.setTimeout(function(){
+          window.scrollTo(0,0);
+        }, 0);
+      }
+     }
+     if(fields?.[i]?.accessory && Number.isInteger(fields?.[i]?.accessory?.toUom)){
+     if(!(e.target.value && parseInt(e.target.value) <= fields?.[i]?.accessory?.toUom)){
+      setAccUOMError(`${t("TL_FILL_CORRECT_UOM_VALUE")} ${fields?.[i]?.accessory?.fromUom} - ${fields?.[i]?.accessory?.toUom}`);
+      window.setTimeout(function(){
+        window.scrollTo(0,0);
+      }, 0);
+       }
+     }
+    }
     let acc = [...fields];
     acc[i].uom = e.target.value;
     setUomValue(e.target.value);
@@ -220,7 +253,7 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
                       optionKey="i18nKey"
                       isMandatory={config.isMandatory}
                       //options={[{ i18nKey: "a" }, { i18nKey: "a" }, { i18nKey: "a" }, { i18nKey: "a" }, { i18nKey: "a" }, { i18nKey: "a" }]}
-                      options={sortDropdownNames(accessories.length !== 0 ? accessories : getAccessoryCategoryDropDown(), "i18nKey", t)}
+                      options={sortDropdownNames( accessories, "i18nKey", t) || []}
                       selectedOption={field.accessory}
                       onSelect={(e) => selectAccessory(index, e)}
                       isPTFlow={true}
@@ -238,13 +271,14 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
                     name="AccessoryCount"
                     value={field.accessorycount}
                     onChange={(e) => selectAccessoryCount(index, e)}
-                    disable={(isEditTrade || isRenewTrade) && (formData?.TradeDetails?.accessories.length - 1 < index ? false : field.accessorycount)}
-                    /* {...(validation = {
-            isRequired: true,
-            pattern: "^[a-zA-Z-.`' ]*$",
-            type: "text",
-            title: t("PT_NAME_ERROR_MESSAGE"),
-          })} */
+                    //disable={(isEditTrade || isRenewTrade) && (formData?.TradeDetails?.accessories.length - 1 < index ? false : field.accessorycount)}
+                    disable={isRenewTrade || isEditTrade ? !enableUOM : false}
+                    {...(validation = {
+                      isRequired: true,
+                      pattern: "[0-9]+",
+                      type: "text",
+                      title: t("TL_WRONG_UOM_COUNT_ERROR"),
+                    })}
                   />
                   <CardLabel>{`${t("TL_UNIT_OF_MEASURE_LABEL")}`}</CardLabel>
                   <TextInput
@@ -274,12 +308,13 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
                     name="UomValue"
                     value={field.uom}
                     onChange={(e) => selectUomValue(index, e)}
-                    disable={
-                      isEditTrade || isRenewTrade
-                        ? (isEditTrade || isRenewTrade) && (formData?.TradeDetails?.accessories.length - 1 < index ? false : field.uom)
-                        : !field.unit
-                    }
+                    // disable={
+                    //   isEditTrade || isRenewTrade
+                    //     ? (isEditTrade || isRenewTrade) && (formData?.TradeDetails?.accessories.length - 1 < index ? false : field.uom)
+                    //     : !field.unit
+                    // }
                     //disable={isUpdateProperty || isEditProperty}
+                    disable={isRenewTrade || isEditTrade ? !enableUOM : false}
                     {...(validation = {
                       isRequired: true,
                       pattern: "[0-9]+",

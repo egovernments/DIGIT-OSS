@@ -8,6 +8,10 @@ const GetCell = (value) => <span className="cell-text">{value}</span>;
 const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast, ptSearchConfig, redirectToUrl }) => {
   const history = useHistory();
   const { state } = useLocation();
+  const search = useLocation().search;
+  const urlPropertyId = new URLSearchParams(search).get("propertyId");
+  let urlParams = window.location.href.includes("&")? window.location.href.substring(window.location.href.indexOf("&")+1,window.location.href.length) : "";
+  
   const [searchQuery, setSearchQuery] = useState({
     /* ...defaultValues,   to enable pagination */
     ...payload,
@@ -30,6 +34,7 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast, ptSearchCon
               <span className="link">
                 <span
                   onClick={() => {
+                    //sessionStorage.setItem("propertyDetailsBC",JSON.stringify({...state}))
                     history.push(
                       `/digit-ui/employee/commonpt/view-property?propertyId=${row.original["propertyId"]}&tenantId=${tenantId}&redirectToUrl=${redirectToUrl}`,
                       { ...state }
@@ -46,7 +51,7 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast, ptSearchCon
       {
         Header: t("PT_COMMON_TABLE_COL_OWNER_NAME"),
         disableSortBy: true,
-        Cell: ({ row }) => GetCell(row.original.name || ""),
+        Cell: ({ row }) => GetCell(row.original.ownerNames || ""),
       },
 
       {
@@ -75,8 +80,10 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast, ptSearchCon
                   {redirectToUrl ? (
                     <span
                       onClick={() => {
-                        history.push(`${redirectToUrl}?propertyId=${row.original["propertyId"]}&tenantId=${tenantId}`, { ...state });
-                        setTimeout(() => window.scrollTo(0, 1600), 400);
+                        //sessionStorage.setItem("propertyDetailsBC",JSON.stringify({...state}))
+                        history.push(urlParams ? `${redirectToUrl}?${urlParams?.replace(urlPropertyId,row.original["propertyId"])}` : `${redirectToUrl}?propertyId=${row.original["propertyId"]}&tenantId=${tenantId}`, { ...state });
+                        const scrollConst = redirectToUrl?.includes("employee/tl") ? 1600 : 300;
+                        setTimeout(() => window.scrollTo(0, scrollConst), 400);
                       }}
                     >
                       {t("CPT_SELECT_PROPERTY")}

@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.3.0 - 2023-02-06
+
+- Transition from 1.3.0-beta version to 1.3.0 version
+
+## 1.3.0-beta - 2022-06-22
+
+- Enhanced user service for the implementation of privacy feature.
+- Added logback-classic version 1.2.0 and updated tracer to remove a critical vulnerabilities
+
 ## 1.2.7 - 2022-02-02
 - Added security fixes for user enumerration issue.
 - Added size validation on user models

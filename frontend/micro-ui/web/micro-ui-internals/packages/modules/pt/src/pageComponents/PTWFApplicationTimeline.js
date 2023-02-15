@@ -13,13 +13,29 @@ const PTWFApplicationTimeline = (props) => {
     moduleCode: businessService,
   });
 
+  function OpenImage(imageSource, index, thumbnailsToShow) {
+    window.open(thumbnailsToShow?.fullImage?.[0], "_blank");
+  }
+
   const getTimelineCaptions = (checkpoint) => {
-    if (checkpoint.state === "OPEN") {
+    if (checkpoint.state === "OPEN")
+    {
       const caption = {
-        date: Digit.DateUtils.ConvertTimestampToDate(props.application?.auditDetails?.createdTime),
+        date: checkpoint?.auditDetails?.lastModified,
         source: props.application?.channel || "",
       };
       return <PTWFCaption data={caption} />;
+    }
+    else if (checkpoint.state) {
+      const caption = {
+        date: checkpoint?.auditDetails?.lastModified,
+        name: checkpoint?.assignes?.[0]?.name,
+        mobileNumber: checkpoint?.assignes?.[0]?.mobileNumber,
+        comment: t(checkpoint?.comment),
+        wfComment: checkpoint.wfComment,
+        thumbnailsToShow: checkpoint?.thumbnailsToShow,
+      };
+      return <PTWFCaption data={caption} OpenImage={OpenImage} />;
     } else if (checkpoint.status === "ACTIVE" && props?.userType === 'citizen') {
       return (
         <div>

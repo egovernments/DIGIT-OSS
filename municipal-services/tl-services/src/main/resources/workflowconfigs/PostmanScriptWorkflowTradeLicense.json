@@ -300,8 +300,7 @@ curl --location --request POST 'https://dev.digit.org/egov-workflow-v2/egov-wf/b
               "action": "FORWARD",
               "nextState": "FIELDINSPECTION",
               "roles": [
-                "CITIZEN",
-                "TL_CEMP"
+                "CITIZEN"
               ]
             }
           ]

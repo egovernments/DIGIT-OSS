@@ -17,7 +17,6 @@ const ChallanSearchResults = ({ template, header, actionButtonLabel }) => {
   const result = Digit.Hooks.mcollect.useMcollectSearchBill({ tenantId, filters });
   let bills = result?.data?.Bills;
 
-
   if (result.isLoading) {
     return <Loader />;
   }
@@ -41,7 +40,7 @@ const ChallanSearchResults = ({ template, header, actionButtonLabel }) => {
   const searchResults = result?.data?.Bills?.map((bill) => {
     return {
       businesService: bill.businessService,
-      total_due: bill.status === "PAID" ? 0 : bill.totalAmount,
+      total_due: bill.status === "ACTIVE" ? bill.totalAmount : 0,
       OwnerName: bill.payerName || t("CS_NA"),
       //bil_due__date: bill.billDetails[0].expiryDate || 0,
       bil_due__date: `${

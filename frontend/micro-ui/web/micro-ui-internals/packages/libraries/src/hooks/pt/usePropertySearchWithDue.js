@@ -2,6 +2,13 @@ import { useQuery, useQueryClient } from "react-query";
 
 const usePropertySearchWithDue = ({ tenantId, filters, auth = true, configs }) => {
   const client = useQueryClient();
+
+  const getOwnerNames = (propertyData) => {
+    const getActiveOwners = propertyData?.owners?.filter(owner => owner?.active);
+    const getOwnersList = getActiveOwners?.map(activeOwner => activeOwner?.name)?.join(",");
+    return getOwnersList;
+  }
+
   const defaultSelect = (data) => {
     let consumerCodes = [];
     let formattedData = {};
@@ -19,6 +26,7 @@ const usePropertySearchWithDue = ({ tenantId, filters, auth = true, configs }) =
         locality: `${property?.tenantId?.replace(".", "_")?.toUpperCase()}_REVENUE_${property?.address?.locality?.code}`,
         owners: property?.owners,
         documents: property?.documents,
+        ownerNames: getOwnerNames(property)
       };
     });
     data["ConsumerCodes"] = consumerCodes;

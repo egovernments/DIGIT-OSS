@@ -21,7 +21,7 @@ body {
 }*/
 
 .h1 {
-  @apply text-heading-l text-text-primary font-bold mb-md ml-md ;
+  @apply text-heading-l text-text-primary font-bold mb-md ml-md;
 }
 
 .link-label {
@@ -50,6 +50,7 @@ body {
   color: #505a5f;
   display: flex;
   margin-bottom: 10px;
+  flex-wrap: wrap
 }
 .bread-crumb--item {
   margin-left: 5px;
@@ -91,9 +92,25 @@ body {
   }
 
   .app-container {
-    width: 960px;
-    margin-left: 8px;
-    margin-right: auto;
+    width: 100%;
+    form {
+      .card {
+        max-width: 960px;
+        h2 {
+          text-align: left;
+        }
+        .field-container {
+          max-width: 540px;
+        }
+        button {
+          max-width: 240px;
+        }
+        .input-otp-wrap,
+        .card-text-button {
+          text-align: left;
+        }
+      }
+    }
   }
 
   .h1 {
@@ -116,4 +133,11 @@ body {
 
 .body-container::-webkit-scrollbar {
   display: none;
+}
+.audit-card {
+  width: 80%;
+  margin-left: -21%;
+  margin-right: -27%;
+  max-height: 120px;
+  margin-top: 90px;
 }

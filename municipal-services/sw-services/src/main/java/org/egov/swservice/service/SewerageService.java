@@ -13,6 +13,8 @@ public interface SewerageService {
 
 	List<SewerageConnection> search(SearchCriteria criteria, RequestInfo requestInfo);
 
+	Integer countAllSewerageApplications(SearchCriteria criteria, RequestInfo requestInfo);
+	
 	List<SewerageConnection> updateSewerageConnection(SewerageConnectionRequest sewarageConnectionRequest);
 	
 	List<SewerageConnection> plainSearch(SearchCriteria criteria, RequestInfo requestInfo);

@@ -64,7 +64,7 @@ public class TLValidator {
      *  Validate the create Requesr
      * @param request The input TradeLicenseRequest Object
      */
-    public void validateCreate(TradeLicenseRequest request, Object mdmsData) {
+    public void validateCreate(TradeLicenseRequest request, Object mdmsData, Object billingSlabs) {
         List<TradeLicense> licenses = request.getLicenses();
         String businessService = request.getLicenses().isEmpty()?null:request.getLicenses().get(0).getBusinessService();
         if(licenses.get(0).getApplicationType() != null && licenses.get(0).getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)){
@@ -83,7 +83,7 @@ public class TLValidator {
                 validateBPASpecificValidations(request);
                 break;
         }
-        mdmsValidator.validateMdmsData(request, mdmsData);
+        mdmsValidator.validateMdmsData(request, mdmsData, billingSlabs);
         validateInstitution(request);
         validateDuplicateDocuments(request);
     }
@@ -309,7 +309,7 @@ public class TLValidator {
      *  Validates the update request
      * @param request The input TradeLicenseRequest Object
      */
-    public void validateUpdate(TradeLicenseRequest request, List<TradeLicense> searchResult, Object mdmsData) {
+    public void validateUpdate(TradeLicenseRequest request, List<TradeLicense> searchResult, Object mdmsData, Object billingSlabs) {
         List<TradeLicense> licenses = request.getLicenses();
         if (searchResult.size() != licenses.size())
             throw new CustomException("INVALID UPDATE", "The license to be updated is not in database");
@@ -331,7 +331,7 @@ public class TLValidator {
                 validateBPASpecificValidations(request);
                 break;
         }
-        mdmsValidator.validateMdmsData(request, mdmsData);
+        mdmsValidator.validateMdmsData(request, mdmsData, billingSlabs);
         validateTradeUnits(request);
         validateDuplicateDocuments(request);
         setFieldsFromSearch(request, searchResult, mdmsData);
@@ -570,11 +570,11 @@ public class TLValidator {
         if(!requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" )&& criteria.isEmpty())
             throw new CustomException("INVALID SEARCH","Search without any paramters is not allowed");
 
-        if(!requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" )&& criteria.tenantIdOnly())
+        if(requestInfo.getUserInfo().getType().equalsIgnoreCase("EMPLOYEE" )&& criteria.tenantIdOnly())
             throw new CustomException("INVALID SEARCH","Search based only on tenantId is not allowed");
 
-        if(requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" )&& criteria.tenantIdOnly())
-            throw new CustomException("INVALID SEARCH","Search only on tenantId is not allowed");
+        /*if(requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" )&& criteria.tenantIdOnly())
+            throw new CustomException("INVALID SEARCH","Search only on tenantId is not allowed");*/
 
         String allowedParamStr = null;
 
@@ -582,6 +582,8 @@ public class TLValidator {
             allowedParamStr = config.getAllowedCitizenSearchParameters();
         else if(requestInfo.getUserInfo().getType().equalsIgnoreCase("EMPLOYEE" ))
             allowedParamStr = config.getAllowedEmployeeSearchParameters();
+        else if(requestInfo.getUserInfo().getType().equalsIgnoreCase("SYSTEM" ))
+            allowedParamStr = config.getAllowedSystemSearchParameters();
         else throw new CustomException("INVALID SEARCH","The userType: "+requestInfo.getUserInfo().getType()+
                     " does not have any search config");
 

@@ -22,10 +22,10 @@ const NOCEmployeeHomeCard = () => {
     }
 
     const tableOrderFormDefaultValues = {
-        sortBy: "",
+        // sortBy: "",
         limit: 10,
         offset: 0,
-        sortOrder: "DESC"
+        // sortOrder: "DESC"
     }
   
     const formInitValue = {
@@ -34,7 +34,7 @@ const NOCEmployeeHomeCard = () => {
       tableForm: tableOrderFormDefaultValues
     }
 
-    const { isLoading: isInboxLoading, data: {table , statuses, totalCount} = {} } = Digit.Hooks.noc.useInbox({
+    const { isLoading: isInboxLoading, data: {table , statuses, totalCount,nearingSlaCount} = {} } = Digit.Hooks.noc.useInbox({
         tenantId,
         filters: { ...formInitValue },
         config : { enabled : formInitValue?.filterForm?.businessServiceArray?.length > 0}
@@ -60,10 +60,10 @@ const NOCEmployeeHomeCard = () => {
             label: t("TOTAL_FSM"),
             link: `/digit-ui/employee/obps/inbox`
         },
-        // {   count:"-",
-        //     label: t("TOTAL_NEARING_SLA"),
-        //     link: `/digit-ui/employee/obps/inbox`
-        // }  
+        {   count:!isInboxLoading ?nearingSlaCount:"-",
+            label: t("TOTAL_NEARING_SLA"),
+            link: `/digit-ui/employee/obps/inbox`
+        }  
       ],
       links: [
         {

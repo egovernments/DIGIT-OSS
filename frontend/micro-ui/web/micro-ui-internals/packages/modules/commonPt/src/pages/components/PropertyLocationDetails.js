@@ -82,7 +82,7 @@ const PropertyLocationDetails = ({ t, config, onSelect, userType, formData, form
               className="form-field"
               selected={value}
               disable={userType === "employee"}
-              option={allCities}
+              option={allCities.sort((a,b) => (a.name > b.name)? 1 : (b.name>a.name)? -1 : 0)}
               select={(value)=>{
                 onChange(value);
                 setLocationDetails({...locationDetails, cityCode: value})
@@ -155,7 +155,7 @@ const PropertyLocationDetails = ({ t, config, onSelect, userType, formData, form
       <CardLabelError style={errorStyle}>{touched?.houseDoorNo ? errors?.houseDoorNo?.message : ""}</CardLabelError>
 
       <LabelFieldPair>
-        <CardLabel>{`${t("PT_BUILDING_COLONY_NAME")}*`}</CardLabel>
+        <CardLabel>{`${t("PT_PROPERTY_ADDRESS_STREET_NAME")}*`}</CardLabel>
         <div className="form-field">
           <Controller
             name="buildingColonyName"

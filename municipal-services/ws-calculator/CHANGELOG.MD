@@ -1,6 +1,26 @@
 # Change log
 All notable changes to this module will be documented in this file.
 
+## 1.4.3 - 2023-02-01
+
+- Transition from 1.4.3-beta version to 1.4.3 version
+
+## 1.4.3-beta - 2022-11-03
+
+- Enabled adding meter reading till pending for disconnection execution for disconnection flow
+
+## 1.4.2 - 2022-11-03
+
+- Added propertyId in additional details for demand creation
+
+## 1.4.1 - 2022-11-03
+
+- Changed disconnection calculations for water applications
+
+## 1.4.0 - 2022-07-07
+
+- Added disconnection flow calculations for water applications
+
 ## 1.3.3 - 2022-03-03
 
 - Added demand and bill notification

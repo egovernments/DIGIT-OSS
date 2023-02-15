@@ -77,7 +77,7 @@ public class CalculatorController {
 	@PostMapping("/_updateDemand")
 	public ResponseEntity<DemandResponse> updateDemands(@RequestBody @Valid RequestInfoWrapper requestInfoWrapper,
 			@ModelAttribute @Valid GetBillCriteria getBillCriteria) {
-		List<Demand> demands = demandService.updateDemands(getBillCriteria, requestInfoWrapper);
+		List<Demand> demands = demandService.updateDemands(getBillCriteria, requestInfoWrapper, false);
 		DemandResponse response = DemandResponse.builder().demands(demands)
 				.responseInfo(
 				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
@@ -86,8 +86,8 @@ public class CalculatorController {
 	}
 	
 	@PostMapping("/_jobscheduler")
-	public void jobscheduler(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper) {
-		wSCalculationService.generateDemandBasedOnTimePeriod(requestInfoWrapper.getRequestInfo());
+	public void jobscheduler(@Valid @RequestBody BulkBillReq bulkBillReq) {
+		wSCalculationService.generateDemandBasedOnTimePeriod(bulkBillReq.getRequestInfo(), bulkBillReq.getBulkBillCriteria());
 	}
 	
 	@PostMapping("/_applyAdhocTax")

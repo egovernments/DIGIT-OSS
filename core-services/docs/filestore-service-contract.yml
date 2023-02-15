@@ -10,9 +10,9 @@ info:
     email: contacts@egovernments.org
 schemes:
   - https
-basePath: /filestore/v1/files/
+basePath: /filestore/v1
 paths:
-  /upload:
+  /files:
     post:
       summary: Uploads different kinds of files to server.
       description: The endpoint for uploading file in the system.
@@ -50,7 +50,7 @@ paths:
           description: Error response in case of failures.
           schema:
             $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ErrorRes"
-  /url:
+  /files/url:
     get:
       summary: Search file url based on tenantid and filestoreid.
       description: Search file url.
@@ -73,7 +73,7 @@ paths:
           description: Error response in case of failures.
           schema:
             $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ErrorRes"
-  /tag:
+  /files/tag:
     get:
       summary: Search file url based on tenantid and tag name.
       description: Search file url.
@@ -96,7 +96,7 @@ paths:
           description: Error response in case of failures.
           schema:
             $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ErrorRes"
-  /metaData:
+  /files/metaData:
     get:
       summary: Get metadata of file based on tenantId and filestoreId.
       description:  metadata of file.
@@ -118,7 +118,28 @@ paths:
         "400":
           description: Error response in case of failures.
           schema:
-            $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ErrorRes"  
+            $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ErrorRes"
+  /files/id:
+    get:
+      summary: Search file url based on tenantid and filestoreid.
+      description: Search file url.
+      tags:
+        - Search
+      parameters:
+        - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/parameters/tenantId"
+        - name: fileStoreId
+          in: query
+          description: fileStore id.
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Return file binary.
+            
+        "400":
+          description: Error response in case of failures.
+          schema:
+            $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ErrorRes"
 definitions:
   FilestoreIdResponse:
     type: object

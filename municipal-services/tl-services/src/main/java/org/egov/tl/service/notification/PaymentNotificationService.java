@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import static org.egov.tl.util.BPAConstants.*;
 import static org.egov.tl.util.TLConstants.*;
@@ -95,6 +96,7 @@ public class PaymentNotificationService {
     public void processBusinessService(HashMap<String, Object> record, String businessService)
     {
         try{
+            TimeUnit.SECONDS.sleep(1);
             String jsonString = new JSONObject(record).toString();
             DocumentContext documentContext = JsonPath.parse(jsonString);
             Map<String,String> valMap = enrichValMap(documentContext, businessService);
@@ -174,7 +176,7 @@ public class PaymentNotificationService {
                             if(null != config.getIsUserEventsNotificationEnabledForBPA()) {
                                 if(config.getIsUserEventsNotificationEnabledForBPA()) {
                                     TradeLicenseRequest tradeLicenseRequest=TradeLicenseRequest.builder().requestInfo(requestInfo).licenses(Collections.singletonList(license)).build();
-                                    EventRequest eventRequest = bpaNotificationUtil.getEventsForBPA(tradeLicenseRequest,true, message,receiptno, BPAConstants.USREVENTS_EVENT_NAME);
+                                    EventRequest eventRequest = bpaNotificationUtil.getEventsForBPA(tradeLicenseRequest,true, locMessage,receiptno, BPAConstants.USREVENTS_EVENT_NAME);
                                     if(null != eventRequest)
                                         util.sendEventNotification(eventRequest);
                                 }
@@ -193,7 +195,7 @@ public class PaymentNotificationService {
                                     mobileNumberToEmail = util.fetchUserEmailIds(mobileNumbers, requestInfo, tenantId);
 
                                     String locMessageEmail = bpaNotificationUtil.getMessageTemplate(NOTIFICATION_PENDINGDOCVERIFICATION_EMAIL, localizationMessages);
-                                    message = bpaNotificationUtil.getReplacedEmailMessage(license, locMessageEmail);
+                                    message = bpaNotificationUtil.getReplacedEmailMessage(requestInfo, license, locMessageEmail);
 
                                     List<EmailRequest> emailRequestsForBPA = new LinkedList<>();
                                     emailRequestsForBPA.addAll(bpaNotificationUtil.createEmailRequestForBPA(requestInfo,message, mobileNumberToEmail,license,receiptno));

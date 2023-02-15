@@ -20,6 +20,7 @@ import org.egov.echallan.repository.rowmapper.ChallanRowMapper;
 import org.egov.echallan.web.models.collection.Bill;
 import org.egov.echallan.web.models.collection.PaymentDetail;
 import org.egov.echallan.web.models.collection.PaymentRequest;
+import org.egov.echallan.util.ChallanConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -97,11 +98,23 @@ public class ChallanRepository {
     
     public List<Challan> getChallans(SearchCriteria criteria) {
         List<Object> preparedStmtList = new ArrayList<>();
-        String query = queryBuilder.getChallanSearchQuery(criteria, preparedStmtList);
+        String query = queryBuilder.getChallanSearchQuery(criteria, preparedStmtList,false);
         List<Challan> challans =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
         return challans;
     }
 
+    /**
+     * gets the total count for a search request
+     *
+     * @param criteria The challan search criteria
+     */
+    public int getChallanSearchCount(SearchCriteria criteria) {
+        List<Object> preparedStmtList = new ArrayList<>();
+        String query = queryBuilder.getChallanSearchQuery(criteria, preparedStmtList,true);
+
+        int count = jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
+        return count;
+    }
 
 
 	public void updateFileStoreId(List<Challan> challans) {
@@ -169,5 +182,27 @@ public class ChallanRepository {
         }
         return response;
     }
+
+
+
+	public Map<String,Integer> fetchDynamicData(String tenantId) {
+		
+		List<Object> preparedStmtListTotalCollection = new ArrayList<>();
+		String query = queryBuilder.getTotalCollectionQuery(tenantId, preparedStmtListTotalCollection);
+		
+		int totalCollection = jdbcTemplate.queryForObject(query,preparedStmtListTotalCollection.toArray(),Integer.class);
+		
+		List<Object> preparedStmtListTotalServices = new ArrayList<>();
+		query = queryBuilder.getTotalServicesQuery(tenantId, preparedStmtListTotalServices);
+		
+		int totalServices = jdbcTemplate.queryForObject(query,preparedStmtListTotalServices.toArray(),Integer.class);
+		
+		Map<String, Integer> dynamicData = new HashMap<String,Integer>();
+		dynamicData.put(ChallanConstants.TOTAL_COLLECTION, totalCollection);
+		dynamicData.put(ChallanConstants.TOTAL_SERVICES, totalServices);
+		
+		return dynamicData;
+		
+	}
     
 }

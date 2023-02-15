@@ -1,12 +1,12 @@
 {
   "name": "pdf-service",
-  "version": "1.1.6",
+  "version": "1.2.1",
   "description": "Starter project for an ES6 RESTful Express API",
   "main": "dist",
   "scripts": {
     "dev": "nodemon -w src --exec \"babel-node src --presets es2015,stage-0\"",
     "build": "babel src -s -D -d dist --presets es2015,stage-0",
-    "start": "node dist",
+    "start": "node --max-old-space-size=8192 dist",
     "prestart": "npm run -s build",
     "test": "eslint src"
   },
@@ -45,13 +45,17 @@
     "lodash.set": "^4.3.2",
     "moment-timezone": "^0.5.28",
     "morgan": "^1.8.0",
-    "pdfmake": "^0.2.2",
-    "pg": "^7.12.0",
+    "pdfmake": "0.2.4",
+    "pg": "^8.7.1",
     "qrcode": "^1.4.1",
     "request": "^2.88.0",
     "resource-router-middleware": "^0.6.0",
     "uuid": "^3.3.3",
-    "winston": "^3.2.1"
+    "winston": "^3.2.1",
+    "pdf-merger-js": "3.2.1",
+    "base64-stream": "1.0.0",
+    "node-cache": "5.1.2",
+    "async": "3.2.3"
   },
   "devDependencies": {
     "babel-cli": "^6.9.0",

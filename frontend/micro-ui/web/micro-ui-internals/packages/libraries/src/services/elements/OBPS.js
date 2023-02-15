@@ -74,7 +74,7 @@ export const OBPSService = {
   BPAREGSearch:(tenantId, details, params) =>
     Request({
       url: Urls.obps.bpaRegSearch,
-      params: { ...params },
+      params: { tenantId, ...params },
       auth: true,
       userService: true,
       method: "POST",
@@ -141,6 +141,16 @@ export const OBPSService = {
       userService: false,
       userDownload: true,
     }),
+  BPAOpensearch: (data) =>
+    Request({
+     url: Urls.obps.getSearchDetails,
+     useCache: false,
+     method: "POST",
+     auth: false ,
+     noRequestInfo: true,
+     userService: false,
+     data: data
+   }),
   LicenseDetails: async (tenantId, params) => {
     const response = await OBPSService.BPAREGSearch(tenantId, {}, params);
     if (!response?.Licenses?.length) {
@@ -337,7 +347,7 @@ export const OBPSService = {
       collectionBillArray.push(
         { title: `${fetchBillRes?.Bill?.[0]?.billDetails?.[0]?.billAccountDetails?.[0]?.taxHeadCode}_DETAILS` || `BPA_SANC_FEE_DETAILS`, value: "", isSubTitle: true},
         { title: `BPA_SANC_FEE_LABEL`, value: `₹${fetchBillRes?.Bill?.[0]?.totalAmount}` },
-        { title: "BPA_STATUS_LABEL", value: "Unpaid" }
+        { title: "BPA_STATUS_LABEL", value: `${fetchBillRes?.Bill?.[0]?.totalAmount == 0 ? "Paid" : "Unpaid"}` }
       )
     }
     totalAmount > 0 && collectionBillArray.push({ title: "BPA_TOT_AMT_PAID", value: `₹${totalAmount}` });

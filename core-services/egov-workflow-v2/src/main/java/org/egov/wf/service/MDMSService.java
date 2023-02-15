@@ -187,6 +187,27 @@ public class MDMSService {
     public StringBuilder getMdmsSearchUrl() {
         return new StringBuilder().append(config.getMdmsHost()).append(config.getMdmsEndPoint());
     }
+    
+    public Integer fetchSlotPercentageForNearingSla(RequestInfo requestInfo) {
+        // master details for WF SLA module
+        List<MasterDetail> masterDetails = new ArrayList<>();
+
+        masterDetails.add(MasterDetail.builder().name(MDMS_WF_SLA_CONFIG).build());
+
+        List<ModuleDetail> wfModuleDtls = Collections.singletonList(ModuleDetail.builder().masterDetails(masterDetails)
+                .moduleName(MDMS_COMMON_MASTERS).build());
+
+        MdmsCriteria mdmsCriteria = MdmsCriteria.builder().moduleDetails(wfModuleDtls)
+                .tenantId(config.getStateLevelTenantId())
+                .build();
+
+        MdmsCriteriaReq mdmsCriteriaReq = MdmsCriteriaReq.builder().mdmsCriteria(mdmsCriteria)
+                .requestInfo(requestInfo).build();
+
+        Object result = serviceRequestRepository.fetchResult(getMdmsSearchUrl(), mdmsCriteriaReq);
+        return JsonPath.read(result, SLOT_PERCENTAGE_PATH);
+
+    }
 
 
 

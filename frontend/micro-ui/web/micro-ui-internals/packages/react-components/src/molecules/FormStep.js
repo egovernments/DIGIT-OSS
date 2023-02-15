@@ -24,7 +24,7 @@ const FormStep = ({
   isMultipleAllow = false,
   showErrorBelowChildren = false,
   childrenAtTheBottom = true,
-  textInputStyle,
+  textInputStyle
 }) => {
   const { register, watch, errors, handleSubmit } = useForm({
     defaultValues: _defaultValues,
@@ -42,7 +42,7 @@ const FormStep = ({
         <React.Fragment key={index}>
           <CardLabel>{t(input.label)}</CardLabel>
           {errors[input.name] && <CardLabelError>{t(input.error)}</CardLabelError>}
-          <div className="field-container">
+          <div className="field-container" style={{ justifyContent: "left" }}>
             {componentInFront ? <span className="citizen-card-input citizen-card-input--front">{componentInFront}</span> : null}
             <TextInput
               key={index}

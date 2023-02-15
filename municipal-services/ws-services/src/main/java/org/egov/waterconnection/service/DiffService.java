@@ -27,18 +27,12 @@ public class DiffService {
 	private EditNotificationService editNotificationService;
 	/**
 	 * Creates a list of Difference object between the update and search
-	 * 
+	 *
 	 * @param request The water connection request for update
-	 * @param searchResult The searched result
 	 */
-	public void checkDifferenceAndSendEditNotification(WaterConnectionRequest request, WaterConnection searchResult) {
+	public void checkDifferenceAndSendEditNotification(WaterConnectionRequest request) {
 		try {
-				WaterConnection updateConnection = request.getWaterConnection();
-				if (!CollectionUtils.isEmpty(getUpdateFields(updateConnection, searchResult))
-						|| !CollectionUtils.isEmpty(getObjectsAdded(updateConnection, searchResult))
-						|| !CollectionUtils.isEmpty(getObjectsRemoved(updateConnection, searchResult))) {
-					editNotificationService.sendEditNotification(request);
-				}
+				editNotificationService.sendEditNotification(request);
 		} catch (Exception ex) {
 			log.error("Edit Notification Error!!", ex);
 		}

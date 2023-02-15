@@ -211,7 +211,10 @@ public class BPAConstants {
 	public static final String USREVENTS_EVENT_TYPE = "SYSTEMGENERATED";
 	public static final String USREVENTS_EVENT_NAME = "Building Plan";
 	public static final String USREVENTS_EVENT_POSTEDBY = "SYSTEM-BPA";
-	
+
+	public static final String USREVENTS_EVENT_DOWNLOAD_RECEIPT_CODE = "DOWNLOAD RECEIPT";
+	public static final String USREVENTS_EVENT_DOWNLOAD_PERMIT_ORDER_CODE = "DOWNLOAD PERMIT ORDER";
+	public static final String USREVENTS_EVENT_DOWNLOAD_OCCUPANCY_CERTIFICATE_CODE = "DOWNLOAD OCCUPANCY CERTIFICATE";
 	public static final String FI_STATUS = "FIELDINSPECTION_INPROGRESS";
 	public static final String FI_ADDITIONALDETAILS = "fieldinspection_pending";
 	
@@ -378,7 +381,14 @@ public class BPAConstants {
 	public static final String CHANNEL_LIST = "channelList";
 
 	public static final String CHANNEL = "Channel";
-
 	public static final String BPA_BUSINESSSERVICE = "BPA";
+
+	//placeholders
+	public static final String DOWNLOAD_OC_LINK_PLACEHOLDER = "{DOWNLOAD_OC_LINK}";
+
+	public static final String DOWNLOAD_PERMIT_LINK_PLACEHOLDER = "{DOWNLOAD_PERMIT_LINK}";
+
+	public static final String PAYMENT_LINK_PLACEHOLDER = "{PAYMENT_LINK}";
+
 
 }

@@ -15,6 +15,7 @@ const DesktopInbox = ({ tableConfig, filterComponent,columns, isLoading, setSear
   const GetCell = (value) => <span className="cell-text">{value}</span>;
 
   const GetSlaCell = (value) => {
+    if(value === "CS_NA") return t(value)
     if (isNaN(value)) return <span className="sla-cell-success">0</span>;
     return value < 0 ? <span className="sla-cell-error">{value}</span> : <span className="sla-cell-success">{value}</span>;
   };

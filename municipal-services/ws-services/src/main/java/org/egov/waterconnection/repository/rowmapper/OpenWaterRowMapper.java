@@ -12,10 +12,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class OpenWaterRowMapper implements ResultSetExtractor<List<WaterConnection>> {
@@ -32,7 +29,7 @@ public class OpenWaterRowMapper implements ResultSetExtractor<List<WaterConnecti
 	
 	@Override
     public List<WaterConnection> extractData(ResultSet rs) throws SQLException, DataAccessException {
-        Map<String, WaterConnection> connectionListMap = new HashMap<>();
+        Map<String, WaterConnection> connectionListMap = new LinkedHashMap<>();
         WaterConnection currentWaterConnection = new WaterConnection();
         while (rs.next()) {
             String Id = rs.getString("connection_Id");
@@ -64,7 +61,6 @@ public class OpenWaterRowMapper implements ResultSetExtractor<List<WaterConnecti
                 currentWaterConnection.setApplicationType(rs.getString("applicationType"));
                 currentWaterConnection.setChannel(rs.getString("channel"));
                 currentWaterConnection.setDateEffectiveFrom(rs.getLong("dateEffectiveFrom"));
-
                 this.setFull_count(rs.getInt("full_count")); 
                 AuditDetails auditdetails = AuditDetails.builder().createdBy(rs.getString("ws_createdBy"))
                         .createdTime(rs.getLong("ws_createdTime")).lastModifiedBy(rs.getString("ws_lastModifiedBy"))
@@ -103,7 +99,7 @@ public class OpenWaterRowMapper implements ResultSetExtractor<List<WaterConnecti
                 isPrimaryOwner = null;
             }
             OwnerInfo connectionHolderInfo = OwnerInfo.builder()
-                    .relationship(Relationship.fromValue(rs.getString("holderrelationship")))
+                    .relationship(rs.getString("holderrelationship"))
                     .status(Status.fromValue(rs.getString("holderstatus")))
                     .tenantId(rs.getString("holdertenantid")).ownerType(rs.getString("connectionholdertype"))
                     .isPrimaryOwner(isPrimaryOwner).uuid(uuid).build();

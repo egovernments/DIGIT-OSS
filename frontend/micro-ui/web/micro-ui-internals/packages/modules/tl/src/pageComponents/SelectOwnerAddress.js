@@ -30,6 +30,26 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData }) => {
       setPermanentAddress(addressDetails);
     }
   }, [formData]);
+
+  useEffect(() => {
+    if(formData?.cpt?.details && permanentAddress && isCorrespondenceAddress && window.location.href.includes("/tl/tradelicence/new-application"))
+    {
+      let obj = {
+        doorNo: formData?.cpt?.details?.address?.doorNo,
+        street: formData?.cpt?.details?.address?.street || formData?.cpt?.details?.address?.buildingName,
+        landmark: formData?.cpt?.details?.address?.landmark,
+        locality: formData?.cpt?.details?.address?.locality?.name,
+        city: formData?.cpt?.details?.address?.city || t(formData?.cpt?.details?.address?.tenantId),
+        pincode: formData?.address?.pincode,
+      };
+      let addressDetails = "";
+      for (const key in obj) {
+        if (key == "pincode" || (!obj["pincode"] && key =="city")) addressDetails += obj[key] ? obj[key] : "";
+        else if(obj[key]) addressDetails += obj[key] ? t(`${obj[key]}`) + ", " : "";
+      }
+      setPermanentAddress(addressDetails);
+    }
+  },[formData?.cpt?.details?.propertyId])
   function setOwnerPermanentAddress(e) {
     setPermanentAddress(e.target.value);
   }
@@ -114,14 +134,14 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData }) => {
           //disable={isUpdateProperty || isEditProperty}
         />
         {/* <CardLabel>{t("PT_OWNER_S_ADDRESS")}</CardLabel> */}
-        <CheckBox
+        {formData?.TradeDetails?.StructureType?.code !== "MOVABLE" && <CheckBox
           label={t("TL_COMMON_SAME_AS_TRADE_ADDRESS")}
           onChange={setCorrespondenceAddress}
           value={isCorrespondenceAddress}
           checked={isCorrespondenceAddress || false}
           style={{ paddingTop: "10px" }}
           //disable={isUpdateProperty || isEditProperty}
-        />
+        />}
       </FormStep>
       {ismultiple ? <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("TL_PRIMARY_ADDR_INFO_MSG")} /> : ""}
     </React.Fragment>

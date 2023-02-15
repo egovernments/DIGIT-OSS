@@ -14,6 +14,7 @@ import SelectProofIdentity from "./pageComponents/SelectProofIdentity";
 import SelectOwnershipProof from "./pageComponents/SelectOwnershipProof";
 import SelectTradeName from "./pageComponents/SelectTradeName";
 import SelectStructureType from "./pageComponents/SelectStructureType";
+import SelectStreet from "./pageComponents/SelectStreet";
 import SelectVehicleType from "./pageComponents/SelectVehicleType";
 import SelectBuildingType from "./pageComponents/SelectBuildingType";
 import SelectCommencementDate from "./pageComponents/SelectCommencementDate";
@@ -25,7 +26,8 @@ import TLDocument from "./pageComponents/TLDocumets";
 import TLAcknowledgement from "./pages/citizen/Create/TLAcknowledgement";
 import MyApplications from "./pages/citizen/Applications/Application";
 import TradeLicenseList  from "./pages/citizen/Renewal/TradeLicenseList";
-import TLWFApplicationTimeline from "./pageComponents/TLWFApplicationTimeline";
+import TLWFApplicationTimeline from "./pageComponents/TLWFApplicationTimeline";  
+import SelectOtherTradeDetails from "./pageComponents/SelectOtherTradeDetails";
 
 import TLOwnerDetailsEmployee from "./pageComponents/TLOwnerDetailsEmployee";
 import TLTradeDetailsEmployee from "./pageComponents/TLTradeDetailsEmployee";
@@ -48,6 +50,8 @@ import EditTrade from "./pages/citizen/EditTrade";
 import { TLList } from "./pages/citizen/Renewal";
 import RenewTrade from "./pages/citizen/Renewal/renewTrade";
 import SearchTradeComponent from "./pages/citizen/SearchTrade";
+import SelectTradeUnitsInitial from "./pageComponents/SelectTradeUnitsInitial";
+import TLTradeUnitsEmployeeInitial from "./pageComponents/TLTradeUnitsEmployeeInitial";
 
 import CitizenApp from "./pages/citizen";
 import EmployeeApp from "./pages/employee";
@@ -115,6 +119,7 @@ const componentsToRegister = {
   SelectOwnerAddress,
   SelectProofIdentity,
   SelectOwnershipProof,
+  SelectStreet,
   TLCheckPage,
   TLDocument,
   TLAcknowledgement,
@@ -140,6 +145,9 @@ const componentsToRegister = {
   TLReNewApplication : ReNewApplication,
   TLSearch : Search,
   TLResponse : Response,
+  SelectOtherTradeDetails,
+  SelectTradeUnitsInitial,
+  TLTradeUnitsEmployeeInitial,
 };
 
 export const initTLComponents = () => {
