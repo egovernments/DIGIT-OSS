@@ -5,7 +5,7 @@ import { Controller } from "react-hook-form";
 
 const NumberInput = (props) => {
   return (
-    <div className="app-input-text">
+    <div className="appInputText">
       <Controller
         render={({ field: { onChange, value } }) => (
           <NumberFormat

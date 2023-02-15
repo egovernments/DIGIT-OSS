@@ -20495,5 +20495,7 @@ input[type=number],
 
 input[type=text]:disabled {
   background: #f3f3f3;
-  border-bottom: 1px dotted;
+  /* border-bottom: 1px dotted; */
 }
+
+

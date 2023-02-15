@@ -165,7 +165,6 @@ const ApllicantFormStep1 = (props) => {
     try {
       const Resp = await axios.post(`/tl-services/new/licenses/object/_getByApplicationNumber?applicationNumber=${id}`, payload);
       const userData = Resp?.data;
-      console.log("userData", userData);
       setData({ caseNumber: userData?.caseNumber, dairyNumber: userData?.dairyNumber });
       // setStepData(userData);
     } catch (error) {
@@ -333,133 +332,145 @@ const ApllicantFormStep1 = (props) => {
                   <h3 className="error-message" style={{ color: "red" }}>
                     {errors?.developerCinNo && errors?.developerCinNo?.message}
                   </h3>
-                </FormControl>
-              </div>
-            </div>
-            <br></br>
-            <h5 className="card-title fw-bold">Directors Information as per developer</h5>
-            <div className="card-body">
-              <div className="table-bd">
-                <table className="table table-bordered">
-                  <thead>
-                    <tr>
-                      <th>Sr. No</th>
-                      <th>DIN Number</th>
-                      <th>Name</th>
-                      <th>Contact Number</th>
-                      <th>View Document</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {developerDataLabel?.addInfo?.DirectorsInformation?.map((item, index) => {
-                      return (
-                        <tr>
-                          <td>{index + 1}</td>
-                          <td>{item?.din}</td>
-                          <td>{item?.name}</td>
-                          <td>{item?.contactNumber}</td>
-                          <td
-                            style={{ color: " #1266af", fontSize: " 12px", fontWeight: "bold", cursor: "pointer", textDecorationLine: "underline" }}
-                            onClick={() => {
-                              if (item?.uploadPdf) getDocShareholding(item?.uploadPdf, setLoader);
-                              else setShowToastError({ key: "error" });
-                            }}
-                          >
-                            <VisibilityIcon color="info" className="icon" />
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <h5 className="card-title fw-bold">1. Director Information as per MCA</h5>
-            <div className="card-body">
-              <div className="table-bd">
-                <table className="table table-bordered">
-                  <thead>
-                    <tr>
-                      <th>Sr. No</th>
-                      <th>DIN Number</th>
-                      <th>Name</th>
-                      <th>Contact Number</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {developerDataLabel?.addInfo?.DirectorsInformationMCA?.map((item, index) => {
-                      return (
-                        <tr>
-                          <td>{index + 1}</td>
-                          <td>{item?.din}</td>
-                          <td>{item?.name}</td>
-                          <td>{item?.contactNumber}</td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <h5 className="card-title fw-bold">Shareholding Patterns</h5>
-            <div className="card-body">
-              <div className="table-bd">
-                <table className="table table-bordered">
-                  <thead>
-                    <tr>
-                      <th>Sr. No</th>
-                      <th>Name</th>
-                      <th>Designition</th>
+                </Col>
+              </Row>
+              <br></br>
 
-                      <th>Percentage</th>
-                      <th>View Document</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {developerDataLabel?.addInfo?.shareHoldingPatterens?.map((it, ind) => {
-                      return (
-                        <tr>
-                          <td>{ind}</td>
-                          <td>{it?.name}</td>
-                          <td>{it?.designition}</td>
-
-                          <td>{it?.percentage}</td>
-                          <td
-                            style={{ color: " #1266af", fontSize: " 12px", fontWeight: "bold", cursor: "pointer", textDecorationLine: "underline" }}
-                            onClick={() => {
-                              if (it?.uploadPdf) getDocShareholding(it?.uploadPdf, setLoader);
-                              else setShowToastError({ key: "error" });
-                            }}
-                          >
-                            <VisibilityIcon color="info" className="icon" />
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+              <h5 className="card-title fw-bold">Directors Information as per developer</h5>
+              <div className="card-body">
+                <div className="table-bd">
+                  <table className="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>Sr. No</th>
+                        <th>DIN Number</th>
+                        <th>Name</th>
+                        <th>Contact Number</th>
+                        <th>View Document</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {developerDataLabel?.addInfo?.DirectorsInformation?.length &&
+                        developerDataLabel?.addInfo?.DirectorsInformation?.map((item, index) => {
+                          return (
+                            <tr>
+                              <td>{index + 1}</td>
+                              <td>{item?.din}</td>
+                              <td>{item?.name}</td>
+                              <td>{item?.contactNumber}</td>
+                              <td
+                                style={{
+                                  color: " #1266af",
+                                  fontSize: " 12px",
+                                  fontWeight: "bold",
+                                  cursor: "pointer",
+                                  textDecorationLine: "underline",
+                                }}
+                                onClick={() => {
+                                  if (item?.uploadPdf) getDocShareholding(item?.uploadPdf, setLoader);
+                                  else setShowToastError({ key: "error" });
+                                }}
+                              >
+                                <VisibilityIcon color="info" className="icon" />
+                              </td>
+                            </tr>
+                          );
+                        })}
+                    </tbody>
+                  </table>
+                </div>
               </div>
-            </div>
-          </div>
-          <div className="card" style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "5px", marginBottom: "52px" }}>
-            <h5 className="card-title fw-bold">Authorized Person Information </h5>
-            <div className="row-12">
-              <div className="col md={4} xxl lg-4">
-                <FormControl>
-                  <h2>
-                    Name <span style={{ color: "red" }}>*</span>
-                  </h2>
-                  <input
-                    type="text"
-                    className="Inputcontrol"
-                    class="form-control"
-                    id="standard-disabled"
-                    label="Disabled"
-                    placeholder="N/A"
-                    readOnly
-                    {...register("authorizedName")}
-                  />
-                  {/* <input type="text" className="form-control" placeholder="N/A" disabled {...register("authorizedName")} /> */}
+
+              <h5 className="card-title fw-bold">1. Director Information as per MCA</h5>
+              <div className="card-body">
+                <div className="table-bd">
+                  <table className="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>Sr. No</th>
+                        <th>DIN Number</th>
+                        <th>Name</th>
+                        <th>Contact Number</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {developerDataLabel?.addInfo?.DirectorsInformationMCA?.length &&
+                        developerDataLabel?.addInfo?.DirectorsInformationMCA?.map((item, index) => {
+                          return (
+                            <tr>
+                              <td>{index + 1}</td>
+                              <td>{item?.din}</td>
+                              <td>{item?.name}</td>
+                              <td>{item?.contactNumber}</td>
+                            </tr>
+                          );
+                        })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <h5 className="card-title fw-bold">Shareholding Patterns</h5>
+              <div className="card-body">
+                <div className="table-bd">
+                  <table className="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>Sr. No</th>
+                        <th>Name</th>
+                        <th>Designition</th>
+
+                        <th>Percentage</th>
+                        <th>View Document</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {developerDataLabel?.addInfo?.shareHoldingPatterens?.length &&
+                        developerDataLabel?.addInfo?.shareHoldingPatterens?.map((it, ind) => {
+                          return (
+                            <tr>
+                              <td>{ind}</td>
+                              <td>{it?.name}</td>
+                              <td>{it?.designition}</td>
+
+                              <td>{it?.percentage}</td>
+                              <td
+                                style={{
+                                  color: " #1266af",
+                                  fontSize: " 12px",
+                                  fontWeight: "bold",
+                                  cursor: "pointer",
+                                  textDecorationLine: "underline",
+                                }}
+                                onClick={() => {
+                                  if (it?.uploadPdf) getDocShareholding(it?.uploadPdf, setLoader);
+                                  else setShowToastError({ key: "error" });
+                                }}
+                              >
+                                <VisibilityIcon color="info" className="icon" />
+                              </td>
+                            </tr>
+                          );
+                        })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </Form.Group>
+          </Card>
+          <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "5px", marginBottom: "52px" }}>
+            <Form.Group className="justify-content-center" controlId="formBasicEmail">
+              <h5 className="card-title fw-bold">Authorized Person Information </h5>
+              <Row className="ml-auto" style={{ marginBottom: 5 }}>
+                <Col md={4} xxl lg="4">
+                  <div>
+                    <Form.Label>
+                      <h2>
+                        Name <span style={{ color: "red" }}>*</span>
+                      </h2>
+                    </Form.Label>
+                  </div>
+                  <input type="text" className="form-control" placeholder="N/A" disabled {...register("authorizedName")} />
                   <h3 className="error-message" style={{ color: "red" }}>
                     {errors?.authorizedName && errors?.authorizedName?.message}
                   </h3>

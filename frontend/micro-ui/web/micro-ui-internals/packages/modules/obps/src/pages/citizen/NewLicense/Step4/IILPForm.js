@@ -78,8 +78,8 @@ const IILPForm = ({ register, getDocumentData, watch, getDocShareholding, setLoa
             <Col md={4} xxl lg="3">
               <div>
                 <Form.Label>
-                  <h2>
-                    Area under undetermined use
+                  <h2 data-toggle="tooltip" data-placement="top" title="Area under undetermined use">
+                    Area under undetermined
                     <span style={{ color: "red" }}>*</span>
                   </h2>
                 </Form.Label>

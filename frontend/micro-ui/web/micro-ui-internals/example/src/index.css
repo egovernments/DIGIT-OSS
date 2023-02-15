@@ -15572,9 +15572,15 @@ input[type=number], .checkbox-wrap .input-emp[type=number] {
 
 .employee-app-wrapper {
   min-height: calc(100vh - 8em); }
+
   input[type=text]:disabled {
     background: #f3f3f3;
-    border-bottom: 1px dotted;
+    /* border-bottom: 1px dotted; */
+  }
+
+  .appInputText  input {
+    height: 36px;
+    padding: 0 0 0 8px !important;
   }
 /* //////////////////////////////////////////////////////////////// */
 
@@ -15595,6 +15601,3 @@ input[type=number], .checkbox-wrap .input-emp[type=number] {
   justify-content: right;
   margin-right: 5px;
 }
-
-
-
