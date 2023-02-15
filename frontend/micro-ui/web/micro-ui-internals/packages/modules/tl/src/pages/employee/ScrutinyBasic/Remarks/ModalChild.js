@@ -46,7 +46,7 @@ function ModalChild(props) {
           fieldValue: inputFieldValue,
           fieldIdL: props.labelmodal,
           isApproved: status,
-          isLOIPart: status === "disapproved" ? false : true ,
+          isLOIPart: status === "conditional" ?  true : null ,
           userid: userInfo?.id || null,
           serviceId: "123",
           documentId: null,
