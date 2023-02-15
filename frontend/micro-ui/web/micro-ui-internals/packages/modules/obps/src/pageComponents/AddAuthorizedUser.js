@@ -1,4 +1,4 @@
-import { FormStep, TextInput, MobileNumber, CardLabel, CardLabelError, Dropdown, Toast, RemoveIcon,MuiTables } from "@egovernments/digit-ui-react-components";
+import { FormStep, TextInput, MobileNumber, CardLabel, CardLabelError, Dropdown, Toast, RemoveIcon } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Table from "react-bootstrap/Table";
