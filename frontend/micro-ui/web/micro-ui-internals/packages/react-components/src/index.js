@@ -59,7 +59,6 @@ import Rating from "./atoms/Rating";
 import RoundedLabel from "./atoms/RoundedLabel";
 import SectionalDropdown from "./atoms/SectionalDropdown";
 import MuiRadio from "./atoms/MuiRadio";
-import MuiTables from "./atoms/MuiTables"
 import { LastRow, MediaRow, Row, StatusTable } from "./atoms/StatusTable";
 import SubmitBar from "./atoms/SubmitBar";
 import StandaloneSearchBar from "./atoms/StandaloneSearchBar";
@@ -267,7 +266,6 @@ export {
   PrivateRoute,
   SectionalDropdown,
   MuiRadio,
-  MuiTables,
   RoundedLabel,
   LabelFieldPair,
   BreadCrumb,
