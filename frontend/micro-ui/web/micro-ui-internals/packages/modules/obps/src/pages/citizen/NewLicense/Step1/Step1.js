@@ -309,25 +309,32 @@ const ApllicantFormStep1 = (props) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {developerDataLabel?.addInfo?.DirectorsInformation?.map((item, index) => {
-                        return (
-                          <tr>
-                            <td>{index + 1}</td>
-                            <td>{item?.din}</td>
-                            <td>{item?.name}</td>
-                            <td>{item?.contactNumber}</td>
-                            <td
-                              style={{ color: " #1266af", fontSize: " 12px", fontWeight: "bold", cursor: "pointer", textDecorationLine: "underline" }}
-                              onClick={() => {
-                                if (item?.uploadPdf) getDocShareholding(item?.uploadPdf, setLoader);
-                                else setShowToastError({ key: "error" });
-                              }}
-                            >
-                              <VisibilityIcon color="info" className="icon" />
-                            </td>
-                          </tr>
-                        );
-                      })}
+                      {developerDataLabel?.addInfo?.DirectorsInformation?.length &&
+                        developerDataLabel?.addInfo?.DirectorsInformation?.map((item, index) => {
+                          return (
+                            <tr>
+                              <td>{index + 1}</td>
+                              <td>{item?.din}</td>
+                              <td>{item?.name}</td>
+                              <td>{item?.contactNumber}</td>
+                              <td
+                                style={{
+                                  color: " #1266af",
+                                  fontSize: " 12px",
+                                  fontWeight: "bold",
+                                  cursor: "pointer",
+                                  textDecorationLine: "underline",
+                                }}
+                                onClick={() => {
+                                  if (item?.uploadPdf) getDocShareholding(item?.uploadPdf, setLoader);
+                                  else setShowToastError({ key: "error" });
+                                }}
+                              >
+                                <VisibilityIcon color="info" className="icon" />
+                              </td>
+                            </tr>
+                          );
+                        })}
                     </tbody>
                   </table>
                 </div>
@@ -346,16 +353,17 @@ const ApllicantFormStep1 = (props) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {developerDataLabel?.addInfo?.DirectorsInformationMCA?.map((item, index) => {
-                        return (
-                          <tr>
-                            <td>{index + 1}</td>
-                            <td>{item?.din}</td>
-                            <td>{item?.name}</td>
-                            <td>{item?.contactNumber}</td>
-                          </tr>
-                        );
-                      })}
+                      {developerDataLabel?.addInfo?.DirectorsInformationMCA?.length &&
+                        developerDataLabel?.addInfo?.DirectorsInformationMCA?.map((item, index) => {
+                          return (
+                            <tr>
+                              <td>{index + 1}</td>
+                              <td>{item?.din}</td>
+                              <td>{item?.name}</td>
+                              <td>{item?.contactNumber}</td>
+                            </tr>
+                          );
+                        })}
                     </tbody>
                   </table>
                 </div>
@@ -376,26 +384,33 @@ const ApllicantFormStep1 = (props) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {developerDataLabel?.addInfo?.shareHoldingPatterens?.map((it, ind) => {
-                        return (
-                          <tr>
-                            <td>{ind}</td>
-                            <td>{it?.name}</td>
-                            <td>{it?.designition}</td>
+                      {developerDataLabel?.addInfo?.shareHoldingPatterens?.length &&
+                        developerDataLabel?.addInfo?.shareHoldingPatterens?.map((it, ind) => {
+                          return (
+                            <tr>
+                              <td>{ind}</td>
+                              <td>{it?.name}</td>
+                              <td>{it?.designition}</td>
 
-                            <td>{it?.percentage}</td>
-                            <td
-                              style={{ color: " #1266af", fontSize: " 12px", fontWeight: "bold", cursor: "pointer", textDecorationLine: "underline" }}
-                              onClick={() => {
-                                if (it?.uploadPdf) getDocShareholding(it?.uploadPdf, setLoader);
-                                else setShowToastError({ key: "error" });
-                              }}
-                            >
-                              <VisibilityIcon color="info" className="icon" />
-                            </td>
-                          </tr>
-                        );
-                      })}
+                              <td>{it?.percentage}</td>
+                              <td
+                                style={{
+                                  color: " #1266af",
+                                  fontSize: " 12px",
+                                  fontWeight: "bold",
+                                  cursor: "pointer",
+                                  textDecorationLine: "underline",
+                                }}
+                                onClick={() => {
+                                  if (it?.uploadPdf) getDocShareholding(it?.uploadPdf, setLoader);
+                                  else setShowToastError({ key: "error" });
+                                }}
+                              >
+                                <VisibilityIcon color="info" className="icon" />
+                              </td>
+                            </tr>
+                          );
+                        })}
                     </tbody>
                   </table>
                 </div>
