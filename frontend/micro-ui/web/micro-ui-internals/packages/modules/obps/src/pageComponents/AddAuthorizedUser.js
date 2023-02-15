@@ -1,4 +1,4 @@
-import { FormStep, TextInput, MobileNumber, CardLabel, CardLabelError, Dropdown, Toast, RemoveIcon,MuiTables } from "@egovernments/digit-ui-react-components";
+import { FormStep, TextInput, MobileNumber, CardLabel, CardLabelError, Dropdown, Toast, RemoveIcon } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Table from "react-bootstrap/Table";
@@ -476,14 +476,6 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
       });
   };
 
-  let result;
-
-  if(aurthorizedUserInfoArray?.length > 0){
-    result = (
-      <MuiTables />
-    );
-  }
-
   const goNext = async (e) => {
     //   e.preventDefault();
     // if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
@@ -680,6 +672,8 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                 )}
               </tbody>
             </Table>
+
+            
             <div>
               <button
                 type="button"
