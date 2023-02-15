@@ -572,7 +572,7 @@ const LandScheduleForm = (props) => {
                                   Area of parent licence in acres <span style={{ color: "red" }}>*</span>
                                 </h2>
                               </label>
-                              <input type="number" className="form-control" {...register("areaOfParentLicence")} minLength={1} maxLength={20} />
+                              <input type="number" className="form-control" {...register("areaOfParentLicenceAcres")} minLength={1} maxLength={20} />
                             </div>
 
                             <div className="col col-3">
