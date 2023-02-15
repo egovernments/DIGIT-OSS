@@ -187,7 +187,7 @@ const LandScheduleForm = (props) => {
   } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
-    resolver: yupResolver(VALIDATION_SCHEMA),
+    // resolver: yupResolver(VALIDATION_SCHEMA),
     shouldFocusError: true,
   });
 
@@ -572,7 +572,7 @@ const LandScheduleForm = (props) => {
                                   Area of parent licence in acres <span style={{ color: "red" }}>*</span>
                                 </h2>
                               </label>
-                              <input type="number" className="form-control" {...register("areaOfParentLicence")} minLength={1} maxLength={20} />
+                              <input type="number" className="form-control" {...register("areaOfParentLicenceAcres")} minLength={1} maxLength={20} />
                             </div>
 
                             <div className="col col-3">
@@ -2406,7 +2406,7 @@ const LandScheduleForm = (props) => {
               </Col>
             </Row>
             <button type="submit" style={{ float: "right" }} class="btn btn-primary btn-md center-block">
-              Submit
+              Submitsss
             </button>
           </form>
         </ModalBody>

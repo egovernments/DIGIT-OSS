@@ -493,14 +493,17 @@ const Developerinfo = (props) => {
   const [openedModal, setOpennedModal] = useState("")
   const [fieldIconColors, setFieldIconColors] = useState({
     licenceApplied: Colors.info,
-    licenceNo: Colors.info,
-    potentialZone: Colors.info,
-    siteLocationPurpose: Colors.info,
+    licenseNumber: Colors.info,
+    potential: Colors.info,
+    siteLoc: Colors.info,
     approachType: Colors.info,
-    approachRoadWidth: Colors.info,
+    areaOfParentLicence: Colors.info,
     specifyOthers: Colors.info,
     typeOfLand: Colors.info,
     thirdPartyRightCreated: Colors.info,
+    thirdPartyRemark:Colors.info,
+    thirdPartyDoc:Colors.info,
+
     migrationPolicy: Colors.info,
     encumbrance: Colors.info,
     existinglitigation: Colors.info,
@@ -546,18 +549,35 @@ const Developerinfo = (props) => {
     dateOfAward: Colors.info,
     dateOfRelease: Colors.info,
     siteDetails: Colors.info,
-    areaOfParentLicence: Colors.info
+    areaOfParentLicence: Colors.info,
+    dateMigration: Colors.info,
+    khasraNumber: Colors.info,
+    areaMigration: Colors.info,
+    balanceOfParentLicence: Colors.info,
+    siteApproachable: Colors.info,
+    minimumApproachFour : Colors.info,
+    minimumApproachEleven : Colors.info,
+    alreadyConstructedSector : Colors.info,
+
+    landOwnerDonated : Colors.info,
+    adjoiningOthersLand : Colors.info,
+    applicantHasDonated : Colors.info,
+    giftDeedHibbanama : Colors.info,
+    adjoiningOwnLand:color.info,
+    joiningOwnLand: Colors.info,
   })
 
   const fieldIdList = [{ label: "Whether licence applied for additional area", key: "licenceApplied" },
-  { label: "License No. of Parent License", key: "licenceNo" },
+  { label: "License No. of Parent License", key: "licenseNumber" },
   { label: "Potential Zone", key: "potentialZone" },
-  { label: "Site Location Purpose", key: "siteLocationPurpose" },
+  { label: "Site Location Purpose", key: "siteLoc" },
   { label: "Approach Type (Type of Policy)", key: "approachType" },
-  { label: "Approach Road Width", key: "approachRoadWidth" },
+  { label: "Approach Road Width", key: "areaOfParentLicence" },
   { label: "Specify Others", key: "specifyOthers" },
   { label: "Type of land", key: "typeOfLand" },
   { label: "Third-party right created ", key: "thirdPartyRightCreated" },
+  { label: "Third Party Remark", key: "thirdPartyRemark" },
+  { label: "Third Party Document", key: "thirdPartyDoc" },
   { label: "Whether licence applied under Migration policy", key: "migrationPolicy" },
   { label: "Any encumbrance with respect to following", key: "encumbrance" },
   { label: "Existing litigation, if any, concerning applied land including co-sharers and collaborator", key: "existinglitigation" },
@@ -589,6 +609,10 @@ const Developerinfo = (props) => {
   { label: "Copy of spa/GPA/board resolution", key: "copyofSpaBoard" },
   { label: "Revised Land Schedule", key: "revisedLansSchedule" },
   { label: "Copy of Shajra Plan", key: "copyOfShajraPlan" },
+  { label: "Date", key: "dateMigration" },
+  { label: "Khasra number", key: "khasraNumber" },
+  { label: "Area", key: "areaMigration" },
+  { label: "Balance Of Parent Licence", key: "balanceOfParentLicence" },
   { label: "Area Applied under Migration", key: "areaAppliedUnderMigration" },
   { label: "Purpose of Parent Licence", key: "purposeOfParentLicence" },
   { label: "Licence No.", key: "licenceNo" },
@@ -602,6 +626,28 @@ const Developerinfo = (props) => {
   { label: "Date of Award", key: "dateOfAward" },
   { label: "Date of Release", key: "dateOfRelease" },
   { label: "Site Details", key: "siteDetails" },
+  { label: "(h) Details of existing approach as per policy dated 20-10-20", key: "siteApproachable" },
+  { label: "(a)  Approach available from minimum 4 karam (22 ft) wide revenue rasta", key: "minimumApproachFour" },
+  { label: "(b) Approach available from minimum 11 feet wide revenue rasta and applied site abuts acquired alignment of the sector road and there is no stay regarding construction on the land falling under the abutting sector road", key: "minimumApproachEleven" },
+  { label: "(c) Applied site abouts already constructed sector road or internal circulation road of approved sectoral plan (of min. 18m/24m width as the case may be) provided its entire stretch required for approach is licenced and is further leading upto atleast 4 karam wide revenue rasta.", key: "applicantHasDonated" },
+  { label: "(d) Applied land is accessible from a minimum 4 karam wide rasta through adjoining own land of the applicant (but not applied for licence)", key: "joiningOwnLand" },
+  { label: "(d1)  If applicable, whether the applicant has donated at least 4 karam wide strip from its adjoining own land in favour of the Gram Panchayat/Municipality, in order to connect the applied site to existing 4 karam rasta?", key: "landOwnerDonated" },
+  { label: "(e) Applied land is accessible from a minimum 4 karam wide rasta through adjoining other’s land", key: "adjoiningOthersLand" },
+  { label: "(e1) whether the land-owner of the adjoining land has donated at least 4 karam wide strip of land to the Gram Panchayat/Municipality, in a manner that the applied site gets connected to existing public rasta of atleast 4 karam width?", key: "siteApproachable" },
+  { label: "whether the applied site is approachable from the proposed 18/24 m internal sectoral plan road/sector dividing road.", key: "siteApproachable" },
+  { label: "Upload copy of Gift Deed/ Hibbanama", key: "giftDeedHibbanama" },
+  // { label: "(h) Details of existing approach as per policy dated 20-10-20", key: "siteApproachable" },
+  // { label: "(h) Details of existing approach as per policy dated 20-10-20", key: "siteApproachable" },
+  // { label: "(h) Details of existing approach as per policy dated 20-10-20", key: "siteApproachable" },
+  // { label: "(h) Details of existing approach as per policy dated 20-10-20", key: "siteApproachable" },
+  // { label: "(h) Details of existing approach as per policy dated 20-10-20", key: "siteApproachable" },
+  // { label: "(h) Details of existing approach as per policy dated 20-10-20", key: "siteApproachable" },
+  // { label: "(h) Details of existing approach as per policy dated 20-10-20", key: "siteApproachable" },
+  // { label: "(h) Details of existing approach as per policy dated 20-10-20", key: "siteApproachable" },
+  // { label: "(h) Details of existing approach as per policy dated 20-10-20", key: "siteApproachable" },
+  // { label: "(h) Details of existing approach as per policy dated 20-10-20", key: "siteApproachable" },
+  // { label: "(h) Details of existing approach as per policy dated 20-10-20", key: "siteApproachable" },
+  // { label: "(h) Details of existing approach as per policy dated 20-10-20", key: "siteApproachable" },
   { label: "Area of Parent Licence", key: "areaOfParentLicence" },];
 
 
@@ -746,11 +792,11 @@ const Developerinfo = (props) => {
                           style={{
                             display: hideRemarks ? "none" : "block",
 
-                            color: fieldIconColors.licenceNo
+                            color: fieldIconColors.licenseNumber
                           }}
                           onClick={() => {
                             setLabelValue("Licence No. of Parent Licence"),
-                              setOpennedModal("licenceNo")
+                              setOpennedModal("licenseNumber")
                             setSmShow(true),
                               console.log("modal open"),
                               setFieldValue(landScheduleData !== null ? landScheduleData?.licenseNumber : null);
@@ -777,11 +823,11 @@ const Developerinfo = (props) => {
                           style={{
                             display: hideRemarks ? "none" : "block",
                             // display: hideRemarksPatwari?"none":"block",
-                            color: fieldIconColors.potentialZone
+                            color: fieldIconColors.potential
                           }}
                           onClick={() => {
                             setLabelValue("Potential Zone"),
-                              setOpennedModal("potentialZone")
+                              setOpennedModal("potential")
                             setSmShow(true),
                               console.log("modal open"),
                               setFieldValue(landScheduleData !== null ? landScheduleData?.potential : null);
@@ -800,12 +846,12 @@ const Developerinfo = (props) => {
                           style={{
                             display: hideRemarks ? "none" : "block",
                             // display: hideRemarksPatwari?"none":"block",
-                            color: fieldIconColors.siteLocationPurpose
+                            color: fieldIconColors.siteLoc
                           }}
                           onClick={() => {
-                            setLabelValue("Site Location Purpose"),
-                              setOpennedModal("siteLocationPurpose")
-                            setSmShow(true),
+                              setLabelValue("Site Location Purpose"),
+                              setOpennedModal("siteLoc")
+                              setSmShow(true),
                               console.log("modal open"),
                               setFieldValue(landScheduleData !== null ? landScheduleData?.siteLoc : null);
                           }}
@@ -865,11 +911,11 @@ const Developerinfo = (props) => {
                           style={{
                             display: hideRemarks ? "none" : "block",
                             // display: hideRemarksPatwari?"none":"block",
-                            color: fieldIconColors.approachRoadWidth
+                            color: fieldIconColors.areaOfParentLicence
                           }}
                           onClick={() => {
                             setLabelValue("Area of Parent Licence"),
-                              setOpennedModal("approachRoadWidth")
+                              setOpennedModal("areaOfParentLicence")
                             setSmShow(true),
                               console.log("modal open"),
                               setFieldValue(landScheduleData !== null ? landScheduleData?.areaOfParentLicence : null);
@@ -954,17 +1000,52 @@ const Developerinfo = (props) => {
                           <div className="col col-4">
 
                             <label> Remark </label>
-                            <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.thirdPartyRemark : null}
+                            
+                              <div className="d-flex flex-row  align-items-center">
+                              <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.thirdPartyRemark : null}
                               // height={30} style={{ maxWidth: 200, marginRight: 5 }} 
                               className={classes.formLabel}
                               disabled></Form.Control>
+                        <ReportProblemIcon
+                          style={{
+                            display: hideRemarks ? "none" : "block",
+                            // display: hideRemarksPatwari?"none":"block",
+                            color: fieldIconColors.thirdPartyRemark
+                          }}
+                          onClick={() => {
+                            setLabelValue("Third Party Remark"),
+                              setOpennedModal("thirdPartyRemark")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(landScheduleData !== null ? landScheduleData?.thirdPartyRemark : null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
                           </div>
                           <div className="col col-4">
                             <label> Document Download </label>
 
+                            
+                             
+                            <div className="d-flex flex-row  align-items-center">
                             <IconButton onClick={() => getDocShareholding(landScheduleData?.thirdPartyDoc)}>
                               <DownloadForOfflineIcon color="primary" className="mx-1" />
                             </IconButton>
+                        <ReportProblemIcon
+                          style={{
+                            display: hideRemarks ? "none" : "block",
+                            // display: hideRemarksPatwari?"none":"block",
+                            color: fieldIconColors.thirdPartyDoc
+                          }}
+                          onClick={() => {
+                            setLabelValue("Third Party Document"),
+                              setOpennedModal("thirdPartyDoc")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(landScheduleData !== null ? landScheduleData?.thirdPartyDoc : null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
 
                           </div>
                         </div>
@@ -1050,11 +1131,11 @@ const Developerinfo = (props) => {
                                   color: fieldIconColors.licenceNo
                                 }}
                                 onClick={() => {
-                                  setLabelValue("Licence No."),
+                                  setLabelValue("Previous Licence Number"),
                                     setOpennedModal("licenceNo")
                                   setSmShow(true),
                                     console.log("modal open"),
-                                    setFieldValue(landScheduleData !== null ? landScheduleData?.licNo : null);
+                                    setFieldValue(landScheduleData !== null ? landScheduleData?.LandScheduleDetails?.[0]?.previousLicensenumber : null);
                                 }}
                               ></ReportProblemIcon>
                             </th>
@@ -1069,7 +1150,7 @@ const Developerinfo = (props) => {
                                     setOpennedModal("areaOfParentLicence")
                                   setSmShow(true),
                                     console.log("modal open"),
-                                    setFieldValue(landScheduleData !== null ? landScheduleData?.parentLicArea : null);
+                                    setFieldValue(landScheduleData !== null ? landScheduleData?.LandScheduleDetails?.[0]?.areaOfParentLicence : null);
                                 }}
                               ></ReportProblemIcon>
                             </th>
@@ -1084,7 +1165,7 @@ const Developerinfo = (props) => {
                                     setOpennedModal("purposeOfParentLicence")
                                   setSmShow(true),
                                     console.log("modal open"),
-                                    setFieldValue(landScheduleData !== null ? landScheduleData?.parentLicPurpose : null);
+                                    setFieldValue(landScheduleData !== null ? landScheduleData?.LandScheduleDetails?.[0]?.purposeOfParentLicence : null);
                                 }}
                               ></ReportProblemIcon>
                             </th>
@@ -1099,7 +1180,22 @@ const Developerinfo = (props) => {
                                   setOpennedModal("validityOfParentLicence")
                                   setSmShow(true),
                                     console.log("modal open"),
-                                    setFieldValue(landScheduleData?.validityOfParentLic === "Y" ? "Yes" : landScheduleData?.validityOfParentLic === "N" ? "No" : null);
+                                    setFieldValue(landScheduleData?.validityOfParentLicence === "Y" ? "Yes" : landScheduleData?.validityOfParentLicence === "N" ? "No" : null);
+                                }}
+                              ></ReportProblemIcon>
+                            </th>
+                            <th class="fw-normal py-0 border-top-0">
+                              <ReportProblemIcon
+                                style={{
+                                  display: hideRemarks ? "none" : "block",
+                                  color: fieldIconColors.dateMigration
+                                }}
+                                onClick={() => {
+                                  setLabelValue("Date"),
+                                    setOpennedModal("dateMigration")
+                                  setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(landScheduleData !== null ? landScheduleData?.LandScheduleDetails?.[0]?.date : null);
                                 }}
                               ></ReportProblemIcon>
                             </th>
@@ -1114,7 +1210,7 @@ const Developerinfo = (props) => {
                                     setOpennedModal("areaAppliedUnderMigration")
                                   setSmShow(true),
                                     console.log("modal open"),
-                                    setFieldValue(landScheduleData !== null ? landScheduleData?.areaAppliedUnderMigration : null);
+                                    setFieldValue(landScheduleData !== null ? landScheduleData?.LandScheduleDetails?.[0]?.areaAppliedmigration : null);
                                 }}
                               ></ReportProblemIcon>
                             </th>
@@ -1122,14 +1218,14 @@ const Developerinfo = (props) => {
                               <ReportProblemIcon
                                 style={{
                                   display: hideRemarks ? "none" : "block",
-                                  color: fieldIconColors.areaAppliedUnderMigration
+                                  color: fieldIconColors.khasraNumber
                                 }}
                                 onClick={() => {
-                                  setLabelValue("Area Applied under Migration"),
-                                    setOpennedModal("areaAppliedUnderMigration")
+                                  setLabelValue("Khasra number"),
+                                    setOpennedModal("khasraNumber")
                                   setSmShow(true),
                                     console.log("modal open"),
-                                    setFieldValue(landScheduleData !== null ? landScheduleData?.areaAppliedUnderMigration : null);
+                                    setFieldValue(landScheduleData !== null ? landScheduleData?.LandScheduleDetails?.[0]?.khasraNumber : null);
                                 }}
                               ></ReportProblemIcon>
                             </th>
@@ -1137,14 +1233,14 @@ const Developerinfo = (props) => {
                               <ReportProblemIcon
                                 style={{
                                   display: hideRemarks ? "none" : "block",
-                                  color: fieldIconColors.areaAppliedUnderMigration
+                                  color: fieldIconColors.areaMigration
                                 }}
                                 onClick={() => {
-                                  setLabelValue("Area Applied under Migration"),
-                                    setOpennedModal("areaAppliedUnderMigration")
+                                  setLabelValue("Area"),
+                                    setOpennedModal("areaMigration")
                                   setSmShow(true),
                                     console.log("modal open"),
-                                    setFieldValue(landScheduleData !== null ? landScheduleData?.areaAppliedUnderMigration : null);
+                                    setFieldValue(landScheduleData !== null ? landScheduleData?.LandScheduleDetails?.[0]?.area : null);
                                 }}
                               ></ReportProblemIcon>
                             </th>
@@ -1152,29 +1248,14 @@ const Developerinfo = (props) => {
                               <ReportProblemIcon
                                 style={{
                                   display: hideRemarks ? "none" : "block",
-                                  color: fieldIconColors.areaAppliedUnderMigration
+                                  color: fieldIconColors.balanceOfParentLicence
                                 }}
                                 onClick={() => {
-                                  setLabelValue("Area Applied under Migration"),
-                                    setOpennedModal("areaAppliedUnderMigration")
+                                  setLabelValue("Balance Of Parent Licence"),
+                                    setOpennedModal("balanceOfParentLicence")
                                   setSmShow(true),
                                     console.log("modal open"),
-                                    setFieldValue(landScheduleData !== null ? landScheduleData?.areaAppliedUnderMigration : null);
-                                }}
-                              ></ReportProblemIcon>
-                            </th>
-                            <th class="fw-normal py-0 border-top-0">
-                              <ReportProblemIcon
-                                style={{
-                                  display: hideRemarks ? "none" : "block",
-                                  color: fieldIconColors.areaAppliedUnderMigration
-                                }}
-                                onClick={() => {
-                                  setLabelValue("Area Applied under Migration"),
-                                    setOpennedModal("areaAppliedUnderMigration")
-                                  setSmShow(true),
-                                    console.log("modal open"),
-                                    setFieldValue(landScheduleData !== null ? landScheduleData?.areaAppliedUnderMigration : null);
+                                    setFieldValue(landScheduleData !== null ? landScheduleData?.LandScheduleDetails?.[0]?.balanceOfParentLicence : null);
                                 }}
                               ></ReportProblemIcon>
                             </th>
@@ -1742,7 +1823,7 @@ const Developerinfo = (props) => {
                         setOpennedModal("anyInsolvency")
                       setSmShow(true),
                         console.log("modal open"),
-                        setFieldValue(landScheduleData !== null ? landScheduleData?.typeLand : null);
+                        setFieldValue(landScheduleData?.insolvency === "Y" ? "Yes" : landScheduleData?.insolvency === "N" ? "NO" : null);
                     }}
                   ></ReportProblemIcon>
                 </div>
@@ -2270,14 +2351,14 @@ const Developerinfo = (props) => {
                   <ReportProblemIcon
                     style={{
                       display: hideRemarks ? "none" : "block",
-                      color: fieldIconColors.ordersUpload
+                      color: fieldIconColors.siteApproachable
                     }}
                     onClick={() => {
-                      setLabelValue("Orders Upload"),
-                        setOpennedModal("ordersUpload")
+                      setLabelValue("(h)  Details of existing approach as per policy dated 20-10-20."),
+                        setOpennedModal("siteApproachable")
                       setSmShow(true),
                         console.log("modal open"),
-                        setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                        setFieldValue(landScheduleData?.siteApproachable === "Y" ? "Category-I approach" : landScheduleData?.siteApproachable === "N" ? "Category-II approach" : null);
                     }}
                   ></ReportProblemIcon>
                 </div>
@@ -2296,11 +2377,11 @@ const Developerinfo = (props) => {
                           color: fieldIconColors.ordersUpload
                         }}
                         onClick={() => {
-                          setLabelValue("Orders Upload"),
-                            setOpennedModal("ordersUpload")
+                          setLabelValue("(a)  Approach available from minimum 4 karam (22 ft) wide revenue rasta"),
+                            setOpennedModal("minimumApproachFour")
                           setSmShow(true),
                             console.log("modal open"),
-                            setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                            setFieldValue(landScheduleData?.minimumApproachFour === "Y" ? "Yes" : landScheduleData?.minimumApproachFour === "N" ? "No" : null);
                         }}
                       ></ReportProblemIcon>
                     </div>
@@ -2315,14 +2396,14 @@ const Developerinfo = (props) => {
                       <ReportProblemIcon
                         style={{
                           display: hideRemarks ? "none" : "block",
-                          color: fieldIconColors.ordersUpload
+                          color: fieldIconColors.minimumApproachEleven
                         }}
                         onClick={() => {
-                          setLabelValue("Orders Upload"),
-                            setOpennedModal("ordersUpload")
+                          setLabelValue("(b) Approach available from minimum 11 feet wide revenue rasta and applied site abuts acquired alignment of the sector road and there is no stay regarding construction on the land falling under the abutting sector road"),
+                            setOpennedModal("minimumApproachEleven")
                           setSmShow(true),
                             console.log("modal open"),
-                            setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                            setFieldValue(landScheduleData?.minimumApproachEleven === "Y" ? "Yes" : landScheduleData?.minimumApproachEleven === "N" ? "No" : null);
                         }}
                       ></ReportProblemIcon>
                     </div>
@@ -2337,14 +2418,14 @@ const Developerinfo = (props) => {
                       <ReportProblemIcon
                         style={{
                           display: hideRemarks ? "none" : "block",
-                          color: fieldIconColors.ordersUpload
+                          color: fieldIconColors.alreadyConstructedSector
                         }}
                         onClick={() => {
-                          setLabelValue("Orders Upload"),
-                            setOpennedModal("ordersUpload")
+                          setLabelValue("(c) Applied site abouts already constructed sector road or internal circulation road of approved sectoral plan (of min. 18m/24m width as the case may be) provided its entire stretch required for approach is licenced and is further leading upto atleast 4 karam wide revenue rasta."),
+                            setOpennedModal("alreadyConstructedSector")
                           setSmShow(true),
                             console.log("modal open"),
-                            setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                            setFieldValue(landScheduleData?.alreadyConstructedSector === "Y" ? "Yes" : landScheduleData?.alreadyConstructedSector === "N" ? "No" : null);
                         }}
                       ></ReportProblemIcon>
                     </div>
@@ -2352,26 +2433,26 @@ const Developerinfo = (props) => {
                     <h6>(d)  Applied land is accessible from a minimum 4 karam wide rasta through adjoining own land of the applicant (but not applied for licence).</h6>
                     <div className="d-flex flex-row align-items-center my-1 ">
                       &nbsp;&nbsp;
-                      <input type="radio" disabled value="Yes" checked={landScheduleData?.adjoiningOwnLand === "Y" ? true : false} />
+                      <input type="radio" disabled value="Yes" checked={landScheduleData?.joiningOwnLand === "Y" ? true : false} />
                       <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                      <input type="radio" disabled value="No" checked={landScheduleData?.adjoiningOwnLand === "N" ? true : false} />
+                      <input type="radio" disabled value="No" checked={landScheduleData?.joiningOwnLand === "N" ? true : false} />
                       <label className="m-0 mx-2" for="No">No</label>
                       <ReportProblemIcon
                         style={{
                           display: hideRemarks ? "none" : "block",
-                          color: fieldIconColors.ordersUpload
+                          color: fieldIconColors.joiningOwnLand
                         }}
                         onClick={() => {
-                          setLabelValue("Orders Upload"),
-                            setOpennedModal("ordersUpload")
+                          setLabelValue("(d)  Applied land is accessible from a minimum 4 karam wide rasta through adjoining own land of the applicant (but not applied for licence)"),
+                            setOpennedModal("joiningOwnLand")
                           setSmShow(true),
                             console.log("modal open"),
-                            setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                            setFieldValue(landScheduleData?.joiningOwnLand === "Y" ? "Yes" : landScheduleData?.joiningOwnLand === "N" ? "No" : null);
                         }}
                       ></ReportProblemIcon>
                     </div>
 
-                    {landScheduleData?.adjoiningOwnLand === "Y" && (
+                    {landScheduleData?.joiningOwnLand === "Y" && (
                       <div className="my-2 mx-2">
                         <h6>(d1)  If applicable, whether the applicant has donated at least 4 karam wide strip from its adjoining own land in favour of the Gram Panchayat/Municipality, in order to connect the applied site to existing 4 karam rasta?</h6>
                         <div className="d-flex flex-row align-items-center my-1 ">
@@ -2383,14 +2464,14 @@ const Developerinfo = (props) => {
                           <ReportProblemIcon
                             style={{
                               display: hideRemarks ? "none" : "block",
-                              color: fieldIconColors.ordersUpload
+                              color: fieldIconColors.applicantHasDonated
                             }}
                             onClick={() => {
-                              setLabelValue("Orders Upload"),
-                                setOpennedModal("ordersUpload")
+                              setLabelValue("(d1)  If applicable, whether the applicant has donated at least 4 karam wide strip from its adjoining own land in favour of the Gram Panchayat/Municipality, in order to connect the applied site to existing 4 karam rasta?"),
+                                setOpennedModal("applicantHasDonated")
                               setSmShow(true),
                                 console.log("modal open"),
-                                setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                                setFieldValue(landScheduleData?.applicantHasDonated === "Y" ? "Yes" : landScheduleData?.applicantHasDonated === "N" ? "No" : null);
                             }}
                           ></ReportProblemIcon>
                         </div>
@@ -2406,14 +2487,14 @@ const Developerinfo = (props) => {
                               <ReportProblemIcon
                                 style={{
                                   display: hideRemarks ? "none" : "block",
-                                  color: fieldIconColors.copyOfShajraPlan
+                                  color: fieldIconColors.giftDeedHibbanama
                                 }}
                                 onClick={() => {
-                                  setLabelValue("Copy of Shajra Plan"),
-                                    setOpennedModal("copyOfShajraPlan")
+                                  setLabelValue("Upload copy of Gift Deed/ Hibbanama"),
+                                    setOpennedModal("giftDeedHibbanama")
                                   setSmShow(true),
                                     console.log("modal open"),
-                                    setFieldValue(landScheduleData !== null ? landScheduleData?.copyOfShajraPlan : null);
+                                    setFieldValue(landScheduleData !== null ? landScheduleData?.giftDeedHibbanama : null);
                                 }}
                               ></ReportProblemIcon>
                             </div>
@@ -2435,11 +2516,11 @@ const Developerinfo = (props) => {
                           color: fieldIconColors.ordersUpload
                         }}
                         onClick={() => {
-                          setLabelValue("Orders Upload"),
-                            setOpennedModal("ordersUpload")
+                          setLabelValue("(e)  Applied land is accessible from a minimum 4 karam wide rasta through adjoining other’s land"),
+                            setOpennedModal("adjoiningOthersLand")
                           setSmShow(true),
                             console.log("modal open"),
-                            setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                            setFieldValue(landScheduleData?.adjoiningOthersLand === "Y" ? "Yes" : landScheduleData?.adjoiningOthersLand === "N" ? "No" : null);
                         }}
                       ></ReportProblemIcon>
                     </div>
@@ -2455,14 +2536,14 @@ const Developerinfo = (props) => {
                           <ReportProblemIcon
                             style={{
                               display: hideRemarks ? "none" : "block",
-                              color: fieldIconColors.ordersUpload
+                              color: fieldIconColors.landOwnerDonated
                             }}
                             onClick={() => {
-                              setLabelValue("Orders Upload"),
-                                setOpennedModal("ordersUpload")
+                              setLabelValue("(e1)  whether the land-owner of the adjoining land has donated at least 4 karam wide strip of land to the Gram Panchayat/Municipality, in a manner that the applied site gets connected to existing public rasta of atleast 4 karam width?"),
+                                setOpennedModal("landOwnerDonated")
                               setSmShow(true),
                                 console.log("modal open"),
-                                setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                                setFieldValue(landScheduleData?.landOwnerDonated === "Y" ? "Yes" : landScheduleData?.landOwnerDonated === "N" ? "No" : null);
                             }}
                           ></ReportProblemIcon>
                         </div>
@@ -2519,7 +2600,7 @@ const Developerinfo = (props) => {
                               setOpennedModal("ordersUpload")
                             setSmShow(true),
                               console.log("modal open"),
-                              setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
+                              setFieldValue(landScheduleData?.approachFromProposedSector === "Y" ? "Yes" : landScheduleData?.approachFromProposedSector === "N" ? "No" : null);
                           }}
                         ></ReportProblemIcon>
                       </div>
@@ -3272,7 +3353,7 @@ const Developerinfo = (props) => {
                         setOpennedModal("anyMarginalLand")
                       setSmShow(true),
                         console.log("modal open"),
-                        setFieldValue(landScheduleData?.land === "Y" ? "Yes" : landScheduleData?.land === "N" ? "No" : null);
+                        setFieldValue(landScheduleData?.utilityLine === "Y" ? "Yes" : landScheduleData?.utilityLine === "N" ? "No" : null);
                     }}
                   ></ReportProblemIcon>
                 </div>

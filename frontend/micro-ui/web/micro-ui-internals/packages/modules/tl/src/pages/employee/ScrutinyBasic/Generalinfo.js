@@ -243,7 +243,6 @@ const Genarelinfo = (props) => {
     district: Colors.info,
     developmentPlan : Colors.info,
     state: Colors.info,
-
     tehsil: Colors.info,
     revenue: Colors.info,
     rectangle: Colors.info,
@@ -251,6 +250,8 @@ const Genarelinfo = (props) => {
     rectaNo: Colors.info,
     killa: Colors.info,
     landOwner: Colors.info,
+    typeLand: Colors.info,
+    isChange: Colors.info,
     consolidationType: Colors.info,
     kanal: Colors.info,
     marla: Colors.info,
@@ -268,9 +269,19 @@ const Genarelinfo = (props) => {
     registeringAuthority : Colors.info,
     hadbastNo : Colors.info,
     sector : Colors.info,
+    editRectangleNo : Colors.info,
+    editKhewats : Colors.info,
+    landOwnerRegistry :Colors.info,
+    collaboration : Colors.info,
+    agreementValidFrom : Colors.info,
+    authSignature :Colors.info,
+    nameAuthSign : Colors.info,
+    registeringAuthorityDoc : Colors.info,
+
+
   })
 
-  const fieldIdList = [{ label: "Purpose Of License", key: "purpose" }, { label: "District", key: "district" }, { label: "State", key: "state" },{ label: "Development Plan", key: "developmentPlan" }, { label: "Potential Zone", key: "potential" },{ label: "Sector", key: "sector" }, { label: "Tehsil", key: "tehsil" }, { label: "Revenue estate", key: "revenue" }, { label: "Rectangle No", key: "rectangleNo" }, { label: "Killa", key: "killa" }, { label: "Land Owner", key: "landOwner" }, { label: "Consolidation Type", key: "consolidationType" }, { label: "Kanal", key: "kanal" }, { label: "Marla", key: "marla" }, { label: "Sarsai", key: "sarsai" }, { label: "Bigha", key: "bigha" }, { label: "Biswa", key: "biswa" }, { label: "Biswansi", key: "biswansi" }, { label: "Collaboration Agreement", key: "collabrationAgreement" }, { label: "Developer Company", key: "developerCompany" }, { label: "Date of Registering", key: "dateOfRegistering" }, { label: "Date of Validity", key: "dateOfValidity" }, { label: "Collaboration Agreement Irrevociable", key: "agreementIrrevocialble" }, { label: "Name of Authorized Signatory Developer", key: "nameOfAuthSignatory" }, { label: "Name of Authorized Signatory Developer", key: "nameOfAuthSignatoryDeveloper" }, { label: "Registering Authority", key: "registeringAuthority" }, { label: "Hadbast Number", key: "hadbastNo" } ];
+  const fieldIdList = [{ label: "Purpose Of License", key: "purpose" }, { label: "District", key: "district" }, { label: "State", key: "state" },{ label: "Development Plan", key: "developmentPlan" }, { label: "Potential Zone", key: "potential" },{ label: "Sector", key: "sector" }, { label: "Tehsil", key: "tehsil" }, { label: "Revenue estate", key: "revenue" }, { label: "Rectangle No", key: "rectangleNo" }, { label: "Killa", key: "killa" }, { label: "Land Owner", key: "landOwner" }, { label: "Consolidation Type", key: "consolidationType" },  { label: "Type of land", key: "typeLand" }, { label: "Rectangle No./Mustil(Changed)", key: "editRectangleNo" },  { label: "khewats No(Changed)", key: "editKhewats" },  { label: "Name of the Land Ower as per Mutation/Jamabandi", key: "landOwnerRegistry" }, { label: "Whether Khasra been developed in collaboration", key: "collaboration" }, { label: "change in information", key: "isChange" },{ label: "Kanal", key: "kanal" }, { label: "Marla", key: "marla" }, { label: "Sarsai", key: "sarsai" }, { label: "Bigha", key: "bigha" }, { label: "Biswa", key: "biswa" }, { label: "Biswansi", key: "biswansi" }, { label: "Collaboration Agreement", key: "collabrationAgreement" }, { label: "Name of the developer company", key: "developerCompany" }, { label: "Date of registering collaboration agreement", key: "agreementValidFrom" },{ label: "Date of Registering", key: "dateOfRegistering" }, { label: "Name of authorized signatory on behalf of land owner(s)", key: "authSignature" },{ label: "Name of authorized signatory on behalf of developer", key: "nameAuthSign" }, { label: "Date of Validity", key: "dateOfValidity" }, { label: "Registering Authority document", key: "registeringAuthorityDoc" }, { label: "Collaboration Agreement Irrevociable", key: "agreementIrrevocialble" }, { label: "Name of Authorized Signatory Developer", key: "nameOfAuthSignatory" }, { label: "Name of Authorized Signatory Developer", key: "nameOfAuthSignatoryDeveloper" }, { label: "Registering Authority", key: "registeringAuthority" }, { label: "Hadbast Number", key: "hadbastNo" } ];
 
 
   const getColorofFieldIcon = () => {
@@ -637,11 +648,15 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
                       Biswansi 
                     </th>
-<th class="fw-normal pb-0 border-bottom-0 align-top">
+                  <th class="fw-normal pb-0 border-bottom-0 align-top">
                     Total Area
                     </th> 
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                    Action Remarks 
+                    </th>
+                     
  </tr>
-                  <tr className="border-top-0">
+                  {/* <tr className="border-top-0">
                     <th class="fw-normal py-0 border-top-0">
                        <ReportProblemIcon
                       style={{
@@ -654,7 +669,8 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                         setOpennedModal("district")
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.district : null);
+                          // setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.district : null);
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.district : null);
                       }}
                     ></ReportProblemIcon></th>
                     <th class="fw-normal py-0 border-top-0">
@@ -669,8 +685,9 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                         setOpennedModal("developmentPlan")
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.district : null);
-                      }}
+                          // setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.district : null);
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.developmentPlan : null);
+                        }}
                     ></ReportProblemIcon></th>
                   <th class="fw-normal py-0 border-top-0">
                     <ReportProblemIcon
@@ -684,7 +701,8 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       setOpennedModal("potential")
                         setSmShow(true),
                         console.log("modal open"),
-                        setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.potential : null);
+                        // setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.potential : null);
+                        setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.potential : null);
                     }}
                   ></ReportProblemIcon>
                     </th>
@@ -700,7 +718,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           setOpennedModal("sector")
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.tehsil : null);
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.sector : null);
                         }}
                       ></ReportProblemIcon>
                     </th>
@@ -803,14 +821,14 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           // display: hideRemarks?"none":"block",
                           // display: hideRemarksPatwari?"none":"block",
                           display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                          color: fieldIconColors.tehsil
+                          color: fieldIconColors.typeLand
                         }}
                         onClick={() => {
-                          setLabelValue("Tehsil"),
-                          setOpennedModal("tehsil")
+                          setLabelValue("Type of land"),
+                          setOpennedModal("typeLand")
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.tehsil : null);
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.typeLand : null);
                         }}
                       ></ReportProblemIcon>
                     </th>
@@ -820,47 +838,32 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           // display: hideRemarks?"none":"block",
                           // display: hideRemarksPatwari?"none":"block",
                           display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                          color: fieldIconColors.tehsil
+                          color: fieldIconColors.isChange
                         }}
                         onClick={() => {
-                          setLabelValue("Tehsil"),
-                          setOpennedModal("tehsil")
+                          setLabelValue("change in information"),
+                          setOpennedModal("isChange")
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.tehsil : null);
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.isChange : null);
                         }}
                       ></ReportProblemIcon>
                     </th>
-                    <th class="fw-normal py-0 border-top-0">
-                      <ReportProblemIcon
-                        style={{
-                          
-                          display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                          color: fieldIconColors.tehsil
-                        }}
-                        onClick={() => {
-                          setLabelValue("Tehsil"),
-                          setOpennedModal("tehsil")
-                          setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.tehsil : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
+                    
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
                           // display: hideRemarks?"none":"block",
                           // display: hideRemarksPatwari?"none":"block",
                           display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                          color: fieldIconColors.tehsil
+                          color: fieldIconColors.editRectangleNo
                         }}
                         onClick={() => {
-                          setLabelValue("Tehsil"),
-                          setOpennedModal("tehsil")
+                          setLabelValue("Rectangle No./Mustil(Changed)"),
+                          setOpennedModal("editRectangleNo")
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.tehsil : null);
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.editRectangleNo : null);
                         }}
                       ></ReportProblemIcon>
                     </th>
@@ -872,19 +875,52 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       <ReportProblemIcon
                         style={{
                           display: hideRemarks || hideRemarksJE ?"none":"block",
-                          color: fieldIconColors.collabrationAgreement
+                          color: fieldIconColors.editKhewats
                         }}
                         onClick={() => {
-                          setLabelValue("Collabration Agreement"),
-                          setOpennedModal("collabrationAgreement")
+                          setLabelValue("khewats No(Changed)"),
+                          setOpennedModal("editKhewats")
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.editKhewats : null);
+                        }}
+                      ></ReportProblemIcon>
+                    </th>
+
+                    <th class="fw-normal py-0 border-top-0">
+                      <ReportProblemIcon
+                        style={{
+                          
+                          display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                          color: fieldIconColors.landOwnerRegistry
+                        }}
+                        onClick={() => {
+                          setLabelValue("Name of the Land Ower as per Mutation/Jamabandi"),
+                          setOpennedModal("landOwnerRegistry")
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.landOwnerRegistry : null);
+                        }}
+                      ></ReportProblemIcon>
+                    </th>
+                    
+                    
+                    <th class="fw-normal py-0 border-top-0">
+                      {" "}
+                      <ReportProblemIcon
+                        style={{
+                          display: hideRemarks || hideRemarksJE ?"none":"block",
+                          color: fieldIconColors.collaboration
+                        }}
+                        onClick={() => {
+                          setLabelValue("Whether Khasra been developed in collaboration"),
+                          setOpennedModal("collaboration")
                           setSmShow(true),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.collaboration : null);
                         }}
                       ></ReportProblemIcon>
                     </th>
-                    
-                    
                     <th class="fw-normal py-0 border-top-0">
                       {" "}
                       <ReportProblemIcon
@@ -893,7 +929,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           color: fieldIconColors.developerCompany
                         }}
                         onClick={() => {
-                          setLabelValue("Developer Company"),
+                          setLabelValue("Name of the developer company"),
                           setOpennedModal("developerCompany")
                           setSmShow(true),
                           console.log("modal open"),
@@ -906,30 +942,14 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       <ReportProblemIcon
                         style={{
                           display: hideRemarks || hideRemarksJE ?"none":"block",
-                          color: fieldIconColors.dateOfRegistering
+                          color: fieldIconColors.agreementValidFrom
                         }}
                         onClick={() => {
-                          setLabelValue("Date of Registering"),
-                          setOpennedModal("dateOfRegistering")
+                          setLabelValue("Date of registering collaboration agreement"),
+                          setOpennedModal("agreementValidFrom")
                           setSmShow(true),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.agreementValidFrom : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                      {" "}
-                      <ReportProblemIcon
-                        style={{
-                          display: hideRemarks || hideRemarksJE ?"none":"block",
-                          color: fieldIconColors.dateOfValidity
-                        }}
-                        onClick={() => {
-                          setLabelValue("Date of Validity"),
-                          setOpennedModal("dateOfValidity")
-                          setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.validitydate : null);
                         }}
                       ></ReportProblemIcon>
                     </th>
@@ -954,14 +974,14 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       <ReportProblemIcon
                         style={{
                           display: hideRemarks || hideRemarksJE ?"none":"block",
-                          color: fieldIconColors.nameOfAuthSignatory
+                          color: fieldIconColors.authSignature
                         }}
                         onClick={() => {
-                          setLabelValue("Name of Authorized Signatory"),
-                          setOpennedModal("nameOfAuthSignatory")
+                          setLabelValue("Name of authorized signatory on behalf of land owner(s)"),
+                          setOpennedModal("authSignature")
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.nameAuthSign : null);
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.authSignature : null);
                         }}
                       ></ReportProblemIcon>
                     </th>
@@ -970,11 +990,11 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       <ReportProblemIcon
                         style={{
                           display: hideRemarks || hideRemarksJE ?"none":"block",
-                          color: fieldIconColors.nameOfAuthSignatoryDeveloper
+                          color: fieldIconColors.nameAuthSign
                         }}
                         onClick={() => {
-                          setLabelValue("Name of Authorized Signatory Developer"),
-                          setOpennedModal("nameOfAuthSignatoryDeveloper")
+                          setLabelValue("Name of authorized signatory on behalf of developer"),
+                          setOpennedModal("nameAuthSign")
                           setSmShow(true),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.nameAuthSign : null);
@@ -1003,14 +1023,14 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           // display: hideRemarks?"none":"block",
                           // display: hideRemarksPatwari?"none":"block",
                           display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                          color: fieldIconColors.tehsil
+                          color: fieldIconColors.registeringAuthorityDoc
                         }}
                         onClick={() => {
-                          setLabelValue("Tehsil"),
-                          setOpennedModal("tehsil")
+                          setLabelValue("Registering Authority document"),
+                          setOpennedModal("registeringAuthorityDoc")
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.tehsil : null);
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.registeringAuthorityDoc : null);
                         }}
                       ></ReportProblemIcon>
                     </th>
@@ -1120,7 +1140,8 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.biswansi : null);
                         }}
                       ></ReportProblemIcon>
-                    </th>
+                    </th> 
+                    
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
@@ -1129,15 +1150,15 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                           color: fieldIconColors.tehsil
                         }}
                         onClick={() => {
-                          setLabelValue("Tehsil"),
-                          setOpennedModal("tehsil")
+                          setLabelValue("tehsil"),
+                          setOpennedModal("ConsolidatedTotal")
                           setSmShow(true),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.tehsil : null);
                         }}
                       ></ReportProblemIcon>
                     </th>
-                  </tr>
+                  </tr> */}
                 </thead>
                 <tbody>
                 {
@@ -1178,10 +1199,10 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       <input type="text" className="form-control" title={item?.typeLand} placeholder={item?.typeLand} disabled />
                     </td>
                     <td class="text-center">
-                      <input type="text" className="form-control" title={item?.isChange} placeholder={item?.isChange} disabled />
+                      <input type="text" className="form-control" title={item?.isChange} placeholder="N/A"  value={item?.isChange} disabled />
                     </td>
                     <td class="text-center">
-                      <input type="text" className="form-control" title={item?.editRectangleNo} placeholder={item?.editRectangleNo} disabled />
+                      <input type="text" className="form-control" title={item?.editRectangleNo} placeholder="N/A" value={item?.editRectangleNo} disabled />
                     </td>
                     <td class="text-center">
                       <input type="text" className="form-control" title={item?.editKhewats} placeholder={item?.editKhewats} disabled />
@@ -1255,6 +1276,25 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
                       <input type="text" className="form-control" title={item?.consolidatedTotal} placeholder={item?.consolidatedTotal} disabled />
                     </td>
                      }
+                     <td  class="text-center">
+                     {/* <th class="fw-normal py-0 border-top-0"> */}
+                       <ReportProblemIcon
+                      style={{
+                        display: hideRemarks || hideRemarksPatwari ?"none":"block",
+
+                        color: fieldIconColors.district
+                      }}
+                      onClick={() => {
+                        setLabelValue("Land schedule Table"),
+                        setOpennedModal("district")
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.district : null);
+                          // setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails : null);
+                      }}
+                    ></ReportProblemIcon>
+                    {/* </th> */}
+                     </td>
   </tr>
                     ))
                   }
