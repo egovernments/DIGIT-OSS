@@ -58,6 +58,7 @@ import RadioButtons from "./atoms/RadioButtons";
 import Rating from "./atoms/Rating";
 import RoundedLabel from "./atoms/RoundedLabel";
 import SectionalDropdown from "./atoms/SectionalDropdown";
+import MuiRadio from "./atoms/MuiRadio";
 
 import { LastRow, MediaRow, Row, StatusTable } from "./atoms/StatusTable";
 import SubmitBar from "./atoms/SubmitBar";
@@ -265,6 +266,7 @@ export {
   ActionLinks,
   PrivateRoute,
   SectionalDropdown,
+  MuiRadio,
   RoundedLabel,
   LabelFieldPair,
   BreadCrumb,
