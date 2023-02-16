@@ -7,7 +7,7 @@ const BackButton = ({ history, style, isSuccessScreen, isCommonPTPropertyScreen,
   const { t } = useTranslation();
 
   return (
-    <div className={`back-btn2 ${className}`} style={style ? style : {}} onClick={() => {!isSuccessScreen ?( !isCommonPTPropertyScreen ? history.goBack() : history.go(getBackPageNumber()) ): null}}>
+    <div className={`back-btn2 ${className}`} style={style ? style : {}} onClick={() => {!isSuccessScreen ?( !isCommonPTPropertyScreen ?  (history.goBack(), window.location.href.includes("/citizen/pt/property/new-application/property-type") ? sessionStorage.setItem("docReqScreenByBack",true) : null) : history.go(getBackPageNumber()) ): null}}>
      {variant=="black"?( <React.Fragment><ArrowLeft />
       <p>{t("CS_COMMON_BACK")}</p></React.Fragment>):<ArrowLeftWhite />}
     </div>

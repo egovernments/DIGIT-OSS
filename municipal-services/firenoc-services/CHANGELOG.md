@@ -3,7 +3,12 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
-## 1.3.2 - 2022-01-13
+## 1.3.2 - 2023-02-01
+
+- Transition from 1.3.2-beta version to 1.3.2 version
+- Modify citizen search to incorporate a bypass for searching with application uuid instead of user uuid
+
+## 1.3.2-beta - 2022-01-13
 
 - Updated to log4j2 version 2.17.1
 

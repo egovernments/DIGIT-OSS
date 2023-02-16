@@ -20,6 +20,12 @@
     margin: 0 !important;
     border-radius: none !important;
   }
+
+  #custom-atoms-singleBuildingContainer label + div,
+  #custom-atoms-multipleBuildingContainer label + div {
+    margin-top: 35px;
+  }
+  
 }
 .applicant-details-error{p{
   font-size: 14px;

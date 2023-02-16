@@ -1,13 +1,20 @@
 import React, { useState } from "react";
 import {
     FormStep,
-    RadioOrSelect
+    RadioOrSelect,
+    CardLabel,
+    TextInput,
+    MobileNumber,
 } from "@egovernments/digit-ui-react-components";
 import Timeline from "../components/Timeline";
 
-const WSPlumberPreference = ({ t, config, onSelect, formData }) => {
+const WSPlumberPreference = ({ t, config, onSelect, userType, formData }) => {
 
-    const [plumberPreference, setPlumberPreference] = useState(formData?.plumberPreference || "");
+    const [plumberPreference, setPlumberPreference] = useState(formData?.plumberPreference?.plumberPreference || {
+        i18nKey: "WS_I_WOULD_PREFER_FROM_MUNICIPAL_OFFICE",
+        code: "ULB"
+    });
+    let validation = {}
 
     const plumberPreferenceList = [
         {
@@ -26,15 +33,20 @@ const WSPlumberPreference = ({ t, config, onSelect, formData }) => {
         setPlumberPreference(value);
     }
 
+
     const onSkip = () => onSelect();
 
     const handleSubmit = () => {
-        onSelect(config.key, plumberPreference);
+        let plumberDetails = {
+            plumberPreference : plumberPreference,
+            
+        }
+        onSelect(config.key, plumberDetails);
     };
 
     return (
         <div>
-            <Timeline currentStep={2} />
+            {userType === "citizen" && (<Timeline currentStep={2} />)}
             <FormStep
                 t={t}
                 config={config}
@@ -50,6 +62,8 @@ const WSPlumberPreference = ({ t, config, onSelect, formData }) => {
                     optionKey="i18nKey"
                     onSelect={onPlumberPreferenceSelect}
                     t={t}
+                    innerStyles={{display:"flex"}}
+                    inputStyle={{marginTop:"10px"}}
                 />
             </FormStep>
         </div>

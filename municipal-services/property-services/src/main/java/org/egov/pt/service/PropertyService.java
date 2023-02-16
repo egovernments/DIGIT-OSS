@@ -21,10 +21,12 @@ import org.egov.pt.models.enums.Status;
 import org.egov.pt.models.user.UserDetailResponse;
 import org.egov.pt.models.user.UserSearchRequest;
 import org.egov.pt.models.workflow.State;
-import org.egov.pt.producer.Producer;
+import org.egov.pt.producer.PropertyProducer;
 import org.egov.pt.repository.PropertyRepository;
+import org.egov.pt.util.EncryptionDecryptionUtil;
 import org.egov.pt.util.PTConstants;
 import org.egov.pt.util.PropertyUtil;
+import org.egov.pt.util.UnmaskingUtil;
 import org.egov.pt.validator.PropertyValidator;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.tracer.model.CustomException;
@@ -36,11 +38,17 @@ import org.springframework.util.StringUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class PropertyService {
+	
+	@Autowired
+	private UnmaskingUtil unmaskingUtil;
 
 	@Autowired
-	private Producer producer;
+	private PropertyProducer producer;
 	
 	@Autowired
 	private NotificationService notifService;
@@ -75,7 +83,8 @@ public class PropertyService {
 	@Autowired
 	private FuzzySearchService fuzzySearchService;
 
-
+	@Autowired
+	EncryptionDecryptionUtil encryptionDecryptionUtil;
 
 	/**
 	 * Enriches the Request and pushes to the Queue
@@ -97,15 +106,26 @@ public class PropertyService {
 			request.getProperty().setStatus(Status.ACTIVE);
 		}
 
-		producer.push(config.getSavePropertyTopic(), request);
+		/* Fix this.
+		 * For FUZZY-search, This code to be un-commented when privacy is enabled
+		 
+		//Push PLAIN data to fuzzy search index
+		producer.push(config.getSavePropertyFuzzyTopic(), request);
+		*
+		*/
+		//Push data after encryption
+		producer.pushAfterEncrytpion(config.getSavePropertyTopic(), request);
 		request.getProperty().setWorkflow(null);
-		return request.getProperty();
+
+		/* decrypt here */
+		return encryptionDecryptionUtil.decryptObject(request.getProperty(), PTConstants.PROPERTY_MODEL, Property.class, request.getRequestInfo());
+		//return request.getProperty();
 	}
 
 	/**
 	 * Updates the property
 	 *
-	 * handles multiple processes 
+	 * handles multiple processes
 	 *
 	 * Update
 	 *
@@ -115,13 +135,14 @@ public class PropertyService {
 	 * @return List of updated properties
 	 */
 	public Property updateProperty(PropertyRequest request) {
-
-		Property propertyFromSearch = propertyValidator.validateCommonUpdateInformation(request);
+		
+		Property propertyFromSearch = unmaskingUtil.getPropertyUnmasked(request);
+		propertyValidator.validateCommonUpdateInformation(request, propertyFromSearch);
 
 		boolean isRequestForOwnerMutation = CreationReason.MUTATION.equals(request.getProperty().getCreationReason());
 		
 		boolean isNumberDifferent = checkIsRequestForMobileNumberUpdate(request, propertyFromSearch);
-		
+
 		if (isRequestForOwnerMutation)
 			processOwnerMutation(request, propertyFromSearch);
 		else if(isNumberDifferent)
@@ -131,7 +152,22 @@ public class PropertyService {
 			processPropertyUpdate(request, propertyFromSearch);
 
 		request.getProperty().setWorkflow(null);
-		return request.getProperty();
+
+		//Push PLAIN data to fuzzy search index
+		PropertyRequest fuzzyPropertyRequest = new PropertyRequest(request.getRequestInfo(),request.getProperty());
+		fuzzyPropertyRequest.setProperty(encryptionDecryptionUtil.decryptObject(request.getProperty(), PTConstants.PROPERTY_DECRYPT_MODEL,
+				Property.class, request.getRequestInfo()));
+
+		/* Fix this.
+		 * For FUZZY-search, This code to be un-commented when privacy is enabled
+		 
+		//Push PLAIN data to fuzzy search index
+		producer.push(config.getSavePropertyFuzzyTopic(), fuzzyPropertyRequest);
+		*
+		*/
+
+		/* decrypt here */
+		return encryptionDecryptionUtil.decryptObject(request.getProperty(), PTConstants.PROPERTY_MODEL, Property.class, request.getRequestInfo());
 	}
 	
 	/*
@@ -174,7 +210,7 @@ public class PropertyService {
 				
 				enrichmentService.enrichUpdateRequest(request, propertyFromSearch);
 				util.mergeAdditionalDetails(request, propertyFromSearch);
-				producer.push(config.getUpdatePropertyTopic(), request);		
+				producer.pushAfterEncrytpion(config.getUpdatePropertyTopic(), request);		
 	}
 
 	/**
@@ -215,9 +251,9 @@ public class PropertyService {
 					&& !propertyFromSearch.getStatus().equals(Status.INWORKFLOW)) {
 
 				propertyFromSearch.setStatus(Status.INACTIVE);
-				producer.push(config.getUpdatePropertyTopic(), OldPropertyRequest);
+				producer.pushAfterEncrytpion(config.getUpdatePropertyTopic(), OldPropertyRequest);
 				util.saveOldUuidToRequest(request, propertyFromSearch.getId());
-				producer.push(config.getSavePropertyTopic(), request);
+				producer.pushAfterEncrytpion(config.getSavePropertyTopic(), request);
 
 			} else if (state.getIsTerminateState()
 					&& !state.getApplicationStatus().equalsIgnoreCase(Status.ACTIVE.toString())) {
@@ -227,7 +263,7 @@ public class PropertyService {
 				/*
 				 * If property is In Workflow then continue
 				 */
-				producer.push(config.getUpdatePropertyTopic(), request);
+				producer.pushAfterEncrytpion(config.getUpdatePropertyTopic(), request);
 			}
 
 		} else {
@@ -235,7 +271,7 @@ public class PropertyService {
 			/*
 			 * If no workflow then update property directly with mutation information
 			 */
-			producer.push(config.getUpdatePropertyTopic(), request);
+			producer.pushAfterEncrytpion(config.getUpdatePropertyTopic(), request);
 		}
 	}
 	
@@ -292,11 +328,11 @@ public class PropertyService {
 					&& !propertyFromSearch.getStatus().equals(Status.INWORKFLOW)) {
 
 				propertyFromSearch.setStatus(Status.INACTIVE);
-				producer.push(config.getUpdatePropertyTopic(), oldPropertyRequest);
+				producer.pushAfterEncrytpion(config.getUpdatePropertyTopic(), oldPropertyRequest);
 
 				util.saveOldUuidToRequest(request, propertyFromSearch.getId());
 				/* save new record */
-				producer.push(config.getSavePropertyTopic(), request);
+				producer.pushAfterEncrytpion(config.getSavePropertyTopic(), request);
 
 			} else if (state.getIsTerminateState()
 					&& !state.getApplicationStatus().equalsIgnoreCase(Status.ACTIVE.toString())) {
@@ -306,7 +342,7 @@ public class PropertyService {
 				/*
 				 * If property is In Workflow then continue
 				 */
-				producer.push(config.getUpdatePropertyTopic(), request);
+				producer.pushAfterEncrytpion(config.getUpdatePropertyTopic(), request);
 			}
 
 		} else {
@@ -314,14 +350,14 @@ public class PropertyService {
 			/*
 			 * If no workflow then update property directly with mutation information
 			 */
-			producer.push(config.getUpdatePropertyTopic(), request);
+			producer.pushAfterEncrytpion(config.getUpdatePropertyTopic(), request);
 		}
 	}
 
 	private void terminateWorkflowAndReInstatePreviousRecord(PropertyRequest request, Property propertyFromSearch) {
 
 		/* current record being rejected */
-		producer.push(config.getUpdatePropertyTopic(), request);
+		producer.pushAfterEncrytpion(config.getUpdatePropertyTopic(), request);
 
 		/* Previous record set to ACTIVE */
 		@SuppressWarnings("unchecked")
@@ -333,14 +369,16 @@ public class PropertyService {
 		if(StringUtils.isEmpty(propertyUuId))
 			return;
 
-		PropertyCriteria criteria = PropertyCriteria.builder().uuids(Sets.newHashSet(propertyUuId))
+		PropertyCriteria criteria = PropertyCriteria.builder()
+				.uuids(Sets.newHashSet(propertyUuId))
+				.isSearchInternal(true)
 				.tenantId(propertyFromSearch.getTenantId()).build();
 		Property previousPropertyToBeReInstated = searchProperty(criteria, request.getRequestInfo()).get(0);
 		previousPropertyToBeReInstated.setAuditDetails(util.getAuditDetails(request.getRequestInfo().getUserInfo().getUuid().toString(), true));
 		previousPropertyToBeReInstated.setStatus(Status.ACTIVE);
 		request.setProperty(previousPropertyToBeReInstated);
 
-		producer.push(config.getUpdatePropertyTopic(), request);
+		producer.pushAfterEncrytpion(config.getUpdatePropertyTopic(), request);
 	}
 
 	/**
@@ -352,6 +390,9 @@ public class PropertyService {
 	public List<Property> searchProperty(PropertyCriteria criteria, RequestInfo requestInfo) {
 
 		List<Property> properties;
+		/* encrypt here */
+		if(!criteria.getIsRequestForOldDataEncryption())
+			criteria = encryptionDecryptionUtil.encryptObject(criteria, PTConstants.PROPERTY_MODEL, PropertyCriteria.class);
 
 		/*
 		 * throw error if audit request is with no proeprty id or multiple propertyids
@@ -362,27 +403,33 @@ public class PropertyService {
 			throw new CustomException("EG_PT_PROPERTY_AUDIT_ERROR", "Audit can only be provided for a single propertyId");
 		}
 
-		if(criteria.getDoorNo()!=null || criteria.getName()!=null || criteria.getOldPropertyId()!=null){
-			return fuzzySearchService.getProperties(requestInfo, criteria);
-		}
-
-		if (criteria.getMobileNumber() != null || criteria.getName() != null || criteria.getOwnerIds() != null) {
-
-			/* converts owner information to associated property ids */
-			Boolean shouldReturnEmptyList = repository.enrichCriteriaFromUser(criteria, requestInfo);
-
-			if (shouldReturnEmptyList)
-				return Collections.emptyList();
-
-			properties = repository.getPropertiesWithOwnerInfo(criteria, requestInfo, false);
-			filterPropertiesForUser(properties, criteria.getOwnerIds());
+		if (criteria.getDoorNo() != null || criteria.getName() != null || criteria.getOldPropertyId() != null) {
+			properties = fuzzySearchService.getProperties(requestInfo, criteria);
 		} else {
-			properties = repository.getPropertiesWithOwnerInfo(criteria, requestInfo, false);
+			if (criteria.getMobileNumber() != null || criteria.getName() != null || criteria.getOwnerIds() != null) {
+
+				/* converts owner information to associated property ids */
+				Boolean shouldReturnEmptyList = repository.enrichCriteriaFromUser(criteria, requestInfo);
+
+				if (shouldReturnEmptyList)
+					return Collections.emptyList();
+
+				properties = repository.getPropertiesWithOwnerInfo(criteria, requestInfo, false);
+				filterPropertiesForUser(properties, criteria.getOwnerIds());
+			} else {
+				properties = repository.getPropertiesWithOwnerInfo(criteria, requestInfo, false);
+			}
+
+			properties.forEach(property -> {
+				enrichmentService.enrichBoundary(property, requestInfo);
+			});
 		}
 
-		properties.forEach(property -> {
-			enrichmentService.enrichBoundary(property, requestInfo);
-		});
+		/* Decrypt here */
+		 if(criteria.getIsSearchInternal())
+			return encryptionDecryptionUtil.decryptObject(properties, PTConstants.PROPERTY_DECRYPT_MODEL, Property.class, requestInfo);
+		else if(!criteria.getIsRequestForOldDataEncryption())
+			return encryptionDecryptionUtil.decryptObject(properties, PTConstants.PROPERTY_MODEL, Property.class, requestInfo);
 
 		return properties;
 	}
@@ -431,7 +478,10 @@ public class PropertyService {
 			if (criteria.getPropertyIds() != null)
 				propertyCriteria.setPropertyIds(criteria.getPropertyIds());
 
-		} else {
+		} else if(criteria.getIsRequestForOldDataEncryption()){
+			propertyCriteria.setTenantIds(criteria.getTenantIds());
+		}
+		else {
 			List<String> uuids = repository.fetchIds(criteria, true);
 			if (uuids.isEmpty())
 				return Collections.emptyList();
@@ -453,7 +503,8 @@ public class PropertyService {
 
 	public Property addAlternateNumber(PropertyRequest request) {
 		
-		Property propertyFromSearch = propertyValidator.validateAlternateMobileNumberInformation(request);
+		Property propertyFromSearch = unmaskingUtil.getPropertyUnmasked(request);
+		propertyValidator.validateAlternateMobileNumberInformation(request, propertyFromSearch);
 		userService.createUserForAlternateNumber(request);
 		
 		request.getProperty().setAlternateUpdated(true);		
@@ -476,10 +527,9 @@ public class PropertyService {
 		//enrichmentService.enrichUpdateRequest(request, propertyFromSearch);
 		util.mergeAdditionalDetails(request, propertyFromSearch);
 		
-		producer.push(config.getUpdatePropertyTopic(), request);
+		producer.pushAfterEncrytpion(config.getUpdatePropertyTopic(), request);
 		
 		request.getProperty().setWorkflow(null);
-		
 		
 		return request.getProperty();
 	}
@@ -489,5 +539,5 @@ public class PropertyService {
         Integer count = repository.getCount(propertyCriteria, requestInfo);
         return count;
 	}
-	
+
 }

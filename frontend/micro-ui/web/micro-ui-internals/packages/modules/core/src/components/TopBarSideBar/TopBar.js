@@ -6,7 +6,7 @@ import ChangeLanguage from "../ChangeLanguage";
 
 const TextToImg = (props) => (
   <span className="user-img-txt" onClick={props.toggleMenu} title={props.name}>
-    {props.name[0].toUpperCase()}
+    {props?.name?.[0]?.toUpperCase()}
   </span>
 );
 const TopBar = ({
@@ -23,6 +23,7 @@ const TopBar = ({
   handleUserDropdownSelection,
   logoUrl,
   showLanguageChange = true,
+  setSideBarScrollTop,
 }) => {
   const [profilePic, setProfilePic] = React.useState(null);
 
@@ -63,6 +64,7 @@ const TopBar = ({
   const updateSidebar = () => {
     if (!Digit.clikOusideFired) {
       toggleSidebar(true);
+      setSideBarScrollTop(true);
     } else {
       Digit.clikOusideFired = false;
     }
@@ -79,19 +81,22 @@ const TopBar = ({
 
   if (CITIZEN) {
     return (
-      <TopBarComponent
-        img={stateInfo?.logoUrlWhite}
-        isMobile={true}
-        toggleSidebar={updateSidebar}
-        logoUrl={stateInfo?.logoUrlWhite}
-        onLogout={handleLogout}
-        userDetails={userDetails}
-        notificationCount={unreadNotificationCount < 99 ? unreadNotificationCount : 99}
-        notificationCountLoaded={notificationCountLoaded}
-        cityOfCitizenShownBesideLogo={t(CitizenHomePageTenantId)}
-        onNotificationIconClick={onNotificationIconClick}
-        hideNotificationIconOnSomeUrlsWhenNotLoggedIn={urlsToDisableNotificationIcon(pathname)}
-      />
+      <div>
+        <TopBarComponent
+          img={stateInfo?.logoUrlWhite}
+          isMobile={true}
+          toggleSidebar={updateSidebar}
+          logoUrl={stateInfo?.logoUrlWhite}
+          onLogout={handleLogout}
+          userDetails={userDetails}
+          notificationCount={unreadNotificationCount < 99 ? unreadNotificationCount : 99}
+          notificationCountLoaded={notificationCountLoaded}
+          cityOfCitizenShownBesideLogo={t(CitizenHomePageTenantId)}
+          onNotificationIconClick={onNotificationIconClick}
+          hideNotificationIconOnSomeUrlsWhenNotLoggedIn={urlsToDisableNotificationIcon(pathname)}
+          changeLanguage={!mobileView ? <ChangeLanguage dropdown={true} /> : null}
+        />
+      </div>
     );
   }
   const loggedin = userDetails?.access_token ? true : false;

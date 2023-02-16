@@ -1,5 +1,6 @@
 import { CardLabel, CitizenInfoLabel, FormStep, RadioOrSelect } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
+import Timeline from "../components/TLTimeline";
 
 const ProvideSubUsageTypeOfRentedArea = ({ t, config, onSelect, userType, formData }) => {
   //let index = window.location.href.charAt(window.location.href.length - 1);
@@ -119,6 +120,7 @@ const ProvideSubUsageTypeOfRentedArea = ({ t, config, onSelect, userType, formDa
   }
   return (
     <React.Fragment>
+          {window.location.href.includes("/citizen") ? <Timeline currentStep={1}/> : null}
       <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!SubUsageTypeOfRentedArea}>
         <CardLabel>{t("PT_SUB_USAGE_TYPE_LABEL")}</CardLabel>
         <div className={"form-pt-dropdown-only"}>

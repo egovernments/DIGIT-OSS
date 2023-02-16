@@ -84,6 +84,7 @@ import org.egov.receipt.consumer.model.VoucherSearchRequest;
 import org.egov.receipt.consumer.repository.ServiceRequestRepository;
 import org.egov.receipt.custom.exception.VoucherCustomException;
 import org.egov.reciept.consumer.config.PropertiesManager;
+import org.egov.tracer.model.CustomException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,7 +122,7 @@ public class VoucherServiceImpl implements VoucherService {
 	 * request.
 	 */
 	public VoucherResponse createReceiptVoucher(ReceiptReq receiptRequest, FinanceMdmsModel finSerMdms, String collectionVersion)
-			throws Exception {
+			throws CustomException {
 		Receipt receipt = receiptRequest.getReceipt().get(0);
 		String tenantId = receipt.getTenantId();
 //		final StringBuilder voucher_create_url = new StringBuilder(propertiesManager.getErpURLBytenantId(tenantId)
@@ -129,11 +130,19 @@ public class VoucherServiceImpl implements VoucherService {
 //		VoucherRequest voucherRequest = new VoucherRequest();
 		Voucher voucher = new Voucher();
 		voucher.setTenantId(tenantId);
-		this.setVoucherDetails(voucher, receipt, tenantId, receiptRequest.getRequestInfo(), finSerMdms, collectionVersion);
+		try {
+			this.setVoucherDetails(voucher, receipt, tenantId, receiptRequest.getRequestInfo(), finSerMdms, collectionVersion);
+		} catch (Exception e) {
+			throw new CustomException(e.toString(),e.toString());
+		}
 //		voucherRequest.setVouchers(Collections.singletonList(voucher));
 //		voucherRequest.setRequestInfo(receiptRequest.getRequestInfo());
 //		voucherRequest.setTenantId(tenantId);
-		return createVoucher(Collections.singletonList(voucher), receiptRequest.getRequestInfo(), tenantId);
+		try {
+			return createVoucher(Collections.singletonList(voucher), receiptRequest.getRequestInfo(), tenantId);
+		} catch (VoucherCustomException e) {
+			throw new CustomException(e.toString(),e.toString());
+		}
 //		return mapper.convertValue(serviceRequestRepository.fetchResult(voucher_create_url, voucherRequest, tenantId), VoucherResponse.class);
 	}
 	
@@ -153,12 +162,17 @@ public class VoucherServiceImpl implements VoucherService {
 	 * true or false in business mapping file.
 	 */
 	@Override
-	public boolean isVoucherCreationEnabled(Receipt receipt, RequestInfo req, FinanceMdmsModel finSerMdms) throws Exception {
+	public boolean isVoucherCreationEnabled(Receipt receipt, RequestInfo req, FinanceMdmsModel finSerMdms) throws CustomException {
 //		Receipt receipt = req.getReceipt().get(0);
 		String tenantId = receipt.getTenantId();
 		Bill bill = receipt.getBill().get(0);
 		String bsCode = bill.getBillDetails().get(0).getBusinessService();
-		List<BusinessService> serviceByCode = this.getBusinessServiceByCode(tenantId, bsCode, req, finSerMdms);
+		List<BusinessService> serviceByCode = null;
+		try {
+			serviceByCode = this.getBusinessServiceByCode(tenantId, bsCode, req, finSerMdms);
+		} catch (Exception e) {
+			throw new CustomException(e.toString(),e.toString());
+		}
 		return serviceByCode != null && !serviceByCode.isEmpty() ? serviceByCode.get(0).isVoucherCreationEnabled()
 				: false;
 	}
@@ -206,7 +220,7 @@ public class VoucherServiceImpl implements VoucherService {
 	 *             is mendatory to create the voucher.
 	 */
 	private void setVoucherDetails(Voucher voucher, Receipt receipt, String tenantId, RequestInfo requestInfo,
-			FinanceMdmsModel finSerMdms, String collectiobVersion) throws Exception {
+			FinanceMdmsModel finSerMdms, String collectiobVersion) throws CustomException, VoucherCustomException {
 		BillDetail billDetail = receipt.getBill().get(0).getBillDetails().get(0);
 		String receiptNumber = null;
 		String consumerCode = null;
@@ -421,9 +435,14 @@ public class VoucherServiceImpl implements VoucherService {
 	 *             business service code which is mapped in json file
 	 */
 	private List<BusinessService> getBusinessServiceByCode(String tenantId, String bsCode, RequestInfo requestInfo,
-			FinanceMdmsModel finSerMdms) throws Exception {
-		List<BusinessService> businessServices = microServiceUtil.getBusinessService(tenantId, bsCode,
-				requestInfo, finSerMdms);
+			FinanceMdmsModel finSerMdms) throws CustomException, VoucherCustomException {
+		List<BusinessService> businessServices = null;
+		try {
+			businessServices = microServiceUtil.getBusinessService(tenantId, bsCode,
+					requestInfo, finSerMdms);
+		} catch (VoucherCustomException e) {
+			throw new CustomException(e.toString(),e.toString());
+		}
 		if (businessServices.isEmpty()) {
 			throw new VoucherCustomException(ProcessStatus.FAILED, "Business service is not mapped with business code : " + bsCode);
 		}
@@ -442,9 +461,14 @@ public class VoucherServiceImpl implements VoucherService {
 	 *             mapped to business service code
 	 */
 	private List<TaxHeadMaster> getTaxHeadMasterByBusinessServiceCode(String tenantId, String bsCode,
-			RequestInfo requestInfo, FinanceMdmsModel finSerMdms) throws Exception {
-		List<TaxHeadMaster> taxHeadMasters = microServiceUtil.getTaxHeadMasters(tenantId, bsCode, requestInfo,
-				finSerMdms);
+			RequestInfo requestInfo, FinanceMdmsModel finSerMdms) throws CustomException {
+		List<TaxHeadMaster> taxHeadMasters = null;
+		try {
+			taxHeadMasters = microServiceUtil.getTaxHeadMasters(tenantId, bsCode, requestInfo,
+					finSerMdms);
+		} catch (VoucherCustomException e) {
+			throw new CustomException(e.toString(),e.toString());
+		}
 		return taxHeadMasters;
 	}
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FormStep, TextInput, LabelFieldPair, CardLabel } from "@egovernments/digit-ui-react-components";
+import { FormStep, TextInput, LabelFieldPair, CardLabel, WrapUnMaskComponent } from "@egovernments/digit-ui-react-components";
 import { useForm, Controller } from "react-hook-form";
 import _ from "lodash";
 import Timeline from "../components/TLTimelineInFSM";
@@ -9,7 +9,7 @@ const SelectStreet = ({ t, config, onSelect, userType, formData, formState, setE
 
   const [focusIndex, setFocusIndex] = useState({ index: -1, type: "" });
 
-  const { control, formState: localFormState, watch, setError: setLocalError, clearErrors: clearLocalErrors, setValue, trigger } = useForm();
+  const { control, formState: localFormState, watch, setError: setLocalError, clearErrors: clearLocalErrors, setValue, getValues, trigger } = useForm();
   const formValue = watch();
   const { errors } = localFormState;
   const checkLocation = window.location.href.includes("tl/new-application") || window.location.href.includes("tl/renew-application-details");
@@ -89,21 +89,35 @@ const SelectStreet = ({ t, config, onSelect, userType, formData, formState, setE
     }
   }, [formValue]);
 
+  useEffect(() => {
+    if(formData?.cpt?.details && window.location.href.includes("tl"))
+    {
+      inputs?.map((input) => {
+        if(getValues(input.name) !== formData?.cpt?.details?.address?.[input.name])
+        {
+          setValue(input.name,(formData?.cpt?.details?.address?.[input.name] === null || formData?.cpt?.details?.address?.[input.name] === "" ? (formData?.address?.[input.name] ? formData?.address?.[input.name] : "") : formData?.cpt?.details?.address?.[input.name]))
+        }
+      })
+    }
+    
+  },[formData?.cpt?.details])
+
   if (userType === "employee") {
     return inputs?.map((input, index) => {
       return (
         <LabelFieldPair key={index}>
           <CardLabel className="card-label-smaller">
-            {!checkLocation ? t(input.label) : `${t(input.label)}:`}
+            {t(input.label)}
             {config.isMandatory ? " * " : null}
           </CardLabel>
           <div className="field">
             <Controller
               control={control}
-              defaultValue={formData?.address?.[input.name]}
+              defaultValue={formData?.cpt?.details?.address?.[input.name] || formData?.address?.[input.name]}
               name={input.name}
               rules={{ validate: convertValidationToRules(input) }}
               render={(_props) => (
+                <div style={{display:"flex",alignItems:"baseline",marginRight: "unset"}}>
                 <TextInput
                   id={input.name}
                   key={input.name}
@@ -114,9 +128,34 @@ const SelectStreet = ({ t, config, onSelect, userType, formData, formState, setE
                   }}
                   onBlur={_props.onBlur}
                   // disable={isRenewal}
+                  disable={formData?.cpt?.details?.address?.[input.name] ? true : false}
                   autoFocus={focusIndex?.index == index}
                   {...input?.validation}
                 />
+                <div style={{marginRight:"-50px",marginLeft:"10px"}}>
+                    <WrapUnMaskComponent
+                      unmaskField={(e) => {
+                        _props.onChange(e);
+                      }}
+                      iseyevisible={(_props.value ? _props.value?.includes("*") :  formData?.cpt?.details?.address?.[input.name]?.includes("*")) ? true : false}
+                      privacy={{
+                          uuid: formData?.cpt?.details?.owners?.[0]?.uuid,
+                          fieldName: [input.name],
+                          model: "Property",
+                          loadData: {
+                              serviceName: "/property-services/property/_search",
+                              requestBody: {},
+                              requestParam: {
+                                  tenantId: formData?.cpt?.details?.tenantId,
+                                  propertyIds: formData?.cpt?.details?.propertyId,
+                                },
+                              jsonPath: `Properties[0].address.${input.name}`,
+                              isArray: false,
+                                    },
+                                }}>
+                      </WrapUnMaskComponent>
+                      </div>
+                    </div>
               )}
             />
           </div>

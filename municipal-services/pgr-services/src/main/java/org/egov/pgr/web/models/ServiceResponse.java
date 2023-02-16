@@ -30,6 +30,15 @@ public class ServiceResponse   {
 
         @JsonProperty("ServiceWrappers")
         private List<ServiceWrapper> serviceWrappers = null;
+        
+        @JsonProperty("complaintsResolved")
+        private int complaintsResolved;
+
+        @JsonProperty("averageResolutionTime")
+        private int averageResolutionTime;
+
+        @JsonProperty("complaintTypes")
+        private int complaintTypes;
 
 
 }

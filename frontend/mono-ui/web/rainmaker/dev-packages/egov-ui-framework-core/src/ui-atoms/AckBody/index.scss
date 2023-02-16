@@ -75,19 +75,24 @@
     padding-right: 16px;
     padding-bottom: 16px; }
     @media only screen and (max-width: 768px) {
+      .ack-header {
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+      }
       .ack-body {
         margin-left: 16px !important;
         width: fit-content !important;
-		flex: none !important;
-		max-width: 35%;
-    	overflow-wrap: break-word;
+		    flex: none !important;
+		    max-width: 100%;
+    	  overflow-wrap: break-word;
+        text-align: center !important;
 	 }
       .ack-text {
 		margin-left: 16px !important;
-		text-align: right !important;
+		text-align: center !important;
 		justify-content: center !important;
 		flex: 1 1 0% !important;
-		max-width: 35%;
+		max-width: 100%;
 		overflow-wrap: break-word;
 	 }
 	 .ack-icon-failure,.ack-icon {

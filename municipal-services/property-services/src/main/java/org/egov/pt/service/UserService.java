@@ -427,7 +427,7 @@ public class UserService {
     }
 
 
-	public Set<User>  getUUidFromUserName(Property property){
+	public Set<OwnerInfo>  getUUidFromUserName(Property property){
 
 		String tenantId = property.getTenantId();
 		List<OwnerInfo> ownerInfos = property.getOwners();
@@ -439,7 +439,7 @@ public class UserService {
 			mobileNumbers.add(owner.getMobileNumber());
 		});
 
-		Set<User>  userSet = new HashSet<>();
+		Set<OwnerInfo>  userSet = new HashSet<>();
 
 		// For every unique mobilenumber search the use with mobilenumber as username and get uuid
 		mobileNumbers.forEach(mobileNumber -> {

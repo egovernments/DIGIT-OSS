@@ -55,29 +55,22 @@ const OCeDCRScrutiny = ({ t, config, onSelect, userType, formData, ownerIndex = 
                     const tenantIdForEdcr = result?.BPA?.[0]?.tenantId;
                     if (permitDate === convertEpochToDate(result?.BPA?.[0]?.approvalDate)) {
                         Digit.OBPSService.scrutinyDetails(tenantIdForEdcr, { edcrNumber: edcrNumber }).then((response) => {
-                            const userInfo = Digit.UserService.getUser();
-                            const queryObject = { 0: { tenantId: stateId }, 1: { id: userInfo?.info?.id } };
-                            Digit.OBPSService.BPAREGSearch(tenantId, queryObject).then((License, error) => {
-                                let architectName = "";
-                                for (let i = 0; i < License.Licenses.length; i++) {
-                                    if (License.Licenses[i].status === "APPROVED") {
-                                        architectName = License.Licenses[i].tradeLicenseDetail.owners[0].name;
+                            Digit.WorkflowService.getAllApplication(tenantIdForEdcr, { businessIds: result?.BPA?.[0]?.applicationNo, history: true })
+                                .then((workFlowData, err) => {
+                                    const architectInfoDetails = workFlowData?.ProcessInstances?.[workFlowData?.ProcessInstances?.length - 1];
+                                    const architectName = architectInfoDetails?.assignes?.[0]?.name || "";
+                                    if (response?.edcrDetail?.length > 0) {
+                                        const isPrimaryOwner = result?.BPA?.[0]?.landInfo?.owners?.filter(data => (data.isPrimaryOwner && data.isPrimaryOwner != "false"));
+                                        response.edcrDetail[0].applicantName = isPrimaryOwner?.[0]?.name;
+                                        response.edcrDetail[0].ocPermitNumber = permitNumber;
+                                        response.edcrDetail[0].ocPermitdate = permitDate;
+                                        response.edcrDetail[0].appliedBy = architectName
+                                        setPermitEdcrData(response?.edcrDetail?.[0]);
                                     }
-                                }
-                                if (!architectName) architectName = userInfo?.info?.name;
-                                if (!architectName) architectName = License.Licenses[0].tradeLicenseDetail.owners[0].name;
-                                if (response?.edcrDetail?.length > 0) {
-                                    const isPrimaryOwner = result?.BPA?.[0]?.landInfo?.owners?.filter(data => (data.isPrimaryOwner && data.isPrimaryOwner != "false"));
-                                    response.edcrDetail[0].applicantName = isPrimaryOwner?.[0]?.name;
-                                    response.edcrDetail[0].ocPermitNumber = permitNumber;
-                                    response.edcrDetail[0].ocPermitdate = permitDate;
-                                    response.edcrDetail[0].appliedBy = architectName
-                                    setPermitEdcrData(response?.edcrDetail?.[0]);
-                                }
-                            }).catch((e) => {
-                                setShowToast({ key: "error", error: true, message: e?.response?.data?.Errors[0]?.message || null });
-                            });
-    
+                                })
+                                .catch((e) => {
+                                    setShowToast({ key: "error", error: true, message: e?.response?.data?.Errors[0]?.message || null });
+                                });
                         }).catch((e) => {
                             setShowToast({ key: "error", error: true, message: e?.response?.data?.Errors[0]?.message || null });
                         });

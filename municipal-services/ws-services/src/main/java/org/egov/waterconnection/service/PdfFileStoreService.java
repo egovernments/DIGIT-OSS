@@ -181,6 +181,7 @@ public class PdfFileStoreService {
 		if (waterConnectionRequest.getWaterConnection().getApplicationStatus()
 				.equalsIgnoreCase(WCConstants.PENDING_APPROVAL_FOR_CONNECTION_CODE)) {
 			addDetail.put(WCConstants.ESTIMATION_DATE_CONST, System.currentTimeMillis());
+			waterConnectionRequest.getWaterConnection().setAdditionalDetails(addDetail);
 			addDetail.put(WCConstants.ESTIMATION_FILESTORE_ID,
 					getFileStoreId(waterConnectionRequest, property, WCConstants.PDF_ESTIMATION_KEY));
 		}

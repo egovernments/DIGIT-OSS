@@ -88,10 +88,10 @@ public class CommonRepository {
 	
 	private static final String BIRTHDTLSAVEQRY="INSERT INTO public.eg_birth_dtls(id, registrationno, hospitalname, dateofreport, "
     		+ "dateofbirth, firstname, middlename, lastname, placeofbirth, informantsname, informantsaddress, "
-    		+ "createdtime, createdby, lastmodifiedtime, lastmodifiedby, counter, tenantid, gender, remarks, hospitalid) "
+    		+ "createdtime, createdby, lastmodifiedtime, lastmodifiedby, counter, tenantid, gender, remarks, hospitalid, islegacyrecord) "
     		+ "VALUES (:id, :registrationno, :hospitalname, :dateofreport, :dateofbirth, :firstname, :middlename, :lastname, "
     		+ ":placeofbirth, :informantsname, :informantsaddress, :createdtime, :createdby, :lastmodifiedtime, "
-    		+ ":lastmodifiedby, :counter, :tenantid, :gender, :remarks, :hospitalid); ";
+    		+ ":lastmodifiedby, :counter, :tenantid, :gender, :remarks, :hospitalid, :islegacyrecord); ";
 	
 	private static final String BIRTHFATHERINFOSAVEQRY="INSERT INTO public.eg_birth_father_info( id, firstname, middlename, lastname, aadharno, "
 			+ "emailid, mobileno, education, proffession, nationality, religion, createdtime, createdby, lastmodifiedtime, lastmodifiedby, birthdtlid) "
@@ -115,10 +115,10 @@ public class CommonRepository {
 	
 	private static final String DEATHDTLSAVEQRY="INSERT INTO public.eg_death_dtls(id, registrationno, hospitalname, dateofreport, "
     		+ "dateofdeath, firstname, middlename, lastname, placeofdeath, informantsname, informantsaddress, "
-    		+ "createdtime, createdby, lastmodifiedtime, lastmodifiedby, counter, tenantid, gender, remarks, hospitalid, age, eidno, aadharno, nationality, religion, icdcode) "
+    		+ "createdtime, createdby, lastmodifiedtime, lastmodifiedby, counter, tenantid, gender, remarks, hospitalid, age, eidno, aadharno, nationality, religion, icdcode, islegacyrecord) "
     		+ "VALUES (:id, :registrationno, :hospitalname, :dateofreport, :dateofdeath, :firstname, :middlename, :lastname, "
     		+ ":placeofdeath, :informantsname, :informantsaddress, :createdtime, :createdby, :lastmodifiedtime, "
-    		+ ":lastmodifiedby, :counter, :tenantid, :gender, :remarks, :hospitalid, :age, :eidno, :aadharno, :nationality, :religion, :icdcode); ";
+    		+ ":lastmodifiedby, :counter, :tenantid, :gender, :remarks, :hospitalid, :age, :eidno, :aadharno, :nationality, :religion, :icdcode, :islegacyrecord); ";
 	
 	private static final String DEATHFATHERINFOSAVEQRY="INSERT INTO public.eg_death_father_info( id, firstname, middlename, lastname, aadharno, "
 			+ "emailid, mobileno, createdtime, createdby, lastmodifiedtime, lastmodifiedby, deathdtlid) "
@@ -148,7 +148,7 @@ public class CommonRepository {
 	private static final String BIRTHDTLUPDATEQRY="UPDATE public.eg_birth_dtls SET registrationno = :registrationno, hospitalname = :hospitalname, dateofreport = :dateofreport, "
 			+ "dateofbirth = :dateofbirth , firstname= :firstname, middlename = :middlename, lastname = :lastname, placeofbirth= :placeofbirth, informantsname = :informantsname, "
 			+ "informantsaddress = :informantsaddress, lastmodifiedtime = :lastmodifiedtime, lastmodifiedby= :lastmodifiedby, gender = :gender, remarks = :remarks, "
-			+ "hospitalid = :hospitalid WHERE id = :id;";
+			+ "hospitalid = :hospitalid, islegacyrecord =:islegacyrecord WHERE id = :id;";
 	
 	private static final String BIRTHFATHERINFOUPDATEQRY="UPDATE public.eg_birth_father_info SET firstname = :firstname, middlename = :middlename, lastname = :lastname, "
 			+ "aadharno = :aadharno, emailid = :emailid, mobileno = :mobileno, education = :education, proffession = :proffession, nationality = :nationality, "
@@ -170,7 +170,7 @@ public class CommonRepository {
 	private static final String DEATHDTLUPDATEQRY="UPDATE public.eg_death_dtls SET registrationno = :registrationno, hospitalname = :hospitalname, dateofreport = :dateofreport, "
 			+ "dateofdeath = :dateofdeath , firstname= :firstname, middlename = :middlename, lastname = :lastname, placeofdeath= :placeofdeath, informantsname = :informantsname, "
 			+ "informantsaddress = :informantsaddress, lastmodifiedtime = :lastmodifiedtime, lastmodifiedby= :lastmodifiedby, gender = :gender, remarks = :remarks, "
-			+ "hospitalid = :hospitalid , age = :age, eidno = :eidno, aadharno = :aadharno, nationality = :nationality, religion = :religion, icdcode = :icdcode WHERE id = :id;";
+			+ "hospitalid = :hospitalid , age = :age, eidno = :eidno, aadharno = :aadharno, nationality = :nationality, religion = :religion, icdcode = :icdcode, islegacyrecord =:islegacyrecord WHERE id = :id;";
 	
 	private static final String DEATHFATHERINFOUPDATEQRY="UPDATE public.eg_death_father_info SET firstname = :firstname, middlename = :middlename, lastname = :lastname, "
 			+ "aadharno = :aadharno, emailid = :emailid, mobileno = :mobileno, lastmodifiedtime = :lastmodifiedtime, lastmodifiedby = :lastmodifiedby WHERE deathdtlid = :deathdtlid;";
@@ -251,11 +251,16 @@ public class CommonRepository {
 			uniqueList.remove(regno);
 		}
 		modifyHospIdBirth(uniqueHospList , response.getBirthCerts().get(0).getTenantid());
-		AuditDetails auditDetails = commUtils.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
 		int finalCount=0;
+			AuditDetails auditDetails;
 		for (Entry<String, EgBirthDtl> entry : uniqueList.entrySet()) {
 			EgBirthDtl birthDtl = entry.getValue();
 			birthDtl.setGenderStr(birthDtl.getGenderStr()==null?"":birthDtl.getGenderStr().trim().toLowerCase());
+			if(birthDtl.getIsLegacyRecord() != null && birthDtl.getIsLegacyRecord()) {
+				auditDetails = commUtils.getAuditDetails("import-user", true);
+			} else {
+				auditDetails = commUtils.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
+			}
 			switch (birthDtl.getGenderStr()) {
 			case "male":
 				birthDtl.setGender(1);
@@ -501,6 +506,7 @@ public class CommonRepository {
 		sqlParameterSource.addValue("gender", birthDtl.getGender());
 		sqlParameterSource.addValue("remarks", birthDtl.getRemarks());
 		sqlParameterSource.addValue("hospitalid", birthDtl.getHospitalid());
+		sqlParameterSource.addValue("islegacyrecord", birthDtl.getIsLegacyRecord());
 		birthDtl.setId(id);
 		return sqlParameterSource;
 
@@ -553,10 +559,15 @@ public class CommonRepository {
 			uniqueList.remove(regno);
 		}
 		modifyHospIdDeath(uniqueHospList , response.getDeathCerts().get(0).getTenantid());
-		AuditDetails auditDetails = commUtils.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
 		int finalCount=0;
+			AuditDetails auditDetails;
 		for (Entry<String, EgDeathDtl> entry : uniqueList.entrySet()) {
 			EgDeathDtl deathDtl = entry.getValue();
+			if(deathDtl.getIsLegacyRecord() != null && deathDtl.getIsLegacyRecord()) {
+				auditDetails = commUtils.getAuditDetails("import-user", true);
+			} else {
+				auditDetails = commUtils.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
+			}
 			deathDtl.setGenderStr(deathDtl.getGenderStr()==null?"":deathDtl.getGenderStr().trim().toLowerCase());
 			switch (deathDtl.getGenderStr()) {
 			case "male":
@@ -565,7 +576,7 @@ public class CommonRepository {
 			case "female":
 				deathDtl.setGender(2);
 				break;
-			case "others":
+			case "transgender":
 				deathDtl.setGender(3);
 				break;
 			default:
@@ -778,7 +789,8 @@ public class CommonRepository {
 		sqlParameterSource.addValue("aadharno", deathDtlEnc.getAadharno() );
 		sqlParameterSource.addValue("nationality", deathDtl.getNationality() );
 		sqlParameterSource.addValue("religion", deathDtl.getReligion() );
-		sqlParameterSource.addValue("icdcode", deathDtlEnc.getIcdcode() );	
+		sqlParameterSource.addValue("icdcode", deathDtlEnc.getIcdcode() );
+		sqlParameterSource.addValue("islegacyrecord", deathDtl.getIsLegacyRecord());
 		deathDtl.setId(id);
 		return sqlParameterSource;
 
@@ -834,10 +846,15 @@ public class CommonRepository {
 			uniqueList.remove(regno);
 		}
 		modifyHospIdBirth(uniqueHospList , response.getBirthCerts().get(0).getTenantid());
-		AuditDetails auditDetails = commUtils.getAuditDetails(requestInfo.getUserInfo().getUuid(), false);
+		AuditDetails auditDetails;
 		int finalCount=0;
 		for (Entry<String, EgBirthDtl> entry : uniqueList.entrySet()) {
 			EgBirthDtl birthDtl = entry.getValue();
+			if(birthDtl.getIsLegacyRecord() != null && birthDtl.getIsLegacyRecord()) {
+				auditDetails = commUtils.getAuditDetails("import-user", true);
+			} else {
+				auditDetails = commUtils.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
+			}
 			birthDtl.setGenderStr(birthDtl.getGenderStr()==null?"":birthDtl.getGenderStr().trim().toLowerCase());
 			switch (birthDtl.getGenderStr()) {
 			case "male":
@@ -938,10 +955,15 @@ public class CommonRepository {
 			uniqueList.remove(regno);
 		}
 		modifyHospIdDeath(uniqueHospList , response.getDeathCerts().get(0).getTenantid());
-		AuditDetails auditDetails = commUtils.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
+		AuditDetails auditDetails;
 		int finalCount=0;
 		for (Entry<String, EgDeathDtl> entry : uniqueList.entrySet()) {
 			EgDeathDtl deathDtl = entry.getValue();
+			if(deathDtl.getIsLegacyRecord() != null && deathDtl.getIsLegacyRecord()) {
+				auditDetails = commUtils.getAuditDetails("import-user", true);
+			} else {
+				auditDetails = commUtils.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
+			}
 			deathDtl.setGenderStr(deathDtl.getGenderStr()==null?"":deathDtl.getGenderStr().trim().toLowerCase());
 			switch (deathDtl.getGenderStr()) {
 			case "male":
@@ -950,7 +972,7 @@ public class CommonRepository {
 			case "female":
 				deathDtl.setGender(2);
 				break;
-			case "others":
+			case "transgender":
 				deathDtl.setGender(3);
 				break;
 			default:

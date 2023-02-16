@@ -9,7 +9,7 @@ import Complaint from "../../components/Complaint";
 export const ComplaintsList = (props) => {
   const User = Digit.UserService.getUser();
   const mobileNumber = User.mobileNumber || User?.info?.mobileNumber || User?.info?.userInfo?.mobileNumber;
-  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code || Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();
   const { path, url } = useRouteMatch();
   let { isLoading, error, data, revalidate } = Digit.Hooks.pgr.useComplaintsListByMobile(tenantId, mobileNumber);
@@ -26,7 +26,6 @@ export const ComplaintsList = (props) => {
       </React.Fragment>
     );
   }
-
 
   let complaints = data?.ServiceWrappers;
   let complaintsList;
@@ -60,8 +59,10 @@ export const ComplaintsList = (props) => {
 
   return (
     <React.Fragment>
-      <Header>{t(LOCALE.MY_COMPLAINTS)}</Header>
-      {complaintsList}
+      <div className="applications-list-container">
+        <Header>{t(LOCALE.MY_COMPLAINTS)}</Header>
+        {complaintsList}
+      </div>
     </React.Fragment>
   );
 };

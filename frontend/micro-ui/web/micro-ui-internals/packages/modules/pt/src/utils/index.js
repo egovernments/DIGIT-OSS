@@ -706,7 +706,7 @@ export const setUpdatedDocumentDetails = (data) => {
   data.documents = documents;
   return data;
 };
-export const convertToUpdateProperty = (data = {}) => {
+export const convertToUpdateProperty = (data = {}, t) => {
   let isResdential = data.isResdential;
   let propertyType = data.PropertyType;
   let selfOccupied = data.selfOccupied;
@@ -717,12 +717,16 @@ export const convertToUpdateProperty = (data = {}) => {
   let noOfFloors = data?.noOfFloors;
   let noOofBasements = data?.noOofBasements;
   let unit = data?.units;
+  data.units = data?.units?.map((ob) => {return({
+    ...ob, unitType : ob?.unitType?.code
+  })})
   let basement1 = Array.isArray(data?.units) && data?.units["-1"] ? data?.units["-1"] : null;
   let basement2 = Array.isArray(data?.units) && data?.units["-2"] ? data?.units["-2"] : null;
   data = setAddressDetails(data);
   data = setUpdateOwnerDetails(data);
   data = setUpdatedDocumentDetails(data);
   data = setPropertyDetails(data);
+  data.address.city = data.address.city ? data.address.city : t(`TENANT_TENANTS_${stringReplaceAll(data?.tenantId.toUpperCase(),".","_")}`);
 
   const formdata = {
     Property: {

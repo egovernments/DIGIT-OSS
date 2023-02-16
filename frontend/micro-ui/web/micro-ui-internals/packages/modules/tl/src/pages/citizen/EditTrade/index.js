@@ -14,7 +14,7 @@ const getPath = (path, params) => {
   return path;
 };
 
-const getTradeEditDetails = (data,t) => {
+const getTradeEditDetails = (data,t,wfdata) => {
   const gettradeaccessories = (tradeacceserioies,t) => {
     let acc = [];
     tradeacceserioies &&
@@ -125,6 +125,9 @@ const getTradeEditDetails = (data,t) => {
       i18nKey: `${data.tradeLicenseDetail?.structureType.includes("IMMOVABLE") ? "TL_COMMON_YES" : "TL_COMMON_NO"}`,
     },
     TradeName: data?.tradeName,
+    TradeGSTNumber: data?.tradeLicenseDetail?.additionalDetail?.tradeGstNo || data?.tradeLicenseDetail?.additionalDetail?.gstNo || "",
+    OperationalSqFtArea : data?.tradeLicenseDetail?.operationalArea || "",
+    NumberOfEmployees : data?.tradeLicenseDetail?.noOfEmployees || "", 
     accessories: gettradeaccessories(data?.tradeLicenseDetail?.accessories,t),
     isAccessories:
       gettradeaccessories(data?.tradeLicenseDetail?.accessories,t).length > 0
@@ -158,9 +161,12 @@ const getTradeEditDetails = (data,t) => {
   };
   data.ownershipCategory = {
     code: `${data?.tradeLicenseDetail?.subOwnerShipCategory}`,
-    i18nKey: `PT_OWNERSHIP_${data?.tradeLicenseDetail?.subOwnerShipCategory.split(".")[1]}`,
-    value: `${data?.tradeLicenseDetail?.subOwnerShipCategory}`,
+    i18nKey: `PT_OWNERSHIP_${data?.tradeLicenseDetail?.subOwnerShipCategory?.includes("INSTITUTIONAL") ? (data?.tradeLicenseDetail?.subOwnerShipCategory?.includes("GOVERNMENT") ?"OTHERGOVERNMENTINSTITUITION":"OTHERSPRIVATEINSTITUITION"):data?.tradeLicenseDetail?.subOwnerShipCategory?.split(".")[1]}`,
+    value: `${data?.tradeLicenseDetail?.subOwnerShipCategory}${data?.tradeLicenseDetail?.subOwnerShipCategory?.includes("INSTITUTIONAL") ? (data?.tradeLicenseDetail?.subOwnerShipCategory?.includes("GOVERNMENT") ?".OTHERGOVERNMENTINSTITUITION":".OTHERSPRIVATEINSTITUITION"):""}`,
+    isSameAsPropertyOwner: data?.tradeLicenseDetail?.additionalDetail?.isSameAsPropertyOwner === "null" ? null : data?.tradeLicenseDetail?.additionalDetail?.isSameAsPropertyOwner,
+
   };
+  data.workflowObject = wfdata;
   return data;
 };
 
@@ -183,6 +189,14 @@ const EditTrade = ({ parentRoute }) => {
   if (licenseNo) filter1.applicationNumber = licenseNo;
   if (tenantId) filter1.tenantId = tenantId;
   const { isLoading, isError, error, data } = Digit.Hooks.tl.useTradeLicenseSearch({ filters: filter1 }, { filters: filter1 });
+  const businessService = data?.Licenses[0]?.businessService;
+  const { isLoading: iswfLoading, data: wfdata } = Digit.Hooks.useWorkflowDetails({
+    tenantId: data?.Licenses[0]?.tenantId,
+    id: data?.Licenses?.[0]?.applicationNumber,
+    moduleCode: businessService,
+  },{
+    enabled:data?.Licenses?.[0] ? true : false
+  });
   const editProperty = window.location.href.includes("edit");
   const tlTrade = JSON.parse(sessionStorage.getItem("tl-trade")) || {};
   let isReneworEditTrade = window.location.href.includes("/renew-trade/") || window.location.href.includes("/edit-application/")
@@ -195,7 +209,7 @@ const EditTrade = ({ parentRoute }) => {
         application.isEditProperty = true;
       }
       sessionStorage.setItem("tradeInitialObject", JSON.stringify({ ...application }));
-      let tradeEditDetails = getTradeEditDetails(application,t);
+      let tradeEditDetails = getTradeEditDetails(application,t,wfdata);
       setParams({ ...params, ...tradeEditDetails });
     }
 
@@ -221,11 +235,11 @@ const EditTrade = ({ parentRoute }) => {
         (nextStep[sessionStorage.getItem("isAccessories")] === "accessories-details" ||
           nextStep[sessionStorage.getItem("isAccessories")] === "map" ||
           nextStep[sessionStorage.getItem("isAccessories")] === "owner-ship-details" || 
-          nextStep[sessionStorage.getItem("isAccessories")] === "know-your-property")
+          nextStep[sessionStorage.getItem("isAccessories")] === "other-trade-details")
       ) {
-        if((isReneworEditTrade && !(params?.tradeLicenseDetail?.additionalDetail?.propertyId)  ) )
-        nextStep = `map`
-        else
+        // if((isReneworEditTrade && !(params?.tradeLicenseDetail?.additionalDetail?.propertyId)  ) )
+        // nextStep = `map`
+        // else
         nextStep = `${nextStep[sessionStorage.getItem("isAccessories")]}`;
       } else if (
         nextStep[sessionStorage.getItem("StructureType")] &&
@@ -247,9 +261,21 @@ const EditTrade = ({ parentRoute }) => {
           }
       }
     }
+    if(nextStep === "know-your-property" && params?.TradeDetails?.StructureType?.code === "MOVABLE")
+    {
+      nextStep = "map";
+    }
+    if(nextStep === "landmark" && params?.TradeDetails?.StructureType?.code === "MOVABLE")
+    {
+      nextStep = "owner-ship-details";
+    }
     if( (params?.cptId?.id || params?.cpt?.details?.propertyId || (isReneworEditTrade && params?.tradeLicenseDetail?.additionalDetail?.propertyId ))  && nextStep === "know-your-property" )
     { 
       nextStep = "property-details";
+    }
+    if(nextStep === "owner-details" && (params?.ownershipCategory?.isSameAsPropertyOwner === true || sessionStorage.getItem("isSameAsPropertyOwner") === "true"))
+    {
+      nextStep = "proof-of-identity"
     }
     let redirectWithHistory = history.push;
     if (skipStep) {

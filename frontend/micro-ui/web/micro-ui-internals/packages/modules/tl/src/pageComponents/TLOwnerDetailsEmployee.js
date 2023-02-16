@@ -52,6 +52,7 @@ const OwnerForm = (_props) => {
     setIsErrors,
     isErrors,
     isRenewal,
+    isSameAsPropertyOwner,
     previousLicenseDetails,
     setPreviousLicenseDetails,
     genderTypeData,
@@ -68,8 +69,8 @@ const OwnerForm = (_props) => {
   });
 
   const typeOfOwner = useMemo(() => {
-    if (formData?.ownershipCategory?.code.includes("SINGLEOWNER")) return "SINGLEOWNER";
-    if (formData?.ownershipCategory?.code.includes("INSTITUTIONAL")) return "INSTITUTIONAL";
+    if (formData?.ownershipCategory?.code?.includes("SINGLEOWNER")) return "SINGLEOWNER";
+    if (formData?.ownershipCategory?.code?.includes("INSTITUTIONAL")) return "INSTITUTIONAL";
     else return "MULTIOWNER";
   }, [formData?.ownershipCategory]);
 
@@ -94,14 +95,42 @@ const OwnerForm = (_props) => {
     [genderFilterTypeMenu]
   );
 
-  const isIndividualTypeOwner = useMemo(() => formData?.ownershipCategory?.code.includes("INDIVIDUAL"), [formData?.ownershipCategory?.code]);
+  //const isIndividualTypeOwner = useMemo(() => formData?.ownershipCategory?.code?.includes("INDIVIDUAL"), [formData?.ownershipCategory?.code]);
 
   useEffect(() => {
     trigger();
   }, []);
 
   useEffect(() => {
-    if (!_.isEqual(formValue, part)) {
+    if(window.location.href.includes("tl/renew-application-details") && formData?.cpt?.details)
+    { 
+      if(typeOfOwner === "INSTITUTIONAL")
+      {
+        setValue("instituionName",owner?.instituionName);
+        setValue("subOwnerShipCategory",owner?.subOwnerShipCategory);
+        setValue("name",owner?.name);
+        setValue("designation",owner?.designation);
+        setValue("mobileNumber",owner?.mobileNumber);
+        setValue("altContactNumber",owner?.altContactNumber);
+        setValue("emailId",owner?.emailId);
+        setValue("emailId",owner?.emailId); 
+      }
+      else
+      {
+        setValue("name",owner?.name);
+        setValue("mobileNumber",owner?.mobileNumber);
+        setValue("fatherOrHusbandName",owner?.fatherOrHusbandName);
+        setValue("relationship",owner?.relationship);
+        setValue("gender",owner?.gender);
+        setValue("emailId",owner?.emailId);
+        setValue("ownerType",owner?.ownerType);
+        setValue("permanentAddress",owner?.permanentAddress);
+      }
+    }
+  }, [formData?.cpt?.details?.propertyId, formData?.cptId?.Id, formData]);
+
+  useEffect(() => {
+    if (!(_.isEqual(formValue, part))) {
       setPart({...formValue});
 
       Object.keys(formValue).map((data) => {
@@ -173,8 +202,9 @@ const OwnerForm = (_props) => {
                         <TextInput
                           t={t}
                           type={"text"}
-                          isMandatory={true}
+                          isMandatory={false}
                           value={props.value}
+                          disable={isSameAsPropertyOwner}
                           autoFocus={focusIndex.index === owner?.key && focusIndex.type === "instituionName"}
                           errorStyle={localFormState.touched.instituionName && errors?.instituionName?.message ? true : false}
                           onChange={(e)=>{
@@ -203,6 +233,7 @@ const OwnerForm = (_props) => {
                           errorStyle={localFormState.touched.subOwnerShipCategory && errors?.subOwnerShipCategory?.message ? true : false}
                           autoFocus={focusIndex.index === owner?.key && focusIndex.type === "subOwnerShipCategory"}
                           selected={props.value}
+                          disable={isSameAsPropertyOwner}
                           select={(e) => {
                             if (e?.code != owner?.subOwnerShipCategory?.code && isRenewal)
                               setPreviousLicenseDetails({ ...previousLicenseDetails, checkForRenewal: true });
@@ -233,6 +264,7 @@ const OwnerForm = (_props) => {
                           isMandatory={false}
                           name="name"
                           value={props.value}
+                          disable={isSameAsPropertyOwner}
                           errorStyle={localFormState.touched.name && errors?.name?.message ? true : false}
                           autoFocus={focusIndex.index === owner?.key && focusIndex.type === "name"}
                           onChange={(e)=>{
@@ -262,6 +294,7 @@ const OwnerForm = (_props) => {
                           isMandatory={false}
                           name="designation"
                           value={props.value}
+                          disable={isSameAsPropertyOwner}
                           errorStyle={localFormState.touched.designation && errors?.designation?.message ? true : false}
                           autoFocus={focusIndex.index === owner?.key && focusIndex.type === "designation"}
                           onChange={(e)=>{
@@ -291,6 +324,7 @@ const OwnerForm = (_props) => {
                         isMandatory={false}
                         name="mobileNumber"
                         value={props.value}
+                        disable={isSameAsPropertyOwner}
                         errorStyle={localFormState.touched.mobileNumber && errors?.mobileNumber?.message ? true : false}
                         autoFocus={focusIndex.index === owner?.key && focusIndex.type === "mobileNumber"}
                         onChange={(e)=>{
@@ -321,6 +355,7 @@ const OwnerForm = (_props) => {
                         maxLength={11}
                         name="altContactNumber"
                         value={owner.altContactNumber}
+                        disable={isSameAsPropertyOwner}
                         errorStyle={localFormState.touched.altContactNumber && errors?.altContactNumber?.message ? true : false}
                         autoFocus={focusIndex.index === owner?.key && focusIndex.type === "altContactNumber"}
                         onChange={(e)=>{
@@ -349,6 +384,7 @@ const OwnerForm = (_props) => {
                         isMandatory={false}
                         name={"emailId"}
                         value={props.value}
+                        disable={isSameAsPropertyOwner}
                         errorStyle={localFormState.touched.emailId && errors?.emailId?.message ? true : false}
                         autoFocus={focusIndex.index === owner?.key && focusIndex.type === "emailId"}
                         onChange={(e)=>{
@@ -391,6 +427,7 @@ const OwnerForm = (_props) => {
                             setFocusIndex({ index: -1 });
                             props.onBlur(e);
                           }}
+                          disable={isSameAsPropertyOwner}
                           style={isMulitpleOwners ? { background: "#FAFAFA" } : ""}
                         />
                       )}
@@ -420,6 +457,7 @@ const OwnerForm = (_props) => {
                           }}
                           labelStyle={{ marginTop: "unset", border: "1px solid #464646", borderRight: "none" }}
                           onBlur={props.onBlur}
+                          disable={isSameAsPropertyOwner}
                           errorStyle={localFormState.touched.mobileNumber && errors?.mobileNumber?.message ? true : false}
                           style={isMulitpleOwners ? { background: "#FAFAFA" } : ""}
                         />
@@ -448,6 +486,7 @@ const OwnerForm = (_props) => {
                             // props.onChange(e);
                             setFocusIndex({ index: owner.key, type: "fatherOrHusbandName" });
                           }}
+                          disable={isSameAsPropertyOwner}
                           onBlur={props.onBlur}
                         />
                       )}
@@ -475,6 +514,7 @@ const OwnerForm = (_props) => {
                           props.onChange(e);
                         }}
                         onBlur={props.onBlur}
+                        disable={isSameAsPropertyOwner}
                         option={[
                           { i18nKey: "COMMON_RELATION_FATHER", code: "FATHER" },
                           { i18nKey: "COMMON_RELATION_HUSBAND", code: "HUSBAND" },
@@ -497,6 +537,7 @@ const OwnerForm = (_props) => {
                       <Dropdown
                         className="form-field"
                         selected={props.value}
+                        disable={isSameAsPropertyOwner}
                         errorStyle={localFormState.touched.gender && errors?.gender?.message ? true : false}
                         select={(e) => {
                           if (e?.code != owner?.gender?.code && isRenewal) setPreviousLicenseDetails({ ...previousLicenseDetails, checkForRenewal: true });
@@ -532,6 +573,7 @@ const OwnerForm = (_props) => {
                           }}
                           labelStyle={{ marginTop: "unset" }}
                           onBlur={props.onBlur}
+                          disable={isSameAsPropertyOwner}
                           style={isMulitpleOwners ? { background: "#FAFAFA" } : ""}
                         />
                       )}
@@ -557,6 +599,7 @@ const OwnerForm = (_props) => {
                           props.onChange(e);
                         }}
                         onBlur={props.onBlur}
+                        disable={isSameAsPropertyOwner}
                         option={ownerTypesMenu ? ownerTypesMenu.sort((a, b) => a.name.localeCompare(b.name)) : []}
 
                         optionKey="i18nKey"
@@ -585,6 +628,7 @@ const OwnerForm = (_props) => {
                             setFocusIndex({ index: owner.key, type: "permanentAddress" });
                           }}
                           onBlur={props.onBlur}
+                          disable={isSameAsPropertyOwner}
                           style={isMulitpleOwners ? { background: "#FAFAFA" } : ""}
                         />
                       )}
@@ -605,7 +649,8 @@ const TLOwnerDetailsEmployee = ({ config, onSelect, userType, formData, setError
   const { t } = useTranslation();
   const { pathname } = useLocation();
   const isEditScreen = pathname.includes("/modify-application/");
-  const [owners, setOwners] = useState(formData?.owners || [createOwnerDetails()]);
+  let isSameAsPropertyOwner = formData?.ownershipCategory?.isSameAsPropertyOwner;
+  const [owners, setOwners] = useState((formData?.owners || [createOwnerDetails()] ));
   const [focusIndex, setFocusIndex] = useState({ index: -1, type: "" });
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
@@ -635,11 +680,18 @@ const TLOwnerDetailsEmployee = ({ config, onSelect, userType, formData, setError
   };
 
   useEffect(() => {
-    if(formData?.ownershipCategory?.code.includes("INSTITUTIONAL") && owners.length == 1 && formData?.tradedetils1 && !owners?.[0]?.subOwnerShipCategory)
+    if(formData?.ownershipCategory?.code?.includes("INSTITUTIONAL") && owners.length == 1 && formData?.tradedetils1 && !owners?.[0]?.subOwnerShipCategory)
     {
       setOwners([{...owners[0],subOwnerShipCategory:formData?.ownershipCategory}])
     }
   },[owners])
+
+  useEffect(() => {
+    if((formData?.ownershipCategory?.isSameAsPropertyOwner == true || formData?.ownershipCategory?.isSameAsPropertyOwner === "true") && JSON.parse(sessionStorage.getItem("ownersFromProperty")) && !(_.isEqual(owners,JSON.parse(sessionStorage.getItem("ownersFromProperty")))) )
+    {
+      setOwners([...JSON.parse(sessionStorage.getItem("ownersFromProperty"))]);
+    }
+  },[formData, formData?.cpt?.details?.propertyId])
 
   useEffect(() => {
     if (formData?.ownershipCategory?.code == "INDIVIDUAL.MULTIPLEOWNERS" && owners.length > 1) clearErrors("mulipleOwnerError");
@@ -667,7 +719,7 @@ const TLOwnerDetailsEmployee = ({ config, onSelect, userType, formData, setError
   if (window.location.href.includes("tl/edit-application-details")) isRenewal = true;
 
   useEffect(() => {
-    if (formData?.tradeUnits?.length > 0 && !isRenewal) {
+    if (formData?.tradeUnits?.length > 0 && !isRenewal ) {
       let flag = true;
       owners.map((data) => {
         Object.keys(data).map((dta) => {
@@ -702,6 +754,7 @@ const TLOwnerDetailsEmployee = ({ config, onSelect, userType, formData, setError
     setIsErrors,
     isErrors,
     isRenewal,
+    isSameAsPropertyOwner,
     previousLicenseDetails,
     setPreviousLicenseDetails,
     genderTypeData,

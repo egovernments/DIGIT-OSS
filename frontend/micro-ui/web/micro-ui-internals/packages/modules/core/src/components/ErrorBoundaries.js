@@ -1,4 +1,20 @@
 import React from "react";
+import ErrorComponent from "./ErrorComponent";
+
+const Redircter = () => {
+  const path = Digit.UserService.getType() === "employee" ? "/digit-ui/employee/user/error" : "/digit-ui/citizen/error";
+  if (
+    window.location.href.includes("employee/user/error") ||
+    window.location.href.includes("citizen/error") ||
+    process.env.NODE_ENV === "development"
+  ) {
+    //do nothing
+  }else{
+    window.location.href = path;
+  }
+  return <span></span>;
+};
+
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
@@ -18,17 +34,19 @@ class ErrorBoundary extends React.Component {
 
   render() {
     if (this.state.hasError) {
-      console.error("UI-error", this.state?.error);
       // ("UI-errorInfo", this.state?.errorStack);
       // ("UI-component-details", this.props);
       // You can render any custom fallback UI
       return (
         <div className="error-boundary">
-          <summary>Something went wrong</summary>
+          <Redircter />
+          <ErrorComponent initData={this.props.initData} />
+
+          {/* <summary>Something went wrong</summary>
           <details style={{ whiteSpace: "pre-wrap" }}>
             {this.state?.errorStack && this.state.errorStack.toString().substring(0, 600)}
             {this.state?.error}
-          </details>
+          </details> */}
         </div>
       );
     }

@@ -35,9 +35,10 @@ const useTLInbox = ({ tenantId, filters, config }) => {
                 locality: `${application.businessObject?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${application.businessObject?.tradeLicenseDetail?.address?.locality?.code?.toUpperCase()}`,
                 status: application.businessObject.status,
                 owner: application.ProcessInstance?.assigner?.name,
-                sla: Math.round(application.ProcessInstance?.businesssServiceSla / (24 * 60 * 60 * 1000))
+                sla: application?.businessObject?.status.match(/^(EXPIRED|APPROVED|CANCELLED)$/)? "CS_NA" : Math.round(application.ProcessInstance?.businesssServiceSla / (24 * 60 * 60 * 1000))
             })),
-            totalCount: data.totalCount
+            totalCount: data.totalCount,
+            nearingSlaCount: data?.nearingSlaCount
         }),
         ...config
     }})

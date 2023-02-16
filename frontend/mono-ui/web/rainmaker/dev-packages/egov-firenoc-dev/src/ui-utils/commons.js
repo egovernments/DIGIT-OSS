@@ -12,7 +12,7 @@ import jp from "jsonpath";
 import get from "lodash/get";
 import set from "lodash/set";
 import store from "ui-redux/store";
-import { getTranslatedLabel } from "../ui-config/screens/specs/utils";
+import { getTranslatedLabel, getCurrentFinancialYearForFireNoc } from "../ui-config/screens/specs/utils";
 
 const handleDeletedCards = (jsonObject, jsonPath, key) => {
   let originalArray = get(jsonObject, jsonPath, []);
@@ -68,6 +68,7 @@ export const getSearchResults = async (queryObject, dispatch) => {
         "error"
       )
     );
+    store.dispatch(toggleSpinner());
     throw error;
   }
 };
@@ -210,7 +211,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
       let finalUoms = [];
       allUoms.forEach(uom => {
         let value = get(building.uomsMap, uom);
-        value &&
+        (value|| value == 0) &&
           finalUoms.push({
             code: uom,
             value: parseInt(value),
@@ -319,7 +320,7 @@ export const createUpdateNocApplication = async (state, dispatch, status) => {
     process.env.REACT_APP_NAME === "Citizen"
       ? set(payload[0], "fireNOCDetails.channel", "CITIZEN")
       : set(payload[0], "fireNOCDetails.channel", "COUNTER");
-    set(payload[0], "fireNOCDetails.financialYear", "2019-20");
+    set(payload[0], "fireNOCDetails.financialYear", getCurrentFinancialYearForFireNoc());
 
     // Set Dates to Epoch
     let owners = get(payload[0], "fireNOCDetails.applicantDetails.owners", []);
@@ -536,7 +537,7 @@ export const furnishNocResponse = response => {
     let uoms = get(building, "uoms", []);
     let uomMap = {};
     uoms.forEach(uom => {
-      uomMap[uom.code] = `${uom.value}`;
+      if (uom.active)uomMap[uom.code] = `${uom.value}`;
     });
     set(
       response,

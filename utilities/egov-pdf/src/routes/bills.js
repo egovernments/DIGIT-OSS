@@ -41,7 +41,6 @@ var router = express.Router();
        var pdfkey = config.pdf.consolidated_bill_template;
 
        if (bills && bills.Bill && bills.Bill.length > 0) {
-           console.log("Hi");
          var pdfResponse;
          try {
            var billArray = { Bill: bills.Bill };

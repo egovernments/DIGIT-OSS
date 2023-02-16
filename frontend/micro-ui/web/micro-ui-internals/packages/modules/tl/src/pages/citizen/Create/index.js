@@ -13,7 +13,7 @@ const CreateTradeLicence = ({ parentRoute }) => {
   const { pathname } = useLocation();
   const history = useHistory();
   let config = [];
-  const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("PT_CREATE_TRADE", {});
+  const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("TL_CREATE_TRADE", {});
   let isReneworEditTrade = window.location.href.includes("/renew-trade/") || window.location.href.includes("/edit-application/")
 
   const stateId = Digit.ULBService.getStateId();
@@ -34,7 +34,7 @@ const CreateTradeLicence = ({ parentRoute }) => {
         (nextStep[sessionStorage.getItem("isAccessories")] === "accessories-details" ||
           nextStep[sessionStorage.getItem("isAccessories")] === "map" ||
           nextStep[sessionStorage.getItem("isAccessories")] === "owner-ship-details" || 
-          nextStep[sessionStorage.getItem("isAccessories")] === "know-your-property")
+          nextStep[sessionStorage.getItem("isAccessories")] === "other-trade-details")
       ) {
         nextStep = `${nextStep[sessionStorage.getItem("isAccessories")]}`;
       } else if (
@@ -56,6 +56,18 @@ const CreateTradeLicence = ({ parentRoute }) => {
          nextStep = `${nextStep[sessionStorage.getItem("KnowProperty")]}`;
           }
       }
+    }
+    if(nextStep === "know-your-property" && params?.TradeDetails?.StructureType?.code === "MOVABLE")
+    {
+      nextStep = "map";
+    }
+    if(nextStep === "landmark" && params?.TradeDetails?.StructureType?.code === "MOVABLE")
+    {
+      nextStep = "owner-ship-details";
+    }
+    if(nextStep === "owner-details" && (sessionStorage.getItem("isSameAsPropertyOwner") === "true"))
+    {
+      nextStep = "proof-of-identity"
     }
     if( (params?.cptId?.id || params?.cpt?.details?.propertyId || (isReneworEditTrade && params?.cpt?.details?.propertyId ))  && nextStep === "know-your-property" )
     { 
@@ -80,10 +92,14 @@ const CreateTradeLicence = ({ parentRoute }) => {
   };
 
   const createProperty = async () => {
+    sessionStorage.setItem("isCreateEnabled","true");
     history.push(`${match.path}/acknowledgement`);
   };
 
   function handleSelect(key, data, skipStep, index, isAddMultiple = false) {
+    if(key === "formData")
+    setParams({...data})
+    else{
     setParams({ ...params, ...{ [key]: { ...params[key], ...data } } });
     if(key === "isSkip" && data === true)
     {
@@ -94,6 +110,7 @@ const CreateTradeLicence = ({ parentRoute }) => {
       goNext(skipStep, index, isAddMultiple, key);
     }
   }
+  }
 
   const handleSkip = () => {};
   const handleMultiple = () => {};
@@ -102,6 +119,12 @@ const CreateTradeLicence = ({ parentRoute }) => {
     sessionStorage.removeItem("CurrentFinancialYear");
     queryClient.invalidateQueries("TL_CREATE_TRADE");
   };
+
+  const onUpdateSuccess = () => {
+    sessionStorage.removeItem("CurrentFinancialYear");
+    clearParams();
+    queryClient.invalidateQueries("TL_CREATE_TRADE");
+  }
   newConfig = newConfig ? newConfig : newConfigTL;
   newConfig?.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
@@ -136,7 +159,7 @@ const CreateTradeLicence = ({ parentRoute }) => {
         <CheckPage onSubmit={createProperty} value={params} />
       </Route>
       <Route path={`${match.path}/acknowledgement`}>
-        <TLAcknowledgement data={params} onSuccess={onSuccess} />
+        <TLAcknowledgement data={params} onSuccess={onSuccess} onUpdateSuccess={onUpdateSuccess} />
       </Route>
       <Route>
         <Redirect to={`${match.path}/${config.indexRoute}`} />

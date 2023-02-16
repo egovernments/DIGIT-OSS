@@ -107,15 +107,16 @@ public class TradeLicenseService {
             businessServicefromPath = businessService_TL;
        tlValidator.validateBusinessService(tradeLicenseRequest,businessServicefromPath);
        Object mdmsData = util.mDMSCall(tradeLicenseRequest.getRequestInfo(), tradeLicenseRequest.getLicenses().get(0).getTenantId());
+       Object billingSlabs = util.getBillingSlabs(tradeLicenseRequest.getRequestInfo(), tradeLicenseRequest.getLicenses().get(0).getTenantId());
        actionValidator.validateCreateRequest(tradeLicenseRequest);
+        switch(businessServicefromPath)
+        {
+            case businessService_BPA:
+                validateMobileNumberUniqueness(tradeLicenseRequest);
+                break;
+        }
        enrichmentService.enrichTLCreateRequest(tradeLicenseRequest, mdmsData);
-       tlValidator.validateCreate(tradeLicenseRequest, mdmsData);
-       switch(businessServicefromPath)
-       {
-           case businessService_BPA:
-               validateMobileNumberUniqueness(tradeLicenseRequest);
-               break;
-       }
+       tlValidator.validateCreate(tradeLicenseRequest, mdmsData, billingSlabs);
        userService.createUser(tradeLicenseRequest, false);
        calculationService.addCalculation(tradeLicenseRequest);
 
@@ -290,6 +291,15 @@ public class TradeLicenseService {
     	
     	return licenseCount;
     }
+
+	public Map<String,Integer> countApplications(TradeLicenseSearchCriteria criteria, RequestInfo requestInfo, String serviceFromPath, HttpHeaders headers){
+	
+		criteria.setBusinessService(serviceFromPath);
+		
+		Map<String,Integer> licenseCount = repository.getApplicationsCount(criteria);
+	
+		return licenseCount;
+	}
     
 
     public void checkEndStateAndAddBPARoles(TradeLicenseRequest tradeLicenseRequest) {
@@ -397,6 +407,7 @@ public class TradeLicenseService {
                 businessServicefromPath = businessService_TL;
             tlValidator.validateBusinessService(tradeLicenseRequest, businessServicefromPath);
             Object mdmsData = util.mDMSCall(tradeLicenseRequest.getRequestInfo(), tradeLicenseRequest.getLicenses().get(0).getTenantId());
+            Object billingSlabs = util.getBillingSlabs(tradeLicenseRequest.getRequestInfo(), tradeLicenseRequest.getLicenses().get(0).getTenantId());
             String businessServiceName = null;
             switch (businessServicefromPath) {
                 case businessService_TL:
@@ -416,7 +427,7 @@ public class TradeLicenseService {
             validateLatestApplicationCancellation(tradeLicenseRequest, businessService);
 
             enrichmentService.enrichTLUpdateRequest(tradeLicenseRequest, businessService);
-            tlValidator.validateUpdate(tradeLicenseRequest, searchResult, mdmsData);
+            tlValidator.validateUpdate(tradeLicenseRequest, searchResult, mdmsData, billingSlabs);
             switch(businessServicefromPath)
             {
                 case businessService_BPA:
@@ -542,5 +553,13 @@ public class TradeLicenseService {
         
         return false;
     }
+
+
+
+
+
+	public int getApplicationValidity() {
+		return Integer.valueOf(config.getApplicationValidity());
+	}
 
 }

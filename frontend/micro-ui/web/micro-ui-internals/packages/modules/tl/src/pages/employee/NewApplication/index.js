@@ -14,6 +14,8 @@ const NewApplication = () => {
   const history = useHistory();
   // delete
   const [propertyId, setPropertyId] = useState(new URLSearchParams(useLocation().search).get("propertyId"));
+  const isEmpNewApplication = window.location.href.includes("/employee/tl/new-application");
+  const isEmpRenewLicense = window.location.href.includes("/employee/tl/renew-application-details") || window.location.href.includes("/employee/tl/edit-application-details"); 
 
   const [sessionFormData, setSessionFormData, clearSessionFormData] = Digit.Hooks.useSessionStorage("PT_CREATE_EMP_TRADE_NEW_FORM", {});
   const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_HAPPENED", false);
@@ -36,16 +38,42 @@ const NewApplication = () => {
   };
 
   useEffect(() => {
+    if(sessionStorage.getItem("isCreateEnabledEmployee") === "true")
+    {
+      sessionStorage.removeItem("isCreateEnabledEmployee");
+      history.replace("/employee");
+    }
+    else
+    sessionStorage.removeItem("isCreateEnabledEmployee");
+
+  })
+
+  useEffect(() => {
     setMutationHappened(false);
     clearSuccessData();
   }, []);
+
+  function checkforownerPresent(formData){
+    if(formData?.owners){
+      formData?.owners?.map((ob) => {
+        if(!ob?.name || !ob.mobileNumber || !ob?.fatherOrHusbandName || !ob?.relationship?.code || ob?.gender?.code)
+        {
+          return true;
+        }
+      })
+      return false;
+    }
+  }
 
   const onFormValueChange = (setValue, formData, formState) => {
     if (!_.isEqual(sessionFormData, formData)) {
       setSessionFormData({ ...sessionFormData, ...formData });
     }
-
-    if (
+    if(checkforownerPresent(formData))
+    {
+      setSubmitValve(false);
+    }
+    else if (
       Object.keys(formState.errors).length > 0 &&
       Object.keys(formState.errors).length == 1 &&
       formState.errors["owners"] &&
@@ -57,6 +85,7 @@ const NewApplication = () => {
     }
   };
   const onSubmit = (data) => {
+    let isSameAsPropertyOwner = sessionStorage.getItem("isSameAsPropertyOwner"); 
     if(data?.cpt?.id){
       if (!data?.cpt?.details || !propertyDetails) {
           setShowToast({ key: "error" });
@@ -111,8 +140,8 @@ const NewApplication = () => {
     if (data?.cpt?.details?.address) {
       address.city = data?.cpt?.details?.address?.city || null;
       address.locality = { code: data?.cpt?.details?.address?.locality?.code || null };
-      if (data?.cpt?.details?.address?.doorNo) address.doorNo = data?.cpt?.details?.address?.doorNo || null;
-      if (data?.cpt?.details?.address?.street) address.street = data?.cpt?.details?.address?.street || null;
+      if (data?.cpt?.details?.address?.doorNo || data?.address?.doorNo) address.doorNo = data?.cpt?.details?.address?.doorNo || data?.address?.doorNo || null;
+      if (data?.cpt?.details?.address?.street || data?.address?.street) address.street = data?.cpt?.details?.address?.street || data?.address?.street || null;
       if (data?.cpt?.details?.address?.pincode) address.pincode = data?.cpt?.details?.address?.pincode;
     } else if (data?.address) {
       address.city = data?.address?.city?.code || null;
@@ -148,7 +177,7 @@ const NewApplication = () => {
     let operationalArea = Number(data?.tradedetils?.["0"]?.operationalArea) || "";
     let structureType = data?.tradedetils?.["0"]?.structureSubType?.code || "";
     let tradeName = data?.tradedetils?.["0"]?.tradeName || "";
-    let subOwnerShipCategory = data?.owners?.[0]?.subOwnerShipCategory?.code || "";
+    let subOwnerShipCategory = data?.ownershipCategory?.code || "";
     let licenseType = data?.tradedetils?.["0"]?.licenseType?.code || "PERMANENT";
 
     let formData = {
@@ -189,7 +218,11 @@ const NewApplication = () => {
       formData.tradeLicenseDetail.institution["name"] = data?.owners?.[0]?.name;
     if (data?.owners?.length && subOwnerShipCategory.includes("INSTITUTIONAL"))
       formData.tradeLicenseDetail.institution["contactNo"] = data?.owners?.[0]?.altContactNumber;
-    if (data?.cpt) formData.tradeLicenseDetail.additionalDetail.propertyId = data?.cpt?.details?.propertyId;
+    if (data?.cpt) 
+    {
+      formData.tradeLicenseDetail.additionalDetail.propertyId = data?.cpt?.details?.propertyId,
+      formData.tradeLicenseDetail.additionalDetail.isSameAsPropertyOwner = isSameAsPropertyOwner
+    };
 
     // setFormData(formData)
     /* use customiseCreateFormData hook to make some chnages to the licence object */
@@ -205,6 +238,7 @@ const NewApplication = () => {
             .then((response) => {
               if (response?.Licenses?.length > 0) {
                 // setTimeout(() => window.location.reload());
+                sessionStorage.setItem("isCreateEnabledEmployee","true");
                 history.replace(`/digit-ui/employee/tl/response`, { data: response?.Licenses });
                 clearSessionFormData();
               }
@@ -238,7 +272,10 @@ const NewApplication = () => {
       return "TL_CHECK_ADDRESS";
     } else if (head === "ES_NEW_APPLICATION_OWNERSHIP_DETAILS") {
       return "TL_OWNERSHIP_DETAILS_HEADER";
-    } else {
+    } else if (head === "TL_NEW_APPLICATION_PROPERTY" && (sessionFormData?.tradedetils?.[0]?.structureType?.code === "MOVABLE" && (isEmpNewApplication || isEmpRenewLicense))) {
+      return "";
+    }
+     else {
       return head;
     }
   }

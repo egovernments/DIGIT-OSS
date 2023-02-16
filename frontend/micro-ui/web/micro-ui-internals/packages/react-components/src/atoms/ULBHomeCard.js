@@ -19,7 +19,7 @@ const ULBHomeCard = (props) => {
             return (
               <Card
                 style={{ minWidth: "100px", cursor: "pointer" }}
-                onClick={() => (i.link ? history.push(i.link) : location.assign(i.locate))}
+                onClick={() => (i.hyperlink ? location.assign(i.link) : history.push(i.link))}
                 children={
                   <>
                     {" "}

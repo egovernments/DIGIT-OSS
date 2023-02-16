@@ -1,5 +1,4 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import { useRouteMatch } from "react-router-dom";
 import Banner from "./components/Banner";
 import ActionModal from "./components/Modal";
@@ -12,8 +11,7 @@ import ReceiptsCard from "./receiptHomeCard";
 
 export const ReceiptsModule = ({ stateCode, userType }) => {
   const moduleCode = "RECEIPTS";
-  const state = useSelector((state) => state);
-  const language = state?.common?.selectedLanguage;
+  const language = Digit.StoreData.getCurrentLanguage();
   const { isLoading, data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });
   const { path, url } = useRouteMatch();
   if (userType === "employee") {

@@ -154,6 +154,11 @@ public class AmendmentRepository {
 			updateParamMap.addValue("additionaldetails", util.getPGObject(amendmentUpdate.getAdditionalDetails()));
 			updateParamMap.addValue("tenantid", amendmentUpdate.getTenantId());
 			updateParamMap.addValue("amendmentid", amendmentUpdate.getAmendmentId());
+			updateParamMap.addValue("amendmentreason", amendmentUpdate.getAmendmentReason().toString());
+			updateParamMap.addValue("reasondocumentnumber", amendmentUpdate.getReasonDocumentNumber());
+			updateParamMap.addValue("effectivefrom", amendmentUpdate.getEffectiveFrom());
+			updateParamMap.addValue("effectivetill", amendmentUpdate.getEffectiveTill());
+
 			updateParamMapList.add(updateParamMap);
 		}
 		return updateParamMapList;

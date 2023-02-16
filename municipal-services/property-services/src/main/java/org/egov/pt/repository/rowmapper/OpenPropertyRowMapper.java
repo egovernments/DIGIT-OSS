@@ -42,16 +42,11 @@ public class OpenPropertyRowMapper implements ResultSetExtractor<List<Property>>
 
 				currentProperty = Property.builder()
 						.creationReason(CreationReason.fromValue(rs.getString("creationReason")))
-						.status(Status.fromValue(rs.getString("propertystatus")))
-						.oldPropertyId(rs.getString("oldPropertyId"))
-						.propertyId(rs.getString("propertyid"))
 						.auditDetails(auditdetails)
-						.tenantId(tenanId)
-						.id(propertyUuId)
-						.address(address)
 						.build();
 
-				
+				setPropertyInfo(currentProperty, rs, tenanId, propertyUuId, address);
+
 				addChildrenToProperty(rs, currentProperty);
 				propertyMap.put(propertyUuId, currentProperty);
 			}
@@ -177,4 +172,25 @@ public class OpenPropertyRowMapper implements ResultSetExtractor<List<Property>>
 		}
 
 	}
+
+	/*
+	 *  method sets all the data for PropertyInfo
+	 *
+	 * @param currentProperty
+	 * @param rs
+	 * @param tenantId
+	 * @param propertyUuId
+	 *
+	 * @throws SQLException
+	 * */
+	private void setPropertyInfo(Property currentProperty, ResultSet rs, String tenantId, String propertyUuId, Address address)
+			throws SQLException {
+		currentProperty.setPropertyId(rs.getString("propertyid"));
+		currentProperty.setAddress(address);
+		currentProperty.setStatus(Status.fromValue(rs.getString("propertystatus")));
+		currentProperty.setOldPropertyId(rs.getString("oldPropertyId"));
+		currentProperty.setTenantId(tenantId);
+		currentProperty.setId(propertyUuId);
+	}
+
 }

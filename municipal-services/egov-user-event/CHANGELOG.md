@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
-## 1.2.0 - 2022-05-12
+## 1.2.0-beta - 2022-05-12
 
 - Enhanced the search API to support date filter
 

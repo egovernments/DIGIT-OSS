@@ -4,18 +4,27 @@ import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
-const getMessage = (mutation) => {
-  if (mutation.isSuccess) return mutation.data?.Documents?.uuid;
-  return "";
-};
+// const getMessage = (mutation) => {
+//   if (mutation.isSuccess) return mutation.data?.Documents?.uuid;
+//   return "";
+// };
+// const getMessage = (mutation) => {
+
+//   if (mutation.isSuccess && mutation?.data?.Surveys?.[0]?.uuid) {
+//     return mutation?.data?.Surveys?.[0]?.uuid
+//   }
+//   if (mutation.isSuccess) return mutation.data?.Documents?.[0]?.uuid;
+//   return "";
+// };
+
 
 const BannerPicker = (props) => {
   const { t } = useTranslation();
   return (
     <Banner
       message={props.isSuccess ? t(`ENGAGEMENT_SURVEY_DELETED`) : t("ENGAGEMENT_SURVEY_DELETE_FAILURE")}
-      applicationNumber={props.mutation?.isSuccess ? props.uuid : ''}
-      info={props.isSuccess ? t("SURVEY_FORM_ID") : ""}
+      //applicationNumber={getMessage(props.mutation)}
+      //info={props.isSuccess ? t("SURVEY_FORM_ID") : ""}
       successful={props.isSuccess}
     />
   );

@@ -1,7 +1,12 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
-## 1.0.5
+## 1.0.5 - 2023-02-01
+
+- Transition from 1.0.5-beta version to 1.0.5 version
+- Added validation for when offline autoapproved application is moved to inprogress
+
+## 1.0.5-beta
 - Added search filter for mobileno
 - Return applicant name and current owner
 

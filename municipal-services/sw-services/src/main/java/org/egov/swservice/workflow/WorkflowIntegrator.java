@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.egov.swservice.config.SWConfiguration;
+import org.egov.swservice.util.SWConstants;
 import org.egov.swservice.util.SewerageServicesUtil;
 import org.egov.swservice.web.models.Property;
 import org.egov.swservice.web.models.SewerageConnection;
@@ -61,7 +62,12 @@ public class WorkflowIntegrator {
 	 */
 	public void callWorkFlow(SewerageConnectionRequest sewerageConnectionRequest, Property property) {
 		String wfBusinessServiceName = config.getBusinessServiceValue();
-		if(servicesUtil.isModifyConnectionRequest(sewerageConnectionRequest)){
+		
+		if(sewerageConnectionRequest.isDisconnectRequest()
+				|| (sewerageConnectionRequest.getSewerageConnection().getApplicationStatus().equalsIgnoreCase(SWConstants.PENDING_FOR_PAYMENT_STATUS_CODE)
+				&& sewerageConnectionRequest.getSewerageConnection().getApplicationNo().contains(SWConstants.APPLICATION_DISCONNECTION_CODE))) {
+			wfBusinessServiceName = config.getDisconnectBusinessServiceName();
+		} else if(servicesUtil.isModifyConnectionRequest(sewerageConnectionRequest)){
 			wfBusinessServiceName = config.getModifySWBusinessServiceName();
 		}
 		SewerageConnection connection = sewerageConnectionRequest.getSewerageConnection();

@@ -27,23 +27,23 @@ const App = ({ path }) => {
   const location = useLocation();
   const { t } = useTranslation();
 
-  const BPACitizenHomeScreen = Digit?.ComponentRegistryService?.getComponent('BPACitizenHomeScreen');
-  const CreateEDCR = Digit?.ComponentRegistryService?.getComponent('ObpsCreateEDCR');
-  const CreateOCEDCR = Digit?.ComponentRegistryService?.getComponent('ObpsCreateOCEDCR');
-  const NewBuildingPermit = Digit?.ComponentRegistryService?.getComponent('ObpsNewBuildingPermit');
-  const OCBuildingPermit = Digit?.ComponentRegistryService?.getComponent('ObpsOCBuildingPermit');
-  const StakeholderRegistration = Digit?.ComponentRegistryService?.getComponent('ObpsStakeholderRegistration');
-  const EdcrInbox = Digit?.ComponentRegistryService?.getComponent('ObpsEdcrInbox');
-  const BpaApplicationDetail = Digit?.ComponentRegistryService?.getComponent('ObpsCitizenBpaApplicationDetail');
-  const BPASendToArchitect = Digit?.ComponentRegistryService?.getComponent('ObpsBPASendToArchitect');
-  const OCSendToArchitect = Digit?.ComponentRegistryService?.getComponent('ObpsOCSendToArchitect');
-  const BPASendBackToCitizen = Digit?.ComponentRegistryService?.getComponent('ObpsBPASendBackToCitizen');
-  const OCSendBackToCitizen = Digit?.ComponentRegistryService?.getComponent('ObpsOCSendBackToCitizen');
+  const BPACitizenHomeScreen = Digit?.ComponentRegistryService?.getComponent("BPACitizenHomeScreen");
+  const CreateEDCR = Digit?.ComponentRegistryService?.getComponent("ObpsCreateEDCR");
+  const CreateOCEDCR = Digit?.ComponentRegistryService?.getComponent("ObpsCreateOCEDCR");
+  const NewBuildingPermit = Digit?.ComponentRegistryService?.getComponent("ObpsNewBuildingPermit");
+  const OCBuildingPermit = Digit?.ComponentRegistryService?.getComponent("ObpsOCBuildingPermit");
+  const StakeholderRegistration = Digit?.ComponentRegistryService?.getComponent("ObpsStakeholderRegistration");
+  const EdcrInbox = Digit?.ComponentRegistryService?.getComponent("ObpsEdcrInbox");
+  const BpaApplicationDetail = Digit?.ComponentRegistryService?.getComponent("ObpsCitizenBpaApplicationDetail");
+  const BPASendToArchitect = Digit?.ComponentRegistryService?.getComponent("ObpsBPASendToArchitect");
+  const OCSendToArchitect = Digit?.ComponentRegistryService?.getComponent("ObpsOCSendToArchitect");
+  const BPASendBackToCitizen = Digit?.ComponentRegistryService?.getComponent("ObpsBPASendBackToCitizen");
+  const OCSendBackToCitizen = Digit?.ComponentRegistryService?.getComponent("ObpsOCSendBackToCitizen");
   const isDocScreenAfterEdcr = sessionStorage.getItem("clickOnBPAApplyAfterEDCR") === "true" ? true : false
-
 
   return (
     <React.Fragment>
+      <div className="ws-citizen-wrapper">
        {!location.pathname.includes("response") && !location.pathname.includes("openlink/stakeholder") && !location.pathname.includes("/acknowledgement") && !isDocScreenAfterEdcr && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
       <Switch>
         <PrivateRoute path={`${path}/home`} component={BPACitizenHomeScreen} />
@@ -65,8 +65,9 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/sendbacktocitizen/ocbpa/:tenantId/:applicationNo`} component={OCSendBackToCitizen} />
         <PrivateRoute path={`${path}/response`} component={OBPSResponse} />
       </Switch>
+      </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
 export default App;

@@ -32,7 +32,7 @@ const StakeholderResponse = (props) => {
           info={t("BPA_NEW_STAKEHOLDER_REGISTRATION_APP_LABEL")}
           successful={bparegData?.status == "REJECTED" ? false : true}
           style={{ padding: "10px" }}
-          headerStyles={{fontSize: "32px"}}
+          headerStyles={{fontSize: "32px", wordBreak: "break-word"}}
         />
         <CardText style={{ paddingBottom: "10px", marginBottom: "10px" }}>{getSubHeaderMessage()}</CardText>
         <ActionBar style={{ display: "flex", justifyContent: "flex-end", alignItems: "baseline" }}>

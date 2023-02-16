@@ -296,6 +296,30 @@ public class SWCalculationConstant {
 
 	public static final String PROPERTY_MASTER_MODULE = "PropertyTax";
 
+	public static final String ADHOC_PENALTY_REASON = "adhocPenaltyReason";
+
+	public static final String ADHOC_PENALTY_COMMENT = "adhocPenaltyComment";
+
+	public static final String ADHOC_REBATE_REASON = "adhocRebateReason";
+
+	public static final String ADHOC_REBATE_COMMENT = "adhocRebateComment";
+
+	public static final String DETAILS_PROVIDED_BY = "detailsProvidedBy";
+
+	public static final String APP_CREATED_DATE = "appCreatedDate";
+
+	public static final String ESTIMATION_FILESTORE_ID = "estimationFileStoreId";
+
+	public static final String SANCTION_LETTER_FILESTORE_ID = "sanctionFileStoreId";
+
+	public static final String ESTIMATION_DATE_CONST = "estimationLetterDate";
+
+	public static final String LOCALITY = "locality";
+	
+	public static final String PAYMENT_COMPLETED_SEARCH_FIELD_NAME = "isPaymentCompleted=";
+
+	public static final String MDMS_CACHE_KEY = "WSMasterData";
+
 	//Notification
 	public static final String CHANNEL_NAME_SMS = "SMS";
 
@@ -317,4 +341,40 @@ public class SWCalculationConstant {
 	public static final String ACTION_FOR_BILL = "BILL";
 
 	public static String Billing_Cycle_String = "billingCycle";
+	
+	public static final String MODIFIED_FINAL_STATE = "APPROVED";
+
+	public static final String STATUS_APPROVED = "CONNECTION_ACTIVATED";
+
+	public static final String PENDING_APPROVAL_FOR_DISCONNECTION = "PENDING_APPROVAL_FOR_DISCONNECTION";
+
+	public static final String CONNECTION_INACTIVATED = "Inactive";
+
+	public static final List<String> FINAL_CONNECTION_STATES = Collections
+			.unmodifiableList(Arrays.asList(MODIFIED_FINAL_STATE, STATUS_APPROVED));
+
+	public static final String BILL_KEY= "Bill";
+
+	public static final String CONSUMER_CODE_KEY= "consumerCode";
+
+	public static final String BILL_DETAILS_KEY= "billDetails";
+
+	public static final String TO_PERIOD_KEY= "toPeriod";
+
+	public static final String FROM_PERIOD_KEY= "fromPeriod";
+
+	public static final String AMOUNT_KEY= "amount";
+
+	public static final String NEW_SEWERAGE_CONNECTION = "NEW_SEWERAGE_CONNECTION";
+
+	public static final String NEWSEWERAGE_BUSINESS_SERVICE = "NewSW1";
+
+	public static final String MODIFY_BUSINESS_SERVICE = "ModifySWConnection";
+
+	public static final String DISCONNECTION_BUSINESS_SERVICE = "DisconnectSWConnection";
+
+	public static final String PENDING_FOR_DISCONNECTION_EXECUTION = "PENDING_FOR_DISCONNECTION_EXECUTION";
+
+	public static final String DISCONNECTION_EXECUTED = "DISCONNECTION_EXECUTED";
+
 }

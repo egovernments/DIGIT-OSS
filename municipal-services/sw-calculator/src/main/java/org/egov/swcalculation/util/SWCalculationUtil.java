@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import com.jayway.jsonpath.Filter;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.contract.request.Role;
 import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsCriteria;
 import org.egov.mdms.model.MdmsCriteriaReq;
@@ -112,9 +113,10 @@ public class SWCalculationUtil {
 	 * @return - Returns the Search URL
 	 */
 	public StringBuilder getDemandSearchUrl(GetBillCriteria getBillCriteria) {
-
+		StringBuilder url;
+		
 		if (CollectionUtils.isEmpty(getBillCriteria.getConsumerCodes()))
-			return new StringBuilder().append(configurations.getBillingServiceHost())
+			url = new StringBuilder().append(configurations.getBillingServiceHost())
 					.append(configurations.getDemandSearchEndPoint()).append(SWCalculationConstant.URL_PARAMS_SEPARATER)
 					.append(SWCalculationConstant.TENANT_ID_FIELD_FOR_SEARCH_URL).append(getBillCriteria.getTenantId())
 					.append(SWCalculationConstant.SEPARATER)
@@ -122,16 +124,42 @@ public class SWCalculationUtil {
 					.append(getBillCriteria.getConnectionId()).append(SWCalculationConstant.SW_CONSUMER_CODE_SEPARATOR)
 					.append(getBillCriteria.getConnectionNumber());
 
-		else
-			return new StringBuilder().append(configurations.getBillingServiceHost())
+		else{
+			url = new StringBuilder().append(configurations.getBillingServiceHost())
 					.append(configurations.getDemandSearchEndPoint()).append(SWCalculationConstant.URL_PARAMS_SEPARATER)
 					.append(SWCalculationConstant.TENANT_ID_FIELD_FOR_SEARCH_URL).append(getBillCriteria.getTenantId())
 					.append(SWCalculationConstant.SEPARATER)
 					.append(SWCalculationConstant.CONSUMER_CODE_SEARCH_FIELD_NAME)
 					.append(StringUtils.join(getBillCriteria.getConsumerCodes(), ","));
 
+			if(getBillCriteria.getIsPaymentCompleted() != null)
+				url.append(SWCalculationConstant.SEPARATER)
+						.append(SWCalculationConstant.PAYMENT_COMPLETED_SEARCH_FIELD_NAME)
+						.append(getBillCriteria.getIsPaymentCompleted());
+		}
+
+		return url;
 	}
 
+
+	public List<Property> propertySearch(RequestInfo requestInfo, Set<String> propertyIds, String tenantId, Long limit) {
+
+		PropertyCriteria propertyCriteria = PropertyCriteria.builder()
+				.propertyIds(propertyIds)
+				.tenantId(tenantId)
+				.limit(limit)
+				.build();
+
+		StringBuilder url = getPropertyURL(propertyCriteria);
+		RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder()
+				.requestInfo(requestInfo)
+				.build();
+
+		Object result = serviceRequestRepository.fetchResult(url, requestInfoWrapper);
+		List<Property> propertyList = getPropertyDetails(result);
+		return propertyList;
+	}
+	
 	/**
 	 * Returns url for demand update Api
 	 *
@@ -420,6 +448,12 @@ public class SWCalculationUtil {
 					.collect(Collectors.joining(","));
 			url.append(uuids).append(uuidString);
 		}
+		if ((criteria.getLimit()) != null) {
+			if (isAnyParameterMatch)
+				url.append("&");
+			isAnyParameterMatch = true;
+			url.append("limit=").append(criteria.getLimit());
+		}
 		return url;
 	}
 
@@ -555,7 +589,7 @@ public class SWCalculationUtil {
 	 * Parses date formats to long for all users in responseMap
 	 * @param responeMap LinkedHashMap got from user api response
 	 */
-	private void parseResponse(LinkedHashMap responeMap,String dobFormat){
+	public void parseResponse(LinkedHashMap responeMap,String dobFormat){
 		List<LinkedHashMap> users = (List<LinkedHashMap>)responeMap.get("user");
 		String formatForDate = "dd-MM-yyyy HH:mm:ss";
 		if(users!=null){
@@ -587,6 +621,36 @@ public class SWCalculationUtil {
 			e.printStackTrace();
 		}
 		return  returnDate.getTime();
+	}
+
+	/**
+	 *
+	 * @param tenantId
+	 * @return internal microservice user to fetch plain user details
+	 */
+	public org.egov.common.contract.request.User getInternalMicroserviceUser(String tenantId)
+	{
+		//Creating role with INTERNAL_MICROSERVICE_ROLE
+		org.egov.common.contract.request.Role role = Role.builder()
+				.name("Internal Microservice Role").code("INTERNAL_MICROSERVICE_ROLE")
+				.tenantId(tenantId).build();
+
+		//Creating userinfo with uuid and role of internal micro service role
+		org.egov.common.contract.request.User userInfo = org.egov.common.contract.request.User.builder()
+				.uuid(config.getEgovInternalMicroserviceUserUuid())
+				.type("SYSTEM")
+				.roles(Collections.singletonList(role)).id(0L).build();
+
+		return userInfo;
+	}
+
+	public String getShortnerURL(String actualURL) {
+		net.minidev.json.JSONObject obj = new net.minidev.json.JSONObject();
+		obj.put("url", actualURL);
+		String url = config.getNotificationUrl() + config.getShortenerURL();
+
+		Object response = serviceRequestRepository.getShorteningURL(new StringBuilder(url), obj);
+		return response.toString();
 	}
 
 }

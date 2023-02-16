@@ -209,7 +209,7 @@ public class UserRequest {
     }
 
     @JsonIgnore
-    public User toDomain(Long loggedInUserId, boolean isCreate) {
+    public User toDomain(Long loggedInUserId, String loggedInUserUuid, boolean isCreate) {
         BloodGroup bloodGroup = null;
         try {
             if (this.bloodGroup != null)
@@ -247,6 +247,7 @@ public class UserRequest {
                 .password(this.password)
                 .roles(toDomainRoles())
                 .loggedInUserId(loggedInUserId)
+                .loggedInUserUuid(loggedInUserUuid)
                 .permanentAddress(toDomainPermanentAddress())
                 .correspondenceAddress(toDomainCorrespondenceAddress())
                 .guardian(fatherOrHusbandName)

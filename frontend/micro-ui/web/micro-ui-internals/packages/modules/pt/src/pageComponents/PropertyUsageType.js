@@ -126,6 +126,7 @@ const PropertyUsageType = ({ t, config, onSelect, userType, formData, formState,
 
   return (
     <React.Fragment>
+          {window.location.href.includes("/citizen") ? <Timeline currentStep={1}/> : null}
       <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!usageCategoryMajor}>
         <div>
           <RadioButtons

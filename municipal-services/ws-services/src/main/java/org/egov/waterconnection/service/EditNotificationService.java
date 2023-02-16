@@ -2,16 +2,19 @@ package org.egov.waterconnection.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
+import org.egov.common.contract.request.User;
 import org.egov.waterconnection.config.WSConfiguration;
 import org.egov.waterconnection.constants.WCConstants;
 import org.egov.waterconnection.util.NotificationUtil;
 import org.egov.waterconnection.util.WaterServicesUtil;
 import org.egov.waterconnection.validator.ValidateProperty;
 import org.egov.waterconnection.web.models.*;
+import org.egov.waterconnection.web.models.users.UserDetailResponse;
+import org.egov.waterconnection.web.models.workflow.ProcessInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -46,7 +49,13 @@ public class EditNotificationService {
 			String applicationStatus = request.getWaterConnection().getApplicationStatus();
 			List<String> configuredChannelNames =  notificationUtil.fetchChannelList(request.getRequestInfo(), request.getWaterConnection().getTenantId(), WATER_SERVICE_BUSINESS_ID, request.getWaterConnection().getProcessInstance().getAction());
 
+			User userInfoCopy = request.getRequestInfo().getUserInfo();
+			User userInfo = notificationUtil.getInternalMicroserviceUser(request.getWaterConnection().getTenantId());
+			request.getRequestInfo().setUserInfo(userInfo);
+
 			Property property = validateProperty.getOrValidateProperty(request);
+
+			request.getRequestInfo().setUserInfo(userInfoCopy);
 
 			if(configuredChannelNames.contains(CHANNEL_NAME_EVENT)) {
 				if (config.getIsUserEventsNotificationEnabled() != null && config.getIsUserEventsNotificationEnabled()) {
@@ -71,11 +80,18 @@ public class EditNotificationService {
 	private EventRequest getEventRequest(WaterConnectionRequest waterConnectionRequest, Property property) {
 		String localizationMessage = notificationUtil
 				.getLocalizationMessages(property.getTenantId(), waterConnectionRequest.getRequestInfo());
+		ProcessInstance workflow = waterConnectionRequest.getWaterConnection().getProcessInstance();
+
 		String code = WCConstants.WS_EDIT_IN_APP;
-		if ((!waterConnectionRequest.getWaterConnection().getProcessInstance().getAction().equalsIgnoreCase(WCConstants.ACTIVATE_CONNECTION))
-				&& waterServicesUtil.isModifyConnectionRequest(waterConnectionRequest)) {
-			   code = WCConstants.WS_MODIFY_IN_APP;
+		if ((!workflow.getAction().equalsIgnoreCase(WCConstants.ACTIVATE_CONNECTION))
+				&& waterServicesUtil.isModifyConnectionRequestForNotification(waterConnectionRequest)) {
+			code = WCConstants.WS_MODIFY_IN_APP;
 		}
+		if ((!workflow.getAction().equalsIgnoreCase(WCConstants.ACTIVATE_CONNECTION)) &&
+				(!workflow.getAction().equalsIgnoreCase(APPROVE_CONNECTION)) && waterServicesUtil.isDisconnectConnectionRequest(waterConnectionRequest)) {
+			code = WS_DISCONNECT_EDIT_INAPP;
+		}
+
 		String message = notificationUtil.getCustomizedMsg(code, localizationMessage);
 		if (message == null) {
 			log.info("No localized message found!!, Using default message");
@@ -83,33 +99,46 @@ public class EditNotificationService {
 			if(code.equalsIgnoreCase(WCConstants.WS_MODIFY_IN_APP))
 				message = notificationUtil.getCustomizedMsg(DEFAULT_OBJECT_MODIFY_APP_MSG, localizationMessage);
 		}
+
 		Map<String, String> mobileNumbersAndNames = new HashMap<>();
+		Map<String, String> mapOfPhoneNoAndUUIDs = new HashMap<>();
 
-			//Send the notification to all owners
-			property.getOwners().forEach(owner -> {
-				if (owner.getMobileNumber() != null)
-					mobileNumbersAndNames.put(owner.getMobileNumber(), owner.getName());
+		Set<String> ownersMobileNumbers = new HashSet<>();
+		//Send the notification to all owners
+		property.getOwners().forEach(owner -> {
+			if (owner.getMobileNumber() != null)
+				ownersMobileNumbers.add(owner.getMobileNumber());
+		});
+
+		//send the notification to the connection holders
+		if (!CollectionUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionHolders())) {
+			waterConnectionRequest.getWaterConnection().getConnectionHolders().forEach(holder -> {
+				if (!StringUtils.isEmpty(holder.getMobileNumber())) {
+					ownersMobileNumbers.add(holder.getMobileNumber());
+				}
 			});
+		}
 
-			//send the notification to the connection holders
-			if(!CollectionUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionHolders())) {
-				waterConnectionRequest.getWaterConnection().getConnectionHolders().forEach(holder -> {
-					if (!StringUtils.isEmpty(holder.getMobileNumber())) {
-						mobileNumbersAndNames.put(holder.getMobileNumber(), holder.getName());
-					}
-				});
+		for (String mobileNumber : ownersMobileNumbers) {
+			UserDetailResponse userDetailResponse = workflowNotificationService.fetchUserByUsername(mobileNumber, waterConnectionRequest.getRequestInfo(), waterConnectionRequest.getWaterConnection().getTenantId());
+			if (!CollectionUtils.isEmpty(userDetailResponse.getUser())) {
+				OwnerInfo user = userDetailResponse.getUser().get(0);
+				mobileNumbersAndNames.put(user.getMobileNumber(), user.getName());
+				mapOfPhoneNoAndUUIDs.put(user.getMobileNumber(), user.getUuid());
+			} else {
+				log.info("No User for mobile {} skipping event", mobileNumber);
 			}
-			//Send the notification to applicant
-			if(!org.apache.commons.lang.StringUtils.isEmpty(waterConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber()))
-			{
-				mobileNumbersAndNames.put(waterConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber(), waterConnectionRequest.getRequestInfo().getUserInfo().getName());
-			}
+		}
+
+		//Send the notification to applicant
+		if (!StringUtils.isEmpty(waterConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber())) {
+			mobileNumbersAndNames.put(waterConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber(), waterConnectionRequest.getRequestInfo().getUserInfo().getName());
+			mapOfPhoneNoAndUUIDs.put(waterConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber(), waterConnectionRequest.getRequestInfo().getUserInfo().getUuid());
+		}
 
 		Map<String, String> mobileNumberAndMessage = workflowNotificationService.getMessageForMobileNumber(mobileNumbersAndNames, waterConnectionRequest, message, property);
 		Set<String> mobileNumbers = mobileNumberAndMessage.keySet().stream().collect(Collectors.toSet());
-		Map<String, String> mapOfPhoneNoAndUUIDs = workflowNotificationService.
-				fetchUserUUIDs(mobileNumbers, waterConnectionRequest.getRequestInfo(),
-				property.getTenantId());
+
 		if (CollectionUtils.isEmpty(mapOfPhoneNoAndUUIDs.keySet())) {
 			log.info("UUID search failed!");
 		}
@@ -140,11 +169,18 @@ public class EditNotificationService {
 	private List<SMSRequest> getSmsRequest(WaterConnectionRequest waterConnectionRequest, Property property) {
 		String localizationMessage = notificationUtil
 				.getLocalizationMessages(property.getTenantId(), waterConnectionRequest.getRequestInfo());
+		ProcessInstance workflow = waterConnectionRequest.getWaterConnection().getProcessInstance();
+
 		String code = WCConstants.WS_EDIT_SMS;
-		if ((!waterConnectionRequest.getWaterConnection().getProcessInstance().getAction().equalsIgnoreCase(WCConstants.ACTIVATE_CONNECTION))
-				&& waterServicesUtil.isModifyConnectionRequest(waterConnectionRequest)) {
-			code = WCConstants.WS_MODIFY_SMS;
+		if ((!workflow.getAction().equalsIgnoreCase(WCConstants.ACTIVATE_CONNECTION))
+				&& waterServicesUtil.isModifyConnectionRequestForNotification(waterConnectionRequest)) {
+			code = WS_MODIFY_SMS;
 		}
+		if ((!workflow.getAction().equalsIgnoreCase(WCConstants.ACTIVATE_CONNECTION)) &&
+				(!workflow.getAction().equalsIgnoreCase(APPROVE_CONNECTION)) && waterServicesUtil.isDisconnectConnectionRequest(waterConnectionRequest)) {
+			code = WS_DISCONNECT_EDIT_SMS;
+		}
+		
 		String message = notificationUtil.getCustomizedMsg(code, localizationMessage);
 		if (message == null) {
 			log.info("No localized message found!!, Using default message");
@@ -152,22 +188,32 @@ public class EditNotificationService {
 			if(code.equalsIgnoreCase(WCConstants.WS_MODIFY_SMS))
 				message = notificationUtil.getCustomizedMsg(DEFAULT_OBJECT_MODIFY_SMS_MSG, localizationMessage);
 		}
-		Map<String, String> mobileNumbersAndNames = new HashMap<>();
 
 			//Send the notification to all owners
-			property.getOwners().forEach(owner -> {
-				if (owner.getMobileNumber() != null)
-					mobileNumbersAndNames.put(owner.getMobileNumber(), owner.getName());
+		Set<String> ownersUuids = new HashSet<>();
+		property.getOwners().forEach(owner -> {
+				if (owner.getUuid() != null)
+				{
+					ownersUuids.add(owner.getUuid());
+				}
 			});
 
 			//send the notification to the connection holders
 			if(!CollectionUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionHolders())) {
 				waterConnectionRequest.getWaterConnection().getConnectionHolders().forEach(holder -> {
-					if (!StringUtils.isEmpty(holder.getMobileNumber())) {
-						mobileNumbersAndNames.put(holder.getMobileNumber(), holder.getName());
+					if (!org.apache.commons.lang.StringUtils.isEmpty(holder.getUuid())) {
+						ownersUuids.add(holder.getUuid());
 					}
 				});
 			}
+
+			UserDetailResponse userDetailResponse = workflowNotificationService.fetchUserByUUID(ownersUuids,waterConnectionRequest.getRequestInfo(),waterConnectionRequest.getWaterConnection().getTenantId());
+			Map<String, String> mobileNumbersAndNames = new HashMap<>();
+			for(OwnerInfo user:userDetailResponse.getUser())
+			{
+				mobileNumbersAndNames.put(user.getMobileNumber(),user.getName());
+			}
+
 			//Send the notification to applicant
 			if(!org.apache.commons.lang.StringUtils.isEmpty(waterConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber()))
 			{

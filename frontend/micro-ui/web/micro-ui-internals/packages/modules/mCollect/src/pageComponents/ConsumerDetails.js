@@ -151,7 +151,7 @@ const OwnerForm1 = (_props) => {
                 control={control}
                 name={"ConsumerName"}
                 defaultValue={consumerdetail?.ConsumerName}
-                rules={{ required: t("REQUIRED_FIELD"), validate: { pattern: (val) => (/^[A-Za-z]+$/.test(val) ? true : t("CS_ADDCOMPLAINT_NAME_ERROR")) } }}
+                rules={{ required: t("REQUIRED_FIELD"), validate: { pattern: (val) => (/^[a-zA-Z-.`' ]*$/.test(val) ? true : t("CS_ADDCOMPLAINT_NAME_ERROR")) } }}
                 render={(props) => (
                   <TextInput
                     value={props.value}

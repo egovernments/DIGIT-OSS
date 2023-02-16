@@ -106,5 +106,5 @@ public class BPAController {
 				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true)).build();
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
-	
+
 }

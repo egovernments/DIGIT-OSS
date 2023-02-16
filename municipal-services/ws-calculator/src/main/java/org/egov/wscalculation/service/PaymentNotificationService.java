@@ -61,6 +61,8 @@ public class PaymentNotificationService {
 	String totalBillAmount = "billAmount";
 	String dueDate = "dueDate";
 
+	String applicationNumberReplacer = "$applicationNumber";
+
 	/**
 	 * @param record record is bill response.
 	 * @param topic  topic is bill generation topic for water.
@@ -74,13 +76,21 @@ public class PaymentNotificationService {
 			HashMap<String, String> mappedRecord = mapRecords(context);
 			Map<String, Object> info = (Map<String, Object>) record.get("requestInfo");
 			RequestInfo requestInfo = mapper.convertValue(info, RequestInfo.class);
+
+			org.egov.common.contract.request.User userInfoCopy = requestInfo.getUserInfo();
+			org.egov.common.contract.request.User userInfo = notificationUtil.getInternalMicroserviceUser(requestInfo.getUserInfo().getTenantId());
+			requestInfo.setUserInfo(userInfo);
+
 			List<WaterConnection> waterConnectionList = calculatorUtil.getWaterConnection(requestInfo,
 					mappedRecord.get(consumerCode), mappedRecord.get(tenantId));
 			int size = waterConnectionList.size();
 			WaterConnection waterConnection = waterConnectionList.get(size - 1);
 			WaterConnectionRequest waterConnectionRequest = WaterConnectionRequest.builder()
 					.waterConnection(waterConnection).requestInfo(requestInfo).build();
+
 			Property property = wSCalculationUtil.getProperty(waterConnectionRequest);
+
+			waterConnectionRequest.getRequestInfo().setUserInfo(userInfoCopy);
 
 			List<String> configuredChannelNames = notificationUtil.fetchChannelList(waterConnectionRequest.getRequestInfo(), waterConnectionRequest.getWaterConnection().getTenantId(), "WS", waterConnectionRequest.getWaterConnection().getProcessInstance().getAction());
 
@@ -131,6 +141,12 @@ public class PaymentNotificationService {
 	 */
 	private EventRequest getEventRequest(HashMap<String, String> mappedRecord, WaterConnectionRequest waterConnectionRequest, String topic,
 										 Property property) {
+
+		//If bill amount is 0 then do not send any notification
+		Double zero = Double.valueOf(0);
+		if(Double.parseDouble(mappedRecord.get(totalBillAmount)) == zero)
+			return null;
+
 		String localizationMessage = notificationUtil.getLocalizationMessages(mappedRecord.get(tenantId), waterConnectionRequest.getRequestInfo());
 		String message = notificationUtil.getCustomizedMsgForInApp(topic, localizationMessage);
 		if (message == null) {
@@ -174,9 +190,12 @@ public class PaymentNotificationService {
 			toUsers.add(mapOfPhoneNoAndUUIDs.get(mobile));
 			Recipient recepient = Recipient.builder().toUsers(toUsers).toRoles(null).build();
 			List<ActionItem> items = new ArrayList<>();
-			String actionLink = config.getPayLink().replace("$mobile", mobile)
-					.replace("$consumerCode", waterConnectionRequest.getWaterConnection().getConnectionNo())
-					.replace("$tenantId", property.getTenantId());
+			String connectionNo = waterConnectionRequest.getWaterConnection().getConnectionNo();
+			String actionLink = config.getBillDetailsLink()
+					.replace("$consumerCode", connectionNo.replace("/", "+"))
+					.replace("$tenantId", property.getTenantId())
+					.replace("$consumerName", mobileNumbersAndNames.get(mobile));
+
 			actionLink = config.getNotificationUrl() + actionLink;
 			ActionItem item = ActionItem.builder().actionUrl(actionLink).code(config.getPayCode()).build();
 			items.add(item);
@@ -204,6 +223,12 @@ public class PaymentNotificationService {
 	 */
 	private List<SMSRequest> getSmsRequest(HashMap<String, String> mappedRecord, WaterConnectionRequest waterConnectionRequest, String topic,
 										   Property property) {
+
+		//If bill amount is 0 then do not send any notification
+		Double zero = Double.valueOf(0);
+		if(Double.parseDouble(mappedRecord.get(totalBillAmount)) == zero)
+			return null;
+
 		String localizationMessage = notificationUtil.getLocalizationMessages(mappedRecord.get(tenantId), waterConnectionRequest.getRequestInfo());
 		String message = notificationUtil.getCustomizedMsgForSMS(topic, localizationMessage);
 		if (message == null) {
@@ -231,11 +256,14 @@ public class PaymentNotificationService {
 		Map<String, String> mobileNumberAndMessage = getMessageForMobileNumber(mobileNumbersAndNames, mappedRecord,
 				message);
 		List<SMSRequest> smsRequest = new ArrayList<>();
+		String connectionNo = waterConnectionRequest.getWaterConnection().getConnectionNo();
+
 		mobileNumberAndMessage.forEach((mobileNumber, msg) -> {
 			if (msg.contains("{Link to Bill}")) {
-				String actionLink = config.getSmsNotificationLink()
-						.replace("$consumerCode", waterConnectionRequest.getWaterConnection().getConnectionNo())
-						.replace("$tenantId", property.getTenantId());
+				String actionLink = config.getBillDetailsLink()
+						.replace("$consumerCode", connectionNo.replace("/", "+"))
+						.replace("$tenantId", property.getTenantId())
+						.replace("$consumerName", mobileNumbersAndNames.get(mobileNumber));
 				actionLink = config.getNotificationUrl() + actionLink;
 				actionLink = notificationUtil.getShortnerURL(actionLink);
 				msg = msg.replace("{Link to Bill}", actionLink);

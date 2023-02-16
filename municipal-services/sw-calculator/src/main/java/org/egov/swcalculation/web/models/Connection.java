@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import lombok.*;
 import org.egov.swcalculation.web.models.workflow.ProcessInstance;
 import org.springframework.validation.annotation.Validated;
 
@@ -26,6 +27,11 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @ApiModel(description = "This is lightweight property object that can be used as reference by definitions needing property linking. Actual Property Object extends this to include more elaborate attributes of the property.")
 @Validated
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-03-13T11:29:47.358+05:30[Asia/Kolkata]")
 public class Connection {
 	@JsonProperty("id")
@@ -128,6 +134,12 @@ public class Connection {
 	@JsonProperty("dateEffectiveFrom")
 	private Long dateEffectiveFrom = null;
 
+	@JsonProperty("oldApplication")
+	private Boolean oldApplication = false;
+
+	@JsonProperty("disconnectionExecutionDate")
+	private Long disconnectionExecutionDate = null;
+
 	public Connection id(String id) {
 		this.id = id;
 		return this;
@@ -174,6 +186,14 @@ public class Connection {
 	public Connection applicationNo(String applicationNo) {
 		this.applicationNo = applicationNo;
 		return this;
+	}
+
+	@ApiModelProperty(value = " ")
+
+	public Boolean getOldApplication() {return oldApplication;}
+
+	public void setOldApplication(Boolean oldApplication) {
+		this.oldApplication = oldApplication;
 	}
 
 	/**
@@ -607,7 +627,8 @@ public class Connection {
 				&& Objects.equals(this.auditDetails, connection.auditDetails)
 				&& Objects.equals(this.connectionHolders, connection.connectionHolders)
 				&& Objects.equals(this.applicationType, connection.applicationType)
-				&& Objects.equals(this.dateEffectiveFrom, connection.dateEffectiveFrom);
+				&& Objects.equals(this.dateEffectiveFrom, connection.dateEffectiveFrom)
+				&& Objects.equals(this.oldApplication, connection.oldApplication);
 	}
 
 	@Override
@@ -615,7 +636,7 @@ public class Connection {
 		return Objects.hash(id, tenantId, propertyId, applicationNo, applicationStatus, status, connectionNo,
 				oldConnectionNo, documents, roadCuttingInfo, plumberInfo, roadType, roadCuttingArea, connectionExecutionDate,
 				connectionCategory, connectionType, additionalDetails, auditDetails, connectionHolders,
-				applicationType, dateEffectiveFrom);
+				applicationType, dateEffectiveFrom, oldApplication);
 	}
 
 	@Override
@@ -644,6 +665,7 @@ public class Connection {
 		sb.append("    connectionHolders: ").append(toIndentedString(connectionHolders)).append("\n");
 		sb.append("    applicationType: ").append(toIndentedString(applicationType)).append("\n");
 		sb.append("	   dateEffectiveFrom: ").append(toIndentedString(dateEffectiveFrom)).append("\n");
+		sb.append("	   oldApplication: ").append(toIndentedString(oldApplication)).append("\n");
 		sb.append("}");
 		return sb.toString();
 	}

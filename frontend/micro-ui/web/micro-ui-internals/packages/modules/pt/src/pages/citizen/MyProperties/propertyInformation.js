@@ -35,7 +35,7 @@ const setBillData = async (tenantId, propertyIds, updatefetchBillData, updateCan
 
 const getBillAmount = (fetchBillData = null) => {
   if (fetchBillData == null) return "CS_NA";
-  return fetchBillData ? (fetchBillData?.Bill && fetchBillData.Bill[0] ? fetchBillData.Bill[0]?.totalAmount : "CS_NA") : "CS_NA";
+  return fetchBillData ? (fetchBillData?.Bill && fetchBillData.Bill[0] ? fetchBillData.Bill[0]?.totalAmount : "0") : "0";
 };
 
 const PropertyInformation = () => {
@@ -163,7 +163,7 @@ const PropertyInformation = () => {
         <Card>
           <StatusTable>
             <Row className="border-none" label={t("PT_PROPERTY_PTUID")} text={`${property.propertyId || t("CS_NA")}`} /* textStyle={{ whiteSpace: "pre" }} */ />
-            <Row className="border-none" label={t("CS_COMMON_TOTAL_AMOUNT_DUE")} text={`${t(getBillAmount(fetchBillData))}`} />
+            <Row className="border-none" label={t("CS_COMMON_TOTAL_AMOUNT_DUE")} text={`₹${t(getBillAmount(fetchBillData))}`} />
           </StatusTable>
           <CardSubHeader>{t("PT_PROPERTY_ADDRESS_SUB_HEADER")}</CardSubHeader>
           <StatusTable>
@@ -175,7 +175,7 @@ const PropertyInformation = () => {
           </StatusTable>
           <CardSubHeader>{t("PT_PROPERTY_ASSESSMENT_DETAILS_HEADER")}</CardSubHeader>
           <StatusTable>
-            <Row 
+            {/* <Row 
               className="border-none" 
               label={t("PT_ASSESMENT_INFO_USAGE_TYPE")}
               text={
@@ -184,7 +184,7 @@ const PropertyInformation = () => {
                     (property?.usageCategory?.split(".")[1] ? property?.usageCategory?.split(".")[1] : property.usageCategory)
                 )}` || t("CS_NA")
               }
-            />
+            /> */}
             <Row className="border-none" label={t("PT_COMMON_PROPERTY_TYPE")} text={`${t(getPropertyTypeLocale(property?.propertyType))}` || t("CS_NA")} />
             <Row className="border-none" label={t("PT_ASSESMENT1_PLOT_SIZE")} text={`${property.landArea} sq.ft` || t("CS_NA")} />
             <Row className="border-none" label={t("PT_ASSESMENT_INFO_NO_OF_FLOOR")} text={`${property.noOfFloors || t("CS_NA")}`} />
@@ -208,9 +208,9 @@ const PropertyInformation = () => {
                           label={t("PT_ASSESSMENT_UNIT_USAGE_TYPE")}
                           text={
                             `${t(
-                              (property.usageCategory !== "RESIDENTIAL" ? "COMMON_PROPSUBUSGTYPE_NONRESIDENTIAL_" : "COMMON_PROPSUBUSGTYPE_") +
-                                (property?.usageCategory?.split(".")[1] ? property?.usageCategory?.split(".")[1] : property.usageCategory) +
-                                (property.usageCategory !== "RESIDENTIAL" ? "_" + unit?.usageCategory.split(".").pop() : "")
+                              (property.usageCategory !== "RESIDENTIAL" ? "COMMON_PROPUSGTYPE_NONRESIDENTIAL_" : "COMMON_PROPUSGTYPE_") +
+                                (property?.usageCategory?.split(".")[1] ? property?.usageCategory?.split(".")[1] : property.usageCategory) 
+                                /* (property.usageCategory !== "RESIDENTIAL" ? "_" + unit?.usageCategory.split(".").pop() : "") */
                             )}` || t("CS_NA")
                           }
                         />
@@ -243,7 +243,7 @@ const PropertyInformation = () => {
                     <Row 
                       className="border-none" 
                       label={t("PT_COMMON_APPLICANT_NAME_LABEL")}
-                      textStyle={isMobile?{marginLeft:"29%",marginRight:"5%",wordBreak:"break-word"}:{marginLeft:"21%"}}
+                      textStyle={isMobile?{marginLeft:"27%",marginRight:"5%",wordBreak:"break-word"}:{marginLeft:"18%"}}
                       text={`${owner?.name || t("CS_NA")}`}
                       actionButtonStyle={{marginRight:"-10px"}}
                       actionButton={
@@ -256,7 +256,7 @@ const PropertyInformation = () => {
                     className="border-none" 
                     label={t("PT_FORM3_MOBILE_NUMBER")}
                     text={`${t(owner?.mobileNumber)}` || t("CS_NA")}
-                    textStyle={isMobile?{marginLeft:"16%"}:{marginLeft:"13%"}}
+                    textStyle={isMobile?{marginLeft:"16%"}:{marginLeft:"12%"}}
                     actionButton={
                     property?.status === "ACTIVE"&&owner?.mobileNumber&&Digit.UserService.getUser()?.info?.mobileNumber&&owner.mobileNumber===Digit.UserService.getUser()?.info?.mobileNumber&&<div onClick={() => showPopup({ name: owner?.name, mobileNumber: owner?.mobileNumber, ownerIndex: index })}>
                     <EditIcon />

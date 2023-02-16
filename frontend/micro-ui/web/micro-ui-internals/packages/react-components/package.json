@@ -1,6 +1,6 @@
 {
   "name": "@egovernments/digit-ui-react-components",
-  "version": "1.5.4",
+  "version": "1.6.0",
   "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
@@ -10,7 +10,7 @@
   },
   "scripts": {
     "example": "cd example && npm run start",
-    "build": "microbundle-crl --no-compress --format modern,cjs",
+    "build": "microbundle-crl --compress --no-sourcemap --format cjs",
     "start": "microbundle-crl watch --no-compress --format modern,cjs",
     "prepare": "yarn build",
     "predeploy": "cd example && yarn install && yarn run build",

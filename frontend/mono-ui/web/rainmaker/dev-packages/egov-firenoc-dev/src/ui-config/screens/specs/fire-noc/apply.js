@@ -31,6 +31,7 @@ import {
   setApplicationNumberBox
 } from "../../../../ui-utils/commons";
 import "./index.css";
+import cloneDeep from "lodash/cloneDeep";
 
 export const stepsData = [
   { labelName: "NOC Details", labelKey: "NOC_COMMON_NOC_DETAILS" },
@@ -228,7 +229,13 @@ const setDocsForEditFlow = async (state, dispatch) => {
     "FireNOCs[0].fireNOCDetails.buildings[0].applicationDocuments",
     []
   );
-  applicationDocuments=[...applicationDocuments,...buildingDocuments]
+
+  let otherDocuments = get(
+    state.screenConfiguration.preparedFinalObject,
+    "FireNOCs[0].fireNOCDetails.additionalDetail.documents",
+    []
+  );
+  applicationDocuments=[...applicationDocuments,...buildingDocuments, ...otherDocuments]
   /* To change the order of application documents similar order of mdms order*/
   const mdmsDocs = get(
     state.screenConfiguration.preparedFinalObject,
@@ -303,9 +310,10 @@ export const prepareEditFlow = async (
     []
   );
   if (applicationNumber ) {
-    let edited =getQueryArg(window.location.href, "edited")
+    let edited =getQueryArg(window.location.href, "edited");
+    let isSummaryPage = getQueryArg(window.location.href, "isSummaryPage");
    
-    let response =  edited?{FireNOCs:get(state.screenConfiguration.preparedFinalObject,'FireNOCs')}:await getSearchResults([
+    let response =  edited || isSummaryPage ?{FireNOCs:get(state.screenConfiguration.preparedFinalObject,'FireNOCs')}:await getSearchResults([
       {
         key: "tenantId",
         value: tenantId
@@ -314,11 +322,32 @@ export const prepareEditFlow = async (
     ]);
     // let response = sampleSingleSearch();
 
-    response = furnishNocResponse(response);
+    if (!edited && !isSummaryPage) {
+      response.FireNOCs[0].fireNOCDetails.buildings.reverse();
+    }
+
+    response = await furnishNocResponse(response);
+
+    let buildingTypes = get(response, "FireNOCs[0].fireNOCDetails.buildings", []);
+    let selectedValuesArray = [];
+    buildingTypes.map(bData => {
+      selectedValuesArray.push({
+        buildingSubUsageType: bData.usageType,
+        buildingUsageType: bData.usageType.split(".")[0]
+      })
+    })
+    dispatch(prepareFinalObject("DynamicMdms.firenoc.buildings.selectedValues", selectedValuesArray));
   
     dispatch(prepareFinalObject("FireNOCs", get(response, "FireNOCs", [])));
+
+    if (!edited && !isSummaryPage) {
+      const additionalDocuments = cloneDeep(get(response, "FireNOCs[0].fireNOCDetails.additionalDetail.documents", [])); 
+      dispatch(prepareFinalObject("FireNOCs[0].fireNOCDetails.additionalDetail.document", additionalDocuments));
+    }
+    
+
     await onchangeOfTenant({value:tenantId},state,dispatch);
-  await setDocsForEditFlow(state,dispatch);
+    await setDocsForEditFlow(state,dispatch);
     if (applicationNumber) {
       setApplicationNumberBox(state, dispatch, applicationNumber);
     }
@@ -377,11 +406,22 @@ const screenConfig = {
   beforeInitScreen: (action, state, dispatch) => {
     dispatch(prepareFinalObject("FireNOCs[0].provisionFireNOCNumber", ""));
     dispatch(prepareFinalObject("DYNAMIC_MDMS_Trigger", false));
+    let edited =getQueryArg(window.location.href, "edited");
+    let isSummaryPage = getQueryArg(window.location.href, "isSummaryPage");
+    if (!edited && !isSummaryPage) {
+      dispatch(prepareFinalObject("FireNOCs", []));
+    }
     const applicationNumber = getQueryArg(
       window.location.href,
       "applicationNumber"
     );
-    const tenantId = getQueryArg(window.location.href, "tenantId");
+    const tenantId = getQueryArg(window.location.href, "tenantId") || get(
+      state.screenConfiguration.preparedFinalObject,
+      "FireNOCs[0].fireNOCDetails.propertyDetails.address.city"
+    ) || getTenantId();
+
+
+
     const step = getQueryArg(window.location.href, "step");
 
     //Set Module Name

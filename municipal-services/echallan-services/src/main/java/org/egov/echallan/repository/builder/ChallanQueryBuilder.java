@@ -30,6 +30,10 @@ public class ChallanQueryBuilder {
             +INNER_JOIN_STRING
             +"eg_challan_address chaladdr ON chaladdr.echallanid = challan.id";
 
+    private static final String COUNT_QUERY = "SELECT COUNT(challan.id) " +
+            "FROM eg_echallan challan"
+            +INNER_JOIN_STRING
+            +"eg_challan_address chaladdr ON chaladdr.echallanid = challan.id";
 
       private final String paginationWrapper = "SELECT * FROM " +
               "(SELECT *, DENSE_RANK() OVER (ORDER BY challan_lastModifiedTime DESC , challan_id) offset_ FROM " +
@@ -42,12 +46,24 @@ public class ChallanQueryBuilder {
       public static final String CANCEL_RECEIPT_UPDATE_SQL = "UPDATE eg_echallan SET applicationStatus='ACTIVE' WHERE challanNo=? and businessService=?";
 
       public static final String CHALLAN_COUNT_QUERY = "SELECT applicationstatus, count(*)  FROM eg_echallan WHERE tenantid ";
+      
+      public static final String TOTAL_COLLECTION_QUERY = "SELECT sum(amountpaid) FROM egbs_billdetail_v1 INNER JOIN egcl_paymentdetail ON egbs_billdetail_v1.billid=egcl_paymentdetail.billid INNER JOIN eg_echallan ON consumercode=challanno WHERE eg_echallan.tenantid=? AND eg_echallan.applicationstatus='PAID' AND egcl_paymentdetail.createdtime>? ";
+      
+      public static final String TOTAL_SERVICES_QUERY = "SELECT count(distinct(businessservice)) FROM eg_echallan WHERE tenantid=? AND createdtime>? ";
 
 
 
-    public String getChallanSearchQuery(SearchCriteria criteria, List<Object> preparedStmtList) {
+    public String getChallanSearchQuery(SearchCriteria criteria, List<Object> preparedStmtList, boolean isCountQuery) {
+        StringBuilder builder;
 
-        StringBuilder builder = new StringBuilder(QUERY);
+        if(isCountQuery)
+        {
+            builder = new StringBuilder(COUNT_QUERY);
+        }
+        else
+        {
+            builder = new StringBuilder(QUERY);
+        }
 
         addBusinessServiceClause(criteria,preparedStmtList,builder);
 
@@ -108,9 +124,16 @@ public class ChallanQueryBuilder {
 
         }
 
-        return addPaginationWrapper(builder.toString(),preparedStmtList,criteria);
-    }
+        if(isCountQuery)
+        {
+            return builder.toString();
+        }
+        else
+        {
+            return addPaginationWrapper(builder.toString(),preparedStmtList,criteria);
+        }
 
+    }
 
     private void addBusinessServiceClause(SearchCriteria criteria,List<Object> preparedStmtList,StringBuilder builder){
     	if(criteria.getBusinessService()!=null) {
@@ -180,6 +203,51 @@ public class ChallanQueryBuilder {
         builder.append("GROUP BY applicationstatus");
         return builder.toString();
     }
+
+
+	public String getTotalCollectionQuery(String tenantId, List<Object> preparedStmtListTotalCollection) {
+		
+		StringBuilder query = new StringBuilder("");
+		query.append(TOTAL_COLLECTION_QUERY);
+		
+		preparedStmtListTotalCollection.add(tenantId);
+		
+		// In order to get data of last 12 months, the months variables is pre-configured in application properties
+    	int months = Integer.valueOf(config.getNumberOfMonths()) ;
+
+    	Calendar calendar = Calendar.getInstance();
+
+    	// To subtract 12 months from current time, we are adding -12 to the calendar instance, as subtract function is not in-built
+    	calendar.add(Calendar.MONTH, -1*months);
+
+    	// Converting the timestamp to milliseconds and adding it to prepared statement list
+    	preparedStmtListTotalCollection.add(calendar.getTimeInMillis());
+		
+		return query.toString();
+	}
+
+
+	public String getTotalServicesQuery(String tenantId, List<Object> preparedStmtListTotalServices) {
+		
+		StringBuilder query = new StringBuilder("");
+		query.append(TOTAL_SERVICES_QUERY);
+		
+		preparedStmtListTotalServices.add(tenantId);
+		
+		// In order to get data of last 12 months, the months variables is pre-configured in application properties
+    	int months = Integer.valueOf(config.getNumberOfMonths()) ;
+
+    	Calendar calendar = Calendar.getInstance();
+
+    	// To subtract 12 months from current time, we are adding -12 to the calendar instance, as subtract function is not in-built
+    	calendar.add(Calendar.MONTH, -1*months);
+
+    	// Converting the timestamp to milliseconds and adding it to prepared statement list
+    	preparedStmtListTotalServices.add(calendar.getTimeInMillis());
+		
+		return query.toString();
+		
+	}
 
 
 

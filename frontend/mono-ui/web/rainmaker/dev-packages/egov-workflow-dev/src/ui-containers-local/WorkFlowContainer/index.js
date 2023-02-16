@@ -212,6 +212,8 @@ class WorkFlowContainer extends React.Component {
       if (beforeSubmitHook) {
         if (moduleName === "BPA" || moduleName === "BPA_OC" || moduleName === "BPA_LOW") {
           data = await beforeSubmitHook(data);
+        } else if (moduleName == "FIRENOC" || moduleName == "FireNOCs") {
+          data = await beforeSubmitHook(data);
         } else {
           data = beforeSubmitHook(data);
         }

@@ -39,7 +39,7 @@ const SearchChallan = ({ config: propsConfig, formData }) => {
      else {
       history.push(
         `/digit-ui/citizen/mcollect/search-results?mobileNumber=${mobileNumber}&challanNo=${challanNo}&Servicecategory=${
-          Servicecateogry ? Servicecateogry.code.split("_")[Servicecateogry.code.split("_").length - 1] : ""
+          Servicecateogry ? Servicecateogry.code.replace("BILLINGSERVICE_BUSINESSSERVICE_","") : ""
         }&tenantId=${city.code}`
       );
     }
@@ -93,7 +93,7 @@ const SearchChallan = ({ config: propsConfig, formData }) => {
         label={propsConfig.texts.submitButtonLabel}
         heading={propsConfig.texts.header}
         text={propsConfig.texts.text}
-        cardStyle={{ margin: "auto" }}
+        cardStyle={{ margin: "auto",maxWidth:"960px" }}
         headingStyle={{ fontSize: "32px", marginBottom: "16px" }}
         onSelect={onChallanSearch}
         componentInFront={<div className="employee-card-input employee-card-input--front">+91</div>}
@@ -144,6 +144,7 @@ const SearchChallan = ({ config: propsConfig, formData }) => {
             type={"mobileNumber"}
             t={t}
             isMandatory={false}
+            style={{maxWidth:"500px"}}
             optionKey="i18nKey"
             name="mobileNumber"
             value={mobileNumber}

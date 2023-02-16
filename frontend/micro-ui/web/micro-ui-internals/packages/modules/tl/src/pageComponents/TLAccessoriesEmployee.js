@@ -16,6 +16,7 @@ const createAccessoriesDetails = () => ({
     key: Date.now(),
 });
 
+
 const TLAccessoriesEmployee = ({ config, onSelect, userType, formData, setError, formState, clearErrors }) => {
     const { t } = useTranslation();
     const { pathname } = useLocation();
@@ -27,11 +28,15 @@ const TLAccessoriesEmployee = ({ config, onSelect, userType, formData, setError,
     const [isErrors, setIsErrors] = useState(false);
     const [flag, setFlag] = useState(true);
     const [uomvalues, setUomvalues] = useState("");
+    const [enableUOM, setenableUOM] = useState(false);
     let isRenewal = window.location.href.includes("renew-application-details");
     if(window.location.href.includes("edit-application-details")) isRenewal = true;
 
 
-    const { data: billingSlabData } = Digit.Hooks.tl.useTradeLicenseBillingslab({ tenantId, filters: {} });
+    const { data: billingSlabData } = Digit.Hooks.tl.useTradeLicenseBillingslab({ tenantId, filters: {} }, {
+        select: (data) => {
+        return data?.billingSlab.filter((e) => e.accessoryCategory && e.applicationType === "NEW" && e.uom);
+    }});
 
     const addAccessories = () => {
         const newAccessor = createAccessoriesDetails();
@@ -95,7 +100,9 @@ const TLAccessoriesEmployee = ({ config, onSelect, userType, formData, setError,
         billingSlabData,
         setUomvalues,
         uomvalues,
-        isRenewal
+        isRenewal,
+        enableUOM,
+        setenableUOM
     };
 
 
@@ -135,14 +142,16 @@ const AccessoriersForm = (_props) => {
         billingSlabData,
         setUomvalues,
         uomvalues,
-        isRenewal
+        isRenewal,
+        enableUOM,
+        setenableUOM
     } = _props;
 
     const { control, formState: localFormState, watch, setError: setLocalError, clearErrors: clearLocalErrors, setValue, trigger, getValues } = useForm();
     const formValue = watch();
     const { errors } = localFormState;
 
-    const isIndividualTypeOwner = useMemo(() => formData?.ownershipCategory?.code.includes("INDIVIDUAL"), [formData?.ownershipCategory?.code]);
+    const isIndividualTypeOwner = useMemo(() => formData?.ownershipCategory?.code?.includes("INDIVIDUAL"), [formData?.ownershipCategory?.code]);
 
     useEffect(() => {
         trigger();
@@ -153,10 +162,10 @@ const AccessoriersForm = (_props) => {
     }, [accessor?.accessoryCategory?.uom, formData?.accessories]);
 
     useEffect(() => {
-        if (billingSlabData && billingSlabData?.billingSlab && billingSlabData?.billingSlab?.length > 0) {
+        if (billingSlabData &&  billingSlabData?.length > 0) {
             const processedData =
-                billingSlabData.billingSlab &&
-                billingSlabData.billingSlab.reduce(
+                billingSlabData &&
+                billingSlabData.reduce(
                     (acc, item) => {
                         let accessory = { active: true };
                         let tradeType = { active: true };
@@ -164,6 +173,8 @@ const AccessoriersForm = (_props) => {
                             accessory.code = item.accessoryCategory;
                             accessory.uom = item.uom;
                             accessory.rate = item.rate;
+                            accessory.fromUom = item.fromUom;
+                            accessory.toUom = item.toUom;
                             item.rate && item.rate > 0 && acc.accessories.push(accessory);
                         } else if (item.accessoryCategory === null && item.tradeType) {
                             tradeType.code = item.tradeType;
@@ -171,6 +182,8 @@ const AccessoriersForm = (_props) => {
                             tradeType.structureType = item.structureType;
                             tradeType.licenseType = item.licenseType;
                             tradeType.rate = item.rate;
+                            tradeType.fromUom = item.fromUom;
+                            tradeType.toUom = item.toUom;
                             !isUndefined(item.rate) &&
                                 item.rate !== null &&
                                 acc.tradeTypeData.push(tradeType);
@@ -249,6 +262,20 @@ const AccessoriersForm = (_props) => {
         }
     }, [errors]);
 
+    function checkRangeForUomValue(e, fromUom, toUom){
+        if(Number.isInteger(fromUom)){
+            if(!(e && parseFloat(e) >= fromUom)){
+            return false;
+            }
+           }
+        if(Number.isInteger(toUom)){
+           if(!(e && parseFloat(e) <= toUom)){
+             return false
+             }
+           }
+        return true
+    }
+
     const errorStyle = { width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" };
     return (
         <React.Fragment>
@@ -281,6 +308,9 @@ const AccessoriersForm = (_props) => {
                                         if (e?.uom !== accessor?.accessoryCategory?.uom) setValue("uomValue", "");
                                         props.onChange(e);
                                         setUomvalues(accessor?.accessoryCategory?.uom);
+                                        setenableUOM(true);
+                                        setValue("uomValue","");
+                                        setValue("count","");
                                     }}
                                     onBlur={props.onBlur}
                                     option={sortDropdownNames(accessories,"i18nKey",t) || []}
@@ -326,7 +356,7 @@ const AccessoriersForm = (_props) => {
                                 control={control}
                                 name={"uomValue"}
                                 defaultValue={accessor?.uomValue}
-                                rules={accessor?.accessoryCategory?.uom && { required: t("REQUIRED_FIELD"), validate: (e) => ((e && getPattern("UOMValue").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")) }}
+                                rules={accessor?.accessoryCategory?.uom && { required: t("REQUIRED_FIELD"), validate: (e) => (/*(e && getPattern("UOMValue").test(e))*/ e > 0 && e < 99999 ? (checkRangeForUomValue(e,accessor?.accessoryCategory?.fromUom,accessor?.accessoryCategory?.toUom) ? true : `${t("ERR_WRONG_UOM_VALUE")} ${accessor?.accessoryCategory?.fromUom} - ${accessor?.accessoryCategory?.toUom}`) : t("ERR_DEFAULT_INPUT_FIELD_MSG")) }}
                                 render={(props) => (
                                     <TextInput
                                         value={getValues("uomValue")}
@@ -337,7 +367,8 @@ const AccessoriersForm = (_props) => {
                                             props.onChange(e.target.value);
                                             setFocusIndex({ index: accessor.key, type: "uomValue" });
                                         }}
-                                        disable={getValues("uomValue")?!(accessor?.accessoryCategory?.uom) || accessor?.id:!(accessor?.accessoryCategory?.uom) }
+                                       // disable={/*getValues("uomValue")?!(accessor?.accessoryCategory?.uom) || accessor?.id:*/!(accessor?.accessoryCategory?.uom) }
+                                        disable={isRenewal ? !enableUOM : false}
                                         onBlur={props.onBlur}
                                         style={{ background: "#FAFAFA" }}
                                     />
@@ -365,7 +396,8 @@ const AccessoriersForm = (_props) => {
                                             setFocusIndex({ index: accessor.key, type: "count" });
                                         }}
                                         onBlur={props.onBlur}
-                                        disable={accessor?.id}
+                                        disable={isRenewal ? !enableUOM : false}
+                                        //disable={accessor?.id}
                                         style={{ background: "#FAFAFA" }}
                                     />
                                 )}

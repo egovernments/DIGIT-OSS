@@ -64,8 +64,10 @@ const themeStyles = theme => ({
     color: "white"
   },
   button: {
-    margin: theme.spacing.unit,
-    padding: "8px 38px"
+    // margin: theme.spacing.unit,
+    // padding: "8px 38px"
+    margin: "0px",
+    padding: "0px"
   },
   input: {
     display: "none"
@@ -325,7 +327,7 @@ class DocumentList extends Component {
             }
             onButtonClick={() => this.onUploadClick(key)}
             inputProps={this.props.inputProps}
-            buttonLabel={this.props.buttonLabel}
+            buttonLabel={{...this.props.buttonLabel, style:{padding: "10px 30px"}}}
           />
         </Grid>
       </Grid>

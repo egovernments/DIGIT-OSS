@@ -33,4 +33,6 @@ public class GetBillCriteria {
 
 	private List<String> consumerCodes;
 	
+	private Boolean isPaymentCompleted;
+	
 }

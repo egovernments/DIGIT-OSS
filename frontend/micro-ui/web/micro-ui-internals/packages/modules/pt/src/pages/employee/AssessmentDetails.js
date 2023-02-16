@@ -113,8 +113,9 @@ const AssessmentDetails = () => {
             sessionStorage.setItem("IsPTAccessDone", data?.Assessments?.[0]?.auditDetails?.lastModifiedTime);
             setShowToast({ key: "success", action: { action: "ASSESSMENT" } });
             setTimeout(closeToast, 5000);
-            queryClient.clear();
-            queryClient.setQueryData(["PT_ASSESSMENT", propertyId, location?.state?.Assessment?.financialYear], true);
+            // queryClient.clear();
+            // queryClient.setQueryData(["PT_ASSESSMENT", propertyId, location?.state?.Assessment?.financialYear], true);
+            history.push(`/digit-ui/employee/payment/collect/PT/${propertyId}`);
           },
         }
       );
@@ -620,7 +621,7 @@ const Penality_menu=[
         </ActionBar>
       ) : (
         <ActionBar>
-          <SubmitBar label={t("PT_PROCEED_PAYMENT")} onSubmit={proceeedToPay} />
+          <SubmitBar disabled={paymentDetails?.data?.Bill?.[0]?.totalAmount > 0 ? false : true} label={t("PT_PROCEED_PAYMENT")} onSubmit={proceeedToPay} />
         </ActionBar>
       )}
     </div>

@@ -1,57 +1,70 @@
 package org.egov.wf.web.controllers;
 
-import org.junit.Test;
-import org.junit.Ignore;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.http.MediaType;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.when;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.ArrayList;
+import javax.servlet.http.HttpServletRequest;
+
+import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.contract.response.ResponseInfo;
+import org.egov.wf.service.WorkflowService;
+import org.egov.wf.util.ResponseInfoFactory;
+import org.egov.wf.web.models.ProcessInstanceRequest;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+@ContextConfiguration(classes = {WorkflowController.class})
+@ExtendWith(SpringExtension.class)
+class WorkflowControllerTest {
+    @MockBean
+    private HttpServletRequest httpServletRequest;
 
-import static org.mockito.Matchers.any;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+    @MockBean
+    private ObjectMapper objectMapper;
 
-/**
-* API tests for WorkflowController
-*/
-@Ignore
-@RunWith(SpringRunner.class)
-@WebMvcTest(WorkflowController.class)
-
-public class WorkflowControllerTest {
+    @MockBean
+    private ResponseInfoFactory responseInfoFactory;
 
     @Autowired
-    private MockMvc mockMvc;
+    private WorkflowController workflowController;
+
+    @MockBean
+    private WorkflowService workflowService;
+
 
     @Test
-    public void v1ProcessTransitionPostSuccess() throws Exception {
-        mockMvc.perform(post("/egov-wf/v1/process/_transition").contentType(MediaType
-        .APPLICATION_JSON_UTF8))
-        .andExpect(status().isOk());
-    }
+    void testProcessTransition() throws Exception {
+        when(this.workflowService.transition((ProcessInstanceRequest) any())).thenReturn(new ArrayList<>());
+        when(this.responseInfoFactory.createResponseInfoFromRequestInfo((RequestInfo) any(), (Boolean) any()))
+                .thenReturn(new ResponseInfo());
 
-    @Test
-    public void v1ProcessTransitionPostFailure() throws Exception {
-        mockMvc.perform(post("/egov-wf/v1/process/_transition").contentType(MediaType
-        .APPLICATION_JSON_UTF8))
-        .andExpect(status().isBadRequest());
+        ProcessInstanceRequest processInstanceRequest = new ProcessInstanceRequest();
+        processInstanceRequest.setProcessInstances(new ArrayList<>());
+        processInstanceRequest.setRequestInfo(new RequestInfo());
+        String content = (new ObjectMapper()).writeValueAsString(processInstanceRequest);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/egov-wf/process/_transition")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content);
+        MockMvcBuilders.standaloneSetup(this.workflowController)
+                .build()
+                .perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+                .andExpect(MockMvcResultMatchers.content()
+                        .string(
+                                "{\"ResponseInfo\":{\"apiId\":null,\"ver\":null,\"ts\":null,\"resMsgId\":null,\"msgId\":null,\"status\":null},"
+                                        + "\"ProcessInstances\":[],\"totalCount\":null}"));
     }
-
-    @Test
-    public void v1SearchPostSuccess() throws Exception {
-        mockMvc.perform(post("/egov-wf/v1/_search").contentType(MediaType
-        .APPLICATION_JSON_UTF8))
-        .andExpect(status().isOk());
-    }
-
-    @Test
-    public void v1SearchPostFailure() throws Exception {
-        mockMvc.perform(post("/egov-wf/v1/_search").contentType(MediaType
-        .APPLICATION_JSON_UTF8))
-        .andExpect(status().isBadRequest());
-    }
-
 }

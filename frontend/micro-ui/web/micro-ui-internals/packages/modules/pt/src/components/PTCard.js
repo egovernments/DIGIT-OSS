@@ -1,6 +1,7 @@
-import { EmployeeModuleCard, PropertyHouse } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { EmployeeModuleCard, PropertyHouse } from "@egovernments/digit-ui-react-components";
 
 const PTCard = () => {
   const { t } = useTranslation();
@@ -12,7 +13,7 @@ const PTCard = () => {
     filters: { limit: 10, offset: 0, services: ["PT.CREATE", "PT.MUTATION", "PT.UPDATE"] },
     config: {
       select: (data) => {
-        return data?.totalCount || "-";
+        return {totalCount:data?.totalCount,nearingSlaCount:data?.nearingSlaCount} || "-";
       },
       enabled: Digit.Utils.ptAccess(),
     },
@@ -25,16 +26,16 @@ const PTCard = () => {
   if (!Digit.Utils.ptAccess()) {
     return null;
   }
-  const links = [
+  const links=[
     {
-      count: isLoading ? "-" : total,
+      count: isLoading ? "-" : total?.totalCount,
       label: t("ES_COMMON_INBOX"),
       link: `/digit-ui/employee/pt/inbox`,
     },
     {
       label: t("ES_TITLE_NEW_REGISTRATION"),
       link: `/digit-ui/employee/pt/new-application`,
-      role: "PT_CEMP",
+      role: "PT_CEMP"
     },
     {
       label: t("SEARCH_PROPERTY"),
@@ -44,28 +45,26 @@ const PTCard = () => {
       label: t("ES_COMMON_APPLICATION_SEARCH"),
       link: `/digit-ui/employee/pt/application-search`,
     },
-  ];
+  ]
   const PT_CEMP = Digit.UserService.hasAccess(["PT_CEMP"]) || false;
-
   const propsForModuleCard = {
     Icon: <PropertyHouse />,
     moduleName: t("ES_TITLE_PROPERTY_TAX"),
     kpis: [
       {
-        count: total,
+        count: total?.totalCount,
         label: t("ES_TITLE_INBOX"),
         link: `/digit-ui/employee/pt/inbox`,
       },
+      {
+        
+        count: total?.nearingSlaCount,
+        label: t("TOTAL_NEARING_SLA"),
+        link: `/digit-ui/employee/pt/inbox`,
+      }
     ],
-    links: links.filter((link) => !link?.role || PT_CEMP),
+    links:links.filter(link=>!link?.role||PT_CEMP),
   };
-
-  if (PT_CEMP && !propsForModuleCard.links?.[2]) {
-    propsForModuleCard.links.push({
-      label: t("ES_TITLE_NEW_REGISTRATION"),
-      link: `/digit-ui/employee/pt/new-application`,
-    });
-  }
 
   return <EmployeeModuleCard {...propsForModuleCard} />;
 };

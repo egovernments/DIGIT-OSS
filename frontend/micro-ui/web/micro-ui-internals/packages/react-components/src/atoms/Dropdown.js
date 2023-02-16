@@ -77,7 +77,7 @@ const TextField = (props) => {
       autoFocus={props.autoFocus}
       placeholder={props.placeholder}
       autoComplete={"off"}
-      style={props.style}
+      style={{...props.style, zIndex: "auto"}}
     />
   );
 };

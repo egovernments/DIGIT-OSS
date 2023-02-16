@@ -12,30 +12,28 @@ const ReceiptsCard = () => {
   const searchParams = {
     tenantId: tenantId,
     businessServices: getDefaultReceiptService(),
-    isCountRequest: true
+    isCountRequest: true,
   };
   const { isLoading, isError, error, data, ...rest } = Digit.Hooks.receipts.useReceiptsSearch(searchParams, tenantId, [], false);
-
-  const  propsForModuleCard  = {
+  const propsForModuleCard = {
     Icon: <ReceiptIcon />,
     moduleName: t("ACTION_TEST_RECEIPTS"),
     kpis: [
       {
         count: isLoading ? "-" : data?.Count,
         label: t("CR_TOTAL_RECEIPTS"),
-        link: `/digit-ui/employee/receipts/inbox`
+        link: `/digit-ui/employee/receipts/inbox`,
       },
     ],
     links: [
       {
         count: isLoading ? "-" : data?.Count,
         label: t("CR_SEARCH_COMMON_HEADER"),
-        link: `/digit-ui/employee/receipts/inbox`
-      }
-    ]
-  }
-  return <EmployeeModuleCard {...propsForModuleCard} />
+        link: `/digit-ui/employee/receipts/inbox`,
+      },
+    ],
+  };
+  return <EmployeeModuleCard {...propsForModuleCard} />;
 };
 
 export default ReceiptsCard;
-

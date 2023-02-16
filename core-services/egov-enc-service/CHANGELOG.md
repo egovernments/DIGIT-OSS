@@ -3,6 +3,16 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.1.4 - 2023-02-06
+- Transition from 1.1.4-beta version to 1.1.4 version
+
+## 1.1.4-beta - 2022-09-20
+- Upgraded spring-boot-starter-parent to 2.2.13 and spring beans to 5.2.20.RELEASE
+
+## 1.1.3 - 2022007016
+- Fixed: In a multi pod cluster, the service now checks if another deployment of the service has added a new key to the database, before throwing the key not found error. 
+
+
 ## 1.1.2 - 2022-01-13
 - Updated to log4j2 version 2.17.1
 

@@ -102,7 +102,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
       case "REMOVE_THIS_OWNER":
         return state.filter((e, i) => i !== action?.payload?.index);
       case "SET_PRIMARY_OWNER":
-        if (action?.payload?.index) {
+        if (action?.payload?.index >= 0) {
           return state.map((ownerData, i) => {
             if (i === action?.payload?.index) {
               return { ...ownerData, isprimaryowner: true };
@@ -210,7 +210,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                   <TextInput
                     t={t}
                     type={"text"}
-                    isMandatory={true}
+                    isMandatory={false}
                     name="institutionName"
                     value={field.institutionName}
                     ValidationRequired={true}
@@ -219,7 +219,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                     {...{
                       validation: {
                         isRequired: true,
-                        pattern: "^[a-zA-Z-.`' ]*$",
+                        pattern: "^[a-z0-9]+( [a-z0-9]+)*$",
                         type: "text",
                         title: t("TL_NAME_ERROR_MESSAGE"),
                       },
@@ -248,7 +248,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                     {...{
                       validation: {
                         // isRequired: true,
-                        pattern: "^[a-zA-Z-.`' ]*$",
+                        pattern: "^[a-z0-9]+( [a-z0-9]+)*$",
                         type: "text",
                         title: t("TL_NAME_ERROR_MESSAGE"),
                       },
@@ -267,7 +267,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                     {...{
                       validation: {
                         // isRequired: true,
-                        pattern: "^[a-zA-Z-.`' ]*$",
+                        pattern: "^[a-z0-9]+( [a-z0-9]+)*$",
                         type: "text",
                         title: t("TL_NAME_ERROR_MESSAGE"),
                       },
@@ -371,7 +371,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                     : {}
                 }
               >
-                <CardLabel style={typeOfOwner === "MULTIOWNER" ? { marginBottom: "-15px" } : {}}>{`${t(
+                <CardLabel style={{}}>{`${t(
                   "TL_NEW_OWNER_DETAILS_NAME_LABEL"
                 )}*`}</CardLabel>
                 {typeOfOwner === "MULTIOWNER" && (
@@ -413,7 +413,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                   {...{
                     validation: {
                       isRequired: true,
-                      pattern: "^[a-zA-Z-.`' ]*$",
+                      pattern: "[a-zA-Z][a-zA-Z ]+[a-zA-Z]$",
                       type: "text",
                       title: t("TL_NAME_ERROR_MESSAGE"),
                     },
@@ -441,7 +441,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                     +91
                   </span>
                   <TextInput
-                    style={typeOfOwner === "MULTIOWNER" ? { background: "#FAFAFA" } : {}}
+                    style={typeOfOwner === "MULTIOWNER" ? { background: "#FAFAFA",maxWidth:"500px" } : {maxWidth:"500px"}}
                     type={"text"}
                     t={t}
                     isMandatory={false}
@@ -475,7 +475,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                   {...{
                     validation: {
                       isRequired: true,
-                      pattern: "^[a-zA-Z-.`' ]*$",
+                      pattern: "[a-zA-Z][a-zA-Z ]+[a-zA-Z]$",
                       type: "text",
                       title: t("TL_NAME_ERROR_MESSAGE"),
                     },

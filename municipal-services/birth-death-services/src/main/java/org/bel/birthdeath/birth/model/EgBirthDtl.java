@@ -82,4 +82,6 @@ public class EgBirthDtl{
 	private String rejectReason;
 	
 	private String fullName;
+
+	private Boolean isLegacyRecord = false;
 }

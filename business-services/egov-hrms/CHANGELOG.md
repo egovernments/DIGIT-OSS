@@ -1,7 +1,11 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
-## 1.2.5 - 2022-03-02
+## 1.2.5 - 2023-02-02
+
+- Transition from 1.2.5-beta version to 1.2.5 version
+
+## 1.2.5-beta - 2022-03-02
 - Added security fix for restricting employee search from citizen role
 
 ## 1.2.4 - 2022-01-13

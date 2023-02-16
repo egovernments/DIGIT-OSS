@@ -218,8 +218,8 @@ function SelectDocument({
       <LabelFieldPair>
         <CardLabel className="card-label-smaller">
           {doc?.documentType != "OLDLICENCENO" ?
-            `${t(`TL_NEW_${doc?.documentType.replaceAll(".", "_")}`)} * :` :
-            `${t(`TL_NEW_${doc?.documentType.replaceAll(".", "_")}`)} :`}
+            `${t(`TL_NEW_${doc?.documentType.replaceAll(".", "_")}`)} * ` :
+            `${t(`TL_NEW_${doc?.documentType.replaceAll(".", "_")}`)} `}
         </CardLabel>
         <div className="field">
           <UploadFile
@@ -233,7 +233,6 @@ function SelectDocument({
             inputStyles={{ width: "280px" }}
             // disabled={enabledActions?.[action].disableUpload || !selectedDocument?.code}
             buttonType="button"
-            accept={doc?.documentType === "OWNERPHOTO" ? "image/*,.jpg,.png" : "image/*,.jpg,.png,.pdf"}
           />
         </div>
       </LabelFieldPair>

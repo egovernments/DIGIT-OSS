@@ -12,29 +12,29 @@ import Summary from "./Summary";
 
 let index = 1;
 
-const showCustomLabel = (title,t)=>{
-  switch(title){
+const showCustomLabel = (title, t) => {
+  switch (title) {
     case "DSS_FSM_MONTHLY_WASTE_CAL":
-     return `${t("DSS_WASTE_RECIEVED")} ${t(`DSS_WASTE_UNIT`)}`;
+      return `${t("DSS_WASTE_RECIEVED")} ${t(`DSS_WASTE_UNIT`)}`;
     default:
-     return "";
+      return "";
   }
-}
+};
 
-const Layout = ({ rowData,forHome=false }) => {
+const Layout = ({ rowData, forHome = false, services, configName }) => {
   const { t } = useTranslation();
   const { value } = useContext(FilterContext);
   const [searchQuery, onSearch] = useState("");
   const [chip, updateChip] = useState({});
-
-  const renderChart = (chart, title) => {
+  const moduleCode = services.filter((e) => configName?.includes(e.name))?.[0]?.code;
+  const renderChart = (chart, title, moduleCode) => {
     switch (chart.chartType) {
       case "table":
-        return <CustomTable data={chart} onSearch={searchQuery} chip={chip} title={title} />;
+        return <CustomTable data={chart} onSearch={searchQuery} chip={chip} title={title} moduleCode={moduleCode} />;
       case "donut":
-        return <CustomPieChart data={chart} title={title} />;
+        return <CustomPieChart data={chart} title={title} moduleCode={moduleCode} />;
       case "line":
-        return <CustomAreaChart data={chart} title={title} />;
+        return <CustomAreaChart data={chart} title={title} moduleCode={moduleCode} />;
       case "horizontalBar":
         return (
           <CustomHorizontalBarChart
@@ -46,21 +46,22 @@ const Layout = ({ rowData,forHome=false }) => {
             xDataKey=""
             showDrillDown={false}
             title={title}
+            moduleCode={moduleCode}
           />
         );
       case "bar":
-        return <CustomHorizontalBarChart data={chart} title={title} yAxisLabel={showCustomLabel(title,t)} />;
+        return <CustomHorizontalBarChart data={chart} title={title} yAxisLabel={showCustomLabel(title, t)} moduleCode={moduleCode} />;
       default:
         return null;
     }
   };
 
-  const renderVisualizer = (visualizer, key, chip, onChipChange) => {
+  const renderVisualizer = (visualizer, key, chip, onChipChange, moduleCode = "") => {
     switch (visualizer.vizType) {
       case "metric-collection":
         return (
           <GenericChart header={visualizer.name} className="metricsTable" key={key} value={value}>
-            <MetricChart data={visualizer} />
+            <MetricChart data={visualizer} moduleCode={moduleCode} />
           </GenericChart>
         );
       case "chart":
@@ -73,7 +74,11 @@ const Layout = ({ rowData,forHome=false }) => {
           <GenericChart
             key={key}
             value={value}
-            header={visualizer?.charts?.[chip ? chip.filter((ele) => ele.active)?.[0]?.index : 0].chartType === "line" ? `${visualizer.name}` : visualizer.name}
+            header={
+              visualizer?.charts?.[chip ? chip.filter((ele) => ele.active)?.[0]?.index : 0].chartType === "line"
+                ? `${visualizer.name}`
+                : visualizer.name
+            }
             chip={chip}
             updateChip={onChipChange}
             showDownload={visualizer?.charts?.[0].chartType === "table"}
@@ -82,7 +87,7 @@ const Layout = ({ rowData,forHome=false }) => {
             onChange={(e) => onSearch(e.target.value)}
           >
             {/* {visualizer.charts.map((chart, key) => renderChart(chart, key))} */}
-            {renderChart(visualizer?.charts?.[chip ? chip.filter((ele) => ele.active)?.[0]?.index : 0], visualizer.name)}
+            {renderChart(visualizer?.charts?.[chip ? chip.filter((ele) => ele.active)?.[0]?.index : 0], visualizer.name, moduleCode)}
           </GenericChart>
         );
       case "performing-metric":
@@ -92,8 +97,16 @@ const Layout = ({ rowData,forHome=false }) => {
         )
           return null;
         return (
-          <GenericChart value={value} header={visualizer.name} subHeader={`(${t(`SUB_${visualizer.name}`)})`} key={key} chip={chip} updateChip={onChipChange}>
+          <GenericChart
+            value={value}
+            header={visualizer.name}
+            subHeader={`(${t(`SUB_${visualizer.name}`)})`}
+            key={key}
+            chip={chip}
+            updateChip={onChipChange}
+          >
             <CustomBarChart
+              moduleCode={moduleCode}
               data={visualizer?.charts?.[chip ? chip.filter((ele) => ele.active)?.[0]?.index : 0]}
               fillColor={index++ % 2 ? "RED" : "GREEN"}
               title={visualizer.name}
@@ -103,7 +116,7 @@ const Layout = ({ rowData,forHome=false }) => {
         );
       case "collection":
       case "module":
-        return <Summary key={key} ttile={visualizer.name} data={visualizer} />;
+        return <Summary header={visualizer.name} className="metricsTable" key={key} value={value} data={visualizer} />;
       default:
         return null;
     }
@@ -129,7 +142,7 @@ const Layout = ({ rowData,forHome=false }) => {
                 oldState[chart.name] = prevChip.map((ele) => ({ ...ele, active: ele.index === index }));
                 return { ...oldState };
               });
-            return renderVisualizer(chart, key, chipData, onChipChange);
+            return renderVisualizer(chart, key, chipData, onChipChange, moduleCode);
           },
           [renderVisualizer, chip]
         )

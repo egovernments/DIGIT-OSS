@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.egov.common.contract.request.RequestInfo;
 import org.egov.fsm.calculator.config.CalculatorConfig;
 import org.egov.fsm.calculator.repository.ServiceRequestRepository;
 import org.egov.fsm.calculator.utils.CalculatorConstants;
@@ -34,7 +35,6 @@ public class MDMSService {
         Object result = serviceRequestRepository.fetchResult(url , mdmsCriteriaReq);
         return result;
     }
-    
 
     /**
      * Creates and returns the url for mdms search endpoint
@@ -70,7 +70,7 @@ public class MDMSService {
 				final String filterCode = "$.[?(@.active==true)]";
 				List<MasterDetail> fsmMasterDtls = new ArrayList<>();
 				fsmMasterDtls.add(MasterDetail.builder().name(CalculatorConstants.FSM_CONFIG).filter(filterCode).build());
-
+				
 				ModuleDetail fsmMasterMDtl = ModuleDetail.builder().masterDetails(fsmMasterDtls)
 						.moduleName(CalculatorConstants.MODULE_CODE).build();
 				

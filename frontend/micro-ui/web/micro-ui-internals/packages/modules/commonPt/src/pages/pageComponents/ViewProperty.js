@@ -1,5 +1,5 @@
 import { Header, ActionBar, SubmitBar } from "@egovernments/digit-ui-react-components";
-import React from "react";
+import React, {useEffect} from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import { useLocation, Link } from "react-router-dom";
@@ -29,9 +29,21 @@ const ViewProperty = () => {
   let workflowDetails = {};
 
   const onSubmit = () => {
-    setTimeout(() => window.scrollTo(0, 1600), 400);
-    return history.push(`${redirectToUrl}?propertyId=${propertyId}&tenantId=${applicationDetails?.tenantId || tenantId}`, { ...state });
+    const scrollConst = redirectToUrl?.includes("employee/tl") ? 1600 : 300;
+    setTimeout(() => window.scrollTo(0, scrollConst), 400);
+    return history.push(`${redirectToUrl}?propertyId=${propertyId}&tenantId=${applicationDetails?.tenantId || tenantId}${state?.data?.applicationDetails?.applicationStatus === "PENDING_FOR_FIELD_INSPECTION" ? `&applicationNumber=${state?.data?.applicationDetails?.applicationNo}&service=${state?.data?.applicationDetails?.applicationData?.serviceType}`:``}`, { ...state });
   };
+
+  useEffect(() => {
+    if(sessionStorage.getItem("isCreateEnabledEmployee") === "true")
+    {
+      sessionStorage.removeItem("isCreateEnabledEmployee");
+      history.replace("/digit-ui/employee");
+    }
+    else
+    sessionStorage.removeItem("isCreateEnabledEmployee");
+
+  })
 
   return (
     <div>

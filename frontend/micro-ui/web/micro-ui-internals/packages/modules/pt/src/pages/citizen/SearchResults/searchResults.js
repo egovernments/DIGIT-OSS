@@ -116,7 +116,7 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
 
     return {
       property_id: property?.propertyId,
-      owner_name: (property?.owners || [])[0]?.name,
+      owner_name: (property?.owners || [])?.map( o => o?.name ). join(","),
       property_address: [addr.doorNo || "", addr.buildingName || "", addr.street || "", addr.locality?.name || "", addr.city || ""]
         .filter((a) => a)
         .join(", "),

@@ -216,6 +216,9 @@ public class TLConfiguration {
 
     @Value("${employee.allowed.search.params}")
     private String allowedEmployeeSearchParameters;
+    
+    @Value("${system.allowed.search.params}")
+    private String allowedSystemSearchParameters;
 
 
 
@@ -261,7 +264,13 @@ public class TLConfiguration {
 	
 	@Value("${egov.usr.events.pay.code}")
 	private String payCode;
-	
+
+    @Value("${egov.usr.events.download.receipt.code}")
+    private String downloadReceiptCode;
+
+    @Value("${egov.usr.events.portal.url.code}")
+    private String portalUrlCode;
+
 	@Value("${egov.user.event.notification.enabledForTL}")
 	private Boolean isUserEventsNotificationEnabledForTL;
 
@@ -329,7 +338,16 @@ public class TLConfiguration {
 
     @Value("${egov.download.receipt.link}")
     private String receiptDownloadLink;
+    
+    //Application count
+    @Value("${egov.applicationcount.period}")
+    private String numberOfMonths;
+    
+    @Value("${egov.application.validity}")
+    private String applicationValidity;
 
+    @Value("${egov.tl.calculator.billingSlab.endpoint}")
+    private String billingSlabEndPoint;
 
 
 }

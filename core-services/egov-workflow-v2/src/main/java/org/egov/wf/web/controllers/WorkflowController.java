@@ -81,6 +81,7 @@ public class WorkflowController {
     @RequestMapping(value="/process/_count", method = RequestMethod.POST)
         public ResponseEntity<Integer> count(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
                                                               @Valid @ModelAttribute ProcessInstanceSearchCriteria criteria) {
+    		criteria.setIsNearingSlaCount(Boolean.FALSE);
             Integer count = workflowService.count(requestInfoWrapper.getRequestInfo(),criteria);
             return new ResponseEntity<>(count,HttpStatus.OK);
         }
@@ -110,6 +111,14 @@ public class WorkflowController {
         }
         List result = workflowService.statusCount(statusCountRequest.getRequestInfo(), statusCriteria);
         return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+    
+    @RequestMapping(value="/process/_nearingslacount", method = RequestMethod.POST)
+    public ResponseEntity<Integer> nearingSlaCount(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+                                         @Valid @ModelAttribute ProcessInstanceSearchCriteria criteria) {
+        criteria.setIsNearingSlaCount(Boolean.TRUE);
+        Integer count = workflowService.count(requestInfoWrapper.getRequestInfo(),criteria);
+        return new ResponseEntity<>(count,HttpStatus.OK);
     }
 
 }

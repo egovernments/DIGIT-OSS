@@ -1,9 +1,7 @@
 package org.egov.swservice.util;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
-import org.apache.commons.lang3.StringUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import net.minidev.json.JSONObject;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.mdms.model.MasterDetail;
@@ -11,25 +9,19 @@ import org.egov.mdms.model.MdmsCriteria;
 import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.mdms.model.ModuleDetail;
 import org.egov.swservice.config.SWConfiguration;
-import org.egov.swservice.web.models.AuditDetails;
-import org.egov.swservice.web.models.Property;
-import org.egov.swservice.web.models.PropertyCriteria;
-import org.egov.swservice.web.models.PropertyResponse;
-import org.egov.swservice.web.models.RequestInfoWrapper;
-import org.egov.swservice.web.models.SearchCriteria;
-import org.egov.swservice.web.models.SewerageConnectionRequest;
-import org.egov.swservice.web.models.workflow.BusinessService;
 import org.egov.swservice.repository.ServiceRequestRepository;
+import org.egov.swservice.web.models.*;
+import org.egov.swservice.web.models.workflow.BusinessService;
 import org.egov.swservice.workflow.WorkflowService;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import net.minidev.json.JSONObject;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class SewerageServicesUtil {
@@ -66,7 +58,9 @@ public class SewerageServicesUtil {
 	private String URL = "url";
 	private String locality = "locality=";
 	private String localityCode = "locality";
-
+	private String doorNo = "doorNo=";
+	private String name = "name=";
+	
 	/**
 	 * 
 	 * @param sewerageConnectionRequest
@@ -84,7 +78,14 @@ public class SewerageServicesUtil {
 			propertyCriteria.setTenantId(sewerageConnectionRequest.getSewerageConnection().getTenantId());
 		}
 		if (sewerageConnectionRequest.getRequestInfo().getUserInfo() != null
-				&& "SYSTEM".equalsIgnoreCase(sewerageConnectionRequest.getRequestInfo().getUserInfo().getType())) {
+				&& "SYSTEM".equalsIgnoreCase(sewerageConnectionRequest.getRequestInfo().getUserInfo().getType())
+				&& "INTERNAL_MICROSERVICE_ROLE".equalsIgnoreCase(sewerageConnectionRequest.getRequestInfo().getUserInfo().getRoles().get(0).getCode()) )
+		{
+			propertyCriteria.setTenantId(sewerageConnectionRequest.getSewerageConnection().getTenantId());
+		}
+		if (sewerageConnectionRequest.getRequestInfo().getUserInfo() != null
+				&& "SYSTEM".equalsIgnoreCase(sewerageConnectionRequest.getRequestInfo().getUserInfo().getType())
+				&& !("INTERNAL_MICROSERVICE_ROLE".equalsIgnoreCase(sewerageConnectionRequest.getRequestInfo().getUserInfo().getRoles().get(0).getCode()))) {
 			sewerageConnectionRequest.getRequestInfo().getUserInfo().setType("EMPLOYEE");
 			List<Role> oldRoles = sewerageConnectionRequest.getRequestInfo().getUserInfo().getRoles();
 			List<Role>  newRoles = new ArrayList<>();
@@ -132,12 +133,20 @@ public class SewerageServicesUtil {
 	public List<Property> propertySearchOnCriteria(SearchCriteria sewerageConnectionSearchCriteria,
 			RequestInfo requestInfo) {
 		if (StringUtils.isEmpty(sewerageConnectionSearchCriteria.getMobileNumber())
+				&& StringUtils.isEmpty(sewerageConnectionSearchCriteria.getDoorNo())
+				&& StringUtils.isEmpty(sewerageConnectionSearchCriteria.getOwnerName())
 				&& StringUtils.isEmpty(sewerageConnectionSearchCriteria.getPropertyId())) {
 			return Collections.emptyList();
 		}
 		PropertyCriteria propertyCriteria = new PropertyCriteria();
 		propertyCriteria.setMobileNumber(sewerageConnectionSearchCriteria.getMobileNumber());
 
+		if (!StringUtils.isEmpty(sewerageConnectionSearchCriteria.getDoorNo())) {
+			propertyCriteria.setDoorNo(sewerageConnectionSearchCriteria.getDoorNo());
+		}
+		if (!StringUtils.isEmpty(sewerageConnectionSearchCriteria.getOwnerName())) {
+			propertyCriteria.setName(sewerageConnectionSearchCriteria.getOwnerName());
+		}
 		if (!StringUtils.isEmpty(sewerageConnectionSearchCriteria.getTenantId())) {
 			propertyCriteria.setTenantId(sewerageConnectionSearchCriteria.getTenantId());
 		}
@@ -261,7 +270,17 @@ public class SewerageServicesUtil {
 			isanyparametermatch = true;
 			url.append(mobileNumber).append(criteria.getMobileNumber());
 		}
-		if (!org.springframework.util.StringUtils.isEmpty(criteria.getLocality())) {
+		if (!StringUtils.isEmpty(criteria.getDoorNo())) {
+			if (isanyparametermatch)url.append("&");
+			isanyparametermatch = true;
+			url.append(doorNo).append(criteria.getDoorNo());
+		}
+		if (!StringUtils.isEmpty(criteria.getName())) {
+			if (isanyparametermatch)url.append("&");
+			isanyparametermatch = true;
+			url.append(name).append(criteria.getName());
+		}
+		if (!StringUtils.isEmpty(criteria.getLocality())) {
 			if (isanyparametermatch)url.append("&");
 			isanyparametermatch = true;
 			url.append(locality).append(criteria.getLocality());
@@ -281,8 +300,23 @@ public class SewerageServicesUtil {
 	 * @return
 	 */
 	public boolean isModifyConnectionRequest(SewerageConnectionRequest sewerageConnectionRequest) {
-		return !org.springframework.util.StringUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionNo());
+		return !StringUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionNo());
 	}
+
+	public boolean isModifyConnectionRequestForNotification(SewerageConnectionRequest sewerageConnectionRequest) {
+		if(sewerageConnectionRequest.getSewerageConnection().getApplicationType().equalsIgnoreCase(SWConstants.MODIFY_SEWERAGE_CONNECTION))
+			return !StringUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionNo());
+
+		return false;
+	}
+
+	public boolean isDisconnectConnectionRequest(SewerageConnectionRequest sewerageConnectionRequest) {
+		if(sewerageConnectionRequest.getSewerageConnection().getApplicationType().equalsIgnoreCase(SWConstants.DISCONNECT_SEWERAGE_CONNECTION))
+			return !StringUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionNo());
+
+		return false;
+	}
+
 
 	public StringBuilder getcollectionURL() {
 		StringBuilder builder = new StringBuilder();

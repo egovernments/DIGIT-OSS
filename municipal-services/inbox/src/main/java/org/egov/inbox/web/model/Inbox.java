@@ -22,4 +22,7 @@ public class Inbox {
 	
 	@JsonProperty("businessObject")
 	private Map<String,Object>	businessObject;
+	
+	@JsonProperty("serviceObject")
+	private Map<String,Object>	serviceObject;
 }

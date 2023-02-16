@@ -45,12 +45,13 @@ const useNOCInbox = ({ tenantId, filters, config={} }) => {
           ...(sourceRefId ? {sourceRefId}: {}),
           ...(applicationNo ? {applicationNo} : {}),
           ...(sortOrder ? {sortOrder} : {}),
+          ...(sortBy ? {sortBy} : {}),
           ...(locality?.length > 0 ? {locality: locality.map((item) => item.code.split("_").pop()).join(",")} : {}),
         },
-        sortBy,
+        // sortBy,
         limit,
         offset,
-        sortOrder
+        // sortOrder
     }
 
     return useInbox({tenantId, filters: _filters, config:{
@@ -64,9 +65,10 @@ const useNOCInbox = ({ tenantId, filters, config={} }) => {
               status: `WF_${application.businessObject.additionalDetails.workflowCode}_${application.businessObject.applicationStatus}`,//application.businessObject.applicationStatus,
               owner: application?.ProcessInstance?.assignes?.[0]?.name || "-",
               source: application.businessObject.source,
-              sla: Math.round(application.ProcessInstance?.businesssServiceSla / (24 * 60 * 60 * 1000))
+              sla: application?.businessObject?.applicationStatus.match(/^(APPROVED)$/) ? "CS_NA" : Math.round(application.ProcessInstance?.businesssServiceSla / (24 * 60 * 60 * 1000))
           })),
-          totalCount: data.totalCount
+          totalCount: data.totalCount,
+          nearingSlaCount: data.nearingSlaCount
         }), 
         ...config 
       }

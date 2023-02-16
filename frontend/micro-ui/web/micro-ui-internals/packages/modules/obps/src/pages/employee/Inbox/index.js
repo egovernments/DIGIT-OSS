@@ -5,6 +5,7 @@ import FilterFormFieldsComponent from "./FilterFormFieldsComponent";
 import SearchFormFieldsComponents from "./SearchFormFieldsComponent";
 import useInboxTableConfig from "./useInboxTableConfig";
 import useInboxMobileCardsData from "./useInboxMobileCardsData";
+import { Link } from "react-router-dom";
 
 const Inbox = ({ parentRoute }) => {
   window.scroll(0, 0);
@@ -199,6 +200,13 @@ const Inbox = ({ parentRoute }) => {
         {t("ES_COMMON_INBOX")}
         {totalCount ? <p className="inbox-count">{totalCount}</p> : null}
       </Header>
+      {Digit.Utils.browser.isMobile() &&
+        <div style={{marginLeft: "12px"}}>
+          <Link to={window.location.href.includes("/citizen") ? "/digit-ui/citizen/obps/search/application" : "/digit-ui/employee/obps/search/application"}>
+            <span className="link">{t("BPA_SEARCH_PAGE_TITLE")}</span>
+          </Link>
+        </div>
+      }
       <InboxComposer
         {...{
           isInboxLoading,

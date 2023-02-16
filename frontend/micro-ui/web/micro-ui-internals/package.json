@@ -3,9 +3,20 @@
   "version": "1.5.4",
   "main": "index.js",
   "workspaces": [
+    "packages/libraries",
+    "packages/css",
     "example",
-    "packages/*",
-    "packages/modules/*"
+    "packages/react-components",
+    "packages/modules/bills",
+    "packages/modules/common",
+    "packages/modules/commonPt",
+    "packages/modules/core",
+    "packages/modules/dss",
+    "packages/modules/engagement",
+    "packages/modules/pgr",
+    "packages/modules/pt",
+    "packages/modules/tl",
+    "packages/modules/ws"
   ],
   "author": "Abhinav Kushwaha <abhinav.kushwaha@egovernments.org>",
   "license": "MIT",
@@ -37,6 +48,8 @@
     "dev:engagement": "cd packages/modules/engagement && yarn start",
     "dev:noc": "cd packages/modules/noc && yarn start",
     "dev:ws": "cd packages/modules/ws && yarn start",
+    "dev:bills": "cd packages/modules/bills && yarn start",
+    "dev:reports": "cd packages/modules/reports && yarn start",
     "dev:example": "cd example && yarn start",
     "build": "run-p build:**",
     "build:libraries": "cd packages/libraries && yarn build",
@@ -46,16 +59,18 @@
     "build:commonPt": "cd packages/modules/commonPt && yarn build",
     "build:core": "cd packages/modules/core && yarn build",
     "build:pgr": "cd packages/modules/pgr && yarn build",
-    "build:fsm": "cd packages/modules/fsm && yarn build",
+    "buildD:fsm": "cd packages/modules/fsm && yarn build",
     "build:dss": "cd packages/modules/dss && yarn build",
-    "build:mcollect": "cd packages/modules/mCollect && yarn build",
-    "build:receipts": "cd packages/modules/receipts && yarn build",
+    "buildD:mcollect": "cd packages/modules/mCollect && yarn build",
+    "buildD:receipts": "cd packages/modules/receipts && yarn build",
     "build:tl": "cd packages/modules/tl && yarn build",
-    "build:hrms": "cd packages/modules/hrms && yarn build",
-    "build:obps": "cd packages/modules/obps && yarn build",
+    "buildD:hrms": "cd packages/modules/hrms && yarn build",
+    "buildD:obps": "cd packages/modules/obps && yarn build",
     "build:engagement": "cd packages/modules/engagement && yarn build",
-    "build:noc": "cd packages/modules/noc && yarn build",
-    "buildWS:ws": "cd packages/modules/ws && yarn build",
+    "buildD:noc": "cd packages/modules/noc && yarn build",
+    "build:ws": "cd packages/modules/ws && yarn build",
+    "build:bills": "cd packages/modules/bills && yarn build",
+    "buildR:reports": "cd packages/modules/reports && yarn build",
     "deploy:jenkins": "./scripts/jenkins.sh"
   },
   "devDependencies": {
@@ -71,5 +86,10 @@
   "dependencies": {
     "lodash": "4.17.21",
     "microbundle-crl": "0.13.11"
+  } ,"resolutions": {
+    "**/babel-loader": "8.2.2",
+    "**/@babel/core": "7.14.0",
+    "**/@babel/preset-env": "7.14.0",
+    "**/@babel/plugin-transform-modules-commonjs": "7.14.0"
   }
 }

@@ -41,7 +41,7 @@ const RadioButtons = (props) => {
                   className="radio-btn"
                   type="radio"
                   value={option}
-                  checked={selected?.code === option.code ? 1 : 0}
+                  checked={props?.isTLFlow ? (selected?.code === option.code || selected?.i18nKey === option.i18nKey) : selected?.code === option.code ? 1 : 0}
                   onChange={() => selectOption(option)}
                   disabled={props?.disabled}
                   name={props.name}

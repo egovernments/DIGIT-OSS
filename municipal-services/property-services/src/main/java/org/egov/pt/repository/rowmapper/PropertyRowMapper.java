@@ -89,27 +89,20 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 						.creationReason(CreationReason.fromValue(rs.getString("creationReason")))
 						.additionalDetails(getadditionalDetail(rs, "padditionalDetails"))
 						.acknowldgementNumber(rs.getString("acknowldgementNumber"))
-						.status(Status.fromValue(rs.getString("propertystatus")))
 						.ownershipCategory(rs.getString("ownershipcategory"))
 						.channel(Channel.fromValue(rs.getString("channel")))
 						.superBuiltUpArea(rs.getBigDecimal("propertysbpa"))
 						.usageCategory(rs.getString("pusagecategory"))
-						.oldPropertyId(rs.getString("oldPropertyId"))
 						.propertyType(rs.getString("propertytype"))
-						.propertyId(rs.getString("propertyid"))
-						.accountId(rs.getString("accountid"))
 						.noOfFloors(rs.getLong("noOfFloors"))
-						.surveyId(rs.getString("surveyId"))
-						.linkedProperties(linkedProperties)
 						.auditDetails(auditdetails)
 						.institution(institute)
 						.landArea(landArea)
-						.tenantId(tenanId)
-						.id(propertyUuId)
-						.address(address)
 						.build();
 
-				
+
+				setPropertyInfo(currentProperty, rs, tenanId, propertyUuId, linkedProperties, address);
+
 				addChildrenToProperty(rs, currentProperty);
 				propertyMap.put(propertyUuId, currentProperty);
 			}
@@ -276,7 +269,6 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 	 * Same document table is being used by both property and owner table, so id check is mandatory
 	 * 
 	 * @param rs
-	 * @param OwnerId
 	 * @param owner
 	 * @throws SQLException
 	 */
@@ -403,6 +395,30 @@ public class PropertyRowMapper implements ResultSetExtractor<List<Property>> {
 		
 		return propertyAdditionalDetails;
 
+	}
+
+	/*
+	 *  method sets all the data for PropertyInfo
+	 *
+	 * @param currentProperty
+	 * @param rs
+	 * @param tenantId
+	 * @param propertyUuId
+	 *
+	 * @throws SQLException
+	* */
+	private void setPropertyInfo(Property currentProperty, ResultSet rs, String tenantId, String propertyUuId,
+								 List<String> linkedProperties, Address address)
+			throws SQLException {
+		currentProperty.setPropertyId(rs.getString("propertyid"));
+		currentProperty.setAddress(address);
+		currentProperty.setStatus(Status.fromValue(rs.getString("propertystatus")));
+		currentProperty.setOldPropertyId(rs.getString("oldPropertyId"));
+		currentProperty.setAccountId(rs.getString("accountid"));
+		currentProperty.setSurveyId(rs.getString("surveyId"));
+		currentProperty.setLinkedProperties(linkedProperties);
+		currentProperty.setTenantId(tenantId);
+		currentProperty.setId(propertyUuId);
 	}
 
 }

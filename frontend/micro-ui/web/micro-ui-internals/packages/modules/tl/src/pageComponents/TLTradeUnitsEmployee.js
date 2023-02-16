@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { CardLabel, LabelFieldPair, Dropdown, TextInput, LinkButton, CardLabelError, MobileNumber } from "@egovernments/digit-ui-react-components";
+import { CardLabel, LabelFieldPair, Dropdown, TextInput, LinkButton, CardLabelError, MobileNumber, Loader } from "@egovernments/digit-ui-react-components";
 import { useForm, Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import _ from "lodash";
@@ -35,7 +35,12 @@ const TLTradeUnitsEmployee = ({ config, onSelect, userType, formData, setError, 
     const [previousLicenseDetails, setPreviousLicenseDetails] = useState(formData?.tradedetils1 || []);
     let isRenewal = window.location.href.includes("tl/renew-application-details");
     if (window.location.href.includes("tl/renew-application-details")) isRenewal = true;
-    const { data: tradeMdmsData,isLoading } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "TradeLicense", "TradeUnits", "[?(@.type=='TL')]");
+    const applicationType = isRenewal ? "RENEWAL" : "NEW";
+     const { data: tradeMdmsData,isLoading } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "TradeLicense", "TradeUnits", "[?(@.type=='TL')]");
+    const { data: billingSlabTradeTypeData, isLoading:isbillingSlabLoading } = Digit.Hooks.tl.useTradeLicenseBillingslab({ tenantId, filters: {} }, {
+        select: (data) => {
+        return data?.billingSlab.filter((e) => e.tradeType && e.applicationType === applicationType && e.licenseType === "PERMANENT" && e.uom);
+    }});
 
     const addNewUnits = () => {
         const newUnit = createUnitDetails();
@@ -83,13 +88,15 @@ const TLTradeUnitsEmployee = ({ config, onSelect, userType, formData, setError, 
         setTradeSubTypeOptionsList,
         setTradeTypeMdmsData,
         setTradeCategoryValues,
-        tradeMdmsData,
+        billingSlabTradeTypeData,
         isErrors,
         setIsErrors,
         previousLicenseDetails, 
         setPreviousLicenseDetails,
         isRenewal,
-        isLoading
+        isLoading,
+        isbillingSlabLoading,
+        tradeMdmsData
     };
 
     if (isEditScreen) {
@@ -130,25 +137,32 @@ const TradeUnitForm = (_props) => {
         setTradeSubTypeOptionsList,
         setTradeTypeMdmsData,
         setTradeCategoryValues,
-        tradeMdmsData,
+        billingSlabTradeTypeData,
         isErrors,
         setIsErrors,
         previousLicenseDetails, 
         setPreviousLicenseDetails,
         isRenewal,
-        isLoading
+        isLoading,
+        isbillingSlabLoading,
+        tradeMdmsData
     } = _props;
 
     const { control, formState: localFormState, watch, setError: setLocalError, clearErrors: clearLocalErrors, setValue, trigger, getValues } = useForm();
     const formValue = watch();
     const { errors } = localFormState;
 
-    const isIndividualTypeOwner = useMemo(() => formData?.ownershipCategory?.code.includes("INDIVIDUAL"), [formData?.ownershipCategory?.code]);
+    const isIndividualTypeOwner = useMemo(() => formData?.ownershipCategory?.code?.includes("INDIVIDUAL"), [formData?.ownershipCategory?.code]);
 
     useEffect(() => {
-        if (tradeMdmsData?.TradeLicense?.TradeType?.length > 0 && formData?.tradedetils?.["0"]?.structureType?.code) {
-            setTradeTypeMdmsData(tradeMdmsData?.TradeLicense?.TradeType);
-            let tradeType = cloneDeep(tradeMdmsData?.TradeLicense?.TradeType);
+        if (tradeMdmsData && ( billingSlabTradeTypeData?.length > 0 && formData?.tradedetils?.["0"]?.structureType?.code && formData?.tradedetils?.["0"]?.structureSubType?.code)) {
+            //let filteredTradeDetails = billingSlabTradeTypeData.filter(data => data?.structureType === formData?.tradedetils?.["0"]?.structureSubType?.code.toString())
+            let filteredTradeDetails = tradeMdmsData?.TradeLicense.TradeType;
+            filteredTradeDetails = filteredTradeDetails.map((ob) => {
+                return {...ob, tradeType : ob?.code}
+            })
+            setTradeTypeMdmsData(filteredTradeDetails);
+            let tradeType = cloneDeep(filteredTradeDetails);
             let tradeCatogoryList = [];
             tradeType.map(data => {
                 data.code = data?.code?.split('.')[0];
@@ -158,7 +172,7 @@ const TradeUnitForm = (_props) => {
             const filterTradeCategoryList = getUniqueItemsFromArray(tradeCatogoryList, "code");
             setTradeCategoryValues(filterTradeCategoryList);
         }
-    }, [formData?.tradedetils?.[0]?.structureType?.code, !isLoading, tradeMdmsData]);
+    }, [formData?.tradedetils?.[0]?.structureType?.code, !isLoading, billingSlabTradeTypeData, formData?.tradedetils?.["0"]?.structureSubType?.code]);
 
     useEffect(() => {
         trigger();
@@ -170,8 +184,7 @@ const TradeUnitForm = (_props) => {
         keys.forEach((key) => (part[key] = unit[key]));
 
         let _ownerType = isIndividualTypeOwner ? {} : { ownerType: { code: "NONE" } };
-
-        if (!_.isEqual(formValue, part)) {
+        if (!(_.isEqual(formValue, part))) {
             Object.keys(formValue).map(data => {
                 if (data != "key" && formValue[data] != undefined && formValue[data] != "" && formValue[data] != null && !isErrors) {
                   setIsErrors(true); 
@@ -195,36 +208,75 @@ const TradeUnitForm = (_props) => {
     let ckeckingLocation = window.location.href.includes("renew-application-details");
     if (window.location.href.includes("edit-application-details")) ckeckingLocation = true;
     useEffect(() => {
-        if (tradeTypeMdmsData?.length > 0 && ckeckingLocation && !isLoading) {
+        if (tradeTypeMdmsData?.length > 0 && (ckeckingLocation || unit?.tradeCategory && (tradeTypeOptionsList && tradeTypeOptionsList?.length == 0)) && !isLoading && !isbillingSlabLoading) {
             let tradeType = cloneDeep(tradeTypeMdmsData);
-            let filteredTradeType = tradeType.filter(data => data?.code?.split('.')[0] === unit?.tradeCategory?.code)
+            let filteredTradeType = tradeType.filter(data => data?.tradeType?.split('.')[0] === unit?.tradeCategory?.code)
             let tradeTypeOptions = [];
             filteredTradeType.map(data => {
-                data.code = data?.code?.split('.')[1];
-                data.code = data?.code?.split('.')[0];
-                data.i18nKey = t(`TRADELICENSE_TRADETYPE_${data?.code?.split('.')[0]}`);
+                data.code = data?.tradeType?.split('.')[1];
+                data.i18nKey = t(`TRADELICENSE_TRADETYPE_${data?.tradeType?.split('.')[1]}`);
                 tradeTypeOptions.push(data);
             });
             const filterTradeCategoryList = getUniqueItemsFromArray(filteredTradeType, "code");
             setTradeTypeOptionsList(filterTradeCategoryList);
         }
-    }, [tradeTypeMdmsData, !isLoading, tradeMdmsData]);
+    }, [tradeTypeMdmsData, !isLoading, billingSlabTradeTypeData]);
 
     useEffect(() => {
-        if (tradeTypeMdmsData?.length > 0 && ckeckingLocation && !isLoading) {
+        if (tradeTypeMdmsData?.length > 0 && (ckeckingLocation || unit?.tradeType && (tradeSubTypeOptionsList && tradeSubTypeOptionsList?.length == 0))  && !isLoading && !isbillingSlabLoading) {
             let tradeType = cloneDeep(tradeTypeMdmsData);
-            let filteredTradeSubType = tradeType.filter(data => data?.code?.split('.')[1] === unit?.tradeType?.code)
+            let filteredTradeSubType = tradeType.filter(data => data?.tradeType?.split('.')[1] === unit?.tradeType?.code)
             let tradeSubTypeOptions = [];
             filteredTradeSubType.map(data => {
-                let code = stringReplaceAll(data?.code, "-", "_");
+                let code = stringReplaceAll(data?.tradeType, "-", "_");
+                data.code = data?.tradeType;
                 data.i18nKey = t(`TRADELICENSE_TRADETYPE_${stringReplaceAll(code, ".", "_")}`);
                 tradeSubTypeOptions.push(data);
             });
             const filterTradeSubTypeList = getUniqueItemsFromArray(tradeSubTypeOptions, "code");
             setTradeSubTypeOptionsList(filterTradeSubTypeList);
         }
-    }, [tradeTypeMdmsData, !isLoading, tradeMdmsData]);
+    }, [tradeTypeMdmsData, !isLoading, billingSlabTradeTypeData]);
 
+    if(isLoading || isbillingSlabLoading)
+    {
+        return <Loader />
+    }
+
+function checkRangeForUomValue(e, fromUom, toUom){
+    let selectedtradesubType = billingSlabTradeTypeData?.filter((ob) => ob?.tradeType === unit?.tradeSubType?.code && (ob?.structureType === formData?.tradedetils?.[0]?.structureSubType?.code))?.[0];
+    fromUom = fromUom ? fromUom : selectedtradesubType?.fromUom;
+    toUom = toUom ? toUom : selectedtradesubType?.toUom;
+    if(Number.isInteger(fromUom)){
+        if(!(e && parseFloat(e) >= fromUom)){
+        return false;
+        }
+       }
+    if(Number.isInteger(toUom)){
+       if(!(e && parseFloat(e) <= toUom)){
+         return false
+         }
+       }
+    return true
+}
+
+function getUomRange(type){
+    let selectedtradesubType = billingSlabTradeTypeData?.filter((ob) => ob?.tradeType === unit?.tradeSubType?.code && (ob?.structureType === formData?.tradedetils?.[0]?.structureSubType?.code))?.[0];
+    if(type === "fromUom")
+    return selectedtradesubType?.fromUom;
+    else
+    return selectedtradesubType?.toUom;
+}
+
+function checkBillingSlab(value){
+    if(value && (billingSlabTradeTypeData?.filter((ob) => ob?.tradeType === value?.code && (ob?.structureType === formData?.tradedetils?.[0]?.structureSubType?.code))?.length <= 0 || billingSlabTradeTypeData?.filter((ob) => ob?.tradeType === value?.code && (ob?.structureType === formData?.tradedetils?.[0]?.structureSubType?.code)) == undefined))
+    {
+        sessionStorage.setItem("isBillingSlabError",true);
+      return false;
+    }
+    sessionStorage.removeItem("isBillingSlabError")
+    return true;
+}
 
     const errorStyle = { width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" };
     return (
@@ -262,12 +314,11 @@ const TradeUnitForm = (_props) => {
                                         let selectedOption = e?.code;
                                         if (tradeTypeMdmsData?.length > 0) {
                                             let tradeType = cloneDeep(tradeTypeMdmsData);
-                                            let filteredTradeType = tradeType.filter(data => data?.code?.split('.')[0] === selectedOption)
+                                            let filteredTradeType = tradeType.filter(data => data?.tradeType?.split('.')[0] === selectedOption)
                                             let tradeTypeOptions = [];
                                             filteredTradeType.map(data => {
-                                                data.code = data?.code?.split('.')[1];
-                                                data.code = data?.code?.split('.')[0];
-                                                data.i18nKey = t(`TRADELICENSE_TRADETYPE_${data?.code?.split('.')[0]}`);
+                                                data.code = data?.tradeType?.split('.')[1];
+                                                data.i18nKey = t(`TRADELICENSE_TRADETYPE_${data?.tradeType?.split('.')[1]}`);
                                                 tradeTypeOptions.push(data);
                                             });
                                             const filterTradeCategoryList = getUniqueItemsFromArray(filteredTradeType, "code");
@@ -310,10 +361,11 @@ const TradeUnitForm = (_props) => {
                                         let selectedOption = e?.code;
                                         if (tradeTypeMdmsData?.length > 0) {
                                             let tradeType = cloneDeep(tradeTypeMdmsData);
-                                            let filteredTradeSubType = tradeType.filter(data => data?.code?.split('.')[1] === selectedOption)
+                                            let filteredTradeSubType = tradeType.filter(data => data?.tradeType?.split('.')[1] === selectedOption)
                                             let tradeSubTypeOptions = [];
                                             filteredTradeSubType.map(data => {
-                                                let code = stringReplaceAll(data?.code, "-", "_");
+                                                let code = stringReplaceAll(data?.tradeType, "-", "_");
+                                                data.code = data?.tradeType;
                                                 data.i18nKey = t(`TRADELICENSE_TRADETYPE_${stringReplaceAll(code, ".", "_")}`);
                                                 tradeSubTypeOptions.push(data);
                                             });
@@ -339,7 +391,7 @@ const TradeUnitForm = (_props) => {
                             control={control}
                             name={"tradeSubType"}
                             defaultValue={unit?.tradeSubType}
-                            rules={{ required: t("REQUIRED_FIELD") }}
+                            rules={{ required: t("REQUIRED_FIELD"), validate: { pattern: (val) => (/*/^(0)*[1-9][0-9]{0,5}$/.test(val)*/ checkBillingSlab(val || unit?.tradeSubType)?true:t("TL_BILLING_SLAB_NOT_FOUND_FOR_COMB")) } }}
                             render={(props) => (
                                 <Dropdown
                                     className="form-field"
@@ -361,7 +413,7 @@ const TradeUnitForm = (_props) => {
                             )}
                         />
                     </LabelFieldPair>
-                    <CardLabelError style={errorStyle}> {localFormState.touched.tradeSubType ? errors?.tradeSubType?.message : ""} </CardLabelError>
+                    <CardLabelError style={errorStyle}> {localFormState.touched.tradeSubType || localFormState.touched.uomValue || (isRenewal && getValues("tradeSubType")) ? errors?.tradeSubType?.message : ""} </CardLabelError>
                     <LabelFieldPair>
                         <CardLabel className="card-label-smaller">{unit?.tradeSubType?.uom ? `${t("TL_NEW_TRADE_DETAILS_UOM_UOM_PLACEHOLDER")} * ` : `${t("TL_NEW_TRADE_DETAILS_UOM_UOM_PLACEHOLDER")}`}</CardLabel>
                         <div className="field">
@@ -396,7 +448,7 @@ const TradeUnitForm = (_props) => {
                                 control={control}
                                 name={"uomValue"}
                                 defaultValue={unit?.uomValue}
-                                rules={unit?.tradeSubType?.uom && { required: t("REQUIRED_FIELD"), validate: { pattern: (val) => (/^(0)*[1-9][0-9]{0,5}$/.test(val) ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")) } } }
+                                rules={unit?.tradeSubType?.uom && { required: t("REQUIRED_FIELD"), validate: { pattern: (val) => (/*/^(0)*[1-9][0-9]{0,5}$/.test(val)*/ val > 0 && val < 99999 ?(checkRangeForUomValue(val,unit?.tradeSubType?.fromUom,unit?.tradeSubType?.toUom) ? true : `${t("ERR_WRONG_UOM_VALUE")} ${getUomRange("fromUom")} - ${getUomRange("toUom")}`) : t("ERR_DEFAULT_INPUT_FIELD_MSG")) } } }
                                 render={(props) => (
                                     <TextInput
                                         value={getValues("uomValue")}

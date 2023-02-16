@@ -33,7 +33,21 @@ window.JSZip = JSZip;
 var sumColumn = [];
 var footerexist = false;
 let rTable;
-
+const mobileCheck = () => {
+  let check = false;
+  (function (a) {
+    if (
+      /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(
+        a
+      ) ||
+      /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(
+        a.substr(0, 4)
+      )
+    )
+      check = true;
+  })(navigator.userAgent || navigator.vendor || window.opera);
+  return check;
+};
 const formatLocaleKeys = (key = "") => {
   if (typeof key != "string") {
     return key;
@@ -459,7 +473,7 @@ class ShowField extends Component {
 
     const buttons = [
       {
-        text: `<span>${getLocaleLabels("RT_DOWNLOAD_AS", "RT_DOWNLOAD_AS")}</span>`,
+        text: `<span style="color:#767676">${getLocaleLabels("RT_DOWNLOAD_AS", "RT_DOWNLOAD_AS")}</span>`,
         className: "report-download-button-text",
       },
       {
@@ -474,9 +488,35 @@ class ShowField extends Component {
           doc.content[0].text = [];
           doc.content[0].text.push({ text: "mSeva System Reports\n\n", bold: true, fontSize: 20 });
           doc.content[0].text.push({ text: reportTitle, fontSize: 18 });
-          if (doc.content[1]) {
-            doc.content[1].margin = reportHeader.length > 6 ? null : [60, 10, 10, 12];
+          if (doc.content[1] && !doc.content[2]) {
+            doc.content[1].margin = reportHeader.length > 6 ? null : reportHeader.length < 3 ? [180, 10, 10, 12] : [60, 10, 10, 12];
+          } else if (doc.content[1] && doc.content[2]) {
+            doc.content[1].margin = reportHeader.length > 6 ? [380, 10, 10, 12] : [180, 10, 10, 12];
+            doc.content[2].margin = reportHeader.length > 6 ? null : reportHeader.length < 3 ? [180, 10, 10, 12] : [60, 10, 10, 12];
           }
+
+          // for PDF alignment issues
+          if (
+            doc &&
+            doc.content &&
+            doc.content.length &&
+            doc.content[2] &&
+            doc.content[2].table &&
+            doc.content[2].table.body &&
+            doc.content[2].table.body.length &&
+            doc.content[2].table.body[0] &&
+            doc.content[2].table.body[0].length &&
+            doc.content[2].table.body[0].length > 6
+          ) {
+            let bodyDataLength = doc.content[2].table.body[0].length;
+            let dataLengthPer = `${100 / bodyDataLength}%`;
+            doc.defaultStyle.alignment = "center";
+            doc.styles.tableHeader.alignment = "center";
+            doc.content[2].table.widths = Array(doc.content[2].table.body[0].length + 1)
+              .join(`${dataLengthPer}?`)
+              .split("?");
+          }
+
           if (window && window.mSewaApp && window.mSewaApp.isMsewaApp && window.mSewaApp.isMsewaApp() && window.mSewaApp.downloadBase64File) {
             const pdfData = pdfMake.createPdf(doc);
             downloadPDFFileUsingBase64(pdfData, `${_this.state.reportName}.pdf`);
@@ -532,6 +572,20 @@ class ShowField extends Component {
       displayStart: displayStart,
       buttons: self.getExportOptions(),
       searching: true,
+      language: {
+        sLengthMenu: `${getLocaleLabels("CS_SHOW", "CS_SHOW")} _MENU_ ${getLocaleLabels("CS_ENTRIES", "CS_ENTRIES")}`,
+        sSearch: getLocaleLabels("CS_SEARCH", "CS_SEARCH"),
+        sInfo: `${getLocaleLabels("CS_SHOWING", "CS_SHOWING")} _START_ ${getLocaleLabels("CS_TO", "CS_TO")} _END_ ${getLocaleLabels(
+          "CS_OF",
+          "CS_OF"
+        )} _TOTAL_ ${getLocaleLabels("CS_RECORDS", "CS_RECORDS")}`,
+        oPaginate: {
+          sFirst: getLocaleLabels("CS_PAGINATION_FIRST", "CS_PAGINATION_FIRST"),
+          sLast: getLocaleLabels("CS_PAGINATION_LAST", "CS_PAGINATION_LAST"),
+          sNext: getLocaleLabels("CS_PAGINATION_NEXT", "CS_PAGINATION_NEXT"),
+          sPrevious: getLocaleLabels("CS_PAGINATION_PREVIOUS", "CS_PAGINATION_PREVIOUS"),
+        },
+      },
       paging: true,
       ordering: true,
       columnDefs: [
@@ -605,6 +659,19 @@ class ShowField extends Component {
         }
       ).then(
         function (response) {
+          if (response && response.reportHeader && response.reportData) {
+            let hiddenRows = [];
+            response.reportHeader.map((e, i) => {
+              if (!e.showColumn) {
+                hiddenRows.push(i);
+              }
+            });
+            response.reportHeader = response.reportHeader.filter((e) => e.showColumn);
+            response.reportData = response.reportData.map((ele) =>
+              ele.filter((e, i) => !hiddenRows.includes(i)).map((ele) => (ele == null ? "" : ele))
+            );
+          }
+
           if (response.viewPath && response.reportData && response.reportData[0]) {
             localStorage.reportData = JSON.stringify(response.reportData);
             setReturnUrl(window.location.hash.split("#/")[1]);
@@ -664,7 +731,23 @@ class ShowField extends Component {
   };
 
   checkIfDate = (val, i) => {
-    let { reportResult } = this.props;
+    let { reportResult, metaData } = this.props;
+    let showCustomColorColumn = false;
+    /*
+    Custom Logic for TL Pending report to show red color column
+    */
+    if (metaData && metaData.reportDetails && metaData.reportDetails.reportName && metaData.reportDetails.reportName == "TLRenewalPendingReport") {
+      if (
+        reportResult &&
+        reportResult.reportHeader &&
+        reportResult.reportHeader.length &&
+        reportResult.reportHeader[i] &&
+        reportResult.reportHeader[i].name == "elapsedtime"
+      ) {
+        showCustomColorColumn = true;
+      }
+    }
+
     if (
       reportResult &&
       reportResult.reportHeader &&
@@ -689,8 +772,7 @@ class ShowField extends Component {
         reportResult.reportHeader &&
         reportResult.reportHeader.length &&
         reportResult.reportHeader[i] &&
-        reportResult.reportHeader[i].isLocalisationRequired &&
-        reportResult.reportHeader[i].localisationPrefix
+        reportResult.reportHeader[i].isLocalisationRequired 
       ) {
         if (reportResult.reportHeader[i].localisationPrefix == "ACCESSCONTROL_ROLES_ROLES_") {
           let list = val && val.split(",");
@@ -710,7 +792,20 @@ class ShowField extends Component {
           />
         );
       } else {
-        return val;
+        if (
+          reportResult &&
+          reportResult.reportHeader &&
+          reportResult.reportHeader.length &&
+          reportResult.reportHeader[i] &&
+          reportResult.reportHeader[i].type == "number"
+        ) {
+          if (val) {
+            return showCustomColorColumn && Number(val) > 7 ? <span style={{ color: "red" }}>{val}</span> : val;
+          }
+          return " - ";
+        }
+
+        return val ? val : getLocaleLabels("COMMON_NA", "COMMON_NA");
       }
     }
   };
@@ -759,7 +854,7 @@ class ShowField extends Component {
             reportResult.reportHeader.map((item, i) => {
               if (item.showColumn) {
                 return (
-                  <th key={i} className="report-header-cell">
+                  <th key={i} className="report-header-cell" data-orderable={item && item.label && item.label.includes("date") ? "false" : "true"}>
                     <Label
                       className="report-header-row-label"
                       labelStyle={{ wordWrap: "unset", wordBreak: "unset", fontWeight: "bold" }}
@@ -769,7 +864,7 @@ class ShowField extends Component {
                 );
               } else {
                 return (
-                  <th style={{ display: "none" }} key={i}>
+                  <th style={{ display: "none" }} key={i} data-orderable={item && item.label && item.label.includes("date") ? "false" : "true"}>
                     <Label
                       className="report-header-row-label"
                       labelStyle={{ wordWrap: "unset", wordBreak: "unset", fontWeight: "bold" }}
@@ -837,13 +932,28 @@ class ShowField extends Component {
           }
         ).then(
           function (response) {
+            if (response && response.reportHeader && response.reportData) {
+              let hiddenRows = [];
+              response.reportHeader.map((e, i) => {
+                if (!e.showColumn) {
+                  hiddenRows.push(i);
+                }
+              });
+              response.reportHeader = response.reportHeader.filter((e) => e.showColumn);
+              response.reportData = response.reportData.map((ele) =>
+                ele.filter((e, i) => !hiddenRows.includes(i)).map((ele) => (ele == null ? "" : ele))
+              );
+            }
+
             if (response.viewPath && response.reportData) {
               localStorage.reportData = JSON.stringify(response.reportData);
               setReturnUrl(window.location.hash.split("#/")[1]);
               setRoute("/print/report/" + response.viewPath);
             }
           },
-          function (err) {}
+          function (err) {
+            console.log(err, "error");
+          }
         );
     }
   }
@@ -867,6 +977,55 @@ class ShowField extends Component {
     sumColumn = [];
     let { reportResult, metaData } = this.props;
     let { drillDown, checkIfDate } = this;
+    // let elapsedTimeValue = [];
+    // let localityIndex = "";
+
+    // let metaDataResults = metaData && metaData.reportDetails && metaData.reportDetails.reportHeader;
+    // if (metaDataResults && metaDataResults.length > 0) {
+    //   localityIndex = metaDataResults.findIndex(checkLocality);
+    //   function checkLocality(column) {
+    //     return column && column.label && column.label.includes("locality");
+    //   }
+    // }
+
+    // if (
+    //   metaData &&
+    //   metaData.reportDetails &&
+    //   metaData.reportDetails.reportName == "TLRenewalPendingReport"  ) {
+    //     reportResult.reportHeader.forEach((data, index) => data.index = index);
+    //     elapsedTimeValue = reportResult.reportHeader.filter((data, index) => data.name == "elapsedtime" && index);
+    //   }
+    // let reportResultArray = [];
+    // if(reportResult && reportResult.reportData && reportResult.reportData.length) {
+    //   reportResult.reportData.forEach(data => {
+    //     let reportDataArray = [];
+    //     data.forEach((details, index) => {
+    //       if(details == null || details == undefined || details == "") {
+    //         reportDataArray.push("NA")
+    //       } else {
+    //         if ((details && typeof details == "string") || (details && typeof details == "string" && details.includes("_"))) {
+    //           if (localityIndex !== index) {
+    //             let localisedData = getLocaleLabels(details, details);
+    //             reportDataArray.push(localisedData);
+    //           } else {
+    //             reportDataArray.push(details)
+    //           }
+    //         } else {
+    //           if ( metaData &&
+    //             metaData.reportDetails &&
+    //             metaData.reportDetails.reportName == "TLRenewalPendingReport" && elapsedTimeValue && elapsedTimeValue[0].index == index && Number(details) > 7) {
+    //               reportDataArray.push(<span style={{color: "red"}}>{details}</span>)
+    //           } else {
+    //             reportDataArray.push(details)
+    //           }
+
+    //         }
+    //       }
+    //     })
+    //     reportResultArray.push(reportDataArray);
+    //   })
+    // }
+
     return (
       <tbody>
         {reportResult.hasOwnProperty("reportData") &&
@@ -874,7 +1033,11 @@ class ShowField extends Component {
             //array of array
             let reportHeaderObj = reportResult.reportHeader;
             return (
-              <tr key={dataIndex} className={this.state.ck[dataIndex] ? "selected" : ""}>
+              <tr
+                key={dataIndex}
+                className={this.state.ck[dataIndex] ? "selected" : ""}
+                style={mobileCheck() ? { width: "100%", display: "flex" } : {}}
+              >
                 <td>{dataIndex + 1}</td>
                 {metaData && metaData.reportDetails && metaData.reportDetails.selectiveDownload && (
                   <td>
@@ -922,7 +1085,6 @@ class ShowField extends Component {
                     return (
                       <td
                         key={itemIndex}
-                        style={{ display: "none" }}
                         onClick={(e) => {
                           drillDown(e, dataIndex, itemIndex, dataItem, item);
                         }}
@@ -940,7 +1102,7 @@ class ShowField extends Component {
   };
 
   renderFooter = () => {
-    let { reportResult } = this.props;
+    let { reportResult, metaData } = this.props;
     let reportHeaderObj = reportResult.reportHeader;
     if (reportResult && reportResult.reportData && reportResult.reportData.length > 0) {
       footerexist = true;
@@ -978,14 +1140,14 @@ class ShowField extends Component {
       for (let j = 0; j < reportResult.reportData[i].length; j++) {
         let val = intVal(reportResult.reportData[i][j]);
         if (i == 0) {
-          if (sumColumn[j + 1].total && typeof val === "number") {
+          if (sumColumn[j + 1] && sumColumn[j + 1].total && typeof val === "number") {
             total.push(val);
           } else {
             total.push("");
           }
           continue;
         }
-        if (sumColumn[j + 1].total) {
+        if (sumColumn[j + 1] && sumColumn[j + 1].total) {
           if (typeof val === "number") {
             if (typeof total[j] === "string") {
               total[j] = val;
@@ -997,7 +1159,22 @@ class ShowField extends Component {
       }
     }
 
-    if (footerexist) {
+    const getIsFooterexist = () => {
+      let isFooterexist = footerexist;
+      if (
+        metaData &&
+        metaData.reportDetails &&
+        (metaData.reportDetails.reportName == "TLApplicationStatusReport" ||
+          metaData.reportDetails.reportName == "TLRegistryReport" ||
+          metaData.reportDetails.reportName == "TLRenewalPendingReport" ||
+          metaData.reportDetails.reportName == "ObpsApplicationStatusReport" )
+      ) {
+        isFooterexist = false;
+      }
+      return isFooterexist;
+    };
+
+    if (getIsFooterexist()) {
       return (
         <tfoot>
           <tr className="total">
@@ -1028,8 +1205,9 @@ class ShowField extends Component {
   };
 
   getReportTitle = (rptName) => {
-    let reportName = rptName || this.state.reportName;
-    let reportTitleArr = reportName && reportName.split(/(?=[A-Z])/);
+    let reportName = rptName || this.state.reportName || "";
+    reportName = reportName.toUpperCase();
+    let reportTitleArr = reportName && getLocaleLabels(reportName, reportName).split(/(?=[A-Z])/);
     let reportTitle = "";
     if (reportTitleArr) {
       reportTitle = reportTitleArr.map((char) => {
@@ -1045,8 +1223,9 @@ class ShowField extends Component {
   };
 
   getXlsReportTitle = (rptName) => {
-    let reportName = rptName || this.state.reportName;
-    let reportTitleArr = reportName && reportName.split(/(?=[A-Z])/);
+    let reportName = rptName || this.state.reportName || "";
+    reportName = reportName.toUpperCase();
+    let reportTitleArr = reportName && getLocaleLabels(reportName, reportName).split(/(?=[A-Z])/);
     let reportTitle = "";
     let reportHeaderName = "";
     if (reportTitleArr) {

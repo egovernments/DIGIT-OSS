@@ -42,4 +42,8 @@ public class ApplicationProperties {
     @Value("${max.data.list.size}")
     private Long maxDataListSize;
 
+    @Value("${adaptor.ingest.system.role}")
+    private String adaptorIngestSystemRole;
+
+
 }

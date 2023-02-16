@@ -20,6 +20,7 @@ const BpaApplicationDetail = () => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateCode = Digit.ULBService.getStateId();
+  const isMobile = window.Digit.Utils.browser.isMobile();
   const queryClient = useQueryClient();
   const [showToast, setShowToast] = useState(null);
   const [isTocAccepted, setIsTocAccepted] = useState(false); 
@@ -395,7 +396,7 @@ const BpaApplicationDetail = () => {
   return (
     <Fragment>
       <div className="cardHeaderWithOptions" style={{ marginRight: "auto", maxWidth: "960px" }}>
-        <Header styles={{fontSize: "32px"}}>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
+        <Header styles={{fontSize: "32px", marginLeft: "10px"}}>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
         {dowloadOptions && dowloadOptions.length > 0 && <MultiLink
           className="multilinkWrapper"
           onHeadClick={() => setShowOptions(!showOptions)}
@@ -512,26 +513,28 @@ const BpaApplicationDetail = () => {
                     />
                   )}
                   {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 1 && (
-                    <ActionBar style={{ position: "relative", boxShadow: "none", minWidth: "240px", maxWidth: "310px", padding: "0px" }}>
+                    //removed this styles to fix the action button in application details UM-5347
+                    <ActionBar /*style={{ position: "relative", boxShadow: "none", minWidth: "240px", maxWidth: "310px", padding: "0px" }}*/>
                       <div style={{ width: "100%" }}>
                         {displayMenu && workflowDetails?.data?.nextActions ? (
                           <Menu
-                            style={{ bottom: "37px", minWidth: "240px", maxWidth: "310px", width: "100%", right: "0px" }}
+                            //style={{ bottom: "37px", minWidth: "240px", maxWidth: "310px", width: "100%", right: "0px" }}
                             localeKeyPrefix={"WF_BPA"}
                             options={workflowDetails?.data?.nextActions.map((action) => action.action)}
                             t={t}
                             onSelect={onActionSelect}
                           />
                         ) : null}
-                        <SubmitBar style={{ width: "100%" }} disabled={checkForSubmitDisable(isFromSendBack, isTocAccepted)} label={t("ES_COMMON_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
+                        <SubmitBar /*style={{ width: "100%" }}*/ disabled={checkForSubmitDisable(isFromSendBack, isTocAccepted)} label={t("ES_COMMON_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
                       </div>
                     </ActionBar>
                   )}
                   {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length == 1 && (
-                    <ActionBar style={{ position: "relative", boxShadow: "none", minWidth: "240px", maxWidth: "310px", padding: "0px" }}>
+                    //removed this style to fix the action button in application details UM-5347
+                    <ActionBar /*style={{ position: "relative", boxShadow: "none", minWidth: "240px", maxWidth: "310px", padding: "0px" }}*/>
                       <div style={{ width: "100%" }}>
                         <button 
-                        style={{ width: "100%", color: "#FFFFFF", fontSize: "19px" }}
+                        style={{  color: "#FFFFFF", fontSize: isMobile ? "19px" : "initial" }}
                         className={`${checkForSubmitDisable(isFromSendBack, isTocAccepted) ? "submit-bar-disabled" : "submit-bar"}`}
                         disabled={checkForSubmitDisable(isFromSendBack, isTocAccepted)} 
                         name={workflowDetails?.data?.nextActions?.[0]?.action} 

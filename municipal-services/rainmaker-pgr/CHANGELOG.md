@@ -2,7 +2,7 @@
 
 All notable changes to this module will be documented in this file.
 
-## 1.1.4 - 2021-07-26
+## 1.1.4-beta - 2021-07-26
 
 - Added new source rb bot to support Reap benfit system integration
 

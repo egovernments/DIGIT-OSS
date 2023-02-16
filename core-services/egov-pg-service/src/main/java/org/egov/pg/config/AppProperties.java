@@ -78,7 +78,21 @@ public class AppProperties {
 
     private final String notificationHost;
 
+    private final String stateLevelTenantId;
+
     private final String egovPgReconciliationSystemUserUuid;
+
+    private final String internalMicroserviceRoleName;
+
+    private final String internalMicroserviceRoleCode;
+
+    private final String internalMicroserviceUserName;
+
+    private final String internalMicroserviceUserUsername;
+
+    private final String internalMicroserviceUserMobilenumber;
+
+    private final String internalMicroserviceUserType;
 
     @Autowired
     public AppProperties(Environment environment){
@@ -114,7 +128,14 @@ public class AppProperties {
         this.billingServiceHost = environment.getRequiredProperty("egov.billing.service.host");
         this.billingServiceSearchEndpoint = environment.getRequiredProperty("egov.bill.searchendpoint");
         this.notificationHost = environment.getRequiredProperty("notification.url");
+        this.stateLevelTenantId = environment.getRequiredProperty("state.level.tenant.id");
         this.egovPgReconciliationSystemUserUuid = environment.getRequiredProperty("egov.pg.reconciliation.system.user.uuid");
+        this.internalMicroserviceRoleName = environment.getRequiredProperty("internal.microservice.role.name");
+        this.internalMicroserviceRoleCode = environment.getRequiredProperty("internal.microservice.role.code");
+        this.internalMicroserviceUserName = environment.getRequiredProperty("internal.microservice.user.name");
+        this.internalMicroserviceUserUsername = environment.getRequiredProperty("internal.microservice.user.username");
+        this.internalMicroserviceUserMobilenumber = environment.getRequiredProperty("internal.microservice.user.mobilenumber");
+        this.internalMicroserviceUserType = environment.getRequiredProperty("internal.microservice.user.type");
     }
 
 }

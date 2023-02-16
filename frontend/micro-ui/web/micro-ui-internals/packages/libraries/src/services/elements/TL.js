@@ -63,4 +63,13 @@ export const TLService = {
       params: { tenantId },
       auth: true,
     }),
+  TLOpensearch: ({ tenantId, filters }) =>
+    Request({
+     url: Urls.tl.search,
+     useCache: false,
+     method: "POST",
+     auth: false ,
+     userService: false,
+     params: { tenantId, ...filters },
+   }),
 };

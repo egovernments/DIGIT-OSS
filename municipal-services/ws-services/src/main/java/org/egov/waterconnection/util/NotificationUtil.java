@@ -6,6 +6,8 @@ import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.contract.request.Role;
+import org.egov.common.contract.request.User;
 import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsCriteria;
 import org.egov.mdms.model.MdmsCriteriaReq;
@@ -22,6 +24,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static com.jayway.jsonpath.Criteria.where;
@@ -142,6 +146,10 @@ public class NotificationUtil {
 		if(reqType == WCConstants.MODIFY_CONNECTION){
 			builder.append("WS_MODIFY_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append("_SMS_MESSAGE");
 		}
+		if (reqType == DISCONNECT_CONNECTION)
+		{
+			builder.append("WS_DISCONNECT_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append("_SMS_MESSAGE");
+		}
 		return getMessageTemplate(builder.toString(), localizationMessage);
 	}
 
@@ -158,6 +166,10 @@ public class NotificationUtil {
 		}
 		if (reqType == WCConstants.MODIFY_CONNECTION) {
 			builder.append("WS_MODIFY_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append("_APP_MESSAGE");
+		}
+		if (reqType == DISCONNECT_CONNECTION)
+		{
+			builder.append("WS_DISCONNECT_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append("_APP_MESSAGE");
 		}
 		return getMessageTemplate(builder.toString(), localizationMessage);
 	}
@@ -176,6 +188,10 @@ public class NotificationUtil {
 		}
 		if (reqType == WCConstants.MODIFY_CONNECTION) {
 			builder.append("WS_MODIFY_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append("_EMAIL_MESSAGE");
+		}
+		if (reqType == DISCONNECT_CONNECTION)
+		{
+			builder.append("WS_DISCONNECT_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append("_EMAIL_MESSAGE");
 		}
 		return getMessageTemplate(builder.toString(), localizationMessage);
 	}
@@ -196,7 +212,7 @@ public class NotificationUtil {
 	 * @param request EventRequest Object
 	 */
 	public void sendEventNotification(EventRequest request) {
-		log.info("Event: " + request.toString());
+		log.info("Pushing Event: " + request.toString());
 		producer.push(config.getSaveUserEventsTopic(), request);
 	}
 	public List<EmailRequest> createEmailRequest(WaterConnectionRequest waterConnectionRequest, String message, Map<String, String> mobileNumberToEmailId) {
@@ -211,7 +227,7 @@ public class NotificationUtil {
 //				customizedMsg = customizedMsg.replace("{RECEIPT_DOWNLOAD_LINK}",linkToReplace);
 //			}
 			String subject = customizedMsg.substring(customizedMsg.indexOf("<h2>")+4,customizedMsg.indexOf("</h2>"));
-			String body = customizedMsg.substring(customizedMsg.indexOf("</h2>")+4);
+			String body = customizedMsg.substring(customizedMsg.indexOf("</h2>")+5);
 			Email emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(true).body(body).subject(subject).build();
 			EmailRequest email = new EmailRequest(waterConnectionRequest.getRequestInfo(),emailobj);
 			emailRequest.add(email);
@@ -243,6 +259,10 @@ public class NotificationUtil {
 		StringBuilder uri = new StringBuilder();
 		uri.append(config.getUserHost()).append(config.getUserSearchEndpoint());
 		Map<String, Object> userSearchRequest = new HashMap<>();
+		User userInfoCopy = requestInfo.getUserInfo();
+		User userInfo = getInternalMicroserviceUser(tenantId);
+		requestInfo.setUserInfo(userInfo);
+
 		userSearchRequest.put("RequestInfo", requestInfo);
 		userSearchRequest.put("tenantId", tenantId);
 		userSearchRequest.put("userType", "CITIZEN");
@@ -263,6 +283,8 @@ public class NotificationUtil {
 				log.error("Exception trace: ",e);
 				continue;
 			}
+
+			requestInfo.setUserInfo(userInfoCopy);
 		}
 		return mapOfPhnoAndEmailIds;
 	}
@@ -311,5 +333,79 @@ public class NotificationUtil {
 		return mdmsCriteriaReq;
 	}
 
+	/**
+	 *
+	 * @param tenantId
+	 * @return internal microservice user to fetch plain user details
+	 */
+	public User getInternalMicroserviceUser(String tenantId)
+	{
+		//Creating role with INTERNAL_MICROSERVICE_ROLE
+		Role role = Role.builder()
+				.name("Internal Microservice Role").code("INTERNAL_MICROSERVICE_ROLE")
+				.tenantId(tenantId).build();
+
+		//Creating userinfo with uuid and role of internal micro service role
+		User userInfo = User.builder()
+				.uuid(config.getEgovInternalMicroserviceUserUuid())
+				.type("SYSTEM")
+				.roles(Collections.singletonList(role)).id(0L).build();
+
+		return userInfo;
+	}
+
+	/**
+	 * @param applicationStatus
+	 * @return In app message code
+	 */
+	public String getCustomizedMsgForInAppForPayment(String action, String applicationStatus, int reqType) {
+		StringBuilder builder = new StringBuilder();
+		if (reqType == WCConstants.UPDATE_APPLICATION) {
+			builder.append("WS_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append(APP_MESSAGE);
+		}
+		if (reqType == WCConstants.MODIFY_CONNECTION) {
+			builder.append("WS_MODIFY_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append(APP_MESSAGE);
+		}
+		if (reqType == DISCONNECT_CONNECTION) {
+			builder.append("WS_DISCONNECT_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append(APP_MESSAGE);
+		}
+		return builder.toString();
+	}
+
+	/**
+	 * @param applicationStatus
+	 * @return message code
+	 */
+	public String getCustomizedMsgForSMSForPayment(String action, String applicationStatus, int reqType) {
+		StringBuilder builder = new StringBuilder();
+		if (reqType == WCConstants.UPDATE_APPLICATION) {
+			builder.append("WS_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append(SMS_MESSAGE);
+		}
+		if (reqType == WCConstants.MODIFY_CONNECTION) {
+			builder.append("WS_MODIFY_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append(SMS_MESSAGE);
+		}
+		if (reqType == DISCONNECT_CONNECTION) {
+			builder.append("WS_DISCONNECT_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append(SMS_MESSAGE);
+		}
+		return builder.toString();
+	}
+
+	/**
+	 * @param applicationStatus
+	 * @return Email message code
+	 */
+	public String getCustomizedMsgForEmailForPayment(String action, String applicationStatus, int reqType) {
+		StringBuilder builder = new StringBuilder();
+		if (reqType == WCConstants.UPDATE_APPLICATION) {
+			builder.append("WS_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append(EMAIL_MESSAGE);
+		}
+		if (reqType == WCConstants.MODIFY_CONNECTION) {
+			builder.append("WS_MODIFY_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append(EMAIL_MESSAGE);
+		}
+		if (reqType == DISCONNECT_CONNECTION) {
+			builder.append("WS_DISCONNECT_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append(EMAIL_MESSAGE);
+		}
+		return builder.toString();
+	}
 
 }

@@ -20,6 +20,7 @@ const ResponseComposer = ({ data, template, actionButtonLabel, onSubmit }) => {
                   keyValue={t(field.label)}
                   note={field.notePrefix ? field.notePrefix + result[field.key] : result[field.key]}
                   noteStyle={field.noteStyle}
+                  privacy={ result?.privacy?.[field.key] ? result?.privacy?.[field.key] : null}
                 />
               );
             })}
@@ -30,6 +31,11 @@ const ResponseComposer = ({ data, template, actionButtonLabel, onSubmit }) => {
                 onSubmit={() => {
                   onSubmit(result);
                 }}
+                disabled={result?.AmountDue === "0"? true : false}
+              />
+            )}
+            {result.status === "INACTIVE" && (
+              <CitizenInfoLabel style={{margin:"0px"}} info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("CS_INACTIVE_PROPERTY_NOT_ELIGIBLE")} 
               />
             )}
             {result.status === "INACTIVE" && (

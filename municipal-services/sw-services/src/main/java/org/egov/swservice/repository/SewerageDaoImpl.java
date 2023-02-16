@@ -9,10 +9,9 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.common.contract.request.User;
 import org.egov.swservice.config.SWConfiguration;
+import org.egov.swservice.repository.rowmapper.EncryptionCountRowMapper;
 import org.egov.swservice.repository.rowmapper.OpenSewerageRowMapper;
-import org.egov.swservice.web.models.SearchCriteria;
-import org.egov.swservice.web.models.SewerageConnection;
-import org.egov.swservice.web.models.SewerageConnectionRequest;
+import org.egov.swservice.web.models.*;
 import org.egov.swservice.producer.SewarageConnectionProducer;
 import org.egov.swservice.repository.builder.SWQueryBuilder;
 import org.egov.swservice.repository.rowmapper.SewerageRowMapper;
@@ -46,11 +45,20 @@ public class SewerageDaoImpl implements SewerageDao {
 	@Autowired
 	private SWConfiguration swConfiguration;
 
+	@Autowired
+	private EncryptionCountRowMapper encryptionCountRowMapper;
+
 	@Value("${egov.sewarageservice.createconnection.topic}")
 	private String createSewarageConnection;
 
 	@Value("${egov.sewarageservice.updateconnection.topic}")
 	private String updateSewarageConnection;
+
+	@Value("${egov.sewerageservice.oldDataEncryptionStatus.topic}")
+	private String encryptionStatusTopic;
+
+	@Value("${egov.sewerageservice.update.oldData.topic}")
+	private String updateOldDataEncTopic;
 
 	@Override
 	public void saveSewerageConnection(SewerageConnectionRequest sewerageConnectionRequest) {
@@ -78,6 +86,16 @@ public class SewerageDaoImpl implements SewerageDao {
 		return sewerageConnectionList;
 	}
 
+	public Integer getSewerageConnectionsCount(SearchCriteria criteria, RequestInfo requestInfo) {
+		List<Object> preparedStatement = new ArrayList<>();
+		String query = swQueryBuilder.getSearchCountQueryString(criteria, preparedStatement, requestInfo);
+		if (query == null)
+			return 0;
+
+		Integer count = jdbcTemplate.queryForObject(query, preparedStatement.toArray(), Integer.class);
+		return count;
+	}
+	
 	public Boolean isSearchOpen(User userInfo) {
 
 		return userInfo.getType().equalsIgnoreCase("SYSTEM")
@@ -86,7 +104,14 @@ public class SewerageDaoImpl implements SewerageDao {
 
 	public void updateSewerageConnection(SewerageConnectionRequest sewerageConnectionRequest,
 			boolean isStateUpdatable) {
+		String reqAction = sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction();
 		if (isStateUpdatable) {
+			if (SWConstants.EXECUTE_DISCONNECTION.equalsIgnoreCase(reqAction)) {
+				sewerageConnectionRequest.getSewerageConnection().setStatus(Connection.StatusEnum.INACTIVE);
+			}
+			sewarageConnectionProducer.push(updateSewarageConnection, sewerageConnectionRequest);
+		} else if (SWConstants.EXECUTE_DISCONNECTION.equalsIgnoreCase(sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction())) {
+			sewerageConnectionRequest.getSewerageConnection().setStatus(Connection.StatusEnum.INACTIVE);
 			sewarageConnectionProducer.push(updateSewarageConnection, sewerageConnectionRequest);
 		} else {
 			sewarageConnectionProducer.push(swConfiguration.getWorkFlowUpdateTopic(), sewerageConnectionRequest);
@@ -98,8 +123,9 @@ public class SewerageDaoImpl implements SewerageDao {
 	 * 
 	 * @param sewerageConnectionRequest - Sewerage Connection Request Object
 	 */
-	public void pushForEditNotification(SewerageConnectionRequest sewerageConnectionRequest) {
-		if (!SWConstants.EDIT_NOTIFICATION_STATE
+	public void pushForEditNotification(SewerageConnectionRequest sewerageConnectionRequest,
+										boolean isStateUpdatable) {
+		if (isStateUpdatable && !SWConstants.EDIT_NOTIFICATION_STATE
 				.contains(sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction())) {
 			sewarageConnectionProducer.push(swConfiguration.getEditNotificationTopic(), sewerageConnectionRequest);
 		}
@@ -129,6 +155,7 @@ public class SewerageDaoImpl implements SewerageDao {
 		String query = swQueryBuilder.getSearchQueryStringForPlainSearch(criteria, preparedStatement, requestInfo);
 		if (query == null)
 			return Collections.emptyList();
+		log.info("\nFinal Query ::" + query);
 		Boolean isOpenSearch = isSearchOpen(requestInfo.getUserInfo());
 		List<SewerageConnection> sewerageConnectionList = new ArrayList<>();
 		if(isOpenSearch)
@@ -142,6 +169,44 @@ public class SewerageDaoImpl implements SewerageDao {
 			return Collections.emptyList();
 		}
 		return sewerageConnectionList;
+	}
+
+	/* Method to push the encrypted data to the 'update' topic  */
+	@Override
+	public void updateOldSewerageConnections(SewerageConnectionRequest sewerageConnectionRequest) {
+		sewarageConnectionProducer.push(updateOldDataEncTopic, sewerageConnectionRequest);
+
+	}
+
+	/* Method to find the total count of applications present in dB */
+	@Override
+	public Integer getTotalApplications(SearchCriteria criteria) {
+		List<Object> preparedStatement = new ArrayList<>();
+		String query = swQueryBuilder.getTotalApplicationsCountQueryString(criteria, preparedStatement);
+		if (query == null)
+			return 0;
+		Integer count = jdbcTemplate.queryForObject(query, preparedStatement.toArray(), Integer.class);
+		return count;
+	}
+
+	/* Method to push the old data encryption status to the 'ws-enc-audit' topic  */
+	@Override
+	public void updateEncryptionStatus(EncryptionCount encryptionCount) {
+		sewarageConnectionProducer.push(encryptionStatusTopic, encryptionCount);
+	}
+
+	/* Method to find the last execution details in dB */
+	@Override
+	public EncryptionCount getLastExecutionDetail(SearchCriteria criteria) {
+
+		List<Object> preparedStatement = new ArrayList<>();
+		String query = swQueryBuilder.getLastExecutionDetail(criteria, preparedStatement);
+
+		log.info("\nQuery executed:" + query);
+		if (query == null)
+			return null;
+		EncryptionCount encryptionCount = jdbcTemplate.query(query, preparedStatement.toArray(), encryptionCountRowMapper);
+		return encryptionCount;
 	}
 
 }

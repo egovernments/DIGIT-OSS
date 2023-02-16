@@ -1,4 +1,4 @@
-FROM egovio/alpine-node-builder-10:yarn
+FROM egovio/alpine-node-builder-14:yarn
 
 ARG WORK_DIR
 ENV npm_config_cache=/tmp

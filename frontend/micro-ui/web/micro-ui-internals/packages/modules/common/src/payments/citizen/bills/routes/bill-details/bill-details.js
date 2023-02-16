@@ -10,10 +10,12 @@ const BillDetails = ({ paymentRules, businessService }) => {
   const { t } = useTranslation();
   const history = useHistory();
   const { state, ...location } = useLocation();
-  const { consumerCode } = useParams();
-  const { workflow: wrkflow, tenantId: _tenantId } = Digit.Hooks.useQueryParams();
+  let { consumerCode } = useParams();
+  const { workflow: wrkflow, tenantId: _tenantId, ConsumerName } = Digit.Hooks.useQueryParams();
   const [bill, setBill] = useState(state?.bill);
   const tenantId = state?.tenantId || _tenantId || Digit.UserService.getUser().info?.tenantId;
+  if(wrkflow === "WNS" && consumerCode.includes("?"))
+  consumerCode = consumerCode.substring(0,consumerCode.indexOf("?"))
   const { data, isLoading } = state?.bill
     ? { isLoading: false }
     : Digit.Hooks.useFetchPayment({
@@ -21,6 +23,20 @@ const BillDetails = ({ paymentRules, businessService }) => {
         businessService,
         consumerCode: wrkflow === "WNS" ? stringReplaceAll(consumerCode, "+", "/") : consumerCode,
       });
+
+  let Useruuid = data?.Bill?.[0]?.userId || "";
+  let requestCriteria = [
+    "/user/_search",
+    {},
+    {data : {uuid:[Useruuid]}},
+    { recordId: Useruuid, plainRequestFields: ["mobileNumber"] },
+    {
+        enabled: Useruuid ? true : false,
+        cacheTime: 100,
+        
+    }
+]
+const { isLoading : isUserLoading, data: userData, revalidate } = Digit.Hooks.useCustomAPIHook(...requestCriteria);
   let { minAmountPayable, isAdvanceAllowed } = paymentRules;
   minAmountPayable = wrkflow === "WNS" ? 100 : minAmountPayable;
   const billDetails = bill?.billDetails?.sort((a, b) => b.fromPeriod - a.fromPeriod)?.[0] || [];
@@ -35,17 +51,17 @@ const BillDetails = ({ paymentRules, businessService }) => {
     const { fromPeriod, toPeriod } = billDetails;
     if (fromPeriod && toPeriod) {
       let from, to;
-      if (wrkflow === "mcollect") {
+      if (wrkflow === "mcollect" || wrkflow === "WNS") {
         from =
           new Date(fromPeriod).getDate().toString() +
           " " +
-          Digit.Utils.date.monthNames[new Date(fromPeriod).getMonth() + 1].toString() +
+          Digit.Utils.date.monthNames[new Date(fromPeriod).getMonth()]?.toString() +
           " " +
           new Date(fromPeriod).getFullYear().toString();
         to =
           new Date(toPeriod).getDate() +
           " " +
-          Digit.Utils.date.monthNames[new Date(toPeriod).getMonth() + 1] +
+          Digit.Utils.date.monthNames[new Date(toPeriod).getMonth()] +
           " " +
           new Date(toPeriod).getFullYear();
         return from + " - " + to;
@@ -113,16 +129,18 @@ const BillDetails = ({ paymentRules, businessService }) => {
         tenantId: billDetails.tenantId,
       });
     } else if (wrkflow === "WNS") {
-      history.push(`/digit-ui/citizen/payment/collect/${businessService}/${consumerCode}?workflow=WNS`, {
+      history.push(`/digit-ui/citizen/payment/billDetails/${businessService}/${consumerCode}/${paymentAmount}?workflow=WNS&ConsumerName=${ConsumerName}`, {
         paymentAmount,
         tenantId: billDetails.tenantId,
+        name: bill.payerName,
+        mobileNumber: bill.mobileNumber && bill.mobileNumber?.includes("*") ? userData?.user?.[0]?.mobileNumber : bill.mobileNumber,
       });
     } else if (businessService === "PT") {
       history.push(`/digit-ui/citizen/payment/billDetails/${businessService}/${consumerCode}/${paymentAmount}`, {
         paymentAmount,
         tenantId: billDetails.tenantId,
         name: bill.payerName,
-        mobileNumber: bill.mobileNumber,
+        mobileNumber: bill.mobileNumber && bill.mobileNumber?.includes("*") ? userData?.user?.[0]?.mobileNumber : bill.mobileNumber,
       });
     } else {
       history.push(`/digit-ui/citizen/payment/collect/${businessService}/${consumerCode}`, { paymentAmount, tenantId: billDetails.tenantId });
@@ -153,8 +171,8 @@ const BillDetails = ({ paymentRules, businessService }) => {
             note={wrkflow === "WNS" ? stringReplaceAll(consumerCode, "+", "/") : consumerCode}
           />
           {businessService !== "PT.MUTATION" && <KeyNote keyValue={t("CS_PAYMENT_BILLING_PERIOD")} note={getBillingPeriod()} />}
-          {businessService?.includes("PT") && billDetails?.currentBillNo && <KeyNote keyValue={t("CS_BILL_NO")} note={billDetails?.currentBillNo} />}
-          {businessService?.includes("PT") && billDetails?.currentExpiryDate && (
+          {businessService?.includes("PT") || wrkflow === "WNS" && billDetails?.currentBillNo && <KeyNote keyValue={t("CS_BILL_NO")} note={billDetails?.currentBillNo} />}
+          {businessService?.includes("PT") || wrkflow === "WNS" && billDetails?.currentExpiryDate && (
             <KeyNote keyValue={t("CS_BILL_DUEDATE")} note={new Date(billDetails?.currentExpiryDate).toLocaleDateString()} />
           )}
           <BillSumary billAccountDetails={getBillBreakDown()} total={getTotal()} businessService={businessService} arrears={Arrears} />

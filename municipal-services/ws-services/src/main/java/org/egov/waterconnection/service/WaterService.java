@@ -13,8 +13,11 @@ public interface WaterService {
 	List<WaterConnection> createWaterConnection(WaterConnectionRequest waterConnectionRequest);
 
 	List<WaterConnection> search(SearchCriteria criteria, RequestInfo requestInfo);
-	
-	List<WaterConnection> updateWaterConnection(WaterConnectionRequest waterConnectionRequest);
 
-	WaterConnectionResponse planeSearch(SearchCriteria criteria, RequestInfo requestInfo);
+	Integer countAllWaterApplications(SearchCriteria criteria, RequestInfo requestInfo);
+
+	List<WaterConnection> updateWaterConnection(WaterConnectionRequest waterConnectionRequest);
+	
+	WaterConnectionResponse plainSearch(SearchCriteria criteria, RequestInfo requestInfo);
+
 }

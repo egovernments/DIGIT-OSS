@@ -1,6 +1,13 @@
 
 All notable changes to this module will be documented in this file.
 
+## 1.1.5 - 2023-02-06
+- Transition from 1.1.5-beta version to 1.1.5 version
+
+## 1.1.5-beta - 2022-09-20
+- Enhanced persister service for the implementation of audit service feature.
+- Upgraded spring-boot-starter-parent to 2.2.13 and spring beans to 5.2.20.RELEASE
+
 ## 1.1.4 - 2022-01-13
 - Updated to log4j2 version 2.17.1
 

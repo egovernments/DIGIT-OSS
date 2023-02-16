@@ -380,7 +380,6 @@ public class EnrichmentService {
 					}
 			});
 
-
 			Set<String> registeredUUIDS = userService.getUUidFromUserName(bpa,mobilenumberToUUIDs);
 
 			if (!CollectionUtils.isEmpty(registeredUUIDS))

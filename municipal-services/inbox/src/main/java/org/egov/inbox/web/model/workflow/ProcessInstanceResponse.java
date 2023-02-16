@@ -37,6 +37,8 @@ public class ProcessInstanceResponse {
         @Valid
         private List<ProcessInstance> processInstances;
 
+        @JsonProperty("totalCount")
+        private Integer totalCount;
 
         public ProcessInstanceResponse addProceInstanceItem(ProcessInstance proceInstanceItem) {
             if (this.processInstances == null) {

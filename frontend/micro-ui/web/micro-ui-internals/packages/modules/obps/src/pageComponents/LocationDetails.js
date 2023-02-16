@@ -27,6 +27,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
   let validation = { };
   let cityCode = formData?.data?.edcrDetails?.tenantId;
   formData = { address: { ...formData?.address } };
+  const isMobile = window.Digit.Utils.browser.isMobile();
 
   useEffect(() => {
     if (!selectedCity || !localities) {
@@ -225,7 +226,8 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
           label={
             <div>
               <span>
-                <svg style={{ float: "right", position: "relative", bottom: "32px", marginTop: "-20px", marginRight: "5px" }} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg 
+                style={!isMobile ? {position: "relative", left: "515px", bottom: "35px", marginTop: "-20px"} : { float: "right", position: "relative", bottom: "35px", marginTop: "-20px", marginRight: "5px" }} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M11 7C8.79 7 7 8.79 7 11C7 13.21 8.79 15 11 15C13.21 15 15 13.21 15 11C15 8.79 13.21 7 11 7ZM19.94 10C19.48 5.83 16.17 2.52 12 2.06V0H10V2.06C5.83 2.52 2.52 5.83 2.06 10H0V12H2.06C2.52 16.17 5.83 19.48 10 19.94V22H12V19.94C16.17 19.48 19.48 16.17 19.94 12H22V10H19.94ZM11 18C7.13 18 4 14.87 4 11C4 7.13 7.13 4 11 4C14.87 4 18 7.13 18 11C18 14.87 14.87 18 11 18Z" fill="#505A5F" />
                 </svg>
               </span>

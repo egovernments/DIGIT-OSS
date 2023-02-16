@@ -51,13 +51,15 @@ public class NotificationConsumer {
 			} else if (topic.equalsIgnoreCase(configs.getSavePropertyTopic()) || topic.equalsIgnoreCase(configs.getUpdatePropertyTopic())) {
 
 				PropertyRequest request = mapper.convertValue(record, PropertyRequest.class);
-				
-				if (PTConstants.MUTATION_PROCESS_CONSTANT.equalsIgnoreCase(request.getProperty().getCreationReason().toString())) {
 
-					notifService.sendNotificationForMutation(request);
-				} else {
+				if (!request.getProperty().isOldDataEncryptionRequest()) {
+					if (PTConstants.MUTATION_PROCESS_CONSTANT.equalsIgnoreCase(request.getProperty().getCreationReason().toString())) {
 
-					notifService.sendNotificationForUpdate(request);
+						notifService.sendNotificationForMutation(request);
+					} else {
+
+						notifService.sendNotificationForUpdate(request);
+					}
 				}
 			}
 

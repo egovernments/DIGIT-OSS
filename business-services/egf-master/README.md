@@ -12,7 +12,7 @@ NA
 
 ### Swagger API Contract
 
-https://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/DIGIT-OSS/master/business-services/Docs/egf-master-v1.0.0%20.yaml#!/
+http://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/egov-services/master/docs/financials/contracts/egf-master/v1-0-0.yml#!/
 
 ## Service Details
 

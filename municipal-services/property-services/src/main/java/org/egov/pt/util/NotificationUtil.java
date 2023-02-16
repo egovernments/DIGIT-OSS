@@ -1,31 +1,30 @@
 package org.egov.pt.util;
 
 
-import java.util.*;
-import java.util.stream.Collectors;
-
 import com.jayway.jsonpath.Filter;
+import com.jayway.jsonpath.JsonPath;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.contract.request.Role;
+import org.egov.common.contract.request.User;
 import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsCriteria;
 import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.mdms.model.ModuleDetail;
 import org.egov.pt.config.PropertyConfiguration;
+import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.enums.CreationReason;
-import org.egov.pt.models.event.Action;
-import org.egov.pt.models.event.ActionItem;
-import org.egov.pt.models.event.Event;
-import org.egov.pt.models.event.EventRequest;
-import org.egov.pt.models.event.Recepient;
-import org.egov.pt.models.event.Source;
-import org.egov.pt.producer.Producer;
+import org.egov.pt.models.event.*;
+import org.egov.pt.models.user.UserDetailResponse;
+import org.egov.pt.models.user.UserSearchRequest;
+import org.egov.pt.producer.PropertyProducer;
 import org.egov.pt.repository.ServiceRequestRepository;
-import org.egov.pt.service.NotificationService;
-import org.egov.pt.web.contracts.*;
+import org.egov.pt.service.UserService;
+import org.egov.pt.web.contracts.Email;
 import org.egov.pt.web.contracts.EmailRequest;
-
+import org.egov.pt.web.contracts.SMSRequest;
 import org.egov.tracer.model.CustomException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +33,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
 
-import com.jayway.jsonpath.JsonPath;
-
-import lombok.extern.slf4j.Slf4j;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.jayway.jsonpath.Criteria.where;
 import static com.jayway.jsonpath.Filter.filter;
@@ -53,9 +51,11 @@ public class NotificationUtil {
 
     private PropertyConfiguration config;
 
-    private Producer producer;
+    private PropertyProducer producer;
 
     private RestTemplate restTemplate;
+
+    private UserService userService;
 
 
     @Value("${egov.mdms.host}")
@@ -66,11 +66,12 @@ public class NotificationUtil {
 
     @Autowired
     public NotificationUtil(ServiceRequestRepository serviceRequestRepository, PropertyConfiguration config,
-                            Producer producer, RestTemplate restTemplate) {
+                            PropertyProducer producer, RestTemplate restTemplate,UserService userService) {
         this.serviceRequestRepository = serviceRequestRepository;
         this.config = config;
         this.producer = producer;
         this.restTemplate = restTemplate;
+        this.userService = userService;
     }
 
 
@@ -259,9 +260,12 @@ public class NotificationUtil {
 
         List<EmailRequest> emailRequest = new LinkedList<>();
         for (Map.Entry<String, String> entryset : mobileNumberToEmailId.entrySet()) {
-            String customizedMsg = "";
+            String customizedMsg = message;
             if(message.contains(NOTIFICATION_EMAIL))
-                customizedMsg = message.replace(NOTIFICATION_EMAIL, entryset.getValue());
+                customizedMsg = customizedMsg.replace(NOTIFICATION_EMAIL, entryset.getValue());
+
+            if(StringUtils.isEmpty(entryset.getValue()))
+                log.info("Email ID is empty, no notification will be sent ");
 
             String subject = "";
             String body = customizedMsg;
@@ -292,10 +296,11 @@ public class NotificationUtil {
         Map<String,String > mobileNumberToMsg = smsRequests.stream().collect(Collectors.toMap(SMSRequest::getMobileNumber, SMSRequest::getMessage));
         List<EmailRequest> emailRequest = new LinkedList<>();
         for (Map.Entry<String, String> entryset : mobileNumberToEmailId.entrySet()) {
-            String customizedMsg = "";
             String message = mobileNumberToMsg.get(entryset.getKey());
+            String customizedMsg = message;
+
             if(message.contains(NOTIFICATION_EMAIL))
-                customizedMsg = message.replace(NOTIFICATION_EMAIL, entryset.getValue());
+                customizedMsg = customizedMsg.replace(NOTIFICATION_EMAIL, entryset.getValue());
 
             //removing lines to match Email Templates
             if(message.contains(PT_TAX_PARTIAL))
@@ -403,11 +408,24 @@ public class NotificationUtil {
 
 		List<Event> events = new ArrayList<>();
        Set<String> mobileNumbers = smsRequests.stream().map(SMSRequest :: getMobileNumber).collect(Collectors.toSet());
-       Map<String, String> mapOfPhnoAndUUIDs = fetchUserUUIDs(mobileNumbers, requestInfo, tenantId);
+       Map<String, String> mapOfPhnoAndUUIDs = new HashMap<>();
+
+       for(String mobileNumber:mobileNumbers) {
+           UserDetailResponse userDetailResponse = fetchUserByUUID(mobileNumber, requestInfo, property.getTenantId());
+           try
+           {
+               OwnerInfo user= (OwnerInfo) userDetailResponse.getUser().get(0);
+               mapOfPhnoAndUUIDs.put(user.getMobileNumber(),user.getUuid());
+           }
+           catch(Exception e) {
+               log.error("Exception while fetching user object: ",e);
+           }
+       }
+
        if (CollectionUtils.isEmpty(mapOfPhnoAndUUIDs.keySet())) {
            log.error("UUIDs Not found for Mobilenumbers");
        }
-       
+
        Map<String,String > mobileNumberToMsg = smsRequests.stream().collect(Collectors.toMap(SMSRequest::getMobileNumber, SMSRequest::getMessage));
        mobileNumbers.forEach(mobileNumber -> {
        	
@@ -615,6 +633,49 @@ public class NotificationUtil {
                 config.getUiAppHost().concat(config.getPayLink().replace(EVENT_PAY_BUSINESSSERVICE,MUTATION_BUSINESSSERVICE)
                         .replace(EVENT_PAY_PROPERTYID, property.getAcknowldgementNumber())
                         .replace(EVENT_PAY_TENANTID, property.getTenantId())));
+    }
+
+    /**
+     * Fetches User Object based on the UUID.
+     *
+     * @param username - username of User
+     * @param requestInfo - Request Info Object
+     * @param tenantId - Tenant Id
+     * @return - Returns User object with given UUID
+     */
+    public UserDetailResponse fetchUserByUUID(String username, RequestInfo requestInfo, String tenantId) {
+        User userInfoCopy = requestInfo.getUserInfo();
+
+        User userInfo = getInternalMicroserviceUser(tenantId);
+        requestInfo.setUserInfo(userInfo);
+
+        UserSearchRequest userSearchRequest = userService.getBaseUserSearchRequest(tenantId, requestInfo);
+        userSearchRequest.setUserName(username);
+
+        UserDetailResponse userDetailResponse = userService.getUser(userSearchRequest);
+        requestInfo.setUserInfo(userInfoCopy);
+        return userDetailResponse;
+    }
+
+    /**
+     *
+     * @param tenantId
+     * @return internal microservice user to fetch plain user details
+     */
+    public User getInternalMicroserviceUser(String tenantId)
+    {
+        //Creating role with INTERNAL_MICROSERVICE_ROLE
+        Role role = Role.builder()
+                .name("Internal Microservice Role").code("INTERNAL_MICROSERVICE_ROLE")
+                .tenantId(tenantId).build();
+
+        //Creating userinfo with uuid and role of internal microservice role
+        User userInfo = User.builder()
+                .uuid(config.getEgovInternalMicroserviceUserUuid())
+                .type("SYSTEM")
+                .roles(Collections.singletonList(role)).id(0L).build();
+
+        return userInfo;
     }
 
 }

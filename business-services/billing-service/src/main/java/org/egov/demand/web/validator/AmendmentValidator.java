@@ -114,7 +114,7 @@ public class AmendmentValidator {
 		AmendmentCriteria amendmentCriteria = AmendmentCriteria.builder()
 				.consumerCode(Stream.of(amendment.getConsumerCode()).collect(Collectors.toSet()))
 				.tenantId(amendment.getTenantId())
-				.status(AmendmentStatus.INWORKFLOW)
+				.status(Stream.of(AmendmentStatus.INWORKFLOW.toString()).collect(Collectors.toSet()))
 				.build();
 		
 		List<Amendment> amendmentsFromSearch = amendmentRepository.getAmendments(amendmentCriteria);
@@ -227,11 +227,12 @@ public class AmendmentValidator {
 		/*
 		 * enrich workflow fields if enabled
 		 */
+		String workflowName = amendment.getBusinessService().concat(".").concat(Constants.AMENDMENT_STRING_CONSTANT);
 		if (props.getIsAmendmentworkflowEnabed()) {
 
 			ProcessInstance processInstance = ProcessInstance.builder()
-					.moduleName(props.getAmendmentWfModuleName())
-					.businessService(props.getAmendmentWfName())
+					.businessService(workflowName)
+					.moduleName(amendment.getBusinessService())
 					.action(props.getAmendmentWfOpenAction())
 					.businessId(amendment.getAmendmentId())
 					.tenantId(amendment.getTenantId())

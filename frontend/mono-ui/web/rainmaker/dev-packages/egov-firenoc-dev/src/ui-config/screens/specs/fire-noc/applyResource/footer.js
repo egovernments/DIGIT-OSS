@@ -127,6 +127,7 @@ const callBackForNext = async (state, dispatch) => {
   let isFormValid = true;
   let hasFieldToaster = false;
   let isMultiownerSelected = false;
+  let isMultiBuildingSelected = false;
 
   if (activeStep === 1) {
     let isPropertyLocationCardValid = validateFields(
@@ -148,6 +149,27 @@ const callBackForNext = async (state, dispatch) => {
       multiplePropertyCardPath,
       []
     );
+
+    let typeOfBuilding = get(
+      state,
+      "screenConfiguration.preparedFinalObject.FireNOCs[0].fireNOCDetails.noOfBuildings",
+      "single"
+    );
+
+    const multiplePropertyCardItemsData = multiplePropertyCardItems && multiplePropertyCardItems.length > 0 && multiplePropertyCardItems.filter(data => data.isDeleted != false);
+
+    if (multiplePropertyCardItemsData.length < 2 && typeOfBuilding == "MULTIPLE") {
+      isMultiBuildingSelected = true;
+      isFormValid = false;
+      let errorMessage = {
+        labelName: "Please add all the building details!",
+        labelKey: "ERR_FILL_MULTIPLE_BUILDING_LABEL"
+      };
+      dispatch(toggleSnackbar(true, errorMessage, "warning"));
+    }
+
+      
+
     let isMultiplePropertyCardValid = true;
     for (var j = 0; j < multiplePropertyCardItems.length; j++) {
       if (

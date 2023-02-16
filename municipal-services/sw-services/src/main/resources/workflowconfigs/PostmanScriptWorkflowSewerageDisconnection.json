@@ -1,0 +1,268 @@
+curl --location --request POST 'https://dev.digit.org/egov-workflow-v2/egov-wf/businessservice/_create' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+	"RequestInfo": {
+		"apiId": "Rainmaker",
+		"action": "",
+		"did": 1,
+		"key": "",
+		"msgId": "20170310130900|en_IN",
+		"requesterId": "",
+		"ts": 1513579888683,
+		"ver": ".01",
+		"authToken": "{{Auth_Token}}"
+	},
+	"BusinessServices": [
+		{
+			"tenantId": "pb",
+			"businessService": "DisconnectSWConnection",
+			"business": "sw-services",
+			"businessServiceSla": 259200000,
+			"states": [
+				{
+					"sla": null,
+					"state": null,
+					"applicationStatus": null,
+					"docUploadRequired": false,
+					"isStartState": true,
+					"isTerminateState": false,
+					"isStateUpdatable": true,
+					"actions": [
+						{
+							"action": "INITIATE",
+							"nextState": "INITIATED",
+							"roles": [
+								"CITIZEN",
+								"SW_CEMP"
+							]
+						}
+					]
+				},
+				{
+					"sla": null,
+					"state": "INITIATED",
+					"applicationStatus": "INITIATED",
+					"docUploadRequired": false,
+					"isStartState": false,
+					"isTerminateState": false,
+					"isStateUpdatable": true,
+					"actions": [
+						{
+							"action": "SUBMIT_APPLICATION",
+							"nextState": "PENDING_FOR_DOCUMENT_VERIFICATION",
+							"roles": [
+								"CITIZEN",
+								"SW_CEMP"
+							]
+						}
+					]
+				},
+				{
+					"sla": null,
+					"state": "PENDING_FOR_DOCUMENT_VERIFICATION",
+					"applicationStatus": "PENDING_FOR_DOCUMENT_VERIFICATION",
+					"docUploadRequired": false,
+					"isStartState": false,
+					"isTerminateState": false,
+					"isStateUpdatable": true,
+					"actions": [
+						{
+							"action": "VERIFY_AND_FORWARD",
+							"nextState": "PENDING_FOR_FIELD_INSPECTION",
+							"roles": [
+								"SW_DOC_VERIFIER"
+							]
+						},
+						{
+							"action": "SEND_BACK",
+							"nextState": "PENDING_FOR_COUNTER_EMPLOYEE_ACTION",
+							"roles": [
+								"SW_DOC_VERIFIER"
+							]
+						},
+						{
+							"action": "SEND_BACK_TO_CITIZEN",
+							"nextState": "PENDING_FOR_CITIZEN_ACTION",
+							"roles": [
+								"SW_DOC_VERIFIER"
+							]
+						}
+					]
+				},
+				{
+					"sla": null,
+					"state": "PENDING_FOR_FIELD_INSPECTION",
+					"applicationStatus": "PENDING_FOR_FIELD_INSPECTION",
+					"docUploadRequired": false,
+					"isStartState": false,
+					"isTerminateState": false,
+					"isStateUpdatable": true,
+					"actions": [
+						{
+							"action": "VERIFY_AND_FORWARD",
+							"nextState": "PENDING_APPROVAL_FOR_DISCONNECTION",
+							"roles": [
+								"SW_FIELD_INSPECTOR"
+							]
+						},
+						{
+							"action": "SEND_BACK_FOR_DOCUMENT_VERIFICATION",
+							"nextState": "PENDING_FOR_DOCUMENT_VERIFICATION",
+							"roles": [
+								"SW_FIELD_INSPECTOR"
+							]
+						},
+						{
+							"action": "SEND_BACK_TO_CITIZEN",
+							"nextState": "PENDING_FOR_CITIZEN_ACTION",
+							"roles": [
+								"SW_FIELD_INSPECTOR"
+							]
+						},
+						{
+							"action": "REJECT",
+							"nextState": "REJECTED",
+							"roles": [
+								"SW_FIELD_INSPECTOR"
+							]
+						}
+					]
+				},
+				{
+					"sla": null,
+					"state": "PENDING_APPROVAL_FOR_DISCONNECTION",
+					"applicationStatus": "PENDING_APPROVAL_FOR_DISCONNECTION",
+					"docUploadRequired": false,
+					"isStartState": false,
+					"isTerminateState": false,
+					"isStateUpdatable": false,
+					"actions": [
+						{
+							"action": "SEND_BACK_FOR_FIELD_INSPECTION",
+							"nextState": "PENDING_FOR_FIELD_INSPECTION",
+							"roles": [
+								"SW_APPROVER"
+							]
+						},
+						{
+							"action": "SEND_BACK_TO_CITIZEN",
+							"nextState": "PENDING_FOR_CITIZEN_ACTION",
+							"roles": [
+								"SW_APPROVER"
+							]
+						},
+						{
+							"action": "APPROVE_FOR_DISCONNECTION",
+							"nextState": "PENDING_FOR_PAYMENT",
+							"roles": [
+								"SW_APPROVER"
+							]
+						},
+						{
+							"action": "REJECT",
+							"nextState": "REJECTED",
+							"roles": [
+								"SW_APPROVER"
+							]
+						}
+					]
+				},
+				{
+					"sla": null,
+					"state": "PENDING_FOR_CITIZEN_ACTION",
+					"applicationStatus": "PENDING_FOR_CITIZEN_ACTION",
+					"docUploadRequired": false,
+					"isStartState": false,
+					"isTerminateState": false,
+					"isStateUpdatable": true,
+					"actions": [
+						{
+							"action": "RESUBMIT_APPLICATION",
+							"nextState": "PENDING_FOR_DOCUMENT_VERIFICATION",
+							"roles": [
+								"CITIZEN",
+								"SW_CEMP"
+							]
+						}
+					]
+				},
+				{
+					"sla": null,
+					"state": "PENDING_FOR_COUNTER_EMPLOYEE_ACTION",
+					"applicationStatus": "PENDING_FOR_COUNTER_EMPLOYEE_ACTION",
+					"docUploadRequired": false,
+					"isStartState": true,
+					"isTerminateState": false,
+					"isStateUpdatable": true,
+					"actions": [
+						{
+							"action": "RESUBMIT_APPLICATION",
+							"nextState": "PENDING_FOR_DOCUMENT_VERIFICATION",
+							"roles": [
+								"CITIZEN",
+								"SW_CEMP"
+							]
+						}
+					]
+				},
+				{
+					"sla": null,
+					"state": "REJECTED",
+					"applicationStatus": "REJECTED",
+					"docUploadRequired": false,
+					"isStartState": false,
+					"isTerminateState": true,
+					"isStateUpdatable": false,
+					"actions": null
+				},
+				{
+					"sla": null,
+					"state": "PENDING_FOR_PAYMENT",
+					"applicationStatus": "PENDING_FOR_PAYMENT",
+					"docUploadRequired": false,
+					"isStartState": false,
+					"isTerminateState": false,
+					"isStateUpdatable": false,
+					"actions": [
+						{
+							"action": "PAY",
+							"nextState": "PENDING_FOR_DISCONNECTION_EXECUTION",
+							"roles": [
+								"CITIZEN",
+								"SW_CEMP"
+							]
+						}
+					]
+				},
+				{
+					"sla": null,
+					"state": "PENDING_FOR_DISCONNECTION_EXECUTION",
+					"applicationStatus": "PENDING_FOR_DISCONNECTION_EXECUTION",
+					"docUploadRequired": false,
+					"isStartState": false,
+					"isTerminateState": false,
+					"isStateUpdatable": true,
+					"actions": [
+						{
+							"action": "EXECUTE_DISCONNECTION",
+							"nextState": "DISCONNECTION_EXECUTED",
+							"roles": [
+								"SW_CLERK"
+							]
+						}
+					]
+				},
+				{
+					"sla": null,
+					"state": "DISCONNECTION_EXECUTED",
+					"applicationStatus": "DISCONNECTION_EXECUTED",
+					"docUploadRequired": false,
+					"isStartState": false,
+					"isTerminateState": true,
+					"isStateUpdatable": false,
+					"actions": null
+				}
+			]
+		}
+	]
+}'

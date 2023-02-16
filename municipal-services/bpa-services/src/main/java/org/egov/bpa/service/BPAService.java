@@ -310,7 +310,7 @@ public class BPAService {
 	 * @return
 	 */
 	private List<BPA> getBPAFromMobileNumber(BPASearchCriteria criteria,LandSearchCriteria landcriteria, RequestInfo requestInfo){
-		List<BPA> bpas =null;
+		List<BPA> bpas = new LinkedList<>();;
 		log.debug("Call with mobile number to Land::" + criteria.getMobileNumber());
 		landcriteria.setMobileNumber(criteria.getMobileNumber());
 		ArrayList<LandInfo> landInfo = landService.searchLandInfoToBPA(requestInfo, landcriteria);
@@ -319,11 +319,13 @@ public class BPAService {
 			landInfo.forEach(land -> landId.add(land.getId()));
 			criteria.setLandId(landId);
 		}
-		List<String> uuids = new ArrayList<>();
-                if (requestInfo.getUserInfo() != null && !StringUtils.isEmpty(requestInfo.getUserInfo().getUuid())) {
-                        uuids.add(requestInfo.getUserInfo().getUuid());
-                        criteria.setCreatedBy(uuids);
-                }
+
+		String tenantId = criteria.getTenantId();
+		if(landInfo.isEmpty() && !tenantId.isEmpty() && tenantId !=null)
+		{
+          return bpas;
+		}
+
 		bpas = getBPAFromLandId(criteria, requestInfo, null);
 		if (!landInfo.isEmpty()) {
 			for (int i = 0; i < bpas.size(); i++) {
@@ -786,6 +788,5 @@ public class BPAService {
     			}
     		}
     	}
-        
         
 }

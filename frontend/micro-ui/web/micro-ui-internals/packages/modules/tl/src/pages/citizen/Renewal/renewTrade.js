@@ -15,6 +15,22 @@ const getPath = (path, params) => {
   return path;
 };
 
+const gettradedocuments = (docs) => {
+  let documents = [];
+  docs &&
+    docs.map((ob) => {
+      if (ob.documentType.includes("OWNERPHOTO")) {
+        documents["OwnerPhotoProof"] = ob;
+      } else if (ob.documentType.includes("OWNERIDPROOF")) {
+        documents["ProofOfIdentity"] = ob;
+      } else if (ob.documentType.includes("OWNERSHIPPROOF")) {
+        documents["ProofOfOwnership"] = ob;
+      }
+    });
+  return documents;
+};
+
+
 const getTradeEditDetails = (data,t) => {
   const gettradeaccessories = (tradeacceserioies, t) => {
     let acc = [];
@@ -45,21 +61,6 @@ const getTradeEditDetails = (data,t) => {
         });
       });
     return units;
-  };
-
-  const gettradedocuments = (docs) => {
-    let documents = [];
-    docs &&
-      docs.map((ob) => {
-        if (ob.documentType.includes("OWNERPHOTO")) {
-          documents["OwnerPhotoProof"] = ob;
-        } else if (ob.documentType.includes("OWNERIDPROOF")) {
-          documents["ProofOfIdentity"] = ob;
-        } else if (ob.documentType.includes("OWNERSHIPPROOF")) {
-          documents["ProofOfOwnership"] = ob;
-        }
-      });
-    return documents;
   };
 
   const gettradeowners = (owner) => {
@@ -114,12 +115,19 @@ const getTradeEditDetails = (data,t) => {
       code: `${data?.tradeLicenseDetail?.structureType}`,
       i18nKey: `COMMON_MASTERS_STRUCTURETYPE_${data.tradeLicenseDetail?.structureType.replaceAll(".", "_")}`,
     },
+    VehicleType:{
+      code: `${data?.tradeLicenseDetail?.structureType}`,
+      i18nKey: `COMMON_MASTERS_STRUCTURETYPE_${data.tradeLicenseDetail?.structureType.replaceAll(".", "_")}`,
+    },
     CommencementDate: getCommencementDataFormat(data?.commencementDate),
     StructureType: {
       code: `${data.tradeLicenseDetail?.structureType.split(".")[0]}`,
       i18nKey: `${data.tradeLicenseDetail?.structureType.includes("IMMOVABLE") ? "TL_COMMON_YES" : "TL_COMMON_NO"}`,
     },
     TradeName: data?.tradeName,
+    TradeGSTNumber: data?.tradeLicenseDetail?.additionalDetail?.tradeGstNo || data?.tradeLicenseDetail?.additionalDetail?.gstNo || "",
+    OperationalSqFtArea : data?.tradeLicenseDetail?.operationalArea || "",
+    NumberOfEmployees : data?.tradeLicenseDetail?.noOfEmployees || "", 
     accessories: gettradeaccessories(data?.tradeLicenseDetail?.accessories,t),
     isAccessories:
       gettradeaccessories(data?.tradeLicenseDetail?.accessories,t).length > 0
@@ -153,8 +161,10 @@ const getTradeEditDetails = (data,t) => {
   };
   data.ownershipCategory = {
     code: `${data?.tradeLicenseDetail?.subOwnerShipCategory}`,
-    i18nKey: `PT_OWNERSHIP_${data?.tradeLicenseDetail?.subOwnerShipCategory.split(".")[1]}`,
-    value: `${data?.tradeLicenseDetail?.subOwnerShipCategory}`,
+    i18nKey: `PT_OWNERSHIP_${data?.tradeLicenseDetail?.subOwnerShipCategory?.includes("INSTITUTIONAL") ? (data?.tradeLicenseDetail?.subOwnerShipCategory?.includes("GOVERNMENT") ?"OTHERGOVERNMENTINSTITUITION":"OTHERSPRIVATEINSTITUITION"):data?.tradeLicenseDetail?.subOwnerShipCategory?.split(".")[1]}`,
+    value: `${data?.tradeLicenseDetail?.subOwnerShipCategory}${data?.tradeLicenseDetail?.subOwnerShipCategory?.includes("INSTITUTIONAL") ? (data?.tradeLicenseDetail?.subOwnerShipCategory?.includes("GOVERNMENT") ?".OTHERGOVERNMENTINSTITUITION":".OTHERSPRIVATEINSTITUITION"):""}`,
+    isSameAsPropertyOwner: data?.tradeLicenseDetail?.additionalDetail?.isSameAsPropertyOwner === "null" ? null : data?.tradeLicenseDetail?.additionalDetail?.isSameAsPropertyOwner,
+
   };
   return data;
 };
@@ -189,9 +199,13 @@ const RenewTrade = ({ parentRoute }) => {
       }
       sessionStorage.setItem("tradeInitialObject", JSON.stringify({ ...application }));
       let tradeEditDetails = getTradeEditDetails(application,t);
+      if(window.location.href.includes("property-details"))
+      {
+        tradeEditDetails = {...params, owners:{...params?.owners, documents:gettradedocuments(application?.tradeLicenseDetail?.applicationDocuments)}}
+      }
       setParams({ ...params, ...tradeEditDetails });
     }
-  }, [data]);
+  }, [data?.Licenses[0]?.applicationNumber]);
 
   const goNext = (skipStep, index, isAddMultiple, key, isPTCreateSkip) => {
     let currentPath = pathname.split("/").pop(),
@@ -210,9 +224,9 @@ const RenewTrade = ({ parentRoute }) => {
         (nextStep[sessionStorage.getItem("isAccessories")] === "accessories-details" ||
           nextStep[sessionStorage.getItem("isAccessories")] === "map" ||
           nextStep[sessionStorage.getItem("isAccessories")] === "owner-ship-details" || 
-          nextStep[sessionStorage.getItem("isAccessories")] === "know-your-property")
+          nextStep[sessionStorage.getItem("isAccessories")] === "other-trade-details")
       ) {
-        if((isReneworEditTrade && !(params?.tradeLicenseDetail?.additionalDetail?.propertyId)  ) )
+        if((isReneworEditTrade && !(params?.tradeLicenseDetail?.additionalDetail?.propertyId) && params?.TradeDetails?.StructureType?.code === "MOVABLE" ) )
         nextStep = `map`
         else
         nextStep = `${nextStep[sessionStorage.getItem("isAccessories")]}`;
@@ -236,9 +250,21 @@ const RenewTrade = ({ parentRoute }) => {
           }
       }
     }
+    if(nextStep === "know-your-property" && params?.TradeDetails?.StructureType?.code === "MOVABLE")
+    {
+      nextStep = "map";
+    }
+    if(nextStep === "landmark" && params?.TradeDetails?.StructureType?.code === "MOVABLE")
+    {
+      nextStep = "owner-ship-details";
+    }
     if( (params?.cptId?.id || params?.cpt?.details?.propertyId || (isReneworEditTrade && params?.tradeLicenseDetail?.additionalDetail?.propertyId ))  && nextStep === "know-your-property" )
     { 
       nextStep = "property-details";
+    }
+    if(nextStep === "owner-details" && (params?.ownershipCategory?.isSameAsPropertyOwner === true || sessionStorage.getItem("isSameAsPropertyOwner") === "true"))
+    {
+      nextStep = "proof-of-identity"
     }
     let redirectWithHistory = history.push;
     if (skipStep) {

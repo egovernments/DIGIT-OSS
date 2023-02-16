@@ -2,6 +2,7 @@ import { CardLabel, CardLabelDesc, Dropdown, FormStep, UploadFile } from "@egove
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { stringReplaceAll } from "../utils";
+import Timeline from "../components/TLTimeline";
 
 const Proof = ({ t, config, onSelect, userType, formData }) => {
   //let index = window.location.href.charAt(window.location.href.length - 1);
@@ -24,7 +25,7 @@ const Proof = ({ t, config, onSelect, userType, formData }) => {
   let dropdownData = [];
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
-  const { data: Documentsob = { } } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "Documents");
+  const { data: Documentsob = {} } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "Documents");
   const docs = Documentsob?.PropertyTax?.Documents;
   const proofOfAddress = Array.isArray(docs) && docs.filter((doc) => doc.code.includes("ADDRESSPROOF"));
   if (proofOfAddress.length > 0) {
@@ -43,7 +44,7 @@ const Proof = ({ t, config, onSelect, userType, formData }) => {
     let fileDetails = file;
     if (fileDetails) fileDetails.documentType = dropdownValue;
     if (fileDetails) fileDetails.fileStoreId = fileStoreId ? fileStoreId : null;
-    let address = !isMutation ? formData?.address : { };
+    let address = !isMutation ? formData?.address : {};
     if (address && address.documents) {
       address.documents["ProofOfAddress"] = fileDetails;
     } else {
@@ -73,41 +74,54 @@ const Proof = ({ t, config, onSelect, userType, formData }) => {
             } else {
               setError(t("PT_FILE_UPLOAD_ERROR"));
             }
-          } catch (err) {
-          }
+          } catch (err) {}
         }
       }
     })();
   }, [file]);
+  const checkMutatePT = window.location.href.includes("citizen/pt/property/property-mutation/") ? (
+    <Timeline currentStep={3} flow="PT_MUTATE" />
+  ) : (
+    <Timeline currentStep={1} />
+  );
 
   return (
-    <FormStep config={config} onSelect={handleSubmit} onSkip={onSkip} t={t} isDisabled={isUpdateProperty || isEditProperty ? false: (!uploadedFile || !dropdownValue || error )}>
-      <CardLabelDesc>{t(`PT_UPLOAD_RESTRICTIONS_TYPES`)}</CardLabelDesc>
-      <CardLabelDesc>{t(`PT_UPLOAD_RESTRICTIONS_SIZE`)}</CardLabelDesc>
-      <CardLabel>{`${t("PT_CATEGORY_DOCUMENT_TYPE")}`}</CardLabel>
-      <Dropdown
+    <React.Fragment>
+      {window.location.href.includes("/citizen") ? checkMutatePT : null}
+      <FormStep
+        config={config}
+        onSelect={handleSubmit}
+        onSkip={onSkip}
         t={t}
-        isMandatory={false}
-        option={dropdownData}
-        selected={dropdownValue}
-        optionKey="i18nKey"
-        select={setTypeOfDropdownValue}
-        placeholder={t(`PT_MUTATION_SELECT_DOC_LABEL`)}
-      />
-      <UploadFile
-        id={"pt-doc"}
-        extraStyleName={"propertyCreate"}
-        accept=".jpg,.png,.pdf"
-        onUpload={selectfile}
-        onDelete={() => {
-          setUploadedFile(null);
-        }}
-        message={uploadedFile ? `1 ${t(`PT_ACTION_FILEUPLOADED`)}` : t(`PT_ACTION_NO_FILEUPLOADED`)}
-        error={error}
-      />
-      {error ? <div style={{ height: "20px", width: "100%", fontSize: "20px", color: "red", marginTop: "5px" }}>{error}</div> : ""}
-      <div style={{ disabled: "true", height: "20px", width: "100%" }}></div>
-    </FormStep>
+        isDisabled={isUpdateProperty || isEditProperty ? false : !uploadedFile || !dropdownValue || error}
+      >
+        <CardLabelDesc>{t(`PT_UPLOAD_RESTRICTIONS_TYPES`)}</CardLabelDesc>
+        <CardLabelDesc>{t(`PT_UPLOAD_RESTRICTIONS_SIZE`)}</CardLabelDesc>
+        <CardLabel>{`${t("PT_CATEGORY_DOCUMENT_TYPE")}`}</CardLabel>
+        <Dropdown
+          t={t}
+          isMandatory={false}
+          option={dropdownData}
+          selected={dropdownValue}
+          optionKey="i18nKey"
+          select={setTypeOfDropdownValue}
+          placeholder={t(`PT_MUTATION_SELECT_DOC_LABEL`)}
+        />
+        <UploadFile
+          id={"pt-doc"}
+          extraStyleName={"propertyCreate"}
+          accept=".jpg,.png,.pdf"
+          onUpload={selectfile}
+          onDelete={() => {
+            setUploadedFile(null);
+          }}
+          message={uploadedFile ? `1 ${t(`PT_ACTION_FILEUPLOADED`)}` : t(`PT_ACTION_NO_FILEUPLOADED`)}
+          error={error}
+        />
+        {error ? <div style={{ height: "20px", width: "100%", fontSize: "20px", color: "red", marginTop: "5px" }}>{error}</div> : ""}
+        <div style={{ disabled: "true", height: "20px", width: "100%" }}></div>
+      </FormStep>
+    </React.Fragment>
   );
 };
 

@@ -11,6 +11,8 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class User {
 
+    private Long id;
+
     private String uuid;
 
     @NotNull
@@ -27,6 +29,7 @@ public class User {
     private String tenantId;
 
     public User(org.egov.common.contract.request.User user) {
+        this.id = user.getId();
         this.uuid = user.getUuid();
         this.name = user.getName();
         this.userName = user.getUserName();

@@ -14,6 +14,10 @@ const TLWFApplicationTimeline = (props) => {
     moduleCode: businessService,
   });
 
+  function OpenImage(imageSource, index,thumbnailsToShow){
+    window.open(thumbnailsToShow?.fullImage?.[0],"_blank");
+  }
+  
   const getTimelineCaptions = (checkpoint) => {
     if (checkpoint.state === "INITIATE") {
       const caption = {
@@ -23,12 +27,21 @@ const TLWFApplicationTimeline = (props) => {
       return <TLWFCaption data={caption} />;
     }  
     else {
+      // const caption = {
+      //   date: Digit.DateUtils.ConvertTimestampToDate(props.application?.auditDetails.lastModifiedTime),
+      //   name: checkpoint?.assigner?.name,
+      //   comment: t(checkpoint?.comment),
+      // };
+
       const caption = {
-        date: Digit.DateUtils.ConvertTimestampToDate(props.application?.auditDetails.lastModifiedTime),
-        name: checkpoint?.assigner?.name,
+        date: checkpoint?.auditDetails?.lastModified,
+        name: checkpoint?.assignes?.[0]?.name,
+        mobileNumber: checkpoint?.assignes?.[0]?.mobileNumber,
         comment: t(checkpoint?.comment),
+        wfComment : checkpoint.wfComment,
+        thumbnailsToShow : checkpoint?.thumbnailsToShow,
       };
-      return <TLWFCaption data={caption} />;
+      return <TLWFCaption data={caption} OpenImage={OpenImage}/>;
     }
   };
 

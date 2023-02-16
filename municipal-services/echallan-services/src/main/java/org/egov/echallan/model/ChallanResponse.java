@@ -40,14 +40,28 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class ChallanResponse {
+	
+  @JsonProperty("countOfServices")
+  private int countOfServices;
+
+  @JsonProperty("totalAmountCollected")
+  private int totalAmountCollected;
+  
+  @JsonProperty("challanValidity")
+  private int validity;
 
   @JsonProperty("responseInfo")
 
   private ResponseInfo responseInfo = null;
 
   @JsonProperty("challans")
+  
 
   private List<Challan> challans = null;
+
+  @JsonProperty("totalCount")
+   private int totalCount;
+
   public ChallanResponse responseInfo(ResponseInfo responseInfo) {
     this.responseInfo = responseInfo;
     return this;

@@ -1,4 +1,4 @@
-import { CloseSvg, FilterIcon, MultiSelectDropdown, RefreshIcon } from "@egovernments/digit-ui-react-components";
+import { CloseSvg, FilterIcon, MultiSelectDropdown, RefreshIcon, Dropdown } from "@egovernments/digit-ui-react-components";
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import DateRange from "./DateRange";
 import FilterContext from "./FilterContext";
@@ -8,12 +8,14 @@ import Switch from "./Switch";
 const Filters = ({
   t,
   ulbTenants,
+  services,
   isOpen,
   closeFilters,
   showDateRange = true,
   showDDR = true,
   showUlb = true,
   showDenomination = true,
+  showModuleFilter = true,
   isNational = false,
 }) => {
   const { value, setValue } = useContext(FilterContext);
@@ -26,12 +28,24 @@ const Filters = ({
     setSelected(ulbTenants?.ulb?.filter((tenant) => value?.filters?.tenantId?.find((selectedTenant) => selectedTenant === tenant?.code)));
   }, [value?.filters?.tenantId]);
 
+  const [selectService, setSelectedService] = useState(() => 
+    services?.filter((module) => value?.moduleLevel === module?.code)
+  )
+
+  useEffect(() => {
+    setSelectedService(services?.filter((module) => value?.moduleLevel === module?.code));
+  }, [value?.moduleLevel]);
+
   const handleFilterChange = (data) => {
     setValue({ ...value, ...data });
   };
 
   const selectFilters = (e, data) => {
     setValue({ ...value, filters: { tenantId: e.map((allPropsData) => allPropsData?.[1]?.code) } });
+  };
+
+  const selectServicesFilters = (e, data) => {
+    setValue({ ...value, moduleLevel: e?.code });
   };
 
   const selectDDR = (e, data) => {
@@ -58,7 +72,11 @@ const Filters = ({
     });
   };
   return (
-    <div className={`filters-wrapper ${isOpen ? "filters-modal" : ""}`}>
+    <div className={`filters-wrapper ${isOpen ? "filters-modal" : ""}`} style={{
+      justifyContent: window.location.href.includes("dss/dashboard/finance") && !isOpen ? "space-between" : "unset",
+      paddingRight: window.location.href.includes("dss/dashboard/finance") && !isOpen? "24px" : "0px",
+      paddingBottom: window.location.href.includes("dss/dashboard/finance") && !isOpen? "20px" : "unset"
+    }}>
       <span className="filter-close" onClick={() => closeFilters()}>
         <CloseSvg />
       </span>
@@ -104,6 +122,18 @@ const Filters = ({
             selected={selected}
             defaultLabel={t("ES_DSS_ALL_ULB_SELECTED")}
             defaultUnit={t("ES_DSS_DDR_SELECTED")}
+          />
+        </div>
+      )}
+      {!isNational && showModuleFilter && (
+        <div className="filters-input">
+          <div className="mbsm">{t("ES_DSS_SERVICES")}</div>
+          <Dropdown
+            option={services}
+            optionKey="name"
+            select={selectServicesFilters}
+            selected={selectService}
+            placeholder={t("ES_DSS_ALL_SERVICES_SELECTED")}
           />
         </div>
       )}

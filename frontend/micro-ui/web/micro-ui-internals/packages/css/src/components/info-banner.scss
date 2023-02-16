@@ -1,6 +1,9 @@
 .info-banner-wrap {
   @apply bg-link-normal bg-opacity-25 m-sm p-md;
+  max-width: 960px;
 
+  background-color: #C7E0F1;
+  border-radius: 4px;
   svg {
     margin-top: 5px;
     @apply rounded-full;
@@ -21,8 +24,6 @@
 
 @screen dt {
   .info-banner-wrap {
-    margin: 0;
-
     h2 {
       @apply text-heading-m-dt;
     }

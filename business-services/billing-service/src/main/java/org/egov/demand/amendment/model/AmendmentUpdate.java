@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import org.egov.demand.amendment.model.enums.AmendmentReason;
 import org.egov.demand.amendment.model.enums.AmendmentStatus;
 import org.egov.demand.model.AuditDetails;
 
@@ -53,7 +54,20 @@ public class AmendmentUpdate {
 	@JsonProperty("documents")
 	@Valid
 	private List<Document> documents;
-	
+
+	@NotNull
+	@JsonProperty("amendmentReason")
+	private AmendmentReason amendmentReason;
+
+	@JsonProperty("reasonDocumentNumber")
+	private String reasonDocumentNumber;
+
+	@JsonProperty("effectiveFrom")
+	private Long effectiveFrom;
+
+	@JsonProperty("effectiveTill")
+	private Long effectiveTill;
+
 	public AmendmentCriteria toSearchCriteria() {
 		
 		return AmendmentCriteria.builder()

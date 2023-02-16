@@ -53,7 +53,7 @@ public class FSM   {
 
   @JsonProperty("source")
   private String source = null;
-
+  
   @JsonProperty("sanitationtype")
   private String sanitationtype = null;
 

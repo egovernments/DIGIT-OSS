@@ -6,6 +6,7 @@ import org.egov.tl.config.TLConfiguration;
 import org.egov.tl.producer.Producer;
 import org.egov.tl.repository.builder.TLQueryBuilder;
 import org.egov.tl.repository.rowmapper.TLRowMapper;
+import org.egov.tl.util.TLConstants;
 import org.egov.tl.web.models.*;
 import org.egov.tl.workflow.WorkflowService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +68,22 @@ public class TLRepository {
         String query = queryBuilder.getTLSearchQuery(criteria, preparedStmtList,true);
         int licenseCount = jdbcTemplate.queryForObject(query,preparedStmtList.toArray(),Integer.class);
         return licenseCount;
+    }
+    
+    public Map<String,Integer> getApplicationsCount(TradeLicenseSearchCriteria criteria) {
+    	List<Object> preparedStmtListIssued = new ArrayList<>();
+        String query = queryBuilder.getApplicationsCountQuery(criteria, preparedStmtListIssued, TLConstants.APPLICATION_TYPE_NEW);
+        int issuedCount = jdbcTemplate.queryForObject(query,preparedStmtListIssued.toArray(),Integer.class);
+        
+        List<Object> preparedStmtListRenewal = new ArrayList<>();
+        query = queryBuilder.getApplicationsCountQuery(criteria, preparedStmtListRenewal, TLConstants.APPLICATION_TYPE_RENEWAL);
+        int renewedCount = jdbcTemplate.queryForObject(query,preparedStmtListRenewal.toArray(),Integer.class);
+        
+        Map<String,Integer> countsMap = new HashMap<String,Integer>();
+        countsMap.put(TLConstants.ISSUED_COUNT, issuedCount);
+        countsMap.put(TLConstants.RENEWED_COUNT, renewedCount);
+        
+        return countsMap;
     }
 
     /**

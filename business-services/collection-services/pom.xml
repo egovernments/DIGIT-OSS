@@ -10,7 +10,7 @@
   </parent>
   <groupId>collection-services</groupId>
   <artifactId>collection-services</artifactId>
-  <version>1.1.6-SNAPSHOT</version>
+  <version>1.1.7-SNAPSHOT</version>
   <name>collection-services</name>
   <description>Spring Boot Project for Collection Services</description>
   <properties>
@@ -37,6 +37,11 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
+      <dependency>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-beans</artifactId>
+          <version>5.2.20.RELEASE</version>
+      </dependency>
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-to-slf4j</artifactId>

@@ -60,7 +60,7 @@ const getTradeDetails = (application, t) => {
 };
 const getAccessoriesDetails = (application, t) => {
   let values = [];
-  application.tradeLicenseDetail?.accessories?.map((accessory) => {
+  application.tradeLicenseDetail?.accessories?.filter((ob) => ob?.active !== false)?.map((accessory) => {
     let accessoryCategory = t("CS_NA");
     if (accessory?.accessoryCategory) {
       accessoryCategory = stringReplaceAll(accessory?.accessoryCategory, ".", "_");
@@ -109,6 +109,7 @@ const getAddressDetails = (application, t) => {
   return {
     title: "",
     values: [
+      { title: t("TL_PROPERTY_ID"), value: application?.tradeLicenseDetail?.additionalDetail?.propertyId || t("CS_NA") },
       { title: t("CORE_COMMON_PINCODE"), value: application?.tradeLicenseDetail?.address?.pincode || t("CS_NA") },
       { title: t("MYCITY_CODE_LABEL"), value: t(application?.tradeLicenseDetail?.address?.city) || t("CS_NA") },
       { title: t("TL_LOCALIZATION_LOCALITY"), value: t(getTransaltedLocality(application?.tradeLicenseDetail?.address)) || t("CS_NA") },

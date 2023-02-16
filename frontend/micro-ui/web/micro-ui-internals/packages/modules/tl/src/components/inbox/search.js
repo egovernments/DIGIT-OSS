@@ -29,17 +29,17 @@ const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams
   },[setSearchFieldsBackToOriginalState])
 
   const setNotRemovedStateToSearchFields = () => {
-    if(Array.isArray(justToResetSearchFieldsInCaseOfFilterTrigger))	
-    {	
-      let [{applicationNumber, mobileNumber}] = justToResetSearchFieldsInCaseOfFilterTrigger	
-      setValue("applicationNumber", applicationNumber)	
-      setValue("mobileNumber", mobileNumber)	
-    }	
-    else	
-    {	
-      let {applicationNumber, mobileNumber} = justToResetSearchFieldsInCaseOfFilterTrigger	
-      setValue("applicationNumber", applicationNumber)	
-      setValue("mobileNumber", mobileNumber)	
+    if(Array.isArray(justToResetSearchFieldsInCaseOfFilterTrigger))
+    {
+      let [{applicationNumber, mobileNumber}] = justToResetSearchFieldsInCaseOfFilterTrigger
+      setValue("applicationNumber", applicationNumber)
+      setValue("mobileNumber", mobileNumber)
+    }
+    else
+    {
+      let {applicationNumber, mobileNumber} = justToResetSearchFieldsInCaseOfFilterTrigger
+      setValue("applicationNumber", applicationNumber)
+      setValue("mobileNumber", mobileNumber)
     }
   }
 

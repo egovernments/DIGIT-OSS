@@ -22,7 +22,7 @@ The functionality is exposed via REST API.
 
 Link to the swagger API contract yaml and editor link like below
 
-https://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/DIGIT-OSS/master/core-services/docs/egov-otp-contract.yml#!/
+http://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/egov-services/master/docs/egov-otp/contract/v1-0-0.yml#!/
 
 
 

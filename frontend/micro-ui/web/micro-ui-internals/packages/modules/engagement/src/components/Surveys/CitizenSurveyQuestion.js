@@ -4,6 +4,7 @@ import { Controller } from "react-hook-form";
 
 const CitizenSurveyQuestion = ({ t, question, control, register, values, formState,formDisabled }) => {
   const formErrors = formState?.errors;
+  
   if (!question) return;
   const displayAnswerField = (answerType) => {
     switch (answerType) {
@@ -81,31 +82,34 @@ const CitizenSurveyQuestion = ({ t, question, control, register, values, formSta
               name={question.uuid}
               //defaultValue={surveyFormState?.collectCitizenInfo}
               //rules={{required:true}}
-              //rules={{ required:question.required }}
-              render={({ onChange, value }) => (
+              rules={{ required:question.required }}
+              render={({ onChange, value }) => {
+                return (
                 <div className="align-columns">
                   {question.options.map((option) => {
                     return (
                       <CheckBox
-                        disabled={formDisabled}
+                        disable={formDisabled}
                         key={option}
                         onChange={(e) => {
                           if (e.target.checked) {
                             onChange([option,...value?value:[]]);             
                           } else {
-                            value && onChange(value.filter((item) => item !== option));
+                            value && onChange(value?.filter((item) => item !== option));
                           }
                         }}
-                        checked={!!value?.find(e=> e===option)}
+                        checked={typeof value === "string" ? !!([value]?.find(e => e === option)) : !!value?.find(e => e === option)}
                         label={option}
+                        checkboxWidth = {{width:"34px",height:"34px"}}
+                        style={{marginTop:"5px", overflowWrap:"break-word"}}
                       />
                     );
                   })}
                 </div>
-              )}
+              )}}
             />
             {formErrors && formErrors?.[question.uuid] && formErrors?.[question.uuid]?.type ==="required" && (
-              <CardLabelError>{t(`CS_COMMON_REQUIRED`)}</CardLabelError>
+              <CardLabelError style={{marginTop:"20px"}}>{t(`CS_COMMON_REQUIRED`)}</CardLabelError>
             )}
           </>
         );
@@ -193,7 +197,7 @@ const CitizenSurveyQuestion = ({ t, question, control, register, values, formSta
   return (
     <Card>
       <div className="surveyQuestion-wrapper">
-        <span className="question-title">{question.questionStatement}</span>
+        <span className="question-title">{question.questionStatement} {question?.required? "*":""}</span>
         <span>{displayAnswerField(question.type)}</span>
       </div>
     </Card>

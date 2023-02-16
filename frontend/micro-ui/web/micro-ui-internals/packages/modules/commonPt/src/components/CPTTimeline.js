@@ -8,6 +8,13 @@ const getAction = (flow) => {
   switch (flow) {
     case "STAKEHOLDER": actions = []
       break;
+    case "WS" : actions = [
+      'WS_COMMON_PROPERTY_DETAILS',
+      'WS_COMMON_CONNECTION_DETAIL',
+      'WS_COMMON_DOCUMENT_DETAILS',
+      'WS_COMMON_SUMMARY',
+    ]
+      break;
     default: actions = [
       'TL_COMMON_TR_DETAILS',
       'TL_LOCATION_AND_OWNER_DETAILS',

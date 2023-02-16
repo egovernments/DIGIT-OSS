@@ -173,12 +173,12 @@ const OwnerForm1 = (_props) => {
     setValue("city",selectedCity);
   },[selectedCity]);
 
-  useEffect(() => {
-    if(!isEdit)
-    TaxHeadMasterFields && TaxHeadMasterFields.length>0 && TaxHeadMasterFields?.map((ob) => {
-      consumerdetail[ob.code] = "";
-    })
-  },[TaxHeadMasterFields])
+  // useEffect(() => {
+  //   if(!isEdit)
+  //   TaxHeadMasterFields && TaxHeadMasterFields.length>0 && TaxHeadMasterFields?.map((ob) => {
+  //     consumerdetail[ob.code] = "";
+  //   })
+  // },[TaxHeadMasterFields])
 
   useEffect(() => {
     if(isEdit && TaxHeadMasterFields && !(formValue[`${formValue?.categoryType?.code?.split(".")[0]}`]))

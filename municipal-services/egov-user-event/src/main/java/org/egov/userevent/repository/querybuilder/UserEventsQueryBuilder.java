@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.tracer.model.CustomException;
 import org.egov.userevent.config.PropertiesManager;
+import org.egov.userevent.model.enums.Status;
 import org.egov.userevent.web.contract.EventSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

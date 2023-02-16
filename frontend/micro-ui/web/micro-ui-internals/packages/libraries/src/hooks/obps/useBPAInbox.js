@@ -12,7 +12,7 @@ const useBPAInbox = ({ tenantId, filters, config={} }) => {
       applicationNumber = applicationNo;
       tenantId = Digit.ULBService.getStateId();
     }
-    if(applicationType === "BUILDING_OC_PLAN_SCRUTINY" && (window.location.href.includes("obps/inbox") || window.location.href.includes("obps/bpa/inbox")) &&  businessService) {
+    if(applicationType === "BUILDING_OC_PLAN_SCRUTINY" && (window.location.href.includes("obps/inbox") || window.location.href.includes("obps/bpa/inbox"))) {
       businessService = "BPA_OC"
     }
 
@@ -53,9 +53,10 @@ const useBPAInbox = ({ tenantId, filters, config={} }) => {
               status: application?.ProcessInstance?.state?.state,
               state:  application?.ProcessInstance?.state?.state,
               owner: application?.ProcessInstance?.assignes?.[0]?.name || "NA",
-              sla: Math.round(application.ProcessInstance?.businesssServiceSla / (24 * 60 * 60 * 1000))
+              sla: application?.businessObject?.status.match(/^(APPROVED)$/) ? "CS_NA" : Math.round(application.ProcessInstance?.businesssServiceSla / (24 * 60 * 60 * 1000))
           })),
-          totalCount: data.totalCount
+          totalCount: data.totalCount,
+          nearingSlaCount: data?.nearingSlaCount
         }), 
         ...config 
       }

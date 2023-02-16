@@ -354,7 +354,14 @@ const getPropertyEditDetails = (data = { }) => {
           ? { i18nKey: "PT_ONE_BASEMENT_OPTION",code:1 }
           : { i18nKey: "PT_NO_BASEMENT_OPTION",code:0 };
 
-      data.units = data?.units;
+      data.units = data?.units.map(ob => {
+        return{...ob, unitType:{
+          code: ob?.usageCategory === "RESIDENTIAL" ? ob?.usageCategory : ob?.usageCategory?.split(".")[3],
+          i18nKey: ob?.usageCategory === "RESIDENTIAL" ? `PROPERTYTAX_BILLING_SLAB_${ob?.usageCategory}` : `PROPERTYTAX_BILLING_SLAB_${ob?.usageCategory?.split(".")[3]}`,
+          usageCategoryMinor: ob?.usageCategory === "RESIDENTIAL" ? "" : ob?.usageCategory?.split(".")[1],
+          usageCategorySubMinor: ob?.usageCategory === "RESIDENTIAL" ? "" : ob?.usageCategory?.split(".")[2],
+        }
+      }});
       //data.units = data?.units.concat(extraunits);
       //unitedit["-1"] ? (data.units["-1"] = unitedit["-1"]) : "";
       //unitedit["-2"] ? (data.units["-2"] = unitedit["-2"]) : "";
@@ -420,18 +427,18 @@ const EditProperty = ({ parentRoute }) => {
   const updateProperty = window.location.href.includes("action=UPDATE");
   const typeOfProperty = window.location.href.includes("UPDATE") ? true : false;
   const ptProperty = JSON.parse(sessionStorage.getItem("pt-property")) || { };
-  const data = { Properties: [ptProperty] };
-  /* const { isLoading, isError, error, data } = Digit.Hooks.pt.usePropertySearch(
-    { filters: typeOfProperty ? { propertyIds } : { acknowledgementIds } },
+  //const data = { Properties: [ptProperty] };
+    const { isLoading: isPTloading, isError, error, data } = Digit.Hooks.pt.usePropertySearch(
+    { filters: updateProperty ? { propertyIds, isSearchInternal:true  } : { acknowledgementIds, isSearchInternal:true  } },
     {
-      filters: typeOfProperty ? { propertyIds } : { acknowledgementIds },
+      filters: updateProperty ? { propertyIds, isSearchInternal:true  } : { acknowledgementIds, isSearchInternal:true  },
     }
-  ); */
+  ); 
   sessionStorage.setItem("isEditApplication", false);
 
   useEffect(() => {
     application = data?.Properties && data.Properties[0] && data.Properties[0];
-    if (data && application) {
+    if (data && application && data?.Properties?.length > 0) {
       application = data?.Properties[0];
       if (updateProperty) {
         application.isUpdateProperty = true;
@@ -444,7 +451,7 @@ const EditProperty = ({ parentRoute }) => {
       let propertyEditDetails = getPropertyEditDetails(application);
       setParams({ ...params, ...propertyEditDetails });
     }
-  }, []);
+  }, [data]);
 
   const goNext = (skipStep, index, isAddMultiple, key) => {
     let currentPath = pathname.split("/").pop(),
@@ -566,7 +573,7 @@ const EditProperty = ({ parentRoute }) => {
   };
 
 
-  if (isLoading) {
+  if (isLoading || isPTloading) {
     return <Loader />;
   }
 

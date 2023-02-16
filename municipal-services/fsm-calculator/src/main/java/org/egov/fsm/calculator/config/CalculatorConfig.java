@@ -53,11 +53,7 @@ public class CalculatorConfig {
 
     @Value("${egov.fsm.search.endpoint}")
     private String fsmSearchEndpoint;
-
-
-
-
-
+   
     //MDMS
     @Value("${egov.mdms.host}")
     private String mdmsHost;

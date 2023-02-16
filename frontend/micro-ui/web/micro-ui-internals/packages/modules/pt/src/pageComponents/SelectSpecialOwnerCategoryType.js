@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FormStep, RadioOrSelect, RadioButtons, LabelFieldPair, CardLabel, Dropdown, Loader } from "@egovernments/digit-ui-react-components";
 import { cardBodyStyle } from "../utils";
 import { useLocation } from "react-router-dom";
+import Timeline from "../components/TLTimeline";
 
 const SelectSpecialOwnerCategoryType = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
   const { pathname: url } = useLocation();
@@ -20,10 +21,12 @@ const SelectSpecialOwnerCategoryType = ({ t, config, onSelect, userType, formDat
   Menu ? Menu.sort((a, b) => a.name.localeCompare(b.name)) : "";
   if (Menu?.length > 0) {
     Menu?.forEach((data, index) => {
-      if (data.code == "NONE") data.order = 0
-      else data.order = index + 1
+      if (data.code == "NONE") data.order = 0;
+      else data.order = index + 1;
     });
-    Menu.sort(function (a, b) { return a.order - b.order; });
+    Menu.sort(function (a, b) {
+      return a.order - b.order;
+    });
   }
 
   const onSkip = () => onSelect();
@@ -77,21 +80,30 @@ const SelectSpecialOwnerCategoryType = ({ t, config, onSelect, userType, formDat
   }
 
   return (
-    <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!ownerType}>
-      <div>
-        <RadioButtons
-          t={t}
-          optionsKey="i18nKey"
-          isMandatory={config.isMandatory}
-          options={Menu || []}
-          selectedOption={ownerType}
-          onSelect={setTypeOfOwner}
-          labelKey="PROPERTYTAX_OWNERTYPE"
-          isDependent={true}
-          disabled={isUpdateProperty || isEditProperty}
-        />
-      </div>
-    </FormStep>
+    <React.Fragment>
+      {window.location.href.includes("/citizen") ? (
+        window.location.href.includes("/citizen/pt/property/property-mutation") ? (
+          <Timeline currentStep={1} flow="PT_MUTATE" />
+        ) : (
+          <Timeline currentStep={2} />
+        )
+      ) : null}
+      <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!ownerType}>
+        <div>
+          <RadioButtons
+            t={t}
+            optionsKey="i18nKey"
+            isMandatory={config.isMandatory}
+            options={Menu || []}
+            selectedOption={ownerType}
+            onSelect={setTypeOfOwner}
+            labelKey="PROPERTYTAX_OWNERTYPE"
+            isDependent={true}
+            disabled={isUpdateProperty || isEditProperty}
+          />
+        </div>
+      </FormStep>
+    </React.Fragment>
   );
 };
 

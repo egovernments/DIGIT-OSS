@@ -110,7 +110,7 @@ public class TradeUtil {
         url.append("tenantId=");
         url.append("{1}");
         url.append("&");
-        url.append("ids=");
+        url.append("propertyIds=");
         url.append("{2}");
         return url.toString();
     }
@@ -365,4 +365,45 @@ public class TradeUtil {
 		return tenantIdToReminderPeriod;
 		
 	}
+
+    public Object getBillingSlabs(RequestInfo requestInfo, String tenantId) {
+        Map<String, Object> billingSlabSearchReq = new HashMap<>();
+        billingSlabSearchReq.put("RequestInfo", requestInfo);
+        Object result = serviceRequestRepository.fetchResult(getBillingSlabUrl(tenantId), billingSlabSearchReq);
+        return result;
+    }
+
+    public StringBuilder getBillingSlabUrl(String tenantId) {
+        return new StringBuilder().append(config.getCalculatorHost()).append(config.getBillingSlabEndPoint())
+                .append("?").append("tenantId=").append(tenantId);
+    }
+
+    /**
+     * Creates request to search StateName in mdms
+     *
+     * @return State name
+     */
+    public String mDMSCallForStateName(RequestInfo requestInfo, String tenantId) {
+
+        List<MasterDetail> masterDetails = new ArrayList<>();
+
+        final String filterCodeForLicenseetypes = "$.[?(@.code =='" + tenantId + "')]";
+
+        masterDetails.add(MasterDetail.builder().name(BPAConstants.MDMS_TENANTS).filter(filterCodeForLicenseetypes).build());
+
+        ModuleDetail moduleDetail = ModuleDetail.builder().masterDetails(masterDetails)
+                .moduleName(BPAConstants.MDMS_MODULE_TENANT).build();
+
+        MdmsCriteria mdmsCriteria = MdmsCriteria.builder().moduleDetails(Collections.singletonList(moduleDetail)).tenantId(tenantId)
+                .build();
+
+        MdmsCriteriaReq mdmsCriteriaReq = MdmsCriteriaReq.builder().mdmsCriteria(mdmsCriteria)
+                .requestInfo(requestInfo).build();
+        Object result = serviceRequestRepository.fetchResult(getMdmsSearchUrl(), mdmsCriteriaReq);
+        String jsonPath = TENANTS_JSONPATH;
+        List<Map<String, Object>> jsonOutput = JsonPath.read(result, jsonPath);
+        String state = (String) jsonOutput.get(0).get("name");
+        return state;
+    }
+
 }

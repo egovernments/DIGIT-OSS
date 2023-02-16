@@ -25,7 +25,7 @@ public class EdcrValidator {
     private static Logger LOG = LogManager.getLogger(EdcrValidator.class);
     private static final String INVALID_VAL = "The %s value is invalid";
     private static final String ALPHANUMERIC_WITH_SPECIAL_CHARS = "^[a-zA-Z0-9]+(([ _\\-&:,/.][a-zA-Z0-9])?[a-zA-Z0-9]*)*$";
-    private static final String ALPHA_CHARS = "^[a-zA-Z ,.'-]+$";
+    private static final String ALPHA_CHARS = "^[a-zA-Z]*$";
     private static final String INVALID_CHAR_MSG = " _-&:,/.";
     private static final String INVALID_CHAR = "The (%s) contains invalid value. Only following special characters are allowed %s, The String should not start with special characters and should not follow two immediately.";
     
@@ -121,25 +121,24 @@ public class EdcrValidator {
                     }
                     if (StringUtils.isNotBlank(value) && value.length() > 1) {
                         value = value.trim();
-                     
-						if (f.getName().equals("applicantName") && StringUtils.isNotBlank(value)
-								&& value.length() > 1) {
-							boolean isAllowName = Pattern.matches(ALPHA_CHARS, value);
-							if (!isAllowName) {
-								LOG.info("The Invalid Value is" + value);
-								error.setErrorCode("EDCR-34");
-								error.setErrorMessage(String.format(INVALID_CHAR, f.getName(), INVALID_CHAR_MSG));
-								return error;
-							}
-						} else {
-							boolean isAllow = Pattern.matches(ALPHANUMERIC_WITH_SPECIAL_CHARS, value);
-							if (!isAllow) {
-								LOG.info("The Invalid Value is" + value);
-								error.setErrorCode("EDCR-31");
-								error.setErrorMessage(String.format(INVALID_CHAR, f.getName(), INVALID_CHAR_MSG));
-								return error;
-							}
-						}
+                        boolean isAllow = Pattern.matches(ALPHANUMERIC_WITH_SPECIAL_CHARS, value);
+                        if (!isAllow) {
+                            LOG.info("The Inalid Value is" + value);
+                            error.setErrorCode("EDCR-31");
+                            error.setErrorMessage(String.format(INVALID_CHAR, f.getName(), INVALID_CHAR_MSG));
+                            return error;
+                        }
+
+                        if(f.getName().equals("applicantName") && StringUtils.isNotBlank(value) && value.length() > 1)
+                        {
+                        	 boolean isAllowName = Pattern.matches(ALPHA_CHARS, value);
+                        	  if (!isAllowName) {
+                                  LOG.info("The Inalid Value is" + value);
+                                  error.setErrorCode("EDCR-31");
+                                  error.setErrorMessage(String.format(INVALID_CHAR, f.getName(), INVALID_CHAR_MSG));
+                                  return error;
+                              }
+                        }
 
                         if (value.length() > 256) {
                             error.setErrorCode("EDCR-32");
