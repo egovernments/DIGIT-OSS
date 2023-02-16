@@ -182,6 +182,7 @@ public class PaymentNotificationService {
 						.replace("$tenantId", property.getTenantId())
 						.replace("$consumerName", mobileNumbersAndNames.get(mobileNumber));
 				actionLink = config.getNotificationUrl() + actionLink;
+				actionLink = util.getShortnerURL(actionLink);
 				msg = msg.replace("{Link to Bill}", actionLink);
 			}
 			SMSRequest req = SMSRequest.builder().mobileNumber(mobileNumber).message(msg).category(Category.TRANSACTION).build();
