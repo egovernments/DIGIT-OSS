@@ -18,7 +18,7 @@ const MODAL_VALIDATION_SCHEMA = Yup.object().shape({
   }),
   hadbastNo: Yup.string().max(99, "Too Long!").required("This field is required."),
   khewats: Yup.string().max(99, "Too Long!").required("This field is required."),
-  landOwnerRegistry: Yup.string().matches(/^[a-zA-Z0-9 ]+$/, "Please enter valid entry"),
+  // landOwnerRegistry: Yup.string().matches(/^[a-zA-Z0-9 ]+$/, "Please enter valid entry"),
   developerCompany: Yup.string().matches(/^[a-zA-Z_ ]+$/, "Please enter valid entry"),
   authSignature: Yup.string().matches(/^[a-zA-Z ]+$/, "Please enter valid entry"),
   // authSignature: Yup.string().matches(/^$|^[a-zA-Z]+$/, "Please enter valid entry"),

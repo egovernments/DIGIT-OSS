@@ -77,7 +77,7 @@ const CommercialPlottedForm = ({
                     setValue("areaUnderSectorAndGreenBelt", "");
                     setValue("netPlannedArea", "");
                     setValue("areaUnderUndetermined", "");
-                    setValue("totalAreaScheme", "");
+                    // setValue("totalAreaScheme", "");
                   }
                 }}
               />

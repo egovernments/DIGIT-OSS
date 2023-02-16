@@ -65,7 +65,7 @@ const MixedLandUseForm = ({ register, getDocumentData, watch, getDocShareholding
                     setValue("areaUnderSectorAndGreenBelt", "");
                     setValue("netPlannedArea", "");
                     setValue("areaUnderUndetermined", "");
-                    setValue("totalAreaScheme", "");
+                    // setValue("totalAreaScheme", "");
                   }
                 }}
               />
