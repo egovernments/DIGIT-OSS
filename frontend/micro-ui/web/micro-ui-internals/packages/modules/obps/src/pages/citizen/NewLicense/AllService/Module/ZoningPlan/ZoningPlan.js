@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
+import { Button } from "@material-ui/core";
+import FormControl from "@mui/material/FormControl";
 import { useForm } from "react-hook-form";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import { Button } from "react-bootstrap";
-import { Card } from "react-bootstrap";
+import OutlinedInput from "@mui/material/OutlinedInput";
 
 const ZoningPlan = () => {
   const { register, handleSubmit } = useForm();
@@ -11,68 +10,67 @@ const ZoningPlan = () => {
 
   return (
     <form onSubmit={handleSubmit(handleRegistration)}>
-      <Card style={{ width: "126%", border: "5px solid #1266af" }}>
+      <div className="card" style={{ width: "126%", border: "5px solid #1266af" }}>
         <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Approval of demarcation cum zoning plan in CLU</h4>
         <div className="card">
           <br></br>
-          <Row>
-            <Col className="col-4">
-              <label>
-                {" "}
-                License No . <span style={{ color: "red" }}>*</span>
-              </label>
+          <div className="row-12">
+            <div className="col md={4} xxl lg-4">
+              <FormControl>
+                <h2 className="FormLable">
+                  License No . <span style={{ color: "red" }}>*</span>
+                </h2>
 
-              <input type="number" className="form-control" {...register("licenseNo")} />
-            </Col>
+                <OutlinedInput type="number" className="Inputcontrol" {...register("licenseNo")} />
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">
+                  Case Number . <span style={{ color: "red" }}>*</span>
+                </h2>{" "}
+                <OutlinedInput type="number" className="Inputcontrol" {...register("caseNumber")} />
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">
+                  {" "}
+                  Layout Plan <span style={{ color: "red" }}>*</span>
+                </h2>
 
-            <Col className="col-4">
-              <label>
-                {" "}
-                Case Number . <span style={{ color: "red" }}>*</span>
-              </label>
+                <OutlinedInput type="text" className="Inputcontrol" {...register("layoutPlan")} />
+              </FormControl>
+            </div>
+          </div>
+          <br></br>
+          <div className="row-12">
+            <div className="col md={4} xxl lg-4">
+              <FormControl>
+                <h2 className="FormLable">
+                  Any other Document <span style={{ color: "red" }}>*</span>
+                </h2>
+                <input type="file" className="form-control" {...register("anyOtherDocument")} />
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">
+                  Amount <span style={{ color: "red" }}>*</span>
+                </h2>
 
-              <input type="number" name="Case Number" className="form-control" {...register("caseNumber")} />
-            </Col>
-            <Col className="col-4">
-              <label>
-                Layout Plan <span style={{ color: "red" }}>*</span>
-              </label>
-
-              <input type="text" className="form-control" {...register("layoutPlan")} />
-            </Col>
-            <br></br>
-
-            <Col className="col-4">
-              <label>
-                {" "}
-                Any other Document <span style={{ color: "red" }}>*</span>
-              </label>{" "}
-              <input type="file" className="form-control" {...register("anyOtherDocument")} />
-            </Col>
-
-            <Col className="col-4">
-              <label>
-                {" "}
-                Amount <span style={{ color: "red" }}>*</span>
-              </label>
-
-              <input type="number" name="Amount" className="form-control" {...register("amount")} />
-            </Col>
-            <Col className="col-4">
-              <div className="col-4">
-                <Button variant="success" className="col my-5" type="submit" aria-label="right-end">
-                  Pay{" "}
-                </Button>
-              </div>
-            </Col>
-          </Row>
+                <OutlinedInput type="number" name="Amount" className="Inputcontrol" {...register("amount")} />
+              </FormControl>
+            </div>
+          </div>
           <div class="col-sm-12 text-right">
-            <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
+            <Button variant="contained" class="btn btn-primary btn-md center-block" type="submit" aria-label="right-end">
+              Pay{" "}
+            </Button>
+            &nbsp;
+            <Button variant="contained" class="btn btn-primary btn-md center-block" type="submit">
               Submit
-            </button>
+            </Button>
           </div>
         </div>
-      </Card>
+      </div>
     </form>
   );
 };

@@ -85,7 +85,7 @@ const ApllicantPuropseForm = (props) => {
     },
     {
       title: "change in information",
-      render: (data) => (data?.isChange ? data?.isChange : "N/A"),
+      render: (data) => (data?.isChange ? data?.isChange : "False"),
     },
     {
       title: "Rectangle No./Mustil(Changed)",
@@ -1244,15 +1244,7 @@ const ApllicantPuropseForm = (props) => {
                             Name of the developer company .<span style={{ color: "red" }}>*</span>
                           </h2>
                         </label>
-                        <Form.Control
-                          type="text"
-                          className="form-control"
-                          placeholder=""
-                          {...register("developerCompany")}
-                          required
-                          minlength={2}
-                          maxLength={20}
-                        />
+                        <Form.Control type="text" className="form-control" placeholder="" {...register("developerCompany")} />
                         <h3 className="error-message" style={{ color: "red" }}>
                           {errors?.developerCompany && errors?.developerCompany?.message}
                         </h3>
@@ -1267,7 +1259,6 @@ const ApllicantPuropseForm = (props) => {
                           type="date"
                           value={modalData.agreementValidFrom}
                           className="form-control"
-                          required
                           placeholder=""
                           {...register("agreementValidFrom")}
                           max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
@@ -1296,15 +1287,7 @@ const ApllicantPuropseForm = (props) => {
                             Name of authorized signatory on behalf of land owner(s)<span style={{ color: "red" }}>*</span>
                           </h2>
                         </label>
-                        <Form.Control
-                          type="text"
-                          className="form-control"
-                          placeholder=""
-                          {...register("authSignature")}
-                          required
-                          minlength={4}
-                          maxLength={99}
-                        />
+                        <Form.Control type="text" className="form-control" placeholder="" {...register("authSignature")} />
                         <h3 className="error-message" style={{ color: "red" }}>
                           {errors?.authSignature && errors?.authSignature?.message}
                         </h3>
@@ -1319,15 +1302,7 @@ const ApllicantPuropseForm = (props) => {
                             Name of authorized signatory on behalf of developer.<span style={{ color: "red" }}>*</span>
                           </h2>
                         </label>
-                        <Form.Control
-                          type="text"
-                          className="form-control"
-                          placeholder=""
-                          {...register("nameAuthSign")}
-                          required
-                          minlength={4}
-                          maxLength={99}
-                        />
+                        <Form.Control type="text" className="form-control" placeholder="" {...register("nameAuthSign")} />
                         <h3 className="error-message" style={{ color: "red" }}>
                           {errors?.nameAuthSign && errors?.nameAuthSign?.message}
                         </h3>
@@ -1338,7 +1313,7 @@ const ApllicantPuropseForm = (props) => {
                             Registering Authority<span style={{ color: "red" }}>*</span>
                           </h2>
                         </label>
-                        <Form.Control type="text" className="form-control" placeholder="" {...register("registeringAuthority")} required />
+                        <Form.Control type="text" className="form-control" placeholder="" {...register("registeringAuthority")} />
                         <h3 className="error-message" style={{ color: "red" }}>
                           {errors?.registeringAuthority && errors?.registeringAuthority?.message}
                         </h3>
@@ -1357,7 +1332,6 @@ const ApllicantPuropseForm = (props) => {
                                 type="file"
                                 accept="application/pdf/jpeg/png"
                                 style={{ display: "none" }}
-                                required
                                 onChange={(e) => getDocumentData(e?.target?.files[0], "registeringAuthorityDocFileName")}
                               />
                             </div>
@@ -1392,7 +1366,7 @@ const ApllicantPuropseForm = (props) => {
                     Type of land<span style={{ color: "red" }}>*</span>
                   </h2>
                 </label>
-                <ReactMultiSelect control={control} name="typeLand" placeholder="Type of Land" data={typeOfLand?.data} labels="typeland" required />
+                <ReactMultiSelect control={control} name="typeLand" placeholder="Type of Land" data={typeOfLand?.data} labels="typeland" />
               </Col>
             </Row>
             <br></br>
@@ -1511,15 +1485,15 @@ const ApllicantPuropseForm = (props) => {
                     <tbody>
                       <tr>
                         <td>
-                          <input type="number" className="form-control  " {...register("kanal")} id="kanal" required maxLength={99} />
+                          <input type="number" className="form-control  " {...register("kanal")} id="kanal" />
                           <label htmlFor="sum">Total: {(watch("kanal") * 0.125)?.toFixed(3)}</label>&nbsp;&nbsp;
                         </td>
                         <td>
-                          <input type="number" className="form-control " {...register("marla")} id="marla" required maxLength={99} />
+                          <input type="number" className="form-control " {...register("marla")} id="marla" />
                           <label htmlFor="summarla">Total: {(watch("marla") * 0.0062)?.toFixed(3)}</label>&nbsp;&nbsp;
                         </td>
                         <td>
-                          <input type="number" className="form-control " {...register("sarsai")} id="sarsai" required maxLength={99} />
+                          <input type="number" className="form-control " {...register("sarsai")} id="sarsai" />
                           <label htmlFor="sumsarsai">Total: {(watch("sarsai") * 0.00069)?.toFixed(3)}</label>&nbsp;&nbsp;
                         </td>
                         <td>
@@ -1561,15 +1535,15 @@ const ApllicantPuropseForm = (props) => {
                     <tbody>
                       <tr>
                         <td>
-                          <input type="number" className="form-control" {...register("bigha")} id="bigha" required maxLength={99} />
+                          <input type="number" className="form-control" {...register("bigha")} id="bigha" />
                           <label htmlFor="sumBigha">Total: {(watch("bigha") * 0.33)?.toFixed(3)}</label>&nbsp;&nbsp;
                         </td>
                         <td>
-                          <input type="number" className="form-control" {...register("biswa")} id="biswa" required maxLength={99} />
+                          <input type="number" className="form-control" {...register("biswa")} id="biswa" />
                           <label htmlFor="sumBiswa">Total: {(watch("biswa") * 0.0309)?.toFixed(3)}</label>&nbsp;&nbsp;
                         </td>
                         <td>
-                          <input type="number" className="form-control" {...register("biswansi")} id="biswansi" required maxLength={99} />
+                          <input type="number" className="form-control" {...register("biswansi")} id="biswansi" />
                           <label htmlFor="sumBiswansi">Total: {(watch("biswansi") * 0.619)?.toFixed(3)}</label>&nbsp;&nbsp;
                         </td>
                         <td>

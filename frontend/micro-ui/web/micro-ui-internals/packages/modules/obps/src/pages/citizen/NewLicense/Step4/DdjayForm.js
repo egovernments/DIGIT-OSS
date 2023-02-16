@@ -19,7 +19,7 @@ const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLo
         </h6>
         <Col col-12>
           <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
-            <Col md={4} xxl lg="3">
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2>
@@ -28,9 +28,13 @@ const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLo
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <NumberInput disabled control={control} name="totalAreaScheme" customInput={TextField} />
             </Col>
-            <Col md={4} xxl lg="3">
+          </Row>
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2 data-toggle="tooltip" data-placement="top" title="Area under Sector Road & Green Belt">
@@ -39,6 +43,8 @@ const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLo
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input
                 type="number"
                 className="form-control"
@@ -58,7 +64,9 @@ const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLo
                 }}
               />
             </Col>
-            <Col md={4} xxl lg="3">
+          </Row>
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2 data-toggle="tooltip" data-placement="top" title=" Balance area after deducting area under sector road and Green Belt">
@@ -67,9 +75,13 @@ const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLo
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input disabled type="number" className="form-control" {...register("balanceAreaAfterDeduction")} />
             </Col>
-            <Col md={4} xxl lg="3">
+          </Row>
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2>
@@ -78,6 +90,8 @@ const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLo
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input
                 type="number"
                 className="form-control"
@@ -99,7 +113,7 @@ const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLo
             </Col>
           </Row>
           <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
-            <Col md={4} xxl lg="3">
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2>
@@ -108,9 +122,14 @@ const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLo
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input disabled type="number" className="form-control" {...register("balanceArea")} />
             </Col>
-            <Col md={4} xxl lg="3">
+          </Row>
+
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2 data-toggle="tooltip" data-placement="top" title="50% of the Area under Sector Road & Green Belt">
@@ -119,10 +138,14 @@ const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLo
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input disabled type="number" className="form-control" {...register("areaUnderSectorAndGreenBelt")} />
             </Col>
+          </Row>
 
-            <Col md={4} xxl lg="3">
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2>
@@ -131,13 +154,15 @@ const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLo
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input disabled type="number" className="form-control" {...register("netPlannedArea")} />
             </Col>
           </Row>
         </Col>
 
         <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
-          <Col md={4} xxl lg="3">
+          <Col md={4} xxl lg="4">
             <div>
               <Form.Label>
                 <h2>
@@ -146,6 +171,8 @@ const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLo
                 </h2>
               </Form.Label>
             </div>
+          </Col>
+          <Col md={4} xxl lg="4">
             <input
               type="number"
               className="form-control"
@@ -156,36 +183,51 @@ const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLo
               }}
               onWheel={handleWheel}
             />
+          </Col>
+          <Col md={4} xxl lg="4">
             {error?.maxAreaPlots && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.maxAreaPlots}</h6>}
           </Col>
-          <Col md={4} xxl lg="3">
+        </Row>
+        <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="4">
             <div>
               <h2>
                 Size of plot ( in sqm)
                 <span style={{ color: "red" }}>*</span>
               </h2>
             </div>
-            <div>
-              <label>Minimum</label>
-              <input type="number" className="form-control" {...register("minPlotSize")} onWheel={handleWheel} />
-            </div>
-            <div>
-              <label>Maximum</label>
-              <input
-                type="number"
-                className="form-control"
-                {...register("maxPlotSize")}
-                onChange={(e) => {
-                  if (e?.target?.value > watch("maxAreaPlots"))
-                    setError({ ...error, ["maxPlotSize"]: "Maximum Cannot be more than Max area of plots" });
-                  else setError({ ...error, ["maxPlotSize"]: "" });
-                }}
-                onWheel={handleWheel}
-              />
-              {error?.maxPlotSize && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.maxPlotSize}</h6>}
-            </div>
           </Col>
-          <Col md={4} xxl lg="3">
+        </Row>
+        <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="4">
+            <label>Minimum</label>
+          </Col>
+          <Col md={4} xxl lg="4">
+            <input type="number" className="form-control" {...register("minPlotSize")} onWheel={handleWheel} />
+          </Col>
+        </Row>
+        <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="4">
+            <label>Maximum</label>
+          </Col>
+          <Col md={4} xxl lg="4">
+            <input
+              type="number"
+              className="form-control"
+              {...register("maxPlotSize")}
+              onChange={(e) => {
+                if (e?.target?.value > watch("maxAreaPlots"))
+                  setError({ ...error, ["maxPlotSize"]: "Maximum Cannot be more than Max area of plots" });
+                else setError({ ...error, ["maxPlotSize"]: "" });
+              }}
+              onWheel={handleWheel}
+            />
+            {error?.maxPlotSize && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.maxPlotSize}</h6>}
+          </Col>
+        </Row>
+
+        <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="4">
             <div>
               <Form.Label>
                 <h2>
@@ -194,6 +236,8 @@ const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLo
                 </h2>
               </Form.Label>
             </div>
+          </Col>
+          <Col md={4} xxl lg="4">
             <NumberInput
               control={control}
               name="totalNoOfPlots"
@@ -214,7 +258,10 @@ const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLo
               }}
             />
           </Col>
-          <Col md={4} xxl lg="3">
+        </Row>
+
+        <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="4">
             <div>
               <Form.Label>
                 <h2>
@@ -223,10 +270,17 @@ const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLo
                 </h2>
               </Form.Label>
             </div>
+          </Col>
+          <Col md={4} xxl lg="4">
             <input type="number" className="form-control" {...register("permissibleDensity")} />
+          </Col>
+          <Col md={4} xxl lg="4">
             {error?.permissibleDensity && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.permissibleDensity}</h6>}
           </Col>
-          <Col md={4} xxl lg="3">
+        </Row>
+
+        <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="4">
             <div>
               <Form.Label>
                 <h2>
@@ -235,6 +289,8 @@ const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLo
                 </h2>
               </Form.Label>
             </div>
+          </Col>
+          <Col md={4} xxl lg="4">
             <input
               type="number"
               className="form-control"
@@ -246,12 +302,14 @@ const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLo
                 } else setError({ ...error, ["residentialAndCommercialPlots"]: "" });
               }}
             />
+          </Col>
+          <Col md={4} xxl lg="4">
             {error?.residentialAndCommercialPlots && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.residentialAndCommercialPlots}</h6>}
           </Col>
         </Row>
         <br></br>
         <Row className="ml-auto" style={{ marginBottom: 5 }}>
-          <Col md={4} xxl lg="3">
+          <Col md={4} xxl lg="4">
             <div>
               <Form.Label>
                 <h2>
@@ -260,6 +318,8 @@ const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLo
                 </h2>
               </Form.Label>
             </div>
+          </Col>
+          <Col md={4} xxl lg="4">
             <input
               type="number"
               className="form-control"
@@ -271,9 +331,13 @@ const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLo
                 } else setError({ ...error, ["areaUnderResidentialUse"]: "" });
               }}
             />
+          </Col>
+          <Col md={4} xxl lg="4">
             {error?.areaUnderResidentialUse && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.areaUnderResidentialUse}</h6>}
           </Col>
-          <Col md={4} xxl lg="3">
+        </Row>
+        <Row className="ml-auto" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="4">
             <div>
               <Form.Label>
                 <h2>
@@ -282,6 +346,8 @@ const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLo
                 </h2>
               </Form.Label>
             </div>
+          </Col>
+          <Col md={4} xxl lg="4">
             <input
               type="number"
               className="form-control"
@@ -293,9 +359,13 @@ const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLo
                 } else setError({ ...error, ["areaUnderCommercialUse"]: "" });
               }}
             />
+          </Col>
+          <Col md={4} xxl lg="4">
             {error?.areaUnderCommercialUse && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.areaUnderCommercialUse}</h6>}
           </Col>
-          <Col md={4} xxl lg="3">
+        </Row>
+        <Row className="ml-auto" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="4">
             <div>
               <Form.Label>
                 <h2 data-toggle="tooltip" data-placement="top" title="  Width of Internal roads in the colony (in meters)">
@@ -304,6 +374,8 @@ const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLo
                 </h2>
               </Form.Label>
             </div>
+          </Col>
+          <Col md={4} xxl lg="4">
             <input
               type="number"
               className="form-control"
@@ -315,9 +387,13 @@ const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLo
                 } else setError({ ...error, ["widthOfInternalRoads"]: "" });
               }}
             />
+          </Col>
+          <Col md={4} xxl lg="4">
             {error?.widthOfInternalRoads && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.widthOfInternalRoads}</h6>}
           </Col>
-          <Col md={4} xxl lg="3">
+        </Row>
+        <Row className="ml-auto" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="4">
             <div>
               <Form.Label>
                 <h2 data-toggle="tooltip" data-placement="top" title="   Area under organized Open Space (in acres)">
@@ -326,6 +402,8 @@ const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLo
                 </h2>
               </Form.Label>
             </div>
+          </Col>
+          <Col md={4} xxl lg="4">
             <input
               type="number"
               className="form-control"
@@ -341,12 +419,14 @@ const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLo
                 } else setError({ ...error, ["AreaUnderOrganizedSpace"]: "" });
               }}
             />
+          </Col>
+          <Col md={4} xxl lg="4">
             {error?.AreaUnderOrganizedSpace && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.AreaUnderOrganizedSpace}</h6>}
           </Col>
         </Row>
         <br></br>
         <Row className="ml-auto" style={{ marginBottom: 5 }}>
-          <Col md={4} xxl lg="3">
+          <Col md={4} xxl lg="4">
             <div>
               <label>
                 <h2
@@ -358,6 +438,8 @@ const DDJAYForm = ({ register, getDocumentData, watch, getDocShareholding, setLo
                 </h2>
               </label>
             </div>
+          </Col>
+          <Col md={4} xxl lg="4">
             <input
               type="number"
               className="form-control"
