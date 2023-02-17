@@ -15,17 +15,17 @@ import ServiceBase from "./ServiceBase";
 
 const ServiceScrutiny = (props) => {
 
-  
+
   // const [ApplicantFormshow, SetApplicantForm] = useState(true);
   // const [PurposeFormshow, SetPurposeForm] = useState(false);
   // const [LandScheduleFormshow, SetLandScheduleForm] = useState(false);
   // const [AppliedDetailsFormshow, SetAppliedDetailsForm] = useState(false);
   // const [FeesChargesFormshow, SetFeesChargesForm] = useState(false);
 
-const {id} = useParams();
+  const { id } = useParams();
 
-const userInfo = Digit.UserService.getUser()?.info || {};
-const authToken = Digit.UserService.getUser()?.access_token || null;
+  const userInfo = Digit.UserService.getUser()?.info || {};
+  const authToken = Digit.UserService.getUser()?.access_token || null;
   // const applicationNumber = "HR-TL-2022-12-07-000498"
 
   // let applicationNumber = "";
@@ -33,23 +33,23 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
   const state = Digit.ULBService.getStateId();
   const { t } = useTranslation();
   const history = useHistory();
-  
+
   const [displayMenu, setDisplayMenu] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [isEnableLoader, setIsEnableLoader] = useState(false);
-  const [isWarningPop, setWarningPopUp ] = useState(false);
+  const [isWarningPop, setWarningPopUp] = useState(false);
   const [showhide19, setShowhide19] = useState("true");
   const [businessService, setBusinessService] = useState("SERVICE_PLAN");
-  const [moduleCode,setModuleCode] = useState("TL")
-  const [ scrutinyDetails, setScrutinyDetails] = useState();
+  const [moduleCode, setModuleCode] = useState("TL")
+  const [scrutinyDetails, setScrutinyDetails] = useState();
   // const [applicationNumber,setApplicationNumber] = useState("");
   const [applicationDetails, setApplicationDetails] = useState();
   const [workflowDetails, setWorkflowDetails] = useState();
-  const [applicationData,setApplicationData] = useState();
+  const [applicationData, setApplicationData] = useState();
   const [additionalDetails, setAdditionalDetails] = useState({});
 
-//   const authToken = Digit.UserService.getUser()?.access_token || null;
+  //   const authToken = Digit.UserService.getUser()?.access_token || null;
 
   // const [showhide19, setShowhide19] = useState("true");
   const handleshow19 = (e) => {
@@ -62,35 +62,35 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
 
 
   const getScrutinyData = async () => {
-    console.log("log123... userInfo",authToken);
+    console.log("log123... userInfo", authToken);
     let requestInfo = {
-        
-        "RequestInfo": {
-            "api_id": "1",
-            "ver": "1",
-            "ts": null,
-            "action": "create",
-            "did": "",
-            "key": "",
-            "msg_id": "",
-            "requester_id": "",
-            "authToken": authToken
-        }
+
+      "RequestInfo": {
+        "api_id": "1",
+        "ver": "1",
+        "ts": null,
+        "action": "create",
+        "did": "",
+        "key": "",
+        "msg_id": "",
+        "requester_id": "",
+        "authToken": authToken
+      }
     }
     try {
-      const Resp = await axios.post(`/tl-services/serviceplan/_get?applicationNumber=${id}`,requestInfo).then((response) => {
+      const Resp = await axios.post(`/tl-services/serviceplan/_get?applicationNumber=${id}`, requestInfo).then((response) => {
         return response?.data;
       });
-    //   console.log("Response From API1", Resp, Resp?.Licenses[0]?.applicationNumber,Resp);
-    setScrutinyDetails(Resp?.servicePlanResponse?.[0]);
+      //   console.log("Response From API1", Resp, Resp?.Licenses[0]?.applicationNumber,Resp);
+      setScrutinyDetails(Resp?.servicePlanResponse?.[0]);
 
-    console.log("devDel1234",Resp?.servicePlanResponse?.[0]);
-    setApplicationData(Resp?.servicePlanResponse?.[0]);
-    setApplicationDetails({
-      applicationData: Resp?.servicePlanResponse?.[0],
-      workflowCode: Resp?.servicePlanResponse?.[0].businessService
-    })
-    
+      console.log("devDel1234", Resp?.servicePlanResponse?.[0]);
+      setApplicationData(Resp?.servicePlanResponse?.[0]);
+      setApplicationDetails({
+        applicationData: Resp?.servicePlanResponse?.[0],
+        workflowCode: Resp?.servicePlanResponse?.[0].businessService
+      })
+
       // setScrutinyDetails(Resp?.servicePlanResponse?.[0]);
 
       // console.log("devDel123",Resp?.servicePlanResponse?.[0]);
@@ -103,15 +103,15 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
   let EditRenewalApplastModifiedTime = Digit.SessionStorage.get("EditRenewalApplastModifiedTime");
 
   let workflowDetailsTemp = Digit.Hooks.useWorkflowDetails({
-    tenantId:  tenantId,
+    tenantId: tenantId,
     id: id,
     moduleCode: businessService,
     role: "TL_CEMP",
-    config:{EditRenewalApplastModifiedTime:EditRenewalApplastModifiedTime},
+    config: { EditRenewalApplastModifiedTime: EditRenewalApplastModifiedTime },
   });
-  
+
   // const applicationDetailsTemp = Digit.Hooks.tl.useApplicationDetail(t, tenantId, id);
- 
+
   const {
     isLoading: updatingApplication,
     isError: updateApplicationError,
@@ -123,7 +123,7 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
 
   function onActionSelect(action) {
     if (action) {
-      if(action?.isWarningPopUp){
+      if (action?.isWarningPopUp) {
         setWarningPopUp(true);
       }
       else if (action?.redirectionUrll) {
@@ -136,11 +136,11 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
           state: { ...action.redirectionUrl?.state },
         });
       }
-    } 
+    }
     setSelectedAction(action);
     setDisplayMenu(false);
   }
-
+  // console.log("logger log1223", action)
   const queryClient = useQueryClient();
 
   // const closeModal = () => {
@@ -159,30 +159,30 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
     setWarningPopUp(false);
   }
 
-  const submitAction = async (data={}, nocData = false, isOBPS = {}) => {
+  const submitAction = async (data = {}, nocData = false, isOBPS = {}) => {
     let tempdata = data || {}
     tempdata.ServicePlanRequest[0].additionalDetails = additionalDetails;
     console.log("logger log1223", tempdata)
 
 
-    try{
+    try {
       let body = {
         ...tempdata,
-   
-      RequestInfo: {
-        api_id: "Rainmaker",
-        ver: "1",
-        ts: null,
-        action: "create",
-        did: "",
-        key: "",
-        msg_id: "",
-        requester_id: "",
-        authToken: authToken
-    }
+
+        RequestInfo: {
+          api_id: "Rainmaker",
+          ver: "1",
+          ts: null,
+          action: "create",
+          did: "",
+          key: "",
+          msg_id: "",
+          requester_id: "",
+          authToken: authToken
+        }
       }
       console.log("logger log1223 body", body);
-      const response = await axios.post("/tl-services/serviceplan/_update",body);
+      const response = await axios.post("/tl-services/serviceplan/_update", body);
       console.log("Update API Response ====> ", response.data);
     } catch (error) {
       console.log("Update Error ===> ", error.message)
@@ -191,27 +191,39 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
     closeModal();
   };
 
- 
+
 
   useEffect(() => {
-    console.log("logService...wrkflw12",id,workflowDetailsTemp,scrutinyDetails,applicationDetails)
+    console.log("logService...wrkflw12", id, workflowDetailsTemp, scrutinyDetails, applicationDetails)
+    // console.log("logService...wrkflw12",id,workflowDetailsTemp,scrutinyDetails,applicationDetails,processInstances)
     if (workflowDetailsTemp?.data?.applicationBusinessService) {
       setWorkflowDetails(workflowDetailsTemp);
       setBusinessService(workflowDetailsTemp?.data?.applicationBusinessService);
+      console.log("Datapoint1", workflowDetailsTemp?.data?.processInstances)
+      // setDataHistory("Datapoint" , workflowDetailsTemp?.data?.processInstances.map((array) => array.map((object))))
+      //  = (e) => {
+      //   const getshow = e.target.value;
+      //   setShowhide19(getshow);
+        console.log("Datapoint", workflowDetailsTemp?.data?.processInstances?.[0])
+      //   DetailsofAppliedLand?.dgpsDetails.map((array) => array.map((object) => `${object.latitude},${object.longitude}`).join(":") ).join("|")
+      //   let query =  DetailsofAppliedLand?.dgpsDetails.map((array) => array.map((object) => `${object.latitude},${object.longitude}`).join(":") ).join("|")
+      //   console.log("Qurey" , query);
+      //   window.open(`/digit-ui/WNS/wmsmap.html?latlngs=${query}`,"popup")
+      // };
     }
   }, [workflowDetailsTemp?.data]);
-  
- 
 
-  useEffect(()=>{
+
+
+  useEffect(() => {
     console.log("ServicePlan12")
     getScrutinyData();
-  },[])
+  }, [])
 
 
   return (
     <Card>
-      <Card.Header class="fw-normal" style={{ top: 5, padding: 5 , fontSize: 14 ,height:90, lineHeight:2 }}>
+      <Card.Header class="fw-normal" style={{ top: 5, padding: 5, fontSize: 14, height: 90, lineHeight: 2 }}>
         <div className="row">
           <div className="col-md-3">
             <p>Application Number:</p>
@@ -241,20 +253,54 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
           applicationNumber={id}
           refreshScrutinyData={getScrutinyData}
         ></ScrutitnyForms> */}
-         {/* <ElecticalBase/> */}
-         <ServiceBase
-         apiResponse={scrutinyDetails}
-         applicationNumber={id}
-         refreshScrutinyData={getScrutinyData}
-         setAdditionalDetails={setAdditionalDetails}
-         ></ServiceBase>
+        {/* <ElecticalBase/> */}
+        <ServiceBase
+          apiResponse={scrutinyDetails}
+          histeroyData={workflowDetailsTemp}
+          applicationNumber={id}
+          refreshScrutinyData={getScrutinyData}
+          setAdditionalDetails={setAdditionalDetails}
+        ></ServiceBase>
       </Row>
+      {/* <Row style={{ top: 10, padding: "10px 22px" }}> */}
       <Row style={{ top: 10, padding: "10px 22px" }}>
 
-        {/* <Row> */}
-        
-          {/* <div class="col-md-10 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
+        <Card>
+          <Card.Header class="fw-normal" style={{ top: 5, padding: 5, fontSize: 20, height: 55, lineHeight: 2 }}>
+            <p class="fw-normal text-center">Remarks History </p>
+          </Card.Header>
+          {/* {applicationData?.comment} */}
+          {/* {JSON.stringify(workflowDetailsTemp?.data?.processInstances?.[0])} */}
+
           
+          {/* {workflowDetailsTemp?.data?.processInstances?.map((item, index) => (
+            <div className="row" key={index}>
+              {index}
+              {item.comment}
+              {item?.assignes?.map((item, index) => (
+                <div style={{ marginLeft: 52 }}>
+                 {item?.name}
+                </div>
+              ))
+              }
+              {item?.documents?.map((item, index) => (
+                <div style={{ marginLeft: 52 }}>
+                 {item?.fileStoreId}
+                </div>
+              ))
+              }
+            </div>
+          ))
+          }
+           */}
+        </Card>
+
+      </Row>
+
+      <Row>
+
+        <div class="col-md-10 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
+
 
 
           {showModal ? (
@@ -265,7 +311,7 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
               state={state}
               id={id}
               applicationDetails={applicationDetails}
-              applicationData={{...applicationDetails?.applicationData,workflowCode:applicationDetails?.applicationData?.workflowCode || "SERVICE_PLAN"}}
+              applicationData={{ ...applicationDetails?.applicationData, workflowCode: applicationDetails?.applicationData?.workflowCode || "SERVICE_PLAN" }}
               closeModal={closeModal}
               submitAction={submitAction}
               actionData={workflowDetails?.data?.timeline}
@@ -275,31 +321,31 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
             />
           ) : null}
           {isWarningPop ? (
-            <ApplicationDetailsWarningPopup 
-            action={selectedAction}
-            workflowDetails={workflowDetails}
-            businessService={businessService}
-            isWarningPop={isWarningPop}
-            closeWarningPopup={closeWarningPopup}
+            <ApplicationDetailsWarningPopup
+              action={selectedAction}
+              workflowDetails={workflowDetails}
+              businessService={businessService}
+              isWarningPop={isWarningPop}
+              closeWarningPopup={closeWarningPopup}
             />
           ) : null}
-         
+
           <ApplicationDetailsActionBar
             workflowDetails={workflowDetails}
             displayMenu={displayMenu}
             onActionSelect={onActionSelect}
             setDisplayMenu={setDisplayMenu}
             businessService={businessService}
-        
+
             ActionBarStyle={{}}
             MenuStyle={{}}
           />
 
 
-            </div> */}
-          
-            <div class="col-md-10 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
-           {showModal ? (
+        </div>
+
+        <div class="col-md-10 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
+          {showModal ? (
             <ActionModal
               t={t}
               action={selectedAction}
@@ -307,7 +353,7 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
               state={state}
               id={id}
               applicationDetails={applicationDetails}
-              applicationData={{...applicationDetails?.applicationData,workflowCode:applicationDetails?.applicationData?.workflowCode || "SERVICE_PLAN"}}
+              applicationData={{ ...applicationDetails?.applicationData, workflowCode: applicationDetails?.applicationData?.workflowCode || "SERVICE_PLAN" }}
               closeModal={closeModal}
               submitAction={submitAction}
               actionData={workflowDetails?.data?.timeline}
@@ -317,15 +363,15 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
             />
           ) : null}
           {isWarningPop ? (
-            <ApplicationDetailsWarningPopup 
-            action={selectedAction}
-            workflowDetails={workflowDetails}
-            businessService={businessService}
-            isWarningPop={isWarningPop}
-            closeWarningPopup={closeWarningPopup}
+            <ApplicationDetailsWarningPopup
+              action={selectedAction}
+              workflowDetails={workflowDetails}
+              businessService={businessService}
+              isWarningPop={isWarningPop}
+              closeWarningPopup={closeWarningPopup}
             />
           ) : null}
-          
+
           <ApplicationDetailsActionBar
             workflowDetails={workflowDetails}
             displayMenu={displayMenu}
@@ -335,24 +381,24 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
             ActionBarStyle={{}}
             MenuStyle={{}}
           />
-   </div>
-          
+        </div>
+
         {/* </Row> */}
-        <Row>
-          
-          <div class="col-md-12 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
+        {/* <Row> */}
+
+        <div class="col-md-12 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
           {/* <Button style={{ textAlign: "right" }}> <a href="http://localhost:3000/digit-ui/citizen/obps/Loi" >Generate LOI</a></Button> */}
           {/* <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow19} /> */}
+        </div>
+        {showhide19 === "Submit" && (
+          <div>
+            <Button style={{ textAlign: "right" }}> <a href="http://localhost:3000/digit-ui/employee/tl/Loi" >Generate LOI</a></Button>
           </div>
-          {showhide19 === "Submit" && (
-                     <div>
-                       <Button style={{ textAlign: "right" }}> <a href="http://localhost:3000/digit-ui/employee/tl/Loi" >Generate LOI</a></Button>
-                     </div>
-                        )}
-                        
-                    
-        </Row>
+        )}
+
+
       </Row>
+      {/* </Row> */}
     </Card>
   );
 };
