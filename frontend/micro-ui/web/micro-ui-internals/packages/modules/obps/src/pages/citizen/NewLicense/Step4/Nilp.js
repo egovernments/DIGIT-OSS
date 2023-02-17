@@ -19,7 +19,7 @@ const NilpForm = ({ register, getDocumentData, watch, getDocShareholding, setLoa
         </h6>
         <Col col-12>
           <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
-            <Col md={4} xxl lg="3">
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2>
@@ -28,9 +28,13 @@ const NilpForm = ({ register, getDocumentData, watch, getDocShareholding, setLoa
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <NumberInput disabled control={control} name="totalAreaScheme" customInput={TextField} />
             </Col>
-            <Col md={4} xxl lg="3">
+          </Row>
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2 data-toggle="tooltip" data-placement="top" title="Area under Sector Road & Green Belt">
@@ -39,6 +43,8 @@ const NilpForm = ({ register, getDocumentData, watch, getDocShareholding, setLoa
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input
                 type="number"
                 className="form-control"
@@ -58,12 +64,14 @@ const NilpForm = ({ register, getDocumentData, watch, getDocShareholding, setLoa
                     setValue("areaUnderSectorAndGreenBelt", "");
                     setValue("netPlannedArea", "");
                     setValue("areaUnderUndetermined", "");
-                    setValue("totalAreaScheme", "");
+                    // setValue("totalAreaScheme", "");
                   }
                 }}
               />
             </Col>
-            <Col md={4} xxl lg="3">
+          </Row>
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2 data-toggle="tooltip" data-placement="top" title=" Balance area after deducting area under sector road and Green Belt">
@@ -72,9 +80,13 @@ const NilpForm = ({ register, getDocumentData, watch, getDocShareholding, setLoa
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input disabled type="number" className="form-control" {...register("balanceAreaAfterDeduction")} />
             </Col>
-            <Col md={4} xxl lg="3">
+          </Row>
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2>
@@ -83,6 +95,8 @@ const NilpForm = ({ register, getDocumentData, watch, getDocShareholding, setLoa
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input
                 type="number"
                 className="form-control"
@@ -104,7 +118,7 @@ const NilpForm = ({ register, getDocumentData, watch, getDocShareholding, setLoa
             </Col>
           </Row>
           <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
-            <Col md={4} xxl lg="3">
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2>
@@ -113,10 +127,13 @@ const NilpForm = ({ register, getDocumentData, watch, getDocShareholding, setLoa
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input disabled type="number" className="form-control" {...register("balanceArea")} />
             </Col>
-
-            <Col md={4} xxl lg="3">
+          </Row>
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2 data-toggle="tooltip" data-placement="top" title="  50% of the Area under Sector Road & Green Belt">
@@ -125,10 +142,13 @@ const NilpForm = ({ register, getDocumentData, watch, getDocShareholding, setLoa
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input disabled type="number" className="form-control" {...register("areaUnderSectorAndGreenBelt")} />
             </Col>
-
-            <Col md={4} xxl lg="3">
+          </Row>
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2>
@@ -137,36 +157,45 @@ const NilpForm = ({ register, getDocumentData, watch, getDocShareholding, setLoa
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input disabled type="number" className="form-control" {...register("netPlannedArea")} />
             </Col>
           </Row>
         </Col>
-        <Col md={4} xxl lg="3">
-          <div>
-            <Form.Label>
-              <h2 data-toggle="tooltip" data-placement="top" title=" Area to be provided free of cost to the Government for EWS/AH">
-                Area provided free of cost
-                <span style={{ color: "red" }}>*</span>
-              </h2>
-            </Form.Label>
-          </div>
-          <input
-            type="number"
-            className="form-control"
-            {...register("providedArea")}
-            onWheel={handleWheel}
-            onChange={(e) => {
-              if (e?.target?.value < (watch("netPlannedArea") * 10) / 100)
-                setError({
-                  ...error,
-                  ["providedArea"]:
-                    "Minimum 10% area to be provided free of cost to the Government for EWS/Affordable Housing as per amended policy dated 11.05.2022. ",
-                });
-              else setError({ ...error, ["providedArea"]: "" });
-            }}
-          />
-          {error?.providedArea && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.providedArea}</h6>}
-        </Col>
+
+        <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="4">
+            <div>
+              <Form.Label>
+                <h2 data-toggle="tooltip" data-placement="top" title=" Area to be provided free of cost to the Government for EWS/AH">
+                  Area provided free of cost
+                  <span style={{ color: "red" }}>*</span>
+                </h2>
+              </Form.Label>
+            </div>
+          </Col>
+          <Col md={4} xxl lg="4">
+            <input
+              type="number"
+              className="form-control"
+              {...register("providedArea")}
+              onWheel={handleWheel}
+              onChange={(e) => {
+                if (e?.target?.value < (watch("netPlannedArea") * 10) / 100)
+                  setError({
+                    ...error,
+                    ["providedArea"]:
+                      "Minimum 10% area to be provided free of cost to the Government for EWS/Affordable Housing as per amended policy dated 11.05.2022. ",
+                  });
+                else setError({ ...error, ["providedArea"]: "" });
+              }}
+            />
+          </Col>
+          <Col md={4} xxl lg="4">
+            {error?.providedArea && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.providedArea}</h6>}
+          </Col>
+        </Row>
 
         <h6 className="text-black mt-4">
           <b>Documents</b>

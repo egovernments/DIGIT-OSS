@@ -26,6 +26,36 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useLocation } from "react-router-dom";
 import { Toast } from "@egovernments/digit-ui-react-components";
 import WorkingTable from "../../../../components/Table";
+
+const test = {
+  area: null,
+  code: "RPL",
+  far: null,
+  name: "Residential Plotted Colony",
+  purposeDetail: [
+    {
+      area: null,
+      code: "RPL",
+      far: null,
+      name: "Residential Plotted Colony",
+    },
+    {
+      area: null,
+      code: "RPL",
+      far: null,
+      name: "Residential Plotted Colony",
+      purposeDetail: [
+        {
+          area: "811.100",
+          code: "RPL",
+          far: null,
+          name: "Residential Plotted Colony",
+        },
+      ],
+    },
+  ],
+};
+
 const potentialOptons = [
   {
     label: "Hyper",

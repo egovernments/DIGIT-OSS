@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { Card, Row, Col, Form, Button } from "react-bootstrap";
+import { Button } from "@material-ui/core";
+import FormControl from "@mui/material/FormControl";
 import { useForm } from "react-hook-form";
+import OutlinedInput from "@mui/material/OutlinedInput";
 
 function CompositionClu() {
   const {
@@ -22,29 +24,24 @@ function CompositionClu() {
 
   return (
     <form onSubmit={handleSubmit(compositionClu)}>
-      <Card style={{ width: "126%", border: "5px solid #1266af" }}>
+      <div className="card" style={{ width: "126%", border: "5px solid #1266af" }}>
         <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Composition of urban Area Violation in CLU</h4>
         <div className="card">
-          <Row>
-            <Col className="col-4">
-              <Form.Group controlId="formGridCase">
-                <Form.Label>
-                  <h2>Name of original land owner </h2>{" "}
-                </Form.Label>
-                <input type="number" placeholder="" className="form-control" {...register("originalLand")} />
-              </Form.Group>
-            </Col>
-            <Col className="col-4">
-              <Form.Group controlId="formGridCase">
-                <Form.Label>
-                  <h2> Land holding of above </h2>{" "}
-                </Form.Label>
-                <input type="text" placeholder="" className="form-control" {...register("landHolding")} />
-              </Form.Group>
-            </Col>
-          </Row>
+          <div className="row-12">
+            <div className="col md={4} xxl lg-4">
+              <FormControl>
+                <h2 className="FormLable">Name of original land owner </h2>{" "}
+                <OutlinedInput type="number" placeholder="" className="Inputcontrol" {...register("originalLand")} />
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable"> Land holding of above </h2>{" "}
+                <OutlinedInput type="text" placeholder="" className="Inputcontrol" {...register("landHolding")} />
+              </FormControl>
+            </div>
+          </div>
           <br></br>
-          <Row>
+          <div className="row-12">
             <div class="bordere">
               <p>
                 <h2>
@@ -108,27 +105,21 @@ function CompositionClu() {
                 Delete
               </button>
             </div>
-          </Row>
+          </div>
           <br></br>
-          <Row>
-            <Col className="col-4">
-              <Form.Group controlId="formGridState">
-                <Form.Label>
-                  <h2> Total Area in Sq. meter</h2>{" "}
-                </Form.Label>
-                <input type="number" className="form-control" placeholder="" {...register("totalArea")} />
-              </Form.Group>
-            </Col>
-
-            <Col className="col-4">
-              <Form.Group controlId="formGridState">
-                <Form.Label>
-                  <h2> Explain the reason for the violation</h2>{" "}
-                </Form.Label>
-                <input type="number" className="form-control" placeholder="" rows="3" {...register("violationReason")} />
-              </Form.Group>
-            </Col>
-          </Row>
+          <div className="row-12">
+            <div className="col md={4} xxl lg-4">
+              <FormControl>
+                <h2 className="FormLable"> Total Area in Sq. meter</h2>{" "}
+                <OutlinedInput type="number" className="Inputcontrol" placeholder="" {...register("totalArea")} />
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable"> Explain the reason for the violation</h2>{" "}
+                <OutlinedInput type="number" className="Inputcontrol" placeholder="" rows="3" {...register("violationReason")} />
+              </FormControl>
+            </div>
+          </div>
           <br></br>
           <div className="table table-bordered table-responsive">
             <thead>
@@ -159,20 +150,17 @@ function CompositionClu() {
             </tbody>
           </div>
 
-          <div class="row">
-            <div class="col-sm-12 text-right">
-              <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
-                Submit
-              </button>
-            </div>
-            <div class="col-sm-12 text-right">
-              <button id="btnSearch" class="btn btn-primary btn-md center-block" style={{ marginTop: "-58px", marginRight: "97px" }}>
-                Save as Draft
-              </button>
-            </div>
+          <div class="col-sm-12 text-right">
+            <Button variant="contained" class="btn btn-primary btn-md center-block" aria-label="right-end">
+              Save as Draft{" "}
+            </Button>
+            &nbsp;
+            <Button variant="contained" class="btn btn-primary btn-md center-block" type="submit">
+              Submit
+            </Button>
           </div>
         </div>
-      </Card>
+      </div>
     </form>
   );
 }

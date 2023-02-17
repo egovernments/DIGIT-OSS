@@ -31,7 +31,7 @@ const RetirementHousingForm = ({
         </h6>
         <Col col-12>
           <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
-            <Col md={4} xxl lg="3">
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2>
@@ -40,9 +40,13 @@ const RetirementHousingForm = ({
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <NumberInput disabled control={control} name="totalAreaScheme" customInput={TextField} />
             </Col>
-            <Col md={4} xxl lg="3">
+          </Row>
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2 data-toggle="tooltip" data-placement="top" title="Area under Sector Road & Green Belt">
@@ -51,6 +55,8 @@ const RetirementHousingForm = ({
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input
                 type="number"
                 className="form-control"
@@ -70,12 +76,14 @@ const RetirementHousingForm = ({
                     setValue("areaUnderSectorAndGreenBelt", "");
                     setValue("netPlannedArea", "");
                     setValue("areaUnderUndetermined", "");
-                    setValue("totalAreaScheme", "");
+                    // setValue("totalAreaScheme", "");
                   }
                 }}
               />
             </Col>
-            <Col md={4} xxl lg="3">
+          </Row>
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2 data-toggle="tooltip" data-placement="top" title=" Balance area after deducting area under sector road and Green Belt">
@@ -84,9 +92,13 @@ const RetirementHousingForm = ({
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input disabled type="number" className="form-control" {...register("balanceAreaAfterDeduction")} />
             </Col>
-            <Col md={4} xxl lg="3">
+          </Row>
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2>
@@ -95,6 +107,8 @@ const RetirementHousingForm = ({
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input
                 type="number"
                 className="form-control"
@@ -115,8 +129,9 @@ const RetirementHousingForm = ({
               />
             </Col>
           </Row>
+
           <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
-            <Col md={4} xxl lg="3">
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2>
@@ -125,10 +140,13 @@ const RetirementHousingForm = ({
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input disabled type="number" className="form-control" {...register("balanceArea")} />
             </Col>
-
-            <Col md={4} xxl lg="3">
+          </Row>
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2 data-toggle="tooltip" data-placement="top" title="  50% of the Area under Sector Road & Green Belt">
@@ -137,9 +155,13 @@ const RetirementHousingForm = ({
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input disabled type="number" className="form-control" {...register("areaUnderSectorAndGreenBelt")} />
             </Col>
-            <Col md={4} xxl lg="3">
+          </Row>
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2>
@@ -148,13 +170,15 @@ const RetirementHousingForm = ({
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input disabled type="number" className="form-control" {...register("netPlannedArea")} />
             </Col>
           </Row>
         </Col>
         <Col col-12>
           <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
-            <Col md={4} xxl lg="3">
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2>
@@ -163,6 +187,8 @@ const RetirementHousingForm = ({
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input
                 type="number"
                 className="form-control"
@@ -174,9 +200,13 @@ const RetirementHousingForm = ({
                   } else setError({ ...error, ["permissableGroundCoverage"]: "" });
                 }}
               />
+            </Col>
+            <Col md={4} xxl lg="4">
               {error?.permissableGroundCoverage && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.permissableGroundCoverage}</h6>}
             </Col>
-            <Col md={4} xxl lg="3">
+          </Row>
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2>
@@ -185,6 +215,8 @@ const RetirementHousingForm = ({
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input
                 type="number"
                 className="form-control"
@@ -196,9 +228,13 @@ const RetirementHousingForm = ({
                   } else setError({ ...error, ["permissableFAR"]: "" });
                 }}
               />
+            </Col>
+            <Col md={4} xxl lg="4">
               {error?.permissableFAR && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.permissableFAR}</h6>}
             </Col>
-            <Col md={4} xxl lg="3">
+          </Row>
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2>
@@ -207,6 +243,8 @@ const RetirementHousingForm = ({
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input
                 type="number"
                 className="form-control"
@@ -218,6 +256,8 @@ const RetirementHousingForm = ({
                   } else setError({ ...error, ["permissableCommercial"]: "" });
                 }}
               />
+            </Col>
+            <Col md={4} xxl lg="4">
               {error?.permissableCommercial && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.permissableCommercial}</h6>}
             </Col>
           </Row>

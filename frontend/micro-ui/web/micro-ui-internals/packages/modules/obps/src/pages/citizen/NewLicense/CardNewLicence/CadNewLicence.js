@@ -110,7 +110,9 @@ const CardNewLicence = (props) => {
           </div>
           <div className="col col-3">
             <Card style={{ height: "85px", marginTop: "40px", borderLeft: "2px solid #1266af" }}>
-              <h2 style={{ textAlign: "center" }}>Completion Certificate In Licence Colony</h2>
+              <h2 style={{ textAlign: "center" }}>
+                <a href="/digit-ui/citizen/obps/CompletionLic"> Completion Certificate In Licence Colony</a>
+              </h2>
             </Card>
           </div>
 

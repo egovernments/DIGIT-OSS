@@ -13,6 +13,7 @@ import IILPForm from "./IILPForm";
 import ITCyberCityForm from "./ITCyberCity";
 import MixedLandUseForm from "./MixedLandUse";
 import RetirementHousingForm from "./RetirementHousing";
+import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
 import LayoutPlan from "./LayoutPlan";
 import DemarcationPlan from "./DemarcationPlan";
 import { Card, Row, Col, Button, Form } from "react-bootstrap";
@@ -47,6 +48,8 @@ const AppliedDetailForm = (props) => {
   const [error, setError] = useState({});
   const [isValid, setIsValid] = useState(false);
   const [getData, setData] = useState({ caseNumber: "", dairyNumber: "" });
+  const [newDataA, setNewDataA] = useState({});
+  const [getFarArr, setFarArr] = useState([]);
 
   const {
     watch,
@@ -344,11 +347,17 @@ const AppliedDetailForm = (props) => {
   useEffect(() => {
     const valueData = stepData?.DetailsofAppliedLand;
     if (valueData) {
-      Object?.keys(valueData?.DetailsAppliedLandPlot)?.map((item) => setValue(item, valueData?.DetailsAppliedLandPlot[item]));
+      valueData?.DetailsAppliedLandPlot &&
+        Object?.keys(valueData?.DetailsAppliedLandPlot)?.map((item) => setValue(item, valueData?.DetailsAppliedLandPlot[item]));
       // Object?.keys(valueData?.DetailsAppliedLandNILP)?.map((item) => setValue(item, valueData?.DetailsAppliedLandNILP[item]));
       // valueData?.dgpsDetails.map((item, index) => {
       //   setValue(`dgpsDetails.${index}.longitude`, item?.longitude), setValue(`dgpsDetails.${index}.latitude`, item?.latitude);
       // });
+    }
+
+    if (valueData) {
+      const test = [valueData?.PurposeDetails];
+      setNewDataA(test);
     }
   }, [stepData]);
 
@@ -477,7 +486,58 @@ const AppliedDetailForm = (props) => {
       const userData = Resp?.data?.LicenseDetails?.[0];
       setData({ caseNumber: Resp?.data?.caseNumber, dairyNumber: Resp?.data?.dairyNumber });
       setValue("totalAreaScheme", userData?.ApplicantPurpose?.totalArea);
+      getFarList(userData?.ApplicantPurpose?.purpose);
       setStepData(userData);
+    } catch (error) {
+      return error;
+    }
+  };
+
+  const getFarList = async (purpose) => {
+    const token = window?.localStorage?.getItem("token");
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: "v1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msgId: "090909",
+        authToken: "",
+        correlationId: null,
+      },
+      MdmsCriteria: {
+        tenantId: "hr",
+        moduleDetails: [
+          {
+            tenantId: "hr",
+            moduleName: "common-masters",
+            masterDetails: [
+              {
+                name: "Purpose",
+                filter: `[?(@.purposeCode=="${purpose}")]`,
+              },
+            ],
+          },
+        ],
+      },
+    };
+    try {
+      const Resp = await axios.post("/egov-mdms-service/v1/_search", payload);
+      const fars = Resp?.data?.MdmsRes?.["common-masters"]?.Purpose?.[0];
+      const farsArr = [];
+      const checkk = Object?.keys(fars)?.map((item) => {
+        if (
+          item == "scrutinyFeeCharges" ||
+          item == "licenseFeeCharges" ||
+          item == "conversionCharges" ||
+          item == "externalDevelopmentCharges" ||
+          item == "stateInfrastructureDevelopmentCharges"
+        )
+          farsArr.push({ label: fars[item], value: fars[item] });
+      });
+      setFarArr(farsArr);
     } catch (error) {
       return error;
     }
@@ -522,8 +582,36 @@ const AppliedDetailForm = (props) => {
   useEffect(() => {
     const check = Object?.values(error)?.every((value) => value === null || (typeof value == "string" && !(value || false)));
     setIsValid(check);
-    console.log("check", check);
   }, [error]);
+
+  let Tree = ({ data }) => {
+    return (
+      <div>
+        {data?.length &&
+          data?.map((x) => {
+            return (
+              <div className="mt-4" key={x.id}>
+                {/* <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Rectangle No./Mustil"
+                      {...register("editRectangleNo")}
+                    /> */}
+                <h6>area: {x?.area}</h6>
+                <h6>code: {x?.code}</h6>
+                <h6>far: {x?.far}</h6>
+                <h6>name: {x?.name}</h6>
+                {!!x?.purposeDetail?.length && (
+                  <div className="mt-4">
+                    <Tree data={x?.purposeDetail} />
+                  </div>
+                )}
+              </div>
+            );
+          })}
+      </div>
+    );
+  };
 
   return (
     <div>
@@ -587,7 +675,35 @@ const AppliedDetailForm = (props) => {
                   })}
                 </div>
 
-                <Col col-12>
+                <div>
+                  <h4>
+                    <b>Layout Plan</b>
+                  </h4>
+                  <div className="mt-3">
+                    <h4>
+                      <b>Area for fees calculation</b>
+                    </h4>
+                  </div>
+                </div>
+
+                <div>
+                  <Tree data={newDataA} />
+                </div>
+
+                <Row className="mt-5">
+                  <Col md={4} xxl lg="4">
+                    <div>
+                      <label>
+                        <h2>
+                          Far <span style={{ color: "red" }}>*</span>
+                        </h2>
+                      </label>
+                      <ReactMultiSelect control={control} name="far" placeholder="Far" data={getFarArr} labels="Far" />
+                    </div>
+                  </Col>
+                </Row>
+
+                <Col className="mt-4" col-12>
                   <div>
                     {stepData?.ApplicantPurpose?.purpose === "RPL" && (
                       <ResidentialPlottedForm

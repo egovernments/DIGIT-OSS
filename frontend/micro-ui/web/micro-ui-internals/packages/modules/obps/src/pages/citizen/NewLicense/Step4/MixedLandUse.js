@@ -20,7 +20,7 @@ const MixedLandUseForm = ({ register, getDocumentData, watch, getDocShareholding
         </h6>
         <Col col-12>
           <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
-            <Col md={4} xxl lg="3">
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2>
@@ -29,9 +29,13 @@ const MixedLandUseForm = ({ register, getDocumentData, watch, getDocShareholding
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <NumberInput disabled control={control} name="totalAreaScheme" customInput={TextField} />
             </Col>
-            <Col md={4} xxl lg="3">
+          </Row>
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2 data-toggle="tooltip" data-placement="top" title="Area under Sector Road & Green Belt">
@@ -40,6 +44,8 @@ const MixedLandUseForm = ({ register, getDocumentData, watch, getDocShareholding
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input
                 type="number"
                 className="form-control"
@@ -59,12 +65,14 @@ const MixedLandUseForm = ({ register, getDocumentData, watch, getDocShareholding
                     setValue("areaUnderSectorAndGreenBelt", "");
                     setValue("netPlannedArea", "");
                     setValue("areaUnderUndetermined", "");
-                    setValue("totalAreaScheme", "");
+                    // setValue("totalAreaScheme", "");
                   }
                 }}
               />
             </Col>
-            <Col md={4} xxl lg="3">
+          </Row>
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2 data-toggle="tooltip" data-placement="top" title=" Balance area after deducting area under sector road and Green Belt">
@@ -73,9 +81,13 @@ const MixedLandUseForm = ({ register, getDocumentData, watch, getDocShareholding
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input disabled type="number" className="form-control" {...register("balanceAreaAfterDeduction")} />
             </Col>
-            <Col md={4} xxl lg="3">
+          </Row>
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2>
@@ -84,6 +96,8 @@ const MixedLandUseForm = ({ register, getDocumentData, watch, getDocShareholding
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input
                 type="number"
                 className="form-control"
@@ -105,7 +119,7 @@ const MixedLandUseForm = ({ register, getDocumentData, watch, getDocShareholding
             </Col>
           </Row>
           <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
-            <Col md={4} xxl lg="3">
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2>
@@ -114,10 +128,13 @@ const MixedLandUseForm = ({ register, getDocumentData, watch, getDocShareholding
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input disabled type="number" className="form-control" {...register("balanceArea")} />
             </Col>
-
-            <Col md={4} xxl lg="3">
+          </Row>
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2 data-toggle="tooltip" data-placement="top" title="  50% of the Area under Sector Road & Green Belt">
@@ -126,9 +143,13 @@ const MixedLandUseForm = ({ register, getDocumentData, watch, getDocShareholding
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input disabled type="number" className="form-control" {...register("areaUnderSectorAndGreenBelt")} />
             </Col>
-            <Col md={4} xxl lg="3">
+          </Row>
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
                   <h2>
@@ -137,215 +158,251 @@ const MixedLandUseForm = ({ register, getDocumentData, watch, getDocShareholding
                   </h2>
                 </Form.Label>
               </div>
+            </Col>
+            <Col md={4} xxl lg="4">
               <input disabled type="number" className="form-control" {...register("netPlannedArea")} />
             </Col>
           </Row>
-        </Col>
-        <Col md={4} xxl lg="3">
-          <h2>Select Mixed Land Use</h2>
-          &nbsp;&nbsp;&nbsp;&nbsp;
-          <label htmlFor="mixedLandUse">
-            <input {...register("mixedLandUse")} type="radio" value="commercial" id="mixedLandUse" />
-            &nbsp; Commercial &nbsp;&nbsp;
-          </label>
-          <label htmlFor="mixedLandUse">
-            <input {...register("mixedLandUse")} type="radio" value="residential" id="mixedLandUse" />
-            &nbsp; Residential &nbsp;&nbsp;
-          </label>
-          {/* <h3 className="error-message" style={{ color: "red" }}>
+
+          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="4">
+              <h2>Select Mixed Land Use</h2>
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              <label htmlFor="mixedLandUse">
+                <input {...register("mixedLandUse")} type="radio" value="commercial" id="mixedLandUse" />
+                &nbsp; Commercial &nbsp;&nbsp;
+              </label>
+              <label htmlFor="mixedLandUse">
+                <input {...register("mixedLandUse")} type="radio" value="residential" id="mixedLandUse" />
+                &nbsp; Residential &nbsp;&nbsp;
+              </label>
+              {/* <h3 className="error-message" style={{ color: "red" }}>
             {errors?.appliedLand && errors?.appliedLand?.message}
           </h3> */}
-        </Col>
-        {watch("mixedLandUse") === "commercial" && (
-          <Row>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>
-                    Commercial (in Acres)
-                    <span style={{ color: "red" }}>*</span>
-                  </h2>
-                </Form.Label>
-              </div>
-              <input
-                type="number"
-                className="form-control"
-                {...register("permissableCommercial")}
-                onWheel={handleWheel}
-                onChange={(e) => {
-                  if (e?.target?.value > (watch("netPlannedArea") * 70) / 100) {
-                    setError({ ...error, ["permissableCommercial"]: "Commercial(In acres) cannot be more than 70% of NPA" });
-                  } else setError({ ...error, ["permissableCommercial"]: "" });
-                }}
-              />
-              {error?.permissableCommercial && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.permissableCommercial}</h6>}
-            </Col>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>
-                    Residential (in Acres)
-                    <span style={{ color: "red" }}>*</span>
-                  </h2>
-                </Form.Label>
-              </div>
-              <input
-                type="number"
-                className="form-control"
-                {...register("residential")}
-                onWheel={handleWheel}
-                onChange={(e) => {
-                  if (e?.target?.value > (watch("netPlannedArea") * 30) / 100) {
-                    setError({ ...error, ["residential"]: "Residential cannot be more than 30% of NPA" });
-                  } else setError({ ...error, ["residential"]: "" });
-                }}
-              />
-              {error?.residential && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.residential}</h6>}
-            </Col>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>
-                    FAR (in Acres)
-                    <span style={{ color: "red" }}>*</span>
-                  </h2>
-                </Form.Label>
-              </div>
-              <input
-                type="number"
-                className="form-control"
-                {...register("permissableFAR")}
-                onWheel={handleWheel}
-                onChange={(e) => {
-                  if (e?.target?.value > (watch("netPlannedArea") * 1.75) / 100) {
-                    setError({ ...error, ["permissableFAR"]: "FAR(In acres) cannot be more than 1.75% of NPA" });
-                  } else setError({ ...error, ["permissableFAR"]: "" });
-                }}
-              />
-              {error?.permissableFAR && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.permissableFAR}</h6>}
             </Col>
           </Row>
-        )}
-        {watch("mixedLandUse") === "residential" && (
-          <Row>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>
-                    Commercial (in Acres)
-                    <span style={{ color: "red" }}>*</span>
-                  </h2>
-                </Form.Label>
+
+          {watch("mixedLandUse") === "commercial" && (
+            <div>
+              <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+                <Col md={4} xxl lg="4">
+                  <div>
+                    <Form.Label>
+                      <h2>
+                        Commercial (in Acres)
+                        <span style={{ color: "red" }}>*</span>
+                      </h2>
+                    </Form.Label>
+                  </div>
+                </Col>
+                <Col md={4} xxl lg="4">
+                  <input
+                    type="number"
+                    className="form-control"
+                    {...register("permissableCommercial")}
+                    onWheel={handleWheel}
+                    onChange={(e) => {
+                      if (e?.target?.value > (watch("netPlannedArea") * 70) / 100) {
+                        setError({ ...error, ["permissableCommercial"]: "Commercial(In acres) cannot be more than 70% of NPA" });
+                      } else setError({ ...error, ["permissableCommercial"]: "" });
+                    }}
+                  />
+                </Col>
+                <Col md={4} xxl lg="4">
+                  {error?.permissableCommercial && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.permissableCommercial}</h6>}
+                </Col>
+              </Row>
+              <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+                <Col md={4} xxl lg="4">
+                  <div>
+                    <Form.Label>
+                      <h2>
+                        Residential (in Acres)
+                        <span style={{ color: "red" }}>*</span>
+                      </h2>
+                    </Form.Label>
+                  </div>
+                </Col>
+                <Col md={4} xxl lg="4">
+                  <input
+                    type="number"
+                    className="form-control"
+                    {...register("residential")}
+                    onWheel={handleWheel}
+                    onChange={(e) => {
+                      if (e?.target?.value > (watch("netPlannedArea") * 30) / 100) {
+                        setError({ ...error, ["residential"]: "Residential cannot be more than 30% of NPA" });
+                      } else setError({ ...error, ["residential"]: "" });
+                    }}
+                  />
+                </Col>
+                <Col md={4} xxl lg="4">
+                  {error?.residential && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.residential}</h6>}
+                </Col>
+              </Row>
+              <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+                <Col md={4} xxl lg="4">
+                  <div>
+                    <Form.Label>
+                      <h2>
+                        FAR (in Acres)
+                        <span style={{ color: "red" }}>*</span>
+                      </h2>
+                    </Form.Label>
+                  </div>
+                </Col>
+                <Col md={4} xxl lg="4">
+                  <input
+                    type="number"
+                    className="form-control"
+                    {...register("permissableFAR")}
+                    onWheel={handleWheel}
+                    onChange={(e) => {
+                      if (e?.target?.value > (watch("netPlannedArea") * 1.75) / 100) {
+                        setError({ ...error, ["permissableFAR"]: "FAR(In acres) cannot be more than 1.75% of NPA" });
+                      } else setError({ ...error, ["permissableFAR"]: "" });
+                    }}
+                  />
+                </Col>
+                <Col md={4} xxl lg="4">
+                  {error?.permissableFAR && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.permissableFAR}</h6>}
+                </Col>
+              </Row>
+            </div>
+          )}
+          {watch("mixedLandUse") === "residential" && (
+            <div>
+              <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+                <Col md={4} xxl lg="4">
+                  <div>
+                    <Form.Label>
+                      <h2>
+                        Commercial (in Acres)
+                        <span style={{ color: "red" }}>*</span>
+                      </h2>
+                    </Form.Label>
+                  </div>
+                </Col>
+                <Col md={4} xxl lg="4">
+                  <input
+                    type="number"
+                    className="form-control"
+                    {...register("permissableCommercial")}
+                    onWheel={handleWheel}
+                    onChange={(e) => {
+                      if (e?.target?.value > (watch("netPlannedArea") * 30) / 100) {
+                        setError({ ...error, ["permissableCommercial"]: "Commercial(In acres) cannot be more than 30% of NPA" });
+                      } else setError({ ...error, ["permissableCommercial"]: "" });
+                    }}
+                  />
+                  {error?.permissableCommercial && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.permissableCommercial}</h6>}
+                </Col>
+              </Row>
+              <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+                <Col md={4} xxl lg="4">
+                  <div>
+                    <Form.Label>
+                      <h2>
+                        Residential (in Acres)
+                        <span style={{ color: "red" }}>*</span>
+                      </h2>
+                    </Form.Label>
+                  </div>
+                </Col>
+                <Col md={4} xxl lg="4">
+                  <input
+                    type="number"
+                    className="form-control"
+                    {...register("residential")}
+                    onWheel={handleWheel}
+                    onChange={(e) => {
+                      if (e?.target?.value > (watch("netPlannedArea") * 70) / 100) {
+                        setError({ ...error, ["residential"]: "Residential cannot be more than 70% of NPA" });
+                      } else setError({ ...error, ["residential"]: "" });
+                    }}
+                  />
+                  {error?.residential && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.residential}</h6>}
+                </Col>
+              </Row>
+              <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+                <Col md={4} xxl lg="4">
+                  <div>
+                    <Form.Label>
+                      <h2>
+                        FAR (in Acres)
+                        <span style={{ color: "red" }}>*</span>
+                      </h2>
+                    </Form.Label>
+                  </div>
+                </Col>
+                <Col md={4} xxl lg="4">
+                  <input
+                    type="number"
+                    className="form-control"
+                    {...register("permissableFAR")}
+                    onWheel={handleWheel}
+                    onChange={(e) => {
+                      if (e?.target?.value > (watch("netPlannedArea") * 1.75) / 100) {
+                        setError({ ...error, ["permissableFAR"]: "FAR(In acres) cannot be more than 1.75% of NPA" });
+                      } else setError({ ...error, ["permissableFAR"]: "" });
+                    }}
+                  />
+                  {error?.permissableFAR && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.permissableFAR}</h6>}
+                </Col>
+              </Row>
+            </div>
+          )}
+          <h6 className="text-black mt-4">
+            <b>Documents</b>
+          </h6>
+          <br></br>
+          <div className="row mt-4">
+            <div className="col col-3">
+              <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top">
+                Layout Plan in pdf<span style={{ color: "red" }}>*</span>
+              </h6>
+              <div className="d-flex">
+                <label>
+                  <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                  <input
+                    type="file"
+                    style={{ display: "none" }}
+                    onChange={(e) => getDocumentData(e?.target?.files[0], "layoutPlanPdf")}
+                    accept="application/pdf/jpeg/png"
+                  />
+                </label>
+                {watch("layoutPlanPdf") && (
+                  <div>
+                    <a onClick={() => getDocShareholding(watch("layoutPlanPdf"), setLoader)} className="btn btn-sm ">
+                      <VisibilityIcon color="info" className="icon" />
+                    </a>
+                  </div>
+                )}
               </div>
-              <input
-                type="number"
-                className="form-control"
-                {...register("permissableCommercial")}
-                onWheel={handleWheel}
-                onChange={(e) => {
-                  if (e?.target?.value > (watch("netPlannedArea") * 30) / 100) {
-                    setError({ ...error, ["permissableCommercial"]: "Commercial(In acres) cannot be more than 30% of NPA" });
-                  } else setError({ ...error, ["permissableCommercial"]: "" });
-                }}
-              />
-              {error?.permissableCommercial && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.permissableCommercial}</h6>}
-            </Col>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>
-                    Residential (in Acres)
-                    <span style={{ color: "red" }}>*</span>
-                  </h2>
-                </Form.Label>
-              </div>
-              <input
-                type="number"
-                className="form-control"
-                {...register("residential")}
-                onWheel={handleWheel}
-                onChange={(e) => {
-                  if (e?.target?.value > (watch("netPlannedArea") * 70) / 100) {
-                    setError({ ...error, ["residential"]: "Residential cannot be more than 70% of NPA" });
-                  } else setError({ ...error, ["residential"]: "" });
-                }}
-              />
-              {error?.residential && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.residential}</h6>}
-            </Col>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>
-                    FAR (in Acres)
-                    <span style={{ color: "red" }}>*</span>
-                  </h2>
-                </Form.Label>
-              </div>
-              <input
-                type="number"
-                className="form-control"
-                {...register("permissableFAR")}
-                onWheel={handleWheel}
-                onChange={(e) => {
-                  if (e?.target?.value > (watch("netPlannedArea") * 1.75) / 100) {
-                    setError({ ...error, ["permissableFAR"]: "FAR(In acres) cannot be more than 1.75% of NPA" });
-                  } else setError({ ...error, ["permissableFAR"]: "" });
-                }}
-              />
-              {error?.permissableFAR && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.permissableFAR}</h6>}
-            </Col>
-          </Row>
-        )}
-        <h6 className="text-black mt-4">
-          <b>Documents</b>
-        </h6>
-        <br></br>
-        <div className="row mt-4">
-          <div className="col col-3">
-            <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top">
-              Layout Plan in pdf<span style={{ color: "red" }}>*</span>
-            </h6>
-            <div className="d-flex">
-              <label>
-                <FileUpload style={{ cursor: "pointer" }} color="primary" />
-                <input
-                  type="file"
-                  style={{ display: "none" }}
-                  onChange={(e) => getDocumentData(e?.target?.files[0], "layoutPlanPdf")}
-                  accept="application/pdf/jpeg/png"
-                />
-              </label>
-              {watch("layoutPlanPdf") && (
-                <div>
-                  <a onClick={() => getDocShareholding(watch("layoutPlanPdf"), setLoader)} className="btn btn-sm ">
+            </div>
+            <div className="col col-3">
+              <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top">
+                Layout Plan in dxf<span style={{ color: "red" }}>*</span>
+              </h6>
+              <div className="d-flex">
+                <label>
+                  <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                  <input
+                    type="file"
+                    style={{ display: "none" }}
+                    onChange={(e) => getDocumentData(e?.target?.files[0], "layoutPlanDxf")}
+                    accept="application/pdf/jpeg/png"
+                  />
+                </label>
+                {watch("layoutPlanDxf") && (
+                  <a onClick={() => getDocShareholding(watch("layoutPlanDxf"), setLoader)} className="btn btn-sm ">
                     <VisibilityIcon color="info" className="icon" />
                   </a>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
-          <div className="col col-3">
-            <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top">
-              Layout Plan in dxf<span style={{ color: "red" }}>*</span>
-            </h6>
-            <div className="d-flex">
-              <label>
-                <FileUpload style={{ cursor: "pointer" }} color="primary" />
-                <input
-                  type="file"
-                  style={{ display: "none" }}
-                  onChange={(e) => getDocumentData(e?.target?.files[0], "layoutPlanDxf")}
-                  accept="application/pdf/jpeg/png"
-                />
-              </label>
-              {watch("layoutPlanDxf") && (
-                <a onClick={() => getDocShareholding(watch("layoutPlanDxf"), setLoader)} className="btn btn-sm ">
-                  <VisibilityIcon color="info" className="icon" />
-                </a>
-              )}
-            </div>
-          </div>
-        </div>
+        </Col>
       </Col>
     </Row>
   );

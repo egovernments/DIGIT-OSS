@@ -17,6 +17,7 @@ import { getDocShareholding } from "../docView/docView.help";
 import { convertEpochToDate } from "../../../../../../tl/src/utils";
 import { useLocation } from "react-router-dom";
 import { Toast } from "@egovernments/digit-ui-react-components";
+import _ from "lodash";
 
 const ApllicantPuropseForm = (props) => {
   const datapost = {
@@ -85,7 +86,7 @@ const ApllicantPuropseForm = (props) => {
     },
     {
       title: "change in information",
-      render: (data) => (data?.isChange ? data?.isChange : "N/A"),
+      render: (data) => (data?.isChange == "false" ? "false" : data?.isChange == "true" || data?.isChange ? "true" : "false"),
     },
     {
       title: "Rectangle No./Mustil(Changed)",
@@ -172,8 +173,12 @@ const ApllicantPuropseForm = (props) => {
       render: (data) => (data?.biswansi ? data?.biswansi : "N/A"),
     },
     {
-      title: "Total Area",
-      render: (data) => data?.nonConsolidatedTotal || data?.consolidatedTotal,
+      title: "Consolidated Total Area",
+      render: (data) => (data?.consolidatedTotal ? data?.consolidatedTotal : "N/A"),
+    },
+    {
+      title: "Non-Consolidated Total Area",
+      render: (data) => (data?.nonConsolidatedTotal ? data?.nonConsolidatedTotal : "N/A"),
     },
     {
       title: "Action",
@@ -201,6 +206,7 @@ const ApllicantPuropseForm = (props) => {
       ),
     },
   ];
+
   const location = useLocation();
   const userInfo = Digit.UserService.getUser()?.info || {};
   const [district, setDistrict] = useState("");
@@ -234,6 +240,7 @@ const ApllicantPuropseForm = (props) => {
   const [getNameRevenueState, setNameRevenueState] = useState("");
   const [getMustil, setMustil] = useState("");
   const [getData, setData] = useState({ caseNumber: "", dairyNumber: "" });
+  const [getTotalArea, setTotlArea] = useState();
 
   const resetValues = () => {
     resetField("district");
@@ -268,6 +275,9 @@ const ApllicantPuropseForm = (props) => {
     resetField("landOwnerRegistry");
     resetField("typeLand");
     resetField("developmentPlan");
+    resetField("nonConsolidationType");
+    resetField("nonConsolidatedTotal");
+    resetField("consolidatedTotal");
   };
 
   useEffect(() => {
@@ -370,7 +380,7 @@ const ApllicantPuropseForm = (props) => {
     mode: "onChange",
     reValidateMode: "onChange",
     // resolver: yupResolver(VALIDATION_SCHEMA),
-    resolver: yupResolver(modal ? MODAL_VALIDATION_SCHEMA : VALIDATION_SCHEMA),
+    // resolver: yupResolver(modal ? MODAL_VALIDATION_SCHEMA : VALIDATION_SCHEMA),
     shouldFocusError: true,
   });
 
@@ -662,11 +672,7 @@ const ApllicantPuropseForm = (props) => {
     // data["potential"] = data?.potential?.value;
     // data["district"] = watch("district")?.value;
     // data["state"] = "Haryana";
-    data["totalArea"] = !isNaN(data?.nonConsolidatedTotal)
-      ? data?.nonConsolidatedTotal
-      : 0 + !isNaN(data?.consolidatedTotal)
-      ? data?.consolidatedTotal
-      : 0;
+    data["totalArea"] = getTotalArea;
     delete data?.district;
     delete data?.developmentPlan;
     delete data?.typeLand;
@@ -741,6 +747,44 @@ const ApllicantPuropseForm = (props) => {
     }
   };
 
+  useEffect(() => {
+    var nameArray = modalData?.map(function (itm) {
+      if (isNaN(itm?.consolidatedTotal)) return 0;
+      return itm?.consolidatedTotal;
+    });
+    var nameArrayB = modalData?.map(function (it) {
+      if (isNaN(it?.nonConsolidatedTotal)) return 0;
+      return it?.nonConsolidatedTotal;
+    });
+
+    const mixedSum = (nameArray = []) => {
+      let sum = 0;
+      for (let i = 0; i < nameArray.length; i++) {
+        const el = nameArray[i];
+        sum += +el;
+      }
+      return sum;
+    };
+    const mixedSumB = (nameArrayB = []) => {
+      let sumA = 0;
+      for (let i = 0; i < nameArrayB.length; i++) {
+        const el = nameArrayB[i];
+        sumA += +el;
+      }
+      return sumA;
+    };
+    console.log("nameArrayB", nameArray);
+    console.log("nameArrayB", nameArrayB);
+
+    console.log("a", mixedSum(nameArray));
+    console.log("b", mixedSumB(nameArrayB));
+
+    const totalVal = mixedSum(nameArray) + mixedSumB(nameArrayB);
+    setTotlArea(totalVal?.toFixed(3));
+    // console.log("nameArray", sum, check);
+    // console.log("nameArray==", totalVal);
+  }, [modalData]);
+
   // const handleWorkflow = async () => {
   //   const token = window?.localStorage?.getItem("token");
   //   setLoader(true);
@@ -802,7 +846,6 @@ const ApllicantPuropseForm = (props) => {
   }, [LandData]);
 
   const handleChangePurpose = (data) => {
-    console.log("data", data);
     const purposeSelected = data?.value;
     window?.localStorage.setItem("purpose", purposeSelected);
   };
@@ -873,12 +916,25 @@ const ApllicantPuropseForm = (props) => {
 
   useEffect(() => {
     const val = watch("marla") * 0.0062 + watch("sarsai") * 0.00069 + watch("kanal") * 0.125;
-    setValue("consolidatedTotal", val?.toFixed(3));
+    // console.log("val==", val);
+    setValue("consolidatedTotal", isNaN(val) ? "N/A" : val?.toFixed(3));
   }, [watch("sarsai"), watch("marla"), watch("kanal")]);
 
   useEffect(() => {
-    const value = watch("bigha") * 0.33 + watch("biswa") * 0.0309 + watch("biswansi") * 0.619;
-    setValue("nonConsolidatedTotal", value?.toFixed(3));
+    if (watch("consolidationType") == "consolidated") resetField("nonConsolidationType");
+  }, [watch("consolidationType")]);
+
+  useEffect(() => {
+    if (watch("nonConsolidationType") == "kachha") {
+      const valueA = watch("bigha") * 1008 + watch("biswa") * 50.41 + watch("biswansi") * 2.52;
+      setValue("nonConsolidatedTotal", isNaN(valueA) ? "N/A" : (valueA / 4840)?.toFixed(3));
+      // console.log("here");
+    }
+    if (watch("nonConsolidationType") == "pucka") {
+      const valueB = watch("bigha") * 3025 + watch("biswa") * 151.25 + watch("biswansi") * 7.56;
+      setValue("nonConsolidatedTotal", isNaN(valueB) ? "N/A" : (valueB / 4840)?.toFixed(3));
+      // console.log("too");
+    }
   }, [watch("bigha"), watch("biswa"), watch("biswansi")]);
 
   return (
@@ -973,16 +1029,9 @@ const ApllicantPuropseForm = (props) => {
                   Back
                 </div> */}
               </div>
-              {console.log("nonConsolidatedTotal", getValues()?.nonConsolidatedTotal, getValues()?.consolidatedTotal)}
+              {/* {console.log("nonConsolidatedTotal", getValues()?.nonConsolidatedTotal, getValues()?.consolidatedTotal)} */}
               <div class="col-sm-12 text-right">
-                <label className="mr-4">
-                  Total Area:
-                  {!isNaN(getValues()?.nonConsolidatedTotal)
-                    ? getValues()?.nonConsolidatedTotal
-                    : 0 + !isNaN(getValues()?.consolidatedTotal)
-                    ? getValues()?.consolidatedTotal
-                    : 0}
-                </label>
+                <label className="mr-4">Total Area: {getTotalArea}</label>
                 <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
                   Save and Continue
                 </button>
@@ -1244,15 +1293,7 @@ const ApllicantPuropseForm = (props) => {
                             Name of the developer company .<span style={{ color: "red" }}>*</span>
                           </h2>
                         </label>
-                        <Form.Control
-                          type="text"
-                          className="form-control"
-                          placeholder=""
-                          {...register("developerCompany")}
-                          required
-                          minlength={2}
-                          maxLength={20}
-                        />
+                        <Form.Control type="text" className="form-control" placeholder="" {...register("developerCompany")} />
                         <h3 className="error-message" style={{ color: "red" }}>
                           {errors?.developerCompany && errors?.developerCompany?.message}
                         </h3>
@@ -1267,7 +1308,6 @@ const ApllicantPuropseForm = (props) => {
                           type="date"
                           value={modalData.agreementValidFrom}
                           className="form-control"
-                          required
                           placeholder=""
                           {...register("agreementValidFrom")}
                           max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
@@ -1296,15 +1336,7 @@ const ApllicantPuropseForm = (props) => {
                             Name of authorized signatory on behalf of land owner(s)<span style={{ color: "red" }}>*</span>
                           </h2>
                         </label>
-                        <Form.Control
-                          type="text"
-                          className="form-control"
-                          placeholder=""
-                          {...register("authSignature")}
-                          required
-                          minlength={4}
-                          maxLength={99}
-                        />
+                        <Form.Control type="text" className="form-control" placeholder="" {...register("authSignature")} />
                         <h3 className="error-message" style={{ color: "red" }}>
                           {errors?.authSignature && errors?.authSignature?.message}
                         </h3>
@@ -1319,15 +1351,7 @@ const ApllicantPuropseForm = (props) => {
                             Name of authorized signatory on behalf of developer.<span style={{ color: "red" }}>*</span>
                           </h2>
                         </label>
-                        <Form.Control
-                          type="text"
-                          className="form-control"
-                          placeholder=""
-                          {...register("nameAuthSign")}
-                          required
-                          minlength={4}
-                          maxLength={99}
-                        />
+                        <Form.Control type="text" className="form-control" placeholder="" {...register("nameAuthSign")} />
                         <h3 className="error-message" style={{ color: "red" }}>
                           {errors?.nameAuthSign && errors?.nameAuthSign?.message}
                         </h3>
@@ -1338,7 +1362,7 @@ const ApllicantPuropseForm = (props) => {
                             Registering Authority<span style={{ color: "red" }}>*</span>
                           </h2>
                         </label>
-                        <Form.Control type="text" className="form-control" placeholder="" {...register("registeringAuthority")} required />
+                        <Form.Control type="text" className="form-control" placeholder="" {...register("registeringAuthority")} />
                         <h3 className="error-message" style={{ color: "red" }}>
                           {errors?.registeringAuthority && errors?.registeringAuthority?.message}
                         </h3>
@@ -1357,7 +1381,6 @@ const ApllicantPuropseForm = (props) => {
                                 type="file"
                                 accept="application/pdf/jpeg/png"
                                 style={{ display: "none" }}
-                                required
                                 onChange={(e) => getDocumentData(e?.target?.files[0], "registeringAuthorityDocFileName")}
                               />
                             </div>
@@ -1392,7 +1415,7 @@ const ApllicantPuropseForm = (props) => {
                     Type of land<span style={{ color: "red" }}>*</span>
                   </h2>
                 </label>
-                <ReactMultiSelect control={control} name="typeLand" placeholder="Type of Land" data={typeOfLand?.data} labels="typeland" required />
+                <ReactMultiSelect control={control} name="typeLand" placeholder="Type of Land" data={typeOfLand?.data} labels="typeland" />
               </Col>
             </Row>
             <br></br>
@@ -1480,29 +1503,51 @@ const ApllicantPuropseForm = (props) => {
                   </h3>
                 </div>
 
+                {watch("consolidationType") == "non-consolidated" && (
+                  <div>
+                    <h2>
+                      <b>
+                        Non Consolidation Type<span style={{ color: "red" }}>*</span>{" "}
+                      </b>
+                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      <label htmlFor="nonConsolidationType">
+                        <input {...register("nonConsolidationType")} type="radio" value="kachha" id="nonConsolidationType" />
+                        &nbsp; Kachha &nbsp;&nbsp;
+                      </label>
+                      <label htmlFor="nonConsolidatedType">
+                        <input {...register("nonConsolidationType")} type="radio" value="pucka" id="nonConsolidatedType" />
+                        &nbsp; Pucka &nbsp;&nbsp;
+                      </label>
+                    </h2>
+                    {/* <h3 className="error-message" style={{ color: "red" }}>
+                      {errors?.nonConsolidationType && errors?.nonConsolidationType?.message}
+                    </h3> */}
+                  </div>
+                )}
+
                 {watch("consolidationType") == "consolidated" && (
                   <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
                     <thead>
                       <tr>
                         <th>
                           <h2>
-                            Kanal <span style={{ color: "red" }}>*</span>
+                            Kanal (in acres) <span style={{ color: "red" }}>*</span>
                           </h2>
                         </th>
                         <th>
                           <h2>
-                            Marla <span style={{ color: "red" }}>*</span>
+                            Marla (in acres) <span style={{ color: "red" }}>*</span>
                           </h2>
                         </th>
                         <th>
                           <h2>
-                            Sarsai <span style={{ color: "red" }}>*</span>
+                            Sarsai (in acres) <span style={{ color: "red" }}>*</span>
                           </h2>
                           &nbsp;&nbsp;
                         </th>
                         <th>
                           <h2>
-                            Total Area <span style={{ color: "red" }}>*</span>
+                            Total Area (in acres) <span style={{ color: "red" }}>*</span>
                           </h2>
                           &nbsp;&nbsp;
                         </th>
@@ -1511,48 +1556,51 @@ const ApllicantPuropseForm = (props) => {
                     <tbody>
                       <tr>
                         <td>
-                          <input type="number" className="form-control  " {...register("kanal")} id="kanal" required maxLength={99} />
+                          <input type="number" className="form-control  " {...register("kanal")} id="kanal" />
                           <label htmlFor="sum">Total: {(watch("kanal") * 0.125)?.toFixed(3)}</label>&nbsp;&nbsp;
                         </td>
                         <td>
-                          <input type="number" className="form-control " {...register("marla")} id="marla" required maxLength={99} />
+                          <input type="number" className="form-control " {...register("marla")} id="marla" />
                           <label htmlFor="summarla">Total: {(watch("marla") * 0.0062)?.toFixed(3)}</label>&nbsp;&nbsp;
                         </td>
                         <td>
-                          <input type="number" className="form-control " {...register("sarsai")} id="sarsai" required maxLength={99} />
+                          <input type="number" className="form-control " {...register("sarsai")} id="sarsai" />
                           <label htmlFor="sumsarsai">Total: {(watch("sarsai") * 0.00069)?.toFixed(3)}</label>&nbsp;&nbsp;
                         </td>
                         <td>
-                          <input step="any" type="number" className="form-control" {...register("consolidatedTotal")} />
-                          <label htmlFor="sumsarsai">Total: {watch("consolidatedTotal")}</label>&nbsp;&nbsp;
+                          <input disabled type="number" className="form-control" {...register("consolidatedTotal")} />
+                          {/* <label htmlFor="sumsarsai">
+                            Total: {(watch("marla") * 0.0062 + watch("sarsai") * 0.00069 + watch("kanal") * 0.125)?.toFixed(3)}
+                          </label> */}
+                          &nbsp;&nbsp;
                         </td>
                       </tr>
                     </tbody>
                   </table>
                 )}
-                {watch("consolidationType") == "non-consolidated" && (
+                {watch("nonConsolidationType") == "kachha" && (
                   <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
                     <thead>
                       <tr>
                         <th>
                           <h2>
-                            Bigha <span style={{ color: "red" }}>*</span>
+                            Bigha (sq. yard) <span style={{ color: "red" }}>*</span>
                           </h2>
                         </th>
                         <th>
                           <h2>
-                            Biswa <span style={{ color: "red" }}>*</span>
+                            Biswa (sq. yard) <span style={{ color: "red" }}>*</span>
                           </h2>
                         </th>
                         <th>
                           <h2>
-                            Biswansi <span style={{ color: "red" }}>*</span>
+                            Biswansi (sq. yard) <span style={{ color: "red" }}>*</span>
                           </h2>
                           &nbsp;&nbsp;
                         </th>
                         <th>
                           <h2>
-                            Total Area <span style={{ color: "red" }}>*</span>
+                            Total Area (in acres) <span style={{ color: "red" }}>*</span>
                           </h2>
                           &nbsp;&nbsp;
                         </th>
@@ -1561,20 +1609,76 @@ const ApllicantPuropseForm = (props) => {
                     <tbody>
                       <tr>
                         <td>
-                          <input type="number" className="form-control" {...register("bigha")} id="bigha" required maxLength={99} />
-                          <label htmlFor="sumBigha">Total: {(watch("bigha") * 0.33)?.toFixed(3)}</label>&nbsp;&nbsp;
+                          <input type="number" id="bigha" className="form-control" {...register("bigha")} />
+                          <label htmlFor="sumBigha">Total: {watch("bigha") * 1008}</label>&nbsp;&nbsp;
                         </td>
                         <td>
-                          <input type="number" className="form-control" {...register("biswa")} id="biswa" required maxLength={99} />
-                          <label htmlFor="sumBiswa">Total: {(watch("biswa") * 0.0309)?.toFixed(3)}</label>&nbsp;&nbsp;
+                          <input type="number" className="form-control" id="biswa" {...register("biswa")} />
+                          <label htmlFor="sumBiswa">Total: {(watch("biswa") * 50.41)?.toFixed(3)}</label>&nbsp;&nbsp;
                         </td>
                         <td>
-                          <input type="number" className="form-control" {...register("biswansi")} id="biswansi" required maxLength={99} />
-                          <label htmlFor="sumBiswansi">Total: {(watch("biswansi") * 0.619)?.toFixed(3)}</label>&nbsp;&nbsp;
+                          <input type="number" className="form-control" id="biswansi" {...register("biswansi")} />
+                          <label htmlFor="sumBiswansi">Total: {(watch("biswansi") * 2.52)?.toFixed(3)}</label>&nbsp;&nbsp;
                         </td>
                         <td>
-                          <input step="any" type="number" className="form-control " {...register("nonConsolidatedTotal")} />
-                          <label htmlFor="sumsarsai">Total: {watch("nonConsolidatedTotal")}</label>&nbsp;&nbsp;
+                          <input disabled type="number" className="form-control" {...register("nonConsolidatedTotal")} />
+                          {/* <label htmlFor="asumsarsai">
+                            Total: {(watch("bigha") * 1008 + watch("biswa") * 50.41 + watch("biswansi") * 2.52)?.toFixed(3)}
+                          </label> */}
+                          &nbsp;&nbsp;
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                )}
+                {watch("nonConsolidationType") == "pucka" && (
+                  <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
+                    <thead>
+                      <tr>
+                        <th>
+                          <h2>
+                            Bigha (sq. yard) <span style={{ color: "red" }}>*</span>
+                          </h2>
+                        </th>
+                        <th>
+                          <h2>
+                            Biswa (sq. yard) <span style={{ color: "red" }}>*</span>
+                          </h2>
+                        </th>
+                        <th>
+                          <h2>
+                            Biswansi (sq. yard) <span style={{ color: "red" }}>*</span>
+                          </h2>
+                          &nbsp;&nbsp;
+                        </th>
+                        <th>
+                          <h2>
+                            Total Area (in acres) <span style={{ color: "red" }}>*</span>
+                          </h2>
+                          &nbsp;&nbsp;
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <input type="number" className="form-control" {...register("bigha")} id="bigha" />
+                          <label htmlFor="sumBigha">Total: {watch("bigha") * 3025}</label>&nbsp;&nbsp;
+                        </td>
+                        <td>
+                          <input type="number" className="form-control" {...register("biswa")} id="biswa" />
+                          <label htmlFor="sumBiswa">Total: {(watch("biswa") * 151.25)?.toFixed(3)}</label>&nbsp;&nbsp;
+                        </td>
+                        <td>
+                          <input type="number" className="form-control" {...register("biswansi")} id="biswansi" />
+                          <label htmlFor="sumBiswansi">Total: {(watch("biswansi") * 7.56)?.toFixed(3)}</label>&nbsp;&nbsp;
+                        </td>
+                        <td>
+                          <input disabled type="number" className="form-control" {...register("nonConsolidatedTotal")} />
+                          {/* <label htmlFor="sumsarsaia">
+                            Total: {(watch("bigha") * 3025 + watch("biswa") * 151.25 + watch("biswansi") * 7.56)?.toFixed(3)}
+                          </label> */}
+                          &nbsp;&nbsp;
                         </td>
                       </tr>
                     </tbody>

@@ -60,7 +60,7 @@ const IndustrialPlottedForm = ({
           <b>Detail of land use</b>
         </h6>
         <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
-          <Col md={4} xxl lg="3">
+          <Col md={4} xxl lg="4">
             <div>
               <Form.Label>
                 <h2>
@@ -69,9 +69,13 @@ const IndustrialPlottedForm = ({
                 </h2>
               </Form.Label>
             </div>
+          </Col>
+          <Col md={4} xxl lg="4">
             <NumberInput disabled control={control} name="totalAreaScheme" customInput={TextField} />
           </Col>
-          <Col md={4} xxl lg="3">
+        </Row>
+        <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="4">
             <div>
               <Form.Label>
                 <h2 data-toggle="tooltip" data-placement="top" title="Area under Sector Road & Green Belt">
@@ -80,6 +84,8 @@ const IndustrialPlottedForm = ({
                 </h2>
               </Form.Label>
             </div>
+          </Col>
+          <Col md={4} xxl lg="4">
             <input
               type="number"
               className="form-control"
@@ -99,7 +105,9 @@ const IndustrialPlottedForm = ({
               }}
             />
           </Col>
-          <Col md={4} xxl lg="3">
+        </Row>
+        <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="4">
             <div>
               <Form.Label>
                 <h2 data-toggle="tooltip" data-placement="top" title=" Balance area after deducting area under sector road and Green Belt">
@@ -108,9 +116,13 @@ const IndustrialPlottedForm = ({
                 </h2>
               </Form.Label>
             </div>
+          </Col>
+          <Col md={4} xxl lg="4">
             <input disabled type="number" className="form-control" {...register("balanceAreaAfterDeduction")} />
           </Col>
-          <Col md={4} xxl lg="3">
+        </Row>
+        <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="4">
             <div>
               <Form.Label>
                 <h2>
@@ -119,6 +131,8 @@ const IndustrialPlottedForm = ({
                 </h2>
               </Form.Label>
             </div>
+          </Col>
+          <Col md={4} xxl lg="4">
             <input
               type="number"
               className="form-control"
@@ -140,7 +154,7 @@ const IndustrialPlottedForm = ({
           </Col>
         </Row>
         <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
-          <Col md={4} xxl lg="3">
+          <Col md={4} xxl lg="4">
             <div>
               <Form.Label>
                 <h2>
@@ -149,9 +163,13 @@ const IndustrialPlottedForm = ({
                 </h2>
               </Form.Label>
             </div>
+          </Col>
+          <Col md={4} xxl lg="4">
             <input disabled type="number" className="form-control" {...register("balanceArea")} />
           </Col>
-          <Col md={4} xxl lg="3">
+        </Row>
+        <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="4">
             <div>
               <Form.Label>
                 <h2 data-toggle="tooltip" data-placement="top" title="  50% of the Area under Sector Road & Green Belt">
@@ -160,10 +178,13 @@ const IndustrialPlottedForm = ({
                 </h2>
               </Form.Label>
             </div>
+          </Col>
+          <Col md={4} xxl lg="4">
             <input disabled type="number" className="form-control" {...register("areaUnderSectorAndGreenBelt")} />
           </Col>
-
-          <Col md={4} xxl lg="3">
+        </Row>
+        <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="4">
             <div>
               <Form.Label>
                 <h2>
@@ -172,105 +193,16 @@ const IndustrialPlottedForm = ({
                 </h2>
               </Form.Label>
             </div>
+          </Col>
+          <Col md={4} xxl lg="4">
             <input disabled type="number" className="form-control" {...register("netPlannedArea")} />
           </Col>
         </Row>
 
         {watch("totalAreaScheme") < 50 && (
-          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>
-                    Area under Industrial use
-                    <span style={{ color: "red" }}>*</span>
-                  </h2>
-                </Form.Label>
-              </div>
-              <input
-                type="text"
-                className="form-control"
-                {...register("areaUnderIndustrialUse")}
-                onWheel={handleWheel}
-                onChange={(e) => {
-                  if (e?.target?.value < (watch("netPlannedArea") * 45) / 100 || e?.target?.value > (watch("totalAreaScheme") * 65) / 100) {
-                    setError({ ...error, ["areaUnderIndustrialUse"]: "Cannot be less than 45%  NPA and Cannot be more than 65%  NPA" });
-                  } else setError({ ...error, ["areaUnderIndustrialUse"]: "" });
-                }}
-              />
-              {error?.areaUnderIndustrialUse && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.areaUnderIndustrialUse}</h6>}
-            </Col>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>
-                    Area under Residential plots
-                    <span style={{ color: "red" }}>*</span>
-                  </h2>
-                </Form.Label>
-              </div>
-              <input
-                type="text"
-                className="form-control"
-                {...register("areaUnderResidentialPlots")}
-                onWheel={handleWheel}
-                onChange={(e) => calculateAreaRes(e?.target?.value, 20)}
-              />
-            </Col>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2 data-toggle="tooltip" data-placement="top" title="  Area under Affordable Industrial Housing">
-                    Area under Affordable Housing
-                    <span style={{ color: "red" }}>*</span>
-                  </h2>
-                </Form.Label>
-              </div>
-              <input
-                type="text"
-                className="form-control"
-                {...register("areaUnderAffordableIndustrial")}
-                onWheel={handleWheel}
-                onChange={(e) => calculateAreaRes(e?.target?.value, 20)}
-              />
-              {error?.areaUnderCommercialUse && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.areaUnderCommercialUse}</h6>}
-            </Col>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>
-                    Area under Commercial
-                    <span style={{ color: "red" }}>*</span>
-                  </h2>
-                </Form.Label>
-              </div>
-              <input
-                type="text"
-                className="form-control"
-                {...register("areaUnderCommercialUse")}
-                onWheel={handleWheel}
-                onChange={(e) => calculateAreaRes(e?.target?.value, 20)}
-              />
-            </Col>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>
-                    Total Saleable Area
-                    <span style={{ color: "red" }}>*</span>
-                  </h2>
-                </Form.Label>
-              </div>
-              <input disabled type="text" className="form-control" {...register("totalSaleableArea")} onWheel={handleWheel} />
-              {error?.totalSaleableArea && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.totalSaleableArea}</h6>}
-            </Col>
-          </Row>
-        )}
-
-        {watch("totalAreaScheme") === 50 ||
-          (watch("totalAreaScheme") < 200 && (
+          <div>
             <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
-              <Col md={4} xxl lg="3">
+              <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
                     <h2>
@@ -279,20 +211,26 @@ const IndustrialPlottedForm = ({
                     </h2>
                   </Form.Label>
                 </div>
+              </Col>
+              <Col md={4} xxl lg="4">
                 <input
                   type="text"
                   className="form-control"
                   {...register("areaUnderIndustrialUse")}
                   onWheel={handleWheel}
                   onChange={(e) => {
-                    if (e?.target?.value < (watch("netPlannedArea") * 40) / 100 || e?.target?.value > (watch("totalAreaScheme") * 65) / 100) {
+                    if (e?.target?.value < (watch("netPlannedArea") * 45) / 100 || e?.target?.value > (watch("totalAreaScheme") * 65) / 100) {
                       setError({ ...error, ["areaUnderIndustrialUse"]: "Cannot be less than 45%  NPA and Cannot be more than 65%  NPA" });
                     } else setError({ ...error, ["areaUnderIndustrialUse"]: "" });
                   }}
                 />
+              </Col>
+              <Col md={4} xxl lg="4">
                 {error?.areaUnderIndustrialUse && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.areaUnderIndustrialUse}</h6>}
               </Col>
-              <Col md={4} xxl lg="3">
+            </Row>
+            <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+              <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
                     <h2>
@@ -301,33 +239,43 @@ const IndustrialPlottedForm = ({
                     </h2>
                   </Form.Label>
                 </div>
+              </Col>
+              <Col md={4} xxl lg="4">
                 <input
                   type="text"
                   className="form-control"
                   {...register("areaUnderResidentialPlots")}
                   onWheel={handleWheel}
-                  onChange={(e) => calculateAreaRes(e?.target?.value, 25)}
+                  onChange={(e) => calculateAreaRes(e?.target?.value, 20)}
                 />
               </Col>
-              <Col md={4} xxl lg="3">
+            </Row>
+            <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+              <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <h2>
-                      Area under Affordable Industrial Housing
+                    <h2 data-toggle="tooltip" data-placement="top" title="  Area under Affordable Industrial Housing">
+                      Area under Affordable Housing
                       <span style={{ color: "red" }}>*</span>
                     </h2>
                   </Form.Label>
                 </div>
+              </Col>
+              <Col md={4} xxl lg="4">
                 <input
                   type="text"
                   className="form-control"
                   {...register("areaUnderAffordableIndustrial")}
                   onWheel={handleWheel}
-                  onChange={(e) => calculateAreaRes(e?.target?.value, 25)}
+                  onChange={(e) => calculateAreaRes(e?.target?.value, 20)}
                 />
+              </Col>
+              <Col md={4} xxl lg="4">
                 {error?.areaUnderCommercialUse && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.areaUnderCommercialUse}</h6>}
               </Col>
-              <Col md={4} xxl lg="3">
+            </Row>
+            <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+              <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
                     <h2>
@@ -336,15 +284,19 @@ const IndustrialPlottedForm = ({
                     </h2>
                   </Form.Label>
                 </div>
+              </Col>
+              <Col md={4} xxl lg="4">
                 <input
                   type="text"
                   className="form-control"
                   {...register("areaUnderCommercialUse")}
                   onWheel={handleWheel}
-                  onChange={(e) => calculateAreaRes(e?.target?.value, 25)}
+                  onChange={(e) => calculateAreaRes(e?.target?.value, 20)}
                 />
               </Col>
-              <Col md={4} xxl lg="3">
+            </Row>
+            <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+              <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
                     <h2>
@@ -353,104 +305,249 @@ const IndustrialPlottedForm = ({
                     </h2>
                   </Form.Label>
                 </div>
+              </Col>
+              <Col md={4} xxl lg="4">
                 <input disabled type="text" className="form-control" {...register("totalSaleableArea")} onWheel={handleWheel} />
               </Col>
+              <Col md={4} xxl lg="4">
+                {error?.totalSaleableArea && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.totalSaleableArea}</h6>}
+              </Col>
             </Row>
+          </div>
+        )}
+
+        {watch("totalAreaScheme") === 50 ||
+          (watch("totalAreaScheme") < 200 && (
+            <div>
+              <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+                <Col md={4} xxl lg="4">
+                  <div>
+                    <Form.Label>
+                      <h2>
+                        Area under Industrial use
+                        <span style={{ color: "red" }}>*</span>
+                      </h2>
+                    </Form.Label>
+                  </div>
+                </Col>
+                <Col md={4} xxl lg="4">
+                  <input
+                    type="text"
+                    className="form-control"
+                    {...register("areaUnderIndustrialUse")}
+                    onWheel={handleWheel}
+                    onChange={(e) => {
+                      if (e?.target?.value < (watch("netPlannedArea") * 40) / 100 || e?.target?.value > (watch("totalAreaScheme") * 65) / 100) {
+                        setError({ ...error, ["areaUnderIndustrialUse"]: "Cannot be less than 45%  NPA and Cannot be more than 65%  NPA" });
+                      } else setError({ ...error, ["areaUnderIndustrialUse"]: "" });
+                    }}
+                  />
+                </Col>
+                <Col md={4} xxl lg="4">
+                  {error?.areaUnderIndustrialUse && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.areaUnderIndustrialUse}</h6>}
+                </Col>
+              </Row>
+              <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+                <Col md={4} xxl lg="4">
+                  <div>
+                    <Form.Label>
+                      <h2>
+                        Area under Residential plots
+                        <span style={{ color: "red" }}>*</span>
+                      </h2>
+                    </Form.Label>
+                  </div>
+                </Col>
+                <Col md={4} xxl lg="4">
+                  <input
+                    type="text"
+                    className="form-control"
+                    {...register("areaUnderResidentialPlots")}
+                    onWheel={handleWheel}
+                    onChange={(e) => calculateAreaRes(e?.target?.value, 25)}
+                  />
+                </Col>
+              </Row>
+              <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+                <Col md={4} xxl lg="4">
+                  <div>
+                    <Form.Label>
+                      <h2>
+                        Area under Affordable Industrial Housing
+                        <span style={{ color: "red" }}>*</span>
+                      </h2>
+                    </Form.Label>
+                  </div>
+                </Col>
+                <Col md={4} xxl lg="4">
+                  <input
+                    type="text"
+                    className="form-control"
+                    {...register("areaUnderAffordableIndustrial")}
+                    onWheel={handleWheel}
+                    onChange={(e) => calculateAreaRes(e?.target?.value, 25)}
+                  />
+                </Col>
+                <Col md={4} xxl lg="4">
+                  {error?.areaUnderCommercialUse && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.areaUnderCommercialUse}</h6>}
+                </Col>
+              </Row>
+              <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+                <Col md={4} xxl lg="4">
+                  <div>
+                    <Form.Label>
+                      <h2>
+                        Area under Commercial
+                        <span style={{ color: "red" }}>*</span>
+                      </h2>
+                    </Form.Label>
+                  </div>
+                </Col>
+                <Col md={4} xxl lg="4">
+                  <input
+                    type="text"
+                    className="form-control"
+                    {...register("areaUnderCommercialUse")}
+                    onWheel={handleWheel}
+                    onChange={(e) => calculateAreaRes(e?.target?.value, 25)}
+                  />
+                </Col>
+              </Row>
+              <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+                <Col md={4} xxl lg="4">
+                  <div>
+                    <Form.Label>
+                      <h2>
+                        Total Saleable Area
+                        <span style={{ color: "red" }}>*</span>
+                      </h2>
+                    </Form.Label>
+                  </div>
+                </Col>
+                <Col md={4} xxl lg="4">
+                  <input disabled type="text" className="form-control" {...register("totalSaleableArea")} onWheel={handleWheel} />
+                </Col>
+              </Row>
+            </div>
           ))}
 
         {watch("totalAreaScheme") > 200 && (
-          <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>
-                    Area under Industrial use
-                    <span style={{ color: "red" }}>*</span>
-                  </h2>
-                </Form.Label>
-              </div>
-              <input
-                type="text"
-                className="form-control"
-                {...register("areaUnderIndustrialUse")}
-                onWheel={handleWheel}
-                onChange={(e) => {
-                  if (e?.target?.value < (watch("netPlannedArea") * 35) / 100 || e?.target?.value > (watch("totalAreaScheme") * 65) / 100) {
-                    setError({ ...error, ["areaUnderIndustrialUse"]: "Cannot be less than 45%  NPA and Cannot be more than 65%  NPA" });
-                  } else setError({ ...error, ["areaUnderIndustrialUse"]: "" });
-                }}
-              />
-              {error?.areaUnderIndustrialUse && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.areaUnderIndustrialUse}</h6>}
-            </Col>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>
-                    Area under Residential plots
-                    <span style={{ color: "red" }}>*</span>
-                  </h2>
-                </Form.Label>
-              </div>
-              <input
-                type="text"
-                className="form-control"
-                {...register("areaUnderResidentialPlots")}
-                onWheel={handleWheel}
-                onChange={(e) => calculateAreaRes(e?.target?.value, 35)}
-              />
-            </Col>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>
-                    Area under Affordable Industrial Housing
-                    <span style={{ color: "red" }}>*</span>
-                  </h2>
-                </Form.Label>
-              </div>
-              <input
-                type="text"
-                className="form-control"
-                {...register("areaUnderAffordableIndustrial")}
-                onWheel={handleWheel}
-                onChange={(e) => calculateAreaRes(e?.target?.value, 35)}
-              />
-              {error?.areaUnderCommercialUse && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.areaUnderCommercialUse}</h6>}
-            </Col>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>
-                    Area under Commercial
-                    <span style={{ color: "red" }}>*</span>
-                  </h2>
-                </Form.Label>
-              </div>
-              <input
-                type="text"
-                className="form-control"
-                {...register("areaUnderCommercialUse")}
-                onWheel={handleWheel}
-                onChange={(e) => calculateAreaRes(e?.target?.value, 35)}
-              />
-            </Col>
-            <Col md={4} xxl lg="3">
-              <div>
-                <Form.Label>
-                  <h2>
-                    Total Saleable Area
-                    <span style={{ color: "red" }}>*</span>
-                  </h2>
-                </Form.Label>
-              </div>
-              <input disabled type="text" className="form-control" {...register("totalSaleableArea")} onWheel={handleWheel} />
-            </Col>
-          </Row>
+          <div>
+            <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+              <Col md={4} xxl lg="4">
+                <div>
+                  <Form.Label>
+                    <h2>
+                      Area under Industrial use
+                      <span style={{ color: "red" }}>*</span>
+                    </h2>
+                  </Form.Label>
+                </div>
+              </Col>
+              <Col md={4} xxl lg="4">
+                <input
+                  type="text"
+                  className="form-control"
+                  {...register("areaUnderIndustrialUse")}
+                  onWheel={handleWheel}
+                  onChange={(e) => {
+                    if (e?.target?.value < (watch("netPlannedArea") * 35) / 100 || e?.target?.value > (watch("totalAreaScheme") * 65) / 100) {
+                      setError({ ...error, ["areaUnderIndustrialUse"]: "Cannot be less than 45%  NPA and Cannot be more than 65%  NPA" });
+                    } else setError({ ...error, ["areaUnderIndustrialUse"]: "" });
+                  }}
+                />
+              </Col>
+              <Col md={4} xxl lg="4">
+                {error?.areaUnderIndustrialUse && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.areaUnderIndustrialUse}</h6>}
+              </Col>
+            </Row>
+            <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+              <Col md={4} xxl lg="4">
+                <div>
+                  <Form.Label>
+                    <h2>
+                      Area under Residential plots
+                      <span style={{ color: "red" }}>*</span>
+                    </h2>
+                  </Form.Label>
+                </div>
+              </Col>
+              <Col md={4} xxl lg="4">
+                <input
+                  type="text"
+                  className="form-control"
+                  {...register("areaUnderResidentialPlots")}
+                  onWheel={handleWheel}
+                  onChange={(e) => calculateAreaRes(e?.target?.value, 35)}
+                />
+              </Col>
+            </Row>
+            <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+              <Col md={4} xxl lg="4">
+                <div>
+                  <Form.Label>
+                    <h2>
+                      Area under Affordable Industrial Housing
+                      <span style={{ color: "red" }}>*</span>
+                    </h2>
+                  </Form.Label>
+                </div>
+              </Col>
+              <Col md={4} xxl lg="4">
+                <input
+                  type="text"
+                  className="form-control"
+                  {...register("areaUnderAffordableIndustrial")}
+                  onWheel={handleWheel}
+                  onChange={(e) => calculateAreaRes(e?.target?.value, 35)}
+                />
+              </Col>
+              <Col md={4} xxl lg="4">
+                {error?.areaUnderCommercialUse && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.areaUnderCommercialUse}</h6>}
+              </Col>
+            </Row>
+            <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+              <Col md={4} xxl lg="4">
+                <div>
+                  <Form.Label>
+                    <h2>
+                      Area under Commercial
+                      <span style={{ color: "red" }}>*</span>
+                    </h2>
+                  </Form.Label>
+                </div>
+              </Col>
+              <Col md={4} xxl lg="4">
+                <input
+                  type="text"
+                  className="form-control"
+                  {...register("areaUnderCommercialUse")}
+                  onWheel={handleWheel}
+                  onChange={(e) => calculateAreaRes(e?.target?.value, 35)}
+                />
+              </Col>
+            </Row>
+            <Row className="ml-auto mt-4" style={{ marginBottom: 5 }}>
+              <Col md={4} xxl lg="4">
+                <div>
+                  <Form.Label>
+                    <h2>
+                      Total Saleable Area
+                      <span style={{ color: "red" }}>*</span>
+                    </h2>
+                  </Form.Label>
+                </div>
+              </Col>
+              <Col md={4} xxl lg="4">
+                <input disabled type="text" className="form-control" {...register("totalSaleableArea")} onWheel={handleWheel} />
+              </Col>
+            </Row>
+          </div>
         )}
 
         {/* common area */}
         <Row className="ml-auto" style={{ marginBottom: 5 }}>
-          <Col md={4} xxl lg="3">
+          <Col md={4} xxl lg="4">
             <div>
               <Form.Label>
                 <h2>
@@ -459,6 +556,8 @@ const IndustrialPlottedForm = ({
                 </h2>
               </Form.Label>
             </div>
+          </Col>
+          <Col md={4} xxl lg="4">
             <NumberInput
               control={control}
               name="totalResidentialPlots"
@@ -468,7 +567,9 @@ const IndustrialPlottedForm = ({
               decimalScale={0}
             />
           </Col>
-          <Col md={4} xxl lg="3">
+        </Row>
+        <Row className="ml-auto" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="4">
             <div>
               <Form.Label>
                 <h2>
@@ -477,6 +578,8 @@ const IndustrialPlottedForm = ({
                 </h2>
               </Form.Label>
             </div>
+          </Col>
+          <Col md={4} xxl lg="4">
             <NumberInput
               control={control}
               name="requiredEWSPlots"
@@ -492,9 +595,13 @@ const IndustrialPlottedForm = ({
                 }
               }}
             />
+          </Col>
+          <Col md={4} xxl lg="4">
             {error?.requiredEWSPlots && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.requiredEWSPlots}</h6>}
           </Col>
-          <Col md={4} xxl lg="3">
+        </Row>
+        <Row className="ml-auto" style={{ marginBottom: 5 }}>
+          <Col md={4} xxl lg="4">
             <div>
               <Form.Label>
                 <h2>
@@ -503,6 +610,8 @@ const IndustrialPlottedForm = ({
                 </h2>
               </Form.Label>
             </div>
+          </Col>
+          <Col md={4} xxl lg="4">
             <NumberInput
               control={control}
               name="totalIndustrialPlots"
