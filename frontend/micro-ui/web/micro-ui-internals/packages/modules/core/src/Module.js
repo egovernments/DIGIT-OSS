@@ -11,7 +11,7 @@ import { useState } from "react";
 import ErrorBoundary from "./components/ErrorBoundaries";
 import getStore from "./redux/store";
 
-const DigitUIWrapper = ({ stateCode, enabledModules, moduleReducers }) => {
+const DigitUIWrapper = ({ stateCode, enabledModules, moduleReducers,defaultLanding }) => {
   const { isLoading, data: initData } = Digit.Hooks.useInitStore(stateCode, enabledModules);
   if (isLoading) {
     return <Loader page={true} />;
@@ -28,6 +28,7 @@ const DigitUIWrapper = ({ stateCode, enabledModules, moduleReducers }) => {
             modules={initData?.modules}
             appTenants={initData.tenants}
             logoUrl={initData?.stateInfo?.logoUrl}
+            defaultLanding={defaultLanding}
           />
         </Body>
       </Router>
@@ -35,7 +36,7 @@ const DigitUIWrapper = ({ stateCode, enabledModules, moduleReducers }) => {
   );
 };
 
-export const DigitUI = ({ stateCode, registry, enabledModules, moduleReducers }) => {
+export const DigitUI = ({ stateCode, registry, enabledModules, moduleReducers ,defaultLanding}) => {
   const [privacy, setPrivacy] = useState(Digit.Utils.getPrivacyObject() || {});
   const userType = Digit.UserService.getType();
   const queryClient = new QueryClient({
@@ -97,7 +98,7 @@ export const DigitUI = ({ stateCode, registry, enabledModules, moduleReducers })
                 },
               }}
             >
-              <DigitUIWrapper stateCode={stateCode} enabledModules={enabledModules} moduleReducers={moduleReducers} />
+              <DigitUIWrapper stateCode={stateCode} enabledModules={enabledModules} moduleReducers={moduleReducers} defaultLanding={defaultLanding}/>
             </PrivacyProvider.Provider>
           </ComponentProvider.Provider>
         </QueryClientProvider>
