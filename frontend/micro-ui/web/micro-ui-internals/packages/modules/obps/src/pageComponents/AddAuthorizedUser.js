@@ -1,4 +1,14 @@
-import { FormStep, TextInput, MobileNumber, CardLabel, CardLabelError, Dropdown, Toast, RemoveIcon } from "@egovernments/digit-ui-react-components";
+import {
+  FormStep,
+  TextInput,
+  MobileNumber,
+  CardLabel,
+  CardLabelError,
+  Dropdown,
+  Toast,
+  RemoveIcon,
+  DeleteIcon,
+} from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Table from "react-bootstrap/Table";
@@ -244,24 +254,26 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                 from: "2022-10-08T06:21:51.321Z",
                 to: "2022-10-08T06:21:51.321Z",
               },
-              "frequency": {
-                "unit": "string",
-                "value": 0,
-                "repeats": 0
-              }
-            }
+              frequency: {
+                unit: "string",
+                value: 0,
+                repeats: 0,
+              },
+            },
           },
-          "signature": {
-            "signature": "string"
-          }
-        }
-      }
-      const panResp = await axios.post(`/certificate/v3/pan/pancr`,panVal, {headers:{
-        'Content-Type': 'application/json',
-        'X-APISETU-APIKEY':'PDSHazinoV47E18bhNuBVCSEm90pYjEF',
-        'X-APISETU-CLIENTID':'in.gov.tcpharyana',
-        'Access-Control-Allow-Origin':"*",
-      }}) 
+          signature: {
+            signature: "string",
+          },
+        },
+      };
+      const panResp = await axios.post(`/certificate/v3/pan/pancr`, panVal, {
+        headers: {
+          "Content-Type": "application/json",
+          "X-APISETU-APIKEY": "PDSHazinoV47E18bhNuBVCSEm90pYjEF",
+          "X-APISETU-CLIENTID": "in.gov.tcpharyana",
+          "Access-Control-Allow-Origin": "*",
+        },
+      });
       // console.log("",panResp.data);
       setPanIsValid(true);
       setPanValError("");
@@ -293,7 +305,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
       if (getValues("authorizedUserFiles")?.includes(file.name)) {
         setShowToastError({ key: "error" });
         setTimeout(() => {
-          setShowToastError(null)
+          setShowToastError(null);
         }, 2000);
         return;
       }
@@ -301,7 +313,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
       if (getValues("modalFiles")?.includes(file.name)) {
         setShowToastError({ key: "error" });
         setTimeout(() => {
-          setShowToastError(null)
+          setShowToastError(null);
         }, 2000);
         return;
       }
@@ -321,7 +333,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
       setLoading(false);
       setShowToast({ key: "success" });
       setTimeout(() => {
-        setShowToast(null)
+        setShowToast(null);
       }, 2000);
       if (fromTable) {
         let temp = aurthorizedUserInfoArray;
@@ -441,9 +453,9 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
       setLoading(false);
       setToastError(error?.response?.data?.Errors?.[0]?.code);
       setTimeout(() => {
-        setToastError(null)
+        setToastError(null);
       }, 2000);
-      console.log("ERROR ====> ",error.response,error);
+      console.log("ERROR ====> ", error.response, error);
     }
     // getAdhaarPdf();
     // getDigitalSignPdf();
@@ -549,381 +561,366 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
         isDisabled={!(aurthorizedUserInfoArray && aurthorizedUserInfoArray.length)}
         t={t}
       >
-        {/* <div>
-                <h5 className="card-h"> Developer</h5>
-            </div> */}
-        {/* <div className="card shadow"> */}
-
-        <div className="card-body px-0">
-          {/* <h5 className="card-h">Add/Remove Authorized Users</h5> */}
-          <div className="table-bd">
-            {/* { inputFields.map((data, index)=>{
-                    const {}
+        <div className="happy">
+          <div className="card">
+            {/* <h5 className="card-h">Add/Remove Authorized Users</h5> */}
+            <div className="table-bd">
+              <Table className="table table-bordered table-striped table-responsive">
+                <thead>
+                  <tr>
+                    <th>Sr. No</th>
+                    <th>Name</th>
+                    <th>Mobile Number</th>
+                    <th>Email</th>
+                    <th>Gender</th>
+                    {/* <th>Date of Birth</th> */}
+                    <th>PAN No.</th>
+                    <th>
+                      {data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" ||
+                      data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm" ||
+                      data?.devDetail[0]?.addInfo?.showDevTypeFields === "Hindu Undivided Family" ? (
+                        <label htmlFor="name" className="text">
+                          Upload Power of Attorney{" "}
+                        </label>
+                      ) : (
+                        <label htmlFor="name" className="text">
+                          {" "}
+                          Upload Board Resolution
+                        </label>
+                      )}
+                    </th>
+                    <th>View Digital Signature PDF</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {aurthorizedUserInfoArray?.length > 0 ? (
+                    aurthorizedUserInfoArray.map((elementInArray, input) => {
+                      return (
+                        <tr key={elementInArray.id}>
+                          <td>{input + 1}</td>
+                          <td>{elementInArray.name}</td>
+                          <td>{elementInArray.mobileNumber}</td>
+                          <td>{elementInArray.emailId}</td>
+                          <td>{elementInArray.gender}</td>
+                          <td>{elementInArray.pan}</td>
+                          <td>
+                            <div className="row">
+                              {elementInArray.uploadBoardResolution !== "" ? (
+                                <button
+                                  type="button"
+                                  onClick={() => getDocShareholding(elementInArray?.uploadBoardResolution)}
+                                  className="btn btn-sm col-md-6"
+                                >
+                                  <VisibilityIcon color="info" title="View Document" className="icon" />
+                                </button>
+                              ) : (
+                                <p></p>
+                              )}
+                              <div className="btn btn-sm col-md-6">
+                                <label for={"uploadAdhaarDoc" + input} title="Upload Document">
+                                  {" "}
+                                  <FileUpload color="primary" />
+                                </label>
+                                <input
+                                  id={"uploadAdhaarDoc" + input}
+                                  type="file"
+                                  accept="application/pdf"
+                                  style={{ display: "none" }}
+                                  onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBoardResolution", true, input)}
+                                />
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <div className="row">
+                              {elementInArray.uploadDigitalSignaturePdf ? (
+                                <button
+                                  type="button"
+                                  onClick={() => getDocShareholding(elementInArray?.uploadDigitalSignaturePdf)}
+                                  className="btn btn-sm col-md-6"
+                                >
+                                  <VisibilityIcon color="info" className="icon" />
+                                </button>
+                              ) : (
+                                <p></p>
+                              )}
+                              <div className="btn btn-sm col-md-6">
+                                <label for={"uploadSignDoc" + input}>
+                                  {" "}
+                                  <FileUpload color="primary" />
+                                </label>
+                                <input
+                                  id={"uploadSignDoc" + input}
+                                  type="file"
+                                  accept="application/pdf"
+                                  style={{ display: "none" }}
+                                  onChange={(e) => getDocumentData(e?.target?.files[0], "uploadDigitalSignaturePdf", true, input)}
+                                />
+                              </div>
+                            </div>
+                          </td>
+                          <td style={{ textAlign: "center" }}>
+                            <a
+                              // onClick={()=>(viewRecord(elementInArray.id))}
+                              onClick={() => viewRecord(elementInArray, input)}
+                            >
+                              <DeleteIcon style={{ fill: "#ff1a1a" }} />
+                            </a>
+                          </td>
+                        </tr>
+                      );
                     })
-                    } */}
-            <Table className="table table-bordered table-striped table-responsive">
-              <thead>
-                <tr>
-                  <th>Sr. No</th>
-                  <th>Name</th>
-                  <th>Mobile Number</th>
-                  <th>Email</th>
-                  <th>Gender</th>
-                  {/* <th>Date of Birth</th> */}
-                  <th>PAN No.</th>
-                  <th>
-                    {data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" ||
-                    data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm" ||
-                    data?.devDetail[0]?.addInfo?.showDevTypeFields === "Hindu Undivided Family" ? (
-                      <label htmlFor="name" className="text">
-                        Upload Power of Attorney{" "}
-                      </label>
-                    ) : (
-                      <label htmlFor="name" className="text">
-                        {" "}
-                        Upload Board Resolution
-                      </label>
-                    )}
-                  </th>
-                  <th>View Digital Signature PDF</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {aurthorizedUserInfoArray?.length > 0 ? (
-                  aurthorizedUserInfoArray.map((elementInArray, input) => {
-                    return (
-                      <tr key={elementInArray.id}>
-                        <td>{input + 1}</td>
-                        <td>{elementInArray.name}</td>
-                        <td>{elementInArray.mobileNumber}</td>
-                        <td>{elementInArray.emailId}</td>
-                        <td>{elementInArray.gender}</td>
-                        <td>{elementInArray.pan}</td>
-                        <td>
-                          <div className="row">
-                            {elementInArray.uploadBoardResolution !== "" ? (
-                              <button
-                                type="button"
-                                onClick={() => getDocShareholding(elementInArray?.uploadBoardResolution)}
-                                className="btn btn-sm col-md-6"
-                              >
-                                <VisibilityIcon color="info" className="icon" />
-                              </button>
-                            ) : (
-                              <p></p>
-                            )}
-                            <div className="btn btn-sm col-md-6">
-                              <label for={"uploadAdhaarDoc" + input}>
-                                {" "}
-                                <FileUpload color="primary" />
-                              </label>
-                              <input
-                                id={"uploadAdhaarDoc" + input}
-                                type="file"
-                                accept="application/pdf"
-                                style={{ display: "none" }}
-                                onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBoardResolution", true, input)}
-                              />
-                            </div>
-                          </div>
-                        </td>
-                        <td>
-                          <div className="row">
-                            {elementInArray.uploadDigitalSignaturePdf ? (
-                              <button
-                                type="button"
-                                onClick={() => getDocShareholding(elementInArray?.uploadDigitalSignaturePdf)}
-                                className="btn btn-sm col-md-6"
-                              >
-                                <VisibilityIcon color="info" className="icon" />
-                              </button>
-                            ) : (
-                              <p></p>
-                            )}
-                            <div className="btn btn-sm col-md-6">
-                              <label for={"uploadSignDoc" + input}>
-                                {" "}
-                                <FileUpload color="primary" />
-                              </label>
-                              <input
-                                id={"uploadSignDoc" + input}
-                                type="file"
-                                accept="application/pdf"
-                                style={{ display: "none" }}
-                                onChange={(e) => getDocumentData(e?.target?.files[0], "uploadDigitalSignaturePdf", true, input)}
-                              />
-                            </div>
-                          </div>
-                        </td>
-                        <td>
-                          <a
-                            // onClick={()=>(viewRecord(elementInArray.id))}
-                            onClick={() => viewRecord(elementInArray, input)}
-                          >
-                            <RemoveIcon />
-                          </a>
-                        </td>
-                      </tr>
-                    );
-                  })
-                ) : (
-                  <div className="d-none">Click on Add to add a aurthorized user</div>
-                )}
-              </tbody>
-            </Table>
+                  ) : (
+                    <div className="d-none">Click on Add to add a aurthorized user</div>
+                  )}
+                </tbody>
+              </Table>
 
-            
-            <div>
-              <button
-                type="button"
-                style={{
-                  float: "left",
-                  backgroundColor: "#0b3629",
-                  color: "white",
-                }}
-                className="btn mt-3"
-                // onClick={() => setNoOfRows(noofRows + 1)}
-                onClick={handleShowAuthuser}
-              >
-                Add More
-              </button>
+              <div>
+                <button
+                  type="button"
+                  style={{
+                    float: "left",
+                    backgroundColor: "#0b3629",
+                    color: "white",
+                  }}
+                  className="btn mt-3"
+                  // onClick={() => setNoOfRows(noofRows + 1)}
+                  onClick={handleShowAuthuser}
+                >
+                  Add More
+                </button>
 
-              <Modal show={showAuthuser} onHide={handleCloseAuthuser} animation={false}>
-                <Modal.Header closeButton>
-                  <Modal.Title>Add Authorised User</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  <form className="text1">
-                    <Row>
-                      <Col md={3} xxl lg="3">
-                        <label htmlFor="name" className="text">
-                          Enter Full Name <span className="text-danger font-weight-bold">*</span>
-                        </label>
-                        <input type="text" value={aurthorizedUserName} class="employee-card-input" onChange={handleUserNameChange} />
-                        {/* <TextInput
-                          t={t}
-                          type={"text"}
-                          isMandatory={false}
-                          optionKey="i18nKey"
-                          value={aurthorizedUserName}
-                          name="aurthorizedUserName"
-                          onChange={handleUserNameChange}
-                          {...(validation = {
-                            isRequired: true,
-                            type: "text",
-                          })}
-                        /> */}
-                        {aurthorizedUserName && aurthorizedUserName.length > 0 && !aurthorizedUserName.match(Digit.Utils.getPattern("Name")) && (
-                          <CardLabelError style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
-                            {t("Please enter valid Name")}
-                          </CardLabelError>
-                        )}
-                      </Col>
-                      <Col md={3} xxl lg="3">
-                        <label htmlFor="name" className="text">
-                          Mobile Number <span className="text-danger font-weight-bold">*</span>
-                        </label>
-                        <MobileNumber
-                          value={aurthorizedMobileNumber}
-                          name="registeredContactNo"
-                          maxlength={"10"}
-                          required
-                          onChange={selectAurthorizedMobileNumber}
-                          // disable={mobileNumber && !isOpenLinkFlow ? true : false}
-                          {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel" }}
-                        />
-                        {aurthorizedMobileNumber &&
-                          aurthorizedMobileNumber.length > 0 &&
-                          !aurthorizedMobileNumber.match(Digit.Utils.getPattern("MobileNo")) && (
+                <Modal show={showAuthuser} onHide={handleCloseAuthuser} animation={false}>
+                  <Modal.Header closeButton>
+                    <Modal.Title>Add Authorised User</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <form className="text1">
+                      <Row>
+                        <Col md={3} xxl lg="3">
+                          <label htmlFor="name" className="text">
+                            Enter Full Name <span className="text-danger font-weight-bold">*</span>
+                          </label>
+                          <input type="text" value={aurthorizedUserName} class="employee-card-input" onChange={handleUserNameChange} />
+                          {aurthorizedUserName && aurthorizedUserName.length > 0 && !aurthorizedUserName.match(Digit.Utils.getPattern("Name")) && (
                             <CardLabelError style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
-                              {t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID")}
+                              {t("Please enter valid Name")}
                             </CardLabelError>
                           )}
-                      </Col>
-                      <Col md={3} xxl lg="3">
-                        <label htmlFor="name" className="text">
-                          Email <span className="text-danger font-weight-bold">*</span>
-                        </label>
-                        {/* <input
-                                type="email"
-                                name="name[]"
-                                placeholder=""
-                                class="employee-card-input"
-                                onChange={(e) => setAurthorizedEmail(e.target.value)}
-                              /> */}
-                        <TextInput
-                          t={t}
-                          type={"email"}
-                          isMandatory={false}
-                          optionKey="i18nKey"
-                          name="aurthorizedEmail"
-                          // value={aurthorizedEmail}
-                          placeholder=""
-                          // onChange={setEmail}
-                          onChange={(e) => {setAurthorizedEmail(e.target.value); setPanIsValid(false);}}
-                          //disable={editScreen}
-                          {...(validation = {
-                            isRequired: true,
-                            title: "Please enter Email",
-                          })}
-                        />
-                        {aurthorizedEmail && aurthorizedEmail.length > 0 && !aurthorizedEmail.match(Digit.Utils.getPattern("Email")) && (
-                          <CardLabelError style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
-                            {"Invalid Email Address"}
-                          </CardLabelError>
-                        )}
-                      </Col>
-                      <Col md={3} xxl lg="3">
-                        <label htmlFor="name" className="text">
-                          Gender <span className="text-danger font-weight-bold">*</span>
-                        </label>
-                        <Dropdown
-                          style={{ width: "100%" }}
-                          className="form-field"
-                          selected={gender?.length === 1 ? gender[0] : gender}
-                          disable={gender?.length === 1 || editScreen}
-                          option={menu}
-                          select={setGenderName}
-                          // value={gender}
-                          optionKey="code"
-                          t={t}
-                          name="gender"
-                          placeholder="Select Gender"
-                        />
-                      </Col>
-                      <Col md={3} xxl lg="3">
-                        <label htmlFor="name" className="text">
-                          Date of Birth <span className="text-danger font-weight-bold">*</span>
-                        </label>
-                        <input
-                          type="date"
-                          name="dob[]"
-                          placeholder=""
-                          class="employee-card-input"
-                          onChange={(e) => {setAurthorizedDob(e.target.value); setPanIsValid(false);}}
-                          max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear() - 18))}
-                        />
-                      </Col>
-                      <Col md={3} xxl lg="3">
-                        <label htmlFor="name" className="text">
-                          PAN No <span className="text-danger font-weight-bold">*</span>
-                        </label>
-                        {/* <input
-                                type="text"
-                                name="name[]"
-                                placeholder=""
-                                class="employee-card-input"
-                                onChange={(e) => setAurthorizedPan(e.target.value)}
-                              /> */}
-                        <div className="d-flex align-items-baseline">
+                        </Col>
+                        <Col md={3} xxl lg="3">
+                          <label htmlFor="name" className="text">
+                            Mobile Number <span className="text-danger font-weight-bold">*</span>
+                          </label>
+                          <MobileNumber
+                            value={aurthorizedMobileNumber}
+                            name="registeredContactNo"
+                            maxlength={"10"}
+                            required
+                            onChange={selectAurthorizedMobileNumber}
+                            // disable={mobileNumber && !isOpenLinkFlow ? true : false}
+                            {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel" }}
+                          />
+                          {aurthorizedMobileNumber &&
+                            aurthorizedMobileNumber.length > 0 &&
+                            !aurthorizedMobileNumber.match(Digit.Utils.getPattern("MobileNo")) && (
+                              <CardLabelError style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
+                                {t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID")}
+                              </CardLabelError>
+                            )}
+                        </Col>
+                        <Col md={3} xxl lg="3">
+                          <label htmlFor="name" className="text">
+                            Email <span className="text-danger font-weight-bold">*</span>
+                          </label>
+                          {/* <input
+                                  type="email"
+                                  name="name[]"
+                                  placeholder=""
+                                  class="employee-card-input"
+                                  onChange={(e) => setAurthorizedEmail(e.target.value)}
+                                /> */}
                           <TextInput
                             t={t}
-                            type={"text"}
+                            type={"email"}
                             isMandatory={false}
                             optionKey="i18nKey"
-                            name="aurthorizedPan"
-                            value={aurthorizedPan}
+                            name="aurthorizedEmail"
+                            // value={aurthorizedEmail}
                             placeholder=""
-                            // onChange={(e) => setAurthorizedPan(e.target.value.toUpperCase())}
-                            onChange={selectPanNumber}
-                            {...{ required: true, maxlength: "10" }}
+                            // onChange={setEmail}
+                            onChange={(e) => {
+                              setAurthorizedEmail(e.target.value);
+                              setPanIsValid(false);
+                            }}
+                            //disable={editScreen}
+                            {...(validation = {
+                              isRequired: true,
+                              title: "Please enter Email",
+                            })}
                           />
-                          <Button className="ml-3" onClick={panVerification}>
-                            {panIsValid ? "Verified" : "Verify"}
-                          </Button>
-                        </div>
-                        {aurthorizedPan && aurthorizedPan.length > 0 && !aurthorizedPan.match(Digit.Utils.getPattern("PAN")) && (
-                          <CardLabelError style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px" }}>
-                            {t("BPA_INVALID_PAN_NO")}
-                          </CardLabelError>
-                        )}
-                        <h3 className="error-message" style={{ color: "red" }}>
-                          {panIsValid ? "" : PanValError}
-                        </h3>
-                      </Col>
-                      <Col md={3} xxl lg="3">
-                        {data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" ||
-                        data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm" ||
-                        data?.devDetail[0]?.addInfo?.showDevTypeFields === "Hindu Undivided Family" ? (
+                          {aurthorizedEmail && aurthorizedEmail.length > 0 && !aurthorizedEmail.match(Digit.Utils.getPattern("Email")) && (
+                            <CardLabelError style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
+                              {"Invalid Email Address"}
+                            </CardLabelError>
+                          )}
+                        </Col>
+                        <Col md={3} xxl lg="3">
                           <label htmlFor="name" className="text">
-                            Upload Power of Attorney <span className="text-danger font-weight-bold">*</span>
+                            Gender <span className="text-danger font-weight-bold">*</span>
                           </label>
-                        ) : (
+                          <Dropdown
+                            style={{ width: "100%" }}
+                            className="form-field"
+                            selected={gender?.length === 1 ? gender[0] : gender}
+                            disable={gender?.length === 1 || editScreen}
+                            option={menu}
+                            select={setGenderName}
+                            // value={gender}
+                            optionKey="code"
+                            t={t}
+                            name="gender"
+                            placeholder="Select Gender"
+                          />
+                        </Col>
+                        <Col md={3} xxl lg="3">
                           <label htmlFor="name" className="text">
-                            {" "}
-                            Upload Board Resolution<span className="text-danger font-weight-bold">*</span>
+                            Date of Birth <span className="text-danger font-weight-bold">*</span>
                           </label>
-                        )}
-                        <input
-                          type="file"
-                          name="uploadBoardResolution"
-                          accept="application/pdf"
-                          placeholder=""
-                          class="employee-card-input"
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBoardResolution")}
-                        />
-                      </Col>
-                      <Col md={3} xxl lg="3">
-                        <label htmlFor="name" className="text">
-                          Upload Digital Signature PDF <span className="text-danger font-weight-bold">*</span>
-                        </label>
-                        <input
-                          type="file"
-                          name="uploadDigitalSignaturePdf"
-                          accept="application/pdf"
-                          placeholder=""
-                          class="employee-card-input"
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "uploadDigitalSignaturePdf")}
-                        />
-                      </Col>
-                    </Row>
-                  </form>
-                </Modal.Body>
-                <Modal.Footer>
-                  <Button variant="secondary" onClick={handleCloseAuthuser}>
-                    Close
-                  </Button>
-                  <Button
-                    disabled={
-                      !aurthorizedUserName ||
-                      !aurthorizedDob ||
-                      !aurthorizedEmail ||
-                      // !panIsValid ||
-                      !aurthorizedMobileNumber ||
-                      !aurthorizedPan ||
-                      !aurthorizedEmail.match(Digit.Utils.getPattern("Email")) ||
-                      !aurthorizedUserName.match(Digit.Utils.getPattern("Name")) ||
-                      !aurthorizedPan.match(Digit.Utils.getPattern("PAN")) ||
-                      !aurthorizedMobileNumber.match(Digit.Utils.getPattern("MobileNo")) ||
-                      !Documents?.uploadBoardResolution ||
-                      !Documents?.uploadDigitalSignaturePdf
-                    }
-                    variant="primary"
-                    onClick={handleSubmitFormdata}
-                  >
-                    Submit
-                  </Button>
-                </Modal.Footer>
-              </Modal>
+                          <input
+                            type="date"
+                            name="dob[]"
+                            placeholder=""
+                            class="employee-card-input"
+                            onChange={(e) => {
+                              setAurthorizedDob(e.target.value);
+                              setPanIsValid(false);
+                            }}
+                            max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear() - 18))}
+                          />
+                        </Col>
+                        <Col md={3} xxl lg="3">
+                          <label htmlFor="name" className="text">
+                            PAN No <span className="text-danger font-weight-bold">*</span>
+                          </label>
+                          {/* <input
+                                  type="text"
+                                  name="name[]"
+                                  placeholder=""
+                                  class="employee-card-input"
+                                  onChange={(e) => setAurthorizedPan(e.target.value)}
+                                /> */}
+                          <div className="d-flex align-items-baseline">
+                            <TextInput
+                              t={t}
+                              type={"text"}
+                              isMandatory={false}
+                              optionKey="i18nKey"
+                              name="aurthorizedPan"
+                              value={aurthorizedPan}
+                              placeholder=""
+                              // onChange={(e) => setAurthorizedPan(e.target.value.toUpperCase())}
+                              onChange={selectPanNumber}
+                              {...{ required: true, maxlength: "10" }}
+                            />
+                            <Button className="ml-3" onClick={panVerification}>
+                              {panIsValid ? "Verified" : "Verify"}
+                            </Button>
+                          </div>
+                          {aurthorizedPan && aurthorizedPan.length > 0 && !aurthorizedPan.match(Digit.Utils.getPattern("PAN")) && (
+                            <CardLabelError style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px" }}>
+                              {t("BPA_INVALID_PAN_NO")}
+                            </CardLabelError>
+                          )}
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {panIsValid ? "" : PanValError}
+                          </h3>
+                        </Col>
+                        <Col md={3} xxl lg="3">
+                          {data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" ||
+                          data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm" ||
+                          data?.devDetail[0]?.addInfo?.showDevTypeFields === "Hindu Undivided Family" ? (
+                            <label htmlFor="name" className="text">
+                              Upload Power of Attorney <span className="text-danger font-weight-bold">*</span>
+                            </label>
+                          ) : (
+                            <label htmlFor="name" className="text">
+                              {" "}
+                              Upload Board Resolution<span className="text-danger font-weight-bold">*</span>
+                            </label>
+                          )}
+                          <input
+                            type="file"
+                            name="uploadBoardResolution"
+                            accept="application/pdf"
+                            placeholder=""
+                            class="employee-card-input"
+                            onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBoardResolution")}
+                          />
+                        </Col>
+                        <Col md={3} xxl lg="3">
+                          <label htmlFor="name" className="text">
+                            Upload Digital Signature PDF <span className="text-danger font-weight-bold">*</span>
+                          </label>
+                          <input
+                            type="file"
+                            name="uploadDigitalSignaturePdf"
+                            accept="application/pdf"
+                            placeholder=""
+                            class="employee-card-input"
+                            onChange={(e) => getDocumentData(e?.target?.files[0], "uploadDigitalSignaturePdf")}
+                          />
+                        </Col>
+                      </Row>
+                    </form>
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseAuthuser}>
+                      Close
+                    </Button>
+                    <Button
+                      disabled={
+                        !aurthorizedUserName ||
+                        !aurthorizedDob ||
+                        !aurthorizedEmail ||
+                        // !panIsValid ||
+                        !aurthorizedMobileNumber ||
+                        !aurthorizedPan ||
+                        !aurthorizedEmail.match(Digit.Utils.getPattern("Email")) ||
+                        !aurthorizedUserName.match(Digit.Utils.getPattern("Name")) ||
+                        !aurthorizedPan.match(Digit.Utils.getPattern("PAN")) ||
+                        !aurthorizedMobileNumber.match(Digit.Utils.getPattern("MobileNo")) ||
+                        !Documents?.uploadBoardResolution ||
+                        !Documents?.uploadDigitalSignaturePdf
+                      }
+                      variant="primary"
+                      onClick={handleSubmitFormdata}
+                    >
+                      Submit
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
+              </div>
             </div>
+            {/* <button
+                  type="button"
+                  style={{ float: "left" }}
+                  className="btn btn-primary"
+                  onClick={() => setNoOfRows(noofRows + 1)}
+                  >
+                  Add More
+                  </button> */}
+            {/* <button
+                  type="button"
+                  style={{ float: "right" }}
+                  className="btn btn-danger"
+                  onClick={() => setNoOfRows(noofRows - 1)}
+                  >
+                  Remove
+                  </button> */}
           </div>
-          {/* <button
-                type="button"
-                style={{ float: "left" }}
-                className="btn btn-primary"
-                onClick={() => setNoOfRows(noofRows + 1)}
-                >
-                Add More
-                </button> */}
-          {/* <button
-                type="button"
-                style={{ float: "right" }}
-                className="btn btn-danger"
-                onClick={() => setNoOfRows(noofRows - 1)}
-                >
-                Remove
-                </button> */}
         </div>
         {/* <div className="form-group col-md6 mt-6">
                 <button
@@ -943,7 +940,6 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
             isDleteBtn={true}
             onClose={() => {
               setToastError(null);
-              
             }}
           />
         )}

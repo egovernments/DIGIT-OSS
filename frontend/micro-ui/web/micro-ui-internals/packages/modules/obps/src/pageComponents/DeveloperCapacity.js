@@ -43,7 +43,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
   const [data, setData] = useState();
   const [loader, setLoading] = useState(false);
   React.useEffect(async () => {
-    const uuid = userInfo?.info?.uuid; 
+    const uuid = userInfo?.info?.uuid;
     const usersResponse = await Digit.UserService.userSearch(tenantId, { uuid: [uuid] }, {});
     setParentId(usersResponse?.user[0]?.parentId);
     setGenderMF(usersResponse?.user[0]?.gender);
@@ -440,7 +440,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
       if (getValues("devTypeDocument")?.includes(file.name)) {
         setShowToastError({ key: "error" });
         setTimeout(() => {
-          setShowToastError(null)
+          setShowToastError(null);
         }, 2000);
         return;
       }
@@ -448,7 +448,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
       if (getValues("hrduModalActFile")?.includes(file.name)) {
         setShowToastError({ key: "error" });
         setTimeout(() => {
-          setShowToastError(null)
+          setShowToastError(null);
         }, 2000);
         return;
       }
@@ -456,7 +456,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
       if (getValues("designatedDirectorsFile")?.includes(file.name)) {
         setShowToastError({ key: "error" });
         setTimeout(() => {
-          setShowToastError(null)
+          setShowToastError(null);
         }, 2000);
         return;
       }
@@ -464,7 +464,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
       if (getValues("alreadyObtaileLicFile")?.includes(file.name)) {
         setShowToastError({ key: "error" });
         setTimeout(() => {
-          setShowToastError(null)
+          setShowToastError(null);
         }, 2000);
         return;
       }
@@ -477,7 +477,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
       if (getValues("techicalExpertFile")?.includes(file.name)) {
         setShowToastError({ key: "error" });
         setTimeout(() => {
-          setShowToastError(null)
+          setShowToastError(null);
         }, 2000);
         return;
       }
@@ -498,7 +498,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
       setLoading(false);
       setShowToast({ key: "success" });
       setTimeout(() => {
-        setShowToast(null)
+        setShowToast(null);
       }, 2000);
       console.log(Resp?.data?.files);
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
@@ -602,8 +602,8 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
       // setShowCapacityDevelopColony(false)
     }
     // setShowCapacityDevelopColony(false)
-      console.log("DevCapacityTwo", hrduModalData);
-      console.log("DevCapacityFirst", capacityDevelopColonyHdruAct);
+    console.log("DevCapacityTwo", hrduModalData);
+    console.log("DevCapacityFirst", capacityDevelopColonyHdruAct);
     localStorage.setItem("DevCapacityDetails", JSON.stringify(capacityDevelopColonyHdruAct));
   };
 
@@ -841,17 +841,18 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                 data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm"
               ? !Documents?.netWorthOfPartners || !Documents?.netWorthOfFirm
               : false) ||
-            ((permissionGrantedHRDU === "Y" && capacityDevelopColonyHdruAct?.length) || permissionGrantedHRDU === "N" ? false : (technicalCapacityOutsideHaryana === "Y" &&
-            technicalCapacityOutsideHaryanaDetails.authority &&
-            technicalCapacityOutsideHaryanaDetails.project &&
-            technicalCapacityOutsideHaryanaDetails.statusOfDevelopment &&
-            technicalCapacityOutsideHaryanaDetails.location &&
-            technicalCapacityOutsideHaryanaDetails.projectArea
+            ((permissionGrantedHRDU === "Y" && capacityDevelopColonyHdruAct?.length) || permissionGrantedHRDU === "N"
+              ? false
+              : technicalCapacityOutsideHaryana === "Y" &&
+                technicalCapacityOutsideHaryanaDetails.authority &&
+                technicalCapacityOutsideHaryanaDetails.project &&
+                technicalCapacityOutsideHaryanaDetails.statusOfDevelopment &&
+                technicalCapacityOutsideHaryanaDetails.location &&
+                technicalCapacityOutsideHaryanaDetails.projectArea
               ? false
               : technicalCapacityOutsideHaryana === "N"
               ? false
-              : true)) 
-            
+              : true)
           }
         >
           {/* <CheckBox
@@ -872,32 +873,33 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
             value={Correspondenceaddress}
             disable={isAddressSame}
           /> */}
-
-          {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" ||
-            data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm" ||
-            data?.devDetail[0]?.addInfo?.showDevTypeFields === "Hindu Undivided Family") && (
-            <div className="card-body">
-              <div className="form-group row mb-12">
-                {/* <label className="col-sm-3 col-form-label">Individual</label> */}
-                <div className="col-sm-12">
-                  {/* <textarea type="text" className="employee-card-input" id="details" placeholder="Enter Details" /> */}
-                  <table className="table table-bordered" size="sm">
-                    <thead>
-                      <tr>
-                        <th>S.No.</th>
-                        <th>Particulars of document</th>
-                        {/* <th>Details </th> */}
-                        <th>Annexure </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td> 1 </td>
-                        <td>
-                          Net Worth in case of individual certified by CA/ Or Income tax return in case of an individual (for the last three years){" "}
-                          <span className="text-danger font-weight-bold">*</span>
-                        </td>
-                        {/* <td>
+          <div className="happy">
+            <div className="card">
+              {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" ||
+                data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm" ||
+                data?.devDetail[0]?.addInfo?.showDevTypeFields === "Hindu Undivided Family") && (
+                <div className="card-body">
+                  <div className="form-group row mb-12">
+                    {/* <label className="col-sm-3 col-form-label">Individual</label> */}
+                    <div className="col-sm-12">
+                      {/* <textarea type="text" className="employee-card-input" id="details" placeholder="Enter Details" /> */}
+                      <table className="table table-bordered" size="sm">
+                        <thead>
+                          <tr>
+                            <th>S.No.</th>
+                            <th>Particulars of document</th>
+                            {/* <th>Details </th> */}
+                            <th>Annexure </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td> 1 </td>
+                            <td>
+                              Net Worth in case of individual certified by CA/ Or Income tax return in case of an individual (for the last three
+                              years) <span className="text-danger font-weight-bold">*</span>
+                            </td>
+                            {/* <td>
                                                     <input
                                                         type="file"
                                                         name="individualCertificateCA"
@@ -906,37 +908,41 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                         onChange={(e) => getDocumentData(e?.target?.files[0], "individualCertificateCA")}
                                                     />
                                                 </td> */}
-                        <td align="center" size="large">
-                          <div className="row">
-                            {Documents?.individualCertificateCA ? (
-                              <a onClick={() => getDocShareholding(Documents?.individualCertificateCA)} className="btn btn-sm col-md-6">
-                                <VisibilityIcon color="info" className="icon" />
-                              </a>
-                            ) : (
-                              <p></p>
-                            )}
-                            <div className="btn btn-sm col-md-6">
-                              <label for="individualCertificateCA">
-                                {" "}
-                                <FileUpload color="primary" />
-                              </label>
-                              <input
-                                id="individualCertificateCA"
-                                type="file"
-                                // accept="application/pdf"
-                                style={{ display: "none" }}
-                                onChange={(e) => getDocumentData(e?.target?.files[0], "individualCertificateCA", "devTypeDocument")}
-                              />
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td> 2 </td>
-                        <td>
-                          Bank statement for the last 3 years <span className="text-danger font-weight-bold">*</span>
-                        </td>
-                        {/* <td>
+                            <td align="center" size="large">
+                              <div className="row">
+                                {Documents?.individualCertificateCA ? (
+                                  <a
+                                    onClick={() => getDocShareholding(Documents?.individualCertificateCA)}
+                                    title="View Document"
+                                    className="btn btn-sm col-md-6"
+                                  >
+                                    <VisibilityIcon color="info" className="icon" />
+                                  </a>
+                                ) : (
+                                  <p></p>
+                                )}
+                                <div className="btn btn-sm col-md-6">
+                                  <label for="individualCertificateCA" title="Upload Document">
+                                    {" "}
+                                    <FileUpload color="primary" />
+                                  </label>
+                                  <input
+                                    id="individualCertificateCA"
+                                    type="file"
+                                    // accept="application/pdf"
+                                    style={{ display: "none" }}
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "individualCertificateCA", "devTypeDocument")}
+                                  />
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td> 2 </td>
+                            <td>
+                              Bank statement for the last 3 years <span className="text-danger font-weight-bold">*</span>
+                            </td>
+                            {/* <td>
                                                     <input
                                                         type="file"
                                                         name="companyBalanceSheet"
@@ -945,62 +951,62 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                         onChange={(e) => getDocumentData(e?.target?.files[0], "companyBalanceSheet")}
                                                     />
                                                 </td> */}
-                        <td align="center" size="large">
-                          <div className="row">
-                            {Documents?.companyBalanceSheet ? (
-                              <a onClick={() => getDocShareholding(Documents?.companyBalanceSheet)} className="btn btn-sm col-md-6">
-                                <VisibilityIcon color="info" className="icon" />
-                              </a>
-                            ) : (
-                              <p></p>
-                            )}
-                            <div className="btn btn-sm col-md-6">
-                              <label for="companyBalanceSheet">
-                                {" "}
-                                <FileUpload color="primary" />
-                              </label>
-                              <input
-                                id="companyBalanceSheet"
-                                type="file"
-                                accept="addplication/pdf"
-                                style={{ display: "none" }}
-                                onChange={(e) => getDocumentData(e?.target?.files[0], "companyBalanceSheet", "devTypeDocument")}
-                              />
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                            <td align="center" size="large">
+                              <div className="row">
+                                {Documents?.companyBalanceSheet ? (
+                                  <a onClick={() => getDocShareholding(Documents?.companyBalanceSheet)} className="btn btn-sm col-md-6">
+                                    <VisibilityIcon color="info" className="icon" />
+                                  </a>
+                                ) : (
+                                  <p></p>
+                                )}
+                                <div className="btn btn-sm col-md-6">
+                                  <label for="companyBalanceSheet">
+                                    {" "}
+                                    <FileUpload color="primary" />
+                                  </label>
+                                  <input
+                                    id="companyBalanceSheet"
+                                    type="file"
+                                    accept="addplication/pdf"
+                                    style={{ display: "none" }}
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "companyBalanceSheet", "devTypeDocument")}
+                                  />
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          )}
-          {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Company" ||
-            data?.devDetail[0]?.addInfo?.showDevTypeFields === "Society" ||
-            data?.devDetail[0]?.addInfo?.showDevTypeFields === "Trust" ||
-            data?.devDetail[0]?.addInfo?.showDevTypeFields === "Institution") && (
-            <div className="card-body">
-              <div className="form-group row">
-                {/* <label className="col-sm-3 col-form-label">Company</label> */}
-                <div className="col-sm-12">
-                  {/* <input type="text" className="employee-card-input" id="Email" placeholder="Enter Email" /> */}
-                  <table className="table table-bordered" size="sm">
-                    <thead>
-                      <tr>
-                        <th>S.No.</th>
-                        <th>Particulars of document</th>
-                        {/* <th>Details </th> */}
-                        <th>Annexure </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td> 1 </td>
-                        <td>
-                          Balance sheet of last 3 years <span className="text-danger font-weight-bold">*</span>
-                        </td>
-                        {/* <td>
+              )}
+              {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Company" ||
+                data?.devDetail[0]?.addInfo?.showDevTypeFields === "Society" ||
+                data?.devDetail[0]?.addInfo?.showDevTypeFields === "Trust" ||
+                data?.devDetail[0]?.addInfo?.showDevTypeFields === "Institution") && (
+                <div className="card-body">
+                  <div className="form-group row">
+                    {/* <label className="col-sm-3 col-form-label">Company</label> */}
+                    <div className="col-sm-12">
+                      {/* <input type="text" className="employee-card-input" id="Email" placeholder="Enter Email" /> */}
+                      <table className="table table-bordered" size="sm">
+                        <thead>
+                          <tr>
+                            <th>S.No.</th>
+                            <th>Particulars of document</th>
+                            {/* <th>Details </th> */}
+                            <th>Annexure </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td> 1 </td>
+                            <td>
+                              Balance sheet of last 3 years <span className="text-danger font-weight-bold">*</span>
+                            </td>
+                            {/* <td>
                                                     <input
                                                         type="file"
                                                         name="companyBalanceSheet"
@@ -1010,373 +1016,401 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                     />
 
                                                 </td> */}
-                        <td align="center" size="large">
-                          <div className="row">
-                            {Documents?.companyBalanceSheet ? (
-                              <a onClick={() => getDocShareholding(Documents?.companyBalanceSheet)} className="btn btn-sm col-md-6">
-                                <VisibilityIcon color="info" className="icon" />
-                              </a>
-                            ) : (
-                              <p></p>
-                            )}
-                            <div className="btn btn-sm col-md-6">
-                              <label for="uploadBalanceDoc">
-                                {" "}
-                                <FileUpload color="primary" />
-                              </label>
-                              <input
-                                id="uploadBalanceDoc"
-                                type="file"
-                                accept="application/pdf"
-                                style={{ display: "none" }}
-                                onChange={(e) => getDocumentData(e?.target?.files[0], "companyBalanceSheet", "devTypeDocument")}
-                              />
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td> 2 </td>
-                        <td>
-                          Ps-3(Representing Paid-UP capital) <span className="text-danger font-weight-bold">*</span>
-                        </td>
+                            <td align="center" size="large">
+                              <div className="row">
+                                {Documents?.companyBalanceSheet ? (
+                                  <a
+                                    onClick={() => getDocShareholding(Documents?.companyBalanceSheet)}
+                                    title="View Document"
+                                    className="btn btn-sm col-md-6"
+                                  >
+                                    <VisibilityIcon color="info" className="icon" />
+                                  </a>
+                                ) : (
+                                  <p></p>
+                                )}
+                                <div className="btn btn-sm col-md-6">
+                                  <label for="uploadBalanceDoc" title="Upload Document">
+                                    {" "}
+                                    <FileUpload color="primary" />
+                                  </label>
+                                  <input
+                                    id="uploadBalanceDoc"
+                                    type="file"
+                                    accept="application/pdf"
+                                    style={{ display: "none" }}
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "companyBalanceSheet", "devTypeDocument")}
+                                  />
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td> 2 </td>
+                            <td>
+                              Ps-3(Representing Paid-UP capital) <span className="text-danger font-weight-bold">*</span>
+                            </td>
 
-                        <td align="center" size="large">
-                          <div className="row">
-                            {Documents?.paidUpCapital ? (
-                              <a onClick={() => getDocShareholding(Documents?.paidUpCapital)} className="btn btn-sm col-md-6">
-                                <VisibilityIcon color="info" className="icon" />
-                              </a>
-                            ) : (
-                              <p></p>
-                            )}
-                            <div className="btn btn-sm col-md-6">
-                              <label for="uploadPaidUpDoc">
-                                {" "}
-                                <FileUpload color="primary" />
-                              </label>
-                              <input
-                                id="uploadPaidUpDoc"
-                                type="file"
-                                accept="application/pdf"
-                                style={{ display: "none" }}
-                                onChange={(e) => getDocumentData(e?.target?.files[0], "paidUpCapital", "devTypeDocument")}
-                              />
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
+                            <td align="center" size="large">
+                              <div className="row">
+                                {Documents?.paidUpCapital ? (
+                                  <a
+                                    onClick={() => getDocShareholding(Documents?.paidUpCapital)}
+                                    title="View Document"
+                                    className="btn btn-sm col-md-6"
+                                  >
+                                    <VisibilityIcon color="info" className="icon" />
+                                  </a>
+                                ) : (
+                                  <p></p>
+                                )}
+                                <div className="btn btn-sm col-md-6">
+                                  <label for="uploadPaidUpDoc" title="Upload Document">
+                                    {" "}
+                                    <FileUpload color="primary" />
+                                  </label>
+                                  <input
+                                    id="uploadPaidUpDoc"
+                                    type="file"
+                                    accept="application/pdf"
+                                    style={{ display: "none" }}
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "paidUpCapital", "devTypeDocument")}
+                                  />
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
 
-                      <tr>
-                        <td> 3 </td>
-                        <td>
-                          Reserves and surpluses <span className="text-danger font-weight-bold">*</span>
-                        </td>
-                        <td align="center" size="large">
-                          <div className="row">
-                            {Documents?.reservesAndSurplus ? (
-                              <a onClick={() => getDocShareholding(Documents?.reservesAndSurplus)} className="btn btn-sm col-md-6">
-                                <VisibilityIcon color="info" className="icon" />
-                              </a>
-                            ) : (
-                              <p></p>
-                            )}
-                            <div className="btn btn-sm col-md-6">
-                              <label for="reservesAndSurplus">
-                                {" "}
-                                <FileUpload color="primary" />
-                              </label>
-                              <input
-                                id="reservesAndSurplus"
-                                type="file"
-                                accept="application/pdf"
-                                style={{ display: "none" }}
-                                onChange={(e) => getDocumentData(e?.target?.files[0], "reservesAndSurplus", "devTypeDocument")}
-                              />
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td> 4 </td>
-                        <td>Fully Convertible Debenture </td>
-                        <td align="center" size="large">
-                          <div className="row">
-                            {Documents?.fullyConvertibleDebenture ? (
-                              <a onClick={() => getDocShareholding(Documents?.fullyConvertibleDebenture)} className="btn btn-sm col-md-6">
-                                <VisibilityIcon color="info" className="icon" />
-                              </a>
-                            ) : (
-                              <p></p>
-                            )}
-                            <div className="btn btn-sm col-md-6">
-                              <label for="fullyConvertibleDebentureId">
-                                {" "}
-                                <FileUpload color="primary" />
-                              </label>
-                              <input
-                                id="fullyConvertibleDebentureId"
-                                type="file"
-                                accept="application/pdf"
-                                style={{ display: "none" }}
-                                onChange={(e) => getDocumentData(e?.target?.files[0], "fullyConvertibleDebenture", "devTypeDocument")}
-                              />
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td> 5 </td>
-                        <td>Any other documents</td>
-                        <td align="center" size="large">
-                          <div className="row">
-                            {Documents?.anyOtherDoc ? (
-                              <a onClick={() => getDocShareholding(Documents?.anyOtherDoc)} className="btn btn-sm col-md-6">
-                                <VisibilityIcon color="info" className="icon" />
-                              </a>
-                            ) : (
-                              <p></p>
-                            )}
-                            <div className="btn btn-sm col-md-6">
-                              <label for="anyOtherDoc">
-                                {" "}
-                                <FileUpload color="primary" />
-                              </label>
-                              <input
-                                id="anyOtherDoc"
-                                type="file"
-                                accept="application/pdf"
-                                style={{ display: "none" }}
-                                onChange={(e) => getDocumentData(e?.target?.files[0], "anyOtherDoc", "devTypeDocument")}
-                              />
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                          <tr>
+                            <td> 3 </td>
+                            <td>
+                              Reserves and surpluses <span className="text-danger font-weight-bold">*</span>
+                            </td>
+                            <td align="center" size="large">
+                              <div className="row">
+                                {Documents?.reservesAndSurplus ? (
+                                  <a
+                                    onClick={() => getDocShareholding(Documents?.reservesAndSurplus)}
+                                    title="View Document"
+                                    className="btn btn-sm col-md-6"
+                                  >
+                                    <VisibilityIcon color="info" className="icon" />
+                                  </a>
+                                ) : (
+                                  <p></p>
+                                )}
+                                <div className="btn btn-sm col-md-6">
+                                  <label for="reservesAndSurplus" title="Upload Document">
+                                    {" "}
+                                    <FileUpload color="primary" />
+                                  </label>
+                                  <input
+                                    id="reservesAndSurplus"
+                                    type="file"
+                                    accept="application/pdf"
+                                    style={{ display: "none" }}
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "reservesAndSurplus", "devTypeDocument")}
+                                  />
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td> 4 </td>
+                            <td>Fully Convertible Debenture </td>
+                            <td align="center" size="large">
+                              <div className="row">
+                                {Documents?.fullyConvertibleDebenture ? (
+                                  <a
+                                    onClick={() => getDocShareholding(Documents?.fullyConvertibleDebenture)}
+                                    title="View Document"
+                                    className="btn btn-sm col-md-6"
+                                  >
+                                    <VisibilityIcon color="info" className="icon" />
+                                  </a>
+                                ) : (
+                                  <p></p>
+                                )}
+                                <div className="btn btn-sm col-md-6">
+                                  <label for="fullyConvertibleDebentureId" title="Upload Document">
+                                    {" "}
+                                    <FileUpload color="primary" />
+                                  </label>
+                                  <input
+                                    id="fullyConvertibleDebentureId"
+                                    type="file"
+                                    accept="application/pdf"
+                                    style={{ display: "none" }}
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "fullyConvertibleDebenture", "devTypeDocument")}
+                                  />
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td> 5 </td>
+                            <td>Any other documents</td>
+                            <td align="center" size="large">
+                              <div className="row">
+                                {Documents?.anyOtherDoc ? (
+                                  <a onClick={() => getDocShareholding(Documents?.anyOtherDoc)} title="View Document" className="btn btn-sm col-md-6">
+                                    <VisibilityIcon color="info" className="icon" />
+                                  </a>
+                                ) : (
+                                  <p></p>
+                                )}
+                                <div className="btn btn-sm col-md-6">
+                                  <label for="anyOtherDoc" title="Upload Document">
+                                    {" "}
+                                    <FileUpload color="primary" />
+                                  </label>
+                                  <input
+                                    id="anyOtherDoc"
+                                    type="file"
+                                    accept="application/pdf"
+                                    style={{ display: "none" }}
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "anyOtherDoc", "devTypeDocument")}
+                                  />
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          )}
-          {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Limited Liability Partnership" ||
-            data?.devDetail[0]?.addInfo?.showDevTypeFields === "Firm" ||
-            data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm") && (
-            <div className="card-body">
-              <div className="form-group row">
-                {/* <label className="col-sm-3 col-form-label">LLP</label> */}
-                <div className="col-sm-12">
-                  {/* <input type="text" className="employee-card-input" id="llp" placeholder="Enter Email" /> */}
-                  <table className="table table-bordered" size="sm">
-                    <thead>
-                      <tr>
-                        <th>S.No.</th>
-                        <th>Particulars of document</th>
-                        {/* <th>Details </th> */}
-                        <th>Annexure </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td> 1 </td>
-                        <td>
-                          Networth of partners <span className="text-danger font-weight-bold">*</span>
-                        </td>
-                        <td align="center" size="large">
-                          <div className="row">
-                            {Documents?.netWorthOfPartners ? (
-                              <a onClick={() => getDocShareholding(Documents?.netWorthOfPartners)} className="btn btn-sm col-md-6">
-                                <VisibilityIcon color="info" className="icon" />
-                              </a>
-                            ) : (
-                              <p></p>
-                            )}
-                            <div className="btn btn-sm col-md-6">
-                              <label for="netWorthOfPartners">
-                                {" "}
-                                <FileUpload color="primary" />
-                              </label>
-                              <input
-                                id="netWorthOfPartners"
-                                type="file"
-                                accept="application/pdf"
-                                style={{ display: "none" }}
-                                onChange={(e) => getDocumentData(e?.target?.files[0], "netWorthOfPartners", "devTypeDocument")}
-                              />
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td> 2 </td>
-                        <td>
-                          Net worth of firm <span className="text-danger font-weight-bold">*</span>
-                        </td>
-                        <td align="center" size="large">
-                          <div className="row">
-                            {Documents?.netWorthOfFirm ? (
-                              <a onClick={() => getDocShareholding(Documents?.netWorthOfFirm)} className="btn btn-sm col-md-6">
-                                <VisibilityIcon color="info" className="icon" />
-                              </a>
-                            ) : (
-                              <p></p>
-                            )}
-                            <div className="btn btn-sm col-md-6">
-                              <label for="netWorthOfFirm">
-                                {" "}
-                                <FileUpload color="primary" />
-                              </label>
-                              <input
-                                id="netWorthOfFirm"
-                                type="file"
-                                accept="application/pdf"
-                                style={{ display: "none" }}
-                                onChange={(e) => getDocumentData(e?.target?.files[0], "netWorthOfFirm", "devTypeDocument")}
-                              />
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td> 3 </td>
-                        <td>
-                          Upload Fully Convertible Debenture <span className="text-danger font-weight-bold">*</span>
-                        </td>
-                        <td align="center" size="large">
-                          <div className="row">
-                            {Documents?.fullyConvertibleDebenture ? (
-                              <a onClick={() => getDocShareholding(Documents?.fullyConvertibleDebenture)} className="btn btn-sm col-md-6">
-                                <VisibilityIcon color="info" className="icon" />
-                              </a>
-                            ) : (
-                              <p></p>
-                            )}
-                            <div className="btn btn-sm col-md-6">
-                              <label for="fullyConvertibleDebentureId">
-                                {" "}
-                                <FileUpload color="primary" />
-                              </label>
-                              <input
-                                id="fullyConvertibleDebentureId"
-                                type="file"
-                                accept="application/pdf"
-                                style={{ display: "none" }}
-                                onChange={(e) => getDocumentData(e?.target?.files[0], "fullyConvertibleDebenture", "devTypeDocument")}
-                              />
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+              )}
+              {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Limited Liability Partnership" ||
+                data?.devDetail[0]?.addInfo?.showDevTypeFields === "Firm" ||
+                data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm") && (
+                <div className="card-body">
+                  <div className="form-group row">
+                    {/* <label className="col-sm-3 col-form-label">LLP</label> */}
+                    <div className="col-sm-12">
+                      {/* <input type="text" className="employee-card-input" id="llp" placeholder="Enter Email" /> */}
+                      <table className="table table-bordered" size="sm">
+                        <thead>
+                          <tr>
+                            <th>S.No.</th>
+                            <th>Particulars of document</th>
+                            {/* <th>Details </th> */}
+                            <th>Annexure </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td> 1 </td>
+                            <td>
+                              Networth of partners <span className="text-danger font-weight-bold">*</span>
+                            </td>
+                            <td align="center" size="large">
+                              <div className="row">
+                                {Documents?.netWorthOfPartners ? (
+                                  <a
+                                    onClick={() => getDocShareholding(Documents?.netWorthOfPartners)}
+                                    title="View Document"
+                                    className="btn btn-sm col-md-6"
+                                  >
+                                    <VisibilityIcon color="info" className="icon" />
+                                  </a>
+                                ) : (
+                                  <p></p>
+                                )}
+                                <div className="btn btn-sm col-md-6">
+                                  <label for="netWorthOfPartners" title="Upload Document">
+                                    {" "}
+                                    <FileUpload color="primary" />
+                                  </label>
+                                  <input
+                                    id="netWorthOfPartners"
+                                    type="file"
+                                    accept="application/pdf"
+                                    style={{ display: "none" }}
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "netWorthOfPartners", "devTypeDocument")}
+                                  />
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td> 2 </td>
+                            <td>
+                              Net worth of firm <span className="text-danger font-weight-bold">*</span>
+                            </td>
+                            <td align="center" size="large">
+                              <div className="row">
+                                {Documents?.netWorthOfFirm ? (
+                                  <a
+                                    onClick={() => getDocShareholding(Documents?.netWorthOfFirm)}
+                                    title="View Document"
+                                    className="btn btn-sm col-md-6"
+                                  >
+                                    <VisibilityIcon color="info" className="icon" />
+                                  </a>
+                                ) : (
+                                  <p></p>
+                                )}
+                                <div className="btn btn-sm col-md-6">
+                                  <label for="netWorthOfFirm" title="Upload Document">
+                                    {" "}
+                                    <FileUpload color="primary" />
+                                  </label>
+                                  <input
+                                    id="netWorthOfFirm"
+                                    type="file"
+                                    accept="application/pdf"
+                                    style={{ display: "none" }}
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "netWorthOfFirm", "devTypeDocument")}
+                                  />
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td> 3 </td>
+                            <td>
+                              Upload Fully Convertible Debenture <span className="text-danger font-weight-bold">*</span>
+                            </td>
+                            <td align="center" size="large">
+                              <div className="row">
+                                {Documents?.fullyConvertibleDebenture ? (
+                                  <a
+                                    onClick={() => getDocShareholding(Documents?.fullyConvertibleDebenture)}
+                                    title="View Document"
+                                    className="btn btn-sm col-md-6"
+                                  >
+                                    <VisibilityIcon color="info" className="icon" />
+                                  </a>
+                                ) : (
+                                  <p></p>
+                                )}
+                                <div className="btn btn-sm col-md-6">
+                                  <label for="fullyConvertibleDebentureId" title="Upload Document">
+                                    {" "}
+                                    <FileUpload color="primary" />
+                                  </label>
+                                  <input
+                                    id="fullyConvertibleDebentureId"
+                                    type="file"
+                                    accept="application/pdf"
+                                    style={{ display: "none" }}
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "fullyConvertibleDebenture", "devTypeDocument")}
+                                  />
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          )}
-          {/* <div>
+              )}
+              {/* <div>
                     <h5 className="card-h">
                     {" "}
                     Capacity of Developer to develop a colony:
                     </h5>
                 </div> */}
-          <div className="card-body">
-            <p>1. I/ We hereby submit the following information/ enclose the relevant documents:-</p>
-            {data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" ||
-            data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm" ||
-            data?.devDetail[0]?.addInfo?.showDevTypeFields === "Hindu Undivided Family" ? (
-              <p className="ml-1">
-                (i) Whether the Developer has earlier been granted permission to set up a colony under HDRU Act, 1975:{" "}
-                <span className="text-danger font-weight-bold">*</span>
-              </p>
-            ) : (
-              <p className="d-none"></p>
-            )}
-            {data?.devDetail[0]?.addInfo?.showDevTypeFields === "Company" && (
-              <p className="ml-1">
-                (i) Whether the Developer has earlier been granted permission to set up a colony under HDRU Act, 1975:{" "}
-                <span className="text-danger font-weight-bold">*</span>
-              </p>
-            )}
-            <div className="form-group ml-1">
-              <input
-                type="radio"
-                value="Y"
-                checked={permissionGrantedHRDU === "Y" ? true : false}
-                id="permissionGrantedHRDU"
-                className="mx-2 mt-1"
-                onChange={changeValueHrdu}
-                name="permissionGrantedHRDU"
-              />
-              <label for="permissionGrantedHRDU">Yes</label>
+              <div className="card-body">
+                <p>1. I/ We hereby submit the following information/ enclose the relevant documents:-</p>
+                {data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" ||
+                data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm" ||
+                data?.devDetail[0]?.addInfo?.showDevTypeFields === "Hindu Undivided Family" ? (
+                  <p className="ml-1">
+                    (i) Whether the Developer has earlier been granted permission to set up a colony under HDRU Act, 1975:{" "}
+                    <span className="text-danger font-weight-bold">*</span>
+                  </p>
+                ) : (
+                  <p className="d-none"></p>
+                )}
+                {data?.devDetail[0]?.addInfo?.showDevTypeFields === "Company" && (
+                  <p className="ml-1">
+                    (i) Whether the Developer has earlier been granted permission to set up a colony under HDRU Act, 1975:{" "}
+                    <span className="text-danger font-weight-bold">*</span>
+                  </p>
+                )}
+                <div className="form-group ml-1">
+                  <input
+                    type="radio"
+                    value="Y"
+                    checked={permissionGrantedHRDU === "Y" ? true : false}
+                    id="permissionGrantedHRDU"
+                    className="mx-2 mt-1"
+                    onChange={changeValueHrdu}
+                    name="permissionGrantedHRDU"
+                  />
+                  <label for="permissionGrantedHRDU">Yes</label>
 
-              <input
-                type="radio"
-                value="N"
-                checked={permissionGrantedHRDU === "N" ? true : false}
-                id="permissionGrantedHRDUN"
-                className="mx-2 mt-1"
-                onChange={changeValueHrdu}
-                name="permissionGrantedHRDU"
-              />
-              <label for="permissionGrantedHRDUN">No</label>
-              {permissionGrantedHRDU === "Y" && (
-                <div className="card-body">
-                  {/* <h5 className="card-h">Add/Remove Authorized Users</h5> */}
-                  <div className="table-bd">
-                    <Table className="table table-bordered">
-                      <thead>
-                        <tr>
-                          <th>S. no</th>
-                          <th> Licence No. </th>
-                          <th>Date of grant of license</th>
-                          <th>Purpose of colony</th>
-                          <th>Validity of Licence</th>
-                          {/* <th>Technical Expert Engaged</th>
+                  <input
+                    type="radio"
+                    value="N"
+                    checked={permissionGrantedHRDU === "N" ? true : false}
+                    id="permissionGrantedHRDUN"
+                    className="mx-2 mt-1"
+                    onChange={changeValueHrdu}
+                    name="permissionGrantedHRDU"
+                  />
+                  <label for="permissionGrantedHRDUN">No</label>
+                  {permissionGrantedHRDU === "Y" && (
+                    <div className="card-body">
+                      {/* <h5 className="card-h">Add/Remove Authorized Users</h5> */}
+                      <div className="table-bd">
+                        <Table className="table table-bordered">
+                          <thead>
+                            <tr>
+                              <th>S. no</th>
+                              <th> Licence No. </th>
+                              <th>Date of grant of license</th>
+                              <th>Purpose of colony</th>
+                              <th>Validity of Licence</th>
+                              {/* <th>Technical Expert Engaged</th>
                                                     <th>Degrees of Engineer</th>
                                                     <th>Degrees of Architect</th>
                                                     <th>Degrees of Town Planner</th> */}
-                          <th>Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {capacityDevelopColonyHdruAct.length > 0 ? (
-                          capacityDevelopColonyHdruAct?.map((elementInArray, input) => {
-                            return (
-                              <tr>
-                                <td>{input + 1}</td>
-                                <td>
-                                  <input
-                                    type="text"
-                                    value={elementInArray?.licenceNumber}
-                                    placeholder={elementInArray?.licenceNumber}
-                                    class="form-control"
-                                  />
-                                </td>
-                                <td>
-                                  <input
-                                    type="text"
-                                    value={elementInArray?.dateOfGrantingLic}
-                                    placeholder={elementInArray?.dateOfGrantingLic}
-                                    class="form-control"
-                                  />
-                                </td>
-                                <td>
-                                  <input
-                                    type="text"
-                                    value={elementInArray?.purposeOfColony}
-                                    placeholder={elementInArray?.purposeOfColony}
-                                    class="form-control"
-                                  />
-                                </td>
-                                <td>
-                                  <input
-                                    type="text"
-                                    value={elementInArray?.licValidity}
-                                    placeholder={elementInArray?.licValidity}
-                                    class="form-control"
-                                  />
-                                </td>
-                                {/* <td>
+                              <th>Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {capacityDevelopColonyHdruAct.length > 0 ? (
+                              capacityDevelopColonyHdruAct?.map((elementInArray, input) => {
+                                return (
+                                  <tr>
+                                    <td>{input + 1}</td>
+                                    <td>
+                                      <input
+                                        type="text"
+                                        value={elementInArray?.licenceNumber}
+                                        placeholder={elementInArray?.licenceNumber}
+                                        class="form-control"
+                                      />
+                                    </td>
+                                    <td>
+                                      <input
+                                        type="text"
+                                        value={elementInArray?.dateOfGrantingLic}
+                                        placeholder={elementInArray?.dateOfGrantingLic}
+                                        class="form-control"
+                                      />
+                                    </td>
+                                    <td>
+                                      <input
+                                        type="text"
+                                        value={elementInArray?.purposeOfColony}
+                                        placeholder={elementInArray?.purposeOfColony}
+                                        class="form-control"
+                                      />
+                                    </td>
+                                    <td>
+                                      <input
+                                        type="text"
+                                        value={elementInArray?.licValidity}
+                                        placeholder={elementInArray?.licValidity}
+                                        class="form-control"
+                                      />
+                                    </td>
+                                    {/* <td>
                                                                         <p>{elementInArray?.technicalExpertEngaged === "Y" ? "Yes" : "No"}</p>
                                                                     </td>
                                                                     <td>
@@ -1414,120 +1448,120 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
 
                                                                         </div>
                                                                     </td> */}
-                                <td>
-                                  <button type="button" onClick={() => deleteTableRows(-1)}>
-                                    <DeleteIcon />
-                                  </button>
-                                </td>
-                              </tr>
-                            );
-                          })
-                        ) : (
-                          <p className="d-none">Click on Add more</p>
-                        )}
-                      </tbody>
-                    </Table>
-                    <div>
-                      <button
-                        type="button"
-                        style={{
-                          float: "left",
-                          backgroundColor: "#0b3629",
-                          color: "white",
-                        }}
-                        className="btn mt-3"
-                        // onClick={() => setNoOfRows(noofRows + 1)}
-                        onClick={handleShowCapacityDevelopColony}
-                      >
-                        Add More
-                      </button>
-                      <Modal show={showCapacityDevelopColony} onHide={handleCloseCapacityDevelopColony} animation={false}>
-                        <Modal.Header closeButton>
-                          <Modal.Title>Add Details</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                          <form className="text1">
-                            <Row>
-                              <Col md={4} xxl lg="4">
-                                <label htmlFor="name" className="text">
-                                  Licence No. <span className="text-danger font-weight-bold">*</span>
-                                </label>
-                                <input
-                                  type="text"
-                                  value={hrduModalData.licNo}
-                                  onChange={(e) => setHrduModalData({ ...hrduModalData, licNo: e.target.value.toUpperCase() })}
-                                  placeholder=""
-                                  class="form-control"
-                                  required="required"
-                                  maxLength={11}
-                                />
-                                {hrduModalData.licNo &&
-                                  hrduModalData.licNo.length > 0 &&
-                                  !hrduModalData.licNo.match(Digit.Utils.getPattern("LicNumber")) && (
-                                    <CardLabelError
-                                      style={{ width: "100%", marginTop: "5px", fontSize: "16px", marginBottom: "12px", color: "red" }}
+                                    <td>
+                                      <button type="button" onClick={() => deleteTableRows(-1)}>
+                                        <DeleteIcon />
+                                      </button>
+                                    </td>
+                                  </tr>
+                                );
+                              })
+                            ) : (
+                              <p className="d-none">Click on Add more</p>
+                            )}
+                          </tbody>
+                        </Table>
+                        <div>
+                          <button
+                            type="button"
+                            style={{
+                              float: "left",
+                              backgroundColor: "#0b3629",
+                              color: "white",
+                            }}
+                            className="btn mt-3"
+                            // onClick={() => setNoOfRows(noofRows + 1)}
+                            onClick={handleShowCapacityDevelopColony}
+                          >
+                            Add More
+                          </button>
+                          <Modal show={showCapacityDevelopColony} onHide={handleCloseCapacityDevelopColony} animation={false}>
+                            <Modal.Header closeButton>
+                              <Modal.Title>Add Details</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                              <form className="text1">
+                                <Row>
+                                  <Col md={4} xxl lg="4">
+                                    <label htmlFor="name" className="text">
+                                      Licence No. <span className="text-danger font-weight-bold">*</span>
+                                    </label>
+                                    <input
+                                      type="text"
+                                      value={hrduModalData.licNo}
+                                      onChange={(e) => setHrduModalData({ ...hrduModalData, licNo: e.target.value.toUpperCase() })}
+                                      placeholder=""
+                                      class="form-control"
+                                      required="required"
+                                      maxLength={11}
+                                    />
+                                    {hrduModalData.licNo &&
+                                      hrduModalData.licNo.length > 0 &&
+                                      !hrduModalData.licNo.match(Digit.Utils.getPattern("LicNumber")) && (
+                                        <CardLabelError
+                                          style={{ width: "100%", marginTop: "5px", fontSize: "16px", marginBottom: "12px", color: "red" }}
+                                        >
+                                          {t("Invalid Licence No.")}
+                                        </CardLabelError>
+                                      )}
+                                  </Col>
+                                  <Col md={4} xxl lg="4">
+                                    <label htmlFor="name" className="text">
+                                      Date of grant of a license <span className="text-danger font-weight-bold">*</span>
+                                    </label>
+                                    <input
+                                      type="date"
+                                      value={hrduModalData.dateOfGrantingLic}
+                                      onChange={(e) => setHrduModalData({ ...hrduModalData, dateOfGrantingLic: e.target.value })}
+                                      placeholder=""
+                                      class="form-control"
+                                      isMandatory={false}
+                                      {...(validation = {
+                                        isRequired: true,
+                                        title: "Please enter Name",
+                                      })}
+                                      max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
+                                    />
+                                  </Col>
+                                  <Col md={3} xxl lg="4">
+                                    <label htmlFor="name" className="text">
+                                      {`${t("Purpose of colony")}`}
+                                      <span class="text-danger font-weight-bold mx-2">*</span>
+                                    </label>
+
+                                    <Select
+                                      value={purposeOfColony || ""}
+                                      onChange={(e) => setShowPurposeType(e.target.value)}
+                                      className="w-100 form-control"
+                                      variant="standard"
                                     >
-                                      {t("Invalid Licence No.")}
-                                    </CardLabelError>
-                                  )}
-                              </Col>
-                              <Col md={4} xxl lg="4">
-                                <label htmlFor="name" className="text">
-                                  Date of grant of a license <span className="text-danger font-weight-bold">*</span>
-                                </label>
-                                <input
-                                  type="date"
-                                  value={hrduModalData.dateOfGrantingLic}
-                                  onChange={(e) => setHrduModalData({ ...hrduModalData, dateOfGrantingLic: e.target.value })}
-                                  placeholder=""
-                                  class="form-control"
-                                  isMandatory={false}
-                                  {...(validation = {
-                                    isRequired: true,
-                                    title: "Please enter Name",
-                                  })}
-                                  max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
-                                />
-                              </Col>
-                              <Col md={3} xxl lg="4">
-                                <label htmlFor="name" className="text">
-                                  {`${t("Purpose of colony")}`}
-                                  <span class="text-danger font-weight-bold mx-2">*</span>
-                                </label>
+                                      {purposeOptions?.data?.map((item, index) => (
+                                        <MenuItem value={item.value}>{item?.label}</MenuItem>
+                                      ))}
+                                    </Select>
+                                  </Col>
+                                </Row>
+                                <Row>
+                                  <Col md={4} xxl lg="4">
+                                    <label htmlFor="name" className="text">
+                                      Validity of licence <span className="text-danger font-weight-bold">*</span>
+                                    </label>
+                                    <input
+                                      type="date"
+                                      name="validatingLicence"
+                                      value={hrduModalData.licValidity}
+                                      disabled={!hrduModalData.dateOfGrantingLic}
+                                      onChange={(e) => setHrduModalData({ ...hrduModalData, licValidity: e.target.value })}
+                                      placeholder=""
+                                      class="form-control"
+                                      min={hrduModalData.dateOfGrantingLic}
+                                    />
+                                  </Col>
+                                </Row>
 
-                                <Select
-                                  value={purposeOfColony || ""}
-                                  onChange={(e) => setShowPurposeType(e.target.value)}
-                                  className="w-100 form-control"
-                                  variant="standard"
-                                >
-                                  {purposeOptions?.data?.map((item, index) => (
-                                    <MenuItem value={item.value}>{item?.label}</MenuItem>
-                                  ))}
-                                </Select>
-                              </Col>
-                            </Row>
-                            <Row>
-                              <Col md={4} xxl lg="4">
-                                <label htmlFor="name" className="text">
-                                  Validity of licence <span className="text-danger font-weight-bold">*</span>
-                                </label>
-                                <input
-                                  type="date"
-                                  name="validatingLicence"
-                                  value={hrduModalData.licValidity}
-                                  disabled={!hrduModalData.dateOfGrantingLic}
-                                  onChange={(e) => setHrduModalData({ ...hrduModalData, licValidity: e.target.value })}
-                                  placeholder=""
-                                  class="form-control"
-                                  min={hrduModalData.dateOfGrantingLic}
-                                />
-                              </Col>
-                            </Row>
+                                {/* <p>(iii) Whether any technical expert(s) engaged</p> */}
 
-                            {/* <p>(iii) Whether any technical expert(s) engaged</p> */}
-
-                            {/* <div className="form-group">
+                                {/* <div className="form-group">
                                                             <input
                                                                 type="radio"
                                                                 value="Y"
@@ -1549,7 +1583,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                             <label for="No">No</label>
                                                         </div> */}
 
-                            {/* {
+                                {/* {
                                                             hrduModalData.technicalExpertEngaged === "Y" &&
                                                             <Row>
                                                                 <Col md={4} xxl lg="4">
@@ -1590,528 +1624,800 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                 </Col>
                                                             </Row>
                                                         } */}
-                          </form>
-                        </Modal.Body>
-                        <Modal.Footer>
-                          <Button variant="secondary" onClick={handleCloseCapacityDevelopColony}>
-                            Close
-                          </Button>
-                          <Button
-                            disabled={
-                              !(
-                                hrduModalData.licNo &&
-                                hrduModalData.licValidity &&
-                                hrduModalData.dateOfGrantingLic &&
-                                purposeOfColony &&
-                                hrduModalData.licNo.match(Digit.Utils.getPattern("LicNumber"))
-                              )
-                            }
-                            variant="primary"
-                            onClick={handleArrayValues}
-                          >
-                            Submit
-                          </Button>
-                        </Modal.Footer>
-                      </Modal>
+                              </form>
+                            </Modal.Body>
+                            <Modal.Footer>
+                              <Button variant="secondary" onClick={handleCloseCapacityDevelopColony}>
+                                Close
+                              </Button>
+                              <Button
+                                disabled={
+                                  !(
+                                    hrduModalData.licNo &&
+                                    hrduModalData.licValidity &&
+                                    hrduModalData.dateOfGrantingLic &&
+                                    purposeOfColony &&
+                                    hrduModalData.licNo.match(Digit.Utils.getPattern("LicNumber"))
+                                  )
+                                }
+                                variant="primary"
+                                onClick={handleArrayValues}
+                              >
+                                Submit
+                              </Button>
+                            </Modal.Footer>
+                          </Modal>
+                        </div>
+
+                        <br></br>
+                        <br></br>
+                      </div>
                     </div>
-
-                    <br></br>
-                    <br></br>
-                  </div>
+                  )}
                 </div>
-              )}
-            </div>
 
-            {permissionGrantedHRDU === "N" && (
-              <div className="ml-1">
-                {data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" ||
-                data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm" ? (
+                {permissionGrantedHRDU === "N" && (
+                  <div className="ml-1">
+                    {data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" ||
+                    data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm" ? (
+                      <p>
+                        (ii) Have you developed projects outside Haryana:- <span className="text-danger font-weight-bold">*</span>
+                      </p>
+                    ) : (
+                      <p>
+                        (ii) Have your company/firm developed projects outside Haryana:- <span className="text-danger font-weight-bold">*</span>
+                      </p>
+                    )}
+
+                    <div className="form-group">
+                      <input
+                        type="radio"
+                        value="Y"
+                        checked={technicalCapacityOutsideHaryana === "Y" ? true : false}
+                        id="technicalCapacityOutsideHaryana"
+                        className="mx-2 mt-1"
+                        onChange={(e) => setTechnicalCapacityOutsideHaryana(e.target.value)}
+                        name="technicalCapacityOutsideHaryana"
+                      />
+                      <label for="technicalCapacityOutsideHaryana">Yes</label>
+
+                      <input
+                        type="radio"
+                        value="N"
+                        checked={technicalCapacityOutsideHaryana === "N" ? true : false}
+                        id="technicalCapacityOutsideHaryanaN"
+                        className="mx-2 mt-1"
+                        onChange={(e) => setTechnicalCapacityOutsideHaryana(e.target.value)}
+                        name="technicalCapacityOutsideHaryana"
+                      />
+                      <label for="technicalCapacityOutsideHaryanaN">No</label>
+                      {technicalCapacityOutsideHaryana === "Y" && (
+                        <Row>
+                          <Col md={3} xxl lg="3" className="mb-2">
+                            <label htmlFor="project" className="">
+                              {" "}
+                              Name of Project <span className="text-danger font-weight-bold">*</span>
+                            </label>
+                            <input
+                              type="text"
+                              name="project"
+                              value={technicalCapacityOutsideHaryanaDetails.project}
+                              onChange={(e) =>
+                                setTechnicalCapacityOutsideHaryanaDetails({ ...technicalCapacityOutsideHaryanaDetails, project: e.target.value })
+                              }
+                              placeholder=""
+                              class="form-control"
+                            />
+                            {technicalCapacityOutsideHaryanaDetails.project &&
+                              technicalCapacityOutsideHaryanaDetails.project.length > 0 &&
+                              !technicalCapacityOutsideHaryanaDetails.project.match(Digit.Utils.getPattern("Name")) && (
+                                <CardLabelError style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
+                                  {t("Please enter valid details")}
+                                </CardLabelError>
+                              )}
+                          </Col>
+
+                          <Col md={3} xxl lg="3" className="mb-2">
+                            <label htmlFor="authority" className="">
+                              {" "}
+                              Name of Authority <span className="text-danger font-weight-bold">*</span>
+                            </label>
+                            <input
+                              type="text"
+                              name="authority"
+                              value={technicalCapacityOutsideHaryanaDetails.authority}
+                              onChange={(e) =>
+                                setTechnicalCapacityOutsideHaryanaDetails({ ...technicalCapacityOutsideHaryanaDetails, authority: e.target.value })
+                              }
+                              placeholder=""
+                              class="form-control"
+                            />
+                            {technicalCapacityOutsideHaryanaDetails.authority &&
+                              technicalCapacityOutsideHaryanaDetails.authority.length > 0 &&
+                              !technicalCapacityOutsideHaryanaDetails.authority.match(Digit.Utils.getPattern("Name")) && (
+                                <CardLabelError style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
+                                  {t("Please enter valid details")}
+                                </CardLabelError>
+                              )}
+                          </Col>
+
+                          <Col md={3} xxl lg="3" className="mb-2">
+                            <label htmlFor="statusOfDevelopment" className="">
+                              Status of Development <span className="text-danger font-weight-bold">*</span>
+                            </label>
+                            <input
+                              type="text"
+                              name="statusOfDevelopment"
+                              value={technicalCapacityOutsideHaryanaDetails.statusOfDevelopment}
+                              onChange={(e) =>
+                                setTechnicalCapacityOutsideHaryanaDetails({
+                                  ...technicalCapacityOutsideHaryanaDetails,
+                                  statusOfDevelopment: e.target.value,
+                                })
+                              }
+                              placeholder=""
+                              class="form-control"
+                            />
+                            {technicalCapacityOutsideHaryanaDetails.statusOfDevelopment &&
+                              technicalCapacityOutsideHaryanaDetails.statusOfDevelopment.length > 0 &&
+                              !technicalCapacityOutsideHaryanaDetails.statusOfDevelopment.match(Digit.Utils.getPattern("Name")) && (
+                                <CardLabelError style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
+                                  {t("Please enter valid details")}
+                                </CardLabelError>
+                              )}
+                          </Col>
+                          <Col md={3} xxl lg="3" className="mb-2">
+                            <label htmlFor="permissionLetterDoc" className="">
+                              Permission letter <span className="text-danger font-weight-bold">*</span>
+                            </label>
+                            <div className="d-flex">
+                              <input
+                                id="permissionLetterYId"
+                                type="file"
+                                className="form-control"
+                                name="permissionLetterDoc"
+                                // accept="addplication/pdf"
+                                onChange={(e) => getDocumentData(e?.target?.files[0], "permissionLetterDoc", "outsideHrDocY")}
+                              />
+                              <span>
+                                {Documents?.permissionLetterDoc ? (
+                                  <a onClick={() => getDocShareholding(Documents?.permissionLetterDoc)} className="btn btn-sm col-md-6">
+                                    <VisibilityIcon color="info" className="icon" />
+                                  </a>
+                                ) : (
+                                  <p></p>
+                                )}
+                              </span>
+                            </div>
+                          </Col>
+                          <Col md={3} xxl lg="3" className="mb-2">
+                            <label htmlFor="projectArea" className="">
+                              Area of the project in acres <span className="text-danger font-weight-bold">*</span>
+                            </label>
+                            <input
+                              type="number"
+                              name="projectArea"
+                              value={technicalCapacityOutsideHaryanaDetails.projectArea}
+                              onChange={(e) =>
+                                setTechnicalCapacityOutsideHaryanaDetails({ ...technicalCapacityOutsideHaryanaDetails, projectArea: e.target.value })
+                              }
+                              placeholder=""
+                              class="form-control"
+                            />
+                          </Col>
+                          <Col md={3} xxl lg="3" className="mb-2">
+                            <label htmlFor="location" className="">
+                              Location <span className="text-danger font-weight-bold">*</span>
+                            </label>
+                            <input
+                              type="text"
+                              name="location"
+                              value={technicalCapacityOutsideHaryanaDetails.location}
+                              onChange={(e) =>
+                                setTechnicalCapacityOutsideHaryanaDetails({ ...technicalCapacityOutsideHaryanaDetails, location: e.target.value })
+                              }
+                              placeholder=""
+                              class="form-control"
+                            />
+                          </Col>
+                          <Col md={3} xxl lg="3" className="mb-2">
+                            <label htmlFor="hrDetailAnyDoc" className="">
+                              Any other document/ Photo
+                            </label>
+                            <div className="d-flex">
+                              <input
+                                id="hrDetailAnyDocId"
+                                type="file"
+                                className="form-control"
+                                name="hrDetailAnyDoc"
+                                // accept="addplication/pdf"
+                                onChange={(e) => getDocumentData(e?.target?.files[0], "hrDetailAnyDoc", "outsideHrDocY")}
+                              />
+                              <span>
+                                {Documents?.hrDetailAnyDoc ? (
+                                  <a
+                                    onClick={() => getDocShareholding(Documents?.hrDetailAnyDoc)}
+                                    title="View Document"
+                                    className="btn btn-sm col-md-6"
+                                  >
+                                    <VisibilityIcon color="info" className="icon" />
+                                  </a>
+                                ) : (
+                                  <p></p>
+                                )}
+                              </span>
+                            </div>
+                          </Col>
+                        </Row>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                <div className="hl"></div>
+
+                <div className="hl"></div>
+                {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual NOT USES" ||
+                  data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm NOT USES") && (
+                  <div>
+                    <p>
+                      (iii). In case of technical capacity sought from another company/firm who has already obtained license(s) under act of 1975
+                      Haryana:
+                      <span className="text-danger font-weight-bold">*</span>
+                    </p>
+
+                    <div className="form-group">
+                      <input
+                        type="radio"
+                        value="Y"
+                        checked={alreadtObtainedLic === "Y" ? true : false}
+                        id="alreadtObtainedLic"
+                        className="mx-2 mt-1"
+                        onChange={changeAlreadyObtainedLic}
+                        name="alreadtObtainedLic"
+                      />
+                      <label for="Yes">Yes</label>
+
+                      <input
+                        type="radio"
+                        value="N"
+                        checked={alreadtObtainedLic === "N" ? true : false}
+                        id="alreadtObtainedLicN"
+                        className="mx-2 mt-1"
+                        onChange={changeAlreadyObtainedLic}
+                        name="alreadtObtainedLic"
+                        onClick={handleshow6}
+                      />
+                      <label for="No">No</label>
+                      {alreadtObtainedLic === "Y" && (
+                        <div>
+                          <div className="row ">
+                            <div className="form-group row">
+                              <div className="col-sm-12">
+                                <Col xs="12" md="12" sm="12">
+                                  <div>
+                                    <Table className="table table-bordered" size="sm">
+                                      <thead>
+                                        <tr>
+                                          <th>S.No.</th>
+                                          <th>Agreement </th>
+                                          <th>Upload Document </th>
+                                          <th>Annexure </th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <tr>
+                                          <td> 1 </td>
+
+                                          <td>
+                                            Agreement between the proposed developer and existing colonizer{" "}
+                                            <span className="text-danger font-weight-bold">*</span>
+                                          </td>
+                                          <td align="center" size="large" style={{ textAlign: "center" }}>
+                                            <label for="agreementDocYId" title="Upload Document">
+                                              {" "}
+                                              <FileUpload color="primary" />
+                                            </label>
+                                            <input
+                                              id="agreementDocYId"
+                                              type="file"
+                                              name="agreementDocY"
+                                              // accept="addplication/pdf"
+                                              style={{ display: "none" }}
+                                              onChange={(e) => getDocumentData(e?.target?.files[0], "agreementDocY", "alreadyObtaileLicFile")}
+                                            />
+                                            {/* <input
+                                                                                type="file"
+                                                                                name="agreementDocY"
+                                                                                onChange={(e) => getDocumentData(e?.target?.files[0], "agreementDocY")}
+                                                                                class="employee-card-input"
+                                                                            /> */}
+                                          </td>
+                                          <td>
+                                            {Documents?.agreementDocY ? (
+                                              <a onClick={() => getDocShareholding(Documents?.agreementDocY)}>
+                                                <VisibilityIcon color="info" className="icon" />
+                                              </a>
+                                            ) : (
+                                              <p></p>
+                                            )}
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td> 2 </td>
+
+                                          <td>
+                                            Board resolution of authorised signatory of the existing colonizer{" "}
+                                            <span className="text-danger font-weight-bold">*</span>
+                                          </td>
+                                          <td align="center" size="large" style={{ textAlign: "center" }}>
+                                            <label for="boardDocXId">
+                                              {" "}
+                                              <FileUpload color="primary" />
+                                            </label>
+                                            <input
+                                              id="boardDocXId"
+                                              type="file"
+                                              name="boardDocX"
+                                              // accept="addplication/pdf"
+                                              style={{ display: "none" }}
+                                              onChange={(e) => getDocumentData(e?.target?.files[0], "boardDocX", "alreadyObtaileLicFile")}
+                                            />
+                                            {/* <input
+                                                                                type="file"
+                                                                                name="boardDocX"
+                                                                                onChange={(e) => getDocumentData(e?.target?.files[0], "boardDocX")}
+                                                                                class="employee-card-input"
+                                                                            /> */}
+                                          </td>
+                                          <td>
+                                            {Documents?.boardDocX ? (
+                                              <a onClick={() => getDocShareholding(Documents?.boardDocX)}>
+                                                <VisibilityIcon color="info" className="icon" />
+                                              </a>
+                                            ) : (
+                                              <p></p>
+                                            )}
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td> 3 </td>
+                                          <td>
+                                            {" "}
+                                            Registered and Irrevocable Agreement <span className="text-danger font-weight-bold">*</span>
+                                          </td>
+                                          <td align="center" size="large" style={{ textAlign: "center" }}>
+                                            <label for="registeredDocId">
+                                              {" "}
+                                              <FileUpload color="primary" />
+                                            </label>
+                                            <input
+                                              id="registeredDocId"
+                                              type="file"
+                                              name="registeredDoc"
+                                              // accept="addplication/pdf"
+                                              style={{ display: "none" }}
+                                              onChange={(e) => getDocumentData(e?.target?.files[0], "registeredDoc", "alreadyObtaileLicFile")}
+                                            />
+                                            {/* <input
+                                                                                type="file"
+                                                                                name="registeredDoc"
+                                                                                onChange={(e) => getDocumentData(e?.target?.files[0], "registeredDoc")}
+                                                                                class="employee-card-input"
+                                                                            /> */}
+                                          </td>
+                                          <td>
+                                            {Documents?.registeredDoc ? (
+                                              <a onClick={() => getDocShareholding(Documents?.registeredDoc)}>
+                                                <VisibilityIcon color="info" className="icon" />
+                                              </a>
+                                            ) : (
+                                              <p></p>
+                                            )}
+                                          </td>
+                                        </tr>
+
+                                        <tr>
+                                          <td> 4 </td>
+                                          <td>
+                                            Board resolutions of authorized signatory of firm/company provided technical assistance{" "}
+                                            <span className="text-danger font-weight-bold">*</span>
+                                          </td>
+                                          <td align="center" size="large" style={{ textAlign: "center" }}>
+                                            <label for="boardDocYId">
+                                              {" "}
+                                              <FileUpload color="primary" />
+                                            </label>
+                                            <input
+                                              id="boardDocYId"
+                                              type="file"
+                                              name="boardDocY"
+                                              // accept="addplication/pdf"
+                                              style={{ display: "none" }}
+                                              onChange={(e) => getDocumentData(e?.target?.files[0], "boardDocY", "alreadyObtaileLicFile")}
+                                            />
+                                            {/* <input
+                                                                                type="file"
+                                                                                onChange={(e) => getDocumentData(e?.target?.files[0], "boardDocY")}
+                                                                                class="employee-card-input"
+                                                                            /> */}
+                                          </td>
+                                          <td>
+                                            {Documents?.boardDocY ? (
+                                              <a onClick={() => getDocShareholding(Documents?.boardDocY)}>
+                                                <VisibilityIcon color="info" className="icon" />
+                                              </a>
+                                            ) : (
+                                              <p></p>
+                                            )}
+                                          </td>
+                                        </tr>
+                                      </tbody>{" "}
+                                    </Table>
+                                  </div>
+                                </Col>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="row mx-1">
+                            <div className="col col-4">
+                              <div className="form-group">
+                                <label htmlFor="licNo">
+                                  License No. <span className="text-danger font-weight-bold">*</span>
+                                </label>
+                                <input
+                                  type="text"
+                                  name="licNo"
+                                  value={technicalCapacitySoughtFromAnyColonizer.licNo}
+                                  onChange={(e) =>
+                                    setTechnicalCapacitySoughtFromAnyColonizer({
+                                      ...technicalCapacitySoughtFromAnyColonizer,
+                                      licNo: e.target.value.toUpperCase(),
+                                    })
+                                  }
+                                  className="form-control"
+                                  maxLength={11}
+                                />
+                                {technicalCapacitySoughtFromAnyColonizer.licNo &&
+                                  technicalCapacitySoughtFromAnyColonizer.licNo.length > 0 &&
+                                  !technicalCapacitySoughtFromAnyColonizer.licNo.match(Digit.Utils.getPattern("LicNumber")) && (
+                                    <CardLabelError
+                                      style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}
+                                    >
+                                      {t("Please enter valid Licence Number")}
+                                    </CardLabelError>
+                                  )}
+                              </div>
+                            </div>
+
+                            <div className="col col-4">
+                              <div className="form-group">
+                                <label htmlFor="licDate">
+                                  Date <span className="text-danger font-weight-bold">*</span>
+                                </label>
+                                <input
+                                  type="date"
+                                  name="licDate"
+                                  value={technicalCapacitySoughtFromAnyColonizer.dateOfGrantingLic}
+                                  onChange={(e) =>
+                                    setTechnicalCapacitySoughtFromAnyColonizer({
+                                      ...technicalCapacitySoughtFromAnyColonizer,
+                                      dateOfGrantingLic: e.target.value,
+                                    })
+                                  }
+                                  className="form-control"
+                                  maxLength={10}
+                                  max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
+                                />
+                              </div>
+                            </div>
+
+                            <div className="col col-4">
+                              <div className="form-group">
+                                <label htmlFor="licValidity">
+                                  Validity <span className="text-danger font-weight-bold">*</span>
+                                </label>
+                                <input
+                                  type="date"
+                                  name="licValidity"
+                                  disabled={!technicalCapacitySoughtFromAnyColonizer.dateOfGrantingLic}
+                                  value={technicalCapacitySoughtFromAnyColonizer.licValidity}
+                                  onChange={(e) =>
+                                    setTechnicalCapacitySoughtFromAnyColonizer({
+                                      ...technicalCapacitySoughtFromAnyColonizer,
+                                      licValidity: e.target.value,
+                                    })
+                                  }
+                                  className="form-control"
+                                  min={technicalCapacitySoughtFromAnyColonizer.dateOfGrantingLic}
+                                />
+                              </div>
+                            </div>
+
+                            <div className="col col-4">
+                              <div className="form-group">
+                                <label htmlFor="licValidity">
+                                  Purpose <span className="text-danger font-weight-bold">*</span>
+                                </label>
+                                <Select
+                                  value={technicalCapacitySoughtFromAnyColonizer.purpose}
+                                  onChange={(e) =>
+                                    setTechnicalCapacitySoughtFromAnyColonizer({
+                                      ...technicalCapacitySoughtFromAnyColonizer,
+                                      purpose: e.target.value,
+                                    })
+                                  }
+                                  className="w-100 form-control"
+                                  variant="standard"
+                                  placeholder="Select purpose"
+                                >
+                                  {purposeOptions?.data?.map((item, index) => (
+                                    <MenuItem value={item.value}>{item?.label}</MenuItem>
+                                  ))}
+                                </Select>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+                <div className="mb-3"></div>
+                {data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual NOT USES" ||
+                data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm NOT USES" ? (
                   <p>
-                    (ii) Have you developed projects outside Haryana:- <span className="text-danger font-weight-bold">*</span>
+                    (iii) Whether any technical expert(s) engaged <span className="text-danger font-weight-bold">*</span>
                   </p>
                 ) : (
-                  <p>
-                    (ii) Have your company/firm developed projects outside Haryana:- <span className="text-danger font-weight-bold">*</span>
+                  <p className="d-none">
+                    (iv) Whether any technical expert(s) engaged <span className="text-danger font-weight-bold">*</span>
                   </p>
                 )}
 
-                <div className="form-group">
+                <div className="form-group d-none">
                   <input
                     type="radio"
                     value="Y"
-                    checked={technicalCapacityOutsideHaryana === "Y" ? true : false}
-                    id="technicalCapacityOutsideHaryana"
+                    checked={technicalExpert === "Y" ? true : false}
+                    id="technicalExpert"
                     className="mx-2 mt-1"
-                    onChange={(e) => setTechnicalCapacityOutsideHaryana(e.target.value)}
-                    name="technicalCapacityOutsideHaryana"
-                  />
-                  <label for="technicalCapacityOutsideHaryana">Yes</label>
-
-                  <input
-                    type="radio"
-                    value="N"
-                    checked={technicalCapacityOutsideHaryana === "N" ? true : false}
-                    id="technicalCapacityOutsideHaryanaN"
-                    className="mx-2 mt-1"
-                    onChange={(e) => setTechnicalCapacityOutsideHaryana(e.target.value)}
-                    name="technicalCapacityOutsideHaryana"
-                  />
-                  <label for="technicalCapacityOutsideHaryanaN">No</label>
-                  {technicalCapacityOutsideHaryana === "Y" && (
-                    <Row>
-                      <Col md={3} xxl lg="3" className="mb-2">
-                        <label htmlFor="project" className="">
-                          {" "}
-                          Name of Project <span className="text-danger font-weight-bold">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="project"
-                          value={technicalCapacityOutsideHaryanaDetails.project}
-                          onChange={(e) =>
-                            setTechnicalCapacityOutsideHaryanaDetails({ ...technicalCapacityOutsideHaryanaDetails, project: e.target.value })
-                          }
-                          placeholder=""
-                          class="form-control"
-                        />
-                        {technicalCapacityOutsideHaryanaDetails.project &&
-                          technicalCapacityOutsideHaryanaDetails.project.length > 0 &&
-                          !technicalCapacityOutsideHaryanaDetails.project.match(Digit.Utils.getPattern("Name")) && (
-                            <CardLabelError style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
-                              {t("Please enter valid details")}
-                            </CardLabelError>
-                          )}
-                      </Col>
-
-                      <Col md={3} xxl lg="3" className="mb-2">
-                        <label htmlFor="authority" className="">
-                          {" "}
-                          Name of Authority <span className="text-danger font-weight-bold">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="authority"
-                          value={technicalCapacityOutsideHaryanaDetails.authority}
-                          onChange={(e) =>
-                            setTechnicalCapacityOutsideHaryanaDetails({ ...technicalCapacityOutsideHaryanaDetails, authority: e.target.value })
-                          }
-                          placeholder=""
-                          class="form-control"
-                        />
-                        {technicalCapacityOutsideHaryanaDetails.authority &&
-                          technicalCapacityOutsideHaryanaDetails.authority.length > 0 &&
-                          !technicalCapacityOutsideHaryanaDetails.authority.match(Digit.Utils.getPattern("Name")) && (
-                            <CardLabelError style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
-                              {t("Please enter valid details")}
-                            </CardLabelError>
-                          )}
-                      </Col>
-
-                      <Col md={3} xxl lg="3" className="mb-2">
-                        <label htmlFor="statusOfDevelopment" className="">
-                          Status of Development <span className="text-danger font-weight-bold">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="statusOfDevelopment"
-                          value={technicalCapacityOutsideHaryanaDetails.statusOfDevelopment}
-                          onChange={(e) =>
-                            setTechnicalCapacityOutsideHaryanaDetails({
-                              ...technicalCapacityOutsideHaryanaDetails,
-                              statusOfDevelopment: e.target.value,
-                            })
-                          }
-                          placeholder=""
-                          class="form-control"
-                        />
-                        {technicalCapacityOutsideHaryanaDetails.statusOfDevelopment &&
-                          technicalCapacityOutsideHaryanaDetails.statusOfDevelopment.length > 0 &&
-                          !technicalCapacityOutsideHaryanaDetails.statusOfDevelopment.match(Digit.Utils.getPattern("Name")) && (
-                            <CardLabelError style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
-                              {t("Please enter valid details")}
-                            </CardLabelError>
-                          )}
-                      </Col>
-                      <Col md={3} xxl lg="3" className="mb-2">
-                        <label htmlFor="permissionLetterDoc" className="">
-                          Permission letter <span className="text-danger font-weight-bold">*</span>
-                        </label>
-                        <div className="d-flex">
-                          <input
-                            id="permissionLetterYId"
-                            type="file"
-                            className="form-control"
-                            name="permissionLetterDoc"
-                            // accept="addplication/pdf"
-                            onChange={(e) => getDocumentData(e?.target?.files[0], "permissionLetterDoc", "outsideHrDocY")}
-                          />
-                          <span>
-                            {Documents?.permissionLetterDoc ? (
-                              <a onClick={() => getDocShareholding(Documents?.permissionLetterDoc)} className="btn btn-sm col-md-6">
-                                <VisibilityIcon color="info" className="icon" />
-                              </a>
-                            ) : (
-                              <p></p>
-                            )}
-                          </span>
-                        </div>
-                      </Col>
-                      <Col md={3} xxl lg="3" className="mb-2">
-                        <label htmlFor="projectArea" className="">
-                          Area of the project in acres <span className="text-danger font-weight-bold">*</span>
-                        </label>
-                        <input
-                          type="number"
-                          name="projectArea"
-                          value={technicalCapacityOutsideHaryanaDetails.projectArea}
-                          onChange={(e) =>
-                            setTechnicalCapacityOutsideHaryanaDetails({ ...technicalCapacityOutsideHaryanaDetails, projectArea: e.target.value })
-                          }
-                          placeholder=""
-                          class="form-control"
-                        />
-                      </Col>
-                      <Col md={3} xxl lg="3" className="mb-2">
-                        <label htmlFor="location" className="">
-                          Location <span className="text-danger font-weight-bold">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          name="location"
-                          value={technicalCapacityOutsideHaryanaDetails.location}
-                          onChange={(e) =>
-                            setTechnicalCapacityOutsideHaryanaDetails({ ...technicalCapacityOutsideHaryanaDetails, location: e.target.value })
-                          }
-                          placeholder=""
-                          class="form-control"
-                        />
-                      </Col>
-                      <Col md={3} xxl lg="3" className="mb-2">
-                        <label htmlFor="hrDetailAnyDoc" className="">
-                          Any other document/ Photo
-                        </label>
-                        <div className="d-flex">
-                          <input
-                            id="hrDetailAnyDocId"
-                            type="file"
-                            className="form-control"
-                            name="hrDetailAnyDoc"
-                            // accept="addplication/pdf"
-                            onChange={(e) => getDocumentData(e?.target?.files[0], "hrDetailAnyDoc", "outsideHrDocY")}
-                          />
-                          <span>
-                            {Documents?.hrDetailAnyDoc ? (
-                              <a onClick={() => getDocShareholding(Documents?.hrDetailAnyDoc)} className="btn btn-sm col-md-6">
-                                <VisibilityIcon color="info" className="icon" />
-                              </a>
-                            ) : (
-                              <p></p>
-                            )}
-                          </span>
-                        </div>
-                      </Col>
-                    </Row>
-                  )}
-                </div>
-              </div>
-            )}
-
-            <div className="hl"></div>
-
-            <div className="hl"></div>
-            {(data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual NOT USES" ||
-              data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm NOT USES") && (
-              <div>
-                <p>
-                  (iii). In case of technical capacity sought from another company/firm who has already obtained license(s) under act of 1975 Haryana:
-                  <span className="text-danger font-weight-bold">*</span>
-                </p>
-
-                <div className="form-group">
-                  <input
-                    type="radio"
-                    value="Y"
-                    checked={alreadtObtainedLic === "Y" ? true : false}
-                    id="alreadtObtainedLic"
-                    className="mx-2 mt-1"
-                    onChange={changeAlreadyObtainedLic}
-                    name="alreadtObtainedLic"
+                    onChange={changeTechnicalExpert}
+                    name="technicalExpert"
                   />
                   <label for="Yes">Yes</label>
 
                   <input
                     type="radio"
                     value="N"
-                    checked={alreadtObtainedLic === "N" ? true : false}
-                    id="alreadtObtainedLicN"
+                    checked={technicalExpert === "N" ? true : false}
+                    id="technicalExpertN"
                     className="mx-2 mt-1"
-                    onChange={changeAlreadyObtainedLic}
-                    name="alreadtObtainedLic"
-                    onClick={handleshow6}
+                    onChange={changeTechnicalExpert}
+                    name="technicalExpert"
                   />
                   <label for="No">No</label>
-                  {alreadtObtainedLic === "Y" && (
-                    <div>
-                      <div className="row ">
-                        <div className="form-group row">
-                          <div className="col-sm-12">
-                            <Col xs="12" md="12" sm="12">
-                              <div>
-                                <Table className="table table-bordered" size="sm">
-                                  <thead>
-                                    <tr>
-                                      <th>S.No.</th>
-                                      <th>Agreement </th>
-                                      <th>Upload Document </th>
-                                      <th>Annexure </th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    <tr>
-                                      <td> 1 </td>
+                  {technicalExpert === "Y" && (
+                    <div className="row ">
+                      <div className="form-group row">
+                        <div className="col-sm-12">
+                          <div className="table-bd">
+                            <Table className="table table-bordered">
+                              <thead>
+                                <tr>
+                                  <th>S.No</th>
+                                  <th>
+                                    Professional <span className="text-danger font-weight-bold">*</span>{" "}
+                                  </th>
+                                  <th>
+                                    Qualification <span className="text-danger font-weight-bold">*</span>
+                                  </th>
+                                  <th>
+                                    Signature <span className="text-danger font-weight-bold">*</span>
+                                  </th>
+                                  <th>
+                                    Annexure <span className="text-danger font-weight-bold">*</span>
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td>1</td>
+                                  <td>
+                                    <input
+                                      typr="text"
+                                      onChange={(e) => setEngineerName(e.target.value)}
+                                      value={engineerName}
+                                      placeholder="Name of Engineer"
+                                      class="employee-card-input"
+                                    />
+                                    {engineerName && engineerName.length > 0 && !engineerName.match(Digit.Utils.getPattern("Name")) && (
+                                      <CardLabelError
+                                        style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}
+                                      >
+                                        {t("Please enter valid details")}
+                                      </CardLabelError>
+                                    )}
+                                  </td>
+                                  <td>
+                                    <input
+                                      type="text"
+                                      onChange={(e) => setEngineerQualification(e.target.value)}
+                                      value={engineerQualification}
+                                      placeholder=""
+                                      class="employee-card-input"
+                                    />
+                                    {engineerQualification &&
+                                      engineerQualification.length > 0 &&
+                                      !engineerQualification.match(Digit.Utils.getPattern("Name")) && (
+                                        <CardLabelError
+                                          style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}
+                                        >
+                                          {t("Please enter valid details")}
+                                        </CardLabelError>
+                                      )}
+                                  </td>
 
-                                      <td>
-                                        Agreement between the proposed developer and existing colonizer{" "}
-                                        <span className="text-danger font-weight-bold">*</span>
-                                      </td>
-                                      <td align="center" size="large" style={{ textAlign: "center" }}>
-                                        <label for="agreementDocYId">
-                                          {" "}
-                                          <FileUpload color="primary" />
-                                        </label>
-                                        <input
-                                          id="agreementDocYId"
-                                          type="file"
-                                          name="agreementDocY"
-                                          // accept="addplication/pdf"
-                                          style={{ display: "none" }}
-                                          onChange={(e) => getDocumentData(e?.target?.files[0], "agreementDocY", "alreadyObtaileLicFile")}
-                                        />
-                                        {/* <input
-                                                                                type="file"
-                                                                                name="agreementDocY"
-                                                                                onChange={(e) => getDocumentData(e?.target?.files[0], "agreementDocY")}
-                                                                                class="employee-card-input"
-                                                                            /> */}
-                                      </td>
-                                      <td>
-                                        {Documents?.agreementDocY ? (
-                                          <a onClick={() => getDocShareholding(Documents?.agreementDocY)}>
-                                            <VisibilityIcon color="info" className="icon" />
-                                          </a>
-                                        ) : (
-                                          <p></p>
-                                        )}
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <td> 2 </td>
+                                  <td style={{ textAlign: "center" }}>
+                                    <label for="engineerSignId">
+                                      {" "}
+                                      <FileUpload color="primary" />
+                                    </label>
+                                    <input
+                                      id="engineerSignId"
+                                      type="file"
+                                      name="engineerSign"
+                                      style={{ display: "none" }}
+                                      onChange={(e) => getDocumentData(e?.target?.files[0], "engineerSign", "techicalExpertFile")}
+                                    />
+                                  </td>
+                                  <td align="center" size="large">
+                                    {Documents?.engineerSign ? (
+                                      <a onClick={() => getDocShareholding(Documents?.engineerSign)} className="btn btn-sm col-md-6">
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </a>
+                                    ) : (
+                                      <p></p>
+                                    )}
+                                  </td>
+                                </tr>
 
-                                      <td>
-                                        Board resolution of authorised signatory of the existing colonizer{" "}
-                                        <span className="text-danger font-weight-bold">*</span>
-                                      </td>
-                                      <td align="center" size="large" style={{ textAlign: "center" }}>
-                                        <label for="boardDocXId">
-                                          {" "}
-                                          <FileUpload color="primary" />
-                                        </label>
-                                        <input
-                                          id="boardDocXId"
-                                          type="file"
-                                          name="boardDocX"
-                                          // accept="addplication/pdf"
-                                          style={{ display: "none" }}
-                                          onChange={(e) => getDocumentData(e?.target?.files[0], "boardDocX", "alreadyObtaileLicFile")}
-                                        />
-                                        {/* <input
-                                                                                type="file"
-                                                                                name="boardDocX"
-                                                                                onChange={(e) => getDocumentData(e?.target?.files[0], "boardDocX")}
-                                                                                class="employee-card-input"
-                                                                            /> */}
-                                      </td>
-                                      <td>
-                                        {Documents?.boardDocX ? (
-                                          <a onClick={() => getDocShareholding(Documents?.boardDocX)}>
-                                            <VisibilityIcon color="info" className="icon" />
-                                          </a>
-                                        ) : (
-                                          <p></p>
-                                        )}
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <td> 3 </td>
-                                      <td>
-                                        {" "}
-                                        Registered and Irrevocable Agreement <span className="text-danger font-weight-bold">*</span>
-                                      </td>
-                                      <td align="center" size="large" style={{ textAlign: "center" }}>
-                                        <label for="registeredDocId">
-                                          {" "}
-                                          <FileUpload color="primary" />
-                                        </label>
-                                        <input
-                                          id="registeredDocId"
-                                          type="file"
-                                          name="registeredDoc"
-                                          // accept="addplication/pdf"
-                                          style={{ display: "none" }}
-                                          onChange={(e) => getDocumentData(e?.target?.files[0], "registeredDoc", "alreadyObtaileLicFile")}
-                                        />
-                                        {/* <input
-                                                                                type="file"
-                                                                                name="registeredDoc"
-                                                                                onChange={(e) => getDocumentData(e?.target?.files[0], "registeredDoc")}
-                                                                                class="employee-card-input"
-                                                                            /> */}
-                                      </td>
-                                      <td>
-                                        {Documents?.registeredDoc ? (
-                                          <a onClick={() => getDocShareholding(Documents?.registeredDoc)}>
-                                            <VisibilityIcon color="info" className="icon" />
-                                          </a>
-                                        ) : (
-                                          <p></p>
-                                        )}
-                                      </td>
-                                    </tr>
+                                <tr>
+                                  <td>2</td>
+                                  <td>
+                                    <input
+                                      typr="text"
+                                      onChange={(e) => setArchitectName(e.target.value)}
+                                      value={architectName}
+                                      placeholder="Name of Architect"
+                                      class="employee-card-input"
+                                    />
+                                    {architectName && architectName.length > 0 && !architectName.match(Digit.Utils.getPattern("Name")) && (
+                                      <CardLabelError
+                                        style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}
+                                      >
+                                        {t("Please enter valid details")}
+                                      </CardLabelError>
+                                    )}
+                                  </td>
+                                  <td>
+                                    <input
+                                      type="text"
+                                      onChange={(e) => setArchitectQualification(e.target.value)}
+                                      value={architectQualification}
+                                      placeholder=""
+                                      class="employee-card-input"
+                                    />
+                                    {architectQualification &&
+                                      architectQualification.length > 0 &&
+                                      !architectQualification.match(Digit.Utils.getPattern("Name")) && (
+                                        <CardLabelError
+                                          style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}
+                                        >
+                                          {t("Please enter valid details")}
+                                        </CardLabelError>
+                                      )}
+                                  </td>
 
-                                    <tr>
-                                      <td> 4 </td>
-                                      <td>
-                                        Board resolutions of authorized signatory of firm/company provided technical assistance{" "}
-                                        <span className="text-danger font-weight-bold">*</span>
-                                      </td>
-                                      <td align="center" size="large" style={{ textAlign: "center" }}>
-                                        <label for="boardDocYId">
-                                          {" "}
-                                          <FileUpload color="primary" />
-                                        </label>
-                                        <input
-                                          id="boardDocYId"
-                                          type="file"
-                                          name="boardDocY"
-                                          // accept="addplication/pdf"
-                                          style={{ display: "none" }}
-                                          onChange={(e) => getDocumentData(e?.target?.files[0], "boardDocY", "alreadyObtaileLicFile")}
-                                        />
-                                        {/* <input
-                                                                                type="file"
-                                                                                onChange={(e) => getDocumentData(e?.target?.files[0], "boardDocY")}
-                                                                                class="employee-card-input"
-                                                                            /> */}
-                                      </td>
-                                      <td>
-                                        {Documents?.boardDocY ? (
-                                          <a onClick={() => getDocShareholding(Documents?.boardDocY)}>
-                                            <VisibilityIcon color="info" className="icon" />
-                                          </a>
-                                        ) : (
-                                          <p></p>
-                                        )}
-                                      </td>
-                                    </tr>
-                                  </tbody>{" "}
-                                </Table>
-                              </div>
-                            </Col>
-                          </div>
-                        </div>
-                      </div>
+                                  <td style={{ textAlign: "center" }}>
+                                    <label for="architectSignId">
+                                      {" "}
+                                      <FileUpload color="primary" />
+                                    </label>
+                                    <input
+                                      id="architectSignId"
+                                      type="file"
+                                      name="architectSign"
+                                      style={{ display: "none" }}
+                                      onChange={(e) => getDocumentData(e?.target?.files[0], "architectSign", "techicalExpertFile")}
+                                    />
+                                    {/* <input
+                                                                    type="file"
+                                                                    onChange={(e) => getDocumentData(e?.target?.files[0], "architectSign")}
+                                                                    placeholder=""
+                                                                    class="employee-card-input"
+                                                                /> */}
+                                  </td>
+                                  <td align="center" size="large">
+                                    {Documents?.architectSign ? (
+                                      <a onClick={() => getDocShareholding(Documents?.architectSign)} className="btn btn-sm col-md-6">
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </a>
+                                    ) : (
+                                      <p></p>
+                                    )}
+                                  </td>
+                                </tr>
 
-                      <div className="row mx-1">
-                        <div className="col col-4">
-                          <div className="form-group">
-                            <label htmlFor="licNo">
-                              License No. <span className="text-danger font-weight-bold">*</span>
-                            </label>
-                            <input
-                              type="text"
-                              name="licNo"
-                              value={technicalCapacitySoughtFromAnyColonizer.licNo}
-                              onChange={(e) =>
-                                setTechnicalCapacitySoughtFromAnyColonizer({
-                                  ...technicalCapacitySoughtFromAnyColonizer,
-                                  licNo: e.target.value.toUpperCase(),
-                                })
-                              }
-                              className="form-control"
-                              maxLength={11}
-                            />
-                            {technicalCapacitySoughtFromAnyColonizer.licNo &&
-                              technicalCapacitySoughtFromAnyColonizer.licNo.length > 0 &&
-                              !technicalCapacitySoughtFromAnyColonizer.licNo.match(Digit.Utils.getPattern("LicNumber")) && (
-                                <CardLabelError style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
-                                  {t("Please enter valid Licence Number")}
-                                </CardLabelError>
-                              )}
-                          </div>
-                        </div>
+                                <tr>
+                                  <td>3</td>
+                                  <td>
+                                    <input
+                                      type="text"
+                                      onChange={(e) => setTownPlannerName(e.target.value)}
+                                      value={townPlannerName}
+                                      placeholder="Name of Town Planner"
+                                      class="employee-card-input"
+                                    />
+                                    {townPlannerName && townPlannerName.length > 0 && !townPlannerName.match(Digit.Utils.getPattern("Name")) && (
+                                      <CardLabelError
+                                        style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}
+                                      >
+                                        {t("Please enter valid details")}
+                                      </CardLabelError>
+                                    )}
+                                  </td>
+                                  <td>
+                                    <input
+                                      type="text"
+                                      onChange={(e) => setTownPlannerQualification(e.target.value)}
+                                      value={townPlannerQualification}
+                                      placeholder=""
+                                      class="employee-card-input"
+                                    />
+                                    {townPlannerQualification &&
+                                      townPlannerQualification.length > 0 &&
+                                      !townPlannerQualification.match(Digit.Utils.getPattern("Name")) && (
+                                        <CardLabelError
+                                          style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}
+                                        >
+                                          {t("Please enter valid details")}
+                                        </CardLabelError>
+                                      )}
+                                  </td>
 
-                        <div className="col col-4">
-                          <div className="form-group">
-                            <label htmlFor="licDate">
-                              Date <span className="text-danger font-weight-bold">*</span>
-                            </label>
-                            <input
-                              type="date"
-                              name="licDate"
-                              value={technicalCapacitySoughtFromAnyColonizer.dateOfGrantingLic}
-                              onChange={(e) =>
-                                setTechnicalCapacitySoughtFromAnyColonizer({
-                                  ...technicalCapacitySoughtFromAnyColonizer,
-                                  dateOfGrantingLic: e.target.value,
-                                })
-                              }
-                              className="form-control"
-                              maxLength={10}
-                              max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
-                            />
-                          </div>
-                        </div>
-
-                        <div className="col col-4">
-                          <div className="form-group">
-                            <label htmlFor="licValidity">
-                              Validity <span className="text-danger font-weight-bold">*</span>
-                            </label>
-                            <input
-                              type="date"
-                              name="licValidity"
-                              disabled={!technicalCapacitySoughtFromAnyColonizer.dateOfGrantingLic}
-                              value={technicalCapacitySoughtFromAnyColonizer.licValidity}
-                              onChange={(e) =>
-                                setTechnicalCapacitySoughtFromAnyColonizer({
-                                  ...technicalCapacitySoughtFromAnyColonizer,
-                                  licValidity: e.target.value,
-                                })
-                              }
-                              className="form-control"
-                              min={technicalCapacitySoughtFromAnyColonizer.dateOfGrantingLic}
-                            />
-                          </div>
-                        </div>
-
-                        <div className="col col-4">
-                          <div className="form-group">
-                            <label htmlFor="licValidity">
-                              Purpose <span className="text-danger font-weight-bold">*</span>
-                            </label>
-                            <Select
-                              value={technicalCapacitySoughtFromAnyColonizer.purpose}
-                              onChange={(e) =>
-                                setTechnicalCapacitySoughtFromAnyColonizer({ ...technicalCapacitySoughtFromAnyColonizer, purpose: e.target.value })
-                              }
-                              className="w-100 form-control"
-                              variant="standard"
-                              placeholder="Select purpose"
-                            >
-                              {purposeOptions?.data?.map((item, index) => (
-                                <MenuItem value={item.value}>{item?.label}</MenuItem>
-                              ))}
-                            </Select>
+                                  <td style={{ textAlign: "center" }}>
+                                    <label for="townPlannerSignId">
+                                      {" "}
+                                      <FileUpload color="primary" />
+                                    </label>
+                                    <input
+                                      id="townPlannerSignId"
+                                      type="file"
+                                      name="townPlannerSign"
+                                      style={{ display: "none" }}
+                                      onChange={(e) => getDocumentData(e?.target?.files[0], "townPlannerSign", "techicalExpertFile")}
+                                    />
+                                    {/* <input
+                                                                    type="file"
+                                                                    onChange={(e) => getDocumentData(e?.target?.files[0], "townPlannerSign")}
+                                                                    placeholder=""
+                                                                    class="employee-card-input"
+                                                                /> */}
+                                  </td>
+                                  <td align="center" size="large">
+                                    {Documents?.townPlannerSign ? (
+                                      <a onClick={() => getDocShareholding(Documents?.townPlannerSign)} className="btn btn-sm col-md-6">
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </a>
+                                    ) : (
+                                      <p></p>
+                                    )}
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </Table>
                           </div>
                         </div>
                       </div>
@@ -2119,260 +2425,6 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                   )}
                 </div>
               </div>
-            )}
-            <div className="mb-3"></div>
-            {data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual NOT USES" ||
-            data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm NOT USES" ? (
-              <p>
-                (iii) Whether any technical expert(s) engaged <span className="text-danger font-weight-bold">*</span>
-              </p>
-            ) : (
-              <p className="d-none">
-                (iv) Whether any technical expert(s) engaged <span className="text-danger font-weight-bold">*</span>
-              </p>
-            )}
-
-            <div className="form-group d-none">
-              <input
-                type="radio"
-                value="Y"
-                checked={technicalExpert === "Y" ? true : false}
-                id="technicalExpert"
-                className="mx-2 mt-1"
-                onChange={changeTechnicalExpert}
-                name="technicalExpert"
-              />
-              <label for="Yes">Yes</label>
-
-              <input
-                type="radio"
-                value="N"
-                checked={technicalExpert === "N" ? true : false}
-                id="technicalExpertN"
-                className="mx-2 mt-1"
-                onChange={changeTechnicalExpert}
-                name="technicalExpert"
-              />
-              <label for="No">No</label>
-              {technicalExpert === "Y" && (
-                <div className="row ">
-                  <div className="form-group row">
-                    <div className="col-sm-12">
-                      <div className="table-bd">
-                        <Table className="table table-bordered">
-                          <thead>
-                            <tr>
-                              <th>S.No</th>
-                              <th>
-                                Professional <span className="text-danger font-weight-bold">*</span>{" "}
-                              </th>
-                              <th>
-                                Qualification <span className="text-danger font-weight-bold">*</span>
-                              </th>
-                              <th>
-                                Signature <span className="text-danger font-weight-bold">*</span>
-                              </th>
-                              <th>
-                                Annexure <span className="text-danger font-weight-bold">*</span>
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td>1</td>
-                              <td>
-                                <input
-                                  typr="text"
-                                  onChange={(e) => setEngineerName(e.target.value)}
-                                  value={engineerName}
-                                  placeholder="Name of Engineer"
-                                  class="employee-card-input"
-                                />
-                                {engineerName && engineerName.length > 0 && !engineerName.match(Digit.Utils.getPattern("Name")) && (
-                                  <CardLabelError style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
-                                    {t("Please enter valid details")}
-                                  </CardLabelError>
-                                )}
-                              </td>
-                              <td>
-                                <input
-                                  type="text"
-                                  onChange={(e) => setEngineerQualification(e.target.value)}
-                                  value={engineerQualification}
-                                  placeholder=""
-                                  class="employee-card-input"
-                                />
-                                {engineerQualification &&
-                                  engineerQualification.length > 0 &&
-                                  !engineerQualification.match(Digit.Utils.getPattern("Name")) && (
-                                    <CardLabelError
-                                      style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}
-                                    >
-                                      {t("Please enter valid details")}
-                                    </CardLabelError>
-                                  )}
-                              </td>
-
-                              <td style={{ textAlign: "center" }}>
-                                <label for="engineerSignId">
-                                  {" "}
-                                  <FileUpload color="primary" />
-                                </label>
-                                <input
-                                  id="engineerSignId"
-                                  type="file"
-                                  name="engineerSign"
-                                  style={{ display: "none" }}
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "engineerSign", "techicalExpertFile")}
-                                />
-                              </td>
-                              <td align="center" size="large">
-                                {Documents?.engineerSign ? (
-                                  <a onClick={() => getDocShareholding(Documents?.engineerSign)} className="btn btn-sm col-md-6">
-                                    <VisibilityIcon color="info" className="icon" />
-                                  </a>
-                                ) : (
-                                  <p></p>
-                                )}
-                              </td>
-                            </tr>
-
-                            <tr>
-                              <td>2</td>
-                              <td>
-                                <input
-                                  typr="text"
-                                  onChange={(e) => setArchitectName(e.target.value)}
-                                  value={architectName}
-                                  placeholder="Name of Architect"
-                                  class="employee-card-input"
-                                />
-                                {architectName && architectName.length > 0 && !architectName.match(Digit.Utils.getPattern("Name")) && (
-                                  <CardLabelError style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
-                                    {t("Please enter valid details")}
-                                  </CardLabelError>
-                                )}
-                              </td>
-                              <td>
-                                <input
-                                  type="text"
-                                  onChange={(e) => setArchitectQualification(e.target.value)}
-                                  value={architectQualification}
-                                  placeholder=""
-                                  class="employee-card-input"
-                                />
-                                {architectQualification &&
-                                  architectQualification.length > 0 &&
-                                  !architectQualification.match(Digit.Utils.getPattern("Name")) && (
-                                    <CardLabelError
-                                      style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}
-                                    >
-                                      {t("Please enter valid details")}
-                                    </CardLabelError>
-                                  )}
-                              </td>
-
-                              <td style={{ textAlign: "center" }}>
-                                <label for="architectSignId">
-                                  {" "}
-                                  <FileUpload color="primary" />
-                                </label>
-                                <input
-                                  id="architectSignId"
-                                  type="file"
-                                  name="architectSign"
-                                  style={{ display: "none" }}
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "architectSign", "techicalExpertFile")}
-                                />
-                                {/* <input
-                                                                    type="file"
-                                                                    onChange={(e) => getDocumentData(e?.target?.files[0], "architectSign")}
-                                                                    placeholder=""
-                                                                    class="employee-card-input"
-                                                                /> */}
-                              </td>
-                              <td align="center" size="large">
-                                {Documents?.architectSign ? (
-                                  <a onClick={() => getDocShareholding(Documents?.architectSign)} className="btn btn-sm col-md-6">
-                                    <VisibilityIcon color="info" className="icon" />
-                                  </a>
-                                ) : (
-                                  <p></p>
-                                )}
-                              </td>
-                            </tr>
-
-                            <tr>
-                              <td>3</td>
-                              <td>
-                                <input
-                                  type="text"
-                                  onChange={(e) => setTownPlannerName(e.target.value)}
-                                  value={townPlannerName}
-                                  placeholder="Name of Town Planner"
-                                  class="employee-card-input"
-                                />
-                                {townPlannerName && townPlannerName.length > 0 && !townPlannerName.match(Digit.Utils.getPattern("Name")) && (
-                                  <CardLabelError style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
-                                    {t("Please enter valid details")}
-                                  </CardLabelError>
-                                )}
-                              </td>
-                              <td>
-                                <input
-                                  type="text"
-                                  onChange={(e) => setTownPlannerQualification(e.target.value)}
-                                  value={townPlannerQualification}
-                                  placeholder=""
-                                  class="employee-card-input"
-                                />
-                                {townPlannerQualification &&
-                                  townPlannerQualification.length > 0 &&
-                                  !townPlannerQualification.match(Digit.Utils.getPattern("Name")) && (
-                                    <CardLabelError
-                                      style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}
-                                    >
-                                      {t("Please enter valid details")}
-                                    </CardLabelError>
-                                  )}
-                              </td>
-
-                              <td style={{ textAlign: "center" }}>
-                                <label for="townPlannerSignId">
-                                  {" "}
-                                  <FileUpload color="primary" />
-                                </label>
-                                <input
-                                  id="townPlannerSignId"
-                                  type="file"
-                                  name="townPlannerSign"
-                                  style={{ display: "none" }}
-                                  onChange={(e) => getDocumentData(e?.target?.files[0], "townPlannerSign", "techicalExpertFile")}
-                                />
-                                {/* <input
-                                                                    type="file"
-                                                                    onChange={(e) => getDocumentData(e?.target?.files[0], "townPlannerSign")}
-                                                                    placeholder=""
-                                                                    class="employee-card-input"
-                                                                /> */}
-                              </td>
-                              <td align="center" size="large">
-                                {Documents?.townPlannerSign ? (
-                                  <a onClick={() => getDocShareholding(Documents?.townPlannerSign)} className="btn btn-sm col-md-6">
-                                    <VisibilityIcon color="info" className="icon" />
-                                  </a>
-                                ) : (
-                                  <p></p>
-                                )}
-                              </td>
-                            </tr>
-                          </tbody>
-                        </Table>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </FormStep>
