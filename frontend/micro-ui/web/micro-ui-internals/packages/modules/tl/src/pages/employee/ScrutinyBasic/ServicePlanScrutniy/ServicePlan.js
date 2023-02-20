@@ -98,7 +98,7 @@ const ServicePlanService = (props) => {
 
   const fieldIdList = [
     { label: "LOI Number", key: "loiNumber" },
-    { label: "Name ", key: "devName" },
+    { label: "Name", key: "devName" },
     { label: "Total Area", key: "totalArea" },
     { label: "Purpose Of Licence", key: "purpose" },
     { label: "Development Plan", key: "developmentPlan" },
@@ -338,6 +338,7 @@ const ServicePlanService = (props) => {
                     setFieldValue(apiResponse !== null ? apiResponse.devName : null);
                 }}
               ></ReportProblemIcon>
+              
              
             </div>
             </Col>
