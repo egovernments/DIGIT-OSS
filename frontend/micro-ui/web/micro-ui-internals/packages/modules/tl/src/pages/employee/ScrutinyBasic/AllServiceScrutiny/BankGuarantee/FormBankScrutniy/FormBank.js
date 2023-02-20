@@ -11,6 +11,7 @@ import SubmitNew from "../SubmitNew";
 
 const FormBank = ({ apiResponse, applicationNumber, refreshScrutinyData }) => {
   const personalInfoRef = useRef();
+
   // const generalInfoRef = useRef();
   // const developerInfoRef = useRef();
   // const appliedInfoRef = useRef();
@@ -82,7 +83,11 @@ const FormBank = ({ apiResponse, applicationNumber, refreshScrutinyData }) => {
       <div style={{ position: "relative", maxWidth: "100%", padding: 2 }}>
         <div>
           <div>
-            <SubmitNew apiResponse={apiResponse} refreshScrutinyData={refreshScrutinyData}></SubmitNew>
+            <SubmitNew
+              apiResponse={apiResponse}
+              refreshScrutinyData={refreshScrutinyData}
+              // dataForIcons={iconStates}
+            ></SubmitNew>
           </div>
 
           {/* <JeLandinfo jeLandInfoRef={jeLandInfoRef} passUncheckedList={getUncheckedJeLandInfo}></JeLandinfo> */}

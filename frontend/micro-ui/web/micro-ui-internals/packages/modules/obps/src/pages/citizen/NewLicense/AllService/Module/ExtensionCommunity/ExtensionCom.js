@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { Card, Row, Col, Form, Button } from "react-bootstrap";
+import { Button } from "@material-ui/core";
+import FormControl from "@mui/material/FormControl";
 import { useForm } from "react-hook-form";
+import OutlinedInput from "@mui/material/OutlinedInput";
 
 function ExtensionCom() {
   const [selects, setSelects] = useState();
@@ -23,103 +25,99 @@ function ExtensionCom() {
 
   return (
     <form onSubmit={handleSubmit(extensionCom)}>
-      <Card style={{ width: "126%", border: "5px solid #1266af" }}>
+      <div className="card" style={{ width: "126%", border: "5px solid #1266af" }}>
         <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Extension (construction in community sites)</h4>
         <div className="card">
-          <Row className="col-12">
-            <Form.Group as={Col} controlId="formGridCase">
-              <Form.Label>
-                <h2>
+          <div className="row-12">
+            <div className="col md={4} xxl lg-4">
+              <FormControl>
+                <h2 className="FormLable">
                   {" "}
                   License No.<span style={{ color: "red" }}>*</span>
                 </h2>
-              </Form.Label>
-              <input type="number" className="form-control" placeholder="" {...register("licenseNumber")} />
-            </Form.Group>
 
-            <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>
-                <h2>
+                <OutlinedInput type="number" className="Inputcontrol" placeholder="" {...register("licenseNumber")} />
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">
                   {" "}
                   Applied by <span style={{ color: "red" }}>*</span>
                 </h2>
-              </Form.Label>
-              <select className="form-control" placeholder="" {...register("appliedBy")} onChange={(e) => handleshowhide(e)}>
-                <option value=" ">----Select value-----</option>
-                <option value="1">Licensee</option>
-                <option value="2">Other than Licensee/Developer</option>
-              </select>
-            </Form.Group>
 
-            <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>
-                <h2>
+                <select className="Inputcontrol" class="form-control" placeholder="" {...register("appliedBy")} onChange={(e) => handleshowhide(e)}>
+                  <option value=" ">----Select value-----</option>
+                  <option value="1">Licensee</option>
+                  <option value="2">Other than Licensee/Developer</option>
+                </select>
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">
                   {" "}
                   Outstanding dues if any <span style={{ color: "red" }}>*</span>
                 </h2>
-              </Form.Label>
-              <input type="text" className="form-control" placeholder="" {...register("outstandingDues")} />
-            </Form.Group>
-          </Row>
-          <Row className="col-12">
-            <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>
-                <h2>
+
+                <OutlinedInput type="number" className="Inputcontrol" placeholder="" {...register("outstandingDues")} />
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">
                   {" "}
                   Type of community site
                   <span style={{ color: "red" }}>*</span>
                 </h2>
-              </Form.Label>
-              <input type="text" className="form-control" placeholder="" {...register("typesCommunitySites")} />
-            </Form.Group>
 
-            <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>
-                <h2>
+                <OutlinedInput type="number" className="Inputcontrol" placeholder="" {...register("typesCommunitySites")} />
+              </FormControl>
+            </div>
+          </div>
+          <br></br>
+          <div className="row-12">
+            <div className="col md={4} xxl lg-4">
+              <FormControl>
+                <h2 className="FormLable">
                   {" "}
                   Area in Acres
                   <span style={{ color: "red" }}>*</span>
                 </h2>
-              </Form.Label>
-              <input type="text" className="form-control" placeholder="" {...register("areainAcres")} />
-            </Form.Group>
-            <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>
-                <h2>
+                <OutlinedInput type="number" className="Inputcontrol" placeholder="" {...register("areainAcres")} />
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">
                   {" "}
                   Community site valid up to <span style={{ color: "red" }}>*</span>{" "}
                 </h2>
-              </Form.Label>
-              <input type="Date" className="form-control" placeholder="" {...register("communitySite")} />
-            </Form.Group>
-          </Row>
-          <Row className="col-8">
-            <Form.Group as={Col} controlId="formGridState">
-              <Form.Label
-                data-toggle="tooltip"
-                data-placement="top"
-                title="Apply for an Extension of time for construction of the
+                <OutlinedInput type="number" className="Inputcontrol" placeholder="" {...register("communitySite")} />
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2
+                  className="FormLable"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="Apply for an Extension of time for construction of the
                   community site (in years)"
-              >
-                <h2>
+                >
                   {" "}
                   Extension of time
                   <span style={{ color: "red" }}>*</span>
                 </h2>
-              </Form.Label>
-              <input type="text" className="form-control" placeholder="" {...register("extensionTime")} />
-            </Form.Group>
 
-            <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>
-                <h2>
+                <OutlinedInput type="number" className="Inputcontrol" placeholder="" {...register("extensionTime")} />
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">
                   {" "}
                   Amount (Rs.) <span style={{ color: "red" }}>*</span>
                 </h2>
-              </Form.Label>
-              <input type="text" className="form-control" placeholder="" {...register("amount")} />
-            </Form.Group>
-          </Row>
+
+                <OutlinedInput type="number" className="Inputcontrol" placeholder="" {...register("amount")} />
+              </FormControl>
+            </div>
+          </div>
         </div>
 
         <div>
@@ -338,7 +336,7 @@ function ExtensionCom() {
             </button>
           </div>
         </div>
-      </Card>
+      </div>
     </form>
   );
 }

@@ -103,6 +103,54 @@ const SubmitNew = (props) => {
     { label: "Existing B.G. No.", key: "existingBgNumber" },
   ];
 
+  //       const getColorofFieldIcon = () => {
+  //   let tempFieldColorState = fieldIconColors;
+  //   fieldIdList.forEach((item) => {
+  //     if (dataIcons !== null && dataIcons !== undefined) {
+  //       console.log("color method called");
+  //       const fieldPresent = dataIcons.egScrutiny.filter(ele => (ele.fieldIdL === item.label));
+  //       console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
+  //       if (fieldPresent && fieldPresent.length) {
+  //         console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
+  //         tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved === "approved" ? Colors.approved : fieldPresent[0].isApproved === "disapproved" ? Colors.disapproved : fieldPresent[0].isApproved === "conditional" ? Colors.conditional : Colors.info }
+
+  //       }
+  //     }
+  //   })
+
+  //   setFieldIconColors(tempFieldColorState);
+
+  // };
+
+  // useEffect(() => {
+  //   getColorofFieldIcon();
+  //   console.log("repeating1...",)
+  // }, [dataIcons])
+
+  // useEffect(() => {
+  //   if (labelValue) {
+  //     const fieldPresent = dataIcons.egScrutiny.filter(ele => (ele.fieldIdL === labelValue));
+  //     setSelectedFieldData(fieldPresent[0]);
+  //   } else {
+  //     setSelectedFieldData(null);
+  //   }
+  // }, [labelValue])
+
+  // const currentRemarks = (data) => {
+  //   props.showTable({ data: data.data });
+  // };
+
+  // const handlemodaldData = (data) => {
+  //   // setmodaldData(data.data);
+  //   setSmShow(false);
+  //   console.log("here", openedModal, data);
+  //   if (openedModal && data) {
+  //     setFieldIconColors({ ...fieldIconColors, [openedModal]: data.data.isApproved ? Colors.approved : Colors.disapproved })
+  //   }
+  //   setOpennedModal("");
+  //   setLabelValue("");
+  // };
+
   console.log("digit2", apiResponse);
   return (
     <form onSubmit={handleSubmit(SubmitNew)}>

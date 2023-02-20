@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-import Button from "react-bootstrap/Button";
-import Col from "react-bootstrap/Col";
-import Form from "react-bootstrap/Form";
-import Row from "react-bootstrap/Row";
-import { Card } from "react-bootstrap";
+import { Button } from "@material-ui/core";
+import FormControl from "@mui/material/FormControl";
 import { useForm } from "react-hook-form";
+import OutlinedInput from "@mui/material/OutlinedInput";
 
 function SurrenderLic() {
   const [selects, setSelects] = useState();
@@ -33,120 +31,110 @@ function SurrenderLic() {
 
   return (
     <form onSubmit={handleSubmit(SurrenderLic)}>
-      <Card style={{ width: "126%", border: "5px solid #1266af" }}>
+      <div className="card" style={{ width: "126%", border: "5px solid #1266af" }}>
         <h4 style={{ fontSize: "25px", marginLeft: "21px" }} className="text-center">
           Surrender of License
         </h4>
         <div className="card">
           <br></br>
-          <Row className="col-12">
-            <Col className="col-4">
-              <Form.Group as={Col} controlId="formGridLicence">
-                <Form.Label>
+          <div className="row-12">
+            <div className="col md={4} xxl lg-4">
+              <FormControl>
+                <h2 className="FormLable">
                   Licence No . <span style={{ color: "red" }}>*</span>
-                </Form.Label>
+                </h2>
 
-                <input type="number" placeholder="" className="form-control" {...register("licenseNo")} />
-              </Form.Group>
-            </Col>
-            <Col className="col-4">
-              <Form.Group as={Col} controlId="formGridState">
-                <Form.Label>
+                <OutlinedInput type="number" placeholder="" className="Inputcontrol" {...register("licenseNo")} />
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">
+                  {" "}
                   Select Type (Complete or Partial) <span style={{ color: "red" }}>*</span>
-                </Form.Label>
+                </h2>
 
-                <select className="form-control" {...register("selectType")} onChange={(e) => handleshowhide(e)}>
+                <select className="Inputcontrol" class="form-control" {...register("selectType")} onChange={(e) => handleshowhide(e)}>
                   <option value=" ">----Select value-----</option>
                   <option value="1">(a)Complete</option>
                   <option value="2">(b) Partial</option>
                 </select>
-              </Form.Group>
-            </Col>
-            <Col className="col-4">
-              <Form.Group as={Row} className="mb-12">
-                <Form.Label>
-                  Area falling under 24m road /service road or sector dividing road (Yes/no)
-                  <span style={{ color: "red" }}>*</span>
-                </Form.Label>
-                <Row>
-                  <Col className="col-3">
-                    <Form.Check
-                      type="radio"
-                      value="true"
-                      label="Yes"
-                      name="areaFalling"
-                      id="areaFalling"
-                      {...register(" areaFalling")}
-                      onChange={(e) => handleselects(e)}
-                    />
-                  </Col>
-                  <Col className="col-3">
-                    <Form.Check
-                      type="radio"
-                      value="false"
-                      label="No"
-                      name="areaFalling"
-                      id="areaFalling"
-                      {...register(" areaFalling")}
-                      onChange={(e) => handleselects(e)}
-                    />
-                  </Col>
-                </Row>
-              </Form.Group>
-            </Col>
-            <Col className="col-4">
-              <Form.Group as={Row} className="mb-12">
-                <Form.Label>
-                  RERA registration of project
-                  <span style={{ color: "red" }}>*</span>
-                </Form.Label>
-                <Row>
-                  <Col className="col-3">
-                    <Form.Check
-                      type="radio"
-                      label="Yes"
-                      name="reraRegistration"
-                      id="reraRegistration"
-                      value="true"
-                      {...register("reraRegistration")}
-                      onChange={(e) => handleselects(e)}
-                    />
-                  </Col>
-                  <Col className="col-3">
-                    <Form.Check
-                      type="radio"
-                      label="No"
-                      name="reraRegistration"
-                      id="reraRegistration"
-                      value="false"
-                      {...register("reraRegistration")}
-                      onChange={(e) => handleselects(e)}
-                    />
-                  </Col>
-                </Row>
-              </Form.Group>
-            </Col>
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <h2 className="FormLable">Area falling under 24m road /service road or sector dividing road (Yes/no) </h2>
+              <span style={{ color: "red" }}>*</span>
+              <div className="col md={4} xxl lg-3">
+                <input
+                  type="radio"
+                  value="true"
+                  label="Yes"
+                  name="areaFalling"
+                  id="areaFalling"
+                  {...register(" areaFalling")}
+                  onChange={(e) => handleselects(e)}
+                />
+              </div>
+              <div className="col md={4} xxl lg-3">
+                <input
+                  type="radio"
+                  value="false"
+                  label="No"
+                  name="areaFalling"
+                  id="areaFalling"
+                  {...register(" areaFalling")}
+                  onChange={(e) => handleselects(e)}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="row-12">
+            <div className="col md={4} xxl lg-4">
+              <h2 className="FormLable">RERA registration of project </h2>
+              <span style={{ color: "red" }}>*</span>
 
-            <Col className="col-4">
-              <Form.Group as={Col} controlId="formGridArea">
-                {/* <Form.Label>Password</Form.Label>
-          <Form.Control type="password" placeholder="Password" /> */}
-                <div>
-                  {showhide === "2" && (
-                    <div className="col-md-12 ">
-                      <Form.Label>
-                        Area in Acres <span style={{ color: "red" }}>*</span>
-                      </Form.Label>
-                      {/* <Form.Control type="number" placeholder="Enter Area" /> */}
-                      <input type="number" placeholder="" className="form-control" {...register("areainAcres")} />
-                    </div>
-                  )}
+              <div className="row-12">
+                <div className="col md={4} xxl lg-3">
+                  <input
+                    type="radio"
+                    label="Yes"
+                    name="reraRegistration"
+                    id="reraRegistration"
+                    value="true"
+                    {...register("reraRegistration")}
+                    onChange={(e) => handleselects(e)}
+                  />
                 </div>
-              </Form.Group>
-            </Col>
-          </Row>
+                <div className="col md={4} xxl lg-3">
+                  <input
+                    type="radio"
+                    label="No"
+                    name="reraRegistration"
+                    id="reraRegistration"
+                    value="false"
+                    {...register("reraRegistration")}
+                    onChange={(e) => handleselects(e)}
+                  />
+                </div>
+              </div>
+            </div>
 
-          <Row>
+            <div className="col md={4} xxl lg-4">
+              {/* <Form.Label>Password</Form.Label>
+          <Form.Control type="password" placeholder="Password" /> */}
+              <div>
+                {showhide === "2" && (
+                  <div className="col-md-12 ">
+                    <h2>
+                      Area in Acres <span style={{ color: "red" }}>*</span>
+                    </h2>
+                    {/* <Form.Control type="number" placeholder="Enter Area" /> */}
+                    <OutlinedInput type="number" placeholder="" className="Inputcontrol" {...register("areainAcres")} />
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="row-12">
             <div>
               {showhide === "1" && (
                 //  <div className="card">
@@ -431,7 +419,7 @@ function SurrenderLic() {
                 // </div>
               )}
             </div>
-          </Row>
+          </div>
 
           <div class="row">
             <div class="col-sm-12 text-right">
@@ -446,7 +434,7 @@ function SurrenderLic() {
             </div>
           </div>
         </div>
-      </Card>
+      </div>
     </form>
   );
 }
