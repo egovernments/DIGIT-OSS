@@ -609,10 +609,11 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                               {elementInArray.uploadBoardResolution !== "" ? (
                                 <button
                                   type="button"
+                                  title="View Document"
                                   onClick={() => getDocShareholding(elementInArray?.uploadBoardResolution)}
                                   className="btn btn-sm col-md-6"
                                 >
-                                  <VisibilityIcon color="info" title="View Document" className="icon" />
+                                  <VisibilityIcon color="info" className="icon" />
                                 </button>
                               ) : (
                                 <p></p>
@@ -663,6 +664,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                           <td style={{ textAlign: "center" }}>
                             <a
                               // onClick={()=>(viewRecord(elementInArray.id))}
+                              title="Delete record"
                               onClick={() => viewRecord(elementInArray, input)}
                             >
                               <DeleteIcon style={{ fill: "#ff1a1a" }} />
