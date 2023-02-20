@@ -839,7 +839,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
               : data?.devDetail[0]?.addInfo?.showDevTypeFields === "Limited Liability Partnership" ||
                 data?.devDetail[0]?.addInfo?.showDevTypeFields === "Firm" ||
                 data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm"
-              ? !Documents?.netWorthOfPartners || !Documents?.netWorthOfFirm
+              ? !Documents?.networthPartners || !Documents?.networthFirm
               : false) ||
             ((permissionGrantedHRDU === "Y" && capacityDevelopColonyHdruAct?.length) || permissionGrantedHRDU === "N"
               ? false
@@ -1206,9 +1206,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                             </td>
                             <td align="center" size="large">
                               <div className="row">
-                                {Documents?.netWorthOfPartners ? (
+                                {Documents?.networthPartners ? (
                                   <a
-                                    onClick={() => getDocShareholding(Documents?.netWorthOfPartners)}
+                                    onClick={() => getDocShareholding(Documents?.networthPartners)}
                                     title="View Document"
                                     className="btn btn-sm col-md-6"
                                   >
@@ -1218,16 +1218,16 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                   <p></p>
                                 )}
                                 <div className="btn btn-sm col-md-6">
-                                  <label for="netWorthOfPartners" title="Upload Document">
+                                  <label for="netWorthOfPartnersId" title="Upload Document">
                                     {" "}
                                     <FileUpload color="primary" />
                                   </label>
                                   <input
-                                    id="netWorthOfPartners"
+                                    id="netWorthOfPartnersId"
                                     type="file"
                                     accept="application/pdf"
                                     style={{ display: "none" }}
-                                    onChange={(e) => getDocumentData(e?.target?.files[0], "netWorthOfPartners", "devTypeDocument")}
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "networthPartners", "devTypeDocument")}
                                   />
                                 </div>
                               </div>
@@ -1240,9 +1240,9 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                             </td>
                             <td align="center" size="large">
                               <div className="row">
-                                {Documents?.netWorthOfFirm ? (
+                                {Documents?.networthFirm ? (
                                   <a
-                                    onClick={() => getDocShareholding(Documents?.netWorthOfFirm)}
+                                    onClick={() => getDocShareholding(Documents?.networthFirm)}
                                     title="View Document"
                                     className="btn btn-sm col-md-6"
                                   >
@@ -1252,16 +1252,16 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                   <p></p>
                                 )}
                                 <div className="btn btn-sm col-md-6">
-                                  <label for="netWorthOfFirm" title="Upload Document">
+                                  <label for="netWorthOfFirmId" title="Upload Document">
                                     {" "}
                                     <FileUpload color="primary" />
                                   </label>
                                   <input
-                                    id="netWorthOfFirm"
+                                    id="netWorthOfFirmId"
                                     type="file"
                                     accept="application/pdf"
                                     style={{ display: "none" }}
-                                    onChange={(e) => getDocumentData(e?.target?.files[0], "netWorthOfFirm", "devTypeDocument")}
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "networthFirm", "devTypeDocument")}
                                   />
                                 </div>
                               </div>

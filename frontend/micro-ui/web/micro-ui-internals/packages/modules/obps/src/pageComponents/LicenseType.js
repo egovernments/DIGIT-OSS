@@ -29,6 +29,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
   const [loader, setLoading] = useState(false);
 
   const getDeveloperData = async () => {
+    setLoading(true);
     try {
       const requestResp = {
         RequestInfo: {
@@ -44,12 +45,14 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
         },
       };
       const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${userInfo?.info?.id}&isAllData=true`, requestResp, {});
+      setLoading(false);
       const developerDataGet = getDevDetails?.data;
       setShowDevTypeFields(developerDataGet?.devDetail[0]?.applicantType?.developerType || devType);
       // setLicenseType(developerDataGet?.devDetail[0]?.applicantType?.licenceType);
       setLicenseTypeSelected(developerDataGet?.devDetail[0]?.applicantType?.licenceTypeSelected);
       setLicenseTypeCom(developerDataGet?.devDetail[0]?.applicantType?.licenceType);
     } catch (error) {
+      setLoading(false);
       return error;
     }
   };
@@ -98,7 +101,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
       found = list.some((el) => el.i18nKey.includes(ob.tradeType.split(".")[0]));
       if (!found) list.push({ role: ob.role, i18nKey: `TRADELICENSE_TRADETYPE_${ob.tradeType.split(".")[0]}`, tradeType: ob.tradeType });
     });
-    console.log("DATAList", list);
+    // console.log("DATAList", list);
     return list;
   }
 

@@ -885,7 +885,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                         !aurthorizedUserName ||
                         !aurthorizedDob ||
                         !aurthorizedEmail ||
-                        // !panIsValid ||
+                        !panIsValid ||
                         !aurthorizedMobileNumber ||
                         !aurthorizedPan ||
                         !aurthorizedEmail.match(Digit.Utils.getPattern("Email")) ||

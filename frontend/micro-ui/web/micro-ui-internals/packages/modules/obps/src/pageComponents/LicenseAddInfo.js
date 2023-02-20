@@ -910,6 +910,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
               showDevTypeFields === "Individual" || showDevTypeFields === "Proprietorship Firm" || showDevTypeFields === "Hindu Undivided Family"
                 ? !(
                     name &&
+                    panIsValid &&
                     mobileNumberUser?.match(Digit.Utils.getPattern("MobileNo")) &&
                     emailId?.match(Digit.Utils.getPattern("Email")) &&
                     gst_Number?.match(Digit.Utils.getPattern("GSTNo"))

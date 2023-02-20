@@ -18,7 +18,7 @@ import { useHistory, useRouteMatch } from "react-router-dom";
 import Timeline from "../../../components/Timeline";
 import OBPSDocument from "../../../pageComponents/OBPSDocuments";
 import axios from "axios";
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import { getDocShareholding } from "../../../../../tl/src/pages/employee/ScrutinyBasic/ScrutinyDevelopment/docview.helper";
 
 const CheckPage = ({ onSubmit, value }) => {
@@ -38,41 +38,37 @@ const CheckPage = ({ onSubmit, value }) => {
   //     sessionStorage.removeItem("Digit.BUILDING_PERMIT");
   //   };
 
-
   const getDeveloperData = async () => {
     try {
       const requestResp = {
-
-        "RequestInfo": {
-          "api_id": "1",
-          "ver": "1",
-          "ts": "",
-          "action": "_getDeveloperById",
-          "did": "",
-          "key": "",
-          "msg_id": "",
-          "requester_id": "",
-          "auth_token": ""
+        RequestInfo: {
+          api_id: "1",
+          ver: "1",
+          ts: "",
+          action: "_getDeveloperById",
+          did: "",
+          key: "",
+          msg_id: "",
+          requester_id: "",
+          auth_token: "",
         },
-      }
-      const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${userInfo?.info?.id}&isAllData=true`, requestResp, {
-
-      });
+      };
+      const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${userInfo?.info?.id}&isAllData=true`, requestResp, {});
       const developerDataGet = getDevDetails?.data;
-      setDevData(getDevDetails?.data?.devDetail[0]?.addInfo)
-      setDevDataFinancialCapacity(getDevDetails?.data?.devDetail[0]?.capacityDevelopAColony?.documents)
+      setDevData(getDevDetails?.data?.devDetail[0]?.addInfo);
+      setDevDataFinancialCapacity(getDevDetails?.data?.devDetail[0]?.capacityDevelopAColony?.documents);
       setShowDevTypeFields(developerDataGet?.devDetail[0]?.applicantType?.developerType);
       setShowLicenceType(developerDataGet?.devDetail[0]?.applicantType?.licenceType);
       setPersonalData(developerDataGet?.devDetail[0]?.licenceDetails);
-      console.log("LOLO",developerDataGet?.devDetail[0]?.licenceDetails);
+      console.log("LOLO", developerDataGet?.devDetail[0]?.licenceDetails);
       setAurthorizedUserInfoArray(developerDataGet?.devDetail[0]?.aurthorizedUserInfoArray);
       // setDocumentsData(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.documents);
     } catch (error) {
       console.log(error);
     }
-  }
+  };
   useEffect(() => {
-    getDeveloperData()
+    getDeveloperData();
   }, []);
 
   const [showDevTypeFields, setShowDevTypeFields] = useState("");
@@ -85,7 +81,7 @@ const CheckPage = ({ onSubmit, value }) => {
   // console.log(":::::", getDevData);
 
   const { result, formData, documents } = value;
-  console.log("form DATA",formData);
+  console.log("form DATA", formData);
   let consumerCode = value?.result?.Licenses[0].applicationNumber;
   const fetchBillParams = { consumerCode };
 
@@ -104,7 +100,6 @@ const CheckPage = ({ onSubmit, value }) => {
   }
 
   const navigate = useHistory();
-
 
   const changeStep = (step) => {
     if (value?.LicneseType?.licenceType === "ARCHITECT.CLASSA") {
@@ -138,7 +133,7 @@ const CheckPage = ({ onSubmit, value }) => {
           break;
       }
     }
-  }
+  };
 
   return (
     <React.Fragment>
@@ -146,7 +141,12 @@ const CheckPage = ({ onSubmit, value }) => {
         {/* <div style={isopenlink?{ width:isCitizenUrl?"100%":"70%", marginLeft:"auto",marginRight:"auto"}:{}}> */}
         <div>
           {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
-          <Timeline currentStep={value?.LicneseType?.licenceType === "ARCHITECT.CLASSA" ? 4 : 6} flow={value?.LicneseType?.licenceType === "ARCHITECT.CLASSA" ? "ARCHITECT.CLASSA" : "STAKEHOLDER"} onChangeStep={changeStep} isAPILoaded={value?.LicneseType?.licenceType ? true : false} />
+          <Timeline
+            currentStep={value?.LicneseType?.licenceType === "ARCHITECT.CLASSA" ? 4 : 6}
+            flow={value?.LicneseType?.licenceType === "ARCHITECT.CLASSA" ? "ARCHITECT.CLASSA" : "STAKEHOLDER"}
+            onChangeStep={changeStep}
+            isAPILoaded={value?.LicneseType?.licenceType ? true : false}
+          />
           <Header styles={{ fontSize: "32px" }}>{t("BPA_STEPPER_SUMMARY_HEADER")}</Header>
           <Card style={{ paddingRight: "16px" }}>
             <StatusTable>
@@ -185,34 +185,17 @@ const CheckPage = ({ onSubmit, value }) => {
                 onClick={() => routeTo(`${routeLink}/license-details`)}
               />
               <StatusTable>
-                <Row
-                  className="border-none"
-                  label={t(`BPA_APPLICANT_NAME_LABEL`)}
-                  textStyle={{ paddingLeft: "12px" }}
-                  text={getPersonalData?.name}
-                />
+                <Row className="border-none" label={t(`BPA_APPLICANT_NAME_LABEL`)} textStyle={{ paddingLeft: "12px" }} text={getPersonalData?.name} />
                 {/* <Row className="border-none" label={t(`BPA_APPLICANT_GENDER_LABEL`)} text={t(formData?.LicneseDetails?.gender.i18nKey)} /> */}
-                <Row
-                  className="border-none"
-                  label={t(`BPA_OWNER_MOBILE_NO_LABEL`)}
-                  text={getPersonalData?.mobileNumber}
-                />
-                <Row
-                  className="border-none"
-                  label={t(`BPA_APPLICANT_EMAIL_LABEL`)}
-                  text={getPersonalData?.email || t("CS_NA")}
-                />
-                <Row
-                  className="border-none"
-                  label={t(`BPA_APPLICANT_PAN_NO`)}
-                  text={getPersonalData?.panNumber || t("CS_NA")}
-                />
+                <Row className="border-none" label={t(`BPA_OWNER_MOBILE_NO_LABEL`)} text={getPersonalData?.mobileNumber} />
+                <Row className="border-none" label={t(`BPA_APPLICANT_EMAIL_LABEL`)} text={getPersonalData?.email || t("CS_NA")} />
+                <Row className="border-none" label={t(`BPA_APPLICANT_PAN_NO`)} text={getPersonalData?.panNumber || t("CS_NA")} />
                 {/* <Row className="border-none" label={`Pin Code`} text={formData?.LicneseDetails?.devDetail?.licenceDetails?.pincode || t("CS_NA")} /> */}
                 <Row className="border-none" label={`Date of Birth`} text={getPersonalData?.dob || t("CS_NA")} />
               </StatusTable>
             </Card>
           )}
-          
+
           {showLicenceType !== "ARCHITECT.CLASSA" && (
             <Card>
               <div style={{ marginRight: "24px" }}>
@@ -221,31 +204,32 @@ const CheckPage = ({ onSubmit, value }) => {
               <LinkButton
                 label={<EditIcon style={{ marginTop: "-15px", float: "right", position: "relative", bottom: "32px" }} />}
                 style={{ width: "100px", display: "inline" }}
-                onClick={() => routeTo(`${routeLink}/license-add-info`)} />
+                onClick={() => routeTo(`${routeLink}/license-add-info`)}
+              />
 
               <StatusTable>
                 <Row className="border-none" label={"Developer's type"} text={getDevData?.showDevTypeFields || t("CS_NA")} />
-                {(getDevData?.showDevTypeFields == "Trust") ? (
-                  <Row className="border-none" label={"CSR Number"} text={getDevData?.csr_Number || t("CS_NA")} /> &&
-                  <Row className="border-none" label={"Trust Name"} text={getDevData?.companyName || t("CS_NA")} /> &&
-                  <Row className="border-none" label={"IncorporationDate"} text={getDevData?.incorporationDate || t("CS_NA")} />
-                ) : (getDevData?.showDevTypeFields == "Company") ? (
-                  <Row className="border-none" label={"CIN Number"} text={getDevData?.cin_Number || t("CS_NA")} /> &&
-                  <Row className="border-none" label={"Company Name"} text={getDevData?.companyName || t("CS_NA")} /> &&
-                  <Row className="border-none" label={"IncorporationDate"} text={getDevData?.incorporationDate || t("CS_NA")} />
-                ) : (getDevData?.showDevTypeFields == "Limited Liability Partnership") ? (
-                  <Row className="border-none" label={"LLP Number"} text={getDevData?.llp_Number || t("CS_NA")} /> &&
-                  <Row className="border-none" label={"IncorporationDate"} text={getDevData?.incorporationDate || t("CS_NA")} />
-                ) : (getDevData?.showDevTypeFields == "Individual") ? (
-                  <Row className="border-none" label={"Email"} text={getDevData?.emailId || t("CS_NA")} /> &&
-                  <Row className="border-none" label={"PAN Number"} text={getDevData?.PanNumber || t("CS_NA")} />
+                {getDevData?.showDevTypeFields == "Trust" ? (
+                  <Row className="border-none" label={"CSR Number"} text={getDevData?.csr_Number || t("CS_NA")} /> && (
+                    <Row className="border-none" label={"Trust Name"} text={getDevData?.companyName || t("CS_NA")} />
+                  ) && <Row className="border-none" label={"IncorporationDate"} text={getDevData?.incorporationDate || t("CS_NA")} />
+                ) : getDevData?.showDevTypeFields == "Company" ? (
+                  <Row className="border-none" label={"CIN Number"} text={getDevData?.cin_Number || t("CS_NA")} /> && (
+                    <Row className="border-none" label={"Company Name"} text={getDevData?.companyName || t("CS_NA")} />
+                  ) && <Row className="border-none" label={"IncorporationDate"} text={getDevData?.incorporationDate || t("CS_NA")} />
+                ) : getDevData?.showDevTypeFields == "Limited Liability Partnership" ? (
+                  <Row className="border-none" label={"LLP Number"} text={getDevData?.llp_Number || t("CS_NA")} /> && (
+                    <Row className="border-none" label={"IncorporationDate"} text={getDevData?.incorporationDate || t("CS_NA")} />
+                  )
+                ) : getDevData?.showDevTypeFields == "Individual" ? (
+                  <Row className="border-none" label={"Email"} text={getDevData?.emailId || t("CS_NA")} /> && (
+                    <Row className="border-none" label={"PAN Number"} text={getDevData?.PanNumber || t("CS_NA")} />
+                  )
                 ) : (
                   <Row className="border-none" label={"Email"} text={getDevData?.email || t("CS_NA")} />
                 )}
 
                 <Row className="border-none" label={"GST Number"} text={getDevData?.gst_Number || t("CS_NA")} />
-
-
 
                 {/* <Row className="border-none" label={"IncorporationDate"} text={getDevData?.incorporationDate || t("CS_NA")} /> */}
                 <Row className="border-none" label={"Mobile Number"} text={getDevData?.mobileNumberUser || t("CS_NA")} />
@@ -261,7 +245,8 @@ const CheckPage = ({ onSubmit, value }) => {
               <LinkButton
                 label={<EditIcon style={{ marginTop: "-15px", float: "right", position: "relative", bottom: "32px" }} />}
                 style={{ width: "100px", display: "inline" }}
-                onClick={() => routeTo(`${routeLink}/add-authorized-user`)} />
+                onClick={() => routeTo(`${routeLink}/add-authorized-user`)}
+              />
               <StatusTable>
                 <table className="table table-bordered table-striped table-responsive">
                   <thead>
@@ -275,29 +260,22 @@ const CheckPage = ({ onSubmit, value }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {(aurthorizedUserInfoArray?.length > 0) ?
+                    {aurthorizedUserInfoArray?.length > 0 ? (
                       aurthorizedUserInfoArray.map((elementInArray, input) => {
                         return (
                           <tr key={elementInArray.id}>
                             <td>{input + 1}</td>
-                            <td>
-                              {elementInArray.name}
-                            </td>
-                            <td>
-                              {elementInArray.mobileNumber}
-                            </td>
-                            <td>
-                              {elementInArray.emailId}
-                            </td>
-                            <td>
-                              {elementInArray.gender}
-                            </td>
-                            <td>
-                              {elementInArray.pan}
-                            </td>
+                            <td>{elementInArray.name}</td>
+                            <td>{elementInArray.mobileNumber}</td>
+                            <td>{elementInArray.emailId}</td>
+                            <td>{elementInArray.gender}</td>
+                            <td>{elementInArray.pan}</td>
                           </tr>
                         );
-                      }) : <div className="d-none"></div>}
+                      })
+                    ) : (
+                      <div className="d-none"></div>
+                    )}
                   </tbody>
                 </table>
               </StatusTable>
@@ -309,10 +287,13 @@ const CheckPage = ({ onSubmit, value }) => {
               <LinkButton
                 label={<EditIcon style={{ marginTop: "-15px", float: "right", position: "relative", bottom: "32px" }} />}
                 style={{ width: "100px", display: "inline" }}
-                onClick={() => routeTo(`${routeLink}/developer-capacity`)} />
+                onClick={() => routeTo(`${routeLink}/developer-capacity`)}
+              />
               <StatusTable>
                 {/* {(getDevDataFinancialCapacity === "Individual") ? () : ()} */}
-                {(getDevData?.showDevTypeFields === "Individual" || getDevData?.showDevTypeFields === "Proprietorship Firm" || getDevData?.showDevTypeFields === "Hindu Undivided Family") && (
+                {(getDevData?.showDevTypeFields === "Individual" ||
+                  getDevData?.showDevTypeFields === "Proprietorship Firm" ||
+                  getDevData?.showDevTypeFields === "Hindu Undivided Family") && (
                   <div className="card-body">
                     <div className="form-group row mb-12">
                       {/* <label className="col-sm-3 col-form-label">Individual</label> */}
@@ -331,7 +312,8 @@ const CheckPage = ({ onSubmit, value }) => {
                             <tr>
                               <td> 1 </td>
                               <td>
-                                Net Worth in case of individual certified by CA/ Or Income tax return in case of an individual (for the last three years) <span className="text-danger font-weight-bold">*</span>
+                                Net Worth in case of individual certified by CA/ Or Income tax return in case of an individual (for the last three
+                                years) <span className="text-danger font-weight-bold">*</span>
                               </td>
                               {/* <td>
                           <input
@@ -344,13 +326,17 @@ const CheckPage = ({ onSubmit, value }) => {
                       </td> */}
                               <td align="center" size="large">
                                 <div className="row">
-                                  {getDevDataFinancialCapacity?.individualCertificateCA ?
-                                    <a onClick={() => getDocShareholding(getDevDataFinancialCapacity?.individualCertificateCA)} className="btn btn-sm col-md-6">
+                                  {getDevDataFinancialCapacity?.individualCertificateCA ? (
+                                    <a
+                                      onClick={() => getDocShareholding(getDevDataFinancialCapacity?.individualCertificateCA)}
+                                      className="btn btn-sm col-md-6"
+                                    >
                                       <VisibilityIcon color="info" className="icon" />
-                                    </a> : <p></p>}
-
+                                    </a>
+                                  ) : (
+                                    <p></p>
+                                  )}
                                 </div>
-
                               </td>
                             </tr>
                             <tr>
@@ -369,21 +355,29 @@ const CheckPage = ({ onSubmit, value }) => {
                       </td> */}
                               <td align="center" size="large">
                                 <div className="row">
-                                  {getDevDataFinancialCapacity?.companyBalanceSheet ?
-                                    <a onClick={() => getDocShareholding(getDevDataFinancialCapacity?.companyBalanceSheet)} className="btn btn-sm col-md-6">
+                                  {getDevDataFinancialCapacity?.companyBalanceSheet ? (
+                                    <a
+                                      onClick={() => getDocShareholding(getDevDataFinancialCapacity?.companyBalanceSheet)}
+                                      className="btn btn-sm col-md-6"
+                                    >
                                       <VisibilityIcon color="info" className="icon" />
-                                    </a> : <p></p>}
+                                    </a>
+                                  ) : (
+                                    <p></p>
+                                  )}
                                 </div>
-
                               </td>
                             </tr>
-
                           </tbody>
                         </table>
                       </div>
                     </div>
-                  </div>)}
-                {(getDevData?.showDevTypeFields === "Company" || getDevData?.showDevTypeFields === "Society" || getDevData?.showDevTypeFields === "Trust" || getDevData?.showDevTypeFields === "Institution") && (
+                  </div>
+                )}
+                {(getDevData?.showDevTypeFields === "Company" ||
+                  getDevData?.showDevTypeFields === "Society" ||
+                  getDevData?.showDevTypeFields === "Trust" ||
+                  getDevData?.showDevTypeFields === "Institution") && (
                   <div className="card-body">
                     <div className="form-group row">
                       {/* <label className="col-sm-3 col-form-label">Company</label> */}
@@ -401,7 +395,9 @@ const CheckPage = ({ onSubmit, value }) => {
                           <tbody>
                             <tr>
                               <td> 1 </td>
-                              <td>Balance sheet of last 3 years <span className="text-danger font-weight-bold">*</span></td>
+                              <td>
+                                Balance sheet of last 3 years <span className="text-danger font-weight-bold">*</span>
+                              </td>
                               {/* <td>
                           <input
                               type="file"
@@ -413,45 +409,57 @@ const CheckPage = ({ onSubmit, value }) => {
 
                       </td> */}
                               <td align="center" size="large">
-
                                 <div className="row">
-                                  {getDevDataFinancialCapacity?.companyBalanceSheet ?
-                                    <a onClick={() => getDocShareholding(getDevDataFinancialCapacity?.companyBalanceSheet)} className="btn btn-sm col-md-6">
+                                  {getDevDataFinancialCapacity?.companyBalanceSheet ? (
+                                    <a
+                                      onClick={() => getDocShareholding(getDevDataFinancialCapacity?.companyBalanceSheet)}
+                                      className="btn btn-sm col-md-6"
+                                    >
                                       <VisibilityIcon color="info" className="icon" />
-                                    </a> : <p></p>}
-
+                                    </a>
+                                  ) : (
+                                    <p></p>
+                                  )}
                                 </div>
                               </td>
                             </tr>
                             <tr>
                               <td> 2 </td>
-                              <td>Ps-3(Representing Paid-UP capital) <span className="text-danger font-weight-bold">*</span></td>
+                              <td>
+                                Ps-3(Representing Paid-UP capital) <span className="text-danger font-weight-bold">*</span>
+                              </td>
 
                               <td align="center" size="large">
                                 <div className="row">
-
-                                  {getDevDataFinancialCapacity?.paidUpCapital ?
+                                  {getDevDataFinancialCapacity?.paidUpCapital ? (
                                     <a onClick={() => getDocShareholding(getDevDataFinancialCapacity?.paidUpCapital)} className="btn btn-sm col-md-6">
                                       <VisibilityIcon color="info" className="icon" />
-                                    </a> : <p></p>}
-
+                                    </a>
+                                  ) : (
+                                    <p></p>
+                                  )}
                                 </div>
-
                               </td>
                             </tr>
 
                             <tr>
                               <td> 3 </td>
-                              <td>Reserves and surpluses <span className="text-danger font-weight-bold">*</span></td>
+                              <td>
+                                Reserves and surpluses <span className="text-danger font-weight-bold">*</span>
+                              </td>
                               <td align="center" size="large">
                                 <div className="row">
-
-                                  {getDevDataFinancialCapacity?.reservesAndSurplus ?
-                                    <a onClick={() => getDocShareholding(getDevDataFinancialCapacity?.reservesAndSurplus)} className="btn btn-sm col-md-6">
+                                  {getDevDataFinancialCapacity?.reservesAndSurplus ? (
+                                    <a
+                                      onClick={() => getDocShareholding(getDevDataFinancialCapacity?.reservesAndSurplus)}
+                                      className="btn btn-sm col-md-6"
+                                    >
                                       <VisibilityIcon color="info" className="icon" />
-                                    </a> : <p></p>}
+                                    </a>
+                                  ) : (
+                                    <p></p>
+                                  )}
                                 </div>
-
                               </td>
                             </tr>
                             <tr>
@@ -459,13 +467,17 @@ const CheckPage = ({ onSubmit, value }) => {
                               <td>Fully Convertible Debenture </td>
                               <td align="center" size="large">
                                 <div className="row">
-
-                                  {getDevDataFinancialCapacity?.fullyConvertibleDebenture ?
-                                    <a onClick={() => getDocShareholding(getDevDataFinancialCapacity?.fullyConvertibleDebenture)} className="btn btn-sm col-md-6">
+                                  {getDevDataFinancialCapacity?.fullyConvertibleDebenture ? (
+                                    <a
+                                      onClick={() => getDocShareholding(getDevDataFinancialCapacity?.fullyConvertibleDebenture)}
+                                      className="btn btn-sm col-md-6"
+                                    >
                                       <VisibilityIcon color="info" className="icon" />
-                                    </a> : <p></p>}
+                                    </a>
+                                  ) : (
+                                    <p></p>
+                                  )}
                                 </div>
-
                               </td>
                             </tr>
                             <tr>
@@ -473,23 +485,25 @@ const CheckPage = ({ onSubmit, value }) => {
                               <td>Any other documents</td>
                               <td align="center" size="large">
                                 <div className="row">
-
-                                  {getDevDataFinancialCapacity?.anyOtherDoc ?
+                                  {getDevDataFinancialCapacity?.anyOtherDoc ? (
                                     <a onClick={() => getDocShareholding(getDevDataFinancialCapacity?.anyOtherDoc)} className="btn btn-sm col-md-6">
                                       <VisibilityIcon color="info" className="icon" />
-                                    </a> : <p></p>}
+                                    </a>
+                                  ) : (
+                                    <p></p>
+                                  )}
                                 </div>
-
                               </td>
                             </tr>
-
-
                           </tbody>
                         </table>
                       </div>
                     </div>
-                  </div>)}
-                {(getDevData?.showDevTypeFields === "Limited Liability Partnership" || getDevData?.showDevTypeFields === "Firm" || getDevData?.showDevTypeFields === "Partnership Firm") && (
+                  </div>
+                )}
+                {(getDevData?.showDevTypeFields === "Limited Liability Partnership" ||
+                  getDevData?.showDevTypeFields === "Firm" ||
+                  getDevData?.showDevTypeFields === "Partnership Firm") && (
                   <div className="card-body">
                     <div className="form-group row">
                       {/* <label className="col-sm-3 col-form-label">LLP</label> */}
@@ -507,51 +521,67 @@ const CheckPage = ({ onSubmit, value }) => {
                           <tbody>
                             <tr>
                               <td> 1 </td>
-                              <td>Networth of partners <span className="text-danger font-weight-bold">*</span></td>
+                              <td>
+                                Networth of partners <span className="text-danger font-weight-bold">*</span>
+                              </td>
                               <td align="center" size="large">
                                 <div className="row">
-
-                                  {getDevDataFinancialCapacity?.netWorthOfPartners ?
-                                    <a onClick={() => getDocShareholding(getDevDataFinancialCapacity?.netWorthOfPartners)} className="btn btn-sm col-md-6">
+                                  {getDevDataFinancialCapacity?.networthPartners ? (
+                                    <a
+                                      onClick={() => getDocShareholding(getDevDataFinancialCapacity?.networthPartners)}
+                                      className="btn btn-sm col-md-6"
+                                    >
                                       <VisibilityIcon color="info" className="icon" />
-                                    </a> : <p></p>}
+                                    </a>
+                                  ) : (
+                                    <p></p>
+                                  )}
                                 </div>
-
                               </td>
                             </tr>
                             <tr>
                               <td> 2 </td>
-                              <td>Net worth of firm <span className="text-danger font-weight-bold">*</span></td>
+                              <td>
+                                Net worth of firm <span className="text-danger font-weight-bold">*</span>
+                              </td>
                               <td align="center" size="large">
                                 <div className="row">
-
-                                  {getDevDataFinancialCapacity?.netWorthOfFirm ?
-                                    <a onClick={() => getDocShareholding(getDevDataFinancialCapacity?.netWorthOfFirm)} className="btn btn-sm col-md-6">
+                                  {getDevDataFinancialCapacity?.networthFirm ? (
+                                    <a onClick={() => getDocShareholding(getDevDataFinancialCapacity?.networthFirm)} className="btn btn-sm col-md-6">
                                       <VisibilityIcon color="info" className="icon" />
-                                    </a> : <p></p>}
+                                    </a>
+                                  ) : (
+                                    <p></p>
+                                  )}
                                 </div>
-
                               </td>
                             </tr>
                             <tr>
                               <td> 3 </td>
-                              <td>Upload Fully Convertible Debenture <span className="text-danger font-weight-bold">*</span></td>
+                              <td>
+                                Upload Fully Convertible Debenture <span className="text-danger font-weight-bold">*</span>
+                              </td>
                               <td align="center" size="large">
                                 <div className="row">
-
-                                  {getDevDataFinancialCapacity?.fullyConvertibleDebenture ?
-                                    <a onClick={() => getDocShareholding(getDevDataFinancialCapacity?.fullyConvertibleDebenture)} className="btn btn-sm col-md-6">
+                                  {getDevDataFinancialCapacity?.fullyConvertibleDebenture ? (
+                                    <a
+                                      onClick={() => getDocShareholding(getDevDataFinancialCapacity?.fullyConvertibleDebenture)}
+                                      className="btn btn-sm col-md-6"
+                                    >
                                       <VisibilityIcon color="info" className="icon" />
-                                    </a> : <p></p>}
+                                    </a>
+                                  ) : (
+                                    <p></p>
+                                  )}
                                 </div>
-
                               </td>
                             </tr>
                           </tbody>
                         </table>
                       </div>
                     </div>
-                  </div>)}
+                  </div>
+                )}
               </StatusTable>
             </Card>
           )}
@@ -577,7 +607,7 @@ const CheckPage = ({ onSubmit, value }) => {
               </div>
             ))}
           </Card>
-          <Card style={{display: "none" }}>
+          <Card style={{ display: "none" }}>
             <CardHeader styles={{ fontSize: "24px" }}>{t("BPA_SUMMARY_FEE_EST")}</CardHeader>
             <StatusTable>
               {paymentDetails?.billResponse?.Bill[0]?.billDetails[0]?.billAccountDetails.map((bill, index) => (
