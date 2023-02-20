@@ -52,9 +52,11 @@ const ElectricalPlanScrutiny = (props) => {
   const [smShow, setSmShow] = useState(false);
   const [labelValue, setLabelValue] = useState("");
   const Colors = {
-    approved: "#09cb3d",
-    disapproved: "#ff0000",
-    info: "#FFB602",
+    conditional:"#2874A6",
+    approved:"#09cb3d",
+    disapproved:"#ff0000",
+   
+    info:"#FFB602"
   };
 
   const handlemodaldData = (data) => {
@@ -72,11 +74,11 @@ const ElectricalPlanScrutiny = (props) => {
   const [openedModal, setOpennedModal] = useState("");
   const [fieldIconColors, setFieldIconColors] = useState({
     loiNumber: Colors.info,
-    electricalInfra: Colors.info,
-    elecricDistribution: Colors.info,
+    electricInfra: Colors.info,
+    electricDistribution: Colors.info,
     electricalCapacity: Colors.info,
     switchingStation: Colors.info,
-    loadSancation: Colors.info,
+    LoadSancation: Colors.info,
     selfCenteredDrawings: Colors.info,
     autoCad: Colors.info,
     pdfFormat: Colors.info,
@@ -90,15 +92,24 @@ const ElectricalPlanScrutiny = (props) => {
     addressForCommunication: Colors.info,
     authPerson: Colors.info,
     emailForCommunication: Colors.info,
+    purpose: Colors.info,
+    totalArea: Colors.info,
+    devName: Colors.info,
+    developmentPlan: Colors.info,
   });
 
   const fieldIdList = [
     { label: "LOI Number", key: "loiNumber" },
-    { label: "Electrical infrastructure sufficient to cater for the electrical need of the project area", key: "electricalInfra" },
-    { label: "Provision of the electricity distribution in the project area by the instructions of the HVPNL", key: "elecricDistribution" },
+    { label: "Name ", key: "devName" },
+    { label: "Total Area", key: "totalArea" },
+    { label: "Purpose Of Licence", key: "purpose" },
+    { label: "Development Plan", key: "developmentPlan" },
+    { label: "Uploaded Service Plan", key: "selfCertifiedDrawingsFromCharetedEng" },
+    { label: "Electrical infrastructure sufficient to cater for the electrical need of the project area", key: "electricInfra" },
+    { label: "Provision of the electricity distribution in the project area by the instructions of the HVPNL", key: "electricDistribution" },
     { label: "The capacity of the proposed electrical substation as per the requirement", key: "electricalCapacity" },
     { label: "Provision of 33 Kv switching station for the electrical infrastructure as per the approved layout plan", key: "switchingStation" },
-    { label: "Load sanction approval as per the requirement", key: "loadSancation" },
+    { label: "Load sanction approval as per the requirement", key: "LoadSancation" },
     { label: "Self-certified drawings from empaneled/certified architects that conform to the standard approved template as per the TCP layout plan / Site plan", key: "selfCenteredDrawings" },
     { label: "Environmental Clearance", key: "environmentalClearance" },
     { label: "Electrical plan PDF (OCR Compatible) + GIS format.", key: "pdfFormat" },
@@ -116,7 +127,7 @@ const ElectricalPlanScrutiny = (props) => {
         console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
         if (fieldPresent && fieldPresent.length) {
           console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
-          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved ? Colors.approved : Colors.disapproved }
+          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved === "approved" ? Colors.approved : fieldPresent[0].isApproved === "disapproved" ? Colors.disapproved : fieldPresent[0].isApproved === "conditional" ? Colors.conditional : Colors.info }
 
         }
       }
@@ -140,7 +151,6 @@ const ElectricalPlanScrutiny = (props) => {
       setSelectedFieldData(null);
     }
   }, [labelValue])
-
 
 
 
@@ -181,9 +191,9 @@ const ElectricalPlanScrutiny = (props) => {
         <Card  
         style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}
         >
-          <Row className="ml-auto" style={{ marginBottom: 5 }}>
-          
-            <Col className="col-4">
+          <Row  >
+
+            <Col className="col-3">
               {/* <Form.Group as={Col} controlId="formGridLicence"> */}
                <div>
                 <Form.Label>
@@ -221,7 +231,154 @@ const ElectricalPlanScrutiny = (props) => {
              </div>
               {/* </Form.Group> */}
             </Col>
+            {/* <Col md={4} xxl lg="4">
+ 
+            </Col>
             <Col md={4} xxl lg="4">
+ 
+            </Col> */}
+          
+            </Row>
+            <Row style={{ marginTop: 3}}>
+            <Col className="col-3">
+              <div>
+                <label>
+                  <h2>
+                    Name
+                  </h2>
+                </label>
+              </div>
+              {/* <input
+                type="string"
+                className="form-control"
+                {...register("devName")}
+                onChange={(e) => setDevName(e.target.value)}
+                value={devName}
+                disabled
+              />  */}
+              <div className={classes.fieldContainer}>
+              <Form.Control className={classes.formControl} placeholder={apiResponse?.devName} disabled></Form.Control>
+
+              <ReportProblemIcon
+                style={{
+                  color: fieldIconColors.devName,
+                }}
+                onClick={() => {
+                  setOpennedModal("devName");
+                  setLabelValue("Name"),
+                    setSmShow(true),
+                    console.log("modal open"),
+                    setFieldValue(apiResponse !== null ? apiResponse.devName : null);
+                }}
+              ></ReportProblemIcon>
+             
+            </div>
+            </Col>
+            <Col className="col-3">
+              <div>
+                <label>
+                  <h2>
+                  Development Plan
+                  </h2>
+                </label>
+              </div>
+              {/* <input
+                type="string"
+                className="form-control"
+                {...register("developmentPlan")}
+                onChange={(e) => setDevelopmentPlan(e.target.value)}
+                value={developmentPlan}
+                disabled
+              /> */}
+               <div className={classes.fieldContainer}>
+              <Form.Control className={classes.formControl} placeholder={apiResponse?.developmentPlan} disabled></Form.Control>
+
+              <ReportProblemIcon
+                style={{
+                  color: fieldIconColors.developmentPlan,
+                }}
+                onClick={() => {
+                  setOpennedModal("developmentPlan");
+                  setLabelValue("Development Plan"),
+                    setSmShow(true),
+                    console.log("modal open"),
+                    setFieldValue(apiResponse !== null ? apiResponse.developmentPlan : null);
+                }}
+              ></ReportProblemIcon>
+             
+            </div>
+            </Col>
+            <Col className="col-3">
+              <div>
+                <label>
+                  <h2>
+                  Purpose Of Licence 
+                  </h2>
+                </label>
+              </div>
+              {/* <input
+                type="string"
+                className="form-control"
+                {...register("purpose")}
+                onChange={(e) => setPurpose(e.target.value)}
+                value={purpose}
+                disabled
+              /> */}
+              <div className={classes.fieldContainer}>
+              <Form.Control className={classes.formControl} placeholder={apiResponse?.purpose} disabled></Form.Control>
+
+              <ReportProblemIcon
+                style={{
+                  color: fieldIconColors.purpose,
+                }}
+                onClick={() => {
+                  setOpennedModal("purpose");
+                  setLabelValue("Purpose Of Licence"),
+                    setSmShow(true),
+                    console.log("modal open"),
+                    setFieldValue(apiResponse !== null ? apiResponse.purpose : null);
+                }}
+              ></ReportProblemIcon>
+             
+            </div>
+            </Col>
+            <Col className="col-3">
+              <div>
+                <label>
+                  <h2>
+                  Total Area
+                  </h2>
+                </label>
+              </div>
+              {/* <input
+                type="string"
+                className="form-control"
+                {...register("totalArea")}
+                onChange={(e) => setTotalArea(e.target.value)}
+                value={totalArea}
+                disabled
+              /> */}
+               <div className={classes.fieldContainer}>
+              <Form.Control className={classes.formControl} placeholder={apiResponse?.totalArea} disabled></Form.Control>
+
+              <ReportProblemIcon
+                style={{
+                  color: fieldIconColors.totalArea,
+                }}
+                onClick={() => {
+                  setOpennedModal("totalArea");
+                  setLabelValue("Total Area"),
+                    setSmShow(true),
+                    console.log("modal open"),
+                    setFieldValue(apiResponse !== null ? apiResponse.totalArea : null);
+                }}
+              ></ReportProblemIcon>
+             
+            </div>
+            </Col>
+          </Row>
+            <Row style={{ marginTop: 3}}>
+            <Col className="col-4">
 
               <p className="ml-3">
               Electrical infrastructure sufficient to cater for the electrical need of the project area <span style={{ color: "red" }}>*</span>{" "}
@@ -232,7 +389,7 @@ const ElectricalPlanScrutiny = (props) => {
                     value="Yes"
 
                     className="mx-2 mt-1"
-                    checked={apiResponse?.electricalInfra  === "Y" ?true:false}
+                    checked={apiResponse?.electricInfra  === "Y" ?true:false}
                     // onChange={(e) => handleChange(e.target.value)}
                     // 
                     // onClick={handleshow}
@@ -245,26 +402,26 @@ const ElectricalPlanScrutiny = (props) => {
                     value="No"
 
                     className="mx-2 mt-1"
-                    checked={apiResponse?.electricalInfra  === "N" ?true:false}
+                    checked={apiResponse?.electricInfra  === "N" ?true:false}
                   
                     disabled
                   />
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
               style={{
-                color:fieldIconColors.electricalInfra }}
+                color:fieldIconColors.electricInfra }}
               onClick={() => {
-                  setOpennedModal("electricalInfra")
+                  setOpennedModal("electricInfra")
                   setLabelValue("Electrical infrastructure sufficient to cater for the electrical need of the project area"),
                   setSmShow(true),
                   console.log("modal open"),
-                  setFieldValue(apiResponse !== null ? apiResponse.electricalInfra : null);
+                  setFieldValue(apiResponse !== null ? apiResponse.electricInfra : null);
               }}
             ></ReportProblemIcon>
                 </div>
               
             </Col>
-            <Col className="ms-auto" md={4} xxl lg="4">
+            <Col  className="col-4">
             <p className="ml-3">
             Provision of the electricity distribution in the project area by the instructions of the HVPNL{" "}
                   <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
@@ -275,7 +432,7 @@ const ElectricalPlanScrutiny = (props) => {
                     value="Yes"
 
                     className="mx-2 mt-1"
-                    checked={apiResponse?.elecricDistribution  === "Y" ?true:false}
+                    checked={apiResponse?.electricDistribution  === "Y" ?true:false}
                     // checked={capacityScrutinyInfo?.designatedDirectors === "Y" ?true:false}
                     // onChange={(e) => handleChange(e.target.value)}
                     // 
@@ -289,7 +446,7 @@ const ElectricalPlanScrutiny = (props) => {
                     value="No"
 
                     className="mx-2 mt-1"
-                    checked={apiResponse?.elecricDistribution  === "N" ?true:false}
+                    checked={apiResponse?.electricDistribution  === "N" ?true:false}
                     // checked={capacityScrutinyInfo?.designatedDirectors === "N" ?true:false}
                     // onChange={(e) => handleChange(e.target.value)}
                     // 
@@ -299,19 +456,19 @@ const ElectricalPlanScrutiny = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
               style={{
-                color:fieldIconColors.elecricDistribution }}
+                color:fieldIconColors.electricDistribution }}
               onClick={() => {
-                  setOpennedModal("elecricDistribution")
+                  setOpennedModal("electricDistribution")
                   setLabelValue("Provision of the electricity distribution in the project area by the instructions of the HVPNL"),
                   setSmShow(true),
                   console.log("modal open"),
-                  setFieldValue(apiResponse !== null ? apiResponse?.elecricDistributionr : null);
+                  setFieldValue(apiResponse !== null ? apiResponse?.electricDistributionr : null);
               }}
             ></ReportProblemIcon>
                 </div>
             
             </Col>
-            <Col className="ms-auto" md={4} xxl lg="4">
+            <Col className="col-4">
             <p className="ml-3">
             The capacity of the proposed electrical substation as per the requirement <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;{" "}
 
@@ -355,8 +512,9 @@ const ElectricalPlanScrutiny = (props) => {
                 </div>
 
               
-            </Col>
-            <Col className="ms-auto" md={4} xxl lg="4">
+            </Col></Row>
+            <Row>
+            <Col className="col-4">
               
                 <p className="ml-3">
                 Provision of 33 Kv switching station for the electrical infrastructure as per the approved layout plan <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;{" "}
@@ -409,7 +567,7 @@ const ElectricalPlanScrutiny = (props) => {
             ></ReportProblemIcon>
                 </div>
             </Col>
-            <Col className="ms-auto" md={4} xxl lg="4">
+            <Col className="col-4">
               
                 <p className="ml-3">
                 Load sanction approval as per the requirement <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
@@ -421,7 +579,7 @@ const ElectricalPlanScrutiny = (props) => {
                     value="Yes"
 
                     className="mx-2 mt-1"
-                    checked={apiResponse?.loadSancation  === "Y" ?true:false}
+                    checked={apiResponse?.LoadSancation  === "Y" ?true:false}
                     // checked={capacityScrutinyInfo?.designatedDirectors === "Y" ?true:false}
                     // onChange={(e) => handleChange(e.target.value)}
                     // 
@@ -435,7 +593,7 @@ const ElectricalPlanScrutiny = (props) => {
                     value="No"
 
                     className="mx-2 mt-1"
-                    checked={apiResponse?.loadSancation  === "N" ?true:false}
+                    checked={apiResponse?.LoadSancation  === "N" ?true:false}
                     // checked={capacityScrutinyInfo?.designatedDirectors === "N" ?true:false}
                     // onChange={(e) => handleChange(e.target.value)}
                     // 
@@ -445,13 +603,13 @@ const ElectricalPlanScrutiny = (props) => {
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
               style={{
-                color:fieldIconColors.loadSancation }}
+                color:fieldIconColors.LoadSancation }}
               onClick={() => {
-                  setOpennedModal("loadSancation")
+                  setOpennedModal("LoadSancation")
                   setLabelValue("Load sanction approval as per the requirement"),
                   setSmShow(true),
                   console.log("modal open"),
-                  setFieldValue(apiResponse !== null ? apiResponse.loadSancation : null);
+                  setFieldValue(apiResponse !== null ? apiResponse.LoadSancation : null);
               }}
             ></ReportProblemIcon>
                 </div>

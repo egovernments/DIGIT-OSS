@@ -64,7 +64,7 @@ const NilpForm = ({ register, getDocumentData, watch, getDocShareholding, setLoa
                     setValue("areaUnderSectorAndGreenBelt", "");
                     setValue("netPlannedArea", "");
                     setValue("areaUnderUndetermined", "");
-                    setValue("totalAreaScheme", "");
+                    // setValue("totalAreaScheme", "");
                   }
                 }}
               />

@@ -34,9 +34,11 @@ const ResidentialPlottedForm = (props) => {
   const [smShow, setSmShow] = useState(false);
   const [labelValue, setLabelValue] = useState("");
   const Colors = {
-    approved: "#09cb3d",
-    disapproved: "#ff0000",
-    info: "#FFB602"
+    conditional:"#2874A6",
+    approved:"#09cb3d",
+    disapproved:"#ff0000",
+   
+    info:"#FFB602"
   }
   const [selectedFieldData, setSelectedFieldData] = useState();
   const [fieldValue, setFieldValue] = useState("");
@@ -45,10 +47,35 @@ const ResidentialPlottedForm = (props) => {
     npnlNo: Colors.info,
     npnlArea: Colors.info,
     ewsNo: Colors.info,
-    ewsArea: Colors.info
+    ewsArea: Colors.info,
+    totalAreaScheme: Colors.info,
+    areaUnderSectorRoad : Colors.info,
+    balanceAreaAfterDeduction : Colors.info,
+    areaUnderUndetermined : Colors.info,
+    areaUnderGH : Colors.info,
+    balanceArea : Colors.info,
+    areaUnderSectorAndGreenBelt :Colors.info,
+    netPlannedArea :Colors.info,
+
+   
   })
 
-  const fieldIdList = [{ label: "NPNL No", key: "npnlNo" },{ label: "NPNL Area", key: "npnlArea" },{ label: "EWS No", key: "ewsNo" },{ label: "EWS Area", key: "ewsArea" },];
+  const fieldIdList = [{ label: "Total area of the Scheme", key: "totalAreaScheme" },
+  { label: "Area under Sector Road & Green Belt", key: "areaUnderSectorRoad" },
+  { label: "Balance area after deducting area under sector road and Green Belt", key: "balanceAreaAfterDeduction" },
+  { label: "Area under undetermined use", key: "areaUnderUndetermined" },
+  
+  { label: "Area under G.H. = 10% of the total area of the scheme", key: "areaUnderGH" },
+  { label: "Balance area", key: "balanceArea" },
+  { label: "50% of the Area under Sector Road & Green Belt", key: "areaUnderSectorAndGreenBelt" },
+  { label: "Net planned area (A+B)", key: "netPlannedArea" },
+  { label: "NPNL No", key: "npnlNo" },
+  { label: "NPNL No", key: "npnlNo" },
+  { label: "NPNL No", key: "npnlNo" },
+  { label: "NPNL No", key: "npnlNo" },
+  { label: "NPNL Area", key: "npnlArea" },
+  { label: "EWS No", key: "ewsNo" },
+  { label: "EWS Area", key: "ewsArea" },];
 
 
   const getColorofFieldIcon = () => {
@@ -60,7 +87,8 @@ const ResidentialPlottedForm = (props) => {
         console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
         if (fieldPresent && fieldPresent.length) {
           console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
-          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved ? Colors.approved : Colors.disapproved }
+          // tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved ? Colors.approved : Colors.disapproved }
+          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved === "approved" ? Colors.approved : fieldPresent[0].isApproved === "disapproved" ? Colors.disapproved : fieldPresent[0].isApproved === "conditional" ? Colors.conditional : Colors.info }
 
         }
       }
@@ -140,14 +168,15 @@ const ResidentialPlottedForm = (props) => {
                   <ReportProblemIcon
                           style={{
                             display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                            color: fieldIconColors.npnlNo
+                            color: fieldIconColors.totalAreaScheme
                           }}
                           onClick={() => {
-                            setLabelValue("NPNL No"),
-                              setOpennedModal("npnlNo")
+                            setLabelValue("Total area of the Scheme"),
+                              setOpennedModal("totalAreaScheme")
                             setSmShow(true),
                               console.log("modal open"),
-                              setFieldValue(residentialData?.npnlNo);
+                              setFieldValue(residentialData !== null ? residentialData?.totalAreaScheme : null);
+                              
                           }}
                         ></ReportProblemIcon>
                     </div> 
@@ -184,14 +213,14 @@ const ResidentialPlottedForm = (props) => {
                   <ReportProblemIcon
                           style={{
                             display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                            color: fieldIconColors.npnlNo
+                            color: fieldIconColors.areaUnderSectorRoad
                           }}
                           onClick={() => {
-                            setLabelValue("NPNL No"),
-                              setOpennedModal("npnlNo")
+                            setLabelValue("Area under Sector Road & Green Belt"),
+                              setOpennedModal("areaUnderSectorRoad")
                             setSmShow(true),
                               console.log("modal open"),
-                              setFieldValue(residentialData?.npnlNo);
+                              setFieldValue(residentialData !== null ? residentialData?.areaUnderSectorRoad : null);
                           }}
                         ></ReportProblemIcon>
                     </div> 
@@ -211,14 +240,14 @@ const ResidentialPlottedForm = (props) => {
                   <ReportProblemIcon
                           style={{
                             display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                            color: fieldIconColors.npnlNo
+                            color: fieldIconColors.balanceAreaAfterDeduction
                           }}
                           onClick={() => {
-                            setLabelValue("NPNL No"),
-                              setOpennedModal("npnlNo")
+                            setLabelValue("Balance area after deducting area under sector road and Green"),
+                              setOpennedModal("balanceAreaAfterDeduction")
                             setSmShow(true),
                               console.log("modal open"),
-                              setFieldValue(residentialData?.npnlNo);
+                              setFieldValue(residentialData !== null ? residentialData?.balanceAreaAfterDeduction : null);
                           }}
                         ></ReportProblemIcon>
                     </div> 
@@ -255,14 +284,14 @@ const ResidentialPlottedForm = (props) => {
                   <ReportProblemIcon
                           style={{
                             display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                            color: fieldIconColors.npnlNo
+                            color: fieldIconColors.areaUnderUndetermined
                           }}
                           onClick={() => {
-                            setLabelValue("NPNL No"),
-                              setOpennedModal("npnlNo")
+                            setLabelValue("Area under undetermined use"),
+                              setOpennedModal("areaUnderUndetermined")
                             setSmShow(true),
                               console.log("modal open"),
-                              setFieldValue(residentialData?.npnlNo);
+                              setFieldValue(residentialData !== null ? residentialData?.areaUnderUndetermined : null);
                           }}
                         ></ReportProblemIcon>
                     </div> 
@@ -294,14 +323,14 @@ const ResidentialPlottedForm = (props) => {
                   <ReportProblemIcon
                           style={{
                             display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                            color: fieldIconColors.npnlNo
+                            color: fieldIconColors.areaUnderGH
                           }}
                           onClick={() => {
-                            setLabelValue("NPNL No"),
-                              setOpennedModal("npnlNo")
+                            setLabelValue("Area under G.H. = 10% of the total area of the scheme"),
+                              setOpennedModal("areaUnderGH")
                             setSmShow(true),
                               console.log("modal open"),
-                              setFieldValue(residentialData?.npnlNo);
+                              setFieldValue(residentialData !== null ? residentialData?.areaUnderGH : null);
                           }}
                         ></ReportProblemIcon>
                     </div> 
@@ -321,14 +350,14 @@ const ResidentialPlottedForm = (props) => {
                   <ReportProblemIcon
                           style={{
                             display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                            color: fieldIconColors.npnlNo
+                            color: fieldIconColors.balanceArea
                           }}
                           onClick={() => {
-                            setLabelValue("NPNL No"),
-                              setOpennedModal("npnlNo")
+                            setLabelValue("Balance area"),
+                              setOpennedModal("balanceArea")
                             setSmShow(true),
                               console.log("modal open"),
-                              setFieldValue(residentialData?.npnlNo);
+                              setFieldValue(residentialData !== null ? residentialData?.balanceArea : null);
                           }}
                         ></ReportProblemIcon>
                     </div> 
@@ -351,11 +380,11 @@ const ResidentialPlottedForm = (props) => {
                             color: fieldIconColors.npnlNo
                           }}
                           onClick={() => {
-                            setLabelValue("NPNL No"),
-                              setOpennedModal("npnlNo")
+                            setLabelValue("50% of the Area under Sector Road & Green Belt"),
+                              setOpennedModal("areaUnderSectorAndGreenBelt")
                             setSmShow(true),
                               console.log("modal open"),
-                              setFieldValue(residentialData?.npnlNo);
+                              setFieldValue(residentialData !== null ? residentialData?.areaUnderSectorAndGreenBelt : null);
                           }}
                         ></ReportProblemIcon>
                     </div> 
@@ -376,14 +405,14 @@ const ResidentialPlottedForm = (props) => {
                   <ReportProblemIcon
                           style={{
                             display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                            color: fieldIconColors.npnlNo
+                            color: fieldIconColors.netPlannedArea
                           }}
                           onClick={() => {
-                            setLabelValue("NPNL No"),
-                              setOpennedModal("npnlNo")
+                            setLabelValue("Net planned area (A+B)"),
+                              setOpennedModal("netPlannedArea")
                             setSmShow(true),
                               console.log("modal open"),
-                              setFieldValue(residentialData?.npnlNo);
+                              setFieldValue(residentialData !== null ? residentialData?.netPlannedArea : null);
                           }}
                         ></ReportProblemIcon>
                     </div> 
@@ -433,7 +462,7 @@ const ResidentialPlottedForm = (props) => {
                               setOpennedModal("npnlNo")
                             setSmShow(true),
                               console.log("modal open"),
-                              setFieldValue(residentialData?.npnlNo);
+                              setFieldValue(residentialData !== null ? residentialData?.balanceAreaAfterDeduction : null);
                           }}
                         ></ReportProblemIcon>
                     </div> 

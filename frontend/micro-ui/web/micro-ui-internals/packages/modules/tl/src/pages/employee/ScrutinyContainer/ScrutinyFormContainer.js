@@ -318,42 +318,45 @@ const ScrutinyFormcontainer = (props) => {
 
 
   return (
-    <Card>
-      <Card.Header class="fw-normal" style={{ top: 5, padding: 5, fontSize: 14, height: 90, lineHeight: 2 }}>
-        <div className="row">
+    <Card className="formColorEmp">
+      <Card.Header className="head-application" >
+        <div className="row fw-normal">
           <div className="col-md-3">
-            <p>Application Number:</p>
-            <p class="fw-normal">{id}</p>
+            <b><p className="head-font">Application Number:</p></b>
+            <b><p className="head-font">{id}</p></b>
           </div>
           <div className="col-md-2">
-            <p>Service Id: </p>
-            <p class="fw-normal">{applicationData?.businessService}</p>
+          <b><p className="head-font">Service Id: </p></b>
+          <b><p className="head-font">{applicationData?.businessService}</p></b>
           </div>
           <div className="col-md-3">
-            <p>TCP Application Number:</p>
-            <p class="fw-normal">{applicationData?.tcpApplicationNumber}</p>
+            <b><p className="head-font">TCP Application Number:</p></b>
+            <b><p className="head-font">{applicationData?.tcpApplicationNumber}</p></b>
           </div>
           <div className="col-md-2">
-            <p>TCP Case Number:</p>
-            <p class="fw-normal">{applicationData?.tcpCaseNumber}</p>
+            <b><p className="head-font">TCP Case Number:</p></b>
+            <b><p className="head-font">{applicationData?.tcpCaseNumber}</p></b>
           </div>
           <div className="col-md-2">
-            <p>TCP Dairy Number: </p>
-            <p class="fw-normal">{applicationData?.tcpDairyNumber}</p>
+            <b><p className="head-font">TCP Dairy Number: </p></b>
+            <b><p className="head-font">{applicationData?.tcpDairyNumber}</p></b>
           </div>
         </div>
       </Card.Header>
-      <Row style={{ top: 30, padding: 10 }}>
+      <Row >
+        <div className="formlist">
         <ScrutitnyForms
           apiResponse={scrutinyDetails}
           applicationNumber={id}
           refreshScrutinyData={getScrutinyData}
         ></ScrutitnyForms>
+        </div>
+        
       </Row>
       <Row style={{ top: 30, padding: "10px 22px" }}>
 
 
-        <Row>
+        {/* <Row> */}
 
           <div class="col-md-10 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
            
@@ -400,7 +403,7 @@ const ScrutinyFormcontainer = (props) => {
 
           </div>
 
-        </Row>
+        {/* </Row> */}
         <Row>
               
           <div class="col-md-12 bg-light text-right" style={{ position: "relative", marginBottom: 20 }}>

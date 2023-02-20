@@ -8,14 +8,14 @@ import { stringReplaceAll } from "../utils";
 const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex = 0, addNewOwner, isShowToast }) => {
   let currCity = JSON.parse(sessionStorage.getItem("currentCity")) || { };
   let currPincode = sessionStorage.getItem("currentPincode");
-  let currLocality = JSON.parse(sessionStorage.getItem("currentLocality")) || { };
+  // let currLocality = JSON.parse(sessionStorage.getItem("currLocality")) || { };
   const allCities = Digit.Hooks.obps.useTenants();
   const { pathname: url } = useLocation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
   const [Pinerror, setPinerror] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [pincode, setPincode] = useState(currPincode || formData?.address?.pincode || "");
+  const [pincode, setPincode] = useState(formData?.address?.pincode || "");
   const [geoLocation, setgeoLocation] = useState(formData?.address?.geoLocation || "")
   const [tenantIdData, setTenantIdData] = useState(formData?.Scrutiny?.[0]?.tenantIdData);
   const [selectedCity, setSelectedCity] = useState(() => formData?.address?.city  || currCity || null);
@@ -41,9 +41,9 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
         setPinerror("BPA_PIN_NOT_VALID_ERROR");
       } else if ( cities.length == 1) {
         let selectCity = selectedCity?.code ? selectedCity?.code : selectedCity ? selectedCity : "";
-        if (cities?.[0].code != selectCity) {
-          setPinerror("BPA_PIN_NOT_VALID_ERROR")
-        }
+        // if (cities?.[0].code != selectCity) {
+        //   setPinerror("BPA_PIN_NOT_VALID_ERROR")
+        // }
       }
     }
 
@@ -156,7 +156,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
     sessionStorage.setItem("currentCity", JSON.stringify({ }));
     sessionStorage.setItem("currLocality", JSON.stringify({ }));
     setSelectedLocality(null);
-    setLocalities(null);
+    // setLocalities(null);
     //setSelectedCity(null);
   }
 
@@ -218,7 +218,8 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
           t={t}
           name="gis"
           //value={geoLocation && geoLocation.latitude && geoLocation.longitude?`${geoLocation.latitude},${geoLocation.longitude}`:""}
-          value={isEditApplication || isSendBackTOCitizen?(geoLocation.latitude !== null?`${geoLocation.latitude}, ${geoLocation.longitude}`:""):placeName}
+          // value={(isEditApplication || isSendBackTOCitizen)?(geoLocation.latitude !== null?`${geoLocation.latitude}, ${geoLocation.longitude}`:""): geoLocation.latitude !== null ? `${geoLocation.latitude}, ${geoLocation.longitude}` : ""}
+          value={geoLocation?.latitude ? `${geoLocation.latitude}, ${geoLocation.longitude}` : ""}
           onChange={selectGeolocation}
         />
         <LinkButton
@@ -255,7 +256,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
         t={t}
         isDependent={true}
         //labelKey="TENANT_TENANTS"
-        disabled={true}
+        // disabled={true}
       />}
       {!isOpen && selectedCity && localities && (
         <span className={"form-pt-dropdown-only"}>

@@ -121,7 +121,9 @@ const ScrutinyDevelopment = (props) => {
                       <b>{el.fieldValue}</b>
                     </Col>
                     <Col>
-                      <b>{el.isApproved ? "Approved" : "Disapproved"}</b>
+                      {/* <b>{el.isApproved ? "Approved" : "Disapproved"}</b> */}
+                      <b>{el.isApproved }</b>
+                      {/* isApproved === "approved" ?Colors.approved: */}
                     </Col>
                   </Row>
 

@@ -58,10 +58,11 @@ import RadioButtons from "./atoms/RadioButtons";
 import Rating from "./atoms/Rating";
 import RoundedLabel from "./atoms/RoundedLabel";
 import SectionalDropdown from "./atoms/SectionalDropdown";
-
+import MuiRadio from "./atoms/MuiRadio";
 import { LastRow, MediaRow, Row, StatusTable } from "./atoms/StatusTable";
 import SubmitBar from "./atoms/SubmitBar";
 import StandaloneSearchBar from "./atoms/StandaloneSearchBar";
+import LabTabs from "./atoms/LabTabs";
 import {
   AnnouncementIcon,
   ArrowDown,
@@ -117,6 +118,10 @@ import {
   EDCRIcon,
   BPAIcon,
   BPAIco,
+  RenewLic,
+  SurrenderLic,
+  TransferLic,
+  StandardDesign,
   BPAHomeIcon,
   DocumentIcon,
   ExternalLinkIcon,
@@ -260,6 +265,7 @@ export {
   ActionLinks,
   PrivateRoute,
   SectionalDropdown,
+  MuiRadio,
   RoundedLabel,
   LabelFieldPair,
   BreadCrumb,
@@ -277,6 +283,7 @@ export {
   EventCalendarView,
   InboxLinks,
   PopupHeadingLabel,
+  LabTabs,
   // Icons
   GetApp,
   ArrowLeft,
@@ -376,6 +383,10 @@ export {
   EDCRIcon,
   BPAIcon,
   BPAIco,
+  RenewLic,
+  TransferLic,
+  SurrenderLic,
+  StandardDesign,
   BPAHomeIcon,
   MapMarker,
   Clock,

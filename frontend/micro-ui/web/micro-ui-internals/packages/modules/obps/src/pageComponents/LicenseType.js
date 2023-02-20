@@ -7,6 +7,7 @@ import {
   OpenLinkContainer,
   CardLabelError,
   BackButton,
+  MuiRadio,
 } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { stringReplaceAll } from "../utils";
@@ -16,10 +17,15 @@ import { MenuItem, Select } from "@mui/material";
 import axios from "axios";
 import { newConfig } from "../config/stakeholderConfig";
 import Spinner from "../components/Loader/index";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
 
 const LicenseType = ({ t, config, onSelect, userType, formData }) => {
   const userInfo = Digit.UserService.getUser();
-
+  // const { t } = useTranslation();
   const [loader, setLoading] = useState(false);
 
   const getDeveloperData = async () => {
@@ -40,7 +46,9 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
       const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${userInfo?.info?.id}&isAllData=true`, requestResp, {});
       const developerDataGet = getDevDetails?.data;
       setShowDevTypeFields(developerDataGet?.devDetail[0]?.applicantType?.developerType || devType);
-      setLicenseType(developerDataGet?.devDetail[0]?.applicantType?.LicneseType);
+      // setLicenseType(developerDataGet?.devDetail[0]?.applicantType?.licenceType);
+      setLicenseTypeSelected(developerDataGet?.devDetail[0]?.applicantType?.licenceTypeSelected);
+      setLicenseTypeCom(developerDataGet?.devDetail[0]?.applicantType?.licenceType);
     } catch (error) {
       return error;
     }
@@ -58,15 +66,10 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
 
-  const setDevType = (data) => {
-    const getDevTypeValue = data?.value;
-    setShowDevTypeFields(getDevTypeValue);
-    localStorage.setItem("devTypeValueFlag", getDevTypeValue);
-    setLicenseTypeCom(`${LicenseType?.tradeType}.${getDevTypeValue}`);
-    // alert(licenceTypeCombined);
-  };
-
   const [LicenseType, setLicenseType] = useState(formData?.LicneseType?.LicenseType || formData?.formData?.LicneseType?.LicenseType || "");
+  const [licenceTypeSelected, setLicenseTypeSelected] = useState(
+    formData?.LicneseType?.licenceTypeSelected || formData?.formData?.LicneseType?.licenceTypeSelected || ""
+  );
   const [ArchitectNo, setArchitectNo] = useState(formData?.LicneseType?.ArchitectNo || formData?.formData?.LicneseType?.ArchitectNo || null);
   const [showDevTypeFields, setShowDevTypeFields] = useState(
     formData?.LicneseType?.showDevTypeFields || formData?.formData?.LicneseType?.showDevTypeFields || ""
@@ -95,15 +98,27 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
       found = list.some((el) => el.i18nKey.includes(ob.tradeType.split(".")[0]));
       if (!found) list.push({ role: ob.role, i18nKey: `TRADELICENSE_TRADETYPE_${ob.tradeType.split(".")[0]}`, tradeType: ob.tradeType });
     });
+    console.log("DATAList", list);
     return list;
   }
 
   const onSkip = () => onSelect();
 
-  function selectLicenseType(value) {
-    // console.log("log123", value)
-    setLicenseType(value);
-  }
+  const selectLicenseType = (e) => {
+    setLicenseTypeSelected(e.target.value);
+    console.log("log123", licenceTypeSelected);
+  };
+
+  const setDevType = (e) => {
+    const getDevTypeValue = e.target.value;
+    setLicenseTypeCom(`${licenceTypeSelected}.${getDevTypeValue}`);
+    setShowDevTypeFields(e.target.value);
+    // setValue(getDevTypeValue);
+    console.log("DEVTYPE", licenceTypeCombined);
+    localStorage.setItem("devTypeValueFlag", getDevTypeValue);
+
+    // alert(licenceTypeCombined);
+  };
 
   function selectArchitectNo(e) {
     setArchitectNo(e.target.value.toUpperCase());
@@ -115,9 +130,10 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
     // if (!(formData?.result && formData?.result?.Licenses[0]?.id)){
 
     // console.log("log1234...",config,formData,LicenseType?.tradeType);
-
+    setLoading(true);
     let applicantType = {
-      licenceType: licenceTypeCombined || LicenseType?.tradeType,
+      licenceType: licenceTypeCombined,
+      licenceTypeSelected: licenceTypeSelected,
       developerType: showDevTypeFields,
     };
     const developerRegisterData = {
@@ -131,12 +147,12 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
     };
 
     // console.log("logger123",config,applicantType);
-    if (LicenseType?.tradeType === "ARCHITECT.CLASSA") {
+    if (licenceTypeSelected === "ARCHITECT.CLASSA") {
       onSelect(config.key, applicantType);
     } else {
       onSelect(config.key, applicantType, null, null, "license-add-info");
     }
-    setLoading(true);
+
     Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
       .then((result, err) => {
         // console.log("DATA",result?.id);
@@ -149,7 +165,7 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
           developerType: developerType,
         };
         //1, units
-        if (LicenseType?.tradeType === "ARCHITECT.CLASSA") {
+        if (licenceTypeSelected === "ARCHITECT.CLASSA") {
           onSelect("", data, "", true);
         } else {
           onSelect("", data, "", true, "license-add-info");
@@ -178,86 +194,130 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
       {loader && <Spinner />}
       <div className={isopenlink ? "OpenlinkContainer" : ""}>
         {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
-        <Timeline currentStep={1} flow={LicenseType?.tradeType === "ARCHITECT.CLASSA" ? "ARCHITECT.CLASSA" : "STAKEHOLDER"} />
+        <Timeline currentStep={1} flow={licenceTypeSelected === "ARCHITECT.CLASSA" ? "ARCHITECT.CLASSA" : "STAKEHOLDER"} />
         <FormStep
           t={t}
           config={config}
           onSelect={goNext}
           onSkip={onSkip}
-          isDisabled={LicenseType && LicenseType?.i18nKey.includes("ARCHITECT") ? !LicenseType || !ArchitectNo : !LicenseType}
+          isDisabled={licenceTypeSelected && licenceTypeSelected.includes("ARCHITECT") ? !licenceTypeSelected || !ArchitectNo : !licenceTypeSelected}
         >
-          <Row className="justify-content-between">
-            <Form.Group className="col-md-5">
-              <CardLabel>
-                {t("Select applicant type")} <span className="font-weight-bold text-danger">*</span>
-              </CardLabel>
-              {/* <CardLabel>{t("BPA_LICENSE_TYPE_TEXT")} <span className="font-weight-bold text-danger">*</span></CardLabel> */}
-              <div className={"form-pt-dropdown-only"}>
-                {/* {JSON.stringify(LicenseType?.i18nKey)} */}
-                {data && (
-                  <div>
-                    <RadioOrSelect
-                      t={t}
-                      optionKey="i18nKey"
-                      isMandatory={config.isMandatory}
-                      options={getLicenseType() || {}}
-                      selectedOption={LicenseType}
-                      onSelect={selectLicenseType}
-                      placeholder="Select option"
-                    />
+          <div className="happy">
+            <div className="card mb-3">
+              <Row className="justify-content-between">
+                <Form.Group className="col-md-7">
+                  <CardLabel>
+                    {t("Select applicant type")} <span className="font-weight-bold text-danger">*</span>
+                  </CardLabel>
+                  {/* <CardLabel>{t("BPA_LICENSE_TYPE_TEXT")} <span className="font-weight-bold text-danger">*</span></CardLabel> */}
+                  <div className={"form-pt-dropdown-only"}>
+                    {/* {JSON.stringify(licenceTypeSelected)} */}
+                    {/* {data && (
+                      <div>
+                        <RadioOrSelect
+                          t={t}
+                          optionKey="i18nKey"
+                          
+                          isMandatory={config.isMandatory}
+                          options={getLicenseType() || {}}
+                          selectedOption={LicenseType}
+                          onSelect={selectLicenseType}
+                          placeholder="Select option"
+                          checked={true}
+                        />
+                      </div>
+                    )} */}
                   </div>
-                )}
-              </div>
-            </Form.Group>
+                  {getLicenseType()?.map((item, index) => {
+                    return (
+                      <FormControl>
+                        {/* <FormLabel id="demo-row-radio-buttons-group-label">Gender</FormLabel> */}
 
-            <Form.Group className="col-md-5">
-              {LicenseType && LicenseType?.i18nKey.includes("ARCHITECT") && (
-                <div>
-                  <CardLabel>
-                    {`${t("BPA_COUNCIL_NUMBER")}`} <span className="font-weight-bold text-danger">*</span>
-                  </CardLabel>
-                  <TextInput
-                    t={t}
-                    type={"text"}
-                    isMandatory={false}
-                    optionKey="i18nKey"
-                    name="ArchitectNo"
-                    value={ArchitectNo}
-                    onChange={selectArchitectNo}
-                    maxlength={"15"}
-                  />
-                  {ArchitectNo && ArchitectNo.length > 0 && !ArchitectNo.match(Digit.Utils.getPattern("architectNumber")) && (
-                    <CardLabelError style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
-                      {t("Invalid Architect Number")}
-                    </CardLabelError>
+                        <RadioGroup
+                          row
+                          aria-labelledby="demo-row-radio-buttons-group-label"
+                          name={licenceTypeSelected}
+                          // value={
+                          //   LicenseTypeSelected.includes("BPA_DEVELOPER")
+                          //     ? "BPA_DEVLEPOR"
+                          //     : LicenseTypeSelected.includes("ARCHITECT")
+                          //     ? "ARCHITECT.CLASSA"
+                          //     : LicenseTypeSelected.includes("CITIZEN")
+                          //     ? "CITIZEN.CLASSA"
+                          //     : ""
+                          // }
+                          value={licenceTypeSelected}
+                          onChange={selectLicenseType}
+                        >
+                          <FormControlLabel key={index} value={item?.tradeType} control={<Radio />} label={t(item?.i18nKey)} />
+                        </RadioGroup>
+                      </FormControl>
+                    );
+                  })}
+                  {/* <MuiRadio 
+                    value="BPA_DEVELOPER"
+                    control={<Radio/>} 
+                    options={getLicenseType() || {}} 
+                    label={optionKey}
+                  /> */}
+                </Form.Group>
+
+                <Form.Group className="col-md-5">
+                  {licenceTypeSelected && licenceTypeSelected.includes("ARCHITECT") && (
+                    <div>
+                      <CardLabel>
+                        {`${t("BPA_COUNCIL_NUMBER")}`} <span className="font-weight-bold text-danger">*</span>
+                      </CardLabel>
+                      <TextInput
+                        t={t}
+                        type={"text"}
+                        isMandatory={false}
+                        optionKey="i18nKey"
+                        name="ArchitectNo"
+                        value={ArchitectNo}
+                        onChange={selectArchitectNo}
+                        maxlength={"15"}
+                      />
+                      {ArchitectNo && ArchitectNo.length > 0 && !ArchitectNo.match(Digit.Utils.getPattern("architectNumber")) && (
+                        <CardLabelError style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
+                          {t("Invalid Architect Number")}
+                        </CardLabelError>
+                      )}
+                    </div>
                   )}
-                </div>
-              )}
 
-              {LicenseType && LicenseType?.i18nKey.includes("DEVELOPER") && (
-                <div>
-                  <CardLabel>
-                    {`${t("Select Developer Type")}`} <span className="font-weight-bold text-danger">*</span>
-                  </CardLabel>
+                  {licenceTypeSelected && licenceTypeSelected.includes("DEVELOPER") && (
+                    <div>
+                      <CardLabel>
+                        {`${t("Select Developer Type")}`} <span className="font-weight-bold text-danger">*</span>
+                      </CardLabel>
 
-                  <Dropdown
-                    labels="Select Type"
-                    className="form-field"
-                    selected={{ code: showDevTypeFields, value: showDevTypeFields }}
-                    option={arrayDevList}
-                    select={setDevType}
-                    optionKey="code"
-                    name="showDevTypeFields"
-                    placeholder={showDevTypeFields}
-                    style={{ width: "100%" }}
-                    t={t}
-                    required
-                  />
-                </div>
-              )}
-            </Form.Group>
-            {/* {LicenseType && LicenseType?.i18nKey.includes("CITIZEN") && <a className="submit-bar col-md-4" onClick={() => history.push("/digit-ui/citizen")}>Submit</a>} */}
-          </Row>
+                      {/* <Dropdown
+                        labels="Select Type"
+                        className="form-field"
+                        selected={{ code: showDevTypeFields, value: showDevTypeFields }}
+                        option={arrayDevList}
+                        select={setDevType}
+                        optionKey="code"
+                        name="showDevTypeFields"
+                        placeholder={showDevTypeFields}
+                        style={{ width: "100%" }}
+                        t={t}
+                        required
+                      /> */}
+
+                      <Select value={showDevTypeFields || ""} onChange={setDevType} className="w-100 form-control" variant="standard">
+                        {arrayDevList?.map((item, index) => (
+                          <MenuItem value={item.value}>{item?.code}</MenuItem>
+                        ))}
+                      </Select>
+                    </div>
+                  )}
+                </Form.Group>
+                {/* {LicenseType && LicenseType?.i18nKey.includes("CITIZEN") && <a className="submit-bar col-md-4" onClick={() => history.push("/digit-ui/citizen")}>Submit</a>} */}
+              </Row>
+            </div>
+          </div>
         </FormStep>
       </div>
     </div>

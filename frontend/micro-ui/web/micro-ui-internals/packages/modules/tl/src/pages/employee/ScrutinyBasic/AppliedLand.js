@@ -30,6 +30,7 @@ import IILPForm from "./Puropse/IILPForm";
 import LayoutPlanForm from "./Puropse/LayoutPlanForm";
 import MixedLandUseForm from "./Puropse/MixedLandUse";
 import ITCyberCityForm from "./Puropse/ITCyberCityForm";
+import { array } from "yup";
 
 const AppliedLandinfo = (props) => {
 
@@ -255,9 +256,11 @@ console.log("AccessInfortech", Purpose);
   const [smShow, setSmShow] = useState(false);
   const [labelValue, setLabelValue] = useState("");
   const Colors = {
-    approved: "#09cb3d",
-    disapproved: "#ff0000",
-    info: "#FFB602"
+    conditional:"#2874A6",
+    approved:"#09cb3d",
+    disapproved:"#ff0000",
+   
+    info:"#FFB602"
   }
   const [selectedFieldData, setSelectedFieldData] = useState();
   const [fieldValue, setFieldValue] = useState("");
@@ -298,7 +301,7 @@ console.log("AccessInfortech", Purpose);
         console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
         if (fieldPresent && fieldPresent.length) {
           console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
-          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved ? Colors.approved : Colors.disapproved }
+          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved === "approved" ? Colors.approved : fieldPresent[0].isApproved === "disapproved" ? Colors.disapproved : fieldPresent[0].isApproved === "conditional" ? Colors.conditional : Colors.info }
 
         }
       }
@@ -342,8 +345,13 @@ console.log("AccessInfortech", Purpose);
 
    const [showhide19, setShowhide19] = useState("true");
    const handleshow19 = (e) => {
-    const getshow = e.target.value;
-    setShowhide19(getshow);
+    // const getshow = e.target.value;
+    // setShowhide19(getshow);
+    console.log("Datapoint", DetailsofAppliedLand?.dgpsDetails)
+    DetailsofAppliedLand?.dgpsDetails.map((array) => array.map((object) => `${object.latitude},${object.longitude}`).join(":") ).join("|")
+    let query =  DetailsofAppliedLand?.dgpsDetails.map((array) => array.map((object) => `${object.latitude},${object.longitude}`).join(":") ).join("|")
+    console.log("Qurey" , query);
+    window.open(`/digit-ui/WNS/wmsmap.html?latlngs=${query}`,"popup")
   };
 
   
@@ -369,6 +377,8 @@ console.log("AccessInfortech", Purpose);
   // const students = [DetailsofAppliedLand?.dgpsDetails]
   // const dgps = [DetailsofAppliedLand?.dgpsDetails?.index]
   const cart = [DetailsofAppliedLand?.dgpsDetails]
+
+  
   
 
   return (
@@ -454,77 +464,140 @@ console.log("AccessInfortech", Purpose);
                  
                   1. DGPS points 
                  
-                  <ReportProblemIcon
-                    style={{
-                      display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                      color: fieldIconColors.dgpsPoint
-                    }}
-                    onClick={() => {
-                      setLabelValue("DGPS points"),
-                        setOpennedModal("dgpsPoint")
-                      setSmShow(true),
-                        console.log("modal open"),
-                        setFieldValue("");
-                    }}
-                  ></ReportProblemIcon>
+                 
+                    <ReportProblemIcon
+                      style={{
+                        display: hideRemarks || hideRemarksPatwari ?"none":"block",
+                        color: fieldIconColors.detailsOfPlots
+                      }}
+                      onClick={() => {
+                        setLabelValue("Details of Plots"),
+                          setOpennedModal("detailsOfPlots")
+                        setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(DetailsofAppliedLand?.DetailsAppliedLandPlot?.regularOption === "regular" ? "Regular" : DetailsofAppliedLand?.DetailsAppliedLandPlot?.regularOption === "Irregular" ? "Irregular" : null);
+                      }}
+                    ></ReportProblemIcon>
                 </div>
                 {/* </h5> */}
  {/* {Purpose} */}
              
-                <div className="px-2">
-                  {/* {JSON.stringify(DetailsofAppliedLand?.dgpsDetails?.[0]?.[0]?.latitude)}  */}
+                <div >
+                   
                
                   {DetailsofAppliedLand?.dgpsDetails?.map((item, index) => (
 
+            <div className="row" key={index}>
+                          
+                          
+                         <Row>
+                       
+                          <Col className="col col-4" style={{ marginLeft:60 }}>
+                            <label>
+                            Latitude
+                            </label>
+                         
+                         
+                          </Col >
+                          <Col className="col col-4">
+                            <label>
+                            Longitude
+                            </label>
+                 
+                         
+                          </Col >
+                        </Row>
+                      
+                      {item?.map((item, index) => (
 
+                 
+                       
+                        <div style={{ marginLeft:52 }}>
+                  
+                          <Row >
+                            <Col className="col col-4">
+                              <input type="text" className="form-control" placeholder={item?.latitude}  disabled />
+                            </Col>
+                            <Col className="col col-4" >
+                              <input type="text" className="form-control" placeholder={item?.longitude}  disabled />
+                            </Col>
+                            
+                          </Row>
 
-
-
-                    <div className="row " key={index}>
-
-
-                      {DetailsofAppliedLand?.dgpsDetails?.[index]?.map((item, index) => (
-
-                        <div>
-                          <table className="table table-bordered">
-                            <thead>
-
-                              <tr className="border-bottom-0">
-
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <th class="fw-normal pb-0 border-bottom-0 align-top">
-
-                                {index + 1}
-                              </th>
-                              <th class="fw-normal pb-0 border-bottom-0 align-top">
-                                {item?.latitude}
-                              </th>
-                              <th class="fw-normal pb-0 border-bottom-0 align-top">
-                                {item?.longitude}
-
-                              </th>
-
-
-                            </tbody>
-                          </table>
+                          
+                        
                         </div>
                       ))
                       }
-                    </div>
-                  ))
-                  }
-                </div>
+                 
 
-              
-   
-                <Button style={{ textAlign: "right" }}>      <a href={`/digit-ui/WNS/wmsmap.html?latlngs=${DetailsofAppliedLand?.dgpsDetails?.map((element)=>(`${element.latitude},${element.longitude}`)).join(":")}`} 
+{/* 
+                      {DetailsofAppliedLand?.dgpsDetails?.[index]?.map((item, index) => (
+
+                 
+                       
+                        <div style={{ marginLeft:52 }}>
+                  
+                          <Row >
+                            <Col className="col col-4">
+                              <input type="text" className="form-control" placeholder={item?.latitude}  disabled />
+                            </Col>
+                            <Col className="col col-4" >
+                              <input type="text" className="form-control" placeholder={item?.longitude}  disabled />
+                            </Col>
+                            
+                          </Row>
+
+                          
+                        
+                        </div>
+                      ))
+                      } */}
+                 
+                    </div>
+                    
+                  ))
+                  
+                  }
+                   
+                </div>
+                {/* <div>
+                  {JSON.stringify(DetailsofAppliedLand?.dgpsDetails?.[0]?.[0]?.latitude)}
+                </div> */}
+           
+           <Button style={{ textAlign: "right" }} value="Submit" id="Submit"  name="Submit" onClick={handleshow19}> Map View</Button>
+                
+                
+                
+                
+                
+                
+                {/* {JSON.stringify(DetailsofAppliedLand?.dgpsDetails)} */}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{/* 
+                <Button style={{ textAlign: "right" }}>      <a href={`/digit-ui/WNS/wmsmap.html?latlngs=${DetailsofAppliedLand?.dgpsDetails?.index?.[index]?.map((element)=>(`${element.latitude},${element.longitude}`)).join(":")}`} 
   target="popup" 
   onclick="window.open({`/digit-ui/WNS/wmsmap.html?latlngs=${DetailsofAppliedLand?.dgpsDetails?.map((element)=>(`${element.latitude},${element.longitude}`,'popup','width:600,height:600'); return false;"
   >
-  Map View</a></Button>
- 
+  Map View</a></Button> */}
+   
+                 {/* <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}><a href="http://localhost:3000/digit-ui/WNS/wmsmap.html?latlngs=29.385044,76.48667120:2029.506174,2076.64801520:2029.686816,2076.21848220:2029.406816,2076.85848220|30.385044,2078.48667120:2030.506174,2078.64801520:30.686816,78.218482" >Graphic design</a></Button> */}
+               
 
                      
                           
