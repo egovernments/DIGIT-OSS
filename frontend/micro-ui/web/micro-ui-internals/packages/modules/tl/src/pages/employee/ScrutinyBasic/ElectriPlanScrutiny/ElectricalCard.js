@@ -222,6 +222,7 @@ const authToken = Digit.UserService.getUser()?.access_token || null;
       <Row style={{ top: 10, padding: 10 }}>
       
          <ElecticalBase
+          histeroyData={workflowDetailsTemp}
          apiResponse={scrutinyDetails}
          applicationNumber={id}
          refreshScrutinyData={getScrutinyData}

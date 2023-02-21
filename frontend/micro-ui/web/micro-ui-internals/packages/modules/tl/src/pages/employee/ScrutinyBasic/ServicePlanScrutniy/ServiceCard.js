@@ -147,16 +147,16 @@ const ServiceScrutiny = (props) => {
   //   setOpen(false)
   //   window.location.href = `/digit-ui/citizen`
   // }
-  const closeModal = () => {
-    setSelectedAction(null);
-    setShowModal(false);
-  };
-
   // const closeModal = () => {
   //   setSelectedAction(null);
   //   setShowModal(false);
-  //   window.location.href = `/digit-ui/employee/tl/servicePlanInbox`
   // };
+
+  const closeModal = () => {
+    setSelectedAction(null);
+    setShowModal(false);
+    
+  };
 
   const closeWarningPopup = () => {
     setWarningPopUp(false);
@@ -169,7 +169,7 @@ const ServiceScrutiny = (props) => {
 
 
     try {
-      let body = {
+      let body = { 
         ...tempdata,
 
         RequestInfo: {
@@ -190,8 +190,13 @@ const ServiceScrutiny = (props) => {
     } catch (error) {
       console.log("Update Error ===> ", error.message)
     }
-
+    // closeModal();
+    // setTimeout(() => {
+    //   setShowToast();
+    //   window.location.href = `/digit-ui/employee/tl/servicePlanInbox`
+    // }, 3000);
     closeModal();
+    
   };
 
 
@@ -302,7 +307,7 @@ const ServiceScrutiny = (props) => {
 
       <Row>
 
-        <div class="col-md-10 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
+        {/* <div class="col-md-10 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
 
 
 
@@ -345,7 +350,7 @@ const ServiceScrutiny = (props) => {
           />
 
 
-        </div>
+        </div> */}
 
         <div class="col-md-10 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
           {showModal ? (
