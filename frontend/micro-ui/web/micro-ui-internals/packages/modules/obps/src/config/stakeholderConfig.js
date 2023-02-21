@@ -46,15 +46,15 @@ export let newConfig = [
         isMandatory: true,
         component: "LicenseAddInfo",
         texts: {
-        headerCaption: "Applicant Information",
-        header: "",
-        cardText: "",
-        submitBarLabel: "CS_COMMON_NEXT"
+          headerCaption: "Applicant Information",
+          header: "",
+          cardText: "",
+          submitBarLabel: "CS_COMMON_NEXT",
         },
         nextStep: "add-authorized-user",
         key: "LicenseAddInfo",
         withoutLabel: true,
-        hideInEmployee: true
+        hideInEmployee: true,
       },
       {
         type: "component",
@@ -62,15 +62,15 @@ export let newConfig = [
         isMandatory: true,
         component: "AddAuthorizedUser",
         texts: {
-        headerCaption: "Authorized User",
-        header: "",
-        cardText: "",
-        submitBarLabel: "CS_COMMON_NEXT"
+          headerCaption: "Authorized User",
+          header: "",
+          cardText: "",
+          submitBarLabel: "CS_COMMON_NEXT",
         },
         nextStep: "developer-capacity",
         key: "AddAuthorizedUser",
         withoutLabel: true,
-        hideInEmployee: true
+        hideInEmployee: true,
       },
       {
         type: "component",
@@ -78,29 +78,27 @@ export let newConfig = [
         isMandatory: true,
         component: "DeveloperCapacity",
         texts: {
-        headerCaption: "Developer Capacity",
-        header: "",
-        cardText: "",
-        submitBarLabel: "CS_COMMON_NEXT"
+          headerCaption: "Developer Capacity",
+          header: "",
+          cardText: "",
+          submitBarLabel: "CS_COMMON_NEXT",
         },
         nextStep: "stakeholder-document-details",
         key: "DeveloperCapacity",
         withoutLabel: true,
-        hideInEmployee: true
+        hideInEmployee: true,
       },
       {
-          route: "stakeholder-document-details",
-          component: "StakeholderDocuments",
-          nextStep: null,
-          key: "documents",
-          texts: {
-            headerCaption: "BPA_DOCUMENT_DETAILS_LABEL",
-            header: "BPA_LICENSEE_DOCUMENT_DETAILS_HEADER",
-            submitBarLabel: "CS_COMMON_NEXT"
-          }
+        route: "stakeholder-document-details",
+        component: "StakeholderDocuments",
+        nextStep: null,
+        key: "documents",
+        texts: {
+          headerCaption: "BPA_DOCUMENT_DETAILS_LABEL",
+          // header: "BPA_LICENSEE_DOCUMENT_DETAILS_HEADER",
+          submitBarLabel: "CS_COMMON_NEXT",
+        },
       },
-
-
-    ]
-  }
-] 
+    ],
+  },
+];
