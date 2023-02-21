@@ -17,6 +17,8 @@ import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import ReleaseNew from "./Release";
 import { getDocShareholding } from "../../NewLicense/docView/docView.help";
+import NumberInput from "../../../../components/NumberInput";
+import TextField from "@mui/material/TextField";
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
@@ -52,7 +54,7 @@ function SubmitNew() {
     getValues,
   } = useForm({});
   const tenantId = Digit.ULBService.getCurrentTenantId();
-
+  const [noOfRows, setNoOfRows] = useState(1);
   const bankSubmitNew = async (data) => {
     const token = window?.localStorage?.getItem("token");
     console.log("token", token);
@@ -620,10 +622,10 @@ function SubmitNew() {
                 <tbody>
                   <tr>
                     <th className="fw-normal" style={{ textAlign: "center" }}>
-                      <input type="text" className="form-control" placeholder="" disabled />
+                      <NumberInput disabled control={control} name="totalAreaScheme" customInput={TextField} />
                     </th>
                     <th className="fw-normal" style={{ textAlign: "center" }}>
-                      <input type="text" className="form-control" placeholder="" />
+                      <input type="number" className="form-control" placeholder="" />
                     </th>
                   </tr>
                   <tr>
@@ -631,7 +633,15 @@ function SubmitNew() {
                       <input type="text" className="form-control" placeholder="" disabled />
                     </th>
                     <th className="fw-normal" style={{ textAlign: "center" }}>
-                      <input type="text" className="form-control" placeholder="" />
+                      <input type="number" className="form-control" placeholder="" />
+                    </th>
+                  </tr>
+                  <tr>
+                    <th className="fw-normal" style={{ textAlign: "center" }}>
+                      <h2>Area Total</h2>
+                    </th>
+                    <th className="fw-normal" style={{ textAlign: "center" }}>
+                      <input type="number" className="form-control" placeholder="" />
                     </th>
                   </tr>
                 </tbody>
@@ -645,24 +655,29 @@ function SubmitNew() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th className="fw-normal" style={{ textAlign: "center" }}>
-                      <input type="text" className="form-control" placeholder="" />
-                    </th>
-                    <th className="fw-normal" style={{ textAlign: "center" }}>
-                      <input type="text" className="form-control" placeholder="" />
-                    </th>
-                  </tr>
-                  <tr>
-                    <th className="fw-normal" style={{ textAlign: "center" }}>
-                      <input type="text" className="form-control" placeholder="" />
-                    </th>
-                    <th className="fw-normal" style={{ textAlign: "center" }}>
-                      <input type="text" className="form-control" placeholder="" />
-                    </th>
-                  </tr>
+                  {[...Array(noOfRows)].map((elementInArray, index) => {
+                    return (
+                      <tr>
+                        <th className="fw-normal" style={{ textAlign: "center" }}>
+                          <input type="text" className="form-control" placeholder="" />
+                        </th>
+                        <th className="fw-normal" style={{ textAlign: "center" }}>
+                          <input type="number" className="form-control" placeholder="" />
+                        </th>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </div>
+              <div class="row-12" className="align-right">
+                <button type="button" class="btn btn-primary me-3" onClick={() => setNoOfRows(noOfRows + 1)}>
+                  Add
+                </button>
+                <button type="button" class="btn btn-danger" onClick={() => setNoOfRows(noOfRows - 1)}>
+                  Delete
+                </button>
+              </div>
+
               <br></br>
               <h5>Upload Documents</h5>
               <br></br>
