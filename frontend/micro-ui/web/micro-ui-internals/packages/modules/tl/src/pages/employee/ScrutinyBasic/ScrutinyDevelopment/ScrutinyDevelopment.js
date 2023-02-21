@@ -5,6 +5,11 @@ import axios from "axios";
 import { ScrutinyRemarksContext } from "../../../../../context/remarks-data-context";
 import { useParams } from "react-router-dom";
 import { margin } from "@mui/system";
+import { getDocShareholding } from "../ScrutinyDevelopment/docview.helper";
+import Visibility from "@mui/icons-material/Visibility";
+import FileDownload from "@mui/icons-material/FileDownload";
+import { IconButton } from "@mui/material";
+
 // import { Scrollbars } from 'react-custom-scrollbars';
 
 
@@ -174,7 +179,7 @@ const ScrutinyDevelopment = (props) => {
         </div>
         </div>
         <div style={{ width: 600, height: 500, overflow: "scroll" }}>
-        <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" , marginLeft: "4%" }}>
+        <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" , marginLeft: "2%",marginBottom :"5%" }}>
         
            
               
@@ -185,17 +190,28 @@ const ScrutinyDevelopment = (props) => {
               {/* {index} */}
               {item.comment}
                 <div className="text-right">
-                   {item?.assignes?.map((item, index) => (
+                   {/* {item?.assigner?.map((item, index) => ( */}
                  <div class="font-weight-bold">
-                 {item?.name}
+                 {item?.assigner?.name}
                 </div>
-              ))
-              }
+              {/* ))
+              } */}
               </div>
               <div className="text-right">
               {item?.documents?.map((item, index) => (
                 <div class="font-weight-bold">
-                 {item?.fileStoreId}
+                   <div className="btn btn-sm col-md-2">
+                        <IconButton onClick={()=>getDocShareholding(item?.fileStoreId)}>
+                        <Visibility color="info" className="icon" />
+                        </IconButton>
+                      </div>
+
+                      <div className="btn btn-sm col-md-2">
+                        <IconButton onClick={()=>getDocShareholding(item?.fileStoreId)}>
+                        <FileDownload color="primary" className="mx-1" />
+                        </IconButton>
+                      </div>
+                 {/* {item?.fileStoreId} */}
                 </div>
               ))
               }

@@ -147,13 +147,16 @@ const ServiceScrutiny = (props) => {
   //   setOpen(false)
   //   window.location.href = `/digit-ui/citizen`
   // }
-
-
   const closeModal = () => {
     setSelectedAction(null);
     setShowModal(false);
-    window.location.href = `/digit-ui/employee/tl/servicePlanInbox`
   };
+
+  // const closeModal = () => {
+  //   setSelectedAction(null);
+  //   setShowModal(false);
+  //   window.location.href = `/digit-ui/employee/tl/servicePlanInbox`
+  // };
 
   const closeWarningPopup = () => {
     setWarningPopUp(false);
