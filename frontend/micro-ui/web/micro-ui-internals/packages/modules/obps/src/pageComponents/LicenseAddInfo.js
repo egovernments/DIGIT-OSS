@@ -910,6 +910,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
               showDevTypeFields === "Individual" || showDevTypeFields === "Proprietorship Firm" || showDevTypeFields === "Hindu Undivided Family"
                 ? !(
                     name &&
+                    panIsValid &&
                     mobileNumberUser?.match(Digit.Utils.getPattern("MobileNo")) &&
                     emailId?.match(Digit.Utils.getPattern("Email")) &&
                     gst_Number?.match(Digit.Utils.getPattern("GSTNo"))
@@ -1716,6 +1717,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                         {elementInArray.uploadPdf ? (
                                           <button
                                             type="button"
+                                            title="View Document"
                                             onClick={() => getDocShareholding(elementInArray?.uploadPdf)}
                                             className="btn btn-sm col-md-6"
                                           >
@@ -1725,7 +1727,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                           <p></p>
                                         )}
                                         <div className="btn btn-sm col-md-6">
-                                          <label for={"uploadshareholdingPattern" + input}>
+                                          <label title="Upload Document" for={"uploadshareholdingPattern" + input}>
                                             {" "}
                                             <FileUpload color="primary" for={"uploadshareholdingPattern" + input} />
                                           </label>
@@ -1739,7 +1741,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                       </div>
                                     </td>
                                     <td>
-                                      <a href="javascript:void(0)" onClick={() => deleteTableRows(-1)}>
+                                      <a href="javascript:void(0)" title="Delete record" onClick={() => deleteTableRows(-1)}>
                                         <DeleteIcon color="danger" className="icon" />
                                       </a>
                                     </td>
@@ -2170,6 +2172,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                               {elementInArray?.uploadPdf ? (
                                                 <button
                                                   type="button"
+                                                  title="View Document"
                                                   onClick={() => getDocShareholding(elementInArray?.uploadPdf)}
                                                   className="btn btn-sm col-md-6 text-center"
                                                 >
@@ -2179,7 +2182,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                                 <p></p>
                                               )}
                                               <div className="btn btn-sm col-md-6">
-                                                <label for={"uploaddirectorInfoPdf" + input}>
+                                                <label title="Upload Document" for={"uploaddirectorInfoPdf" + input}>
                                                   <FileUpload color="primary" for={"uploaddirectorInfoPdf" + input} />
                                                 </label>
                                                 <input
@@ -2192,7 +2195,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                             </div>
                                           </td>
                                           <td>
-                                            <a href="javascript:void(0)" onClick={() => deleteDirectorTableRows(-1)}>
+                                            <a href="javascript:void(0)" title="Delete record" onClick={() => deleteDirectorTableRows(-1)}>
                                               <DeleteIcon color="danger" className="icon" />
                                             </a>
                                           </td>

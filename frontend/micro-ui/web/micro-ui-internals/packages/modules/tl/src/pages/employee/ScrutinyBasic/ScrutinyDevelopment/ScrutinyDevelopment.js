@@ -4,16 +4,26 @@ import { Row, Col, Card, Container, Form, Button } from "react-bootstrap";
 import axios from "axios";
 import { ScrutinyRemarksContext } from "../../../../../context/remarks-data-context";
 import { useParams } from "react-router-dom";
+import { margin } from "@mui/system";
+import { getDocShareholding } from "../ScrutinyDevelopment/docview.helper";
+import Visibility from "@mui/icons-material/Visibility";
+import FileDownload from "@mui/icons-material/FileDownload";
+import { IconButton } from "@mui/material";
+
+// import { Scrollbars } from 'react-custom-scrollbars';
+
 
 
 const windowHeight = window !== undefined ? window.innerHeight : null;
 const ScrutinyDevelopment = (props) => {
+  
 
   const { handleGetFiledsStatesById, handleGetRemarkssValues } = useContext(ScrutinyRemarksContext);
   const {id} = useParams();
   let user = Digit.UserService.getUser();
   const userRoles = user?.info?.roles?.map((e) => e.code);
   const showRemarksSection = userRoles.includes("DTCP_HR")
+  const histeroyData = props.histeroyData
 
   const [approval, setDisapproval] = useState(false);
   const [disapprovedList, setDisapprovedList] = useState([]);
@@ -57,6 +67,7 @@ const ScrutinyDevelopment = (props) => {
 
   }
   
+  
   useEffect(
     () => {
       if (remarkDataResp && remarkDataResp?.length) {
@@ -66,6 +77,16 @@ const ScrutinyDevelopment = (props) => {
       }
     }, [remarkDataResp]
   )
+
+  // const Container = () => {
+  //   return (
+  //     <div style={{ height: "2300px", width: "514px", margin: "16px" }}>
+  //       <Paper style={{ height: "100%", width: "514px" }}>Hello</Paper>
+  //     </div>
+  //   );
+  // };
+
+
   // const sumdataTime = props.remarksum;
   // const [applicationId, setApplicationId] = useState("");
   return (
@@ -75,45 +96,51 @@ const ScrutinyDevelopment = (props) => {
         top: windowHeight * 0.3,
         minWidth: "90%",
         maxWidth: "98%",
-        maxHeight: "100%",
+        maxHeight: "50%",
         minHeight: "40%",
       }}
     >
-      <Row>
-        <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
+      <Row className="d-flex flex-row">
+      <div style={{ width: 850, height: 500, overflow: "scroll" }} >
+        <div class="WhatsNewCard scrollspy-example" data-spy="scroll" style={{ backgroundColor: "#ddf2cf" , marginRight: "2%" }}>
+            <b class="text-center">Current Remarks</b>
           <Row>
-            {/* {sumdataTime !== null ? (
-              sumdataTime.map((el) => {
-                return ( */}
-
+  
             <Col>
               <b>Application Id.</b>
-              {/* {el.applicationId} */}
+              {remarkDataResp?.[0]?.applicationId}
             </Col>
             <Col>
               <b>Service Id.</b>
-
-              {/* {el.serviceId} */}
+              {remarkDataResp?.[0]?.bussinessServiceName}
             </Col>
             <Col>
               <b> Diary No.</b>
-
-              {/* {el.documentId} */}
+              {remarkDataResp?.[0]?.bussinessServiceName}
             </Col>
-
-            {/* );
-              })
-            ) : (
-              <p></p>
-            )} */}
           </Row>
           <hr style={{ marginTop: 5, marginBottom: 5 }}></hr>
           {remarkDataResp !== null ? (
             remarkDataResp.map((el, i) => {
               return (
                 <div>
-                  <Row style={{ marginBottom: 5 }}>
+                  {/* <Row>
+                  <Col>
+                      <b>{el.applicationId}</b>
+                    </Col>
                     <Col>
+                      {" "}
+                      <b>{el.bussinessServiceName}</b>
+                    </Col>
+                    <Col>
+                     
+                      
+                   
+                    </Col>
+                  </Row> */}
+                  
+                  <Row>
+                  <Col>
                       <b>{el.fieldIdL}</b>
                     </Col>
                     <Col>
@@ -121,18 +148,19 @@ const ScrutinyDevelopment = (props) => {
                       <b>{el.fieldValue}</b>
                     </Col>
                     <Col>
-                      {/* <b>{el.isApproved ? "Approved" : "Disapproved"}</b> */}
+                     
                       <b>{el.isApproved }</b>
-                      {/* isApproved === "approved" ?Colors.approved: */}
+                   
                     </Col>
                   </Row>
+                    
 
                   <Row>
                     <p>
                       <i>{el.comment}</i>
                     </p>
                   </Row>
-
+                  
                   <Row style={{ margin: 4 }}>
                     <b style={{ textAlign: "right" }}>{el.userid}</b>
                   </Row>
@@ -149,6 +177,54 @@ const ScrutinyDevelopment = (props) => {
             <p></p>
           )}
         </div>
+        </div>
+        <div style={{ width: 600, height: 500, overflow: "scroll" }}>
+        <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" , marginLeft: "2%",marginBottom :"5%" }}>
+        
+           
+              
+          <div >
+          <b class="text-center">History Remarks</b>
+                  {histeroyData?.data?.processInstances?.map((item, index) => (
+            <div key={index}>
+              {/* {index} */}
+              {item.comment}
+                <div className="text-right">
+                   {/* {item?.assigner?.map((item, index) => ( */}
+                 <div class="font-weight-bold">
+                 {item?.assigner?.name}
+                </div>
+              {/* ))
+              } */}
+              </div>
+              <div className="text-right">
+              {item?.documents?.map((item, index) => (
+                <div class="font-weight-bold">
+                   <div className="btn btn-sm col-md-2">
+                        <IconButton onClick={()=>getDocShareholding(item?.fileStoreId)}>
+                        <Visibility color="info" className="icon" />
+                        </IconButton>
+                      </div>
+
+                      <div className="btn btn-sm col-md-2">
+                        <IconButton onClick={()=>getDocShareholding(item?.fileStoreId)}>
+                        <FileDownload color="primary" className="mx-1" />
+                        </IconButton>
+                      </div>
+                 {/* {item?.fileStoreId} */}
+                </div>
+              ))
+              }
+              </div>
+            </div>
+          ))
+          }
+          
+                 
+                  </div>
+          
+           </div>
+           </div>
       </Row>
 
       {/* {JSON.stringify(userRoles)}
