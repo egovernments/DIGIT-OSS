@@ -183,13 +183,6 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
         setError(e?.response?.data?.Errors[0]?.message || null);
       });
     // }
-
-    // else {
-    //   let data = formData?.formData;
-    //   data.LicneseType.LicenseType = LicenseType;
-    //   data.LicneseType.ArchitectNo = ArchitectNo;
-    //   onSelect("", formData)
-    // }
   }
 
   return (
@@ -237,18 +230,8 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
                         {/* <FormLabel id="demo-row-radio-buttons-group-label">Gender</FormLabel> */}
 
                         <RadioGroup
-                          row
                           aria-labelledby="demo-row-radio-buttons-group-label"
                           name={licenceTypeSelected}
-                          // value={
-                          //   LicenseTypeSelected.includes("BPA_DEVELOPER")
-                          //     ? "BPA_DEVLEPOR"
-                          //     : LicenseTypeSelected.includes("ARCHITECT")
-                          //     ? "ARCHITECT.CLASSA"
-                          //     : LicenseTypeSelected.includes("CITIZEN")
-                          //     ? "CITIZEN.CLASSA"
-                          //     : ""
-                          // }
                           value={licenceTypeSelected}
                           onChange={selectLicenseType}
                         >
@@ -257,12 +240,6 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
                       </FormControl>
                     );
                   })}
-                  {/* <MuiRadio 
-                    value="BPA_DEVELOPER"
-                    control={<Radio/>} 
-                    options={getLicenseType() || {}} 
-                    label={optionKey}
-                  /> */}
                 </Form.Group>
 
                 <Form.Group className="col-md-5">
@@ -294,21 +271,6 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
                       <CardLabel>
                         {`${t("Select Developer Type")}`} <span className="font-weight-bold text-danger">*</span>
                       </CardLabel>
-
-                      {/* <Dropdown
-                        labels="Select Type"
-                        className="form-field"
-                        selected={{ code: showDevTypeFields, value: showDevTypeFields }}
-                        option={arrayDevList}
-                        select={setDevType}
-                        optionKey="code"
-                        name="showDevTypeFields"
-                        placeholder={showDevTypeFields}
-                        style={{ width: "100%" }}
-                        t={t}
-                        required
-                      /> */}
-
                       <Select value={showDevTypeFields || ""} onChange={setDevType} className="w-100 form-control" variant="standard">
                         {arrayDevList?.map((item, index) => (
                           <MenuItem value={item.value}>{item?.code}</MenuItem>
