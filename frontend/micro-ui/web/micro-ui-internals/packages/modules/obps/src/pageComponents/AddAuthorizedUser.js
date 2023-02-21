@@ -638,6 +638,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                               {elementInArray.uploadDigitalSignaturePdf ? (
                                 <button
                                   type="button"
+                                  title="View Document"
                                   onClick={() => getDocShareholding(elementInArray?.uploadDigitalSignaturePdf)}
                                   className="btn btn-sm col-md-6"
                                 >

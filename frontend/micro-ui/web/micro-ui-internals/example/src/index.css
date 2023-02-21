@@ -21031,23 +21031,16 @@ input[type=text]:disabled {
   z-index: 9;
   background-color: rgb(255, 217, 84);
   margin-bottom: 2px;
-
   max-width: 89%;
   min-width: 89%;
-  margin: 2;
+  margin: 2px;
   margin-top: 10px;
   border-radius: 2px;
 }
-
 .head-font {
   font-size: 15px;
   padding-left: 10px;
-
-
 }
-
-
 .formlist {
-
   padding: 10;
 }
