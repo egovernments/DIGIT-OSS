@@ -15,7 +15,7 @@ import axios from "axios";
 import { ScrutinyRemarksContext } from "../../../../context/remarks-data-context";
 // import AddIcon from "@mui/icons-material/Add";
 
-const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData }) => {
+const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData , histeroyData}) => {
   const personalInfoRef = useRef();
   const generalInfoRef = useRef();
   const developerInfoRef = useRef();
@@ -362,6 +362,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
         <ScrutinyDevelopment
           remarkData={remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null}
           // remarksum={sumrol.egScrutiny !== undefined ? sumrol.egScrutiny : null}
+          histeroyData={histeroyData}
         ></ScrutinyDevelopment>
       </div>
     </div>
