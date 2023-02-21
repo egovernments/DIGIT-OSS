@@ -379,8 +379,8 @@ const ApllicantPuropseForm = (props) => {
   } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
-    // resolver: yupResolver(VALIDATION_SCHEMA),
-    // resolver: yupResolver(modal ? MODAL_VALIDATION_SCHEMA : VALIDATION_SCHEMA),
+    resolver: yupResolver(VALIDATION_SCHEMA),
+    resolver: yupResolver(modal ? MODAL_VALIDATION_SCHEMA : VALIDATION_SCHEMA),
     shouldFocusError: true,
   });
 
