@@ -4,6 +4,7 @@ import static java.util.Objects.isNull;
 
 import java.util.*;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.collection.config.ApplicationProperties;
 import org.egov.collection.model.Payment;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 
+@Slf4j
 @Service
 public class PaymentService {
 
@@ -194,12 +196,37 @@ public class PaymentService {
     public List<Payment> plainSearch(PaymentSearchCriteria paymentSearchCriteria) {
         PaymentSearchCriteria searchCriteria = new PaymentSearchCriteria();
 
+        log.info("plainSearch Service BusinessServices"+paymentSearchCriteria.getBusinessServices() +"plainSearch Service Date "+
+                paymentSearchCriteria.getFromDate() +" to "+paymentSearchCriteria.getToDate() +"Tenant ID "+paymentSearchCriteria.getTenantId());
+
         if (applicationProperties.isPaymentsSearchPaginationEnabled()) {
             searchCriteria.setOffset(isNull(paymentSearchCriteria.getOffset()) ? 0 : paymentSearchCriteria.getOffset());
             searchCriteria.setLimit(isNull(paymentSearchCriteria.getLimit()) ? applicationProperties.getReceiptsSearchDefaultLimit() : paymentSearchCriteria.getLimit());
         } else {
             searchCriteria.setOffset(0);
             searchCriteria.setLimit(applicationProperties.getReceiptsSearchDefaultLimit());
+        }
+
+        if(paymentSearchCriteria.getTenantId() != null) {
+            searchCriteria.setTenantId(paymentSearchCriteria.getTenantId());
+        }
+
+        if(paymentSearchCriteria.getBusinessServices() != null) {
+            log.info("in PaymentService.java paymentSearchCriteria.getBusinessServices(): " + paymentSearchCriteria.getBusinessServices());
+            searchCriteria.setBusinessServices(paymentSearchCriteria.getBusinessServices());
+        }
+
+        if(paymentSearchCriteria.getBusinessService() != null) {
+            log.info("in PaymentService.java paymentSearchCriteria.getBusinessService(): " + paymentSearchCriteria.getBusinessService());
+            searchCriteria.setBusinessService(paymentSearchCriteria.getBusinessService());
+        }
+
+
+        if((paymentSearchCriteria.getFromDate() !=null && paymentSearchCriteria.getFromDate()>0 ) && (paymentSearchCriteria.getToDate() !=null && paymentSearchCriteria.getToDate()>0 ) )
+        {
+            searchCriteria.setToDate(paymentSearchCriteria.getToDate());
+            searchCriteria.setFromDate(paymentSearchCriteria.getFromDate());
+
         }
 
         List<String> ids = paymentRepository.fetchPaymentIds(searchCriteria);
