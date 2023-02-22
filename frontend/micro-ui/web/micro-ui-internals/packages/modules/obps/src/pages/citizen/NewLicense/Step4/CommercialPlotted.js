@@ -18,6 +18,7 @@ const CommercialPlottedForm = ({
   handleWheel,
   setError,
   error,
+  getFarArr,
 }) => {
   return (
     <Row className="ml-auto" style={{ marginBottom: 5 }}>
@@ -213,6 +214,7 @@ const CommercialPlottedForm = ({
             {error?.groundCoverage && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.groundCoverage}</h6>}
           </Col>
         </Row>
+
         <Row className="ml-auto" style={{ marginBottom: 5 }}>
           <Col md={4} xxl lg="4">
             <div>
@@ -225,22 +227,17 @@ const CommercialPlottedForm = ({
             </div>
           </Col>
           <Col md={4} xxl lg="4">
-            <input
-              type="text"
-              className="form-control"
-              {...register("FAR")}
-              onWheel={handleWheel}
-              onChange={(e) => {
-                if (e?.target?.value > (watch("netPlannedArea") * 150) / 100) {
-                  setError({ ...error, ["FAR"]: "Cannot be above 150% of Net planned area" });
-                } else setError({ ...error, ["FAR"]: "" });
-              }}
-            />
-          </Col>
-          <Col md={4} xxl lg="4">
-            {error?.FAR && <h6 style={{ fontSize: "12px", color: "red" }}>{error?.FAR}</h6>}
+            <div>
+              <label>
+                <h2>
+                  Far <span style={{ color: "red" }}>*</span>
+                </h2>
+              </label>
+              <ReactMultiSelect control={control} name="FAR" placeholder="Far" data={getFarArr} labels="Far" />
+            </div>
           </Col>
         </Row>
+
         <Row className="ml-auto" style={{ marginBottom: 5 }}>
           <Col md={4} xxl lg="4">
             <div>
