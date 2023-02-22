@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { Card, Row, Col, Form, Button } from "react-bootstrap";
+import { Button } from "@material-ui/core";
+import FormControl from "@mui/material/FormControl";
 import { useForm } from "react-hook-form";
+import OutlinedInput from "@mui/material/OutlinedInput";
 
 function ExtensionClu() {
   const {
@@ -14,168 +16,159 @@ function ExtensionClu() {
   const extensionClu = (data) => console.log(data);
   return (
     <form onSubmit={handleSubmit(extensionClu)}>
-      <Card style={{ width: "126%", border: "5px solid #1266af" }}>
+      <div className="card" style={{ width: "126%", border: "5px solid #1266af" }}>
         <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Extension of CLU permission</h4>
         <div className="card">
-          <Row className="col-12">
-            <Form.Group as={Col} controlId="formGridCase">
-              <Form.Label>
-                <h2>
+          <div className="row-12">
+            <div className="col md={4} xxl lg-4">
+              <FormControl>
+                <h2 className="FormLable">
                   Case No.<span style={{ color: "red" }}>*</span>
                 </h2>
-              </Form.Label>
-              <input type="number" className="form-control" placeholder="" {...register("caseNo")} />
-            </Form.Group>
 
-            <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>
-                <h2>
+                <OutlinedInput type="number" className="Inputcontrol" placeholder="" {...register("caseNo")} />
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">
                   {" "}
                   Application Number <span style={{ color: "red" }}>*</span>
                 </h2>
-              </Form.Label>
-              <input type="number" className="form-control" placeholder="" {...register("applicationNo")} />
-            </Form.Group>
 
-            <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>
-                <h2>
+                <OutlinedInput type="number" className="Inputcontrol" placeholder="" {...register("applicationNo")} />
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">
                   {" "}
                   Nature (land Use) Purpose <span style={{ color: "red" }}>*</span>
                 </h2>
-              </Form.Label>
-              <input type="text" className="form-control" placeholder="" {...register("naturePurpose")} />
-            </Form.Group>
-          </Row>
-          <Row className="col-12">
-            <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>
-                <h2>
+
+                <OutlinedInput type="number" className="Inputcontrol" placeholder="" {...register("naturePurpose")} />
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">
                   {" "}
                   Total Area in Sq. meter. <span style={{ color: "red" }}>*</span>
                 </h2>
-              </Form.Label>
-              <input type="number" className="form-control" placeholder="" {...register("totalAreaSq")} />
-            </Form.Group>
-
-            <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>
-                <h2>
+                <OutlinedInput type="number" className="Inputcontrol" placeholder="" {...register("totalAreaSq")} />
+              </FormControl>
+            </div>
+          </div>
+          <br></br>
+          <div className="row-12">
+            <div className="col md={4} xxl lg-4">
+              <FormControl>
+                <h2 className="FormLable">
                   {" "}
                   Date Of CLU
                   <span style={{ color: "red" }}>*</span>
                 </h2>
-              </Form.Label>
-              <input type="Date" className="form-control" placeholder="" {...register("cluDate")} />
-            </Form.Group>
-            <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>
-                <h2>
+
+                <OutlinedInput type="number" className="Inputcontrol" placeholder="" {...register("cluDate")} />
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">
                   {" "}
                   Date of Expiry of CLU
                   <span style={{ color: "red" }}>*</span>
                 </h2>
-              </Form.Label>
-              <input type="Date" className="form-control" placeholder="" {...register("expiryClu")} />
-            </Form.Group>
-          </Row>
-          <Row className="col-12">
-            <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>
-                <h2>
+                <OutlinedInput type="number" className="Inputcontrol" placeholder="" {...register("expiryClu")} />
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">
                   {" "}
                   Stage of construction <span style={{ color: "red" }}>*</span>
                 </h2>
-              </Form.Label>
-              <input type="text" className="form-control" placeholder="" {...register("stageConstruction")} />
-            </Form.Group>
 
-            <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>
-                <h2>
+                <OutlinedInput type="number" className="Inputcontrol" placeholder="" {...register("stageConstruction")} />
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">
                   {" "}
-                  Name of applicantName
-                  <span style={{ color: "red" }}>*</span>{" "}
+                  Name of applicantName <span style={{ color: "red" }}>*</span>
                 </h2>
-              </Form.Label>
-              <input type="text" className="form-control" placeholder="" {...register("applicantName")} />
-            </Form.Group>
-            <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>
-                <h2>
+
+                <OutlinedInput type="number" className="Inputcontrol" placeholder="" {...register("applicantName")} />
+              </FormControl>
+            </div>
+          </div>
+          <br></br>
+          <div className="row-12">
+            <div className="col md={4} xxl lg-4">
+              <FormControl>
+                <h2 className="FormLable">
                   {" "}
                   Mobile
                   <span style={{ color: "red" }}>*</span>
                 </h2>
-              </Form.Label>
-              <input type="number" className="form-control" placeholder="" {...register("mobile")} />
-            </Form.Group>
-          </Row>
-          <Row className="col-12">
-            <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>
-                <h2>
+                <OutlinedInput type="number" className="Inputcontrol" placeholder="" {...register("mobile")} />
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">
                   {" "}
                   Email-Address <span style={{ color: "red" }}>*</span>{" "}
                 </h2>
-              </Form.Label>
-              <input type="email" className="form-control" placeholder="" {...register("emailAddress")} />
-            </Form.Group>
 
-            <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>
-                <h2>
+                <OutlinedInput type="number" className="Inputcontrol" placeholder="" {...register("emailAddress")} />
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">
                   {" "}
                   Address
                   <span style={{ color: "red" }}>*</span>
                 </h2>
-              </Form.Label>
-              <input type="text" className="form-control" placeholder="" {...register("address")} />
-            </Form.Group>
-            <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>
-                <h2>
+                <OutlinedInput type="number" className="Inputcontrol" placeholder="" {...register("address")} />
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">
                   {" "}
                   Village <span style={{ color: "red" }}>*</span>
                 </h2>
-              </Form.Label>
-              <input type="text" className="form-control" placeholder="" {...register("village")} />
-            </Form.Group>
-          </Row>
-          <Row className="col-12">
-            <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>
-                <h2>
+                <OutlinedInput type="number" className="Inputcontrol" placeholder="" {...register("village")} />
+              </FormControl>
+            </div>
+          </div>
+          <br></br>
+          <div className="row-12">
+            <div className="col md={4} xxl lg-4">
+              <FormControl>
+                <h2 className="FormLable">
                   {" "}
                   Tehsil
                   <span style={{ color: "red" }}>*</span>
                 </h2>
-              </Form.Label>
-              <input type="text" className="form-control" placeholder="" {...register("tehsil")} />
-            </Form.Group>
 
-            <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>
-                <h2>
+                <OutlinedInput type="number" className="Inputcontrol" placeholder="" {...register("tehsil")} />
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">
                   {" "}
                   Pin code
                   <span style={{ color: "red" }}>*</span>
                 </h2>
-              </Form.Label>
-              <input type="number" className="form-control" placeholder="" {...register("pinCode")} />
-            </Form.Group>
-
-            <Form.Group as={Col} controlId="formGridState">
-              <Form.Label>
-                <h2>
+                <OutlinedInput type="number" className="Inputcontrol" placeholder="" {...register("pinCode")} />
+              </FormControl>
+              &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+              <FormControl>
+                <h2 className="FormLable">
                   {" "}
                   Reason for Delay
                   <span style={{ color: "red" }}>*</span>
                 </h2>
-              </Form.Label>
-              <input type="textarea" className="form-control" placeholder="" {...register("reasonDelay")} />
-            </Form.Group>
-          </Row>
+
+                <OutlinedInput type="number" className="Inputcontrol" placeholder="" {...register("reasonDelay")} />
+              </FormControl>
+            </div>
+          </div>
           <br></br>
           <div className="table table-bordered table-responsive">
             <thead>
@@ -251,7 +244,7 @@ function ExtensionClu() {
             </div>
           </div>
         </div>
-      </Card>
+      </div>
     </form>
   );
 }

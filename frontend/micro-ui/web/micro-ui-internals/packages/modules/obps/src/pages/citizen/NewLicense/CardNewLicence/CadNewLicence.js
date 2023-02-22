@@ -95,7 +95,9 @@ const CardNewLicence = (props) => {
 
           <div className="col col-3">
             <Card style={{ height: "85px", marginTop: "40px", borderLeft: "2px solid #1266af" }}>
-              <h2 style={{ textAlign: "center" }}>Extension of CLU permission</h2>
+              <h2 style={{ textAlign: "center" }}>
+                <a href="/digit-ui/citizen/obps/ExtensionClu">Extension of CLU permission</a>
+              </h2>
             </Card>
           </div>
         </Row>

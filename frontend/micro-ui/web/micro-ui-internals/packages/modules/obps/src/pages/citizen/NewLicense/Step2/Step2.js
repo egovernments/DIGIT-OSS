@@ -134,12 +134,10 @@ const ApllicantPuropseForm = (props) => {
       dataIndex: "",
       render: (data) => (
         <div>
-          {fileStoreId?.registeringAuthorityDoc ? (
-            <a onClick={() => getDocShareholding(fileStoreId?.registeringAuthorityDoc)} className="btn btn-sm col-md-6">
+          {watch("registeringAuthorityDocFileName") && (
+            <a onClick={() => getDocShareholding(watch("registeringAuthorityDocFileName"), setLoader)} className="btn btn-sm ">
               <VisibilityIcon color="info" className="icon" />
             </a>
-          ) : (
-            <p>N/A</p>
           )}
         </div>
       ),
@@ -379,8 +377,8 @@ const ApllicantPuropseForm = (props) => {
   } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
-    // resolver: yupResolver(VALIDATION_SCHEMA),
-    // resolver: yupResolver(modal ? MODAL_VALIDATION_SCHEMA : VALIDATION_SCHEMA),
+    resolver: yupResolver(VALIDATION_SCHEMA),
+    resolver: yupResolver(modal ? MODAL_VALIDATION_SCHEMA : VALIDATION_SCHEMA),
     shouldFocusError: true,
   });
 
@@ -785,46 +783,46 @@ const ApllicantPuropseForm = (props) => {
     // console.log("nameArray==", totalVal);
   }, [modalData]);
 
-  // const handleWorkflow = async () => {
-  //   const token = window?.localStorage?.getItem("token");
-  //   setLoader(true);
-  //   const payload = {
-  //     ProcessInstances: [
-  //       {
-  //         businessService: "NewTL",
-  //         documents: null,
-  //         businessId: applicantId,
-  //         tenantId: "hr",
-  //         moduleName: "TL",
-  //         action: "SENDBACK",
-  //         previousStatus: "INITIATED",
-  //         comment: null,
-  //       },
-  //     ],
-  //     RequestInfo: {
-  //       apiId: "Rainmaker",
-  //       msgId: "1669293303096|en_IN",
-  //       authToken: token,
-  //     },
-  //   };
-  //   // try {
-  //   //   const Resp = await axios.post("/tl-services/new/_create", postDistrict);
-  //   //   setLoader(false);
-  //   //   const useData = Resp?.data?.LicenseServiceResponseInfo?.[0]?.LicenseDetails?.[0];
-  //   //   props.Step2Continue(useData);
-  //   // } catch (error) {
-  //   //   setLoader(false);
-  //   //   return error;
-  //   // }
-  //   try {
-  //     await axios.post("/egov-workflow-v2/egov-wf/process/_transition", payload);
-  //     setLoader(false);
-  //     props.Step2Back();
-  //   } catch (error) {
-  //     setLoader(false);
-  //     return error;
-  //   }
-  // };
+  const handleWorkflow = async () => {
+    const token = window?.localStorage?.getItem("token");
+    setLoader(true);
+    const payload = {
+      ProcessInstances: [
+        {
+          businessService: "NewTL",
+          documents: null,
+          businessId: applicantId,
+          tenantId: "hr",
+          moduleName: "TL",
+          action: "SENDBACK",
+          previousStatus: "INITIATED",
+          comment: null,
+        },
+      ],
+      RequestInfo: {
+        apiId: "Rainmaker",
+        msgId: "1669293303096|en_IN",
+        authToken: token,
+      },
+    };
+    // try {
+    //   const Resp = await axios.post("/tl-services/new/_create", postDistrict);
+    //   setLoader(false);
+    //   const useData = Resp?.data?.LicenseServiceResponseInfo?.[0]?.LicenseDetails?.[0];
+    //   props.Step2Continue(useData);
+    // } catch (error) {
+    //   setLoader(false);
+    //   return error;
+    // }
+    try {
+      await axios.post("/egov-workflow-v2/egov-wf/process/_transition", payload);
+      setLoader(false);
+      props.Step2Back();
+    } catch (error) {
+      setLoader(false);
+      return error;
+    }
+  };
 
   useEffect(() => {
     if (stepData) {
@@ -1022,16 +1020,16 @@ const ApllicantPuropseForm = (props) => {
                 </div>
               )}
             </Form.Group>
-
+            <br></br>
             <div class="row">
               <div class="col-sm-12 text-left">
-                {/* <div id="btnClear" class="btn btn-primary btn-md center-block" onClick={() => handleWorkflow()}>
+                <div id="btnClear" class="btn btn-primary btn-md center-block" onClick={() => handleWorkflow()}>
                   Back
-                </div> */}
+                </div>
               </div>
-              {/* {console.log("nonConsolidatedTotal", getValues()?.nonConsolidatedTotal, getValues()?.consolidatedTotal)} */}
               <div class="col-sm-12 text-right">
                 <label className="mr-4">Total Area: {getTotalArea}</label>
+                &nbsp;&nbsp;&nbsp;
                 <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
                   Save and Continue
                 </button>
@@ -1061,7 +1059,6 @@ const ApllicantPuropseForm = (props) => {
                 <ReactMultiSelect
                   control={control}
                   name="district"
-                  placeholder="District"
                   data={districtOptons?.data}
                   labels="District"
                   loading={districtOptons?.isLoading}
@@ -1076,6 +1073,7 @@ const ApllicantPuropseForm = (props) => {
                   {errors?.district?.value && errors?.district?.value?.message}
                 </h3>
               </Col>
+              <br></br>
               {watch("district")?.value && (
                 <Col md={4} xxl lg="4">
                   <div>
@@ -1100,6 +1098,7 @@ const ApllicantPuropseForm = (props) => {
                   </h3>
                 </Col>
               )}
+              <br></br>
               {watch("developmentPlan")?.value && (
                 <Col md={4} xxl lg="4">
                   <div>
@@ -1124,6 +1123,7 @@ const ApllicantPuropseForm = (props) => {
                   </h3>
                 </Col>
               )}
+              <br></br>
               {watch("potential")?.value && (
                 <Col md={4} xxl lg="4">
                   <div>
@@ -1147,6 +1147,7 @@ const ApllicantPuropseForm = (props) => {
                   </h3>
                 </Col>
               )}
+              <br></br>
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
@@ -1192,6 +1193,7 @@ const ApllicantPuropseForm = (props) => {
                   {errors?.revenueEstate?.value && errors?.revenueEstate?.value?.message}
                 </h3>
               </Col>
+              <br></br>
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
@@ -1317,6 +1319,7 @@ const ApllicantPuropseForm = (props) => {
                         <h2>
                           Whether collaboration agreement irrevocable (Yes/No)<span style={{ color: "red" }}>*</span>
                         </h2>
+                        <br></br>
                         <label htmlFor="agreementIrrevocialble">
                           <input {...register("agreementIrrevocialble")} type="radio" value="Y" id="yes" />
                           &nbsp;&nbsp; Yes &nbsp;&nbsp;
@@ -1386,11 +1389,7 @@ const ApllicantPuropseForm = (props) => {
                             </div>
                           </h2>
                         </label>
-                        {watch("registeringAuthorityDocFileName") && (
-                          <a onClick={() => getDocShareholding(watch("registeringAuthorityDocFileName"), setLoader)} className="btn btn-sm ">
-                            <VisibilityIcon color="info" className="icon" />
-                          </a>
-                        )}
+
                         {/* <h3>{watch("registeringAuthorityDocFileName")}</h3> */}
                         <h3 className="error-message" style={{ color: "red" }}>
                           {errors?.registeringAuthorityDocFileName && errors?.registeringAuthorityDocFileName?.message}
@@ -1415,7 +1414,7 @@ const ApllicantPuropseForm = (props) => {
                     Type of land<span style={{ color: "red" }}>*</span>
                   </h2>
                 </label>
-                <ReactMultiSelect control={control} name="typeLand" placeholder="Type of Land" data={typeOfLand?.data} labels="typeland" />
+                <ReactMultiSelect control={control} name="typeLand" data={typeOfLand?.data} labels="typeland" />
               </Col>
             </Row>
             <br></br>
@@ -1461,7 +1460,7 @@ const ApllicantPuropseForm = (props) => {
                         </h2>
                       </label>
                     </div>
-                    <input autoComplete="off" type="text" className="form-control" placeholder="Enter Khewat" {...register("editKhewats")} />
+                    <input autoComplete="off" type="text" className="form-control" placeholder="khasra No." {...register("editKhewats")} />
                     <h3 className="error-message" style={{ color: "red" }}>
                       {errors?.editKhewats && errors?.editKhewats?.message}
                     </h3>
@@ -1543,13 +1542,11 @@ const ApllicantPuropseForm = (props) => {
                           <h2>
                             Sarsai (in acres) <span style={{ color: "red" }}>*</span>
                           </h2>
-                          &nbsp;&nbsp;
                         </th>
                         <th>
                           <h2>
                             Total Area (in acres) <span style={{ color: "red" }}>*</span>
                           </h2>
-                          &nbsp;&nbsp;
                         </th>
                       </tr>
                     </thead>
@@ -1568,10 +1565,7 @@ const ApllicantPuropseForm = (props) => {
                           <label htmlFor="sumsarsai">Total: {(watch("sarsai") * 0.00069)?.toFixed(3)}</label>&nbsp;&nbsp;
                         </td>
                         <td>
-                          <input disabled type="number" className="form-control" {...register("consolidatedTotal")} />
-                          {/* <label htmlFor="sumsarsai">
-                            Total: {(watch("marla") * 0.0062 + watch("sarsai") * 0.00069 + watch("kanal") * 0.125)?.toFixed(3)}
-                          </label> */}
+                          <input type="number" className="form-control" {...register("consolidatedTotal")} disabled />
                           &nbsp;&nbsp;
                         </td>
                       </tr>
