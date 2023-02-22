@@ -175,16 +175,17 @@ const ScrutinyDevelopment = (props) => {
 
 
                     <Row>
+                      <p style={{margin: 5 }}><b>Remarks:</b></p>
                       <p>
-                        <i>{el.comment}</i>
+                      <i>{el.comment}</i>
                       </p>
                     </Row>
 
                     <Row style={{ margin: 4 }}>
-                    {/* <b style={{ textAlign: "right" }}>{el.employeeName}</b> */}
+                    <b style={{ textAlign: "right" }}>{el.employeeName}</b>
                     <b style={{ textAlign: "right" ,marginRight:2}}>{el.designation}</b>
-                      <b style={{ textAlign: "right" }}>{el.userid}</b>
-                      
+                      {/* <b style={{ textAlign: "right" }}>{el.userid}</b>
+                       */}
                     </Row>
 
                     <Row style={{ margin: 4 }}>
