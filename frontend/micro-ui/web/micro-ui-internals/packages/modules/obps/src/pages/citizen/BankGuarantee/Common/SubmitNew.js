@@ -281,91 +281,6 @@ function SubmitNew() {
                 Search
               </button>
             </div>
-            {watch("typeOfBg") === "SPE" && (
-              <div className="col-12">
-                <FormControl>
-                  <h2 className="FormLable">
-                    Amount (in fig)<span style={{ color: "red" }}>*</span>
-                  </h2>
-
-                  <input type="text" className="form-control" placeholder="" {...register("amountInFig")} />
-                </FormControl>
-                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-                <FormControl>
-                  <h2 className="FormLable">
-                    Amount (in words)<span style={{ color: "red" }}>*</span>
-                  </h2>
-
-                  <input type="text" className="form-control" placeholder="" {...register("amountInWords")} />
-                </FormControl>
-              </div>
-            )}
-            {watch("typeOfBg") === "IDW" && (
-              <div className="col-12">
-                <FormControl>
-                  <h2 className="FormLable">
-                    Amount (in fig)<span style={{ color: "red" }}>*</span>
-                  </h2>
-
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="standard-disabled"
-                    label="Disabled"
-                    {...register("amountInFig")}
-                    readOnly
-                    disabled={existingBgNumber?.length > 0 ? true : false}
-                  />
-                </FormControl>
-                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-                <FormControl>
-                  <h2 className="FormLable">
-                    Amount (in words)<span style={{ color: "red" }}>*</span>
-                  </h2>
-
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder=""
-                    {...register("amountInWords")}
-                    disabled={existingBgNumber?.length > 0 ? true : false}
-                  />
-                </FormControl>
-              </div>
-            )}
-            {watch("typeOfBg") === "EDC" && (
-              <div className="col-12">
-                <FormControl>
-                  <h2 className="FormLable">
-                    Amount (in fig)<span style={{ color: "red" }}>*</span>
-                  </h2>
-
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="standard-disabled"
-                    label="Disabled"
-                    {...register("amountInFig")}
-                    readOnly
-                    disabled={existingBgNumber?.length > 0 ? true : false}
-                  />
-                </FormControl>
-                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-                <FormControl>
-                  <h2 className="FormLable">
-                    Amount (in words)<span style={{ color: "red" }}>*</span>
-                  </h2>
-
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder=""
-                    {...register("amountInWords")}
-                    disabled={existingBgNumber?.length > 0 ? true : false}
-                  />
-                </FormControl>
-              </div>
-            )}
           </div>
           &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
           <label htmlFor="bankGuarantee">
@@ -393,6 +308,102 @@ function SubmitNew() {
           &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
           {showhide === "1" && (
             <div>
+              <div className="col-12">
+                {watch("typeOfBg") === "SPE" && (
+                  <div className="row-12">
+                    <div className="col md={4} xxl lg-4">
+                      <FormControl>
+                        <h2 className="FormLable">
+                          Amount (in fig)<span style={{ color: "red" }}>*</span>
+                        </h2>
+
+                        <input type="text" className="form-control" placeholder="" {...register("amountInFig")} />
+                      </FormControl>
+                      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                      <FormControl>
+                        <h2 className="FormLable">
+                          Amount (in words)<span style={{ color: "red" }}>*</span>
+                        </h2>
+
+                        <input type="text" className="form-control" placeholder="" {...register("amountInWords")} />
+                      </FormControl>
+                    </div>
+                  </div>
+                )}
+                <br></br>
+                {watch("typeOfBg") === "IDW" && (
+                  <div className="row-12">
+                    <div className="col-12">
+                      <FormControl>
+                        <h2 className="FormLable">
+                          Amount (in fig)<span style={{ color: "red" }}>*</span>
+                        </h2>
+
+                        <input
+                          type="text"
+                          className="form-control"
+                          id="standard-disabled"
+                          label="Disabled"
+                          {...register("amountInFig")}
+                          readOnly
+                          disabled={existingBgNumber?.length > 0 ? true : false}
+                        />
+                      </FormControl>
+                      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                      <FormControl>
+                        <h2 className="FormLable">
+                          Amount (in words)<span style={{ color: "red" }}>*</span>
+                        </h2>
+
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder=""
+                          {...register("amountInWords")}
+                          disabled={existingBgNumber?.length > 0 ? true : false}
+                        />
+                      </FormControl>
+                    </div>
+                  </div>
+                )}
+                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                {watch("typeOfBg") === "EDC" && (
+                  <div className="row-12">
+                    <div className="col-12">
+                      <FormControl>
+                        <h2 className="FormLable">
+                          Amount (in fig)<span style={{ color: "red" }}>*</span>
+                        </h2>
+
+                        <input
+                          type="text"
+                          className="form-control"
+                          id="standard-disabled"
+                          label="Disabled"
+                          {...register("amountInFig")}
+                          readOnly
+                          disabled={existingBgNumber?.length > 0 ? true : false}
+                        />
+                      </FormControl>
+                      &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                      <FormControl>
+                        <h2 className="FormLable">
+                          Amount (in words)<span style={{ color: "red" }}>*</span>
+                        </h2>
+
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder=""
+                          {...register("amountInWords")}
+                          disabled={existingBgNumber?.length > 0 ? true : false}
+                        />
+                      </FormControl>
+                    </div>
+                  </div>
+                )}
+              </div>
+              <br></br>
               <div className="col-12">
                 <FormControl>
                   <h2 className="FormLable">
@@ -612,7 +623,7 @@ function SubmitNew() {
           )}
           {showhide === "2" && (
             <div>
-              <div className="table table-bordered table-responsive">
+              <div className="table table-bordered table-responsive " style={{ backgroundColor: "rgb(251 251 253))", width: "629px" }}>
                 <thead>
                   <tr>
                     <th scope="col">Khasra No</th>
@@ -647,7 +658,7 @@ function SubmitNew() {
                 </tbody>
               </div>
               <h5 className="card-title fw-bold">Enter Plot</h5>
-              <div className="table table-bordered table-responsive">
+              <div className="table table-bordered table-responsive" style={{ backgroundColor: "rgb(251 251 253))", width: "629px" }}>
                 <thead>
                   <tr>
                     <th scope="col">Plot No</th>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
@@ -22,6 +22,7 @@ const SubmitNew = (props) => {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
   const [open2, setOpen2] = useState(false);
+  const dataIcons = props.dataForIcons;
   const apiResponse = props.apiResponse;
   const handleshowhide = (event) => {
     const getuser = event.target.value;
@@ -44,28 +45,29 @@ const SubmitNew = (props) => {
   const SubmitNew = (data) => console.log(data);
   const item = props.ApiResponseData;
   const classes = useStyles();
-  const currentRemarks = (data) => {
-    props.showTable({ data: data.data });
-  };
+  // const currentRemarks = (data) => {
+  //   props.showTable({ data: data.data });
+  // };
 
   const [smShow, setSmShow] = useState(false);
   const [labelValue, setLabelValue] = useState("");
   const Colors = {
     approved: "#09cb3d",
     disapproved: "#ff0000",
+    conditional: "#2874A6",
     info: "#FFB602",
   };
 
-  const handlemodaldData = (data) => {
-    // setmodaldData(data.data);
-    setSmShow(false);
-    console.log("here", openedModal, data);
-    if (openedModal && data) {
-      setFieldIconColors({ ...fieldIconColors, [openedModal]: data.data.isApproved ? Colors.approved : Colors.disapproved });
-    }
-    setOpennedModal("");
-    setLabelValue("");
-  };
+  // const handlemodaldData = (data) => {
+
+  //   setSmShow(false);
+  //   console.log("here", openedModal, data);
+  //   if (openedModal && data) {
+  //     setFieldIconColors({ ...fieldIconColors, [openedModal]: data.data.isApproved ? Colors.approved : Colors.disapproved });
+  //   }
+  //   setOpennedModal("");
+  //   setLabelValue("");
+  // };
   const [selectedFieldData, setSelectedFieldData] = useState();
   const [fieldValue, setFieldValue] = useState("");
   const [openedModal, setOpennedModal] = useState("");
@@ -103,53 +105,62 @@ const SubmitNew = (props) => {
     { label: "Existing B.G. No.", key: "existingBgNumber" },
   ];
 
-  //       const getColorofFieldIcon = () => {
-  //   let tempFieldColorState = fieldIconColors;
-  //   fieldIdList.forEach((item) => {
-  //     if (dataIcons !== null && dataIcons !== undefined) {
-  //       console.log("color method called");
-  //       const fieldPresent = dataIcons.egScrutiny.filter(ele => (ele.fieldIdL === item.label));
-  //       console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
-  //       if (fieldPresent && fieldPresent.length) {
-  //         console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
-  //         tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved === "approved" ? Colors.approved : fieldPresent[0].isApproved === "disapproved" ? Colors.disapproved : fieldPresent[0].isApproved === "conditional" ? Colors.conditional : Colors.info }
+  const getColorofFieldIcon = () => {
+    let tempFieldColorState = fieldIconColors;
+    fieldIdList.forEach((item) => {
+      if (dataIcons !== null && dataIcons !== undefined) {
+        console.log("color method called");
+        const fieldPresent = dataIcons.egScrutiny.filter((ele) => ele.fieldIdL === item.label);
+        console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
+        if (fieldPresent && fieldPresent.length) {
+          console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
+          tempFieldColorState = {
+            ...tempFieldColorState,
+            [item.key]:
+              fieldPresent[0].isApproved === "approved"
+                ? Colors.approved
+                : fieldPresent[0].isApproved === "disapproved"
+                ? Colors.disapproved
+                : fieldPresent[0].isApproved === "conditional"
+                ? Colors.conditional
+                : Colors.info,
+          };
+        }
+      }
+    });
 
-  //       }
-  //     }
-  //   })
+    setFieldIconColors(tempFieldColorState);
+  };
 
-  //   setFieldIconColors(tempFieldColorState);
+  useEffect(() => {
+    getColorofFieldIcon();
+    console.log("repeating1...");
+  }, [dataIcons]);
 
-  // };
+  useEffect(() => {
+    if (labelValue) {
+      const fieldPresent = dataIcons.egScrutiny.filter((ele) => ele.fieldIdL === labelValue);
+      setSelectedFieldData(fieldPresent[0]);
+    } else {
+      setSelectedFieldData(null);
+    }
+  }, [labelValue]);
 
-  // useEffect(() => {
-  //   getColorofFieldIcon();
-  //   console.log("repeating1...",)
-  // }, [dataIcons])
+  const currentRemarks = (data) => {
+    props.showTable({ data: data.data });
+  };
 
-  // useEffect(() => {
-  //   if (labelValue) {
-  //     const fieldPresent = dataIcons.egScrutiny.filter(ele => (ele.fieldIdL === labelValue));
-  //     setSelectedFieldData(fieldPresent[0]);
-  //   } else {
-  //     setSelectedFieldData(null);
-  //   }
-  // }, [labelValue])
-
-  // const currentRemarks = (data) => {
-  //   props.showTable({ data: data.data });
-  // };
-
-  // const handlemodaldData = (data) => {
-  //   // setmodaldData(data.data);
-  //   setSmShow(false);
-  //   console.log("here", openedModal, data);
-  //   if (openedModal && data) {
-  //     setFieldIconColors({ ...fieldIconColors, [openedModal]: data.data.isApproved ? Colors.approved : Colors.disapproved })
-  //   }
-  //   setOpennedModal("");
-  //   setLabelValue("");
-  // };
+  const handlemodaldData = (data) => {
+    // setmodaldData(data.data);
+    setSmShow(false);
+    console.log("here", openedModal, data);
+    if (openedModal && data) {
+      setFieldIconColors({ ...fieldIconColors, [openedModal]: data.data.isApproved ? Colors.approved : Colors.disapproved });
+    }
+    setOpennedModal("");
+    setLabelValue("");
+  };
+  console.log("remarks", dataIcons);
 
   console.log("digit2", apiResponse);
   return (

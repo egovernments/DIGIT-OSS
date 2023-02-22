@@ -19,7 +19,7 @@ import RetirementHousing from "./RetirementHousing";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { getDocShareholding } from "../docView/docView.help";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { VALIDATION_SCHEMA } from "../../../../utils/schema/step3";
+import { VALIDATION_SCHEMA, MODAL_VALIDATION_SCHEMA } from "../../../../utils/schema/step3";
 import FileUpload from "@mui/icons-material/FileUpload";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -223,6 +223,7 @@ const LandScheduleForm = (props) => {
     mode: "onChange",
     reValidateMode: "onChange",
     resolver: yupResolver(VALIDATION_SCHEMA),
+    resolver: yupResolver(modal ? MODAL_VALIDATION_SCHEMA : VALIDATION_SCHEMA),
     shouldFocusError: true,
   });
 
@@ -536,7 +537,7 @@ const LandScheduleForm = (props) => {
                                 type="text"
                                 className="form-control"
                                 {...register("licenseNumber")}
-                                maxLength={20}
+                                // maxLength={20}
                                 // pattern="(/^[^\s][a-zA-Z0-9\s]+$"
                               />
                               <h3 className="error-message" style={{ color: "red" }}>
@@ -557,6 +558,9 @@ const LandScheduleForm = (props) => {
                                 labels="Potential"
                                 loading={getPotentialOptons?.isLoading}
                               />
+                              <h3 className="error-message" style={{ color: "red" }}>
+                                {errors?.potential && errors?.potential?.message}
+                              </h3>
                             </div>
                             <div className="col col-4">
                               <label>
@@ -572,6 +576,9 @@ const LandScheduleForm = (props) => {
                                 loading={purposeOptions?.isLoading}
                                 labels="siteLoc"
                               />
+                              <h3 className="error-message" style={{ color: "red" }}>
+                                {errors?.siteLoc && errors?.siteLoc?.message}
+                              </h3>
                             </div>
                             <div className="col col-12">
                               {Purpose === "DDJAY_APHP" && <CommercialColonyInResidential watch={watch} register={register} />}
@@ -608,6 +615,9 @@ const LandScheduleForm = (props) => {
                                 </h2>
                               </label>
                               <input type="number" className="form-control" {...register("areaOfParentLicenceAcres")} minLength={1} maxLength={20} />
+                              <h3 className="error-message" style={{ color: "red" }}>
+                                {errors?.areaOfParentLicenceAcres && errors?.areaOfParentLicenceAcres?.message}
+                              </h3>
                             </div>
 
                             <div className="col col-3">
@@ -630,6 +640,9 @@ const LandScheduleForm = (props) => {
                                 <input {...register("thirdParty")} type="radio" value="N" id="thirdParty" />
                                 &nbsp; No &nbsp;&nbsp;
                               </label>
+                              <h3 className="error-message" style={{ color: "red" }}>
+                                {errors?.thirdParty && errors?.thirdParty?.message}
+                              </h3>
 
                               {watch("thirdParty") === "N" && (
                                 <div className="row ">
@@ -805,56 +818,171 @@ const LandScheduleForm = (props) => {
                     </label>
                     <div className="row ">
                       {watch("encumburance") === "rehan" && (
-                        <div className="col col-4">
-                          <label>
-                            <h2>
-                              Remark <span style={{ color: "red" }}>*</span>
-                            </h2>{" "}
-                          </label>
-                          <input type="text" className="form-control" {...register("rehanRemark")} />
+                        <div className="row ">
+                          <div className="col col-4">
+                            <label>
+                              <h2>
+                                Remark <span style={{ color: "red" }}>*</span>
+                              </h2>{" "}
+                            </label>
+                            <input type="text" className="form-control" {...register("rehanRemark")} />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.rehanRemark && errors?.rehanRemark?.message}
+                            </h3>
+                          </div>
+                          <div className="col col-6">
+                            <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"></h2> Document Upload{" "}
+                            <span style={{ color: "red" }}>*</span>
+                            <label>
+                              <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                              <input
+                                type="file"
+                                style={{ display: "none" }}
+                                accept="application/pdf/jpeg/png"
+                                onChange={(e) => getDocumentData(e?.target?.files[0], "encumburanceDoc")}
+                              />
+                            </label>
+                            {watch("encumburanceDoc") && (
+                              <a onClick={() => getDocShareholding(watch("encumburanceDoc"), setLoader)} className="btn btn-sm ">
+                                <VisibilityIcon color="info" className="icon" />
+                              </a>
+                            )}
+                          </div>
                         </div>
                       )}
                       {watch("encumburance") === "patta" && (
-                        <div className="col col-4">
-                          <label>
-                            <h2>
-                              Remark <span style={{ color: "red" }}>*</span>
-                            </h2>{" "}
-                          </label>
-                          <input type="text" className="form-control" {...register("pattaRemark")} />
+                        <div className="row ">
+                          <div className="col col-4">
+                            <label>
+                              <h2>
+                                Remark <span style={{ color: "red" }}>*</span>
+                              </h2>{" "}
+                            </label>
+                            <input type="text" className="form-control" {...register("pattaRemark")} />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.pattaRemark && errors?.pattaRemark?.message}
+                            </h3>
+                          </div>
+                          <div className="col col-6">
+                            <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"></h2> Document Upload{" "}
+                            <span style={{ color: "red" }}>*</span>
+                            <label>
+                              <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                              <input
+                                type="file"
+                                style={{ display: "none" }}
+                                accept="application/pdf/jpeg/png"
+                                onChange={(e) => getDocumentData(e?.target?.files[0], "encumburanceDoc")}
+                              />
+                            </label>
+                            {watch("encumburanceDoc") && (
+                              <a onClick={() => getDocShareholding(watch("encumburanceDoc"), setLoader)} className="btn btn-sm ">
+                                <VisibilityIcon color="info" className="icon" />
+                              </a>
+                            )}
+                          </div>
                         </div>
                       )}
                       {watch("encumburance") === "gair" && (
-                        <div className="col col-4">
-                          <label>
-                            <h2>
-                              Remark <span style={{ color: "red" }}>*</span>
-                            </h2>{" "}
-                          </label>
-                          <input type="text" className="form-control" {...register("gairRemark")} />
+                        <div className="row ">
+                          <div className="col col-4">
+                            <label>
+                              <h2>
+                                Remark <span style={{ color: "red" }}>*</span>
+                              </h2>{" "}
+                            </label>
+                            <input type="text" className="form-control" {...register("gairRemark")} />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.gairRemark && errors?.gairRemark?.message}
+                            </h3>
+                          </div>
+                          <div className="col col-6">
+                            <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"></h2> Document Upload{" "}
+                            <span style={{ color: "red" }}>*</span>
+                            <label>
+                              <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                              <input
+                                type="file"
+                                style={{ display: "none" }}
+                                accept="application/pdf/jpeg/png"
+                                onChange={(e) => getDocumentData(e?.target?.files[0], "encumburanceDoc")}
+                              />
+                            </label>
+                            {watch("encumburanceDoc") && (
+                              <a onClick={() => getDocShareholding(watch("encumburanceDoc"), setLoader)} className="btn btn-sm ">
+                                <VisibilityIcon color="info" className="icon" />
+                              </a>
+                            )}
+                          </div>
                         </div>
                       )}
                       {watch("encumburance") === "loan" && (
-                        <div className="col col-4">
-                          <label>
-                            <h2>
-                              Remark <span style={{ color: "red" }}>*</span>
-                            </h2>{" "}
-                          </label>
-                          <input type="text" className="form-control" {...register("loanRemark")} />
+                        <div className="row ">
+                          <div className="col col-4">
+                            <label>
+                              <h2>
+                                Remark <span style={{ color: "red" }}>*</span>
+                              </h2>{" "}
+                            </label>
+                            <input type="text" className="form-control" {...register("loanRemark")} />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.loanRemark && errors?.loanRemark?.message}
+                            </h3>
+                          </div>
+                          <div className="col col-6">
+                            <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"></h2> Document Upload{" "}
+                            <span style={{ color: "red" }}>*</span>
+                            <label>
+                              <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                              <input
+                                type="file"
+                                style={{ display: "none" }}
+                                accept="application/pdf/jpeg/png"
+                                onChange={(e) => getDocumentData(e?.target?.files[0], "encumburanceDoc")}
+                              />
+                            </label>
+                            {watch("encumburanceDoc") && (
+                              <a onClick={() => getDocShareholding(watch("encumburanceDoc"), setLoader)} className="btn btn-sm ">
+                                <VisibilityIcon color="info" className="icon" />
+                              </a>
+                            )}
+                          </div>
                         </div>
                       )}
                       {watch("encumburance") === "anyOther" && (
-                        <div className="col col-4">
-                          <label>
-                            <h2>
-                              Remark <span style={{ color: "red" }}>*</span>
-                            </h2>{" "}
-                          </label>
-                          <input type="text" className="form-control" {...register("anyOtherRemark")} />
+                        <div className="row ">
+                          <div className="col col-4">
+                            <label>
+                              <h2>
+                                Remark <span style={{ color: "red" }}>*</span>
+                              </h2>{" "}
+                            </label>
+                            <input type="text" className="form-control" {...register("anyOtherRemark")} />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.anyOtherRemark && errors?.anyOtherRemark?.message}
+                            </h3>
+                          </div>
+                          <div className="col col-6">
+                            <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"></h2> Document Upload{" "}
+                            <span style={{ color: "red" }}>*</span>
+                            <label>
+                              <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                              <input
+                                type="file"
+                                style={{ display: "none" }}
+                                accept="application/pdf/jpeg/png"
+                                onChange={(e) => getDocumentData(e?.target?.files[0], "encumburanceDoc")}
+                              />
+                            </label>
+                            {watch("encumburanceDoc") && (
+                              <a onClick={() => getDocShareholding(watch("encumburanceDoc"), setLoader)} className="btn btn-sm ">
+                                <VisibilityIcon color="info" className="icon" />
+                              </a>
+                            )}
+                          </div>
                         </div>
                       )}
-                      {watch("encumburance") !== "none" && (
+                      {/* {watch("encumburance") !== "none" && (
                         <div className="col col-6">
                           <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"></h2> Document Upload{" "}
                           <span style={{ color: "red" }}>*</span>
@@ -873,7 +1001,7 @@ const LandScheduleForm = (props) => {
                             </a>
                           )}
                         </div>
-                      )}
+                      )} */}
                     </div>
 
                     <h3 className="error-message" style={{ color: "red" }}>
@@ -933,6 +1061,9 @@ const LandScheduleForm = (props) => {
                                     </h2>{" "}
                                   </label>
                                   <input type="text" className="form-control" {...register("courtyCaseNo")} />
+                                  <h3 className="error-message" style={{ color: "red" }}>
+                                    {errors?.courtyCaseNo && errors?.courtyCaseNo?.message}
+                                  </h3>
                                 </div>
                                 <div className="col col-6">
                                   <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"></h2>
@@ -994,6 +1125,9 @@ const LandScheduleForm = (props) => {
                               </h2>{" "}
                             </label>
                             <input type="text" className="form-control" {...register("insolvencyRemark")} />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.insolvencyRemark && errors?.insolvencyRemark?.message}
+                            </h3>
                           </div>
                           <div className="col col-6">
                             <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"></h2> Document Upload{" "}
@@ -1101,6 +1235,9 @@ const LandScheduleForm = (props) => {
                               <option value="Gatta">Gatta</option>
                             </select>
                           </div>
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.waterCourse && errors?.waterCourse?.message}
+                          </h3>
                         </div>
                       )}
                     </div>
@@ -1130,6 +1267,9 @@ const LandScheduleForm = (props) => {
                               </h2>{" "}
                             </label>
                             <input type="text" className="form-control" {...register("waterCourseRemark")} />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.waterCourseRemark && errors?.waterCourseRemark?.message}
+                            </h3>
                           </div>
                         </div>
                       )}
@@ -1160,6 +1300,9 @@ const LandScheduleForm = (props) => {
                               </h2>{" "}
                             </label>
                             <input type="text" className="form-control" {...register("compactBlockRemark")} />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.compactBlockRemark && errors?.compactBlockRemark?.message}
+                            </h3>
                           </div>
                         </div>
                       )}
@@ -1192,6 +1335,9 @@ const LandScheduleForm = (props) => {
                               </h2>
                             </label>
                             <input type="text" className="form-control" {...register("landSandwichedRemark")} />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.landSandwichedRemark && errors?.landSandwichedRemark?.message}
+                            </h3>
                           </div>
                         </div>
                       )}
@@ -1336,6 +1482,9 @@ const LandScheduleForm = (props) => {
                           &nbsp; Category-II approach &nbsp;&nbsp;
                         </label>
                       </h2>
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.siteApproachable && errors?.siteApproachable?.message}
+                      </h3>
                     </div>
                     {watch("siteApproachable") === "Y" && (
                       <div>
@@ -1352,6 +1501,9 @@ const LandScheduleForm = (props) => {
                               &nbsp; No &nbsp;&nbsp;
                             </label>
                           </h2>
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.minimumApproachFour && errors?.minimumApproachFour?.message}
+                          </h3>
                         </div>
                         <div className="col col-12">
                           <h2>
@@ -1367,6 +1519,9 @@ const LandScheduleForm = (props) => {
                               &nbsp; No &nbsp;&nbsp;
                             </label>
                           </h2>
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.minimumApproachEleven && errors?.minimumApproachEleven?.message}
+                          </h3>
                         </div>
                         <div className="col col-12">
                           <h2>
@@ -1382,6 +1537,9 @@ const LandScheduleForm = (props) => {
                               &nbsp; No &nbsp;&nbsp;
                             </label>
                           </h2>
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.alreadyConstructedSector && errors?.alreadyConstructedSector?.message}
+                          </h3>
                         </div>
                         <div className="col col-12">
                           <h2>
@@ -1396,6 +1554,9 @@ const LandScheduleForm = (props) => {
                               &nbsp; No &nbsp;&nbsp;
                             </label>
                           </h2>
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.adjoiningOwnLand && errors?.adjoiningOwnLand?.message}
+                          </h3>
                           {watch("adjoiningOwnLand") === "Y" && (
                             <div>
                               <h2>
@@ -1411,7 +1572,9 @@ const LandScheduleForm = (props) => {
                                   &nbsp; No &nbsp;&nbsp;
                                 </label>
                               </h2>
-
+                              <h3 className="error-message" style={{ color: "red" }}>
+                                {errors?.applicantHasDonated && errors?.applicantHasDonated?.message}
+                              </h3>
                               {watch("applicantHasDonated") === "Y" && (
                                 <div className="col col-3">
                                   <h2 style={{ display: "flex" }}>
@@ -1449,6 +1612,9 @@ const LandScheduleForm = (props) => {
                               &nbsp; No &nbsp;&nbsp;
                             </label>
                           </h2>
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.adjoiningOthersLand && errors?.adjoiningOthersLand?.message}
+                          </h3>
                           {watch("adjoiningOthersLand") === "Y" && (
                             <div>
                               <h2>
@@ -1465,6 +1631,9 @@ const LandScheduleForm = (props) => {
                                   &nbsp; No &nbsp;&nbsp;
                                 </label>
                               </h2>
+                              <h3 className="error-message" style={{ color: "red" }}>
+                                {errors?.landOwnerDonated && errors?.landOwnerDonated?.message}
+                              </h3>
                               {watch("landOwnerDonated") === "Y" && (
                                 <div className="col col-3">
                                   <h2 style={{ display: "flex" }}>
@@ -1515,6 +1684,9 @@ const LandScheduleForm = (props) => {
                               &nbsp; No &nbsp;&nbsp;
                             </label>
                           </h2>
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.irrevocableConsent && errors?.irrevocableConsent?.message}
+                          </h3>
                           {watch("irrevocableConsent") === "Y" && (
                             <div className="col col-3">
                               <h2 style={{ display: "flex" }}>
@@ -1691,6 +1863,9 @@ const LandScheduleForm = (props) => {
                             &nbsp; No &nbsp;&nbsp;
                           </label>
                         </h2>
+                        <h3 className="error-message" style={{ color: "red" }}>
+                          {errors?.parentLicenceApproach && errors?.parentLicenceApproach?.message}
+                        </h3>
                       </div>
                     </div>
                   )}
@@ -1709,6 +1884,9 @@ const LandScheduleForm = (props) => {
                           &nbsp; No &nbsp;&nbsp;
                         </label>
                       </h2>
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.availableExistingApproach && errors?.availableExistingApproach?.message}
+                      </h3>
                     </div>
                     {watch("availableExistingApproach") === "Y" && (
                       <div className="row">
@@ -1771,6 +1949,9 @@ const LandScheduleForm = (props) => {
                               </h2>
                             </label>
                             <input type="text" className="form-control" {...register("vacantRemark")} />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.vacantRemark && errors?.vacantRemark?.message}
+                            </h3>
                           </div>
                         </div>
                       )}
@@ -1814,6 +1995,9 @@ const LandScheduleForm = (props) => {
                               </h2>
                             </label>
                             <input type="text" className="form-control" {...register("htRemark")} />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.htRemark && errors?.htRemark?.message}
+                            </h3>
                           </div>
                         </div>
                       )}
@@ -1852,6 +2036,9 @@ const LandScheduleForm = (props) => {
                               IOC Remark <span style={{ color: "red" }}>*</span>
                             </label>
                             <input type="text" className="form-control" {...register("gasRemark")} />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.gasRemark && errors?.gasRemark?.message}
+                            </h3>
                           </div>
                         </div>
                       )}
@@ -1887,6 +2074,9 @@ const LandScheduleForm = (props) => {
                               Nallah Remark <span style={{ color: "red" }}>*</span>
                             </label>
                             <input type="text" className="form-control" {...register("nallahRemark")} />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.nallahRemark && errors?.nallahRemark?.message}
+                            </h3>
                           </div>
                         </div>
                       )}
@@ -1928,6 +2118,9 @@ const LandScheduleForm = (props) => {
                               </h2>
                             </label>
                             <input type="number" className="form-control" {...register("roadWidth")} minLength={2} maxLength={20} />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.roadWidth && errors?.roadWidth?.message}
+                            </h3>
                           </div>
                           <div className="col col-12">
                             <label>
@@ -1936,6 +2129,9 @@ const LandScheduleForm = (props) => {
                               </h2>
                             </label>
                             <input type="text" className="form-control" {...register("roadRemark")} />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.roadRemark && errors?.roadRemark?.message}
+                            </h3>
                           </div>
                         </div>
                       )}
@@ -2021,6 +2217,9 @@ const LandScheduleForm = (props) => {
                               </h2>
                             </label>
                             <input type="number" className="form-control" {...register("utilityWidth")} minLength={2} maxLength={99} />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.utilityWidth && errors?.utilityWidth?.message}
+                            </h3>
                           </div>
                           <div className="col col-12">
                             <label>
@@ -2029,6 +2228,9 @@ const LandScheduleForm = (props) => {
                               </h2>
                             </label>
                             <input type="text" className="form-control" {...register("utilityRemark")} />
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.utilityRemark && errors?.utilityRemark?.message}
+                            </h3>
                           </div>
                         </div>
                       )}
@@ -2351,7 +2553,7 @@ const LandScheduleForm = (props) => {
                     </h2>
                   </Form.Label>
                 </div>
-                <input type="text" className="form-control" {...register("areaOfParentLicence")} />
+                <input type="number" className="form-control" {...register("areaOfParentLicence")} />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.areaOfParentLicence?.value && errors?.areaOfParentLicence?.value?.message}
                 </h3>
@@ -2400,6 +2602,9 @@ const LandScheduleForm = (props) => {
                         </label>
                         <Form.Control type="date" className="form-control" {...register("date")} />
                       </div>
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.date && errors?.date?.message}
+                      </h3>
                     </div>
                   </div>
                 )}
@@ -2426,7 +2631,7 @@ const LandScheduleForm = (props) => {
                     </h2>
                   </label>
                 </div>
-                <input type="text" className="form-control" {...register("khasraNumber")} />
+                <input type="number" className="form-control" {...register("khasraNumber")} />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.khasraNumber && errors?.khasraNumber?.message}
                 </h3>
@@ -2437,7 +2642,10 @@ const LandScheduleForm = (props) => {
                     Area <span style={{ color: "red" }}>*</span>
                   </h2>
                 </label>
-                <input type="text" className="form-control" {...register("area")} />
+                <input type="number" className="form-control" {...register("area")} />
+                <h3 className="error-message" style={{ color: "red" }}>
+                  {errors?.area && errors?.area?.message}
+                </h3>
               </Col>
             </Row>
             <button type="submit" style={{ float: "right" }} class="btn btn-primary btn-md center-block">

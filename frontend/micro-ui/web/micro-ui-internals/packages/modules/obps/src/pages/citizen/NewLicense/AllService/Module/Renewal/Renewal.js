@@ -205,7 +205,6 @@ function renewalClu() {
                   <textarea className="form-control" placeholder="" {...register("completingProject")} rows="3" />
                 </div>
                 <br></br>
-
                 <div className="row-12">
                   <h2>
                     {" "}
@@ -699,163 +698,132 @@ function renewalClu() {
                   </div>
                 </div>
                 <br></br>
-                <Row className="col-12">
-                  <Col className="col-6">
-                    <Form.Label>
-                      <h2>
-                        {" "}
-                        CA certificate regarding non collection of stamp duty and registration charges.
-                        <span style={{ color: "red" }}>*</span>
-                      </h2>
-                    </Form.Label>
-                  </Col>
-                  <Col className="col-6">
-                    <input type="file" className="form-control" placeholder="" {...register("cacertification")} />
-                  </Col>
-                </Row>
+                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                <h2>
+                  {" "}
+                  CA certificate regarding non collection of stamp duty and registration charges.
+                  <span style={{ color: "red" }}>*</span>
+                  <input type="file" className="form-control" placeholder="" {...register("cacertification")} />
+                </h2>
+                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                <h2>
+                  {" "}
+                  Copies of advertisement for the sale of flat (Sec 24) along with register containing authenticated copies of Agreement entered
+                  between colonizer.
+                  <span style={{ color: "red" }}>*</span>
+                </h2>
+                <label htmlFor=" advertisementCopy">
+                  {" "}
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <input {...register("advertisementCopy")} type="radio" value="1" id="yes" /> &nbsp; Yes
+                </label>{" "}
+                <label htmlFor="advertisementCopy">
+                  &nbsp;&nbsp;
+                  <input {...register("advertisementCopy")} type="radio" value="2" id="no" /> &nbsp; No
+                </label>
+                {watch("advertisementCopy") === "1" && (
+                  <div className="row-12">
+                    <div className="col md={4} xxl lg-4">
+                      <FormControl>
+                        <h2>Remark</h2>
+
+                        <input type="text" className="form-control" placeholder="" />
+                      </FormControl>
+                    </div>
+                  </div>
+                )}
+                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                <h2>
+                  {" "}
+                  Annual Financial statements duly audited/certifie and signed by Chartened Accountant indicating the amount realized from each space
+                  holders, the expenditure incured internal and on external development works separately of the colony /building etc. with detail
+                  thereof whether with the amount due from each space holders indicating their postal addresses.
+                  <span style={{ color: "red" }}>*</span>
+                </h2>
+                <label htmlFor=" annualFinancial">
+                  {" "}
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <input {...register("annualFinancial")} type="radio" value="1" id="yes" /> &nbsp; Yes
+                </label>{" "}
+                <label htmlFor="annualFinancial">
+                  &nbsp;&nbsp;
+                  <input {...register("annualFinancial")} type="radio" value="2" id="no" /> &nbsp; No
+                </label>
+                {watch("annualFinancial") === "1" && (
+                  <div className="row-12">
+                    <div className="col md={4} xxl lg-4">
+                      <FormControl>
+                        <h2>Remark</h2>
+
+                        <input type="text" className="form-control" placeholder="" />
+                      </FormControl>
+                    </div>
+                  </div>
+                )}
+                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                <h2>
+                  {" "}
+                  Detail of account number of schedule bank in which 30% of the amount released by him from the space holder deposited to meet out the
+                  cost of internet developmant work of the colony.
+                  <span style={{ color: "red" }}>*</span>
+                </h2>
+                <label htmlFor=" detailAccountNumber">
+                  {" "}
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <input {...register("detailAccountNumber")} type="radio" value="1" id="yes" /> &nbsp; Yes
+                </label>{" "}
+                <label htmlFor="detailAccountNumber">
+                  &nbsp;&nbsp;
+                  <input {...register("detailAccountNumber")} type="radio" value="2" id="no" /> &nbsp; No
+                </label>
+                {watch("detailAccountNumber") === "1" && (
+                  <div className="row-12">
+                    <div className="col md={4} xxl lg-4">
+                      <FormControl>
+                        <h2>Remark</h2>
+
+                        <input type="text" className="form-control" placeholder="" />
+                      </FormControl>
+                    </div>
+                  </div>
+                )}
+                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                <h2>
+                  {" "}
+                  Copies of form AC account indicating the amount released from each space holders and the amount deposited during the preceeding
+                  month in the schedule Bank.
+                  <span style={{ color: "red" }}>*</span>
+                </h2>
+                <label htmlFor=" copiesOfCaAccount">
+                  {" "}
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <input {...register("copiesOfCaAccount")} type="radio" value="1" id="yes" /> &nbsp; Yes
+                </label>{" "}
+                <label htmlFor="copiesOfCaAccount">
+                  &nbsp;&nbsp;
+                  <input {...register("copiesOfCaAccount")} type="radio" value="2" id="no" /> &nbsp; No
+                </label>
+                {watch("copiesOfCaAccount") === "1" && (
+                  <div className="row-12">
+                    <div className="col md={4} xxl lg-4">
+                      <FormControl>
+                        <h2>Remark</h2>
+
+                        <input type="text" className="form-control" placeholder="" />
+                      </FormControl>
+                    </div>
+                  </div>
+                )}
                 <br></br>
-                <Row className="col-12">
-                  <Col className="col-12">
-                    <Form.Label>
-                      <h2>
-                        {" "}
-                        Copies of advertisement for the sale of flat (Sec 24) along with register containing authenticated copies of Agreement entered
-                        between colonizer.
-                        <span style={{ color: "red" }}>*</span>
-                      </h2>
-                    </Form.Label>{" "}
-                    <br></br>
-                    <label htmlFor=" advertisementCopy">
+                <br></br>
+                <div className="row-12">
+                  <div className="col md={4} xxl lg-4">
+                    <h2 style={{ marginleft: "20px" }}>
                       {" "}
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      <input {...register("advertisementCopy")} type="radio" value="1" id="yes" /> &nbsp; Yes
-                    </label>{" "}
-                    <label htmlFor="advertisementCopy">
-                      &nbsp;&nbsp;
-                      <input {...register("advertisementCopy")} type="radio" value="2" id="no" /> &nbsp; No
-                    </label>
-                    {watch("advertisementCopy") === "1" && (
-                      <Row className="col-4">
-                        <Col className="col-12">
-                          <Form.Label>
-                            <h2>Remark</h2>
-                          </Form.Label>
-                          <input type="text" className="form-control" placeholder="" />
-                        </Col>
-                      </Row>
-                    )}
-                  </Col>
-                </Row>
-                <br></br>
-                <Row className="col-12">
-                  <Col className="col-12">
-                    <Form.Label>
-                      <h2>
-                        {" "}
-                        Annual Financial statements duly audited/certifie and signed by Chartened Accountant indicating the amount realized from each
-                        space holders, the expenditure incured internal and on external development works separately of the colony /building etc. with
-                        detail thereof whether with the amount due from each space holders indicating their postal addresses.
-                        <span style={{ color: "red" }}>*</span>
-                      </h2>
-                    </Form.Label>{" "}
-                    <br></br>
-                    <label htmlFor=" annualFinancial">
-                      {" "}
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      <input {...register("annualFinancial")} type="radio" value="1" id="yes" /> &nbsp; Yes
-                    </label>{" "}
-                    <label htmlFor="annualFinancial">
-                      &nbsp;&nbsp;
-                      <input {...register("annualFinancial")} type="radio" value="2" id="no" /> &nbsp; No
-                    </label>
-                    {watch("annualFinancial") === "1" && (
-                      <Row className="col-4">
-                        <Col className="col-12">
-                          <Form.Label>
-                            <h2>Remark</h2>
-                          </Form.Label>
-                          <input type="text" className="form-control" placeholder="" />
-                        </Col>
-                      </Row>
-                    )}
-                  </Col>
-                </Row>
-                <br></br>
-                <Row className="col-12">
-                  <Col className="col-12">
-                    <Form.Label>
-                      <h2>
-                        {" "}
-                        Detail of account number of schedule bank in which 30% of the amount released by him from the space holder deposited to meet
-                        out the cost of internet developmant work of the colony.
-                        <span style={{ color: "red" }}>*</span>
-                      </h2>
-                    </Form.Label>{" "}
-                    <br></br>
-                    <label htmlFor=" detailAccountNumber">
-                      {" "}
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      <input {...register("detailAccountNumber")} type="radio" value="1" id="yes" /> &nbsp; Yes
-                    </label>{" "}
-                    <label htmlFor="detailAccountNumber">
-                      &nbsp;&nbsp;
-                      <input {...register("detailAccountNumber")} type="radio" value="2" id="no" /> &nbsp; No
-                    </label>
-                    {watch("detailAccountNumber") === "1" && (
-                      <Row className="col-4">
-                        <Col className="col-12">
-                          <Form.Label>
-                            <h2>Remark</h2>
-                          </Form.Label>
-                          <input type="text" className="form-control" placeholder="" />
-                        </Col>
-                      </Row>
-                    )}
-                  </Col>
-                </Row>
-                <br></br>
-                <Row className="col-12">
-                  <Col className="col-12">
-                    <Form.Label>
-                      <h2>
-                        {" "}
-                        Copies of form AC account indicating the amount released from each space holders and the amount deposited during the
-                        preceeding month in the schedule Bank.
-                        <span style={{ color: "red" }}>*</span>
-                      </h2>
-                    </Form.Label>{" "}
-                    <br></br>
-                    <label htmlFor=" copiesOfCaAccount">
-                      {" "}
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      <input {...register("copiesOfCaAccount")} type="radio" value="1" id="yes" /> &nbsp; Yes
-                    </label>{" "}
-                    <label htmlFor="copiesOfCaAccount">
-                      &nbsp;&nbsp;
-                      <input {...register("copiesOfCaAccount")} type="radio" value="2" id="no" /> &nbsp; No
-                    </label>
-                    {watch("copiesOfCaAccount") === "1" && (
-                      <Row className="col-4">
-                        <Col className="col-12">
-                          <Form.Label>
-                            <h2>Remark</h2>
-                          </Form.Label>
-                          <input type="text" className="form-control" placeholder="" />
-                        </Col>
-                      </Row>
-                    )}
-                  </Col>
-                </Row>
-                <br></br>
-                <Row className="col-12">
-                  <Col className="col-12">
-                    <Form.Label>
-                      <h2 style={{ marginleft: "20px" }}>
-                        {" "}
-                        (1) Status of OC
-                        <span style={{ color: "red" }}>*</span>
-                      </h2>
-                    </Form.Label>
+                      (1) Status of OC
+                      <span style={{ color: "red" }}>*</span>
+                    </h2>
+
                     <div className="table table-bordered table-responsive">
                       <thead>
                         <tr>
@@ -903,47 +871,45 @@ function renewalClu() {
                               <input {...register("dodFilled")} type="radio" value="2" id="no" /> &nbsp; No
                             </label>
                             {watch("dodFilled") === "1" && (
-                              <Row className="col-12">
-                                <Col className="col-12">
+                              <div className="row-12">
+                                <div className="col md={4} xxl lg-12">
                                   <select className="form-control" {...register("dodFiledDrop")}>
                                     <option value=" ">----Select value-----</option>
                                     <option value="1">Within Time </option>
                                     <option value="2">Delayed</option>
                                     <option value="3">NA</option>
                                   </select>
-                                </Col>
-                              </Row>
+                                </div>
+                              </div>
                             )}
                             {watch("dodFiledDrop") === "2" && (
-                              <Row className="col-12">
-                                <Col className="col-12">
-                                  <Form.Label>
-                                    <h2>
-                                      {" "}
-                                      Composition
-                                      <span style={{ color: "red" }}>*</span>
-                                    </h2>
-                                  </Form.Label>{" "}
+                              <div className="row-12">
+                                <div className="col md={4} xxl lg-12">
+                                  <h2>
+                                    {" "}
+                                    Composition
+                                    <span style={{ color: "red" }}>*</span>
+                                  </h2>
+
                                   <input type="text" placeholder="" className="form-control" readOnly {...register("composition")} />
-                                </Col>
-                              </Row>
+                                </div>
+                              </div>
                             )}
                           </td>
                         </tr>
                       </tbody>
                     </div>
-                  </Col>
-                </Row>
+                  </div>
+                </div>
                 <br></br>
-                <Row className="col-12">
-                  <Col className="col-12">
-                    <Form.Label>
-                      <h2 style={{ marginleft: "20px" }}>
-                        {" "}
-                        (2) Status of Part Completion
-                        <span style={{ color: "red" }}>*</span>
-                      </h2>
-                    </Form.Label>
+                <div className="row-12">
+                  <div className="col md={4} xxl lg-4">
+                    <h2 style={{ marginleft: "20px" }}>
+                      {" "}
+                      (2) Status of Part Completion
+                      <span style={{ color: "red" }}>*</span>
+                    </h2>
+
                     <div className="table table-bordered table-responsive">
                       <thead>
                         <tr>
@@ -992,18 +958,17 @@ function renewalClu() {
                         </tr>
                       </tbody>
                     </div>
-                  </Col>
-                </Row>
+                  </div>
+                </div>
                 <br></br>
-                <Row className="col-12">
-                  <Col className="col-12">
-                    <Form.Label>
-                      <h2 style={{ marginleft: "20px" }}>
-                        {" "}
-                        (3) Status of Community Sites
-                        <span style={{ color: "red" }}>*</span>
-                      </h2>
-                    </Form.Label>
+                <div className="row-12">
+                  <div className="col md={4} xxl lg-4">
+                    <h2 style={{ marginleft: "20px" }}>
+                      {" "}
+                      (3) Status of Community Sites
+                      <span style={{ color: "red" }}>*</span>
+                    </h2>
+
                     <div className="table table-bordered table-responsive">
                       <thead>
                         <tr>
@@ -1048,20 +1013,22 @@ function renewalClu() {
                               <input {...register("buildingPlan")} type="radio" value="2" id="no" /> &nbsp; No
                             </label>
                             {watch("buildingPlan") === "1" && (
-                              <Col className="col-12">
-                                <Form.Label>
+                              <div className="row-12">
+                                <div className="col md={4} xxl lg-12">
                                   <h2>Date</h2>
-                                </Form.Label>
-                                <input type="date" className="form-control" placeholder="" />
-                              </Col>
+
+                                  <input type="date" className="form-control" placeholder="" />
+                                </div>
+                              </div>
                             )}
                             {watch("buildingPlan") === "2" && (
-                              <Col className="col-12">
-                                <Form.Label>
+                              <div className="row-12">
+                                <div className="col md={4} xxl lg-12">
                                   <h2>Remark</h2>
-                                </Form.Label>
-                                <input type="text" className="form-control" placeholder="" />
-                              </Col>
+
+                                  <input type="text" className="form-control" placeholder="" />
+                                </div>
+                              </div>
                             )}
                           </td>
                           <td>
@@ -1075,20 +1042,21 @@ function renewalClu() {
                               <input {...register("ocGranized")} type="radio" value="2" id="no" onClick={() => setmodal(true)} /> &nbsp; No
                             </label>
                             {watch("ocGranized") === "1" && (
-                              <Row className="col-12">
-                                <Col className="col-6">
-                                  <Form.Label>
+                              <div className="row-12">
+                                <div className="col md={4} xxl lg-6">
+                                  <FormControl>
                                     <h2>Remark</h2>
-                                  </Form.Label>
-                                  <input type="date" className="form-control" placeholder="" />
-                                </Col>
-                                <Col className="col-6">
-                                  <Form.Label>
+
+                                    <input type="date" className="form-control" placeholder="" />
+                                  </FormControl>
+                                  &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                                  <FormControl>
                                     <h2>Till Date</h2>
-                                  </Form.Label>
-                                  <input type="date" className="form-control" placeholder="" />
-                                </Col>
-                              </Row>
+
+                                    <input type="date" className="form-control" placeholder="" />
+                                  </FormControl>
+                                </div>
+                              </div>
                             )}
                             {watch("ocGranized") === "2" && (
                               <Col className="col-12">
@@ -1118,106 +1086,75 @@ function renewalClu() {
                         </tr>
                       </tbody>
                     </div>
-                  </Col>
-                </Row>
+                  </div>
+                </div>
                 <hr></hr>
                 <br></br>
-                <Row className="col-12">
-                  <Col className="col-4">
-                    <Form.Label>
-                      <h2>
+                <div className="row-12">
+                  <div className="col md={4} xxl lg-4">
+                    <h2> Total number of EWS Plots/flats approved in the Layout Plan/Building Plan. </h2>
+                    <br></br>
+                    <FormControl>
+                      <h2>No. of Plots/flats.</h2>
+                      <input type="text" className="form-control" placeholder="" {...register("noOfFlats")} />
+                    </FormControl>
+                    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                    <FormControl>
+                      <h2> Status of allotment and possession of Plot/Flats of EWS category. </h2>
+                      <label htmlFor=" allotmentStatus">
                         {" "}
-                        Total number of EWS Plots/flats approved in the Layout Plan/Building Plan.
-                        <br></br>No. of Plots/flats.
-                        <span style={{ color: "red" }}>*</span>
-                      </h2>
-                    </Form.Label>
-                    <input type="text" className="form-control" placeholder="" {...register("noOfFlats")} />
-                  </Col>
-                  <Col className="col-4">
-                    <Form.Label>
-                      <h2>
-                        {" "}
-                        Status of allotment and possession of Plot/Flats of EWS category.
-                        <span style={{ color: "red" }}>*</span>
-                      </h2>
-                    </Form.Label>
-                    <label htmlFor=" allotmentStatus">
-                      {" "}
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      <input {...register("allotmentStatus")} type="radio" value="1" id="yes" /> &nbsp; Yes
-                    </label>{" "}
-                    <label htmlFor="allotmentStatus">
-                      &nbsp;&nbsp;
-                      <input {...register("allotmentStatus")} type="radio" value="2" id="no" /> &nbsp; No
-                    </label>
-                    {watch("allotmentStatus") === "1" && (
-                      <div className="card">
-                        <Row className="col-12">
-                          <Form.Label>
-                            <h2>Plot/Flats for which possession given. </h2>
-                          </Form.Label>
-                          <Col className="col-6">
-                            <Form.Label>
-                              <h2></h2>
-                            </Form.Label>
-                            <input type="text" className="form-control" placeholder="" />
-                          </Col>
-                          <Col className="col-6">
-                            <Form.Label>
-                              <h2></h2>
-                            </Form.Label>
-                            <select className="form-control" {...register("flatPossession")}>
-                              <option value=" ">Select value</option>
-                              <option value="1">Within time</option>
-                              <option value="2">Delayed</option>
-                              <option value="2">NA</option>
-                            </select>
-                          </Col>
-                        </Row>
-                      </div>
-                    )}
-                    {watch("flatPossession") === "2" && (
-                      <div className="card">
-                        <Row className="col-12">
-                          <Col className="col-12">
-                            <Form.Label>
-                              <h2>
-                                Whether composition fee paid.
-                                <label htmlFor=" compositionPaid">
-                                  {" "}
-                                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                  <input {...register("compositionPaid")} type="radio" value="1" id="yes" /> &nbsp; Yes
-                                </label>{" "}
-                                <label htmlFor="compositionPaid">
-                                  &nbsp;&nbsp;
-                                  <input {...register("compositionPaid")} type="radio" value="2" id="no" /> &nbsp; No
-                                </label>
-                              </h2>
-                            </Form.Label>
-                          </Col>
-                        </Row>
-                      </div>
-                    )}
-                    {watch("compositionPaid") === "1" && (
-                      <div className="card">
-                        <Row className="col-12">
-                          <Col className="col-12">
-                            <Form.Label>
-                              <h2>Amount</h2>
-                            </Form.Label>
-                            <input type="text" placeholder="" className="form-control" />
-                          </Col>
-                        </Row>
-                      </div>
-                    )}
-                  </Col>
-                </Row>
-                <br></br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input {...register("allotmentStatus")} type="radio" value="1" id="yes" /> &nbsp; Yes
+                      </label>{" "}
+                      <label htmlFor="allotmentStatus">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input {...register("allotmentStatus")} type="radio" value="2" id="no" /> &nbsp; No
+                      </label>
+                    </FormControl>
+                  </div>
+                </div>
+                {watch("allotmentStatus") === "1" && (
+                  <div className="col md={4} xxl lg-12">
+                    <FormControl>
+                      <h2>Plot/Flats for which possession given. </h2>
 
+                      <select className="form-control" {...register("flatPossession")}>
+                        <option value=" ">Select value</option>
+                        <option value="1">Within time</option>
+                        <option value="2">Delayed</option>
+                        <option value="2">NA</option>
+                      </select>
+                    </FormControl>
+                  </div>
+                )}
                 <br></br>
-                <Row className="col-12">
-                  <Col className="col-12">
+                {watch("flatPossession") === "2" && (
+                  <div className="col md={4} xxl lg-12">
+                    <h2>
+                      Whether composition fee paid.
+                      <label htmlFor=" compositionPaid">
+                        {" "}
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input {...register("compositionPaid")} type="radio" value="1" id="yes" /> &nbsp; Yes
+                      </label>{" "}
+                      <label htmlFor="compositionPaid">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input {...register("compositionPaid")} type="radio" value="2" id="no" /> &nbsp; No
+                      </label>
+                    </h2>
+                  </div>
+                )}
+                {watch("compositionPaid") === "1" && (
+                  <div className="col md={4} xxl lg-4">
+                    <h2>Amount</h2>
+
+                    <input type="text" placeholder="" className="form-control" />
+                  </div>
+                )}
+                <br></br>
+                <br></br>
+                <div className="row-12">
+                  <div className="col md={4} xxl lg-12">
                     <div className="table table-bordered table-responsive">
                       <thead>
                         <tr>
@@ -1298,26 +1235,27 @@ function renewalClu() {
                         </tr>
                       </tbody>
                     </div>
-                  </Col>
-                </Row>
+                  </div>
+                </div>
                 <br></br>
-                <Row className="col-12">
-                  <Col className="col-4">
-                    <Form.Label>
+                <div className="row-12">
+                  <div className="col md={4} xxl lg-4">
+                    <FormControl>
                       <h2>
                         {" "}
                         Amount <span style={{ color: "red" }}>*</span>
                       </h2>
-                    </Form.Label>
-                    <input type="text" className="form-control" placeholder="" readOnly {...register("amount")} />
-                  </Col>
 
-                  <Col className="col-4">
-                    <button type="submit" id="btnSearch" class="btn btn-success btn-md center-block" style={{ marginTop: "25px" }}>
-                      Pay
-                    </button>
-                  </Col>
-                </Row>
+                      <input type="text" className="form-control" placeholder="" readOnly {...register("amount")} />
+                    </FormControl>
+                    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+                    <FormControl>
+                      <button type="submit" id="btnSearch" class="btn btn-success btn-md center-block" style={{ marginTop: "25px" }}>
+                        Pay
+                      </button>
+                    </FormControl>
+                  </div>
+                </div>
                 <div class="row">
                   <div class="col-sm-12 text-right">
                     <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">

@@ -61,25 +61,21 @@ const MyApplications = ({ view }) => {
         <tr>
           <th
             style={{
-              border: "1px solid #ddd",
-              padding: "8px",
-              paddingTop: "12px",
-              paddingBottom: "12px",
+              border: "1px solid rgb(221, 221, 221)",
+              padding: "12px 8px",
               textAlign: "left",
-              backgroundColor: "#04AA6D",
+              backgroundColor: "rgb(65, 105, 225)",
               color: "white",
             }}
           >
-            id
+            ID
           </th>
           <th
             style={{
-              border: "1px solid #ddd",
-              padding: "8px",
-              paddingTop: "12px",
-              paddingBottom: "12px",
+              border: "1px solid rgb(221, 221, 221)",
+              padding: "12px 8px",
               textAlign: "left",
-              backgroundColor: "#04AA6D",
+              backgroundColor: "rgb(65, 105, 225)",
               color: "white",
             }}
           >
@@ -87,12 +83,10 @@ const MyApplications = ({ view }) => {
           </th>
           <th
             style={{
-              border: "1px solid #ddd",
-              padding: "8px",
-              paddingTop: "12px",
-              paddingBottom: "12px",
+              border: "1px solid rgb(221, 221, 221)",
+              padding: "12px 8px",
               textAlign: "left",
-              backgroundColor: "#04AA6D",
+              backgroundColor: "rgb(65, 105, 225)",
               color: "white",
             }}
           >
@@ -100,12 +94,10 @@ const MyApplications = ({ view }) => {
           </th>
           <th
             style={{
-              border: "1px solid #ddd",
-              padding: "8px",
-              paddingTop: "12px",
-              paddingBottom: "12px",
+              border: "1px solid rgb(221, 221, 221)",
+              padding: "12px 8px",
               textAlign: "left",
-              backgroundColor: "#04AA6D",
+              backgroundColor: "rgb(65, 105, 225)",
               color: "white",
             }}
           >
@@ -113,12 +105,10 @@ const MyApplications = ({ view }) => {
           </th>
           <th
             style={{
-              border: "1px solid #ddd",
-              padding: "8px",
-              paddingTop: "12px",
-              paddingBottom: "12px",
+              border: "1px solid rgb(221, 221, 221)",
+              padding: "12px 8px",
               textAlign: "left",
-              backgroundColor: "#04AA6D",
+              backgroundColor: "rgb(65, 105, 225)",
               color: "white",
             }}
           >
@@ -126,12 +116,10 @@ const MyApplications = ({ view }) => {
           </th>
           <th
             style={{
-              border: "1px solid #ddd",
-              padding: "8px",
-              paddingTop: "12px",
-              paddingBottom: "12px",
+              border: "1px solid rgb(221, 221, 221)",
+              padding: "12px 8px",
               textAlign: "left",
-              backgroundColor: "#04AA6D",
+              backgroundColor: "rgb(65, 105, 225)",
               color: "white",
             }}
           >
@@ -139,12 +127,10 @@ const MyApplications = ({ view }) => {
           </th>
           <th
             style={{
-              border: "1px solid #ddd",
-              padding: "8px",
-              paddingTop: "12px",
-              paddingBottom: "12px",
+              border: "1px solid rgb(221, 221, 221)",
+              padding: "12px 8px",
               textAlign: "left",
-              backgroundColor: "#04AA6D",
+              backgroundColor: "rgb(65, 105, 225)",
               color: "white",
             }}
           >

@@ -1565,10 +1565,8 @@ const ApllicantPuropseForm = (props) => {
                           <label htmlFor="sumsarsai">Total: {(watch("sarsai") * 0.00069)?.toFixed(3)}</label>&nbsp;&nbsp;
                         </td>
                         <td>
-                          <input disabled type="number" className="form-control" {...register("consolidatedTotal")} />
-                          {/* <label htmlFor="sumsarsai">
-                            Total: {(watch("marla") * 0.0062 + watch("sarsai") * 0.00069 + watch("kanal") * 0.125)?.toFixed(3)}
-                          </label> */}
+                          <input type="number" className="form-control" {...register("consolidatedTotal")} disabled />
+                          &nbsp;&nbsp;
                         </td>
                       </tr>
                     </tbody>
