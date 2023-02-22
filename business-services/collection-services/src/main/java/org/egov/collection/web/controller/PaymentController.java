@@ -180,10 +180,7 @@ public class PaymentController {
     @RequestMapping(value = "/_plainsearch", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<PaymentResponse> plainSearch(@ModelAttribute PaymentSearchCriteria paymentSearchCriteria,
-                                                       @RequestBody @Valid final RequestInfoWrapper requestInfoWrapper,
-                                                       @RequestParam(value = "businessservice", required = false) String businessservice,
-                                                       @RequestParam(value = "fromDate", required = false) Long fromDate,
-                                                       @RequestParam(value = "toDate", required = false) Long toDate)  {
+                                                       @RequestBody @Valid final RequestInfoWrapper requestInfoWrapper)  {
 
         log.info("businessservice: " + paymentSearchCriteria.getBusinessServices());
         log.info("tenantId: " + paymentSearchCriteria.getTenantId());
