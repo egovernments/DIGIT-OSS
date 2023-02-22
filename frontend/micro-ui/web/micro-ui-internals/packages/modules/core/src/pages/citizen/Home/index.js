@@ -155,7 +155,11 @@ const Home = () => {
         links: [
           {
             link: `/digit-ui/citizen/obps/SubmitNew`,
-            i18nKey: t("BG_CREATE_TRADE"),
+            i18nKey: t("Bank Guarantee Submission"),
+          },
+          {
+            link: `/digit-ui/citizen/obps/release`,
+            i18nKey: t("Release of Bank Guarantee"),
           },
           {
             link: `/digit-ui/citizen/tl/bankGuarantee/my-application`,
