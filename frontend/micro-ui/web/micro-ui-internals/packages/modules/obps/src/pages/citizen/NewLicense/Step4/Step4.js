@@ -29,6 +29,8 @@ import { CardLabelError } from "@egovernments/digit-ui-react-components";
 import { Toast } from "@egovernments/digit-ui-react-components";
 import _ from "lodash";
 import NumberInput from "../../../../components/NumberInput";
+import FileUpload from "@mui/icons-material/FileUpload";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 const AppliedDetailForm = (props) => {
   const location = useLocation();
@@ -525,18 +527,10 @@ const AppliedDetailForm = (props) => {
     };
     try {
       const Resp = await axios.post("/egov-mdms-service/v1/_search", payload);
-      const fars = Resp?.data?.MdmsRes?.["common-masters"]?.Purpose?.[0];
+      const fars = Resp?.data?.MdmsRes?.["common-masters"]?.Purpose?.[0]?.far;
+      console.log("fars", fars);
       const farsArr = [];
-      const checkk = Object?.keys(fars)?.map((item) => {
-        if (
-          item == "scrutinyFeeCharges" ||
-          item == "licenseFeeCharges" ||
-          item == "conversionCharges" ||
-          item == "externalDevelopmentCharges" ||
-          item == "stateInfrastructureDevelopmentCharges"
-        )
-          farsArr.push({ label: fars[item], value: fars[item] });
-      });
+      const testData = fars?.forEach((i) => farsArr?.push({ label: i[Object.keys(i)[0]], value: i[Object.keys(i)[0]] }));
       setFarArr(farsArr);
     } catch (error) {
       return error;
@@ -589,23 +583,33 @@ const AppliedDetailForm = (props) => {
       <div>
         {data?.length &&
           data?.map((x) => {
+            console.log("x====", x);
             return (
-              <div className="mt-4" key={x.id}>
-                {/* <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Rectangle No./Mustil"
-                      {...register("editRectangleNo")}
-                    /> */}
-                <h6>area: {x?.area}</h6>
-                <h6>code: {x?.code}</h6>
-                <h6>far: {x?.far}</h6>
-                <h6>name: {x?.name}</h6>
-                {!!x?.purposeDetail?.length && (
-                  <div className="mt-4">
-                    <Tree data={x?.purposeDetail} />
+              <div>
+                <h6>
+                  <span>
+                    <b>Purpose Name:</b>
+                  </span>
+                  {x?.name}
+                </h6>
+                <div className="row">
+                  <div className="col col-4 mt-3">
+                    <h6>
+                      Area: <input type="text" value={x?.area} className="form-control" placeholder="enter Area" {...register("far")} />
+                    </h6>
                   </div>
-                )}
+                  <div className="col col-4 mt-3">
+                    <h6>
+                      FAR: <ReactMultiSelect control={control} name="far" placeholder="Far" data={getFarArr} labels="Far" />
+                    </h6>
+                  </div>
+
+                  {!!x?.purposeDetail?.length && (
+                    <div className="ml-4 mt-4">
+                      <Tree data={x?.purposeDetail} />
+                    </div>
+                  )}
+                </div>
               </div>
             );
           })}
@@ -676,34 +680,26 @@ const AppliedDetailForm = (props) => {
                 </div>
 
                 <div>
-                  <h4>
-                    <b>Layout Plan</b>
-                  </h4>
-                  <div className="mt-3">
+                  <div className="mt-3 mb-3">
                     <h4>
-                      <b>Area for fees calculation</b>
+                      <b>Bifurcation Of Purpose</b>
                     </h4>
                   </div>
                 </div>
 
-                <div>
-                  <Tree data={newDataA} />
-                </div>
-
-                <Row className="mt-5">
-                  <Col md={4} xxl lg="4">
-                    <div>
-                      <label>
-                        <h2>
-                          Far <span style={{ color: "red" }}>*</span>
-                        </h2>
-                      </label>
-                      <ReactMultiSelect control={control} name="far" placeholder="Far" data={getFarArr} labels="Far" />
-                    </div>
-                  </Col>
-                </Row>
+                {newDataA && (
+                  <div>
+                    <Tree data={newDataA} />
+                  </div>
+                )}
 
                 <Col className="mt-4" col-12>
+                  <h4>
+                    <b>Layout Plan</b>
+                  </h4>
+                  {/* 
+                  
+
                   <div>
                     {stepData?.ApplicantPurpose?.purpose === "RPL" && (
                       <ResidentialPlottedForm
@@ -755,6 +751,7 @@ const AppliedDetailForm = (props) => {
                         handleWheel={handleWheel}
                         setError={setError}
                         error={error}
+                        getFarArr={getFarArr}
                       />
                     )}
                   </div>
@@ -901,6 +898,94 @@ const AppliedDetailForm = (props) => {
                         error={error}
                       />
                     )}
+                  </div> */}
+
+                  <h6 className="text-black mt-4">
+                    <b>Documents</b>
+                  </h6>
+                  <div className="row mt-3 ">
+                    <div className="col col-3">
+                      <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top">
+                        Layout Plan in pdf<span style={{ color: "red" }}>*</span>
+                      </h6>
+                      <label>
+                        <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "layoutPlanPdf")}
+                          accept="application/pdf"
+                        />
+                      </label>
+                      {watch("layoutPlanPdf") && (
+                        <a onClick={() => getDocShareholding(watch("layoutPlanPdf"), setLoader)} className="btn btn-sm ">
+                          <VisibilityIcon color="info" className="icon" />
+                        </a>
+                      )}
+                    </div>
+                    <div className="col col-3">
+                      <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top">
+                        Layout Plan in dxf<span style={{ color: "red" }}>*</span>
+                      </h6>
+                      <label>
+                        <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "layoutPlanDxf")}
+                          accept=".dxf"
+                        />
+                      </label>
+                      {watch("layoutPlanDxf") && (
+                        <a onClick={() => getDocShareholding(watch("layoutPlanDxf"), setLoader)} className="btn btn-sm ">
+                          <VisibilityIcon color="info" className="icon" />
+                        </a>
+                      )}
+                    </div>
+
+                    <div className="col col-3">
+                      <h6
+                        style={{ display: "flex" }}
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="Undertaking that no change has been made in the phasing "
+                      >
+                        Undertaking<span style={{ color: "red" }}>*</span>
+                      </h6>
+                      <label>
+                        <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "undertaking")}
+                          accept="application/pdf/jpeg/png"
+                        />
+                      </label>
+                      {watch("undertaking") && (
+                        <a onClick={() => getDocShareholding(watch("undertaking"), setLoader)} className="btn btn-sm ">
+                          <VisibilityIcon color="info" className="icon" />
+                        </a>
+                      )}
+                    </div>
+                    <div className="col col-3">
+                      <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Any other relevant document">
+                        Any other relevant document<span style={{ color: "red" }}>*</span>
+                      </h6>
+                      <label>
+                        <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "anyOtherDoc")}
+                          accept="application/pdf/jpeg/png"
+                        />
+                      </label>
+                      {watch("anyOtherDoc") && (
+                        <a onClick={() => getDocShareholding(watch("anyOtherDoc"), setLoader)} className="btn btn-sm ">
+                          <VisibilityIcon color="info" className="icon" />
+                        </a>
+                      )}
+                    </div>
                   </div>
 
                   <div class="row">
@@ -952,9 +1037,9 @@ const AppliedDetailForm = (props) => {
             <Row className="ml-auto">
               <Col>
                 <h4>
-                  1. DGPS points{" "}
+                  1. DGPS points
                   {/* <span className="text-primary">
-                    {" "}
+                    
                     <a onClick={() => setmodal1(true)}>
                       (Click here for instructions to receive DGPS-based coordinate points of the colony boundary)
                     </a>
@@ -972,7 +1057,7 @@ const AppliedDetailForm = (props) => {
                       <ModalHeader toggle={() => setmodal1(!modal1)}></ModalHeader>
                       <ModalBody style={{ fontSize: 20 }}>
                         <h2>
-                          {" "}
+                          
                           <b> A.</b> Applicant level Information: DGPS-based survey to be executed at the applicant level to collect coordinate points
                           of the colony boundary. <br></br>• DGPS Coordinate points to be collected for each divergent/edge of the colony boundary.
                           <br></br> • DGPS Coordinate Points to be entered by the applicant in e-License application in Web Form.<br></br>
