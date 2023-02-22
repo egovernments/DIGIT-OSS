@@ -3,7 +3,7 @@ import { Button } from "@material-ui/core";
 import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import axios from "axios";
-import { Col, Form } from "react-bootstrap";
+import { Row, Col, Form } from "react-bootstrap";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useLocation, useHistory } from "react-router-dom";
@@ -459,147 +459,147 @@ const ApllicantFormStep1 = (props) => {
               </div>
             </div>
           </div>
-        </div>
-        <div classname="card" style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "5px", marginBottom: "52px" }}>
-          <h5 className="card-title fw-bold">Authorized Person Information </h5>
-          <div className="row" class="ml-auto" style={{ marginBottom: 5 }}>
-            <Col md={4} xxl lg="4">
-              <div>
-                <Form.Label>
+
+          <div classname="card" style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "5px", marginBottom: "52px" }}>
+            <h5 className="card-title fw-bold">Authorized Person Information </h5>
+            <div className="row-12">
+              <div className="col md={4} xxl lg-4">
+                <FormControl>
                   <h2>
                     Name <span style={{ color: "red" }}>*</span>
                   </h2>
-                </Form.Label>
+
+                  <input type="text" className="form-control" placeholder="N/A" disabled {...register("authorizedName")} />
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.authorizedName && errors?.authorizedName?.message}
+                  </h3>
+                </FormControl>
+                &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                <FormControl>
+                  <h2>
+                    Mobile No.<span style={{ color: "red" }}>*</span>
+                  </h2>
+
+                  <Controller
+                    control={control}
+                    name="authorizedPerson"
+                    render={({ field: { onChange, value } }) => (
+                      <input
+                        type="text"
+                        className="Inputcontrol"
+                        class="form-control"
+                        id="standard-disabled"
+                        label="Disabled"
+                        placeholder="N/A"
+                        value={value}
+                        readOnly
+                        {...register("authorizedMobile")}
+                      />
+                      // <input type="text" value={value} className="form-control" placeholder="N/A" disabled {...register("authorizedMobile")} />
+                    )}
+                  />
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.authorizedMobile && errors?.authorizedMobile?.message}
+                  </h3>
+                </FormControl>
+                &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                <FormControl>
+                  <h2>
+                    Emailid for Authorized Signatory<span style={{ color: "red" }}>*</span>
+                  </h2>
+
+                  <Controller
+                    control={control}
+                    name="authorizedEmail"
+                    render={({ field: { onChange, value } }) => (
+                      <input
+                        type="text"
+                        className="Inputcontrol"
+                        class="form-control"
+                        id="standard-disabled"
+                        label="Disabled"
+                        placeholder="N/A"
+                        value={value}
+                        readOnly
+                        {...register("authorizedEmail")}
+                      />
+                      // <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="authorizedEmail" />
+                    )}
+                  />
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.authorizedEmail && errors?.authorizedEmail?.message}
+                  </h3>
+                </FormControl>
+                &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                <FormControl>
+                  <h2>Pan No.</h2>
+
+                  <Controller
+                    control={control}
+                    name="authorizedPan"
+                    render={({ field: { onChange, value } }) => (
+                      <input
+                        type="text"
+                        className="Inputcontrol"
+                        class="form-control"
+                        id="standard-disabled"
+                        label="Disabled"
+                        placeholder="N/A"
+                        value={value}
+                        readOnly
+                        {...register("authorizedPan")}
+                      />
+                      // <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="authorizedPan" />
+                    )}
+                  />
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.authorizedPan && errors?.authorizedPan?.message}
+                  </h3>
+                </FormControl>
               </div>
-              <input type="text" className="form-control" placeholder="N/A" disabled {...register("authorizedName")} />
-              <h3 className="error-message" style={{ color: "red" }}>
-                {errors?.authorizedName && errors?.authorizedName?.message}
-              </h3>
-            </Col>
-            &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
-            <FormControl>
-              <h2>
-                Mobile No.<span style={{ color: "red" }}>*</span>
-              </h2>
-
-              <Controller
-                control={control}
-                name="authorizedPerson"
-                render={({ field: { onChange, value } }) => (
-                  <input
-                    type="text"
-                    className="Inputcontrol"
-                    class="form-control"
-                    id="standard-disabled"
-                    label="Disabled"
-                    placeholder="N/A"
-                    value={value}
-                    readOnly
-                    {...register("authorizedMobile")}
-                  />
-                  // <input type="text" value={value} className="form-control" placeholder="N/A" disabled {...register("authorizedMobile")} />
-                )}
-              />
-              <h3 className="error-message" style={{ color: "red" }}>
-                {errors?.authorizedMobile && errors?.authorizedMobile?.message}
-              </h3>
-            </FormControl>
-            &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
-            <FormControl>
-              <h2>
-                Emailid for Authorized Signatory<span style={{ color: "red" }}>*</span>
-              </h2>
-
-              <Controller
-                control={control}
-                name="authorizedEmail"
-                render={({ field: { onChange, value } }) => (
-                  <input
-                    type="text"
-                    className="Inputcontrol"
-                    class="form-control"
-                    id="standard-disabled"
-                    label="Disabled"
-                    placeholder="N/A"
-                    value={value}
-                    readOnly
-                    {...register("authorizedEmail")}
-                  />
-                  // <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="authorizedEmail" />
-                )}
-              />
-              <h3 className="error-message" style={{ color: "red" }}>
-                {errors?.authorizedEmail && errors?.authorizedEmail?.message}
-              </h3>
-            </FormControl>
-            &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
-            <FormControl>
-              <h2>Pan No.</h2>
-
-              <Controller
-                control={control}
-                name="authorizedPan"
-                render={({ field: { onChange, value } }) => (
-                  <input
-                    type="text"
-                    className="Inputcontrol"
-                    class="form-control"
-                    id="standard-disabled"
-                    label="Disabled"
-                    placeholder="N/A"
-                    value={value}
-                    readOnly
-                    {...register("authorizedPan")}
-                  />
-                  // <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="authorizedPan" />
-                )}
-              />
-              <h3 className="error-message" style={{ color: "red" }}>
-                {errors?.authorizedPan && errors?.authorizedPan?.message}
-              </h3>
-            </FormControl>
+            </div>
           </div>
-        </div>
-        <br></br>
-        <div className="row-12">
-          <div className="col md={4} xxl lg-4">
-            <FormControl>
-              <div
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  if (developerDataLabel?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf)
-                    getDocShareholding(developerDataLabel?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf, setLoader);
-                  else setShowToastError({ key: "error" });
-                }}
-                id="btnSearch"
-                class=""
-              >
-                View Upload Digital Signature <VisibilityIcon color="info" className="icon" />
-              </div>
-            </FormControl>
-            &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
-            <FormControl>
-              <div
-                style={{ cursor: "pointer" }}
-                onClick={() => {
-                  if (developerDataLabel?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution)
-                    getDocShareholding(developerDataLabel?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution, setLoader);
-                  else setShowToastError({ key: "error" });
-                }}
-                id="btnSearch"
-                class=""
-              >
-                View Upload Board Resolution <VisibilityIcon color="info" className="icon" />
-              </div>
-            </FormControl>
+          <br></br>
+          <div className="row-12">
+            <div className="col md={4} xxl lg-4">
+              <FormControl>
+                <div
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    if (developerDataLabel?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf)
+                      getDocShareholding(developerDataLabel?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf, setLoader);
+                    else setShowToastError({ key: "error" });
+                  }}
+                  id="btnSearch"
+                  class=""
+                >
+                  View Upload Digital Signature <VisibilityIcon color="info" className="icon" />
+                </div>
+              </FormControl>
+              &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+              <FormControl>
+                <div
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    if (developerDataLabel?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution)
+                      getDocShareholding(developerDataLabel?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution, setLoader);
+                    else setShowToastError({ key: "error" });
+                  }}
+                  id="btnSearch"
+                  class=""
+                >
+                  View Upload Board Resolution <VisibilityIcon color="info" className="icon" />
+                </div>
+              </FormControl>
+            </div>
           </div>
-        </div>
 
-        <div class="row">
-          <div class="col-sm-12 text-right">
-            <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
-              Save and Continue
-            </button>
+          <div class="row">
+            <div class="col-sm-12 text-right">
+              <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
+                Save and Continue
+              </button>
+            </div>
           </div>
         </div>
       </form>

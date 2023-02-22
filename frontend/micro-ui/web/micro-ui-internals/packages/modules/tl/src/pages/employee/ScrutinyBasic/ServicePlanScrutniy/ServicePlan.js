@@ -50,9 +50,11 @@ const ServicePlanService = (props) => {
   const [smShow, setSmShow] = useState(false);
   const [labelValue, setLabelValue] = useState("");
   const Colors = {
-    approved: "#09cb3d",
-    disapproved: "#ff0000",
-    info: "#FFB602",
+    conditional:"#2874A6",
+    approved:"#09cb3d",
+    disapproved:"#ff0000",
+   
+    info:"#FFB602"
   };
 
   const handlemodaldData = (data) => {
@@ -77,6 +79,10 @@ const ServicePlanService = (props) => {
     template: Colors.info,
     certified: Colors.info,
     AutoCAD: Colors.info,
+    purpose: Colors.info,
+    totalArea: Colors.info,
+    devName: Colors.info,
+    developmentPlan: Colors.info,
     // pin: Colors.info,
     // tehsil: Colors.info,
     // district: Colors.info,
@@ -92,6 +98,10 @@ const ServicePlanService = (props) => {
 
   const fieldIdList = [
     { label: "LOI Number", key: "loiNumber" },
+    { label: "Name", key: "devName" },
+    { label: "Total Area", key: "totalArea" },
+    { label: "Purpose Of Licence", key: "purpose" },
+    { label: "Development Plan", key: "developmentPlan" },
     { label: "Uploaded Service Plan", key: "selfCertifiedDrawingsFromCharetedEng" },
     { label: "Undertaking Mobile No", key: "Undertaking" },
     { label: "Self-certified drawings from empanelled/certified architects that conform to the standard approved template. as per the TCP layout plan / Site plan.", key: "Selfcertified" },
@@ -111,7 +121,7 @@ const ServicePlanService = (props) => {
         console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
         if (fieldPresent && fieldPresent.length) {
           console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
-          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved ? Colors.approved : Colors.disapproved }
+          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved === "approved" ? Colors.approved : fieldPresent[0].isApproved === "disapproved" ? Colors.disapproved : fieldPresent[0].isApproved === "conditional" ? Colors.conditional : Colors.info }
 
         }
       }
@@ -172,7 +182,7 @@ const ServicePlanService = (props) => {
             <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Service Plan </h4>
             <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
               <Row>
-                <Col className="col-4">
+                <Col className="col-3">
                   {/* <Form.Group as={Col} controlId="formGridLicence"> */}
                   <div>
                     <Form.Label>
@@ -207,6 +217,7 @@ const ServicePlanService = (props) => {
                   </div>
                   {/* </Form.Group> */}
                 </Col>
+                
                 {/* <Col className="col-4">
                   <Form.Label>
                     <div>
@@ -295,6 +306,145 @@ const ServicePlanService = (props) => {
                   </Form.Label>
                 </Col> */}
               </Row>
+              <Row>
+            <Col className="col-3">
+              <div>
+                <label>
+                  <h2>
+                    Name
+                  </h2>
+                </label>
+              </div>
+              {/* <input
+                type="string"
+                className="form-control"
+                {...register("devName")}
+                onChange={(e) => setDevName(e.target.value)}
+                value={devName}
+                disabled
+              />  */}
+              <div className={classes.fieldContainer}>
+              <Form.Control className={classes.formControl} placeholder={apiResponse?.devName} disabled></Form.Control>
+
+              <ReportProblemIcon
+                style={{
+                  color: fieldIconColors.devName,
+                }}
+                onClick={() => {
+                  setOpennedModal("devName");
+                  setLabelValue("Name"),
+                    setSmShow(true),
+                    console.log("modal open"),
+                    setFieldValue(apiResponse !== null ? apiResponse.devName : null);
+                }}
+              ></ReportProblemIcon>
+              
+             
+            </div>
+            </Col>
+            <Col className="col-3">
+              <div>
+                <label>
+                  <h2>
+                  Development Plan
+                  </h2>
+                </label>
+              </div>
+              {/* <input
+                type="string"
+                className="form-control"
+                {...register("developmentPlan")}
+                onChange={(e) => setDevelopmentPlan(e.target.value)}
+                value={developmentPlan}
+                disabled
+              /> */}
+               <div className={classes.fieldContainer}>
+              <Form.Control className={classes.formControl} placeholder={apiResponse?.developmentPlan} disabled></Form.Control>
+
+              <ReportProblemIcon
+                style={{
+                  color: fieldIconColors.developmentPlan,
+                }}
+                onClick={() => {
+                  setOpennedModal("developmentPlan");
+                  setLabelValue("Development Plan"),
+                    setSmShow(true),
+                    console.log("modal open"),
+                    setFieldValue(apiResponse !== null ? apiResponse.developmentPlan : null);
+                }}
+              ></ReportProblemIcon>
+             
+            </div>
+            </Col>
+            <Col className="col-3">
+              <div>
+                <label>
+                  <h2>
+                  Purpose Of Licence 
+                  </h2>
+                </label>
+              </div>
+              {/* <input
+                type="string"
+                className="form-control"
+                {...register("purpose")}
+                onChange={(e) => setPurpose(e.target.value)}
+                value={purpose}
+                disabled
+              /> */}
+              <div className={classes.fieldContainer}>
+              <Form.Control className={classes.formControl} placeholder={apiResponse?.purpose} disabled></Form.Control>
+
+              <ReportProblemIcon
+                style={{
+                  color: fieldIconColors.purpose,
+                }}
+                onClick={() => {
+                  setOpennedModal("purpose");
+                  setLabelValue("Purpose Of Licence"),
+                    setSmShow(true),
+                    console.log("modal open"),
+                    setFieldValue(apiResponse !== null ? apiResponse.purpose : null);
+                }}
+              ></ReportProblemIcon>
+             
+            </div>
+            </Col>
+            <Col className="col-3">
+              <div>
+                <label>
+                  <h2>
+                  Total Area
+                  </h2>
+                </label>
+              </div>
+              {/* <input
+                type="string"
+                className="form-control"
+                {...register("totalArea")}
+                onChange={(e) => setTotalArea(e.target.value)}
+                value={totalArea}
+                disabled
+              /> */}
+               <div className={classes.fieldContainer}>
+              <Form.Control className={classes.formControl} placeholder={apiResponse?.totalArea} disabled></Form.Control>
+
+              <ReportProblemIcon
+                style={{
+                  color: fieldIconColors.totalArea,
+                }}
+                onClick={() => {
+                  setOpennedModal("totalArea");
+                  setLabelValue("Total Area"),
+                    setSmShow(true),
+                    console.log("modal open"),
+                    setFieldValue(apiResponse !== null ? apiResponse.totalArea : null);
+                }}
+              ></ReportProblemIcon>
+             
+            </div>
+            </Col>
+          </Row>
               <br></br>
               <div className="table table-bordered table-responsive">
                 <thead>

@@ -28,9 +28,11 @@ const LicenseDetailsScrutiny = (props) => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const Colors = {
-    approved: "#09cb3d",
-    disapproved: "#ff0000",
-    info: "#FFB602"
+    conditional:"#2874A6",
+    approved:"#09cb3d",
+    disapproved:"#ff0000",
+   
+    info:"#FFB602"
   }
   const [selectedFieldData, setSelectedFieldData] = useState();
   const [fieldValue, setFieldValue] = useState("");
@@ -94,8 +96,7 @@ const LicenseDetailsScrutiny = (props) => {
         console.log("filteration value", fieldPresent, fieldPresent[0]?.isApproved);
         if (fieldPresent && fieldPresent.length) {
           console.log("filteration value1", fieldPresent, fieldPresent[0]?.isApproved);
-          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved ? Colors.approved : Colors.disapproved }
-
+          tempFieldColorState = {...tempFieldColorState,[item.key]:fieldPresent[0].isApproved === "approved" ?Colors.approved: fieldPresent[0].isApproved === "disapproved" ? Colors.disapproved:fieldPresent[0].isApproved === "conditional" ? Colors.conditional:Colors.info}
         }
       }
     })

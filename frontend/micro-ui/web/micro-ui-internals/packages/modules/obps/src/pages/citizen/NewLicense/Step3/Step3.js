@@ -157,6 +157,11 @@ const LandScheduleForm = (props) => {
       dataIndex: "area",
     },
     {
+      key: "balanceOfParentLicence",
+      title: "Balance of Parent Licence ",
+      dataIndex: "balanceOfParentLicence",
+    },
+    {
       title: "Action",
       dataIndex: "",
       render: (data) => (
@@ -1088,11 +1093,13 @@ const LandScheduleForm = (props) => {
                             <label>
                               <h2>
                                 {" "}
-                                Width of Revenue Rasta(In Karam)<span style={{ color: "red" }}>*</span>&nbsp;
-                                <CalculateIcon color="primary" />
+                                Unconsolidated<span style={{ color: "red" }}>*</span>&nbsp;
                               </h2>
                             </label>
-                            <input type="number" className="form-control" {...register("revenueRastaWidth")} minLength={10} maxLength={99} />
+                            <select class="form-control">
+                              <option value="Karam"> Karam</option>
+                              <option value="Gatta">Gatta</option>
+                            </select>
                           </div>
                         </div>
                       )}
@@ -1225,17 +1232,15 @@ const LandScheduleForm = (props) => {
                               {errors?.sectionSix && errors?.sectionSix?.message}
                             </h3>
                           </div>
-                          {/* <div className="col col-12">
+                          <div className="col col-12">
                             <label>
-                              <h2>
-                                Date of Award <span style={{ color: "red" }}>*</span>{" "}
-                              </h2>
+                              <h2>Date of Award</h2>
                             </label>
                             <input type="date" className="form-control" {...register("rewardDate")} />
                             <h3 className="error-message" style={{ color: "red" }}>
                               {errors?.rewardDate && errors?.rewardDate?.message}
                             </h3>
-                          </div> */}
+                          </div>
                         </div>
                       )}
                     </div>
@@ -1291,13 +1296,13 @@ const LandScheduleForm = (props) => {
                               />
                               <div className="invalid-feedback">{errors?.releaseStatus?.message}</div>
                             </div>
-                            <div className="col col-3">
+                            {/* <div className="col col-3">
                               <label>
                                 <h2>Date of Award</h2>
                               </label>
                               <input type="date" {...register("awardDate")} className="form-control" />
                               <div className="invalid-feedback">{errors?.awardDate?.message}</div>
-                            </div>
+                            </div> */}
                             <div className="col col-3">
                               <label>
                                 <h2>Date of Release</h2>{" "}
@@ -1491,9 +1496,9 @@ const LandScheduleForm = (props) => {
                         <div className="col col-12">
                           <div className="col col-3">
                             <label>
-                              <h2>(a)&nbsp;&nbsp;Width of Constructed ROW of plotted licenced colony (In meters)</h2>{" "}
+                              <h2>(a)&nbsp;&nbsp;Enter Width in Meters</h2>{" "}
                             </label>
-                            <input type="text" {...register("constructedRowWidth")} className="form-control" />
+                            <input type="number" {...register("constructedRowWidth")} className="form-control" />
                           </div>
                         </div>
                         <div className="col col-12">
@@ -1556,8 +1561,8 @@ const LandScheduleForm = (props) => {
                       {watch("approachFromProposedSector") === "Y" && (
                         <div>
                           <div className="col col-5">
-                            <label>(a)&nbsp;&nbsp;Width of sector road/ Development Plan Road (In meters)</label>
-                            <input type="text" {...register("sectorAndDevelopmentWidth")} className="form-control" />
+                            <label>(a)&nbsp;&nbsp;Enter Width in Meters</label>
+                            <input type="number" {...register("sectorAndDevelopmentWidth")} className="form-control" />
                           </div>
                           <h2>
                             (b)&nbsp;&nbsp;Whether acquired? &nbsp;&nbsp;
@@ -1621,8 +1626,8 @@ const LandScheduleForm = (props) => {
                       {watch("approachFromInternalCirculation") === "Y" && (
                         <div>
                           <div className="col col-3">
-                            <label>(a)&nbsp;&nbsp;Width of internal circulation / sectoral plan road (In meters)</label>
-                            <input type="text" {...register("internalAndSectoralWidth")} className="form-control" />
+                            <label>(a)&nbsp;&nbsp;Enter Width in Meters</label>
+                            <input type="number" {...register("internalAndSectoralWidth")} className="form-control" />
                           </div>
                           <h2>
                             (b)&nbsp;&nbsp;Whether acquired? &nbsp;&nbsp;
@@ -1707,14 +1712,14 @@ const LandScheduleForm = (props) => {
                     </div>
                     {watch("availableExistingApproach") === "Y" && (
                       <div className="row">
-                        <div className="col col-4">
+                        {/* <div className="col col-4">
                           <label>
                             <h2>
                               Remark <span style={{ color: "red" }}>*</span>
                             </h2>
                           </label>
                           <input type="text" className="form-control" {...register("availableExistingApproachRemark")} />
-                        </div>
+                        </div> */}
                         <div className="col col-3">
                           <h2 style={{ display: "flex" }}>Upload document.</h2>
                           <label>
@@ -2011,7 +2016,7 @@ const LandScheduleForm = (props) => {
                           <div className="col col-12">
                             <label>
                               <h2>
-                                Width of ROW (in ft.) <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
+                                Width of Row (in ft.) <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
                                 <CalculateIcon color="primary" />
                               </h2>
                             </label>
@@ -2408,7 +2413,7 @@ const LandScheduleForm = (props) => {
                     </h2>
                   </label>
                 </div>
-                <input type="text" className="form-control" {...register("areaAppliedmigration")} />
+                <input type="number" className="form-control" {...register("areaAppliedmigration")} />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.areaAppliedmigration && errors?.areaAppliedmigration?.message}
                 </h3>
