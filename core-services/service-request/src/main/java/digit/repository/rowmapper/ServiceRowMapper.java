@@ -23,6 +23,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
+import static digit.constants.Constants.VALUE_JSON_PATH;
+
 @Component
 public class ServiceRowMapper implements ResultSetExtractor<List<Service>> {
 
@@ -91,7 +93,7 @@ public class ServiceRowMapper implements ResultSetExtractor<List<Service>> {
 
     private Object getProperTypeCastedAttributeValue(PGobject genericValueObject) {
         String valueJson = genericValueObject.getValue();
-        return JsonPath.read(valueJson, "$.value");
+        return JsonPath.read(valueJson, VALUE_JSON_PATH);
     }
 
     private JsonNode getAdditionalDetail(PGobject pGobject){
