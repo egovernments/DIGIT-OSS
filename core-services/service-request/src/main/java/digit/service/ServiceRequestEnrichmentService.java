@@ -1,14 +1,13 @@
 package digit.service;
 
 import digit.models.coremodels.AuditDetails;
-import digit.web.models.Service;
-import digit.web.models.ServiceDefinition;
-import digit.web.models.ServiceDefinitionRequest;
-import digit.web.models.ServiceRequest;
+import digit.web.models.*;
 import org.egov.common.contract.request.RequestInfo;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
+import java.util.*;
+
+import static digit.constants.Constants.*;
 
 @Component
 public class ServiceRequestEnrichmentService {
@@ -37,6 +36,15 @@ public class ServiceRequestEnrichmentService {
         // Enrich audit details for service definition
         serviceDefinition.setAuditDetails(auditDetails);
 
+        // Initialize values with empty strings in case of non-list type attribute definition values
+        serviceDefinition.getAttributes().forEach(attributeDefinition -> {
+            if(!(attributeDefinition.getDataType().equals(AttributeDefinition.DataTypeEnum.SINGLEVALUELIST) || attributeDefinition.getDataType().equals(AttributeDefinition.DataTypeEnum.MULTIVALUELIST))){
+                List<String> emptyStringList = new ArrayList<>();
+                emptyStringList.add("");
+                attributeDefinition.setValues(emptyStringList);
+            }
+        });
+
     }
 
     public void enrichServiceRequest(ServiceRequest serviceRequest) {
@@ -63,5 +71,16 @@ public class ServiceRequestEnrichmentService {
         // Enrich audit details for service
         service.setAuditDetails(auditDetails);
 
+        // Convert incoming attribute value into JSON object
+        convertAttributeValuesIntoJson(serviceRequest);
+
+    }
+
+    private void convertAttributeValuesIntoJson(ServiceRequest serviceRequest) {
+        serviceRequest.getService().getAttributes().forEach(attributeValue -> {
+            Map<String, Object> jsonObj = new HashMap<>();
+            jsonObj.put(VALUE, attributeValue.getValue());
+            attributeValue.setValue(jsonObj);
+        });
     }
 }

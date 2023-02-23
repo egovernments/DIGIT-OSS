@@ -15,7 +15,7 @@ CREATE TABLE eg_service_attribute_value(
     id character varying(64),
     referenceId character varying(64),
     attributeCode character varying(64),
-    "value" character varying(128),
+    "value" JSONB,
     createdBy character varying(64),
     lastModifiedBy character varying(64),
     createdTime bigint,

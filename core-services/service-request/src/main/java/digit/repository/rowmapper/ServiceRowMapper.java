@@ -3,6 +3,7 @@ package digit.repository.rowmapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.JsonPath;
 import digit.models.coremodels.AuditDetails;
 import digit.web.models.AttributeDefinition;
 import digit.web.models.AttributeValue;
@@ -65,13 +66,14 @@ public class ServiceRowMapper implements ResultSetExtractor<List<Service>> {
     }
 
     private void addAttributeValues(ResultSet rs, Service service) throws SQLException, DataAccessException {
+        PGobject genericValueObject = (PGobject) rs.getObject("attribute_value_value");
         AuditDetails auditDetails = AuditDetails.builder().createdBy(rs.getString("attribute_value_createdby"))
                 .createdTime(rs.getLong("attribute_value_createdtime")).lastModifiedBy(rs.getString("attribute_value_lastmodifiedby"))
                 .lastModifiedTime(rs.getLong("attribute_value_lastmodifiedtime")).build();
         AttributeValue attributeValue = AttributeValue.builder().id(rs.getString("attribute_value_id"))
                 .referenceId(rs.getString("attribute_value_referenceid"))
                 .attributeCode(rs.getString("attribute_value_attributecode"))
-                .value(rs.getObject("attribute_value_value"))
+                .value(getProperTypeCastedAttributeValue(genericValueObject))
                 .auditDetails(auditDetails)
                 .additionalDetails(getAdditionalDetail((PGobject) rs.getObject("attribute_value_additionaldetails")))
                 .build();
@@ -85,6 +87,11 @@ public class ServiceRowMapper implements ResultSetExtractor<List<Service>> {
         }
 
 
+    }
+
+    private Object getProperTypeCastedAttributeValue(PGobject genericValueObject) {
+        String valueJson = genericValueObject.getValue();
+        return JsonPath.read(valueJson, "$.value");
     }
 
     private JsonNode getAdditionalDetail(PGobject pGobject){
