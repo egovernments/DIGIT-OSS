@@ -42,8 +42,8 @@ public class PaymentUpdateService {
 	private ObjectMapper mapper;
 
 	@Autowired
-	public PaymentUpdateService(FSMConfiguration config, FSMRepository repository,
-			WorkflowIntegrator wfIntegrator, EnrichmentService enrichmentService, ObjectMapper mapper) {
+	public PaymentUpdateService(FSMConfiguration config, FSMRepository repository, WorkflowIntegrator wfIntegrator,
+			EnrichmentService enrichmentService, ObjectMapper mapper) {
 		this.config = config;
 		this.repository = repository;
 		this.wfIntegrator = wfIntegrator;
@@ -52,46 +52,46 @@ public class PaymentUpdateService {
 
 	}
 
-	final String tenantId = "tenantId";
+	static final String TENANT_ID = "tenantId";
 
-	final String businessService = "businessService";
+	static final String BUSINESS_SERVICE = "businessService";
 
-	final String consumerCode = "consumerCode";
+	static final String CONSUMER_CODE = "consumerCode";
 
 	/**
 	 * Process the message from kafka and updates the status to paid
 	 * 
-	 * @param record
-	 *            The incoming message from receipt create consumer
+	 * @param record The incoming message from receipt create consumer
 	 */
 	public void process(HashMap<String, Object> record) {
 
 		try {
+			log.info("Reached the method process for updating the status from payment pending to Assign DSO::@@@");
 			PaymentRequest paymentRequest = mapper.convertValue(record, PaymentRequest.class);
 			RequestInfo requestInfo = paymentRequest.getRequestInfo();
 			List<PaymentDetail> paymentDetails = paymentRequest.getPayment().getPaymentDetails();
-			String tenantId = paymentRequest.getPayment().getTenantId();
+			String tenantIdData = paymentRequest.getPayment().getTenantId();
 
 			for (PaymentDetail paymentDetail : paymentDetails) {
 
-				if(paymentDetail.getBusinessService().equalsIgnoreCase(FSMConstants.FSM_PAY_BUSINESS_SERVICE)) {
-					
-				
+				if (paymentDetail.getBusinessService().equalsIgnoreCase(FSMConstants.FSM_PAY_BUSINESS_SERVICE)) {
+
+					log.info(
+							"Reached the method process if condition for updating the status from payment pending to Assign DSO::@@@");
 					FSMSearchCriteria searchCriteria = new FSMSearchCriteria();
-					searchCriteria.setTenantId(tenantId);
+					searchCriteria.setTenantId(tenantIdData);
 					List<String> applNos = Arrays.asList(paymentDetail.getBill().getConsumerCode());
 					searchCriteria.setApplicationNos(applNos);
 					FSMResponse fsmResponse = repository.getFSMData(searchCriteria, null);
 					List<FSM> fsms = fsmResponse.getFsm();
-					enrichmentService.enrichFSMSearch(fsms, requestInfo, tenantId);
+					enrichmentService.enrichFSMSearch(fsms, requestInfo, tenantIdData);
 					if (CollectionUtils.isEmpty(fsms)) {
 						throw new CustomException(FSMErrorConstants.INVALID_RECEIPT,
-								"No FSM Application found for the comsumerCode "
-										+ searchCriteria.getApplicationNos());
+								"No FSM Application found for the comsumerCode " + searchCriteria.getApplicationNos());
 					}
 					Workflow workflow = Workflow.builder().action("PAY").build();
 					fsms.forEach(fsm -> {
-					
+
 						FSMRequest updateRequest = FSMRequest.builder().RequestInfo(requestInfo).fsm(fsm).build();
 						updateRequest.setWorkflow(workflow);
 
@@ -99,29 +99,22 @@ public class PaymentUpdateService {
 						requestInfo.getUserInfo().getRoles().add(role);
 						role = Role.builder().code("CITIZEN").tenantId(fsms.get(0).getTenantId()).build();
 						requestInfo.getUserInfo().getRoles().add(role);
-						
 
 						/*
 						 * calling workflow to update status
 						 */
+						log.info("Reached the method process code calling the workflow::@@@");
 						wfIntegrator.callWorkFlow(updateRequest);
 
-						log.debug(" the status of the application is : " + updateRequest.getFsm().getStatus());
-
-						/*
-						 * calling repository to update the object in eg_bpa_buildingpaln tables
-						 */
-						enrichmentService.postStatusEnrichment(updateRequest);
+						log.info(" the status of the application is : " + updateRequest.getFsm().getStatus());
 
 						repository.update(updateRequest, false);
 					});
 				}
-					
 
-				
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.info("Failed to parse additionalDetail object", e.getMessage());
 		}
 	}
 }
