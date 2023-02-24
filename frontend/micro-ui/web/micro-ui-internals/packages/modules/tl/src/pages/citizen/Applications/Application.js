@@ -64,7 +64,7 @@ const MyApplications = ({ view }) => {
               border: "1px solid rgb(221, 221, 221)",
               padding: "12px 8px",
               textAlign: "left",
-              backgroundColor: "rgb(65, 105, 225)",
+              backgroundColor: "#024f9d",
               color: "white",
             }}
           >
@@ -75,7 +75,7 @@ const MyApplications = ({ view }) => {
               border: "1px solid rgb(221, 221, 221)",
               padding: "12px 8px",
               textAlign: "left",
-              backgroundColor: "rgb(65, 105, 225)",
+              backgroundColor: "#024f9d",
               color: "white",
             }}
           >
@@ -86,7 +86,7 @@ const MyApplications = ({ view }) => {
               border: "1px solid rgb(221, 221, 221)",
               padding: "12px 8px",
               textAlign: "left",
-              backgroundColor: "rgb(65, 105, 225)",
+              backgroundColor: "#024f9d",
               color: "white",
             }}
           >
@@ -97,7 +97,7 @@ const MyApplications = ({ view }) => {
               border: "1px solid rgb(221, 221, 221)",
               padding: "12px 8px",
               textAlign: "left",
-              backgroundColor: "rgb(65, 105, 225)",
+              backgroundColor: "#024f9d",
               color: "white",
             }}
           >
@@ -108,7 +108,7 @@ const MyApplications = ({ view }) => {
               border: "1px solid rgb(221, 221, 221)",
               padding: "12px 8px",
               textAlign: "left",
-              backgroundColor: "rgb(65, 105, 225)",
+              backgroundColor: "#024f9d",
               color: "white",
             }}
           >
@@ -119,7 +119,7 @@ const MyApplications = ({ view }) => {
               border: "1px solid rgb(221, 221, 221)",
               padding: "12px 8px",
               textAlign: "left",
-              backgroundColor: "rgb(65, 105, 225)",
+              backgroundColor: "#024f9d",
               color: "white",
             }}
           >
@@ -130,7 +130,7 @@ const MyApplications = ({ view }) => {
               border: "1px solid rgb(221, 221, 221)",
               padding: "12px 8px",
               textAlign: "left",
-              backgroundColor: "rgb(65, 105, 225)",
+              backgroundColor: "#024f9d",
               color: "white",
             }}
           >

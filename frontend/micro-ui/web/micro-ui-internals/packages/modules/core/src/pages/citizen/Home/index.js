@@ -517,7 +517,8 @@ const Home = () => {
             ) : (
               <div className="WhatsNewSection">
                 <div className="headSection">
-                  <h2>{t("DASHBOARD_WHATS_NEW_LABEL")}</h2>
+                  {/* <h2>{t("DASHBOARD_WHATS_NEW_LABEL")}</h2> */}
+                  <h2>What's New</h2>
                   <p onClick={() => history.push("/digit-ui/citizen/engagement/whats-new")}>{t("DASHBOARD_VIEW_ALL_LABEL")}</p>
                 </div>
                 <WhatsNewCard {...EventsData?.[0]} />
