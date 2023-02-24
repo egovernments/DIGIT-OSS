@@ -11,6 +11,6 @@ public class BillingSlabProducer {
 	private CustomKafkaTemplate<String, Object> kafkaTemplate;
 
 	public void push(String topic, Object value) {
-		kafkaTemplate.send(topic, value); // TODO enable after persister configuration
+		kafkaTemplate.send(topic, value);
 	}
 }
