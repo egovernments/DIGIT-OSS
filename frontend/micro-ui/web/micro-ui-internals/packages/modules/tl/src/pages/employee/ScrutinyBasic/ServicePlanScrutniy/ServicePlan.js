@@ -651,6 +651,364 @@ const ServicePlanService = (props) => {
                     </td>
                   </tr>
                 </tbody>
+                { (apiResponse?.purpose === "DDJAY_APHP" || apiResponse?.purpose === "RPL" || apiResponse?.purpose === "NILP"|| apiResponse?.purpose === "NILPC"|| apiResponse?.purpose === "IPA" || apiResponse?.purpose === "CPRS" || apiResponse?.purpose === "CICS") && (
+              
+              <tbody>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">6.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2>Previously Uploaded layout plan (call)</h2>
+                  {/* {drawingErr.selfCertifiedDrawingFromEmpaneledDoc ? <p style={{color: 'red'}}>Please upload self-certified drawings from empanelled/certified architects*</p> : " "} */}
+                </td>
+                {/* <td component="th" scope="row">
+                  <label for='file-input-1'>
+                    <FileUploadIcon 
+                    color="primary"
+                    />
+                  </label>
+                  <input
+                    type="file"
+                    className="form-control"
+                    id="file-input-1"
+                    onChange={(e) => getDocumentData(e?.target?.files[0], "selfCertifiedDrawingFromEmpaneledDoc")}
+                    style={{display: "none"}}
+                  />
+                    
+                  {fileStoreId?.selfCertifiedDrawingFromEmpaneledDoc ? 
+                  <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.selfCertifiedDrawingFromEmpaneledDoc)}>
+                    {" "}
+                  </VisibilityIcon>
+                  : "" }
+                  {applicationId && (!fileStoreId?.selfCertifiedDrawingFromEmpaneledDoc) &&
+                  <div className="btn btn-sm col-md-4">
+                    <IconButton onClick={()=>downloadDocument(selfCertifiedDrawing)}>
+                        <FileDownload color="primary" className="mx-1" />
+                    </IconButton>
+                      <IconButton onClick={()=>viewDocument(selfCertifiedDrawing)}>
+                        <VisibilityIcon color="info" className="icon" />
+                      </IconButton>
+                  </div> 
+                  }
+                </td> */}
+                <td component="th" scope="row">
+                      <div className="btn btn-sm col-md-4">
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.certifieadCopyOfThePlan)}>
+                        <Visibility color="info" className="icon" />
+                        </IconButton>
+                      </div>
+
+                      <div className="btn btn-sm col-md-4">
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.certifieadCopyOfThePlan)}>
+                        <FileDownload color="primary" className="mx-1" />
+                        </IconButton>
+                      </div>
+                      <div className="btn btn-sm col-md-4">
+                        <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.certified,
+                          }}
+                          onClick={() => {
+                            setOpennedModal("certified");
+                            setLabelValue("Certified copy of the Service plan verified by a third party"),
+                              setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(apiResponse !== null ? apiResponse?.certifieadCopyOfThePlan : null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
+                    </td>
+              </tr>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">7.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2>Upload the Revised layout plan</h2>
+                  {/* {drawingErr.environmentalClearance ? <p style={{color: 'red'}}>Please upload environmental clearance drawings*</p> : " "} */}
+                </td>
+                {/* <td component="th" scope="row">
+                <label for='file-input-2'>
+                    <FileUploadIcon 
+                    color="primary"
+                    />
+                  </label>
+                  <input
+                    type="file"
+                    className="form-control"
+                    id="file-input-2"
+                    // {...register("environmentalClearance")}
+                    onChange={(e) => getDocumentData(e?.target?.files[0], "environmentalClearance")}
+                    style={{display: "none"}}
+                  />
+                  {fileStoreId?.environmentalClearance ? 
+                  <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.environmentalClearance)}>
+                    {" "}
+                  </VisibilityIcon>
+                  : ""}
+                   {applicationId && (!fileStoreId?.environmentalClearance) && 
+                  <div className="btn btn-sm col-md-4">
+                    <IconButton onClick={()=>downloadDocument(environmental)}>
+                        <FileDownload color="primary" className="mx-1" />
+                    </IconButton>
+                      <IconButton onClick={()=>viewDocument(environmental)}>
+                        <VisibilityIcon color="info" className="icon" />
+                      </IconButton>
+                  </div> 
+                  }
+                </td> */}
+                <td component="th" scope="row">
+                      <div className="btn btn-sm col-md-4">
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.certifieadCopyOfThePlan)}>
+                        <Visibility color="info" className="icon" />
+                        </IconButton>
+                      </div>
+
+                      <div className="btn btn-sm col-md-4">
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.certifieadCopyOfThePlan)}>
+                        <FileDownload color="primary" className="mx-1" />
+                        </IconButton>
+                      </div>
+                      <div className="btn btn-sm col-md-4">
+                        <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.certified,
+                          }}
+                          onClick={() => {
+                            setOpennedModal("certified");
+                            setLabelValue("Certified copy of the Service plan verified by a third party"),
+                              setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(apiResponse !== null ? apiResponse?.certifieadCopyOfThePlan : null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
+                    </td>
+              </tr>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">8.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2>Upload Demarcation Plan in AutoCAD (DXF) file</h2>
+                  {/* {drawingErr.shapeFileAsPerTemplate ? <p style={{color: 'red'}}>Please upload service plan pdf and gis format*</p> : " "} */}
+
+                </td>
+                {/* <td component="th" scope="row">
+                <label for='file-input-3'>
+                    <FileUploadIcon 
+                    color="primary"
+                    />
+                  </label>
+                  <input
+                    type="file"
+                    className="form-control"
+                    // {...register("shapeFileAsPerTemplate")}
+                    id="file-input-3"
+                    onChange={(e) => getDocumentData(e?.target?.files[0], "shapeFileAsPerTemplate")}
+                    style={{display: "none"}}
+                  />
+                  {fileStoreId?.shapeFileAsPerTemplate ? 
+                  <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.shapeFileAsPerTemplate)}>
+                    {" "}
+                  </VisibilityIcon>
+                    : ""}
+                   {applicationId && (!fileStoreId?.shapeFileAsPerTemplate) && 
+                  <div className="btn btn-sm col-md-4">
+                    <IconButton onClick={()=>downloadDocument(gisFormat)}>
+                        <FileDownload color="primary" className="mx-1" />
+                    </IconButton>
+                      <IconButton onClick={()=>viewDocument(gisFormat)}>
+                        <VisibilityIcon color="info" className="icon" />
+                      </IconButton>
+                  </div> 
+                  }
+                </td> */}
+                <td component="th" scope="row">
+                      <div className="btn btn-sm col-md-4">
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.certifieadCopyOfThePlan)}>
+                        <Visibility color="info" className="icon" />
+                        </IconButton>
+                      </div>
+
+                      <div className="btn btn-sm col-md-4">
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.certifieadCopyOfThePlan)}>
+                        <FileDownload color="primary" className="mx-1" />
+                        </IconButton>
+                      </div>
+                      <div className="btn btn-sm col-md-4">
+                        <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.certified,
+                          }}
+                          onClick={() => {
+                            setOpennedModal("certified");
+                            setLabelValue("Certified copy of the Service plan verified by a third party"),
+                              setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(apiResponse !== null ? apiResponse?.certifieadCopyOfThePlan : null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
+                    </td>
+              </tr>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">9.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2>Upload Demarcation Plan in PDF (OCR Compatible) + GIS format.</h2>
+                  {/* {drawingErr.autoCadFile ? <p style={{color: 'red'}}>Please upload autocad file*</p> : " "} */}
+                </td>
+                {/* <td component="th" scope="row">
+                <label for='file-input-4'>
+                    <FileUploadIcon 
+                    color="primary"
+                    />
+                  </label>
+                  <input
+                    type="file"
+                    className="form-control"
+                    id="file-input-4"
+                    // {...register("autoCadFile")}
+                    onChange={(e) => getDocumentData(e?.target?.files[0], "autoCadFile")}
+                    style={{display: "none"}}
+                  />
+                  {fileStoreId?.autoCadFile ? 
+                  <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.autoCadFile)}>
+                    {" "}
+                  </VisibilityIcon>
+                  : "" }
+                   {applicationId && (!fileStoreId?.autoCadFile) &&
+                  <div className="btn btn-sm col-md-4">
+                    <IconButton onClick={()=>downloadDocument(autocad)}>
+                        <FileDownload color="primary" className="mx-1" />
+                    </IconButton>
+                      <IconButton onClick={()=>viewDocument(autocad)}>
+                        <VisibilityIcon color="info" className="icon" />
+                      </IconButton>
+                  </div> 
+                  }
+                </td> */}
+                <td component="th" scope="row">
+                      <div className="btn btn-sm col-md-4">
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.certifieadCopyOfThePlan)}>
+                        <Visibility color="info" className="icon" />
+                        </IconButton>
+                      </div>
+
+                      <div className="btn btn-sm col-md-4">
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.certifieadCopyOfThePlan)}>
+                        <FileDownload color="primary" className="mx-1" />
+                        </IconButton>
+                      </div>
+                      <div className="btn btn-sm col-md-4">
+                        <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.certified,
+                          }}
+                          onClick={() => {
+                            setOpennedModal("certified");
+                            setLabelValue("Certified copy of the Service plan verified by a third party"),
+                              setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(apiResponse !== null ? apiResponse?.certifieadCopyOfThePlan : null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
+                    </td>
+              </tr>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">10.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2>Upload Excel of detailed layout structure</h2>
+                 
+
+                </td>
+             
+                <td component="th" scope="row">
+                      <div className="btn btn-sm col-md-4">
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.certifieadCopyOfThePlan)}>
+                        <Visibility color="info" className="icon" />
+                        </IconButton>
+                      </div>
+
+                      <div className="btn btn-sm col-md-4">
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.certifieadCopyOfThePlan)}>
+                        <FileDownload color="primary" className="mx-1" />
+                        </IconButton>
+                      </div>
+                      <div className="btn btn-sm col-md-4">
+                        <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.certified,
+                          }}
+                          onClick={() => {
+                            setOpennedModal("certified");
+                            setLabelValue("Certified copy of the Service plan verified by a third party"),
+                              setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(apiResponse !== null ? apiResponse?.certifieadCopyOfThePlan : null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
+                    </td>
+              </tr>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">11.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2>Any other relevant document </h2>
+                 
+
+                </td>
+             
+                <td component="th" scope="row">
+                      <div className="btn btn-sm col-md-4">
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.certifieadCopyOfThePlan)}>
+                        <Visibility color="info" className="icon" />
+                        </IconButton>
+                      </div>
+
+                      <div className="btn btn-sm col-md-4">
+                        <IconButton onClick={()=>getDocShareholding(apiResponse?.certifieadCopyOfThePlan)}>
+                        <FileDownload color="primary" className="mx-1" />
+                        </IconButton>
+                      </div>
+                      <div className="btn btn-sm col-md-4">
+                        <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.certified,
+                          }}
+                          onClick={() => {
+                            setOpennedModal("certified");
+                            setLabelValue("Certified copy of the Service plan verified by a third party"),
+                              setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(apiResponse !== null ? apiResponse?.certifieadCopyOfThePlan : null);
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
+                    </td>
+              </tr>
+              </tbody>
+              )}
               </div>
 
               
