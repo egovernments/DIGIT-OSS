@@ -13,6 +13,7 @@ import {
 import Timeline from "../components/Timeline";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
+import { useForm } from "react-hook-form";
 
 const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setError: setFormError, clearErrors: clearFormErrors, formState }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -27,6 +28,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
   const isCitizenUrl = Digit.Utils.browser.isMobile() ? true : false;
   let isopenlink = window.location.href.includes("/openlink/");
   const [isRequiredField, setRequiredField] = useState(true);
+  // const [docList, setDocList] = useState({});
   if (isopenlink)
     window.onunload = function () {
       sessionStorage.removeItem("Digit.BUILDING_PERMIT");
@@ -81,6 +83,13 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
 
   const handleSubmit = () => {
     let document = formData.documents;
+    documents.map((dataFile, index) => {
+      console.log(
+        "515151",
+        documents?.filter((item) => item?.documentType)
+      );
+    });
+
     let documentStep;
     let regularDocs = [];
     bpaTaxDocuments &&
@@ -91,6 +100,32 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
         if (docobject) regularDocs.push(docobject);
       });
     documentStep = { ...document, documents: regularDocs };
+    console.log("RTGT", documentStep);
+    const developerRegisterData = {
+      id: userInfo?.info?.id,
+      pageName: "licensesDoc",
+      createdBy: userInfo?.info?.id,
+      updatedBy: userInfo?.info?.id,
+      devDetail: {
+        licensesDoc: documents,
+      },
+    };
+    Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
+      .then((result, err) => {
+        // localStorage.setItem('devRegId',JSON.stringify(result?.id));
+        setIsDisableForNext(false);
+        let data = {
+          result: result,
+          formData: formData,
+        };
+        //1, units
+        onSelect("", data, "", true);
+      })
+      .catch((e) => {
+        setIsDisableForNext(false);
+        setShowToast({ key: "error" });
+        setError(e?.response?.data?.Errors[0]?.message || null);
+      });
     onSelect(config.key, documentStep);
   };
   const onSkip = () => onSelect();
@@ -98,7 +133,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
 
   useEffect(() => {
     let count = 0;
-    console.log("DEVC", bpaTaxDocuments);
+    console.log("DEVC", documents);
     bpaTaxDocuments.map((doc) => {
       if (doc.required === true) {
         console.log("YES");
@@ -174,21 +209,26 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
             onAdd={onAdd}
             cardStyle={{ paddingRight: "16px" }}
           >
-            {bpaTaxDocuments?.map((document, index) => {
-              return (
-                <SelectDocument
-                  key={index}
-                  document={document}
-                  t={t}
-                  error={error}
-                  setError={setError}
-                  setDocuments={setDocuments}
-                  documents={documents}
-                  setCheckRequiredFields={setCheckRequiredFields}
-                  isCitizenUrl={isCitizenUrl}
-                />
-              );
-            })}
+            <div className="happy">
+              <div className="card">
+                {bpaTaxDocuments?.map((document, index) => {
+                  return (
+                    <SelectDocument
+                      key={index}
+                      document={document}
+                      t={t}
+                      error={error}
+                      setError={setError}
+                      setDocuments={setDocuments}
+                      documents={documents}
+                      setCheckRequiredFields={setCheckRequiredFields}
+                      isCitizenUrl={isCitizenUrl}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+
             {error && <Toast label={error} isDleteBtn={true} onClose={() => setError(null)} error />}
           </FormStep>
         ) : (
@@ -208,9 +248,17 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
 };
 
 function SelectDocument({ t, document: doc, setDocuments, error, setError, documents, setCheckRequiredFields, isCitizenUrl }) {
-  console.log("DDDD", documents);
+  // const docData = documents?.map((docs, index) => {
+  //   setDocList(docs.documentUid);
+  // });
+
+  // setDocList(documents);
+  const { setValue, getValues, watch } = useForm();
+  // const [docList, setDocList] = useState({});
   const filteredDocument = documents?.filter((item) => item?.documentType?.includes(doc?.code))[0];
+
   const tenantId = Digit.ULBService.getCurrentTenantId();
+
   const [selectedDocument, setSelectedDocument] = useState(
     filteredDocument
       ? { ...filteredDocument, active: true, code: filteredDocument?.documentType, i18nKey: filteredDocument?.documentType }
@@ -218,9 +266,13 @@ function SelectDocument({ t, document: doc, setDocuments, error, setError, docum
       ? doc?.dropdownData[0]
       : {}
   );
+
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(() => filteredDocument?.fileStoreId || null);
+  setValue("finalDocList", filteredDocument?.fileStoreId);
+  console.log("FILTEREDDOC", uploadedFile);
 
+  // console.log("HGHGHG", docList);
   const handleSelectDocument = (value) => setSelectedDocument(value);
 
   function selectfile(e) {
@@ -276,8 +328,7 @@ function SelectDocument({ t, document: doc, setDocuments, error, setError, docum
   }, [file]);
 
   return (
-    <div style={{ marginBottom: "24px" }}>
-      <div>{doc?.required}</div>
+    <div className="doc-upload-field" style={{ marginBottom: "24px" }}>
       <CardLabel style={{ marginBottom: "10px" }}>
         {doc?.required ? `${t(`BPAREG_HEADER_${doc?.code?.replace(".", "_")}`)} *` : `${t(`BPAREG_HEADER_${doc?.code?.replace(".", "_")}`)}`}
       </CardLabel>
