@@ -52,6 +52,7 @@ const AppliedDetailForm = (props) => {
   const [getData, setData] = useState({ caseNumber: "", dairyNumber: "" });
   const [newDataA, setNewDataA] = useState({});
   const [getFarArr, setFarArr] = useState([]);
+  const [getUpdatedData, setUpdatedData] = useState([]);
 
   const {
     watch,
@@ -128,7 +129,7 @@ const AppliedDetailForm = (props) => {
     // if (!validateDgpsPoint()) {
     //   return;
     // }
-    // console.log("data", data);
+    console.log("data", data);
     // return;
     setLoader(true);
     delete data["dgpsDetails"];
@@ -342,6 +343,7 @@ const AppliedDetailForm = (props) => {
       props.Step4Continue(useData, Resp?.data?.LicenseServiceResponseInfo?.[0]);
     } catch (error) {
       setLoader(false);
+      console.log(error?.message);
       return error?.message;
     }
   };
@@ -358,6 +360,7 @@ const AppliedDetailForm = (props) => {
     }
 
     if (valueData) {
+      console.log("valueData", valueData);
       const test = [valueData?.PurposeDetails];
       setNewDataA(test);
     }
@@ -573,6 +576,20 @@ const AppliedDetailForm = (props) => {
     setDGPSModal(!dgpsModal);
   };
 
+  const updateAreaById = (it, id, newArea) => {
+    const updatedData = it?.map((obj) => {
+      if (obj.id === id) {
+        return { ...obj, area: newArea };
+      } else if (obj.purposeDetail.length > 0) {
+        return { ...obj, purposeDetail: updateAreaById(obj.purposeDetail, id, newArea) };
+      } else {
+        return obj;
+      }
+    });
+    setUpdatedData([...getUpdatedData], updatedData);
+    return updatedData;
+  };
+
   useEffect(() => {
     const check = Object?.values(error)?.every((value) => value === null || (typeof value == "string" && !(value || false)));
     setIsValid(check);
@@ -582,27 +599,43 @@ const AppliedDetailForm = (props) => {
     return (
       <div>
         {data?.length &&
-          data?.map((x) => {
-            console.log("x====", x);
+          data?.map((x, i) => {
+            setValue(x?.id, x?.area);
             return (
               <div>
                 <h6>
                   <span>
-                    <b>Purpose Name:</b>
+                    <b>Purpose Name: </b>
                   </span>
                   {x?.name}
                 </h6>
                 <div className="row">
                   <div className="col col-4 mt-3">
                     <h6>
-                      Area: <input type="text" value={x?.area} className="form-control" placeholder="enter Area" {...register("far")} />
+                      Area:{" "}
+                      <input
+                        type="number"
+                        className="form-control"
+                        placeholder="enter Area"
+                        {...register(`${x?.id}`)}
+                        onChange={(e) => {
+                          // let newSelection = [];
+                          const updatedData = updateAreaById(newDataA, x?.id, e?.target?.value);
+                          console.log(updatedData);
+                          // newSelection = [...getUpdatedData, updatedData];
+                          // setUpdatedData(newSelection);
+                          // setNewDataA(updatedData);
+                        }}
+                      />
                     </h6>
                   </div>
-                  <div className="col col-4 mt-3">
-                    <h6>
-                      FAR: <ReactMultiSelect control={control} name="far" placeholder="Far" data={getFarArr} labels="Far" />
-                    </h6>
-                  </div>
+                  {getFarArr?.length > 0 && (
+                    <div className="col col-4 mt-3">
+                      <h6>
+                        FAR: <ReactMultiSelect control={control} name="far" placeholder="Far" data={getFarArr} labels="Far" />
+                      </h6>
+                    </div>
+                  )}
 
                   {!!x?.purposeDetail?.length && (
                     <div className="ml-4 mt-4">
@@ -683,6 +716,9 @@ const AppliedDetailForm = (props) => {
                   <div className="mt-3 mb-3">
                     <h4>
                       <b>Bifurcation Of Purpose</b>
+                    </h4>
+                    <h4 className="mt-3">
+                      <b>Total Applied Area: </b> {stepData?.ApplicantPurpose?.totalArea}
                     </h4>
                   </div>
                 </div>
