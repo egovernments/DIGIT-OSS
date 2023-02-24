@@ -64,6 +64,7 @@ public class VehicleSearchCriteria {
 	
 	@JsonProperty("status")
 	private List<String> status;
+
 	    
 	public enum SortOrder {
 	        ASC,

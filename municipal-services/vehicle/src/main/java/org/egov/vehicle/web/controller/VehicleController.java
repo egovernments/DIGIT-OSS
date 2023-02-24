@@ -1,6 +1,5 @@
 package org.egov.vehicle.web.controller;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,54 +20,67 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/v1")
 public class VehicleController {
-    @Autowired
-    private VehicleService vehicleService;
+	@Autowired
+	private VehicleService vehicleService;
 
-    @Autowired
-    private VehicleUtil vehicleUtil;
+	@Autowired
+	private VehicleUtil vehicleUtil;
 
-    @Autowired
-    private ResponseInfoFactory responseInfoFactory;
+	@Autowired
+	private ResponseInfoFactory responseInfoFactory;
 
-    @PostMapping(value = "/_create")
-    public ResponseEntity<VehicleResponse> create(@Valid @RequestBody VehicleRequest vehicleRequest) {
+	@PostMapping(value = "/_create")
+	public ResponseEntity<VehicleResponse> create(@Valid @RequestBody VehicleRequest vehicleRequest) {
 
-        vehicleUtil.defaultJsonPathConfig();
-        Vehicle vehicle = vehicleService.create(vehicleRequest);
-        List<Vehicle> vehicleList = new ArrayList<Vehicle>();
-        vehicleList.add(vehicle);
-        VehicleResponse response = VehicleResponse.builder().vehicle(vehicleList)
-                .responseInfo(responseInfoFactory.createResponseInfoFromRequestInfo(vehicleRequest.getRequestInfo(), true))
-                .build();
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
+		vehicleUtil.defaultJsonPathConfig();
+		Vehicle vehicle = vehicleService.create(vehicleRequest);
+		List<Vehicle> vehicleList = new ArrayList<>();
+		vehicleList.add(vehicle);
+		VehicleResponse response = VehicleResponse.builder().vehicle(vehicleList)
+				.responseInfo(
+						responseInfoFactory.createResponseInfoFromRequestInfo(vehicleRequest.getRequestInfo(), true))
+				.build();
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
 
+	@PostMapping(value = "/_update")
+	public ResponseEntity<VehicleResponse> update(@Valid @RequestBody VehicleRequest vehicleRequest) {
+
+		vehicleUtil.defaultJsonPathConfig();
+		Vehicle vehicle = vehicleService.update(vehicleRequest);
+		List<Vehicle> vehicleList = new ArrayList<>();
+		vehicleList.add(vehicle);
+		VehicleResponse response = VehicleResponse.builder().vehicle(vehicleList)
+				.responseInfo(
+						responseInfoFactory.createResponseInfoFromRequestInfo(vehicleRequest.getRequestInfo(), true))
+				.build();
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
 
 	@PostMapping(value = "/_search")
 	public ResponseEntity<VehicleResponse> search(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
 			@Valid @ModelAttribute VehicleSearchCriteria criteria) {
-		
+
 		VehicleResponse response = vehicleService.search(criteria, requestInfoWrapper.getRequestInfo());
-		
+
 		response.setResponseInfo(
 				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true));
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
-	
-	@RequestMapping(value = "/_plainsearch", method = RequestMethod.POST)
+
+	@PostMapping(value = "/_plainsearch")
 	public ResponseEntity<VehicleResponse> plainsearch(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
 			@Valid @ModelAttribute VehicleSearchCriteria criteria) {
-		List<Vehicle> vehicleList = vehicleService.vehiclePlainSearch(criteria,requestInfoWrapper.getRequestInfo());
-		VehicleResponse response = VehicleResponse.builder().vehicle(vehicleList)
-                .responseInfo(responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
-                .build();
+		List<Vehicle> vehicleList = vehicleService.vehiclePlainSearch(criteria);
+		VehicleResponse response = VehicleResponse.builder().vehicle(vehicleList).responseInfo(
+				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
+				.build();
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
-	
+
 }

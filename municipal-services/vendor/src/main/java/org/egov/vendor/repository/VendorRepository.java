@@ -43,11 +43,10 @@ public class VendorRepository {
 	public void save(VendorRequest vendorRequest) {
 		producer.push(configuration.getSaveTopic(), vendorRequest);
 	}
-	
+
 	public void update(VendorRequest vendorRequest) {
 		producer.push(configuration.getUpdateTopic(), vendorRequest);
 	}
-
 
 	public void updateVendorVehicleDriver(VendorRequest vendorRequest) {
 		producer.push(configuration.getSaveVendorVehicleDriverTopic(), vendorRequest);
@@ -56,10 +55,10 @@ public class VendorRepository {
 	public VendorResponse getVendorData(VendorSearchCriteria vendorSearchCriteria) {
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = vendorQueryBuilder.getVendorSearchQuery(vendorSearchCriteria, preparedStmtList);
+		log.info("Get vendors query ::=>" + query.toString());
 		List<Vendor> vendorData = jdbcTemplate.query(query, preparedStmtList.toArray(), vendorrowMapper);
-		VendorResponse response= VendorResponse.builder().vendor(vendorData).totalCount(Integer.valueOf(vendorrowMapper.getFullCount())).build();
-		System.out.println("query is " + query);
-		return response;
+		return VendorResponse.builder().vendor(vendorData).totalCount(Integer.valueOf(vendorrowMapper.getFullCount()))
+				.build();
 	}
 
 	public List<String> getDrivers(String id, String status) {
@@ -85,15 +84,17 @@ public class VendorRepository {
 	public List<String> getVendorWithVehicles(VendorSearchCriteria vendorSearchCriteria) {
 		List<String> vendorIds = null;
 		List<Object> preparedStmtList = new ArrayList<>();
-		vendorIds = jdbcTemplate.queryForList(vendorQueryBuilder.vendorsForVehicles(vendorSearchCriteria, preparedStmtList),
+		vendorIds = jdbcTemplate.queryForList(
+				vendorQueryBuilder.vendorsForVehicles(vendorSearchCriteria, preparedStmtList),
 				preparedStmtList.toArray(), String.class);
 		return vendorIds;
 	}
-	
+
 	public List<String> getVendorWithDrivers(VendorSearchCriteria vendorSearchCriteria) {
 		List<String> vendorIds = null;
 		List<Object> preparedStmtList = new ArrayList<>();
-		vendorIds = jdbcTemplate.queryForList(vendorQueryBuilder.vendorsForDrivers(vendorSearchCriteria, preparedStmtList),
+		vendorIds = jdbcTemplate.queryForList(
+				vendorQueryBuilder.vendorsForDrivers(vendorSearchCriteria, preparedStmtList),
 				preparedStmtList.toArray(), String.class);
 		return vendorIds;
 	}
@@ -102,11 +103,8 @@ public class VendorRepository {
 		List<Object> preparedStmtList = new ArrayList<>();
 		preparedStmtList.add(criteria.getOffset());
 		preparedStmtList.add(criteria.getLimit());
-
-		List<String> ids = jdbcTemplate.query(
-				"SELECT id from eg_vendor ORDER BY createdtime offset " + " ? " + "limit ? ",
+		return jdbcTemplate.query("SELECT id from eg_vendor ORDER BY createdtime offset " + " ? " + "limit ? ",
 				preparedStmtList.toArray(), new SingleColumnRowMapper<>(String.class));
-		return ids;
 	}
 
 	public List<Vendor> getVendorPlainSearch(VendorSearchCriteria criteria) {
