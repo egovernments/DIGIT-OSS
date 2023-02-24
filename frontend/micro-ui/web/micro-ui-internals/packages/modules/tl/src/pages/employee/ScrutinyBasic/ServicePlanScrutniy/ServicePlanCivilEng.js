@@ -84,6 +84,9 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 // import IconButton from '@mui/material/IconButton';
 import "../css/personalInfoChild.style.js";
 import { useStyles } from "../css/personalInfoChild.style.js";
+import Collapse from "react-bootstrap/Collapse";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 // const ServicePlanCivil = () => {
     function ServicePlanCivil(props) {
@@ -116,6 +119,7 @@ import { useStyles } from "../css/personalInfoChild.style.js";
     shouldFocusError: true,
   });
   const [open, setOpen] = useState(false)
+  const [open2, setOpen2] = useState(false);
   const [applicationNumber, setApplicationNumber] = useState()
 
   const [developerDataLabel, setDeveloperDataLabel] = useState([]);
@@ -162,11 +166,39 @@ import { useStyles } from "../css/personalInfoChild.style.js";
     <React.Fragment>
 
     <form onSubmit={handleSubmit(servicePlan)}>
-      {/* <Card > */}
+    <div
+        className="collapse-header"
+        onClick={() => setOpen2(!open2)}
+        aria-controls="example-collapse-text"
+        aria-expanded={open2}
+        style={{
+          background: "#f1f1f1",
+          padding: "0.25rem 1.25rem",
+          borderRadius: "0.25rem",
+          fontWeight: "600",
+          display: "flex",
+          cursor: "pointer",
+          color: "#817f7f",
+          justifyContent: "space-between",
+          alignContent: "center",
+        }}
+      >
+        <span style={{ color: "#817f7f" }} className="">
+        Evaluation by Civil Engineer
+        </span>
+        {open2 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+      </div>
+      <Collapse in={open2}>
+        <div id="example-collapse-text">
+      <Card >
+      <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Evaluation by Civil Engineer </h4>
         {/* <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Electrical Plan </h4> */}
         <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "20px", marginBottom: "52px" }}>
+       
           <Row  style={{ marginTop: 4 , marginBottom: 4 }}>
           {/* {JSON.stringify(apiResponse?.additionalDetails?.electricDistribution)} */}
+          {/* <h4 className="text-center">Evaluation by Civil Engineer</h4> */}
+          
             <Col md={6} xxl lg="6">
               <div>
                 <Form.Label className={classes.formLabel}>
@@ -668,13 +700,13 @@ import { useStyles } from "../css/personalInfoChild.style.js";
 
          
 
-          <div class="row">
+          {/* <div class="row">
             <div class="col-sm-12 text-right">
               <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
                 Submit
               </button>
             </div>
-          </div>
+          </div> */}
           {/* <Row className="justify-content-end">
             <Button variant="outline-primary" className="col-md-2 my-2 mx-2" type="save" aria-label="right-end">
               Save as Draft
@@ -684,7 +716,9 @@ import { useStyles } from "../css/personalInfoChild.style.js";
             </Button>
           </Row> */}
         </Card>
-      {/* </Card> */}
+      </Card>
+      </div>
+      </Collapse>
     </form>
     <Dialog
     open={open}
