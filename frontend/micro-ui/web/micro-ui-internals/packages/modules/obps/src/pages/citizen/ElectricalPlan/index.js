@@ -761,9 +761,9 @@ const electricalPlanService = () => {
           <div className="table table-bordered table-responsive">
             <thead>
               <tr>
-                <td style={{ textAlign: "center" }}> Sr.No.</td>
-                <td style={{ textAlign: "center" }}>Type Of Map/Plan</td>
-                <td style={{ textAlign: "center" }}>Annexure</td>
+                <td style={{ textAlign: "center" }}>Sr.No.</td>
+                <td style={{ textAlign: "center" }}>Document's Type/Name</td>
+                <td style={{ textAlign: "center" }}>Actions</td>
               </tr>
             </thead>
             <tbody>
