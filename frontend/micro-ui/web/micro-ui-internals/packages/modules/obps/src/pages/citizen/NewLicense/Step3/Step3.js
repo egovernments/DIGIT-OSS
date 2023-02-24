@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-// import { Checkbox } from "@mui/material";
+import { convertEpochToDate } from "../../../../../../tl/src/utils";
 import CalculateIcon from "@mui/icons-material/Calculate";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import ScrollToTop from "@egovernments/digit-ui-react-components/src/atoms/ScrollToTop";
@@ -114,7 +114,7 @@ const LandScheduleForm = (props) => {
   const { data: LandData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["LandType"]);
   const [getData, setData] = useState({ caseNumber: "", dairyNumber: "" });
 
-  const { data: PotentialType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["PotentialZone"]);
+  const { data: PotentialType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["DevPlan"]);
   const columns = [
     {
       key: "previousLicensenumber",
@@ -196,10 +196,10 @@ const LandScheduleForm = (props) => {
   }, [PurposeType]);
 
   useEffect(() => {
-    const potential = PotentialType?.["common-masters"]?.PotentialZone?.map(function (data) {
-      return { value: data?.code, label: data?.zone };
+    const devPlan = PotentialType?.["common-masters"]?.DevPlan?.map(function (data) {
+      return { value: data?.devPlanCode, label: data?.devPlan };
     });
-    setPotentialOptions({ data: potential, isLoading: false });
+    setPotentialOptions({ data: devPlan, isLoading: false });
   }, [PotentialType]);
 
   useEffect(() => {
@@ -276,6 +276,10 @@ const LandScheduleForm = (props) => {
       props.Step3Continue(useData);
     } catch (error) {
       setLoader(false);
+      setToastError(error?.response?.data?.Errors?.[0]?.code);
+      setTimeout(() => {
+        setToastError(null);
+      }, 2000);
       return error.message;
     }
   };
@@ -313,6 +317,9 @@ const LandScheduleForm = (props) => {
     console.log("documentData", fieldName);
     if (selectedFiles.includes(file.name)) {
       setShowToastError({ key: "error" });
+      setTimeout(() => {
+        setShowToastError(null);
+      }, 2000);
       return;
     }
 
@@ -389,8 +396,12 @@ const LandScheduleForm = (props) => {
 
       setLoader(false);
       setShowToast({ key: "success" });
+      setTimeout(() => {
+        setShowToastError(null);
+      }, 2000);
     } catch (error) {
       setLoader(false);
+
       return error.message;
     }
   };
@@ -608,7 +619,7 @@ const LandScheduleForm = (props) => {
                           </div>
                           <br></br>
                           <div className="row">
-                            <div className="col col-3">
+                            <div className="col col-4">
                               <label>
                                 <h2>
                                   Area of parent licence in acres <span style={{ color: "red" }}>*</span>
@@ -620,18 +631,18 @@ const LandScheduleForm = (props) => {
                               </h3>
                             </div>
 
-                            <div className="col col-3">
+                            <div className="col col-4">
                               <label>
                                 <h2>Any Other Remark </h2>
                               </label>
                               <input type="text" {...register("specify")} className="form-control" pattern="[A-Za-z]+" />
                             </div>
 
-                            <div className="col col-3 ">
+                            <div className="col col-4">
                               <h2>
                                 Third-party right created<span style={{ color: "red" }}>*</span>&nbsp; &nbsp;&nbsp;
                               </h2>
-
+                              <br></br>
                               <label htmlFor="thirdParty">
                                 <input {...register("thirdParty")} type="radio" value="Y" id="thirdParty" />
                                 &nbsp; Yes &nbsp;&nbsp;
@@ -1312,7 +1323,7 @@ const LandScheduleForm = (props) => {
                   <div className="row">
                     <div className="col col-3 ">
                       <h2 data-toggle="tooltip" data-placement="top" title="Whether Others Land fall within Applied Land">
-                        (e)&nbsp;Whether Others Land fall within Applied Land<span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                        (e)&nbsp;Whether Others Land fall <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
                       </h2>{" "}
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="landSandwiched">
@@ -1364,7 +1375,12 @@ const LandScheduleForm = (props) => {
                             <label>
                               <h2>Date of section 4 notification</h2>{" "}
                             </label>
-                            <input type="date" {...register("sectionFour")} className="form-control" />
+                            <input
+                              type="date"
+                              {...register("sectionFour")}
+                              className="form-control"
+                              max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
+                            />
                             <h3 className="error-message" style={{ color: "red" }}>
                               {errors?.sectionFour && errors?.sectionFour?.message}
                             </h3>
@@ -1373,7 +1389,12 @@ const LandScheduleForm = (props) => {
                             <label>
                               <h2>Date of section 6 notification</h2>
                             </label>
-                            <input type="date" className="form-control" {...register("sectionSix")} />
+                            <input
+                              type="date"
+                              className="form-control"
+                              {...register("sectionSix")}
+                              max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
+                            />
                             <h3 className="error-message" style={{ color: "red" }}>
                               {errors?.sectionSix && errors?.sectionSix?.message}
                             </h3>
@@ -1382,7 +1403,12 @@ const LandScheduleForm = (props) => {
                             <label>
                               <h2>Date of Award</h2>
                             </label>
-                            <input type="date" className="form-control" {...register("rewardDate")} />
+                            <input
+                              type="date"
+                              className="form-control"
+                              {...register("rewardDate")}
+                              max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
+                            />
                             <h3 className="error-message" style={{ color: "red" }}>
                               {errors?.rewardDate && errors?.rewardDate?.message}
                             </h3>
@@ -1488,40 +1514,44 @@ const LandScheduleForm = (props) => {
                     </div>
                     {watch("siteApproachable") === "Y" && (
                       <div>
-                        <div className="col col-12">
-                          <h2>
-                            (a)&nbsp;&nbsp;Approach available from minimum 4 karam (22 ft) wide revenue rasta.<span style={{ color: "red" }}>*</span>{" "}
-                            &nbsp;&nbsp;
-                            <label htmlFor="minimumApproachFour">
-                              <input {...register("minimumApproachFour")} type="radio" value="Y" id="minimumApproachFour" />
-                              &nbsp; Yes &nbsp;&nbsp;
-                            </label>
-                            <label htmlFor="minimumApproachFour">
-                              <input {...register("minimumApproachFour")} type="radio" value="N" id="minimumApproachFour" />
-                              &nbsp; No &nbsp;&nbsp;
-                            </label>
-                          </h2>
-                          <h3 className="error-message" style={{ color: "red" }}>
-                            {errors?.minimumApproachFour && errors?.minimumApproachFour?.message}
-                          </h3>
+                        <div className="row-12">
+                          <div className="col col-8">
+                            <h2>
+                              (a)&nbsp;&nbsp;Approach available from minimum 4 karam (22 ft) wide revenue rasta.
+                              <span style={{ color: "red" }}>*</span>{" "}
+                              <label htmlFor="minimumApproachFour">
+                                <input {...register("minimumApproachFour")} type="radio" value="Y" id="minimumApproachFour" />
+                                &nbsp; Yes &nbsp;&nbsp;
+                              </label>
+                              <label htmlFor="minimumApproachFour">
+                                <input {...register("minimumApproachFour")} type="radio" value="N" id="minimumApproachFour" />
+                                &nbsp; No &nbsp;&nbsp;
+                              </label>
+                            </h2>
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.minimumApproachFour && errors?.minimumApproachFour?.message}
+                            </h3>
+                          </div>
                         </div>
-                        <div className="col col-12">
-                          <h2>
-                            (b)&nbsp;&nbsp;Approach available from minimum 11 feet wide revenue rasta and applied site abuts acquired alignment of the
-                            sector road and there is no stay regarding construction on the land falling under the abutting sector road.
-                            <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-                            <label htmlFor="minimumApproachEleven">
-                              <input {...register("minimumApproachEleven")} type="radio" value="Y" id="minimumApproachEleven" />
-                              &nbsp; Yes &nbsp;&nbsp;
-                            </label>
-                            <label htmlFor="minimumApproachEleven">
-                              <input {...register("minimumApproachEleven")} type="radio" value="N" id="minimumApproachEleven" />
-                              &nbsp; No &nbsp;&nbsp;
-                            </label>
-                          </h2>
-                          <h3 className="error-message" style={{ color: "red" }}>
-                            {errors?.minimumApproachEleven && errors?.minimumApproachEleven?.message}
-                          </h3>
+                        <div className="row-12">
+                          <div className="col col-8">
+                            <h2>
+                              (b)&nbsp;&nbsp;Approach available from minimum 11 feet wide revenue rasta and applied site abuts acquired alignment of
+                              the sector road and there is no stay regarding construction on the land falling under the abutting sector road.
+                              <span style={{ color: "red" }}>*</span>{" "}
+                              <label htmlFor="minimumApproachEleven">
+                                <input {...register("minimumApproachEleven")} type="radio" value="Y" id="minimumApproachEleven" />
+                                &nbsp; Yes &nbsp;&nbsp;
+                              </label>
+                              <label htmlFor="minimumApproachEleven">
+                                <input {...register("minimumApproachEleven")} type="radio" value="N" id="minimumApproachEleven" />
+                                &nbsp; No &nbsp;&nbsp;
+                              </label>
+                            </h2>
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.minimumApproachEleven && errors?.minimumApproachEleven?.message}
+                            </h3>
+                          </div>
                         </div>
                         <div className="col col-12">
                           <h2>
@@ -2094,7 +2124,7 @@ const LandScheduleForm = (props) => {
                   <div className="row ">
                     <div className="col col-3">
                       <h2 data-toggle="tooltip" data-placement="top" title="Any revenue rasta/road passing through proposed site (Yes/No)">
-                        (e) &nbsp;Any revenue rasta/road passing through proposed site<span style={{ color: "red" }}>*</span>
+                        (e) &nbsp;Any revenue rasta/road <span style={{ color: "red" }}>*</span>
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="road">
@@ -2112,8 +2142,8 @@ const LandScheduleForm = (props) => {
                         <div className="row ">
                           <div className="col col-12">
                             <label>
-                              <h2>
-                                Width of Revenue rasta/road (in ft.)<span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                              <h2 data-toggle="tooltip" data-placement="top" title=" Width of Revenue rasta/road (in ft.)">
+                                Width of Revenue rasta(in ft.)<span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
                                 <CalculateIcon color="primary" />
                               </h2>
                             </label>

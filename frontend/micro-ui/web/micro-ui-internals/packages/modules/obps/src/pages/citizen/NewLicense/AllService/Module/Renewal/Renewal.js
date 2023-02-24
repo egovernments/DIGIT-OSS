@@ -1,14 +1,34 @@
 import React, { useState } from "react";
-import { Card, Row, Col, Form, Button } from "react-bootstrap";
 import FormControl from "@mui/material/FormControl";
 import { useForm } from "react-hook-form";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import AddBoxSharpIcon from "@mui/icons-material/AddBoxSharp";
 import IndeterminateCheckBoxSharpIcon from "@mui/icons-material/IndeterminateCheckBoxSharp";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
-import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-
+import { styled } from "@mui/material/styles";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import Typography from "@mui/material/Typography";
+import { Button } from "@material-ui/core";
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  "& .MuiDialogContent-root": {
+    padding: theme.spacing(2),
+  },
+  "& .MuiDialogActions-root": {
+    padding: theme.spacing(1),
+  },
+}));
 function renewalClu() {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
   const {
     register,
     handleSubmit,
@@ -1039,7 +1059,7 @@ function renewalClu() {
                             </label>{" "}
                             <label htmlFor="ocGranized">
                               &nbsp;&nbsp;
-                              <input {...register("ocGranized")} type="radio" value="2" id="no" onClick={() => setmodal(true)} /> &nbsp; No
+                              <input {...register("ocGranized")} type="radio" value="2" id="no" onClick={handleClickOpen} /> &nbsp; No
                             </label>
                             {watch("ocGranized") === "1" && (
                               <div className="row-12">
@@ -1059,28 +1079,51 @@ function renewalClu() {
                               </div>
                             )}
                             {watch("ocGranized") === "2" && (
-                              <Col className="col-12">
-                                <Modal
-                                  size="lg"
-                                  isOpen={modal}
-                                  toggle={() => setmodal(!modal)}
-                                  style={{ width: "500px", height: "200px" }}
-                                  aria-labelledby="contained-modal-title-vcenter"
-                                  centered
-                                >
-                                  <ModalHeader toggle={() => setmodal(!modal)}></ModalHeader>
-                                  <ModalBody style={{ fontSize: 20 }}>
-                                    <label>
-                                      <h2>Valid upto</h2>
-                                    </label>
-                                    <input type="date" placeholder="" className="form-control" />
-                                    <div>
-                                      <h2>If out of date then redirect to extension of Cs.</h2>
-                                    </div>
-                                  </ModalBody>
-                                  <ModalFooter toggle={() => setmodal(!modal)}></ModalFooter>
-                                </Modal>
-                              </Col>
+                              <div>
+                                <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
+                                  {/* <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
+                      Modal title
+                    </BootstrapDialogTitle> */}
+                                  <DialogContent dividers>
+                                    <Typography gutterBottom>
+                                      <label>
+                                        <h2>Valid upto</h2>
+                                      </label>
+                                      <input type="date" placeholder="" className="form-control" />
+                                      <div>
+                                        <h2>If out of date then redirect to extension of Cs.</h2>
+                                      </div>
+                                    </Typography>
+                                  </DialogContent>
+                                  <DialogActions>
+                                    <Button autoFocus onClick={handleClose}>
+                                      Close
+                                    </Button>
+                                  </DialogActions>
+                                </BootstrapDialog>
+                              </div>
+                              // <Col className="col-12">
+                              //   <Modal
+                              //     size="lg"
+                              //     isOpen={modal}
+                              //     toggle={() => setmodal(!modal)}
+                              //     style={{ width: "500px", height: "200px" }}
+                              //     aria-labelledby="contained-modal-title-vcenter"
+                              //     centered
+                              //   >
+                              //     <ModalHeader toggle={() => setmodal(!modal)}></ModalHeader>
+                              //     <ModalBody style={{ fontSize: 20 }}>
+                              //       <label>
+                              //         <h2>Valid upto</h2>
+                              //       </label>
+                              //       <input type="date" placeholder="" className="form-control" />
+                              //       <div>
+                              //         <h2>If out of date then redirect to extension of Cs.</h2>
+                              //       </div>
+                              //     </ModalBody>
+                              //     <ModalFooter toggle={() => setmodal(!modal)}></ModalFooter>
+                              //   </Modal>
+                              // </Col>
                             )}
                           </td>
                         </tr>

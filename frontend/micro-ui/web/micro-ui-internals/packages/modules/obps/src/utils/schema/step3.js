@@ -67,7 +67,7 @@ const VALIDATION_SCHEMA = Yup.object().shape({
   ht: Yup.string().nullable().required("This field is required."),
   htRemark: Yup.string().nullable().required("This field is required."),
   gas: Yup.string().nullable().required("This field is required."),
-  gasRemark: Yup.string().nullable().required("This field is required."),
+  gasRemark: Yup.string().nullable(true).required("This field is required."),
   nallah: Yup.string().nullable().required("This field is required."),
   nallahRemark: Yup.string().nullable().required("This field is required."),
   road: Yup.string().nullable().required("This field is required."),
@@ -76,7 +76,9 @@ const VALIDATION_SCHEMA = Yup.object().shape({
   utilityLine: Yup.string().nullable().required("This field is required."),
   utilityWidth: Yup.string().nullable().required("This field is required."),
   utilityRemark: Yup.string().nullable().required("This field is required."),
-  // landSchedule: Yup.object().nullable(true).required("This field is required"),
+  landSchedule: Yup.mixed().test("type", "This field is required.", (value) => {
+    return value && value[0].type === "image/jpeg";
+  }),
 });
 const MODAL_VALIDATION_SCHEMA = Yup.object().shape({
   previousLicensenumber: Yup.string().nullable().required("This field is required."),
@@ -88,4 +90,5 @@ const MODAL_VALIDATION_SCHEMA = Yup.object().shape({
   khasraNumber: Yup.string().required("This field is required."),
   area: Yup.string().required("This field is required."),
 });
+
 export { VALIDATION_SCHEMA, MODAL_VALIDATION_SCHEMA };
