@@ -45,6 +45,7 @@ const ServicePlanService = () => {
   const [applicationNumber, setApplicationNumber] = useState()
   const [valid, setValid] = useState([])
   const [devName, setDevName] = useState("")
+  
   const [purpose, setPurpose] = useState("")
   const [developmentPlan, setDevelopmentPlan] = useState("")
   const [gstnumber, setGSTNumber] = useState("")
@@ -357,6 +358,8 @@ const ServicePlanService = () => {
         console.log(error)
       } 
    }
+  //  const userRoles = user?.info?.roles?.map((e) => e.code) || [];
+  // const hideRemarks = purpose.some((item)=>item === "DDJAY_APHP" || item === "RPL" || item === "DTP_HR" || item === "DTP_HQ" )
 
   return (
   <div>
@@ -463,8 +466,8 @@ const ServicePlanService = () => {
             </Col>
           </Row>
           <br></br>
-          <Row>
-            {/* <Col className="col-3">
+          {/* <Row>
+            <Col className="col-3">
               <div>
                 <label>
                   <h2>
@@ -480,8 +483,8 @@ const ServicePlanService = () => {
                 value={devName}
                 disabled
               />
-            </Col> */}
-            {/* <Col className="col-3">
+            </Col>
+            <Col className="col-3">
               <div>
                 <label>
                   <h2>
@@ -531,8 +534,226 @@ const ServicePlanService = () => {
                 value={mobileNmber}
                 disabled
               />
-            </Col> */}
-          </Row>
+            </Col>
+          </Row> */}
+          {/* <div className="table table-bordered table-responsive">
+            <thead>
+              <tr>
+                <td style={{ textAlign: "center" }}> Sr.No.</td>
+                <td style={{ textAlign: "center" }}>Type Of Demarcation</td>
+                <td style={{ textAlign: "center" }}>Annexure</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">1.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2>Previously Uploaded layout plan (call)</h2>
+                  {drawingErr.selfCertifiedDrawingFromEmpaneledDoc ? <p style={{color: 'red'}}>Please upload self-certified drawings from empanelled/certified architects*</p> : " "}
+                </td>
+                <td component="th" scope="row">
+                  <label for='file-input-1'>
+                    <FileUploadIcon 
+                    color="primary"
+                    />
+                  </label>
+                  <input
+                    type="file"
+                    className="form-control"
+                    id="file-input-1"
+                    onChange={(e) => getDocumentData(e?.target?.files[0], "selfCertifiedDrawingFromEmpaneledDoc")}
+                    style={{display: "none"}}
+                  />
+                    
+                  {fileStoreId?.selfCertifiedDrawingFromEmpaneledDoc ? 
+                  <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.selfCertifiedDrawingFromEmpaneledDoc)}>
+                    {" "}
+                  </VisibilityIcon>
+                  : "" }
+                  {applicationId && (!fileStoreId?.selfCertifiedDrawingFromEmpaneledDoc) &&
+                  <div className="btn btn-sm col-md-4">
+                    <IconButton onClick={()=>downloadDocument(selfCertifiedDrawing)}>
+                        <FileDownload color="primary" className="mx-1" />
+                    </IconButton>
+                      <IconButton onClick={()=>viewDocument(selfCertifiedDrawing)}>
+                        <VisibilityIcon color="info" className="icon" />
+                      </IconButton>
+                  </div> 
+                  }
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">2.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2>Upload the Revised layout plan</h2>
+                  {drawingErr.environmentalClearance ? <p style={{color: 'red'}}>Please upload environmental clearance drawings*</p> : " "}
+                </td>
+                <td component="th" scope="row">
+                <label for='file-input-2'>
+                    <FileUploadIcon 
+                    color="primary"
+                    />
+                  </label>
+                  <input
+                    type="file"
+                    className="form-control"
+                    id="file-input-2"
+                    // {...register("environmentalClearance")}
+                    onChange={(e) => getDocumentData(e?.target?.files[0], "environmentalClearance")}
+                    style={{display: "none"}}
+                  />
+                  {fileStoreId?.environmentalClearance ? 
+                  <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.environmentalClearance)}>
+                    {" "}
+                  </VisibilityIcon>
+                  : ""}
+                   {applicationId && (!fileStoreId?.environmentalClearance) && 
+                  <div className="btn btn-sm col-md-4">
+                    <IconButton onClick={()=>downloadDocument(environmental)}>
+                        <FileDownload color="primary" className="mx-1" />
+                    </IconButton>
+                      <IconButton onClick={()=>viewDocument(environmental)}>
+                        <VisibilityIcon color="info" className="icon" />
+                      </IconButton>
+                  </div> 
+                  }
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">3.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2>Upload Demarcation Plan in AutoCAD (DXF) file</h2>
+                  {drawingErr.shapeFileAsPerTemplate ? <p style={{color: 'red'}}>Please upload service plan pdf and gis format*</p> : " "}
+
+                </td>
+                <td component="th" scope="row">
+                <label for='file-input-3'>
+                    <FileUploadIcon 
+                    color="primary"
+                    />
+                  </label>
+                  <input
+                    type="file"
+                    className="form-control"
+                    // {...register("shapeFileAsPerTemplate")}
+                    id="file-input-3"
+                    onChange={(e) => getDocumentData(e?.target?.files[0], "shapeFileAsPerTemplate")}
+                    style={{display: "none"}}
+                  />
+                  {fileStoreId?.shapeFileAsPerTemplate ? 
+                  <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.shapeFileAsPerTemplate)}>
+                    {" "}
+                  </VisibilityIcon>
+                    : ""}
+                   {applicationId && (!fileStoreId?.shapeFileAsPerTemplate) && 
+                  <div className="btn btn-sm col-md-4">
+                    <IconButton onClick={()=>downloadDocument(gisFormat)}>
+                        <FileDownload color="primary" className="mx-1" />
+                    </IconButton>
+                      <IconButton onClick={()=>viewDocument(gisFormat)}>
+                        <VisibilityIcon color="info" className="icon" />
+                      </IconButton>
+                  </div> 
+                  }
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">4.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2>Upload Demarcation Plan in PDF (OCR Compatible) + GIS format.</h2>
+                  {drawingErr.autoCadFile ? <p style={{color: 'red'}}>Please upload autocad file*</p> : " "}
+                </td>
+                <td component="th" scope="row">
+                <label for='file-input-4'>
+                    <FileUploadIcon 
+                    color="primary"
+                    />
+                  </label>
+                  <input
+                    type="file"
+                    className="form-control"
+                    id="file-input-4"
+                    // {...register("autoCadFile")}
+                    onChange={(e) => getDocumentData(e?.target?.files[0], "autoCadFile")}
+                    style={{display: "none"}}
+                  />
+                  {fileStoreId?.autoCadFile ? 
+                  <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.autoCadFile)}>
+                    {" "}
+                  </VisibilityIcon>
+                  : "" }
+                   {applicationId && (!fileStoreId?.autoCadFile) &&
+                  <div className="btn btn-sm col-md-4">
+                    <IconButton onClick={()=>downloadDocument(autocad)}>
+                        <FileDownload color="primary" className="mx-1" />
+                    </IconButton>
+                      <IconButton onClick={()=>viewDocument(autocad)}>
+                        <VisibilityIcon color="info" className="icon" />
+                      </IconButton>
+                  </div> 
+                  }
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">5.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2>Upload Excel of detailed layout structure</h2>
+                  {drawingErr.certifieadCopyOfThePlan ? <p style={{color: 'red'}}>Please upload certified copy of the plan*</p> : " "}
+
+                </td>
+                <td component="th" scope="row">
+                <label for='file-input-5'>
+                    <FileUploadIcon 
+                    color="primary"
+                    />
+                  </label>
+                  <input
+                    type="file"
+                    className="form-control"
+                    // {...register("certifieadCopyOfThePlan")}
+                    id="file-input-5"
+                    onChange={(e) => getDocumentData(e?.target?.files[0], "certifieadCopyOfThePlan")}
+                    style={{display: "none"}}
+                  />
+                  {fileStoreId?.certifieadCopyOfThePlan ? 
+                  <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.certifieadCopyOfThePlan)}>
+                    {" "}
+                  </VisibilityIcon>
+                  : "" }
+                   {applicationId && (!fileStoreId?.certifieadCopyOfThePlan) &&
+                  <div className="btn btn-sm col-md-4">
+                    <IconButton onClick={()=>downloadDocument(certifiedCopy)}>
+                        <FileDownload color="primary" className="mx-1" />
+                    </IconButton>
+                      <IconButton onClick={()=>viewDocument(certifiedCopy)}>
+                        <VisibilityIcon color="info" className="icon" />
+                      </IconButton>
+                  </div> 
+                  }
+                </td>
+              </tr>
+            </tbody>
+          </div> */}
           <br></br>
           <br></br>
           <div className="table table-bordered table-responsive">
@@ -751,7 +972,220 @@ const ServicePlanService = () => {
                   }
                 </td>
               </tr>
-            </tbody>
+              </tbody>
+              { (purpose === "DDJAY_APHP" || purpose === "RPL" || purpose === "NILP"|| purpose === "NILPC"|| purpose === "IPA" || purpose === "CPRS" || purpose === "CICS") && (
+              //  && "NILP" && "NILPC" && "IPA" && "CPRS" && "CICS" &&
+              <tbody>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">6.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2>Previously Uploaded layout plan (call)</h2>
+                  {drawingErr.selfCertifiedDrawingFromEmpaneledDoc ? <p style={{color: 'red'}}>Please upload self-certified drawings from empanelled/certified architects*</p> : " "}
+                </td>
+                <td component="th" scope="row">
+                  <label for='file-input-1'>
+                    <FileUploadIcon 
+                    color="primary"
+                    />
+                  </label>
+                  <input
+                    type="file"
+                    className="form-control"
+                    id="file-input-1"
+                    onChange={(e) => getDocumentData(e?.target?.files[0], "selfCertifiedDrawingFromEmpaneledDoc")}
+                    style={{display: "none"}}
+                  />
+                    
+                  {fileStoreId?.selfCertifiedDrawingFromEmpaneledDoc ? 
+                  <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.selfCertifiedDrawingFromEmpaneledDoc)}>
+                    {" "}
+                  </VisibilityIcon>
+                  : "" }
+                  {applicationId && (!fileStoreId?.selfCertifiedDrawingFromEmpaneledDoc) &&
+                  <div className="btn btn-sm col-md-4">
+                    <IconButton onClick={()=>downloadDocument(selfCertifiedDrawing)}>
+                        <FileDownload color="primary" className="mx-1" />
+                    </IconButton>
+                      <IconButton onClick={()=>viewDocument(selfCertifiedDrawing)}>
+                        <VisibilityIcon color="info" className="icon" />
+                      </IconButton>
+                  </div> 
+                  }
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">7.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2>Upload the Revised layout plan</h2>
+                  {drawingErr.environmentalClearance ? <p style={{color: 'red'}}>Please upload environmental clearance drawings*</p> : " "}
+                </td>
+                <td component="th" scope="row">
+                <label for='file-input-2'>
+                    <FileUploadIcon 
+                    color="primary"
+                    />
+                  </label>
+                  <input
+                    type="file"
+                    className="form-control"
+                    id="file-input-2"
+                    // {...register("environmentalClearance")}
+                    onChange={(e) => getDocumentData(e?.target?.files[0], "environmentalClearance")}
+                    style={{display: "none"}}
+                  />
+                  {fileStoreId?.environmentalClearance ? 
+                  <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.environmentalClearance)}>
+                    {" "}
+                  </VisibilityIcon>
+                  : ""}
+                   {applicationId && (!fileStoreId?.environmentalClearance) && 
+                  <div className="btn btn-sm col-md-4">
+                    <IconButton onClick={()=>downloadDocument(environmental)}>
+                        <FileDownload color="primary" className="mx-1" />
+                    </IconButton>
+                      <IconButton onClick={()=>viewDocument(environmental)}>
+                        <VisibilityIcon color="info" className="icon" />
+                      </IconButton>
+                  </div> 
+                  }
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">8.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2>Upload Demarcation Plan in AutoCAD (DXF) file</h2>
+                  {drawingErr.shapeFileAsPerTemplate ? <p style={{color: 'red'}}>Please upload service plan pdf and gis format*</p> : " "}
+
+                </td>
+                <td component="th" scope="row">
+                <label for='file-input-3'>
+                    <FileUploadIcon 
+                    color="primary"
+                    />
+                  </label>
+                  <input
+                    type="file"
+                    className="form-control"
+                    // {...register("shapeFileAsPerTemplate")}
+                    id="file-input-3"
+                    onChange={(e) => getDocumentData(e?.target?.files[0], "shapeFileAsPerTemplate")}
+                    style={{display: "none"}}
+                  />
+                  {fileStoreId?.shapeFileAsPerTemplate ? 
+                  <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.shapeFileAsPerTemplate)}>
+                    {" "}
+                  </VisibilityIcon>
+                    : ""}
+                   {applicationId && (!fileStoreId?.shapeFileAsPerTemplate) && 
+                  <div className="btn btn-sm col-md-4">
+                    <IconButton onClick={()=>downloadDocument(gisFormat)}>
+                        <FileDownload color="primary" className="mx-1" />
+                    </IconButton>
+                      <IconButton onClick={()=>viewDocument(gisFormat)}>
+                        <VisibilityIcon color="info" className="icon" />
+                      </IconButton>
+                  </div> 
+                  }
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">9.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2>Upload Demarcation Plan in PDF (OCR Compatible) + GIS format.</h2>
+                  {drawingErr.autoCadFile ? <p style={{color: 'red'}}>Please upload autocad file*</p> : " "}
+                </td>
+                <td component="th" scope="row">
+                <label for='file-input-4'>
+                    <FileUploadIcon 
+                    color="primary"
+                    />
+                  </label>
+                  <input
+                    type="file"
+                    className="form-control"
+                    id="file-input-4"
+                    // {...register("autoCadFile")}
+                    onChange={(e) => getDocumentData(e?.target?.files[0], "autoCadFile")}
+                    style={{display: "none"}}
+                  />
+                  {fileStoreId?.autoCadFile ? 
+                  <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.autoCadFile)}>
+                    {" "}
+                  </VisibilityIcon>
+                  : "" }
+                   {applicationId && (!fileStoreId?.autoCadFile) &&
+                  <div className="btn btn-sm col-md-4">
+                    <IconButton onClick={()=>downloadDocument(autocad)}>
+                        <FileDownload color="primary" className="mx-1" />
+                    </IconButton>
+                      <IconButton onClick={()=>viewDocument(autocad)}>
+                        <VisibilityIcon color="info" className="icon" />
+                      </IconButton>
+                  </div> 
+                  }
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">10.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2>Upload Excel of detailed layout structure</h2>
+                  {drawingErr.certifieadCopyOfThePlan ? <p style={{color: 'red'}}>Please upload certified copy of the plan*</p> : " "}
+
+                </td>
+                <td component="th" scope="row">
+                <label for='file-input-5'>
+                    <FileUploadIcon 
+                    color="primary"
+                    />
+                  </label>
+                  <input
+                    type="file"
+                    className="form-control"
+                    // {...register("certifieadCopyOfThePlan")}
+                    id="file-input-5"
+                    onChange={(e) => getDocumentData(e?.target?.files[0], "certifieadCopyOfThePlan")}
+                    style={{display: "none"}}
+                  />
+                  {fileStoreId?.certifieadCopyOfThePlan ? 
+                  <VisibilityIcon color="primary" onClick={() => viewDocument(fileStoreId?.certifieadCopyOfThePlan)}>
+                    {" "}
+                  </VisibilityIcon>
+                  : "" }
+                   {applicationId && (!fileStoreId?.certifieadCopyOfThePlan) &&
+                  <div className="btn btn-sm col-md-4">
+                    <IconButton onClick={()=>downloadDocument(certifiedCopy)}>
+                        <FileDownload color="primary" className="mx-1" />
+                    </IconButton>
+                      <IconButton onClick={()=>viewDocument(certifiedCopy)}>
+                        <VisibilityIcon color="info" className="icon" />
+                      </IconButton>
+                  </div> 
+                  }
+                </td>
+              </tr>
+              </tbody>
+              )}
+           
           </div>
 
           <div class="row">
