@@ -76,6 +76,10 @@ public class ServiceRequestValidator {
                     throw new CustomException(SERVICE_REQUEST_ATTRIBUTE_INVALID_VALUE_CODE, SERVICE_REQUEST_ATTRIBUTE_INVALID_TEXT_VALUE_MSG);
                 }
                 validateSizeOfText(attributeValue.getValue());
+            }else if(attributeCodeVsDataType.get(attributeValue.getAttributeCode()).equals(AttributeDefinition.DataTypeEnum.DATETIME)){
+                if(!(attributeValue.getValue() instanceof Long)){
+                    throw new CustomException(SERVICE_REQUEST_ATTRIBUTE_INVALID_VALUE_CODE, SERVICE_REQUEST_ATTRIBUTE_INVALID_DATETIME_VALUE_MSG);
+                }
             }else if(attributeCodeVsDataType.get(attributeValue.getAttributeCode()).equals(AttributeDefinition.DataTypeEnum.SINGLEVALUELIST)){
                 if(!(attributeValue.getValue() instanceof String)){
                     throw new CustomException(SERVICE_REQUEST_ATTRIBUTE_INVALID_VALUE_CODE, SERVICE_REQUEST_ATTRIBUTE_INVALID_SINGLE_VALUE_LIST_VALUE_MSG);

@@ -24,6 +24,8 @@ public class ErrorCode {
 
     public static final String SERVICE_REQUEST_ATTRIBUTE_INVALID_TEXT_VALUE_MSG = "Attribute Value provided against the attribute definition of type Text must be a string";
 
+    public static final String SERVICE_REQUEST_ATTRIBUTE_INVALID_DATETIME_VALUE_MSG = "Attribute Value provided against the attribute definition of type DateTime must be an epoch value of type long";
+
     public static final String SERVICE_REQUEST_ATTRIBUTE_INVALID_SINGLE_VALUE_LIST_VALUE_MSG = "Attribute Value provided against the attribute definition of type single value list must be an instance of String";
 
     public static final String SERVICE_REQUEST_ATTRIBUTE_INVALID_MULTI_VALUE_LIST_VALUE_MSG = "Attribute Value provided against the attribute definition of type multi value list must be an instance of list";
