@@ -43,6 +43,9 @@ public class ServiceDefinitionRequestService {
         // Producer statement to emit service definition to kafka for persisting
         producer.push(config.getServiceDefinitionCreateTopic(), serviceDefinitionRequest);
 
+        // Restore attribute values to the type in which it was sent in service definition request
+        enrichmentService.setAttributeDefinitionValuesBackToNativeState(serviceDefinition);
+
         return serviceDefinition;
     }
 
@@ -52,6 +55,11 @@ public class ServiceDefinitionRequestService {
 
         if(CollectionUtils.isEmpty(listOfServiceDefinitions))
             return new ArrayList<>();
+
+        listOfServiceDefinitions.forEach(serviceDefinition -> {
+            // Restore attribute values to native state
+            enrichmentService.setAttributeDefinitionValuesBackToNativeState(serviceDefinition);
+        });
 
         return listOfServiceDefinitions;
     }

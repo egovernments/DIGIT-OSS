@@ -12,6 +12,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ServiceRequestService {
@@ -39,10 +40,13 @@ public class ServiceRequestService {
         serviceRequestValidator.validateServiceRequest(serviceRequest);
 
         // Enrich incoming service definition request
-        enrichmentService.enrichServiceRequest(serviceRequest);
+        Map<String, Object> attributeCodeVsValueMap = enrichmentService.enrichServiceRequest(serviceRequest);
 
         // Producer statement to emit service definition to kafka for persisting
         producer.push(config.getServiceCreateTopic(), serviceRequest);
+
+        // Restore attribute values to the type in which it was sent in service request
+        enrichmentService.setAttributeValuesBackToNativeState(serviceRequest, attributeCodeVsValueMap);
 
         return service;
     }

@@ -49,6 +49,12 @@ public class ServiceDefinitionQueryBuilder {
             addToPreparedStatement(preparedStmtList, criteria.getIds());
         }
 
+        if(!ObjectUtils.isEmpty(criteria.getClientId())){
+            addClauseIfRequired(query, preparedStmtList);
+            query.append(" sd.clientid = ? ");
+            preparedStmtList.add(criteria.getClientId());
+        }
+
         // Fetch service definitions which have NOT been soft deleted
         addClauseIfRequired(query, preparedStmtList);
         query.append(" sd.isActive = ? ");

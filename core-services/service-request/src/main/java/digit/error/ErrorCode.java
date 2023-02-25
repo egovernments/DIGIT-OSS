@@ -30,13 +30,9 @@ public class ErrorCode {
 
     public static final String SERVICE_REQUEST_ATTRIBUTE_INVALID_MULTI_VALUE_LIST_VALUE_MSG = "Attribute Value provided against the attribute definition of type multi value list must be an instance of list";
 
-    public static final String INVALID_SIZE_OF_STRING_CODE= "INVALID_SIZE_OF_STRING_CODE";
+    public static final String INVALID_SIZE_OF_INPUT_CODE = "INVALID_SIZE_OF_INPUT_CODE";
 
-    public static final String INVALID_SIZE_OF_STRING_MSG = "String value cannot be of length greater than 64";
-
-    public static final String INVALID_SIZE_OF_TEXT_CODE = "INVALID_SIZE_OF_TEXT_CODE";
-
-    public static final String INVALID_SIZE_OF_TEXT_MSG = "Text value cannot be of length greater than 1024";
+    public static final String INVALID_SIZE_OF_TEXT_MSG = "Text value cannot be of length greater than configured length ";
 
     public static final String SERVICE_DEFINITION_ALREADY_EXISTS_ERR_CODE = "SERVICE_DEFINITION_ALREADY_EXISTS_ERR_CODE";
 
@@ -57,4 +53,8 @@ public class ErrorCode {
     public static final String INVALID_ATTRIBUTE_DEFINITION_ERR_CODE = "INVALID_ATTRIBUTE_DEFINITION_ERR_CODE";
 
     public static final String INVALID_ATTRIBUTE_DEFINITION_ERR_MSG = "Values are only allowed in case of single value and multi value lists";
+
+    public static final String SERVICE_REQUEST_ATTRIBUTE_INVALID_VALUE_SINGLEVALUELIST_MSG = "Values provided against single value type list must belong to the list of values provided during service definition creation.";
+
+    public static final String SERVICE_REQUEST_ATTRIBUTE_INVALID_VALUE_MULTIVALUELIST_MSG = "Values provided against multi value type list must belong to the list of values provided during service definition creation.";
 }

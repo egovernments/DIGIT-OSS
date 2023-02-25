@@ -40,6 +40,9 @@ public class ServiceDefinitionCriteria {
     @JsonProperty("code")
     private List<String> code = null;
 
+    @JsonProperty("clientId")
+    private String clientId = null;
+
 
     public ServiceDefinitionCriteria addIdsItem(String idsItem) {
         if (this.ids == null) {

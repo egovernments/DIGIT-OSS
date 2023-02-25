@@ -43,6 +43,12 @@ public class ServiceCriteria {
     @JsonProperty("referenceIds")
     private List<String> referenceIds = null;
 
+    @JsonProperty("accountId")
+    private String accountId = null;
+
+    @JsonProperty("clientId")
+    private String clientId = null;
+
 
     public ServiceCriteria addIdsItem(String idsItem) {
         if (this.ids == null) {

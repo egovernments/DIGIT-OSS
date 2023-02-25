@@ -53,6 +53,18 @@ public class ServiceQueryBuilder {
             addToPreparedStatement(preparedStmtList, criteria.getReferenceIds());
         }
 
+        if(!ObjectUtils.isEmpty(criteria.getAccountId())){
+            addClauseIfRequired(query, preparedStmtList);
+            query.append(" service.accountid = ? ");
+            preparedStmtList.add(criteria.getAccountId());
+        }
+
+        if(!ObjectUtils.isEmpty(criteria.getClientId())){
+            addClauseIfRequired(query, preparedStmtList);
+            query.append(" service.clientid = ? ");
+            preparedStmtList.add(criteria.getClientId());
+        }
+
         // order services based on their createdtime in latest first manner
         query.append(ORDERBY_CREATEDTIME);
 

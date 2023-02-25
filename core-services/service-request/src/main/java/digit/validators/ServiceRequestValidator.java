@@ -1,5 +1,6 @@
 package digit.validators;
 
+import digit.config.Configuration;
 import digit.repository.ServiceDefinitionRequestRepository;
 import digit.repository.ServiceRequestRepository;
 import digit.web.models.*;
@@ -22,9 +23,17 @@ public class ServiceRequestValidator {
     @Autowired
     private ServiceDefinitionRequestRepository serviceDefinitionRequestRepository;
 
+    @Autowired
+    private Configuration config;
+
     public void validateServiceRequest(ServiceRequest serviceRequest){
         List<ServiceDefinition> serviceDefinitions = validateServiceDefID(serviceRequest.getService().getTenantId(), serviceRequest.getService().getServiceDefId());
         validateAttributeValuesAgainstServiceDefinition(serviceDefinitions.get(0), serviceRequest.getService());
+        validateAccountId(serviceRequest.getService());
+    }
+
+    private void validateAccountId(Service service) {
+        // TO DO
     }
 
 
@@ -34,8 +43,13 @@ public class ServiceRequestValidator {
         // validate uniqueness of attribute value codes being passed against service definition
         Map<String, AttributeDefinition.DataTypeEnum> attributeCodeVsDataType = new HashMap<>();
         Set<String> setOfRequiredAttributes = new HashSet<>();
+        Map<String, Set<String>> attributeCodeVsValues = new HashMap<>();
         serviceDefinition.getAttributes().forEach(attributeDefinition -> {
             attributeCodeVsDataType.put(attributeDefinition.getCode(), attributeDefinition.getDataType());
+
+            if(attributeDefinition.getDataType().equals(AttributeDefinition.DataTypeEnum.SINGLEVALUELIST) || attributeDefinition.getDataType().equals(AttributeDefinition.DataTypeEnum.MULTIVALUELIST)){
+                attributeCodeVsValues.put(attributeDefinition.getCode(), new HashSet<>(attributeDefinition.getValues()));
+            }
 
             if(attributeDefinition.getRequired())
                 setOfRequiredAttributes.add(attributeDefinition.getCode());
@@ -70,12 +84,12 @@ public class ServiceRequestValidator {
                 if(!(attributeValue.getValue() instanceof String)){
                     throw new CustomException(SERVICE_REQUEST_ATTRIBUTE_INVALID_VALUE_CODE, SERVICE_REQUEST_ATTRIBUTE_INVALID_STRING_VALUE_MSG);
                 }
-                validateSizeOfString(attributeValue.getValue());
+                validateSize(attributeValue.getValue());
             }else if(attributeCodeVsDataType.get(attributeValue.getAttributeCode()).equals(AttributeDefinition.DataTypeEnum.TEXT)){
                 if(!(attributeValue.getValue() instanceof String)){
                     throw new CustomException(SERVICE_REQUEST_ATTRIBUTE_INVALID_VALUE_CODE, SERVICE_REQUEST_ATTRIBUTE_INVALID_TEXT_VALUE_MSG);
                 }
-                validateSizeOfText(attributeValue.getValue());
+                validateSize(attributeValue.getValue());
             }else if(attributeCodeVsDataType.get(attributeValue.getAttributeCode()).equals(AttributeDefinition.DataTypeEnum.DATETIME)){
                 if(!(attributeValue.getValue() instanceof Long)){
                     throw new CustomException(SERVICE_REQUEST_ATTRIBUTE_INVALID_VALUE_CODE, SERVICE_REQUEST_ATTRIBUTE_INVALID_DATETIME_VALUE_MSG);
@@ -90,25 +104,32 @@ public class ServiceRequestValidator {
                 }
             }
         });
+
+        // Validate if value provided against attribute definition of single value list and multi value list is the same as the list of values provided during creation
+        service.getAttributes().forEach(attributeValue -> {
+            if(attributeCodeVsValues.containsKey(attributeValue.getAttributeCode())){
+                if(attributeCodeVsDataType.get(attributeValue.getAttributeCode()).equals(AttributeDefinition.DataTypeEnum.SINGLEVALUELIST)){
+                    if(!attributeCodeVsValues.get(attributeValue.getAttributeCode()).contains(attributeValue.getValue())){
+                        throw new CustomException(SERVICE_REQUEST_ATTRIBUTE_INVALID_VALUE_CODE, SERVICE_REQUEST_ATTRIBUTE_INVALID_VALUE_SINGLEVALUELIST_MSG);
+                    }
+                } else if(attributeCodeVsDataType.get(attributeValue.getAttributeCode()).equals(AttributeDefinition.DataTypeEnum.MULTIVALUELIST)){
+                    List<String> providedAttributeValues = (List<String>) attributeValue.getValue();
+                    providedAttributeValues.forEach(providedAttributeValue -> {
+                        if(!attributeCodeVsValues.get(attributeValue.getAttributeCode()).contains(providedAttributeValue)){
+                            throw new CustomException(SERVICE_REQUEST_ATTRIBUTE_INVALID_VALUE_CODE, SERVICE_REQUEST_ATTRIBUTE_INVALID_VALUE_MULTIVALUELIST_MSG);
+                        }
+                    });
+                }
+            }
+        });
+
     }
 
-    private void validateSizeOfString(Object value) {
+    private void validateSize(Object value) {
         String incomingValue = (String) value;
 
-        // Should this be made configurable?
-
-        if(incomingValue.length() > 64){
-            throw new CustomException(INVALID_SIZE_OF_STRING_CODE, INVALID_SIZE_OF_STRING_MSG);
-        }
-    }
-
-    private void validateSizeOfText(Object value) {
-        String incomingValue = (String) value;
-
-        // Should this be made configurable?
-
-        if(incomingValue.length() > 1024){
-            throw new CustomException(INVALID_SIZE_OF_TEXT_CODE, INVALID_SIZE_OF_TEXT_MSG);
+        if(incomingValue.length() > config.getMaxStringInputSize()){
+            throw new CustomException(INVALID_SIZE_OF_INPUT_CODE, INVALID_SIZE_OF_TEXT_MSG);
         }
     }
 

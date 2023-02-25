@@ -47,7 +47,7 @@ public class ServiceRequestEnrichmentService {
 
     }
 
-    public void enrichServiceRequest(ServiceRequest serviceRequest) {
+    public Map<String, Object> enrichServiceRequest(ServiceRequest serviceRequest) {
         Service service = serviceRequest.getService();
         RequestInfo requestInfo = serviceRequest.getRequestInfo();
 
@@ -72,15 +72,35 @@ public class ServiceRequestEnrichmentService {
         service.setAuditDetails(auditDetails);
 
         // Convert incoming attribute value into JSON object
-        convertAttributeValuesIntoJson(serviceRequest);
+        Map<String, Object> attributeCodeVsValueMap = convertAttributeValuesIntoJson(serviceRequest);
+
+        return attributeCodeVsValueMap;
 
     }
 
-    private void convertAttributeValuesIntoJson(ServiceRequest serviceRequest) {
+    private Map<String, Object> convertAttributeValuesIntoJson(ServiceRequest serviceRequest) {
+        Map<String, Object> attributeCodeVsValueMap = new HashMap<>();
         serviceRequest.getService().getAttributes().forEach(attributeValue -> {
+            attributeCodeVsValueMap.put(attributeValue.getAttributeCode(), attributeValue.getValue());
             Map<String, Object> jsonObj = new HashMap<>();
             jsonObj.put(VALUE, attributeValue.getValue());
             attributeValue.setValue(jsonObj);
+        });
+        return attributeCodeVsValueMap;
+    }
+
+    public void setAttributeDefinitionValuesBackToNativeState(ServiceDefinition serviceDefinition) {
+        // Initialize values with null in case of non-list type attribute definition values
+        serviceDefinition.getAttributes().forEach(attributeDefinition -> {
+            if(!(attributeDefinition.getDataType().equals(AttributeDefinition.DataTypeEnum.SINGLEVALUELIST) || attributeDefinition.getDataType().equals(AttributeDefinition.DataTypeEnum.MULTIVALUELIST))){
+                attributeDefinition.setValues(null);
+            }
+        });
+    }
+
+    public void setAttributeValuesBackToNativeState(ServiceRequest serviceRequest, Map<String, Object> attributeCodeVsValueMap) {
+        serviceRequest.getService().getAttributes().forEach(attributeValue -> {
+            attributeValue.setValue(attributeCodeVsValueMap.get(attributeValue.getAttributeCode()));
         });
     }
 }
