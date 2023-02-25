@@ -111,7 +111,7 @@ public class ServiceDefinitionQueryBuilder {
 
 
     public String getServiceDefinitionSearchQuery(ServiceDefinitionCriteria criteria, List<Object> preparedStmtList) {
-        StringBuilder query = new StringBuilder("SELECT sd.id, sd.tenantid,  sd.code, sd.isactive, sd.createdby, sd.lastmodifiedby, sd.createdtime, sd.lastmodifiedtime, sd.additionaldetails, "
+        StringBuilder query = new StringBuilder("SELECT sd.id, sd.tenantid,  sd.code, sd.isactive, sd.createdby, sd.lastmodifiedby, sd.createdtime, sd.lastmodifiedtime, sd.additionaldetails, sd.clientid, "
                 + "ad.id as attribute_definition_id, ad.referenceid as attribute_definition_referenceid, ad.tenantid as attribute_definition_tenantid, ad.code as attribute_definition_code, ad.datatype as attribute_definition_datatype, ad.values as attribute_definition_values, ad.isactive as attribute_definition_isactive, ad.required as attribute_definition_required, ad.regex as attribute_definition_regex, ad.order as attribute_definition_order, ad.createdby as attribute_definition_createdby, ad.lastmodifiedby as attribute_definition_lastmodifiedby, ad.createdtime as attribute_definition_createdtime, ad.lastmodifiedtime as attribute_definition_lastmodifiedtime, ad.additionaldetails as attribute_definition_additionaldetails "
                 + "FROM eg_service_definition as sd "
                 + "INNER JOIN eg_service_attribute_definition as ad ON "

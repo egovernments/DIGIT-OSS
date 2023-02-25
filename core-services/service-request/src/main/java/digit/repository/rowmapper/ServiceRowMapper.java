@@ -55,6 +55,8 @@ public class ServiceRowMapper implements ResultSetExtractor<List<Service>> {
                             .referenceId(rs.getString("referenceid"))
                             .auditDetails(auditDetails)
                             .additionalDetails(getAdditionalDetail((PGobject) rs.getObject("additionaldetails")))
+                            .accountId(rs.getString("accountid"))
+                            .clientId(rs.getString("clientid"))
                             .build();
 
                 }

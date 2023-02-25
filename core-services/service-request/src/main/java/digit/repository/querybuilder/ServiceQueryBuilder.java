@@ -110,7 +110,7 @@ public class ServiceQueryBuilder {
 
 
     public String getServiceSearchQuery(ServiceCriteria criteria, List<Object> preparedStmtList) {
-        StringBuilder query = new StringBuilder("SELECT service.id, service.tenantid,  service.servicedefid, service.referenceid, service.createdby, service.lastmodifiedby, service.createdtime, service.lastmodifiedtime, service.additionaldetails, "
+        StringBuilder query = new StringBuilder("SELECT service.id, service.tenantid,  service.servicedefid, service.referenceid, service.createdby, service.lastmodifiedby, service.createdtime, service.lastmodifiedtime, service.additionaldetails, service.accountid, service.clientid, "
                 + "attribute_value.id as attribute_value_id, attribute_value.referenceid as attribute_value_referenceid, attribute_value.attributecode as attribute_value_attributecode, attribute_value.value as attribute_value_value, attribute_value.createdby as attribute_value_createdby, attribute_value.lastmodifiedby as attribute_value_lastmodifiedby, attribute_value.createdtime as attribute_value_createdtime, attribute_value.lastmodifiedtime as attribute_value_lastmodifiedtime, attribute_value.additionaldetails as attribute_value_additionaldetails "
                 + "FROM eg_service as service "
                 + "INNER JOIN eg_service_attribute_value as attribute_value ON "

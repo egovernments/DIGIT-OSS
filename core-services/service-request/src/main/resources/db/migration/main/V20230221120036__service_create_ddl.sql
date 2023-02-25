@@ -8,6 +8,8 @@ CREATE TABLE eg_service(
     createdTime bigint,
     lastModifiedTime bigint,
     additionalDetails JSONB,
+    accountId character varying(64),
+    clientId character varying(64),
     CONSTRAINT uk_eg_service UNIQUE (id)
 );
 

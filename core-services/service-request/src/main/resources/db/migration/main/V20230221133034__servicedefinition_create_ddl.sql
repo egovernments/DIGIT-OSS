@@ -8,6 +8,7 @@ CREATE TABLE eg_service_definition(
     createdTime bigint,
     lastModifiedTime bigint,
     additionalDetails JSONB,
+    clientId character varying(64),
     CONSTRAINT uk_eg_service_definition UNIQUE (id),
     CONSTRAINT pk_eg_service_definition PRIMARY KEY (tenantId,code)
 );

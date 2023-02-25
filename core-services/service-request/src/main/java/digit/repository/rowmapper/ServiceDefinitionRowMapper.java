@@ -50,6 +50,7 @@ public class ServiceDefinitionRowMapper implements ResultSetExtractor<List<Servi
                             .isActive(rs.getBoolean("isactive"))
                             .auditDetails(auditDetails)
                             .additionalDetails(getAdditionalDetail((PGobject) rs.getObject("additionaldetails")))
+                            .clientId(rs.getString("clientid"))
                             .build();
 
                 }

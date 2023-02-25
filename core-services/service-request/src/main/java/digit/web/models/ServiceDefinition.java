@@ -59,6 +59,10 @@ public class ServiceDefinition {
     @JsonProperty("additionalDetails")
     private Object additionalDetails = null;
 
+    @JsonProperty("clientId")
+    @Size(max = 64)
+    private String clientId = null;
+
 
     public ServiceDefinition addAttributesItem(AttributeDefinition attributesItem) {
         this.attributes.add(attributesItem);

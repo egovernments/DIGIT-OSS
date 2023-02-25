@@ -60,6 +60,15 @@ public class Service {
     @JsonProperty("additionalDetails")
     private Object additionalDetails = null;
 
+    @JsonProperty("accountId")
+    @NotNull
+    @Size(max = 64)
+    private String accountId = null;
+
+    @JsonProperty("clientId")
+    @Size(max = 64)
+    private String clientId = null;
+
 
     public Service addAttributesItem(AttributeValue attributesItem) {
         this.attributes.add(attributesItem);
