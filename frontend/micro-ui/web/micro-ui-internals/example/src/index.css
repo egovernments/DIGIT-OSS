@@ -9724,6 +9724,11 @@ textarea {
   background-color: #024f9d;
   border-color: #024f9d;
 }
+.btn-primary:disabled {
+  color: #fff;
+  background-color: #024f9d;
+  border-color: #024f9d;
+}
 
 .card2 {
   padding: 2%;
@@ -21044,3 +21049,22 @@ input[type=text]:disabled {
 .formlist {
   padding: 10;
 }
+
+.remarkshelp {
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  }
+  .histroryremarks{
+    width: 35%;
+    height: 500px;
+    overflow-y: auto;
+  
+  }
+  .currentremarks {
+    width: 65%;
+    height: 500px;
+    overflow-y: auto;
+  }

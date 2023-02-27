@@ -20,8 +20,9 @@ import { getDocShareholding } from "../ScrutinyDevelopment/docview.helper";
 import ModalChild from "../Remarks/ModalChild";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import { useStyles } from "../css/personalInfoChild.style";
+import { add } from "lodash";
 
-const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataValue, data, capacityScrutinyInfo, iconColorState ,developerType,getRemarkData}) => {
+const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataValue, data, addInfo, capacityScrutinyInfo, iconColorState ,showDevTypeFields,getRemarkData}) => {
   const { pathname: url } = useLocation();
   const userInfo = Digit.UserService.getUser();
   let validation = {};
@@ -406,6 +407,8 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
     setOpennedModal("");
     setLabelValue("");
   };
+  console.log("happy akash" ,capacityScrutinyInfo);
+  console.log("happy akash2" , addInfo);
 
   return (
     <div>
@@ -446,7 +449,11 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
       <Collapse in={open}>
         <div id="example-collapse-text">
           <FormStep config={config} onSelect={submitTechdevData} onSkip={onSkip} t={t}>
-            {developerType === "Individual" && (
+          {/* kit  {developerType} */}
+          
+            {/* oti {addInfo?.showDevTypeFields} */}
+
+            {addInfo?.showDevTypeFields === "Individual" && (
               <div className="card-body">
                 <div className="form-group row mb-12">
                   <label className="col-sm-3 col-form-label">Individual</label>
@@ -551,11 +558,11 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                 </div>
               </div>
             )}
-{/* {developerType} */}
 
 
 
-            {developerType === "Company" && (
+
+            {addInfo?.showDevTypeFields === "Company" && (
               <div className="card-body">
                 <div className="form-group row">
                   <div className="col-sm-12">
@@ -583,11 +590,12 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                                   </button> */}
                                   
                                  <div className="btn btn-sm col-md-6">
-                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                   <IconButton onClick={()=>getDocShareholding(capacityScrutinyInfo?.documents?.companyBalanceSheet)}>
                                       <VisibilityIcon color="info" className="icon" /></IconButton>
                                       </div>
+                                    
                                  <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                  <IconButton onClick={()=>getDocShareholding(capacityScrutinyInfo?.documents?.companyBalanceSheet)}>
                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
                                       </div>
                                 </div>
@@ -624,11 +632,11 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                                   </button> */}
                                   
                                  <div className="btn btn-sm col-md-6">
-                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                   <IconButton onClick={()=>getDocShareholding(capacityScrutinyInfo?.documents?.paidUpCapital)}>
                                       <VisibilityIcon color="info" className="icon" /></IconButton>
                                       </div>
                                  <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                  <IconButton onClick={()=>getDocShareholding(capacityScrutinyInfo?.documents?.paidUpCapital)}>
                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
                                       </div>
                                 </div>
@@ -665,11 +673,11 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                                   </button> */}
                                   
                                  <div className="btn btn-sm col-md-6">
-                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                   <IconButton onClick={()=>getDocShareholding(capacityScrutinyInfo?.documents?.reservesAndSurplus)}>
                                       <VisibilityIcon color="info" className="icon" /></IconButton>
                                       </div>
                                  <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                  <IconButton onClick={()=>getDocShareholding(capacityScrutinyInfo?.documents?.reservesAndSurplus)}>
                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
                                       </div>
                                 </div>
@@ -706,11 +714,11 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                                   </button> */}
                                   
                                  <div className="btn btn-sm col-md-6">
-                                   <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                   <IconButton onClick={()=>getDocShareholding(capacityScrutinyInfo?.documents?.anyOtherDoc)}>
                                       <VisibilityIcon color="info" className="icon" /></IconButton>
                                       </div>
                                  <div className="btn btn-sm col-md-6">
-                                  <IconButton onClick={()=>getDocShareholding(item?.agreementDoc)}>
+                                  <IconButton onClick={()=>getDocShareholding(capacityScrutinyInfo?.documents?.anyOtherDoc)}>
                                       <FileDownloadIcon color="info" className="icon" /></IconButton>
                                       </div>
                                 </div>

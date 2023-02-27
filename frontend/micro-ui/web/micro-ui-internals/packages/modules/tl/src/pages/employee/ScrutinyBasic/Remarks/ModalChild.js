@@ -51,7 +51,9 @@ function ModalChild(props) {
           serviceId: "123",
           documentId: null,
           ts: dateTime.toUTCString(),
-          bussinessServiceName : bussinessService
+          bussinessServiceName : bussinessService,
+          designation : userInfo?.name || null,
+          employeeName : userInfo?.roles?.[1]?.name || null,
         },
       };
 
@@ -84,6 +86,7 @@ function ModalChild(props) {
   }, [props.selectedFieldData]);
 
   console.log("Isdata" , status )
+  console.log("username" , userInfo?.roles?.[1]?.name  )
 
   return (
     <Modal

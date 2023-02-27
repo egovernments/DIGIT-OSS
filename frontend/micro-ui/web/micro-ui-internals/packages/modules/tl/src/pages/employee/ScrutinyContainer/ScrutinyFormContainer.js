@@ -346,6 +346,7 @@ const ScrutinyFormcontainer = (props) => {
       <Row >
         <div className="formlist">
         <ScrutitnyForms
+         histeroyData={workflowDetailsTemp}
           apiResponse={scrutinyDetails}
           applicationNumber={id}
           refreshScrutinyData={getScrutinyData}
