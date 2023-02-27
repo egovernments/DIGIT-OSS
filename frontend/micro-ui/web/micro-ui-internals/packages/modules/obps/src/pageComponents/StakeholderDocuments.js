@@ -28,6 +28,13 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
   const isCitizenUrl = Digit.Utils.browser.isMobile() ? true : false;
   let isopenlink = window.location.href.includes("/openlink/");
   const [isRequiredField, setRequiredField] = useState(true);
+  const [articlesOfAssociation, setArticlesOfAssociation] = useState(formData?.documents?.documents[0]?.documentUid || "");
+  const [memorandumOfArticles, setMemorandumOfArticles] = useState(formData?.documents?.documents[1]?.documentUid || "");
+  const [registeredIrrevocablePaternshipDeed, setRegisteredIrrevocablePaternshipDeed] = useState(
+    formData?.documents?.documents[2]?.documentUid || ""
+  );
+  const [affidavitAndPancard, setAffidavitAndPancard] = useState(formData?.documents?.documents[3]?.documentUid || "");
+  const [anyOtherDoc, setAnyOtherDoc] = useState(formData?.documents?.documents[4]?.documentUid || "");
   // const [docList, setDocList] = useState({});
   if (isopenlink)
     window.onunload = function () {
@@ -86,9 +93,11 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
     documents.map((dataFile, index) => {
       console.log(
         "515151",
-        documents?.filter((item) => item?.documentType)
+        documents?.filter((item) => item?.documentType == dataFile.code)
       );
     });
+
+    setArticlesOfAssociation(documents[0]?.documentUid);
 
     let documentStep;
     let regularDocs = [];
@@ -100,14 +109,29 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
         if (docobject) regularDocs.push(docobject);
       });
     documentStep = { ...document, documents: regularDocs };
-    console.log("RTGT", documentStep);
+
+    let allDocs = [];
+
+    bpaTaxDocuments.map((items, index) => {
+      let fstDoc = documents.find((obd) => obd.documentType == "ARTICLES_OF_ASSOCIATION");
+      if (fstDoc) allDocs.push(fstDoc?.fileStoreId);
+      let articlesOfAss = allDocs[0];
+    });
+
+    console.log("RTGT", articlesOfAssociation);
     const developerRegisterData = {
       id: userInfo?.info?.id,
       pageName: "licensesDoc",
       createdBy: userInfo?.info?.id,
       updatedBy: userInfo?.info?.id,
       devDetail: {
-        licensesDoc: documents,
+        licensesDoc: {
+          articlesOfAssociation: articlesOfAssociation,
+          memorandumOfArticles: memorandumOfArticles,
+          registeredIrrevocablePaternshipDeed: registeredIrrevocablePaternshipDeed,
+          affidavitAndPancard: affidavitAndPancard,
+          anyOtherDoc: anyOtherDoc,
+        },
       },
     };
     Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
@@ -270,7 +294,8 @@ function SelectDocument({ t, document: doc, setDocuments, error, setError, docum
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(() => filteredDocument?.fileStoreId || null);
   setValue("finalDocList", filteredDocument?.fileStoreId);
-  console.log("FILTEREDDOC", uploadedFile);
+  // setArticlesOfAssociation(uploadedFile);
+  // console.log("FILTEREDDOC", articlesOfAssociation);
 
   // console.log("HGHGHG", docList);
   const handleSelectDocument = (value) => setSelectedDocument(value);
