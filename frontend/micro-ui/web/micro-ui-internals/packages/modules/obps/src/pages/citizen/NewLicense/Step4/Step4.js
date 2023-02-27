@@ -52,7 +52,7 @@ const AppliedDetailForm = (props) => {
   const [getData, setData] = useState({ caseNumber: "", dairyNumber: "" });
   const [newDataA, setNewDataA] = useState({});
   const [getFarArr, setFarArr] = useState([]);
-  const [getUpdatedData, setUpdatedData] = useState([]);
+  const [getUpdatedData, setUpdatedData] = useState(null);
 
   const {
     watch,
@@ -143,6 +143,7 @@ const AppliedDetailForm = (props) => {
       LicenseDetails: {
         DetailsofAppliedLand: {
           dgpsDetails: modalData,
+          PurposeDetails: getUpdatedData,
           DetailsAppliedLandPlot: {
             ...data,
             // regularOption: data?.regularOption,
@@ -586,7 +587,6 @@ const AppliedDetailForm = (props) => {
         return obj;
       }
     });
-    setUpdatedData([...getUpdatedData], updatedData);
     return updatedData;
   };
 
@@ -600,7 +600,7 @@ const AppliedDetailForm = (props) => {
       <div>
         {data?.length &&
           data?.map((x, i) => {
-            setValue(x?.id, x?.area);
+            // setValue(x?.id, x?.area);
             return (
               <div>
                 <h6>
@@ -612,19 +612,24 @@ const AppliedDetailForm = (props) => {
                 <div className="row">
                   <div className="col col-4 mt-3">
                     <h6>
-                      Area:{" "}
+                      Area:
                       <input
                         type="number"
                         className="form-control"
                         placeholder="enter Area"
+                        defaultValue={x?.area}
                         {...register(`${x?.id}`)}
                         onChange={(e) => {
                           // let newSelection = [];
                           const updatedData = updateAreaById(newDataA, x?.id, e?.target?.value);
-                          console.log(updatedData);
+                          console.log("updatedData", updatedData?.[0]);
+                          // console.log(updatedData);
+                          // const newArray = [...getUpdatedData, updatedData];
+                          // console.log("newArray", newArray);
+                          // setUpdatedData(e?.target?.value);
                           // newSelection = [...getUpdatedData, updatedData];
-                          // setUpdatedData(newSelection);
-                          // setNewDataA(updatedData);
+                          // setUpdatedData(updatedData?.[0]);
+                          // setNewDataA(newArray);
                         }}
                       />
                     </h6>
