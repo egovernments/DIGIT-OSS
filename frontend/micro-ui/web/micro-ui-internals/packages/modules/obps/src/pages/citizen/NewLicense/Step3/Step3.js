@@ -239,10 +239,6 @@ const LandScheduleForm = (props) => {
     data["siteLoc"] = data?.siteLoc?.value;
     data["purposeParentLic"] = data?.purposeParentLic?.value;
     data["releaseStatus"] = data?.releaseStatus?.value;
-
-    console.log("data", data);
-    // return;
-
     const postDistrict = {
       pageName: "LandSchedule",
       action: "LANDSCHEDULE",
@@ -309,7 +305,6 @@ const LandScheduleForm = (props) => {
   }, []);
 
   const getDocumentData = async (file, fieldName) => {
-    console.log("documentData", fieldName);
     if (selectedFiles.includes(file.name)) {
       setShowToastError({ key: "error" });
       return;
@@ -323,7 +318,6 @@ const LandScheduleForm = (props) => {
     setLoader(true);
     try {
       const Resp = await axios.post("/filestore/v1/files", formData, {});
-      console.log("documentData", Resp?.data?.files);
       setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
       // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
@@ -474,7 +468,6 @@ const LandScheduleForm = (props) => {
   }, []);
 
   const LandScheduleModalData = (modaldata) => {
-    console.log("modaldata", modaldata);
     setModalData((prev) => [...prev, modaldata]);
     // resetValues();
     setmodal(false);
