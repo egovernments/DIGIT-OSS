@@ -65,13 +65,31 @@ function SubmitNew() {
       const postDistrict = {
         NewBankGuaranteeRequest: [
           {
+            loiNumber: "",
+            typeOfBg: "",
             tenantId: tenantId,
-            additionalDetails: null,
-            additionalDocuments: null,
+            businessService: "",
+            additionalDetails: {
+              mortgageKhasraDetails: [
+                {
+                  ...data,
+                },
+              ],
+              // totalKhasraAreaToMortgage: "",
+              mortgagePlotDetails: [
+                {
+                  ...data,
+                },
+              ],
+              // totalPlotAreaToMortgage: "",
+            },
+            additionalDocuments: {
+              ...data,
+            },
             action: null,
             comment: "test comment",
             assignee: null,
-            // validity: data?.validity,
+
             ...data,
           },
         ],
@@ -633,10 +651,10 @@ function SubmitNew() {
                 <tbody>
                   <tr>
                     <th className="fw-normal" style={{ textAlign: "center" }}>
-                      <NumberInput disabled control={control} name="totalAreaScheme" customInput={TextField} />
+                      <NumberInput disabled control={control} name="totalAreaScheme" {...register("khasraNumber")} />
                     </th>
                     <th className="fw-normal" style={{ textAlign: "center" }}>
-                      <input type="number" className="form-control" placeholder="" />
+                      <input type="number" className="form-control" placeholder="" {...register("areaToBeMortgagedInSqMtrs")} />
                     </th>
                   </tr>
                   <tr>
@@ -652,7 +670,7 @@ function SubmitNew() {
                       <h2>Area Total</h2>
                     </th>
                     <th className="fw-normal" style={{ textAlign: "center" }}>
-                      <input type="number" className="form-control" placeholder="" />
+                      <input type="number" className="form-control" placeholder="" {...register("totalKhasraAreaToMortgage")} />
                     </th>
                   </tr>
                 </tbody>
@@ -670,10 +688,10 @@ function SubmitNew() {
                     return (
                       <tr>
                         <th className="fw-normal" style={{ textAlign: "center" }}>
-                          <input type="text" className="form-control" placeholder="" />
+                          <input type="text" className="form-control" placeholder="" {...register("plotNumber")} />
                         </th>
                         <th className="fw-normal" style={{ textAlign: "center" }}>
-                          <input type="number" className="form-control" placeholder="" />
+                          <input type="number" className="form-control" placeholder="" {...register("areaInSqMtrs")} />
                         </th>
                       </tr>
                     );
@@ -700,18 +718,18 @@ function SubmitNew() {
                     <input
                       type="file"
                       style={{ display: "none" }}
-                      onChange={(e) => getDocumentData(e?.target?.files[0], "layoutPlanEarmarking")}
+                      onChange={(e) => getDocumentData(e?.target?.files[0], "mortgageLayoutPlan")}
                       accept="application/pdf/jpeg/png"
                     />
                   </label>
-                  {watch("layoutPlanEarmarking") && (
-                    <a onClick={() => getDocShareholding(watch("layoutPlanEarmarking"), setLoader)} className="btn btn-sm ">
+                  {watch("mortgageLayoutPlan") && (
+                    <a onClick={() => getDocShareholding(watch("mortgageLayoutPlan"), setLoader)} className="btn btn-sm ">
                       <VisibilityIcon color="info" className="icon" />
                     </a>
                   )}
 
                   <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.layoutPlanEarmarking && errors?.layoutPlanEarmarking?.message}
+                    {errors?.mortgageLayoutPlan && errors?.mortgageLayoutPlan?.message}
                   </h3>
                 </div>
 
@@ -748,18 +766,18 @@ function SubmitNew() {
                     <input
                       type="file"
                       style={{ display: "none" }}
-                      onChange={(e) => getDocumentData(e?.target?.files[0], "landSchedulePlotnumber")}
+                      onChange={(e) => getDocumentData(e?.target?.files[0], "mortgageLandScheduleAndPlotNumbersDoc")}
                       accept="application/pdf/jpeg/png"
                     />
                   </label>
-                  {watch("landSchedulePlotnumber") && (
-                    <a onClick={() => getDocShareholding(watch("landSchedulePlotnumber"), setLoader)} className="btn btn-sm ">
+                  {watch("mortgageLandScheduleAndPlotNumbersDoc") && (
+                    <a onClick={() => getDocShareholding(watch("mortgageLandScheduleAndPlotNumbersDoc"), setLoader)} className="btn btn-sm ">
                       <VisibilityIcon color="info" className="icon" />
                     </a>
                   )}
 
                   <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.landSchedulePlotnumber && errors?.landSchedulePlotnumber?.message}
+                    {errors?.mortgageLandScheduleAndPlotNumbersDoc && errors?.mortgageLandScheduleAndPlotNumbersDoc?.message}
                   </h3>
                 </div>
               </div>
@@ -774,18 +792,18 @@ function SubmitNew() {
                     <input
                       type="file"
                       style={{ display: "none" }}
-                      onChange={(e) => getDocumentData(e?.target?.files[0], "undertakingAmmended")}
+                      onChange={(e) => getDocumentData(e?.target?.files[0], "mortgageDeedAfterBPApproval")}
                       accept="application/pdf/jpeg/png"
                     />
                   </label>
-                  {watch("undertakingAmmended") && (
-                    <a onClick={() => getDocShareholding(watch("undertakingAmmended"), setLoader)} className="btn btn-sm ">
+                  {watch("mortgageDeedAfterBPApproval") && (
+                    <a onClick={() => getDocShareholding(watch("mortgageDeedAfterBPApproval"), setLoader)} className="btn btn-sm ">
                       <VisibilityIcon color="info" className="icon" />
                     </a>
                   )}
 
                   <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.undertakingAmmended && errors?.undertakingAmmended?.message}
+                    {errors?.mortgageDeedAfterBPApproval && errors?.mortgageDeedAfterBPApproval?.message}
                   </h3>
                 </div>
               </div>

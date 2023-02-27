@@ -19,7 +19,7 @@ import RetirementHousing from "./RetirementHousing";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { getDocShareholding } from "../docView/docView.help";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { VALIDATION_SCHEMA, MODAL_VALIDATION_SCHEMA } from "../../../../utils/schema/step3";
+import { VALIDATION_SCHEMA } from "../../../../utils/schema/step3";
 import FileUpload from "@mui/icons-material/FileUpload";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -223,7 +223,7 @@ const LandScheduleForm = (props) => {
     mode: "onChange",
     reValidateMode: "onChange",
     resolver: yupResolver(VALIDATION_SCHEMA),
-    resolver: yupResolver(modal ? MODAL_VALIDATION_SCHEMA : VALIDATION_SCHEMA),
+    // resolver: yupResolver(modal ? MODAL_VALIDATION_SCHEMA : VALIDATION_SCHEMA),
     shouldFocusError: true,
   });
 
@@ -2514,7 +2514,7 @@ const LandScheduleForm = (props) => {
                           type="file"
                           style={{ display: "none" }}
                           onChange={(e) => getDocumentData(e?.target?.files[0], "copyOfShajraPlan")}
-                          accept="application/shp/zip"
+                          // accept="application/shp/zip"
                         />
                       </label>
                       {watch("copyOfShajraPlan") && (
