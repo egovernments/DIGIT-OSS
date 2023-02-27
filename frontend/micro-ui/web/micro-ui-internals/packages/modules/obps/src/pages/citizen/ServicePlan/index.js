@@ -702,7 +702,7 @@ const ServicePlanService = () => {
                 </td>
               </tr>
               </tbody>
-              {/* { (purpose === "DDJAY_APHP" || purpose === "RPL" || purpose === "NILP"|| purpose === "NILPC"|| purpose === "IPA" || purpose === "CPRS" || purpose === "CICS") && ( */}
+              { (purpose === "DDJAY_APHP" || purpose === "RPL" || purpose === "NILP"|| purpose === "NILPC"|| purpose === "IPA" || purpose === "CPRS" || purpose === "CICS") && (
               <tbody>
               <tr>
                 <td>
@@ -954,9 +954,7 @@ const ServicePlanService = () => {
                 </td>
               </tr>
               </tbody>
-
-              
-              {/* )} */}
+              )}
           </div>
 
           <div class="row">
