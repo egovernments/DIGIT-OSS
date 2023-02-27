@@ -337,7 +337,7 @@ const ApllicantFormStep1 = (props) => {
               </div>
             </div>
             <br></br>
-            {developerDataLabel?.addInfo?.showDevTypeFields == "Individual" && (
+            {developerDataLabel?.addInfo?.showDevTypeFields !== "Individual" && (
               <div>
                 <h5 className="card-title fw-bold">Directors Information as per developer</h5>
                 <div className="card-body">
