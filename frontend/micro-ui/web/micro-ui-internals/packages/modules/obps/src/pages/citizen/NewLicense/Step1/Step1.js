@@ -337,127 +337,130 @@ const ApllicantFormStep1 = (props) => {
               </div>
             </div>
             <br></br>
+            {developerDataLabel?.addInfo?.showDevTypeFields == "Individual" && (
+              <div>
+                <h5 className="card-title fw-bold">Directors Information as per developer</h5>
+                <div className="card-body">
+                  <div className="table-bd">
+                    <table className="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>Sr. No</th>
+                          <th>DIN Number</th>
+                          <th>Name</th>
+                          <th>Contact Number</th>
+                          <th>View Document</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {developerDataLabel?.addInfo?.DirectorsInformation?.length &&
+                          developerDataLabel?.addInfo?.DirectorsInformation?.map((item, index) => {
+                            return (
+                              <tr>
+                                <td>{index + 1}</td>
+                                <td>{item?.din}</td>
+                                <td>{item?.name}</td>
+                                <td>{item?.contactNumber}</td>
+                                <td
+                                  style={{
+                                    color: " #1266af",
+                                    fontSize: " 12px",
+                                    fontWeight: "bold",
+                                    cursor: "pointer",
+                                    textDecorationLine: "underline",
+                                  }}
+                                  onClick={() => {
+                                    if (item?.uploadPdf) getDocShareholding(item?.uploadPdf, setLoader);
+                                    else setShowToastError({ key: "error" });
+                                  }}
+                                >
+                                  <VisibilityIcon color="info" className="icon" />
+                                </td>
+                              </tr>
+                            );
+                          })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
 
-            <h5 className="card-title fw-bold">Directors Information as per developer</h5>
-            <div className="card-body">
-              <div className="table-bd">
-                <table className="table table-bordered">
-                  <thead>
-                    <tr>
-                      <th>Sr. No</th>
-                      <th>DIN Number</th>
-                      <th>Name</th>
-                      <th>Contact Number</th>
-                      <th>View Document</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {developerDataLabel?.addInfo?.DirectorsInformation?.length &&
-                      developerDataLabel?.addInfo?.DirectorsInformation?.map((item, index) => {
-                        return (
-                          <tr>
-                            <td>{index + 1}</td>
-                            <td>{item?.din}</td>
-                            <td>{item?.name}</td>
-                            <td>{item?.contactNumber}</td>
-                            <td
-                              style={{
-                                color: " #1266af",
-                                fontSize: " 12px",
-                                fontWeight: "bold",
-                                cursor: "pointer",
-                                textDecorationLine: "underline",
-                              }}
-                              onClick={() => {
-                                if (item?.uploadPdf) getDocShareholding(item?.uploadPdf, setLoader);
-                                else setShowToastError({ key: "error" });
-                              }}
-                            >
-                              <VisibilityIcon color="info" className="icon" />
-                            </td>
-                          </tr>
-                        );
-                      })}
-                  </tbody>
-                </table>
+                <h5 className="card-title fw-bold">1. Director Information as per MCA</h5>
+                <div className="card-body">
+                  <div className="table-bd">
+                    <table className="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>Sr. No</th>
+                          <th>DIN Number</th>
+                          <th>Name</th>
+                          <th>Contact Number</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {developerDataLabel?.addInfo?.DirectorsInformationMCA?.length &&
+                          developerDataLabel?.addInfo?.DirectorsInformationMCA?.map((item, index) => {
+                            return (
+                              <tr>
+                                <td>{index + 1}</td>
+                                <td>{item?.din}</td>
+                                <td>{item?.name}</td>
+                                <td>{item?.contactNumber}</td>
+                              </tr>
+                            );
+                          })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <h5 className="card-title fw-bold">Shareholding Patterns</h5>
+                <div className="card-body">
+                  <div className="table-bd">
+                    <table className="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>Sr. No</th>
+                          <th>Name</th>
+                          <th>Designition</th>
+
+                          <th>Percentage</th>
+                          <th>View Document</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {developerDataLabel?.addInfo?.shareHoldingPatterens?.length &&
+                          developerDataLabel?.addInfo?.shareHoldingPatterens?.map((it, ind) => {
+                            return (
+                              <tr>
+                                <td>{ind + 1}</td>
+                                <td>{it?.name}</td>
+                                <td>{it?.designition}</td>
+
+                                <td>{it?.percentage}</td>
+                                <td
+                                  style={{
+                                    color: " #1266af",
+                                    fontSize: " 12px",
+                                    fontWeight: "bold",
+                                    cursor: "pointer",
+                                    textDecorationLine: "underline",
+                                  }}
+                                  onClick={() => {
+                                    if (it?.uploadPdf) getDocShareholding(it?.uploadPdf, setLoader);
+                                    else setShowToastError({ key: "error" });
+                                  }}
+                                >
+                                  <VisibilityIcon color="info" className="icon" />
+                                </td>
+                              </tr>
+                            );
+                          })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
-            </div>
-
-            <h5 className="card-title fw-bold">1. Director Information as per MCA</h5>
-            <div className="card-body">
-              <div className="table-bd">
-                <table className="table table-bordered">
-                  <thead>
-                    <tr>
-                      <th>Sr. No</th>
-                      <th>DIN Number</th>
-                      <th>Name</th>
-                      <th>Contact Number</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {developerDataLabel?.addInfo?.DirectorsInformationMCA?.length &&
-                      developerDataLabel?.addInfo?.DirectorsInformationMCA?.map((item, index) => {
-                        return (
-                          <tr>
-                            <td>{index + 1}</td>
-                            <td>{item?.din}</td>
-                            <td>{item?.name}</td>
-                            <td>{item?.contactNumber}</td>
-                          </tr>
-                        );
-                      })}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <h5 className="card-title fw-bold">Shareholding Patterns</h5>
-            <div className="card-body">
-              <div className="table-bd">
-                <table className="table table-bordered">
-                  <thead>
-                    <tr>
-                      <th>Sr. No</th>
-                      <th>Name</th>
-                      <th>Designition</th>
-
-                      <th>Percentage</th>
-                      <th>View Document</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {developerDataLabel?.addInfo?.shareHoldingPatterens?.length &&
-                      developerDataLabel?.addInfo?.shareHoldingPatterens?.map((it, ind) => {
-                        return (
-                          <tr>
-                            <td>{ind}</td>
-                            <td>{it?.name}</td>
-                            <td>{it?.designition}</td>
-
-                            <td>{it?.percentage}</td>
-                            <td
-                              style={{
-                                color: " #1266af",
-                                fontSize: " 12px",
-                                fontWeight: "bold",
-                                cursor: "pointer",
-                                textDecorationLine: "underline",
-                              }}
-                              onClick={() => {
-                                if (it?.uploadPdf) getDocShareholding(it?.uploadPdf, setLoader);
-                                else setShowToastError({ key: "error" });
-                              }}
-                            >
-                              <VisibilityIcon color="info" className="icon" />
-                            </td>
-                          </tr>
-                        );
-                      })}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+            )}
           </div>
 
           <div classname="card" style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "5px", marginBottom: "52px" }}>
