@@ -87,6 +87,7 @@ const FeesChargesForm = (props) => {
         authToken: token,
         userInfo: userInfo,
       },
+      applicationNo: applicantId,
       // CalulationCriteria: [
       //   {
       //     tenantId: "hr",
@@ -101,10 +102,9 @@ const FeesChargesForm = (props) => {
       //   applicationNumber: applicantId,
       // },
     };
-    // http://103.166.62.118:8443/tl-calculator/v1/_getPaymentEstimate?applicationNo=HRTL20230204003630
     try {
       // const Resp = await axios.post("/tl-calculator/v1/_calculator", payload);
-      const Resp = await axios.post(`/tl-calculator/v1/_getPaymentEstimate?applicationNo=${applicantId}`, payload);
+      const Resp = await axios.post(`/tl-calculator/v1/_getPaymentEstimate`, payload);
       const charges = Resp.data?.Calculations?.[0]?.tradeTypeBillingIds;
       setValue("scrutinyFee", charges?.scrutinyFeeCharges);
       setValue("licenseFee", charges?.licenseFeeCharges);
