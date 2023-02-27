@@ -108,7 +108,7 @@ export const customizePdfPrint = (doc, ulbname, logoBase64, headerLogo, waste = 
       },
     },
     { margin: [0, 10, 0, 10], text: [{ text: 'Waste : ', bold: true }, waste] },
-    { table: { widths: ['40%', '20%', '10%', '10%'], headerRows: 2, body: prepareBody(reportResult.reportData) } },
+    { table: { widths: ['40%', '20%', '5%', '5%'], headerRows: 2, body: prepareBody(reportResult.reportData) } },
     { text: 'Chief Officer', alignment: 'right', bold: true, fontSize: 16, margin: [0, 100, 50, 0] },
     { text: ulbname, alignment: 'right', bold: true, fontSize: 16, margin: [0, 20, 50, 0] },
   ];
