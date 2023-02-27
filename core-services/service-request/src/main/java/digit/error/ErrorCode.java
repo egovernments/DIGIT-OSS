@@ -57,4 +57,8 @@ public class ErrorCode {
     public static final String SERVICE_REQUEST_ATTRIBUTE_INVALID_VALUE_SINGLEVALUELIST_MSG = "Values provided against single value type list must belong to the list of values provided during service definition creation.";
 
     public static final String SERVICE_REQUEST_ATTRIBUTE_INVALID_VALUE_MULTIVALUELIST_MSG = "Values provided against multi value type list must belong to the list of values provided during service definition creation.";
+
+    public static final String INVALID_REGEX_ERR_CODE = "INVALID_REGEX_ERR_CODE";
+
+    public static final String INVALID_REGEX_ERR_MSG = "The provided regex failed to compile for attribute definition with code - ";
 }

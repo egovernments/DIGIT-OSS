@@ -6,11 +6,13 @@ import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import static digit.error.ErrorCode.*;
 
@@ -32,6 +34,21 @@ public class ServiceDefinitionRequestValidator {
         // Validate values provided in attribute definitions as per data type
         validateAttributeValuesAsPerDataType(serviceDefinition);
 
+        // Validate regex values provided in attribute definitions
+        validateRegex(serviceDefinition);
+
+    }
+
+    private void validateRegex(ServiceDefinition serviceDefinition) {
+        serviceDefinition.getAttributes().forEach(attributeDefinition -> {
+            if(!ObjectUtils.isEmpty(attributeDefinition.getRegex())){
+                try {
+                    Pattern.compile(attributeDefinition.getRegex(), Pattern.CASE_INSENSITIVE);
+                }catch (Exception e){
+                    throw new CustomException(INVALID_REGEX_ERR_CODE, INVALID_REGEX_ERR_MSG + attributeDefinition.getCode());
+                }
+            }
+        });
     }
 
     private void validateAttributeValuesAsPerDataType(ServiceDefinition serviceDefinition) {
