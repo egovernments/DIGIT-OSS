@@ -4707,11 +4707,27 @@ body {
     position: relative;
   }
 
+  /* .one.ServiceCardHeader{
+    background-image: url(https://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/banner-images/1.png);
+  }
+  .two.ServiceCardHeader{
+    background-image: url(https://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/banner-images/2.png);
+  }
+  .three.ServiceCardHeader{
+    background-image: url(https://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/banner-images/3.png);
+  }
+  .four.ServiceCardHeader{
+    background-image: url(https://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/banner-images/4.png);
+  }
+  .five.ServiceCardHeader{
+    background-image: url(https://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/banner-images/5.png);
+  } */
   .ServiceCardHeader {
     position: relative;
     background-image: url(https://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/banner-images/abstract_01.svg);
     padding: 2rem 0.5rem;
     border-radius: 0.55rem;
+    background-size: cover;
   }
 
   .Icon-side {

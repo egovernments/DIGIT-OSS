@@ -82,6 +82,7 @@ const Home = () => {
       {
         name: "New Licence",
         Icon: <LicencingIcon className="fill-path-primary-main" />,
+        value: "1",
         links: [
           {
             link: `/digit-ui/citizen/obps/tab`,
@@ -152,6 +153,7 @@ const Home = () => {
       {
         name: t("BANK_GUARANTEE_PLAN"),
         Icon: <BankGuaranteeIcon className="fill-path-primary-main" />,
+        value: "4",
         links: [
           {
             link: `/digit-ui/citizen/obps/SubmitNew`,
@@ -170,6 +172,7 @@ const Home = () => {
       {
         name: t("Renewal of Licence"),
         Icon: <RenewLic className="fill-path-primary-main" />,
+        value: "5",
         links: [
           {
             link: `/digit-ui/citizen/obps/renewalClu`,
@@ -180,6 +183,7 @@ const Home = () => {
       {
         name: t("Transfer of License"),
         Icon: <TransferLic className="fill-path-primary-main" />,
+        value: "6",
         links: [
           {
             link: `/digit-ui/citizen/obps/TransferLicense`,
@@ -190,6 +194,7 @@ const Home = () => {
       {
         name: t("Surrender of License"),
         Icon: <SurrenderLic className="fill-path-primary-main" />,
+        value: "7",
         links: [
           {
             link: `/digit-ui/citizen/obps/SurrenderLic`,
@@ -200,6 +205,7 @@ const Home = () => {
       {
         name: t("Approval of Standard Design"),
         Icon: <StandardDesign className="fill-path-primary-main" />,
+        value: "8",
         links: [
           {
             link: `/digit-ui/citizen/obps/Standard`,
@@ -210,6 +216,7 @@ const Home = () => {
       {
         name: t("Demarcation cum zoning plan"),
         Icon: <StandardDesign className="fill-path-primary-main" />,
+        value: "9",
         links: [
           {
             link: `/digit-ui/citizen/obps/ZoningPlan`,
@@ -220,6 +227,7 @@ const Home = () => {
       {
         name: t("Revised Layout Plan"),
         Icon: <StandardDesign className="fill-path-primary-main" />,
+        value: "10",
         links: [
           {
             link: `/digit-ui/citizen/obps/LayoutPlanClu`,
@@ -230,6 +238,7 @@ const Home = () => {
       {
         name: t("Extension of time"),
         Icon: <StandardDesign className="fill-path-primary-main" />,
+        value: "11",
         links: [
           {
             link: `/digit-ui/citizen/obps/ExtensionCom`,
@@ -240,6 +249,7 @@ const Home = () => {
       {
         name: t("Extension of CLU permission"),
         Icon: <StandardDesign className="fill-path-primary-main" />,
+        value: "12",
         links: [
           {
             link: ``,
@@ -250,6 +260,7 @@ const Home = () => {
       {
         name: t("Composition of urban Area Violation"),
         Icon: <StandardDesign className="fill-path-primary-main" />,
+        value: "13",
         links: [
           {
             link: `/digit-ui/citizen/obps/CompositionClu`,
@@ -260,6 +271,7 @@ const Home = () => {
       {
         name: t("Completion Certificate In Licence Colony"),
         Icon: <StandardDesign className="fill-path-primary-main" />,
+        value: "14",
         links: [
           {
             link: ``,
@@ -270,6 +282,7 @@ const Home = () => {
       {
         name: t("Change in Beneficial Interest"),
         Icon: <StandardDesign className="fill-path-primary-main" />,
+        value: "15",
         links: [
           {
             link: `/digit-ui/citizen/obps/Beneficial`,
@@ -280,6 +293,7 @@ const Home = () => {
       {
         name: t("Building Plan Approval for Low and Medium Risk"),
         Icon: <StandardDesign className="fill-path-primary-main" />,
+        value: "16",
         links: [
           {
             link: `/digit-ui/citizen/obps/BPALowMedium`,
@@ -354,7 +368,7 @@ const Home = () => {
       {
         name: "Licencing Services",
         Icon: <LicencingIcon className="fill-path-primary-main" />,
-        value: "1",
+        value: "one",
         links: [
           {
             link: `/digit-ui/citizen/obps/tab`,
@@ -371,7 +385,7 @@ const Home = () => {
         name: t("SERVICE_PLAN_CARD"),
         // name: "Service Plan",
         Icon: <ServicePlanIcon className="fill-path-primary-main" />,
-        value: "2",
+        value: "two",
         links: [
           {
             link: `/digit-ui/citizen/obps/servicePlan`,
@@ -389,7 +403,7 @@ const Home = () => {
       {
         name: t("ELECTRIC_PLAN_CARD"),
         Icon: <ElectricPlanIcon className="fill-path-primary-main" />,
-        value: "3",
+        value: "three",
         links: [
           {
             link: `/digit-ui/citizen/obps/electricalPlan`,
@@ -407,6 +421,7 @@ const Home = () => {
       {
         name: t("ACTION_TEST_BUILDING_PLAN_APPROVAL"),
         Icon: <BPAIco className="fill-path-primary-main" />,
+        value: "four",
         links: [
           {
             link: `/digit-ui/citizen/obps/my-applications`,
@@ -425,6 +440,7 @@ const Home = () => {
       {
         name: t("BANK_GUARANTEE_PLAN"),
         Icon: <BankGuaranteeIcon className="fill-path-primary-main" />,
+        value: "five",
         links: [
           {
             link: `/digit-ui/citizen/obps/SubmitNew`,
