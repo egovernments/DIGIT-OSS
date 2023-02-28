@@ -86,17 +86,11 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
   // useEffect(() => {
 
   // }, );
-  console.log("+_+_+_+", documents);
-  console.log("-=-=-=-=", articlesOfAssociation);
-  console.log("()()()()()", memorandumOfArticles);
+  // console.log("+_+_+_+", documents);
+  // console.log("-=-=-=-=", articlesOfAssociation);
+  // console.log("()()()()()", memorandumOfArticles);
   const handleSubmit = () => {
     let document = formData.documents;
-    documents.map((dataFile, index) => {
-      console.log(
-        "515151",
-        documents?.filter((item) => item?.documentType == dataFile.code)
-      );
-    });
 
     // setArticlesOfAssociation(documents[0]?.documentUid);
 
@@ -129,7 +123,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
       },
     ];
 
-    console.log("RTGT", articlesOfAssociation);
+    // console.log("RTGT", articlesOfAssociation);
     const developerRegisterData = {
       id: userInfo?.info?.id,
       pageName: "licensesDoc",
@@ -162,13 +156,13 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
 
   useEffect(() => {
     let count = 0;
-    console.log("DEVC", documents);
+    // console.log("DEVC", documents);
     bpaTaxDocuments.map((doc) => {
       if (doc.required === true) {
-        console.log("YES");
+        // console.log("YES");
         setRequiredField(true);
       } else {
-        console.log("NO");
+        // console.log("NO");
         setRequiredField(false);
       }
       let isRequired = false;
@@ -253,7 +247,6 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
           >
             <div className="happy">
               <div className="card">
-                {JSON.stringify(articlesOfAssociation)}
                 {bpaTaxDocuments?.map((document, index) => {
                   return (
                     <SelectDocument
