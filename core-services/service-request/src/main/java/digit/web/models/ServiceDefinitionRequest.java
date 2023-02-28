@@ -24,12 +24,12 @@ import lombok.Builder;
 @Builder
 public class ServiceDefinitionRequest   {
 
-    @JsonProperty("requestInfo")
+    @JsonProperty("RequestInfo")
     @NotNull
     @Valid
     private RequestInfo requestInfo = null;
 
-    @JsonProperty("serviceDefinition")
+    @JsonProperty("ServiceDefinition")
     @NotNull
     @Valid
     private ServiceDefinition serviceDefinition = null;
