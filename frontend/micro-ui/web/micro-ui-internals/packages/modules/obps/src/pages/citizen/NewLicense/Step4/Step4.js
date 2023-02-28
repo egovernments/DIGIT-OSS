@@ -361,6 +361,7 @@ const AppliedDetailForm = (props) => {
     }
     if (valueData) {
       const test = [valueData?.PurposeDetails];
+      console.log("test", test);
       setNewDataA(test);
     }
   }, [stepData]);
@@ -533,6 +534,7 @@ const AppliedDetailForm = (props) => {
       const farsArr = [];
       const testData = fars?.forEach((i) => farsArr?.push({ label: i[Object.keys(i)[0]], value: i[Object.keys(i)[0]] }));
       setFarArr(farsArr);
+      return farsArr;
     } catch (error) {
       return error;
     }
@@ -588,6 +590,38 @@ const AppliedDetailForm = (props) => {
     return updatedData;
   };
 
+  const updateFARById = (it, id, farValue) => {
+    const updatedDataA = it?.map((obj) => {
+      if (obj?.id === id) {
+        return { ...obj, far: farValue };
+      } else if (obj?.purposeDetail?.length > 0) {
+        return { ...obj, purposeDetail: updateFARById(obj?.purposeDetail, id, farValue) };
+      } else {
+        return obj;
+      }
+    });
+    setNewDataA(updatedDataA);
+    return updatedDataA;
+  };
+
+  useEffect(() => {
+    console.log("newDataA", newDataA);
+  }, [newDataA]);
+
+  const getFarAllData = () => {
+    // const id = newDataA
+    const checkData = newDataA?.map((obj) => {
+      if (obj?.purposeDetail?.length > 0) {
+        return { ...obj, purposeDetail: getFarAllData(obj?.purposeDetail, id, newArea) };
+      } else {
+        return obj?.code;
+      }
+    });
+    // Promise.all(drinksPromises).then((data) => {
+    //   console.log("data", data);
+    // });
+  };
+
   useEffect(() => {
     const check = Object?.values(error)?.every((value) => value === null || (typeof value == "string" && !(value || false)));
     setIsValid(check);
@@ -599,6 +633,8 @@ const AppliedDetailForm = (props) => {
         <form>
           {data?.length &&
             data?.map((x, i) => {
+              const farsArr = [];
+              const testData = x?.fars?.forEach((i) => farsArr?.push({ label: i, value: i }));
               setValue(x?.id, x?.area);
               return (
                 <div key={i}>
@@ -629,10 +665,20 @@ const AppliedDetailForm = (props) => {
                         />
                       </h6>
                     </div>
-                    {getFarArr?.length > 0 && (
+                    {farsArr?.length > 0 && (
                       <div className="col col-4 mt-3">
                         <h6>
-                          FAR: <ReactMultiSelect control={control} name="far" placeholder="Far" data={getFarArr} labels="Far" />
+                          FAR:{" "}
+                          <ReactMultiSelect
+                            control={control}
+                            name={x?.code + x?.id}
+                            placeholder="Far"
+                            onChange={(e) => {
+                              updateFARById(newDataA, x?.id, e?.value);
+                            }}
+                            data={farsArr}
+                            labels="Far"
+                          />
                         </h6>
                       </div>
                     )}
