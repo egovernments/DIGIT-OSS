@@ -28,13 +28,12 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
   const isCitizenUrl = Digit.Utils.browser.isMobile() ? true : false;
   let isopenlink = window.location.href.includes("/openlink/");
   const [isRequiredField, setRequiredField] = useState(true);
-  const [articlesOfAssociation, setArticlesOfAssociation] = useState(formData?.documents?.documents[0]?.documentUid || "");
-  const [memorandumOfArticles, setMemorandumOfArticles] = useState(formData?.documents?.documents[1]?.documentUid || "");
-  const [registeredIrrevocablePaternshipDeed, setRegisteredIrrevocablePaternshipDeed] = useState(
-    formData?.documents?.documents[2]?.documentUid || ""
-  );
-  const [affidavitAndPancard, setAffidavitAndPancard] = useState(formData?.documents?.documents[3]?.documentUid || "");
-  const [anyOtherDoc, setAnyOtherDoc] = useState(formData?.documents?.documents[4]?.documentUid || "");
+  const [articlesOfAssociation, setArticlesOfAssociation] = useState("");
+  // documents?.filter((item) => item?.documentType?.includes(doc?.code))[0]
+  const [memorandumOfArticles, setMemorandumOfArticles] = useState("");
+  const [registeredIrrevocablePaternshipDeed, setRegisteredIrrevocablePaternshipDeed] = useState("");
+  const [affidavitAndPancard, setAffidavitAndPancard] = useState("");
+  const [anyOtherDoc, setAnyOtherDoc] = useState("");
   // const [docList, setDocList] = useState({});
   if (isopenlink)
     window.onunload = function () {
@@ -87,7 +86,9 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
   // useEffect(() => {
 
   // }, );
-
+  console.log("+_+_+_+", documents);
+  console.log("-=-=-=-=", articlesOfAssociation);
+  console.log("()()()()()", memorandumOfArticles);
   const handleSubmit = () => {
     let document = formData.documents;
     documents.map((dataFile, index) => {
@@ -97,7 +98,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
       );
     });
 
-    setArticlesOfAssociation(documents[0]?.documentUid);
+    // setArticlesOfAssociation(documents[0]?.documentUid);
 
     let documentStep;
     let regularDocs = [];
@@ -118,6 +119,16 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
       let articlesOfAss = allDocs[0];
     });
 
+    const docList = [
+      {
+        articlesOfAssociation: articlesOfAssociation,
+        memorandumOfArticles: memorandumOfArticles,
+        registeredIrrevocablePaternshipDeed: registeredIrrevocablePaternshipDeed,
+        affidavitAndPancard: affidavitAndPancard,
+        anyOtherDoc: anyOtherDoc,
+      },
+    ];
+
     console.log("RTGT", articlesOfAssociation);
     const developerRegisterData = {
       id: userInfo?.info?.id,
@@ -125,13 +136,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
       createdBy: userInfo?.info?.id,
       updatedBy: userInfo?.info?.id,
       devDetail: {
-        licensesDoc: {
-          articlesOfAssociation: articlesOfAssociation,
-          memorandumOfArticles: memorandumOfArticles,
-          registeredIrrevocablePaternshipDeed: registeredIrrevocablePaternshipDeed,
-          affidavitAndPancard: affidavitAndPancard,
-          anyOtherDoc: anyOtherDoc,
-        },
+        licensesDoc: docList,
       },
     };
     Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
@@ -172,7 +177,20 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
         if (doc.required && data !== null && data && doc.code == `${data.documentType.split(".")[0]}.${data.documentType.split(".")[1]}`) {
           isRequired = true;
         }
+
+        if (data.documentType === "ARTICLES_OF_ASSOCIATION") {
+          setArticlesOfAssociation(data?.documentUid);
+        } else if (data.documentType === "MEMORANDUM_OF_ARTICLES") {
+          setMemorandumOfArticles(data?.documentUid);
+        } else if (data.documentType === "REGISTERED_IRREVOCABLE_PARTNERSHIP_DEED") {
+          setRegisteredIrrevocablePaternshipDeed(data?.documentUid);
+        } else if (data.documentType === "AFFIDAVIT_AND_PANCARD") {
+          setAffidavitAndPancard(data?.documentUid);
+        } else if (data.documentType === "APPL.BPAREG_OTHERS") {
+          setAnyOtherDoc(data?.documentUid);
+        }
       });
+
       if (!isRequired && doc.required) {
         count = count + 1;
       }
@@ -235,6 +253,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
           >
             <div className="happy">
               <div className="card">
+                {JSON.stringify(articlesOfAssociation)}
                 {bpaTaxDocuments?.map((document, index) => {
                   return (
                     <SelectDocument
