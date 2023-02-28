@@ -4709,7 +4709,7 @@ body {
 
   .ServiceCardHeader {
     position: relative;
-    background-image: url(https://nulp.niua.org/assets/common-consumption/images/abstract_01.svg);
+    background-image: url(https://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/banner-images/abstract_01.svg);
     padding: 2rem 0.5rem;
     border-radius: 0.55rem;
   }
@@ -11922,6 +11922,7 @@ body {
   font-size: 18px;
   line-height: 28px;
   font-weight: 700;
+  margin: 0.5rem auto;
 }
 
 .card-search-heading {
@@ -21068,3 +21069,41 @@ input[type=text]:disabled {
     height: 500px;
     overflow-y: auto;
   }
+
+  .doc-upload-field{
+    width: 50%;
+  }
+
+  .card.main .data-table{
+    padding: 1.5rem;
+    background: #fff;
+    border-radius: 0.45rem;
+    /* box-shadow: 0.375rem 0.375rem 0.125rem 0 rgb(0 0 0 / 10%); */
+}
+
+.summary-page .card.main{
+  padding: 0.5rem;
+}
+
+.summary-page .card-header {
+  font-size: 24px;
+  position: relative;
+  line-height: 24px;
+  margin-bottom: 0px;
+  background: #ffd954;
+  border-radius: 0.45rem;
+}
+.summary-page .card-header span{
+  float: right;
+    background: #024f9d;
+    text-align: center;
+    border-radius: 0.35rem;
+    padding: 0.2rem;
+    padding-left: 0.5rem;
+}
+.summary-page .card-header svg {
+  border-radius: 0.35rem;
+  text-align: center;
+  width: 20px;
+  height: 20px;
+}
