@@ -17,6 +17,9 @@
     "micro-ui-internals/packages/modules/tl",
     "micro-ui-internals/packages/modules/ws"
   ],
+  "engines": {
+    "node": ">=14"
+  },
   "dependencies": {
     "@egovernments/digit-ui-libraries":"1.6.0",
     "@egovernments/digit-ui-module-bills": "1.6.0",
