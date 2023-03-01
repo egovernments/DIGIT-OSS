@@ -139,7 +139,7 @@ const CheckPage = ({ onSubmit, value }) => {
     <React.Fragment>
       <div className={isopenlink ? "OpenlinkContainer" : ""}>
         {/* <div style={isopenlink?{ width:isCitizenUrl?"100%":"70%", marginLeft:"auto",marginRight:"auto"}:{}}> */}
-        <div>
+        <div className="summary-page">
           {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
           <Timeline
             currentStep={value?.LicneseType?.licenceType === "ARCHITECT.CLASSA" ? 4 : 6}
@@ -148,7 +148,7 @@ const CheckPage = ({ onSubmit, value }) => {
             isAPILoaded={value?.LicneseType?.licenceType ? true : false}
           />
           <Header styles={{ fontSize: "32px" }}>{t("BPA_STEPPER_SUMMARY_HEADER")}</Header>
-          <Card style={{ paddingRight: "16px" }}>
+          <Card>
             <StatusTable>
               <Row
                 className="border-none"
@@ -157,13 +157,18 @@ const CheckPage = ({ onSubmit, value }) => {
               />
             </StatusTable>
           </Card>
-          <Card style={{ paddingRight: "16px" }}>
-            <CardHeader styles={{ fontSize: "24px" }}>{t(`BPA_LICENSE_TYPE`)}</CardHeader>
-            <LinkButton
+          <Card>
+            <CardHeader>
+              {t(`BPA_LICENSE_TYPE`)}{" "}
+              <span onClick={() => routeTo(`${routeLink}/provide-license-type`)}>
+                <EditIcon />
+              </span>{" "}
+            </CardHeader>
+            {/* <LinkButton
               label={<EditIcon style={{ marginTop: "-15px", float: "right", position: "relative", bottom: "32px" }} />}
               style={{ width: "100px", display: "inline" }}
               onClick={() => routeTo(`${routeLink}/provide-license-type`)}
-            />
+            /> */}
             <StatusTable>
               <Row
                 className="border-none"
@@ -178,12 +183,17 @@ const CheckPage = ({ onSubmit, value }) => {
           </Card>
           {showLicenceType === "ARCHITECT.CLASSA" && (
             <Card>
-              <CardHeader styles={{ fontSize: "24px" }}>{t("Peronal Details")}</CardHeader>
-              <LinkButton
+              <CardHeader>
+                {t("Peronal Details")}{" "}
+                <span onClick={() => routeTo(`${routeLink}/license-details`)}>
+                  <EditIcon />
+                </span>
+              </CardHeader>
+              {/* <LinkButton
                 label={<EditIcon style={{ marginTop: "-15px", float: "right", position: "relative", bottom: "32px" }} />}
                 style={{ width: "100px", display: "inline" }}
                 onClick={() => routeTo(`${routeLink}/license-details`)}
-              />
+              /> */}
               <StatusTable>
                 <Row className="border-none" label={t(`BPA_APPLICANT_NAME_LABEL`)} textStyle={{ paddingLeft: "12px" }} text={getPersonalData?.name} />
                 {/* <Row className="border-none" label={t(`BPA_APPLICANT_GENDER_LABEL`)} text={t(formData?.LicneseDetails?.gender.i18nKey)} /> */}
@@ -198,14 +208,17 @@ const CheckPage = ({ onSubmit, value }) => {
 
           {showLicenceType !== "ARCHITECT.CLASSA" && (
             <Card>
-              <div style={{ marginRight: "24px" }}>
-                <CardHeader styles={{ fontSize: "24px" }}>{t(`BPA_ADD_INFO_LABEL`)}</CardHeader>
-              </div>
-              <LinkButton
+              <CardHeader>
+                {t(`BPA_ADD_INFO_LABEL`)}{" "}
+                <span onClick={() => routeTo(`${routeLink}/license-add-info`)}>
+                  <EditIcon />
+                </span>
+              </CardHeader>
+              {/* <LinkButton
                 label={<EditIcon style={{ marginTop: "-15px", float: "right", position: "relative", bottom: "32px" }} />}
                 style={{ width: "100px", display: "inline" }}
                 onClick={() => routeTo(`${routeLink}/license-add-info`)}
-              />
+              /> */}
 
               <StatusTable>
                 <Row className="border-none" label={"Developer's type"} text={getDevData?.showDevTypeFields || t("CS_NA")} />
@@ -239,14 +252,17 @@ const CheckPage = ({ onSubmit, value }) => {
           )}
           {showLicenceType !== "ARCHITECT.CLASSA" && (
             <Card>
-              <div style={{ marginRight: "24px" }}>
-                <CardHeader styles={{ fontSize: "24px" }}>{t(`BPA_AUTHORIZED_USER_LABEL`)}</CardHeader>
-              </div>
-              <LinkButton
+              <CardHeader>
+                {t(`BPA_AUTHORIZED_USER_LABEL`)}{" "}
+                <span onClick={() => routeTo(`${routeLink}/add-authorized-user`)}>
+                  <EditIcon />
+                </span>
+              </CardHeader>
+              {/* <LinkButton
                 label={<EditIcon style={{ marginTop: "-15px", float: "right", position: "relative", bottom: "32px" }} />}
                 style={{ width: "100px", display: "inline" }}
                 onClick={() => routeTo(`${routeLink}/add-authorized-user`)}
-              />
+              /> */}
               <StatusTable>
                 <table className="table table-bordered table-striped table-responsive">
                   <thead>
@@ -283,12 +299,17 @@ const CheckPage = ({ onSubmit, value }) => {
           )}
           {showLicenceType !== "ARCHITECT.CLASSA" && (
             <Card>
-              <CardHeader styles={{ fontSize: "24px" }}>{t("Financial Capacity Document")}</CardHeader>
-              <LinkButton
+              <CardHeader>
+                {t("Financial Capacity Document")}{" "}
+                <span onClick={() => routeTo(`${routeLink}/developer-capacity`)}>
+                  <EditIcon />
+                </span>
+              </CardHeader>
+              {/* <LinkButton
                 label={<EditIcon style={{ marginTop: "-15px", float: "right", position: "relative", bottom: "32px" }} />}
                 style={{ width: "100px", display: "inline" }}
                 onClick={() => routeTo(`${routeLink}/developer-capacity`)}
-              />
+              /> */}
               <StatusTable>
                 {/* {(getDevDataFinancialCapacity === "Individual") ? () : ()} */}
                 {(getDevData?.showDevTypeFields === "Individual" ||
@@ -586,17 +607,24 @@ const CheckPage = ({ onSubmit, value }) => {
             </Card>
           )}
           <Card>
-            <CardHeader styles={{ fontSize: "24px" }}>{t("BPA_DOC_DETAILS_SUMMARY")}</CardHeader>
-            <LinkButton
+            <CardHeader>
+              {t("BPA_DOC_DETAILS_SUMMARY")}{" "}
+              <span onClick={() => routeTo(`${routeLink}/stakeholder-document-details`)}>
+                <EditIcon />
+              </span>
+            </CardHeader>
+            {/* <LinkButton
               label={<EditIcon style={{ marginTop: "-15px", float: "right", position: "relative", bottom: "32px" }} />}
               style={{ width: "100px", display: "inline" }}
               onClick={() => routeTo(`${routeLink}/stakeholder-document-details`)}
-            />
+            /> */}
             {documents?.documents.map((doc, index) => (
               <div key={index}>
                 <CardSectionHeader styles={{ fontSize: "18px" }}>{t(`BPAREG_HEADER_${doc?.documentType?.replace(".", "_")}`)}</CardSectionHeader>
                 {doc?.info ? (
-                  <div style={{ fontSize: "12px", color: "#505A5F", fontWeight: 400, lineHeight: "15px" }}>{`${t(doc?.info)}`}</div>
+                  <div style={{ fontSize: "12px", color: "#505A5F", fontWeight: 400, lineHeight: "15px", marginBottom: "0.7rem" }}>{`${t(
+                    doc?.info
+                  )}`}</div>
                 ) : null}
                 <StatusTable>
                   <OBPSDocument value={value} Code={doc?.documentType} index={index} isNOC={false} svgStyles={{}} isStakeHolder={true} />
@@ -608,7 +636,7 @@ const CheckPage = ({ onSubmit, value }) => {
             ))}
           </Card>
           <Card style={{ display: "none" }}>
-            <CardHeader styles={{ fontSize: "24px" }}>{t("BPA_SUMMARY_FEE_EST")}</CardHeader>
+            <CardHeader>{t("BPA_SUMMARY_FEE_EST")} </CardHeader>
             <StatusTable>
               {paymentDetails?.billResponse?.Bill[0]?.billDetails[0]?.billAccountDetails.map((bill, index) => (
                 <div key={index}>

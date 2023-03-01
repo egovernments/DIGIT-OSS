@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.css";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, Controller } from "react-hook-form";
 import ResidentialPlottedForm from "./ResidentialPlotted";
 import DDJAYForm from "../Step4/DdjayForm";
 import IndustrialPlottedForm from "./IndustrialPlotted";
@@ -129,7 +129,7 @@ const AppliedDetailForm = (props) => {
     // if (!validateDgpsPoint()) {
     //   return;
     // }
-    console.log("data", data);
+    // console.log("data", newDataA);
     // return;
     setLoader(true);
     delete data["dgpsDetails"];
@@ -143,7 +143,7 @@ const AppliedDetailForm = (props) => {
       LicenseDetails: {
         DetailsofAppliedLand: {
           dgpsDetails: modalData,
-          PurposeDetails: getUpdatedData,
+          PurposeDetails: newDataA,
           DetailsAppliedLandPlot: {
             ...data,
             // regularOption: data?.regularOption,
@@ -359,11 +359,10 @@ const AppliedDetailForm = (props) => {
       //   setValue(`dgpsDetails.${index}.longitude`, item?.longitude), setValue(`dgpsDetails.${index}.latitude`, item?.latitude);
       // });
     }
-
     if (valueData) {
-      console.log("valueData", valueData);
-      const test = [valueData?.PurposeDetails];
-      setNewDataA(test);
+      const test = valueData?.PurposeDetails;
+      console.log("test==", test);
+      setNewDataA(valueData?.PurposeDetails);
     }
   }, [stepData]);
 
@@ -532,10 +531,10 @@ const AppliedDetailForm = (props) => {
     try {
       const Resp = await axios.post("/egov-mdms-service/v1/_search", payload);
       const fars = Resp?.data?.MdmsRes?.["common-masters"]?.Purpose?.[0]?.far;
-      console.log("fars", fars);
       const farsArr = [];
       const testData = fars?.forEach((i) => farsArr?.push({ label: i[Object.keys(i)[0]], value: i[Object.keys(i)[0]] }));
       setFarArr(farsArr);
+      return farsArr;
     } catch (error) {
       return error;
     }
@@ -579,15 +578,48 @@ const AppliedDetailForm = (props) => {
 
   const updateAreaById = (it, id, newArea) => {
     const updatedData = it?.map((obj) => {
-      if (obj.id === id) {
+      if (obj?.id === id) {
         return { ...obj, area: newArea };
-      } else if (obj.purposeDetail.length > 0) {
-        return { ...obj, purposeDetail: updateAreaById(obj.purposeDetail, id, newArea) };
+      } else if (obj?.purposeDetail?.length > 0) {
+        return { ...obj, purposeDetail: updateAreaById(obj?.purposeDetail, id, newArea) };
       } else {
         return obj;
       }
     });
+    setNewDataA(updatedData);
     return updatedData;
+  };
+
+  const updateFARById = (it, id, farValue) => {
+    const updatedDataA = it?.map((obj) => {
+      if (obj?.id === id) {
+        return { ...obj, far: farValue };
+      } else if (obj?.purposeDetail?.length > 0) {
+        return { ...obj, purposeDetail: updateFARById(obj?.purposeDetail, id, farValue) };
+      } else {
+        return obj;
+      }
+    });
+    setNewDataA(updatedDataA);
+    return updatedDataA;
+  };
+
+  useEffect(() => {
+    console.log("newDataA", newDataA);
+  }, [newDataA]);
+
+  const getFarAllData = () => {
+    // const id = newDataA
+    const checkData = newDataA?.map((obj) => {
+      if (obj?.purposeDetail?.length > 0) {
+        return { ...obj, purposeDetail: getFarAllData(obj?.purposeDetail, id, newArea) };
+      } else {
+        return obj?.code;
+      }
+    });
+    // Promise.all(drinksPromises).then((data) => {
+    //   console.log("data", data);
+    // });
   };
 
   useEffect(() => {
@@ -598,59 +630,68 @@ const AppliedDetailForm = (props) => {
   let Tree = ({ data }) => {
     return (
       <div>
-        {data?.length &&
-          data?.map((x, i) => {
-            // setValue(x?.id, x?.area);
-            return (
-              <div>
-                <h6>
-                  <span>
-                    <b>Purpose Name: </b>
-                  </span>
-                  {x?.name}
-                </h6>
-                <div className="row">
-                  <div className="col col-4 mt-3">
-                    <h6>
-                      Area:
-                      <input
-                        type="number"
-                        className="form-control"
-                        placeholder="enter Area"
-                        defaultValue={x?.area}
-                        {...register(`${x?.id}`)}
-                        onChange={(e) => {
-                          // let newSelection = [];
-                          const updatedData = updateAreaById(newDataA, x?.id, e?.target?.value);
-                          console.log("updatedData", updatedData?.[0]);
-                          // console.log(updatedData);
-                          // const newArray = [...getUpdatedData, updatedData];
-                          // console.log("newArray", newArray);
-                          // setUpdatedData(e?.target?.value);
-                          // newSelection = [...getUpdatedData, updatedData];
-                          // setUpdatedData(updatedData?.[0]);
-                          // setNewDataA(newArray);
-                        }}
-                      />
-                    </h6>
-                  </div>
-                  {getFarArr?.length > 0 && (
+        <form>
+          {data?.length &&
+            data?.map((x, i) => {
+              const farsArr = [];
+              const testData = x?.fars?.forEach((i) => farsArr?.push({ label: i, value: i }));
+              setValue(x?.id, x?.area);
+              return (
+                <div key={i}>
+                  <h6>
+                    <span>
+                      <b>Purpose Name: </b>
+                    </span>
+                    {x?.name}
+                  </h6>
+                  <div className="row">
                     <div className="col col-4 mt-3">
                       <h6>
-                        FAR: <ReactMultiSelect control={control} name="far" placeholder="Far" data={getFarArr} labels="Far" />
+                        Area:
+                        <input
+                          type="number"
+                          className="form-control"
+                          placeholder="enter Area"
+                          defaultValue={x?.area}
+                          {...register(`${x?.id}`)}
+                          onChange={(e) => {
+                            let delay;
+                            delay = setTimeout(() => {
+                              updateAreaById(newDataA, x?.id, e?.target?.value);
+                            }, 700);
+                            return () => clearTimeout(delay);
+                            // const updatedData = updateAreaById(newDataA, x?.id, e?.target?.value);
+                          }}
+                        />
                       </h6>
                     </div>
-                  )}
-
-                  {!!x?.purposeDetail?.length && (
-                    <div className="ml-4 mt-4">
-                      <Tree data={x?.purposeDetail} />
-                    </div>
-                  )}
+                    {farsArr?.length > 0 && (
+                      <div className="col col-4 mt-3">
+                        <h6>
+                          FAR:{" "}
+                          <ReactMultiSelect
+                            control={control}
+                            name={x?.code + x?.id}
+                            placeholder="Far"
+                            onChange={(e) => {
+                              updateFARById(newDataA, x?.id, e?.value);
+                            }}
+                            data={farsArr}
+                            labels="Far"
+                          />
+                        </h6>
+                      </div>
+                    )}
+                    {!!x?.purposeDetail?.length && (
+                      <div className="ml-4 mt-4">
+                        <Tree data={x?.purposeDetail} />
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+        </form>
       </div>
     );
   };
@@ -739,8 +780,6 @@ const AppliedDetailForm = (props) => {
                     <b>Layout Plan</b>
                   </h4>
                   {/* 
-                  
-
                   <div>
                     {stepData?.ApplicantPurpose?.purpose === "RPL" && (
                       <ResidentialPlottedForm

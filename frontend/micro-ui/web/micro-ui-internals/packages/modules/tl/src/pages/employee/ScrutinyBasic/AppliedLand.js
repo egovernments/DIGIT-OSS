@@ -39,11 +39,11 @@ const AppliedLandinfo = (props) => {
   console.log("personal info applicant data4", DetailsofAppliedLand);
   let user = Digit.UserService.getUser();
   const userRoles = user?.info?.roles?.map((e) => e.code) || [];
-  const hideRemarks = userRoles.some((item)=>item === "CTP_HR" || item === "CTP_HQ" || item === "DTP_HR" || item === "DTP_HQ")
-  const hideRemarksPatwari = userRoles.some((item)=>item ==="Patwari_HQ")
+  const hideRemarks = userRoles.some((item) => item === "CTP_HR" || item === "CTP_HQ" || item === "DTP_HR" || item === "DTP_HQ")
+  const hideRemarksPatwari = userRoles.some((item) => item === "Patwari_HQ")
 
   const [uncheckedValue, setUncheckedVlue] = useState([]);
-  console.log("abcd1",uncheckedValue);
+  console.log("abcd1", uncheckedValue);
   const [migrationApllied, setMigrationApplied] = useState(true);
   // const DdjayFormDisplay = useSelector(selectDdjayFormShowDisplay);
   const [resplotno, setResPlotno] = useState("");
@@ -66,11 +66,12 @@ const AppliedLandinfo = (props) => {
   const [noOfRow, setNoOfRow] = useState(1);
   const [noOfRow1, setNoOfRow1] = useState(1);
   const Purpose = props.purpose;
+  const totalArea = props.totalArea;
   const [modaldData, setmodaldData] = useState({ label: "", Remarks: "" });
   const [isyesOrNochecked, setYesorNochecked] = useState(true);
   const [modal, setmodal] = useState(false);
   const [modal1, setmodal1] = useState(false);
-  const [urlGetShareHoldingDoc,setDocShareHoldingUrl] = useState("")
+  const [urlGetShareHoldingDoc, setDocShareHoldingUrl] = useState("")
 
 
   const handleYesOrNochecked = (data) => {
@@ -250,17 +251,18 @@ const AppliedLandinfo = (props) => {
   // });
   // console.log("Akash", Purpose);
 
-console.log("AccessInfortech", Purpose);
+  console.log("AccessInfortech", Purpose);
+  console.log("AccessInfortech1", totalArea);
   const classes = useStyles();
 
   const [smShow, setSmShow] = useState(false);
   const [labelValue, setLabelValue] = useState("");
   const Colors = {
-    conditional:"#2874A6",
-    approved:"#09cb3d",
-    disapproved:"#ff0000",
-   
-    info:"#FFB602"
+    conditional: "#2874A6",
+    approved: "#09cb3d",
+    disapproved: "#ff0000",
+
+    info: "#FFB602"
   }
   const [selectedFieldData, setSelectedFieldData] = useState();
   const [fieldValue, setFieldValue] = useState("");
@@ -343,21 +345,21 @@ console.log("AccessInfortech", Purpose);
     setLabelValue("");
   };
 
-   const [showhide19, setShowhide19] = useState("true");
-   const handleshow19 = (e) => {
+  const [showhide19, setShowhide19] = useState("true");
+  const handleshow19 = (e) => {
     // const getshow = e.target.value;
     // setShowhide19(getshow);
     console.log("Datapoint", DetailsofAppliedLand?.dgpsDetails)
-    DetailsofAppliedLand?.dgpsDetails.map((array) => array.map((object) => `${object.latitude},${object.longitude}`).join(":") ).join("|")
-    let query =  DetailsofAppliedLand?.dgpsDetails.map((array) => array.map((object) => `${object.latitude},${object.longitude}`).join(":") ).join("|")
-    console.log("Qurey" , query);
-    window.open(`/digit-ui/WNS/wmsmap.html?latlngs=${query}`,"popup")
+    DetailsofAppliedLand?.dgpsDetails.map((array) => array.map((object) => `${object.latitude},${object.longitude}`).join(":")).join("|")
+    let query = DetailsofAppliedLand?.dgpsDetails.map((array) => array.map((object) => `${object.latitude},${object.longitude}`).join(":")).join("|")
+    console.log("Qurey", query);
+    window.open(`/digit-ui/WNS/wmsmap.html?latlngs=${query}`, "popup")
   };
 
-  
+
   // const getDocShareholding = async () => {
   //   if ((Documents?.uploadPdf !== null || Documents?.uploadPdf !== undefined) && (uploadPdf!==null || uploadPdf!=="")) {
-        
+
   //       try {
   //           const response = await axios.get(`/filestore/v1/files/url?tenantId=hr&fileStoreIds=${DetailsofAppliedLand?.DetailsAppliedLand?.democraticPlan}`, {
 
@@ -367,7 +369,7 @@ console.log("AccessInfortech", Purpose);
   //       } catch (error) {
   //           console.log(error.message);
   //       }
-   
+
   // }
 
   // useEffect(() => {
@@ -378,11 +380,11 @@ console.log("AccessInfortech", Purpose);
   // const dgps = [DetailsofAppliedLand?.dgpsDetails?.index]
   const cart = [DetailsofAppliedLand?.dgpsDetails]
 
-  
-  
+
+
 
   return (
-    
+
     <Form
       ref={props.appliedLandInfoRef}
     // style={{
@@ -461,77 +463,77 @@ console.log("AccessInfortech", Purpose);
                     {JSON.stringify(hideRemarks)} */}
               <Col col-10>
                 <div style={{ display: "flex" }}>
-                 
-                  1. DGPS points 
-                 
-                 
-                    <ReportProblemIcon
-                      style={{
-                        display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                        color: fieldIconColors.detailsOfPlots
-                      }}
-                      onClick={() => {
-                        setLabelValue("Details of Plots"),
-                          setOpennedModal("detailsOfPlots")
-                        setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(DetailsofAppliedLand?.DetailsAppliedLandPlot?.regularOption === "regular" ? "Regular" : DetailsofAppliedLand?.DetailsAppliedLandPlot?.regularOption === "Irregular" ? "Irregular" : null);
-                      }}
-                    ></ReportProblemIcon>
+
+                  1. DGPS points
+
+
+                  <ReportProblemIcon
+                    style={{
+                      display: hideRemarks || hideRemarksPatwari ? "none" : "block",
+                      color: fieldIconColors.detailsOfPlots
+                    }}
+                    onClick={() => {
+                      setLabelValue("Details of Plots"),
+                        setOpennedModal("detailsOfPlots")
+                      setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue(DetailsofAppliedLand?.DetailsAppliedLandPlot?.regularOption === "regular" ? "Regular" : DetailsofAppliedLand?.DetailsAppliedLandPlot?.regularOption === "Irregular" ? "Irregular" : null);
+                    }}
+                  ></ReportProblemIcon>
                 </div>
                 {/* </h5> */}
- {/* {Purpose} */}
-             
+                {/* {Purpose} */}
+
                 <div >
-                   
-               
+
+
                   {DetailsofAppliedLand?.dgpsDetails?.map((item, index) => (
 
-            <div className="row" key={index}>
-                          
-                          
-                         <Row>
-                       
-                          <Col className="col col-4" style={{ marginLeft:60 }}>
-                            <label>
+                    <div className="row" key={index}>
+
+
+                      <Row>
+
+                        <Col className="col col-4" style={{ marginLeft: 60 }}>
+                          <label>
                             Latitude
-                            </label>
-                         
-                         
-                          </Col >
-                          <Col className="col col-4">
-                            <label>
+                          </label>
+
+
+                        </Col >
+                        <Col className="col col-4">
+                          <label>
                             Longitude
-                            </label>
-                 
-                         
-                          </Col >
-                        </Row>
-                      
+                          </label>
+
+
+                        </Col >
+                      </Row>
+
                       {item?.map((item, index) => (
 
-                 
-                       
-                        <div style={{ marginLeft:52 }}>
-                  
+
+
+                        <div style={{ marginLeft: 52 }}>
+
                           <Row >
                             <Col className="col col-4">
-                              <input type="text" className="form-control" placeholder={item?.latitude}  disabled />
+                              <input type="text" className="form-control" placeholder={item?.latitude} disabled />
                             </Col>
                             <Col className="col col-4" >
-                              <input type="text" className="form-control" placeholder={item?.longitude}  disabled />
+                              <input type="text" className="form-control" placeholder={item?.longitude} disabled />
                             </Col>
-                            
+
                           </Row>
 
-                          
-                        
+
+
                         </div>
                       ))
                       }
-                 
 
-{/* 
+
+                      {/* 
                       {DetailsofAppliedLand?.dgpsDetails?.[index]?.map((item, index) => (
 
                  
@@ -553,25 +555,25 @@ console.log("AccessInfortech", Purpose);
                         </div>
                       ))
                       } */}
-                 
+
                     </div>
-                    
+
                   ))
-                  
+
                   }
-                   
+
                 </div>
                 {/* <div>
                   {JSON.stringify(DetailsofAppliedLand?.dgpsDetails?.[0]?.[0]?.latitude)}
                 </div> */}
-           
-           <Button style={{ textAlign: "right" }} value="Submit" id="Submit"  name="Submit" onClick={handleshow19}> Map View</Button>
-                
-                
-                
-                
-                
-                
+
+                <Button style={{ textAlign: "right" }} value="Submit" id="Submit" name="Submit" onClick={handleshow19}> Map View</Button>
+
+
+
+
+
+
                 {/* {JSON.stringify(DetailsofAppliedLand?.dgpsDetails)} */}
 
 
@@ -589,22 +591,22 @@ console.log("AccessInfortech", Purpose);
 
 
 
-{/* 
+                {/* 
                 <Button style={{ textAlign: "right" }}>      <a href={`/digit-ui/WNS/wmsmap.html?latlngs=${DetailsofAppliedLand?.dgpsDetails?.index?.[index]?.map((element)=>(`${element.latitude},${element.longitude}`)).join(":")}`} 
   target="popup" 
   onclick="window.open({`/digit-ui/WNS/wmsmap.html?latlngs=${DetailsofAppliedLand?.dgpsDetails?.map((element)=>(`${element.latitude},${element.longitude}`,'popup','width:600,height:600'); return false;"
   >
   Map View</a></Button> */}
-   
-                 {/* <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}><a href="http://localhost:3000/digit-ui/WNS/wmsmap.html?latlngs=29.385044,76.48667120:2029.506174,2076.64801520:2029.686816,2076.21848220:2029.406816,2076.85848220|30.385044,2078.48667120:2030.506174,2078.64801520:30.686816,78.218482" >Graphic design</a></Button> */}
-               
 
-                     
-                          
-                          
-                           
-                          
-  <hr className="my-3" />      
+                {/* <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}><a href="http://localhost:3000/digit-ui/WNS/wmsmap.html?latlngs=29.385044,76.48667120:2029.506174,2076.64801520:2029.686816,2076.21848220:2029.406816,2076.85848220|30.385044,2078.48667120:2030.506174,2078.64801520:30.686816,78.218482" >Graphic design</a></Button> */}
+
+
+
+
+
+
+
+                <hr className="my-3" />
 
                 {/* <hr className="my-3" />
                
@@ -1189,7 +1191,106 @@ console.log("AccessInfortech", Purpose);
                     </div>
                   </div>
                 )} */}
-                	 <div>
+
+                <div>
+                  <div className="mt-3 mb-3">
+                    <h4>
+                      <b>Bifurcation Of Purpose</b>
+                    </h4>
+                    <h4 className="mt-3">
+                      <b>Total Applied Area: </b>
+                      {totalArea}
+                    </h4>
+                    <h4 className="mt-3">
+                      <b>Purpose Name: </b>
+                      {DetailsofAppliedLand?.PurposeDetails?.name}
+                    </h4>
+                    <h4 className="mt-3">
+                      Area:
+                      {DetailsofAppliedLand?.PurposeDetails?.area}
+                    </h4>
+                    {DetailsofAppliedLand?.PurposeDetails?.purposeDetail?.map((item, index) => (
+                      <div style={{ marginLeft: 52 }}>
+
+                        <Row >
+                        <h4 className="mt-3">
+                      <b>Purpose Name: </b>
+                      {item?.name}
+                    </h4>
+
+                    <h4 className="mt-3">
+                      Area:
+                      <Col className="col col-4" >
+                            <input type="text" className="form-control" placeholder={item?.area} disabled />
+                          </Col> 
+                    </h4>
+                          {/* <Col className="col col-4">
+
+                            {item?.name}
+                          </Col>
+                          <Col className="col col-4" >
+                            <input type="text" className="form-control" placeholder={item?.area} disabled />
+                          </Col> */}
+
+                        </Row>
+                        {item?.purposeDetail?.map((item, index) => (
+
+
+
+                          <div style={{ marginLeft: 52 }}>
+
+                            <Row >
+                              {/* <Col className="col col-4">
+                                {item?.name}
+                                <input type="text" className="form-control" placeholder={item?.latitude}  disabled />
+                              </Col>
+                              <Col className="col col-4" >
+                                <input type="text" className="form-control" placeholder={item?.area} disabled />
+                              </Col> */}
+                              <h4 className="mt-3">
+                      <b>Purpose Name: </b>
+                      {item?.name}
+                    </h4>
+
+                    <h4 className="mt-3">
+                      Area:
+                      <Col className="col col-4" >
+                            <input type="text" className="form-control" placeholder={item?.area} disabled />
+                          </Col> 
+                    </h4>
+
+                            </Row>
+
+
+
+                          </div>
+                        ))
+                        }
+
+
+
+                      </div>
+                    ))
+                    }
+
+                  </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                {/* ///last time  */}
+                {/* <div>
                   <DDJAYForm displayDdjay={Purpose === "DDJAY_APHP" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandPlot} dataForIcons={dataIcons}></DDJAYForm>
                 </div>
                 <div>
@@ -1220,9 +1321,7 @@ console.log("AccessInfortech", Purpose);
                 <div>
                   <AffordableGroupHousingForm displayAffordableData={Purpose === "AGH" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandPlot} dataForIcons={dataIcons} ></AffordableGroupHousingForm>
                 </div>
-                {/* <div>
-                  <CommercialIntegratedForm displayCommericalIntegratedForm={Purpose === "CICS"  || "CIRS" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandCommercial} dataForIcons={dataIcons} ></CommercialIntegratedForm>
-                </div> */}
+              
                 <div>
                   <CommercialIntegratedForm displayCommericalIntegratedForm={Purpose === "CICS" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandPlot} dataForIcons={dataIcons} ></CommercialIntegratedForm>
                 </div>
@@ -1238,19 +1337,15 @@ console.log("AccessInfortech", Purpose);
                 <div>
                   <MixedLandUseForm displayMixedLandUseForm={Purpose === "MLU-CZ" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandPlot} dataForIcons={dataIcons} ></MixedLandUseForm>
                 </div>
-                {/* <div>
-                  <LayoutPlanForm displayCommericalIntegratedForm={Purpose === "CICS"  || "CIRS" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandCommercial} dataForIcons={dataIcons} ></LayoutPlanForm>
-                </div> */}
+              
                 <div>
                   <IILPForm displayIILPForm={Purpose === "IPULP"  ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandPlot} dataForIcons={dataIcons} ></IILPForm>
                 </div>
-                {/* <div>
-                  <DemarcationPlanForm displayCommericalIntegratedForm={Purpose === "CICS"  || "CIRS" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandCommercial} dataForIcons={dataIcons} ></DemarcationPlanForm>
-                </div> */}
+                 */}
 
-                  {/* <NilpForm></NilpForm> */}
-                  {/* CPCS */}
-               
+                {/* <NilpForm></NilpForm> */}
+                {/* CPCS */}
+
 
                 {/* <h5 className="text-black mt-4">
                   <div style={{ display: "flex" }}>
@@ -1883,15 +1978,15 @@ console.log("AccessInfortech", Purpose);
 
                 </div> */}
 
-              
+
               </Col>
             </Row>
-          
+
           </Form.Group>
 
         </div>
       </Collapse>
- 
+
     </Form>
   );
 };

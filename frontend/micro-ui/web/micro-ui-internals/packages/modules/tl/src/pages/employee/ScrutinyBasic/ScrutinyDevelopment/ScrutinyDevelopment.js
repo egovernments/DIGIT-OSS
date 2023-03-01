@@ -71,7 +71,7 @@ const ScrutinyDevelopment = (props) => {
   useEffect(
     () => {
       if (remarkDataResp && remarkDataResp?.length) {
-        const tempArray = remarkDataResp.filter((ele) => ele.isApproved === false)
+        const tempArray = remarkDataResp.filter((ele) => ele.isApproved === "disapproved")
         console.log("log123DisA", tempArray);
         setDisapprovedList(tempArray);
       }

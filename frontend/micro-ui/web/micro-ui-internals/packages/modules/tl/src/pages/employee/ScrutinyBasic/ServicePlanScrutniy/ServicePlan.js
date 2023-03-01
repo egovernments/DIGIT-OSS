@@ -83,8 +83,8 @@ const ServicePlanService = (props) => {
     totalArea: Colors.info,
     devName: Colors.info,
     developmentPlan: Colors.info,
-    // pin: Colors.info,
-    // tehsil: Colors.info,
+    uploaded: Colors.info,
+    Revised: Colors.info,
     // district: Colors.info,
     // state: Colors.info,
     // type: Colors.info,
@@ -108,6 +108,13 @@ const ServicePlanService = (props) => {
     { label: "Environmental Clearance.", key: "environmental" },
     { label: "Service plan in PDF (OCR Compatible) + GIS format.", key: "template" },
     { label: "Certified copy of the Service plan verified by a third party", key: "certified" },
+    { label: "Service plan in AutoCAD (DXF) file", key: "AutoCAD" },
+
+    { label: "Previously Uploaded layout plan (call)", key: "Uploaded" },
+    { label: "Upload the Revised layout plan", key: "Revised" },
+    { label: "Service plan in AutoCAD (DXF) file", key: "AutoCAD" },
+    { label: "Service plan in AutoCAD (DXF) file", key: "AutoCAD" },
+    { label: "Service plan in AutoCAD (DXF) file", key: "AutoCAD" },
     { label: "Service plan in AutoCAD (DXF) file", key: "AutoCAD" },
   ];
 
@@ -712,8 +719,8 @@ const ServicePlanService = (props) => {
                             color: fieldIconColors.certified,
                           }}
                           onClick={() => {
-                            setOpennedModal("certified");
-                            setLabelValue("Certified copy of the Service plan verified by a third party"),
+                            setOpennedModal("Uploaded");
+                            setLabelValue("Previously Uploaded layout plan (call)"),
                               setSmShow(true),
                               console.log("modal open"),
                               setFieldValue(apiResponse !== null ? apiResponse?.certifieadCopyOfThePlan : null);
@@ -780,8 +787,8 @@ const ServicePlanService = (props) => {
                             color: fieldIconColors.certified,
                           }}
                           onClick={() => {
-                            setOpennedModal("certified");
-                            setLabelValue("Certified copy of the Service plan verified by a third party"),
+                            setOpennedModal("Revised");
+                            setLabelValue("Upload the Revised layout plan"),
                               setSmShow(true),
                               console.log("modal open"),
                               setFieldValue(apiResponse !== null ? apiResponse?.certifieadCopyOfThePlan : null);

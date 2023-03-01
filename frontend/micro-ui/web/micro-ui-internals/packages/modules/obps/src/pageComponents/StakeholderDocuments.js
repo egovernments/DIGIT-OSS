@@ -28,6 +28,12 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
   const isCitizenUrl = Digit.Utils.browser.isMobile() ? true : false;
   let isopenlink = window.location.href.includes("/openlink/");
   const [isRequiredField, setRequiredField] = useState(true);
+  const [articlesOfAssociation, setArticlesOfAssociation] = useState("");
+  // documents?.filter((item) => item?.documentType?.includes(doc?.code))[0]
+  const [memorandumOfArticles, setMemorandumOfArticles] = useState("");
+  const [registeredIrrevocablePaternshipDeed, setRegisteredIrrevocablePaternshipDeed] = useState("");
+  const [affidavitAndPancard, setAffidavitAndPancard] = useState("");
+  const [anyOtherDoc, setAnyOtherDoc] = useState("");
   // const [docList, setDocList] = useState({});
   if (isopenlink)
     window.onunload = function () {
@@ -80,15 +86,13 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
   // useEffect(() => {
 
   // }, );
-
+  // console.log("+_+_+_+", documents);
+  // console.log("-=-=-=-=", articlesOfAssociation);
+  // console.log("()()()()()", memorandumOfArticles);
   const handleSubmit = () => {
     let document = formData.documents;
-    documents.map((dataFile, index) => {
-      console.log(
-        "515151",
-        documents?.filter((item) => item?.documentType)
-      );
-    });
+
+    // setArticlesOfAssociation(documents[0]?.documentUid);
 
     let documentStep;
     let regularDocs = [];
@@ -100,14 +104,33 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
         if (docobject) regularDocs.push(docobject);
       });
     documentStep = { ...document, documents: regularDocs };
-    console.log("RTGT", documentStep);
+
+    let allDocs = [];
+
+    bpaTaxDocuments.map((items, index) => {
+      let fstDoc = documents.find((obd) => obd.documentType == "ARTICLES_OF_ASSOCIATION");
+      if (fstDoc) allDocs.push(fstDoc?.fileStoreId);
+      let articlesOfAss = allDocs[0];
+    });
+
+    const docList = [
+      {
+        articlesOfAssociation: articlesOfAssociation,
+        memorandumOfArticles: memorandumOfArticles,
+        registeredIrrevocablePaternshipDeed: registeredIrrevocablePaternshipDeed,
+        affidavitAndPancard: affidavitAndPancard,
+        anyOtherDoc: anyOtherDoc,
+      },
+    ];
+
+    // console.log("RTGT", articlesOfAssociation);
     const developerRegisterData = {
       id: userInfo?.info?.id,
       pageName: "licensesDoc",
       createdBy: userInfo?.info?.id,
       updatedBy: userInfo?.info?.id,
       devDetail: {
-        licensesDoc: documents,
+        licensesDoc: docList,
       },
     };
     Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
@@ -133,13 +156,13 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
 
   useEffect(() => {
     let count = 0;
-    console.log("DEVC", documents);
+    // console.log("DEVC", documents);
     bpaTaxDocuments.map((doc) => {
       if (doc.required === true) {
-        console.log("YES");
+        // console.log("YES");
         setRequiredField(true);
       } else {
-        console.log("NO");
+        // console.log("NO");
         setRequiredField(false);
       }
       let isRequired = false;
@@ -148,7 +171,20 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
         if (doc.required && data !== null && data && doc.code == `${data.documentType.split(".")[0]}.${data.documentType.split(".")[1]}`) {
           isRequired = true;
         }
+
+        if (data.documentType === "ARTICLES_OF_ASSOCIATION") {
+          setArticlesOfAssociation(data?.documentUid);
+        } else if (data.documentType === "MEMORANDUM_OF_ARTICLES") {
+          setMemorandumOfArticles(data?.documentUid);
+        } else if (data.documentType === "REGISTERED_IRREVOCABLE_PARTNERSHIP_DEED") {
+          setRegisteredIrrevocablePaternshipDeed(data?.documentUid);
+        } else if (data.documentType === "AFFIDAVIT_AND_PANCARD") {
+          setAffidavitAndPancard(data?.documentUid);
+        } else if (data.documentType === "APPL.BPAREG_OTHERS") {
+          setAnyOtherDoc(data?.documentUid);
+        }
       });
+
       if (!isRequired && doc.required) {
         count = count + 1;
       }
@@ -270,7 +306,8 @@ function SelectDocument({ t, document: doc, setDocuments, error, setError, docum
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(() => filteredDocument?.fileStoreId || null);
   setValue("finalDocList", filteredDocument?.fileStoreId);
-  console.log("FILTEREDDOC", uploadedFile);
+  // setArticlesOfAssociation(uploadedFile);
+  // console.log("FILTEREDDOC", articlesOfAssociation);
 
   // console.log("HGHGHG", docList);
   const handleSelectDocument = (value) => setSelectedDocument(value);

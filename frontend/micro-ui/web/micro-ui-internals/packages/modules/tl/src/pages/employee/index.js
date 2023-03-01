@@ -9,7 +9,7 @@ import Inbox from "./Inbox";
 import ApplicationDetails from "./ApplicationDetails";
 //import ReNewApplication from "./ReNewApplication";
 import ScrutinyFormcontainer from "../employee/ScrutinyContainer/ScrutinyFormContainer";
-import Loi from "../employee/ScrutinyContainer/Loi";
+// import Loi from "../employee/ScrutinyContainer/Loi";
 import Records from "../employee/ApplicationRecord/Record";
 import renewalClu from "../employee/ScrutinyBasic/AllServiceScrutiny/Renewal/Renewal";
 import Beneficial from "../employee/ScrutinyBasic/AllServiceScrutiny/BeneficialInterest/Beneficial";
@@ -226,7 +226,7 @@ const EmployeeApp = ({ path, url, userType }) => {
             <PrivateRoute path={`${path}/response`} component={(props) => <Response {...props} parentRoute={path} />} />
             <PrivateRoute path={`${path}/search/:variant`} component={(props) => <Search {...props} parentRoute={path} />} />
             <PrivateRoute path={`${path}/scrutiny/:id`} component={ScrutinyFormcontainer} />
-            <PrivateRoute path={`${path}/Loi`} component={Loi} />
+            {/* <PrivateRoute path={`${path}/Loi`} component={Loi} /> */}
             <PrivateRoute path={`${path}/Records`} component={Records} />
             <PrivateRoute path={`${path}/renewalClu`} component={renewalClu} />
             <PrivateRoute path={`${path}/Beneficial`} component={Beneficial} />
@@ -241,7 +241,7 @@ const EmployeeApp = ({ path, url, userType }) => {
             <PrivateRoute path={`${path}/ServiceScrutiny/:id`} component={ServiceScrutiny} />
             {/* <PrivateRoute path={`${path}/ScrutinyForm`} component={ScrutinyForm} /> */}
             <PrivateRoute path={`${path}/ScrutinyForm/:id`} component={ScrutinyForm} />
-            <PrivateRoute path={`${path}/servicePlanInbox`} component={(props) => <ServicePlanInbox parentRoute={path} businessService="SERVICE_PLAN" filterComponent="TL_INBOX_FILTER" initialStates={{}} isInbox={true} /> } /> 
+            <PrivateRoute path={`${path}/servicePlanInbox`} component={(props) => <ServicePlanInbox parentRoute={path} businessService={["SERVICE_PLAN_DEMARCATION","SERVICE_PLAN"]} filterComponent="TL_INBOX_FILTER" initialStates={{}} isInbox={true} /> } /> 
             <PrivateRoute path={`${path}/electricPlanInbox`} component={(props) => <ElectricalPlanInbox parentRoute={path} businessService="ELECTRICAL_PLAN" filterComponent="TL_INBOX_FILTER" initialStates={{}} isInbox={true} /> } /> 
             <PrivateRoute path={`${path}/bankGuaranteeInbox`} component={(props) => <BankGuaranteePlan parentRoute={path} businessService="BG_NEW" filterComponent="TL_INBOX_FILTER" initialStates={{}} isInbox={true} /> } /> 
 
