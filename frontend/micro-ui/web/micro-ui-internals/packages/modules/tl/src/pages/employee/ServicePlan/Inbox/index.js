@@ -8,7 +8,7 @@ import { Header } from "@egovernments/digit-ui-react-components";
 
 const ServicePlanInbox = ({
   parentRoute,
-  businessService = "SERVICE_PLAN",
+  businessService = ["SERVICE_PLAN","SERVICE_PLAN_DEMARCATION"],
   initialStates = {},
   filterComponent,
   isInbox

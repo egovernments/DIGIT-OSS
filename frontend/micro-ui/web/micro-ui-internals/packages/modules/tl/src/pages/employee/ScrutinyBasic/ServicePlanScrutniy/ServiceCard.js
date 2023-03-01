@@ -15,13 +15,6 @@ import ServiceBase from "./ServiceBase";
 
 const ServiceScrutiny = (props) => {
 
-
-  // const [ApplicantFormshow, SetApplicantForm] = useState(true);
-  // const [PurposeFormshow, SetPurposeForm] = useState(false);
-  // const [LandScheduleFormshow, SetLandScheduleForm] = useState(false);
-  // const [AppliedDetailsFormshow, SetAppliedDetailsForm] = useState(false);
-  // const [FeesChargesFormshow, SetFeesChargesForm] = useState(false);
-
   const { id } = useParams();
 
   const userInfo = Digit.UserService.getUser()?.info || {};
@@ -48,6 +41,7 @@ const ServiceScrutiny = (props) => {
   const [workflowDetails, setWorkflowDetails] = useState();
   const [applicationData, setApplicationData] = useState();
   const [additionalDetails, setAdditionalDetails] = useState({});
+  const [loiNumberSet, setLOINumberSet] = useState("");
 
   //   const authToken = Digit.UserService.getUser()?.access_token || null;
 
@@ -83,13 +77,37 @@ const ServiceScrutiny = (props) => {
       });
       //   console.log("Response From API1", Resp, Resp?.Licenses[0]?.applicationNumber,Resp);
       setScrutinyDetails(Resp?.servicePlanResponse?.[0]);
-
-      console.log("devDel1234", Resp?.servicePlanResponse?.[0]);
+      setLOINumberSet(Resp?.servicePlanResponse?.[0]?.loiNumber)
+      
+      console.log("devDel1234", Resp?.servicePlanResponse?.[0]?.loiNumber);
+      const loiNumber =  Resp?.servicePlanResponse?.[0]?.loiNumber
       setApplicationData(Resp?.servicePlanResponse?.[0]);
       setApplicationDetails({
         applicationData: Resp?.servicePlanResponse?.[0],
         workflowCode: Resp?.servicePlanResponse?.[0].businessService
       })
+      console.log("Loi1234787", userInfo );
+      console.log("Loi1234", loiNumber );
+      const loiRequest = {
+        requestInfo: {
+          api_id: "Rainmaker",
+          ver: "1",
+          ts: 0,
+          action: "_search",
+          did: "",
+          key: "",
+          msg_id: "090909",
+          requesterId: "",
+          authToken: authToken,
+          "userInfo": userInfo
+        },
+      }
+      
+     
+      const Resploi =await axios.post(`/tl-services/v1/_search?loiNumber=${loiNumber}`, loiRequest);
+      console.log("Afterloi", Resploi );
+      
+      
 
       // setScrutinyDetails(Resp?.servicePlanResponse?.[0]);
 
@@ -234,6 +252,7 @@ const ServiceScrutiny = (props) => {
       <Card.Header class="fw-normal" style={{ top: 5, padding: 5, fontSize: 14, height: 90, lineHeight: 2 }}>
         <div className="row">
           <div className="col-md-3">
+            {/* {loiNumberSet} */}
             <p>Application Number:</p>
             <p class="fw-normal">{id}</p>
           </div>
