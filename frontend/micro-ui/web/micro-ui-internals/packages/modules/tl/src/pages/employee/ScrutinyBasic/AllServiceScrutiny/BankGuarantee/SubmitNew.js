@@ -31,7 +31,7 @@ const SubmitNew = (props) => {
   };
   let user = Digit.UserService.getUser();
   const userRoles = user?.info?.roles?.map((e) => e.code);
-  const showRemarks = userRoles.includes("AO_HQ");
+  const showRemarks = userRoles.includes("AO_HQ" || "AD_HQ");
   const landScheduleData = props.ApiResponseData;
   const {
     register,
@@ -86,6 +86,16 @@ const SubmitNew = (props) => {
     licenseApplied: Colors.info,
     tcpSubmissionReceived: Colors.info,
     existingBgNumber: Colors.info,
+    khasraNumber: Colors.info,
+    areaToBeMortgagedInSqMtrs: Colors.info,
+    totalKhasraAreaToMortgage: Colors.info,
+    plotNumber: Colors.info,
+    areaInSqMtrs: Colors.info,
+    totalPlotAreaToMortgage: Colors.info,
+    mortgageLayoutPlan: Colors.info,
+    mortgageDeed: Colors.info,
+    mortgageLandScheduleAndPlotNumbersDoc: Colors.info,
+    mortgageDeedAfterBPApproval: Colors.info,
   });
 
   const fieldIdList = [
@@ -103,6 +113,16 @@ const SubmitNew = (props) => {
     { label: "Hardcopy Submitted at TCP office.", key: "licenseApplied" },
     { label: "Upload Receipt of Submission.", key: "tcpSubmissionReceived" },
     { label: "Existing B.G. No.", key: "existingBgNumber" },
+    { label: "Khasra No", key: "khasraNumber" },
+    { label: "Area to be Mortgaged (in sq meters)", key: "areaToBeMortgagedInSqMtrs" },
+    { label: "Area Total", key: "totalKhasraAreaToMortgage" },
+    { label: "Plot No", key: "plotNumber" },
+    { label: "Area (in sq meters)", key: "areaInSqMtrs" },
+    { label: "Area Total", key: "totalPlotAreaToMortgage" },
+    { label: "Upload layout plan earmarking land to be mortgaged", key: "mortgageLayoutPlan" },
+    { label: " Mortgage Deed", key: "mortgageDeed" },
+    { label: "Land schedule and Plot numbers", key: "mortgageLandScheduleAndPlotNumbersDoc" },
+    { label: " Undertaking Amended/supplementary/addendum mortage deed specifying plots/flats/shops", key: "mortgageDeedAfterBPApproval" },
   ];
 
   const getColorofFieldIcon = () => {
@@ -193,7 +213,7 @@ const SubmitNew = (props) => {
             <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Bank Guarantee Submission </h4>
             <div className="card">
               <Row className="col-12">
-                <Form.Group as={Col} controlId="formGridLicence">
+                <Col md={4} xxl lg="3">
                   <Form.Label>
                     <h2>Enter LOI No.</h2>{" "}
                   </Form.Label>
@@ -222,8 +242,8 @@ const SubmitNew = (props) => {
                     ></ModalChild>
                   </div>
                   {/* <input type="text" className="form-control" placeholder="" {...register("enter")} /> */}
-                </Form.Group>
-                <Form.Group as={Col} controlId="formGridLicence">
+                </Col>
+                <Col md={4} xxl lg="3">
                   <div>
                     <Form.Label>
                       <h2>Type of B.G</h2>
@@ -247,74 +267,28 @@ const SubmitNew = (props) => {
                     <option> IDW</option>
                     <option>EDC</option>
                   </select> */}
-                </Form.Group>
-                <Form.Group as={Col} controlId="formGridLicence">
-                  <div>
-                    <Form.Label>
-                      <h2>Amount (in fig)</h2>
-                    </Form.Label>
-                  </div>
-                  <div className={classes.fieldContainer}>
-                    <Form.Control className={classes.formControl} placeholder={apiResponse?.amountInFig} disabled></Form.Control>
-
-                    <ReportProblemIcon
-                      style={{
-                        color: fieldIconColors.amountInFig,
-                        display: showRemarks ? "block" : "none",
-                      }}
-                      onClick={() => {
-                        setOpennedModal("amountInFig");
-                        setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"), setFieldValue(amountInFig);
-                      }}
-                    ></ReportProblemIcon>
-                  </div>
-                  {/* <input type="text" className="form-control" placeholder="" {...register("amountInFig")} /> */}
-                </Form.Group>
-                <Form.Group as={Col} controlId="formGridLicence">
-                  <div>
-                    <Form.Label>
-                      <h2>Amount (in words)</h2>
-                    </Form.Label>
-                  </div>
-                  <div className={classes.fieldContainer}>
-                    <Form.Control className={classes.formControl} placeholder={apiResponse?.amountInWords} disabled></Form.Control>
-
-                    <ReportProblemIcon
-                      style={{
-                        color: fieldIconColors.amountInWords,
-                        display: showRemarks ? "block" : "none",
-                      }}
-                      onClick={() => {
-                        setOpennedModal("amountInWords");
-                        setLabelValue("Amount (in words)"), setSmShow(true), console.log("modal open"), setFieldValue(amountInWords);
-                      }}
-                    ></ReportProblemIcon>
-                  </div>
-                  {/* <input type="text" className="form-control" placeholder="" {...register("amountInWords")} /> */}
-                </Form.Group>
+                </Col>
               </Row>
               <br></br>
               <Row className="col-12">
                 <Col md={4} xxl lg="3">
-                  <label htmlFor="bankGuarantee">
+                  <label htmlFor="businessService">
                     <input
-                      {...register("bankGuarantee")}
+                      {...register("businessService")}
                       type="radio"
-                      name="bankGuarantee"
-                      id="bankGuarantee1"
-                      value="1"
-                      onChange={(e) => handleshowhide(e)}
+                      id="businessService"
+                      checked={apiResponse?.businessService === "BG_NEW" ? true : false}
+                      disabled
                     />
                     &nbsp; Bank Gurantee &nbsp;&nbsp;
                   </label>
-                  <label htmlFor="bankGuarantee">
+                  <label htmlFor="businessService">
                     <input
-                      {...register("bankGuarantee")}
+                      {...register("businessService")}
                       type="radio"
-                      name="bankGuarantee"
-                      id="bankGuarantee2"
-                      value="2"
-                      onChange={(e) => handleshowhide(e)}
+                      id="businessService"
+                      checked={apiResponse?.businessService === "BG_MORTGAGE" ? true : false}
+                      disabled
                     />
                     &nbsp; Mortgage &nbsp;&nbsp;
                   </label>
@@ -323,12 +297,12 @@ const SubmitNew = (props) => {
 
                     <ReportProblemIcon
                       style={{
-                        color: fieldIconColors.bgNumber,
+                        color: fieldIconColors.businessService,
                         display: showRemarks ? "block" : "none",
                       }}
                       onClick={() => {
-                        setOpennedModal("bgNumber");
-                        setLabelValue("Enter Bank Guarantee No."), setSmShow(true), console.log("modal open"), setFieldValue(bgNumber);
+                        setOpennedModal("businessService");
+                        setLabelValue("Bank Guarantee mortgage"), setSmShow(true), console.log("modal open"), setFieldValue(bankGuarantee);
                       }}
                     ></ReportProblemIcon>
                   </div>
@@ -336,9 +310,53 @@ const SubmitNew = (props) => {
               </Row>
               <Row className="col-12">
                 <Col md={4} xxl lg="12">
-                  {landScheduleData?.bankGuarantee === "1" && (
+                  {apiResponse?.businessService === "BG_NEW" && (
                     <div>
                       <Row className="col-12">
+                        <Form.Group as={Col} controlId="formGridLicence">
+                          <div>
+                            <Form.Label>
+                              <h2>Amount (in fig)</h2>
+                            </Form.Label>
+                          </div>
+                          <div className={classes.fieldContainer}>
+                            <Form.Control className={classes.formControl} placeholder={apiResponse?.amountInFig} disabled></Form.Control>
+
+                            <ReportProblemIcon
+                              style={{
+                                color: fieldIconColors.amountInFig,
+                                display: showRemarks ? "block" : "none",
+                              }}
+                              onClick={() => {
+                                setOpennedModal("amountInFig");
+                                setLabelValue("Amount (in fig)"), setSmShow(true), console.log("modal open"), setFieldValue(amountInFig);
+                              }}
+                            ></ReportProblemIcon>
+                          </div>
+                          {/* <input type="text" className="form-control" placeholder="" {...register("amountInFig")} /> */}
+                        </Form.Group>
+                        <Form.Group as={Col} controlId="formGridLicence">
+                          <div>
+                            <Form.Label>
+                              <h2>Amount (in words)</h2>
+                            </Form.Label>
+                          </div>
+                          <div className={classes.fieldContainer}>
+                            <Form.Control className={classes.formControl} placeholder={apiResponse?.amountInWords} disabled></Form.Control>
+
+                            <ReportProblemIcon
+                              style={{
+                                color: fieldIconColors.amountInWords,
+                                display: showRemarks ? "block" : "none",
+                              }}
+                              onClick={() => {
+                                setOpennedModal("amountInWords");
+                                setLabelValue("Amount (in words)"), setSmShow(true), console.log("modal open"), setFieldValue(amountInWords);
+                              }}
+                            ></ReportProblemIcon>
+                          </div>
+                          {/* <input type="text" className="form-control" placeholder="" {...register("amountInWords")} /> */}
+                        </Form.Group>
                         <Col md={4} xxl lg="3">
                           <div>
                             <Form.Label>
@@ -682,9 +700,9 @@ const SubmitNew = (props) => {
 
               <Row className={classes.formLabel}>
                 <Col md={4} xxl lg="12">
-                  {landScheduleData?.bankGuarantee === "2" && (
+                  {apiResponse?.businessService === "BG_MORTGAGE" && (
                     <div>
-                      <div className="table table-bordered table-responsive">
+                      <div className="table table-bordered table-responsive" style={{ backgroundColor: "rgb(251 251 253))", width: "629px" }}>
                         <thead>
                           <tr>
                             <th scope="col">Khasra No</th>
@@ -694,32 +712,96 @@ const SubmitNew = (props) => {
                         <tbody>
                           <tr>
                             <th className="fw-normal" style={{ textAlign: "center" }}>
-                              <NumberInput disabled control={control} name="totalAreaScheme" customInput={TextField} />
+                              <div className={classes.fieldContainer}>
+                                <Form.Control
+                                  className={classes.formControl}
+                                  placeholder={apiResponse?.additionalDetails?.mortgageKhasraDetails?.[0]?.khasraNumber}
+                                  disabled
+                                ></Form.Control>
+
+                                <ReportProblemIcon
+                                  style={{
+                                    color: fieldIconColors.khasraNumber,
+                                    display: showRemarks ? "block" : "none",
+                                  }}
+                                  onClick={() => {
+                                    setOpennedModal("khasraNumber");
+                                    setLabelValue("Khasra No"), setSmShow(true), console.log("modal open"), setFieldValue(khasraNumber);
+                                  }}
+                                ></ReportProblemIcon>
+                              </div>
+                              {/* <input disabled control={control} name="totalAreaScheme" /> */}
                             </th>
                             <th className="fw-normal" style={{ textAlign: "center" }}>
-                              <input type="number" className="form-control" placeholder="" />
+                              <div className={classes.fieldContainer}>
+                                <Form.Control
+                                  className={classes.formControl}
+                                  placeholder={apiResponse?.additionalDetails?.mortgageKhasraDetails?.[0]?.areaToBeMortgagedInSqMtrs}
+                                  disabled
+                                ></Form.Control>
+
+                                <ReportProblemIcon
+                                  style={{
+                                    color: fieldIconColors.areaToBeMortgagedInSqMtrs,
+                                    display: showRemarks ? "block" : "none",
+                                  }}
+                                  onClick={() => {
+                                    setOpennedModal("areaToBeMortgagedInSqMtrs");
+                                    setLabelValue("Area to be Mortgaged (in sq meters)"),
+                                      setSmShow(true),
+                                      console.log("modal open"),
+                                      setFieldValue(areaToBeMortgagedInSqMtrs);
+                                  }}
+                                ></ReportProblemIcon>
+                              </div>
+                              {/* <input type="number" className="form-control" placeholder="" /> */}
                             </th>
                           </tr>
-                          <tr>
+                          {/* <tr>
                             <th className="fw-normal" style={{ textAlign: "center" }}>
                               <input type="text" className="form-control" placeholder="" disabled />
                             </th>
                             <th className="fw-normal" style={{ textAlign: "center" }}>
                               <input type="number" className="form-control" placeholder="" />
                             </th>
-                          </tr>
-                          <tr>
+                          </tr> */}
+                          {/* <tr>
                             <th className="fw-normal" style={{ textAlign: "center" }}>
                               <h2>Area Total</h2>
                             </th>
                             <th className="fw-normal" style={{ textAlign: "center" }}>
                               <input type="number" className="form-control" placeholder="" />
                             </th>
-                          </tr>
+                          </tr> */}
                         </tbody>
                       </div>
+                      <div className="row mx-1">
+                        <div className="col col-3 p-1">
+                          <h2>Area Total</h2>
+                          <div className={classes.fieldContainer}>
+                            <Form.Control
+                              className={classes.formControl}
+                              placeholder={apiResponse?.additionalDetails?.totalKhasraAreaToMortgage}
+                              disabled
+                            ></Form.Control>
+
+                            <ReportProblemIcon
+                              style={{
+                                color: fieldIconColors.totalKhasraAreaToMortgage,
+                                display: showRemarks ? "block" : "none",
+                              }}
+                              onClick={() => {
+                                setOpennedModal("totalKhasraAreaToMortgage");
+                                setLabelValue("Area Total"), setSmShow(true), console.log("modal open"), setFieldValue(totalKhasraAreaToMortgage);
+                              }}
+                            ></ReportProblemIcon>
+                          </div>
+                          {/* <input type="number" className="form-control" placeholder="" /> */}
+                        </div>
+                      </div>
+
                       <h5 className="card-title fw-bold">Enter Plot</h5>
-                      <div className="table table-bordered table-responsive">
+                      <div className="table table-bordered table-responsive" style={{ backgroundColor: "rgb(251 251 253))", width: "629px" }}>
                         <thead>
                           <tr>
                             <th scope="col">Plot No</th>
@@ -727,37 +809,93 @@ const SubmitNew = (props) => {
                           </tr>
                         </thead>
                         <tbody>
-                          {[...Array(noOfRows)].map((elementInArray, index) => {
-                            return (
-                              <tr>
-                                <th className="fw-normal" style={{ textAlign: "center" }}>
-                                  <input type="text" className="form-control" placeholder="" />
-                                </th>
-                                <th className="fw-normal" style={{ textAlign: "center" }}>
-                                  <input type="number" className="form-control" placeholder="" />
-                                </th>
-                              </tr>
-                            );
-                          })}
+                          <tr>
+                            <th className="fw-normal" style={{ textAlign: "center" }}>
+                              <div className={classes.fieldContainer}>
+                                <Form.Control
+                                  className={classes.formControl}
+                                  placeholder={apiResponse?.additionalDetails?.mortgagePlotDetails?.[0]?.plotNumber}
+                                  disabled
+                                ></Form.Control>
+
+                                <ReportProblemIcon
+                                  style={{
+                                    color: fieldIconColors.plotNumber,
+                                    display: showRemarks ? "block" : "none",
+                                  }}
+                                  onClick={() => {
+                                    setOpennedModal("plotNumber");
+                                    setLabelValue("Plot No"), setSmShow(true), console.log("modal open"), setFieldValue(plotNumber);
+                                  }}
+                                ></ReportProblemIcon>
+                              </div>
+                              {/* <input type="text" className="form-control" placeholder="" /> */}
+                            </th>
+                            <th className="fw-normal" style={{ textAlign: "center" }}>
+                              <div className={classes.fieldContainer}>
+                                <Form.Control
+                                  className={classes.formControl}
+                                  placeholder={apiResponse?.additionalDetails?.mortgagePlotDetails?.[0]?.areaInSqMtrs}
+                                  disabled
+                                ></Form.Control>
+
+                                <ReportProblemIcon
+                                  style={{
+                                    color: fieldIconColors.areaInSqMtrs,
+                                    display: showRemarks ? "block" : "none",
+                                  }}
+                                  onClick={() => {
+                                    setOpennedModal("areaInSqMtrs");
+                                    setLabelValue("Area (in sq meters)"), setSmShow(true), console.log("modal open"), setFieldValue(areaInSqMtrs);
+                                  }}
+                                ></ReportProblemIcon>
+                              </div>
+                              {/* <input type="number" className="form-control" placeholder="" /> */}
+                            </th>
+                          </tr>
                         </tbody>
+                      </div>
+                      <div className="row mx-1">
+                        <div className="col col-3 p-1">
+                          <h2>Area Total</h2>
+                          <div className={classes.fieldContainer}>
+                            <Form.Control
+                              className={classes.formControl}
+                              placeholder={apiResponse?.additionalDetails?.totalPlotAreaToMortgage}
+                              disabled
+                            ></Form.Control>
+
+                            <ReportProblemIcon
+                              style={{
+                                color: fieldIconColors.totalPlotAreaToMortgage,
+                                display: showRemarks ? "block" : "none",
+                              }}
+                              onClick={() => {
+                                setOpennedModal("totalPlotAreaToMortgage");
+                                setLabelValue("Area Total"), setSmShow(true), console.log("modal open"), setFieldValue(totalPlotAreaToMortgage);
+                              }}
+                            ></ReportProblemIcon>
+                          </div>
+                          {/* <input type="number" className="form-control" placeholder="" /> */}
+                        </div>
                       </div>
                       <div className="row mx-1">
                         <div className="col col-3 p-1">
                           <h6>Upload layout plan earmarking land to be mortgaged</h6>
                           <div className="d-flex flex-row align-items-center my-1 ">
-                            <IconButton onClick={() => getDocShareholding(landScheduleData?.copyOfShajraPlan)}>
+                            <IconButton onClick={() => getDocShareholding(apiResponse?.additionalDocuments?.mortgageLayoutPlan)}>
                               <DownloadForOfflineIcon color="primary" className="mx-1" />
                             </IconButton>
                             <ReportProblemIcon
                               style={{
-                                display: hideRemarks ? "none" : "block",
-                                color: fieldIconColors.copyOfShajraPlan,
+                                display: showRemarks ? "block" : "none",
+                                color: fieldIconColors.mortgageLayoutPlan,
                               }}
                               onClick={() => {
-                                setLabelValue("Copy of Shajra Plan"), setOpennedModal("copyOfShajraPlan");
+                                setLabelValue("Upload layout plan earmarking land to be mortgaged"), setOpennedModal("mortgageLayoutPlan");
                                 setSmShow(true),
                                   console.log("modal open"),
-                                  setFieldValue(landScheduleData !== null ? landScheduleData?.copyOfShajraPlan : null);
+                                  setFieldValue(apiResponse !== null ? apiResponse?.additionalDocuments?.mortgageLayoutPlan : null);
                               }}
                             ></ReportProblemIcon>
                           </div>
@@ -765,19 +903,19 @@ const SubmitNew = (props) => {
                         <div className="col col-3 p-1">
                           <h6> Mortgage Deed</h6>
                           <div className="d-flex flex-row align-items-center my-1 ">
-                            <IconButton onClick={() => getDocShareholding(landScheduleData?.copyOfShajraPlan)}>
+                            <IconButton onClick={() => getDocShareholding(apiResponse?.additionalDocuments?.mortgageDeed)}>
                               <DownloadForOfflineIcon color="primary" className="mx-1" />
                             </IconButton>
                             <ReportProblemIcon
                               style={{
-                                display: hideRemarks ? "none" : "block",
-                                color: fieldIconColors.copyOfShajraPlan,
+                                display: showRemarks ? "block" : "none",
+                                color: fieldIconColors.mortgageDeed,
                               }}
                               onClick={() => {
-                                setLabelValue("Copy of Shajra Plan"), setOpennedModal("copyOfShajraPlan");
+                                setLabelValue("Mortgage Deed"), setOpennedModal("mortgageDeed");
                                 setSmShow(true),
                                   console.log("modal open"),
-                                  setFieldValue(landScheduleData !== null ? landScheduleData?.copyOfShajraPlan : null);
+                                  setFieldValue(apiResponse !== null ? apiResponse?.additionalDocuments?.mortgageDeed : null);
                               }}
                             ></ReportProblemIcon>
                           </div>
@@ -785,19 +923,21 @@ const SubmitNew = (props) => {
                         <div className="col col-3 p-1">
                           <h6>Land schedule and Plot numbers</h6>
                           <div className="d-flex flex-row align-items-center my-1 ">
-                            <IconButton onClick={() => getDocShareholding(landScheduleData?.copyOfShajraPlan)}>
+                            <IconButton onClick={() => getDocShareholding(apiResponse?.additionalDocuments?.mortgageLandScheduleAndPlotNumbersDoc)}>
                               <DownloadForOfflineIcon color="primary" className="mx-1" />
                             </IconButton>
                             <ReportProblemIcon
                               style={{
-                                display: hideRemarks ? "none" : "block",
-                                color: fieldIconColors.copyOfShajraPlan,
+                                display: showRemarks ? "block" : "none",
+                                color: fieldIconColors.mortgageLandScheduleAndPlotNumbersDoc,
                               }}
                               onClick={() => {
-                                setLabelValue("Copy of Shajra Plan"), setOpennedModal("copyOfShajraPlan");
+                                setLabelValue("Land schedule and Plot numbers"), setOpennedModal("mortgageLandScheduleAndPlotNumbersDoc");
                                 setSmShow(true),
                                   console.log("modal open"),
-                                  setFieldValue(landScheduleData !== null ? landScheduleData?.copyOfShajraPlan : null);
+                                  setFieldValue(
+                                    apiResponse !== null ? apiResponse?.additionalDocuments?.mortgageLandScheduleAndPlotNumbersDoc : null
+                                  );
                               }}
                             ></ReportProblemIcon>
                           </div>
@@ -810,19 +950,20 @@ const SubmitNew = (props) => {
                             mortgaged upon approval of building plans
                           </h6>
                           <div className="d-flex flex-row align-items-center my-1 ">
-                            <IconButton onClick={() => getDocShareholding(landScheduleData?.copyOfShajraPlan)}>
+                            <IconButton onClick={() => getDocShareholding(apiResponse?.additionalDocuments?.mortgageDeedAfterBPApproval)}>
                               <DownloadForOfflineIcon color="primary" className="mx-1" />
                             </IconButton>
                             <ReportProblemIcon
                               style={{
-                                display: hideRemarks ? "none" : "block",
-                                color: fieldIconColors.copyOfShajraPlan,
+                                display: showRemarks ? "block" : "none",
+                                color: fieldIconColors.mortgageDeedAfterBPApproval,
                               }}
                               onClick={() => {
-                                setLabelValue("Copy of Shajra Plan"), setOpennedModal("copyOfShajraPlan");
+                                setLabelValue("Undertaking Amended/supplementary/addendum mortage deed specifying plots/flats/shops"),
+                                  setOpennedModal("mortgageDeedAfterBPApproval");
                                 setSmShow(true),
                                   console.log("modal open"),
-                                  setFieldValue(landScheduleData !== null ? landScheduleData?.copyOfShajraPlan : null);
+                                  setFieldValue(apiResponse !== null ? apiResponse?.additionalDocuments?.mortgageDeedAfterBPApproval : null);
                               }}
                             ></ReportProblemIcon>
                           </div>

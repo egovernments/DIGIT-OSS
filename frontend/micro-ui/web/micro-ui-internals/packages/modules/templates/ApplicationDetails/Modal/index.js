@@ -14,14 +14,18 @@ const ActionModal = (props) => {
     return <PTActionModal {...props} />;
   }
 
-  if (props?.businessService.includes("NewTL") || props?.businessService.includes("TL") || props?.businessService.includes("EDITRENEWAL") || props?.businessService.includes("DIRECTRENEWAL")) {
+  if (
+    props?.businessService.includes("NewTL") ||
+    props?.businessService.includes("TL") ||
+    props?.businessService.includes("EDITRENEWAL") ||
+    props?.businessService.includes("DIRECTRENEWAL")
+  ) {
     return <TLActionModal {...props} />;
   }
 
   if (props?.moduleCode.includes("BPAREG")) {
     return <BPAREGActionModal {...props} />;
   }
-
 
   if (props?.moduleCode.includes("BPA")) {
     return <BPAActionModal {...props} />;
@@ -39,6 +43,9 @@ const ActionModal = (props) => {
     return <ServicePlanModal {...props} />;
   }
   if (props?.businessService.includes("BG_NEW")) {
+    return <BankGuaranteePlan {...props} />;
+  }
+  if (props?.businessService.includes("BG_MORTGAGE")) {
     return <BankGuaranteePlan {...props} />;
   }
   // return <FSMActionModal {...props} />;

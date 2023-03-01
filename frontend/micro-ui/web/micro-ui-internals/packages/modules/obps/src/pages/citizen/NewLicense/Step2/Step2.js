@@ -16,7 +16,7 @@ import Spinner from "../../../../components/Loader";
 import { getDocShareholding } from "../docView/docView.help";
 import { convertEpochToDate } from "../../../../../../tl/src/utils";
 import { useLocation } from "react-router-dom";
-import { Toast } from "@egovernments/digit-ui-react-components";
+import { Toast, CardLabelError } from "@egovernments/digit-ui-react-components";
 import _ from "lodash";
 
 const ApllicantPuropseForm = (props) => {
@@ -1094,7 +1094,7 @@ const ApllicantPuropseForm = (props) => {
                     onChange={(e) => getZoneOption(e?.value)}
                   />
                   <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.potential?.value && errors?.potential?.value?.message}
+                    {errors?.developmentPlan?.value && errors?.developmentPlan?.value?.message}
                   </h3>
                 </Col>
               )}
@@ -1119,7 +1119,7 @@ const ApllicantPuropseForm = (props) => {
                   />
 
                   <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.zone?.value && errors?.zone?.value?.message}
+                    {errors?.potential?.value && errors?.potential?.value?.message}
                   </h3>
                 </Col>
               )}
@@ -1295,10 +1295,10 @@ const ApllicantPuropseForm = (props) => {
                             Name of the developer company .<span style={{ color: "red" }}>*</span>
                           </h2>
                         </label>
-                        <Form.Control type="text" className="form-control" placeholder="" {...register("developerCompany")} />
-                        <h3 className="error-message" style={{ color: "red" }}>
-                          {errors?.developerCompany && errors?.developerCompany?.message}
-                        </h3>
+                        <Form.Control type="text" className="form-control" placeholder="" {...register("developerCompany")} required="required" />
+                        <CardLabelError style={{ width: "100%", marginTop: "5px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
+                          ("This is requird field")
+                        </CardLabelError>
                       </div>
                       <div className="col col-4">
                         <label>
@@ -1415,6 +1415,9 @@ const ApllicantPuropseForm = (props) => {
                   </h2>
                 </label>
                 <ReactMultiSelect control={control} name="typeLand" data={typeOfLand?.data} labels="typeland" />
+                <h3 className="error-message" style={{ color: "red" }}>
+                  {errors?.typeLand && errors?.typeLand?.message}
+                </h3>
               </Col>
             </Row>
             <br></br>
