@@ -8,10 +8,12 @@ import {
   Toast,
   RemoveIcon,
   DeleteIcon,
+  MuiTables,
 } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
-import Table from "react-bootstrap/Table";
+// import Table from "react-bootstrap/Table";
+import Button from "react-bootstrap/Button";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 // import "../Developer/AddInfo.css";
 // import DashboardScreen from "../../src/Screens/DashboardScreen/DashboardScreen";
@@ -29,7 +31,7 @@ import Popup from "reactjs-popup";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { Modal, ModalHeader, ModalFooter, ModalBody } from "react-bootstrap";
-import { Button } from "react-bootstrap";
+// import { Button } from "react-bootstrap";
 import { convertEpochToDate } from "../utils/index";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FileUpload from "@mui/icons-material/FileUpload";
@@ -39,6 +41,16 @@ import { getDocShareholding } from "../../../tl/src/pages/employee/ScrutinyBasic
 const TYPE_REGISTER = { type: "register" };
 const TYPE_LOGIN = { type: "login" };
 import Spinner from "../components/Loader/index";
+import { styled } from "@mui/material/styles";
+import Paper from "@mui/material/Paper";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TablePagination from "@mui/material/TablePagination";
+import TableRow from "@mui/material/TableRow";
+// import Button from "@mui/material/Button";
 // const tenantId = Digit.ULBService.getCurrentTenantId();
 
 //for Redux use only
@@ -63,6 +75,37 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
   const [aurthorizedUserInfoArray, setAurthorizedUserInfoArray] = useState([]);
   const [panIsValid, setPanIsValid] = useState(false);
   const [toastError, setToastError] = useState("");
+
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+  const [page, setPage] = React.useState(0);
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    "&:nth-of-type(odd)": {
+      backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    "&:last-child td, &:last-child th": {
+      border: 0,
+    },
+  }));
 
   const getDeveloperData = async () => {
     try {
@@ -565,7 +608,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
           <div className="card">
             {/* <h5 className="card-h">Add/Remove Authorized Users</h5> */}
             <div className="table-bd">
-              <Table className="table table-bordered table-striped table-responsive">
+              {/* <Table className="table table-bordered table-striped table-responsive">
                 <thead>
                   <tr>
                     <th>Sr. No</th>
@@ -573,7 +616,6 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                     <th>Mobile Number</th>
                     <th>Email</th>
                     <th>Gender</th>
-                    {/* <th>Date of Birth</th> */}
                     <th>PAN No.</th>
                     <th>
                       {data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" ||
@@ -664,7 +706,6 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                           </td>
                           <td style={{ textAlign: "center" }}>
                             <a
-                              // onClick={()=>(viewRecord(elementInArray.id))}
                               title="Delete record"
                               onClick={() => viewRecord(elementInArray, input)}
                             >
@@ -678,8 +719,138 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                     <div className="d-none">Click on Add to add a aurthorized user</div>
                   )}
                 </tbody>
-              </Table>
-
+              </Table> */}
+              <Paper sx={{ width: "100%", overflow: "hidden" }}>
+                <TableContainer sx={{ maxHeight: 440 }}>
+                  <Table stickyHeader aria-label="sticky table">
+                    <TableHead>
+                      <TableRow>
+                        <StyledTableCell>Sr No.</StyledTableCell>
+                        <StyledTableCell>Name</StyledTableCell>
+                        <StyledTableCell>Mobile Number</StyledTableCell>
+                        <StyledTableCell>Email</StyledTableCell>
+                        <StyledTableCell>Gender</StyledTableCell>
+                        <StyledTableCell>PAN No.</StyledTableCell>
+                        <StyledTableCell>
+                          {data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" ||
+                          data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm" ||
+                          data?.devDetail[0]?.addInfo?.showDevTypeFields === "Hindu Undivided Family" ? (
+                            <label htmlFor="name" className="text">
+                              Upload/View Power of Attorney{" "}
+                            </label>
+                          ) : (
+                            <label htmlFor="name" className="text">
+                              {" "}
+                              Upload/View Board Resolution
+                            </label>
+                          )}
+                        </StyledTableCell>
+                        <StyledTableCell>Upload/View Digital Signature PDF</StyledTableCell>
+                        <StyledTableCell>Action</StyledTableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {aurthorizedUserInfoArray?.length > 0 ? (
+                        aurthorizedUserInfoArray.map((elementInArray, input) => {
+                          return (
+                            <StyledTableRow key={elementInArray.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                              <StyledTableCell component="th" scope="row">
+                                {input + 1}
+                              </StyledTableCell>
+                              <StyledTableCell>{elementInArray.name}</StyledTableCell>
+                              <StyledTableCell>{elementInArray.mobileNumber}</StyledTableCell>
+                              <StyledTableCell>{elementInArray.emailId}</StyledTableCell>
+                              <StyledTableCell>{elementInArray.gender}</StyledTableCell>
+                              <StyledTableCell>{elementInArray.pan}</StyledTableCell>
+                              <StyledTableCell>
+                                <div className="row">
+                                  {elementInArray.uploadBoardResolution !== "" ? (
+                                    <button
+                                      type="button"
+                                      title="View Document"
+                                      onClick={() => getDocShareholding(elementInArray?.uploadBoardResolution)}
+                                      className="btn btn-sm col-md-6"
+                                    >
+                                      <VisibilityIcon color="info" className="icon" />
+                                    </button>
+                                  ) : (
+                                    <p></p>
+                                  )}
+                                  <div className="btn btn-sm col-md-6">
+                                    <label for={"uploadAdhaarDoc" + input} title="Upload Document">
+                                      {" "}
+                                      <FileUpload color="primary" />
+                                    </label>
+                                    <input
+                                      id={"uploadAdhaarDoc" + input}
+                                      type="file"
+                                      accept="application/pdf"
+                                      style={{ display: "none" }}
+                                      onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBoardResolution", true, input)}
+                                    />
+                                  </div>
+                                </div>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <div className="row">
+                                  {elementInArray.uploadDigitalSignaturePdf ? (
+                                    <button
+                                      type="button"
+                                      title="View Document"
+                                      onClick={() => getDocShareholding(elementInArray?.uploadDigitalSignaturePdf)}
+                                      className="btn btn-sm col-md-6"
+                                    >
+                                      <VisibilityIcon color="info" className="icon" />
+                                    </button>
+                                  ) : (
+                                    <p></p>
+                                  )}
+                                  <div className="btn btn-sm col-md-6">
+                                    <label for={"uploadSignDoc" + input} title="Upload Document">
+                                      {" "}
+                                      <FileUpload color="primary" />
+                                    </label>
+                                    <input
+                                      id={"uploadSignDoc" + input}
+                                      type="file"
+                                      accept="application/pdf"
+                                      style={{ display: "none" }}
+                                      onChange={(e) => getDocumentData(e?.target?.files[0], "uploadDigitalSignaturePdf", true, input)}
+                                    />
+                                  </div>
+                                </div>
+                              </StyledTableCell>
+                              <StyledTableCell align="center">
+                                {/* <Button variant="contained" color={"primary"} title="Delete record" onClick={() => viewRecord(elementInArray, input)}>
+                                <DeleteIcon style={{ fill: "#ff1a1a" }} />
+                              </Button> */}
+                                <a
+                                  // onClick={()=>(viewRecord(elementInArray.id))}
+                                  title="Delete record"
+                                  onClick={() => viewRecord(elementInArray, input)}
+                                >
+                                  <DeleteIcon style={{ fill: "#ff1a1a" }} />
+                                </a>
+                              </StyledTableCell>
+                            </StyledTableRow>
+                          );
+                        })
+                      ) : (
+                        <div className="d-none">Click on Add to add a aurthorized user</div>
+                      )}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+                <TablePagination
+                  rowsPerPageOptions={[10, 25, 100]}
+                  component="div"
+                  count={aurthorizedUserInfoArray?.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+              </Paper>
               <div>
                 <button
                   type="button"
@@ -706,7 +877,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                           <label htmlFor="name" className="text">
                             Enter Full Name <span className="text-danger font-weight-bold">*</span>
                           </label>
-                          <input type="text" value={aurthorizedUserName} class="employee-card-input" onChange={handleUserNameChange} />
+                          <input type="text" value={aurthorizedUserName} class="form-control" onChange={handleUserNameChange} />
                           {aurthorizedUserName && aurthorizedUserName.length > 0 && !aurthorizedUserName.match(Digit.Utils.getPattern("Name")) && (
                             <CardLabelError style={{ width: "100%", marginTop: "-15px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
                               {t("Please enter valid Name")}
@@ -907,22 +1078,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
                 </Modal>
               </div>
             </div>
-            {/* <button
-                  type="button"
-                  style={{ float: "left" }}
-                  className="btn btn-primary"
-                  onClick={() => setNoOfRows(noofRows + 1)}
-                  >
-                  Add More
-                  </button> */}
-            {/* <button
-                  type="button"
-                  style={{ float: "right" }}
-                  className="btn btn-danger"
-                  onClick={() => setNoOfRows(noofRows - 1)}
-                  >
-                  Remove
-                  </button> */}
+            {/* <MuiTables /> */}
           </div>
         </div>
         {/* <div className="form-group col-md6 mt-6">

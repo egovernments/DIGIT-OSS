@@ -30,7 +30,7 @@ import DisplayPhotos from "./atoms/DisplayPhotos";
 import Dropdown from "./atoms/Dropdown";
 import EllipsisMenu from "./atoms/EllipsisMenu";
 import EmployeeAppContainer from "./atoms/EmployeeAppContainer";
-import {EmployeeModuleCard,ModuleCardFullWidth} from "./atoms/EmployeeModuleCard";
+import { EmployeeModuleCard, ModuleCardFullWidth } from "./atoms/EmployeeModuleCard";
 import GreyOutText from "./atoms/GreyOutText";
 import Hamburger from "./atoms/Hamburger";
 import Header from "./atoms/Header";
@@ -63,6 +63,7 @@ import { LastRow, MediaRow, Row, StatusTable } from "./atoms/StatusTable";
 import SubmitBar from "./atoms/SubmitBar";
 import StandaloneSearchBar from "./atoms/StandaloneSearchBar";
 import LabTabs from "./atoms/LabTabs";
+import MuiTables from "./atoms/MuiTables";
 import {
   AnnouncementIcon,
   ArrowDown,
@@ -151,7 +152,7 @@ import {
   GalleryIcon,
   RemoveIcon,
   CheckSvg,
-  ErrorIcon
+  ErrorIcon,
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
@@ -168,7 +169,7 @@ import BannerAllCard from "./atoms/BannerAllCard";
 import WhatsNewCard from "./atoms/WhatsNewCard";
 import EventCalendarView from "./atoms/EventCalendarView";
 import InboxLinks from "./atoms/InboxLinks";
-import PopupHeadingLabel from "./atoms/PopupHeadingLabel"
+import PopupHeadingLabel from "./atoms/PopupHeadingLabel";
 
 import { FormComposer } from "./hoc/FormComposer";
 import Modal from "./hoc/Modal";
@@ -284,6 +285,7 @@ export {
   InboxLinks,
   PopupHeadingLabel,
   LabTabs,
+  MuiTables,
   // Icons
   GetApp,
   ArrowLeft,
@@ -407,6 +409,5 @@ export {
   CheckSvg,
   ModuleCardFullWidth,
   ArrowForward,
-  ErrorIcon
+  ErrorIcon,
 };
-

@@ -19,7 +19,7 @@ import React, { useState, useEffect } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import Timeline from "../components/Timeline";
 import Form from "react-bootstrap/Form";
-import Table from "react-bootstrap/Table";
+// import Table from "react-bootstrap/Table";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { useForm } from "react-hook-form";
@@ -47,6 +47,17 @@ import { convertEpochToDate } from "../utils/index";
 import Spinner from "../components/Loader/index";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
+
+import { styled } from "@mui/material/styles";
+import Paper from "@mui/material/Paper";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TablePagination from "@mui/material/TablePagination";
+import TableRow from "@mui/material/TableRow";
+
 const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
   let validation = {};
   const { pathname: url } = useLocation();
@@ -79,6 +90,61 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   const [isUndertaken, setIsUndertaken] = useState(formData?.isUndertaken || formData?.formData?.isUndertaken || false);
   const [loader, setLoading] = useState(false);
   const [panIsValid, setPanIsValid] = useState(false);
+
+  // -----Shareholding Pageination
+  const [rowsPerPageStack, setRowsPerPageStack] = React.useState(10);
+  const handleChangePageStack = (event, newPageStack) => {
+    setPageStack(newPageStack);
+  };
+  const [pageStack, setPageStack] = React.useState(0);
+  const handleChangeRowsPerPageStack = (event) => {
+    setRowsPerPageStack(+event.target.value);
+    setPageStack(0);
+  };
+  //-------------------//
+
+  const [rowsPerPageMca, setRowsPerPageMca] = React.useState(10);
+  const handleChangePageMca = (event, newPageMca) => {
+    setPageMca(newPageMca);
+  };
+  const [pageMca, setPageMca] = React.useState(0);
+  const handleChangeRowsPerPageMca = (event) => {
+    setRowsPerPageMca(+event.target.value);
+    setPageMca(0);
+  };
+  //--------------------//
+
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+  const [page, setPage] = React.useState(0);
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    "&:nth-of-type(odd)": {
+      backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    "&:last-child td, &:last-child th": {
+      border: 0,
+    },
+  }));
+
   const getDeveloperData = async () => {
     setLoading(true);
     try {
@@ -1692,7 +1758,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                     {/* {JSON.stringify(modalValuesArray)} */}
                     <div className="card-body">
                       <div className="table-bd">
-                        <table className="table table-bordered">
+                        {/* <table className="table table-bordered">
                           <thead>
                             <tr>
                               <th>Sr. No</th>
@@ -1752,7 +1818,84 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                               <p className="text-danger text-center d-none">Click on the Add More Button</p>
                             )}
                           </tbody>
-                        </table>
+                        </table> */}
+
+                        <Paper sx={{ width: "100%", overflow: "hidden" }}>
+                          <TableContainer sx={{ maxHeight: 440 }}>
+                            <Table stickyHeader aria-label="sticky table">
+                              <TableHead>
+                                <TableRow>
+                                  <StyledTableCell>Sr No.</StyledTableCell>
+                                  <StyledTableCell>Name</StyledTableCell>
+                                  <StyledTableCell>Designition</StyledTableCell>
+                                  <StyledTableCell>Percentage</StyledTableCell>
+                                  <StyledTableCell>View Document</StyledTableCell>
+                                  <StyledTableCell>Action</StyledTableCell>
+                                </TableRow>
+                              </TableHead>
+                              <TableBody>
+                                {modalValuesArray?.length > 0 ? (
+                                  modalValuesArray.map((elementInArray, input) => {
+                                    return (
+                                      <StyledTableRow key={elementInArray.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                                        <StyledTableCell component="th" scope="row">
+                                          {input + 1}
+                                        </StyledTableCell>
+                                        <StyledTableCell>{elementInArray.name}</StyledTableCell>
+                                        <StyledTableCell>{elementInArray.designation}</StyledTableCell>
+                                        <StyledTableCell>{elementInArray.percentage}</StyledTableCell>
+                                        <StyledTableCell>
+                                          <div className="row">
+                                            {elementInArray.uploadPdf ? (
+                                              <button
+                                                type="button"
+                                                title="View Document"
+                                                onClick={() => getDocShareholding(elementInArray?.uploadPdf)}
+                                                className="btn btn-sm col-md-6"
+                                              >
+                                                <VisibilityIcon color="info" className="icon" />
+                                              </button>
+                                            ) : (
+                                              <p></p>
+                                            )}
+                                            <div className="btn btn-sm col-md-6">
+                                              <label title="Upload Document" for={"uploadshareholdingPattern" + input}>
+                                                {" "}
+                                                <FileUpload color="primary" for={"uploadshareholdingPattern" + input} />
+                                              </label>
+                                              <input
+                                                id={"uploadshareholdingPattern" + input}
+                                                type="file"
+                                                style={{ display: "none" }}
+                                                onChange={(e) => getDocumentData(e?.target?.files[0], "uploadPdf", "shareholdingPattern", input)}
+                                              />
+                                            </div>
+                                          </div>
+                                        </StyledTableCell>
+                                        <StyledTableCell>
+                                          <a href="javascript:void(0)" title="Delete record" onClick={() => deleteTableRows(-1)}>
+                                            <DeleteIcon color="danger" className="icon" />
+                                          </a>
+                                        </StyledTableCell>
+                                      </StyledTableRow>
+                                    );
+                                  })
+                                ) : (
+                                  <div className="d-none">Click on Add More Button</div>
+                                )}
+                              </TableBody>
+                            </Table>
+                          </TableContainer>
+                          <TablePagination
+                            rowsPerPageOptions={[10, 25, 100]}
+                            component="div"
+                            count={modalValuesArray?.length}
+                            rowsPerPage={rowsPerPageStack}
+                            page={pageStack}
+                            onPageChange={handleChangePageStack}
+                            onRowsPerPageChange={handleChangeRowsPerPageStack}
+                          />
+                        </Paper>
                       </div>
                       {/* <div className="form-group col-md2 mt-4">
                       <button  className="btn btn-success" >Add More
@@ -1951,7 +2094,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                     <div className="card-body">
                       {/* {JSON.stringify(DirectorData)}ewewfewf */}
                       <div className="table-bd">
-                        <table className="table table-bordered">
+                        {/* <table className="table table-bordered">
                           <thead>
                             <tr>
                               <th>Sr. No</th>
@@ -1976,11 +2119,53 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                               <p></p>
                             )}
                           </tbody>
-                        </table>
+                        </table> */}
+
+                        <Paper sx={{ width: "100%", overflow: "hidden" }}>
+                          <TableContainer sx={{ maxHeight: 440 }}>
+                            <Table stickyHeader aria-label="sticky table">
+                              <TableHead>
+                                <TableRow>
+                                  <StyledTableCell>Sr No.</StyledTableCell>
+                                  <StyledTableCell>DIN Number</StyledTableCell>
+                                  <StyledTableCell>Name</StyledTableCell>
+                                  <StyledTableCell>Contact Number</StyledTableCell>
+                                </TableRow>
+                              </TableHead>
+                              <TableBody>
+                                {DirectorDataMCA?.length > 0 ? (
+                                  DirectorDataMCA.map((elementInArray, input) => {
+                                    return (
+                                      <StyledTableRow key={elementInArray.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                                        <StyledTableCell component="th" scope="row">
+                                          {input + 1}
+                                        </StyledTableCell>
+                                        <StyledTableCell>{elementInArray.din}</StyledTableCell>
+                                        <StyledTableCell>{elementInArray.name}</StyledTableCell>
+                                        <StyledTableCell>{elementInArray.contactNumber}</StyledTableCell>
+                                      </StyledTableRow>
+                                    );
+                                  })
+                                ) : (
+                                  <div className="d-none">Click on Add to add a aurthorized user</div>
+                                )}
+                              </TableBody>
+                            </Table>
+                          </TableContainer>
+                          <TablePagination
+                            rowsPerPageOptions={[10, 25, 100]}
+                            component="div"
+                            count={DirectorDataMCA?.length}
+                            rowsPerPage={rowsPerPageMca}
+                            page={pageMca}
+                            onPageChange={handleChangePageMca}
+                            onRowsPerPageChange={handleChangeRowsPerPageMca}
+                          />
+                        </Paper>
                       </div>
-                      <p className="ml-1">
+                      <p className="ml-1 mt-4">
                         If the directors are in addition/modification to data fetched from the MCA portal, then the complete details of existing
-                        directors may be provided.
+                        directors may be provided. <span className="text-danger font-weight-bold">*</span>
                       </p>
                       <div className="form-group ml-2">
                         <input
@@ -2146,7 +2331,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                               </Modal>
                             </div>
                             <div className="table-bd">
-                              <table className="table table-bordered">
+                              {/* <table className="table table-bordered">
                                 <thead>
                                   <tr>
                                     <th>Sr. No</th>
@@ -2168,7 +2353,6 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                           <td>{elementInArray.contactNumber}</td>
                                           <td>
                                             <div className="row">
-                                              {/* {JSON.stringify(elementInArray?.uploadPdf)} */}
                                               {elementInArray?.uploadPdf ? (
                                                 <button
                                                   type="button"
@@ -2206,15 +2390,97 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                     <p></p>
                                   )}
                                 </tbody>
-                              </table>
+                              </table> */}
+
+                              <Paper sx={{ width: "100%", overflow: "hidden" }}>
+                                <TableContainer sx={{ maxHeight: 440 }}>
+                                  <Table stickyHeader aria-label="sticky table">
+                                    <TableHead>
+                                      <TableRow>
+                                        <StyledTableCell>Sr No.</StyledTableCell>
+                                        <StyledTableCell>DIN Number</StyledTableCell>
+                                        <StyledTableCell>Name</StyledTableCell>
+                                        <StyledTableCell>Contact Number</StyledTableCell>
+                                        <StyledTableCell>Upload/View Document</StyledTableCell>
+                                        <StyledTableCell>Action</StyledTableCell>
+                                      </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                      {DirectorData?.length > 0 ? (
+                                        DirectorData.map((elementInArray, input) => {
+                                          return (
+                                            <StyledTableRow key={elementInArray.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                                              <StyledTableCell component="th" scope="row">
+                                                {input + 1}
+                                              </StyledTableCell>
+                                              <StyledTableCell>{elementInArray.din}</StyledTableCell>
+                                              <StyledTableCell>{elementInArray.name}</StyledTableCell>
+                                              <StyledTableCell>{elementInArray.contactNumber}</StyledTableCell>
+                                              <StyledTableCell>
+                                                <div className="row">
+                                                  {/* {JSON.stringify(elementInArray?.uploadPdf)} */}
+                                                  {elementInArray?.uploadPdf ? (
+                                                    <button
+                                                      type="button"
+                                                      title="View Document"
+                                                      onClick={() => getDocShareholding(elementInArray?.uploadPdf)}
+                                                      className="btn btn-sm col-md-6 text-center"
+                                                    >
+                                                      <VisibilityIcon color="info" className="icon" />
+                                                    </button>
+                                                  ) : (
+                                                    <p></p>
+                                                  )}
+                                                  <div className="btn btn-sm col-md-6">
+                                                    <label title="Upload Document" for={"uploaddirectorInfoPdf" + input}>
+                                                      <FileUpload color="primary" for={"uploaddirectorInfoPdf" + input} />
+                                                    </label>
+                                                    <input
+                                                      id={"uploaddirectorInfoPdf" + input}
+                                                      type="file"
+                                                      style={{ display: "none" }}
+                                                      onChange={(e) =>
+                                                        getDocumentData(e?.target?.files[0], "directorInfoPdf", "directorInfoPdf", input)
+                                                      }
+                                                    />
+                                                  </div>
+                                                </div>
+                                              </StyledTableCell>
+                                              <StyledTableCell align="center">
+                                                {/* <Button variant="contained" color={"primary"} title="Delete record" onClick={() => viewRecord(elementInArray, input)}>
+                                <DeleteIcon style={{ fill: "#ff1a1a" }} />
+                              </Button> */}
+                                                <a href="javascript:void(0)" title="Delete record" onClick={() => deleteDirectorTableRows(-1)}>
+                                                  <DeleteIcon color="danger" className="icon" />
+                                                </a>
+                                              </StyledTableCell>
+                                            </StyledTableRow>
+                                          );
+                                        })
+                                      ) : (
+                                        <div className="d-none">Click on Add to add a aurthorized user</div>
+                                      )}
+                                    </TableBody>
+                                  </Table>
+                                </TableContainer>
+                                <TablePagination
+                                  rowsPerPageOptions={[10, 25, 100]}
+                                  component="div"
+                                  count={DirectorData?.length}
+                                  rowsPerPage={rowsPerPage}
+                                  page={page}
+                                  onPageChange={handleChangePage}
+                                  onRowsPerPageChange={handleChangeRowsPerPage}
+                                />
+                              </Paper>
                             </div>
                           </div>
                         )}
                       </div>
 
-                      <p className="ml-1">
+                      <p className="ml-1 my-3">
                         In case the Partner/director of the applicant firm/company is common with any existing colonizer who has been granted a
-                        license under the 1975 act Yes/No.
+                        license under the 1975 act Yes/No. <span className="text-danger font-weight-bold">*</span>
                       </p>
 
                       <div className="form-group ml-2">

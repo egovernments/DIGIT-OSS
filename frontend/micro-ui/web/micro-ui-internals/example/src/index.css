@@ -21156,3 +21156,8 @@ input[type=text]:disabled {
   width: 20px;
   height: 20px;
 }
+
+.css-67bhig-MuiTableCell-root.MuiTableCell-head {
+  background-color: #ffd863!important;
+    color: #000!important;
+}

@@ -16,7 +16,7 @@ import Timeline from "../components/Timeline";
 import { useForm } from "react-hook-form";
 import { Button, Form, FormLabel } from "react-bootstrap";
 // import { Card, Row, Col } from "react-bootstrap";
-import Table from "react-bootstrap/Table";
+// import Table from "react-bootstrap/Table";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { Modal, ModalHeader, ModalFooter, ModalBody } from "react-bootstrap";
@@ -30,6 +30,16 @@ import { getDocShareholding } from "../../../tl/src/pages/employee/ScrutinyBasic
 import { MenuItem, Select } from "@mui/material";
 import { convertEpochToDate } from "../utils/index";
 import Spinner from "../components/Loader/index";
+
+import { styled } from "@mui/material/styles";
+import Paper from "@mui/material/Paper";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TablePagination from "@mui/material/TablePagination";
+import TableRow from "@mui/material/TableRow";
 
 const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) => {
   const { pathname: url } = useLocation();
@@ -59,6 +69,49 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
     });
 
   const { setValue, getValues, watch } = useForm();
+
+  // -----Shareholding Pageination
+  const [rowsPerPageStack, setRowsPerPageStack] = React.useState(10);
+  const handleChangePageStack = (event, newPageStack) => {
+    setPageStack(newPageStack);
+  };
+  const [pageStack, setPageStack] = React.useState(0);
+  const handleChangeRowsPerPageStack = (event) => {
+    setRowsPerPageStack(+event.target.value);
+    setPageStack(0);
+  };
+  //-------------------//
+
+  const [rowsPerPageMca, setRowsPerPageMca] = React.useState(10);
+  const handleChangePageMca = (event, newPageMca) => {
+    setPageMca(newPageMca);
+  };
+  const [pageMca, setPageMca] = React.useState(0);
+  const handleChangeRowsPerPageMca = (event) => {
+    setRowsPerPageMca(+event.target.value);
+    setPageMca(0);
+  };
+  //--------------------//
+
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    "&:nth-of-type(odd)": {
+      backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    "&:last-child td, &:last-child th": {
+      border: 0,
+    },
+  }));
 
   const DevelopersAllData = getValues();
   console.log("DEVEDATAGEGT", DevelopersAllData);
@@ -883,12 +936,11 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                     {/* <label className="col-sm-3 col-form-label">Individual</label> */}
                     <div className="col-sm-12">
                       {/* <textarea type="text" className="employee-card-input" id="details" placeholder="Enter Details" /> */}
-                      <table className="table table-bordered" size="sm">
+                      {/* <table className="table table-bordered" size="sm">
                         <thead>
                           <tr>
                             <th>S.No.</th>
                             <th>Particulars of document</th>
-                            {/* <th>Details </th> */}
                             <th>Annexure </th>
                           </tr>
                         </thead>
@@ -899,15 +951,6 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                               Net Worth in case of individual certified by CA/ Or Income tax return in case of an individual (for the last three
                               years) <span className="text-danger font-weight-bold">*</span>
                             </td>
-                            {/* <td>
-                                                    <input
-                                                        type="file"
-                                                        name="individualCertificateCA"
-                                                        placeholder=""
-                                                        class="employee-card-input"
-                                                        onChange={(e) => getDocumentData(e?.target?.files[0], "individualCertificateCA")}
-                                                    />
-                                                </td> */}
                             <td align="center" size="large">
                               <div className="row">
                                 {Documents?.individualCertificateCA ? (
@@ -929,7 +972,6 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                   <input
                                     id="individualCertificateCA"
                                     type="file"
-                                    // accept="application/pdf"
                                     style={{ display: "none" }}
                                     onChange={(e) => getDocumentData(e?.target?.files[0], "individualCertificateCA", "devTypeDocument")}
                                   />
@@ -942,15 +984,6 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                             <td>
                               Bank statement for the last 3 years <span className="text-danger font-weight-bold">*</span>
                             </td>
-                            {/* <td>
-                                                    <input
-                                                        type="file"
-                                                        name="companyBalanceSheet"
-                                                        placeholder=""
-                                                        class="employee-card-input"
-                                                        onChange={(e) => getDocumentData(e?.target?.files[0], "companyBalanceSheet")}
-                                                    />
-                                                </td> */}
                             <td align="center" size="large">
                               <div className="row">
                                 {Documents?.companyBalanceSheet ? (
@@ -977,7 +1010,99 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                             </td>
                           </tr>
                         </tbody>
-                      </table>
+                      </table> */}
+
+                      <Paper sx={{ width: "100%", overflow: "hidden" }}>
+                        <TableContainer sx={{ maxHeight: 440 }}>
+                          <Table stickyHeader aria-label="sticky table">
+                            <TableHead>
+                              <TableRow>
+                                <StyledTableCell>Sr No.</StyledTableCell>
+                                <StyledTableCell>Particulars of document</StyledTableCell>
+                                <StyledTableCell>Annexure</StyledTableCell>
+                              </TableRow>
+                            </TableHead>
+                            <TableBody>
+                              <StyledTableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                                <StyledTableCell component="th" scope="row">
+                                  1
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  Net Worth in case of individual certified by CA/ Or Income tax return in case of an individual (for the last three
+                                  years) <span className="text-danger font-weight-bold">*</span>
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  <div className="row">
+                                    {Documents?.individualCertificateCA ? (
+                                      <a
+                                        onClick={() => getDocShareholding(Documents?.individualCertificateCA)}
+                                        title="View Document"
+                                        className="btn btn-sm col-md-6"
+                                      >
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </a>
+                                    ) : (
+                                      <p></p>
+                                    )}
+                                    <div className="btn btn-sm col-md-6">
+                                      <label for="individualCertificateCA" title="Upload Document">
+                                        {" "}
+                                        <FileUpload color="primary" />
+                                      </label>
+                                      <input
+                                        id="individualCertificateCA"
+                                        type="file"
+                                        style={{ display: "none" }}
+                                        onChange={(e) => getDocumentData(e?.target?.files[0], "individualCertificateCA", "devTypeDocument")}
+                                      />
+                                    </div>
+                                  </div>
+                                </StyledTableCell>
+                              </StyledTableRow>
+                              <StyledTableRow>
+                                <StyledTableCell> 2 </StyledTableCell>
+                                <StyledTableCell>
+                                  Bank statement for the last 3 years <span className="text-danger font-weight-bold">*</span>
+                                </StyledTableCell>
+
+                                <StyledTableCell align="center" size="large">
+                                  <div className="row">
+                                    {Documents?.companyBalanceSheet ? (
+                                      <a onClick={() => getDocShareholding(Documents?.companyBalanceSheet)} className="btn btn-sm col-md-6">
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </a>
+                                    ) : (
+                                      <p></p>
+                                    )}
+                                    <div className="btn btn-sm col-md-6">
+                                      <label for="companyBalanceSheet">
+                                        {" "}
+                                        <FileUpload color="primary" />
+                                      </label>
+                                      <input
+                                        id="companyBalanceSheet"
+                                        type="file"
+                                        accept="addplication/pdf"
+                                        style={{ display: "none" }}
+                                        onChange={(e) => getDocumentData(e?.target?.files[0], "companyBalanceSheet", "devTypeDocument")}
+                                      />
+                                    </div>
+                                  </div>
+                                </StyledTableCell>
+                              </StyledTableRow>
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+                        {/* <TablePagination
+                            rowsPerPageOptions={[10, 25, 100]}
+                            component="div"
+                            count={capacityDevelopColonyHdruAct?.length}
+                            rowsPerPage={rowsPerPageStack}
+                            page={pageStack}
+                            onPageChange={handleChangePageStack}
+                            onRowsPerPageChange={handleChangeRowsPerPageStack}
+                          /> */}
+                      </Paper>
                     </div>
                   </div>
                 </div>
@@ -991,12 +1116,11 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                     {/* <label className="col-sm-3 col-form-label">Company</label> */}
                     <div className="col-sm-12">
                       {/* <input type="text" className="employee-card-input" id="Email" placeholder="Enter Email" /> */}
-                      <table className="table table-bordered" size="sm">
+                      {/* <table className="table table-bordered" size="sm">
                         <thead>
                           <tr>
                             <th>S.No.</th>
                             <th>Particulars of document</th>
-                            {/* <th>Details </th> */}
                             <th>Annexure </th>
                           </tr>
                         </thead>
@@ -1006,16 +1130,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                             <td>
                               Balance sheet of last 3 years <span className="text-danger font-weight-bold">*</span>
                             </td>
-                            {/* <td>
-                                                    <input
-                                                        type="file"
-                                                        name="companyBalanceSheet"
-                                                        placeholder=""
-                                                        class="employee-card-input"
-                                                        onChange={(e) => getDocumentData(e?.target?.files[0], "companyBalanceSheet")}
-                                                    />
-
-                                                </td> */}
+                           
                             <td align="center" size="large">
                               <div className="row">
                                 {Documents?.companyBalanceSheet ? (
@@ -1176,7 +1291,201 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                             </td>
                           </tr>
                         </tbody>
-                      </table>
+                      </table> */}
+                      <Paper sx={{ width: "100%", overflow: "hidden" }}>
+                        <TableContainer sx={{ maxHeight: 440 }}>
+                          <Table stickyHeader aria-label="sticky table">
+                            <TableHead>
+                              <TableRow>
+                                <StyledTableCell>Sr No.</StyledTableCell>
+                                <StyledTableCell>Particulars of document</StyledTableCell>
+                                <StyledTableCell>Annexure</StyledTableCell>
+                              </TableRow>
+                            </TableHead>
+                            <TableBody>
+                              <StyledTableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                                <StyledTableCell component="th" scope="row">
+                                  1
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  Balance sheet of last 3 years <span className="text-danger font-weight-bold">*</span>
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  <div className="row">
+                                    {Documents?.companyBalanceSheet ? (
+                                      <a
+                                        onClick={() => getDocShareholding(Documents?.companyBalanceSheet)}
+                                        title="View Document"
+                                        className="btn btn-sm col-md-6"
+                                      >
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </a>
+                                    ) : (
+                                      <p></p>
+                                    )}
+                                    <div className="btn btn-sm col-md-6">
+                                      <label for="uploadBalanceDoc" title="Upload Document">
+                                        {" "}
+                                        <FileUpload color="primary" />
+                                      </label>
+                                      <input
+                                        id="uploadBalanceDoc"
+                                        type="file"
+                                        accept="application/pdf"
+                                        style={{ display: "none" }}
+                                        onChange={(e) => getDocumentData(e?.target?.files[0], "companyBalanceSheet", "devTypeDocument")}
+                                      />
+                                    </div>
+                                  </div>
+                                </StyledTableCell>
+                              </StyledTableRow>
+                              <StyledTableRow>
+                                <StyledTableCell> 2 </StyledTableCell>
+                                <StyledTableCell>
+                                  Ps-3(Representing Paid-UP capital) <span className="text-danger font-weight-bold">*</span>
+                                </StyledTableCell>
+
+                                <StyledTableCell align="center" size="large">
+                                  <div className="row">
+                                    {Documents?.paidUpCapital ? (
+                                      <a
+                                        onClick={() => getDocShareholding(Documents?.paidUpCapital)}
+                                        title="View Document"
+                                        className="btn btn-sm col-md-6"
+                                      >
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </a>
+                                    ) : (
+                                      <p></p>
+                                    )}
+                                    <div className="btn btn-sm col-md-6">
+                                      <label for="uploadPaidUpDoc" title="Upload Document">
+                                        {" "}
+                                        <FileUpload color="primary" />
+                                      </label>
+                                      <input
+                                        id="uploadPaidUpDoc"
+                                        type="file"
+                                        accept="application/pdf"
+                                        style={{ display: "none" }}
+                                        onChange={(e) => getDocumentData(e?.target?.files[0], "paidUpCapital", "devTypeDocument")}
+                                      />
+                                    </div>
+                                  </div>
+                                </StyledTableCell>
+                              </StyledTableRow>
+
+                              <StyledTableRow>
+                                <StyledTableCell> 3 </StyledTableCell>
+                                <StyledTableCell>
+                                  Reserves and surpluses <span className="text-danger font-weight-bold">*</span>
+                                </StyledTableCell>
+                                <StyledTableCell align="center" size="large">
+                                  <div className="row">
+                                    {Documents?.reservesAndSurplus ? (
+                                      <a
+                                        onClick={() => getDocShareholding(Documents?.reservesAndSurplus)}
+                                        title="View Document"
+                                        className="btn btn-sm col-md-6"
+                                      >
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </a>
+                                    ) : (
+                                      <p></p>
+                                    )}
+                                    <div className="btn btn-sm col-md-6">
+                                      <label for="reservesAndSurplus" title="Upload Document">
+                                        {" "}
+                                        <FileUpload color="primary" />
+                                      </label>
+                                      <input
+                                        id="reservesAndSurplus"
+                                        type="file"
+                                        accept="application/pdf"
+                                        style={{ display: "none" }}
+                                        onChange={(e) => getDocumentData(e?.target?.files[0], "reservesAndSurplus", "devTypeDocument")}
+                                      />
+                                    </div>
+                                  </div>
+                                </StyledTableCell>
+                              </StyledTableRow>
+                              <StyledTableRow>
+                                <StyledTableCell> 4 </StyledTableCell>
+                                <StyledTableCell>Fully Convertible Debenture </StyledTableCell>
+                                <StyledTableCell align="center" size="large">
+                                  <div className="row">
+                                    {Documents?.fullyConvertibleDebenture ? (
+                                      <a
+                                        onClick={() => getDocShareholding(Documents?.fullyConvertibleDebenture)}
+                                        title="View Document"
+                                        className="btn btn-sm col-md-6"
+                                      >
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </a>
+                                    ) : (
+                                      <p></p>
+                                    )}
+                                    <div className="btn btn-sm col-md-6">
+                                      <label for="fullyConvertibleDebentureId" title="Upload Document">
+                                        {" "}
+                                        <FileUpload color="primary" />
+                                      </label>
+                                      <input
+                                        id="fullyConvertibleDebentureId"
+                                        type="file"
+                                        accept="application/pdf"
+                                        style={{ display: "none" }}
+                                        onChange={(e) => getDocumentData(e?.target?.files[0], "fullyConvertibleDebenture", "devTypeDocument")}
+                                      />
+                                    </div>
+                                  </div>
+                                </StyledTableCell>
+                              </StyledTableRow>
+                              <StyledTableRow>
+                                <StyledTableCell> 5 </StyledTableCell>
+                                <StyledTableCell>Any other documents</StyledTableCell>
+                                <StyledTableCell align="center" size="large">
+                                  <div className="row">
+                                    {Documents?.anyOtherDoc ? (
+                                      <a
+                                        onClick={() => getDocShareholding(Documents?.anyOtherDoc)}
+                                        title="View Document"
+                                        className="btn btn-sm col-md-6"
+                                      >
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </a>
+                                    ) : (
+                                      <p></p>
+                                    )}
+                                    <div className="btn btn-sm col-md-6">
+                                      <label for="anyOtherDoc" title="Upload Document">
+                                        {" "}
+                                        <FileUpload color="primary" />
+                                      </label>
+                                      <input
+                                        id="anyOtherDoc"
+                                        type="file"
+                                        accept="application/pdf"
+                                        style={{ display: "none" }}
+                                        onChange={(e) => getDocumentData(e?.target?.files[0], "anyOtherDoc", "devTypeDocument")}
+                                      />
+                                    </div>
+                                  </div>
+                                </StyledTableCell>
+                              </StyledTableRow>
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+                        {/* <TablePagination
+                            rowsPerPageOptions={[10, 25, 100]}
+                            component="div"
+                            count={capacityDevelopColonyHdruAct?.length}
+                            rowsPerPage={rowsPerPageStack}
+                            page={pageStack}
+                            onPageChange={handleChangePageStack}
+                            onRowsPerPageChange={handleChangeRowsPerPageStack}
+                          /> */}
+                      </Paper>
                     </div>
                   </div>
                 </div>
@@ -1189,12 +1498,11 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                     {/* <label className="col-sm-3 col-form-label">LLP</label> */}
                     <div className="col-sm-12">
                       {/* <input type="text" className="employee-card-input" id="llp" placeholder="Enter Email" /> */}
-                      <table className="table table-bordered" size="sm">
+                      {/* <table className="table table-bordered" size="sm">
                         <thead>
                           <tr>
                             <th>S.No.</th>
                             <th>Particulars of document</th>
-                            {/* <th>Details </th> */}
                             <th>Annexure </th>
                           </tr>
                         </thead>
@@ -1302,7 +1610,139 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                             </td>
                           </tr>
                         </tbody>
-                      </table>
+                      </table> */}
+                      <Paper sx={{ width: "100%", overflow: "hidden" }}>
+                        <TableContainer sx={{ maxHeight: 440 }}>
+                          <Table stickyHeader aria-label="sticky table">
+                            <TableHead>
+                              <TableRow>
+                                <StyledTableCell>Sr No.</StyledTableCell>
+                                <StyledTableCell>Particulars of document</StyledTableCell>
+                                <StyledTableCell>Annexure</StyledTableCell>
+                              </TableRow>
+                            </TableHead>
+                            <TableBody>
+                              <StyledTableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                                <StyledTableCell component="th" scope="row">
+                                  1
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  Networth of partners <span className="text-danger font-weight-bold">*</span>
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  <div className="row">
+                                    {Documents?.networthPartners ? (
+                                      <a
+                                        onClick={() => getDocShareholding(Documents?.networthPartners)}
+                                        title="View Document"
+                                        className="btn btn-sm col-md-6"
+                                      >
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </a>
+                                    ) : (
+                                      <p></p>
+                                    )}
+                                    <div className="btn btn-sm col-md-6">
+                                      <label for="netWorthOfPartnersId" title="Upload Document">
+                                        {" "}
+                                        <FileUpload color="primary" />
+                                      </label>
+                                      <input
+                                        id="netWorthOfPartnersId"
+                                        type="file"
+                                        accept="application/pdf"
+                                        style={{ display: "none" }}
+                                        onChange={(e) => getDocumentData(e?.target?.files[0], "networthPartners", "devTypeDocument")}
+                                      />
+                                    </div>
+                                  </div>
+                                </StyledTableCell>
+                              </StyledTableRow>
+                              <StyledTableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                                <StyledTableCell component="th" scope="row">
+                                  2
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  Net worth of firm <span className="text-danger font-weight-bold">*</span>
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  <div className="row">
+                                    {Documents?.networthFirm ? (
+                                      <a
+                                        onClick={() => getDocShareholding(Documents?.networthFirm)}
+                                        title="View Document"
+                                        className="btn btn-sm col-md-6"
+                                      >
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </a>
+                                    ) : (
+                                      <p></p>
+                                    )}
+                                    <div className="btn btn-sm col-md-6">
+                                      <label for="netWorthOfFirmId" title="Upload Document">
+                                        {" "}
+                                        <FileUpload color="primary" />
+                                      </label>
+                                      <input
+                                        id="netWorthOfFirmId"
+                                        type="file"
+                                        accept="application/pdf"
+                                        style={{ display: "none" }}
+                                        onChange={(e) => getDocumentData(e?.target?.files[0], "networthFirm", "devTypeDocument")}
+                                      />
+                                    </div>
+                                  </div>
+                                </StyledTableCell>
+                              </StyledTableRow>
+                              <StyledTableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                                <StyledTableCell component="th" scope="row">
+                                  3
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  Upload Fully Convertible Debenture <span className="text-danger font-weight-bold">*</span>
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  <div className="row">
+                                    {Documents?.fullyConvertibleDebenture ? (
+                                      <a
+                                        onClick={() => getDocShareholding(Documents?.fullyConvertibleDebenture)}
+                                        title="View Document"
+                                        className="btn btn-sm col-md-6"
+                                      >
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </a>
+                                    ) : (
+                                      <p></p>
+                                    )}
+                                    <div className="btn btn-sm col-md-6">
+                                      <label for="fullyConvertibleDebentureId" title="Upload Document">
+                                        {" "}
+                                        <FileUpload color="primary" />
+                                      </label>
+                                      <input
+                                        id="fullyConvertibleDebentureId"
+                                        type="file"
+                                        accept="application/pdf"
+                                        style={{ display: "none" }}
+                                        onChange={(e) => getDocumentData(e?.target?.files[0], "fullyConvertibleDebenture", "devTypeDocument")}
+                                      />
+                                    </div>
+                                  </div>
+                                </StyledTableCell>
+                              </StyledTableRow>
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+                        {/* <TablePagination
+                            rowsPerPageOptions={[10, 25, 100]}
+                            component="div"
+                            count={capacityDevelopColonyHdruAct?.length}
+                            rowsPerPage={rowsPerPageStack}
+                            page={pageStack}
+                            onPageChange={handleChangePageStack}
+                            onRowsPerPageChange={handleChangeRowsPerPageStack}
+                          /> */}
+                      </Paper>
                     </div>
                   </div>
                 </div>
@@ -1357,7 +1797,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                     <div className="card-body">
                       {/* <h5 className="card-h">Add/Remove Authorized Users</h5> */}
                       <div className="table-bd">
-                        <Table className="table table-bordered">
+                        {/* <Table className="table table-bordered">
                           <thead>
                             <tr>
                               <th>S. no</th>
@@ -1365,10 +1805,6 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                               <th>Date of grant of license</th>
                               <th>Purpose of colony</th>
                               <th>Validity of Licence</th>
-                              {/* <th>Technical Expert Engaged</th>
-                                                    <th>Degrees of Engineer</th>
-                                                    <th>Degrees of Architect</th>
-                                                    <th>Degrees of Town Planner</th> */}
                               <th>Actions</th>
                             </tr>
                           </thead>
@@ -1410,44 +1846,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                         class="form-control"
                                       />
                                     </td>
-                                    {/* <td>
-                                                                        <p>{elementInArray?.technicalExpertEngaged === "Y" ? "Yes" : "No"}</p>
-                                                                    </td>
-                                                                    <td>
-                                                                        <div className="row">
-                                                                            {elementInArray.engineerDegree ?
-                                                                                <a
-                                                                                    onClick={() => getDocShareholding(elementInArray.engineerDegree)}
-                                                                                    className="btn btn-sm col-md-6">
-                                                                                    <VisibilityIcon color="info" className="icon" />
-                                                                                </a> : <p></p>
-                                                                            }
-
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <div className="row">
-                                                                            {elementInArray.architectDegree ?
-                                                                                <a
-                                                                                    onClick={() => getDocShareholding(elementInArray.architectDegree)}
-                                                                                    className="btn btn-sm col-md-6">
-                                                                                    <VisibilityIcon color="info" className="icon" />
-                                                                                </a> : <p></p>
-                                                                            }
-
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <div className="row">
-                                                                            {elementInArray.townPlannerDegree ?
-                                                                                <a
-                                                                                    onClick={() => getDocShareholding(elementInArray.townPlannerDegree)} className="btn btn-sm col-md-6">
-                                                                                    <VisibilityIcon color="info" className="icon" />
-                                                                                </a> : <p></p>
-                                                                            }
-
-                                                                        </div>
-                                                                    </td> */}
+                                  
                                     <td>
                                       <button type="button" onClick={() => deleteTableRows(-1)}>
                                         <DeleteIcon />
@@ -1460,7 +1859,57 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                               <p className="d-none">Click on Add more</p>
                             )}
                           </tbody>
-                        </Table>
+                        </Table> */}
+
+                        <Paper sx={{ width: "100%", overflow: "hidden" }}>
+                          <TableContainer sx={{ maxHeight: 440 }}>
+                            <Table stickyHeader aria-label="sticky table">
+                              <TableHead>
+                                <TableRow>
+                                  <StyledTableCell>Sr No.</StyledTableCell>
+                                  <StyledTableCell>Licence No.</StyledTableCell>
+                                  <StyledTableCell>Date of grant of license</StyledTableCell>
+                                  <StyledTableCell>Purpose of colony</StyledTableCell>
+                                  <StyledTableCell>Validity of Licence</StyledTableCell>
+                                  <StyledTableCell>Action</StyledTableCell>
+                                </TableRow>
+                              </TableHead>
+                              <TableBody>
+                                {capacityDevelopColonyHdruAct?.length > 0 ? (
+                                  capacityDevelopColonyHdruAct.map((elementInArray, input) => {
+                                    return (
+                                      <StyledTableRow key={elementInArray.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                                        <StyledTableCell component="th" scope="row">
+                                          {input + 1}
+                                        </StyledTableCell>
+                                        <StyledTableCell>{elementInArray.licenceNumber}</StyledTableCell>
+                                        <StyledTableCell>{elementInArray.dateOfGrantingLic}</StyledTableCell>
+                                        <StyledTableCell>{elementInArray.purposeOfColony}</StyledTableCell>
+                                        <StyledTableCell>{elementInArray.licValidity}</StyledTableCell>
+                                        <StyledTableCell>
+                                          <a href="javascript:void(0)" title="Delete record" onClick={() => deleteTableRows(-1)}>
+                                            <DeleteIcon color="danger" className="icon" />
+                                          </a>
+                                        </StyledTableCell>
+                                      </StyledTableRow>
+                                    );
+                                  })
+                                ) : (
+                                  <div className="d-none">Click on Add More Button</div>
+                                )}
+                              </TableBody>
+                            </Table>
+                          </TableContainer>
+                          <TablePagination
+                            rowsPerPageOptions={[10, 25, 100]}
+                            component="div"
+                            count={capacityDevelopColonyHdruAct?.length}
+                            rowsPerPage={rowsPerPageStack}
+                            page={pageStack}
+                            onPageChange={handleChangePageStack}
+                            onRowsPerPageChange={handleChangeRowsPerPageStack}
+                          />
+                        </Paper>
                         <div>
                           <button
                             type="button"
