@@ -8,7 +8,7 @@ const OBPSCard = () => {
     const userRoles = Digit.SessionStorage.get('User')?.info?.roles
     const { t } = useTranslation();
     const tenantId = Digit.ULBService.getCurrentTenantId();
-    const BgRole = ["SO_HQ", "AO_HQ", "CAO_HQ", "DTCP_HR", "DTP_HQ"]
+    const BgRole = ["SO_HQ", "AO_HQ", "CAO_HQ", "DTCP_HR", "DTP_HQ", "AD_HQ", "JD_HQ", "Patwari_HQ", "ATP_HQ", "Nayab_Tehsildar_HQ"]
     const SP_Role = ["CTP_HR", "AO_HQ", "AD_HQ", "JD_HQ", "SD_HQ", "DTCP_HR", "DTP_HQ", "JE_HQ", "STP_HQ", "ASST_JE_HQ", "CE_HQ", "HSVP", "GMDA", "FMDA", "PMDA"]
     const EP_Role = ["CTP_HR","AO_HQ", "JD_HQ", "SD_HQ","DTCP_HR", "DTP_HQ", "JE_HQ", "STP_HQ", "ASST_JE_HQ", "EE_HQ", "PUD"]
     function isBankGuarrantee(){
