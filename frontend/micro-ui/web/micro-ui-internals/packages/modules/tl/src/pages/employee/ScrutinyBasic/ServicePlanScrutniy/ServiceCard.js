@@ -252,7 +252,7 @@ const ServiceScrutiny = (props) => {
       <Card.Header class="fw-normal" style={{ top: 5, padding: 5, fontSize: 14, height: 90, lineHeight: 2 }}>
         <div className="row">
           <div className="col-md-3">
-            {/* {loiNumberSet} */}
+            {loiNumberSet}
             <p>Application Number:</p>
             <p class="fw-normal">{id}</p>
           </div>
