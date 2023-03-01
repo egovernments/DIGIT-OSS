@@ -396,10 +396,10 @@ const ServicePlanService = () => {
       {spaction === "SENDBACK_TO_AUTH_USER" ? 
       <Dialog
       open={spopen}
-      onClose={handleModal}
+      // onClose={handleModal}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
-      PaperProps={{style: { width: '500px', height: '250px'}}}
+      PaperProps={{style: { width: '800px', height: '300px'}}}
       >
       <DialogTitle id="alert-dialog-title">
           Service Plan Rejection Status

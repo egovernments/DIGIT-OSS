@@ -15,6 +15,7 @@ import FileDownload from "@mui/icons-material/FileDownload";
 import ScrollToTop from "@egovernments/digit-ui-react-components/src/atoms/ScrollToTop";
 import Spinner from "../../../components/Loader";
 import { Toast } from "@egovernments/digit-ui-react-components";
+import ErrorIcon from '@mui/icons-material/Error';
 
 const electricalPlanService = () => {
   const {
@@ -70,6 +71,9 @@ const electricalPlanService = () => {
   const [showToast, setShowToast] = useState(null);
   const [showToastError, setShowToastError] = useState(null);
   const [loader, setLoader] = useState(false);
+  const [epaction, setEPAction] = useState('')
+  const [comment, setComment] = useState('')
+  const [epopen, setEPOpen] = useState(false)
   
 
   
@@ -256,6 +260,9 @@ const electricalPlanService = () => {
     setOpen(false)
     window.location.href = `/digit-ui/citizen`
   }
+  const handleModal = () => {
+    setEPOpen(false)
+  }
 
   const viewDocument = async (documentId) => {
     try {
@@ -407,7 +414,9 @@ const electricalPlanService = () => {
         setAutoCad(response?.data?.electricPlanResponse[0].autoCad)
         setVerifiedPlan(response?.data?.electricPlanResponse[0].verifiedPlan)
         setElectricPlanRes(response?.data?.electricPlanResponse[0])
-
+        setEPAction(response?.data?.electricPlanResponse[0].action)
+        setComment(response?.data?.electricPlanResponse[0].comment)
+        setEPOpen(true)
       } catch (error) {
         console.log(error)
       } 
@@ -417,6 +426,33 @@ const electricalPlanService = () => {
     <React.Fragment>
         <ScrollToTop />
        {loader && <Spinner />}
+       {epaction === "SENDBACK_TO_AUTH_USER" ? 
+      <Dialog
+      open={epopen}
+      // onClose={handleModal}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+      PaperProps={{style: { width: '800px', height: '300px'}}}
+      >
+      <DialogTitle id="alert-dialog-title">
+          Electrical Plan Rejection Status
+      </DialogTitle>
+      <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              <h1>Your Electric Plan Application is rejected <span><ErrorIcon style={{color: '#FF7276', variant: 'filled'}}/></span></h1>
+              <br></br>
+              <h1>Please act on this: <span>{comment}</span></h1>
+            </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+            <Button onClick={handleModal} autoFocus>
+              Ok
+            </Button>
+      </DialogActions>
+  
+      </Dialog>
+      : ""
+      }
     <form onSubmit={handleSubmit(electricPlan)}>
       <Card style={{ width: "126%", border: "5px solid #1266af" }}>
         <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Electrical Plan </h4>
