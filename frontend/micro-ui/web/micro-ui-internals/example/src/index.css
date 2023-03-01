@@ -4722,10 +4722,43 @@ body {
   .five.ServiceCardHeader{
     background-image: url(https://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/banner-images/5.png);
   }
+  .six.ServiceCardHeader{
+    background-image: url(https://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/banner-images/6.png);
+  }
+  .seven.ServiceCardHeader{
+    background-image: url(https://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/banner-images/7.png);
+  }
+  .eight.ServiceCardHeader{
+    background-image: url(https://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/banner-images/8.png);
+  }
+  .nine.ServiceCardHeader{
+    background-image: url(https://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/banner-images/9.png);
+  }
+  .ten.ServiceCardHeader{
+    background-image: url(https://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/banner-images/10.png);
+  }
+  .eleven.ServiceCardHeader{
+    background-image: url(https://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/banner-images/11.png);
+  }
+  .twelve.ServiceCardHeader{
+    background-image: url(https://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/banner-images/12.png);
+  }
+  .thirteen.ServiceCardHeader{
+    background-image: url(https://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/banner-images/13.png);
+  }
+  .fourteen.ServiceCardHeader{
+    background-image: url(https://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/banner-images/14.png);
+  }
+  .fifteen.ServiceCardHeader{
+    background-image: url(https://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/banner-images/15.png);
+  }
+  .sixteen.ServiceCardHeader{
+    background-image: url(https://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/banner-images/16.png);
+  }
   .ServiceCardHeader {
     position: relative;
     background-image: url(https://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/banner-images/abstract_01.svg);
-    padding: 2rem 0.5rem;
+    padding: 2.5rem 0.5rem;
     border-radius: 0.55rem;
     background-size: cover;
   }
@@ -4733,7 +4766,7 @@ body {
   .Icon-side {
     position: absolute;
     right: 11px;
-    bottom: -16px;
+    bottom: -20px;
     background: #ffffff;
     padding: 0.55rem;
     border-radius: 50%;
