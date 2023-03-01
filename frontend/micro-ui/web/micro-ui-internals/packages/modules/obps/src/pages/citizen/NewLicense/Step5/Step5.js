@@ -27,6 +27,7 @@ const FeesChargesForm = (props) => {
   const [showToastError, setShowToastError] = useState(null);
   const [getShow, setShow] = useState({ submit: false, payNow: false });
   const [getData, setData] = useState({ caseNumber: "", dairyNumber: "", status: "" });
+  const [getCalculatedData, setCalculatedData] = useState(null);
 
   const {
     register,
@@ -106,10 +107,12 @@ const FeesChargesForm = (props) => {
       // const Resp = await axios.post("/tl-calculator/v1/_calculator", payload);
       const Resp = await axios.post(`/tl-calculator/v1/_getPaymentEstimate`, payload);
       const charges = Resp.data?.Calculations?.[0]?.tradeTypeBillingIds;
-      setValue("scrutinyFee", charges?.scrutinyFeeCharges);
-      setValue("licenseFee", charges?.licenseFeeCharges);
-      setValue("conversionCharges", charges?.conversionCharges);
-      setValue("payableNow", charges?.scrutinyFeeCharges + (charges?.licenseFeeCharges * 25) / 100);
+      console.log("resp", Resp.data?.feesTypeCalculationDto);
+      setCalculatedData(Resp.data);
+      // setValue("scrutinyFee", charges?.scrutinyFeeCharges);
+      // setValue("licenseFee", charges?.licenseFeeCharges);
+      // setValue("conversionCharges", charges?.conversionCharges);
+      setValue("payableNow", Resp.data?.totalFee);
     } catch (error) {
       return error;
     }
@@ -290,6 +293,54 @@ const FeesChargesForm = (props) => {
     if (id) getApplicantUserData(id);
   }, []);
 
+  const Tree = ({ data }) => {
+    return (
+      <div>
+        {data?.map((item, index) => {
+          return (
+            <div>
+              <table key={index} className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))", width: "629px" }}>
+                <thead>
+                  <tr>
+                    <th>Conversion Charges</th>
+                    <td> {item?.conversionChargesCal}</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>External Development Charges</th>
+                    <td>{item?.externalDevelopmentChargesCal}</td>
+                  </tr>
+                  <tr>
+                    <th>License Fee Charges</th>
+                    <td>{item?.licenseFeeChargesCal}</td>
+                  </tr>
+                  <tr>
+                    <th>Purpose</th>
+                    <td>{item?.purpose}</td>
+                  </tr>
+                  <tr>
+                    <th>Scrutiny Fee Charges</th>
+                    <td>{item?.scrutinyFeeChargesCal}</td>
+                  </tr>
+                  <tr>
+                    <th>State Infrastructure Development Charges</th>
+                    <td>{item?.stateInfrastructureDevelopmentChargesCal}</td>
+                  </tr>
+                </tbody>
+              </table>
+              {!!item?.feesTypeCalculationDto?.length && (
+                <div className="ml-4 mt-4">
+                  <Tree data={item?.feesTypeCalculationDto} />
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
   return (
     <div>
       <ScrollToTop />
@@ -314,7 +365,7 @@ const FeesChargesForm = (props) => {
             <Form.Group className="justify-content-center" controlId="formBasicEmail">
               <Row className="ml-auto" style={{ marginBottom: 5 }}>
                 <Col col-12>
-                  <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))", width: "629px" }}>
+                  {/* <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))", width: "629px" }}>
                     <thead>
                       <tr>
                         <th>
@@ -366,42 +417,28 @@ const FeesChargesForm = (props) => {
                           <input type="text" className="form-control" disabled {...register("payLicenseFee")} />
                         </td>
                       </tr>
-                      {/* <tr>
-                        <th>
-                          Conversion Charges <span style={{ color: "red" }}>*</span>
-                        </th>
-                        <td>
-                          <input type="text" className="form-control" disabled {...register("conversionCharges")} />
-                        </td>
-                      </tr> */}
+                     
                     </tbody>
-                  </table>
-
+                  </table> */}
+                  {getCalculatedData?.feesTypeCalculationDto && (
+                    <div>
+                      <Tree data={getCalculatedData?.feesTypeCalculationDto} />
+                    </div>
+                  )}
                   <div className="row">
                     <div className="col col-4">
                       <h6 data-toggle="tooltip" data-placement="top" title="Total Fees (License fee 25% + Scrutiny Fees)">
                         (i)&nbsp;Amount Payable <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
                       </h6>
                       <input type="text" className="form-control" disabled {...register("payableNow")} />
-                      {/* <input
-                        type="text"
-                        className="form-control"
-                        disabled
-                        minLength={1}
-                        maxLength={20}
-                        pattern="[0-9]*"
-                        onChange1={handleTotalFeesChange}
-                        onChange={(e) => setPayableNow(e.target.value)}
-                        value={payableNow}
-                      /> */}
                     </div>
 
-                    <div className="col col-4">
+                    {/* <div className="col col-4">
                       <h6>(ii)Remark (If any)</h6>
                       <input type="text" className="form-control" minLength={2} maxLength={100} {...register("remark")} />
-                    </div>
+                    </div> */}
 
-                    <div className="col col-4">
+                    {/* <div className="col col-4">
                       <h6 data-toggle="tooltip" data-placement="top" title="Do you want to adjust the fee from any previous licence (Yes/No)">
                         (iii)&nbsp;Adjust Fees <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
                       </h6>
@@ -451,7 +488,6 @@ const FeesChargesForm = (props) => {
                                           <VisibilityIcon color="info" className="icon" />
                                         </a>
                                       )}
-                                      {/* <h3>{watch('consentLetterFileName')}</h3> */}
 
                                       <h3 className="error-message" style={{ color: "red" }}>
                                         {errors?.consentLetterFileName && errors?.consentLetterFileName?.message}
@@ -472,7 +508,7 @@ const FeesChargesForm = (props) => {
                           </div>
                         </div>
                       )}
-                    </div>
+                    </div> */}
                   </div>
                   <br></br>
                   <hr />
