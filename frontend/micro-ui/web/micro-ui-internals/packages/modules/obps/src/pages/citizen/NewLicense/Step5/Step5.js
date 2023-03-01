@@ -38,7 +38,7 @@ const FeesChargesForm = (props) => {
   } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
-    resolver: yupResolver(VALIDATION_SCHEMA),
+    // resolver: yupResolver(VALIDATION_SCHEMA),
     shouldFocusError: true,
   });
 
@@ -550,14 +550,14 @@ const FeesChargesForm = (props) => {
                         onClick={(e) => {
                           if (e.target.checked) {
                             setShow({ payNow: false, submit: true });
-                            showPdf();
+                            // showPdf();
                           }
                         }}
                         className="form-check-input"
                         formControlName="agreeCheck"
                         type="checkbox"
                         value=""
-                        checked={getData?.status === "FEESANDCHARGES" ? true : false}
+                        // checked={getData?.status === "FEESANDCHARGES" ? true : false}
                         id="flexCheckDefault"
                       />
                       <label className="checkbox" for="flexCheckDefault">
