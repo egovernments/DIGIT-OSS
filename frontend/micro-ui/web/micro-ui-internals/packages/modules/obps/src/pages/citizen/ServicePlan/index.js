@@ -16,6 +16,7 @@ import { IconButton } from "@mui/material";
 import ScrollToTop from "@egovernments/digit-ui-react-components/src/atoms/ScrollToTop";
 import Spinner from "../../../components/Loader";
 import { Toast } from "@egovernments/digit-ui-react-components";
+import ErrorIcon from '@mui/icons-material/Error';
 //import { getDocShareholding } from 'packages/modules/tl/src/pages/employee/ScrutinyBasic/ScrutinyDevelopment/docview.helper.js'
 
 
@@ -68,6 +69,9 @@ const ServicePlanService = () => {
   const [showToastError, setShowToastError] = useState(null);
   const [loader, setLoader] = useState(false);
   const [fileStoreId, setFileStoreId] = useState({});
+  const [spaction, setSPAction] = useState('')
+  const [comment, setComment] = useState('')
+  const [spopen, setSPOpen] = useState(false)
   const {
     register,
     handleSubmit,
@@ -285,6 +289,9 @@ const ServicePlanService = () => {
     setOpen(false)
     window.location.href = `/digit-ui/citizen`
   }
+  const handleModal = () => {
+    setSPOpen(false)
+  }
   const getApplicationId = (url) => {
     const urlParams = new URLSearchParams(url.split('?')[1])
     return urlParams.get('id')
@@ -371,7 +378,9 @@ const ServicePlanService = () => {
         setDemarcationgis(response?.data?.servicePlanResponse[0].demarcationgis)
         setLayoutExcel(response?.data?.servicePlanResponse[0].layoutExcel)
         setAnyotherDoc(response?.data?.servicePlanResponse[0].anyOtherdoc)
-
+        setSPAction(response?.data?.servicePlanResponse[0].action)
+        setComment(response?.data?.servicePlanResponse[0].comment)
+        setSPOpen(true)
       } catch (error) {
         console.log(error)
       } 
@@ -384,6 +393,33 @@ const ServicePlanService = () => {
    <React.Fragment>
        <ScrollToTop />
       {loader && <Spinner />}
+      {spaction === "SENDBACK_TO_AUTH_USER" ? 
+      <Dialog
+      open={spopen}
+      onClose={handleModal}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+      PaperProps={{style: { width: '500px', height: '250px'}}}
+      >
+      <DialogTitle id="alert-dialog-title">
+          Service Plan Rejection Status
+      </DialogTitle>
+      <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              <h1>Your Service Plan Application is rejected <span><ErrorIcon style={{color: '#FF7276', variant: 'filled'}}/></span></h1>
+              <br></br>
+              <h1>Please act on this: <span>{comment}</span></h1>
+            </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+            <Button onClick={handleModal} autoFocus>
+              Ok
+            </Button>
+      </DialogActions>
+  
+      </Dialog>
+      : ""
+      }
     <form onSubmit={handleSubmit(servicePlan)}>
       <Card style={{ width: "126%", border: "5px solid #1266af" }}>
         <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Service Plan </h4>
