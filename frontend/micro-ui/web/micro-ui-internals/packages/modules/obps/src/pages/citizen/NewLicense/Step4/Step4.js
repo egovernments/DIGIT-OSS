@@ -360,9 +360,9 @@ const AppliedDetailForm = (props) => {
       // });
     }
     if (valueData) {
-      const test = [valueData?.PurposeDetails];
+      const test = valueData?.PurposeDetails;
       console.log("test", test);
-      setNewDataA(test);
+      setNewDataA(valueData?.PurposeDetails);
     }
   }, [stepData]);
 
