@@ -54,6 +54,12 @@ const Genarelinfo = (props) => {
     localStorage.setItem("Purpose", e.target.value);
     props.passUncheckedList({ data: uncheckedValue, purpose: e?.target?.value });
   };
+  const [totalArea, setTotalArea] = useState("");
+  const handleChangesetTotalArea = (e) => {
+    setTotalArea(e.target.value);
+    localStorage.setItem("TotalArea", e.target.value);
+    props.passUncheckedList({ data: uncheckedValue, totalArea: e?.target?.value });
+  };
 
   const [form, setForm] = useState([]);
   const [open2, setOpen2] = useState(false);
@@ -222,6 +228,8 @@ const Genarelinfo = (props) => {
 
   console.log("color for the deeloper", developerInputFiledColor);
   console.log("AccessInfortech1", purpose);
+  console.log("AccessInfortech12", totalArea);
+  
 
   const classes = useStyles();
 

@@ -334,6 +334,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
             <AppliedLandinfo
               appliedInfoRef={appliedInfoRef}
               purpose={apiResponse ? apiResponse?.ApplicantPurpose?.purpose : null}
+              totalArea={apiResponse ? apiResponse?.ApplicantPurpose?.totalArea : null}
               passUncheckedList={getUncheckedAppliedLandInfo}
               passCheckedList={getCheckedAppliedInfoValue}
               ApiResponseData={apiResponse !== undefined ? apiResponse?.DetailsofAppliedLand : null}

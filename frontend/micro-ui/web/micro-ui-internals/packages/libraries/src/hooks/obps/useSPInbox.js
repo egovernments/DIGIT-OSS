@@ -9,7 +9,7 @@ const useSPInbox = ({ tenantId, filters, config }) => {
         tenantId,
 		processSearchCriteria: {
             moduleName: "tl-services",
-			businessService: ["SERVICE_PLAN"],
+			businessService: ["SERVICE_PLAN","SERVICE_PLAN_DEMARCATION"],
             assignee: USER_UUID,
             ...(applicationStatus?.length > 0 ? {status: applicationStatus} : {}),
             ...(uuid && Object.keys(uuid).length > 0 ? {assignee: uuid.code === "ASSIGNED_TO_ME" ? USER_UUID : ""} : {}),
