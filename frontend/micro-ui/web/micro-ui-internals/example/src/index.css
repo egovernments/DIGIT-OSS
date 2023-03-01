@@ -4707,7 +4707,7 @@ body {
     position: relative;
   }
 
-  /* .one.ServiceCardHeader{
+  .one.ServiceCardHeader{
     background-image: url(https://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/banner-images/1.png);
   }
   .two.ServiceCardHeader{
@@ -4721,7 +4721,7 @@ body {
   }
   .five.ServiceCardHeader{
     background-image: url(https://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/banner-images/5.png);
-  } */
+  }
   .ServiceCardHeader {
     position: relative;
     background-image: url(https://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/banner-images/abstract_01.svg);
