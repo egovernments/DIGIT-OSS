@@ -421,10 +421,6 @@ components:
           type: array
           items:
             type: string
-        documents:
-          type: array
-          items:
-            $ref: '#/components/schemas/Document'
       required:
         - action
     Order:
