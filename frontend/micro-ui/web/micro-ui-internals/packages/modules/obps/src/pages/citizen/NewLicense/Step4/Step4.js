@@ -361,7 +361,7 @@ const AppliedDetailForm = (props) => {
     }
     if (valueData) {
       const test = valueData?.PurposeDetails;
-      console.log("test", test);
+      console.log("test==", test);
       setNewDataA(valueData?.PurposeDetails);
     }
   }, [stepData]);
