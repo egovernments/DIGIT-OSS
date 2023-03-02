@@ -15,7 +15,7 @@ import axios from "axios";
 
 // import AddIcon from "@mui/icons-material/Add";
 
-const ServiceBase = ({apiResponse,applicationNumber,refreshScrutinyData,setAdditionalDetails,histeroyData}) => {
+const ServiceBase = ({apiResponse,applicationNumber,refreshScrutinyData,setAdditionalDetails,histeroyData,idwDataTreade,edcDataTreade }) => {
   const [purpose, setPurpose] = useState("");
   const jeLandInfoRef = useRef();
 
@@ -236,6 +236,8 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
         <div>
          <div>
          <ServicePlanService
+         edcDataTreade={edcDataTreade}
+         idwDataTreade={idwDataTreade}
            apiResponse={apiResponse}
            refreshScrutinyData={refreshScrutinyData}
            applicationNumber={applicationNumber}

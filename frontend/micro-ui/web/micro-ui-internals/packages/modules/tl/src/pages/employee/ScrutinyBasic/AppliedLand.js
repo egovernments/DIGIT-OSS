@@ -1201,36 +1201,36 @@ const AppliedLandinfo = (props) => {
                       <b>Total Applied Area: </b>
                       {totalArea}
                     </h4>
-                    <h4 className="mt-3">
+                    {/* <h4 className="mt-3">
                       <b>Purpose Name: </b>
                       {DetailsofAppliedLand?.PurposeDetails?.name}
                     </h4>
                     <h4 className="mt-3">
                       Area:
                       {DetailsofAppliedLand?.PurposeDetails?.area}
-                    </h4>
-                    {DetailsofAppliedLand?.PurposeDetails?.purposeDetail?.map((item, index) => (
+                    </h4> */}
+                    {DetailsofAppliedLand?.PurposeDetails?.map((item, index) => (
                       <div style={{ marginLeft: 52 }}>
 
                         <Row >
-                        <h4 className="mt-3">
-                      <b>Purpose Name: </b>
-                      {item?.name}
-                    </h4>
-
-                    <h4 className="mt-3">
-                      Area:
-                      <Col className="col col-4" >
-                            <input type="text" className="form-control" placeholder={item?.area} disabled />
-                          </Col> 
-                    </h4>
-                          {/* <Col className="col col-4">
-
+                          <h4 className="mt-3">
+                            <b>Purpose Name: </b>
                             {item?.name}
-                          </Col>
-                          <Col className="col col-4" >
-                            <input type="text" className="form-control" placeholder={item?.area} disabled />
-                          </Col> */}
+                          </h4>
+
+                          <h4 className="mt-3">
+                            Area:
+                            <Col className="col col-4" >
+                              <input type="text" className="form-control" placeholder={item?.area} disabled />
+                            </Col>
+                          </h4>
+                          {/* <h4 className="mt-3">
+                      FAR:
+                      <Col className="col col-4" >
+                            <input type="text" className="form-control" placeholder={item?.fars} disabled />
+                          </Col> 
+                    </h4> */}
+
 
                         </Row>
                         {item?.purposeDetail?.map((item, index) => (
@@ -1240,26 +1240,60 @@ const AppliedLandinfo = (props) => {
                           <div style={{ marginLeft: 52 }}>
 
                             <Row >
-                              {/* <Col className="col col-4">
-                                {item?.name}
-                                <input type="text" className="form-control" placeholder={item?.latitude}  disabled />
-                              </Col>
-                              <Col className="col col-4" >
-                                <input type="text" className="form-control" placeholder={item?.area} disabled />
-                              </Col> */}
-                              <h4 className="mt-3">
-                      <b>Purpose Name: </b>
-                      {item?.name}
-                    </h4>
 
-                    <h4 className="mt-3">
-                      Area:
-                      <Col className="col col-4" >
-                            <input type="text" className="form-control" placeholder={item?.area} disabled />
-                          </Col> 
-                    </h4>
+                              <h4 className="mt-3">
+                                <b> SubPurpose Name: </b>
+                                {item?.name}
+                              </h4>
+                              
+                              <h4 className="mt-3">
+                                Area:
+                                <Col className="col col-4" >
+                                  <input type="text" className="form-control" placeholder={item?.area} disabled />
+                                </Col>
+                              </h4>
+                              <h4 className="mt-3">
+                                FAR:
+                                <Col className="col col-4" >
+                                  <input type="text" className="form-control" placeholder={item?.fars} disabled />
+                                </Col>
+                              </h4>
+                             
 
                             </Row>
+                            {item?.purposeDetail?.map((item, index) => (
+
+
+
+                              <div style={{ marginLeft: 52 }}>
+
+                                <Row >
+
+                                  <h4 className="mt-3">
+                                    <b> SubPurpose Name: </b>
+                                    {item?.name}
+                                  </h4>
+
+                                  <h4 className="mt-3">
+                                    Area:
+                                    <Col className="col col-4" >
+                                      <input type="text" className="form-control" placeholder={item?.area} disabled />
+                                    </Col>
+                                  </h4>
+                                  <h4 className="mt-3">
+                                    FAR:
+                                    <Col className="col col-4" >
+                                      <input type="text" className="form-control" placeholder={item?.fars} disabled />
+                                    </Col>
+                                  </h4>
+
+                                </Row>
+
+
+
+                              </div>
+                            ))
+                            }
 
 
 
