@@ -173,13 +173,8 @@ const BillDetails = ({ businessService, consumerCode, _amount, onChange }) => {
   const yearWiseBills = bill?.billDetails?.sort((a, b) => b.fromPeriod - a.fromPeriod);
   const billDetails = yearWiseBills?.[0] || [];
   // const currentYear = new Date().getFullYear();
-  const getTotal = () => {
-    if (checkFSM) {
-      application?.totalAmount ? application?.totalAmount : 0;
-    } else {
-      bill?.totalAmount ? bill?.totalAmount : 0;
-    }
-  };
+  const getTotal = () => (bill?.totalAmount ? bill?.totalAmount : 0);
+  const getTotalFSM = () => (application?.totalAmount ? application?.totalAmount : 0);
   const getAdvanceAmount = () => (applicationData?.advanceAmount ? applicationData?.advanceAmount : 0);
   const dueAmountTobePaid = () => (bill?.totalAmount ? bill?.totalAmount : 0);
   const getAmountPerTrip = () => (application?.additionalDetails?.tripAmount ? application?.additionalDetails?.tripAmount : 0);
@@ -360,7 +355,7 @@ const BillDetails = ({ businessService, consumerCode, _amount, onChange }) => {
             textStyle={{ textAlign: "left" }}
             text={"₹ " + Number(getAmountPerTrip()).toFixed(2)}
           />
-          <Row label={t("ES_PAYMENT_DETAILS_TOTAL_AMOUNT")} textStyle={{ textAlign: "left" }} text={"₹ " + Number(getTotal()).toFixed(2)} />
+          <Row label={t("ES_PAYMENT_DETAILS_TOTAL_AMOUNT")} textStyle={{ textAlign: "left" }} text={"₹ " + Number(getTotalFSM()).toFixed(2)} />
           {getAdvanceAmountPaid ? (
             <Row
               label={t("ES_PAYMENT_DETAILS_ADV_AMOUNT_PAID")}
