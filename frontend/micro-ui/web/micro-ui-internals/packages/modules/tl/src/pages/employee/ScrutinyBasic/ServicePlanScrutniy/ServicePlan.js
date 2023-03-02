@@ -25,7 +25,9 @@ const ServicePlanService = (props) => {
   const {remarksData,iconStates} = useContext(ScrutinyRemarksContext);
 
  const dataIcons = props.dataForIcons;
- const apiResponse = props.apiResponse
+ const apiResponse = props.apiResponse;
+ const idwDataTreade = props. idwDataTreade;
+ const edcDataTreade = props. edcDataTreade;
 //  apiResponse,refreshScrutinyData, applicationNumber,iconStates
   const handleshowhide = (event) => {
     const getuser = event.target.value;
@@ -154,7 +156,7 @@ const ServicePlanService = (props) => {
   }, [labelValue])
 
 
-
+console.log("dataEDC",idwDataTreade);
 
   console.log("Digit123", apiResponse );
   return (
@@ -187,6 +189,7 @@ const ServicePlanService = (props) => {
           //   style={{ width: "126%", border: "5px solid #1266af" }}
           >
             <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Service Plan </h4>
+            <h4 style={{ fontSize: "20px", textAlign: "left" }}>EDC : {edcDataTreade} &nbsp;&nbsp; IDW :  {idwDataTreade}</h4>
             <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
               <Row>
                 <Col className="col-3">
