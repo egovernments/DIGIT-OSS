@@ -268,14 +268,14 @@ const ScrutinyForm = (props) => {
             {/* <Button style={{ textAlign: "right" }}> <a href="http://localhost:3000/digit-ui/citizen/obps/Loi" >Generate LOI</a></Button> */}
             {/* <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow19} /> */}
           </div>
-          {showhide19 === "Submit" && (
+          {/* {showhide19 === "Submit" && (
             <div>
               <Button style={{ textAlign: "right" }}>
                 {" "}
                 <a href="http://localhost:3000/digit-ui/employee/tl/Loi">Generate LOI</a>
               </Button>
             </div>
-          )}
+          )} */}
         </Row>
       </Row>
     </Card>

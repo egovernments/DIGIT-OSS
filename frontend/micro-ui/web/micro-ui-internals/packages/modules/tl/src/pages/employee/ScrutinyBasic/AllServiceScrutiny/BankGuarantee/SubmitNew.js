@@ -31,7 +31,7 @@ const SubmitNew = (props) => {
   };
   let user = Digit.UserService.getUser();
   const userRoles = user?.info?.roles?.map((e) => e.code);
-  const showRemarks = userRoles.includes("AO_HQ" || "AD_HQ");
+  const showRemarks = userRoles.includes("AO_HQ");
   const landScheduleData = props.ApiResponseData;
   const {
     register,
@@ -74,6 +74,7 @@ const SubmitNew = (props) => {
   const [fieldIconColors, setFieldIconColors] = useState({
     loiNumber: Colors.info,
     typeOfBg: Colors.info,
+    businessService: Colors.info,
     amountInFig: Colors.info,
     amountInWords: Colors.info,
     bgNumber: Colors.info,
@@ -101,6 +102,7 @@ const SubmitNew = (props) => {
   const fieldIdList = [
     { label: "Enter LOI No", key: "loiNumber" },
     { label: "Type of B.G", key: "typeOfBg" },
+    { label: "Bank Guarantee/Mortgage", key: "businessService" },
     { label: "Amount (in fig)", key: "amountInFig" },
     { label: "Amount (in words) ", key: "amountInWords" },
     { label: "Enter Bank Guarantee No.", key: "bgNumber" },
@@ -401,7 +403,8 @@ const SubmitNew = (props) => {
                           </div>
                           {/* <input type="text" className="form-control" placeholder="" {...register("bankName")} /> */}
                         </Col>
-
+                      </Row>
+                      <Row className="col-12">
                         <Col md={4} xxl lg="3">
                           <div>
                             <Form.Label>
@@ -460,8 +463,7 @@ const SubmitNew = (props) => {
                     <option> 12</option>
                   </select> */}
                         </Col>
-                      </Row>
-                      <Row className="col-12">
+
                         <Col md={4} xxl lg="3">
                           <div>
                             <Form.Label>
@@ -562,6 +564,8 @@ const SubmitNew = (props) => {
                           </div>
                           {/* <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBg")} /> */}
                         </Col>
+                      </Row>
+                      <Row className="col-12">
                         <Col md={4} xxl lg="3">
                           <div>
                             <label>Hardcopy Submitted at TCP office. </label>
@@ -668,8 +672,7 @@ const SubmitNew = (props) => {
                             </div>
                           )}
                         </Col>
-                      </Row>
-                      <Row className="col-12">
+
                         <Col md={4} xxl lg="3">
                           <div>
                             <Form.Label>

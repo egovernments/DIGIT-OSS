@@ -108,6 +108,7 @@ const FeesChargesForm = (props) => {
       const Resp = await axios.post(`/tl-calculator/v1/_getPaymentEstimate`, payload);
       const charges = Resp.data?.Calculations?.[0]?.tradeTypeBillingIds;
       console.log("resp", Resp.data?.feesTypeCalculationDto);
+      CalculationApi(Resp?.data?.feesTypeCalculationDto);
       setCalculatedData(Resp.data);
       // setValue("scrutinyFee", charges?.scrutinyFeeCharges);
       // setValue("licenseFee", charges?.licenseFeeCharges);
@@ -265,6 +266,43 @@ const FeesChargesForm = (props) => {
   //     return error;
   //   }
   // };
+
+  const CalculationApi = async (data) => {
+    const token = window?.localStorage?.getItem("token");
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+
+        authToken: token,
+        userInfo: userInfo,
+
+        msgId: "1675336317896|en_IN",
+      },
+
+      CalulationCriteria: [
+        {
+          tenantId: "hr",
+        },
+      ],
+
+      CalculatorRequest: {
+        totalLandSize: stepData?.ApplicantPurpose?.totalArea,
+
+        potenialZone: stepData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.potential,
+
+        purposeCode: stepData?.ApplicantPurpose?.purpose,
+
+        far: "1",
+
+        applicationNumber: applicantId,
+      },
+    };
+    try {
+      const Resp = await axios.post(`/tl-calculator/v1/_calculator`, payload);
+    } catch (error) {
+      return error;
+    }
+  };
 
   const getApplicantUserData = async (id) => {
     const token = window?.localStorage?.getItem("token");

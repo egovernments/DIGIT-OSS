@@ -77,7 +77,7 @@ function SubmitNew() {
                   areaToBeMortgagedInSqMtrs: data?.areaToBeMortgagedInSqMtrs,
                 },
               ],
-              totalKhasraAreaToMortgage: data?.totalKhasraAreaToMortgage,
+              totalKhasraAreaToMortgage: data?.areaToBeMortgagedInSqMtrs,
               mortgagePlotDetails: [
                 {
                   plotNumber: data?.plotNumber,
@@ -719,7 +719,13 @@ function SubmitNew() {
               <div class="row-12" className="align-right">
                 <div className="col col-3">
                   <h2>Area Total</h2>
-                  <input type="number" {...register("totalKhasraAreaToMortgage")} className="form-control" disabled />
+                  <input
+                    type="number"
+                    placeholder={watch("areaToBeMortgagedInSqMtrs")}
+                    {...register("totalKhasraAreaToMortgage")}
+                    className="form-control"
+                    disabled
+                  />
                   &nbsp;&nbsp;
                 </div>
               </div>

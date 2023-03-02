@@ -2288,15 +2288,15 @@ const LandScheduleForm = (props) => {
                           accept="application/pdf/jpeg/png"
                         />
                       </label>
-                      {watch("landSchedule") && (
+                      {watch("landSchedule") ? (
                         <a onClick={() => getDocShareholding(watch("landSchedule"), setLoader)} className="btn btn-sm ">
                           <VisibilityIcon color="info" className="icon" />
                         </a>
+                      ) : (
+                        <h3 className="error-message" style={{ color: "red" }}>
+                          {errors?.landSchedule && errors?.landSchedule?.message}
+                        </h3>
                       )}
-                      {/* <h3>{watch("landSchedule")}</h3> */}
-                      <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.landSchedule && errors?.landSchedule?.message}
-                      </h3>
                     </div>
 
                     <div className="col col-3">
