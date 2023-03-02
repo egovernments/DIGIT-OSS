@@ -551,13 +551,15 @@ const FeesChargesForm = (props) => {
                           if (e.target.checked) {
                             setShow({ payNow: false, submit: true });
                             // showPdf();
+                          } else {
+                            setShow({ payNow: false, submit: false });
                           }
                         }}
                         className="form-check-input"
                         formControlName="agreeCheck"
                         type="checkbox"
                         value=""
-                        // checked={getData?.status === "FEESANDCHARGES" ? true : false}
+                        checked={getData?.status === "FEESANDCHARGES" ? true : false}
                         id="flexCheckDefault"
                       />
                       <label className="checkbox" for="flexCheckDefault">
@@ -570,7 +572,7 @@ const FeesChargesForm = (props) => {
                   </div>
                   <div class="row">
                     <div class="col-sm-12 text-right">
-                      {getShow?.submit && (
+                      {getShow?.submit && getData?.status !== "FEESANDCHARGES" && (
                         <button type="submit" id="btnClear" class="btn btn-primary btn-md ">
                           Submit
                         </button>
