@@ -67,24 +67,30 @@ function SubmitNew() {
           {
             loiNumber: "",
             typeOfBg: "",
-            tenantId: tenantId,
             businessService: "",
+            tenantId: tenantId,
+
             additionalDetails: {
               mortgageKhasraDetails: [
                 {
-                  ...data,
+                  khasraNumber: khasraNumber,
+                  areaToBeMortgagedInSqMtrs: data?.areaToBeMortgagedInSqMtrs,
                 },
               ],
-              // totalKhasraAreaToMortgage: "",
+              totalKhasraAreaToMortgage: data?.areaToBeMortgagedInSqMtrs,
               mortgagePlotDetails: [
                 {
-                  ...data,
+                  plotNumber: data?.plotNumber,
+                  areaInSqMtrs: data?.areaInSqMtrs,
                 },
               ],
-              // totalPlotAreaToMortgage: "",
+              totalPlotAreaToMortgage: data?.totalPlotAreaToMortgage,
             },
             additionalDocuments: {
-              ...data,
+              mortgageLayoutPlan: data?.mortgageLayoutPlan,
+              mortgageDeed: data?.mortgageDeed,
+              mortgageLandScheduleAndPlotNumbersDoc: data?.mortgageLandScheduleAndPlotNumbersDoc,
+              mortgageDeedAfterBPApproval: data?.mortgageDeedAfterBPApproval,
             },
             action: null,
             comment: "test comment",
@@ -108,7 +114,7 @@ function SubmitNew() {
       const Resp = await axios.post("/tl-services/bank/guarantee/_create", postDistrict);
       setServicePlanDataLabel(Resp.data);
     } catch (error) {
-      console.log(error.message);
+      console.log("helloriya", error.message);
     }
   };
   const [fileStoreId, setFileStoreId] = useState({});
@@ -250,6 +256,40 @@ function SubmitNew() {
 
     setShowhide(getuser);
   };
+  const [LOINumber, setLOINumber] = useState("");
+  const [khasraNumber, setKhasraNumber] = useState("");
+  const handleLoiNumber = async (e) => {
+    const token = window?.localStorage?.getItem("token");
+
+    try {
+      const loiRequest = {
+        requestInfo: {
+          api_id: "Rainmaker",
+          ver: "1",
+          ts: 0,
+          action: "_search",
+          did: "",
+          key: "",
+          msg_id: "090909",
+          requesterId: "",
+          authToken: token,
+          userInfo: userInfo,
+        },
+      };
+      const Resp = await axios.post(`/tl-services/v1/_search?loiNumber=${LOINumber}`, loiRequest);
+      console.log(Resp, "RRRRRRRRRRR");
+      setKhasraNumber(Resp?.data?.Licenses?.[1]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.AppliedLandDetails?.[0]?.khewats);
+      // setDevelopmentPlan(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.AppliedLandDetails?.[0]?.developmentPlan)
+      // setPurpose(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.purpose)
+      // setTotalArea(Resp?.data?.Licenses?.[0]?.tradeLicenseDetail?.additionalDetail?.[0]?.ApplicantPurpose?.totalArea)
+
+      // console.log({ devName, developmentPlan, purpose, totalArea });
+    } catch (error) {
+      console.log(error);
+    }
+
+    console.log("loiloiloi");
+  };
 
   return (
     <form onSubmit={handleSubmit(bankSubmitNew)}>
@@ -294,37 +334,38 @@ function SubmitNew() {
                 // id="btnClear"
                 type="button"
                 class="btn btn-primary btn-md center-block"
-                onClick={existingBgFormSubmitHandler}
+                onClick={submitNewFormSubmitHandler}
               >
                 Search
               </button>
             </div>
           </div>
           &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-          <label htmlFor="bankGuarantee">
+          <label htmlFor="businessService">
             <input
-              {...register("bankGuarantee")}
+              {...register("businessService")}
               type="radio"
-              name="bankGuarantee"
-              id="bankGuarantee1"
-              value="1"
+              name="businessService"
+              id="businessService1"
+              value="BG_NEW"
               onChange={(e) => handleshowhide(e)}
             />
             &nbsp; Bank Gurantee &nbsp;&nbsp;
           </label>
-          <label htmlFor="bankGuarantee">
+          <label htmlFor="businessService">
             <input
-              {...register("bankGuarantee")}
+              {...register("businessService")}
               type="radio"
-              name="bankGuarantee"
-              id="bankGuarantee2"
-              value="2"
+              name="businessService"
+              id="businessService2"
+              value="BG_MORTGAGE"
+              onClick={handleLoiNumber}
               onChange={(e) => handleshowhide(e)}
             />
             &nbsp; Mortgage &nbsp;&nbsp;
           </label>
           &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-          {showhide === "1" && (
+          {showhide === "BG_NEW" && (
             <div>
               <div className="col-12">
                 {watch("typeOfBg") === "SPE" && (
@@ -639,7 +680,7 @@ function SubmitNew() {
               </div>
             </div>
           )}
-          {showhide === "2" && (
+          {showhide === "BG_MORTGAGE" && (
             <div>
               <div className="table table-bordered table-responsive " style={{ backgroundColor: "rgb(251 251 253))", width: "629px" }}>
                 <thead>
@@ -651,30 +692,52 @@ function SubmitNew() {
                 <tbody>
                   <tr>
                     <th className="fw-normal" style={{ textAlign: "center" }}>
-                      <NumberInput disabled control={control} name="totalAreaScheme" {...register("khasraNumber")} />
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder=""
+                        disabled
+                        {...register("khasraNumber")}
+                        onChange={(e) => setKhasraNumber(e.target.value)}
+                        value={khasraNumber}
+                      />
                     </th>
                     <th className="fw-normal" style={{ textAlign: "center" }}>
                       <input type="number" className="form-control" placeholder="" {...register("areaToBeMortgagedInSqMtrs")} />
                     </th>
                   </tr>
-                  <tr>
+                </tbody>
+              </div>
+              {/* <tr>
                     <th className="fw-normal" style={{ textAlign: "center" }}>
                       <input type="text" className="form-control" placeholder="" disabled />
                     </th>
                     <th className="fw-normal" style={{ textAlign: "center" }}>
                       <input type="number" className="form-control" placeholder="" />
                     </th>
-                  </tr>
-                  <tr>
+                  </tr> */}
+              <div class="row-12" className="align-right">
+                <div className="col col-3">
+                  <h2>Area Total</h2>
+                  <input
+                    type="number"
+                    placeholder={watch("areaToBeMortgagedInSqMtrs")}
+                    {...register("totalKhasraAreaToMortgage")}
+                    className="form-control"
+                    disabled
+                  />
+                  &nbsp;&nbsp;
+                </div>
+              </div>
+              {/* <tr>
                     <th className="fw-normal" style={{ textAlign: "center" }}>
                       <h2>Area Total</h2>
                     </th>
                     <th className="fw-normal" style={{ textAlign: "center" }}>
                       <input type="number" className="form-control" placeholder="" {...register("totalKhasraAreaToMortgage")} />
                     </th>
-                  </tr>
-                </tbody>
-              </div>
+                  </tr> */}
+
               <h5 className="card-title fw-bold">Enter Plot</h5>
               <div className="table table-bordered table-responsive" style={{ backgroundColor: "rgb(251 251 253))", width: "629px" }}>
                 <thead>
@@ -698,7 +761,13 @@ function SubmitNew() {
                   })}
                 </tbody>
               </div>
+
               <div class="row-12" className="align-right">
+                <div className="col col-3">
+                  <h2>Area Total</h2>
+
+                  <input type="number" className="form-control" placeholder="" {...register("totalPlotAreaToMortgage")} />
+                </div>
                 <button type="button" class="btn btn-primary me-3" onClick={() => setNoOfRows(noOfRows + 1)}>
                   Add
                 </button>

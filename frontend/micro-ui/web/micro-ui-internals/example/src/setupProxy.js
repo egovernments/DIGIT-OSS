@@ -87,7 +87,6 @@ module.exports = function (app) {
     "/land-services/new/licenses/_get",
     "/land-services/electric/plan/_create",
     "/land-services/serviceplan/_create",
-    "/tl-services/bank/guarantee/_create",
   ].forEach((location) => app.use(location, createProxy));
   ["/pb-egov-assets"].forEach((location) => app.use(location, assetsProxy));
   ["/mca/v1/companies", "/mca-directors/v1/companies", "/certificate/v3/pan/pancr"].forEach((location) => app.use(location, apiSetuProxy));

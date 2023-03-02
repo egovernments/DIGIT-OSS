@@ -42,6 +42,8 @@ const ServiceScrutiny = (props) => {
   const [applicationData, setApplicationData] = useState();
   const [additionalDetails, setAdditionalDetails] = useState({});
   const [loiNumberSet, setLOINumberSet] = useState("");
+  const [edcDataTreade ,setEdcDataTreade] = useState("");
+  const [idwDataTreade ,setIdwDataTreade] = useState("");
 
   //   const authToken = Digit.UserService.getUser()?.access_token || null;
 
@@ -77,7 +79,7 @@ const ServiceScrutiny = (props) => {
       });
       //   console.log("Response From API1", Resp, Resp?.Licenses[0]?.applicationNumber,Resp);
       setScrutinyDetails(Resp?.servicePlanResponse?.[0]);
-      setLOINumberSet(Resp?.servicePlanResponse?.[0]?.loiNumber)
+      
       
       console.log("devDel1234", Resp?.servicePlanResponse?.[0]?.loiNumber);
       const loiNumber =  Resp?.servicePlanResponse?.[0]?.loiNumber
@@ -86,8 +88,8 @@ const ServiceScrutiny = (props) => {
         applicationData: Resp?.servicePlanResponse?.[0],
         workflowCode: Resp?.servicePlanResponse?.[0].businessService
       })
-      console.log("Loi1234787", userInfo );
-      console.log("Loi1234", loiNumber );
+      // console.log("Loi1234787", userInfo );
+      // console.log("Loi1234", loiNumber );
       const loiRequest = {
         requestInfo: {
           api_id: "Rainmaker",
@@ -105,8 +107,10 @@ const ServiceScrutiny = (props) => {
       
      
       const Resploi =await axios.post(`/tl-services/v1/_search?loiNumber=${loiNumber}`, loiRequest);
-      console.log("Afterloi", Resploi );
-      
+      // console.log("Afterloi", Resploi );
+      console.log("EDCR1234", Resploi?.data?.Licenses?.[0]?.tradeLicenseDetail?.EDC);
+      setEdcDataTreade(Resploi?.data?.Licenses?.[0]?.tradeLicenseDetail?.EDC)
+      setIdwDataTreade(Resploi?.data?.Licenses?.[0]?.tradeLicenseDetail?.IDW)
       
 
       // setScrutinyDetails(Resp?.servicePlanResponse?.[0]);
@@ -287,6 +291,8 @@ const ServiceScrutiny = (props) => {
           applicationNumber={id}
           refreshScrutinyData={getScrutinyData}
           setAdditionalDetails={setAdditionalDetails}
+          edcDataTreade={setEdcDataTreade}
+          idwDataTreade={setIdwDataTreade}
         ></ServiceBase>
       </Row>
       {/* <Row style={{ top: 10, padding: "10px 22px" }}> */}

@@ -38,6 +38,7 @@ const VALIDATION_SCHEMA = Yup.object().shape({
   compactBlock: Yup.string().nullable().required("This field is required."),
   // compactBlockRemark: Yup.string().nullable(true).required("This field is required."),
   landSandwiched: Yup.string().nullable().required("This field is required."),
+  landSchedule: Yup.string().nullable().required("This field is required."),
   // landSandwichedRemark: Yup.string().nullable(true).required("This field is required."),
   acquistion: Yup.string().nullable().required("This field is required."),
   // orderUpload: Yup.string().nullable().required("This field is required."),

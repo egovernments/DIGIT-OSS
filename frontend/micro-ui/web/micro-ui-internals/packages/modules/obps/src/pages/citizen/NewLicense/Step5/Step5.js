@@ -108,6 +108,7 @@ const FeesChargesForm = (props) => {
       const Resp = await axios.post(`/tl-calculator/v1/_getPaymentEstimate`, payload);
       const charges = Resp.data?.Calculations?.[0]?.tradeTypeBillingIds;
       console.log("resp", Resp.data?.feesTypeCalculationDto);
+      CalculationApi(Resp?.data?.feesTypeCalculationDto);
       setCalculatedData(Resp.data);
       // setValue("scrutinyFee", charges?.scrutinyFeeCharges);
       // setValue("licenseFee", charges?.licenseFeeCharges);
@@ -125,49 +126,28 @@ const FeesChargesForm = (props) => {
     const token = window?.localStorage?.getItem("token");
     setLoader(true);
     const payload = {
-      requestInfo: {
-        api_id: "1",
-        action: "create",
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: ".01",
+        ts: null,
+        action: "_update",
+        did: "1",
+        key: "",
+        msgId: "20170310130900|en_IN",
         authToken: token,
       },
     };
     try {
-      const Resp = await axios.post(`/tl-services/loi/report/_create?applicationNumber=${props.getId}`, payload).then((response) => {
-        setLoader(false);
-        openBase64NewTab(response?.data?.data);
-      });
+      const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${props.getId}`, payload, { responseType: "arraybuffer" });
+      setLoader(false);
+      const pdfBlob = new Blob([Resp.data], { type: "application/pdf" });
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+      window.open(pdfUrl);
     } catch (error) {
       setLoader(false);
       return error;
     }
   };
-
-  function base64toBlob(base64Data) {
-    const sliceSize = 1024;
-    const byteCharacters = atob(base64Data);
-    const bytesLength = byteCharacters.length;
-    const slicesCount = Math.ceil(bytesLength / sliceSize);
-    const byteArrays = new Array(slicesCount);
-
-    for (let sliceIndex = 0; sliceIndex < slicesCount; ++sliceIndex) {
-      const begin = sliceIndex * sliceSize;
-      const end = Math.min(begin + sliceSize, bytesLength);
-
-      const bytes = new Array(end - begin);
-      for (let offset = begin, i = 0; offset < end; ++i, ++offset) {
-        bytes[i] = byteCharacters[offset].charCodeAt(0);
-      }
-      byteArrays[sliceIndex] = new Uint8Array(bytes);
-    }
-    return new Blob(byteArrays, { type: "application/pdf" });
-  }
-
-  function openBase64NewTab(base64Pdf) {
-    var blob = base64toBlob(base64Pdf);
-    const blobUrl = URL.createObjectURL(blob);
-    window.open(blobUrl);
-    // }
-  }
 
   const getSubmitDataLabel = async () => {
     try {
@@ -265,6 +245,43 @@ const FeesChargesForm = (props) => {
   //     return error;
   //   }
   // };
+
+  const CalculationApi = async (data) => {
+    const token = window?.localStorage?.getItem("token");
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+
+        authToken: token,
+        userInfo: userInfo,
+
+        msgId: "1675336317896|en_IN",
+      },
+
+      CalulationCriteria: [
+        {
+          tenantId: "hr",
+        },
+      ],
+
+      CalculatorRequest: {
+        totalLandSize: stepData?.ApplicantPurpose?.totalArea,
+
+        potenialZone: stepData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.potential,
+
+        purposeCode: stepData?.ApplicantPurpose?.purpose,
+
+        far: "1",
+
+        applicationNumber: applicantId,
+      },
+    };
+    try {
+      const Resp = await axios.post(`/tl-calculator/v1/_calculator`, payload);
+    } catch (error) {
+      return error;
+    }
+  };
 
   const getApplicantUserData = async (id) => {
     const token = window?.localStorage?.getItem("token");
@@ -550,16 +567,14 @@ const FeesChargesForm = (props) => {
                         onClick={(e) => {
                           if (e.target.checked) {
                             setShow({ payNow: false, submit: true });
-                            // showPdf();
-                          } else {
-                            setShow({ payNow: false, submit: false });
+                            showPdf();
                           }
                         }}
                         className="form-check-input"
                         formControlName="agreeCheck"
                         type="checkbox"
                         value=""
-                        checked={getData?.status === "FEESANDCHARGES" ? true : false}
+                        // checked={getData?.status === "FEESANDCHARGES" ? true : false}
                         id="flexCheckDefault"
                       />
                       <label className="checkbox" for="flexCheckDefault">

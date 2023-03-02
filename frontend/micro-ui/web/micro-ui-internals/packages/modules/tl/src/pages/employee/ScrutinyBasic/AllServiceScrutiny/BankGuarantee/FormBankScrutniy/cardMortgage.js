@@ -13,7 +13,7 @@ import FormBank from "../FormBankScrutniy/FormBank";
 // import { commoncolor, primarycolor } from "../../constants";
 // import ScrutitnyForms from "../ScrutinyBasic/ScutinyBasic";
 // import { useSearchParams } from "react-router-dom";
-const ScrutinyForm = (props) => {
+const CardMortgage = (props) => {
   const { id } = useParams();
 
   const userInfo = Digit.UserService.getUser()?.info || {};
@@ -171,7 +171,7 @@ const ScrutinyForm = (props) => {
       setBusinessService(workflowDetailsTemp?.data?.applicationBusinessService);
     }
   }, [workflowDetailsTemp?.data]);
-  console.log("history", workflowDetailsTemp);
+
   useEffect(() => {
     console.log("Akash124");
     getScrutinyData();
@@ -231,7 +231,7 @@ const ScrutinyForm = (props) => {
               applicationDetails={applicationDetails}
               applicationData={{
                 ...applicationDetails?.applicationData,
-                workflowCode: applicationDetails?.applicationData?.workflowCode || "BG_NEW",
+                workflowCode: applicationDetails?.applicationData?.workflowCode || "BG_MORTGAGE",
               }}
               closeModal={closeModal}
               submitAction={submitAction}
@@ -268,18 +268,18 @@ const ScrutinyForm = (props) => {
             {/* <Button style={{ textAlign: "right" }}> <a href="http://localhost:3000/digit-ui/citizen/obps/Loi" >Generate LOI</a></Button> */}
             {/* <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow19} /> */}
           </div>
-          {/* {showhide19 === "Submit" && (
+          {showhide19 === "Submit" && (
             <div>
               <Button style={{ textAlign: "right" }}>
                 {" "}
                 <a href="http://localhost:3000/digit-ui/employee/tl/Loi">Generate LOI</a>
               </Button>
             </div>
-          )} */}
+          )}
         </Row>
       </Row>
     </Card>
   );
 };
 
-export default ScrutinyForm;
+export default CardMortgage;
