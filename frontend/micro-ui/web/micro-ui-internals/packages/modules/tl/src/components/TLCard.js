@@ -18,9 +18,9 @@ const TLCard = () => {
         return isTLEmp
       }
 
-    if (!Digit.Utils.tlAccess() && !isTLRole()) {
-        return null;
-    }
+    // if (!Digit.Utils.tlAccess() && !isTLRole()) {
+    //     return null;
+    // }
     const { t } = useTranslation();
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const inboxSearchParams = { limit: 10, offset: 0 }
