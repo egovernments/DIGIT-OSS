@@ -158,17 +158,18 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
     let count = 0;
     // console.log("DEVC", documents);
     bpaTaxDocuments.map((doc) => {
-      if (doc.required === true) {
-        // console.log("YES");
-        setRequiredField(true);
-      } else {
-        // console.log("NO");
-        setRequiredField(false);
-      }
       let isRequired = false;
 
       documents.map((data) => {
-        if (doc.required && data !== null && data && doc.code == `${data.documentType.split(".")[0]}.${data.documentType.split(".")[1]}`) {
+        // if (doc.required && data !== null && data && doc.code == `${data.documentType.split(".")[0]}.${data.documentType.split(".")[1]}`) {
+        //   isRequired = true;
+        // }
+        // if (doc.required && doc.code == `${data.documentType.split(".")[0]}.${data.documentType.split(".")[1]}`) {
+        // }
+        // console.log("ALLOW", data);
+
+        if (doc.required == true && data !== null && data && doc.code == data.documentType) {
+          // console.log("YES");
           isRequired = true;
         }
 
@@ -185,7 +186,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
         }
       });
 
-      if (!isRequired && doc.required) {
+      if (!isRequired && doc.required == true) {
         count = count + 1;
       }
     });
@@ -241,7 +242,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
             config={config}
             onSelect={handleSubmit}
             onSkip={onSkip}
-            // isDisabled={enableSubmit}
+            isDisabled={enableSubmit}
             onAdd={onAdd}
             cardStyle={{ paddingRight: "16px" }}
           >
@@ -377,7 +378,7 @@ function SelectDocument({ t, document: doc, setDocuments, error, setError, docum
         extraStyleName={"OBPS"}
         accept="image/*, .pdf, .png, .jpeg, .jpg"
         onUpload={selectfile}
-        required={uploadedFile && doc.required !== true ? false : uploadedFile && doc.required === true ? false : true}
+        // required={uploadedFile && doc.required !== true ? false : uploadedFile && doc.required === true ? false : true}
         onDelete={() => {
           setUploadedFile(null);
           setCheckRequiredFields(true);
