@@ -194,7 +194,7 @@ const ScrutinyFormcontainer = (props) => {
       }
     }
 
-    if (data.Licenses[0].action === "APPROVE_PRELIMINARY_SCRUTINY" ){
+    if (data.Licenses[0].action === "APPROVE_SITE_VERIFICATION" ){
 
       let requestInfo = {
          
@@ -245,7 +245,7 @@ const ScrutinyFormcontainer = (props) => {
     
           }
         }
-        const Resp = await axios.post(`/tl-services/loi/report/_create?applicationNumber=${id}&userId=${userInfo?.id}`, payload,{responseType:"arraybuffer"})
+        const Resp = await axios.post(`/tl-services/loi/report/_create?applicationNumber=${id}&userId=${userInfo?.id}&hqUserId=2247`, payload,{responseType:"arraybuffer"})
     
         console.log("logger12345...", Resp.data, userInfo)
     
