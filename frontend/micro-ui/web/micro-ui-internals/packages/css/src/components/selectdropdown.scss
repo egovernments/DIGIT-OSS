@@ -95,7 +95,7 @@
   .select {
     @apply flex;
     input {
-      @apply text-center;
+      text-align: left;
     }
   }
   .select-active {
@@ -103,9 +103,10 @@
   }
   .options-card {
     .profile-dropdown--item {
-      justify-content: center;
+      justify-content: left;
     }
   }
+  margin-bottom: 0;
 }
 
 .employee-select-wrap--elipses {

@@ -9,11 +9,22 @@ const SelectStreet = ({ t, config, onSelect, userType, formData, formState, setE
 
   const [focusIndex, setFocusIndex] = useState({ index: -1, type: "" });
 
-  const { control, formState: localFormState, watch, setError: setLocalError, clearErrors: clearLocalErrors, setValue, getValues, trigger } = useForm();
+  const {
+    control,
+    formState: localFormState,
+    watch,
+    setError: setLocalError,
+    clearErrors: clearLocalErrors,
+    setValue,
+    getValues,
+    trigger,
+  } = useForm();
   const formValue = watch();
   const { errors } = localFormState;
   const checkLocation = window.location.href.includes("tl/new-application") || window.location.href.includes("tl/renew-application-details");
   const isRenewal = window.location.href.includes("edit-application") || window.location.href.includes("tl/renew-application-details");
+  const [street, setStreet] = useState();
+  const [doorNo, setDoorNo] = useState();
 
   let inputs;
   if (window.location.href.includes("tl")) {
@@ -72,6 +83,11 @@ const SelectStreet = ({ t, config, onSelect, userType, formData, formState, setE
   }, []);
 
   useEffect(() => {
+    if (formData?.address?.doorNo) setDoorNo(formData?.address?.doorNo);
+    if (formData?.address?.street) setStreet(formData?.address?.street);
+  }, [formData?.address]);
+
+  useEffect(() => {
     if (userType === "employee") {
       if (Object.keys(errors).length && !_.isEqual(formState.errors[config.key]?.type || {}, errors)) setError(config.key, { type: errors });
       else if (!Object.keys(errors).length && formState.errors[config.key]) clearErrors(config.key);
@@ -90,17 +106,27 @@ const SelectStreet = ({ t, config, onSelect, userType, formData, formState, setE
   }, [formValue]);
 
   useEffect(() => {
-    if(formData?.cpt?.details && window.location.href.includes("tl"))
-    {
+    if (formData?.cpt?.details && window.location.href.includes("tl")) {
       inputs?.map((input) => {
-        if(getValues(input.name) !== formData?.cpt?.details?.address?.[input.name])
-        {
-          setValue(input.name,(formData?.cpt?.details?.address?.[input.name] === null || formData?.cpt?.details?.address?.[input.name] === "" ? (formData?.address?.[input.name] ? formData?.address?.[input.name] : "") : formData?.cpt?.details?.address?.[input.name]))
+        if (getValues(input.name) !== formData?.cpt?.details?.address?.[input.name]) {
+          setValue(
+            input.name,
+            formData?.cpt?.details?.address?.[input.name] === null || formData?.cpt?.details?.address?.[input.name] === ""
+              ? formData?.address?.[input.name]
+                ? formData?.address?.[input.name]
+                : ""
+              : formData?.cpt?.details?.address?.[input.name]
+          );
         }
-      })
+      });
     }
-    
-  },[formData?.cpt?.details])
+  }, [formData?.cpt?.details]);
+
+  const handleSkip = (data) => {
+    let { name } = data.target;
+    let { value } = data.target;
+    name === "street" ? setStreet(value) : setDoorNo(value);
+  };
 
   if (userType === "employee") {
     return inputs?.map((input, index) => {
@@ -113,49 +139,51 @@ const SelectStreet = ({ t, config, onSelect, userType, formData, formState, setE
           <div className="field">
             <Controller
               control={control}
-              defaultValue={formData?.cpt?.details?.address?.[input.name] || formData?.address?.[input.name]}
+              defaultValue={formData?.cpt?.details?.address?.[input?.name] || formData?.address?.[input.name]}
               name={input.name}
               rules={{ validate: convertValidationToRules(input) }}
               render={(_props) => (
-                <div style={{display:"flex",alignItems:"baseline",marginRight: "unset"}}>
-                <TextInput
-                  id={input.name}
-                  key={input.name}
-                  value={_props.value}
-                  onChange={(e) => {
-                    setFocusIndex({ index });
-                    _props.onChange(e.target.value);
-                  }}
-                  onBlur={_props.onBlur}
-                  // disable={isRenewal}
-                  disable={formData?.cpt?.details?.address?.[input.name] ? true : false}
-                  autoFocus={focusIndex?.index == index}
-                  {...input?.validation}
-                />
-                <div style={{marginRight:"-50px",marginLeft:"10px"}}>
+                <div style={{ display: "flex", alignItems: "baseline", marginRight: "unset" }}>
+                  <TextInput
+                    id={input.name}
+                    key={input.name}
+                    value={_props.value}
+                    onChange={(e) => {
+                      setFocusIndex({ index });
+                      _props.onChange(e.target.value);
+                    }}
+                    onBlur={_props.onBlur}
+                    // disable={isRenewal}
+                    disable={formData?.cpt?.details?.address?.[input.name] ? true : false}
+                    autoFocus={focusIndex?.index == index}
+                    {...input?.validation}
+                  />
+                  <div style={{ marginRight: "-50px", marginLeft: "10px" }}>
                     <WrapUnMaskComponent
                       unmaskField={(e) => {
                         _props.onChange(e);
                       }}
-                      iseyevisible={(_props.value ? _props.value?.includes("*") :  formData?.cpt?.details?.address?.[input.name]?.includes("*")) ? true : false}
+                      iseyevisible={
+                        (_props.value ? _props.value?.includes("*") : formData?.cpt?.details?.address?.[input.name]?.includes("*")) ? true : false
+                      }
                       privacy={{
-                          uuid: formData?.cpt?.details?.owners?.[0]?.uuid,
-                          fieldName: [input.name],
-                          model: "Property",
-                          loadData: {
-                              serviceName: "/property-services/property/_search",
-                              requestBody: {},
-                              requestParam: {
-                                  tenantId: formData?.cpt?.details?.tenantId,
-                                  propertyIds: formData?.cpt?.details?.propertyId,
-                                },
-                              jsonPath: `Properties[0].address.${input.name}`,
-                              isArray: false,
-                                    },
-                                }}>
-                      </WrapUnMaskComponent>
-                      </div>
-                    </div>
+                        uuid: formData?.cpt?.details?.owners?.[0]?.uuid,
+                        fieldName: [input.name],
+                        model: "Property",
+                        loadData: {
+                          serviceName: "/property-services/property/_search",
+                          requestBody: {},
+                          requestParam: {
+                            tenantId: formData?.cpt?.details?.tenantId,
+                            propertyIds: formData?.cpt?.details?.propertyId,
+                          },
+                          jsonPath: `Properties[0].address.${input.name}`,
+                          isArray: false,
+                        },
+                      }}
+                    ></WrapUnMaskComponent>
+                  </div>
+                </div>
               )}
             />
           </div>
@@ -169,8 +197,10 @@ const SelectStreet = ({ t, config, onSelect, userType, formData, formState, setE
       <FormStep
         config={{ ...config, inputs }}
         _defaultValues={{ street: formData?.address.street, doorNo: formData?.address.doorNo }}
+        onChange={handleSkip}
         onSelect={(data) => onSelect(config.key, data)}
         onSkip={onSkip}
+        isDisabled={doorNo || street ? false : true}
         t={t}
       />
     </React.Fragment>

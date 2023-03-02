@@ -19,7 +19,7 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
   const [shouldSearch, setShouldSearch] = useState(false);
   const [pageOffset, setPageOffset] = useState(0);
   const [pageSize, setPageSize] = useState(10);
-  const [sortParams, setSortParams] = useState([{ id: "createdTime", desc: false }]);
+  const [sortParams, setSortParams] = useState([{ id: "createdTime", desc: true }]);
 
   const searchParamsKey = isInbox ? "fsm/inbox/searchParams" : "fsm/search/searchParams";
   const searchParamsValue = isInbox
@@ -58,7 +58,10 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
     DSO ? true : false
   );
 
-  const inboxTotalCount = DSO ? applications?.statuses.filter(e => e.applicationstatus === "DSO_INPROGRESS")[0]?.count + applications?.statuses.filter(e => e.applicationstatus === "PENDING_DSO_APPROVAL")[0]?.count : applications?.totalCount
+  const inboxTotalCount = DSO
+    ? applications?.statuses.filter((e) => e.applicationstatus === "DSO_INPROGRESS")[0]?.count +
+      applications?.statuses.filter((e) => e.applicationstatus === "PENDING_DSO_APPROVAL")[0]?.count
+    : applications?.totalCount;
   const {
     isLoading: isSearchLoading,
     isIdle: isSearchIdle,
@@ -191,30 +194,32 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
   };
 
   useEffect(() => {
-    const status = ["CITIZEN_FEEDBACK_PENDING"]
+    const status = ["CITIZEN_FEEDBACK_PENDING"];
     applications?.table?.map((data) => {
-      if (status.includes(data.status))
-        data.sla = '-'
-    })
+      if (status.includes(data.status)) data.sla = "-";
+    });
   }, [applications]);
 
   if (applications?.table?.length !== null) {
     if (isMobile) {
       return (
-        <MobileInbox
-          data={isInbox ? applications?.table : data}
-          isLoading={isInbox ? isLoading || isIdle : isSearchLoading}
-          isSearch={isSearch}
-          searchFields={getSearchFields(userRoles)}
-          onFilterChange={handleFilterChange}
-          onSearch={onSearch}
-          onSort={handleSort}
-          parentRoute={parentRoute}
-          searchParams={searchParams}
-          sortParams={sortParams}
-          removeParam={removeParam}
-          linkPrefix={`${parentRoute}/${DSO ? "dso-application-details" : "application-details"}/`}
-        />
+        <div>
+          {!isSearch && <Header>{t("ES_COMMON_INBOX")}</Header>}
+          <MobileInbox
+            data={isInbox ? applications : data}
+            isLoading={isInbox ? isLoading || isIdle : isSearchLoading}
+            isSearch={isSearch}
+            searchFields={getSearchFields(userRoles)}
+            onFilterChange={handleFilterChange}
+            onSearch={onSearch}
+            onSort={handleSort}
+            parentRoute={parentRoute}
+            searchParams={searchParams}
+            sortParams={sortParams}
+            removeParam={removeParam}
+            linkPrefix={`${parentRoute}/${DSO ? "dso-application-details" : "application-details"}/`}
+          />
+        </div>
       );
     } else {
       return (
