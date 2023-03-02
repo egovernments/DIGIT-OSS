@@ -171,7 +171,7 @@ const ScrutinyForm = (props) => {
       setBusinessService(workflowDetailsTemp?.data?.applicationBusinessService);
     }
   }, [workflowDetailsTemp?.data]);
-
+  console.log("history", workflowDetailsTemp);
   useEffect(() => {
     console.log("Akash124");
     getScrutinyData();

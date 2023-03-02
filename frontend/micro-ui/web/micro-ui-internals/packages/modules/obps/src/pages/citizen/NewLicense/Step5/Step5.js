@@ -126,14 +126,19 @@ const FeesChargesForm = (props) => {
     const token = window?.localStorage?.getItem("token");
     setLoader(true);
     const payload = {
-      requestInfo: {
-        api_id: "1",
-        action: "create",
-        authToken: token,
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: ".01",
+        ts: null,
+        action: "_update",
+        did: "1",
+        key: "",
+        msgId: "20170310130900|en_IN",
+        authToken: "",
       },
     };
     try {
-      const Resp = await axios.post(`/tl-services/loi/report/_create?applicationNumber=${props.getId}`, payload).then((response) => {
+      const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${props.getId}`, payload).then((response) => {
         setLoader(false);
         openBase64NewTab(response?.data?.data);
       });
@@ -167,7 +172,6 @@ const FeesChargesForm = (props) => {
     var blob = base64toBlob(base64Pdf);
     const blobUrl = URL.createObjectURL(blob);
     window.open(blobUrl);
-    // }
   }
 
   const getSubmitDataLabel = async () => {
@@ -588,7 +592,7 @@ const FeesChargesForm = (props) => {
                         onClick={(e) => {
                           if (e.target.checked) {
                             setShow({ payNow: false, submit: true });
-                            // showPdf();
+                            showPdf();
                           }
                         }}
                         className="form-check-input"

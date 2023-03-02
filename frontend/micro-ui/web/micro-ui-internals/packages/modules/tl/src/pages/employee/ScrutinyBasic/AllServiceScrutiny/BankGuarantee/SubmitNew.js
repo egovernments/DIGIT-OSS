@@ -31,7 +31,7 @@ const SubmitNew = (props) => {
   };
   let user = Digit.UserService.getUser();
   const userRoles = user?.info?.roles?.map((e) => e.code);
-  const showRemarks = userRoles.includes("AO_HQ");
+  const showRemarks = userRoles.includes("AO_HQ" && "AD_HQ" && "JD_HQ" && "ATP_HQ" && "Patwari_HQ" && "NAYAB_TEHSILDAR");
   const landScheduleData = props.ApiResponseData;
   const {
     register,
@@ -212,7 +212,7 @@ const SubmitNew = (props) => {
       <Collapse in={open2}>
         <div id="example-collapse-text">
           <Card>
-            <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Bank Guarantee Submission </h4>
+            <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Bank Guarantee/Mortgage Submission </h4>
             <div className="card">
               <Row className="col-12">
                 <Col md={4} xxl lg="3">
