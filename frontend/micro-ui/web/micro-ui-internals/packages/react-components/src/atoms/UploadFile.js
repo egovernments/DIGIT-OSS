@@ -227,7 +227,7 @@ const UploadFile = (props) => {
           style={extraStyles ? { ...extraStyles?.inputStyles, ...props?.inputStyles } : { ...props?.inputStyles }}
           ref={inpRef}
           type="file"
-          required={props.required}
+          // required={props.required}
           id={props.id || `document-${getRandomId()}`}
           name="file"
           multiple={props.multiple}

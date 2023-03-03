@@ -595,6 +595,12 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     setOthersArray([]);
   };
 
+  function selectCompname(e) {
+    if (e.target.value.match("^[a-zA-z ]*$")) {
+      setCompanyName(e.target.value);
+    }
+  }
+
   function SelectExistingColonizerName(e) {
     if (!e.target.value || e.target.value.match("^[a-zA-Z ]*$")) {
       setExistingColonizerDetails({ ...existingColonizerDetails, name: e.target.value });
@@ -1628,7 +1634,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                               value={companyName}
                               placeholder={companyName}
                               name="companyName"
-                              onChange={(e) => setCompanyName(e.target.value)}
+                              // onChange={(e) => }
+                              onChange={selectCompname}
                               className="form-control"
                               disabled={showDevTypeFields === "Company"}
                               maxlength="50"
