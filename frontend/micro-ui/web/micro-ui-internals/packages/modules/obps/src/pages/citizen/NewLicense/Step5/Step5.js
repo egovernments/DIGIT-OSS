@@ -134,45 +134,20 @@ const FeesChargesForm = (props) => {
         did: "1",
         key: "",
         msgId: "20170310130900|en_IN",
-        authToken: "",
+        authToken: token,
       },
     };
     try {
-      const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${props.getId}`, payload).then((response) => {
-        setLoader(false);
-        openBase64NewTab(response?.data?.data);
-      });
+      const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${props.getId}`, payload, { responseType: "arraybuffer" });
+      setLoader(false);
+      const pdfBlob = new Blob([Resp.data], { type: "application/pdf" });
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+      window.open(pdfUrl);
     } catch (error) {
       setLoader(false);
       return error;
     }
   };
-
-  function base64toBlob(base64Data) {
-    const sliceSize = 1024;
-    const byteCharacters = atob(base64Data);
-    const bytesLength = byteCharacters.length;
-    const slicesCount = Math.ceil(bytesLength / sliceSize);
-    const byteArrays = new Array(slicesCount);
-
-    for (let sliceIndex = 0; sliceIndex < slicesCount; ++sliceIndex) {
-      const begin = sliceIndex * sliceSize;
-      const end = Math.min(begin + sliceSize, bytesLength);
-
-      const bytes = new Array(end - begin);
-      for (let offset = begin, i = 0; offset < end; ++i, ++offset) {
-        bytes[i] = byteCharacters[offset].charCodeAt(0);
-      }
-      byteArrays[sliceIndex] = new Uint8Array(bytes);
-    }
-    return new Blob(byteArrays, { type: "application/pdf" });
-  }
-
-  function openBase64NewTab(base64Pdf) {
-    var blob = base64toBlob(base64Pdf);
-    const blobUrl = URL.createObjectURL(blob);
-    window.open(blobUrl);
-  }
 
   const getSubmitDataLabel = async () => {
     try {
@@ -612,7 +587,7 @@ const FeesChargesForm = (props) => {
                   </div>
                   <div class="row">
                     <div class="col-sm-12 text-right">
-                      {getShow?.submit && (
+                      {getShow?.submit && getData?.status !== "FEESANDCHARGES" && (
                         <button type="submit" id="btnClear" class="btn btn-primary btn-md ">
                           Submit
                         </button>
