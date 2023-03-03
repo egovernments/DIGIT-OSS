@@ -520,7 +520,7 @@ const FstpOperatorDetails = () => {
 
             {!workflowDetails?.isLoading &&
               workflowDetails?.data?.nextActions?.length > 0 &&
-              (workflowDetails?.data?.nextActions?.length > 0 ? (
+              (workflowDetails?.data?.nextActions?.length === 1 ? (
                 <ActionBar>
                   <SubmitBar
                     label={t(`CS_ACTION_${workflowDetails?.data?.nextActions?.[0]?.action}`)}

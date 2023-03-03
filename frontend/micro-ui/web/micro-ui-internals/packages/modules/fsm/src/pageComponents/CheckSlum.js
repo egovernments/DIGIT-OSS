@@ -13,6 +13,7 @@ const CheckSlum = ({ t, config, onSelect, userType, formData }) => {
 
   const onSkip = () => onSelect();
   function goNext() {
+    sessionStorage.removeItem("Digit.total_amount")
     onSelect(config.key, { slumArea });
   }
 
