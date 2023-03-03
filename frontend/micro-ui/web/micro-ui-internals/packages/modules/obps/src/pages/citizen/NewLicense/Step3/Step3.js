@@ -273,9 +273,7 @@ const LandScheduleForm = (props) => {
     } catch (error) {
       setLoader(false);
       setToastError(error?.response?.data?.Errors?.[0]?.code);
-      setTimeout(() => {
-        setToastError(null);
-      }, 2000);
+
       return error.message;
     }
   };
@@ -2507,7 +2505,7 @@ const LandScheduleForm = (props) => {
                           type="file"
                           style={{ display: "none" }}
                           onChange={(e) => getDocumentData(e?.target?.files[0], "copyOfShajraPlan")}
-                          // accept="application/shp/zip"
+                          accept=".dxf/.zip"
                         />
                       </label>
                       {watch("copyOfShajraPlan") && (
