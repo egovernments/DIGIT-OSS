@@ -79,14 +79,14 @@ const LogoutDialog = ({ onSelect, onCancel, onDismiss }) => {
       }}
       headerBarMain={<Heading label={t("CORE_LOGOUT_WEB_HEADER")} />}
       headerBarEnd={<CloseBtn onClick={onDismiss} isMobileView={isMobileView} />}
-      actionCancelLabel={t("TL_COMMON_NO")}
+      actionCancelLabel={t("CORE_LOGOUT_CANCEL")}
       actionCancelOnSubmit={onCancel}
-      actionSaveLabel={t("TL_COMMON_YES")}
+      actionSaveLabel={t("CORE_LOGOUT_WEB_YES")}
       actionSaveOnSubmit={onSelect}
       formId="modal-action"
     >
       <div>
-        <CardText style={{ margin: 0 }}>{t("CORE_LOGOUT_MOBILE_CONFIRMATION_MESSAGE") + " "}</CardText>
+        <CardText style={{ margin: 0 }}>{t("CORE_LOGOUT_WEB_CONFIRMATION_MESSAGE") + " "}</CardText>
       </div>
     </Modal>
   ) : (
