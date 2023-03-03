@@ -11,7 +11,7 @@ const GetMessage = (type, action, isSuccess, isEmployee, t, data) => {
   const advanceZero = data?.advanceAmount === 0 || false;
   return t(
     `${isEmployee ? "E" : "C"}S_FSM_RESPONSE_${action ? action : "CREATE"}_${type}${isSuccess ? "" : "_ERROR"}${
-      advanceZero ? "_POST_PAY" : zeroPricing ? "_ZERO_PAY" : ""
+      action ? "" : advanceZero ? "_POST_PAY" : zeroPricing ? "_ZERO_PAY" : ""
     }`
   );
 };

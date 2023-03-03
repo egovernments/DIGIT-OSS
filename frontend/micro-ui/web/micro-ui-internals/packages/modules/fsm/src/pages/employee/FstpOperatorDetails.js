@@ -234,7 +234,7 @@ const FstpOperatorDetails = () => {
       return;
     }
 
-    if (wasteCollected === null || wasteCollected?.trim()?.length === 0) {
+    if (!wasteCollected || wasteCollected?.trim()?.length === 0) {
       setShowToast({ key: "error", action: `ES_FSTP_INVALID_WASTE_AMOUNT` });
       setTimeout(() => {
         closeToast();
