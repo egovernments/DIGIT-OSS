@@ -109,9 +109,9 @@ const OBPSCard = () => {
 
       const obpsSubModuleProps = []
 
-        if(isBankGuarrantee()){
-            obpsSubModuleProps.push(propsForBankModuleCard)
-        }
+        // if(isBankGuarrantee()){
+        //     obpsSubModuleProps.push(propsForBankModuleCard)
+        // }
     
       //   if((Digit.Utils.tlAccess() || isServiceEmp())){
       //       obpsSubModuleProps.push(propsForServiceModuleCard)
@@ -121,6 +121,7 @@ const OBPSCard = () => {
       // }
       obpsSubModuleProps.push(propsForServiceModuleCard)
       obpsSubModuleProps.push(propsForElectricModuleCard)
+      obpsSubModuleProps.push(propsForBankModuleCard)
         return (
         <React.Fragment>
         {
