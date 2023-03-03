@@ -152,7 +152,8 @@ const Feeandcharges = (props) => {
               <Form.Group className="justify-content-center" controlId="formBasicEmail">
                 <Row className="ml-auto" style={{ marginBottom: 5 }}>
                   <Col col-12>
-                    <table className="table table-bordered mx-auto mb-3" style={{ backgroundColor: "rgb(251 251 253))", width: "629px"}}>
+                    {/* ///////////Last time */}
+                    {/* <table className="table table-bordered mx-auto mb-3" style={{ backgroundColor: "rgb(251 251 253))", width: "629px"}}>
                       <thead>
                         <tr>
                           <th>Total Area</th>
@@ -193,62 +194,45 @@ const Feeandcharges = (props) => {
                           </td>
                         </tr>
                       </tbody>
-                    </table>
+                    </table> */}
 
                     <div className="row">
-                      <div className="col col-5">
-                        <h6 data-toggle="tooltip" data-placement="top" title="Total Fees (License fee 25% + Scrutiny Fees)">
-                          (i)&nbsp;Amount Payable 
-                        </h6>
+                      <div className="col col-4">
+                       
+                        <h4 className="mt-3">
+                            <b>Amount Payable: </b>
+                            {feeAndChargesData?.payableNow}
+                          </h4>
 
-                        <input type="text" className="form-control" minLength={1} maxLength={20} pattern="[0-9]*" disabled placeholder={feeAndChargesData?.payableNow} />
-                        {errors.totalFee && <p></p>}
+                        {/* <input type="text" className="form-control" minLength={1} maxLength={20} pattern="[0-9]*" disabled placeholder={feeAndChargesData?.payableNow} />
+                        {errors.totalFee && <p></p>} */}
+                      </div>
+                      <div className="col col-4">
+                      <h4 className="mt-3">
+                            <b>Purpose : </b>
+                            {feeAndChargesData?.purpose}
+                          </h4>
+
+                        {/* <input type="text" className="form-control" minLength={1} maxLength={20} pattern="[0-9]*" disabled placeholder={feeAndChargesData?.purpose} />
+                        {errors.totalFee && <p></p>} */}
+                      </div>
+                      <div className="col col-4">
+                      <h4 className="mt-3">
+                            <b>Development Plan: </b>
+                            {feeAndChargesData?.developmentPlan}
+                          </h4>
+
+                        {/* <input type="text" className="form-control" minLength={1} maxLength={20} pattern="[0-9]*" disabled placeholder={feeAndChargesData?.payableNow} />
+                        {errors.totalFee && <p></p>} */}
                       </div>
 
-                      <div className="col col-5">
+                      {/* <div className="col col-5">
                         <h6>(ii)Remark (If any)</h6>
                         <input type="text" className="form-control" minLength={2} maxLength={100} disabled placeholder={feeAndChargesData?.remark} />
                         {errors.remark && <p></p>}
-                      </div>
-
-                      {/* <div className="col col-2">
-                        <h6 data-toggle="tooltip" data-placement="top" title="Do you want to adjust the fee from any previous license (Yes/No)">
-                          (iii)&nbsp;Adjust Fees
-                        </h6>
-                        <div className="mt-2 ml-1">
-                        <input type="radio" value="Yes" disabled checked={feeAndChargesData?.adjustFee==="Y"?true:false} />
-                        <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                        <input type="radio" value="No" disabled checked={feeAndChargesData?.adjustFee==="N"?true:false} />
-                        <label className="m-0 mx-2" for="No">No</label>
-                        {feeAndChargesData?.adjustFee==="Y" && (
-                          <div className="row ">
-                            <div className="col col-12">
-                              <label>Enter License Number/LOI number</label>
-                              <input type="text" className="form-control" disabled placeholder={feeAndChargesData?.licNo} />
-                              <label>Amount (previous)</label>
-                              <input type="text" className="form-control" disabled placeholder={feeAndChargesData?.amount}/>
-                              <label>Amount to be paid after adjustment</label>
-                              <input type="text" className="form-control" disabled placeholder={feeAndChargesData?.amountAfterAdjustment} />
-                            </div>
-                          </div>
-                        )}
-                        </div>
-                      </div>
-                    </div>
-                    <br></br>
-                    <hr />
-                    <br></br>
-
-                    <div class="row">
-                      <div class="col-sm-12 text-right">
-                        <button id="btnSearch" class="btn btn-primary btn-md ">
-                          {" "}
-                          View as PDF &nbsp;&nbsp;
-                        </button>{" "}
-                        &nbsp;&nbsp;
-                      </div>
-                    </div> */}
-                     <div className="col col-2">
+                      </div> */}
+                        {/* ///////////////////Last time */}
+                     {/* <div className="col col-2">
                         <h6 data-toggle="tooltip" data-placement="top" title="Do you want to adjust the fee from any previous license (Yes/No)">
                           (iii)&nbsp;Adjust Fees
                         </h6>
@@ -258,9 +242,9 @@ const Feeandcharges = (props) => {
                         <input type="radio" value="No" disabled checked={feeAndChargesData?.adjustFee==="N"?true:false} />
                         <label className="m-0 mx-2" for="No">No</label>
                         </div>
-                      </div>
+                      </div> */}
                     </div>
-                        {feeAndChargesData?.adjustFee === "Y" && (
+                        {/* {feeAndChargesData?.adjustFee === "Y" && (
                           <div className="row mt-3">
                               <div className="col col-4">
                               <label>License Number/LOI number</label>
@@ -277,14 +261,7 @@ const Feeandcharges = (props) => {
                         <label className="m-0 mx-2" for="No">No</label>
                         </div>
                       </div>
-                      {/* {feeAndChargesData?.adjustFee === "Y" && (
-                          <div className="row mt-3">
-                             <div className="col col-4">
-                              <label>Consent letter in case of Another Developer (verified by the Department)</label>
-                              <input type="text" className="form-control" disabled placeholder={feeAndChargesData?.amount}/>
-                              </div>
-                            </div>
-                        )} */}
+                      
                               <div className="col col-4">
                               <label>Amount (previous)</label>
                               <input type="text" className="form-control" disabled placeholder={feeAndChargesData?.amount}/>
@@ -297,7 +274,7 @@ const Feeandcharges = (props) => {
                         )}
                     <br></br>
                     <hr />
-                    <br></br>
+                    <br></br> */}
 
                   </Col>
                 </Row>

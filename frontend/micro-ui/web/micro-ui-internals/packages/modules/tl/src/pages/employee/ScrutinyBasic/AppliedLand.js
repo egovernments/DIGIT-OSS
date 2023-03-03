@@ -1199,7 +1199,7 @@ const AppliedLandinfo = (props) => {
                     </h4>
                     <h4 className="mt-3">
                       <b>Total Applied Area: </b>
-                      {totalArea}
+                      {DetailsofAppliedLand?.DetailsAppliedLandPlot?.totalAreaScheme}
                     </h4>
                     {/* <h4 className="mt-3">
                       <b>Purpose Name: </b>
@@ -1399,9 +1399,9 @@ const AppliedLandinfo = (props) => {
                       }}
                     ></ReportProblemIcon>
                   </div>
-                </h5>
+                </h5> */}
 
-
+{/* 
                 <div class="w-full px-3 my-3">
                   <div class="row">
                     <div class="col-1 border p-2 d-flex flex-row justify-content-center align-items-center ">S.No.</div>
@@ -1583,7 +1583,7 @@ const AppliedLandinfo = (props) => {
                       )}
                     </div>
                   </div>
-                </div>
+                </div> */}
 
 
 
@@ -1596,10 +1596,10 @@ const AppliedLandinfo = (props) => {
                 <div className={`${classes.formLabel} row`}>
                   <div className="col col-3">
                     <h5 className="d-flex flex-column mb-2">
-                      Demarcation Plan
+                    Upload Layout Plan DXF
                       <div style={{ display: "flex" }}>
                         
-                        <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.demarcationPlan)}>
+                        <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLandPlot?.layoutPlanDxf)}>
                           <DownloadForOfflineIcon color="primary" className="mx-1"  />
                         </IconButton>
                         <ReportProblemIcon
@@ -1621,10 +1621,10 @@ const AppliedLandinfo = (props) => {
                   </div>
                   <div className="col col-3">
                   <h5 className="d-flex flex-column mb-2">
-                      Democratic Plan.
+                  Upload Layout Plan PDF
                       <div style={{ display: "flex" }}>
                      
-                        <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.democraticPlan)}>
+                        <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLandPlot?.layoutPlanPdf)}>
                           <DownloadForOfflineIcon color="primary" className="mx-1"  />
                         </IconButton>
                         <ReportProblemIcon
@@ -1645,11 +1645,11 @@ const AppliedLandinfo = (props) => {
                     
                   </div>
                   <div className="col col-3">
-                    <h5 className="d-flex flex-column mb-2" >Sectoral Plan/Layout Plan.
+                    <h5 className="d-flex flex-column mb-2" >Undertaking
 
                       <div style={{ display: "flex" }}>
                        
-                        <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.sectoralPlan)}>
+                        <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLandPlot?.undertaking)}>
                           <DownloadForOfflineIcon color="primary" className="mx-1"  />
                         </IconButton>
                         <ReportProblemIcon
@@ -1673,10 +1673,12 @@ const AppliedLandinfo = (props) => {
                     <div className="col col-3">
                       <div className="form-group">
                         <h5 className="d-flex flex-column mb-2">
-                          Upload Layout Plan
+                          
+                          
+                          Any other relevant documen
                           <div style={{ display: "flex" }}>
                         
-                        <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.uploadLayoutPlan)}>
+                        <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLandPlot?.layoutPlanPdf)}>
                           <DownloadForOfflineIcon color="primary" className="mx-1"  />
                         </IconButton>
                             <ReportProblemIcon
@@ -1698,7 +1700,7 @@ const AppliedLandinfo = (props) => {
                       </div>
                     </div>
 
-                  <div className="row">
+                  {/* <div className="row">
                     <div className="col col-3">
                       <h5 className="d-flex flex-column mb-2">Plans showing cross sections
 
@@ -2008,9 +2010,9 @@ const AppliedLandinfo = (props) => {
                       </h5>
                     </div>
 
-                  </div>
+                  </div> */}
 
-                </div> */}
+                </div>
 
 
               </Col>
