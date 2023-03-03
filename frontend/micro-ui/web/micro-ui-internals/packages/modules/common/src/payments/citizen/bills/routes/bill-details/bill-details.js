@@ -37,7 +37,7 @@ const BillDetails = ({ paymentRules, businessService }) => {
   ];
 
   const { isLoading: isUserLoading, data: userData, revalidate } = Digit.Hooks.useCustomAPIHook(...requestCriteria);
-  
+
   const { isLoading: isFSMLoading, isError, error, data: application, error: errorApplication } = Digit.Hooks.fsm.useApplicationDetail(
     t,
     tenantId,
@@ -71,21 +71,15 @@ const BillDetails = ({ paymentRules, businessService }) => {
       from = new Date(billDetails.fromPeriod).getFullYear().toString();
       to = new Date(billDetails.toPeriod).getFullYear().toString();
       if (from === to) {
-        if(window.location.href.includes("BPA"))
-        {
-          if(new Date(data?.Bill?.[0]?.billDate).getMonth()+1 < 4)
-          {
-            let newfrom =  (parseInt(from)-1).toString();
+        if (window.location.href.includes("BPA")) {
+          if (new Date(data?.Bill?.[0]?.billDate).getMonth() + 1 < 4) {
+            let newfrom = (parseInt(from) - 1).toString();
             return "FY " + newfrom + "-" + to;
-          }
-          else
-          {
-            let newTo = (parseInt(to)+1).toString();
+          } else {
+            let newTo = (parseInt(to) + 1).toString();
             return "FY " + from + "-" + newTo;
           }
-        }
-        else
-        return "FY " + from;
+        } else return "FY " + from;
       }
       return "FY " + from + "-" + to;
     } else return "N/A";
@@ -104,7 +98,7 @@ const BillDetails = ({ paymentRules, businessService }) => {
   if (authorization === "true" && !userInfo?.access_token) {
     localStorage.clear();
     sessionStorage.clear();
-    return <Redirect to={`/digit-ui/citizen/login?from=${encodeURIComponent(pathname + search)}`} />;
+    window.location.href = `/digit-ui/citizen/login?from=${encodeURIComponent(pathname + search)}`;
   }
   useEffect(() => {
     window.scroll({ top: 0, behavior: "smooth" });
@@ -149,18 +143,22 @@ const BillDetails = ({ paymentRules, businessService }) => {
         tenantId: billDetails.tenantId,
       });
     } else if (wrkflow === "WNS") {
-      history.push(`/digit-ui/citizen/payment/billDetails/${businessService}/${consumerCode}/${paymentAmount}?workflow=WNS&ConsumerName=${ConsumerName}`, {
-        paymentAmount,
-        tenantId: billDetails.tenantId,
-        name: bill.payerName,
-        mobileNumber: bill.mobileNumber && bill.mobileNumber?.includes("*") ? userData?.user?.[0]?.mobileNumber : bill.mobileNumber,
-      });
+      history.push(
+        `/digit-ui/citizen/payment/billDetails/${businessService}/${consumerCode}/${paymentAmount}?workflow=WNS&ConsumerName=${ConsumerName}`,
+        {
+          paymentAmount,
+          tenantId: billDetails.tenantId,
+          name: bill.payerName,
+          mobileNumber: bill.mobileNumber && bill.mobileNumber?.includes("*") ? userData?.user?.[0]?.mobileNumber : bill.mobileNumber,
+        }
+      );
     } else if (businessService === "PT") {
       history.push(`/digit-ui/citizen/payment/billDetails/${businessService}/${consumerCode}/${paymentAmount}`, {
         paymentAmount,
         tenantId: billDetails.tenantId,
         name: bill.payerName,
-        mobileNumber: bill.mobileNumber && bill.mobileNumber?.includes("*") ? userData?.user?.[0]?.mobileNumber : bill.mobileNumber,      });
+        mobileNumber: bill.mobileNumber && bill.mobileNumber?.includes("*") ? userData?.user?.[0]?.mobileNumber : bill.mobileNumber,
+      });
     } else {
       history.push(`/digit-ui/citizen/payment/collect/${businessService}/${consumerCode}`, { paymentAmount, tenantId: billDetails.tenantId });
     }
