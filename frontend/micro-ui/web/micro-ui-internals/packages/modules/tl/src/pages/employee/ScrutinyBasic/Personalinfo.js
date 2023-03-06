@@ -105,9 +105,9 @@ const Personalinfo = (props) => {
   return (
     <Form
       ref={props.personalInfoRef}
-  
+
     >
-      
+
       <div
         className="collapse-header"
         onClick={() => setOpen(!open)}

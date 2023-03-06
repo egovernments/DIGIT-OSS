@@ -407,9 +407,9 @@ const ScrutinyFormcontainer = (props) => {
         {/* </Row> */}
         <Row>
               
-          <div class="col-md-12 bg-light text-right" style={{ position: "relative", marginBottom: 20 }}>
+          {/* <div class="col-md-12 bg-light text-right" style={{ position: "relative", marginBottom: 20 }}>
           <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}>Submit</Button>
-          </div>
+          </div> */}
           {/* {showhide19 === "Submit" && ( */}
           {/* <div>
             <Button style={{ textAlign: "right" }}> <a href="http://localhost:3000/digit-ui/employee/tl/Loi" >Generate LOI</a></Button>
