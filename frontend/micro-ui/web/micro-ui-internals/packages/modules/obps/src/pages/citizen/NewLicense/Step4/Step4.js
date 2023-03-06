@@ -1062,12 +1062,12 @@ const AppliedDetailForm = (props) => {
                   </div>
 
                   <div class="row">
-                    <div class="col-sm-12 text-left">
+                    <div class="col-sm-6 text-left">
                       <div id="btnClear" class="btn btn-primary btn-md center-block" onClick={() => handleWorkflow()}>
                         Back
                       </div>
                     </div>
-                    <div class="col-sm-12 text-right">
+                    <div class="col-sm-6 text-right">
                       <button disabled={isValid ? false : true} type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
                         Save and Continue
                       </button>
