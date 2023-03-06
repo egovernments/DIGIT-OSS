@@ -26,7 +26,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useLocation } from "react-router-dom";
 import { Toast } from "@egovernments/digit-ui-react-components";
 import WorkingTable from "../../../../components/Table";
-
 const test = {
   area: null,
   code: "RPL",
@@ -94,6 +93,17 @@ const releaseStatus = [
   },
 ];
 
+const unconsolidated = [
+  {
+    label: "Karam",
+    value: "karam",
+  },
+  {
+    label: "Gatta",
+    value: "gatta",
+  },
+];
+
 const LandScheduleForm = (props) => {
   const location = useLocation();
   const [purposeOptions, setPurposeOptions] = useState({ data: [], isLoading: true });
@@ -113,7 +123,8 @@ const LandScheduleForm = (props) => {
   const [modalData, setModalData] = useState([]);
   const { data: LandData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["LandType"]);
   const [getData, setData] = useState({ caseNumber: "", dairyNumber: "" });
-
+  const [success, setError] = useState(null);
+  const [toastError, setToastError] = useState("");
   const { data: PotentialType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["DevPlan"]);
   const columns = [
     {
@@ -240,6 +251,7 @@ const LandScheduleForm = (props) => {
     data["siteLoc"] = data?.siteLoc?.value;
     data["purposeParentLic"] = data?.purposeParentLic?.value;
     data["releaseStatus"] = data?.releaseStatus?.value;
+    data["unconsolidated"] = data?.unconsolidated?.value;
     const postDistrict = {
       pageName: "LandSchedule",
       action: "LANDSCHEDULE",
@@ -273,7 +285,9 @@ const LandScheduleForm = (props) => {
     } catch (error) {
       setLoader(false);
       setToastError(error?.response?.data?.Errors?.[0]?.code);
-
+      setTimeout(() => {
+        setToastError(null);
+      }, 2000);
       return error.message;
     }
   };
@@ -397,7 +411,8 @@ const LandScheduleForm = (props) => {
       return error.message;
     }
   };
-
+  const FILE_SIZE = 160 * 1024;
+  const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/pdf"];
   const getApplicantUserData = async (id) => {
     const token = window?.localStorage?.getItem("token");
     const payload = {
@@ -1232,10 +1247,13 @@ const LandScheduleForm = (props) => {
                                 Unconsolidated<span style={{ color: "red" }}>*</span>&nbsp;
                               </h2>
                             </label>
-                            <select class="form-control">
-                              <option value="Karam"> Karam</option>
-                              <option value="Gatta">Gatta</option>
-                            </select>
+                            <ReactMultiSelect
+                              control={control}
+                              name="unconsolidated"
+                              placeholder="Unconsolidated"
+                              data={unconsolidated}
+                              labels="Potential"
+                            />
                           </div>
                           <h3 className="error-message" style={{ color: "red" }}>
                             {errors?.waterCourse && errors?.waterCourse?.message}
@@ -1505,26 +1523,31 @@ const LandScheduleForm = (props) => {
                     </div>
                     {watch("siteApproachable") === "Y" && (
                       <div>
-                        <div className="row-12">
-                          <div className="col col-8">
-                            <h2>
-                              (a)&nbsp;&nbsp;Approach available from minimum 4 karam (22 ft) wide revenue rasta.
-                              <span style={{ color: "red" }}>*</span>{" "}
-                              <label htmlFor="minimumApproachFour">
+                        <div class="row">
+                          <div class="col-12">
+                            <div class="col-6">
+                              <h2>
+                                (a)&nbsp;Approach available from minimum 4 karam (22 ft) wide revenue rasta.
+                                <span style={{ color: "red" }}>*</span>
+                              </h2>
+                            </div>
+                            <div class="col-6">
+                              <label>
                                 <input {...register("minimumApproachFour")} type="radio" value="Y" id="minimumApproachFour" />
                                 &nbsp; Yes &nbsp;&nbsp;
                               </label>
-                              <label htmlFor="minimumApproachFour">
+                              <label>
                                 <input {...register("minimumApproachFour")} type="radio" value="N" id="minimumApproachFour" />
                                 &nbsp; No &nbsp;&nbsp;
                               </label>
-                            </h2>
-                            <h3 className="error-message" style={{ color: "red" }}>
-                              {errors?.minimumApproachFour && errors?.minimumApproachFour?.message}
-                            </h3>
+
+                              <h3 className="error-message" style={{ color: "red" }}>
+                                {errors?.minimumApproachFour && errors?.minimumApproachFour?.message}
+                              </h3>
+                            </div>
                           </div>
                         </div>
-                        <div className="row-12">
+                        <div className="row">
                           <div className="col col-8">
                             <h2>
                               (b)&nbsp;&nbsp;Approach available from minimum 11 feet wide revenue rasta and applied site abuts acquired alignment of
@@ -2310,15 +2333,15 @@ const LandScheduleForm = (props) => {
                           accept="application/pdf/jpeg/png"
                         />
                       </label>
-                      {watch("mutation") && (
+                      {watch("mutation") ? (
                         <a onClick={() => getDocShareholding(watch("mutation"), setLoader)} className="btn btn-sm ">
                           <VisibilityIcon color="info" className="icon" />
                         </a>
+                      ) : (
+                        <h3 className="error-message" style={{ color: "red" }}>
+                          {errors?.mutation && errors?.mutation?.message}
+                        </h3>
                       )}
-                      {/* <h3 >{watch("mutation") }</h3> */}
-                      <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.mutation && errors?.mutation?.message}
-                      </h3>
                     </div>
 
                     <div className="col col-3">
@@ -2334,15 +2357,15 @@ const LandScheduleForm = (props) => {
                           accept="application/pdf/jpeg/png"
                         />
                       </label>
-                      {watch("jambandhi") && (
+                      {watch("jambandhi") ? (
                         <a onClick={() => getDocShareholding(watch("jambandhi"), setLoader)} className="btn btn-sm ">
                           <VisibilityIcon color="info" className="icon" />
                         </a>
+                      ) : (
+                        <h3 className="error-message" style={{ color: "red" }}>
+                          {errors?.jambandhi && errors?.jambandhi?.message}
+                        </h3>
                       )}
-                      {/* <h3>{watch("jambandhi")}</h3> */}
-                      <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.jambandhi && errors?.jambandhi?.message}
-                      </h3>
                     </div>
                     <div className="col col-3">
                       <h2 style={{ display: "flex" }}>Details of lease / patta</h2>
@@ -2355,15 +2378,15 @@ const LandScheduleForm = (props) => {
                           accept="application/pdf/jpeg/png"
                         />
                       </label>
-                      {watch("detailsOfLease") && (
+                      {watch("detailsOfLease") ? (
                         <a onClick={() => getDocShareholding(watch("detailsOfLease"), setLoader)} className="btn btn-sm ">
                           <VisibilityIcon color="info" className="icon" />
                         </a>
+                      ) : (
+                        <h3 className="error-message" style={{ color: "red" }}>
+                          {errors?.detailsOfLease && errors?.detailsOfLease?.message}
+                        </h3>
                       )}
-                      {/* <h3>{watch("detailsOfLease")}</h3> */}
-                      <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.detailsOfLease && errors?.detailsOfLease?.message}
-                      </h3>
                     </div>
                   </div>
                   <br></br>
@@ -2386,15 +2409,15 @@ const LandScheduleForm = (props) => {
                           accept="application/pdf/jpeg/png"
                         />
                       </label>
-                      {watch("addSalesDeed") && (
+                      {watch("addSalesDeed") ? (
                         <a onClick={() => getDocShareholding(watch("addSalesDeed"), setLoader)} className="btn btn-sm ">
                           <VisibilityIcon color="info" className="icon" />
                         </a>
+                      ) : (
+                        <h3 className="error-message" style={{ color: "red" }}>
+                          {errors?.addSalesDeed && errors?.addSalesDeed?.message}
+                        </h3>
                       )}
-                      {/* <h3>{watch("addSalesDeed")}</h3> */}
-                      <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.addSalesDeed && errors?.addSalesDeed?.message}
-                      </h3>
                     </div>
                     <div className="col col-3">
                       <h2
@@ -2414,15 +2437,15 @@ const LandScheduleForm = (props) => {
                           accept="application/pdf/jpeg/png"
                         />
                       </label>
-                      {watch("copyofSpaBoard") && (
+                      {watch("copyofSpaBoard") ? (
                         <a onClick={() => getDocShareholding(watch("copyofSpaBoard"), setLoader)} className="btn btn-sm ">
                           <VisibilityIcon color="info" className="icon" />
                         </a>
+                      ) : (
+                        <h3 className="error-message" style={{ color: "red" }}>
+                          {errors?.copyofSpaBoard && errors?.copyofSpaBoard?.message}
+                        </h3>
                       )}
-                      {/* <h3 >{watch("copyofSpaBoard")}</h3> */}
-                      <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.copyofSpaBoard && errors?.copyofSpaBoard?.message}
-                      </h3>
                     </div>
                     {/* <div className="col col-3">
                       <h2 style={{ display: "flex" }}>
@@ -2504,31 +2527,31 @@ const LandScheduleForm = (props) => {
                         <input
                           type="file"
                           style={{ display: "none" }}
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "copyOfShajraPlan")}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "c")}
                           accept=".dxf/.zip"
                         />
                       </label>
-                      {watch("copyOfShajraPlan") && (
+                      {watch("copyOfShajraPlan") ? (
                         <a onClick={() => getDocShareholding(watch("copyOfShajraPlan"), setLoader)} className="btn btn-sm ">
                           <VisibilityIcon color="info" className="icon" />
                         </a>
+                      ) : (
+                        <h3 className="error-message" style={{ color: "red" }}>
+                          {errors?.copyOfShajraPlan && errors?.copyOfShajraPlan?.message}
+                        </h3>
                       )}
-                      {/* <h3>{watch("copyOfShajraPlan")}</h3> */}
-                      <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.copyOfShajraPlan && errors?.copyOfShajraPlan?.message}
-                      </h3>
                     </div>
                   </div>
                 </Col>
               </Row>
             </Form.Group>
             <div class="row">
-              <div class="col-sm-12 text-left">
-                <div id="btnClear" class="btn btn-primary btn-md center-block" onClick={() => handleWorkflow()}>
+              <div class="col-sm-6 text-left">
+                <button type="submit" id="btnClear" class="btn btn-primary btn-md center-block" onClick={() => handleWorkflow()}>
                   Back
-                </div>
+                </button>
               </div>
-              <div class="col-sm-12 text-right">
+              <div class="col-sm-6 text-right">
                 <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
                   Save and Continue
                 </button>
@@ -2676,6 +2699,16 @@ const LandScheduleForm = (props) => {
         </ModalBody>
         <ModalFooter toggle={() => setmodal(!modal)}></ModalFooter>
       </Modal>
+      {toastError && (
+        <Toast
+          error={"error" ? true : false}
+          label={toastError}
+          isDleteBtn={true}
+          onClose={() => {
+            setToastError(null);
+          }}
+        />
+      )}
       {showToast && (
         <Toast
           success={showToast?.key === "success" ? true : false}
@@ -2683,7 +2716,6 @@ const LandScheduleForm = (props) => {
           isDleteBtn={true}
           onClose={() => {
             setShowToast(null);
-            setError(null);
           }}
         />
       )}

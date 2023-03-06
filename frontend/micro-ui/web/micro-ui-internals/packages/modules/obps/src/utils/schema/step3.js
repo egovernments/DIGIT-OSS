@@ -65,6 +65,35 @@ const VALIDATION_SCHEMA = Yup.object().shape({
   // roadWidth: Yup.string().nullable().required("This field is required."),
   // roadRemark: Yup.string().nullable().required("This field is required."),
   utilityLine: Yup.string().nullable().required("This field is required."),
+  // landSchedule: Yup.string().required("A text is required"),
+  landSchedule: Yup.string()
+    .required("Only pdf,jpeg,png image required")
+    .test("fileSize", "File too large", (value) => value && value.size <= FILE_SIZE)
+    .test("fileFormat", "Unsupported Format", (value) => value && SUPPORTED_FORMATS.includes(value.type)),
+  mutation: Yup.string()
+    .required("Only pdf,jpeg,png image required")
+    .test("fileSize", "File too large", (value) => value && value.size <= FILE_SIZE)
+    .test("fileFormat", "Unsupported Format", (value) => value && SUPPORTED_FORMATS.includes(value.type)),
+  jambandhi: Yup.string()
+    .required("Only pdf,jpeg,png image required")
+    .test("fileSize", "File too large", (value) => value && value.size <= FILE_SIZE)
+    .test("fileFormat", "Unsupported Format", (value) => value && SUPPORTED_FORMATS.includes(value.type)),
+  detailsOfLease: Yup.string()
+    .required("Only pdf,jpeg,png image required")
+    .test("fileSize", "File too large", (value) => value && value.size <= FILE_SIZE)
+    .test("fileFormat", "Unsupported Format", (value) => value && SUPPORTED_FORMATS.includes(value.type)),
+  addSalesDeed: Yup.string()
+    .required("Only pdf,jpeg,png image required")
+    .test("fileSize", "File too large", (value) => value && value.size <= FILE_SIZE)
+    .test("fileFormat", "Unsupported Format", (value) => value && SUPPORTED_FORMATS.includes(value.type)),
+  copyofSpaBoard: Yup.string()
+    .required("Only pdf,jpeg,png image required")
+    .test("fileSize", "File too large", (value) => value && value.size <= FILE_SIZE)
+    .test("fileFormat", "Unsupported Format", (value) => value && SUPPORTED_FORMATS.includes(value.type)),
+  // copyofSpaBoard: Yup.string()
+  //   .required("Only zip/dxf image required")
+  //   .test("fileSize", "File too large", (value) => value && value.size <= FILE_SIZE)
+  //   .test("fileFormat", "Unsupported Format", (value) => value && SUPPORTED_FORMATS.includes(value.type)),
   // utilityWidth: Yup.string().nullable().required("This field is required."),
   // utilityRemark: Yup.string().nullable().required("This field is required."),
 });

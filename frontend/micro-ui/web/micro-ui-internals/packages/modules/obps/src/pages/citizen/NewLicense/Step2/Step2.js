@@ -1022,12 +1022,12 @@ const ApllicantPuropseForm = (props) => {
             </Form.Group>
             <br></br>
             <div class="row">
-              <div class="col-sm-12 text-left">
+              <div class="col-sm-6 text-left">
                 <div id="btnClear" class="btn btn-primary btn-md center-block" onClick={() => handleWorkflow()}>
                   Back
                 </div>
               </div>
-              <div class="col-sm-12 text-right">
+              <div class="col-sm-6 text-right">
                 <label className="mr-4">Total Area: {getTotalArea}</label>
                 &nbsp;&nbsp;&nbsp;
                 <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
