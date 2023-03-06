@@ -1191,7 +1191,7 @@ const AppliedLandinfo = (props) => {
                     </div>
                   </div>
                 )} */}
-
+                  <br></br>
                 <div>
                   <div className="mt-3 mb-3">
                     <h4>
@@ -1212,7 +1212,7 @@ const AppliedLandinfo = (props) => {
                     {DetailsofAppliedLand?.PurposeDetails?.map((item, index) => (
                       <div style={{ marginLeft: 52 }}>
 
-                        <Row >
+                        {/* <Row > */}
                           <h4 className="mt-3">
                             <b>Purpose Name: </b>
                             {item?.name}
@@ -1232,7 +1232,7 @@ const AppliedLandinfo = (props) => {
                     </h4> */}
 
 
-                        </Row>
+                        {/* </Row> */}
                         {item?.purposeDetail?.map((item, index) => (
 
 

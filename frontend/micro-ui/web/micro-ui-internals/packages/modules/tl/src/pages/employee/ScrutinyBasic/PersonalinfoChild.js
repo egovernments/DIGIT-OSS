@@ -164,7 +164,7 @@ const PersonalinfoChild = (props) => {
           <div className={classes.fieldContainer}>
             <Form.Control
               className={classes.formControl}
-              placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.name : null}
+              placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.companyName : null}
               disabled
             ></Form.Control>
             &nbsp;&nbsp;
@@ -181,7 +181,7 @@ const PersonalinfoChild = (props) => {
                   setLabelValue("Developer"),
                   setSmShow(true),
                   console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.name : null);
+                  setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.companyName : null);
                   // }
                   
 
@@ -240,7 +240,7 @@ const PersonalinfoChild = (props) => {
           <div className={classes.fieldContainer}>
             <Form.Control
               className={classes.formControl}
-              placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.emailId : null}
+              placeholder={personalinfo !== null ? personalinfo?.devDetail?.addInfo?.email : null}
               disabled
             ></Form.Control>
             &nbsp;&nbsp;
@@ -256,7 +256,7 @@ const PersonalinfoChild = (props) => {
                   setLabelValue("Email Id"),
                   setSmShow(true),
                   console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.emailId: null);
+                  setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.addInfo?.email: null);
               }}
             ></ReportProblemIcon>
            
@@ -738,7 +738,7 @@ const PersonalinfoChild = (props) => {
                         </tr>
                       </thead>
                       <tbody>
-                        {   personalinfo?.devDetail?.addInfo?.DirectorsInformation?.map((item, index) => (
+                        {   personalinfo?.devDetail?.addInfo?.DirectorsInformationMCA?.map((item, index) => (
 
                             <tr
                             >
