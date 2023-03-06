@@ -4698,14 +4698,21 @@ body {
     /* box-shadow: 0 10px 20px rgb(0 0 0 / 19%), 0 6px 6px rgb(0 0 0 / 23%); */
   }
 
+  .ServiceCardOptions.empCard{
+    width: 22%;
+  }
+
   .ServiceCardData {
     width: 100%;
     background: #ffffff;
     box-shadow: 0.375rem 0.375rem 0.125rem 0 rgb(0 0 0 / 10%);
     border-radius: 0.65rem;
     padding: 0.6rem;
+    max-height: 260px;
+    min-height: 230px;
     position: relative;
   }
+
 
   /* .one.ServiceCardHeader{
     background-image: url(https://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/banner-images/1.png);
