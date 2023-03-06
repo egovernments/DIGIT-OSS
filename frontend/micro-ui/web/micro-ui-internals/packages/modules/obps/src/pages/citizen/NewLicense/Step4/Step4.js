@@ -655,11 +655,12 @@ const AppliedDetailForm = (props) => {
                           defaultValue={x?.area}
                           {...register(`${x?.id}`)}
                           onChange={(e) => {
-                            let delay;
-                            delay = setTimeout(() => {
-                              updateAreaById(newDataA, x?.id, e?.target?.value);
-                            }, 700);
-                            return () => clearTimeout(delay);
+                            updateAreaById(newDataA, x?.id, e?.target?.value);
+                            // let delay;
+                            // delay = setTimeout(() => {
+                            // updateAreaById(newDataA, x?.id, e?.target?.value);
+                            // }, 700);
+                            // return () => clearTimeout(delay);
                             // const updatedData = updateAreaById(newDataA, x?.id, e?.target?.value);
                           }}
                         />
@@ -682,11 +683,7 @@ const AppliedDetailForm = (props) => {
                         </h6>
                       </div>
                     )}
-                    {!!x?.purposeDetail?.length && (
-                      <div className="ml-4 mt-4">
-                        <Tree data={x?.purposeDetail} />
-                      </div>
-                    )}
+                    {!!x?.purposeDetail?.length && <div className="ml-4 mt-4">{Tree({ data: x?.purposeDetail })}</div>}
                   </div>
                 </div>
               );
@@ -769,11 +766,7 @@ const AppliedDetailForm = (props) => {
                   </div>
                 </div>
 
-                {newDataA && (
-                  <div>
-                    <Tree data={newDataA} />
-                  </div>
-                )}
+                {newDataA && <div>{Tree({ data: newDataA })}</div>}
 
                 <Col className="mt-4" col-12>
                   <h4>
