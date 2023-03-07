@@ -14,7 +14,9 @@ import Timeline from "../components/Timeline";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { useForm } from "react-hook-form";
-
+import { getDocShareholding } from "../../../tl/src/pages/employee/ScrutinyBasic/ScrutinyDevelopment/docview.helper";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { Button, Placeholder } from "react-bootstrap";
 const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setError: setFormError, clearErrors: clearFormErrors, formState }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
@@ -60,7 +62,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
       const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${userInfo?.info?.id}&isAllData=true`, requestResp, {});
       const developerDataGet = getDevDetails?.data;
       setTradeType(developerDataGet?.devDetail[0]?.applicantType?.licenceType);
-
+      setDocuments(developerDataGet?.devDetail[0]?.licensesDoc);
       // console.log("TRADETYPE", tradeType);
 
       let filtredBpaDocs = [];
@@ -248,6 +250,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
           >
             <div className="happy">
               <div className="card">
+                {/* {JSON.stringify(documents)} */}
                 {bpaTaxDocuments?.map((document, index) => {
                   return (
                     <SelectDocument
@@ -373,19 +376,58 @@ function SelectDocument({ t, document: doc, setDocuments, error, setError, docum
       {doc?.info ? (
         <div style={{ fontSize: "12px", color: "#505A5F", fontWeight: 400, lineHeight: "15px", marginBottom: "10px" }}>{`${t(doc?.info)}`}</div>
       ) : null}
+      {/* {JSON.stringify(doc?.code)} */}
 
-      <UploadFile
-        extraStyleName={"OBPS"}
-        accept="image/*, .pdf, .png, .jpeg, .jpg"
-        onUpload={selectfile}
-        // required={uploadedFile && doc.required !== true ? false : uploadedFile && doc.required === true ? false : true}
-        onDelete={() => {
-          setUploadedFile(null);
-          setCheckRequiredFields(true);
-        }}
-        message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
-        iserror={error}
-      />
+      <div className="" style={{ display: "flex", alignItems: "center" }}>
+        <UploadFile
+          extraStyleName={"OBPS"}
+          accept="image/*, .pdf, .png, .jpeg, .jpg"
+          onUpload={selectfile}
+          // required={uploadedFile && doc.required !== true ? false : uploadedFile && doc.required === true ? false : true}
+          onDelete={() => {
+            setUploadedFile(null);
+            setCheckRequiredFields(true);
+          }}
+          message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
+          iserror={error}
+        />
+        <span style={{ margin: "0 0.5rem" }}>
+          {doc?.code === "ARTICLES_OF_ASSOCIATION" ? (
+            <button
+              type="button"
+              title="View Document"
+              onClick={() => getDocShareholding(documents[0]?.articlesOfAssociation)}
+              className="btn btn-sm col-md-6"
+            >
+              <VisibilityIcon color="info" className="icon" />
+            </button>
+          ) : doc?.code === "REGISTERED_IRREVOCABLE_PARTNERSHIP_DEED" ? (
+            <button
+              type="button"
+              title="View Document"
+              onClick={() => getDocShareholding(documents[0]?.registeredIrrevocablePaternshipDeed)}
+              className="btn btn-sm col-md-6"
+            >
+              <VisibilityIcon color="info" className="icon" />
+            </button>
+          ) : doc?.code === "MEMORANDUM_OF_ARTICLES" ? (
+            <button
+              type="button"
+              title="View Document"
+              onClick={() => getDocShareholding(documents[0]?.memorandumOfArticles)}
+              className="btn btn-sm col-md-6"
+            >
+              <VisibilityIcon color="info" className="icon" />
+            </button>
+          ) : doc?.code === "APPL.BPAREG_OTHERS" ? (
+            <button type="button" title="View Document" onClick={() => getDocShareholding(documents[0]?.anyOtherDoc)} className="btn btn-sm col-md-6">
+              <VisibilityIcon color="info" className="icon" />
+            </button>
+          ) : (
+            ""
+          )}
+        </span>
+      </div>
     </div>
   );
 }

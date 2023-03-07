@@ -4786,7 +4786,7 @@ body {
   .ServiceCardOptions.empCard .ServiceCardHeader{
     background-image: url(https://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/banner-images/10.png);
   }
-  
+
   .Icon-side {
     position: absolute;
     right: 11px;
@@ -14152,6 +14152,7 @@ body {
   border-color: #464646;
   border-color: rgba(70, 70, 70, var(--border-opacity));
   width: 100%;
+  border-radius: 0.45rem;
 }
 
 .upload-file div {
