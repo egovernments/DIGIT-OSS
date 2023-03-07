@@ -14,6 +14,17 @@ import { IconButton } from "@mui/material";
 import { getDocShareholding } from "./ScrutinyDevelopment/docview.helper";
 
 
+// import {AiFillCheckCircle, AiFillCloseCircle} from "react-icons/ai";
+// import {AiFillCheckCircle, AiFillCloseCircle} from "react-icons/ai";
+// import CalculateIcon from '@mui/icons-material/Calculate';
+// import InfoIcon from '@mui/icons-material/Info';
+// import * as Icon from "react-bootstrap-icons";
+// import { XCircleFill } from "react-bootstrap-icons";
+// import { CheckCircleFill } from "react-bootstrap-icons";
+// import { ArrowDownCircleFill } from "react-bootstrap-icons";
+import CancelIcon from "@mui/icons-material/Cancel";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+
 
 const PersonalinfoChild = (props) => {
 
@@ -27,15 +38,16 @@ const PersonalinfoChild = (props) => {
   // let users = Digit.UserService.getUser();
   // const userRole = users?.info?.roles?.map((e) => e.code) || [];
 
-
+  //   const [handleChange,setHandleChange] =useState("");
+  //   const handleClose = () => setShow(false);
+  // const [handleshow ,setHandleShow] = () => setShow(true);
   const [smShow, setSmShow] = useState(false);
   const [labelValue, setLabelValue] = useState("");
   const Colors = {
     conditional: "#2874A6",
     approved: "#09cb3d",
     disapproved: "#ff0000",
-
-    info: "#FFB602"
+      info: "#FFB602"
   }
   const [selectedFieldData, setSelectedFieldData] = useState();
   const [fieldValue, setFieldValue] = useState("");
@@ -133,7 +145,7 @@ const PersonalinfoChild = (props) => {
   };
 
   const handlemodaldData = (data) => {
-    // setmodaldData(data.data);
+    setmodaldData(data.data);
     setSmShow(false);
     console.log("here", openedModal, data);
     if (openedModal && data) {
@@ -145,7 +157,46 @@ const PersonalinfoChild = (props) => {
     setOpennedModal("");
     setLabelValue("");
   };
+//////////////////////////////////////////Old code 
+// const [uncheckedValue, setUncheckedVlue] = useState([]);
+// const [checkValue, setCheckedVAlue] = useState([]);
 
+// const [modaldData, setmodaldData] = useState({ label: "", Remarks: "" });
+//   const [isyesOrNochecked, setYesorNochecked] = useState(true);
+
+//   const handlemodaldData = (data) => {
+//     setmodaldData(data.data);
+//     setSmShow(false);
+//   };
+
+//   const handleYesOrNochecked = (data) => {
+//     setYesorNochecked(data.data);
+//   };
+//   const handlemodalsubmit = () => {
+//     console.log("here");
+//     const filteredObj = uncheckedValue.filter((obj) => {
+//       return obj.label == modaldData.label;
+//     });
+
+//     if (isyesOrNochecked === false) {
+//       if (modaldData.label !== "" || modaldData.Remarks !== "") {
+//         if (filteredObj.length === 0) {
+//           setUncheckedVlue((prev) => [...prev, modaldData]);
+//         }
+//       }
+//     }
+//   };
+//   useEffect(() => {
+//     console.log("called");
+//     handlemodalsubmit();
+//   }, [modaldData.Remarks]);
+//   useEffect(() => {
+//     props.passUncheckedList({ data: uncheckedValue });
+//   }, [uncheckedValue]);
+//   console.log("unchecked values", uncheckedValue);
+
+//   console.log(uncheckedValue.indexOf("developer"));
+  
 
   return (
     <Form.Group style={{ display: props.displayPersonal }} className={classes.formGroup}>
@@ -905,6 +956,28 @@ const PersonalinfoChild = (props) => {
               disabled
             ></Form.Control>
             &nbsp;&nbsp;
+            <Form.Check
+                        value="Yes"
+                        type="radio"
+                        // onChange1={handleChange}
+                        // onClick={handleshow}
+                        id="default-radio"
+                        label={<CheckCircleIcon color="success"></CheckCircleIcon>}
+                        name="group41"
+                        inline
+                      ></Form.Check>
+                      <Form.Check
+                        // onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
+                        value="No"
+                        type="radio"
+                        id="default-radio"
+                        // onChange1={handleChange}
+                        // onClick={handleshow}
+                        label={<CancelIcon color="error" />}
+                        name="group41"
+                        inline
+                      ></Form.Check> 
+                       &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
                 display: hideRemarks || hideRemarksPatwari ? "none" : "block",

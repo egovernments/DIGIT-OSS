@@ -1,6 +1,7 @@
 import React, { useEffect, useReducer, useRef, useState } from "react";
 import { ArrowDown, CheckSvg } from "./svgindex";
 import { useTranslation } from "react-i18next";
+import Checkbox from '@mui/material/Checkbox';
 
 const MultiSelectDropdown = ({ options, optionsKey, selected = [], onSelect, defaultLabel = "", defaultUnit = "",BlockNumber=1,isOBPSMultiple=false,props={},isPropsNeeded=false,ServerStyle={}, showSelectedValue=false}) => {
   const [active, setActive] = useState(false);
@@ -91,6 +92,8 @@ const MultiSelectDropdown = ({ options, optionsKey, selected = [], onSelect, def
         style={{minWidth: "24px", width: "100%"}}
       />
       <div className="custom-checkbox">
+        {/* <Checkbox style={{innerWidth: "24px", width: "24px"}}/> */}
+        {/* ////old code  */}
         <CheckSvg style={{innerWidth: "24px", width: "24px"}}/>
       </div>
       <p className="label" style={index === optionIndex ? {
