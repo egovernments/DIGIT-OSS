@@ -1,4 +1,6 @@
 import * as Yup from "yup";
+const FILE_SIZE = 160 * 1024;
+const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/pdf"];
 
 const VALIDATION_SCHEMA = Yup.object().shape({
   licenseApplied: Yup.string().nullable().required("This field is required."),
@@ -66,36 +68,30 @@ const VALIDATION_SCHEMA = Yup.object().shape({
   // roadRemark: Yup.string().nullable().required("This field is required."),
   utilityLine: Yup.string().nullable().required("This field is required."),
   // landSchedule: Yup.string().required("A text is required"),
-  landSchedule: Yup.string()
-    .required("Only pdf,jpeg,png image required")
-    .test("fileSize", "File too large", (value) => value && value.size <= FILE_SIZE)
-    .test("fileFormat", "Unsupported Format", (value) => value && SUPPORTED_FORMATS.includes(value.type)),
-  mutation: Yup.string()
-    .required("Only pdf,jpeg,png image required")
-    .test("fileSize", "File too large", (value) => value && value.size <= FILE_SIZE)
-    .test("fileFormat", "Unsupported Format", (value) => value && SUPPORTED_FORMATS.includes(value.type)),
-  jambandhi: Yup.string()
-    .required("Only pdf,jpeg,png image required")
-    .test("fileSize", "File too large", (value) => value && value.size <= FILE_SIZE)
-    .test("fileFormat", "Unsupported Format", (value) => value && SUPPORTED_FORMATS.includes(value.type)),
-  detailsOfLease: Yup.string()
-    .required("Only pdf,jpeg,png image required")
-    .test("fileSize", "File too large", (value) => value && value.size <= FILE_SIZE)
-    .test("fileFormat", "Unsupported Format", (value) => value && SUPPORTED_FORMATS.includes(value.type)),
-  addSalesDeed: Yup.string()
-    .required("Only pdf,jpeg,png image required")
-    .test("fileSize", "File too large", (value) => value && value.size <= FILE_SIZE)
-    .test("fileFormat", "Unsupported Format", (value) => value && SUPPORTED_FORMATS.includes(value.type)),
-  copyofSpaBoard: Yup.string()
-    .required("Only pdf,jpeg,png image required")
-    .test("fileSize", "File too large", (value) => value && value.size <= FILE_SIZE)
-    .test("fileFormat", "Unsupported Format", (value) => value && SUPPORTED_FORMATS.includes(value.type)),
-  // copyofSpaBoard: Yup.string()
-  //   .required("Only zip/dxf image required")
+  // landSchedule: Yup.string()
+  //   .required("Only pdf,jpeg,png image required")
   //   .test("fileSize", "File too large", (value) => value && value.size <= FILE_SIZE)
   //   .test("fileFormat", "Unsupported Format", (value) => value && SUPPORTED_FORMATS.includes(value.type)),
-  // utilityWidth: Yup.string().nullable().required("This field is required."),
-  // utilityRemark: Yup.string().nullable().required("This field is required."),
+  // mutation: Yup.string()
+  //   .required("Only pdf,jpeg,png image required")
+  //   .test("fileSize", "File too large", (value) => value && value.size <= FILE_SIZE)
+  //   .test("fileFormat", "Unsupported Format", (value) => value && SUPPORTED_FORMATS.includes(value.type)),
+  // jambandhi: Yup.string()
+  //   .required("Only pdf,jpeg,png image required")
+  //   .test("fileSize", "File too large", (value) => value && value.size <= FILE_SIZE)
+  //   .test("fileFormat", "Unsupported Format", (value) => value && SUPPORTED_FORMATS.includes(value.type)),
+  // detailsOfLease: Yup.string()
+  //   .required("Only pdf,jpeg,png image required")
+  //   .test("fileSize", "File too large", (value) => value && value.size <= FILE_SIZE)
+  //   .test("fileFormat", "Unsupported Format", (value) => value && SUPPORTED_FORMATS.includes(value.type)),
+  // addSalesDeed: Yup.string()
+  //   .required("Only pdf,jpeg,png image required")
+  //   .test("fileSize", "File too large", (value) => value && value.size <= FILE_SIZE)
+  //   .test("fileFormat", "Unsupported Format", (value) => value && SUPPORTED_FORMATS.includes(value.type)),
+  // copyofSpaBoard: Yup.string()
+  //   .required("Only pdf,jpeg,png image required")
+  //   .test("fileSize", "File too large", (value) => value && value.size <= FILE_SIZE)
+  //   .test("fileFormat", "Unsupported Format", (value) => value && SUPPORTED_FORMATS.includes(value.type)),
 });
 // const MODAL_VALIDATION_SCHEMA = Yup.object().shape({
 //   previousLicensenumber: Yup.string().nullable().required("This field is required."),
