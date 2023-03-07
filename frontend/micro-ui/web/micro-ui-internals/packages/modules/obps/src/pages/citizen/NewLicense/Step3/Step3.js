@@ -411,8 +411,7 @@ const LandScheduleForm = (props) => {
       return error.message;
     }
   };
-  const FILE_SIZE = 160 * 1024;
-  const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/pdf"];
+
   const getApplicantUserData = async (id) => {
     const token = window?.localStorage?.getItem("token");
     const payload = {
@@ -497,6 +496,10 @@ const LandScheduleForm = (props) => {
     // resetValues();
     setmodal(false);
   };
+
+  useEffect(() => {
+    console.log("errors", errors);
+  }, [errors]);
 
   return (
     <div>

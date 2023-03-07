@@ -638,7 +638,7 @@ const AppliedDetailForm = (props) => {
               setValue(x?.id, x?.area);
               return (
                 <div key={i}>
-                  <h6>
+                  <h6 style={{ marginTop: "10px" }}>
                     <span>
                       <b>Purpose Name: </b>
                     </span>
@@ -664,6 +664,8 @@ const AppliedDetailForm = (props) => {
                             // const updatedData = updateAreaById(newDataA, x?.id, e?.target?.value);
                           }}
                         />
+                        <span style={{ fontSize: "13px", fontWeight: "bold" }}>Max Percentage:</span> {x?.maxPercentage},{" "}
+                        <span style={{ fontSize: "13px", fontWeight: "bold" }}>Min Percentage:</span> {x?.minPercentage}
                       </h6>
                     </div>
                     {farsArr?.length > 0 && (
