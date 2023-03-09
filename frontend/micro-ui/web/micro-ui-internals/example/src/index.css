@@ -4825,6 +4825,10 @@ body {
     margin: 0.2rem 0;
     color: #262626;
   }
+
+  .links-redirect a:hover {
+    color: #0056b3
+  }
 }
 
 .WhatsNewCard {
