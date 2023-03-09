@@ -8,65 +8,65 @@ serviceMaps:
       queryMaps:
 
         - query: INSERT INTO eg_service_definition(id, tenantid, code, isactive, createdby, lastmodifiedby, createdtime, lastmodifiedtime, additionaldetails, clientid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-          basePath: $.serviceDefinition
+          basePath: $.ServiceDefinition
           jsonMaps:
-            - jsonPath: $.serviceDefinition.id
+            - jsonPath: $.ServiceDefinition.id
 
-            - jsonPath: $.serviceDefinition.tenantId
+            - jsonPath: $.ServiceDefinition.tenantId
 
-            - jsonPath: $.serviceDefinition.code
+            - jsonPath: $.ServiceDefinition.code
 
-            - jsonPath: $.serviceDefinition.isActive
+            - jsonPath: $.ServiceDefinition.isActive
 
-            - jsonPath: $.serviceDefinition.auditDetails.createdBy
+            - jsonPath: $.ServiceDefinition.auditDetails.createdBy
 
-            - jsonPath: $.serviceDefinition.auditDetails.lastModifiedBy
+            - jsonPath: $.ServiceDefinition.auditDetails.lastModifiedBy
 
-            - jsonPath: $.serviceDefinition.auditDetails.createdTime
+            - jsonPath: $.ServiceDefinition.auditDetails.createdTime
 
-            - jsonPath: $.serviceDefinition.auditDetails.lastModifiedTime
+            - jsonPath: $.ServiceDefinition.auditDetails.lastModifiedTime
 
-            - jsonPath: $.serviceDefinition.additionalDetails
+            - jsonPath: $.ServiceDefinition.additionalDetails
               type: JSON
               dbType: JSONB
 
-            - jsonPath: $.serviceDefinition.clientId
+            - jsonPath: $.ServiceDefinition.clientId
 
 
         - query: INSERT INTO eg_service_attribute_definition(id, referenceid, tenantid, code, datatype, "values", isactive, required, regex, "order", createdby, lastmodifiedby, createdtime, lastmodifiedtime, additionaldetails) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-          basePath: $.serviceDefinition.attributes.*
+          basePath: $.ServiceDefinition.attributes.*
           jsonMaps:
-            - jsonPath: $.serviceDefinition.attributes.*.id
+            - jsonPath: $.ServiceDefinition.attributes.*.id
 
-            - jsonPath: $.serviceDefinition.attributes.*.referenceId
+            - jsonPath: $.ServiceDefinition.attributes.*.referenceId
 
-            - jsonPath: $.serviceDefinition.attributes.*.tenantId
+            - jsonPath: $.ServiceDefinition.attributes.*.tenantId
 
-            - jsonPath: $.serviceDefinition.attributes.*.code
+            - jsonPath: $.ServiceDefinition.attributes.*.code
 
-            - jsonPath: $.serviceDefinition.attributes.*.dataType
+            - jsonPath: $.ServiceDefinition.attributes.*.dataType
 
-            - jsonPath: $.serviceDefinition.attributes.*.values
+            - jsonPath: $.ServiceDefinition.attributes.*.values
               type: ARRAY
               dbType: STRING
 
-            - jsonPath: $.serviceDefinition.attributes.*.isActive
+            - jsonPath: $.ServiceDefinition.attributes.*.isActive
 
-            - jsonPath: $.serviceDefinition.attributes.*.required
+            - jsonPath: $.ServiceDefinition.attributes.*.required
 
-            - jsonPath: $.serviceDefinition.attributes.*.regex
+            - jsonPath: $.ServiceDefinition.attributes.*.regex
 
-            - jsonPath: $.serviceDefinition.attributes.*.order
+            - jsonPath: $.ServiceDefinition.attributes.*.order
 
-            - jsonPath: $.serviceDefinition.attributes.*.auditDetails.createdBy
+            - jsonPath: $.ServiceDefinition.attributes.*.auditDetails.createdBy
 
-            - jsonPath: $.serviceDefinition.attributes.*.auditDetails.lastModifiedBy
+            - jsonPath: $.ServiceDefinition.attributes.*.auditDetails.lastModifiedBy
 
-            - jsonPath: $.serviceDefinition.attributes.*.auditDetails.createdTime
+            - jsonPath: $.ServiceDefinition.attributes.*.auditDetails.createdTime
 
-            - jsonPath: $.serviceDefinition.attributes.*.auditDetails.lastModifiedTime
+            - jsonPath: $.ServiceDefinition.attributes.*.auditDetails.lastModifiedTime
 
-            - jsonPath: $.serviceDefinition.attributes.*.additionalDetails
+            - jsonPath: $.ServiceDefinition.attributes.*.additionalDetails
               type: JSON
               dbType: JSONB
 
@@ -82,54 +82,54 @@ serviceMaps:
 
 
         - query: INSERT INTO eg_service(id, tenantid, servicedefid, referenceid, createdby, lastmodifiedby, createdtime, lastmodifiedtime, additionaldetails, accountid, clientid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-          basePath: $.service
+          basePath: $.Service
           jsonMaps:
-            - jsonPath: $.service.id
+            - jsonPath: $.Service.id
 
-            - jsonPath: $.service.tenantId
+            - jsonPath: $.Service.tenantId
 
-            - jsonPath: $.service.serviceDefId
+            - jsonPath: $.Service.serviceDefId
 
-            - jsonPath: $.service.referenceId
+            - jsonPath: $.Service.referenceId
 
-            - jsonPath: $.service.auditDetails.createdBy
+            - jsonPath: $.Service.auditDetails.createdBy
 
-            - jsonPath: $.service.auditDetails.lastModifiedBy
+            - jsonPath: $.Service.auditDetails.lastModifiedBy
 
-            - jsonPath: $.service.auditDetails.createdTime
+            - jsonPath: $.Service.auditDetails.createdTime
 
-            - jsonPath: $.service.auditDetails.lastModifiedTime
+            - jsonPath: $.Service.auditDetails.lastModifiedTime
 
-            - jsonPath: $.service.additionalDetails
+            - jsonPath: $.Service.additionalDetails
               type: JSON
               dbType: JSONB
 
-            - jsonPath: $.service.accountId
+            - jsonPath: $.Service.accountId
 
-            - jsonPath: $.service.clientId
+            - jsonPath: $.Service.clientId
 
 
         - query: INSERT INTO eg_service_attribute_value(id, referenceid, attributecode, value, createdby, lastmodifiedby, createdtime, lastmodifiedtime, additionaldetails) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
-          basePath: $.service.attributes.*
+          basePath: $.Service.attributes.*
           jsonMaps:
-            - jsonPath: $.service.attributes.*.id
+            - jsonPath: $.Service.attributes.*.id
 
-            - jsonPath: $.service.attributes.*.referenceId
+            - jsonPath: $.Service.attributes.*.referenceId
 
-            - jsonPath: $.service.attributes.*.attributeCode
+            - jsonPath: $.Service.attributes.*.attributeCode
 
-            - jsonPath: $.service.attributes.*.value
+            - jsonPath: $.Service.attributes.*.value
               type: JSON
               dbType: JSONB
 
-            - jsonPath: $.service.attributes.*.auditDetails.createdBy
+            - jsonPath: $.Service.attributes.*.auditDetails.createdBy
 
-            - jsonPath: $.service.attributes.*.auditDetails.lastModifiedBy
+            - jsonPath: $.Service.attributes.*.auditDetails.lastModifiedBy
 
-            - jsonPath: $.service.attributes.*.auditDetails.createdTime
+            - jsonPath: $.Service.attributes.*.auditDetails.createdTime
 
-            - jsonPath: $.service.attributes.*.auditDetails.lastModifiedTime
+            - jsonPath: $.Service.attributes.*.auditDetails.lastModifiedTime
 
-            - jsonPath: $.service.attributes.*.additionalDetails
+            - jsonPath: $.Service.attributes.*.additionalDetails
               type: JSON
               dbType: JSONB
