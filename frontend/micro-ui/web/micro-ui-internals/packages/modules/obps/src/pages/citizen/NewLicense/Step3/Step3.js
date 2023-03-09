@@ -411,8 +411,7 @@ const LandScheduleForm = (props) => {
       return error.message;
     }
   };
-  const FILE_SIZE = 160 * 1024;
-  const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/pdf"];
+
   const getApplicantUserData = async (id) => {
     const token = window?.localStorage?.getItem("token");
     const payload = {
@@ -1524,55 +1523,61 @@ const LandScheduleForm = (props) => {
                     {watch("siteApproachable") === "Y" && (
                       <div>
                         <div class="row">
-                          <div class="col-12">
-                            <div class="col-6">
-                              <h2>
-                                (a)&nbsp;Approach available from minimum 4 karam (22 ft) wide revenue rasta.
-                                <span style={{ color: "red" }}>*</span>
-                              </h2>
-                            </div>
-                            <div class="col-6">
-                              <label>
-                                <input {...register("minimumApproachFour")} type="radio" value="Y" id="minimumApproachFour" />
-                                &nbsp; Yes &nbsp;&nbsp;
-                              </label>
-                              <label>
-                                <input {...register("minimumApproachFour")} type="radio" value="N" id="minimumApproachFour" />
-                                &nbsp; No &nbsp;&nbsp;
-                              </label>
+                          <div class="col-sm-6 text-left">
+                            <h2>
+                              (a)&nbsp;Approach available from minimum 4 karam (22 ft) wide revenue rasta.
+                              <span style={{ color: "red" }}>*</span>
+                            </h2>
+                          </div>
+                          <div class="col-sm-6 text-right">
+                            <label>
+                              <input {...register("minimumApproachFour")} type="radio" value="Y" id="minimumApproachFour" />
+                              &nbsp; Yes &nbsp;&nbsp;
+                            </label>
+                            <label>
+                              <input {...register("minimumApproachFour")} type="radio" value="N" id="minimumApproachFour" />
+                              &nbsp; No &nbsp;&nbsp;
+                            </label>
 
-                              <h3 className="error-message" style={{ color: "red" }}>
-                                {errors?.minimumApproachFour && errors?.minimumApproachFour?.message}
-                              </h3>
-                            </div>
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.minimumApproachFour && errors?.minimumApproachFour?.message}
+                            </h3>
                           </div>
                         </div>
                         <div className="row">
-                          <div className="col col-8">
+                          <div class="col-sm-6 text-left">
                             <h2>
                               (b)&nbsp;&nbsp;Approach available from minimum 11 feet wide revenue rasta and applied site abuts acquired alignment of
                               the sector road and there is no stay regarding construction on the land falling under the abutting sector road.
                               <span style={{ color: "red" }}>*</span>{" "}
-                              <label htmlFor="minimumApproachEleven">
-                                <input {...register("minimumApproachEleven")} type="radio" value="Y" id="minimumApproachEleven" />
-                                &nbsp; Yes &nbsp;&nbsp;
-                              </label>
-                              <label htmlFor="minimumApproachEleven">
-                                <input {...register("minimumApproachEleven")} type="radio" value="N" id="minimumApproachEleven" />
-                                &nbsp; No &nbsp;&nbsp;
-                              </label>
                             </h2>
+                          </div>
+                          <div class="col-sm-6 text-right">
+                            <label htmlFor="minimumApproachEleven">
+                              <input {...register("minimumApproachEleven")} type="radio" value="Y" id="minimumApproachEleven" />
+                              &nbsp; Yes &nbsp;&nbsp;
+                            </label>
+                            <label htmlFor="minimumApproachEleven">
+                              <input {...register("minimumApproachEleven")} type="radio" value="N" id="minimumApproachEleven" />
+                              &nbsp; No &nbsp;&nbsp;
+                            </label>
+
                             <h3 className="error-message" style={{ color: "red" }}>
                               {errors?.minimumApproachEleven && errors?.minimumApproachEleven?.message}
                             </h3>
                           </div>
                         </div>
-                        <div className="col col-12">
-                          <h2>
-                            (c)&nbsp;&nbsp;Applied site abouts already constructed sector road or internal circulation road of approved sectoral plan
-                            (of min. 18m/24m width as the case may be) provided its entire stretch required for approach is licenced and is further
-                            leading upto atleast 4 karam wide revenue rasta.<span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-                            <label htmlFor="alreadyConstructedSector">
+                        &nbsp;&nbsp;
+                        <div className="row">
+                          <div class="col-sm-6 text-left">
+                            <h2>
+                              (c)&nbsp;&nbsp;Applied site abouts already constructed sector road or internal circulation road of approved sectoral
+                              plan (of min. 18m/24m width as the case may be) provided its entire stretch required for approach is licenced and is
+                              further leading upto atleast 4 karam wide revenue rasta.<span style={{ color: "red" }}>*</span>
+                            </h2>
+                          </div>
+                          <div class="col-sm-6 text-right">
+                            <label>
                               <input {...register("alreadyConstructedSector")} type="radio" value="Y" id="alreadyConstructedSector" />
                               &nbsp; Yes &nbsp;&nbsp;
                             </label>
@@ -1580,15 +1585,21 @@ const LandScheduleForm = (props) => {
                               <input {...register("alreadyConstructedSector")} type="radio" value="N" id="alreadyConstructedSector" />
                               &nbsp; No &nbsp;&nbsp;
                             </label>
-                          </h2>
-                          <h3 className="error-message" style={{ color: "red" }}>
-                            {errors?.alreadyConstructedSector && errors?.alreadyConstructedSector?.message}
-                          </h3>
+
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.alreadyConstructedSector && errors?.alreadyConstructedSector?.message}
+                            </h3>
+                          </div>
                         </div>
-                        <div className="col col-12">
-                          <h2>
-                            (d)&nbsp;&nbsp;Applied land is accessible from a minimum 4 karam wide rasta through adjoining own land of the applicant
-                            (but not applied for licence).<span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                        &nbsp;&nbsp;
+                        <div className="row">
+                          <div class="col-sm-6 text-left">
+                            <h2>
+                              (d)&nbsp;&nbsp;Applied land is accessible from a minimum 4 karam wide rasta through adjoining own land of the applicant
+                              (but not applied for licence).<span style={{ color: "red" }}>*</span>
+                            </h2>
+                          </div>
+                          <div class="col-sm-6 text-right">
                             <label htmlFor="adjoiningOwnLand">
                               <input {...register("adjoiningOwnLand")} type="radio" value="Y" id="adjoiningOwnLand" />
                               &nbsp; Yes &nbsp;&nbsp;
@@ -1597,16 +1608,23 @@ const LandScheduleForm = (props) => {
                               <input {...register("adjoiningOwnLand")} type="radio" value="N" id="adjoiningOwnLand" />
                               &nbsp; No &nbsp;&nbsp;
                             </label>
-                          </h2>
-                          <h3 className="error-message" style={{ color: "red" }}>
-                            {errors?.adjoiningOwnLand && errors?.adjoiningOwnLand?.message}
-                          </h3>
-                          {watch("adjoiningOwnLand") === "Y" && (
-                            <div>
-                              <h2>
-                                (d1)&nbsp;&nbsp;If applicable, whether the applicant has donated at least 4 karam wide strip from its adjoining own
-                                land in favour of the Gram Panchayat/Municipality, in order to connect the applied site to existing 4 karam rasta?.
-                                <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                          </div>
+                        </div>
+                        <h3 className="error-message" style={{ color: "red" }}>
+                          {errors?.adjoiningOwnLand && errors?.adjoiningOwnLand?.message}
+                        </h3>
+                        &nbsp;&nbsp;
+                        {watch("adjoiningOwnLand") === "Y" && (
+                          <div>
+                            <div className="row">
+                              <div class="col-sm-6 text-left">
+                                <h2>
+                                  (d1)&nbsp;&nbsp;If applicable, whether the applicant has donated at least 4 karam wide strip from its adjoining own
+                                  land in favour of the Gram Panchayat/Municipality, in order to connect the applied site to existing 4 karam rasta?.
+                                  <span style={{ color: "red" }}>*</span>
+                                </h2>
+                              </div>
+                              <div class="col-sm-6 text-right">
                                 <label htmlFor="applicantHasDonated">
                                   <input {...register("applicantHasDonated")} type="radio" value="Y" id="applicantHasDonated" />
                                   &nbsp; Yes &nbsp;&nbsp;
@@ -1615,38 +1633,48 @@ const LandScheduleForm = (props) => {
                                   <input {...register("applicantHasDonated")} type="radio" value="N" id="applicantHasDonated" />
                                   &nbsp; No &nbsp;&nbsp;
                                 </label>
-                              </h2>
-                              <h3 className="error-message" style={{ color: "red" }}>
-                                {errors?.applicantHasDonated && errors?.applicantHasDonated?.message}
-                              </h3>
-                              {watch("applicantHasDonated") === "Y" && (
-                                <div className="col col-3">
-                                  <h2 style={{ display: "flex" }}>
-                                    Upload copy of Gift Deed/ Hibbanama <span style={{ color: "red" }}>*</span>
-                                  </h2>
-                                  <label>
-                                    <FileUpload style={{ cursor: "pointer" }} color="primary" />
-                                    <input
-                                      type="file"
-                                      style={{ display: "none" }}
-                                      onChange={(e) => getDocumentData(e?.target?.files[0], "giftDeedHibbanama")}
-                                      accept="application/pdf/jpeg/png"
-                                    />
-                                  </label>
-                                  {watch("giftDeedHibbanama") && (
-                                    <a onClick={() => getDocShareholding(watch("giftDeedHibbanama"), setLoader)} className="btn btn-sm ">
-                                      <VisibilityIcon color="info" className="icon" />
-                                    </a>
-                                  )}
-                                </div>
-                              )}
+                              </div>
                             </div>
-                          )}
-                        </div>
-                        <div className="col col-12">
-                          <h2>
-                            (e)&nbsp;&nbsp;Applied land is accessible from a minimum 4 karam wide rasta through adjoining other’s land
-                            <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.applicantHasDonated && errors?.applicantHasDonated?.message}
+                            </h3>
+                            &nbsp;&nbsp;
+                            {watch("applicantHasDonated") === "Y" && (
+                              <div>
+                                <div className="row">
+                                  <div class="col-sm-6 text-left">
+                                    <h2 style={{ display: "flex" }}>
+                                      Upload copy of Gift Deed/ Hibbanama <span style={{ color: "red" }}>*</span>
+                                    </h2>
+                                    <label>
+                                      <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                                      <input
+                                        type="file"
+                                        style={{ display: "none" }}
+                                        onChange={(e) => getDocumentData(e?.target?.files[0], "giftDeedHibbanama")}
+                                        accept="application/pdf/jpeg/png"
+                                      />
+                                    </label>
+                                    {watch("giftDeedHibbanama") && (
+                                      <a onClick={() => getDocShareholding(watch("giftDeedHibbanama"), setLoader)} className="btn btn-sm ">
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </a>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                        &nbsp;&nbsp;
+                        <div className="row">
+                          <div class="col-sm-6 text-left">
+                            <h2>
+                              (e)&nbsp;&nbsp;Applied land is accessible from a minimum 4 karam wide rasta through adjoining other’s land
+                              <span style={{ color: "red" }}>*</span>
+                            </h2>
+                          </div>
+                          <div class="col-sm-6 text-right">
                             <label htmlFor="adjoiningOthersLand">
                               <input {...register("adjoiningOthersLand")} type="radio" value="Y" id="adjoiningOthersLand" />
                               &nbsp; Yes &nbsp;&nbsp;
@@ -1655,17 +1683,24 @@ const LandScheduleForm = (props) => {
                               <input {...register("adjoiningOthersLand")} type="radio" value="N" id="adjoiningOthersLand" />
                               &nbsp; No &nbsp;&nbsp;
                             </label>
-                          </h2>
-                          <h3 className="error-message" style={{ color: "red" }}>
-                            {errors?.adjoiningOthersLand && errors?.adjoiningOthersLand?.message}
-                          </h3>
-                          {watch("adjoiningOthersLand") === "Y" && (
-                            <div>
-                              <h2>
-                                (e1)&nbsp;&nbsp;whether the land-owner of the adjoining land has donated at least 4 karam wide strip of land to the
-                                Gram Panchayat/Municipality, in a manner that the applied site gets connected to existing public rasta of atleast 4
-                                karam width?.
-                                <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                          </div>
+                        </div>
+                        <h3 className="error-message" style={{ color: "red" }}>
+                          {errors?.adjoiningOthersLand && errors?.adjoiningOthersLand?.message}
+                        </h3>
+                        &nbsp;&nbsp;
+                        {watch("adjoiningOthersLand") === "Y" && (
+                          <div>
+                            <div className="row">
+                              <div class="col-sm-6 text-left">
+                                <h2>
+                                  (e1)&nbsp;&nbsp;whether the land-owner of the adjoining land has donated at least 4 karam wide strip of land to the
+                                  Gram Panchayat/Municipality, in a manner that the applied site gets connected to existing public rasta of atleast 4
+                                  karam width?.
+                                  <span style={{ color: "red" }}>*</span>
+                                </h2>
+                              </div>
+                              <div class="col-sm-6 text-right">
                                 <label htmlFor="landOwnerDonated">
                                   <input {...register("landOwnerDonated")} type="radio" value="Y" id="landOwnerDonated" />
                                   &nbsp; Yes &nbsp;&nbsp;
@@ -1674,51 +1709,64 @@ const LandScheduleForm = (props) => {
                                   <input {...register("landOwnerDonated")} type="radio" value="N" id="landOwnerDonated" />
                                   &nbsp; No &nbsp;&nbsp;
                                 </label>
-                              </h2>
-                              <h3 className="error-message" style={{ color: "red" }}>
-                                {errors?.landOwnerDonated && errors?.landOwnerDonated?.message}
-                              </h3>
-                              {watch("landOwnerDonated") === "Y" && (
-                                <div className="col col-3">
-                                  <h2 style={{ display: "flex" }}>
-                                    Upload copy of Gift Deed/ Hibbanama <span style={{ color: "red" }}>*</span>
-                                  </h2>
-                                  <label>
-                                    <FileUpload style={{ cursor: "pointer" }} color="primary" />
-                                    <input
-                                      type="file"
-                                      style={{ display: "none" }}
-                                      onChange={(e) => getDocumentData(e?.target?.files[0], "giftDeedHibbanama")}
-                                      accept="application/pdf/jpeg/png"
-                                    />
-                                  </label>
-                                  {watch("giftDeedHibbanama") && (
-                                    <a onClick={() => getDocShareholding(watch("giftDeedHibbanama"), setLoader)} className="btn btn-sm ">
-                                      <VisibilityIcon color="info" className="icon" />
-                                    </a>
-                                  )}
-                                </div>
-                              )}
+                              </div>
                             </div>
-                          )}
-                        </div>
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.landOwnerDonated && errors?.landOwnerDonated?.message}
+                            </h3>
+                            &nbsp;&nbsp;
+                            {watch("landOwnerDonated") === "Y" && (
+                              <div>
+                                <div className="row">
+                                  <div class="col-sm-6 text-left">
+                                    <h2 style={{ display: "flex" }}>
+                                      Upload copy of Gift Deed/ Hibbanama <span style={{ color: "red" }}>*</span>
+                                    </h2>
+                                    <label>
+                                      <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                                      <input
+                                        type="file"
+                                        style={{ display: "none" }}
+                                        onChange={(e) => getDocumentData(e?.target?.files[0], "giftDeedHibbanama")}
+                                        accept="application/pdf/jpeg/png"
+                                      />
+                                    </label>
+                                    {watch("giftDeedHibbanama") && (
+                                      <a onClick={() => getDocShareholding(watch("giftDeedHibbanama"), setLoader)} className="btn btn-sm ">
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </a>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        )}
                       </div>
                     )}
                     {watch("siteApproachable") === "N" && (
                       <div>
-                        <div className="col col-12">
-                          <div className="col col-3">
+                        <div className="row">
+                          <div class="col-sm-9 text-left">
                             <label>
                               <h2>(a)&nbsp;&nbsp;Enter Width in Meters</h2>{" "}
                             </label>
+                          </div>
+                          <div class="col-sm-3 text-right">
                             <input type="number" {...register("constructedRowWidth")} className="form-control" />
                           </div>
                         </div>
-                        <div className="col col-12">
-                          <h2>
-                            (b)&nbsp;&nbsp;Whether irrevocable consent from such developer/ colonizer for uninterrupted usage of such internal road
-                            for the purpose of development of the colony by the applicant or by its agencies and for usage by its allottees submitted
-                            <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                        &nbsp;&nbsp;
+                        <div className="row">
+                          <div class="col-sm-6 text-left">
+                            <h2>
+                              (b)&nbsp;&nbsp;Whether irrevocable consent from such developer/ colonizer for uninterrupted usage of such internal road
+                              for the purpose of development of the colony by the applicant or by its agencies and for usage by its allottees
+                              submitted
+                              <span style={{ color: "red" }}>*</span>
+                            </h2>
+                          </div>
+                          <div class="col-sm-6 text-right">
                             <label htmlFor="irrevocableConsent">
                               <input {...register("irrevocableConsent")} type="radio" value="Y" id="irrevocableConsent" />
                               &nbsp; Yes &nbsp;&nbsp;
@@ -1727,7 +1775,7 @@ const LandScheduleForm = (props) => {
                               <input {...register("irrevocableConsent")} type="radio" value="N" id="irrevocableConsent" />
                               &nbsp; No &nbsp;&nbsp;
                             </label>
-                          </h2>
+                          </div>
                           <h3 className="error-message" style={{ color: "red" }}>
                             {errors?.irrevocableConsent && errors?.irrevocableConsent?.message}
                           </h3>
