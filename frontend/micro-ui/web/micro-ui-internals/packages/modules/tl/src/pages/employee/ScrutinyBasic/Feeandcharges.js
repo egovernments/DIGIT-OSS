@@ -28,6 +28,8 @@ const style = {
 };
 
 const Feeandcharges = (props) => {
+const feeandcharges = props.feeandchargesData
+
 
   const feeAndChargesData = props.ApiResponseData
 
@@ -94,6 +96,8 @@ const Feeandcharges = (props) => {
 
   const [uncheckedValue, setUncheckedVlue] = useState([]);
   console.log(uncheckedValue);
+  console.log("step5" ,feeandcharges);
+
   return (
     <Form
       ref={props.feeandchargesInfoRef}
@@ -277,7 +281,36 @@ const Feeandcharges = (props) => {
                     <br></br> */}
 
                   </Col>
+
+
+
                 </Row>
+                      {feeandcharges?.feesTypeCalculationDto?.map((item, index) => (
+                      
+                      <div style={{ marginLeft: 52 }}>
+  { index?.item?.map((x,i) =>(
+                        <Row >
+                          <h4 className="mt-3">
+                            <b>Purpose Name: </b>
+                            {item?.name}
+                          </h4>
+
+                          <h4 className="mt-3">
+                            Area:
+                            <Col className="col col-4" >
+                              <input type="text" className="form-control" placeholder={item?.area} disabled />
+                            </Col>
+                          </h4>
+                          </Row>
+))}
+                          </div>
+                        
+                      
+                      ))}
+
+
+
+
               </Form.Group>
             </Card>
 
