@@ -21,6 +21,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
   const userInfo = Digit.UserService.getUser();
+  const [documentsUploadList, setDocumentsList] = useState([]);
   const [documents, setDocuments] = useState(formData?.documents?.documents || []);
   const [tradeType, setTradeType] = useState("");
   const [error, setError] = useState(null);
@@ -62,8 +63,8 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
       const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${userInfo?.info?.id}&isAllData=true`, requestResp, {});
       const developerDataGet = getDevDetails?.data;
       setTradeType(developerDataGet?.devDetail[0]?.applicantType?.licenceType);
-      setDocuments(developerDataGet?.devDetail[0]?.licensesDoc);
-      // console.log("TRADETYPE", tradeType);
+      setDocumentsList(developerDataGet?.devDetail[0]?.licensesDoc);
+      // console.log("TRADETYPE", documentsUploadList);
 
       let filtredBpaDocs = [];
       if (data?.StakeholderRegistraition?.TradeTypetoRoleMapping) {
@@ -159,18 +160,18 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
   useEffect(() => {
     let count = 0;
     // console.log("DEVC", documents);
-    bpaTaxDocuments.map((doc) => {
+    bpaTaxDocuments?.map((doc) => {
       let isRequired = false;
 
-      documents.map((data) => {
+      documents?.map((data) => {
         // if (doc.required && data !== null && data && doc.code == `${data.documentType.split(".")[0]}.${data.documentType.split(".")[1]}`) {
         //   isRequired = true;
         // }
         // if (doc.required && doc.code == `${data.documentType.split(".")[0]}.${data.documentType.split(".")[1]}`) {
         // }
-        // console.log("ALLOW", data);
+        console.log("ALLOW", data);
 
-        if (doc.required == true && data !== null && data && doc.code == data.documentType) {
+        if (doc.required == true && data !== null && doc.code == data.documentType) {
           // console.log("YES");
           isRequired = true;
         }
@@ -190,10 +191,14 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
 
       if (!isRequired && doc.required == true) {
         count = count + 1;
+        // console.log("+_+_+_+", count);
       }
     });
-    if ((count == "0" || count == 0) && documents.length > 0) setEnableSubmit(false);
-    else setEnableSubmit(true);
+    if (((count == "0" || count == 0) && documents?.length > 0) || documentsUploadList?.length > 0) {
+      setEnableSubmit(false);
+    } else {
+      setEnableSubmit(true);
+    }
   }, [documents, checkRequiredFields]);
   const navigate = useHistory();
 
@@ -260,6 +265,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
                       error={error}
                       setError={setError}
                       setDocuments={setDocuments}
+                      documentsUploadList={documentsUploadList}
                       documents={documents}
                       setCheckRequiredFields={setCheckRequiredFields}
                       isCitizenUrl={isCitizenUrl}
@@ -287,7 +293,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
   );
 };
 
-function SelectDocument({ t, document: doc, setDocuments, error, setError, documents, setCheckRequiredFields, isCitizenUrl }) {
+function SelectDocument({ t, document: doc, setDocuments, documentsUploadList, error, setError, documents, setCheckRequiredFields, isCitizenUrl }) {
   // const docData = documents?.map((docs, index) => {
   //   setDocList(docs.documentUid);
   // });
@@ -311,7 +317,7 @@ function SelectDocument({ t, document: doc, setDocuments, error, setError, docum
   const [uploadedFile, setUploadedFile] = useState(() => filteredDocument?.fileStoreId || null);
   setValue("finalDocList", filteredDocument?.fileStoreId);
   // setArticlesOfAssociation(uploadedFile);
-  // console.log("FILTEREDDOC", articlesOfAssociation);
+  // console.log("FILTEREDDOC", doc);
 
   // console.log("HGHGHG", docList);
   const handleSelectDocument = (value) => setSelectedDocument(value);
@@ -391,42 +397,95 @@ function SelectDocument({ t, document: doc, setDocuments, error, setError, docum
           message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
           iserror={error}
         />
-        <span style={{ margin: "0 0.5rem" }}>
-          {doc?.code === "ARTICLES_OF_ASSOCIATION" ? (
-            <button
-              type="button"
-              title="View Document"
-              onClick={() => getDocShareholding(documents[0]?.articlesOfAssociation)}
-              className="btn btn-sm col-md-6"
-            >
-              <VisibilityIcon color="info" className="icon" />
-            </button>
-          ) : doc?.code === "REGISTERED_IRREVOCABLE_PARTNERSHIP_DEED" ? (
-            <button
-              type="button"
-              title="View Document"
-              onClick={() => getDocShareholding(documents[0]?.registeredIrrevocablePaternshipDeed)}
-              className="btn btn-sm col-md-6"
-            >
-              <VisibilityIcon color="info" className="icon" />
-            </button>
-          ) : doc?.code === "MEMORANDUM_OF_ARTICLES" ? (
-            <button
-              type="button"
-              title="View Document"
-              onClick={() => getDocShareholding(documents[0]?.memorandumOfArticles)}
-              className="btn btn-sm col-md-6"
-            >
-              <VisibilityIcon color="info" className="icon" />
-            </button>
-          ) : doc?.code === "APPL.BPAREG_OTHERS" ? (
-            <button type="button" title="View Document" onClick={() => getDocShareholding(documents[0]?.anyOtherDoc)} className="btn btn-sm col-md-6">
-              <VisibilityIcon color="info" className="icon" />
-            </button>
-          ) : (
-            ""
-          )}
-        </span>
+        {
+          // <span style={{ margin: "0 0.5rem" }}>
+          //   {doc?.code === "ARTICLES_OF_ASSOCIATION" ? (
+          //     documents?.data?.documentType == "ARTICLES_OF_ASSOCIATION" ? (
+          //       <button
+          //         type="button"
+          //         title="View Document"
+          //         onClick={() => getDocShareholding(documents?.data?.documentUid)}
+          //         className="btn btn-sm col-md-6"
+          //       >
+          //         <VisibilityIcon color="info" className="icon" />
+          //       </button>
+          //     ) : (
+          //       <button
+          //         type="button"
+          //         title="View Document"
+          //         onClick={() => getDocShareholding(documentsUploadList[0]?.articlesOfAssociation)}
+          //         className="btn btn-sm col-md-6"
+          //       >
+          //         <VisibilityIcon color="info" className="icon" />
+          //       </button>
+          //     )
+          //   ) : doc?.code === "REGISTERED_IRREVOCABLE_PARTNERSHIP_DEED" ? (
+          //     documents?.documentType === "REGISTERED_IRREVOCABLE_PARTNERSHIP_DEED" ? (
+          //       <button
+          //         type="button"
+          //         title="View Document"
+          //         onClick={() => getDocShareholding(documents?.documentUid)}
+          //         className="btn btn-sm col-md-6"
+          //       >
+          //         <VisibilityIcon color="info" className="icon" />
+          //       </button>
+          //     ) : (
+          //       <button
+          //         type="button"
+          //         title="View Document"
+          //         onClick={() => getDocShareholding(documentsUploadList[0]?.registeredIrrevocablePaternshipDeed)}
+          //         className="btn btn-sm col-md-6"
+          //       >
+          //         <VisibilityIcon color="info" className="icon" />
+          //       </button>
+          //     )
+          //   ) : (
+          //     ""
+          //   )}
+          // </span>
+
+          <span style={{ margin: "0 0.5rem" }}>
+            {doc?.code === "ARTICLES_OF_ASSOCIATION" && documentsUploadList?.length > 0 ? (
+              <button
+                type="button"
+                title="View Document"
+                onClick={() => getDocShareholding(documentsUploadList[0]?.articlesOfAssociation)}
+                className="btn btn-sm col-md-6"
+              >
+                <VisibilityIcon color="info" className="icon" />
+              </button>
+            ) : doc?.code === "REGISTERED_IRREVOCABLE_PARTNERSHIP_DEED" && documentsUploadList?.length > 0 ? (
+              <button
+                type="button"
+                title="View Document"
+                onClick={() => getDocShareholding(documentsUploadList[0]?.registeredIrrevocablePaternshipDeed)}
+                className="btn btn-sm col-md-6"
+              >
+                <VisibilityIcon color="info" className="icon" />
+              </button>
+            ) : doc?.code === "MEMORANDUM_OF_ARTICLES" && documentsUploadList?.length > 0 ? (
+              <button
+                type="button"
+                title="View Document"
+                onClick={() => getDocShareholding(documentsUploadList[0]?.memorandumOfArticles)}
+                className="btn btn-sm col-md-6"
+              >
+                <VisibilityIcon color="info" className="icon" />
+              </button>
+            ) : doc?.code === "APPL.BPAREG_OTHERS" && documentsUploadList?.length > 0 ? (
+              <button
+                type="button"
+                title="View Document"
+                onClick={() => getDocShareholding(documentsUploadList[0]?.anyOtherDoc)}
+                className="btn btn-sm col-md-6"
+              >
+                <VisibilityIcon color="info" className="icon" />
+              </button>
+            ) : (
+              ""
+            )}
+          </span>
+        }
       </div>
     </div>
   );
