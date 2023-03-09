@@ -31,15 +31,15 @@ import lombok.Builder;
 @NoArgsConstructor
 @Builder
 public class ServiceDefinitionResponse {
-    @JsonProperty("responseInfo")
+    @JsonProperty("ResponseInfo")
     @Valid
     private ResponseInfo responseInfo = null;
 
-    @JsonProperty("serviceDefinition")
+    @JsonProperty("ServiceDefinition")
     @Valid
     private List<ServiceDefinition> serviceDefinition = null;
 
-    @JsonProperty("pagination")
+    @JsonProperty("Pagination")
     @Valid
     private Pagination pagination = null;
 

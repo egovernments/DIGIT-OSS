@@ -26,12 +26,12 @@ import lombok.Builder;
 @NoArgsConstructor
 @Builder
 public class ServiceRequest {
-    @JsonProperty("requestInfo")
+    @JsonProperty("RequestInfo")
     @NotNull
     @Valid
     private RequestInfo requestInfo = null;
 
-    @JsonProperty("service")
+    @JsonProperty("Service")
     @Valid
     private Service service = null;
 
