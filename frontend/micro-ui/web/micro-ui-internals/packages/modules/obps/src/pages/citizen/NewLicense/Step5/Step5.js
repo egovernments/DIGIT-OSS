@@ -319,17 +319,17 @@ const FeesChargesForm = (props) => {
               <table key={index} className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))", width: "629px" }}>
                 <thead>
                   <tr>
-                    <th>Conversion Charges</th>
+                    <th>Conversion Charges (In Rs.)</th>
                     <td> {item?.conversionChargesCal}</td>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <th>External Development Charges</th>
+                    <th>External Development Charges (In Rs.)</th>
                     <td>{item?.externalDevelopmentChargesCal}</td>
                   </tr>
                   <tr>
-                    <th>License Fee Charges</th>
+                    <th>License Fee Charges (In Rs.)</th>
                     <td>{item?.licenseFeeChargesCal}</td>
                   </tr>
                   <tr>
@@ -337,11 +337,11 @@ const FeesChargesForm = (props) => {
                     <td>{item?.purpose}</td>
                   </tr>
                   <tr>
-                    <th>Scrutiny Fee Charges</th>
+                    <th>Scrutiny Fee Charges (In Rs.)</th>
                     <td>{item?.scrutinyFeeChargesCal}</td>
                   </tr>
                   <tr>
-                    <th>State Infrastructure Development Charges</th>
+                    <th>State Infrastructure Development Charges (In Rs.)</th>
                     <td>{item?.stateInfrastructureDevelopmentChargesCal}</td>
                   </tr>
                 </tbody>
@@ -607,7 +607,7 @@ const FeesChargesForm = (props) => {
                       )}
                     </div>
                   </div>
-                  {showToast && (
+                  {/* {showToast && (
                     <Toast
                       success={showToast?.key === "success" ? true : false}
                       label="Document Uploaded Successfully"
@@ -628,7 +628,7 @@ const FeesChargesForm = (props) => {
                         setError(null);
                       }}
                     />
-                  )}
+                  )} */}
                 </Col>
               </Row>
             </Form.Group>
