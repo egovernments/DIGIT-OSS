@@ -384,7 +384,7 @@ const ApllicantFormStep1 = (props) => {
                   </div>
                 </div>
 
-                <h5 className="card-title fw-bold">1. Director Information as per MCA</h5>
+                <h5 className="card-title fw-bold"> Director Information as per MCA</h5>
                 <div className="card-body">
                   <div className="table-bd">
                     <table className="table table-bordered">

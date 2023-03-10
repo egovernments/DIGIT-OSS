@@ -18,6 +18,7 @@ import { convertEpochToDate } from "../../../../../../tl/src/utils";
 import { useLocation } from "react-router-dom";
 import { Toast, CardLabelError } from "@egovernments/digit-ui-react-components";
 import _ from "lodash";
+import CusToaster from "../../../../components/Toaster";
 
 const ApllicantPuropseForm = (props) => {
   const datapost = {
@@ -86,7 +87,7 @@ const ApllicantPuropseForm = (props) => {
     },
     {
       title: "change in information",
-      render: (data) => (data?.isChange == "false" ? "false" : data?.isChange == "true" || data?.isChange ? "true" : "false"),
+      render: (data) => (data?.isChange == "false" ? "Incorrect" : data?.isChange == "true" || data?.isChange ? "Correct" : "Incorrect"),
     },
     {
       title: "Rectangle No./Mustil(Changed)",
@@ -228,7 +229,7 @@ const ApllicantPuropseForm = (props) => {
   const [applicantId, setApplicantId] = useState("");
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [showToast, setShowToast] = useState(null);
-  const [showToastError, setShowToastError] = useState(null);
+  const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   const stateId = Digit.ULBService.getStateId();
   const [typeOfLand, setYypeOfLand] = useState({ data: [], isLoading: true });
   const [showFields, setShowFields] = useState(false);
@@ -853,9 +854,10 @@ const ApllicantPuropseForm = (props) => {
   };
   const getDocumentData = async (file, fieldName) => {
     if (selectedFiles.includes(file.name)) {
-      setShowToastError({ key: "error" });
+      setShowToastError({ label: "Duplicate file Selected", error: true, success: false });
       return;
     }
+
     const formData = new FormData();
     formData.append("file", file);
     formData.append("tenantId", "hr");
@@ -871,7 +873,7 @@ const ApllicantPuropseForm = (props) => {
       // }
       setSelectedFiles([...selectedFiles, file.name]);
       setLoader(false);
-      setShowToast({ key: "success" });
+      setShowToastError({ label: "File Uploaded Successfully", error: false, success: true });
     } catch (error) {
       setLoader(false);
       return error.message;
@@ -961,7 +963,7 @@ const ApllicantPuropseForm = (props) => {
                   <div>
                     <Form.Label>
                       <h2>
-                        Puropse Of Licence<span style={{ color: "red" }}>*</span>
+                        Purpose Of Licence<span style={{ color: "red" }}>*</span>
                       </h2>
                     </Form.Label>
                   </div>
@@ -979,6 +981,9 @@ const ApllicantPuropseForm = (props) => {
                     {errors?.purpose?.value && errors?.purpose?.value?.message}
                   </h3>
                 </Col>
+                <Col style={{ display: "flex", alignItems: "end" }} md={8} xxl lg="9">
+                  <p>Note: The application to be received under policy dated 10.11.17 shall only be accepted within window period.</p>
+                </Col>
               </Row>
 
               <div className="ml-auto" style={{ marginTop: 20 }}>
@@ -986,11 +991,7 @@ const ApllicantPuropseForm = (props) => {
                   <b>Land schedule</b>
                 </h5>
                 <br></br>
-                <p>
-                  Note: The term “Collaboration agreement" shall include all Development agreements/ Joint Venture agreements/ Joint Development
-                  agreements/ Memorandum of Understanding etc. and similar agreements registered with competent authority.
-                </p>
-                <br></br>
+
                 <p>
                   <h3>(i) Khasra-wise information to be provided in the following format</h3>
                 </p>
@@ -1284,6 +1285,10 @@ const ApllicantPuropseForm = (props) => {
                 </h2>
                 {watch("collaboration") === "Y" && (
                   <div>
+                    <p className="mt-3 mb-3">
+                      Note: The term “Collaboration agreement" shall include all Development agreements/ Joint Venture agreements/ Joint Development
+                      agreements/ Memorandum of Understanding etc. and similar agreements registered with competent authority.
+                    </p>
                     <div className="row ">
                       <div className="col col-4">
                         <label>
@@ -1296,9 +1301,9 @@ const ApllicantPuropseForm = (props) => {
                           </h2>
                         </label>
                         <Form.Control type="text" className="form-control" placeholder="" {...register("developerCompany")} required="required" />
-                        <CardLabelError style={{ width: "100%", marginTop: "5px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
+                        {/* <CardLabelError style={{ width: "100%", marginTop: "5px", fontSize: "16px", marginBottom: "12px", color: "red" }}>
                           ("This is requird field")
-                        </CardLabelError>
+                        </CardLabelError> */}
                       </div>
                       <div className="col col-4">
                         <label>
@@ -1377,7 +1382,7 @@ const ApllicantPuropseForm = (props) => {
                       <div className="col col-4">
                         <label>
                           <h2 data-toggle="tooltip" data-placement="top" title="Upload Document" style={{ marginTop: "-4px" }}>
-                            Registering Authority document <span style={{ color: "red" }}>*</span>{" "}
+                            Collaboration document <span style={{ color: "red" }}>*</span>{" "}
                             <FileUpload style={{ cursor: "pointer" }} color="primary" />
                             <div>
                               <input
@@ -1691,7 +1696,7 @@ const ApllicantPuropseForm = (props) => {
         </ModalBody>
         <ModalFooter toggle={() => setmodal(!modal)}></ModalFooter>
       </Modal>
-      {showToast && (
+      {/* {showToast && (
         <Toast
           success={showToast?.key === "success" ? true : false}
           label="Document Uploaded Successfully"
@@ -1710,6 +1715,16 @@ const ApllicantPuropseForm = (props) => {
           onClose={() => {
             setShowToastError(null);
             setError(null);
+          }}
+        />
+      )} */}
+      {showToastError && (
+        <CusToaster
+          label={showToastError?.label}
+          success={showToastError?.success}
+          error={showToastError?.error}
+          onClose={() => {
+            setShowToastError({ label: "", success: false, error: false });
           }}
         />
       )}

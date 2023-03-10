@@ -4094,6 +4094,7 @@ body {
   border-width: 1px;
   --border-opacity: 1;
   border-color: #f47738;
+  background-color: #1266af;
   border-color: rgba(244, 119, 56, var(--border-opacity));
 }
 
@@ -4698,14 +4699,34 @@ body {
     /* box-shadow: 0 10px 20px rgb(0 0 0 / 19%), 0 6px 6px rgb(0 0 0 / 23%); */
   }
 
+  .ServiceCardOptions.empCard{
+    width: 22%;
+  }
+
   .ServiceCardData {
     width: 100%;
     background: #ffffff;
     box-shadow: 0.375rem 0.375rem 0.125rem 0 rgb(0 0 0 / 10%);
     border-radius: 0.65rem;
     padding: 0.6rem;
+    max-height: 260px;
+    min-height: 230px;
     position: relative;
   }
+
+  .ServiceCardOptions.empCard .inbox-total {
+    background: #024f9d;
+    padding: 0.3rem 0.5rem;
+    border-radius: 50%;
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    vertical-align: middle;
+    font-weight: 500;
+    text-align: center;
+    color: #fff;
+    margin: 0.4rem;
+}
 
   /* .one.ServiceCardHeader{
     background-image: url(https://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/banner-images/1.png);
@@ -4763,6 +4784,10 @@ body {
     background-size: cover;
   }
 
+  .ServiceCardOptions.empCard .ServiceCardHeader{
+    background-image: url(https://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/banner-images/10.png);
+  }
+
   .Icon-side {
     position: absolute;
     right: 11px;
@@ -4786,7 +4811,7 @@ body {
   }
 
   .ServiceCardCaption h3 {
-    font-size: 1rem;
+    font-size: 1.15rem;
     font-weight: 800;
     color: #262626;
     margin-bottom: 0.5rem;
@@ -4796,9 +4821,14 @@ body {
 
   .links-redirect a {
     display: block;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     text-decoration: none;
     margin: 0.2rem 0;
+    color: #262626;
+  }
+
+  .links-redirect a:hover {
+    color: #0056b3
   }
 }
 
@@ -8832,6 +8862,7 @@ textarea {
   border-width: 1px;
   --border-opacity: 1;
   border-color: #f47738;
+  background-color: #1266af;
   border-color: rgba(244, 119, 56, var(--border-opacity));
 }
 
@@ -14127,6 +14158,7 @@ body {
   border-color: #464646;
   border-color: rgba(70, 70, 70, var(--border-opacity));
   width: 100%;
+  border-radius: 0.45rem;
 }
 
 .upload-file div {
@@ -15661,6 +15693,7 @@ body {
   border-width: 1px;
   --border-opacity: 1;
   border-color: #1266af;
+  background-color: #1266af;
   border-color: rgba(244, 119, 56, var(--border-opacity));
 }
 

@@ -15,12 +15,13 @@ import axios from "axios";
 import { ScrutinyRemarksContext } from "../../../../context/remarks-data-context";
 // import AddIcon from "@mui/icons-material/Add";
 
-const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData , histeroyData}) => {
+const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData , histeroyData, feeandcharges}) => {
   const personalInfoRef = useRef();
   const generalInfoRef = useRef();
   const developerInfoRef = useRef();
   const appliedInfoRef = useRef();
   const feeandchargesInfoRef = useRef();
+  // const feeandcharges = useRef();
   // const licenseDetailsInfoRef = useRef();
   const [purpose, setPurpose] = useState("");
   const jeLandInfoRef = useRef();
@@ -349,6 +350,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
               passUncheckedList={getUncheckedFeeandChargesInfo}
               heightFee={defaultheightFee}
               ApiResponseData={apiResponse !== undefined ? apiResponse?.FeesAndCharges : null}
+              feeandchargesData={feeandcharges}
             ></Feeandcharges>
             {/* </Col> */}
           </div>

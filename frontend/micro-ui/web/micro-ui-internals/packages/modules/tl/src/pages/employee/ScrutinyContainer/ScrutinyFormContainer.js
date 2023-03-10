@@ -40,6 +40,7 @@ const ScrutinyFormcontainer = (props) => {
   const [businessService, setBusinessServices] = useState("NewTL");
   const [moduleCode, setModuleCode] = useState("TL")
   const [scrutinyDetails, setScrutinyDetails] = useState();
+  const [feeandchargesData, SetFeeandchargesData] = useState();
 
   const [applicationDetails, setApplicationDetails] = useState();
   const [workflowDetails, setWorkflowDetails] = useState();
@@ -50,40 +51,40 @@ const ScrutinyFormcontainer = (props) => {
   const userInfo = Digit.UserService.getUser()?.info || {};
 
   
-  const handleshow19 = async (e) => {
-    const payload = {
+  // const handleshow19 = async (e) => {
+  //   const payload = {
 
-      "RequestInfo": {
+  //     "RequestInfo": {
 
-        "apiId": "Rainmaker",
+  //       "apiId": "Rainmaker",
 
-        "ver": ".01",
+  //       "ver": ".01",
 
-        "ts": null,
+  //       "ts": null,
 
-        "action": "_update",
+  //       "action": "_update",
 
-        "did": "1",
+  //       "did": "1",
 
-        "key": "",
+  //       "key": "",
 
-        "msgId": "20170310130900|en_IN",
+  //       "msgId": "20170310130900|en_IN",
 
-        "authToken": authToken
+  //       "authToken": authToken
 
-      }
-    }
-    const Resp = await axios.post(`/tl-services/loi/report/_create?applicationNumber=${id}&userId=${userInfo?.id}`, payload,{responseType:"arraybuffer"})
+  //     }
+  //   }
+  //   const Resp = await axios.post(`/tl-services/loi/report/_create?applicationNumber=${id}&userId=${userInfo?.id}`, payload,{responseType:"arraybuffer"})
 
-    console.log("logger12345...", Resp.data, userInfo)
+  //   console.log("logger12345...", Resp.data, userInfo)
 
-    const pdfBlob = new Blob([Resp.data], { type: 'application/pdf' });
-    const pdfUrl = URL.createObjectURL(pdfBlob);
-    window.open(pdfUrl);
+  //   const pdfBlob = new Blob([Resp.data], { type: 'application/pdf' });
+  //   const pdfUrl = URL.createObjectURL(pdfBlob);
+  //   window.open(pdfUrl);
 
-    console.log("logger123456...", pdfBlob,pdfUrl );
+  //   console.log("logger123456...", pdfBlob,pdfUrl );
     
-  };
+  // };
   const handleChange = (e) => {
     this.setState({ isRadioSelected: true });
   };
@@ -113,8 +114,28 @@ const ScrutinyFormcontainer = (props) => {
     } catch (error) {
       console.log(error);
     }
-  };
+    const applicationNo = id
+    console.log("applicationNo" , applicationNo);
+    const feeAndChargesData = {
+     
 
+          "RequestInfo": {
+            "apiId": "Rainmaker",
+            "msgId": "1669293303096|en_IN",
+            userInfo : userInfo ,
+            "authToken": authToken,
+            
+    
+          },
+          applicationNo : applicationNo,
+        }
+        const feeandchargesRespon = await axios.post(`/tl-calculator/v1/_getPaymentEstimate`, feeAndChargesData)
+        SetFeeandchargesData(feeandchargesRespon);
+        console.log("Datafee", feeandchargesRespon);
+       
+
+  };
+  // console.log("Data334", feeandchargesData);
   let EditRenewalApplastModifiedTime = Digit.SessionStorage.get("EditRenewalApplastModifiedTime");
 
   let workflowDetailsTemp = Digit.Hooks.useWorkflowDetails({
@@ -158,10 +179,16 @@ const ScrutinyFormcontainer = (props) => {
 
   const queryClient = useQueryClient();
 
+  
 
   const closeModal = () => {
-    setSelectedAction(null);
+    
+    setTimeout(() => {
+      setSelectedAction(null);
     setShowModal(false);
+   
+      window.location.href = `/digit-ui/employee/tl/inbox`
+    }, 3000);
   };
 
   const closeWarningPopup = () => {
@@ -292,6 +319,11 @@ const ScrutinyFormcontainer = (props) => {
     }
 
     closeModal();
+    // closeModal();
+    // setTimeout(() => {
+    //   setShowToast();
+    //   window.location.href = `/digit-ui/employee/tl/servicePlanInbox`
+    // }, 3000);
   };
 
   useEffect(() => {
@@ -346,6 +378,7 @@ const ScrutinyFormcontainer = (props) => {
       <Row >
         <div className="formlist">
         <ScrutitnyForms
+        feeandcharges={feeandchargesData}
          histeroyData={workflowDetailsTemp}
           apiResponse={scrutinyDetails}
           applicationNumber={id}
@@ -407,9 +440,9 @@ const ScrutinyFormcontainer = (props) => {
         {/* </Row> */}
         <Row>
               
-          <div class="col-md-12 bg-light text-right" style={{ position: "relative", marginBottom: 20 }}>
+          {/* <div class="col-md-12 bg-light text-right" style={{ position: "relative", marginBottom: 20 }}>
           <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}>Submit</Button>
-          </div>
+          </div> */}
           {/* {showhide19 === "Submit" && ( */}
           {/* <div>
             <Button style={{ textAlign: "right" }}> <a href="http://localhost:3000/digit-ui/employee/tl/Loi" >Generate LOI</a></Button>

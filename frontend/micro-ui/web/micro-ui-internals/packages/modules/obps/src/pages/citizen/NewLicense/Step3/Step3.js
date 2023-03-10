@@ -26,6 +26,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useLocation } from "react-router-dom";
 import { Toast } from "@egovernments/digit-ui-react-components";
 import WorkingTable from "../../../../components/Table";
+import CusToaster from "../../../../components/Toaster";
+
 const test = {
   area: null,
   code: "RPL",
@@ -116,7 +118,7 @@ const LandScheduleForm = (props) => {
   const [stepData, setStepData] = useState(null);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [showToast, setShowToast] = useState(null);
-  const [showToastError, setShowToastError] = useState(null);
+  const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   const [applicantId, setApplicantId] = useState("");
   const [litigationRemark, setLitigationRemark] = useState("");
   const { data: PurposeType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
@@ -323,10 +325,7 @@ const LandScheduleForm = (props) => {
 
   const getDocumentData = async (file, fieldName) => {
     if (selectedFiles.includes(file.name)) {
-      setShowToastError({ key: "error" });
-      setTimeout(() => {
-        setShowToastError(null);
-      }, 2000);
+      setShowToastError({ label: "Duplicate file Selected", error: true, success: false });
       return;
     }
 
@@ -399,12 +398,8 @@ const LandScheduleForm = (props) => {
       //   setValue("copyOfShajraPlanFileName", file.name);
       // }
       setSelectedFiles([...selectedFiles, file.name]);
-
       setLoader(false);
-      setShowToast({ key: "success" });
-      setTimeout(() => {
-        setShowToastError(null);
-      }, 2000);
+      setShowToastError({ label: "File Uploaded Successfully", error: false, success: true });
     } catch (error) {
       setLoader(false);
 
@@ -496,6 +491,10 @@ const LandScheduleForm = (props) => {
     // resetValues();
     setmodal(false);
   };
+
+  useEffect(() => {
+    console.log("errors", errors);
+  }, [errors]);
 
   return (
     <div>
@@ -596,7 +595,7 @@ const LandScheduleForm = (props) => {
                                 {errors?.siteLoc && errors?.siteLoc?.message}
                               </h3>
                             </div>
-                            <div className="col col-12">
+                            {/* <div className="col col-12">
                               {Purpose === "DDJAY_APHP" && <CommercialColonyInResidential watch={watch} register={register} />}
                               {Purpose === "RPL" && <CommercialColonyInResidential watch={watch} register={register} />}
                               {Purpose === "NILPC" && <CommercialColonyInResidential watch={watch} register={register} />}
@@ -608,19 +607,7 @@ const LandScheduleForm = (props) => {
                               {Purpose === "ITC" && <CyberPark watch={watch} register={register} />}
                               {Purpose === "RHP" && <RetirementHousing watch={watch} register={register} />}
 
-                              {/* <ReactMultiSelect
-                              control={control}
-                              name="approachType"
-                              placeholder="Approach"
-                              data={potentialOptons}
-                              labels="Potential"
-                            /> */}
-                              {/* <select className="form-control" id="approachType" {...register("approachType")}>
-                                <option>{Purpose === "DDJAY_APHP" && <CommercialColonyInResidential watch={watch} register={register} />}</option> */}
-                              {/* <option value="potential 2">(a) Existing ser-vice road along with sector di-viding road.</option> */}
-                              {/* <option value="potential 2">(c) Constructed sector road or internal circula-tion road of min. 18m/24m (licenced) part of the approved sectoral plan and further leadup up to at least 4 karam wide public ras-ta.</option> */}
-                              {/* </select> */}
-                            </div>
+                            </div> */}
                           </div>
                           <br></br>
                           <div className="row">
@@ -634,6 +621,46 @@ const LandScheduleForm = (props) => {
                               <h3 className="error-message" style={{ color: "red" }}>
                                 {errors?.areaOfParentLicenceAcres && errors?.areaOfParentLicenceAcres?.message}
                               </h3>
+                            </div>
+
+                            <div className="col col-4">
+                              <h2>
+                                Validity of parent licence <span style={{ color: "red" }}>*</span>
+                                &nbsp;&nbsp;
+                                <label htmlFor="validity">
+                                  <input {...register("validity")} type="radio" value="Y" id="yes" />
+                                  &nbsp;&nbsp; Yes &nbsp;&nbsp;
+                                </label>
+                                <label htmlFor="validity">
+                                  <input {...register("validity")} type="radio" value="N" id="no" />
+                                  &nbsp;&nbsp; No &nbsp;&nbsp;
+                                </label>
+                                <h3 className="error-message" style={{ color: "red" }}>
+                                  {errors?.validity && errors?.validity?.message}
+                                </h3>
+                              </h2>
+
+                              {watch("validity") === "N" && (
+                                <div>
+                                  <div className="row ">
+                                    <h2>
+                                      Whether renewal licence fee submitted <span style={{ color: "red" }}>*</span>
+                                      &nbsp;&nbsp;
+                                      <label htmlFor="yess">
+                                        <input {...register("renewalLicenceFee")} type="radio" value="Y" id="yess" />
+                                        &nbsp;&nbsp; Yes &nbsp;&nbsp;
+                                      </label>
+                                      <label htmlFor="noo">
+                                        <input {...register("renewalLicenceFee")} type="radio" value="N" id="noo" />
+                                        &nbsp;&nbsp; No &nbsp;&nbsp;
+                                      </label>
+                                      <h3 className="error-message" style={{ color: "red" }}>
+                                        {errors?.renewalLicenceFee && errors?.renewalLicenceFee?.message}
+                                      </h3>
+                                    </h2>
+                                  </div>
+                                </div>
+                              )}
                             </div>
 
                             <div className="col col-4">
@@ -730,7 +757,7 @@ const LandScheduleForm = (props) => {
                                       <div className="row ">
                                         <div className="col col-12">
                                           <h6 data-toggle="tooltip" data-placement="top" title=" Upload Copy of non-registration of RERA"></h6>
-                                          Upload non-registration RERA <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
+                                          Affidavit <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
                                           <label>
                                             <FileUpload style={{ cursor: "pointer" }} color="primary" />
                                             <input
@@ -2700,6 +2727,33 @@ const LandScheduleForm = (props) => {
                     </div>
                   </div>
                 )}
+                {watch("validity") === "N" && (
+                  <div>
+                    <div className="row ">
+                      <h2>
+                        <b>
+                          Whether renewal licence fee submitted <span style={{ color: "red" }}>*</span>
+                        </b>
+                        &nbsp;&nbsp;
+                        <label htmlFor="yess">
+                          <input {...register("renewalLicenceFee")} type="radio" value="Y" id="yess" />
+                          &nbsp;&nbsp; Yes &nbsp;&nbsp;
+                        </label>
+                        <label htmlFor="noo">
+                          <input {...register("renewalLicenceFee")} type="radio" value="N" id="noo" />
+                          &nbsp;&nbsp; No &nbsp;&nbsp;
+                        </label>
+                        <h3 className="error-message" style={{ color: "red" }}>
+                          {errors?.renewalLicenceFee && errors?.renewalLicenceFee?.message}
+                        </h3>
+                      </h2>
+
+                      {/* <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.date && errors?.date?.message}
+                      </h3> */}
+                    </div>
+                  </div>
+                )}
               </div>
 
               <Col md={4} xxl lg="4">
@@ -2747,7 +2801,7 @@ const LandScheduleForm = (props) => {
         </ModalBody>
         <ModalFooter toggle={() => setmodal(!modal)}></ModalFooter>
       </Modal>
-      {toastError && (
+      {/* {toastError && (
         <Toast
           error={"error" ? true : false}
           label={toastError}
@@ -2756,8 +2810,8 @@ const LandScheduleForm = (props) => {
             setToastError(null);
           }}
         />
-      )}
-      {showToast && (
+      )} */}
+      {/* {showToast && (
         <Toast
           success={showToast?.key === "success" ? true : false}
           label="Document Uploaded Successfully"
@@ -2766,15 +2820,14 @@ const LandScheduleForm = (props) => {
             setShowToast(null);
           }}
         />
-      )}
+      )} */}
       {showToastError && (
-        <Toast
-          error={showToastError?.key === "error" ? true : false}
-          label="Duplicate file Selected"
-          isDleteBtn={true}
+        <CusToaster
+          label={showToastError?.label}
+          success={showToastError?.success}
+          error={showToastError?.error}
           onClose={() => {
-            setShowToastError(null);
-            setError(null);
+            setShowToastError({ label: "", success: false, error: false });
           }}
         />
       )}

@@ -1191,7 +1191,7 @@ const AppliedLandinfo = (props) => {
                     </div>
                   </div>
                 )} */}
-
+                  <br></br>
                 <div>
                   <div className="mt-3 mb-3">
                     <h4>

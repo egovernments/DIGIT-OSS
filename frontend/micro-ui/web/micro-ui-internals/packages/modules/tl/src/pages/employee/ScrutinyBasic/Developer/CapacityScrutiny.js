@@ -22,7 +22,7 @@ import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import { useStyles } from "../css/personalInfoChild.style";
 import { add } from "lodash";
 
-const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataValue, data, addInfo, capacityScrutinyInfo, iconColorState ,showDevTypeFields,getRemarkData}) => {
+const CapacityScrutiny = ({ t, config, onSelect, showTable, formData, formDataValue, data, addInfo, capacityScrutinyInfo, iconColorState ,showDevTypeFields,getRemarkData}) => {
   const { pathname: url } = useLocation();
   const userInfo = Digit.UserService.getUser();
   let validation = {};
@@ -335,9 +335,11 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
   const [smShow, setSmShow] = useState(false);
   const [labelValue, setLabelValue] = useState("");
   const Colors = {
-    approved: "#09cb3d",
-    disapproved: "#ff0000",
-    info: "#FFB602"
+    conditional:"#2874A6",
+    approved:"#09cb3d",
+    disapproved:"#ff0000",
+   
+    info:"#FFB602"
   }
   const [selectedFieldData, setSelectedFieldData] = useState();
   const [fieldValue, setFieldValue] = useState("");
@@ -348,65 +350,88 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
     caution3: Colors.info,
     caution4: Colors.info,
     caution5: Colors.info,
+    caution6: Colors.info,
+    caution7: Colors.info,
+    caution8: Colors.info,
+    caution9: Colors.info,
+    caution10: Colors.info,
+    caution11: Colors.info,
+    caution12: Colors.info,
+    caution13: Colors.info,
+    caution14: Colors.info,
   })
 
-  const fieldIdList = [{ label: "Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975", key: "caution1" },{ label: "Licences/permissions granted to Developer/ group company for development of colony under any other law/Act as", key: "caution2" },{ label: "Whether any technical expert(s) engaged", key: "caution3" },{ label: "If director/partner of the proposed developer company/firm also holds designation of director/partner in any other company/firm who has already obtained license(s) under act of 1975", key: "caution4" },{ label: "In case of technical capacity sought from another company/firm who has already obtained license(s) under act of 1975 or outside Haryana", key: "caution5" },]
+  const fieldIdList = [{ label: "Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975", key: "caution1" },
+  { label: "Bank statement for the last 3 years", key: "caution2" },
+  { label: "Balance sheet of last 3 years", key: "caution3" },
+  { label: "Ps-3(Representing Paid-UP capital)", key: "caution4" },
+  { label: "Reserves and surpluses", key: "caution5" },
+  { label: "Any other documents (in the case of the company)", key: "caution6" },
+  { label: "Whether the Developer has earlier been granted permission to set up a colony under HDRU Act,1975:", key: "caution7" },
+  { label: "Name of Project", key: "caution8" },
+  { label: "Name of Authority", key: "caution9" },
+  { label: "Status of Development", key: "caution11" },
+  { label: "Location", key: "caution14" },
+  { label: "Permission letter", key: "caution12" },
+  { label: "Area of the project in acres ", key: "caution13" },
+  { label: "(ii) Have you developed projects outside Haryana:-", key: "caution10" },]
 
-
-  const getColorofFieldIcon = () => {
-    let tempFieldColorState = fieldIconColors;
-    fieldIdList.forEach((item) => { 
-      if (iconColorState !== null && iconColorState !== undefined) {
-        console.log("color method called");
-        const fieldPresent = iconColorState.egScrutiny.filter(ele => (ele.fieldIdL === item.label));
-        console.log("filteration value", fieldPresent, fieldPresent[0]?.isApproved);
-        if (fieldPresent && fieldPresent.length) {
-          console.log("filteration value1", fieldPresent, fieldPresent[0]?.isApproved);
-          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved ? Colors.approved : Colors.disapproved }
-
-        }
+const iconStates = iconColorState
+console.log("RemarksColor", iconStates);
+const getColorofFieldIcon=()=>{
+  let tempFieldColorState = fieldIconColors;
+  fieldIdList.forEach((item)=>{
+    if (iconStates!==null && iconStates!==undefined) {
+      console.log("color method called");
+      const fieldPresent = iconStates.egScrutiny.filter(ele => (ele.fieldIdL===item.label));
+      console.log("filteration value", fieldPresent,fieldPresent[0]?.isApproved);
+      if(fieldPresent && fieldPresent.length){
+        console.log("filteration value1", fieldPresent,fieldPresent[0]?.isApproved);
+        tempFieldColorState = {...tempFieldColorState,[item.key]:fieldPresent[0].isApproved === "approved" ?Colors.approved: fieldPresent[0].isApproved === "disapproved" ? Colors.disapproved:fieldPresent[0].isApproved === "conditional" ? Colors.conditional:Colors.info}
+       
       }
-    })
-
-    setFieldIconColors(tempFieldColorState);
-
-  };
-
-
-  useEffect(() => {
-    getColorofFieldIcon();
-    console.log("repeating1...",)
-  }, [iconColorState])
-
-  useEffect(() => {
-    if (labelValue) {
-      const fieldPresent = iconColorState.egScrutiny.filter(ele => (ele.fieldIdL === labelValue));
-      setSelectedFieldData(fieldPresent[0]);
-    } else {
-      setSelectedFieldData(null);
     }
-  }, [labelValue])
+  })
+
+  setFieldIconColors(tempFieldColorState);
+
+};
+
+
+useEffect(()=>{
+  getColorofFieldIcon();
+  console.log("repeating1...",)
+},[iconStates])
+
+useEffect(()=>{
+  if(labelValue){
+    const fieldPresent = iconStates.egScrutiny.filter(ele => (ele.fieldIdL===labelValue));
+    setSelectedFieldData(fieldPresent[0]);
+  }else{
+    setSelectedFieldData(null);
+  }
+},[labelValue])
 
 
 
-  const currentRemarks = (data) => {
-    // props.
-    showTable({ data: data.data });
-    // props.
-    getRemarkData()
+const currentRemarks = (data) => {
+  showTable({ data: data.data });
+};
 
-  };
+const handlemodaldData = (data) => {
+  // setmodaldData(data.data);
+  setSmShow(false);
+  console.log("here",openedModal,data);
+  if(openedModal && data){
+    setFieldIconColors({...fieldIconColors,[openedModal]:data.data.isApproved?Colors.approved:Colors.disapproved})
 
-  const handlemodaldData = (data) => {
-    // setmodaldData(data.data);
-    setSmShow(false);
-    console.log("here", openedModal, data);
-    if (openedModal && data) {
-      setFieldIconColors({ ...fieldIconColors, [openedModal]: data.data.isApproved ? Colors.approved : Colors.disapproved })
-    }
+    
+    // fieldPresent[0].isApproved === "approved" ?Colors.approved: fieldPresent[0].isApproved === "disapproved" ? Colors.disapproved:fieldPresent[0].isApproved === "conditional" ? Colors.conditional:Colors.info
+  }
     setOpennedModal("");
     setLabelValue("");
-  };
+};
+
   console.log("happy akash" ,capacityScrutinyInfo);
   console.log("happy akash2" , addInfo);
 
@@ -539,14 +564,14 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                           <div>
                             <ReportProblemIcon
                   style={{
-                    color: fieldIconColors.caution1
+                    color: fieldIconColors.agreementDoc
                   }}
                   onClick={() => {
-                    setOpennedModal("caution1")
-                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
+                    setOpennedModal("caution2")
+                    setLabelValue("Bank statement for the last 3 years"),
                       setSmShow(true),
                       console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.agreementDoc: null);
                   }}
                 ></ReportProblemIcon>
                 </div>
@@ -605,14 +630,14 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                             <ReportProblemIcon
                   style={{
                     display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                    color: fieldIconColors.caution1
+                    color: fieldIconColors.caution3
                   }}
                   onClick={() => {
-                    setOpennedModal("caution1")
-                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
+                    setOpennedModal("caution3")
+                    setLabelValue("Balance sheet of last 3 years"),
                       setSmShow(true),
                       console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.documents?.companyBalanceSheet: null);
                   }}
                 ></ReportProblemIcon>
                 </div>
@@ -646,14 +671,14 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                             <ReportProblemIcon
                   style={{
                     display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                    color: fieldIconColors.caution1
+                    color: fieldIconColors.caution4
                   }}
                   onClick={() => {
-                    setOpennedModal("caution1")
-                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
+                    setOpennedModal("caution4")
+                    setLabelValue("Ps-3(Representing Paid-UP capital)"),
                       setSmShow(true),
                       console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.documents?.paidUpCapital: null);
                   }}
                 ></ReportProblemIcon>
                 </div>
@@ -687,14 +712,14 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                             <ReportProblemIcon
                   style={{
                     display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                    color: fieldIconColors.caution1
+                    color: fieldIconColors.caution5
                   }}
                   onClick={() => {
-                    setOpennedModal("caution1")
-                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
+                    setOpennedModal("caution5")
+                    setLabelValue("Reserves and surpluses"),
                       setSmShow(true),
                       console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.documents?.reservesAndSurplus: null);
                   }}
                 ></ReportProblemIcon>
                 </div>
@@ -728,14 +753,14 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                             <ReportProblemIcon
                   style={{
                     display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                    color: fieldIconColors.caution1
+                    color: fieldIconColors.caution6
                   }}
                   onClick={() => {
-                    setOpennedModal("caution1")
-                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
+                    setOpennedModal("caution6")
+                    setLabelValue("Any other documents (in the case of the company)"),
                       setSmShow(true),
                       console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.documents?.anyOtherDoc: null);
                   }}
                 ></ReportProblemIcon>
                 </div>
@@ -762,14 +787,14 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                 <ReportProblemIcon
                   style={{
                     display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                    color: fieldIconColors.caution1
+                    color: fieldIconColors.caution7
                   }}
                   onClick={() => {
-                    setOpennedModal("caution1")
-                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
+                    setOpennedModal("caution7")
+                    setLabelValue("Whether the Developer has earlier been granted permission to set up a colony under HDRU Act,1975:"),
                       setSmShow(true),
                       console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.permissionGrantedHRDU: null);
                   }}
                 ></ReportProblemIcon>
 
@@ -896,7 +921,7 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                                  
                               </div>
                             </td> */}
-                            <td>
+                            {/* <td>
                             <div className="btn btn-sm col-md-6">
                             <ReportProblemIcon
                   style={{
@@ -904,7 +929,7 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                     color: fieldIconColors.caution1
                   }}
                   onClick={() => {
-                    setOpennedModal("caution1")
+                    setOpennedModal("caution8")
                     setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
                       setSmShow(true),
                       console.log("modal open"),
@@ -914,7 +939,7 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                 </div>
                             
 
-                            </td>
+                            </td> */}
                           </tr>
 
                           ))
@@ -1042,14 +1067,14 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                   <ReportProblemIcon
                     style={{
                       display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                      color:fieldIconColors.caution4
+                      color:fieldIconColors.caution10
                     }}
                     onClick={() => {
-                      setOpennedModal("caution4")
-                      setLabelValue("If director/partner of the proposed developer company/firm also holds designation of director/partner in any other company/firm who has already obtained license(s) under act of 1975"),
+                      setOpennedModal("caution10")
+                      setLabelValue("(ii) Have you developed projects outside Haryana:-"),
                       setSmShow(true),
                       console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution4: null);
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.technicalCapacityOutsideHaryana: null);
                     }}
                   ></ReportProblemIcon>
                 </div>
@@ -1123,14 +1148,14 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                                <ReportProblemIcon
                   style={{
                     display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                    color: fieldIconColors.caution1
+                    color: fieldIconColors.caution8
                   }}
                   onClick={() => {
-                    setOpennedModal("caution1")
+                    setOpennedModal("caution8")
                     setLabelValue("Name of Project"),
                       setSmShow(true),
                       console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.project: null);
                   }}
                 ></ReportProblemIcon>
             </div>
@@ -1147,14 +1172,14 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                                <ReportProblemIcon
                   style={{
                     display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                    color: fieldIconColors.caution1
+                    color: fieldIconColors.caution9
                   }}
                   onClick={() => {
-                    setOpennedModal("caution1")
+                    setOpennedModal("caution9")
                     setLabelValue("Name of Authority"),
                       setSmShow(true),
                       console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.authority: null);
                   }}
                 ></ReportProblemIcon>
             </div>
@@ -1172,14 +1197,14 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                                <ReportProblemIcon
                   style={{
                     display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                    color: fieldIconColors.caution1
+                    color: fieldIconColors.caution11
                   }}
                   onClick={() => {
-                    setOpennedModal("caution1")
+                    setOpennedModal("caution11")
                     setLabelValue("Status of Development"),
                       setSmShow(true),
                       console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.statusOfDevelopment: null);
                   }}
                 ></ReportProblemIcon>
             </div>
@@ -1187,7 +1212,7 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                                     </Col>
                                 </Row>
                                 <Row>
-                                <Col md={4} xxl lg="4">
+                                {/* <Col md={4} xxl lg="4">
                                         <label htmlFor="statusOfDevelopment" className="text"> Permission letter  </label>
                                         
                                            <div className={classes.fieldContainer}>
@@ -1198,38 +1223,38 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                                <ReportProblemIcon
                   style={{
                     display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                    color: fieldIconColors.caution1
+                    color: fieldIconColors.caution12
                   }}
                   onClick={() => {
-                    setOpennedModal("caution1")
-                    setLabelValue("Status of Development"),
+                    setOpennedModal("caution12")
+                    setLabelValue("Permission letter"),
                       setSmShow(true),
                       console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.statusOfDevelopment: null);
                   }}
                 ></ReportProblemIcon>
             </div>
 
-                                    </Col>
+                                    </Col> */}
                                     <Col md={4} xxl lg="4">
                                         <label htmlFor="statusOfDevelopment" className="text">Area of the project in acres </label>
                                         
                                            <div className={classes.fieldContainer}>
                               <Form.Control 
-                               placeholder={capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.statusOfDevelopment} 
+                               placeholder={capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.projectArea} 
                                disabled></Form.Control>
                                &nbsp;&nbsp;
                                <ReportProblemIcon
                   style={{
                     display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                    color: fieldIconColors.caution1
+                    color: fieldIconColors.caution13
                   }}
                   onClick={() => {
-                    setOpennedModal("caution1")
-                    setLabelValue("Status of Development"),
+                    setOpennedModal("caution13")
+                    setLabelValue("Area of the project in acres "),
                       setSmShow(true),
                       console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.projectArea: null);
                   }}
                 ></ReportProblemIcon>
             </div>
@@ -1240,20 +1265,20 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                                         
                                            <div className={classes.fieldContainer}>
                               <Form.Control 
-                               placeholder={capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.statusOfDevelopment} 
+                               placeholder={capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.location} 
                                disabled></Form.Control>
                                &nbsp;&nbsp;
                                <ReportProblemIcon
                   style={{
                     display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                    color: fieldIconColors.caution1
+                    color: fieldIconColors.caution14
                   }}
                   onClick={() => {
-                    setOpennedModal("caution1")
-                    setLabelValue("Status of Development"),
+                    setOpennedModal("caution14")
+                    setLabelValue("Location"),
                       setSmShow(true),
                       console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.location: null);
                   }}
                 ></ReportProblemIcon>
             </div>
@@ -1261,30 +1286,30 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                                     </Col>
                                 </Row>
                                 <Row>
-                                <Col md={4} xxl lg="4">
+                                {/* <Col md={4} xxl lg="4">
                                         <label htmlFor="statusOfDevelopment" className="text">Any other document/ Photo</label>
                                         
                                            <div className={classes.fieldContainer}>
                               <Form.Control 
-                               placeholder={capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.statusOfDevelopment} 
+                               placeholder={capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.anyOtherDoc} 
                                disabled></Form.Control>
                                &nbsp;&nbsp;
                                <ReportProblemIcon
                   style={{
                     display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                    color: fieldIconColors.caution1
+                    color: fieldIconColors.caution15
                   }}
                   onClick={() => {
-                    setOpennedModal("caution1")
-                    setLabelValue("Status of Development"),
+                    setOpennedModal("caution15")
+                    setLabelValue("Any other document/ Photo"),
                       setSmShow(true),
                       console.log("modal open"),
-                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.technicalCapacityOutsideHaryanaDetails?.anyOtherDoc: null);
                   }}
                 ></ReportProblemIcon>
             </div>
 
-                                    </Col>
+                                    </Col> */}
                                 </Row>
                     </div>
                   {/* </div> */}
@@ -1768,8 +1793,6 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                         </div> */}
 
 
-<br></br>
-<br></br>
 {/* <div className="hl"></div>
               <p>(v) Whether any technical expert(s) engaged   &nbsp;&nbsp;&nbsp;
                 <div className="d-flex flex-row align-items-center ml-2">
@@ -2087,8 +2110,7 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
                   </div>
                 )}
               </div> */}
-              <br></br>
-
+             
 
             </div>
           </FormStep>
@@ -2097,4 +2119,4 @@ const DeveloperCapacity = ({ t, config, onSelect, showTable, formData, formDataV
     </div>
   );
 };
-export default DeveloperCapacity;
+export default CapacityScrutiny;

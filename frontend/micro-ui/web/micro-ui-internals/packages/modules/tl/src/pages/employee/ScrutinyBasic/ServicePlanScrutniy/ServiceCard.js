@@ -175,9 +175,12 @@ const ServiceScrutiny = (props) => {
   // };
 
   const closeModal = () => {
-    setSelectedAction(null);
-    setShowModal(false);
     
+    setTimeout(() => {
+      setSelectedAction(null);
+      setShowModal(false);
+      window.location.href = `/digit-ui/employee/tl/servicePlanInbox`
+      }, 3000);
   };
 
   const closeWarningPopup = () => {

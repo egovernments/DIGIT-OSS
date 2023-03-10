@@ -31,6 +31,7 @@ import _ from "lodash";
 import NumberInput from "../../../../components/NumberInput";
 import FileUpload from "@mui/icons-material/FileUpload";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import CusToaster from "../../../../components/Toaster";
 
 const AppliedDetailForm = (props) => {
   const location = useLocation();
@@ -42,7 +43,7 @@ const AppliedDetailForm = (props) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [showError, setShowError] = useState({});
   const [showToast, setShowToast] = useState(null);
-  const [showToastError, setShowToastError] = useState(null);
+  const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
   const [toastMessage, setToastMessage] = useState(null);
   const userInfo = Digit.UserService.getUser()?.info || {};
   const [applicantId, setApplicantId] = useState("");
@@ -384,8 +385,7 @@ const AppliedDetailForm = (props) => {
 
   const getDocumentData = async (file, fieldName) => {
     if (selectedFiles.includes(file.name)) {
-      setShowToastError({ key: "error" });
-      setToastMessage("Duplicate file Selected");
+      setShowToastError({ label: "Duplicate file Selected", error: true, success: false });
       return;
     }
     const formData = new FormData();
@@ -440,7 +440,7 @@ const AppliedDetailForm = (props) => {
       // }
       setSelectedFiles([...selectedFiles, file.name]);
       setLoader(false);
-      setShowToast({ key: "success" });
+      setShowToastError({ label: "File Uploaded Successfully", error: false, success: true });
     } catch (error) {
       setLoader(false);
       return error;
@@ -638,7 +638,7 @@ const AppliedDetailForm = (props) => {
               setValue(x?.id, x?.area);
               return (
                 <div key={i}>
-                  <h6>
+                  <h6 style={{ marginTop: "10px" }}>
                     <span>
                       <b>Purpose Name: </b>
                     </span>
@@ -647,7 +647,7 @@ const AppliedDetailForm = (props) => {
                   <div className="row">
                     <div className="col col-4 mt-3">
                       <h6>
-                        Area:
+                        Area(in acres):
                         <input
                           type="number"
                           className="form-control"
@@ -664,6 +664,8 @@ const AppliedDetailForm = (props) => {
                             // const updatedData = updateAreaById(newDataA, x?.id, e?.target?.value);
                           }}
                         />
+                        <span style={{ fontSize: "13px", fontWeight: "bold" }}>Max Percentage:</span> {x?.maxPercentage},{" "}
+                        <span style={{ fontSize: "13px", fontWeight: "bold" }}>Min Percentage:</span> {x?.minPercentage}
                       </h6>
                     </div>
                     {farsArr?.length > 0 && (
@@ -1073,7 +1075,7 @@ const AppliedDetailForm = (props) => {
                       </button>
                     </div>
                   </div>
-                  {showToast && (
+                  {/* {showToast && (
                     <Toast
                       success={showToast?.key === "success" ? true : false}
                       label="Document Uploaded Successfully"
@@ -1090,6 +1092,16 @@ const AppliedDetailForm = (props) => {
                       isDleteBtn={true}
                       onClose={() => {
                         setShowToastError(null);
+                      }}
+                    />
+                  )} */}
+                  {showToastError && (
+                    <CusToaster
+                      label={showToastError?.label}
+                      success={showToastError?.success}
+                      error={showToastError?.error}
+                      onClose={() => {
+                        setShowToastError({ label: "", success: false, error: false });
                       }}
                     />
                   )}
