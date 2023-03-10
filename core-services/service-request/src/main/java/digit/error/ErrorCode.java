@@ -61,4 +61,8 @@ public class ErrorCode {
     public static final String INVALID_REGEX_ERR_CODE = "INVALID_REGEX_ERR_CODE";
 
     public static final String INVALID_REGEX_ERR_MSG = "The provided regex failed to compile for attribute definition with code - ";
+
+    public static final String ATTRIBUTE_VALUE_REGEX_VALIDATION_ERR_CODE = "ATTRIBUTE_VALUE_REGEX_VALIDATION_ERR";
+
+    public static final String ATTRIBUTE_VALUE_REGEX_VALIDATION_ERR_MSG = "Provided attribute value does not conform with the regex provided against attribute definition";
 }

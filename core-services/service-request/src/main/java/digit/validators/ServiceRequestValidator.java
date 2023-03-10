@@ -8,8 +8,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static digit.error.ErrorCode.*;
 
@@ -44,6 +47,7 @@ public class ServiceRequestValidator {
         Map<String, AttributeDefinition.DataTypeEnum> attributeCodeVsDataType = new HashMap<>();
         Set<String> setOfRequiredAttributes = new HashSet<>();
         Map<String, Set<String>> attributeCodeVsValues = new HashMap<>();
+        Map<String, String> attributeCodeVsRegexMap = new HashMap<>();
         serviceDefinition.getAttributes().forEach(attributeDefinition -> {
             attributeCodeVsDataType.put(attributeDefinition.getCode(), attributeDefinition.getDataType());
 
@@ -53,6 +57,10 @@ public class ServiceRequestValidator {
 
             if(attributeDefinition.getRequired())
                 setOfRequiredAttributes.add(attributeDefinition.getCode());
+
+            if(!ObjectUtils.isEmpty(attributeDefinition.getRegex())){
+                attributeCodeVsRegexMap.put(attributeDefinition.getCode(), attributeDefinition.getRegex());
+            }
         });
 
         // Check if service has all the attribute values required as part of service definition
@@ -120,6 +128,25 @@ public class ServiceRequestValidator {
                         }
                     });
                 }
+            }
+        });
+
+        // Validate if all attribute values provided against service definition conform to the regex provided
+        service.getAttributes().forEach(attributeValue -> {
+            if(attributeCodeVsRegexMap.containsKey(attributeValue.getAttributeCode())){
+                if(attributeCodeVsDataType.get(attributeValue.getAttributeCode()).equals(AttributeDefinition.DataTypeEnum.MULTIVALUELIST)){
+                    List<String> providedAttributeValues = (List<String>) attributeValue.getValue();
+                    providedAttributeValues.forEach(providedAttributeValue -> {
+                        if(!providedAttributeValue.matches(attributeCodeVsRegexMap.get(attributeValue.getAttributeCode()))){
+                            throw new CustomException(ATTRIBUTE_VALUE_REGEX_VALIDATION_ERR_CODE, ATTRIBUTE_VALUE_REGEX_VALIDATION_ERR_MSG);
+                        }
+                    });
+                }else{
+                    if(!String.valueOf(attributeValue.getValue()).matches(attributeCodeVsRegexMap.get(attributeValue.getAttributeCode()))){
+                        throw new CustomException(ATTRIBUTE_VALUE_REGEX_VALIDATION_ERR_CODE, ATTRIBUTE_VALUE_REGEX_VALIDATION_ERR_MSG);
+                    }
+                }
+
             }
         });
 
