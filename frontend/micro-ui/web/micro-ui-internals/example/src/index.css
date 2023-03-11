@@ -4094,6 +4094,7 @@ body {
   border-width: 1px;
   --border-opacity: 1;
   border-color: #f47738;
+  background-color: #1266af;
   border-color: rgba(244, 119, 56, var(--border-opacity));
 }
 
@@ -4824,6 +4825,10 @@ body {
     text-decoration: none;
     margin: 0.2rem 0;
     color: #262626;
+  }
+
+  .links-redirect a:hover {
+    color: #0056b3
   }
 }
 
@@ -8857,6 +8862,7 @@ textarea {
   border-width: 1px;
   --border-opacity: 1;
   border-color: #f47738;
+  background-color: #1266af;
   border-color: rgba(244, 119, 56, var(--border-opacity));
 }
 
@@ -15687,6 +15693,7 @@ body {
   border-width: 1px;
   --border-opacity: 1;
   border-color: #1266af;
+  background-color: #1266af;
   border-color: rgba(244, 119, 56, var(--border-opacity));
 }
 
