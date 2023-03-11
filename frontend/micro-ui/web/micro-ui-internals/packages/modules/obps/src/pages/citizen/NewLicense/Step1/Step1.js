@@ -12,6 +12,8 @@ import Spinner from "../../../../components/Loader";
 import { getDocShareholding } from "../docView/docView.help";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step1";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import CusToaster from "../../../../components/Toaster";
+import FileUpload from "@mui/icons-material/FileUpload";
 
 const ApllicantFormStep1 = (props) => {
   const history = useHistory();
@@ -20,14 +22,17 @@ const ApllicantFormStep1 = (props) => {
   const tenant = Digit.ULBService.getCurrentTenantId();
   const [developerDataLabel, setDeveloperDataLabel] = useState([]);
   const [loader, setLoader] = useState(false);
-  const [showToastError, setShowToastError] = useState(null);
   const [getData, setData] = useState({ caseNumber: "", dairyNumber: "" });
   // const [getAppliantInfoData, setAppliantInfoData] = useState(null);
   const [applicantId, setApplicantId] = useState("");
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [fileStoreId, setFileStoreId] = useState({});
+  const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
 
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
     control,
     setValue,
@@ -180,6 +185,34 @@ const ApllicantFormStep1 = (props) => {
     setApplicantId(id?.toString());
     if (id) getApplicantUserData(id);
   }, []);
+
+  const getDocumentData = async (file, fieldName) => {
+    if (selectedFiles.includes(file.name)) {
+      setShowToastError({ label: "Duplicate file Selected", error: true, success: false });
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("tenantId", "hr");
+    formData.append("module", "property-upload");
+    formData.append("tag", "tag-property");
+    setLoader(true);
+    try {
+      const Resp = await axios.post("/filestore/v1/files", formData, {});
+      setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
+      setFileStoreId({ ...fileStoreId, [fieldName]: Resp?.data?.files?.[0]?.fileStoreId });
+      // if (fieldName === "registeringAuthorityDoc") {
+      //   setValue("registeringAuthorityDocFileName", file.name);
+      // }
+      setSelectedFiles([...selectedFiles, file.name]);
+      setLoader(false);
+      setShowToastError({ label: "File Uploaded Successfully", error: false, success: true });
+    } catch (error) {
+      setLoader(false);
+      return error.message;
+    }
+  };
 
   return (
     <div>
@@ -339,6 +372,35 @@ const ApllicantFormStep1 = (props) => {
             <br></br>
             {developerDataLabel?.addInfo?.showDevTypeFields != "Individual" && (
               <div>
+                <h5 className="card-title fw-bold"> Director Information as per MCA</h5>
+                <div className="card-body">
+                  <div className="table-bd">
+                    <table className="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>Sr. No</th>
+                          <th>DIN Number</th>
+                          <th>Name</th>
+                          <th>Contact Number</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {developerDataLabel?.addInfo?.DirectorsInformationMCA?.length &&
+                          developerDataLabel?.addInfo?.DirectorsInformationMCA?.map((item, index) => {
+                            return (
+                              <tr>
+                                <td>{index + 1}</td>
+                                <td>{item?.din}</td>
+                                <td>{item?.name}</td>
+                                <td>{item?.contactNumber}</td>
+                              </tr>
+                            );
+                          })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
                 <h5 className="card-title fw-bold">Directors Information as per developer</h5>
                 <div className="card-body">
                   <div className="table-bd">
@@ -371,40 +433,11 @@ const ApllicantFormStep1 = (props) => {
                                   }}
                                   onClick={() => {
                                     if (item?.uploadPdf) getDocShareholding(item?.uploadPdf, setLoader);
-                                    else setShowToastError({ key: "error" });
+                                    else setShowToastError({ label: "No pdf here", error: true, success: false });
                                   }}
                                 >
                                   <VisibilityIcon color="info" className="icon" />
                                 </td>
-                              </tr>
-                            );
-                          })}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-                <h5 className="card-title fw-bold"> Director Information as per MCA</h5>
-                <div className="card-body">
-                  <div className="table-bd">
-                    <table className="table table-bordered">
-                      <thead>
-                        <tr>
-                          <th>Sr. No</th>
-                          <th>DIN Number</th>
-                          <th>Name</th>
-                          <th>Contact Number</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {developerDataLabel?.addInfo?.DirectorsInformationMCA?.length &&
-                          developerDataLabel?.addInfo?.DirectorsInformationMCA?.map((item, index) => {
-                            return (
-                              <tr>
-                                <td>{index + 1}</td>
-                                <td>{item?.din}</td>
-                                <td>{item?.name}</td>
-                                <td>{item?.contactNumber}</td>
                               </tr>
                             );
                           })}
@@ -447,7 +480,7 @@ const ApllicantFormStep1 = (props) => {
                                   }}
                                   onClick={() => {
                                     if (it?.uploadPdf) getDocShareholding(it?.uploadPdf, setLoader);
-                                    else setShowToastError({ key: "error" });
+                                    else setShowToastError({ label: "No pdf here", error: true, success: false });
                                   }}
                                 >
                                   <VisibilityIcon color="info" className="icon" />
@@ -571,7 +604,7 @@ const ApllicantFormStep1 = (props) => {
                   onClick={() => {
                     if (developerDataLabel?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf)
                       getDocShareholding(developerDataLabel?.aurthorizedUserInfoArray?.[0]?.uploadDigitalSignaturePdf, setLoader);
-                    else setShowToastError({ key: "error" });
+                    else setShowToastError({ label: "No pdf here", error: true, success: false });
                   }}
                   id="btnSearch"
                   class=""
@@ -586,7 +619,7 @@ const ApllicantFormStep1 = (props) => {
                   onClick={() => {
                     if (developerDataLabel?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution)
                       getDocShareholding(developerDataLabel?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution, setLoader);
-                    else setShowToastError({ key: "error" });
+                    else setShowToastError({ label: "No pdf here", error: true, success: false });
                   }}
                   id="btnSearch"
                   class=""
@@ -594,6 +627,83 @@ const ApllicantFormStep1 = (props) => {
                   View Upload Board Resolution <VisibilityIcon color="info" className="icon" />
                 </div>
               </FormControl>
+            </div>
+          </div>
+          <div className="row mt-4">
+            <div className="col col-4">
+              <label>
+                Upload Board resolution
+                <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                <input
+                  type="file"
+                  style={{ display: "none" }}
+                  accept="application/pdf/jpeg/png"
+                  onChange={(e) => getDocumentData(e?.target?.files[0], "boardResolutionDoc")}
+                />
+              </label>
+
+              {watch("boardResolutionDoc") && (
+                <a onClick={() => getDocShareholding(watch("boardResolutionDoc"), setLoader)} className="btn btn-sm ">
+                  <VisibilityIcon color="info" className="icon" />
+                </a>
+              )}
+            </div>
+            <div className="col col-4">
+              <label>
+                Consent degree certificate of Architect
+                <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                <input
+                  type="file"
+                  style={{ display: "none" }}
+                  accept="application/pdf/jpeg/png"
+                  onChange={(e) => getDocumentData(e?.target?.files[0], "architectDegreeCertificate")}
+                />
+              </label>
+
+              {watch("architectDegreeCertificate") && (
+                <a onClick={() => getDocShareholding(watch("architectDegreeCertificate"), setLoader)} className="btn btn-sm ">
+                  <VisibilityIcon color="info" className="icon" />
+                </a>
+              )}
+            </div>
+            <div className="col col-4">
+              <label>
+                Consent degree certificate of Engineer
+                <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                <input
+                  type="file"
+                  style={{ display: "none" }}
+                  accept="application/pdf/jpeg/png"
+                  onChange={(e) => getDocumentData(e?.target?.files[0], "engineerDegreeCertificate")}
+                />
+              </label>
+
+              {watch("engineerDegreeCertificate") && (
+                <a onClick={() => getDocShareholding(watch("engineerDegreeCertificate"), setLoader)} className="btn btn-sm ">
+                  <VisibilityIcon color="info" className="icon" />
+                </a>
+              )}
+            </div>
+          </div>
+
+          <div className="">
+            <div className="form-check">
+              <input
+                onClick={(e) => {
+                  console.log("e.target.checke", e.target.checke);
+                }}
+                className="form-check-input"
+                formControlName="agreeCheck"
+                type="checkbox"
+                value=""
+                id="flexCheckDefault"
+              />
+              <label className="checkbox" for="flexCheckDefault">
+                The information fetched from developer registration is updated
+                <span className="text-danger">
+                  <b>*</b>
+                </span>
+              </label>
             </div>
           </div>
 
@@ -606,8 +716,18 @@ const ApllicantFormStep1 = (props) => {
           </div>
         </div>
       </form>
-
       {showToastError && (
+        <CusToaster
+          label={showToastError?.label}
+          success={showToastError?.success}
+          error={showToastError?.error}
+          onClose={() => {
+            setShowToastError({ label: "", success: false, error: false });
+          }}
+        />
+      )}
+
+      {/* {showToastError && (
         <Toast
           error={showToastError?.key === "error" ? true : false}
           label="No Pdf here"
@@ -617,7 +737,7 @@ const ApllicantFormStep1 = (props) => {
             setError(null);
           }}
         />
-      )}
+      )} */}
     </div>
   );
 };

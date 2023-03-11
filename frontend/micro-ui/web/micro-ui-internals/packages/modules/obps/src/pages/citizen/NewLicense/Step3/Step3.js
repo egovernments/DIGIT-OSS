@@ -2163,8 +2163,8 @@ const LandScheduleForm = (props) => {
                   <br></br>
                   <div className="row ">
                     <div className="col col-3">
-                      <h2 data-toggle="tooltip" data-placement="top" title="Any revenue rasta/road passing through proposed site (Yes/No)">
-                        (e) &nbsp;Any revenue rasta/road <span style={{ color: "red" }}>*</span>
+                      <h2 data-toggle="tooltip" data-placement="top" title="Any revenue rasta/road/bundh passing through proposed site (Yes/No)">
+                        (e) &nbsp;Any revenue rasta/road/bundh <span style={{ color: "red" }}>*</span>
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="road">

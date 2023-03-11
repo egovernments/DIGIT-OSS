@@ -26,6 +26,7 @@ const FeesChargesForm = (props) => {
   const [showToast, setShowToast] = useState(null);
   const [showToastError, setShowToastError] = useState(null);
   const [getShow, setShow] = useState({ submit: false, payNow: false });
+  const [consentButton, setConsentButton] = useState(false);
   const [getData, setData] = useState({ caseNumber: "", dairyNumber: "", status: "" });
   const [getCalculatedData, setCalculatedData] = useState(null);
 
@@ -140,6 +141,7 @@ const FeesChargesForm = (props) => {
     try {
       const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${props.getId}`, payload, { responseType: "arraybuffer" });
       setLoader(false);
+      setConsentButton(true);
       const pdfBlob = new Blob([Resp.data], { type: "application/pdf" });
       const pdfUrl = URL.createObjectURL(pdfBlob);
       window.open(pdfUrl);
@@ -537,12 +539,21 @@ const FeesChargesForm = (props) => {
                     <p className="text-black">The following is undertaken: </p>
                     <ul className="Undertakings">
                       <li>I hereby declare that the details furnished above are true and correct to the best of my knowledge.</li>
-                      <button className="btn btn-primary" onClick={() => setmodal1(true)}>
-                        Read More
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => {
+                          // if (e.target.checked) {
+                          // setShow({ payNow: false, submit: false });
+                          showPdf();
+                          // }
+                          // setmodal1(true)
+                        }}
+                      >
+                        Review Application
                       </button>
                     </ul>
                   </div>
-                  <Modal
+                  {/* <Modal
                     size="lg"
                     isOpen={modal1}
                     toggle={() => setmodal(!modal1)}
@@ -560,31 +571,33 @@ const FeesChargesForm = (props) => {
                       </h2>
                     </ModalBody>
                     <ModalFooter toggle={() => setmodal(!modal1)}></ModalFooter>
-                  </Modal>
-                  <div className="">
-                    <div className="form-check">
-                      <input
-                        onClick={(e) => {
-                          if (e.target.checked) {
-                            setShow({ payNow: false, submit: true });
-                            showPdf();
-                          }
-                        }}
-                        className="form-check-input"
-                        formControlName="agreeCheck"
-                        type="checkbox"
-                        value=""
-                        // checked={getData?.status === "FEESANDCHARGES" ? true : false}
-                        id="flexCheckDefault"
-                      />
-                      <label className="checkbox" for="flexCheckDefault">
-                        I agree and accept the terms and conditions.
-                        <span className="text-danger">
-                          <b>*</b>
-                        </span>
-                      </label>
+                  </Modal> */}
+                  {(consentButton || getData?.status === "FEESANDCHARGES") && (
+                    <div className="">
+                      <div className="form-check">
+                        <input
+                          onClick={(e) => {
+                            if (e.target.checked) {
+                              setShow({ payNow: false, submit: true });
+                              // showPdf();
+                            } else setShow({ payNow: false, submit: false });
+                          }}
+                          className="form-check-input"
+                          formControlName="agreeCheck"
+                          type="checkbox"
+                          value=""
+                          // checked={getData?.status === "FEESANDCHARGES" ? true : false}
+                          id="flexCheckDefault"
+                        />
+                        <label className="checkbox" for="flexCheckDefault">
+                          I agree and accept the terms and conditions.
+                          <span className="text-danger">
+                            <b>*</b>
+                          </span>
+                        </label>
+                      </div>
                     </div>
-                  </div>
+                  )}
                   <div class="row">
                     <div class="col-sm-12 text-right">
                       {getShow?.submit && getData?.status !== "FEESANDCHARGES" && (
