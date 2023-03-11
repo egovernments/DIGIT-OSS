@@ -98,6 +98,58 @@ const feeandcharges = props.feeandchargesData
   console.log(uncheckedValue);
   console.log("step5" ,feeandcharges);
 
+  const Tree = ({ data }) => {
+    return (
+      <div>
+        {data?.map((item, index) => {
+          return (
+            <div>
+              <table key={index} className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))", width: "629px" }}>
+                <thead>
+                  <tr>
+                    <th>Conversion Charges (In Rs.)</th>
+                    <td> {item?.conversionChargesCal}</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>External Development Charges (In Rs.)</th>
+                    <td>{item?.externalDevelopmentChargesCal}</td>
+                  </tr>
+                  <tr>
+                    <th>License Fee Charges (In Rs.)</th>
+                    <td>{item?.licenseFeeChargesCal}</td>
+                  </tr>
+                  <tr>
+                    <th>Purpose</th>
+                    <td>{item?.purpose}</td>
+                  </tr>
+                  <tr>
+                    <th>Scrutiny Fee Charges (In Rs.)</th>
+                    <td>{item?.scrutinyFeeChargesCal}</td>
+                  </tr>
+                  <tr>
+                    <th>State Infrastructure Development Charges (In Rs.)</th>
+                    <td>{item?.stateInfrastructureDevelopmentChargesCal}</td>
+                  </tr>
+                </tbody>
+              </table>
+              {!!item?.feesTypeCalculationDto?.length && (
+                <div className="ml-4 mt-4">
+                  <Tree data={item?.feesTypeCalculationDto} />
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+// console.log("Tree123" , data);
+
+
+
+
   return (
     <Form
       ref={props.feeandchargesInfoRef}
@@ -199,7 +251,7 @@ const feeandcharges = props.feeandchargesData
                         </tr>
                       </tbody>
                     </table> */}
-
+{/* 
                     <div className="row">
                       <div className="col col-4">
                        
@@ -208,8 +260,6 @@ const feeandcharges = props.feeandchargesData
                             {feeAndChargesData?.payableNow}
                           </h4>
 
-                        {/* <input type="text" className="form-control" minLength={1} maxLength={20} pattern="[0-9]*" disabled placeholder={feeAndChargesData?.payableNow} />
-                        {errors.totalFee && <p></p>} */}
                       </div>
                       <div className="col col-4">
                       <h4 className="mt-3">
@@ -217,18 +267,14 @@ const feeandcharges = props.feeandchargesData
                             {feeAndChargesData?.purpose}
                           </h4>
 
-                        {/* <input type="text" className="form-control" minLength={1} maxLength={20} pattern="[0-9]*" disabled placeholder={feeAndChargesData?.purpose} />
-                        {errors.totalFee && <p></p>} */}
+                        
                       </div>
                       <div className="col col-4">
                       <h4 className="mt-3">
                             <b>Development Plan: </b>
                             {feeAndChargesData?.developmentPlan}
                           </h4>
-
-                        {/* <input type="text" className="form-control" minLength={1} maxLength={20} pattern="[0-9]*" disabled placeholder={feeAndChargesData?.payableNow} />
-                        {errors.totalFee && <p></p>} */}
-                      </div>
+                      </div> */}
 
                       {/* <div className="col col-5">
                         <h6>(ii)Remark (If any)</h6>
@@ -247,7 +293,7 @@ const feeandcharges = props.feeandchargesData
                         <label className="m-0 mx-2" for="No">No</label>
                         </div>
                       </div> */}
-                    </div>
+                    {/* </div> */}
                         {/* {feeAndChargesData?.adjustFee === "Y" && (
                           <div className="row mt-3">
                               <div className="col col-4">
@@ -285,7 +331,7 @@ const feeandcharges = props.feeandchargesData
 
 
                 </Row>
-                      {feeandcharges?.feesTypeCalculationDto?.map((item, index) => (
+                      {/* {feeandcharges?.data?.feesTypeCalculationDto?.map((item, index) => (
                       
                       <div style={{ marginLeft: 52 }}>
   { index?.item?.map((x,i) =>(
@@ -306,10 +352,110 @@ const feeandcharges = props.feeandchargesData
                           </div>
                         
                       
-                      ))}
+                      ))} */}
+                     <Row>
+
+                     {/* {feeandcharges?.data?.totalFee}  */}
+
+ {/* {feeandcharges?.data?.feesTypeCalculationDto?.map((item, index) => (
+                      <div style={{ marginLeft: 52 }}>
+
+                        <Row >
+                          <h4 className="mt-3">
+                            <b>Purpose Name: </b>
+                            {item?.purpose}
+                          </h4>
+
+                          <h4 className="mt-3">
+                            Area:
+                            <Col className="col col-4" >
+                              {item?.scrutinyFeeChargesCal}
+                              
+                            </Col>
+                          </h4>
+                        
+
+                        </Row>
+                        {item?.feesTypeCalculationDto?.map((item, index) => (
 
 
 
+                          <div style={{ marginLeft: 52 }}>
+
+                            <Row >
+
+                              <h4 className="mt-3">
+                                <b> SubPurpose Name: </b>
+                                {item?.name}
+                              </h4>
+                              
+                              <h4 className="mt-3">
+                                Area:
+                                <Col className="col col-4" >
+                                  <input type="text" className="form-control" placeholder={item?.area} disabled />
+                                </Col>
+                              </h4>
+                              <h4 className="mt-3">
+                                FAR:
+                                <Col className="col col-4" >
+                                  <input type="text" className="form-control" placeholder={item?.fars} disabled />
+                                </Col>
+                              </h4>
+                             
+
+                            </Row>
+                            {item?.feesTypeCalculationDto?.map((item, index) => (
+
+
+
+                              <div style={{ marginLeft: 52 }}>
+
+                                <Row >
+
+                                  <h4 className="mt-3">
+                                    <b> SubPurpose Name: </b>
+                                    {item?.name}
+                                  </h4>
+
+                                  <h4 className="mt-3">
+                                    Area:
+                                    <Col className="col col-4" >
+                                      <input type="text" className="form-control" placeholder={item?.area} disabled />
+                                    </Col>
+                                  </h4>
+                                  <h4 className="mt-3">
+                                    FAR:
+                                    <Col className="col col-4" >
+                                      <input type="text" className="form-control" placeholder={item?.fars} disabled />
+                                    </Col>
+                                  </h4>
+
+                                </Row>
+
+
+
+                              </div>
+                            ))
+                            }
+
+
+
+                          </div>
+                        ))
+                        }
+
+
+
+                      </div>
+                    ))
+                    } */}
+    {feeandcharges?.feesTypeCalculationDto && (
+                    <div>
+                      <Tree data={feeandcharges?.feesTypeCalculationDto} />
+                    </div>
+                  )}
+
+</Row>
 
               </Form.Group>
             </Card>

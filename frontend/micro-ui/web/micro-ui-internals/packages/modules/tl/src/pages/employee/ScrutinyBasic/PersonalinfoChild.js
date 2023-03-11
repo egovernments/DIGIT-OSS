@@ -687,6 +687,80 @@ const PersonalinfoChild = (props) => {
       <br></br>
       {personalinfo?.devDetail?.addInfo?.showDevTypeFields === "Company" &&
         <div>
+          
+          <div div style={{ display: "flex" }}>
+            <h5 className="card-title fw-bold" > &nbsp;&nbsp; 1. Director Information as per MCA &nbsp;&nbsp;</h5>
+
+            {/* <div className="btn btn-sm col-md-4"> */}
+            <ReportProblemIcon
+              style={{
+                display: hideRemarks || hideRemarksPatwari ? "none" : "block",
+
+                color: fieldIconColors.DirectorsInformation
+              }}
+              onClick={() => {
+                setOpennedModal("DirectorsInformation")
+                setLabelValue("Director Information as per MCA"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution : null);
+              }}
+            ></ReportProblemIcon>
+            {/* </div> */}
+          </div>
+
+          <div className="card-body">
+            <div className="table-bd">
+              <table className="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Sr. No</th>
+                    <th>DIN Number</th>
+                    <th>Name</th>
+                    <th>Contact Number</th>
+                    {/* <th>View PDF</th> */}
+                  </tr>
+                </thead>
+                <tbody>
+                  {personalinfo?.devDetail?.addInfo?.DirectorsInformationMCA?.map((item, index) => (
+
+                    <tr
+                    >
+                      <td>{index + 1}</td>
+                      <td>
+                        <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} placeholder={item?.din} disabled></Form.Control>
+                      </td>
+                      <td>
+                        <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} placeholder={item?.name} disabled></Form.Control>
+                      </td>
+                      <td>
+                        <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} placeholder={item?.contactNumber} disabled></Form.Control>
+                      </td>
+                      {/* <td>
+                                <div className="row">
+                                  
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}>
+                                      <Visibility color="info" className="icon" /></IconButton>
+                                  
+                                  </div>
+                                  <div className="btn btn-sm col-md-6">
+                                    <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}>
+                                <FileDownload color="primary" className="mx-1" />
+                        </IconButton>
+                        </div>
+                                </div>
+                              </td> */}
+                    </tr>
+                  ))
+                  }
+                  {/* );
+                            })} */}
+                </tbody>
+              </table>
+            </div>
+          </div>
+                  <br></br>
           <div div style={{ display: "flex" }}>
             <h5 className="card-title fw-bold" > &nbsp; &nbsp;&nbsp; Directors Information &nbsp;&nbsp;</h5>
 
@@ -760,78 +834,9 @@ const PersonalinfoChild = (props) => {
             </div>
           </div>
           <br></br>
-          <div div style={{ display: "flex" }}>
-            <h5 className="card-title fw-bold" > &nbsp;&nbsp; 1. Director Information as per MCA &nbsp;&nbsp;</h5>
 
-            {/* <div className="btn btn-sm col-md-4"> */}
-            <ReportProblemIcon
-              style={{
-                display: hideRemarks || hideRemarksPatwari ? "none" : "block",
 
-                color: fieldIconColors.DirectorsInformation
-              }}
-              onClick={() => {
-                setOpennedModal("DirectorsInformation")
-                setLabelValue("Director Information as per MCA"),
-                  setSmShow(true),
-                  console.log("modal open"),
-                  setFieldValue(personalinfo !== null ? personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.uploadBoardResolution : null);
-              }}
-            ></ReportProblemIcon>
-            {/* </div> */}
-          </div>
 
-          <div className="card-body">
-            <div className="table-bd">
-              <table className="table table-bordered">
-                <thead>
-                  <tr>
-                    <th>Sr. No</th>
-                    <th>DIN Number</th>
-                    <th>Name</th>
-                    <th>Contact Number</th>
-                    {/* <th>View PDF</th> */}
-                  </tr>
-                </thead>
-                <tbody>
-                  {personalinfo?.devDetail?.addInfo?.DirectorsInformationMCA?.map((item, index) => (
-
-                    <tr
-                    >
-                      <td>{index + 1}</td>
-                      <td>
-                        <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} placeholder={item?.din} disabled></Form.Control>
-                      </td>
-                      <td>
-                        <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} placeholder={item?.name} disabled></Form.Control>
-                      </td>
-                      <td>
-                        <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} placeholder={item?.contactNumber} disabled></Form.Control>
-                      </td>
-                      {/* <td>
-                                <div className="row">
-                                  
-                                  <div className="btn btn-sm col-md-6">
-                                    <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}>
-                                      <Visibility color="info" className="icon" /></IconButton>
-                                  
-                                  </div>
-                                  <div className="btn btn-sm col-md-6">
-                                    <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}>
-                                <FileDownload color="primary" className="mx-1" />
-                        </IconButton>
-                        </div>
-                                </div>
-                              </td> */}
-                    </tr>
-                  ))
-                  }
-                  {/* );
-                            })} */}
-                </tbody>
-              </table>
-            </div>
-          </div>
           <div div style={{ display: "flex" }}>
             <h5 className="card-title fw-bold"> &nbsp;&nbsp;&nbsp; Shareholding Patterns &nbsp;&nbsp; </h5>
 
@@ -955,7 +960,7 @@ const PersonalinfoChild = (props) => {
               placeholder={personalinfo !== null ? personalinfo?.devDetail?.aurthorizedUserInfoArray?.[0]?.mobileNumber : null}
               disabled
             ></Form.Control>
-            &nbsp;&nbsp;
+            {/* &nbsp;&nbsp;
             <Form.Check
                         value="Yes"
                         type="radio"
@@ -976,7 +981,7 @@ const PersonalinfoChild = (props) => {
                         label={<CancelIcon color="error" />}
                         name="group41"
                         inline
-                      ></Form.Check> 
+                      ></Form.Check>  */}
                        &nbsp;&nbsp;
             <ReportProblemIcon
               style={{

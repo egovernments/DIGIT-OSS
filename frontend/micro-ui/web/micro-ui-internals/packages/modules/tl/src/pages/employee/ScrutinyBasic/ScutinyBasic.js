@@ -13,6 +13,7 @@ import { Button, Row, Col } from "react-bootstrap";
 import { useForkRef } from "@mui/material";
 import axios from "axios";
 import { ScrutinyRemarksContext } from "../../../../context/remarks-data-context";
+import DataGridDemo from "./PatwariHQ";
 // import AddIcon from "@mui/icons-material/Add";
 
 const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData , histeroyData, feeandcharges}) => {
@@ -291,7 +292,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
   console.log("remarks api", remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null);
 
   console.log("remakes data parsnalinfo", remarksChanges);
-
+console.log("basiceData",iconStates )
   return (
     <div>
       <div style={{ position: "relative", maxWidth: "100%", padding: 2 }}>
@@ -367,6 +368,15 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
           // remarksum={sumrol.egScrutiny !== undefined ? sumrol.egScrutiny : null}
           histeroyData={histeroyData}
         ></ScrutinyDevelopment>
+      </div>
+
+      <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
+      <DataGridDemo
+          // applicantInfo={applicantInfoPersonal}
+          applicationNumber={applicationNumber}
+          dataForIcons={iconStates}
+          >
+          </DataGridDemo>
       </div>
     </div>
   );

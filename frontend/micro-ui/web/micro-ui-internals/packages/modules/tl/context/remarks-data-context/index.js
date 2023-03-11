@@ -11,6 +11,8 @@ const ScrutinyRemarksProvider = ({ children }) => {
 
     const [remarksData, setRemarksData] = useState({});
     const [iconStates,setIconState]= useState(null);
+    const [roleData,setRoleData]= useState(null);
+
     const [bussinessService , setBusinessService] = useState("");
   
     const userInfo = Digit.UserService.getUser()?.info || {};
@@ -63,11 +65,11 @@ const ScrutinyRemarksProvider = ({ children }) => {
           }
       };
       try {
-        const Resp = await axios.post(`/land-services/egscrutiny/_search?applicationNumber=${applicationNumber}&userId=${userInfo?.id}`, dataToPass).then((response) => {
+        const Resp = await axios.post(`/land-services/egscrutiny/_search2?applicationNumber=${applicationNumber}`, dataToPass).then((response) => {
           return response.data;
         });
   
-        console.log("Response From API", Resp);
+        console.log("ResponseTABLE", Resp);
         setIconState(Resp);
         // setApiResponse(Resp);
       } catch (error) {
@@ -75,6 +77,42 @@ const ScrutinyRemarksProvider = ({ children }) => {
       }
   
     }
+
+    // const handleRoleTable=async(applicationNumber)=>{
+    //     console.log("logger123...",applicationNumber)
+    //     const dataToPass={
+    //       "RequestInfo": {
+    //         "apiId": "Rainmaker",
+
+    //         "action": "_create",
+    
+    //         "did": 1,
+    
+    //         "key": "",
+    
+    //         "msgId": "20170310130900|en_IN",
+    
+    //         "ts": 0,
+    
+    //         "ver": ".01",
+    
+    //         "authToken": authToken
+    
+    //       }
+    //   };
+    //   try {
+    //     const Resp = await axios.post(`/land-services/egscrutiny/_search2?applicationNumber=${applicationNumber}`, dataToPass).then((response) => {
+    //       return response.data;
+    //     });
+  
+    //     console.log("ResponsTable", Resp);
+    //     setRoleData(Resp);
+    //     // setApiResponse(Resp);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+  
+    // }
 
 
     return (
