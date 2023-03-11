@@ -23,6 +23,8 @@ import { VALIDATION_SCHEMA } from "../../../../utils/schema/step3";
 import FileUpload from "@mui/icons-material/FileUpload";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import InfoIcon from "@mui/icons-material/Info";
+import Tooltip from "@mui/material/Tooltip";
 import { useLocation } from "react-router-dom";
 import { Toast } from "@egovernments/digit-ui-react-components";
 import WorkingTable from "../../../../components/Table";
@@ -692,8 +694,12 @@ const LandScheduleForm = (props) => {
                                   <div className="col col-12">
                                     <label>
                                       {" "}
-                                      <h2 data-toggle="tooltip" data-placement="top" title="Upload affidavit related to non-creation."></h2>
-                                      Upload affidavit <span style={{ color: "red" }}>*</span>
+                                      <h2>
+                                        Upload affidavit <span style={{ color: "red" }}>*</span>
+                                        <Tooltip title="Upload affidavit related to non-creation.">
+                                          <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
+                                        </Tooltip>
+                                      </h2>
                                       <FileUpload style={{ cursor: "pointer" }} color="primary" />
                                       <input
                                         type="file"
@@ -701,15 +707,13 @@ const LandScheduleForm = (props) => {
                                         accept="application/pdf/jpeg/png"
                                         onChange={(e) => getDocumentData(e?.target?.files[0], "thirdPartyDoc")}
                                       />
+                                      {watch("thirdPartyDoc") && (
+                                        <a onClick={() => getDocShareholding(watch("thirdPartyDoc"), setLoader)} className="btn btn-sm ">
+                                          <VisibilityIcon color="info" className="icon" />
+                                        </a>
+                                      )}
+                                      {/* <h3>{watch("thirdPartyDoc")}</h3> */}
                                     </label>
-
-                                    {watch("thirdPartyDoc") && (
-                                      <a onClick={() => getDocShareholding(watch("thirdPartyDoc"), setLoader)} className="btn btn-sm ">
-                                        <VisibilityIcon color="info" className="icon" />
-                                      </a>
-                                    )}
-                                    {/* <h3>{watch("thirdPartyDoc")}</h3> */}
-
                                     <h3 className="error-message" style={{ color: "red" }}>
                                       {errors?.thirdPartyDoc && errors?.thirdPartyDoc?.message}
                                     </h3>
@@ -730,9 +734,14 @@ const LandScheduleForm = (props) => {
                                     {watch("reraRegistered") === "Y" && (
                                       <div className="row ">
                                         <div className="col col-12">
-                                          <h6 data-toggle="tooltip" data-placement="top" title="Upload copy of RERA registration"></h6>
-                                          Upload RERA registration <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
                                           <label>
+                                            <h6>
+                                              Upload RERA registration <span style={{ color: "red" }}>*</span>
+                                              <Tooltip title="Upload copy of RERA registration">
+                                                <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
+                                              </Tooltip>
+                                            </h6>
+
                                             <FileUpload style={{ cursor: "pointer" }} color="primary" />
                                             <input
                                               type="file"
@@ -740,12 +749,13 @@ const LandScheduleForm = (props) => {
                                               onChange={(e) => getDocumentData(e?.target?.files[0], "reraDocUpload")}
                                               accept="application/pdf/jpeg/png"
                                             />
+
+                                            {watch("reraDocUpload") && (
+                                              <a onClick={() => getDocShareholding(watch("reraDocUpload"), setLoader)} className="btn btn-sm ">
+                                                <VisibilityIcon color="info" className="icon" />
+                                              </a>
+                                            )}
                                           </label>
-                                          {watch("reraDocUpload") && (
-                                            <a onClick={() => getDocShareholding(watch("reraDocUpload"), setLoader)} className="btn btn-sm ">
-                                              <VisibilityIcon color="info" className="icon" />
-                                            </a>
-                                          )}
                                           {/* <h3>{watch("reraDocUpload")}</h3> */}
                                           <h3 className="error-message" style={{ color: "red" }}>
                                             {errors?.reraDocUpload && errors?.reraDocUpload?.message}
@@ -756,9 +766,14 @@ const LandScheduleForm = (props) => {
                                     {watch("reraRegistered") === "N" && (
                                       <div className="row ">
                                         <div className="col col-12">
-                                          <h6 data-toggle="tooltip" data-placement="top" title=" Upload Copy of non-registration of RERA"></h6>
-                                          Affidavit <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
                                           <label>
+                                            <h6>
+                                              Affidavit <span style={{ color: "red" }}>*</span>
+                                              <Tooltip title=" Upload Copy of non-registration of RERA">
+                                                <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
+                                              </Tooltip>
+                                            </h6>
+
                                             <FileUpload style={{ cursor: "pointer" }} color="primary" />
                                             <input
                                               type="file"
@@ -766,12 +781,16 @@ const LandScheduleForm = (props) => {
                                               onChange={(e) => getDocumentData(e?.target?.files[0], "reraNonRegistrationDoc")}
                                               accept="application/pdf/jpeg/png"
                                             />
+
+                                            {watch("reraNonRegistrationDoc") && (
+                                              <a
+                                                onClick={() => getDocShareholding(watch("reraNonRegistrationDoc"), setLoader)}
+                                                className="btn btn-sm "
+                                              >
+                                                <VisibilityIcon color="info" className="icon" />
+                                              </a>
+                                            )}
                                           </label>
-                                          {watch("reraNonRegistrationDoc") && (
-                                            <a onClick={() => getDocShareholding(watch("reraNonRegistrationDoc"), setLoader)} className="btn btn-sm ">
-                                              <VisibilityIcon color="info" className="icon" />
-                                            </a>
-                                          )}
                                           {/* <h3>{watch("reraNonRegistrationDoc")}</h3> */}
                                           <h3 className="error-message" style={{ color: "red" }}>
                                             {errors?.reraNonRegistrationDoc && errors?.reraNonRegistrationDoc?.message}
@@ -874,8 +893,7 @@ const LandScheduleForm = (props) => {
                             </h3>
                           </div>
                           <div className="col col-6">
-                            <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"></h2> Document Upload{" "}
-                            <span style={{ color: "red" }}>*</span>
+                            <h2></h2> Document Upload <span style={{ color: "red" }}>*</span>
                             <label>
                               <FileUpload style={{ cursor: "pointer" }} color="primary" />
                               <input
@@ -907,8 +925,7 @@ const LandScheduleForm = (props) => {
                             </h3>
                           </div>
                           <div className="col col-6">
-                            <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"></h2> Document Upload{" "}
-                            <span style={{ color: "red" }}>*</span>
+                            <h2></h2> Document Upload <span style={{ color: "red" }}>*</span>
                             <label>
                               <FileUpload style={{ cursor: "pointer" }} color="primary" />
                               <input
@@ -940,8 +957,7 @@ const LandScheduleForm = (props) => {
                             </h3>
                           </div>
                           <div className="col col-6">
-                            <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"></h2> Document Upload{" "}
-                            <span style={{ color: "red" }}>*</span>
+                            <h2></h2> Document Upload <span style={{ color: "red" }}>*</span>
                             <label>
                               <FileUpload style={{ cursor: "pointer" }} color="primary" />
                               <input
@@ -973,8 +989,7 @@ const LandScheduleForm = (props) => {
                             </h3>
                           </div>
                           <div className="col col-6">
-                            <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"></h2> Document Upload{" "}
-                            <span style={{ color: "red" }}>*</span>
+                            <h2></h2> Document Upload <span style={{ color: "red" }}>*</span>
                             <label>
                               <FileUpload style={{ cursor: "pointer" }} color="primary" />
                               <input
@@ -1006,8 +1021,7 @@ const LandScheduleForm = (props) => {
                             </h3>
                           </div>
                           <div className="col col-6">
-                            <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"></h2> Document Upload{" "}
-                            <span style={{ color: "red" }}>*</span>
+                            <h2></h2> Document Upload <span style={{ color: "red" }}>*</span>
                             <label>
                               <FileUpload style={{ cursor: "pointer" }} color="primary" />
                               <input
@@ -1109,7 +1123,7 @@ const LandScheduleForm = (props) => {
                                   </h3>
                                 </div>
                                 <div className="col col-6">
-                                  <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"></h2>
+                                  <h2></h2>
                                   Document Upload <span style={{ color: "red" }}>*</span>
                                   <label>
                                     <FileUpload style={{ cursor: "pointer" }} color="primary" />
@@ -1173,8 +1187,7 @@ const LandScheduleForm = (props) => {
                             </h3>
                           </div>
                           <div className="col col-6">
-                            <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"></h2> Document Upload{" "}
-                            <span style={{ color: "red" }}>*</span>
+                            <h2></h2> Document Upload <span style={{ color: "red" }}>*</span>
                             <label>
                               <FileUpload style={{ cursor: "pointer" }} color="primary" />
                               <input
@@ -1223,7 +1236,7 @@ const LandScheduleForm = (props) => {
                       {watch("appliedLand") === "N" && (
                         <div className="row ">
                           <div className="col col-12">
-                            <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"></h6>
+                            <h6></h6>
                             Document Upload <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
                             <label>
                               <FileUpload style={{ cursor: "pointer" }} color="primary" />
@@ -1249,8 +1262,11 @@ const LandScheduleForm = (props) => {
                     </div>
 
                     <div className="col col-3 ">
-                      <h2 data-toggle="tooltip" data-placement="top" title="If any revenue rasta abuts to the applied site ?">
-                        (b)&nbsp;Revenue rasta <span style={{ color: "red" }}>*</span> &nbsp;&nbsp; &nbsp;&nbsp;
+                      <h2>
+                        (b)&nbsp;Revenue rasta <span style={{ color: "red" }}>*</span>
+                        <Tooltip title="If any revenue rasta abuts to the applied site ?">
+                          <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
+                        </Tooltip>
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="revenueRasta">
@@ -1288,8 +1304,11 @@ const LandScheduleForm = (props) => {
                       )}
                     </div>
                     <div className="col col-3 ">
-                      <h2 data-toggle="tooltip" data-placement="top" title="Watercourse running along boundary through the applied site ?">
-                        (c)&nbsp;Watercourse <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                      <h2>
+                        (c)&nbsp;Watercourse <span style={{ color: "red" }}>*</span>
+                        <Tooltip title="Watercourse running along boundary through the applied site ?">
+                          <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
+                        </Tooltip>
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="waterCourse">
@@ -1357,8 +1376,11 @@ const LandScheduleForm = (props) => {
                   <br></br>
                   <div className="row">
                     <div className="col col-3 ">
-                      <h2 data-toggle="tooltip" data-placement="top" title="Whether Others Land fall within Applied Land">
-                        (e)&nbsp;Whether Others Land fall <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                      <h2>
+                        (e)&nbsp;Whether Others Land fall <span style={{ color: "red" }}>*</span>
+                        <Tooltip title="Whether Others Land fall within Applied Land">
+                          <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
+                        </Tooltip>
                       </h2>{" "}
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="landSandwiched">
@@ -1476,8 +1498,11 @@ const LandScheduleForm = (props) => {
                         {watch("orderUpload") === "Y" && (
                           <div className="row ">
                             <div className="col col-3 ">
-                              <h2 data-toggle="tooltip" data-placement="top" title="Whether land compensation received ">
+                              <h2>
                                 Whether land compensation
+                                <Tooltip title="Whether land compensation received ">
+                                  <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
+                                </Tooltip>
                               </h2>
 
                               <label htmlFor="landCompensation">
@@ -2212,8 +2237,11 @@ const LandScheduleForm = (props) => {
                   <br></br>
                   <div className="row ">
                     <div className="col col-3">
-                      <h2 data-toggle="tooltip" data-placement="top" title="Any revenue rasta/road passing through proposed site (Yes/No)">
+                      <h2>
                         (e) &nbsp;Any revenue rasta/road <span style={{ color: "red" }}>*</span>
+                        <Tooltip title="Any revenue rasta/road passing through proposed site (Yes/No)">
+                          <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
+                        </Tooltip>
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="road">
@@ -2231,8 +2259,11 @@ const LandScheduleForm = (props) => {
                         <div className="row ">
                           <div className="col col-12">
                             <label>
-                              <h2 data-toggle="tooltip" data-placement="top" title=" Width of Revenue rasta/road (in ft.)">
-                                Width of Revenue rasta(in ft.)<span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                              <h2>
+                                Width of Revenue rasta(in ft.)<span style={{ color: "red" }}>*</span>
+                                <Tooltip title=" Width of Revenue rasta/road (in ft.)">
+                                  <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
+                                </Tooltip>
                                 <CalculateIcon color="primary" />
                               </h2>
                             </label>
@@ -2307,12 +2338,11 @@ const LandScheduleForm = (props) => {
                       )}
                     </div> */}
                     <div className="col col-3">
-                      <h2
-                        data-toggle="tooltip"
-                        data-placement="top"
-                        title="Whether any utility line passing through the site is incorporated/adjusted in the layout plan (Yes/No)"
-                      >
+                      <h2>
                         (f)&nbsp;Utility/Permit Line <span style={{ color: "red" }}>*</span>
+                        <Tooltip title="Whether any utility line passing through the site is incorporated/adjusted in the layout plan (Yes/No)">
+                          <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
+                        </Tooltip>
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="utilityLine">
@@ -2467,15 +2497,14 @@ const LandScheduleForm = (props) => {
                   <br></br>
                   <div className="row">
                     <div className="col col-3">
-                      <h2
-                        style={{ display: "flex" }}
-                        data-toggle="tooltip"
-                        data-placement="top"
-                        title=" Add sales/Deed/exchange/gift deed, mutation, lease/Patta"
-                      >
-                        Sale Deed/Exchange Deed
-                      </h2>
                       <label>
+                        <h2 style={{ display: "flex" }}>
+                          Sale Deed/Exchange Deed
+                          <Tooltip title=" Add sales/Deed/exchange/gift deed, mutation, lease/Patta">
+                            <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
+                          </Tooltip>
+                        </h2>
+
                         <FileUpload style={{ cursor: "pointer" }} color="primary" />
                         <input
                           type="file"
@@ -2483,27 +2512,27 @@ const LandScheduleForm = (props) => {
                           onChange={(e) => getDocumentData(e?.target?.files[0], "addSalesDeed")}
                           accept="application/pdf/jpeg/png"
                         />
+
+                        {watch("addSalesDeed") ? (
+                          <a onClick={() => getDocShareholding(watch("addSalesDeed"), setLoader)} className="btn btn-sm ">
+                            <VisibilityIcon color="info" className="icon" />
+                          </a>
+                        ) : (
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.addSalesDeed && errors?.addSalesDeed?.message}
+                          </h3>
+                        )}
                       </label>
-                      {watch("addSalesDeed") ? (
-                        <a onClick={() => getDocShareholding(watch("addSalesDeed"), setLoader)} className="btn btn-sm ">
-                          <VisibilityIcon color="info" className="icon" />
-                        </a>
-                      ) : (
-                        <h3 className="error-message" style={{ color: "red" }}>
-                          {errors?.addSalesDeed && errors?.addSalesDeed?.message}
-                        </h3>
-                      )}
                     </div>
                     <div className="col col-3">
-                      <h2
-                        style={{ display: "flex" }}
-                        data-toggle="tooltip"
-                        data-placement="top"
-                        title="Copy of spa/GPA/board resolution to sign collaboration agrrement"
-                      >
-                        Copy of spa/GPA/board. <span style={{ color: "red" }}>*</span>
-                      </h2>
                       <label>
+                        <h2 style={{ display: "flex" }}>
+                          Copy of spa/GPA/board. <span style={{ color: "red" }}>*</span>
+                          <Tooltip title="Copy of spa/GPA/board resolution to sign collaboration agrrement">
+                            <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
+                          </Tooltip>
+                        </h2>
+
                         <FileUpload style={{ cursor: "pointer" }} color="primary" />
                         <input
                           type="file"
@@ -2511,16 +2540,17 @@ const LandScheduleForm = (props) => {
                           onChange={(e) => getDocumentData(e?.target?.files[0], "copyofSpaBoard")}
                           accept="application/pdf/jpeg/png"
                         />
+
+                        {watch("copyofSpaBoard") ? (
+                          <a onClick={() => getDocShareholding(watch("copyofSpaBoard"), setLoader)} className="btn btn-sm ">
+                            <VisibilityIcon color="info" className="icon" />
+                          </a>
+                        ) : (
+                          <h3 className="error-message" style={{ color: "red" }}>
+                            {errors?.copyofSpaBoard && errors?.copyofSpaBoard?.message}
+                          </h3>
+                        )}
                       </label>
-                      {watch("copyofSpaBoard") ? (
-                        <a onClick={() => getDocShareholding(watch("copyofSpaBoard"), setLoader)} className="btn btn-sm ">
-                          <VisibilityIcon color="info" className="icon" />
-                        </a>
-                      ) : (
-                        <h3 className="error-message" style={{ color: "red" }}>
-                          {errors?.copyofSpaBoard && errors?.copyofSpaBoard?.message}
-                        </h3>
-                      )}
                     </div>
                     {/* <div className="col col-3">
                       <h2 style={{ display: "flex" }}>
@@ -2551,13 +2581,11 @@ const LandScheduleForm = (props) => {
                     <div className="col col-3">
                       <h2 style={{ display: "flex" }}>
                         Shajra Plan <span style={{ color: "red" }}>*</span>
+                        <Tooltip title=" Click here for instructions to Upload Copy of Shajra Plan.">
+                          <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
+                        </Tooltip>
                       </h2>
-                      <span
-                        className="text-primary"
-                        data-toggle="tooltip"
-                        data-placement="top"
-                        title=" Click here for instructions to Upload Copy of Shajra Plan."
-                      >
+                      <span>
                         {" "}
                         <a onClick={() => setmodal1(true)}>(Click here )</a>
                       </span>
