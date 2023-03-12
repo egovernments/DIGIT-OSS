@@ -146,7 +146,6 @@ public class TLRepository {
 		preparedStmtList.add(criteria.getLimit());
 
         if(!StringUtils.isEmpty(criteria.getTenantId())) {
-            System.out.println(criteria.getTenantId());
             query=query+" where tenantid= '"+criteria.getTenantId()+"'";
         }
         query=query+" ORDER BY createdtime offset " +
