@@ -32,6 +32,8 @@ import NumberInput from "../../../../components/NumberInput";
 import FileUpload from "@mui/icons-material/FileUpload";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import CusToaster from "../../../../components/Toaster";
+import InfoIcon from "@mui/icons-material/Info";
+import Tooltip from "@mui/material/Tooltip";
 
 const AppliedDetailForm = (props) => {
   const location = useLocation();
@@ -980,7 +982,7 @@ const AppliedDetailForm = (props) => {
                   </h6>
                   <div className="row mt-3 ">
                     <div className="col col-3">
-                      <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top">
+                      <h6 style={{ display: "flex" }}>
                         Layout Plan in pdf<span style={{ color: "red" }}>*</span>
                       </h6>
                       <label>
@@ -999,7 +1001,7 @@ const AppliedDetailForm = (props) => {
                       )}
                     </div>
                     <div className="col col-3">
-                      <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top">
+                      <h6 style={{ display: "flex" }}>
                         Layout Plan in dxf<span style={{ color: "red" }}>*</span>
                       </h6>
                       <label>
@@ -1019,15 +1021,14 @@ const AppliedDetailForm = (props) => {
                     </div>
 
                     <div className="col col-3">
-                      <h6
-                        style={{ display: "flex" }}
-                        data-toggle="tooltip"
-                        data-placement="top"
-                        title="Undertaking that no change has been made in the phasing "
-                      >
-                        Undertaking<span style={{ color: "red" }}>*</span>
-                      </h6>
                       <label>
+                        <h6 style={{ display: "flex" }}>
+                          Undertaking<span style={{ color: "red" }}>*</span>
+                          <Tooltip title="Undertaking that no change has been made in the phasing ">
+                            <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
+                          </Tooltip>
+                        </h6>
+
                         <FileUpload style={{ cursor: "pointer" }} color="primary" />
                         <input
                           type="file"
@@ -1035,12 +1036,13 @@ const AppliedDetailForm = (props) => {
                           onChange={(e) => getDocumentData(e?.target?.files[0], "undertaking")}
                           accept="application/pdf/jpeg/png"
                         />
+
+                        {watch("undertaking") && (
+                          <a onClick={() => getDocShareholding(watch("undertaking"), setLoader)} className="btn btn-sm ">
+                            <VisibilityIcon color="info" className="icon" />
+                          </a>
+                        )}
                       </label>
-                      {watch("undertaking") && (
-                        <a onClick={() => getDocShareholding(watch("undertaking"), setLoader)} className="btn btn-sm ">
-                          <VisibilityIcon color="info" className="icon" />
-                        </a>
-                      )}
                     </div>
 
                     <div className="col col-3">

@@ -14,6 +14,7 @@ import { VALIDATION_SCHEMA } from "../../../../utils/schema/step5";
 import ScrollToTop from "@egovernments/digit-ui-react-components/src/atoms/ScrollToTop";
 import FileUpload from "@mui/icons-material/FileUpload";
 import { Toast } from "@egovernments/digit-ui-react-components";
+
 const FeesChargesForm = (props) => {
   const location = useLocation();
   const history = useHistory();
@@ -446,20 +447,16 @@ const FeesChargesForm = (props) => {
                   )}
                   <div className="row">
                     <div className="col col-4">
-                      <h6 data-toggle="tooltip" data-placement="top" title="Total Fees (License fee 25% + Scrutiny Fees)">
-                        Total Scrutiny Fee <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
-                      </h6>
-                      <input type="text" className="form-control" disabled {...register("payableNow")} />
+                      <h6>Total Scrutiny Fee</h6>
+                      <input type="text" className="form-control" disabled {...register("totalScrutinyFee")} />
+                    </div>
+                    <div className="col col-4">
+                      <h6>Total License Fee (25%)</h6>
+                      <input type="text" className="form-control" disabled {...register("totalLicenseFee")} />
                     </div>
                     <div className="col col-4">
                       <h6 data-toggle="tooltip" data-placement="top" title="Total Fees (License fee 25% + Scrutiny Fees)">
-                        Total License Fee (25%)<span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
-                      </h6>
-                      <input type="text" className="form-control" disabled {...register("payableNow")} />
-                    </div>
-                    <div className="col col-4">
-                      <h6 data-toggle="tooltip" data-placement="top" title="Total Fees (License fee 25% + Scrutiny Fees)">
-                        Amount Payable <span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
+                        Amount Payable
                       </h6>
                       <input type="text" className="form-control" disabled {...register("payableNow")} />
                     </div>

@@ -19,7 +19,8 @@ import { useLocation } from "react-router-dom";
 import { Toast, CardLabelError } from "@egovernments/digit-ui-react-components";
 import _ from "lodash";
 import CusToaster from "../../../../components/Toaster";
-
+import InfoIcon from "@mui/icons-material/Info";
+import Tooltip from "@mui/material/Tooltip";
 const ApllicantPuropseForm = (props) => {
   const datapost = {
     RequestInfo: {
@@ -1292,12 +1293,11 @@ const ApllicantPuropseForm = (props) => {
                     <div className="row ">
                       <div className="col col-4">
                         <label>
-                          <h2
-                            data-toggle="tooltip"
-                            data-placement="top"
-                            title=" Name of the developer company / Firm/ LLP etc. with whom collaboration agreement entered."
-                          >
+                          <h2>
                             Name of the developer company .<span style={{ color: "red" }}>*</span>
+                            <Tooltip title=" Name of the developer company / Firm/ LLP etc. with whom collaboration agreement entered.">
+                              <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
+                            </Tooltip>
                           </h2>
                         </label>
                         <Form.Control type="text" className="form-control" placeholder="" {...register("developerCompany")} required="required" />
@@ -1351,12 +1351,11 @@ const ApllicantPuropseForm = (props) => {
                       </div>
                       <div className="col col-4">
                         <label>
-                          <h2
-                            data-toggle="tooltip"
-                            data-placement="top"
-                            title="  Name of authorized signatory on behalf of developer to sign Collaboration agreement."
-                          >
+                          <h2>
                             Name of authorized signatory on behalf of developer.<span style={{ color: "red" }}>*</span>
+                            <Tooltip title="  Name of authorized signatory on behalf of developer to sign Collaboration agreement.">
+                              <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
+                            </Tooltip>
                           </h2>
                         </label>
                         <Form.Control type="text" className="form-control" placeholder="" {...register("nameAuthSign")} />
@@ -1381,9 +1380,11 @@ const ApllicantPuropseForm = (props) => {
                     <div className="row ">
                       <div className="col col-4">
                         <label>
-                          <h2 data-toggle="tooltip" data-placement="top" title="Upload Document" style={{ marginTop: "-4px" }}>
+                          <h2>
                             Collaboration document <span style={{ color: "red" }}>*</span>{" "}
-                            <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                            <Tooltip title="Upload Document">
+                              <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                            </Tooltip>
                             <div>
                               <input
                                 type="file"

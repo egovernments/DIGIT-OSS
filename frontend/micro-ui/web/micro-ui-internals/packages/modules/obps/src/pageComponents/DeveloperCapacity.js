@@ -882,7 +882,8 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
           t={t}
           isDisabled={
             (data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" ||
-            data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm"
+            data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm" ||
+            data?.devDetail[0]?.addInfo?.showDevTypeFields === "Hindu Undivided Family"
               ? !Documents?.companyBalanceSheet || !Documents?.individualCertificateCA
               : data?.devDetail[0]?.addInfo?.showDevTypeFields === "Company" ||
                 data?.devDetail[0]?.addInfo?.showDevTypeFields === "Society" ||

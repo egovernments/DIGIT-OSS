@@ -7,9 +7,9 @@ import { Card } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-
+import { useStyles } from "../../css/personalInfoChild.style";
 import Collapse from "react-bootstrap/Collapse";
-
+import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 function SurrenderLic() {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
