@@ -238,24 +238,27 @@ const ApllicantFormStep1 = (props) => {
             <h5 className="card-title fw-bold">Developer Information</h5>
             <div className="row-12">
               <div className="col md={4} xxl lg-4">
-                <FormControl>
-                  <h2>
-                    Name <span style={{ color: "red" }}>*</span>
-                  </h2>
-                  <input
-                    type="text"
-                    className="Inputcontrol"
-                    class="form-control"
-                    id="standard-disabled"
-                    label="Disabled"
-                    placeholder="N/A"
-                    readOnly
-                    {...register("developerName")}
-                  />
-                  <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.developerName && errors?.developerName?.message}
-                  </h3>
-                </FormControl>
+                {developerDataLabel?.addInfo?.showDevTypeFields != "Individual" &&
+                  developerDataLabel?.addInfo?.showDevTypeFields != "Proprietorship Firm" && (
+                    <FormControl>
+                      <h2>
+                        Name <span style={{ color: "red" }}>*</span>
+                      </h2>
+                      <input
+                        type="text"
+                        className="Inputcontrol"
+                        class="form-control"
+                        id="standard-disabled"
+                        label="Disabled"
+                        placeholder="N/A"
+                        readOnly
+                        {...register("developerName")}
+                      />
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.developerName && errors?.developerName?.message}
+                      </h3>
+                    </FormControl>
+                  )}
                 &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
                 <FormControl>
                   <h2>
@@ -285,33 +288,36 @@ const ApllicantFormStep1 = (props) => {
                   </h3>
                 </FormControl>
                 &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
-                <FormControl>
-                  <h2>
-                    EmailId<span style={{ color: "red" }}>*</span>
-                  </h2>
+                {developerDataLabel?.addInfo?.showDevTypeFields != "Individual" &&
+                  developerDataLabel?.addInfo?.showDevTypeFields != "Proprietorship Firm" && (
+                    <FormControl>
+                      <h2>
+                        EmailId<span style={{ color: "red" }}>*</span>
+                      </h2>
 
-                  <Controller
-                    control={control}
-                    name="developerEmail"
-                    render={({ field: { onChange, value } }) => (
-                      <input
-                        type="text"
-                        className="Inputcontrol"
-                        class="form-control"
-                        id="standard-disabled"
-                        label="Disabled"
-                        placeholder="N/A"
-                        readOnly
-                        value={value}
+                      <Controller
+                        control={control}
                         name="developerEmail"
+                        render={({ field: { onChange, value } }) => (
+                          <input
+                            type="text"
+                            className="Inputcontrol"
+                            class="form-control"
+                            id="standard-disabled"
+                            label="Disabled"
+                            placeholder="N/A"
+                            readOnly
+                            value={value}
+                            name="developerEmail"
+                          />
+                          // <OutlinedInput type="text" value={value} className="form-control" disabled name="developerEmail" />
+                        )}
                       />
-                      // <OutlinedInput type="text" value={value} className="form-control" disabled name="developerEmail" />
-                    )}
-                  />
-                  <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.developerEmail && errors?.developerEmail?.message}
-                  </h3>
-                </FormControl>
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.developerEmail && errors?.developerEmail?.message}
+                      </h3>
+                    </FormControl>
+                  )}
                 &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
                 <FormControl>
                   <h2>Developer Type</h2>
@@ -341,160 +347,167 @@ const ApllicantFormStep1 = (props) => {
               </div>
             </div>
             <br></br>
+            {developerDataLabel?.addInfo?.showDevTypeFields != "Individual" &&
+              developerDataLabel?.addInfo?.showDevTypeFields != "Limited Liability Partnership" &&
+              developerDataLabel?.addInfo?.showDevTypeFields != "Hindu Undivided Family" &&
+              developerDataLabel?.addInfo?.showDevTypeFields != "Proprietorship Firm" && (
+                <div className="row-12">
+                  <div className="col md={4} xxl lg-4">
+                    <FormControl>
+                      <h2>
+                        CIN Number<span style={{ color: "red" }}>*</span>
+                      </h2>
 
-            <div className="row-12">
-              <div className="col md={4} xxl lg-4">
-                <FormControl>
-                  <h2>
-                    CIN Number<span style={{ color: "red" }}>*</span>
-                  </h2>
-
-                  <Controller
-                    control={control}
-                    name="developerCinNo"
-                    render={({ field: { onChange, value } }) => (
-                      <input
-                        type="text"
-                        value={value}
-                        className="Inputcontrol"
-                        class="form-control"
-                        placeholder="N/A"
-                        disabled
+                      <Controller
+                        control={control}
                         name="developerCinNo"
+                        render={({ field: { onChange, value } }) => (
+                          <input
+                            type="text"
+                            value={value}
+                            className="Inputcontrol"
+                            class="form-control"
+                            placeholder="N/A"
+                            disabled
+                            name="developerCinNo"
+                          />
+                        )}
                       />
-                    )}
-                  />
-                  <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.developerCinNo && errors?.developerCinNo?.message}
-                  </h3>
-                </FormControl>
-              </div>
-            </div>
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.developerCinNo && errors?.developerCinNo?.message}
+                      </h3>
+                    </FormControl>
+                  </div>
+                </div>
+              )}
             <br></br>
-            {developerDataLabel?.addInfo?.showDevTypeFields != "Individual" && (
-              <div>
-                <h5 className="card-title fw-bold"> Director Information as per MCA</h5>
-                <div className="card-body">
-                  <div className="table-bd">
-                    <table className="table table-bordered">
-                      <thead>
-                        <tr>
-                          <th>Sr. No</th>
-                          <th>DIN Number</th>
-                          <th>Name</th>
-                          <th>Contact Number</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {developerDataLabel?.addInfo?.DirectorsInformationMCA?.length &&
-                          developerDataLabel?.addInfo?.DirectorsInformationMCA?.map((item, index) => {
-                            return (
-                              <tr>
-                                <td>{index + 1}</td>
-                                <td>{item?.din}</td>
-                                <td>{item?.name}</td>
-                                <td>{item?.contactNumber}</td>
-                              </tr>
-                            );
-                          })}
-                      </tbody>
-                    </table>
+            {developerDataLabel?.addInfo?.showDevTypeFields != "Individual" &&
+              developerDataLabel?.addInfo?.showDevTypeFields != "Limited Liability Partnership" &&
+              developerDataLabel?.addInfo?.showDevTypeFields != "Hindu Undivided Family" &&
+              developerDataLabel?.addInfo?.showDevTypeFields != "Proprietorship Firm" && (
+                <div>
+                  <h5 className="card-title fw-bold"> Director Information as per MCA</h5>
+                  <div className="card-body">
+                    <div className="table-bd">
+                      <table className="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th>Sr. No</th>
+                            <th>DIN Number</th>
+                            <th>Name</th>
+                            <th>Contact Number</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {developerDataLabel?.addInfo?.DirectorsInformationMCA?.length &&
+                            developerDataLabel?.addInfo?.DirectorsInformationMCA?.map((item, index) => {
+                              return (
+                                <tr>
+                                  <td>{index + 1}</td>
+                                  <td>{item?.din}</td>
+                                  <td>{item?.name}</td>
+                                  <td>{item?.contactNumber}</td>
+                                </tr>
+                              );
+                            })}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  <h5 className="card-title fw-bold">Directors Information as per developer</h5>
+                  <div className="card-body">
+                    <div className="table-bd">
+                      <table className="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th>Sr. No</th>
+                            <th>DIN Number</th>
+                            <th>Name</th>
+                            <th>Contact Number</th>
+                            <th>View Document</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {developerDataLabel?.addInfo?.DirectorsInformation?.length &&
+                            developerDataLabel?.addInfo?.DirectorsInformation?.map((item, index) => {
+                              return (
+                                <tr>
+                                  <td>{index + 1}</td>
+                                  <td>{item?.din}</td>
+                                  <td>{item?.name}</td>
+                                  <td>{item?.contactNumber}</td>
+                                  <td
+                                    style={{
+                                      color: " #1266af",
+                                      fontSize: " 12px",
+                                      fontWeight: "bold",
+                                      cursor: "pointer",
+                                      textDecorationLine: "underline",
+                                    }}
+                                    onClick={() => {
+                                      if (item?.uploadPdf) getDocShareholding(item?.uploadPdf, setLoader);
+                                      else setShowToastError({ label: "No pdf here", error: true, success: false });
+                                    }}
+                                  >
+                                    <VisibilityIcon color="info" className="icon" />
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  <h5 className="card-title fw-bold">Shareholding Patterns</h5>
+                  <div className="card-body">
+                    <div className="table-bd">
+                      <table className="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th>Sr. No</th>
+                            <th>Name</th>
+                            <th>Designition</th>
+
+                            <th>Percentage</th>
+                            <th>View Document</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {developerDataLabel?.addInfo?.shareHoldingPatterens?.length &&
+                            developerDataLabel?.addInfo?.shareHoldingPatterens?.map((it, ind) => {
+                              return (
+                                <tr>
+                                  <td>{ind + 1}</td>
+                                  <td>{it?.name}</td>
+                                  <td>{it?.designition}</td>
+
+                                  <td>{it?.percentage}</td>
+                                  <td
+                                    style={{
+                                      color: " #1266af",
+                                      fontSize: " 12px",
+                                      fontWeight: "bold",
+                                      cursor: "pointer",
+                                      textDecorationLine: "underline",
+                                    }}
+                                    onClick={() => {
+                                      if (it?.uploadPdf) getDocShareholding(it?.uploadPdf, setLoader);
+                                      else setShowToastError({ label: "No pdf here", error: true, success: false });
+                                    }}
+                                  >
+                                    <VisibilityIcon color="info" className="icon" />
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
-
-                <h5 className="card-title fw-bold">Directors Information as per developer</h5>
-                <div className="card-body">
-                  <div className="table-bd">
-                    <table className="table table-bordered">
-                      <thead>
-                        <tr>
-                          <th>Sr. No</th>
-                          <th>DIN Number</th>
-                          <th>Name</th>
-                          <th>Contact Number</th>
-                          <th>View Document</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {developerDataLabel?.addInfo?.DirectorsInformation?.length &&
-                          developerDataLabel?.addInfo?.DirectorsInformation?.map((item, index) => {
-                            return (
-                              <tr>
-                                <td>{index + 1}</td>
-                                <td>{item?.din}</td>
-                                <td>{item?.name}</td>
-                                <td>{item?.contactNumber}</td>
-                                <td
-                                  style={{
-                                    color: " #1266af",
-                                    fontSize: " 12px",
-                                    fontWeight: "bold",
-                                    cursor: "pointer",
-                                    textDecorationLine: "underline",
-                                  }}
-                                  onClick={() => {
-                                    if (item?.uploadPdf) getDocShareholding(item?.uploadPdf, setLoader);
-                                    else setShowToastError({ label: "No pdf here", error: true, success: false });
-                                  }}
-                                >
-                                  <VisibilityIcon color="info" className="icon" />
-                                </td>
-                              </tr>
-                            );
-                          })}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-                <h5 className="card-title fw-bold">Shareholding Patterns</h5>
-                <div className="card-body">
-                  <div className="table-bd">
-                    <table className="table table-bordered">
-                      <thead>
-                        <tr>
-                          <th>Sr. No</th>
-                          <th>Name</th>
-                          <th>Designition</th>
-
-                          <th>Percentage</th>
-                          <th>View Document</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {developerDataLabel?.addInfo?.shareHoldingPatterens?.length &&
-                          developerDataLabel?.addInfo?.shareHoldingPatterens?.map((it, ind) => {
-                            return (
-                              <tr>
-                                <td>{ind + 1}</td>
-                                <td>{it?.name}</td>
-                                <td>{it?.designition}</td>
-
-                                <td>{it?.percentage}</td>
-                                <td
-                                  style={{
-                                    color: " #1266af",
-                                    fontSize: " 12px",
-                                    fontWeight: "bold",
-                                    cursor: "pointer",
-                                    textDecorationLine: "underline",
-                                  }}
-                                  onClick={() => {
-                                    if (it?.uploadPdf) getDocShareholding(it?.uploadPdf, setLoader);
-                                    else setShowToastError({ label: "No pdf here", error: true, success: false });
-                                  }}
-                                >
-                                  <VisibilityIcon color="info" className="icon" />
-                                </td>
-                              </tr>
-                            );
-                          })}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            )}
+              )}
           </div>
 
           <div classname="card" style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "5px", marginBottom: "52px" }}>
