@@ -28,6 +28,7 @@ const ApllicantFormStep1 = (props) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [fileStoreId, setFileStoreId] = useState({});
   const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
+  const [getDisable, setDisable] = useState(true);
 
   const {
     register,
@@ -627,6 +628,21 @@ const ApllicantFormStep1 = (props) => {
                   View Upload Board Resolution <VisibilityIcon color="info" className="icon" />
                 </div>
               </FormControl>
+              &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+              <FormControl>
+                <div
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    if (developerDataLabel?.licensesDoc?.[0]?.memorandumOfArticles)
+                      getDocShareholding(developerDataLabel?.licensesDoc?.[0]?.memorandumOfArticles, setLoader);
+                    else setShowToastError({ label: "No pdf here", error: true, success: false });
+                  }}
+                  id="btnSearch"
+                  class=""
+                >
+                  View MOA Document <VisibilityIcon color="info" className="icon" />
+                </div>
+              </FormControl>
             </div>
           </div>
           <div className="row mt-4">
@@ -690,7 +706,12 @@ const ApllicantFormStep1 = (props) => {
             <div className="form-check">
               <input
                 onClick={(e) => {
-                  console.log("e.target.checke", e.target.checke);
+                  if (e.target.checked) {
+                    setDisable(false);
+                  } else {
+                    setDisable(true);
+                  }
+                  // setDisable(e.target.checked);
                 }}
                 className="form-check-input"
                 formControlName="agreeCheck"
@@ -709,7 +730,7 @@ const ApllicantFormStep1 = (props) => {
 
           <div class="row">
             <div class="col-sm-12 text-right">
-              <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
+              <button disabled={getDisable} type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
                 Save and Continue
               </button>
             </div>
