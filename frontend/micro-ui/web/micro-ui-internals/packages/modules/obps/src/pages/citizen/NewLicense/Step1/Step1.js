@@ -28,6 +28,7 @@ const ApllicantFormStep1 = (props) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [fileStoreId, setFileStoreId] = useState({});
   const [showToastError, setShowToastError] = useState({ label: "", error: false, success: false });
+  const [getDisable, setDisable] = useState(true);
 
   const {
     register,
@@ -705,7 +706,12 @@ const ApllicantFormStep1 = (props) => {
             <div className="form-check">
               <input
                 onClick={(e) => {
-                  console.log("e.target.checke", e.target.checke);
+                  if (e.target.checked) {
+                    setDisable(false);
+                  } else {
+                    setDisable(true);
+                  }
+                  // setDisable(e.target.checked);
                 }}
                 className="form-check-input"
                 formControlName="agreeCheck"
@@ -724,7 +730,7 @@ const ApllicantFormStep1 = (props) => {
 
           <div class="row">
             <div class="col-sm-12 text-right">
-              <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
+              <button disabled={getDisable} type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
                 Save and Continue
               </button>
             </div>
