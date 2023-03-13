@@ -2238,8 +2238,8 @@ const LandScheduleForm = (props) => {
                   <div className="row ">
                     <div className="col col-3">
                       <h2>
-                        (e) &nbsp;Any revenue rasta/road <span style={{ color: "red" }}>*</span>
-                        <Tooltip title="Any revenue rasta/road passing through proposed site (Yes/No)">
+                        (e) &nbsp;Any revenue rasta/road/bundh <span style={{ color: "red" }}>*</span>
+                        <Tooltip title="Any revenue rasta/road/bundh passing through proposed site (Yes/No)">
                           <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
                         </Tooltip>
                       </h2>

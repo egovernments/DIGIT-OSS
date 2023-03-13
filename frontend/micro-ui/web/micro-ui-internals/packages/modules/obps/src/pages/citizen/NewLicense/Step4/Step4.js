@@ -1047,7 +1047,7 @@ const AppliedDetailForm = (props) => {
 
                     <div className="col col-3">
                       <h6 style={{ display: "flex" }}>
-                        Any other relevant document<span style={{ color: "red" }}>*</span>
+                        Development Plan<span style={{ color: "red" }}>*</span>
                       </h6>
                       <label>
                         <FileUpload style={{ cursor: "pointer" }} color="primary" />

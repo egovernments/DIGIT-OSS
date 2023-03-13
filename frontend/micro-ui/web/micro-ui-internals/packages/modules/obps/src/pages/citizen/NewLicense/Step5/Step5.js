@@ -14,8 +14,7 @@ import { VALIDATION_SCHEMA } from "../../../../utils/schema/step5";
 import ScrollToTop from "@egovernments/digit-ui-react-components/src/atoms/ScrollToTop";
 import FileUpload from "@mui/icons-material/FileUpload";
 import { Toast } from "@egovernments/digit-ui-react-components";
-import InfoIcon from "@mui/icons-material/Info";
-import Tooltip from "@mui/material/Tooltip";
+
 const FeesChargesForm = (props) => {
   const location = useLocation();
   const history = useHistory();
@@ -448,11 +447,16 @@ const FeesChargesForm = (props) => {
                   )}
                   <div className="row">
                     <div className="col col-4">
-                      <h6>
-                        (i)&nbsp;Amount Payable <span style={{ color: "red" }}>*</span>
-                        <Tooltip title="Total Fees (License fee 25% + Scrutiny Fees)">
-                          <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
-                        </Tooltip>
+                      <h6>Total Scrutiny Fee</h6>
+                      <input type="text" className="form-control" disabled {...register("totalScrutinyFee")} />
+                    </div>
+                    <div className="col col-4">
+                      <h6>Total License Fee (25%)</h6>
+                      <input type="text" className="form-control" disabled {...register("totalLicenseFee")} />
+                    </div>
+                    <div className="col col-4">
+                      <h6 data-toggle="tooltip" data-placement="top" title="Total Fees (License fee 25% + Scrutiny Fees)">
+                        Amount Payable
                       </h6>
                       <input type="text" className="form-control" disabled {...register("payableNow")} />
                     </div>
