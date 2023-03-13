@@ -627,6 +627,21 @@ const ApllicantFormStep1 = (props) => {
                   View Upload Board Resolution <VisibilityIcon color="info" className="icon" />
                 </div>
               </FormControl>
+              &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+              <FormControl>
+                <div
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    if (developerDataLabel?.licensesDoc?.[0]?.memorandumOfArticles)
+                      getDocShareholding(developerDataLabel?.licensesDoc?.[0]?.memorandumOfArticles, setLoader);
+                    else setShowToastError({ label: "No pdf here", error: true, success: false });
+                  }}
+                  id="btnSearch"
+                  class=""
+                >
+                  View MOA Document <VisibilityIcon color="info" className="icon" />
+                </div>
+              </FormControl>
             </div>
           </div>
           <div className="row mt-4">
