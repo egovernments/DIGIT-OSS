@@ -196,7 +196,11 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
           config={config}
           onSelect={goNext}
           onSkip={onSkip}
-          isDisabled={licenceTypeSelected && licenceTypeSelected.includes("ARCHITECT") ? !licenceTypeSelected || !ArchitectNo : !licenceTypeSelected}
+          isDisabled={
+            licenceTypeSelected && licenceTypeSelected.includes("ARCHITECT")
+              ? !licenceTypeSelected || !ArchitectNo || !showDevTypeFields
+              : !licenceTypeSelected || licenceTypeSelected.includes("CITIZEN")
+          }
         >
           <div className="happy">
             <div className="card mb-3">
