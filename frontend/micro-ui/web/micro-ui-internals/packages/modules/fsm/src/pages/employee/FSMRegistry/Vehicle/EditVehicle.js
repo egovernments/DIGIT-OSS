@@ -119,7 +119,7 @@ const EditVehicle = ({ parentUrl, heading }) => {
         queryClient.invalidateQueries("DSO_SEARCH");
         setTimeout(() => {
           closeToast();
-          history.push(`/digit-ui/employee/fsm/registry`);
+          history.push(`/digit-ui/employee/fsm/registry/vehicle-details/${dsoId}`);
         }, 5000);
       },
     });

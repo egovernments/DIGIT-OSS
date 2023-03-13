@@ -5,7 +5,7 @@ import Timeline from "../components/TLTimelineInFSM";
 
 const SelectPincode = ({ t, config, onSelect, formData = {}, userType, register, errors, props }) => {
   const tenants = Digit.Hooks.fsm.useTenants();
-  const [pincode, setPincode] = useState(() => formData?.address?.pincode || "");
+  const [pincode, setPincode] = useState(formData?.address?.pincode || "");
   const [pincodeServicability, setPincodeServicability] = useState(null);
 
   const { pathname } = useLocation();
@@ -33,9 +33,9 @@ const SelectPincode = ({ t, config, onSelect, formData = {}, userType, register,
   }, [formData?.address?.pincode]);
 
   useEffect(() => {
-    if (formData?.address?.locality?.pincode !== pincode) {
+    if (formData?.address?.locality?.pincode !== pincode && userType === "employee") {
       setPincode(formData?.address?.locality?.pincode || "");
-      setPincodeServicability(null)
+      setPincodeServicability(null);
     }
   }, [formData?.address?.locality]);
 
@@ -82,7 +82,11 @@ const SelectPincode = ({ t, config, onSelect, formData = {}, userType, register,
               <TextInput key={input.name} value={pincode} onChange={onChange} {...input.validation} />
             </div>
           </LabelFieldPair>
-          {pincodeServicability && <CardLabelError style={{ width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" }}>{t(pincodeServicability)}</CardLabelError>}
+          {pincodeServicability && (
+            <CardLabelError style={{ width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" }}>
+              {t(pincodeServicability)}
+            </CardLabelError>
+          )}
         </>
       );
     });

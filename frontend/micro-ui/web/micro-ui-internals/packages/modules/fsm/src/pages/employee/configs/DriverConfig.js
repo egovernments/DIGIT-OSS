@@ -1,5 +1,6 @@
 import React from "react";
 const { DatePicker } = require("@egovernments/digit-ui-react-components");
+import { convertEpochToDate } from "../../../utils";
 
 const DriverConfig = (t, disabled = false) => {
   return [
@@ -70,7 +71,14 @@ const DriverConfig = (t, disabled = false) => {
             validation: {
               required: true,
             },
-            component: (props, customProps) => <DatePicker onChange={props.onChange} date={props.value} {...customProps} />,
+            component: (props, customProps) => (
+              <DatePicker
+                onChange={props.onChange}
+                date={props.value}
+                {...customProps}
+                max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
+              />
+            ),
           },
         },
         {

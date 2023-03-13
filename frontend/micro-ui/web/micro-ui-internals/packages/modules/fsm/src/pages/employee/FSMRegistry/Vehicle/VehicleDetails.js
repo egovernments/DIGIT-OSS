@@ -129,6 +129,7 @@ const VehicleDetails = (props) => {
 
   const closeModal = () => {
     setSelectedAction(null);
+    setSelectedOption({})
     setShowModal(false);
   };
 

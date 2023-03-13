@@ -1,4 +1,5 @@
 import React from "react";
+import { convertEpochToDate } from "../../../utils";
 const { DatePicker, Dropdown } = require("@egovernments/digit-ui-react-components");
 
 const VendorConfig = (t, disabled = false) => {
@@ -54,7 +55,14 @@ const VendorConfig = (t, disabled = false) => {
             validation: {
               required: true,
             },
-            component: (props, customProps) => <DatePicker onChange={props.onChange} date={props.value} {...customProps} />,
+            component: (props, customProps) => (
+              <DatePicker
+                onChange={props.onChange}
+                date={props.value}
+                {...customProps}
+                max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
+              />
+            ),
           },
         },
         {
