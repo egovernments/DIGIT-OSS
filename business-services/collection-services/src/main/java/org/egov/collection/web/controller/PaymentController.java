@@ -40,13 +40,11 @@
 
 package org.egov.collection.web.controller;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.validation.Valid;
 
+import lombok.extern.slf4j.Slf4j;
 import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentRequest;
 import org.egov.collection.model.PaymentResponse;
@@ -77,6 +75,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+
+@Slf4j
 @RestController
 @RequestMapping("/payments")
 public class PaymentController {
@@ -180,10 +180,13 @@ public class PaymentController {
     @RequestMapping(value = "/_plainsearch", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<PaymentResponse> plainSearch(@ModelAttribute PaymentSearchCriteria paymentSearchCriteria,
-                                                       @RequestBody @Valid final RequestInfoWrapper requestInfoWrapper) {
+                                                       @RequestBody @Valid final RequestInfoWrapper requestInfoWrapper)  {
+
+        log.info("businessservice: " + paymentSearchCriteria.getBusinessServices());
+        log.info("tenantId: " + paymentSearchCriteria.getTenantId());
+        log.info(" paymentSearchCriteria: " + paymentSearchCriteria);
 
         final RequestInfo requestInfo = requestInfoWrapper.getRequestInfo();
-
         List<Payment> payments = paymentService.plainSearch(paymentSearchCriteria);
 
         return getSuccessResponse(payments, requestInfo);

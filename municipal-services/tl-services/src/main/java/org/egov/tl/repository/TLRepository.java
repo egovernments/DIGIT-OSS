@@ -13,6 +13,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 
@@ -139,15 +140,30 @@ public class TLRepository {
     
     public List<String> fetchTradeLicenseIds(TradeLicenseSearchCriteria criteria){
 
+        String query ="SELECT id from eg_tl_tradelicense ";
 		List<Object> preparedStmtList = new ArrayList<>();
 		preparedStmtList.add(criteria.getOffset());
 		preparedStmtList.add(criteria.getLimit());
 
-		return jdbcTemplate.query("SELECT id from eg_tl_tradelicense ORDER BY createdtime offset " +
-						" ? " +
-						"limit ? ",
-				preparedStmtList.toArray(),
-				new SingleColumnRowMapper<>(String.class));
-	}
+        if(!StringUtils.isEmpty(criteria.getTenantId())) {
+            query=query+" where tenantid= '"+criteria.getTenantId()+"'";
+        }
+        query=query+" ORDER BY createdtime offset " +
+                " ? " +
+                " limit ? ";
+
+        log.info("Query to fetch trade license id's: " + query);
+
+//		return jdbcTemplate.query("SELECT id from eg_tl_tradelicense ORDER BY createdtime offset " +
+//						" ? " +
+//						"limit ? ",
+//				preparedStmtList.toArray(),
+//				new SingleColumnRowMapper<>(String.class));
+
+        return jdbcTemplate.query(query,
+                preparedStmtList.toArray(),
+                new SingleColumnRowMapper<>(String.class));
+    }
+
 
 }

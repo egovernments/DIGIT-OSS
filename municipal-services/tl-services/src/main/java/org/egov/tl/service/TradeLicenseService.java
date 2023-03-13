@@ -354,17 +354,27 @@ public class TradeLicenseService {
 
 
 	public List<TradeLicense> plainSearch(TradeLicenseSearchCriteria criteria, RequestInfo requestInfo){
+
+        if(criteria.getLimit() == null)
+            criteria.setLimit(config.getDefaultLimit());
+
+        if (criteria.getLimit() != null && criteria.getLimit() > config.getMaxSearchLimit())
+            criteria.setLimit(config.getMaxSearchLimit());
+
         List<TradeLicense> licenses;
         List<String> ids = repository.fetchTradeLicenseIds(criteria);
         if(ids.isEmpty())
             return Collections.emptyList();
 
         criteria.setIds(ids);
+        log.info(" plain search Criteria ::"+criteria.toString());
 
         TradeLicenseSearchCriteria idsCriteria = TradeLicenseSearchCriteria.builder().ids(ids).build();
+        log.info("Plain Search idsCriteria ::"+ idsCriteria.toString());
 
         licenses = repository.getPlainLicenseSearch(idsCriteria);
 
+        log.info("Insided plainSearch flow,licenses fetched ::"+ licenses.size());
         if(!CollectionUtils.isEmpty(licenses))
             licenses = enrichmentService.enrichTradeLicenseSearch(licenses,criteria,requestInfo);
 
