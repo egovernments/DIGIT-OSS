@@ -33,7 +33,7 @@ function ZoningPlan() {
     setValue,
   } = useForm({});
 
-  const beneficialNew = (data) => console.log(data);
+  const ZoningPlan = (data) => console.log(data);
 
   const classes = useStyles();
   const currentRemarks = (data) => {
