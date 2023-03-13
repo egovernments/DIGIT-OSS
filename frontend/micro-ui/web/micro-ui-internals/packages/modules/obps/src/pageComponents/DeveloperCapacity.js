@@ -893,7 +893,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
               : data?.devDetail[0]?.addInfo?.showDevTypeFields === "Limited Liability Partnership" ||
                 data?.devDetail[0]?.addInfo?.showDevTypeFields === "Firm" ||
                 data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm"
-              ? !Documents?.networthPartners || !Documents?.networthFirm
+              ? !Documents?.networthPartners || !Documents?.networthFirm || !Documents?.fullyConvertibleDebenture
               : false) ||
             ((permissionGrantedHRDU === "Y" && capacityDevelopColonyHdruAct?.length) || permissionGrantedHRDU === "N"
               ? false
