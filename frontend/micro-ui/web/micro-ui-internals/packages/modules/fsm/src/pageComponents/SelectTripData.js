@@ -115,7 +115,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
         }
       }
     })();
-  }, [formData?.propertyType, formData?.subtype, formData?.address, formData?.tripData?.vehicleType?.capacity, formData?.tripData?.noOfTrips]);
+  }, [formData?.propertyType, formData?.subtype, formData?.address?.slum, formData?.tripData?.vehicleType?.capacity, formData?.tripData?.noOfTrips]);
 
   return isVehicleMenuLoading && isDsoLoading ? (
     <Loader />
