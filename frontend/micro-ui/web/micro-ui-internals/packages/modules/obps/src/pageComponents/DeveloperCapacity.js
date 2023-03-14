@@ -735,14 +735,17 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
         },
       ],
     };
+    setLoading(true);
     Digit.OBPSService.BPAREGCreate(payload, tenantId)
       .then((result, err) => {
         setIsDisableForNext(false);
         let data = { result: result, formData: formData, Correspondenceaddress: Correspondenceaddress, isAddressSame: isAddressSame };
         //1, units
         onSelect("", data, "", true);
+        setLoading(false);
       })
       .catch((e) => {
+        setLoading(false);
         setIsDisableForNext(false);
         // setShowToast({ key: "error" });
         setError(e?.response?.data?.Errors[0]?.message || null);

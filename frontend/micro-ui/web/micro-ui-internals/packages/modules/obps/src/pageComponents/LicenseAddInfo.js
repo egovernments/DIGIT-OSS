@@ -162,7 +162,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         },
       };
       const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${userInfo?.info?.id}&isAllData=true`, requestResp, {});
-      setLoading(false);
+
       const developerDataGet = getDevDetails?.data;
       const developerDataGetDocs = getDevDetails?.data?.devDetail[0]?.addInfo;
       setDeveloperDataAddinfo(developerDataGetDocs);
@@ -205,19 +205,20 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       setRegisteredMobileNumber(developerDataGet?.devDetail[0]?.addInfo?.registeredContactNo);
       // setShowDevTypeFields(valueOfDrop);
       let totalRemainingShareholdingPattern = 100;
-      console.log("log123", developerDataGet?.devDetail[0]?.addInfo);
+      // console.log("log123", developerDataGet?.devDetail[0]?.addInfo);
       developerDataGet?.devDetail[0]?.addInfo?.shareHoldingPatterens.forEach((item, index) => {
-        console.log("log123", item, item.percentage, item.percentage.split("%"));
+        // console.log("log123", item, item.percentage, item.percentage.split("%"));
         totalRemainingShareholdingPattern -= Number(item.percentage.split("%")[0]);
-        console.log("log123", item.percentage, item.percentage.split("%")[0], totalRemainingShareholdingPattern);
+        // console.log("log123", item.percentage, item.percentage.split("%")[0], totalRemainingShareholdingPattern);
       });
       setRemainingStakeholderPercentage(Number(totalRemainingShareholdingPattern));
-      console.log(
-        "log123",
-        totalRemainingShareholdingPattern,
-        developerDataGet?.devDetail[0]?.addInfo?.shareHoldingPatterens,
-        developerDataGet?.devDetail[0]?.addInfo?.shareHoldingPatterens[0].percentage.split("%")[0]
-      );
+      // console.log(
+      //   "log123",
+      //   totalRemainingShareholdingPattern,
+      //   developerDataGet?.devDetail[0]?.addInfo?.shareHoldingPatterens,
+      //   developerDataGet?.devDetail[0]?.addInfo?.shareHoldingPatterens[0].percentage.split("%")[0]
+      // );
+      setLoading(false);
     } catch (error) {
       setLoading(false);
       console.log(error);
@@ -297,7 +298,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     const purpose = PurposeType?.["common-masters"]?.Purpose?.map(function (data) {
       return { value: data?.purposeCode, label: data?.name };
     });
-    console.log("log123", purpose);
+    // console.log("log123", purpose);
     setPurposeOptions({ data: purpose, isLoading: false });
   }, [PurposeType]);
 
@@ -466,7 +467,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   }
 
   function setGenderName(value) {
-    console.log("GENDER", value.target.value);
+    // console.log("GENDER", value.target.value);
     setGender(value.target.value);
     setPanIsValid(false);
   }

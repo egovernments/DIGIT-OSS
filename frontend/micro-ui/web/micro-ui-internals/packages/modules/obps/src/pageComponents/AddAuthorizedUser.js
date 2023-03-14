@@ -431,7 +431,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
     setLoading(true);
     // if(aurthorizedMobileNumber!=="" && aurthorizedUserName!=="" && aurthorizedMobileNumber!=="" && aurthorizedEmail!==""){
     const user = {
-      userName: aurthorizedMobileNumber,
+      userName: aurthorizedEmail,
       name: aurthorizedUserName,
       gender: gender.value,
       mobileNumber: aurthorizedMobileNumber,
@@ -549,6 +549,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
         aurthorizedUserInfoArray: aurthorizedUserInfoArray,
       },
     };
+    setLoading(true);
     Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
       .then((result, err) => {
         // localStorage.setItem('devRegId',JSON.stringify(result?.id));
@@ -564,8 +565,10 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, isUserRegistered = t
         };
         //1, units
         onSelect("", data, "", true);
+        setLoading(false);
       })
       .catch((e) => {
+        setLoading(false);
         setIsDisableForNext(false);
         setShowToast({ key: "error" });
         setError(e?.response?.data?.Errors[0]?.message || null);
