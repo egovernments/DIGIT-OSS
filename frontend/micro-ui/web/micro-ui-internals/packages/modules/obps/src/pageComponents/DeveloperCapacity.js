@@ -461,7 +461,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
   const handleChange = (e) => {
     this.setState({ isRadioSelected: true });
   };
-
+  const [showToastError, setShowToastError] = useState(null);
   const devTypeFlagVal = localStorage.getItem("devTypeValueFlag");
   // const getDocumentData = async () => {
   //     if (file === null) {
@@ -892,13 +892,14 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                 data?.devDetail[0]?.addInfo?.showDevTypeFields === "Society" ||
                 data?.devDetail[0]?.addInfo?.showDevTypeFields === "Trust" ||
                 data?.devDetail[0]?.addInfo?.showDevTypeFields === "Institution"
-              ? !Documents?.companyBalanceSheet || !Documents?.paidUpCapital
+              ? !Documents?.companyBalanceSheet || !Documents?.paidUpCapital || !Documents?.reservesAndSurplus
               : data?.devDetail[0]?.addInfo?.showDevTypeFields === "Limited Liability Partnership" ||
                 data?.devDetail[0]?.addInfo?.showDevTypeFields === "Firm" ||
                 data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm"
               ? !Documents?.networthPartners || !Documents?.networthFirm || !Documents?.fullyConvertibleDebenture
               : false) ||
-            ((permissionGrantedHRDU === "Y" && capacityDevelopColonyHdruAct?.length) || permissionGrantedHRDU === "N"
+            ((permissionGrantedHRDU === "Y" && capacityDevelopColonyHdruAct?.length) ||
+            (permissionGrantedHRDU === "N" && technicalCapacityOutsideHaryana === "N")
               ? false
               : technicalCapacityOutsideHaryana === "Y" &&
                 technicalCapacityOutsideHaryanaDetails.authority &&
@@ -906,8 +907,6 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                 technicalCapacityOutsideHaryanaDetails.statusOfDevelopment &&
                 technicalCapacityOutsideHaryanaDetails.location &&
                 technicalCapacityOutsideHaryanaDetails.projectArea
-              ? false
-              : technicalCapacityOutsideHaryana === "N"
               ? false
               : true)
           }
@@ -2891,6 +2890,17 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
           isDleteBtn={true}
           onClose={() => {
             setShowToast(null);
+            setError(null);
+          }}
+        />
+      )}
+      {showToastError && (
+        <Toast
+          error={showToastError?.key === "error" ? true : false}
+          label="Duplicate file Selected"
+          isDleteBtn={true}
+          onClose={() => {
+            setShowToastError(null);
             setError(null);
           }}
         />

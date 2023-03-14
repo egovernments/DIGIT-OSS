@@ -172,7 +172,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
         // }
         // console.log("ALLOW", data);
 
-        if (doc.required == true && data !== null && doc.code == data.documentType) {
+        if (doc?.required == true && data !== null && doc?.code == data?.documentType) {
           isRequired = true;
         }
 
@@ -402,7 +402,6 @@ function SelectDocument({ t, document: doc, setDocuments, documentsUploadList, e
             extraStyleName={"OBPS"}
             accept="image/*, .pdf, .png, .jpeg, .jpg"
             onUpload={selectfile}
-            // required={uploadedFile && doc.required !== true ? false : uploadedFile && doc.required === true ? false : true}
             onDelete={() => {
               setUploadedFile(null);
               setCheckRequiredFields(true);
@@ -485,7 +484,7 @@ function SelectDocument({ t, document: doc, setDocuments, documentsUploadList, e
                 >
                   <VisibilityIcon color="info" className="icon" />
                 </button>
-              ) : doc?.code === "APPL.BPAREG_OTHERS" && documentsUploadList[0]?.anyOtherDoc ? (
+              ) : doc?.code === "APPL.BPAREG_OTHERS" && documentsUploadList?.length > 0 ? (
                 <button
                   type="button"
                   title="View Document"
