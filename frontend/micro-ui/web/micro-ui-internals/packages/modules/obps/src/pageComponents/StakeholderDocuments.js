@@ -430,6 +430,15 @@ function SelectDocument({ t, document: doc, setDocuments, documentsUploadList, e
                 >
                   <VisibilityIcon color="info" className="icon" />
                 </button>
+              ) : doc?.code === "AFFIDAVIT_AND_PANCARD" && documentsUploadList?.length > 0 ? (
+                <button
+                  type="button"
+                  title="View Document"
+                  onClick={() => getDocShareholding(documentsUploadList[0]?.affidavitAndPancard)}
+                  className="btn btn-sm col-md-6"
+                >
+                  <VisibilityIcon color="info" className="icon" />
+                </button>
               ) : doc?.code === "MEMORANDUM_OF_ARTICLES" && documentsUploadList?.length > 0 ? (
                 <button
                   type="button"
@@ -439,7 +448,7 @@ function SelectDocument({ t, document: doc, setDocuments, documentsUploadList, e
                 >
                   <VisibilityIcon color="info" className="icon" />
                 </button>
-              ) : doc?.code === "APPL.BPAREG_OTHERS" && documentsUploadList?.[0]?.length > 0 ? (
+              ) : doc?.code === "APPL.BPAREG_OTHERS" && documentsUploadList?.[0]?.anyOtherDoc ? (
                 <button
                   type="button"
                   title="View Document"
