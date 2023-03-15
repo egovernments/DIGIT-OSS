@@ -1,0 +1,75 @@
+#material-ui-header {
+    display: flex !important;
+    // justify-content: space-between !important;
+  }
+  .bpa-searchpview #material-ui-header #material-ui-rightContainer {
+    width: 50% !important;
+    }
+  .bpa-searchpview #material-ui-header #material-ui-leftContainer {
+    width: 50% !important;
+    }
+  #custom-atoms-titlebar2 {
+      display: block !important;
+    }
+  #custom-atoms-titlebar2 div:nth-child(0) {
+      padding: 10px 0 !important
+    }
+  @media only screen and (min-width: 768px){
+    .apply-wizard-footer {
+      z-index: 110 !important;
+     }
+    }
+  #custom-containers-remarks,
+  #custom-containers-landRegDetails {
+    line-height: 2rem !important;
+    padding: 2px !important;
+  }
+  
+  div[class^="MuiPaper-root"] svg text, .stepper-container svg text {
+    font-size: 12px !important; }
+  
+  .occupancytypeblock {
+      float: right; 
+      width: 50% !important;
+      margin-top: -15px
+    }
+  
+    .occupancytypeblock > div {
+      max-width: 100%;
+      flex-basis: 100%;
+    }
+  
+     .mymuicontainer #material-ui-cardContent #material-ui-applicantContainer div:nth-child(3) > div:nth-child(1) {
+       display:none;
+     }
+     #material-ui-buildingDetailsContainer div:nth-child(3),
+     #material-ui-blocksContainer div:nth-child(3) {
+      width: 100% !important;
+    }
+    #material-ui-buildingDetailsContainer {
+      // background: rgb(242, 242, 242) !important;
+      padding: 10px !important; 
+    }
+
+    @media only screen and (max-width: 960px) {
+      #material-ui-blocksContainer,
+      #material-ui-buildingDetailsContainer {
+        table {
+          table-layout: fixed !important;
+        }
+        table tbody tr td {
+          width: 45% !important;
+          padding:4px 8px 4px 10px !important;
+          font-size: 15px !important;
+          height: 75px !important;
+          white-space: unset !important;
+          word-break: break-all !important;
+        }
+        table tbody tr td p{
+          margin: 0px !important;
+        }
+        table tbody tr td div a{
+          font-size: 11px !important;
+        }
+      }
+    }

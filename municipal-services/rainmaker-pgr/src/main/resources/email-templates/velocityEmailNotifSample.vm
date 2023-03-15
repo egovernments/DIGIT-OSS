@@ -1,0 +1,9 @@
+<html>
+	<body>
+		<h3>Hi $params.name!</h3>
+		<p>
+			Your complaint with id: $params.id has been  successfully $params.status.
+		</p>
+	</body>
+
+</html>

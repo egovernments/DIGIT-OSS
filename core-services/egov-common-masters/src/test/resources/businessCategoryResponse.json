@@ -1,0 +1,35 @@
+{
+    "ResponseInfo":{
+        "apiId":"org.egov.collection",
+        "ver":"1.0",
+        "msgId":"654654",
+        "resMsgId":"uief87324",
+        "status":"200"
+     
+      
+},
+    "BusinessCategory":[{
+    "id":3,
+    "name":"Trade Licence",
+    "code":"TL",
+    "active":true,
+    "tenantId":"default"
+        },
+    {
+    "id":2,
+    "name":"Marriage Registration",
+    "code":"MR",
+    "active":true,
+    "tenantId":"default"
+    },
+    {
+    "id":1,
+    "name":"Collection",
+    "code":"CL",
+    "active":true,
+    "tenantId":"default"
+    }
+      
+    ]
+}
+    

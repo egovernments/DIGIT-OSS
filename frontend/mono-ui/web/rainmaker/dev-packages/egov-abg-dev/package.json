@@ -1,0 +1,8 @@
+{
+  "name": "egov-abg-dev",
+  "version": "0.0.1",
+  "license": "egov",
+  "private": true,
+  "dependencies": {},
+  "scripts": {}
+}

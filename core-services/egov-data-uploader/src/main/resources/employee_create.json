@@ -1,0 +1,155 @@
+{
+  "moduleName": "HR-Employee",
+  "Definitions": [
+    {
+      "name": "hr-employee-create",
+      "templateFileName": "Employee_Create_Template.xls",
+      "uniqueParentKeys": ["Mobile"],
+      "isParentChild": true,
+      "requests": [
+        {
+          "url": "/hr-employee-v2/employees/_create",
+          "apiRequest": {
+            "RequestInfo": {
+              "apiId": "org.egov.eis",
+              "ver": "1.0",
+              "ts": null,
+              "action": "asd",
+              "did": "4354648646",
+              "key": "xyz",
+              "msgId": null,
+              "correlationId": null,
+              "authToken": "67f947e9-3af5-490f-8e10-d35d0b9fd0d0"
+            },
+            "Employee": {
+              "dateOfAppointment": null,
+              "dateOfJoining": null,
+              "dateOfRetirement": null,
+              "employeeStatus": "7",
+              "recruitmentMode": null,
+              "recruitmentType": null,
+              "recruitmentQuota": null,
+              "retirementAge": null,
+              "dateOfResignation": null,
+              "dateOfTermination": null,
+              "employeeType": "1",
+              "assignments": [
+                {
+                  "position": 4,
+                  "isPrimary": true
+                }
+              ],
+              "jurisdictions": ["2"],
+              "motherTongue": null,
+              "religion": null,
+              "community": null,
+              "category": null,
+              "physicallyDisabled": false,
+              "transferredEmployee": false,
+              "medicalReportProduced": true,
+              "languagesKnown": [],
+              "maritalStatus": "UNMARRIED",
+              "passportNo": null,
+              "gpfNo": null,
+              "group": null,
+              "placeOfBirth": null,
+              "documents": [],
+              "serviceHistory": [],
+              "probation": [],
+              "regularisation": [],
+              "technical": [],
+              "education": [],
+              "test": [],
+              "user": {
+                "roles": [
+                  {
+                    "code": "EMPLOYEE",
+                    "name": "EMPLOYEE"
+                  }
+                ],
+                "userName": "qaemployeeone",
+                "name": "Ramakrishna",
+                "gender": "MALE",
+                "mobileNumber": "9999999991",
+                "emailId": null,
+                "bankAccount": "",
+                "ifscCode": "",
+                "bankBranch": "",
+                "altContactNumber": null,
+                "pan": null,
+                "aadhaarNumber": null,
+                "permanentAddress": null,
+                "permanentCity": null,
+                "permanentPinCode": null,
+                "correspondenceCity": null,
+                "correspondencePinCode": null,
+                "correspondenceAddress": null,
+                "active": true,
+                "dob": null,
+                "locale": null,
+                "signature": null,
+                "fatherOrHusbandName": null,
+                "bloodGroup": null,
+                "identificationMark": null,
+                "photo": null,
+                "type": "EMPLOYEE",
+                "password": null,
+                "tenantId": "pb.amritsar"
+              },
+              "tenantId": "pb.amritsar"
+            }
+          },
+          "excelHeadersToRequestMap": {
+            "Employee Name": [
+              "$.Employee.user.name"
+            ],
+            "Gender": [
+              "$.Employee.user.gender"
+            ],
+            "Mobile": [
+              "$.Employee.user.mobileNumber"
+            ],
+            "DOB": [
+              "$.Employee.user.dob"
+            ],
+            "Start Date": [
+              "$.Employee.assignments.*.fromDate",
+              "$.Employee.dateOfAppointment"
+            ],
+            "End Date": [
+              "$.Employee.assignments.*.toDate"
+            ],
+            "Department": [
+              "$.Employee.assignments.*.department"
+            ],
+            "Designation": [
+              "$.Employee.assignments.*.designation"
+            ],
+            "Primary": [
+              "$.Employee.assignments.*.isPrimary"
+            ],
+            "Code": [
+              "$.Employee.user.userName",
+              "$.Employee.code"
+            ],
+            "Password": [
+              "$.Employee.user.password"
+            ],
+            "Role Code": [
+              "$.Employee.user.roles.*.code"
+            ],
+            "Role Name": [
+              "$.Employee.user.roles.*.name"
+            ],
+            "Position": [
+              "$.Employee.assignments.*.position"
+            ]
+          },
+          "additionalResFields": {
+          },
+          "tenantIdPaths": ["$.Employee.tenantId", "$.Employee.user.tenantId"]
+        }
+      ]
+    }
+  ]
+}

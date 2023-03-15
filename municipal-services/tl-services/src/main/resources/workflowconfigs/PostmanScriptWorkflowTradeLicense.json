@@ -1,0 +1,322 @@
+curl --location --request POST 'https://dev.digit.org/egov-workflow-v2/egov-wf/businessservice/_create' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "RequestInfo": {
+    "apiId": "Rainmaker",
+    "action": "",
+    "did": 1,
+    "key": "",
+    "msgId": "20170310130900|en_IN",
+    "requesterId": "",
+    "ts": 1513579888683,
+    "ver": ".01",
+    "authToken": "e03cfa08-072c-405f-bb77-83dd4b9876d0",
+    "userInfo": {
+      "id": 73,
+      "userName": null,
+      "name": null,
+      "type": "EMPLOYEE",
+      "mobileNumber": null,
+      "emailId": null,
+      "roles": [
+        {
+          "id": 2,
+          "name": "Customer Support Representative",
+          "code": null,
+          "tenantId": null
+        }
+      ],
+      "tenantId": null,
+      "uuid": "uuid"
+    }
+  },
+  "BusinessServices": [
+    {
+      "tenantId": "pb.amritsar",
+      "businessService": "NewTL",
+      "business": "tl-services",
+      "businessServiceSla": 172800000,
+      "states": [
+        {
+          "tenantId": "pb.amritsar",
+          "sla": null,
+          "state": null,
+          "applicationStatus": null,
+          "docUploadRequired": false,
+          "isStartState": true,
+          "isTerminateState": false,
+          "isStateUpdatable": true,
+          "actions": [
+            {
+              "tenantId": "pb.amritsar",
+              "action": "INITIATE",
+              "nextState": "INITIATED",
+              "roles": [
+                "CITIZEN",
+                "TL_CEMP"
+              ]
+            }
+          ]
+        },
+        {
+          "tenantId": "pb.amritsar",
+          "sla": null,
+          "state": "INITIATED",
+          "applicationStatus": "INITIATED",
+          "docUploadRequired": false,
+          "isStartState": true,
+          "isTerminateState": false,
+          "isStateUpdatable": true,
+          "actions": [
+            {
+              "tenantId": "pb.amritsar",
+              "action": "APPLY",
+              "nextState": "APPLIED",
+              "roles": [
+                "CITIZEN",
+                "TL_CEMP"
+              ]
+            },
+            {
+              "tenantId": "pb.amritsar",
+              "action": "INITIATE",
+              "nextState": "INITIATED",
+              "roles": [
+                "CITIZEN",
+                "TL_CEMP"
+              ]
+            }
+          ]
+        },
+        {
+          "tenantId": "pb.amritsar",
+          "sla": null,
+          "state": "APPLIED",
+          "applicationStatus": "APPLIED",
+          "docUploadRequired": false,
+          "isStartState": false,
+          "isTerminateState": false,
+          "isStateUpdatable": true,
+          "actions": [
+            {
+              "tenantId": "pb.amritsar",
+              "action": "FORWARD",
+              "nextState": "FIELDINSPECTION",
+              "roles": [
+                "TL_DOC_VERIFIER"
+              ]
+            },
+            {
+              "tenantId": "pb.amritsar",
+              "action": "REJECT",
+              "nextState": "REJECTED",
+              "roles": [
+                "TL_DOC_VERIFIER"
+              ]
+            }
+          ]
+        },
+        {
+          "tenantId": "pb.amritsar",
+          "sla": null,
+          "state": "REJECTED",
+          "applicationStatus": "REJECTED",
+          "docUploadRequired": false,
+          "isStartState": false,
+          "isTerminateState": true,
+          "isStateUpdatable": false,
+          "actions": null
+        },
+        {
+          "tenantId": "pb.amritsar",
+          "sla": 86400000,
+          "state": "FIELDINSPECTION",
+          "applicationStatus": "FIELDINSPECTION",
+          "docUploadRequired": false,
+          "isStartState": false,
+          "isTerminateState": false,
+          "isStateUpdatable": true,
+          "actions": [
+            {
+              "tenantId": "pb.amritsar",
+              "action": "SENDBACKTOCITIZEN",
+              "nextState": "CITIZENACTIONREQUIRED",
+              "roles": [
+                "TL_FIELD_INSPECTOR"
+              ]
+            },
+            {
+              "tenantId": "pb.amritsar",
+              "action": "FORWARD",
+              "nextState": "PENDINGAPPROVAL",
+              "roles": [
+                "TL_FIELD_INSPECTOR"
+              ]
+            },
+            {
+              "tenantId": "pb.amritsar",
+              "action": "REJECT",
+              "nextState": "REJECTED",
+              "roles": [
+                "TL_FIELD_INSPECTOR"
+              ]
+            },
+            {
+              "tenantId": "pb.amritsar",
+              "action": "SENDBACK",
+              "nextState": "APPLIED",
+              "roles": [
+                "TL_FIELD_INSPECTOR"
+              ]
+            }
+          ]
+        },
+        {
+          "tenantId": "pb.amritsar",
+          "sla": 43200000,
+          "state": "PENDINGAPPROVAL",
+          "applicationStatus": "PENDINGAPPROVAL",
+          "docUploadRequired": false,
+          "isStartState": false,
+          "isTerminateState": false,
+          "isStateUpdatable": false,
+          "actions": [
+            {
+              "tenantId": "pb.amritsar",
+              "action": "SENDBACK",
+              "nextState": "FIELDINSPECTION",
+              "roles": [
+                "TL_APPROVER"
+              ]
+            },
+            {
+              "tenantId": "pb.amritsar",
+              "action": "APPROVE",
+              "nextState": "PENDINGPAYMENT",
+              "roles": [
+                "TL_APPROVER"
+              ]
+            },
+            {
+              "tenantId": "pb.amritsar",
+              "action": "REJECT",
+              "nextState": "REJECTED",
+              "roles": [
+                "TL_APPROVER"
+              ]
+            }
+          ]
+        },
+        {
+          "tenantId": "pb.amritsar",
+          "sla": 43200000,
+          "state": "PENDINGPAYMENT",
+          "applicationStatus": "PENDINGPAYMENT",
+          "docUploadRequired": false,
+          "isStartState": false,
+          "isTerminateState": false,
+          "isStateUpdatable": false,
+          "actions": [
+            {
+              "tenantId": "pb.amritsar",
+              "action": "ADHOC",
+              "nextState": "PENDINGPAYMENT",
+              "roles": [
+                "TL_CEMP"
+              ]
+            },
+            {
+              "tenantId": "pb.amritsar",
+              "action": "PAY",
+              "nextState": "APPROVED",
+              "roles": [
+                "CITIZEN",
+                "TL_CEMP",
+                "SYSTEM_PAYMENT"
+              ]
+            }
+          ]
+        },
+        {
+          "tenantId": "pb.amritsar",
+          "sla": null,
+          "state": "APPROVED",
+          "applicationStatus": "APPROVED",
+          "docUploadRequired": false,
+          "isStartState": false,
+          "isTerminateState": false,
+          "isStateUpdatable": false,
+          "actions": [
+            {
+              "tenantId": "pb.amritsar",
+              "action": "EXPIRE",
+              "nextState": "EXPIRED",
+              "roles": [
+                "SYSTEM"
+              ]
+            },
+            {
+              "tenantId": "pb.amritsar",
+              "action": "CANCEL",
+              "nextState": "CANCELLED",
+              "roles": [
+                "TL_APPROVER"
+              ]
+            }
+          ]
+        },
+        {
+          "tenantId": "pb.amritsar",
+          "sla": null,
+          "state": "CANCELLED",
+          "applicationStatus": "CANCELLED",
+          "docUploadRequired": false,
+          "isStartState": false,
+          "isTerminateState": true,
+          "isStateUpdatable": false,
+          "actions": null
+        },
+        {
+          "tenantId": "pb.amritsar",
+          "sla": null,
+          "state": "CITIZENACTIONREQUIRED",
+          "applicationStatus": "CITIZENACTIONREQUIRED",
+          "docUploadRequired": false,
+          "isStartState": false,
+          "isTerminateState": false,
+          "isStateUpdatable": true,
+          "actions": [
+            {
+              "tenantId": "pb.amritsar",
+              "action": "RESUBMIT",
+              "nextState": "FIELDINSPECTION",
+              "roles": [
+                "TL_CEMP"
+              ]
+            },
+            {
+              
+              "tenantId": "pb.amritsar",
+              "action": "FORWARD",
+              "nextState": "FIELDINSPECTION",
+              "roles": [
+                "CITIZEN"
+              ]
+            }
+          ]
+        },
+        {
+          "tenantId": "pb.amritsar",
+          "sla": null,
+          "state": "EXPIRED",
+          "applicationStatus": "EXPIRED",
+          "docUploadRequired": false,
+          "isStartState": false,
+          "isTerminateState": true,
+          "isStateUpdatable": false,
+          "actions": null
+        }
+      ]
+    }
+  ]
+}'

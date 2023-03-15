@@ -1,0 +1,129 @@
+curl --location --request POST 'https://dev.digit.org/egov-workflow-v2/egov-wf/businessservice/_create' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "RequestInfo": {
+    "apiId": "Rainmaker",
+    "action": "",
+    "did": 1,
+    "key": "",
+    "msgId": "20170310130900|en_IN",
+    "requesterId": "",
+    "ts": 1513579888683,
+    "ver": ".01",
+    "authToken": "{{Auth_Token}}"
+  },
+  "BusinessServices": [
+    {
+      "tenantId": "pb",
+      "businessService": "ModifySWConnection",
+      "business": "sw-services",
+      "businessServiceSla": 259200000,
+      "states": [
+        {
+          "sla": null,
+          "state": null,
+          "applicationStatus": null,
+          "docUploadRequired": false,
+          "isStartState": true,
+          "isTerminateState": false,
+          "isStateUpdatable": false,
+          "actions": [
+            {
+              "action": "INITIATE",
+              "nextState": "INITIATED",
+              "roles": [
+                "SW_CEMP"
+              ]
+            }
+          ]
+        },
+        {
+          "sla": null,
+          "state": "INITIATED",
+          "applicationStatus": "INITIATED",
+          "docUploadRequired": false,
+          "isStartState": false,
+          "isTerminateState": false,
+          "isStateUpdatable": true,
+          "actions": [
+            {
+              "action": "SUBMIT_APPLICATION",
+              "nextState": "PENDING_FOR_APPROVAL",
+              "roles": [
+                "SW_CEMP"
+              ]
+            }
+          ]
+        },
+        {
+          "sla": 86400000,
+          "state": "PENDING_FOR_APPROVAL",
+          "applicationStatus": "PENDING_FOR_APPROVAL",
+          "docUploadRequired": false,
+          "isStartState": false,
+          "isStateUpdatable": true,
+          "isTerminateState": false,
+          "actions": [
+            {
+              "action": "APPROVE_CONNECTION",
+              "nextState": "APPROVED",
+              "roles": [
+                "SW_APPROVER"
+              ]
+            },
+            {
+              "action": "REJECT",
+              "nextState": "REJECTED",
+              "roles": [
+                "SW_APPROVER"
+              ]
+            },
+            {
+              "action": "SEND_BACK",
+              "nextState": "PENDING_FOR_COUNTER_EMPLOYEE_ACTION",
+              "roles": [
+                "SW_APPROVER"
+              ]
+            }
+          ]
+        },
+        {
+          "sla": null,
+          "state": "REJECTED",
+          "applicationStatus": "REJECTED",
+          "isStateUpdatable": false,
+          "docUploadRequired": false,
+          "isStartState": false,
+          "isTerminateState": true
+        },
+        {
+          "sla": null,
+          "state": "APPROVED",
+          "applicationStatus": "APPROVED",
+          "isStateUpdatable": false,
+          "docUploadRequired": false,
+          "isStartState": false,
+          "isTerminateState": true
+        },
+        {
+        "sla": null,
+        "state": "PENDING_FOR_COUNTER_EMPLOYEE_ACTION",
+        "applicationStatus": "PENDING_FOR_COUNTER_EMPLOYEE_ACTION",
+        "isStateUpdatable": true,
+        "docUploadRequired": false,
+        "isStartState": false,
+        "isTerminateState": false,
+        "actions": [
+             {
+              "action": "SUBMIT_APPLICATION",
+              "nextState": "PENDING_FOR_APPROVAL",
+              "roles": [
+                  "SW_CEMP"
+                ]
+             }
+           ]
+        }
+      ]
+    }
+  ]
+}'

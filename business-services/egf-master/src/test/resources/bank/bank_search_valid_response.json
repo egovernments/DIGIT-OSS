@@ -1,0 +1,10 @@
+"banks":[
+   {
+      "code":"code",
+      "name":"name",
+      "description":"description",
+      "active":true,
+      "type":"type",
+      "tenantId":"default"
+   }
+]

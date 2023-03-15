@@ -1,0 +1,22 @@
+{
+	"variables": [],
+	"info": {
+		"name": "file store by tag with url",
+		"_postman_id": "0fbfd4e0-a27f-b245-a724-0cd35f60a4a3",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://egov-micro-dev.egovernments.org/filestore/v1/files/tag?tenantId=default&tag=00019-2017-OA",
+			"request": {
+				"url": "http://egov-micro-dev.egovernments.org/filestore/v1/files/tag?tenantId=default&tag=00019-2017-OA",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

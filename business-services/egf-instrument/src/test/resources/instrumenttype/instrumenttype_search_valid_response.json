@@ -1,0 +1,18 @@
+"instrumentTypes": [
+   	{
+		"name":"name",
+		"description":"description",
+		"active":true,
+   		"tenantId":"default"
+   	}
+   	
+   	],
+    "page":
+    {
+        "totalResults": 1,
+        "totalPages": 1,
+        "pageSize": 500,
+        "currentPage": 0,
+        "offset": 0
+    }
+    

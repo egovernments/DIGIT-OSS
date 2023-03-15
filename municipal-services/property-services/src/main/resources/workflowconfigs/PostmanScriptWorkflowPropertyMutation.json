@@ -1,0 +1,191 @@
+curl --location --request POST 'https://dev.digit.org/egov-workflow-v2/egov-wf/businessservice/_create' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "RequestInfo": {
+      "apiId": "Rainmaker",
+      "action": "",
+      "did": 1,
+      "key": "",
+      "msgId": "20170310130900|en_IN",
+      "requesterId": "",
+      "ts": 1513579888683,
+      "ver": ".01",
+      "authToken": "{{Auth_Token}}"
+    },
+   "BusinessServices": [
+        {
+            "tenantId": "pb",
+            "businessService": "PT.MUTATION",
+            "business": "PT",
+            "businessServiceSla": null,
+            "states": [
+                {
+                    "tenantId": "pb",
+                    "sla": null,
+                    "state": null,
+                    "applicationStatus": "INWORKFLOW",
+                    "docUploadRequired": false,
+                    "isStartState": true,
+                    "isTerminateState": false,
+                    "actions": [
+                        {
+                            "tenantId": "pb",
+                            "action": "OPEN",
+                            "nextState": "OPEN",
+                            "roles": [
+                                "CITIZEN",
+                                "EMPLOYEE"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "tenantId": "pb",
+                    "sla": null,
+                    "state": "OPEN",
+                    "applicationStatus": "INWORKFLOW",
+                    "docUploadRequired": false,
+                    "isStartState": true,
+                    "isTerminateState": false,
+                    "actions": [
+                        {
+                            "tenantId": "pb",
+                            "action": "VERIFY",
+                            "nextState": "DOCVERIFIED",
+                            "roles": [
+                                "PT_DOC_VERIFIER"
+                            ]
+                        },
+                        {
+                            "tenantId": "pb",
+                            "action": "REJECT",
+                            "nextState": "REJECTED",
+                            "roles": [
+                                "PT_DOC_VERIFIER"
+                            ]
+                        },
+                        {
+                            "tenantId": "pb",
+                            "action": "SENDBACKTOCITIZEN",
+                            "nextState": "CORRECTIONPENDING",
+                            "roles": [
+                                "PT_DOC_VERIFIER"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "tenantId": "pb",
+                    "sla": null,
+                    "state": "DOCVERIFIED",
+                    "applicationStatus": "INWORKFLOW",
+                    "docUploadRequired": false,
+                    "isStartState": false,
+                    "isTerminateState": false,
+                    "actions": [
+                        {
+                            "tenantId": "pb",
+                            "action": "FORWARD",
+                            "nextState": "FIELDVERIFIED",
+                            "roles": [
+                                "PT_FIELD_INSPECTOR"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "tenantId": "pb",
+                    "sla": null,
+                    "state": "FIELDVERIFIED",
+                    "applicationStatus": "INWORKFLOW",
+                    "docUploadRequired": false,
+                    "isStartState": false,
+                    "isTerminateState": false,
+                    "actions": [
+                        {
+                            "tenantId": "pb",
+                            "action": "PAY",
+                            "nextState": "PAID",
+                            "roles": [
+                                "CITIZEN",
+                                "PT_CEMP"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "tenantId": "pb",
+                    "sla": null,
+                    "state": "REJECTED",
+                    "applicationStatus": "INACTIVE",
+                    "docUploadRequired": false,
+                    "isStartState": false,
+                    "isTerminateState": true,
+                    "actions": null
+                },
+                {
+                    "tenantId": "pb",
+                    "sla": null,
+                    "state": "PAID",
+                    "applicationStatus": "INWORKFLOW",
+                    "docUploadRequired": false,
+                    "isStartState": false,
+                    "isTerminateState": false,
+                    "isStateUpdatable": false,
+                    "actions": [
+                        {
+                            "tenantId": "pb",
+                            "action": "APPROVE",
+                            "nextState": "APPROVED",
+                            "roles": [
+                                "PT_APPROVER"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "tenantId": "pb",
+                    "sla": null,
+                    "state": "APPROVED",
+                    "applicationStatus": "ACTIVE",
+                    "docUploadRequired": false,
+                    "isStartState": false,
+                    "isTerminateState": true,
+                    "isStateUpdatable": false,
+                    "actions": null
+                },
+                {
+                    "tenantId": "pb",
+                    "sla": null,
+                    "state": "CORRECTIONPENDING",
+                    "applicationStatus": "INWORKFLOW",
+                    "docUploadRequired": false,
+                    "isStartState": false,
+                    "isTerminateState": false,
+                    "isStateUpdatable": true,
+                    "actions": [
+                        {
+                            "tenantId": "pb",
+                            "action": "REJECT",
+                            "nextState": "REJECTED",
+                            "roles": [
+                                "CITIZEN",
+                                "PT_CEMP"
+                            ]
+                        },
+                        {
+                            "tenantId": "pb",
+                            "action": "REOPEN",
+                            "nextState": "OPEN",
+                            "roles": [
+                                "CITIZEN",
+                                "PT_CEMP"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+   ]
+}
+s'

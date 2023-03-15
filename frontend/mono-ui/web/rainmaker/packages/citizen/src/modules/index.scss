@@ -1,0 +1,27 @@
+.jk-footer {
+    position: fixed;
+    width: 100%;
+    right: 0;
+    bottom: 0;
+    height: 2.5em;
+    --bg-opacity: 1;
+    background-color: #f4f7fb;
+    padding-bottom: 16px;
+    padding-top: 8px;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    z-index: 50;
+    display: flex;
+  }
+  
+  .jk-footer-image-cursor {
+    cursor: pointer;
+  }
+  
+  input[type="date"]{
+    cursor: pointer;
+  }
+  input[type="date" i] {
+    cursor: pointer;
+  }

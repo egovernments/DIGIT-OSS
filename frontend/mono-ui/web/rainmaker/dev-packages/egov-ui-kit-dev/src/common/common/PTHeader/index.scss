@@ -1,0 +1,22 @@
+@media only screen and (max-width: 768px) {
+
+    .search-preview-header{
+        
+        display: grid !important;
+        margin-bottom: 15px !important;
+        top: -10px;
+        position: relative;
+    }
+    .header-buttons{
+        margin-top: 10px !important;
+        div{
+            div{
+                button{
+                    display: block !important;
+                    height: 65px !important;
+                    width: 157px !important;
+                }
+            }
+        }
+    }
+}

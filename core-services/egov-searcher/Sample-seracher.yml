@@ -1,0 +1,52 @@
+SearchDefinitions:
+ moduleName: sample-yaml
+ summary: 
+ version: 1.0.0
+ definitions:
+ - name: samplesearch
+   isCustomerRowMapEnabled: false
+   query: 
+    baseQuery:   select * from table_name $WHERE
+    
+   searchParams: 
+    condition: AND
+    params:
+    - name: b.tenantid
+      isMandatory: true
+      jsonPath: $.searchCriteria.tenantId
+    - name: bd.consumercode
+      isMandatory: false
+      jsonPath: $.searchCriteria.consumerCode
+      operator: ILIKE
+    - name: bd.businessservice
+      isMandatory: false
+      jsonPath: $.searchCriteria.businesService
+    - name: b.mobilenumber
+      isMandatory: false
+      jsonPath: $.searchCriteria.mobileNumber
+    - name: bd.billno
+      isMandatory: false
+      jsonPath: $.searchCriteria.billNo
+    - name: ptadd.locality
+      isMandatory: false
+      jsonPath: $.searchCriteria.locality
+    - name: ptdet.financialyear
+      isMandatory: false
+      jsonPath: $.searchCriteria.financialYear
+    - name: fromperiod
+      isMandatory: false
+      jsonPath: $.searchCriteria.fromPeriod
+      operator: LE
+    - name: toperiod
+      isMandatory: false
+      jsonPath: $.searchCriteria.toPeriod
+      operator: GE
+    - name: b.status
+      isMandatory: false
+      jsonPath: $.searchCriteria.billActive
+
+   output:
+    jsonFormat: {"ResponseInfo": {},"Bills": []}
+    outJsonPath: $.Bills
+    responseInfoPath: $.ResponseInfo
+    

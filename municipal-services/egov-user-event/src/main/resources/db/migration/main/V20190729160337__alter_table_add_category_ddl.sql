@@ -1,0 +1,1 @@
+ALTER TABLE eg_usrevents_events ADD COLUMN category character varying(256);

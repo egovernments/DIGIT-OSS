@@ -1,0 +1,13 @@
+{
+	"RequestInfo" :{
+		"authToken" :"8a15413a-efb5-4a27-9c91-6e95676dd2d2"
+	},
+	
+	"HierarchyType":{
+		
+	   "name" : "TESTTEST12"	,
+       "tenantId" : "default",
+       "code" : "Revenue"
+       
+	} 
+}

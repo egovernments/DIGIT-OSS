@@ -1,0 +1,35 @@
+.past-payment-form {
+  display: flex;
+  justify-content: space-between;
+  .receipt {
+    width: 25% !important;
+  }
+  .amount {
+    width: 25% !important;
+  }
+  .checkbox-container {
+    width: 25% !important;
+    label {
+      font-weight: normal;
+      color: black;
+    }
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .past-payment-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    .receipt {
+      width: 100% !important;
+    }
+    .amount {
+      width: 100% !important;
+    }
+    .checkbox-container {
+      width: 100% !important;
+    }
+  }
+}

@@ -1,0 +1,29 @@
+.feedback-main-screen {
+  padding: 0 !important;
+  height: calc(100vh - 120px);
+  // background: #ffffff;
+}
+
+.feedback-main-container {
+  position: relative;
+  padding: 16px 16px 0px 16px;
+  // background: #ffffff;
+}
+
+.feedback-submitted-main-cont {
+  text-align: center;
+  height: calc(100vh - 120px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.feedback-submitted-icon-cont {
+  margin-top: -16px;
+  margin-bottom: 21px;
+}
+
+.feedback-thankyou-text .label-text {
+  letter-spacing: 0.7px;
+}

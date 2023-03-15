@@ -1,0 +1,107 @@
+curl --location --request POST 'https://dev.digit.org/egov-workflow-v2/egov-wf/businessservice/_create' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "RequestInfo": {
+    "apiId": "Rainmaker",
+    "action": "",
+    "did": 1,
+    "key": "",
+    "msgId": "20170310130900|en_IN",
+    "requesterId": "",
+    "ts": 1513579888683,
+    "ver": ".01",
+    "authToken": "b39181b1-5c6b-484a-b825-6be2f62012b8"
+  },
+  "BusinessServices": [
+    {
+      "tenantId": "pb",
+      "businessService": "PT.CREATEWITHWNS",
+      "business": "PT",
+      "businessServiceSla": null,
+      "states": [
+        {
+          "sla": null,
+          "state": null,
+          "applicationStatus": "INWORKFLOW",
+          "docUploadRequired": false,
+          "isStartState": true,
+          "isTerminateState": false,
+          "isStateUpdatable": false,
+          "actions": [
+            {
+              "action": "OPEN",
+              "nextState": "INITIATED",
+              "roles": [
+                "CITIZEN",
+                "WS_CEMP",
+                "SW_CEMP"
+              ]
+            }
+          ]
+        },
+        {
+          "sla": null,
+          "state": "INITIATED",
+          "applicationStatus": "INWORKFLOW",
+          "docUploadRequired": false,
+          "isStartState": true,
+          "isTerminateState": false,
+          "isStateUpdatable": true,
+          "actions": [
+            {
+              "action": "SUBMIT",
+              "nextState": "APPROVED",
+              "roles": [
+                "EMPLOYEE",
+                "CITIZEN",
+                "SW_CEMP",
+                "WS_CEMP"
+              ]
+            },
+            {
+              "action": "BACK",
+              "nextState": "INWORKFLOW",
+              "roles": [
+                "EMPLOYEE",
+                "CITIZEN",
+                "SW_CEMP",
+                "WS_CEMP"
+              ]
+            }
+          ]
+        },
+        {
+          "sla": null,
+          "state": "INWORKFLOW",
+          "applicationStatus": "INWORKFLOW",
+          "docUploadRequired": false,
+          "isStartState": true,
+          "isTerminateState": false,
+          "isStateUpdatable": true,
+          "actions": [
+            {
+              "action": "SUBMIT",
+              "nextState": "APPROVED",
+              "roles": [
+                "EMPLOYEE",
+                "CITIZEN",
+                "SW_CEMP",
+                "WS_CEMP"
+              ]
+            }
+          ]
+        },
+        {
+          "sla": null,
+          "state": "APPROVED",
+          "applicationStatus": "ACTIVE",
+          "docUploadRequired": false,
+          "isStartState": false,
+          "isTerminateState": true,
+          "isStateUpdatable": false,
+          "actions": null
+        }
+      ]
+    }
+  ]
+}'

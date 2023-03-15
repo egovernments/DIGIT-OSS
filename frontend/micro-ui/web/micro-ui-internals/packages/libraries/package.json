@@ -1,0 +1,49 @@
+{
+  "name": "@egovernments/digit-ui-libraries",
+  "version": "1.6.1",
+  "main": "dist/index.js",
+  "module": "dist/index.modern.js",
+  "source": "src/index.js",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "microbundle-crl --compress --no-sourcemap --format cjs",
+    "start": "microbundle-crl watch --no-compress --format modern,cjs",
+    "prepublish": "yarn build"
+  },
+  "peerDependencies": {
+    "react": "17.0.2"
+  },
+  "devDependencies": {
+    "gh-pages": "2.2.0",
+    "microbundle-crl": "0.13.11",
+    "react-dom": "17.0.2",
+    "react-scripts": "4.0.1"
+  },
+  "dependencies": {
+    "axios": "0.21.1",
+    "babel-preset-react": "6.24.1",
+    "date-fns": "2.28.0",
+    "html2canvas": "1.4.1",
+    "dom-to-image": "2.6.0",
+    "i18next": "19.9.2",
+    "i18next-react-postprocessor": "3.0.7",
+    "jspdf": "2.5.1",
+    "pdfmake": "0.1.72",
+    "react": "17.0.2",
+    "react-i18next": "11.16.2",
+    "react-query": "3.6.1",
+    "react-redux": "7.2.8",
+    "react-router-dom": "5.3.0",
+    "redux": "4.1.2",
+    "xlsx": "0.17.5"
+  },
+  "resolutions": {
+    "**/babel-loader": "8.2.3",
+    "**/@babel/core": "7.16.0",
+    "**/@babel/preset-env": "7.16.0",
+    "**/@babel/plugin-transform-modules-commonjs": "7.16.0"
+  }
+}

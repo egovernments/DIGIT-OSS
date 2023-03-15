@@ -1,0 +1,10 @@
+{
+  "responseInfo": null,
+  "otp": {
+    "otp": "randomNumber",
+    "UUID": "uuid",
+    "identity": "identity",
+    "tenantId": "tenantId",
+    "isValidationSuccessful": false
+  }
+}

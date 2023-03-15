@@ -1,0 +1,38 @@
+@media only screen and (max-width: 551px) {
+  .apply-wizard-footer {
+    background-color: #ffffff;
+    -webkit-box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.24);
+    box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.24);
+    /* padding: 8px; */
+    position: fixed !important;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    text-align: right;
+    display: flex;
+    padding: initial;
+  }
+
+  .apply-wizard-footer button {
+    width: 100% !important;
+    margin: initial;
+    border: none;
+    margin: 0 !important;
+    border-radius: none !important;
+  }
+
+  #custom-atoms-singleBuildingContainer label + div,
+  #custom-atoms-multipleBuildingContainer label + div {
+    margin-top: 35px;
+  }
+  
+}
+.applicant-details-error{p{
+  font-size: 14px;
+}}
+#custom-containers-propertyMohalla{div{p{
+  font-size: 14px;
+}}}
+#material-ui-nocDetailsContainer > div:nth-child(2) > div > div{
+  visibility: visible !important;
+}

@@ -1,0 +1,262 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Get applications for inbox
+  description: |
+    ### API specs for inbox ###
+    * Employees get applications in his inbox on which are assigned to him or on which he can take action
+  contact:
+    name: Egovernments Foundation
+    email: contact@egovernments.org
+x-module: Inbox
+x-common-path: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml'
+paths:
+
+  /inbox/v1/_search:
+    post:
+      summary: Searches applications based on given search criteria
+      description: Returns applications to be displayed in inbox
+      tags:
+        - Inbox
+      responses:
+        '200':
+          description: Application searched successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/InboxResponse'
+        '400':
+          description: Failed to search the applications
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ErrorRes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InboxRequest'
+        description: Request schema.
+        required: true
+        
+  /inbox/v1/elastic/_search:
+    post:
+      summary: Get citizen privacy audit logs based on given search criteria
+      description: Returns privacy audit logs of citizen
+      tags:
+        - Inbox
+      responses:
+        '200':
+          description: Citizen audit logs searched successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ElasticSearchResponse'
+        '400':
+          description: Failed to search the applications
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ErrorRes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InboxElasticSearchRequest'
+        description: Request schema.
+        required: true
+    
+components:
+  schemas:
+    InboxSearchCriteria:
+      type: object
+      description: 'BPA application object to capture the details of land, land owners, and address of the land.'
+      properties:
+        tenantId:
+          type: string
+          description: TenantId of the user
+          minLength: 1
+          maxLength: 64
+        processSearchCriteria:
+          type: object
+          items:
+            $ref: '#/components/schemas/ProcessInstanceSearchCriteria'  
+        moduleSearchCriteria:
+          type: object
+          description: Hashmap containing the module search params and values
+          minLength: 1
+          maxLength: 64
+        offset:
+          type: integer
+          description: Offset of the search result
+        limit:
+          description: Limit of search result
+          type: integer
+   
+    ProcessInstanceSearchCriteria:
+      type: object
+      description: |
+        Schema to search process instances
+      properties:
+        tenantId:
+          type: string
+          readOnly: true
+          description: The tenantIds of the applications.
+          minLength: 2
+          maxLength: 64
+        status:
+          type: array
+          items:
+            type: string
+          description: List of statuses of pplications.
+        businessIds:
+          type: string
+          items:
+            type: string
+          description: The application numbers to search
+        assignee:
+          type: string
+          description: UUID of the assignee
+          minLength: 2
+          maxLength: 256
+        ids:
+          type: string
+          items:
+            type: string
+          description: UUIDS of the processinstances 
+          minLength: 2
+          maxLength: 64
+        businessService:
+          type: string
+          description: BusinessService (Workdflow config code) of the applications
+        moduleName:
+          type: string
+          description: Module name of the applications 
+          readOnly: true
+        isProcessCountCall:
+          type: string
+          description: 'Source mdms master data. Which captures the source of the service request(ex:- whatsapp, ivr, Swachhata etc)'
+          minLength: 2
+          maxLength: 64
+          example: whatsapp, ivr etc
+        offset:
+          type: integer
+          description: Offset of the search
+        limit:
+          type: string
+          description: Limit of the search
+
+    InboxRequest:
+      type: object
+      description: Response of the FSM
+      properties:
+        RequestInfo:
+          $ref: >-
+            https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/RequestInfo
+        inbox:
+          type: object
+          $ref: '#/components/schemas/InboxSearchCriteria'
+          description: Search criteria
+
+    InboxResponse:
+      type: object
+      description: Response of the FSM
+      properties:
+        responseInfo:
+          $ref: >-
+            https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ResponseInfo
+        statusMap:
+          type: object
+          description: map of status vs count
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Inbox'
+        totalCount:
+          type: string
+          description: totalcount of records available in the system satifyig the search criteria
+          
+    Inbox:
+      type: object
+      description: >
+        Inbox object
+      properties:
+        businessObject:
+          type: string
+          description: Entity object as key value pair
+        ProcessInstance:
+          type: object
+          $ref: 'https://raw.githubusercontent.com/egovernments/core-services/master/docs/worfklow-2.0.yml#/definitions/ProcessInstance'
+          description: Workflow processintance.
+          
+    InboxElasticSearchRequest:
+      type: object
+      description: Inbox elastic search request body
+      properties:
+        RequestInfo:
+          $ref: >-
+            https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/RequestInfo
+        InboxElasticSearchCriteria:
+          type: object
+          $ref: '#/components/schemas/InboxElasticSearchCriteria'
+          description: Search criteria
+          
+    InboxElasticSearchCriteria:
+      type: object
+      description: 'Search criteria for privacy audit logs'
+      properties:
+        tenantId:
+          type: string
+          description: TenantId of the user
+          minLength: 1
+          maxLength: 64
+        indexKey:
+          type: string
+          description: indexer key value
+          minLength: 1
+          maxLength: 64
+        fromDate:
+          type: integer
+          maxItems: 50
+          description: epoch date.
+        toDate:
+          type: integer
+          maxItems: 50
+          description: epoch date.
+    
+    ElasticSearchResponse:
+      type: object
+      description: Inbox elastic search request body
+      properties:
+        ResponseInfo:
+          $ref: >-
+            https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ResponseInfo
+        ElasticSearchData:
+          type: array
+          description: elastic search response
+          items:
+            $ref: '#/components/schemas/ElasticSearchData'
+          
+    ElasticSearchData:
+      type: object
+      description: 'Response for privacy audit logs'
+      properties:
+        userId:
+          type: string
+          description: uuid of the user who access the citizen data
+        dataViewedBy:
+          type: string
+          description: name of the user who access the citizen data
+        timestamp:
+          type: integer
+          description: epoch date.
+        dataView:
+          type: array
+          items:
+            type: string
+          description: List of citizen data was viewed by other.
+        roles:
+          type: array
+          description: List of all the roles of the user who viewed the citizen data
+          items:
+            $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/Role'

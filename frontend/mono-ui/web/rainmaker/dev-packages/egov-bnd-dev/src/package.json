@@ -1,0 +1,10 @@
+{
+  "name": "egov-bnd",
+  "version": "1.8.1",
+  "license": "egov",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

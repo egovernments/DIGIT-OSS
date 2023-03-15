@@ -1,0 +1,56 @@
+.search-form-wrapper{
+    @apply flex flex-wrap justify-between bg-white mb-lg py-lg pl-lg;
+    .form-field{
+        width: calc( 25% - 16px );
+        @apply inline-block mr-md align-middle;
+    }
+    .SubmitAndClearAllContainer{
+        @apply w-full;
+        .submit{
+            right: 36px;
+            margin-top: 22px;
+            margin-left: -16px !important;
+            @apply flex flex-row-reverse items-center w-full align-middle text-center !important;
+            button{
+                margin: 0;
+                @apply inline-block w-1/4 !important;
+            }
+            p{
+                @apply cursor-pointer text-link text-focus w-1/4 inline-block ;
+            }
+        }
+    }
+    .submit{
+        right: 36px;
+        margin-top: 22px;
+        @apply inline align-middle text-center !important;
+        button{
+            margin: 0;
+            @apply inline-block w-full !important;
+        }
+        p{
+            @apply cursor-pointer text-link text-focus w-full inline-block ;
+        }
+    }
+    .pt-property-search{
+        justify-content: unset;
+    }
+
+}
+
+@media (min-width: 780px) {
+    .search-form-wrapper{
+        .pt-form-field{
+            width: 30% !important;
+            margin-bottom: 20px;
+          }
+    }
+  }
+  @media (max-width: 780px) {
+    .search-form-wrapper{
+        .pt-form-field{
+            width: 100% !important;
+            margin-bottom: 15px;
+          }
+    }
+}

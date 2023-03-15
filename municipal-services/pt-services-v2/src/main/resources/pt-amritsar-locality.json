@@ -1,0 +1,123 @@
+"children": [
+{
+"id": 1366,
+"boundaryNum": 1,
+"name": "Katra Karam Singh",
+"localname": "Katra Karam Singh",
+"longitude": null,
+"latitude": null,
+"label": "Locality",
+"code": "KatraKaramSingh",
+"area": "A1",
+"children": []
+},
+{
+"id": 1367,
+"boundaryNum": 2,
+"name": "Ajnala Road",
+"localname": "Ajnala Road",
+"longitude": null,
+"latitude": null,
+"label": "Locality",
+"code": "AjnalaRoad",
+"area": "A2",
+"children": []
+},
+{
+"id": 1368,
+"boundaryNum": 3,
+"name": "Azad Nagar",
+"localname": "Azad Nagar",
+"longitude": null,
+"latitude": null,
+"label": "Locality",
+"code": "AzadNagar",
+"area": "A1",
+"children": []
+},
+{
+"id": 1369,
+"boundaryNum": 4,
+"name": "Babowal",
+"localname": "Babowal",
+"longitude": null,
+"latitude": null,
+"label": "Locality",
+"code": "Babowal",
+"area": "A3",
+"children": []
+},
+{
+"id": 1370,
+"boundaryNum": 5,
+"name": "Bal Kalan",
+"localname": "Bal Kalan",
+"longitude": null,
+"latitude": null,
+"label": "Locality",
+"code": "BalKalan",
+"area": "A2",
+"children": []
+},
+{
+"id": 1371,
+"boundaryNum": 6,
+"name": "Mahal",
+"localname": "Mahal",
+"longitude": null,
+"latitude": null,
+"label": "Locality",
+"code": "Mahal",
+"area": "A1",
+"children": []
+},
+{
+"id": 1372,
+"boundaryNum": 7,
+"name": "NH-1",
+"localname": "NH-1",
+"longitude": null,
+"latitude": null,
+"label": "Locality",
+"code": "NH1",
+"area": "A3",
+"children": []
+},
+{
+"id": 1373,
+"boundaryNum": 8,
+"name": "Jalalabad",
+"localname": "Jalalabad",
+"longitude": null,
+"latitude": null,
+"label": "Locality",
+"code": "Jalalabad",
+"area": "A2",
+"children": []
+},
+{
+"id": 1374,
+"boundaryNum": 9,
+"name": "Model Town",
+"localname": "Model Town",
+"longitude": null,
+"latitude": null,
+"label": "Locality",
+"code": "ModelTown",
+"area": "A1",
+"children": []
+},
+{
+"id": 1375,
+"boundaryNum": 10,
+"name": "Verka",
+"localname": "Verka",
+"longitude": null,
+"latitude": null,
+"label": "Locality",
+"code": "Verka",
+"area": "A2",
+"children": []
+}
+
+]

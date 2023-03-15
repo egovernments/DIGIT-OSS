@@ -1,0 +1,12 @@
+[
+  {
+    "operation": "shift",
+    "spec": {
+      "tenantId": "tenantId",
+      "serviceRequestId": "serviceRequestId",
+      "complainCategory": "complainCategory",
+      "dateOfComplaint": "dateOfComplaint"
+
+    }
+  }
+]

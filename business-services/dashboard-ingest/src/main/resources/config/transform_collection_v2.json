@@ -1,0 +1,100 @@
+[
+  {
+    "operation": "shift",
+    "spec": {
+      "tenantId": "tenantId",
+      "id": "id",
+      "paymentMode": "paymentMode",
+      "paymentStatus": "paymentStatus",
+      "transactionId": "transactionNumber",
+      "paidBy": "paidBy",
+      "payer": "payer",
+      "paymentDetails": {
+        "$i": {
+          "businessService": "paymentDetails.businessService",
+          "receiptType": "paymentDetails.receiptType",
+          "totalDue": "paymentDetails.totalDue",
+          "receiptDate": "paymentDetails.receiptDate",
+          "bill": {
+            "billDetails": {
+              "$j": {
+                "boundary": "paymentDetails.bill.billDetails.boundary",
+                "amount": "paymentDetails.bill.billDetails.amount",
+                "fromPeriod": "paymentDetails.bill.billDetails.fromPeriod",
+                "voucherHeader": "paymentDetails.bill.billDetails.voucherHeader",
+                "channel": "paymentDetails.bill.billDetails.channel",
+                "additionalDetails": "paymentDetails.bill.billDetails.additionalDetails",
+                "cancellationRemarks": "paymentDetails.bill.billDetails.cancellationRemarks",
+                "manualReceiptDate": "paymentDetails.bill.billDetails.manualReceiptDate",
+                "expiryDate": "paymentDetails.bill.billDetails.expiryDate",
+                "collectionType": "paymentDetails.bill.billDetails.collectionType",
+                "displayMessage": "paymentDetails.bill.billDetails.displayMessage",
+                "demandId": "paymentDetails.bill.billDetails.demandId",
+                "amountPaid": "paymentDetails.bill.billDetails.amountPaid",
+                "manualReceiptNumber": "paymentDetails.bill.billDetails.manualReceiptNumber",
+                "billId": "paymentDetails.bill.billDetails.billId",
+                "auditDetails": "paymentDetails.bill.billDetails.auditDetails",
+                "tenantId": "paymentDetails.bill.billDetails.tenantId",
+                "toPeriod": "paymentDetails.bill.billDetails.toPeriod",
+                "billDescription": "paymentDetails.bill.billDetails.billDescription",
+                "id": "paymentDetails.bill.billDetails.id",
+                "callBackForApportioning": "paymentDetails.bill.billDetails.callBackForApportioning",
+                "billAccountDetails": {
+                  "*": {
+                    "amount": "paymentDetails.bill.billDetails.billAccountDetails.[&1].amount",
+                    "taxHeadCode": "paymentDetails.bill.billDetails.billAccountDetails.[&1].taxHeadCode",
+                    "purpose": "paymentDetails.bill.billDetails.billAccountDetails.[&1].purpose",
+                    "adjustedAmount": "paymentDetails.bill.billDetails.billAccountDetails.[&1].adjustedAmount",
+                    "auditDetails": "paymentDetails.bill.billDetails.billAccountDetails.[&1].auditDetails",
+                    "tenantId": "paymentDetails.bill.billDetails.billAccountDetails.[&1].tenantId",
+                    "id": "paymentDetails.bill.billDetails.billAccountDetails.[&1].id",
+                    "billDetailId": "paymentDetails.bill.billDetails.billAccountDetails.[&1].billDetailId",
+                    "additionalDetails": "paymentDetails.bill.billDetails.billAccountDetails.[&1].additionalDetails",
+                    "demandDetailId": "paymentDetails.bill.billDetails.billAccountDetails.[&1].demandDetailId",
+                    "order": "paymentDetails.bill.billDetails.billAccountDetails.[&1].order",
+                    "isActualDemand": "paymentDetails.bill.billDetails.billAccountDetails.[&1].isActualDemand"
+                  }
+                }
+              }
+            },
+            "isAdvanceAllowed": "paymentDetails.bill.isAdvanceAllowed",
+            "businessService": "paymentDetails.bill.businessService",
+            "isCancelled": "paymentDetails.bill.isCancelled",
+            "collectionModesNotAllowed": "paymentDetails.bill.collectionModesNotAllowed",
+            "paidBy": "paymentDetails.bill.paidBy",
+            "mobileNumber": "paymentDetails.bill.mobileNumber",
+            "payerId": "paymentDetails.bill.payerId",
+            "reasonForCancellation": "paymentDetails.bill.reasonForCancellation",
+            "minimumAmountToBePaid": "paymentDetails.bill.minimumAmountToBePaid",
+            "billDate": "paymentDetails.bill.billDate",
+            "additionalDetails": "paymentDetails.bill.additionalDetails",
+            "totalAmount": "paymentDetails.bill.totalAmount",
+            "payerAddress": "paymentDetails.bill.payerAddress",
+            "auditDetails": "paymentDetails.bill.auditDetails",
+            "tenantId": "paymentDetails.bill.tenantId",
+            "payerName": "paymentDetails.bill.payerName",
+            "partPaymentAllowed": "paymentDetails.bill.partPaymentAllowed",
+            "consumerCode": "paymentDetails.bill.consumerCode",
+            "id": "paymentDetails.bill.id",
+            "billNumber": "paymentDetails.bill.billNumber",
+            "payerEmail": "paymentDetails.bill.payerEmail",
+            "status": "paymentDetails.bill.status"
+          },
+          "totalAmountPaid": "paymentDetails.totalAmountPaid",
+          "additionalDetails": "paymentDetails.additionalDetails",
+          "manualReceiptDate": "paymentDetails.manualReceiptDate",
+          "manualReceiptNumber": "paymentDetails.manualReceiptNumber",
+          "billId": "paymentDetails.billId",
+          "auditDetails": "paymentDetails.auditDetails",
+          "tenantId": "paymentDetails.tenantId",
+          "id": "paymentDetails.id",
+          "receiptNumber": "paymentDetails.receiptNumber"
+        }
+      },
+      "auditDetails": "auditDetails",
+      "additionalDetails": "additionalDetails",
+      "tenantData": "tenantData",
+      "@timestamp": "@timestamp"
+    }
+  }
+]

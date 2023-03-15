@@ -1,0 +1,26 @@
+{
+  "name": "@egovernments/telemetry",
+  "version": "0.0.2",
+  "description": "",
+  "main": "webpack.config.js",
+  "author": "Jagankumar <jagan.kumar@egovernments.org>",
+  "license": "MIT",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "keywords": [],
+  "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
+    "babel-loader": "^8.0.4",
+    "script-loader": "^0.7.2",
+    "webpack": "^4.23.1",
+    "webpack-cli": "^3.1.2"
+  },
+  "dependencies": {
+    "jquery": "3.6.0",
+    "ua-parser-js": "^0.7.19"
+  }
+}

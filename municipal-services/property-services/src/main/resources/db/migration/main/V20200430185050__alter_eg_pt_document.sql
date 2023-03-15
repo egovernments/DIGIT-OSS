@@ -1,0 +1,1 @@
+ALTER TABLE eg_pt_document ALTER COLUMN status DROP NOT NULL;

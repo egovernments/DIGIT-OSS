@@ -1,0 +1,14 @@
+.idea
+dist
+*.iml
+target
+.project
+.settings
+.classpath
+.tern-project
+rebel.xml
+.travis.yml
+
+egov/\.metadata/
+
+egov/\.recommenders/

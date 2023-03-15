@@ -1,0 +1,20 @@
+{
+  "responseInfo": null,
+  "error": {
+    "code": 400,
+    "message": "Invalid OTP search request",
+    "description": null,
+    "fields": [
+      {
+        "code": "OTP.UUID_MANDATORY",
+        "message": "UUID field is mandatory",
+        "field": "otp.uuid"
+      },
+      {
+        "code": "OTP.TENANT_ID_MANDATORY",
+        "message": "Tenant field is mandatory",
+        "field": "otp.tenantId"
+      }
+    ]
+  }
+}

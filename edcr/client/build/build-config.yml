@@ -1,0 +1,16 @@
+#
+# config:
+# -   name: < Name of the job, foo/bar would create job named bar inside folder foo >
+#     build: 
+#     - work-dir: < Working directory of the app to be built >
+#       dockerfile: < Path to the dockerfile, optional, assumes dockerfile in working directory if not provided >
+#       image-name: < Docker image name  >
+# -
+# - 
+
+config:
+-   name: builds/dcr-client/egov-dcr-client/egov-edcr
+    build:
+    - work-dir: egov
+      image-name: egov-edcr
+      dockerfile: Dockerfile

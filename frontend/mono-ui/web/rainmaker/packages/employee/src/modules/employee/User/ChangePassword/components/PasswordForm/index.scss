@@ -1,0 +1,18 @@
+.emp-change-passwd-field {
+  background-color: transparent !important;
+}
+
+.employee-change-passwd-submit {
+  box-shadow: none !important;
+  z-index: 1000;
+}
+
+.employee-change-passwd-screen {
+  padding-bottom: 0px !important;
+}
+
+@media only screen and (min-width: 768px) {
+  .employee-change-password {
+    padding: 0 16px;
+  }
+}

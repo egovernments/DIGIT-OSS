@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+
+<!--
+  ~    eGov  SmartCity eGovernance suite aims to improve the internal efficiency,transparency,
+  ~    accountability and the service delivery of the government  organizations.
+  ~
+  ~     Copyright (C) 2017  eGovernments Foundation
+  ~
+  ~     The updated version of eGov suite of products as by eGovernments Foundation
+  ~     is available at http://www.egovernments.org
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program. If not, see http://www.gnu.org/licenses/ or
+  ~     http://www.gnu.org/licenses/gpl.html .
+  ~
+  ~     In addition to the terms of the GPL license to be adhered to in using this
+  ~     program, the following additional terms are to be complied with:
+  ~
+  ~         1) All versions of this program, verbatim or modified must carry this
+  ~            Legal Notice.
+  ~            Further, all user interfaces, including but not limited to citizen facing interfaces,
+  ~            Urban Local Bodies interfaces, dashboards, mobile applications, of the program and any
+  ~            derived works should carry eGovernments Foundation logo on the top right corner.
+  ~
+  ~            For the logo, please refer http://egovernments.org/html/logo/egov_logo.png.
+  ~            For any further queries on attribution, including queries on brand guidelines,
+  ~            please contact contact@egovernments.org
+  ~
+  ~         2) Any misrepresentation of the origin of the material is prohibited. It
+  ~            is required that all modified versions of this material be marked in
+  ~            reasonable ways as different from the original version.
+  ~
+  ~         3) This license does not grant any rights to any user of the program
+  ~            with regards to rights under trademark law for use of the trade names
+  ~            or trademarks of eGovernments Foundation.
+  ~
+  ~   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
+  ~
+  -->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Oct 3, 2007 7:28:42 PM by Hibernate Tools 3.2.0.b9 -->
+<hibernate-mapping>
+    <class name="org.egov.model.recoveries.EgDeductionDetails" table="EG_DEDUCTION_DETAILS">
+         <id name="id" type="integer">
+            <column name="ID" precision="10" scale="0" />
+            <generator class="org.hibernate.id.enhanced.SequenceStyleGenerator">
+            <param name="sequence_name">SEQ_EG_DEDUCTION_DETAILS</param>
+            </generator>
+        </id>
+        <many-to-one name="recovery" class="org.egov.model.recoveries.Recovery" fetch="select">
+            <column name="TDSID" precision="22" scale="0" not-null="true" />
+        </many-to-one>
+        
+        <many-to-one name="egpartytype" class="org.egov.commons.EgPartytype" fetch="select">
+		     <column name="PARTYTYPEID" precision="22" scale="0"/>
+        </many-to-one>
+        <many-to-one name="workDocType" class="org.egov.commons.EgwTypeOfWork" fetch="select">
+			 <column name="DOCTYPEID" precision="22" scale="0" />
+        </many-to-one>
+        <many-to-one name="workDocSubType" class="org.egov.commons.EgwTypeOfWork" fetch="select">
+			 <column name="DOCSUBTYPEID" precision="22" scale="0"/>
+        </many-to-one>
+        <property name="datefrom" type="date">
+            <column name="DATEFROM" length="7" />
+        </property>
+        <property name="dateto" type="date">
+            <column name="DATETO" length="7" />
+        </property>
+        <property name="lowlimit" type="big_decimal">
+            <column name="LOWLIMIT" precision="15" not-null="true" />
+        </property>
+        <property name="highlimit" type="big_decimal">
+            <column name="HIGHLIMIT" precision="15" />
+        </property>
+        <property name="incometax" type="big_decimal">
+            <column name="INCOMETAX" precision="5" />
+        </property>
+        <property name="surcharge" type="big_decimal">
+            <column name="SURCHARGE" precision="5" />
+        </property>
+        <property name="education" type="big_decimal">
+            <column name="EDUCATION" precision="5" />
+        </property>
+        <property name="lastmodifieddate" type="date">
+            <column name="LASTMODIFIEDDATE" length="7" />
+        </property>
+        <property name="flatAmount" type="big_decimal">
+            <column name="AMOUNT" precision="15" />
+        </property>
+        <property name="cumulativeLowLimit" type="big_decimal">
+            <column name="CUMULATIVELOWLIMIT" precision="15" />
+        </property>
+        <property name="cumulativeHighLimit" type="big_decimal">
+            <column name="CUMULATIVEHIGHLIMIT" precision="15" />
+        </property>
+    </class>
+</hibernate-mapping>

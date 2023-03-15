@@ -1,0 +1,1660 @@
+openapi: 3.0.1
+info:
+  title: eGov Property Registry System.
+  description: APIs for Property Registry module. This provide APIs for create new property, update existing property, search existing property.
+  contact:
+    name: Egovernments Foundation
+    email: contact@egovernments.org
+  version: '1.0'
+servers:
+  - url: https://virtserver.swaggerhub.com/egovernmets-faundation/PT-2.0/1.0.0
+    description: SwaggerHub API Auto Mocking
+    variables: {}
+  - url: https://egov-micro-dev.egovernments.org
+    variables: {}
+paths:
+  /property/_create:
+    post:
+      tags:
+        - property
+      summary: Creates new property.
+      description: Creates new property with basic information related to land and owner information. Can be integrated with other modules like Water and Sewerage or Trade License to act as base entity against which water connection or trade license can be issued
+      operationId: Createsnewproperty.
+      requestBody:
+        description: propertyRequest
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PropertyRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PropertyResponse'
+        '201':
+          description: Property created sucessfully
+          content: {}
+        '401':
+          description: Unauthorized
+          content: {}
+        '403':
+          description: Forbidden
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+      x-codegen-request-body-name: propertyRequest
+  /property/_migration:
+    post:
+      tags:
+        - property
+      summary: propertyMigration
+      operationId: propertyMigrationUsingPOST
+      parameters:
+        - name: accountId
+          in: query
+          schema:
+            type: string
+        - name: addressids
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: asOnDate
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: documentids
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: doorNo
+          in: query
+          schema:
+            type: string
+        - name: financialYear
+          in: query
+          schema:
+            type: string
+        - name: ids
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: locality
+          in: query
+          schema:
+            type: string
+        - name: mobileNumber
+          in: query
+          schema:
+            type: string
+        - name: name
+          in: query
+          schema:
+            type: string
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: oldpropertyids
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: ownerids
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: propertyDetailStatus
+          in: query
+          schema:
+            type: string
+            enum:
+              - ACTIVE
+              - INACTIVE
+              - INWORKFLOW
+              - CANCELLED
+              - REJECTED
+        - name: propertyDetailids
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: propertyId
+          in: query
+          schema:
+            type: string
+        - name: statuses
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - ACTIVE
+                - INACTIVE
+            enum:
+              - ACTIVE
+              - INACTIVE
+        - name: tenantId
+          in: query
+          schema:
+            type: string
+        - name: unitids
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: userName
+          in: query
+          schema:
+            type: string
+      requestBody:
+        description: requestInfoWrapper
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestInfoWrapper'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+        '201':
+          description: Created
+          content: {}
+        '401':
+          description: Unauthorized
+          content: {}
+        '403':
+          description: Forbidden
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+      x-codegen-request-body-name: requestInfoWrapper
+  /property/_plainsearch:
+    post:
+      tags:
+        - property
+      summary: plainsearch
+      operationId: plainsearchUsingPOST_1
+      parameters:
+        - name: acknowledgementIds
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: audit
+          in: query
+          schema:
+            type: boolean
+        - name: creationReason
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: doorNo
+          in: query
+          schema:
+            type: string
+        - name: fromDate
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: isInboxSearch
+          in: query
+          schema:
+            type: boolean
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: locality
+          in: query
+          schema:
+            type: string
+        - name: mobileNumber
+          in: query
+          schema:
+            type: string
+        - name: name
+          in: query
+          schema:
+            type: string
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: oldPropertyId
+          in: query
+          schema:
+            type: string
+        - name: oldpropertyids
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: ownerIds
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: propertyIds
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: status
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - ACTIVE
+                - INACTIVE
+                - INWORKFLOW
+                - CANCELLED
+                - REJECTED
+            enum:
+              - ACTIVE
+              - INACTIVE
+              - INWORKFLOW
+              - CANCELLED
+              - REJECTED
+        - name: tenantId
+          in: query
+          schema:
+            type: string
+        - name: tenantIds
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: toDate
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: uuids
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+      requestBody:
+        description: requestInfoWrapper
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestInfoWrapper'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PropertyResponse'
+        '201':
+          description: Created
+          content: {}
+        '401':
+          description: Unauthorized
+          content: {}
+        '403':
+          description: Forbidden
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+      x-codegen-request-body-name: requestInfoWrapper
+  /property/_search:
+    post:
+      tags:
+        - property
+      summary: Get the list of properties defined in the system.
+      description: Get the properties list based on the input parameters.
+      operationId: Getthelistofpropertiesdefinedinthesystem.
+      parameters:
+        - name: acknowledgementIds
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: audit
+          in: query
+          schema:
+            type: boolean
+        - name: creationReason
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: doorNo
+          in: query
+          schema:
+            type: string
+        - name: fromDate
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: isInboxSearch
+          in: query
+          schema:
+            type: boolean
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: locality
+          in: query
+          schema:
+            type: string
+        - name: mobileNumber
+          in: query
+          schema:
+            type: string
+        - name: name
+          in: query
+          schema:
+            type: string
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: oldPropertyId
+          in: query
+          schema:
+            type: string
+        - name: oldpropertyids
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: ownerIds
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: propertyIds
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: status
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - ACTIVE
+                - INACTIVE
+                - INWORKFLOW
+                - CANCELLED
+                - REJECTED
+            enum:
+              - ACTIVE
+              - INACTIVE
+              - INWORKFLOW
+              - CANCELLED
+              - REJECTED
+        - name: tenantId
+          in: query
+          schema:
+            type: string
+        - name: tenantIds
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: toDate
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: uuids
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+      requestBody:
+        description: requestInfoWrapper
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestInfoWrapper'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PropertyResponse'
+        '201':
+          description: Created
+          content: {}
+        '401':
+          description: Unauthorized
+          content: {}
+        '403':
+          description: Forbidden
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+      x-codegen-request-body-name: requestInfoWrapper
+  /property/_update:
+    post:
+      tags:
+        - property
+      summary: Update existing property.
+      description: Updates a given `Property` with newer details.
+      operationId: Updateexistingproperty.
+      requestBody:
+        description: propertyRequest
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PropertyRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PropertyResponse'
+        '201':
+          description: Update Property successful
+          content: {}
+        '401':
+          description: Unauthorized
+          content: {}
+        '403':
+          description: Forbidden
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+      x-codegen-request-body-name: propertyRequest
+  /property/fuzzy/_search:
+    post:
+      tags:
+        - property
+      summary: fuzzySearch
+      operationId: fuzzySearchUsingPOST
+      parameters:
+        - name: acknowledgementIds
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: audit
+          in: query
+          schema:
+            type: boolean
+        - name: creationReason
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: doorNo
+          in: query
+          schema:
+            type: string
+        - name: fromDate
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: isInboxSearch
+          in: query
+          schema:
+            type: boolean
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: locality
+          in: query
+          schema:
+            type: string
+        - name: mobileNumber
+          in: query
+          schema:
+            type: string
+        - name: name
+          in: query
+          schema:
+            type: string
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: oldPropertyId
+          in: query
+          schema:
+            type: string
+        - name: oldpropertyids
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: ownerIds
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: propertyIds
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: status
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - ACTIVE
+                - INACTIVE
+                - INWORKFLOW
+                - CANCELLED
+                - REJECTED
+            enum:
+              - ACTIVE
+              - INACTIVE
+              - INWORKFLOW
+              - CANCELLED
+              - REJECTED
+        - name: tenantId
+          in: query
+          schema:
+            type: string
+        - name: tenantIds
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: toDate
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: uuids
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+      requestBody:
+        description: requestInfoWrapper
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestInfoWrapper'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PropertyResponse'
+        '201':
+          description: Created
+          content: {}
+        '401':
+          description: Unauthorized
+          content: {}
+        '403':
+          description: Forbidden
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+      x-codegen-request-body-name: requestInfoWrapper
+components:
+  schemas:
+    Action:
+      title: Action
+      type: object
+      properties:
+        action:
+          maxLength: 256
+          minLength: 0
+          type: string
+          description: API action to be performed like _create, _update, _search (denoting POST, PUT, GET) or _oauth etc
+        auditDetails:
+          $ref: '#/components/schemas/AuditDetails'
+        currentState:
+          maxLength: 256
+          minLength: 0
+          type: string
+        nextState:
+          maxLength: 256
+          minLength: 0
+          type: string
+        roles:
+          type: array
+          items:
+            type: string
+        tenantId:
+          maxLength: 256
+          minLength: 0
+          type: string
+          description: Unique Identifier of the tenant to which user primarily belongs
+        uuid:
+          maxLength: 256
+          minLength: 0
+          type: string
+          description: System Generated User id of the authenticated user.
+      description: A Object holds the basic data for a Trade License
+    Address:
+      title: Address
+      type: object
+      properties:
+        additionalDetails:
+          type: object
+          properties: {}
+          description: more address detail as may be needed
+        buildingName:
+          type: string
+          description: Name of the building
+        city:
+          type: string
+          description: City of the address. Can be represented by the tenantid itself
+        country:
+          type: string
+          description: The country in which the property is located
+        district:
+          type: string
+          description: The district in which the property is located
+        doorNo:
+          type: string
+          description: House number or door number.
+        geoLocation:
+          $ref: '#/components/schemas/GeoLocation'
+        id:
+          type: string
+          description: System generated id for the address
+        landmark:
+          type: string
+          description: additional landmark to help locate the address
+        locality:
+          $ref: '#/components/schemas/Locality'
+        pincode:
+          type: string
+          description: PIN code of the address. Indian pincodes will usually be all numbers.
+        plotNo:
+          type: string
+          description: Plot number of the house.
+        region:
+          type: string
+          description: The Region in which the property is located
+        state:
+          type: string
+          description: The State in which the property is located
+        street:
+          type: string
+          description: Street Name
+        tenantId:
+          type: string
+          description: Unique Identifier of the tenant to which user primarily belongs
+      description: Representation of a address. Indiavidual APIs may choose to extend from this using allOf if more details needed to be added in their case.
+    AuditDetails:
+      title: AuditDetails
+      type: object
+      properties:
+        createdBy:
+          type: string
+          description: username (preferred) or userid of the user that created the object
+        createdTime:
+          type: integer
+          description: epoch of the time object is created
+          format: int64
+        lastModifiedBy:
+          type: string
+          description: username (preferred) or userid of the user that last modified the object
+        lastModifiedTime:
+          type: integer
+          description: epoch of the time object is last modified
+          format: int64
+      description: Collection of audit related fields used by most models
+    ConstructionDetail:
+      title: ConstructionDetail
+      type: object
+      properties:
+        builtUpArea:
+          type: number
+        carpetArea:
+          type: number
+        constructionDate:
+          type: integer
+          format: int64
+        constructionType:
+          type: string
+        dimensions:
+          type: object
+          properties: {}
+        plinthArea:
+          type: number
+        superBuiltUpArea:
+          type: number
+          description: Construction/constructionDetail details are captured here. Detail information of the constructionDetail including floor wise usage and area are saved as seperate units .For each financial year construction details may change. constructionDetail object is required for tax calculation
+    Document:
+      title: Document
+      required:
+        - documentType
+        - fileStoreId
+      type: object
+      properties:
+        auditDetails:
+          $ref: '#/components/schemas/AuditDetails'
+          description: Json object to capture any extra information which is not accommodated by model
+        documentType:
+          type: string
+          description: unique document type code, should be validated with document type master
+        documentUid:
+          type: string
+          description: The unique id(Pancard Number,Adhar etc.) of the given Document.
+        fileStoreId:
+          type: string
+          description: File store reference key.
+        id:
+          type: string
+          description: system id of the Document.
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - INACTIVE
+            - INWORKFLOW
+            - CANCELLED
+            - REJECTED
+      description: This object holds list of documents attached during the transaciton for a property
+    GeoLocation:
+      title: GeoLocation
+      type: object
+      properties:
+        latitude:
+          type: number
+          description: latitude of the address
+          format: double
+        longitude:
+          type: number
+          description: longitude of the address
+          format: double
+    Institution:
+      title: Institution
+      type: object
+      properties:
+        additionalDetails:
+          type: object
+          description: Json object to capture any extra information which is not accommodated by model
+          properties: {}
+        designation:
+          type: string
+          description: Designation of the person creating/updatingentity on behalf of the institution
+        id:
+          type: string
+          description: Unique Identifier of the Institution(UUID).
+        name:
+          type: string
+        nameOfAuthorizedPerson:
+          type: string
+          description: Name of the person who is taking action on behalf of institution
+        tenantId:
+          type: string
+          description: tenant id of the Property
+        type:
+          type: string
+          description: Institution type.
+    JsonNode:
+      title: JsonNode
+      type: object
+      properties:
+        array:
+          type: boolean
+        bigDecimal:
+          type: boolean
+        bigInteger:
+          type: boolean
+        binary:
+          type: boolean
+        boolean:
+          type: boolean
+        containerNode:
+          type: boolean
+        double:
+          type: boolean
+        empty:
+          type: boolean
+        float:
+          type: boolean
+        floatingPointNumber:
+          type: boolean
+        int:
+          type: boolean
+        integralNumber:
+          type: boolean
+        long:
+          type: boolean
+        missingNode:
+          type: boolean
+        nodeType:
+          type: string
+          enum:
+            - ARRAY
+            - BINARY
+            - BOOLEAN
+            - MISSING
+            - null
+            - NUMBER
+            - OBJECT
+            - POJO
+            - STRING
+        'null':
+          type: boolean
+        number:
+          type: boolean
+        object:
+          type: boolean
+        pojo:
+          type: boolean
+        short:
+          type: boolean
+        textual:
+          type: boolean
+        valueNode:
+          type: boolean
+    Link:
+      title: Link
+      type: object
+      properties:
+        href:
+          type: string
+        templated:
+          type: boolean
+    Locality:
+      title: Locality
+      type: object
+      properties:
+        area:
+          type: string
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/Locality'
+        code:
+          type: string
+        label:
+          type: string
+        latitude:
+          type: string
+        longitude:
+          type: string
+        materializedPath:
+          type: string
+        name:
+          type: string
+      additionalProperties:
+        $ref: '#/components/schemas/Link'
+    OwnerInfo:
+      title: OwnerInfo
+      required:
+        - mobileNumber
+        - name
+        - ownerType
+      type: object
+      properties:
+        aadhaarNumber:
+          pattern: ^[0-9]{12}$
+          type: string
+        accountLocked:
+          type: boolean
+        active:
+          type: boolean
+        altContactNumber:
+          maxLength: 50
+          minLength: 0
+          type: string
+        bloodGroup:
+          maxLength: 32
+          minLength: 0
+          type: string
+        correspondenceAddress:
+          type: string
+        correspondenceCity:
+          maxLength: 300
+          minLength: 0
+          type: string
+        correspondencePinCode:
+          maxLength: 10
+          minLength: 0
+          type: string
+        createdBy:
+          maxLength: 64
+          minLength: 0
+          type: string
+        createdDate:
+          type: integer
+          format: int64
+        dob:
+          type: integer
+          format: int64
+        documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document'
+        emailId:
+          maxLength: 128
+          minLength: 0
+          type: string
+        fatherOrHusbandName:
+          type: string
+        gender:
+          type: string
+        id:
+          type: integer
+          format: int64
+        identificationMark:
+          maxLength: 300
+          minLength: 0
+          type: string
+        institutionId:
+          type: string
+        isPrimaryOwner:
+          type: boolean
+        lastModifiedBy:
+          maxLength: 64
+          minLength: 0
+          type: string
+        lastModifiedDate:
+          type: integer
+          format: int64
+        locale:
+          maxLength: 16
+          minLength: 0
+          type: string
+        mobileNumber:
+          pattern: (^[6-9][0-9]{9}$)
+          type: string
+        name:
+          maxLength: 100
+          minLength: 0
+          pattern: ^[^\$"'<>?\\~`!@#$%^()+={}\[\]*,:;“”‘’]*$
+          type: string
+        ownerInfoUuid:
+          type: string
+        ownerShipPercentage:
+          type: number
+          format: double
+        ownerType:
+          type: string
+        pan:
+          maxLength: 10
+          minLength: 0
+          type: string
+        password:
+          maxLength: 64
+          minLength: 0
+          type: string
+        permanentAddress:
+          maxLength: 300
+          minLength: 0
+          type: string
+        permanentCity:
+          maxLength: 300
+          minLength: 0
+          type: string
+        permanentPinCode:
+          maxLength: 10
+          minLength: 0
+          type: string
+        photo:
+          maxLength: 36
+          minLength: 0
+          type: string
+        pwdExpiryDate:
+          type: integer
+          format: int64
+        relationship:
+          type: string
+          enum:
+            - FATHER
+            - HUSBAND
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/Role'
+        salutation:
+          type: string
+        signature:
+          maxLength: 36
+          minLength: 0
+          type: string
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - INACTIVE
+            - INWORKFLOW
+            - CANCELLED
+            - REJECTED
+        tenantId:
+          maxLength: 256
+          minLength: 0
+          type: string
+        type:
+          maxLength: 50
+          minLength: 0
+          type: string
+        userName:
+          maxLength: 64
+          minLength: 0
+          type: string
+        uuid:
+          maxLength: 64
+          minLength: 0
+          type: string
+    ProcessInstance:
+      title: ProcessInstance
+      required:
+        - action
+        - businessId
+        - businessService
+        - moduleName
+        - tenantId
+      type: object
+      properties:
+        action:
+          maxLength: 128
+          minLength: 0
+          type: string
+        assignes:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        businessId:
+          maxLength: 128
+          minLength: 0
+          type: string
+        businessService:
+          maxLength: 128
+          minLength: 0
+          type: string
+        comment:
+          type: string
+        documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document'
+        id:
+          maxLength: 64
+          minLength: 0
+          type: string
+        moduleName:
+          maxLength: 64
+          minLength: 0
+          type: string
+        notificationAction:
+          type: string
+        state:
+          $ref: '#/components/schemas/State'
+        tenantId:
+          maxLength: 128
+          minLength: 0
+          type: string
+      description: A Object holds the basic data for a Trade License
+    Property:
+      title: Property
+      required:
+        - creationReason
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique Identifier of the Property for internal reference.
+        tenantId:
+          type: string
+          description: tenant id of the Property
+        accountId:
+          type: string
+          description: UUID of the user to which the property will be associated
+        propertyId:
+          type: string
+          description: Unique Identifier of the Property.
+        oldPropertyId:
+          type: string
+          description: Old upic no of the Property. ULBs have the existing property in their system/manual records with their identification number, they want to continue the old reference number in this case the same identification number will be captured here.
+        acknowldgementNumber:
+          type: string
+          description: Acknowldgement number given to citizen on submitting the application for creation or modification of the property.
+        propertyType:
+          type: string
+          description: Type of a property like Private, Vacant Land, State Government, Central Government etc.
+        surveyId:
+          type: string
+          description: survey id of the Property
+        address:
+          $ref: '#/components/schemas/Address'
+        channel:
+          type: string
+          enum:
+            - SYSTEM
+            - CFC_COUNTER
+            - CITIZEN
+            - DATA_ENTRY
+            - MIGRATION
+        source:
+          type: string
+          enum:
+            - MUNICIPAL_RECORDS
+            - FIELD_SURVEY
+            - WATER_CHARGES
+        creationReason:
+          type: string
+          enum:
+            - CREATE
+            - UPDATE
+            - MUTATION
+            - LEGACY_ENTRY
+            - BIFURCATION
+            - AMALGAMATION
+            - SUBDIVISION
+            - DATA_UPLOAD
+        documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document'
+            description: The documents attached by owner for exemption.
+        institution:
+          $ref: '#/components/schemas/Institution'
+        landArea:
+          type: number
+          description: Land area of the property in sq ft
+          format: double
+        superBuiltUpArea:
+          type: number
+          description: super builtup area of the complete property
+        units:
+          type: array
+          items:
+            $ref: '#/components/schemas/Unit'
+        usageCategory:
+          type: string
+        linkedProperties:
+          type: array
+          items:
+            type: string
+        noOfFloors:
+          maximum: 500
+          exclusiveMaximum: false
+          type: integer
+          description: no of floors in the property
+          format: int64
+        owners:
+          type: array
+          items:
+            $ref: '#/components/schemas/OwnerInfo'
+            description: Property owners, these will be citizen users in system.
+        ownershipCategory:
+          type: string
+          description: The type of ownership of the property.
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - INACTIVE
+            - INWORKFLOW
+            - CANCELLED
+            - REJECTED
+        workflow:
+          $ref: '#/components/schemas/ProcessInstance'
+        auditDetails:
+          $ref: '#/components/schemas/AuditDetails'
+        additionalDetails:
+          $ref: '#/components/schemas/JsonNode'
+    PropertyRequest:
+      title: PropertyRequest
+      type: object
+      properties:
+        Property:
+          $ref: '#/components/schemas/Property'
+        RequestInfo:
+          $ref: '#/components/schemas/RequestInfo'
+      description: Contract class to receive request. Array of Property items  are used in case of create . Where as single Property item is used for update
+    PropertyResponse:
+      title: PropertyResponse
+      type: object
+      properties:
+        Properties:
+          type: array
+          items:
+            $ref: '#/components/schemas/Property'
+        ResponseInfo:
+          $ref: '#/components/schemas/ResponseInfo'
+      description: Contains the ResponseHeader and the created/updated property
+    RequestInfo:
+      title: RequestInfo
+      type: object
+      properties:
+        apiId:
+          type: string
+        ver:
+          type: string
+        ts:
+          type: integer
+          format: int64
+        action:
+          type: string
+        did:
+          type: string
+        key:
+          type: string
+        msgId:
+          type: string
+        authToken:
+          type: string
+        correlationId:
+          type: string
+        userInfo:
+          $ref: '#/components/schemas/User'
+    RequestInfoWrapper:
+      title: RequestInfoWrapper
+      type: object
+      properties:
+        RequestInfo:
+          $ref: '#/components/schemas/RequestInfo'
+    ResponseInfo:
+      title: ResponseInfo
+      type: object
+      properties:
+        apiId:
+          type: string
+        msgId:
+          type: string
+        resMsgId:
+          type: string
+        status:
+          type: string
+        ts:
+          type: integer
+          format: int64
+        ver:
+          type: string
+    Role:
+      title: Role
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        code:
+          type: string
+        tenantId:
+          type: string
+    Unit:
+      title: Unit
+      required:
+        - constructionDetail
+        - usageCategory
+      type: object
+      properties:
+        active:
+          type: boolean
+        additionalDetails:
+          type: object
+          description: Json object to capture any extra information which is not accommodated by model
+          properties: {}
+        arv:
+          type: number
+        auditDetails:
+          $ref: '#/components/schemas/AuditDetails'
+        constructionDetail:
+          $ref: '#/components/schemas/ConstructionDetail'
+        floorNo:
+          maximum: 500
+          exclusiveMaximum: false
+          type: integer
+          description: floor number of the Unit
+          format: int32
+        id:
+          type: string
+          description: Unique Identifier of the Unit(UUID).
+        occupancyDate:
+          type: integer
+          format: int64
+        occupancyType:
+          type: string
+        tenantId:
+          type: string
+          description: tenant id of the Property
+        unitType:
+          type: string
+          description: Unit type is master data.
+          example: Building, Room, Kitchen etc.
+        usageCategory:
+          type: string
+          description: This is about the usage of the property like Residential, Non-residential, Mixed(Property witch is gettiong used for Residential, Non-residential purpose)
+    State:
+      title: State
+      type: object
+      properties:
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Action'
+        applicationStatus:
+          maxLength: 256
+          minLength: 0
+          type: string
+        auditDetails:
+          $ref: '#/components/schemas/AuditDetails'
+        businessServiceId:
+          maxLength: 256
+          minLength: 0
+          type: string
+        docUploadRequired:
+          type: boolean
+        isStartState:
+          type: boolean
+        isStateUpdatable:
+          type: boolean
+        isTerminateState:
+          type: boolean
+        sla:
+          type: integer
+          format: int64
+        state:
+          maxLength: 256
+          minLength: 0
+          type: string
+        tenantId:
+          maxLength: 256
+          minLength: 0
+          type: string
+        uuid:
+          maxLength: 256
+          minLength: 0
+          type: string
+      description: A Object holds the basic data for a Trade License
+    UnitUsage:
+      title: UnitUsage
+      required:
+        - occupancyType
+        - unitId
+        - usageCategory
+      type: object
+      properties:
+        auditDetails:
+          $ref: '#/components/schemas/AuditDetails'
+        id:
+          type: string
+        occupancyDate:
+          type: integer
+          format: int64
+        occupancyType:
+          type: string
+        tenantId:
+          type: string
+        unitId:
+          type: string
+        usageCategory:
+          type: string
+    User:
+      title: User
+      type: object
+      properties:
+        aadhaarNumber:
+          pattern: ^[0-9]{12}$
+          type: string
+          description: Adhar number of the user.
+        accountLocked:
+          type: boolean
+        active:
+          type: boolean
+        altContactNumber:
+          maxLength: 50
+          minLength: 0
+          type: string
+        bloodGroup:
+          maxLength: 32
+          minLength: 0
+          type: string
+          description: Bood group of the user.
+        correspondenceAddress:
+          maxLength: 300
+          minLength: 0
+          type: string
+        correspondenceCity:
+          maxLength: 300
+          minLength: 0
+          type: string
+        correspondencePinCode:
+          maxLength: 10
+          minLength: 0
+          type: string
+        createdBy:
+          maxLength: 64
+          minLength: 0
+          type: string
+        createdDate:
+          type: integer
+          format: int64
+        dob:
+          type: integer
+          format: int64
+          description: Birth date of the user.
+        fatherOrHusbandName:
+          maxLength: 100
+          minLength: 0
+          type: string
+        gender:
+          type: string
+          description: Gender of the user.
+        id:
+          type: integer
+          format: int64
+        identificationMark:
+          maxLength: 300
+          minLength: 0
+          type: string
+        lastModifiedBy:
+          maxLength: 64
+          minLength: 0
+          type: string
+        lastModifiedDate:
+          type: integer
+          format: int64
+        locale:
+          maxLength: 16
+          minLength: 0
+          type: string
+        pan:
+          maxLength: 10
+          minLength: 0
+          type: string
+          description: Pancard of the user.
+        password:
+          maxLength: 64
+          minLength: 0
+          type: string
+          description: password of the user.
+        permanentAddress:
+          maxLength: 300
+          minLength: 0
+          type: string
+          description: Permanent addres sof the user.
+        permanentCity:
+          maxLength: 300
+          minLength: 0
+          type: string
+          description: Permanent city of the user.
+        permanentPinCode:
+          maxLength: 10
+          minLength: 0
+          type: string
+          description: Permanent address pincode of the user.
+        photo:
+          maxLength: 36
+          minLength: 0
+          type: string
+          description: Photo of the user.
+        pwdExpiryDate:
+          type: integer
+          format: int64
+        salutation:
+          type: string
+          description: Salutation of the user.
+        signature:
+          maxLength: 36
+          minLength: 0
+          type: string
+          description: Signature of the user.
+        userName:
+          type: string
+          description: Unique user name of the authenticated user
+        name:
+          type: string
+          description: User name of the authenticated user
+        type:
+          type: string
+        mobileNumber:
+          type: string
+        emailId:
+          type: string
+          description: email address of the authenticated user
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/Role'
+            description: List of all the roles for the primary tenant
+        tenantId:
+          type: string
+          description: Unique Identifier of the tenant to which user primarily belongs
+        uuid:
+          type: string
+          description: System Generated User id of the authenticated user.

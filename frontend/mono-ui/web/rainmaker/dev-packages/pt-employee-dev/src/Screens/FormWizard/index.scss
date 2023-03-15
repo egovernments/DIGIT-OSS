@@ -1,0 +1,564 @@
+.wizard-form-main-cont {
+  padding: 12px 0px 0px 0px;
+  position: relative;
+}
+
+.owner-gender-selection {
+  display: flex;
+  position: inherit;
+  top: -5px;
+}
+
+.pt-ownerinfo-deletebtn {
+  float: right !important;
+  margin-top: -30px;
+}
+.basicInformation {.rainwaterHarvesting {
+  height: 100px!important;
+}
+
+}
+
+input[type="radio"]:before {
+  content: "";
+  display: block;
+  width: 60%;
+  height: 60%;
+  margin: 20% auto;
+  border-radius: 50%;
+}
+.pt-owner-info {
+  .pt-ownerinfo-title {
+    margin-left: 23px;
+  }
+  .owner-details-form {
+    display: flex;
+    .name-address {
+      padding: 5px 352px 0 30px;
+      .textfield {
+        width: 145% !important;
+      }
+      .ownerCategory {
+        width: 145% !important;
+        display: flow-root !important;
+      }
+    }
+    .relationship-details {
+      display: flex;
+      div:nth-of-type(1) {
+        margin-right: 35px;
+      }
+    }
+    .ownerCategoryIdType {
+      width: 100% !important;
+    }
+    
+
+    .dropdown {
+      display: flow-root !important;
+    }
+  }
+  .property-corr {
+    // margin-top: -29px;
+    // margin-left: -4px;
+    margin-left: 12px;
+    label {
+      color: rgb(72, 72, 72) !important;
+      font-weight: 500;
+    }
+  }
+}
+
+.pt-institute-authority-info {
+  margin-left: 25px;
+  .pt-authority-title {
+    display: flex;
+    span:nth-of-type(2) {
+      margin-top: 2px;
+      margin-left: 5px;
+    }
+  }
+  .authority-details-form {
+    display: flex;
+    .name-address {
+      .textfield {
+        width: 117% !important;
+      }
+    }
+    .address {
+      margin-left: 130px;
+    }
+    @media only screen and (max-width: 768px) {
+      .address {
+        margin-left: 0px;
+    }
+    }
+    .property-corr {
+      > div {
+        margin-top: 2px !important;
+      }
+      label {
+        color: rgb(72, 72, 72) !important;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+.breadcrumb {
+  padding: 0;
+}
+
+.pt-add-owner-btn {
+  cursor: pointer;
+  display: flex;
+  justify-content: flex-end;
+  color: #fe7a51;
+}
+
+.grayout {
+  box-shadow: none;
+  background-color: #f6f6f6 !important;
+  
+}
+
+.payment-details {
+  margin-top: 20px;
+  .tax-header {
+    display: flex;
+    .label-text {
+      width: 245px;
+      height: 19px;
+      font-size: 16px;
+      font-weight: 900;
+      line-height: normal;
+      letter-spacing: 0.7px;
+      color: #484848;
+    }
+  }
+  .receipt-details {
+    background-color: rgb(242, 242, 242);;
+    margin-bottom: 18px;
+    padding: 10px;
+    .receipt-header {
+      .label-text {
+        height: 19px;
+        font-size: 16px;
+        font-weight: 700;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: normal;
+        letter-spacing: 0.7px;
+        color: #484848;
+        padding-left: 11px;
+        font-size: 14px;
+        padding-top: 10px;
+      }
+    }
+    .receipt-info {
+      margin-top: 7px;
+      display: flex;
+      .textfield:nth-of-type(1) {
+        width: 35% !important;
+        background: none!important;
+        margin-left: 15px;
+      }
+      
+     
+      .textfield:nth-of-type(2) {
+        background: none!important;
+        width: 35% !important;
+        margin-left: 237px;
+      }
+    }
+  }
+  .bill-dates-payment {
+    display: flex;
+    .detaild-bill {
+      width: 442px;
+      height: 274px;
+      background-color: #f2f2f2;
+      .tax-breakup {
+        .header {
+          font-size: 14px;
+          font-weight: 900;
+          position: relative;
+          top: 18px;
+          left: 27px;
+          line-height: normal;
+          letter-spacing: 0.6px;
+          color: #484848;
+          display: block;
+          margin-bottom: 40px;
+        }
+        .tax-list {
+          list-style-type: none !important;
+          margin-right: 36px !important;
+          padding-left: 28px;
+          .tax-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 9px;
+          }
+        }
+      }
+      .total-section {
+        display: flex;
+        justify-content: space-between;
+        margin-right: 36px;
+        margin-left: 29px;
+        margin-top: 10px;
+      }
+    }
+    .date-details {
+      margin-top: 11px;
+      margin-left: 30%;
+      .date-header {
+        .label-text {
+          width: 112px;
+          height: 16px;
+          font-size: 14px;
+          font-weight: 700;
+          line-height: normal;
+          letter-spacing: 0.6px;
+          text-align: left;
+          color: #484848;
+        }
+      }
+      .header {
+        font-size: 14px;
+        font-weight: 700;
+        text-align: left;
+        color: #484848;
+      }
+      ul {
+        padding: 0;
+        list-style-type: none;
+        margin-top: 20px;
+        width: 400px;
+        li {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 8px;
+          span:nth-of-type(1) {
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.6px;
+            text-align: left;
+            color: #767676;
+          }
+          span:nth-of-type(2) {
+            color: black;
+          }
+        }
+      }
+    }
+  }
+  .addl-details {
+    button {
+      position: initial !important;
+      height: initial !important;
+      padding: 0 !important;
+      margin-left: 53% !important;
+      svg {
+        margin-left: 80%;
+      }
+    }
+    .view-details {
+      width: 99px;
+      height: 16px;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: normal;
+      letter-spacing: 0.6px;
+      color: #fe7a51;
+    }
+  }
+  .payment-modes {
+    margin-top: 5px;
+    margin-bottom: 10px;
+    background-color: rgb(242, 242, 242);
+    .payment-mode-info {
+      padding: 2px 18px;
+      width: 42.5%;
+    }
+    .payment-modes-header {
+      height: 19px;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: normal;
+      letter-spacing: 0.7px;
+      color: #484848;
+      padding-left: 27px;
+    }
+    .textfield {
+      background: none!important;
+      display: flow-root !important;
+    }
+    .dropdown {
+      display: flow-root !important;
+      width: 100% !important;
+      background: none !important;
+    }
+    .payer-details {
+      margin: 16px 30px 7px 18px;
+      .cash-info {
+        justify-content: space-between;
+        display: flex;
+        .name-paidby {
+          width: 40%;
+        }
+        .mobile-number {
+          width: 40%;
+          .empty {
+            height: 72px;
+          }
+        }
+      }
+    }
+    .cheque-details {
+      margin: 20px 30px 20px 18px;
+      .cheque-info {
+        display: flex;
+        justify-content: space-between;
+        .no-name {
+          width: 40%;
+        }
+        .date-branchr {
+          width: 40%;
+        }
+      }
+    }
+    .demand-details {
+      margin: 20px 30px 20px 18px;
+      .demand-info {
+        display: flex;
+        justify-content: space-between;
+        .no-name {
+          width: 40%;
+        }
+        .date-branchr {
+          width: 40%;
+        }
+      }
+    }
+    .mode-title {
+      font-size: 16px;
+      font-weight: 500;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: normal;
+      letter-spacing: 0.6px;
+      color: #484848;
+    }
+    .card-details {
+      margin: 20px 30px 11px 18px;
+      .card-info {
+        display: flex;
+        justify-content: space-between;
+        .card-no {
+          width: 40%;
+        }
+        .receipt {
+          width: 40%;
+          .empty {
+            height: 72px;
+          }
+        }
+      }
+    }
+    .list-header {
+      .label-text {
+        font-size: 16px;
+        font-weight: 700;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: normal;
+        letter-spacing: 0.6px;
+        color: #484848;
+      }
+    }
+  }
+}
+.review-pay-tab {
+  .dropdown > div > div {
+    div:nth-of-type(2) {
+      color: rgb(72, 72, 72) !important;
+    }
+  }
+  .textfield {
+    div:nth-of-type(1) {
+      opacity: 0 !important;
+    }
+  }
+  .autosuggest {
+    input {
+      color: rgb(72, 72, 72) !important;
+    }
+  }
+  .rainmaker-card {
+    .rainmaker-card {
+      -webkit-box-shadow: none !important;
+      box-shadow: none !important;
+    }
+  }
+}
+
+input[type="radio"] {
+  // margin: 4px 8px 0 !important;
+  -webkit-appearance: none;
+  width: 17px;
+  height: 17px;
+  border: 1px solid grey;
+  border-radius: 50%;
+  outline: none;
+}
+
+input[type="radio"]:before {
+  content: "";
+  display: block;
+  width: 60%;
+  height: 60%;
+  margin: 20% auto;
+  border-radius: 50%;
+}
+
+input[type="radio"]:checked {
+  border: 1px solid #fe7a51;
+}
+
+input[type="radio"]:checked:before {
+  background: #fe7a51;
+}
+
+.propertyAddress,
+.ifsc-field {
+  .textfield-text div {
+    width: 60px;
+    color: #fe7a51 !important;
+    margin-right: 12px !important;
+  }
+}
+.pt-emp-property-address-city,
+.pt-floor-name {
+  div > div {
+    div:nth-of-type(2) {
+      color: rgb(72, 72, 72) !important;
+    }
+  }
+}
+
+.checkbox-container > div > div > div {
+  margin-right: 4px !important;
+  div > svg:nth-of-type(2) {
+    fill: #fe7a51 !important;
+  }
+}
+
+.remove-unit-assessment {
+  float: right;
+}
+
+div[class^="floorDetails_"] .text-left {
+  margin-left: 15px;
+}
+
+div[class^="MuiPaper-root"],
+.stepper-container {
+  svg {
+    text {
+      fill: #fff;
+      font-size: 1.2rem;
+      font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    }
+
+  }
+  [class*="MuiStepIcon-active"] {
+    circle,
+    path {
+      color: #fe7a51;
+    }
+  }
+ 
+  [class*="MuiStepLabel"] {
+    color: rgba(0, 0, 0, 0.87);
+  }
+  > div > span > span:nth-of-type(2) > span {
+    font-size: 14px;
+  }
+}
+
+div[class^="MuiPaper-root"],
+.stepper-container {
+[class*="MuiStep-completed"]{
+  circle,
+  path {
+    color: #39CB74;
+  }
+}
+}
+#tax-wizard-buttons {
+  height: 64px;
+  padding: 8px;
+}
+
+@media only screen and (max-width: 704px) {
+  #tax-wizard-buttons {
+    text-align: initial;
+    text-align: initial;
+    margin: 0;
+    padding: 0;
+    height: initial;
+    .button-container {
+      float: none;
+      display: flex;
+      width: 100%;
+      margin: initial;
+      padding: initial;
+      div:nth-of-type(1),
+      div:nth-of-type(2) {
+        width: 100% !important;
+        margin: 0 !important;
+        
+      }
+    }
+  }
+  .stepper-container {
+    padding: 10px 0px 0px 0px !important;
+  } 
+  .form-header{
+    margin-top:50px;
+  }
+  // .year-dialog {
+  //   // left: initial;
+  //   // right: 11%;
+  //   //  > div > div > div {
+  //   //   width: calc(100% + 104px);
+  //   // }
+  // }
+}
+@media only screen and (max-width:768px){
+  .propertyAddress,.pt-review-form,.ownerInfo,.bill-details,.basicInformation,.plotDetails,.ownershipType,.date-details-container{
+    padding: 0px !important;
+  }
+  .owner-gender-selection.RadioComp{
+    display: block;
+  }
+  .MuiStepLabel-labelContainer-47 >span{
+    font-size :12px !important;
+  }
+}
+.general-field-padding .textfield div{
+  background: none!important;
+}
+.general-field-padding .textfield{
+  background: none!important;
+}
+
+@media only screen and (max-width: 768px) {
+  .authority-details-form{
+   display: grid !important;
+   overflow: auto !important;
+   overflow-x: hidden !important;
+ }
+}

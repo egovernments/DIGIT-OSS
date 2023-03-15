@@ -1,0 +1,1 @@
+INSERT INTO id_generator(idname, tenantid, format, sequencenumber) VALUES ('swm.sanitationstaff.target.number', 'default', 'MH-SWM-SNTS-TRGT-[SEQ_SWM_SNTS_TRGT_NUM]', 1);

@@ -1,0 +1,105 @@
+{
+  "tenantId": "default",
+  "RequestInfo": {
+    "apiId": "emp",
+    "ver": "1.0",
+    "ts": "10-03-2017 00:00:00",
+    "action": "create",
+    "did": "1",
+    "key": "abcdkey",
+    "msgId": "20170310130900",
+    "requesterId": "rajesh",
+    "correlationId": "",
+    "authToken": "589431b5-1bcb-478e-83e5-45a24be6f175",
+    "userInfo": {
+      "id": "73"
+    }
+  },
+  "Receipt": [
+    {
+      "tenantId": "default",
+      "Bill": [
+        {
+          "id": "8",
+          "payeeName": "TestUpdate",
+          "paidBy": "Vishal Mahuli",
+          "payeeAddress": null,
+          "payeeEmail": "vishal@gmail.com",
+          "isActive": true,
+          "isCancelled": false,
+          "BillDetail": [
+            {
+              "id": "7",
+              "tenantId": "default",
+              "bill": "2",
+              "businessService": "TL",
+              "billNumber": "2",
+              "billDate": 1500461751586,
+              "consumerCode": "codevishal123",
+              "receiptType": "C",
+              "consumerType": "consumertype1",
+              "billDescription": "Water Charge Consumer Code: consumercode123",
+              "displayMessage": "Water Charge Consumer Code: consumercode123",
+              "minimumAmount": 10,
+              "totalAmount": 900,
+              "collectionModesNotAllowed": [
+                "Cash",
+                "Cheque"
+              ],
+              "amountPaid": 300,
+              "callBackForApportioning": false,
+              "partPaymentAllowed": false,
+              "BillAccountDetail": [
+                {
+                  "id": "2",
+                  "tenantId": "default",
+                  "billDetail": "2",
+                  "glcode": "1405014",
+                  "order": 1,
+                  "accountDescription": "ESTIMATIONCHARGES-1491004800-1499990400",
+                  "crAmountToBePaid": 900,
+                  "creditAmount": 500,
+                  "debitAmount": 500,
+                  "isActualDemand": true,
+                  "purpose": "OTHERS"
+                }
+              ]
+            }
+          ],
+          "tenantId": "default",
+          "auditDetail": null
+        }
+      ],
+      "instrument": {
+        "transactionNumber": "1232356543",
+        "transactionDate":"2017-06-08T22:03:59.947",
+        "amount": 100,
+        "instrumentType": {
+          "name": "Cheque",
+          "tenantId": "default"
+        },
+        "transactionType": "Debit",
+        "payee": "Vishal",
+        "bankAccount": {
+          "id": "1",
+          "tenantId": "default"
+        },
+        "bank": {
+          "id": "1",
+          "tenantId": "default"
+        }
+      },
+      "WorkflowDetails":{
+	      "receiptNumber":"08/2017-18/000336",
+	      "comments":"Testing",
+	      "user":1,
+	      "state":"Approved",
+	      "status":"Approved",
+	      "action":"Cancel",
+	      "details":"Receipt Create : 08/2017-18/000336",
+	      "tenantId":"default",
+	      "initiatorPosition":1
+      }
+    }
+  ]
+}

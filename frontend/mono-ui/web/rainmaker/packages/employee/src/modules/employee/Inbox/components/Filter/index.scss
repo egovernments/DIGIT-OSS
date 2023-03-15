@@ -1,0 +1,24 @@
+.filter-fields {
+  color:black !important;
+  // padding-right: 5%;
+  width: 95% !important; 
+  background: none!important;
+}
+.dropdown div{
+  color:black!important;
+}
+.filter-clear-icon{
+  cursor: pointer;
+  margin-right: 5px ;
+  padding-top: 30px;
+}
+@media only screen and (max-width: 768px) {
+.filter-hidden-mob{
+  display: none;
+}
+.filter-clear-icon{
+  cursor: pointer;
+  margin-right: 5px ;
+  padding-top: 15px;
+}
+}

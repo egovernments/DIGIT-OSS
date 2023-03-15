@@ -1,0 +1,17 @@
+#form-wizard-tooltip {
+  font-size: 12px;
+}
+
+.hidden-field {
+  width: 0;
+}
+div.mohalla div:nth-child(1) {width: 100%;}
+div#mohalla div[class^="MuiFormControl-root"] {width: 100% !important;}
+div#city div[class^="MuiFormControl-root"] {width: 100% !important;}
+div.assessment-number-of-floors div:nth-child(1) {width: 100%;}
+div.assessment-number-of-floors div[class^="MuiFormControl-root"] {width: 100% !important;}
+@media only screen and (max-width:768px){
+  .dummy-field{
+    display: none;
+  }
+}

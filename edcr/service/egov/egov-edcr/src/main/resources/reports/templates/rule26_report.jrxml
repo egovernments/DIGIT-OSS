@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.2.2.final using JasperReports Library version 6.2.2  -->
+<!-- 2018-02-23T14:56:29 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rule26_subreport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c670b05b-52f3-4738-b6d9-7c2e34c47a86">
+	<import value="org.egov.infra.reporting.util.*"/>
+	<import value="org.egov.infstr.utils.*"/>
+	<import value="org.apache.commons.lang3.StringUtils"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="RULE26" class="org.egov.edcr.entity.RuleOutput"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="key" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="71" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<staticText>
+				<reportElement x="3" y="1" width="100" height="30" uuid="112542ea-a0da-461f-82d2-9a5c1b41a9b4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Rule 26]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="5" y="33" width="215" height="30" uuid="b7e2832b-9cdd-40ac-a0e7-e775bb39103c"/>
+				<textFieldExpression><![CDATA[StringUtils.isNotBlank($P{RULE26}.getRuleDescription()) ? $P{RULE26}.getRuleDescription() : ""]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="230" y="33" width="225" height="30" uuid="8dd6aa60-c09c-4e38-ab0e-67e687911c0e"/>
+				<textFieldExpression><![CDATA[StringUtils.isNotBlank($P{RULE26}.getMessage()) ? $P{RULE26}.getMessage() : ""]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<subreport>
+				<reportElement x="5" y="3" width="515" height="20" uuid="f0c24fd1-48ea-496a-8a8b-fafb0bf12488"/>
+				<subreportParameter name="subRuleOutput">
+					<subreportParameterExpression><![CDATA[$P{RULE26}.getSubRuleOutputs().get(0)]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression><![CDATA[ReportUtil.getTemplateAsStream("rule26_subreport.jasper")]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="30">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<subreport>
+				<reportElement x="5" y="4" width="526" height="26" uuid="b773902c-d9ba-4f2c-94e4-38077c7ca598"/>
+				<subreportParameter name="subRuleOutput">
+					<subreportParameterExpression><![CDATA[$P{RULE26}.getSubRuleOutputs().get(1)]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression><![CDATA["src/main/resources/reports/templates/rule26_A_subreport.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

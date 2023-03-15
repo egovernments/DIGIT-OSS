@@ -1,0 +1,94 @@
+{
+  "ResponseInfo": {
+    "apiId": "asset-services",
+    "userInfo":{
+      "id":"12"
+    }
+  },
+  "properties": [
+    { "id":"fdfdf",
+      "tenantId": "pb",
+      "status": "ACTIVE",
+      "assessmentNumber":"dsgdggd",
+      "financialYear": "second",
+      "acknowldgementNumber":"xyz",
+      "propertyType": "P456",
+      "propertySubType":"Prop1",
+      "usageCategoryMajor": "NONRESIDENTIAL",
+      "owners":[{}],
+      "address": {
+        "id":"afcd",
+        "latitude": 0,
+        "longitude": 0,
+        "addressNumber": "string",
+        "type": "four",
+        "addressLine1": "afsdg",
+        "addressLine2": "line4",
+        "landmark": "string",
+        "city": "string",
+        "pincode": "string",
+        "detail": "string",
+        "buildingName": "string",
+        "street": "string",
+        "locality": {
+          "code": "xyz",
+          "name": "string",
+          "label": "string",
+          "latitude": "string",
+          "longitude": "string",
+          "children": [
+            null
+          ]
+        }
+      },
+      "oldAssessmentNumber": "string",
+      "assessmentDate": 1,
+      "creationReason": "NEWPROPERTY",
+      "occupancyDate": 0,
+      "propertyDetail": {
+        "id":"fhffdg",
+        "source": "MUNICIPAL_RECORDS",
+        "usage": "string",
+        "noOfFloors": 0,
+        "landArea": 0,
+        "buildUpArea": 0,
+        "units": [
+          {"id":"fddhfd",
+            "floorNo": 1,
+            "unitType": "string",
+            "unitArea": 0,
+            "usageCategoryMajor":"NONRESIDENTIAL",
+            "usageCategoryMinor":"COMMERCIAL",
+            "usageCategorySubMinor":"RETAIL",
+            "usageCategoryDetail":"GROCERYSTORE",
+            "occupancyType":"RENTED",
+            "occupancyDate":132321,
+            "constructionType":"PUCCA",
+            "constructionSubType":"COUNTRYTILED",
+            "arv":100.1
+          }
+        ],
+        "documents": [
+          {"id":"hftsa",
+            "documentType": "pancard",
+            "fileStore": "string"
+          }
+        ],
+        "additionalDetails": "string",
+        "channel": "SYSTEM"
+      }
+    }
+  ]
+
+
+
+
+
+
+
+
+
+
+
+
+}

@@ -1,0 +1,16 @@
+{
+    "responseInfo": {
+        "apiId": "org.egov.accesscontrol",
+        "ver": "1.0",
+        "resMsgId": "uief87324",
+        "msgId": "20170310130900",
+        "status": "200 OK"
+    },
+    "roleActions": [
+        {
+            "roleCode": "TEST",
+            "actionId": 128,
+            "tenantId": "default"
+        }
+    ]
+}

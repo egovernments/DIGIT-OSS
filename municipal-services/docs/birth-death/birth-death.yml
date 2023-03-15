@@ -1,0 +1,2919 @@
+openapi: 3.0.1
+info:
+  title: eGov Birth and Death System.
+  description: APIs for Birth and Death module. This provide APIs for create new birth and death applications, update existing applications, search existing applications and download birth and death certificates.
+  contact:
+    name: Egovernments Foundation
+    email: contact@egovernments.org
+  version: '1.0'
+servers:
+  - url: "https://virtserver.swaggerhub.com/egov-foundation/BND/1.0.0"
+    description: SwaggerHub API Auto Mocking
+    variables: {}
+  - url: https://dev.digit.org
+    variables: {}
+paths:
+  /birth/_download:
+    post:
+      tags:
+      - birth-controller
+      summary: download
+      operationId: downloadUsingPOST
+      parameters:
+      - name: birthDtlId
+        in: query
+        schema:
+          type: string
+      - name: birthcertificateno
+        in: query
+        schema:
+          type: string
+      - name: consumerCode
+        in: query
+        schema:
+          type: string
+      - name: dateOfBirth
+        in: query
+        schema:
+          type: string
+      - name: fatherName
+        in: query
+        schema:
+          type: string
+      - name: fromDate
+        in: query
+        schema:
+          type: string
+      - name: gender
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: hospitalId
+        in: query
+        schema:
+          type: string
+      - name: id
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: motherName
+        in: query
+        schema:
+          type: string
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: registrationNo
+        in: query
+        schema:
+          type: string
+      - name: source
+        in: query
+        schema:
+          type: string
+          enum:
+          - sms
+          - email
+          - ivr
+          - mobileapp
+          - whatsapp
+          - csc
+          - web
+      - name: tenantId
+        in: query
+        schema:
+          type: string
+      - name: toDate
+        in: query
+        schema:
+          type: string
+      - name: token
+        in: query
+        schema:
+          type: string
+      requestBody:
+        description: requestInfoWrapper
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestInfoWrapper'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/BirthCertResponse'
+        201:
+          description: Created
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Not Found
+          content: {}
+      deprecated: false
+      x-codegen-request-body-name: requestInfoWrapper
+  /birth/_getfilestoreid:
+    post:
+      tags:
+      - birth-controller
+      summary: getfilestoreid
+      operationId: getfilestoreidUsingPOST
+      parameters:
+      - name: birthDtlId
+        in: query
+        schema:
+          type: string
+      - name: birthcertificateno
+        in: query
+        schema:
+          type: string
+      - name: consumerCode
+        in: query
+        schema:
+          type: string
+      - name: dateOfBirth
+        in: query
+        schema:
+          type: string
+      - name: fatherName
+        in: query
+        schema:
+          type: string
+      - name: fromDate
+        in: query
+        schema:
+          type: string
+      - name: gender
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: hospitalId
+        in: query
+        schema:
+          type: string
+      - name: id
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: motherName
+        in: query
+        schema:
+          type: string
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: registrationNo
+        in: query
+        schema:
+          type: string
+      - name: source
+        in: query
+        schema:
+          type: string
+          enum:
+          - sms
+          - email
+          - ivr
+          - mobileapp
+          - whatsapp
+          - csc
+          - web
+      - name: tenantId
+        in: query
+        schema:
+          type: string
+      - name: toDate
+        in: query
+        schema:
+          type: string
+      - name: token
+        in: query
+        schema:
+          type: string
+      requestBody:
+        description: requestInfoWrapper
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestInfoWrapper'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/BirthCertResponse'
+        201:
+          description: Created
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Not Found
+          content: {}
+      deprecated: false
+      x-codegen-request-body-name: requestInfoWrapper
+  /birth/_plainsearch:
+    post:
+      tags:
+      - birth-controller
+      summary: plainSearch
+      operationId: plainSearchUsingPOST
+      parameters:
+      - name: birthDtlId
+        in: query
+        schema:
+          type: string
+      - name: birthcertificateno
+        in: query
+        schema:
+          type: string
+      - name: consumerCode
+        in: query
+        schema:
+          type: string
+      - name: dateOfBirth
+        in: query
+        schema:
+          type: string
+      - name: fatherName
+        in: query
+        schema:
+          type: string
+      - name: fromDate
+        in: query
+        schema:
+          type: string
+      - name: gender
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: hospitalId
+        in: query
+        schema:
+          type: string
+      - name: id
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: motherName
+        in: query
+        schema:
+          type: string
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: registrationNo
+        in: query
+        schema:
+          type: string
+      - name: source
+        in: query
+        schema:
+          type: string
+          enum:
+          - sms
+          - email
+          - ivr
+          - mobileapp
+          - whatsapp
+          - csc
+          - web
+      - name: tenantId
+        in: query
+        schema:
+          type: string
+      - name: toDate
+        in: query
+        schema:
+          type: string
+      - name: token
+        in: query
+        schema:
+          type: string
+      requestBody:
+        description: requestInfoWrapper
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestInfoWrapper'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/BirthCertResponse'
+        201:
+          description: Created
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Not Found
+          content: {}
+      deprecated: false
+      x-codegen-request-body-name: requestInfoWrapper
+  /birth/_search:
+    post:
+      tags:
+      - birth-controller
+      summary: search
+      operationId: searchUsingPOST
+      parameters:
+      - name: birthDtlId
+        in: query
+        schema:
+          type: string
+      - name: birthcertificateno
+        in: query
+        schema:
+          type: string
+      - name: consumerCode
+        in: query
+        schema:
+          type: string
+      - name: dateOfBirth
+        in: query
+        schema:
+          type: string
+      - name: fatherName
+        in: query
+        schema:
+          type: string
+      - name: fromDate
+        in: query
+        schema:
+          type: string
+      - name: gender
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: hospitalId
+        in: query
+        schema:
+          type: string
+      - name: id
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: motherName
+        in: query
+        schema:
+          type: string
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: registrationNo
+        in: query
+        schema:
+          type: string
+      - name: source
+        in: query
+        schema:
+          type: string
+          enum:
+          - sms
+          - email
+          - ivr
+          - mobileapp
+          - whatsapp
+          - csc
+          - web
+      - name: tenantId
+        in: query
+        schema:
+          type: string
+      - name: toDate
+        in: query
+        schema:
+          type: string
+      - name: token
+        in: query
+        schema:
+          type: string
+      requestBody:
+        description: requestInfoWrapper
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestInfoWrapper'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/BirthResponse'
+        201:
+          description: Created
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Not Found
+          content: {}
+      deprecated: false
+      x-codegen-request-body-name: requestInfoWrapper
+  /birth/_searchapplications:
+    post:
+      tags:
+      - birth-controller
+      summary: searchApplications
+      operationId: searchApplicationsUsingPOST
+      parameters:
+      - name: birthDtlId
+        in: query
+        schema:
+          type: string
+      - name: birthcertificateno
+        in: query
+        schema:
+          type: string
+      - name: consumerCode
+        in: query
+        schema:
+          type: string
+      - name: dateOfBirth
+        in: query
+        schema:
+          type: string
+      - name: fatherName
+        in: query
+        schema:
+          type: string
+      - name: fromDate
+        in: query
+        schema:
+          type: string
+      - name: gender
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: hospitalId
+        in: query
+        schema:
+          type: string
+      - name: id
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: motherName
+        in: query
+        schema:
+          type: string
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: registrationNo
+        in: query
+        schema:
+          type: string
+      - name: source
+        in: query
+        schema:
+          type: string
+          enum:
+          - sms
+          - email
+          - ivr
+          - mobileapp
+          - whatsapp
+          - csc
+          - web
+      - name: tenantId
+        in: query
+        schema:
+          type: string
+      - name: toDate
+        in: query
+        schema:
+          type: string
+      - name: token
+        in: query
+        schema:
+          type: string
+      requestBody:
+        description: requestInfoWrapper
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestInfoWrapper'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/BirthCertApplnResponse'
+        201:
+          description: Created
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Not Found
+          content: {}
+      deprecated: false
+      x-codegen-request-body-name: requestInfoWrapper
+  /birth/_viewcertdata:
+    post:
+      tags:
+      - birth-controller
+      summary: viewCertificateData
+      operationId: viewCertificateDataUsingPOST
+      parameters:
+      - name: birthDtlId
+        in: query
+        schema:
+          type: string
+      - name: birthcertificateno
+        in: query
+        schema:
+          type: string
+      - name: consumerCode
+        in: query
+        schema:
+          type: string
+      - name: dateOfBirth
+        in: query
+        schema:
+          type: string
+      - name: fatherName
+        in: query
+        schema:
+          type: string
+      - name: fromDate
+        in: query
+        schema:
+          type: string
+      - name: gender
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: hospitalId
+        in: query
+        schema:
+          type: string
+      - name: id
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: motherName
+        in: query
+        schema:
+          type: string
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: registrationNo
+        in: query
+        schema:
+          type: string
+      - name: source
+        in: query
+        schema:
+          type: string
+          enum:
+          - sms
+          - email
+          - ivr
+          - mobileapp
+          - whatsapp
+          - csc
+          - web
+      - name: tenantId
+        in: query
+        schema:
+          type: string
+      - name: toDate
+        in: query
+        schema:
+          type: string
+      - name: token
+        in: query
+        schema:
+          type: string
+      requestBody:
+        description: requestInfoWrapper
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestInfoWrapper'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/BirthPdfApplicationRequest'
+        201:
+          description: Created
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Not Found
+          content: {}
+      deprecated: false
+      x-codegen-request-body-name: requestInfoWrapper
+  /birth/_viewfullcertdata:
+    post:
+      tags:
+      - birth-controller
+      summary: viewfullCertMasterData
+      operationId: viewfullCertMasterDataUsingPOST
+      parameters:
+      - name: birthDtlId
+        in: query
+        schema:
+          type: string
+      - name: birthcertificateno
+        in: query
+        schema:
+          type: string
+      - name: consumerCode
+        in: query
+        schema:
+          type: string
+      - name: dateOfBirth
+        in: query
+        schema:
+          type: string
+      - name: fatherName
+        in: query
+        schema:
+          type: string
+      - name: fromDate
+        in: query
+        schema:
+          type: string
+      - name: gender
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: hospitalId
+        in: query
+        schema:
+          type: string
+      - name: id
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: motherName
+        in: query
+        schema:
+          type: string
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: registrationNo
+        in: query
+        schema:
+          type: string
+      - name: source
+        in: query
+        schema:
+          type: string
+          enum:
+          - sms
+          - email
+          - ivr
+          - mobileapp
+          - whatsapp
+          - csc
+          - web
+      - name: tenantId
+        in: query
+        schema:
+          type: string
+      - name: toDate
+        in: query
+        schema:
+          type: string
+      - name: token
+        in: query
+        schema:
+          type: string
+      requestBody:
+        description: requestInfoWrapper
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestInfoWrapper'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/BirthPdfApplicationRequest'
+        201:
+          description: Created
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Not Found
+          content: {}
+      deprecated: false
+      x-codegen-request-body-name: requestInfoWrapper
+  /common/gethospitals:
+    post:
+      tags:
+      - common-controller
+      summary: search
+      operationId: searchUsingPOST_1
+      parameters:
+      - name: birthDtlId
+        in: query
+        schema:
+          type: string
+      - name: birthcertificateno
+        in: query
+        schema:
+          type: string
+      - name: consumerCode
+        in: query
+        schema:
+          type: string
+      - name: dateOfBirth
+        in: query
+        schema:
+          type: string
+      - name: fatherName
+        in: query
+        schema:
+          type: string
+      - name: fromDate
+        in: query
+        schema:
+          type: string
+      - name: gender
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: hospitalId
+        in: query
+        schema:
+          type: string
+      - name: id
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: motherName
+        in: query
+        schema:
+          type: string
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: registrationNo
+        in: query
+        schema:
+          type: string
+      - name: source
+        in: query
+        schema:
+          type: string
+          enum:
+          - sms
+          - email
+          - ivr
+          - mobileapp
+          - whatsapp
+          - csc
+          - web
+      - name: tenantId
+        in: query
+        schema:
+          type: string
+      - name: toDate
+        in: query
+        schema:
+          type: string
+      - name: token
+        in: query
+        schema:
+          type: string
+      requestBody:
+        description: requestInfoWrapper
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestInfoWrapper'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HospitalResponse'
+        201:
+          description: Created
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Not Found
+          content: {}
+      deprecated: false
+      x-codegen-request-body-name: requestInfoWrapper
+  /common/savebirthimport:
+    post:
+      tags:
+      - common-controller
+      summary: saveBirthImport
+      operationId: saveBirthImportUsingPOST
+      requestBody:
+        description: importJSon
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BirthResponse'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ImportBirthWrapper'
+        201:
+          description: Created
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Not Found
+          content: {}
+      deprecated: false
+      x-codegen-request-body-name: importJSon
+  /common/savedeathimport:
+    post:
+      tags:
+      - common-controller
+      summary: saveDeathImport
+      operationId: saveDeathImportUsingPOST
+      requestBody:
+        description: importJSon
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeathResponse'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ImportDeathWrapper'
+        201:
+          description: Created
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Not Found
+          content: {}
+      deprecated: false
+      x-codegen-request-body-name: importJSon
+  /common/updatebirthimport:
+    post:
+      tags:
+      - common-controller
+      summary: updateBirthImport
+      operationId: updateBirthImportUsingPOST
+      requestBody:
+        description: importJSon
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BirthResponse'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ImportBirthWrapper'
+        201:
+          description: Created
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Not Found
+          content: {}
+      deprecated: false
+      x-codegen-request-body-name: importJSon
+  /common/updatedeathimport:
+    post:
+      tags:
+      - common-controller
+      summary: updateDeathImport
+      operationId: updateDeathImportUsingPOST
+      requestBody:
+        description: importJSon
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeathResponse'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ImportDeathWrapper'
+        201:
+          description: Created
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Not Found
+          content: {}
+      deprecated: false
+      x-codegen-request-body-name: importJSon
+  /death/_download:
+    post:
+      tags:
+      - death-controller
+      summary: download
+      operationId: downloadUsingPOST_1
+      parameters:
+      - name: consumerCode
+        in: query
+        schema:
+          type: string
+      - name: dateOfDeath
+        in: query
+        schema:
+          type: string
+      - name: deathDtlId
+        in: query
+        schema:
+          type: string
+      - name: deathcertificateno
+        in: query
+        schema:
+          type: string
+      - name: fatherName
+        in: query
+        schema:
+          type: string
+      - name: fromDate
+        in: query
+        schema:
+          type: string
+      - name: gender
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: hospitalId
+        in: query
+        schema:
+          type: string
+      - name: id
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: motherName
+        in: query
+        schema:
+          type: string
+      - name: name
+        in: query
+        schema:
+          type: string
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: registrationNo
+        in: query
+        schema:
+          type: string
+      - name: source
+        in: query
+        schema:
+          type: string
+          enum:
+          - sms
+          - email
+          - ivr
+          - mobileapp
+          - whatsapp
+          - csc
+          - web
+      - name: spouseName
+        in: query
+        schema:
+          type: string
+      - name: tenantId
+        in: query
+        schema:
+          type: string
+      - name: toDate
+        in: query
+        schema:
+          type: string
+      requestBody:
+        description: requestInfoWrapper
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestInfoWrapper'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DeathCertResponse'
+        201:
+          description: Created
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Not Found
+          content: {}
+      deprecated: false
+      x-codegen-request-body-name: requestInfoWrapper
+  /death/_getfilestoreid:
+    post:
+      tags:
+      - death-controller
+      summary: getfilestoreid
+      operationId: getfilestoreidUsingPOST_1
+      parameters:
+      - name: consumerCode
+        in: query
+        schema:
+          type: string
+      - name: dateOfDeath
+        in: query
+        schema:
+          type: string
+      - name: deathDtlId
+        in: query
+        schema:
+          type: string
+      - name: deathcertificateno
+        in: query
+        schema:
+          type: string
+      - name: fatherName
+        in: query
+        schema:
+          type: string
+      - name: fromDate
+        in: query
+        schema:
+          type: string
+      - name: gender
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: hospitalId
+        in: query
+        schema:
+          type: string
+      - name: id
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: motherName
+        in: query
+        schema:
+          type: string
+      - name: name
+        in: query
+        schema:
+          type: string
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: registrationNo
+        in: query
+        schema:
+          type: string
+      - name: source
+        in: query
+        schema:
+          type: string
+          enum:
+          - sms
+          - email
+          - ivr
+          - mobileapp
+          - whatsapp
+          - csc
+          - web
+      - name: spouseName
+        in: query
+        schema:
+          type: string
+      - name: tenantId
+        in: query
+        schema:
+          type: string
+      - name: toDate
+        in: query
+        schema:
+          type: string
+      requestBody:
+        description: requestInfoWrapper
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestInfoWrapper'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DeathCertResponse'
+        201:
+          description: Created
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Not Found
+          content: {}
+      deprecated: false
+      x-codegen-request-body-name: requestInfoWrapper
+  /death/_plainsearch:
+    post:
+      tags:
+      - death-controller
+      summary: plainSearch
+      operationId: plainSearchUsingPOST_1
+      parameters:
+      - name: consumerCode
+        in: query
+        schema:
+          type: string
+      - name: dateOfDeath
+        in: query
+        schema:
+          type: string
+      - name: deathDtlId
+        in: query
+        schema:
+          type: string
+      - name: deathcertificateno
+        in: query
+        schema:
+          type: string
+      - name: fatherName
+        in: query
+        schema:
+          type: string
+      - name: fromDate
+        in: query
+        schema:
+          type: string
+      - name: gender
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: hospitalId
+        in: query
+        schema:
+          type: string
+      - name: id
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: motherName
+        in: query
+        schema:
+          type: string
+      - name: name
+        in: query
+        schema:
+          type: string
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: registrationNo
+        in: query
+        schema:
+          type: string
+      - name: source
+        in: query
+        schema:
+          type: string
+          enum:
+          - sms
+          - email
+          - ivr
+          - mobileapp
+          - whatsapp
+          - csc
+          - web
+      - name: spouseName
+        in: query
+        schema:
+          type: string
+      - name: tenantId
+        in: query
+        schema:
+          type: string
+      - name: toDate
+        in: query
+        schema:
+          type: string
+      requestBody:
+        description: requestInfoWrapper
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestInfoWrapper'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DeathCertResponse'
+        201:
+          description: Created
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Not Found
+          content: {}
+      deprecated: false
+      x-codegen-request-body-name: requestInfoWrapper
+  /death/_search:
+    post:
+      tags:
+      - death-controller
+      summary: search
+      operationId: searchUsingPOST_2
+      parameters:
+      - name: consumerCode
+        in: query
+        schema:
+          type: string
+      - name: dateOfDeath
+        in: query
+        schema:
+          type: string
+      - name: deathDtlId
+        in: query
+        schema:
+          type: string
+      - name: deathcertificateno
+        in: query
+        schema:
+          type: string
+      - name: fatherName
+        in: query
+        schema:
+          type: string
+      - name: fromDate
+        in: query
+        schema:
+          type: string
+      - name: gender
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: hospitalId
+        in: query
+        schema:
+          type: string
+      - name: id
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: motherName
+        in: query
+        schema:
+          type: string
+      - name: name
+        in: query
+        schema:
+          type: string
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: registrationNo
+        in: query
+        schema:
+          type: string
+      - name: source
+        in: query
+        schema:
+          type: string
+          enum:
+          - sms
+          - email
+          - ivr
+          - mobileapp
+          - whatsapp
+          - csc
+          - web
+      - name: spouseName
+        in: query
+        schema:
+          type: string
+      - name: tenantId
+        in: query
+        schema:
+          type: string
+      - name: toDate
+        in: query
+        schema:
+          type: string
+      requestBody:
+        description: requestInfoWrapper
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestInfoWrapper'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DeathResponse'
+        201:
+          description: Created
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Not Found
+          content: {}
+      deprecated: false
+      x-codegen-request-body-name: requestInfoWrapper
+  /death/_searchapplications:
+    post:
+      tags:
+      - death-controller
+      summary: searchApplications
+      operationId: searchApplicationsUsingPOST_1
+      parameters:
+      - name: consumerCode
+        in: query
+        schema:
+          type: string
+      - name: dateOfDeath
+        in: query
+        schema:
+          type: string
+      - name: deathDtlId
+        in: query
+        schema:
+          type: string
+      - name: deathcertificateno
+        in: query
+        schema:
+          type: string
+      - name: fatherName
+        in: query
+        schema:
+          type: string
+      - name: fromDate
+        in: query
+        schema:
+          type: string
+      - name: gender
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: hospitalId
+        in: query
+        schema:
+          type: string
+      - name: id
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: motherName
+        in: query
+        schema:
+          type: string
+      - name: name
+        in: query
+        schema:
+          type: string
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: registrationNo
+        in: query
+        schema:
+          type: string
+      - name: source
+        in: query
+        schema:
+          type: string
+          enum:
+          - sms
+          - email
+          - ivr
+          - mobileapp
+          - whatsapp
+          - csc
+          - web
+      - name: spouseName
+        in: query
+        schema:
+          type: string
+      - name: tenantId
+        in: query
+        schema:
+          type: string
+      - name: toDate
+        in: query
+        schema:
+          type: string
+      requestBody:
+        description: requestInfoWrapper
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestInfoWrapper'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DeathCertApplnResponse'
+        201:
+          description: Created
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Not Found
+          content: {}
+      deprecated: false
+      x-codegen-request-body-name: requestInfoWrapper
+  /death/_viewcertdata:
+    post:
+      tags:
+      - death-controller
+      summary: viewCertificateData
+      operationId: viewCertificateDataUsingPOST_1
+      parameters:
+      - name: consumerCode
+        in: query
+        schema:
+          type: string
+      - name: dateOfDeath
+        in: query
+        schema:
+          type: string
+      - name: deathDtlId
+        in: query
+        schema:
+          type: string
+      - name: deathcertificateno
+        in: query
+        schema:
+          type: string
+      - name: fatherName
+        in: query
+        schema:
+          type: string
+      - name: fromDate
+        in: query
+        schema:
+          type: string
+      - name: gender
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: hospitalId
+        in: query
+        schema:
+          type: string
+      - name: id
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: motherName
+        in: query
+        schema:
+          type: string
+      - name: name
+        in: query
+        schema:
+          type: string
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: registrationNo
+        in: query
+        schema:
+          type: string
+      - name: source
+        in: query
+        schema:
+          type: string
+          enum:
+          - sms
+          - email
+          - ivr
+          - mobileapp
+          - whatsapp
+          - csc
+          - web
+      - name: spouseName
+        in: query
+        schema:
+          type: string
+      - name: tenantId
+        in: query
+        schema:
+          type: string
+      - name: toDate
+        in: query
+        schema:
+          type: string
+      requestBody:
+        description: requestInfoWrapper
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestInfoWrapper'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DeathPdfApplicationRequest'
+        201:
+          description: Created
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Not Found
+          content: {}
+      deprecated: false
+      x-codegen-request-body-name: requestInfoWrapper
+  /death/_viewfullcertdata:
+    post:
+      tags:
+      - death-controller
+      summary: viewfullCertMasterData
+      operationId: viewfullCertMasterDataUsingPOST_1
+      parameters:
+      - name: consumerCode
+        in: query
+        schema:
+          type: string
+      - name: dateOfDeath
+        in: query
+        schema:
+          type: string
+      - name: deathDtlId
+        in: query
+        schema:
+          type: string
+      - name: deathcertificateno
+        in: query
+        schema:
+          type: string
+      - name: fatherName
+        in: query
+        schema:
+          type: string
+      - name: fromDate
+        in: query
+        schema:
+          type: string
+      - name: gender
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: hospitalId
+        in: query
+        schema:
+          type: string
+      - name: id
+        in: query
+        schema:
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: motherName
+        in: query
+        schema:
+          type: string
+      - name: name
+        in: query
+        schema:
+          type: string
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: registrationNo
+        in: query
+        schema:
+          type: string
+      - name: source
+        in: query
+        schema:
+          type: string
+          enum:
+          - sms
+          - email
+          - ivr
+          - mobileapp
+          - whatsapp
+          - csc
+          - web
+      - name: spouseName
+        in: query
+        schema:
+          type: string
+      - name: tenantId
+        in: query
+        schema:
+          type: string
+      - name: toDate
+        in: query
+        schema:
+          type: string
+      requestBody:
+        description: requestInfoWrapper
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestInfoWrapper'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DeathPdfApplicationRequest'
+        201:
+          description: Created
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Not Found
+          content: {}
+      deprecated: false
+      x-codegen-request-body-name: requestInfoWrapper
+components:
+  schemas:
+    Amount:
+      title: Amount
+      type: object
+      properties:
+        amount:
+          type: number
+        taxHeadCode:
+          type: string
+    AuditDetails:
+      title: AuditDetails
+      type: object
+      properties:
+        createdBy:
+          type: string
+        createdTime:
+          type: integer
+          format: int64
+        lastModifiedBy:
+          type: string
+        lastModifiedTime:
+          type: integer
+          format: int64
+    BirthCertAppln:
+      title: BirthCertAppln
+      type: object
+      properties:
+        applicationCategory:
+          type: string
+        applicationDate:
+          type: string
+        applicationNumber:
+          type: string
+        applicationType:
+          type: string
+        fileStoreId:
+          type: string
+        name:
+          type: string
+        regNo:
+          type: string
+        status:
+          type: string
+        tenantId:
+          type: string
+    BirthCertApplnResponse:
+      title: BirthCertApplnResponse
+      type: object
+      properties:
+        applications:
+          type: array
+          items:
+            $ref: '#/components/schemas/BirthCertAppln'
+        responseInfo:
+          $ref: '#/components/schemas/ResponseInfo'
+    BirthCertResponse:
+      title: BirthCertResponse
+      type: object
+      properties:
+        birthCertificate:
+          type: array
+          items:
+            $ref: '#/components/schemas/BirthCertificate'
+        consumerCode:
+          type: string
+        filestoreId:
+          type: string
+        responseInfo:
+          $ref: '#/components/schemas/ResponseInfo'
+        tenantId:
+          type: string
+    BirthCertificate:
+      title: BirthCertificate
+      type: object
+      properties:
+        additionalDetail:
+          type: object
+          properties: {}
+        amount:
+          type: array
+          items:
+            $ref: '#/components/schemas/Amount'
+        applicationStatus:
+          type: string
+          enum:
+          - ACTIVE
+          - CANCELLED
+          - FREE_DOWNLOAD
+          - PAID_DOWNLOAD
+          - PAID_PDF_GENERATED
+          - PAID
+        auditDetails:
+          $ref: '#/components/schemas/AuditDetails'
+        birthCertificateNo:
+          type: string
+        birthDtlId:
+          type: string
+        birthPlace:
+          type: string
+        businessService:
+          type: string
+        calculation:
+          $ref: '#/components/schemas/Calculation'
+        citizen:
+          $ref: '#/components/schemas/User'
+        counter:
+          type: integer
+          format: int32
+        dateofbirth:
+          $ref: '#/components/schemas/Timestamp'
+        dateofissue:
+          type: integer
+          format: int64
+        dateofreport:
+          $ref: '#/components/schemas/Timestamp'
+        district:
+          type: string
+        embeddedUrl:
+          type: string
+        filestoreid:
+          type: string
+        gender:
+          type: string
+        id:
+          type: string
+        source:
+          type: string
+        state:
+          type: string
+        taxPeriodFrom:
+          type: integer
+          format: int64
+        taxPeriodTo:
+          type: integer
+          format: int64
+        tenantId:
+          type: string
+        ward:
+          type: string
+        year:
+          type: string
+    BirthPdfApplicationRequest:
+      title: BirthPdfApplicationRequest
+      type: object
+      properties:
+        BirthCertificate:
+          type: array
+          items:
+            $ref: '#/components/schemas/EgBirthDtl'
+        RequestInfo:
+          $ref: '#/components/schemas/RequestInfo'
+    BirthResponse:
+      title: BirthResponse
+      type: object
+      properties:
+        RequestInfo:
+          $ref: '#/components/schemas/RequestInfo'
+        ResponseInfo:
+          $ref: '#/components/schemas/ResponseInfo'
+        birthCerts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EgBirthDtl'
+    Calculation:
+      title: Calculation
+      type: object
+      properties:
+        deathCertificate:
+          $ref: '#/components/schemas/DeathCertificate'
+        deathCertificateNo:
+          type: string
+        taxHeadEstimates:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaxHeadEstimate'
+        tenantId:
+          type: string
+    DeathCertAppln:
+      title: DeathCertAppln
+      type: object
+      properties:
+        applicationCategory:
+          type: string
+        applicationDate:
+          type: string
+        applicationNumber:
+          type: string
+        applicationType:
+          type: string
+        fileStoreId:
+          type: string
+        name:
+          type: string
+        regNo:
+          type: string
+        status:
+          type: string
+        tenantId:
+          type: string
+    DeathCertApplnResponse:
+      title: DeathCertApplnResponse
+      type: object
+      properties:
+        applications:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeathCertAppln'
+        responseInfo:
+          $ref: '#/components/schemas/ResponseInfo'
+    DeathCertResponse:
+      title: DeathCertResponse
+      type: object
+      properties:
+        consumerCode:
+          type: string
+        deathCertificate:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeathCertificate'
+        filestoreId:
+          type: string
+        responseInfo:
+          $ref: '#/components/schemas/ResponseInfo'
+        tenantId:
+          type: string
+    DeathCertificate:
+      title: DeathCertificate
+      type: object
+      properties:
+        additionalDetail:
+          type: object
+          properties: {}
+        age:
+          type: integer
+          format: int64
+        amount:
+          type: array
+          items:
+            $ref: '#/components/schemas/Amount'
+        applicationStatus:
+          type: string
+          enum:
+          - ACTIVE
+          - CANCELLED
+          - FREE_DOWNLOAD
+          - PAID_DOWNLOAD
+          - PAID_PDF_GENERATED
+          - PAID
+        auditDetails:
+          $ref: '#/components/schemas/AuditDetails'
+        businessService:
+          type: string
+        calculation:
+          $ref: '#/components/schemas/Calculation'
+        citizen:
+          $ref: '#/components/schemas/User'
+        counter:
+          type: integer
+          format: int32
+        dateofdeath:
+          $ref: '#/components/schemas/Timestamp'
+        dateofissue:
+          type: integer
+          format: int64
+        dateofreport:
+          $ref: '#/components/schemas/Timestamp'
+        deathCertificateNo:
+          type: string
+        deathDtlId:
+          type: string
+        district:
+          type: string
+        embeddedUrl:
+          type: string
+        filestoreid:
+          type: string
+        gender:
+          type: string
+        id:
+          type: string
+        placeofdeath:
+          type: string
+        source:
+          type: string
+        state:
+          type: string
+        taxPeriodFrom:
+          type: integer
+          format: int64
+        taxPeriodTo:
+          type: integer
+          format: int64
+        tenantId:
+          type: string
+        ward:
+          type: string
+        year:
+          type: string
+    DeathPdfApplicationRequest:
+      title: DeathPdfApplicationRequest
+      type: object
+      properties:
+        DeathCertificate:
+          type: array
+          items:
+            $ref: '#/components/schemas/EgDeathDtl'
+        RequestInfo:
+          $ref: '#/components/schemas/RequestInfo'
+    DeathResponse:
+      title: DeathResponse
+      type: object
+      properties:
+        RequestInfo:
+          $ref: '#/components/schemas/RequestInfo'
+        ResponseInfo:
+          $ref: '#/components/schemas/ResponseInfo'
+        deathCerts:
+          type: array
+          items:
+            $ref: '#/components/schemas/EgDeathDtl'
+    EgBirthDtl:
+      title: EgBirthDtl
+      type: object
+      properties:
+        birthFatherInfo:
+          $ref: '#/components/schemas/EgBirthFatherInfo'
+        birthMotherInfo:
+          $ref: '#/components/schemas/EgBirthMotherInfo'
+        birthPermaddr:
+          $ref: '#/components/schemas/EgBirthPermaddr'
+        birthPresentaddr:
+          $ref: '#/components/schemas/EgBirthPresentaddr'
+        birthcertificateno:
+          type: string
+        counter:
+          type: integer
+          format: int32
+        createdby:
+          type: string
+        createdtime:
+          type: integer
+          format: int64
+        dateofbirth:
+          $ref: '#/components/schemas/Timestamp'
+        dateofbirthepoch:
+          type: string
+        dateofissue:
+          type: integer
+          format: int64
+        dateofreport:
+          $ref: '#/components/schemas/Timestamp'
+        dateofreportepoch:
+          type: string
+        embeddedUrl:
+          type: string
+        excelrowindex:
+          type: integer
+          format: int32
+        firstname:
+          type: string
+        fullName:
+          type: string
+        gender:
+          type: integer
+          format: int32
+        genderStr:
+          type: string
+        hospitalid:
+          type: string
+        hospitalname:
+          type: string
+        id:
+          type: string
+        informantsaddress:
+          type: string
+        informantsname:
+          type: string
+        lastmodifiedby:
+          type: string
+        lastmodifiedtime:
+          type: integer
+          format: int64
+        lastname:
+          type: string
+        middlename:
+          type: string
+        placeofbirth:
+          type: string
+        registrationno:
+          type: string
+        rejectReason:
+          type: string
+        remarks:
+          type: string
+        tenantid:
+          type: string
+    EgBirthFatherInfo:
+      title: EgBirthFatherInfo
+      type: object
+      properties:
+        aadharno:
+          type: string
+        createdby:
+          type: string
+        createdtime:
+          type: integer
+          format: int64
+        education:
+          type: string
+        emailid:
+          type: string
+        firstname:
+          type: string
+        fullName:
+          type: string
+        id:
+          type: string
+        lastmodifiedby:
+          type: string
+        lastmodifiedtime:
+          type: integer
+          format: int64
+        lastname:
+          type: string
+        middlename:
+          type: string
+        mobileno:
+          type: string
+        nationality:
+          type: string
+        proffession:
+          type: string
+        religion:
+          type: string
+    EgBirthMotherInfo:
+      title: EgBirthMotherInfo
+      type: object
+      properties:
+        aadharno:
+          type: string
+        createdby:
+          type: string
+        createdtime:
+          type: integer
+          format: int64
+        education:
+          type: string
+        emailid:
+          type: string
+        firstname:
+          type: string
+        fullName:
+          type: string
+        id:
+          type: string
+        lastmodifiedby:
+          type: string
+        lastmodifiedtime:
+          type: integer
+          format: int64
+        lastname:
+          type: string
+        middlename:
+          type: string
+        mobileno:
+          type: string
+        nationality:
+          type: string
+        proffession:
+          type: string
+        religion:
+          type: string
+    EgBirthPermaddr:
+      title: EgBirthPermaddr
+      type: object
+      properties:
+        buildingno:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        createdby:
+          type: string
+        createdtime:
+          type: integer
+          format: int64
+        district:
+          type: string
+        fullAddress:
+          type: string
+        houseno:
+          type: string
+        id:
+          type: string
+        lastmodifiedby:
+          type: string
+        lastmodifiedtime:
+          type: integer
+          format: int64
+        locality:
+          type: string
+        pinno:
+          type: string
+        state:
+          type: string
+        streetname:
+          type: string
+        tehsil:
+          type: string
+    EgBirthPresentaddr:
+      title: EgBirthPresentaddr
+      type: object
+      properties:
+        buildingno:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        createdby:
+          type: string
+        createdtime:
+          type: integer
+          format: int64
+        district:
+          type: string
+        fullAddress:
+          type: string
+        houseno:
+          type: string
+        id:
+          type: string
+        lastmodifiedby:
+          type: string
+        lastmodifiedtime:
+          type: integer
+          format: int64
+        locality:
+          type: string
+        pinno:
+          type: string
+        state:
+          type: string
+        streetname:
+          type: string
+        tehsil:
+          type: string
+    EgDeathDtl:
+      title: EgDeathDtl
+      type: object
+      properties:
+        aadharno:
+          type: string
+        age:
+          type: integer
+          format: int64
+        counter:
+          type: integer
+          format: int32
+        createdby:
+          type: string
+        createdtime:
+          type: integer
+          format: int64
+        dateofdeath:
+          $ref: '#/components/schemas/Timestamp'
+        dateofdeathepoch:
+          type: string
+        dateofissue:
+          type: integer
+          format: int64
+        dateofreport:
+          $ref: '#/components/schemas/Timestamp'
+        dateofreportepoch:
+          type: string
+        deathFatherInfo:
+          $ref: '#/components/schemas/EgDeathFatherInfo'
+        deathMotherInfo:
+          $ref: '#/components/schemas/EgDeathMotherInfo'
+        deathPermaddr:
+          $ref: '#/components/schemas/EgDeathPermaddr'
+        deathPresentaddr:
+          $ref: '#/components/schemas/EgDeathPresentaddr'
+        deathSpouseInfo:
+          $ref: '#/components/schemas/EgDeathSpouseInfo'
+        deathcertificateno:
+          type: string
+        eidno:
+          type: string
+        embeddedUrl:
+          type: string
+        excelrowindex:
+          type: integer
+          format: int32
+        firstname:
+          type: string
+        fullName:
+          type: string
+        gender:
+          type: integer
+          format: int32
+        genderStr:
+          type: string
+        hospitalid:
+          type: string
+        hospitalname:
+          type: string
+        icdcode:
+          type: string
+        id:
+          type: string
+        informantsaddress:
+          type: string
+        informantsname:
+          type: string
+        lastmodifiedby:
+          type: string
+        lastmodifiedtime:
+          type: integer
+          format: int64
+        lastname:
+          type: string
+        middlename:
+          type: string
+        nationality:
+          type: string
+        placeofdeath:
+          type: string
+        registrationno:
+          type: string
+        rejectReason:
+          type: string
+        religion:
+          type: string
+        remarks:
+          type: string
+        tenantid:
+          type: string
+    EgDeathFatherInfo:
+      title: EgDeathFatherInfo
+      type: object
+      properties:
+        aadharno:
+          type: string
+        createdby:
+          type: string
+        createdtime:
+          type: integer
+          format: int64
+        emailid:
+          type: string
+        firstname:
+          type: string
+        fullName:
+          type: string
+        id:
+          type: string
+        lastmodifiedby:
+          type: string
+        lastmodifiedtime:
+          type: integer
+          format: int64
+        lastname:
+          type: string
+        middlename:
+          type: string
+        mobileno:
+          type: string
+    EgDeathMotherInfo:
+      title: EgDeathMotherInfo
+      type: object
+      properties:
+        aadharno:
+          type: string
+        createdby:
+          type: string
+        createdtime:
+          type: integer
+          format: int64
+        emailid:
+          type: string
+        firstname:
+          type: string
+        fullName:
+          type: string
+        id:
+          type: string
+        lastmodifiedby:
+          type: string
+        lastmodifiedtime:
+          type: integer
+          format: int64
+        lastname:
+          type: string
+        middlename:
+          type: string
+        mobileno:
+          type: string
+    EgDeathPermaddr:
+      title: EgDeathPermaddr
+      type: object
+      properties:
+        buildingno:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        createdby:
+          type: string
+        createdtime:
+          type: integer
+          format: int64
+        district:
+          type: string
+        fullAddress:
+          type: string
+        houseno:
+          type: string
+        id:
+          type: string
+        lastmodifiedby:
+          type: string
+        lastmodifiedtime:
+          type: integer
+          format: int64
+        locality:
+          type: string
+        pinno:
+          type: string
+        state:
+          type: string
+        streetname:
+          type: string
+        tehsil:
+          type: string
+    EgDeathPresentaddr:
+      title: EgDeathPresentaddr
+      type: object
+      properties:
+        buildingno:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        createdby:
+          type: string
+        createdtime:
+          type: integer
+          format: int64
+        district:
+          type: string
+        fullAddress:
+          type: string
+        houseno:
+          type: string
+        id:
+          type: string
+        lastmodifiedby:
+          type: string
+        lastmodifiedtime:
+          type: integer
+          format: int64
+        locality:
+          type: string
+        pinno:
+          type: string
+        state:
+          type: string
+        streetname:
+          type: string
+        tehsil:
+          type: string
+    EgDeathSpouseInfo:
+      title: EgDeathSpouseInfo
+      type: object
+      properties:
+        aadharno:
+          type: string
+        createdby:
+          type: string
+        createdtime:
+          type: integer
+          format: int64
+        emailid:
+          type: string
+        firstname:
+          type: string
+        fullName:
+          type: string
+        id:
+          type: string
+        lastmodifiedby:
+          type: string
+        lastmodifiedtime:
+          type: integer
+          format: int64
+        lastname:
+          type: string
+        middlename:
+          type: string
+        mobileno:
+          type: string
+    EgHospitalDtl:
+      title: EgHospitalDtl
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        tenantid:
+          type: string
+    HospitalResponse:
+      title: HospitalResponse
+      type: object
+      properties:
+        ResponseInfo:
+          $ref: '#/components/schemas/ResponseInfo'
+        hospitalDtls:
+          type: array
+          items:
+            $ref: '#/components/schemas/EgHospitalDtl'
+    ImportBirthWrapper:
+      title: ImportBirthWrapper
+      type: object
+      properties:
+        ResponseInfo:
+          $ref: '#/components/schemas/ResponseInfo'
+        errorRowMap:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        hospitals:
+          type: array
+          items:
+            type: string
+        serviceError:
+          type: string
+        statsMap:
+          type: object
+          additionalProperties:
+            type: integer
+            format: int32
+        statsMapData:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/EgBirthDtl'
+    ImportDeathWrapper:
+      title: ImportDeathWrapper
+      type: object
+      properties:
+        ResponseInfo:
+          $ref: '#/components/schemas/ResponseInfo'
+        errorRowMap:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        hospitals:
+          type: array
+          items:
+            type: string
+        serviceError:
+          type: string
+        statsMap:
+          type: object
+          additionalProperties:
+            type: integer
+            format: int32
+        statsMapData:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/EgDeathDtl'
+    RequestInfoWrapper:
+      title: RequestInfoWrapper
+      type: object
+      properties:
+        RequestInfo:
+          $ref: '#/components/schemas/RequestInfo'
+    RequestInfo:
+      type: object
+      properties:
+        apiId:
+          type: string
+        ver:
+          type: string
+        ts:
+          type: integer
+          format: int64
+        action:
+          type: string
+        did:
+          type: string
+        key:
+          type: string
+        msgId:
+          type: string
+        authToken:
+          type: string
+        correlationId:
+          type: string
+        userInfo:
+          $ref: '#/components/schemas/User'
+      title: RequestInfo
+    ResponseInfo:
+      title: ResponseInfo
+      type: object
+      properties:
+        apiId:
+          type: string
+        msgId:
+          type: string
+        resMsgId:
+          type: string
+        status:
+          type: string
+        ts:
+          type: integer
+          format: int64
+        ver:
+          type: string
+    Role:
+      title: Role
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        code:
+          type: string
+        tenantId:
+          type: string
+    TaxHeadEstimate:
+      title: TaxHeadEstimate
+      type: object
+      properties:
+        category:
+          type: string
+          enum:
+          - TAX
+          - FEE
+          - REBATE
+          - EXEMPTION
+          - ADVANCE_COLLECTION
+          - PENALTY
+          - FINES
+          - CHARGES
+        estimateAmount:
+          type: number
+        taxHeadCode:
+          type: string
+    Timestamp:
+      type: object
+      properties:
+        date:
+          type: integer
+          format: int32
+        day:
+          type: integer
+          format: int32
+        hours:
+          type: integer
+          format: int32
+        minutes:
+          type: integer
+          format: int32
+        month:
+          type: integer
+          format: int32
+        nanos:
+          type: integer
+          format: int32
+        seconds:
+          type: integer
+          format: int32
+        time:
+          type: integer
+          format: int64
+        timezoneOffset:
+          type: integer
+          format: int32
+        year:
+          type: integer
+          format: int32
+      title: Timestamp
+    User:
+      title: User
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        userName:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+        mobileNumber:
+          type: string
+        emailId:
+          type: string
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/Role'
+        tenantId:
+          type: string
+        uuid:
+          type: string
+    View:
+      type: object
+      properties:
+        contentType:
+          type: string
+      title: View
+

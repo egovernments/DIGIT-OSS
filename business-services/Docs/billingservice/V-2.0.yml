@@ -1,0 +1,743 @@
+swagger: '2.0'
+info:
+  version: '1.1.0'
+  title: eGov Billing Service APIs
+  description: |-
+    eGov Billing Service manages head wise demand and Demand Bill information for all the revenue modules from eGov solution. It manages
+    * The demand data for a revenue module with category of tax for a defined *period, rebate, penalty, late payment interest, fee* etc and again head wise in each category. This module have one entity called Demand for every revenue entity which holds the list of category and head wise demands for a defined period in DemandDetail.
+    * The Demand Bill data with period and head wise dues and its payment details.
+    * Service APIs supports single tenant only
+  contact:
+    name: eGovernments Foundation
+schemes:
+  - https
+basePath: /billingservice/
+x-common-path: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml'
+paths:
+  /demand/_search:
+    post:
+      description: 'Returns a demand along with its list of demand details. Along with tenantId, any one parameter is mandatory. In case search is performed based on the demand amounts, then demandFrom and demandTo parameters will be mandatory. When both demandFrom and demandTo parameters are passed, the type parameter will be mandatory. By default results will be sorted by fromDate'
+
+      parameters:
+        - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo'
+        - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId'
+        - name: demandId
+          in: query
+          description: Id(s) of the Demand(s) to be returned
+          required: false
+          type: array
+          items:
+            type: string
+        - name: consumerCode
+          in: query
+          description: Unique identification provided by business details.
+          required: false
+          type: array
+          items:
+            type: string
+        - name: email
+          in: query
+          description: Email Id of Primary owner of business detail.
+          required: false
+          type: string
+        - name: mobileNumber
+          in: query
+          description: Mobile Number of Primary owner of business detail.
+          required: false
+          type: string
+        - name: businessService
+          in: query
+          description: 'Billing system details e.g., PropertyTax,Water Charges etc.'
+          required: true
+          type: string
+      tags:
+        - Demand
+      responses:
+        '200':
+          description: returns a demand along with its demand details.
+          schema:
+            $ref: '#/definitions/DemandResponse'
+        '400':
+          description: Invalid input
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+  /demand/_create:
+    post:
+      description: Creates a demand along with its list of demand details
+      parameters:
+        - name: demand
+          in: body
+          description: Request header for the demand.
+          required: true
+          schema:
+            $ref: '#/definitions/DemandRequest'
+      tags:
+        - Demand
+      responses:
+        '201':
+          description: Created Demand(s) successfully.
+          schema:
+            $ref: '#/definitions/DemandResponse'
+        '400':
+          description: Invalid input
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+  /demand/_update:
+    post:
+      description: Updates a demand.
+      parameters:
+        - name: demand
+          in: body
+          description: Request header for the demand.
+          required: true
+          schema:
+            $ref: '#/definitions/DemandRequest'
+      tags:
+        - Demand
+      responses:
+        '200':
+          description: updated a collection amount for demand.
+          schema:
+            $ref: '#/definitions/DemandResponse'
+        '400':
+          description: Invalid input
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+
+/bill/_search:
+    post:
+      description: 'Returns a Bill along with its list of bill details. By default active and non-cancelled bills will be returned when no value passed for active or cancelled. Along with tenantId, any one parameter is mandatory. By default results will be sorted by bill creation date'
+
+      parameters:
+        - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo'
+        - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId'
+        - name: billId
+          in: query
+          description: Id(s) of the Bill(s) to be returned
+          required: false
+          type: array
+          items:
+            type: string
+        - name: isActive
+          in: query
+          description: 'true when active bill required,  when inactive bill required.'
+          required: false
+          type: boolean
+        - name: isCancelled
+          in: query
+          description: 'true when cancelled bill required, false when non-cancelled bill required.'
+          required: false
+          type: boolean
+        - name: billType
+          in: query
+          description: Bill type. AUTO or MANUAL
+          required: false
+          type: string
+        - name: consumerCode
+          in: query
+          description: A unique identification for a billing entity.
+          required: false
+          type: string
+        - name: service
+          in: query
+          description: Name of the business service for which 'TaxHeadMaster' to be returned.
+          required: false
+          type: string
+        - name: size
+          in: query
+          description: size of the result set.
+          required: false
+          type: integer
+        - name: offset
+          in: query
+          description: starting index of the result set.
+          required: false
+          type: integer
+      tags:
+        - Bill
+      responses:
+        '200':
+          description: returns a Bill along with its bill details.
+          schema:
+            $ref: '#/definitions/BillResponse'
+        '400':
+          description: Invalid input
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+
+/bill/_generate:
+    post:
+      description: 'Creates a Bill for collections. By default active bill will be created. Along with tenantId, any one parameter is mandatory. The bill type is AUTO here.'
+
+      parameters:
+        - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo'
+        - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId'
+        - name: demandId
+          in: query
+          description: Primary key of Demand object.
+          required: false
+          type: integer
+          format: int64
+        - name: consumerCode
+          in: query
+          description: A unique identification for a demand entity with respect to the consumer and the service being consumer.
+          required: false
+          type: string
+        - name: businessService
+          in: query
+          description: 'The service which demand is generated e.g., PropertyTax,Water Charges etc.'
+          required: false
+          type: string
+        - name: email
+          in: query
+          description: Email Id of Primary owner of business detail.
+          required: false
+          type: string
+        - name: mobileNumber
+          in: query
+          description: Mobile number of Primary owner of business detail.
+          required: false
+          type: string
+      tags:
+        - Bill
+      responses:
+        '201':
+          description: 'Creates a Bill along with its bill details. Ex- If search is done using mobile number, combined bill will be generated, having information for each of the services(ex-Property tax, Water charges)'
+          schema:
+            $ref: '#/definitions/BillResponse'
+        '400':
+          description: Invalid input
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+  /bill/_fetchBill:
+    post:
+      description: 'Creates a Bill for collections. By default active bill will be created. Along with tenantId, any one parameter is mandatory. Trigers bill generate internally, Checks whether a demand exists for the given data in db else creates a new one throught the revenue services.'
+      parameters:
+        - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo'
+        - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId'
+        - name: demandId
+          in: query
+          description: Primary key of Demand object.
+          required: false
+          type: integer
+          format: int64
+        - name: consumerCode
+          in: query
+          description: A unique identification for a billing entity.
+          required: false
+          type: string
+        - name: businessService
+          in: query
+          description: 'Billing system details e.g., PropertyTax,Water Charges etc.'
+          required: true
+          type: string
+        - name: email
+          in: query
+          description: Email Id of Primary owner of business detail.
+          required: false
+          type: string
+        - name: mobileNumber
+          in: query
+          description: Mobile number of Primary owner of business detail.
+          required: false
+          type: string
+      tags:
+        - Bill
+      responses:
+        '201':
+          description: 'Creates a Bill along with its bill details. Ex- If search is done using mobile number, combined bill will be generated, having information for each of the services(ex-Property tax, Water charges)'
+          schema:
+            $ref: '#/definitions/BillResponse'
+        '400':
+          description: Invalid input
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+definitions:
+  Demand:
+    type: object
+    description: 'A Object which holds the basic info about the revenue assessment for which the demand is generated like module name, consumercode, owner, etc.'
+    properties:
+      id:
+        type: string
+        description: primary key of a demand.
+      tenantId:
+        type: string
+        description: Unique Identifier of the tenant
+        maxLength: 128
+        minLength: 4
+      consumerCode:
+        type: string
+        description: Unique identification of billing entity.
+      consumerType:
+        type: string
+        description: Consumer type of billing entity.
+      businessService:
+        type: string
+        description: 'Billing system e.g., Property Tax, Water Charges etc.'
+        maxLength: 256
+        minLength: 4
+      payer:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/egov-user/contracts/v1-1-0.yml#/definitions/User'
+      taxPeriodFrom:
+        type: integer
+        format: int64
+        description: start date from when the tax is applicable.
+      taxPeriodTo:
+        type: integer
+        format: int64
+        description: end date till when the tax is applicable.
+      demandDetails:
+        type: array
+        items:
+          $ref: '#/definitions/DemandDetail'
+      billExpiryTime:
+        type: integer
+        format: int64
+        description: Time in epoch indicating the period in which the bills generated for this particular demand expires or invalidates.
+      auditDetails:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/AuditDetails'
+      additionalDetails:
+        type: object
+        description: field for capturing any additional details.
+      status:
+        type: string
+        enum:
+          - ACTIVE
+          - CANCELLED
+          - ADJUSTED
+    required:
+      - taxPeriodFrom
+      - taxPeriodTo
+      - demandDetails
+      - consumerCode
+      - businessService
+      - minimumAmountPayable
+      - tenantId
+      - consumerType
+      - owner
+  DemandDetail:
+    type: object
+    description: A object holds a demand and collection values for a tax head and period.
+    properties:
+      id:
+        type: string
+        description: primary key of a DemandDetails.
+      demandId:
+        type: string
+        description: foriegn key of a DemandDetails from demand.
+      taxHeadMasterCode:
+        type: string
+        description: Tax Head code.
+        maxLength: 64
+        minLength: 2
+      taxAmount:
+        type: number
+        format: BigDecimal
+        description: demand amount.
+      collectionAmount:
+        type: number
+        default: 0
+        description: collection against taxAmount.
+      additionalDetails:
+        type: object
+        description: field for capturing any additional details.
+      auditDetails:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/AuditDetails'
+      tenantId:
+        type: string
+        description: Unique Identifier of the tenant
+        maxLength: 128
+        minLength: 4
+    required:
+      - taxHead
+      - taxAmount
+      - collectionAmount
+  TaxHeadMaster:
+    type: object
+    description: 'A object holds a tax heads for each reason category and service along with glcodes for financial posting, for example General tax, Edu cess, lib cess for TAX.'
+    properties:
+      id:
+        type: string
+        description: primary key of a TaxHeadMaster.
+      tenantId:
+        type: string
+        description: Unique Identifier of the tenant
+        maxLength: 128
+        minLength: 4
+      category:
+        type: string
+        description: 'Category of demand like tax, fee, rebate, penalty etc.'
+        enum:
+          - TAX
+          - FEE
+          - CHARGES
+          - REBATE
+          - ADVANCE_COLLECTION
+          - PENALTY
+          - FINES
+      service:
+        type: string
+        description: Service for which the Tax Head is defined.
+        maxLength: 64
+        minLength: 2
+      name:
+        type: string
+        description: Tax Head name.
+        maxLength: 64
+        minLength: 2
+      code:
+        type: string
+        description: Tax Head code.
+        maxLength: 64
+        minLength: 2
+      glcodes:
+        type: string
+      order:
+        type: integer
+        format: int64
+        description: Order of the tax heads in which the collection has to be done.
+      isDebit:
+        type: boolean
+        description: Particular demand goes as credit or debit.
+        default: false
+      auditDetails:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/AuditDetails'
+    required:
+      - name
+      - category
+      - service
+      - validFrom
+      - validTill
+      - tenantId
+  TaxPeriod:
+    type: object
+    description: An object which holds the tax period info
+    properties:
+      id:
+        type: string
+        description: Id of the bill
+      tenantId:
+        type: string
+        description: Unique Identifier of the tenant
+        maxLength: 128
+        minLength: 4
+      periodCycle:
+        type: string
+        description: A period cycle. One business service can have multiple period cycles.
+        enum:
+          - MONTH
+          - QUARTER
+          - HALFYEAR
+          - ANNUAL
+      fromDate:
+        type: integer
+        format: int64
+        description: 'Time in epoch, Start date for tax period'
+      toDate:
+        type: integer
+        format: int64
+        description: 'Time in epoch, End date for tax period'
+      service:
+        type: string
+        description: Name of the module this period belongs to.
+      code:
+        type: string
+        description: Description/Code of a tax period.
+      financialYear:
+        type: string
+        description: Financial year for which this period belongs.
+      auditDetails:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/AuditDetails'
+    required:
+      - id
+      - tenantId
+      - fromDate
+      - toDate
+      - service
+      - code
+  Bill:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Id of the bill
+      mobileNumber:
+        type: string
+        description: MobileNumber of the payer.
+      payerName:
+        type: string
+        description: name of the payer.
+      payerAddress:
+        type: string
+        description: Address details from the payer.
+      payerEmail:
+        type: string
+        description: email address of the payer.
+      status:
+        type: string
+        description: 'status of the bill .'
+        enum:
+          - ACTIVE
+          - CANCELLED
+          - PAID
+          - EXPIRED
+      totalAmount:
+        type: number
+      businessService:
+        type: string
+        description: BusinessService code.
+      billDate:
+        type: number
+        format: int64
+        description: Bill date.
+      billNumber:
+        type: string
+        description: Bill number.
+      consumerCode:
+        type: string
+        description: Consumer code of the entity for which the bill is being created.
+      collectionModesNotAllowed:
+        type: array
+        items:
+          type: string
+        description: List of collection modes not allowed.
+      partPaymentAllowed:
+        type: boolean
+        description: 'true if part payment allowed, false if part payment is not allowed.'
+      additionalDetails:
+        type: object
+        description: field for capturing any additional details.
+      billDetails:
+        type: array
+        items:
+          $ref: '#/definitions/BillDetail'
+      tenantId:
+        type: string
+        description: Unique Identifier of the tenant
+        maxLength: 128
+        minLength: 4
+      auditDetails:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/AuditDetails'
+  BillDetail:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Id of bill details
+      tenantId:
+        type: string
+        description: Unique Identifier of the tenant
+        maxLength: 256
+        minLength: 4
+      demandId:
+        type: string
+        description: Unique Identifier of the demand associated with the bill detail
+      billId:
+        type: string
+        description: Id of bill
+      expiryDate:
+        type: number
+        format: int64
+        description: end of bill validity in epoch time.
+      amount:
+        type: number
+        description: Total bill amount to be paid.
+      fromPeriod:
+        type: number
+        format: int64
+        description: starting date of the demand period referred by the bill detail.
+      toPeriod:
+        type: number
+        format: int64
+        description: ending date of the demand period referred by the bill detail.
+      additionalDetails:
+        type: object
+        description: field for capturing any additional details.
+      billAccountDetails:
+        type: array
+        items:
+          $ref: '#/definitions/BillAccountDetail'
+  BillAccountDetail:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Id of bill account details
+      tenantId:
+        type: string
+        description: Unique Identifier of the tenant
+        maxLength: 128
+        minLength: 4
+      billDetailId:
+        type: string
+        description: Id of billdetail
+      demandDetailId:
+        type: string
+        description: unique id of the demand detail object.
+      order:
+        type: integer
+        format: int32
+        description: Order number used for apportioning amount in case of part payment.
+      amount:
+        type: number
+        description: Credit account head amount to be paid.
+      isActualDemand:
+        type: boolean
+        description: True for tax/charges/penalty. False for advances(if any).
+      taxHeadCode:
+        type: string
+        description: field for capturing the taxhead-code value.
+      additionalDetails:
+        type: object
+        description: field for capturing any additional details.
+  BusinessServiceDetails:
+    type: object
+    description: The object holds the configuration details for each business service.
+    properties:
+      id:
+        type: string
+        description: Id of the bill
+      tenantId:
+        type: string
+        description: Unique Identifier of the tenant
+        maxLength: 128
+        minLength: 4
+      businessService:
+        type: string
+        description: BusinessService code.
+      collectionModesNotAllowed:
+        type: array
+        items:
+          type: string
+        description: List of collection modes not allowed.
+      partPaymentAllowed:
+        type: boolean
+        description: 'true if part payment allowed, false if part payment is not allowed.'
+      auditDetails:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/AuditDetails'
+  DemandRequest:
+    properties:
+      RequestInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+      Demand:
+        type: array
+        minimum: 1
+        maximum: 100
+        items:
+          $ref: '#/definitions/Demand'
+    type: object
+  DemandResponse:
+    properties:
+      ResponseInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+      Demands:
+        type: array
+        maximum: 500
+        items:
+          $ref: '#/definitions/Demand'
+    type: object
+  DemandDetailResponse:
+    properties:
+      ResponseInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+      DemandDetails:
+        type: array
+        maximum: 500
+        items:
+          $ref: '#/definitions/DemandDetail'
+    type: object
+  BillRequest:
+    properties:
+      RequestInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+      BillInfos:
+        type: array
+        minimum: 1
+        maximum: 100
+        items:
+          $ref: '#/definitions/Bill'
+    type: object
+  BillResponse:
+    properties:
+      ResponseInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+      Bill:
+        type: array
+        maximum: 500
+        items:
+          $ref: '#/definitions/Bill'
+    type: object
+  BusinessServiceDetailRequest:
+    properties:
+      RequestInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+      businessServiceDetails:
+        type: array
+        minimum: 1
+        maximum: 100
+        items:
+          $ref: '#/definitions/BusinessServiceDetails'
+    type: object
+  BusinessServiceDetailResponse:
+    properties:
+      ResponseInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+      businessServiceDetails:
+        type: array
+        maximum: 500
+        items:
+          $ref: '#/definitions/BusinessServiceDetails'
+    type: object
+  TaxHeadMasterRequest:
+    properties:
+      RequestInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+      taxHeadMasters:
+        type: array
+        minimum: 1
+        maximum: 100
+        items:
+          $ref: '#/definitions/TaxHeadMaster'
+    type: object
+  TaxHeadMasterResponse:
+    properties:
+      ResponseInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+      taxHeadMasters:
+        type: array
+        maximum: 500
+        items:
+          $ref: '#/definitions/TaxHeadMaster'
+    type: object
+  TaxPeriodRequest:
+    properties:
+      RequestInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+      taxPeriods:
+        type: array
+        minimum: 1
+        maximum: 100
+        items:
+          $ref: '#/definitions/TaxPeriod'
+    type: object
+  TaxPeriodResponse:
+    properties:
+      ResponseInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+      taxPeriods:
+        type: array
+        maximum: 500
+        items:
+          $ref: '#/definitions/TaxPeriod'
+    type: object
+  taxAndPayment:
+    properties:
+      businessService:
+        type: string
+        description: unique code of the business service
+      taxAmount:
+        type: string
+        description: amount to be paid by the payer
+      amountPaid:
+        type: string
+        description: amount paid by the payer

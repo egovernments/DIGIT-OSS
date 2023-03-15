@@ -1,0 +1,61 @@
+{
+  "moduleName": "Localization",
+  "Definitions": [
+    {
+      "name": "Upload-Localization-Messages",
+      "uniqueParentKeys": [],
+      "templateFileName": "localization_template.xls",
+      "isParentChild": false,
+      "requests": [
+        {
+          "apiRequest": {
+            "RequestInfo": {
+              "apiId": "localization",
+              "ver": null,
+              "ts": null,
+              "action": null,
+              "did": null,
+              "key": null,
+              "msgId": "search with from and to values",
+              "authToken": "cdc03e03-8b26-49ca-9c15-3ccc9c91c1ec"
+            },
+            "tenantId": "pb",
+            "messages": [
+              {
+                "code": "SERVICEDEFS.DAMAGEDGARBAGEBIN",
+                "message": "Damaged Garbage Bin",
+                "module": "rainmaker-pgr",
+                "locale": "en_IN"
+              }
+            ]
+          },
+          "excelHeadersToRequestMap": {
+            "Code": [
+              "$.messages.*.code"
+            ],
+            "Locale": [
+              "$.messages.*.locale"
+            ],
+            "Message": [
+              "$.messages.*.message"
+            ],
+            "Module": [
+              "$.messages.*.module"
+            ],
+            "TenantId": [
+              "$.tenantId"
+            ]
+          },
+          "arrayPath": "$.messages.*",
+          "tenantIdPaths": [
+            "$.messages.*.tenantId"
+          ],
+          "url": "http://egov-localization:8080/localization/messages/v1/_create",
+          "additionalResFields":{
+            "$.messages.*.code[0]":"Response"
+          }
+        }
+      ]
+    }
+  ]
+}

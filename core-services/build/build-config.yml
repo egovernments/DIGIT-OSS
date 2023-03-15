@@ -1,0 +1,275 @@
+#
+# config:
+# -   name: < Name of the job, foo/bar would create job named bar inside folder foo >
+#     build:
+#     - work-dir: < Working directory of the app to be built >
+#       dockerfile: < Path to the dockerfile, optional, assumes dockerfile in working directory if not provided >
+#       image-name: < Docker image name  >
+# -
+# -
+config:
+  - name: "builds/core-services/egov-accesscontrol"
+    build:
+      - work-dir: "egov-accesscontrol"
+        image-name: "egov-accesscontrol"
+        dockerfile: "build/maven/Dockerfile"
+
+  - name: "builds/core-services/egov-common-masters"
+    build:
+      - work-dir: "egov-common-masters"
+        image-name: "egov-common-masters"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "egov-common-masters/src/main/resources/db"
+        image-name: "egov-common-masters-db"
+
+  - name: "builds/core-services/egov-data-uploader"
+    build:
+      - work-dir: "egov-data-uploader"
+        image-name: "egov-data-uploader"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "egov-data-uploader/src/main/resources/db"
+        image-name: "egov-data-uploader-db"
+
+  - name: "builds/core-services/egov-enc-service"
+    build:
+      - work-dir: "egov-enc-service"
+        image-name: "egov-enc-service"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "egov-enc-service/src/main/resources/db"
+        image-name: "egov-enc-service-db"
+
+  - name: "builds/core-services/egov-filestore"
+    build:
+      - work-dir: "egov-filestore"
+        image-name: "egov-filestore"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "egov-filestore/src/main/resources/db"
+        image-name: "egov-filestore-db"
+
+  - name: "builds/core-services/egov-idgen"
+    build:
+      - work-dir: "egov-idgen"
+        image-name: "egov-idgen"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "egov-idgen/src/main/resources/db"
+        image-name: "egov-idgen-db"
+
+  - name: "builds/core-services/egov-indexer"
+    build:
+      - work-dir: "egov-indexer"
+        image-name: "egov-indexer"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "egov-indexer/src/main/resources/db"
+        image-name: "egov-indexer-db"
+
+  - name: "builds/core-services/egov-localization"
+    build:
+      - work-dir: "egov-localization"
+        image-name: "egov-localization"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "egov-localization/src/main/resources/db"
+        image-name: "egov-localization-db"
+
+  - name: "builds/core-services/egov-location"
+    build:
+      - work-dir: "egov-location"
+        image-name: "egov-location"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "egov-location/src/main/resources/db"
+        image-name: "egov-location-db"
+
+  - name: "builds/core-services/egov-mdms-service"
+    build:
+      - work-dir: "egov-mdms-service"
+        image-name: "egov-mdms-service"
+        dockerfile: "build/maven/Dockerfile"
+
+  - name: "builds/core-services/egov-notification-mail"
+    build:
+      - work-dir: "egov-notification-mail"
+        image-name: "egov-notification-mail"
+        dockerfile: "build/maven/Dockerfile"
+
+  - name: "builds/core-services/egov-notification-sms"
+    build:
+      - work-dir: "egov-notification-sms"
+        image-name: "egov-notification-sms"
+        dockerfile: "build/maven/Dockerfile"
+
+  - name: "builds/core-services/egov-otp"
+    build:
+      - work-dir: "egov-otp"
+        image-name: "egov-otp"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "egov-otp/src/main/resources/db"
+        image-name: "egov-otp-db"
+
+  - name: "builds/core-services/egov-persister"
+    build:
+      - work-dir: "egov-persister"
+        image-name: "egov-persister"
+        dockerfile: "build/maven/Dockerfile"
+
+  - name: "builds/core-services/egov-pg-service"
+    build:
+      - work-dir: "egov-pg-service"
+        image-name: "egov-pg-service"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "egov-pg-service/src/main/resources/db"
+        image-name: "egov-pg-service-db"
+
+  - name: "builds/core-services/egov-searcher"
+    build:
+      - work-dir: "egov-searcher"
+        image-name: "egov-searcher"
+        dockerfile: "build/maven/Dockerfile"
+
+  - name: "builds/core-services/egov-telemetry"
+    build:
+      - work-dir: "egov-telemetry"
+        image-name: "egov-telemetry"
+        dockerfile: "build/maven/Dockerfile"
+
+  - name: "builds/core-services/egov-user"
+    build:
+      - work-dir: "egov-user"
+        image-name: "egov-user"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "egov-user/src/main/resources/db"
+        image-name: "egov-user-db"
+
+  - name: "builds/core-services/egov-workflow-v2"
+    build:
+      - work-dir: "egov-workflow-v2"
+        image-name: "egov-workflow-v2"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "egov-workflow-v2/src/main/resources/db"
+        image-name: "egov-workflow-v2-db"
+
+  - name: "builds/core-services/report"
+    build:
+      - work-dir: "report"
+        image-name: "report"
+        dockerfile: "build/maven/Dockerfile"   
+
+  - name: "builds/core-services/tenant"
+    build:
+      - work-dir: "tenant"
+        image-name: "tenant"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "tenant/src/main/resources/db"
+        image-name: "tenant-db"
+
+  - name: "builds/core-services/user-otp"
+    build:
+      - work-dir: "user-otp"
+        image-name: "user-otp"
+        dockerfile: "build/maven/Dockerfile"
+
+  - name: "builds/core-services/zuul"
+    build:
+      - work-dir: "zuul"
+        image-name: "zuul"
+        dockerfile: "build/maven/Dockerfile"
+
+  - name: "builds/core-services/internal-gateway"
+    build:
+      - work-dir: "internal-gateway"
+        image-name: "internal-gateway"
+        dockerfile: "build/maven/Dockerfile"
+        
+  - name: "builds/core-services/egov-user-event"
+    build:
+      - work-dir: "egov-user-event"
+        image-name: "egov-user-event"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "egov-user-event/src/main/resources/db"
+        image-name: "egov-user-event-db"
+        dockerfile: "build/maven/Dockerfile"       
+
+  - name: "builds/core-services/pdf-service"
+    build:
+      - work-dir: "pdf-service"
+        image-name: "pdf-service"
+      - work-dir: "pdf-service/migration"
+        image-name: "pdf-service-db"
+        
+  - name: "builds/core-services/telemetry/egov-telemetry-kafka-streams"
+    build:
+      - work-dir: "egov-telemetry/egov-telemetry-kafka-streams"
+        image-name: "egov-telemetry-kafka-streams"
+
+  - name: "builds/core-services/telemetry/egov-telemetry-batch-process"
+    build:
+      - work-dir: "egov-telemetry/egov-telemetry-batch-process"
+        image-name: "egov-telemetry-batch-process"
+        dockerfile: "build/maven/Dockerfile"
+  
+  - name: "builds/core-services/egov-url-shortening"
+    build:
+      - work-dir: "egov-url-shortening"
+        image-name: "egov-url-shortening"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "egov-url-shortening/src/main/resources/db"
+        image-name: "egov-url-shortening-db"
+  
+  - name: "builds/core-services/chatbot"
+    build:
+      - work-dir: "chatbot"
+        image-name: "chatbot"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "chatbot/src/main/resources/db"
+        image-name: "chatbot-db"
+        
+  - name: "builds/core-services/http-to-kafka-connector"
+    build:
+      - work-dir: "http-to-kafka-connector"
+        image-name: "whatsapp-webhook"
+
+  - name: "builds/core-services/egov-user-chatbot"
+    build:
+      - work-dir: "egov-user"
+        image-name: "egov-user-chatbot"
+        dockerfile: "build/maven/Dockerfile"
+
+  - name: "builds/core-services/mailbot"
+    build:
+      - work-dir: "mailbot"
+        image-name: "mailbot"
+        dockerfile: "build/maven/Dockerfile"
+
+  - name: "builds/core-services/libraries/enc-client"
+    build:
+      - work-dir: "libraries/enc-client"
+        image-name: "enc-client"
+        
+  - name: "builds/core-services/libraries/tracer"
+    build:
+      - work-dir: "libraries/tracer"
+        image-name: "tracer"
+  
+  - name: "builds/core-services/libraries/services-common"
+    build:
+      - work-dir: "libraries/services-common"
+        image-name: "services-common"
+
+  - name: "builds/core-services/nlp-engine"
+    build:
+      - work-dir: "nlp-engine"
+        image-name: "nlp-engine"
+        dockerfile: "nlp-engine/Dockerfile"
+
+  - name: "builds/core-services/xstate-chatbot"
+    build:
+      - work-dir: "xstate-chatbot/nodejs"
+        image-name: "xstate-chatbot"
+      - work-dir: "xstate-chatbot/nodejs/db"
+        image-name: "xstate-chatbot-db"
+
+  - name: "builds/core-services/egov-document-uploader"
+    build:
+      - work-dir: "egov-document-uploader"
+        image-name: "egov-document-uploader"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "egov-document-uploader/src/main/resources/db"
+        image-name: "egov-document-uploader-db"

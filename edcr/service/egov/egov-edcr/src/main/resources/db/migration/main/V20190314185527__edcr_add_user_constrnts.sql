@@ -1,0 +1,13 @@
+ALTER TABLE edcr_application ADD CONSTRAINT fk_edcr_application_crtedby FOREIGN KEY (createdby) REFERENCES state.eg_user(id);
+ALTER TABLE edcr_application ADD CONSTRAINT fk_edcr_application_mdfdby FOREIGN KEY (lastmodifiedby) REFERENCES state.eg_user(id);
+ALTER TABLE edcr_application ADD CONSTRAINT fk_edcr_appln_bldg_licensee FOREIGN KEY (buildinglicensee) REFERENCES state.eg_user(id);
+ALTER TABLE edcr_application_detail ADD CONSTRAINT fk_edcr_dxf_document_crtby FOREIGN KEY (createdby) REFERENCES state.eg_user(id);
+ALTER TABLE edcr_application_detail ADD CONSTRAINT fk_edcr_dxf_document_mdfdby FOREIGN KEY (lastmodifiedby) REFERENCES state.eg_user(id);
+ALTER TABLE edcr_planinfo ADD CONSTRAINT fk_edcr_planinfo_crtedby FOREIGN KEY (createdby) REFERENCES state.eg_user(id);
+ALTER TABLE edcr_planinfo ADD CONSTRAINT fk_edcr_planinfo_mdfdby FOREIGN KEY (lastmodifiedby) REFERENCES state.eg_user(id);
+ALTER TABLE edcr_planrule ADD CONSTRAINT fk_edcr_planrule_crtby FOREIGN KEY (createdby) REFERENCES state.eg_user(id);
+ALTER TABLE edcr_planrule ADD CONSTRAINT fk_edcr_planrule_mdfdby FOREIGN KEY (lastmodifiedby) REFERENCES state.eg_user(id);
+ALTER TABLE edcr_rule ADD CONSTRAINT fk_edcr_rule_crtby FOREIGN KEY (createdby) REFERENCES state.eg_user(id);
+ALTER TABLE edcr_rule ADD CONSTRAINT fk_edcr_rule_mdfdby FOREIGN KEY (lastmodifiedby) REFERENCES state.eg_user(id);
+ALTER TABLE edcr_subrule ADD CONSTRAINT fk_edcr_subrule_crtby FOREIGN KEY (createdby) REFERENCES state.eg_user(id);
+ALTER TABLE edcr_subrule ADD CONSTRAINT fk_edcr_subrule_mdfdby FOREIGN KEY (lastmodifiedby) REFERENCES state.eg_user(id);

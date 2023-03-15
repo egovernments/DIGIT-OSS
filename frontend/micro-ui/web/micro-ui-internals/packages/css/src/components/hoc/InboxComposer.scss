@@ -1,0 +1,115 @@
+.InboxComposerWrapper {
+  .form-field-flex-one {
+    .form-field {
+      @apply flex-1;
+    }
+  }
+}
+
+.inboxPopupMobileWrapper {
+  @apply block p-md w-full overflow-scroll;
+  .submit {
+    @apply flex left-0 w-full px-xl items-center flex-row-reverse !important;
+  }
+  .form-field {
+    margin: 0 !important;
+    @apply w-full;
+  }
+  .InboxMobilePopupCloseButtonWrapper {
+    @apply flex flex-row-reverse;
+  }
+}
+
+@screen dt {
+  .InboxComposerWrapper {
+    grid-template-columns: calc(25% - 32px) 75%;
+    @apply grid gap-x-8 gap-y-6;
+  }
+
+  .wns-inbox-composer {
+    .filter-form {
+      height: fit-content;
+    }
+
+    .wns-search-field {
+      width: 30% !important;
+      .field-container {
+      }
+    }
+    .form-field {
+      width: 100% !important;
+    }
+
+    .SubmitAndClearAllContainer {
+      width: 100%;
+      display: flex;
+      justify-content: end;
+      align-items: center;
+      .clear-search {
+        width: 30%;
+        display: inline-block;
+        vertical-align: middle;
+        text-align: right;
+        cursor: pointer;
+        p {
+          padding: 1rem;
+          color: rgb(244, 119, 56);
+          text-align: end;
+        }
+      }
+      .submit {
+        width: 30% !important;
+        margin-left: unset !important;
+        button {
+          width: 100% !important;
+        }
+      }
+    }
+  }
+
+  .search-form-wns-inbox {
+    .clear-search-container {
+      grid-column: 2/3;
+      text-align: right;
+      .clear-search {
+        width: 100%;
+        color: rgb(244, 119, 56);
+      }
+    }
+    button {
+      width: 100%;
+    }
+
+    .filter-form {
+      height: fit-content;
+    }
+
+    .search-complaint-container {
+      flex-direction: column;
+      align-items: flex-start;
+      --bg-opacity: 1;
+      background-color: #fff;
+      background-color: rgba(255, 255, 255, var(--bg-opacity));
+      padding: 16px;
+      display: unset;
+      flex-wrap: unset;
+      justify-content: unset;
+      margin-bottom: 0;
+      .complaint-input-container {
+        display: grid;
+        grid-template-columns: 33.33% 33.33% 33.33%;
+      }
+      .form-field {
+        width: 100%;
+        padding-right: 15px;
+        .clear-search {
+          padding-top: 10px;
+        }
+      }
+    }
+    .submit {
+      margin-top: 0;
+      right: 0;
+    }
+  }
+}

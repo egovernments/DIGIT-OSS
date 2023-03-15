@@ -1,0 +1,220 @@
+serviceMaps:
+  serviceName: apportion-services
+  mappings:
+  - version: 1.0
+    description: Persists apportioning request
+    fromTopic: save-apportion-request
+    isTransaction: true
+    queryMaps:
+
+    - query: INSERT INTO eg_appr_bills_request(billId,tenantid,mobileNumber,payerName,payerAddress,payerEmail,paidBy,taxAndPayments,isActive,isCancelled,billDetails,createdBy,createdTime) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)
+      basePath: Bills.*
+      jsonMaps:
+      - jsonPath: $.Bills.*.id
+
+      - jsonPath: $.Bills.*.tenantId
+
+      - jsonPath: $.Bills.*.mobileNumber
+
+      - jsonPath: $.Bills.*.payerName
+
+      - jsonPath: $.Bills.*.payerAddress
+
+      - jsonPath: $.Bills.*.payerEmail
+
+      - jsonPath: $.Bills.*.paidBy
+
+      - jsonPath: $.Bills.*.taxAndPayments
+        type: JSON
+        dbType: JSONB
+
+      - jsonPath: $.Bills.*.isActive
+
+      - jsonPath: $.Bills.*.isCancelled
+
+      - jsonPath: $.Bills.*.billDetails
+        type: JSON
+        dbType: JSONB
+
+      - jsonPath: $.Bills.*.auditDetails.createdBy
+
+      - jsonPath: $.Bills.*.auditDetails.createdTime
+
+
+  - version: 1.0
+    description: Persists apportioning response
+    fromTopic: save-apportion-response
+    isTransaction: true
+    queryMaps:
+
+    - query: INSERT INTO eg_appr_bills_response(billId,tenantid,mobileNumber,payerName,payerAddress,payerEmail,paidBy,taxAndPayments,isActive,isCancelled,billDetails,createdBy,createdTime) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)
+      basePath: Bills.*
+      jsonMaps:
+      - jsonPath: $.Bills.*.id
+
+      - jsonPath: $.Bills.*.tenantId
+
+      - jsonPath: $.Bills.*.mobileNumber
+
+      - jsonPath: $.Bills.*.payerName
+
+      - jsonPath: $.Bills.*.payerAddress
+
+      - jsonPath: $.Bills.*.payerEmail
+
+      - jsonPath: $.Bills.*.paidBy
+
+      - jsonPath: $.Bills.*.taxAndPayments
+        type: JSON
+        dbType: JSONB
+
+      - jsonPath: $.Bills.*.isActive
+
+      - jsonPath: $.Bills.*.isCancelled
+
+      - jsonPath: $.Bills.*.billDetails
+        type: JSON
+        dbType: JSONB
+
+      - jsonPath: $.Bills.*.auditDetails.createdBy
+
+      - jsonPath: $.Bills.*.auditDetails.createdTime
+
+  - version: 1.0
+    description: Persists apportioning request
+    fromTopic: save-apportion-bill-request
+    isTransaction: true
+    queryMaps:
+
+    - query: INSERT INTO eg_appr_bills_request(billId,tenantid,mobileNumber,payerName,payerAddress,payerEmail,paidBy,taxAndPayments,isActive,isCancelled,billDetails,createdBy,createdTime) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)
+      basePath: Bills.*
+      jsonMaps:
+      - jsonPath: $.Bills.*.id
+
+      - jsonPath: $.Bills.*.tenantId
+
+      - jsonPath: $.Bills.*.mobileNumber
+
+      - jsonPath: $.Bills.*.payerName
+
+      - jsonPath: $.Bills.*.payerAddress
+
+      - jsonPath: $.Bills.*.payerEmail
+
+      - jsonPath: $.Bills.*.paidBy
+
+      - jsonPath: $.Bills.*.taxAndPayments
+        type: JSON
+        dbType: JSONB
+
+      - jsonPath: $.Bills.*.isActive
+
+      - jsonPath: $.Bills.*.isCancelled
+
+      - jsonPath: $.Bills.*.billDetails
+        type: JSON
+        dbType: JSONB
+
+      - jsonPath: $.Bills.*.auditDetails.createdBy
+
+      - jsonPath: $.Bills.*.auditDetails.createdTime
+
+
+  - version: 1.0
+    description: Persists apportioning response
+    fromTopic: save-apportion-bill-response
+    isTransaction: true
+    queryMaps:
+
+    - query: INSERT INTO eg_appr_bills_response(billId,tenantid,mobileNumber,payerName,payerAddress,payerEmail,paidBy,taxAndPayments,isActive,isCancelled,billDetails,createdBy,createdTime) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)
+      basePath: Bills.*
+      jsonMaps:
+      - jsonPath: $.Bills.*.id
+
+      - jsonPath: $.Bills.*.tenantId
+
+      - jsonPath: $.Bills.*.mobileNumber
+
+      - jsonPath: $.Bills.*.payerName
+
+      - jsonPath: $.Bills.*.payerAddress
+
+      - jsonPath: $.Bills.*.payerEmail
+
+      - jsonPath: $.Bills.*.paidBy
+
+      - jsonPath: $.Bills.*.taxAndPayments
+        type: JSON
+        dbType: JSONB
+
+      - jsonPath: $.Bills.*.isActive
+
+      - jsonPath: $.Bills.*.isCancelled
+
+      - jsonPath: $.Bills.*.billDetails
+        type: JSON
+        dbType: JSONB
+
+      - jsonPath: $.Bills.*.auditDetails.createdBy
+
+      - jsonPath: $.Bills.*.auditDetails.createdTime
+
+
+  - version: 1.0
+    description: Persists apportioning request
+    fromTopic: save-apportion-demand-request
+    isTransaction: true
+    queryMaps:
+
+    - query: INSERT INTO eg_appr_demand_request(demandId,tenantid,consumerCode,demandDetails,taxPeriodFrom,taxPeriodTo,status,createdBy,createdTime) VALUES (?,?,?,?,?,?,?,?,?)
+      basePath: Demands.*
+      jsonMaps:
+      - jsonPath: $.Demands.*.id
+
+      - jsonPath: $.Demands.*.tenantId
+
+      - jsonPath: $.Demands.*.consumerCode
+
+      - jsonPath: $.Demands.*.demandDetails
+        type: JSON
+        dbType: JSONB
+
+      - jsonPath: $.Demands.*.taxPeriodFrom
+
+      - jsonPath: $.Demands.*.taxPeriodTo
+
+      - jsonPath: $.Demands.*.status
+
+      - jsonPath: $.Demands.*.auditDetails.createdBy
+
+      - jsonPath: $.Demands.*.auditDetails.createdTime
+
+
+  - version: 1.0
+    description: Persists apportioning response
+    fromTopic: save-apportion-demand-response
+    isTransaction: true
+    queryMaps:
+
+    - query: INSERT INTO eg_appr_demand_response(demandId,tenantid,consumerCode,demandDetails,taxPeriodFrom,taxPeriodTo,status,createdBy,createdTime) VALUES (?,?,?,?,?,?,?,?,?)
+      basePath: Demands.*
+      jsonMaps:
+      - jsonPath: $.Demands.*.id
+
+      - jsonPath: $.Demands.*.tenantId
+
+      - jsonPath: $.Demands.*.consumerCode
+
+      - jsonPath: $.Demands.*.demandDetails
+        type: JSON
+        dbType: JSONB
+
+      - jsonPath: $.Demands.*.taxPeriodFrom
+
+      - jsonPath: $.Demands.*.taxPeriodTo
+
+      - jsonPath: $.Demands.*.status
+
+      - jsonPath: $.Demands.*.auditDetails.createdBy
+
+      - jsonPath: $.Demands.*.auditDetails.createdTime

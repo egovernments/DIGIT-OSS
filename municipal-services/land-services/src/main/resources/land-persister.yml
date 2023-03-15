@@ -1,0 +1,539 @@
+serviceMaps:
+ serviceName: land-services
+ mappings:
+ - version: 1.0
+   description: Persists landinfo details in EG_LandInfo_BuildingPlan  table
+   fromTopic: save-landinfo
+   isTransaction: true
+   queryMaps:
+
+       - query: INSERT INTO eg_land_landInfo(id, landUId,landUniqueRegNo,tenantId, status, ownershipCategory, source, channel, additionalDetails, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?,  ?, ?, ?, ?, ?, ?, ?, ?, ?); 
+         basePath: LandInfo
+         jsonMaps:
+          - jsonPath: $.LandInfo.id
+
+          - jsonPath: $.LandInfo.landUId
+
+          - jsonPath: $.LandInfo.landUniqueRegNo
+
+          - jsonPath: $.LandInfo.tenantId
+
+          - jsonPath: $.LandInfo.status
+
+          - jsonPath: $.LandInfo.ownershipCategory
+
+          - jsonPath: $.LandInfo.source
+
+          - jsonPath: $.LandInfo.channel
+
+          - jsonPath: $.LandInfo.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.LandInfo.auditDetails.createdBy
+
+          - jsonPath: $.LandInfo.auditDetails.lastModifiedBy
+
+          - jsonPath: $.LandInfo.auditDetails.createdTime
+
+          - jsonPath: $.LandInfo.auditDetails.lastModifiedTime
+
+
+       - query: INSERT INTO eg_land_Address( id, tenantid, doorno, plotno,landmark, city, district, region, state, country, pincode, additiondetails, buildingname, street, locality, landInfoId, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) 
+         basePath: LandInfo.address
+         jsonMaps:
+          - jsonPath: $.LandInfo.address.id
+
+          - jsonPath: $.LandInfo.address.tenantId
+
+          - jsonPath: $.LandInfo.address.doorNo
+
+          - jsonPath: $.LandInfo.address.plotNo
+
+          - jsonPath: $.LandInfo.address.landmark
+
+          - jsonPath: $.LandInfo.address.city
+
+          - jsonPath: $.LandInfo.address.district
+
+          - jsonPath: $.LandInfo.address.region
+
+          - jsonPath: $.LandInfo.address.state
+
+          - jsonPath: $.LandInfo.address.country
+
+          - jsonPath: $.LandInfo.address.pincode
+
+          - jsonPath: $.LandInfo.address.additionDetails
+
+          - jsonPath: $.LandInfo.address.buildingName
+
+          - jsonPath: $.LandInfo.address.street
+
+          - jsonPath: $.LandInfo.address.locality.code
+
+          - jsonPath: $.LandInfo.id
+
+          - jsonPath: $.LandInfo.address.auditDetails.createdBy
+
+          - jsonPath: $.LandInfo.address.auditDetails.lastModifiedBy
+
+          - jsonPath: $.LandInfo.address.auditDetails.createdTime
+
+          - jsonPath: $.LandInfo.address.auditDetails.lastModifiedTime
+
+
+       - query: INSERT INTO eg_land_ownerInfo( id, uuid, isprimaryowner, ownershippercentage, institutionId, additionalDetails, landInfoId, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+         basePath: LandInfo.owners.*
+         jsonMaps:
+          - jsonPath: $.LandInfo.owners.*.ownerId
+
+          - jsonPath: $.LandInfo.owners.*.uuid
+
+          - jsonPath: $.LandInfo.owners.*.isPrimaryOwner
+
+          - jsonPath: $.LandInfo.owners.*.ownerShipPercentage
+
+          - jsonPath: $.LandInfo.owners.*.institutionId
+
+          - jsonPath: $.LandInfo.owners.*.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.LandInfo.id
+
+          - jsonPath: $.LandInfo.owners.*.auditDetails.createdBy
+
+          - jsonPath: $.LandInfo.owners.*.auditDetails.lastModifiedBy
+
+          - jsonPath: $.LandInfo.owners.*.auditDetails.createdTime
+
+          - jsonPath: $.LandInfo.owners.*.auditDetails.lastModifiedTime
+
+
+       - query: INSERT INTO eg_land_institution( id, tenantId, type, designation, nameOfAuthorizedPerson, additionalDetails, landInfoId) VALUES (?, ?, ?, ?, ?, ?, ?);
+         basePath: LandInfo.institution
+         jsonMaps:
+          - jsonPath: $.LandInfo.institution.id
+
+          - jsonPath: $.LandInfo.institution.tenantId
+
+          - jsonPath: $.LandInfo.institution.type
+
+          - jsonPath: $.LandInfo.institution.designation
+
+          - jsonPath: $.LandInfo.institution.nameOfAuthorizedPerson
+
+          - jsonPath: $.LandInfo.institution.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.LandInfo.id
+
+
+       - query: INSERT INTO eg_land_document( id, documenttype, fileStoreId, documentUid, additionalDetails, landInfoId, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+         basePath: LandInfo.documents.*
+         jsonMaps:
+          - jsonPath: $.LandInfo.documents.*.id
+
+          - jsonPath: $.LandInfo.documents.*.documentType
+
+          - jsonPath: $.LandInfo.documents.*.fileStoreId
+
+          - jsonPath: $.LandInfo.documents.*.documentuid
+
+          - jsonPath: $.LandInfo.documents.*.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.LandInfo.id
+
+          - jsonPath: $.LandInfo.documents.*.auditDetails.createdBy
+
+          - jsonPath: $.LandInfo.documents.*.auditDetails.lastModifiedBy
+
+          - jsonPath: $.LandInfo.documents.*.auditDetails.createdTime
+
+          - jsonPath: $.LandInfo.documents.*.auditDetails.lastModifiedTime
+
+
+       - query: INSERT INTO eg_land_unit( id,tenantid, floorNo, unitType, usageCategory,occupancyType, occupancyDate,additionaldetails, landInfoId, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+         basePath: LandInfo.unit.*
+         jsonMaps:
+          - jsonPath: $.LandInfo.unit.*.id
+
+          - jsonPath: $.LandInfo.unit.*.tenantId
+
+          - jsonPath: $.LandInfo.unit.*.floorNo
+
+          - jsonPath: $.LandInfo.unit.*.unitType
+
+          - jsonPath: $.LandInfo.unit.*.usageCategory
+
+          - jsonPath: $.LandInfo.unit.*.occupancyType
+
+          - jsonPath: $.LandInfo.unit.*.occupancyDate
+
+          - jsonPath: $.LandInfo.unit.*.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.LandInfo.id
+
+          - jsonPath: $.LandInfo.unit.*.auditDetails.createdBy
+
+          - jsonPath: $.LandInfo.unit.*.auditDetails.lastModifiedBy
+
+          - jsonPath: $.LandInfo.unit.*.auditDetails.createdTime
+
+          - jsonPath: $.LandInfo.unit.*.auditDetails.lastModifiedTime
+
+
+       - query: INSERT INTO eg_land_geolocation( id, latitude, longitude, additionaldetails, addressid) VALUES (?, ?, ?, ?, ?);
+         basePath: LandInfo.address.geoLocation
+         jsonMaps:
+          - jsonPath: $.LandInfo.address.geoLocation.id
+
+          - jsonPath: $.LandInfo.address.geoLocation.latitude
+            type: DOUBLE
+            dbType: DOUBLE
+
+          - jsonPath: $.LandInfo.address.geoLocation.longitude
+            type: DOUBLE
+            dbType: DOUBLE
+
+          - jsonPath: $.LandInfo.address.geoLocation.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.LandInfo.address.id
+
+
+       - query: INSERT INTO eg_land_auditdetails SELECT * FROM eg_land_landInfo WHERE id =?;
+         basePath: LandInfo
+         jsonMaps:
+
+          - jsonPath: $.LandInfo.id
+
+
+       - query: INSERT INTO eg_land_owner_auditdetails SELECT * FROM eg_land_ownerInfo WHERE id =?;
+         basePath: LandInfo.owners.*
+         jsonMaps:
+
+          - jsonPath: $.LandInfo.owners.*.ownerId
+
+
+       - query: INSERT INTO eg_land_institution_auditdetails SELECT * FROM eg_land_institution WHERE id =?;
+         basePath: LandInfo.institution
+         jsonMaps:
+
+          - jsonPath: $.LandInfo.institution.id
+
+
+       - query: INSERT INTO eg_land_unit_auditdetails SELECT * FROM eg_land_unit WHERE id =?;
+         basePath: LandInfo.unit.*
+         jsonMaps:
+
+          - jsonPath: $.LandInfo.unit.*.id
+
+
+       - query: INSERT INTO eg_land_address_auditdetails SELECT * FROM eg_land_address WHERE id =?;
+         basePath: LandInfo.address
+         jsonMaps:
+
+          - jsonPath: $.LandInfo.address.id
+
+
+       - query: INSERT INTO eg_land_geolocation_auditdetails SELECT * FROM eg_land_geolocation WHERE id =?;
+         basePath: LandInfo.address.geoLocation
+         jsonMaps:
+
+          - jsonPath: $.LandInfo.address.geoLocation.id
+
+
+
+ - version: 1.0
+   description: update LandInfo details in eg_land_landinfo table
+   fromTopic: update-landinfo
+   isTransaction: true
+   queryMaps:
+       - query: UPDATE eg_land_landInfo SET landUId =? ,landUniqueRegNo =?,tenantId =?, status =?, ownershipCategory =?, source =? , channel =?, additionalDetails =?, lastmodifiedby =?, lastmodifiedtime =? WHERE id=?;
+         basePath: LandInfo
+         jsonMaps:
+          - jsonPath: $.LandInfo.landUId
+
+          - jsonPath: $.LandInfo.landUniqueRegNo
+
+          - jsonPath: $.LandInfo.tenantId
+
+          - jsonPath: $.LandInfo.status
+
+          - jsonPath: $.LandInfo.ownershipCategory
+
+          - jsonPath: $.LandInfo.source
+
+          - jsonPath: $.LandInfo.channel
+
+          - jsonPath: $.LandInfo.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.LandInfo.auditDetails.lastModifiedBy
+
+          - jsonPath: $.LandInfo.auditDetails.lastModifiedTime
+
+          - jsonPath: $.LandInfo.id          
+
+
+       - query: INSERT INTO eg_land_auditdetails SELECT * FROM eg_land_landInfo WHERE id =?;
+         basePath: LandInfo
+         jsonMaps:
+
+           - jsonPath: $.LandInfo.id
+
+
+       - query: UPDATE eg_land_address SET  doorno=?, plotno=?, district=?, region=?, state=?, country=?, pincode=?, additiondetails=?, buildingname=?, street=?, landmark=?, city=?, locality=?, lastmodifiedby=?, lastmodifiedtime=? WHERE id=?;
+         basePath: LandInfo.address
+         jsonMaps:
+
+          - jsonPath: $.LandInfo.address.doorNo
+
+          - jsonPath: $.LandInfo.address.plotNo
+
+          - jsonPath: $.LandInfo.address.district
+
+          - jsonPath: $.LandInfo.address.region
+
+          - jsonPath: $.LandInfo.address.state
+
+          - jsonPath: $.LandInfo.address.country
+
+          - jsonPath: $.LandInfo.address.pincode
+
+          - jsonPath: $.LandInfo.address.additionDetails
+
+          - jsonPath: $.LandInfo.address.buildingName
+
+          - jsonPath: $.LandInfo.address.street
+
+          - jsonPath: $.LandInfo.address.landmark
+
+          - jsonPath: $.LandInfo.address.city
+
+          - jsonPath: $.LandInfo.address.locality.code
+
+          - jsonPath: $.LandInfo.auditDetails.lastModifiedBy
+
+          - jsonPath: $.LandInfo.auditDetails.lastModifiedTime
+
+          - jsonPath: $.LandInfo.address.id
+
+       - query: UPDATE eg_land_geolocation SET latitude =?, longitude=?, additionaldetails=?, addressid=? WHERE id = ?;
+         basePath: LandInfo.address.geoLocation
+         jsonMaps:         
+          - jsonPath: $.LandInfo.address.geoLocation.latitude
+            type: DOUBLE
+            dbType: DOUBLE
+
+          - jsonPath: $.LandInfo.address.geoLocation.longitude
+            type: DOUBLE
+            dbType: DOUBLE
+
+          - jsonPath: $.LandInfo.address.geoLocation.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.LandInfo.address.id
+
+          - jsonPath: $.LandInfo.address.geoLocation.id
+
+
+       - query: INSERT INTO eg_land_ownerInfo( id, uuid, isprimaryowner, ownershippercentage, institutionId, additionalDetails, landInfoId, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id, landInfoId) WHERE id IS NOT NULL DO UPDATE SET uuid = ?, isPrimaryOwner=?, ownerShipPercentage=?, institutionId=?, additionalDetails=?, lastModifiedBy=?, lastModifiedTime=?;
+         basePath: LandInfo.owners.*
+         jsonMaps:
+          - jsonPath: $.LandInfo.owners.*.ownerId
+
+          - jsonPath: $.LandInfo.owners.*.uuid
+
+          - jsonPath: $.LandInfo.owners.*.isPrimaryOwner
+
+          - jsonPath: $.LandInfo.owners.*.ownerShipPercentage
+
+          - jsonPath: $.LandInfo.owners.*.institutionId
+
+          - jsonPath: $.LandInfo.owners.*.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.LandInfo.id
+
+          - jsonPath: $.LandInfo.owners.*.auditDetails.createdBy
+
+          - jsonPath: $.LandInfo.owners.*.auditDetails.lastModifiedBy
+
+          - jsonPath: $.LandInfo.owners.*.auditDetails.createdTime
+
+          - jsonPath: $.LandInfo.owners.*.auditDetails.lastModifiedTime
+
+          - jsonPath: $.LandInfo.owners.*.uuid
+
+          - jsonPath: $.LandInfo.owners.*.isPrimaryOwner
+
+          - jsonPath: $.LandInfo.owners.*.ownerShipPercentage
+
+          - jsonPath: $.LandInfo.owners.*.institutionId
+
+          - jsonPath: $.LandInfo.owners.*.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.LandInfo.owners.*.auditDetails.lastModifiedBy
+
+          - jsonPath: $.LandInfo.owners.*.auditDetails.lastModifiedTime
+
+       - query: UPDATE eg_land_institution SET type=?, designation=?, nameOfAuthorizedPerson=?, additionalDetails=? WHERE id=?;
+         basePath: LandInfo.institution
+         jsonMaps:
+
+          - jsonPath: $.LandInfo.institution.type
+
+          - jsonPath: $.LandInfo.institution.designation
+
+          - jsonPath: $.LandInfo.institution.nameOfAuthorizedPerson
+
+          - jsonPath: $.LandInfo.institution.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.LandInfo.institution.id
+
+
+       - query: INSERT INTO eg_land_document( id, documenttype, fileStoreId, documentUid, additionalDetails, landInfoId, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id, landinfoid) WHERE id IS NOT NULL DO UPDATE SET documentType=?, filestoreid=?, documentuid=?, additionalDetails=?, lastModifiedBy=?, lastModifiedTime=?;
+         basePath: LandInfo.documents.*
+         jsonMaps:
+          - jsonPath: $.LandInfo.documents.*.id
+
+          - jsonPath: $.LandInfo.documents.*.documentType
+
+          - jsonPath: $.LandInfo.documents.*.fileStoreId
+
+          - jsonPath: $.LandInfo.documents.*.documentuid
+
+          - jsonPath: $.LandInfo.documents.*.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.LandInfo.id
+
+          - jsonPath: $.LandInfo.documents.*.auditDetails.createdBy
+
+          - jsonPath: $.LandInfo.documents.*.auditDetails.lastModifiedBy
+
+          - jsonPath: $.LandInfo.documents.*.auditDetails.createdTime
+
+          - jsonPath: $.LandInfo.documents.*.auditDetails.lastModifiedTime
+
+          - jsonPath: $.LandInfo.documents.*.documentType
+
+          - jsonPath: $.LandInfo.documents.*.fileStoreId
+
+          - jsonPath: $.LandInfo.documents.*.documentuid
+
+          - jsonPath: $.LandInfo.documents.*.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.LandInfo.documents.*.auditDetails.lastModifiedBy
+
+          - jsonPath: $.LandInfo.documents.*.auditDetails.lastModifiedTime
+
+
+
+       - query: INSERT INTO eg_land_unit( id,tenantid, floorNo, unitType, usageCategory,occupancyType, occupancyDate,additionaldetails, landInfoId, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id, landinfoid, tenantid) WHERE id IS NOT NULL DO UPDATE SET floorNo=?, unitType=?, usageCategory=?, occupancyType=?, occupancyDate=?, additionalDetails=?,lastModifiedBy=?, lastModifiedTime=?;
+         basePath: LandInfo.unit.*
+         jsonMaps:
+          - jsonPath: $.LandInfo.unit.*.id
+
+          - jsonPath: $.LandInfo.unit.*.tenantId
+
+          - jsonPath: $.LandInfo.unit.*.floorNo
+
+          - jsonPath: $.LandInfo.unit.*.unitType
+
+          - jsonPath: $.LandInfo.unit.*.usageCategory
+
+          - jsonPath: $.LandInfo.unit.*.occupancyType
+
+          - jsonPath: $.LandInfo.unit.*.occupancyDate
+
+          - jsonPath: $.LandInfo.unit.*.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.LandInfo.id
+
+          - jsonPath: $.LandInfo.unit.*.auditDetails.createdBy
+
+          - jsonPath: $.LandInfo.unit.*.auditDetails.lastModifiedBy
+
+          - jsonPath: $.LandInfo.unit.*.auditDetails.createdTime
+
+          - jsonPath: $.LandInfo.unit.*.auditDetails.lastModifiedTime
+
+          - jsonPath: $.LandInfo.unit.*.floorNo
+
+          - jsonPath: $.LandInfo.unit.*.unitType
+
+          - jsonPath: $.LandInfo.unit.*.usageCategory
+
+          - jsonPath: $.LandInfo.unit.*.occupancyType
+
+          - jsonPath: $.LandInfo.unit.*.occupancyDate
+
+          - jsonPath: $.LandInfo.unit.*.additionalDetails
+            type: JSON
+            dbType: JSONB
+
+          - jsonPath: $.LandInfo.unit.*.auditDetails.lastModifiedBy
+
+          - jsonPath: $.LandInfo.unit.*.auditDetails.lastModifiedTime
+          
+          
+       - query: INSERT INTO eg_land_owner_auditdetails SELECT * FROM eg_land_ownerInfo WHERE id =?;
+         basePath: LandInfo.owners.*
+         jsonMaps:
+
+          - jsonPath: $.LandInfo.owners.*.ownerId
+
+
+       - query: INSERT INTO eg_land_institution_auditdetails SELECT * FROM eg_land_institution WHERE id =?;
+         basePath: LandInfo.institution
+         jsonMaps:
+
+          - jsonPath: $.LandInfo.institution.id
+
+
+       - query: INSERT INTO eg_land_unit_auditdetails SELECT * FROM eg_land_unit WHERE id =?;
+         basePath: LandInfo.unit.*
+         jsonMaps:
+
+          - jsonPath: $.LandInfo.unit.*.id
+
+
+       - query: INSERT INTO eg_land_address_auditdetails SELECT * FROM eg_land_address WHERE id =?;
+         basePath: LandInfo.address
+         jsonMaps:
+
+          - jsonPath: $.LandInfo.address.id
+
+
+       - query: INSERT INTO eg_land_geolocation_auditdetails SELECT * FROM eg_land_geolocation WHERE id =?;
+         basePath: LandInfo.address.geoLocation
+         jsonMaps:
+
+          - jsonPath: $.LandInfo.address.geoLocation.id
+
+
+
+
+          

@@ -1,0 +1,14 @@
+.checkbox-label {
+  letter-spacing: 0.58px;
+  margin-bottom: 0;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+@media (max-width: 780px) {
+
+.bnd-checkbox{
+div{
+  flex-wrap:unset;
+}
+}
+}

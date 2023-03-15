@@ -1,0 +1,16 @@
+{
+    "responseInfo": null,
+    "error": {
+        "code": 400,
+        "message": "Invalid tenant object",
+        "description": null,
+        "fields": [
+            {
+                "code": "core-tenant.TENANT_CODE_MANDATORY",
+                "message": "Tenant code is required",
+                "field": "code"
+            }
+        ]
+    }
+}
+

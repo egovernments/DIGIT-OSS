@@ -1,0 +1,113 @@
+.citizen-user-register #person-city {
+  height: 56px !important;
+  padding-bottom: 0px !important;
+}
+
+.employee-login-logo {
+  width: 45%;
+  margin: 0 auto;
+}
+@media only screen and (max-width: 768px) {
+.register-hl-divider { 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 1em 0;
+  padding: 0;
+}
+.register-circle-mobile{
+  display: flex;
+   width: 50px;
+   height:30px;
+  justify-content: center;
+  align-items: center;
+  // margin-left: -33px;
+  border-radius: 50%;
+  // height: 69px;
+  // width: 69px;
+  background-color: white;
+
+}
+.register-mobile-whatsapp-button{
+  display: flex;
+  justify-content: center;
+}
+.register-mobile-whatsapp-icon{
+  margin-top: 2px;
+  margin-right: 8px;
+  color:green !important;
+  fill:green !important;
+}
+
+  .register-cardwidth{
+   
+    width: 100%;
+
+  }
+}
+@media only screen and (min-width: 768px) {
+  .register-cardwidth{
+    margin-left: 20%;
+    width: 25%;
+
+  }
+  .register-vl-divider{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 7%;
+    margin-right: 2%;
+    border-left: 1px solid #F2F2F2;
+    //height: 500px;
+    margin-top:16px;
+    margin-bottom: 16px;
+
+
+  }
+  .register-circle-web{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+     margin-left: -33px;
+    border-radius: 50%;
+    height: 69px;
+    width: 69px;
+    background-color:#F2F2F2;
+
+  }
+  .register-qrscan{
+    width: 46%;
+    background-color: white;
+    margin-top:16px;
+    margin-bottom: 16px;
+    border-radius: 3px;
+    justify-content: center;
+    align-items: center;
+  }
+  .register-qrlogo{
+    height: 90% !important;
+    margin-top: 20px;
+
+  }
+  .register-qrtext{
+  display: flex;
+  justify-content: center;
+ 
+  }
+  .register-qrscan > div{
+    display: flex;
+    justify-content: center;
+    margin-top: 10%;
+  }
+  .wha-user-screen-card{
+    padding: 24px 16px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  margin-left: 25%;
+  width: 50%;
+
+  }
+}

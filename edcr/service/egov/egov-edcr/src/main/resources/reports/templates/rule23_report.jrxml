@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rule23_subreport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="462898ca-813c-4e0a-ae65-32920afc77cf">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<import value="org.egov.infra.reporting.util.*"/>
+	<import value="org.egov.infstr.utils.*"/>
+	<parameter name="RULE23" class="org.egov.edcr.entity.RuleOutput"/>
+	<field name="key" class="java.lang.String"/>
+	<field name="subRuleOutputs" class="java.util.List"/>
+	<field name="message" class="java.lang.String"/>
+	<field name="ruleDescription" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="70" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<staticText>
+				<reportElement x="4" y="4" width="100" height="30" uuid="cb395122-901e-4c02-b65d-95b79525cab8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Rule 23]]></text>
+			</staticText>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="110" y="4" width="330" height="30" uuid="27aa65f0-cc69-4d6e-a2b2-52cfebec0ad4"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{RULE23}.getMessage()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="10" y="34" width="430" height="30" uuid="73a75e25-d3cb-4824-a8cc-6be0844cac42"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{ruleDescription}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<subreport>
+				<reportElement x="14" y="5" width="460" height="23" uuid="48c4bec4-216b-4ac9-94fb-6bb89bff0dc6">
+					<printWhenExpression><![CDATA[$F{subRuleOutputs} != null && !$F{subRuleOutputs}.isEmpty()]]></printWhenExpression>
+				</reportElement>
+				<subreportParameter name="subRuleOutput">
+					<subreportParameterExpression><![CDATA[$F{subRuleOutputs}.get(0)]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression><![CDATA[ReportUtil.getTemplateAsStream("rule23_4_subreport.jasper")]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="30">
+			<subreport>
+				<reportElement x="14" y="3" width="460" height="27" uuid="71283973-fa73-41a6-838d-0c999b3ca23a">
+					<printWhenExpression><![CDATA[$F{subRuleOutputs} != null && !$F{subRuleOutputs}.isEmpty()]]></printWhenExpression>
+				</reportElement>
+				<subreportParameter name="subRuleOutput">
+					<subreportParameterExpression><![CDATA[$F{subRuleOutputs}.get(1)]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportExpression><![CDATA[ReportUtil.getTemplateAsStream("rule23_5_subreport.jasper")]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

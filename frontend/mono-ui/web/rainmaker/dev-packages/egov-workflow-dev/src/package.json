@@ -1,0 +1,10 @@
+{
+  "name": "egov-workflow",
+  "version": "1.8.0",
+  "license": "egov",
+  "private": true,
+  "dependencies": {
+    "egov-ui-framework": "0.1.41"
+  },
+  "scripts": {}
+}

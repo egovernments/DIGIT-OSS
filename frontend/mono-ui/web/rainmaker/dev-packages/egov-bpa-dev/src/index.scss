@@ -1,0 +1,202 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  background: #f4f7fb;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.container-padding {
+  margin: 8px;
+}
+
+.mihy-stepper-overide {
+  margin-top: 32px;
+}
+
+.apply-application-for-new {
+  color: #484848;
+  font-family: Roboto;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 29px;
+  text-align: left;
+  margin-bottom: 32px;
+}
+
+.apply-wizard-footer {
+  background-color: #ffffff;
+  box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.24);
+  padding: 8px;
+  position: fixed !important;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  /* z-index: 1000; */
+  /* height: 55px; */
+  text-align: right;
+}
+
+.common-div-css {
+  margin: 80px 16px 88px 16px;
+}
+
+.common-card-css {
+  background-color: #ffffff;
+  border: 0.5px solid rgba(255, 255, 255, 0.800000011920929);
+  border-radius: 2px;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.23999999463558197),
+    0 0 2px 0 rgba(0, 0, 0, 0.11999999731779099);
+  /* width: 100%; */
+  margin-bottom: 24px;
+  /* margin-right: 24px; */
+  padding: 16px;
+}
+
+.mihy-subheader {
+  color: rgba(0, 0, 0, 0.8700000047683716);
+  font-family: Roboto;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0.83px;
+  line-height: 24px;
+  text-align: left;
+}
+
+.mihy-paragraph {
+  color: rgba(0, 0, 0, 0.6000000238418579);
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  width: 881px;
+  text-align: left;
+}
+
+.mihy-primary-button {
+  background-color: #fe7a51;
+  border-radius: 2px;
+  box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.23999999463558197),
+    0 0 8px 0 rgba(0, 0, 0, 0.11999999731779099),
+    0 2px 2px 0 rgba(0, 0, 0, 0.23999999463558197),
+    0 0 2px 0 rgba(0, 0, 0, 0.11999999731779099);
+  width: 200px;
+  height: 48px;
+}
+
+span[class^="MuiFormLabel-asterisk"] {
+  color: #e54d42;
+}
+
+.search-preview div[id^="material-ui-item"] div[id^="material-ui-cardContent"] {
+  padding: 8px 1px 1px 1px;
+}
+
+.search-preview
+  div[id^="material-ui-item"]
+  div[id^="material-ui-cardContent"]
+  span[class^="MuiIconButton-label"] {
+  display: none;
+}
+
+.search-preview button[aria-label="Remove"] {
+  display: none;
+}
+
+.select-field-placeholder {
+  color: rgba(162, 162, 162, 0.77);
+}
+
+input[type="date"]::before {
+  content: attr(placeholder);
+  width: 100%;
+  color: rgba(162, 162, 162, 0.77);
+}
+
+input[type="date"]:focus::before,
+input[type="date"]:valid::before {
+  display: none;
+}
+
+/* div[class^="MuiGrid-item"]   {
+    padding-right: 80px
+} */
+
+@media only screen and (max-width: 768px) {
+  #custom-atoms-applicationSuccessFooter,
+  #custom-atoms-paymentSuccessFooter {
+    display: block;
+    text-align: center;
+  }
+  #custom-atoms-applicationSuccessFooter button {
+    margin-top: 5px;
+  }
+  #material-ui-applicationSuccessContainer {
+    display: table !important;
+  }
+  #material-ui-applicationSuccessContainer div:first-child {
+    margin-left: 16px;
+    margin-bottom: 16px;
+  }
+  #material-ui-applicationSuccessContainer #custom-atoms-tail {
+    display: block;
+    text-align: left !important;
+    margin-left: 16px;
+    margin-top: 16px;
+  }
+  .citizen-payment-confirmation .apply-wizard-footer {
+    display: block;
+    text-align: center;
+  }
+  .citizen-payment-confirmation {
+    padding-bottom: 166px;
+  }
+  .tl-total-amount-text,
+  .tl-total-amount-value {
+    display: none !important;
+  }
+  .tl-application-table-total-value aside {
+    font-weight: 600;
+    font-size: 18px;
+  }
+  #custom-atoms-paymentSuccessFooter #material-ui-printReceiptButton {
+    margin-right: 16px !important;
+  }
+  #custom-atoms-applicationSuccessCard {
+    margin-bottom: 190px;
+  }
+  /* .MuiFormControl-fullWidth-296 {
+    width: 100% !important;
+  } */
+}
+
+@media only screen and (min-width: 768px) {
+  .common-div-css {
+    margin: 30px 16px 88px 16px;
+  }
+}
+
+@media only screen and (max-width: 720px) {
+  #material-ui-blocksContainer div:nth-child(3) {
+    table {
+      table-layout: fixed !important;
+    }
+    table tbody tr td {
+      width: 45% !important;
+      padding:4px 8px 4px 10px !important;
+      font-size: 15px !important;
+      height: 75px !important;
+      white-space: unset !important;
+      word-break: break-all !important;
+    }
+    table tbody tr td p{
+      margin: 0px !important;
+    }
+    table tbody tr td div a{
+      font-size: 11px !important;
+    }
+  }
+}

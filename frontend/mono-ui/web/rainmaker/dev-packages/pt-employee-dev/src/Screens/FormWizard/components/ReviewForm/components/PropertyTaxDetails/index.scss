@@ -1,0 +1,149 @@
+.pt-tax-calc-details-btn {
+  font-family: "Roboto";
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.6px;
+  color: #fe7a51;
+}
+.tax-calculation-card-header {
+  padding-left: 18px !important;
+  button {
+    width: auto !important;
+  }
+}
+
+.tax-header-price {
+  letter-spacing: 0.9px;
+  color: #484848;
+  font-family: Roboto;
+  font-size: 20px;
+  font-weight: 500;
+
+  .property-dues-total-amount {
+    margin-left: 24px;
+  }
+  .pt-total {
+    margin-left: 50px;
+  }
+}
+
+.fare-section {
+  display: flex;
+  // .bill-details {
+  // }
+  .pt-rf-detailed-bill {
+    width: 454px;
+    background-color: #f2f2f2;
+    margin-right: 23%;
+    .pt-rf-detailed-bill-text {
+      padding: 16px !important;
+      font-family: "Roboto";
+      font-size: 20px;
+      font-weight: 500;
+      color: #484848;
+    }
+    .pt-rf-detailed-bill-table {
+      border-bottom: solid 1px #b3b3b3;
+      margin-left: 16px;
+      margin-right: 76px;
+      .pt-rf-detailed-bill-points {
+        margin: 16px 0px 16px 0px;
+      }
+    }
+    .pt-rf-detailed-bill-total,
+    .pt-rf-detailed-bill-text {
+      padding: 16px 76px 16px 16px;
+      .pt-rf-price {
+        font-family: "Roboto";
+        font-size: 20px;
+        font-weight: 500;
+        letter-spacing: 0.9px;
+        color: #fe7a51;
+      }
+    }
+
+    .pt-rf-price {
+      float: right;
+    }
+    .pt-rf-detailed-bill-text,
+    .pt-rf-price {
+      font-family: "Roboto";
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.6px;
+      color: #484848;
+    }
+  }
+  .date-details {
+    margin-top: 11px;
+    .header {
+      font-size: 14px;
+      font-weight: 700;
+      text-align: left;
+      color: #484848;
+    }
+    ul {
+      padding: 0;
+      list-style-type: none;
+      margin-top: 20px;
+      li {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        span:nth-of-type(1) {
+          font-size: 14px;
+          font-weight: 500;
+          letter-spacing: 0.6px;
+          text-align: left;
+          color: #767676;
+        }
+        span:nth-of-type(2) {
+          color: black;
+        }
+      }
+    }
+  }
+}
+
+.additional-rebate-charges {
+  display: flex;
+  justify-content: space-between;
+  padding-right: 0px;
+  margin-top: 15px;
+  div{
+  button {
+    background-color: #fe7a51 !important;
+    height: 35px !important;
+    line-height: 35px !important;
+    span {
+      .label-text {
+        font-size: 12px !important;
+        font-weight: 500;
+      }
+    }
+  }
+}
+}
+
+.rebate-button{
+  float:left;
+}
+.view-detail-button{
+  float:left;
+}
+@media only screen and (max-width:768px){
+  .rebate-button{
+    float:none;
+  }
+  .view-detail-button{
+    float:none;
+  }
+  .fare-section{
+    display: block;
+  } 
+}
+@media only screen and (min-width:768px){
+  .view-detail-button{
+    margin-left: -5px;
+  }
+}

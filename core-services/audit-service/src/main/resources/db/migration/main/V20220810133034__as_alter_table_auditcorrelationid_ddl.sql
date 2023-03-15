@@ -1,0 +1,1 @@
+ALTER TABLE eg_audit_logs ADD COLUMN auditcorrelationid character varying(128);

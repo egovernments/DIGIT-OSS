@@ -1,0 +1,17 @@
+{
+  "id": 18,
+  "userName": "narasappa",
+  "name": "narasappa",
+  "mobileNumber": "123456789",
+  "emailId": "abc@gmail.com",
+  "locale": "en_IN",
+  "type": "EMPLOYEE",
+  "roles": [
+    {
+      "name": "Employee"
+    }
+  ],
+  "active": true,
+  "tenantId": "default",
+  "actions": null
+}

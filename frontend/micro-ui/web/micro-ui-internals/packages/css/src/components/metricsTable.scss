@@ -1,0 +1,27 @@
+.metricsTable {
+  @apply bg-white px-md pt-md pb-lg shadow-card;
+  max-width: 440px;
+  border-radius: 4px;
+
+  .row {
+    @apply flex justify-between;
+    height: 80px;
+    width: 100%;
+  }
+
+  .lower_red {
+    @apply inline;
+    color: rgb(229, 77, 66);
+  }
+
+  .upper_green {
+    @apply inline;
+    color: #00703C;
+  }
+}
+
+.chart-metric-wrapper{
+  display: flex;
+    flex-wrap: wrap;
+    margin-top: 15px;
+}

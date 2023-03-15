@@ -1,0 +1,269 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: eChallan System
+  description: |
+    ### API Specs For eChallan System ###
+    1. Generate the new challan.
+    2. Update the details of existing challan
+    3. Search the existing challan
+    4. Generate the demand and bill for the challan amount so that collection can be done in online and offline mode.
+  contact:
+    name: Egovernments Foundation
+    email: contact@egovernments.org
+x-module: BPA
+x-common-path: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml'
+
+paths:
+ 
+  /eChallan/v1/_create:
+    post:
+      summary: Create new challan request
+      description: Generate the challan in the system with the defined attributes
+      tags:
+        - eChallan APIs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChallanRequest'
+        description: Request schema.
+        required: true
+      responses:
+        '202':
+          description: Application submitted successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ChallanResponse'
+        '400':
+          description: Failed to process the application
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ErrorRes'
+  /eChallan/v1/_update:
+    post:
+      summary: Update the existing challan details
+      description: Update the existing challan details
+      tags:
+        - eChallan APIs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChallanRequest'
+        description: Request schema.
+        required: true
+      
+      responses:
+        '202':
+          description: Application submitted successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ChallanResponse'
+        '400':
+          description: Failed to process the application
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ErrorRes'
+  
+  /eChallan/v1/_search:
+    post:
+      summary: Get the list of existing challan details 
+      description: |
+        Gets the list of service requests for a particular ULB based on search criteria.
+      parameters:
+        - $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/parameters/tenantId'
+        - name: serviceCode
+          in: query
+          description: Allows search for service type - comma separated list
+          schema:
+            type: array
+            items:
+              type: string
+              maxItems: 5
+        - name: ids
+          in: query
+          description: Search by list of UUID
+          schema:
+            type: array
+            items:
+              type: string
+              maxItems: 10
+        - name: mobileNo
+          in: query
+          description: Search by mobile number citizen
+          schema:
+            type: string
+      responses:
+        '202':
+          description: Successful response sorted by reverse chrnological order of creation
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ChallanResponse'
+        '400':
+          description: Invalid input.
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ErrorRes'
+      tags:
+        - eChallan APIs
+  
+  /eChallan/v1/_count:
+    post:
+      summary: Get the list of count of paid, active, cancelled and total number of challan 
+      description: |
+        Get the list of count of paid, active, cancelled and total number of challan for given tenant Id.
+      parameters:
+        - $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/parameters/tenantId'
+      responses:
+        '200':
+          description: Successful response, present the list of count of challans for given tenant Id.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ChallanCountResponse'
+        '400':
+          description: Invalid input.
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ErrorRes'
+      tags:
+        - eChallan APIs    
+      
+components:
+  schemas:
+    Challan:
+      type: object
+      description: |
+        Capture the challan details
+      properties:
+        citizen:
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/UserInfo'
+        id:
+          type: string
+          readOnly: true
+          description: The server generated unique ID(UUID).
+          minLength: 2
+          maxLength: 64
+        tenantId:
+          type: string
+          description: Unique identifier of the tenant.
+          minLength: 2
+          maxLength: 64
+        businessService:
+          type: string
+          description: Business service code from "BusinessService" master(MDMS)
+          minLength: 2
+          maxLength: 128
+        challanNo:
+          type: string
+          readOnly: true
+          description: The unique formatted id for challan.
+          minLength: 2
+          maxLength: 128
+        referenceId:
+          type: string
+          description: Unique identifier of the entity for which the challan is generated.
+          minLength: 2
+          maxLength: 128
+        description:
+          type: string
+          description: Additional information or description of the challan
+          minLength: 2
+          maxLength: 512
+        accountId:
+          type: string
+          description: userid of the user requesting the srervice - in our case it may be same as phone as we are using mobile number as the userid
+          minLength: 2
+          maxLength: 64
+        additionalDetail:
+          type: object
+          description: This is the json object that will carry the actual input (whereever the metadata requries input). Structure should be same as the schema definition provided in the metadata of the service (schema compliance check to be performed at client/server)
+        applicationStatus:
+          type: string
+          description: The current status of the service request.
+          readOnly: true
+        source:
+          type: string
+          description: 'Source mdms master data. Which captures the source of the service request(ex:- whatsapp, ivr, Swachhata etc)'
+          minLength: 2
+          maxLength: 64
+          example: 'whatsapp, ivr etc'
+        amount:
+          type: array
+          items:
+            $ref: '#/components/schemas/Amount'
+        address:
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/Address'
+        auditDetails:
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/AuditDetails'
+      required:
+        - tenantId
+        - accountId
+      
+    Amount:
+      type: object
+      description: Capture the challan amount details
+      properties:
+        taxHeadCode:
+          type: string
+          description: Tax head code from tax head master(Tax codes are desfined at business service level so each business service can have diffrent tax head code defined)
+          minLength: 2
+          maxLength: 128
+        amount:
+          type: number
+          format: double
+          description: Capture the amount for a tax head
+    
+    ChallanRequest:
+      type: object
+      description: Request object to fetch the report data
+      properties:
+        requestInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/RequestHeader'
+        challan:
+          $ref: '#/components/schemas/Challan'
+      required:
+        - requestInfo
+        - challan
+    ChallanResponse:
+      type: object
+      description: Response to the service request
+      properties:
+        responseInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ResponseHeader'
+        challans:
+          type: array
+          items:
+            $ref: '#/components/schemas/Challan'
+    ChallanCount:
+      type: object
+      description: Capture the challan count details
+      properties:
+        paidChallan:
+          type: string
+          description: Number of paid challan present in the system
+        cancelledChallan:
+          type: string
+          description: Number of cancelled challan present in the system
+        activeChallan:
+          type: string
+          description: Number of active challan present in the system
+        totalChallan:
+          type: string
+          description: Number of total challan present in the system
+    ChallanCountResponse:
+      type: object
+      description: Response to the service request
+      properties:
+        responseInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ResponseHeader'
+        ChallanCount:
+            $ref: '#/components/schemas/ChallanCount'

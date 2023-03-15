@@ -1,0 +1,58 @@
+.home-screen-appbar {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.citizen-header-logo-label {
+  display: flex;
+}
+
+.icon-button {
+  display: flex;
+  align-items: center;
+}
+
+.notification-icon {
+  height: 64px;
+  display: flex;
+  align-items: center;
+}
+
+.appbar-right-logo {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.citizen-header-logo > img {
+  width: 40px;
+  height: 49px;
+}
+
+.appbar-municipal-label .label-text {
+  text-transform: uppercase !important;
+}
+
+@media only screen and (max-width: 768px) {
+  .app-toolbar,
+  .citizen-header-logo,
+  .appbar-right-logo,
+  .appbar-municipal-label {
+    display: none !important;
+  }
+
+  .notification-icon-web {
+    display: none !important;
+  }
+}
+@media only screen and (min-width: 768px) {
+  .appbar-title-label {
+    display: none !important;
+  }
+  .notification-icon-mobile {
+    display: none !important;
+  }
+
+  .notification-icon-web {
+    margin-right: 50px;
+  }
+}

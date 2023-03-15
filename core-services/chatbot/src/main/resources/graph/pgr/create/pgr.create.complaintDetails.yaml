@@ -1,0 +1,9 @@
+name : pgr.create.complaintDetails
+description : "Additional complaint details"
+nodeType : step
+optional : true
+validationRequired : false
+
+message : chatbot.messages.pgrCreateAdditionalDetails
+
+type : text

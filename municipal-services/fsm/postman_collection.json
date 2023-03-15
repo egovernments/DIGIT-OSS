@@ -1,0 +1,39 @@
+{
+	"info": {
+		"_postman_id": "02497157-f93a-41e0-80fa-b19328c5f88e",
+		"name": "FSM",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"RequestInfo\": {\n    \"apiInfo\": {\n      \"id\": \"string\",\n      \"version\": \"string\",\n      \"path\": \"string\"\n    },\n    \"deviceDetail\": {\n      \"id\": \"string\",\n      \"signature\": \"string\"\n    },\n    \"ts\": 0,\n    \"action\": \"string\",\n    \"key\": \"string\",\n    \"msgId\": \"string\",\n    \"requesterId\": \"string\",\n    \"authToken\": \"{{token}}\",\n    \"signature\": \"string\"\n    \n  },\n  \"fsm\": {\n    \"tenantId\": \"pb.amritsar\",\n    \"description\": \"string\",\n    \"accountId\": \"string\",\n    \"additionalDetail\": {},\n    \"source\": \"whatsapp, ivr etc\",\n    \"sanitationtype\": \"string\",\n    \"propertyUsage\": \"BUILTUP\",\n    \"noOfTrips\": 0,\n    \"status\": \"ACTIVE\",\n    \"vehicleId\": \"string\",\n    \"pitDetail\": {\n      \"hight\": 0,\n      \"length\": 0,\n      \"width\": 0,\n      \"distanceFromRoad\": 0\n    },\n    \"address\": {\n      \"tenantId\": \"string\",\n      \"doorNo\": \"string\",\n      \"plotNo\": \"string\",\n      \"landmark\": \"string\",\n      \"city\": \"string\",\n      \"district\": \"string\",\n      \"region\": \"string\",\n      \"state\": \"string\",\n      \"country\": \"string\",\n      \"pincode\": \"string\",\n      \"additionDetails\": \"string\",\n      \"buildingName\": \"string\",\n      \"street\": \"string\",\n      \"locality\": {\n        \"code\": \"string\",\n        \"name\": \"string\",\n        \"label\": \"string\",\n        \"latitude\": \"string\",\n        \"longitude\": \"string\",\n        \"children\": [\n          null\n        ]\n      },\n      \"geoLocation\": {\n        \"latitude\": 0,\n        \"longitude\": 0,\n        \"additionalDetails\": {}\n      }\n    }\n  },\n  \"workflow\": {\n    \"action\": \"string\",\n    \"assignes\": [\n      \"string\"\n    ],\n    \"comments\": \"string\",\n    \"varificationDocuments\": [\n      {\n        \"id\": \"string\",\n        \"documentType\": \"string\",\n        \"fileStore\": \"string\",\n        \"documentUid\": \"string\",\n        \"additionalDetails\": {}\n      }\n    ]\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9098/fsm/v1/_create",
+					"host": [
+						"localhost"
+					],
+					"port": "9098",
+					"path": [
+						"fsm",
+						"v1",
+						"_create"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

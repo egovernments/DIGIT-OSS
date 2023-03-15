@@ -1,0 +1,21 @@
+.confirm-bnd-popup{
+    display:unset !important;
+  }
+
+  .bnd-footer{
+    .apply-wizard-footer{
+      background: white;
+
+    }
+  }
+  @media (max-width: 780px) {
+
+
+  .bnd-footer{
+.apply-wizard-footer{
+  button{
+    min-width: 50% !important;
+  }
+}
+  }
+}

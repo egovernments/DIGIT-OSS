@@ -1,0 +1,1 @@
+ALTER TABLE eg_tl_owner DROP CONSTRAINT uk_eg_tl_owner;

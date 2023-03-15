@@ -1,0 +1,59 @@
+@media only screen and (min-width: 768px) {
+  
+    .downloadprint-commonmenu {
+        float:right;
+        margin-top: -50px;
+
+    }
+      
+  }
+  @media only screen and (max-width: 768px) {
+    .tl-download-button {
+      margin-left: 5px;
+      margin-right: 1px;
+      width: 178px;
+    }
+    .tl-print-button {
+      margin-left: 4px;
+      width: 140px;
+    }
+    div#custom-atoms-rightdiv {
+      width: 100%;
+    }
+    .firenoc-btn-search-reset{
+      div{
+        flex-basis: auto;
+      }  
+      }
+  }
+  
+  @media only screen and (min-width: 768px) {
+    .tl-download-button {
+      margin-left: 10px;
+      width: 180px;
+    }
+    .tl-print-button {
+      margin-left: 5px;
+      width: 150px;
+    }
+  }
+  #material-ui-applicantDetails {
+    overflow: visible;
+  }
+  .autocomplete-dropdown {
+    min-width: 80%;
+    position: absolute;
+    z-index: 1900;
+    max-height: 150px;
+    overflow: hidden;
+  }
+  .autocomplete-dropdown div {
+	  min-width: 80%;
+	  height: auto;
+    overflow: auto;
+    max-width: 100%;
+    white-space: pre-line;
+  }
+  p[class^="MuiFormHelperText-root"] {
+    font-size: 14px !important; }
+

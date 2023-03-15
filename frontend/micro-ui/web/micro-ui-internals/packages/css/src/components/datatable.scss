@@ -1,0 +1,76 @@
+.data-table {
+  @apply text-text-primary;
+
+  .row {
+    @apply flex border-b border-border pb-sm mb-sm;
+
+    span {
+      width: 70%;
+      display: contents;
+    }
+
+    h2 {
+      width: 40%;
+      @apply font-bold text-heading-s;
+    }
+
+    .value {
+      width: 50%;
+      @apply text-heading-s;
+      word-break: break-all;
+    }
+    .caption {
+      width: 70%;
+      @apply text-heading-s text-text-secondary;
+    }
+  }
+
+  .last {
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+}
+
+.employee-data-table {
+  .row {
+    @apply flex pb-sm mb-sm;
+
+    span {
+      width: 70%;
+      display: contents;
+    }
+
+    h2 {
+      width: 30%;
+      @apply font-bold text-heading-s;
+    }
+
+    .value {
+      width: 50%;
+      @apply text-heading-s;
+    }
+
+    .caption {
+      width: 70%;
+      @apply text-heading-s text-text-secondary;
+    }
+  }
+  .vendor-details-row {
+    margin-left: 15px !important;
+  }
+
+  .last {
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+}
+
+.pt-citizen {
+  .data-table {
+    .row {
+      justify-content: space-between;
+    }
+  }
+}

@@ -1,0 +1,70 @@
+{
+	"info": {
+		"_postman_id": "118db689-c098-4f97-9c81-3a87c44bd9ee",
+		"name": "Demand Based System",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": " http://localhost:8080/pt-services-v2/demandBased/_generate",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"RequestInfo\": {\n    \"apiId\": \"Rainmaker\",\n    \"action\": \"\",\n    \"did\": 1,\n    \"key\": \"\",\n    \"msgId\": \"20170310130900|en_IN\",\n    \"requesterId\": \"\",\n    \"ts\": \"\",\n    \"ver\": \".01\",\n    \"authToken\": \"5a755b3e-92a7-4fba-85f2-4f35f20db6f0\"\n  },\n  \"searchCriteria\": {\n    \"locality\": \"SUN45\",\n    \"tenantId\": \"pb.amritsar\",\n    \"financialYear\": \"2014-15\"\n  }\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8086/pt-services-v2/demandBased/_generate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8086",
+					"path": [
+						"pt-services-v2",
+						"demandBased",
+						"_generate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/egov-searcher/rainmaker-pt-demandbased/searchAssessmentsToUpdate/_get",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"RequestInfo\": {\n    \"apiId\": \"Rainmaker\",\n    \"ver\": \".01\",\n    \"ts\": 0,\n    \"action\": \"_create\",\n    \"did\": \"1\",\n    \"key\": \"\",\n    \"msgId\": \"20170310130900|en_IN\",\n    \"authToken\": \"d617f4ee-a4be-4087-ba7d-bab207ec056e\",\n    \"correlationId\": \"a2e4642e-8cb5-483b-8ea2-827cbe822c5f\"\n  },\n  \"searchCriteria\": {\n    \"locality\": \"SUN13\",\n    \"tenantId\": \"pb.amritsar\"\n  }\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/egov-searcher/rainmaker-pt-demandbased/searchAssessmentsToUpdate/_get",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"egov-searcher",
+						"rainmaker-pt-demandbased",
+						"searchAssessmentsToUpdate",
+						"_get"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

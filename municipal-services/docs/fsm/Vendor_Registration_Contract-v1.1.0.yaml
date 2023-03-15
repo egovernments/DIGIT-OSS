@@ -1,0 +1,242 @@
+openapi: 3.0.0
+info:
+  version: 1.1.0
+  title: Vendor Registration(Business entity registration)
+  description: |
+    ### Register Vendor for desludging  ###
+    * Register Desludging oprator in the system
+    * Map vehicle to the DSO
+    * Map driver to DSO
+    * Search vendor details
+    * add new vendor
+    * update existing vendor details
+    
+  contact:
+    name: Egovernments Foundation
+    email: contact@egovernments.org
+x-module: FSM
+x-common-path: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml'
+paths:
+  /vendor/v1/_search:
+    post:
+      summary: Get the Vendor details
+      description: |
+        Gets the list of Vendor for a particular ULB based on search criteria.
+      parameters:
+        - $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/parameters/tenantId'
+          required: true
+        - name: name
+          in: query
+          description: search with name of the business entity
+          schema:
+            type: string
+        - name: vehicleRegistrationNumber
+          in: query
+          description: search based on the vehicle assigned to DSO with the vehicle registration number
+          schema:
+            type: string
+        - name: vehicleType
+          in: query
+          description: search based on the vehicle assigned to DSO with the vehicleType
+          schema:
+            type: string
+        - name: vehicleIds
+          in: query
+          description: search by list of uuid(s) of the vehicle assigned to the SO
+          schema:
+            type: array
+            items:
+              type: string
+        - name: ids
+          in: query
+          description: Search by list of UUID
+          schema:
+            type: array
+            items:
+              type: string
+        - name : offset
+          in: query
+          description: offset for the pagination results
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          description: limit for the pagination results
+          schema:
+           type: integer
+        - name: ownerIds
+          in: query
+          description: search by list of uuid(s) of the owner of the DSo
+          schema:
+            type: array
+            items:
+              type: string
+        - name: mobileNumber
+          in: query
+          description: Search DSO by mobileNumber of the Owner of the DSO
+          schema:
+            type: string
+        - name: vehicleCapacity
+          in: query
+          description: Search DSO by vehicleCapacity of the dso vehicle
+          schema:
+            type: string
+      responses:
+        '202':
+          description: Successful response sorted by reverse chrnological order of creation
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/VendorResponse'
+        '400':
+          description: Invalid input.
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ErrorRes'
+      tags:
+        - Vendor
+  /vendor/v1/_create:
+    post:
+      summary: Add new vendor  
+      description: Add the vendor details into the system
+      tags:
+        - Vendor
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VendorRequest'
+        description: Request schema.
+        required: true
+      responses:
+        '202':
+          description: Request submitted successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/VendorResponse'
+        '400':
+          description: Failed to process the Request
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ErrorRes'
+  /vendor/v1/_update:
+    post:
+      summary: Update existing vendor details
+      description: Updates the details of the vendor 
+      tags:
+        - Vendor
+      responses:
+        '202':
+          description: Request submitted successfully
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/VendorResponse'
+        '400':
+          description: Failed to process the application
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ErrorRes'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VendorRequest'
+        description: Request schema.
+        required: true
+components:
+  schemas:
+    Vendor:
+      type: object
+      description: | 
+       Capture the vendor information in the system.
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: The server generated unique ID(UUID).
+          minLength: 2
+          maxLength: 64
+        tenantId:
+          type: string
+          description: Unique identifier of the tenant.
+          minLength: 2
+          maxLength: 64
+        name: 
+          type: string
+          description: Name of the vendor(business entity name).
+          minLength: 2
+          maxLength: 128
+        agencyType: 
+          type: string
+          description: Agency Type of the vendor configured in MDMS.
+          minLength: 1
+          maxLength: 128
+        paymentPreference: 
+          type: string
+          description: Payment Preference of the vendor configured in MDMS.
+          minLength: 1
+          maxLength: 128
+        address:
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/Address'
+        owner:
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/UserInfo'
+        vehicles:
+          type: array
+          items:
+            $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/fsm-docs/docs/fsm/Vehicle_Registry_Contract.yaml'
+        drivers:
+          type: array
+          items:
+            $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/UserInfo'
+        additionalDetail:
+          type: object
+          description: This is the json object that will carry the actual input (whereever the metadata requries input). Structure should be same as the schema definition provided in the metadata of the service (schema compliance check to be performed at client/server)
+        source:
+          type: string
+          description: 'Source mdms master data. Which captures the source of the service request(ex:- whatsapp, ivr, Swachhata etc)'
+          minLength: 2
+          maxLength: 64
+          example: whatsapp, ivr etc
+        status:
+          type: string
+          description: Inactive records will be consider as soft deleted 
+          enum:
+           - ACTIVE
+           - INACTIVE
+        auditDetails:
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/AuditDetails'
+      required:
+        - tenantId
+        - name
+        - address
+        - owner
+        - vehicles
+        
+    VendorRequest:
+      type: object
+      description: Request for Vendor registartion 
+      properties:
+        requestInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/RequestHeader'
+        vendor:
+          $ref: '#/components/schemas/Vendor'
+      required:
+        - requestInfo
+        - vendor
+    VendorResponse:
+      type: object
+      description: Response of Vendor detail
+      properties:
+        responseInfo:
+          $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/ResponseInfo'
+        vendor:
+          $ref: '#/components/schemas/Vendor'
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/WalkingTreeDev/eGov-DSO/1.0.0

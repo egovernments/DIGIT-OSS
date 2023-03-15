@@ -1,0 +1,9 @@
+def build(path, ci_image) {
+    stage("Build") {
+        docker.image("node:8.12-alpine").inside {
+            sh "echo hello";
+        }
+    }
+}
+
+return this;

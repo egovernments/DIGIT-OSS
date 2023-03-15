@@ -1,0 +1,110 @@
+{
+  "RequestInfo": {
+    "apiId": "Rainmaker",
+    "action": "",
+    "did": 1,
+    "key": "",
+    "msgId": "20170310130900|en_IN",
+    "requesterId": "",
+    "ts": 1513579888683,
+    "ver": ".01",
+    "authToken": "{AUTH}",
+        "userInfo":{
+        "id": 26397,
+        "uuid": "b5655467-f24f-452d-a2f8-2177014b00f3",
+        "userName": "9449880531",
+        "name": "Sushama Manohar",
+        "mobileNumber": "9449880531",
+        "emailId": "sus.man@gmail.com",
+        "locale": null,
+        "type": "CITIZEN",
+        "roles": [
+            {
+                "name": "Citizen",
+                "code": "CITIZEN",
+                "tenantId": "pb"
+            },
+            {
+                "name": "BPA Architect",
+                "code": "BPA_ARCHITECT",
+                "tenantId": "pb"
+            }
+        ],
+        "active": true,
+        "tenantId": "pb"
+    }
+  },
+  "BusinessServices": [
+    {
+      "tenantId": "pb",
+      "businessService": "FSM_VEHICLE_TRIP",
+      "business": "vehicle",
+      "businessServiceSla": 172800000,
+      "states": [
+        {
+          "sla": null,
+          "state": null,
+          "applicationStatus": null,
+          "docUploadRequired": false,
+          "isStartState": true,
+          "isTerminateState": false,
+          "isStateUpdatable": true,
+          "actions": [
+            {
+              "action": "SCHEDULE",
+              "nextState": "SCHEDULED",
+              "roles": [
+                "FSM_DSO",
+                "FSM_EDITOR_EMP"
+              ]
+            }
+          ]
+        },
+        {
+          "sla": null,
+          "state": "SCHEDULED",
+          "applicationStatus": "SCHEDULED",
+          "docUploadRequired": false,
+          "isStartState": true,
+          "isTerminateState": false,
+          "actions": [
+            {
+              "action": "READY_FOR_DISPOSAL",
+              "nextState": "WAITING_FOR_DISPOSAL",
+              "roles": [
+                "FSM_DSO",
+                "FSM_EDITOR_EMP"
+              ]
+            }
+          ]
+        },
+        {
+          "sla": null,
+          "state": "WAITING_FOR_DISPOSAL",
+          "applicationStatus": "WAITING_FOR_DISPOSAL",
+          "docUploadRequired": false,
+          "isStartState": true,
+          "isTerminateState": false,
+          "actions": [
+            {
+              "action": "DISPOSE",
+              "nextState": "DISPOSED",
+              "roles": [
+                "FSM_EMP_FSTPO"
+              ]
+            }
+          ]
+        },
+         {
+          "sla": null,
+          "state": "DISPOSED",
+          "applicationStatus": "DISPOSED",
+          "docUploadRequired": false,
+          "isStartState": false,
+          "isTerminateState": true,
+          "isStateUpdatable": true
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "responseInfo": {
+    "apiId": "asset-services",
+    "ver": null,
+    "ts": null,
+    "resMsgId": null,
+    "msgId": null,
+    "status": "200"
+  },
+  "user": [
+    {  "id":"87",
+      "password": "123456",
+      "salutation": "Ms",
+      "name": "test1",
+      "gender": "FEMALE",
+      "mobileNumber": "9999992914",
+      "emailId": "xyz@egovernments.org",
+      "altContactNumber": "",
+      "pan": "AITGC5624P",
+      "aadhaarNumber": "96a70",
+      "permanentAddress": "Dawakhana",
+      "permanentCity": "Kaikoo",
+      "permanentPinCode": "111111",
+      "correspondenceCity": "banglore",
+      "correspondencePinCode": "1234",
+      "correspondenceAddress": "correAddress",
+      "active": false,
+      "dob": "12321",
+      "pwdExpiryDate": null,
+      "locale": "string",
+      "type": "CITIZEN",
+      "signature": "",
+      "accountLocked": false,
+      "fatherOrHusbandName": "Arjun",
+      "bloodGroup": "O_POSITIVE",
+      "identificationMark": "Wears spects",
+      "photo": "a8a6cf1e-c84d-4a0c-b2d5-57ec8711ba25",
+      "otpReference": "14856",
+      "tenantId": "pb.amritsar",
+      "roles": [
+        {
+          "code": "CITIZEN"
+        }
+      ],
+      "uuid": "dbdc0276-7149-4032-b203-f067bbfdb515",
+      "createdDate": "18-06-2018 05:44:46",
+      "lastModifiedDate": "18-06-2018 05:44:46",
+      "dob": "01-01-1970",
+      "pwdExpiryDate": "16-09-2018 05:44:45"
+    }
+  ]
+}

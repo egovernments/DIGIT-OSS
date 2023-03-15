@@ -1,0 +1,38 @@
+.wizard-cont {
+  padding: 0 16px 90px 16px;
+  min-height: calc(100vh - 64px);
+  clear: both;
+}
+
+.wizard-footer {
+  background-color: #ffffff;
+  box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.24);
+  padding: 16px 16px 16px;
+  position: fixed !important;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  z-index: 1000;
+}
+
+.breadcrumb-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.breadcrumb {
+  padding: 0;
+}
+
+@media only screen and (max-width:768px){
+  .MuiStep-alternativeLabel-35{
+    width: calc(100% - (60px * 5)) !important;
+   }
+   .MuiStepConnector-alternativeLabel-88 {
+     width: 50% !important;
+   } 
+   .wizard-cont {
+     overflow-x: hidden;
+   }
+}

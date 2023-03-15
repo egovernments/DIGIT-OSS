@@ -1,0 +1,36 @@
+
+INSERT INTO egf_accountcodepurpose (id, name, createdby, createddate, lastmodifieddate, lastmodifiedby, version, tenantid) VALUES (4, 'Cash In Hand', NULL, NULL, NULL, NULL, 0, 'default');
+INSERT INTO egf_accountcodepurpose (id, name, createdby, createddate, lastmodifieddate, lastmodifiedby, version, tenantid) VALUES (5, 'Cheque In Hand', NULL, NULL, NULL, NULL, 0, 'default');
+INSERT INTO egf_accountcodepurpose (id, name, createdby, createddate, lastmodifieddate, lastmodifiedby, version, tenantid) VALUES (7, 'ExcessIE', NULL, NULL, NULL, NULL, 0, 'default');
+INSERT INTO egf_accountcodepurpose (id, name, createdby, createddate, lastmodifieddate, lastmodifiedby, version, tenantid) VALUES (8, ' Payable to Other Funds', NULL, NULL, NULL, NULL, 0, 'default');
+INSERT INTO egf_accountcodepurpose (id, name, createdby, createddate, lastmodifieddate, lastmodifiedby, version, tenantid) VALUES (10, 'Contractor Deductions', NULL, NULL, NULL, NULL, 0, 'default');
+INSERT INTO egf_accountcodepurpose (id, name, createdby, createddate, lastmodifieddate, lastmodifiedby, version, tenantid) VALUES (11, 'Fixed Assets', NULL, NULL, NULL, NULL, 0, 'default');
+INSERT INTO egf_accountcodepurpose (id, name, createdby, createddate, lastmodifieddate, lastmodifiedby, version, tenantid) VALUES (12, 'Bank Account Codes', NULL, NULL, NULL, NULL, 0, 'default');
+INSERT INTO egf_accountcodepurpose (id, name, createdby, createddate, lastmodifieddate, lastmodifiedby, version, tenantid) VALUES (15, 'Accumulated Depreciation', NULL, NULL, NULL, NULL, 0, 'default');
+INSERT INTO egf_accountcodepurpose (id, name, createdby, createddate, lastmodifieddate, lastmodifiedby, version, tenantid) VALUES (16, 'CWIP Account code', NULL, NULL, NULL, NULL, 0, 'default');
+INSERT INTO egf_accountcodepurpose (id, name, createdby, createddate, lastmodifieddate, lastmodifiedby, version, tenantid) VALUES (17, 'Depreciation Expense Account', NULL, NULL, NULL, NULL, 0, 'default');
+INSERT INTO egf_accountcodepurpose (id, name, createdby, createddate, lastmodifieddate, lastmodifiedby, version, tenantid) VALUES (18, 'Revaluation Reserve Account', NULL, NULL, NULL, NULL, 0, 'default');
+INSERT INTO egf_accountcodepurpose (id, name, createdby, createddate, lastmodifieddate, lastmodifiedby, version, tenantid) VALUES (21, 'Fixed Assets Written off', NULL, NULL, NULL, NULL, 0, 'default');
+INSERT INTO egf_accountcodepurpose (id, name, createdby, createddate, lastmodifieddate, lastmodifiedby, version, tenantid) VALUES (22, 'Inter-Unit Transfer Account', NULL, NULL, NULL, NULL, 0, 'default');
+INSERT INTO egf_accountcodepurpose (id, name, createdby, createddate, lastmodifieddate, lastmodifiedby, version, tenantid) VALUES (26, 'Creditors-Contractor Payable', NULL, NULL, NULL, NULL, 0, 'default');
+INSERT INTO egf_accountcodepurpose (id, name, createdby, createddate, lastmodifieddate, lastmodifiedby, version, tenantid) VALUES (27, 'Creditors-Supplier Payable', NULL, NULL, NULL, NULL, 0, 'default');
+INSERT INTO egf_accountcodepurpose (id, name, createdby, createddate, lastmodifieddate, lastmodifiedby, version, tenantid) VALUES (28, 'Contigency Bill Code', NULL, NULL, NULL, NULL, 0, 'default');
+INSERT INTO egf_accountcodepurpose (id, name, createdby, createddate, lastmodifieddate, lastmodifiedby, version, tenantid) VALUES (29, 'Security Deposit', NULL, NULL, NULL, NULL, 0, 'default');
+INSERT INTO egf_accountcodepurpose (id, name, createdby, createddate, lastmodifieddate, lastmodifiedby, version, tenantid) VALUES (30, 'Bank Charges', NULL, NULL, NULL, NULL, 0, 'default');
+INSERT INTO egf_accountcodepurpose (id, name, createdby, createddate, lastmodifieddate, lastmodifiedby, version, tenantid) VALUES (31, 'Salary Payable', NULL, NULL, NULL, NULL, 0, 'default');
+INSERT INTO egf_accountcodepurpose (id, name, createdby, createddate, lastmodifieddate, lastmodifiedby, version, tenantid) VALUES (34, 'Pension Payable', NULL, NULL, NULL, NULL, 0, 'default');
+INSERT INTO egf_accountcodepurpose (id, name, createdby, createddate, lastmodifieddate, lastmodifiedby, version, tenantid) VALUES (35, 'Supplier Advance Account', NULL, NULL, NULL, NULL, 0, 'default');
+INSERT INTO egf_accountcodepurpose (id, name, createdby, createddate, lastmodifieddate, lastmodifiedby, version, tenantid) VALUES (36, 'Wages Payable', NULL, NULL, NULL, NULL, 0, 'default');
+INSERT INTO egf_accountcodepurpose (id, name, createdby, createddate, lastmodifieddate, lastmodifiedby, version, tenantid) VALUES (37, 'Material Clearing Account', NULL, NULL, NULL, NULL, 0, 'default');
+INSERT INTO egf_accountcodepurpose (id, name, createdby, createddate, lastmodifieddate, lastmodifiedby, version, tenantid) VALUES (38, 'Scrap Suspense Account', NULL, NULL, NULL, NULL, 0, 'default');
+INSERT INTO egf_accountcodepurpose (id, name, createdby, createddate, lastmodifieddate, lastmodifiedby, version, tenantid) VALUES (60, 'Overhead_account codes', NULL, NULL, NULL, NULL, 0, 'default');
+INSERT INTO egf_accountcodepurpose (id, name, createdby, createddate, lastmodifieddate, lastmodifiedby, version, tenantid) VALUES (61, 'DEPOSIT:OTHER WORKS', NULL, NULL, NULL, NULL, 0, 'default');
+INSERT INTO egf_accountcodepurpose (id, name, createdby, createddate, lastmodifieddate, lastmodifiedby, version, tenantid) VALUES (62, 'REPAIRS AND MAINTENANCE', NULL, NULL, NULL, NULL, 0, 'default');
+INSERT INTO egf_accountcodepurpose (id, name, createdby, createddate, lastmodifieddate, lastmodifiedby, version, tenantid) VALUES (95, 'RETENTION_MONEY', NULL, NULL, NULL, NULL, 0, 'default');
+INSERT INTO egf_accountcodepurpose (id, name, createdby, createddate, lastmodifieddate, lastmodifiedby, version, tenantid) VALUES (96, 'LandEstate_Rent_purpose', NULL, NULL, NULL, NULL, 0, 'default');
+INSERT INTO egf_accountcodepurpose (id, name, createdby, createddate, lastmodifieddate, lastmodifiedby, version, tenantid) VALUES (103, 'Pension Payable Code', NULL, NULL, NULL, NULL, 0, 'default');
+INSERT INTO egf_accountcodepurpose (id, name, createdby, createddate, lastmodifieddate, lastmodifiedby, version, tenantid) VALUES (105, 'CONTRACTOR_ADVANCE_ACCOUNTCODE', NULL, NULL, NULL, NULL, 0, 'default');
+INSERT INTO egf_accountcodepurpose (id, name, createdby, createddate, lastmodifieddate, lastmodifiedby, version, tenantid) VALUES (120, 'BPA Deposit CWIP Account Code', NULL, NULL, NULL, NULL, 0, 'default');
+INSERT INTO egf_accountcodepurpose (id, name, createdby, createddate, lastmodifieddate, lastmodifiedby, version, tenantid) VALUES (121, 'Cash In Transit', NULL, NULL, NULL, NULL, 0, 'default');
+
+SELECT setval('seq_egf_accountcodepurpose',(select max(id)+1 from egf_accountcodepurpose));

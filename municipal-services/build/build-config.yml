@@ -1,0 +1,212 @@
+#
+# config:
+# -   name: < Name of the job, foo/bar would create job named bar inside folder foo >
+#     build:
+#     - work-dir: < Working directory of the app to be built >
+#       dockerfile: < Path to the dockerfile, optional, assumes dockerfile in working directory if not provided >
+#       image-name: < Docker image name  >
+# -
+# -
+config:
+  - name: "builds/municipal-services/egov-user-event"
+    build:
+      - work-dir: "egov-user-event"
+        image-name: "egov-user-event"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "egov-user-event/src/main/resources/db"
+        image-name: "egov-user-event-db"
+
+  - name: "builds/municipal-services/pt-calculator-v2"
+    build:
+      - work-dir: "pt-calculator-v2"
+        image-name: "pt-calculator-v2"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "pt-calculator-v2/src/main/resources/db"
+        image-name: "pt-calculator-v2-db"
+
+  - name: "builds/municipal-services/pt-services-v2"
+    build:
+      - work-dir: "pt-services-v2"
+        image-name: "pt-services-v2"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "pt-services-v2/src/main/resources/db"
+        image-name: "pt-services-v2-db"
+
+  - name: "builds/municipal-services/rainmaker-pgr"
+    build:
+      - work-dir: "rainmaker-pgr"
+        image-name: "rainmaker-pgr"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "rainmaker-pgr/src/main/resources/db"
+        image-name: "rainmaker-pgr-db"
+
+  - name: "builds/municipal-services/pgr-services"
+    build:
+      - work-dir: "pgr-services"
+        image-name: "pgr-services"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "pgr-services/src/main/resources/db"
+        image-name: "pgr-services-db"
+
+  - name: "builds/municipal-services/tl-calculator"
+    build:
+      - work-dir: "tl-calculator"
+        image-name: "tl-calculator"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "tl-calculator/src/main/resources/db"
+        image-name: "tl-calculator-db"
+        
+  - name: "builds/municipal-services/tl-services"
+    build:
+      - work-dir: "tl-services"
+        image-name: "tl-services"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "tl-services/src/main/resources/db"
+        image-name: "tl-services-db"
+
+  - name: "builds/municipal-services/firenoc-services"
+    build:
+      - work-dir: "firenoc-services"
+        image-name: "firenoc-services"
+      - work-dir: "firenoc-services/migration"
+        image-name: "firenoc-services-db"
+
+  - name: "builds/municipal-services/firenoc-calculator"
+    build:
+      - work-dir: "firenoc-calculator"
+        image-name: "firenoc-calculator"
+      - work-dir: "firenoc-calculator/migration"
+        image-name: "firenoc-calculator-db"
+
+  - name: "builds/municipal-services/ws-services"
+    build:
+      - work-dir: "ws-services"
+        image-name: "ws-services"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "ws-services/src/main/resources/db"
+        image-name: "ws-services-db"
+        
+  - name: "builds/municipal-services/property-services"
+    build:
+      - work-dir: "property-services"
+        image-name: "property-services"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "property-services/src/main/resources/db"
+        image-name: "property-services-db"
+
+  - name: "builds/municipal-services/ws-calculator"
+    build:
+      - work-dir: "ws-calculator"
+        image-name: "ws-calculator"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "ws-calculator/src/main/resources/db"
+        image-name: "ws-calculator-db"
+
+  - name: "builds/municipal-services/sw-services"
+    build:
+      - work-dir: "sw-services"
+        image-name: "sw-services"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "sw-services/src/main/resources/db"
+        image-name: "sw-services-db"
+
+  - name: "builds/municipal-services/sw-calculator"
+    build:
+      - work-dir: "sw-calculator"
+        image-name: "sw-calculator"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "sw-calculator/src/main/resources/db"
+        image-name: "sw-calculator-db"     
+
+  - name: "builds/municipal-services/bpa-services"
+    build:
+      - work-dir: "bpa-services"
+        image-name: "bpa-services"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "bpa-services/src/main/resources/db"
+        image-name: "bpa-services-db"         
+
+
+  - name: "builds/municipal-services/bpa-calculator"
+    build:
+      - work-dir: "bpa-calculator"
+        image-name: "bpa-calculator"
+        dockerfile: "build/maven/Dockerfile"     
+
+  - name: "builds/municipal-services/land-services"
+    build:
+      - work-dir: "land-services"
+        image-name: "land-services"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "land-services/src/main/resources/db"
+        image-name: "land-services-db"
+
+
+  - name: "builds/municipal-services/noc-services"
+    build:
+      - work-dir: "noc-services"
+        image-name: "noc-services"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "noc-services/src/main/resources/db"
+        image-name: "noc-services-db"
+
+  - name: "builds/municipal-services/echallan-services"
+    build:
+      - work-dir: "echallan-services"
+        image-name: "echallan-services"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "echallan-services/src/main/resources/db"
+        image-name: "echallan-services-db"         
+
+  - name: "builds/municipal-services/echallan-calculator"
+    build:
+      - work-dir: "echallan-calculator"
+        image-name: "echallan-calculator"
+        dockerfile: "build/maven/Dockerfile"  
+        
+  - name: "builds/municipal-services/fsm"
+    build:
+      - work-dir: "fsm"
+        image-name: "fsm"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "fsm/src/main/resources/db"
+        image-name: "fsm-db"
+
+
+
+  - name: "builds/municipal-services/vehicle"
+    build:
+      - work-dir: "vehicle"
+        image-name: "vehicle"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "vehicle/src/main/resources/db"
+        image-name: "vehicle-db"
+
+
+  - name: "builds/municipal-services/vendor"
+    build:
+      - work-dir: "vendor"
+        image-name: "vendor"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "vendor/src/main/resources/db"
+        image-name: "vendor-db"
+
+  - name: "builds/municipal-services/fsm-calculator"
+    build:
+      - work-dir: "fsm-calculator"
+        image-name: "fsm-calculator"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "fsm-calculator/src/main/resources/db"
+        image-name: "fsm-calculator-db"
+        
+  - name: "builds/digit-impel-builds/municipal-services/turn-io-adapter"
+      - work-dir: "turn-io-adapter"
+        image-name: "turn-io-adapter"
+        dockerfile: "build/maven/Dockerfile"
+        
+  - name: "builds/municipal-services/inbox"
+    build:
+      - work-dir: "inbox"
+        image-name: "inbox"
+        dockerfile: "build/maven/Dockerfile"
+

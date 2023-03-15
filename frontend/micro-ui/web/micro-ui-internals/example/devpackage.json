@@ -1,0 +1,44 @@
+{
+  "name": "@egovernments/digit-ui-example",
+  "version": "1.3.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "homepage": "digit-ui/",
+  "scripts": {
+    "start": "react-scripts start"
+  },
+  "devDependencies": {
+    "@egovernments/digit-ui-libraries":"^1.4.0",
+    "@egovernments/digit-ui-module-common":"^1.4.0",
+    "@egovernments/digit-ui-module-engagement":"^1.4.0",
+    "@egovernments/digit-ui-module-fsm":"^1.4.0",
+    "@egovernments/digit-ui-module-mcollect":"^1.4.0",
+    "@egovernments/digit-ui-module-noc":"^1.4.0",
+    "@egovernments/digit-ui-module-obps":"^1.4.0",
+    "@egovernments/digit-ui-module-pgr":"^1.4.0",
+    "@egovernments/digit-ui-module-pt":"^1.4.0",
+    "@egovernments/digit-ui-module-receipts":"^1.4.0",
+    "@egovernments/digit-ui-module-tl":"^1.4.0",
+    "@egovernments/digit-ui-module-ws":"^1.4.0",
+    "@egovernments/digit-ui-module-commonpt":"^1.4.0",
+    "http-proxy-middleware": "^1.0.5",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-i18next": "11.16.2",
+    "react-router-dom": "5.3.0",
+    "react-scripts": "^4.0.1"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

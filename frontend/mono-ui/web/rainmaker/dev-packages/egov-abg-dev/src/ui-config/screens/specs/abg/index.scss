@@ -1,0 +1,41 @@
+#material-ui-abgSearchCard, #material-ui-billSearchCard {
+    overflow: visible;
+  }
+  .autocomplete-dropdown {
+    min-width: 80%;
+    position: absolute;
+    z-index: 1900;
+    max-height: 150px;
+    overflow: hidden;
+  }
+  .autocomplete-dropdown div {
+	min-width: 80%;
+	max-height: 150px;
+    overflow: auto;
+  }
+  /* Tooltip container */
+  .jk-tooltip {
+    position: relative;
+    display: inline-block;
+  }
+  
+  /* Tooltip text */
+  .jk-tooltip .jk-tooltiptext {
+    visibility: hidden;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 8px 0;
+    border-radius: 6px;
+   
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+    top: -5px;
+    right: 105%;
+  }
+  
+  /* Show the tooltip text when you mouse over the tooltip container */
+  .jk-tooltip:hover .jk-tooltiptext {
+    visibility: visible;
+  }

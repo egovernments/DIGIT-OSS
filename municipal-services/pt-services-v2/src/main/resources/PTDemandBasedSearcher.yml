@@ -1,0 +1,45 @@
+SearchDefinitions:
+  moduleName: rainmaker-pt-demandbased
+  summary: Searcher configuration for demand based search
+  version: 1.0.0
+  definitions:
+
+  - name: searchAssessmentsToUpdate
+    query:
+      baseQuery: |
+        select row_to_json(data) from (
+        WITH summary AS (
+        SELECT ptdl.property,
+         ptdl.assessmentnumber,
+         ptdl.financialYear,
+         pt.tenantId,
+         address.locality,
+         ROW_NUMBER() OVER(PARTITION BY ptdl.property
+         ORDER BY ptdl.financialyear DESC,ptdl.createdtime DESC ) AS rk
+         FROM eg_pt_property_v2 pt INNER JOIN eg_pt_propertydetail_v2 ptdl ON pt.propertyid = ptdl.property INNER JOIN eg_pt_address_v2 address on address.property=pt.propertyid)
+         SELECT s.*
+         FROM summary s
+         WHERE s.rk = 1) data $where
+      groupBy:
+      orderBy:
+    searchParams:
+      condition: AND
+      params:
+      - name: data.locality
+        isMandatory: true
+        jsonPath: $.searchCriteria.locality
+        operator: =
+      - name: data.tenantid
+        isMandatory: true
+        jsonPath: $.searchCriteria.tenantId
+        operator: =
+      - name: data.financialYear
+        isMandatory: true
+        jsonPath: $.searchCriteria.financialYear
+        operator: NE
+
+
+    output:
+      jsonFormat: {"ResponseInfo": {}}
+      outJsonPath: $.DemandBasedAssessments
+      responseInfoPath: $.ResponseInfo

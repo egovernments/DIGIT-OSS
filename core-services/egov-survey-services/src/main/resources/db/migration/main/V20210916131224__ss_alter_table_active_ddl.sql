@@ -1,0 +1,1 @@
+ALTER TABLE eg_ss_survey ADD COLUMN active BOOLEAN DEFAULT TRUE;

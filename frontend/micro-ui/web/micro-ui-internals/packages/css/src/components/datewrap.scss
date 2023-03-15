@@ -1,0 +1,21 @@
+.date-wrap {
+  @apply flex mb-md;
+
+  img,
+  svg {
+    height: 22px;
+    width: 20px;
+  }
+
+  p {
+    @apply text-text-primary text-body-l pl-sm;
+  }
+}
+
+@screen dt {
+  .date-wrap {
+    p {
+      @apply text-body-l-dt;
+    }
+  }
+}

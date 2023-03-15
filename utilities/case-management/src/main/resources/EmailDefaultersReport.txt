@@ -1,0 +1,11 @@
+Greetings,
+
+Please find the list of isolation cases who were not able to self report their daily health details. Their complete details along with their contact information have been shared in the attached excel sheet.
+
+Instructions:
+Download the attached excel sheet.
+Make necessary calls to isolation cases to record their health details on the same sheet.
+Once done, please reply to this email along with the completed excel sheet to register the cases.
+After the system verifies the details filled by you in the sheet and it will send back a confirmation email along with errors if there are any.
+
+In case of face any issue please call us on XXXXX-XXXXX

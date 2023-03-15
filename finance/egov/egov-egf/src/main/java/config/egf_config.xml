@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--
+  ~    eGov  SmartCity eGovernance suite aims to improve the internal efficiency,transparency,
+  ~    accountability and the service delivery of the government  organizations.
+  ~
+  ~     Copyright (C) 2017  eGovernments Foundation
+  ~
+  ~     The updated version of eGov suite of products as by eGovernments Foundation
+  ~     is available at http://www.egovernments.org
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program. If not, see http://www.gnu.org/licenses/ or
+  ~     http://www.gnu.org/licenses/gpl.html .
+  ~
+  ~     In addition to the terms of the GPL license to be adhered to in using this
+  ~     program, the following additional terms are to be complied with:
+  ~
+  ~         1) All versions of this program, verbatim or modified must carry this
+  ~            Legal Notice.
+  ~            Further, all user interfaces, including but not limited to citizen facing interfaces,
+  ~            Urban Local Bodies interfaces, dashboards, mobile applications, of the program and any
+  ~            derived works should carry eGovernments Foundation logo on the top right corner.
+  ~
+  ~            For the logo, please refer http://egovernments.org/html/logo/egov_logo.png.
+  ~            For any further queries on attribution, including queries on brand guidelines,
+  ~            please contact contact@egovernments.org
+  ~
+  ~         2) Any misrepresentation of the origin of the material is prohibited. It
+  ~            is required that all modified versions of this material be marked in
+  ~            reasonable ways as different from the original version.
+  ~
+  ~         3) This license does not grant any rights to any user of the program
+  ~            with regards to rights under trademark law for use of the trade names
+  ~            or trademarks of eGovernments Foundation.
+  ~
+  ~   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
+  ~
+  -->
+<properties>
+    <AccountCode>
+
+        <!-- Mention the Maximum length of glcode  -->
+        <glcodeMaxLength>7</glcodeMaxLength>
+
+        <!-- Mention the difference between the sub-minorcode and posting code in zeroes (6-4=2 i.e 00)  -->
+        <zerofill>00</zerofill>
+
+        <!-- Mention the number of digits in the sub-minorcode ( 4721 --> 4) -->
+        <subminorvalue>5</subminorvalue>
+
+        <!-- Mention the classification value of the parent of detail code  -->
+        <parentfordetailcode>3</parentfordetailcode>
+
+        <!-- Mention the number of digits in the majorcode    -->
+        <majorcodevalue>3</majorcodevalue>
+
+        <!-- Mention the number of digits in the minor code    -->
+        <minorcodevalue>5</minorcodevalue>
+
+
+        <!-- Mention the classification value for budget group    -->
+        <budgetgroupvalue>4</budgetgroupvalue>
+
+    </AccountCode>
+
+    <autoGenerateCheck>
+        <autoGenerateChqNo>Y</autoGenerateChqNo>
+    </autoGenerateCheck>
+
+    <deptCheck>
+        <deptRequired>Y</deptRequired>
+    </deptCheck>
+
+    <budgetCheck>
+        <budgetCheckRequired>Y</budgetCheckRequired>
+
+    </budgetCheck>
+
+    <general>
+        <deptRequired>Y</deptRequired>
+        <MODULESFORBILLSACCOUNTINGMODIFY>Salary</MODULESFORBILLSACCOUNTINGMODIFY>
+    </general>
+
+    <!-- Properties for Admin Boundary module -->
+    <ADMBNDRY>
+        <Administration>
+            <multiple>multiple</multiple>
+            <EXCLUDE_LEVEL>SUBBLOCK,STREET,Street Fragment</EXCLUDE_LEVEL>
+            <callJavaScriptFunonChange>setBoundryType</callJavaScriptFunonChange>
+        </Administration>
+        <PGRADMIN>
+            <multiple></multiple>
+            <EXCLUDE_LEVEL>SUBBLOCK,STREET,Street Fragment</EXCLUDE_LEVEL>
+            <callJavaScriptFunonChange>zoneDeptcheck</callJavaScriptFunonChange>
+        </PGRADMIN>
+    </ADMBNDRY>
+
+    <vouchernumberformat>
+        <receipt>BRV</receipt>
+        <payment>BPV</payment>
+        <journal>GJV</journal>
+        <purchasejv>PJV</purchasejv>
+        <fixedassetjv>FJV</fixedassetjv>
+        <worksjv>CJV</worksjv>
+        <contingentjv>EJV</contingentjv>
+        <salaryjv>SJV</salaryjv>
+        <contra>CSL</contra>
+        <pensionjv>TJV</pensionjv>
+        <length>5</length>
+        <sublength>3</sublength>
+    </vouchernumberformat>
+    <CashInHand>
+        <PURPOSEID>4</PURPOSEID>
+    </CashInHand>
+
+    <ChequeInHand>
+        <PURPOSEID>5</PURPOSEID>
+    </ChequeInHand>
+
+    <BoundaryType>
+        <city>city</city>
+    </BoundaryType>
+
+
+    <MAXAmount>
+        <Length>1000</Length>
+    </MAXAmount>
+
+
+    <RecFund>
+        <PURPOSEID>9</PURPOSEID>
+    </RecFund>
+
+    <PayFund>
+        <Length>8</Length>
+    </PayFund>
+
+    <ContractorCodes>
+        <ConPayCode>350100201</ConPayCode>
+        <TdsAccCode></TdsAccCode>
+        <ConAdvCode>460400201</ConAdvCode>
+    </ContractorCodes>
+
+    <SupplierCodes>
+        <SupPayCode>350100101</SupPayCode>
+        <SupAdvCode>460400101</SupAdvCode>
+
+    </SupplierCodes>
+
+    <CBillCodes>
+        <CbillPayCode>350100301</CbillPayCode>
+    </CBillCodes>
+    <RTGSPayment>
+        <payto>Cashier</payto>
+    </RTGSPayment>
+    <!--   not Used
+    <SalaryBillCodes>
+                <211100>382100</211100>
+                <212100>382200</212100>
+                <salCodes>211100\,212100</salCodes>
+    </SalaryBillCodes>
+       -->
+    <SalaryCodes>
+        <SalPayCode>350110100</SalPayCode>
+    </SalaryCodes>
+
+    <defaultValues>
+        <salaryBillPurposeIds>31</salaryBillPurposeIds>
+        <salaryBillDefaultPurposeId>31</salaryBillDefaultPurposeId>
+        <cBillPurposeIds>28</cBillPurposeIds>
+        <cBillDefaultPurposeId>28</cBillDefaultPurposeId>
+        <worksBillPurposeIds>26</worksBillPurposeIds>
+        <worksBillDefaultPurposeId>26</worksBillDefaultPurposeId>
+        <purchaseBillPurposeIds>27</purchaseBillPurposeIds>
+        <purchaseBillDefaultPurposeId>27</purchaseBillDefaultPurposeId>
+    </defaultValues>
+
+    <PenaltyCode>
+        <RecPenaltyCode></RecPenaltyCode>
+        <OtherTaxes></OtherTaxes>
+    </PenaltyCode>
+
+    <!-- In income and expenditure report we expect all income codes to be credited except this refundcode-->
+    <!-- This code needs to be subtracted in ie report -->
+
+    <IncomeRefundCode>
+        <noOfCodes>3</noOfCodes>
+        <IRefundCode>119\,139\,149</IRefundCode>
+    </IncomeRefundCode>
+
+    <servers>
+        <news>
+            <host>news.mydomain.com\,news.com</host>
+            <port>1244</port>
+        </news>
+        <email>
+            <host>mymail.com\,myemail.com</host>
+            <port>9211</port>
+        </email>
+    </servers>
+
+    <!-- Properties for PGR module -->
+    <PGR>
+        <!-- Can be AUTOMATIC or SEMI_AUTOMATIC-->
+        <SYSTEM_MODE>AUTOMATIC</SYSTEM_MODE>
+        <!-- APPROPRIATE ROUTING USER IDS FOR THEIR RESPECTIVE DEPARTMENTS -->
+        <DEPT_ENG_ROUTER_ID>6</DEPT_ENG_ROUTER_ID>
+        <DEPT_HEALTH_ROUTER_ID>17</DEPT_HEALTH_ROUTER_ID>
+        <DEPT_REVENUE_ROUTER_ID>11</DEPT_REVENUE_ROUTER_ID>
+        <GRIEVANCE_OFFICER_ID>5</GRIEVANCE_OFFICER_ID>
+    </PGR>
+
+    <!-- Properties for PT module -->
+    <PT>
+        <!-- Can be ARV, UAS or CVS-->
+        <VALUATION_SYSTEM>ARV</VALUATION_SYSTEM>
+    </PT>
+
+    <!-- Properties for BND module -->
+    <BND>
+    </BND>
+    <GISReports>
+        <getFinancialyear>1</getFinancialyear>
+        <getSubstringValue>3</getSubstringValue>
+        <getFinancialyearName>2006-2007</getFinancialyearName>
+    </GISReports>
+    <PredefinedId>
+        <fundId>4</fundId>
+        <fundSourceId>1</fundSourceId>
+        <functionId>13</functionId>
+        <departmentId>11</departmentId>
+
+    </PredefinedId>
+
+
+    <purposeId>
+        <cessControlCode>2</cessControlCode>
+        <PTSuspenseCode></PTSuspenseCode>
+    </purposeId>
+
+
+    <ReportDate>
+        <HalfYear>30/09</HalfYear>
+    </ReportDate>
+
+
+    <FinClassFactory>
+        <Commons>com.exilant.eGov.src.common.EGovernCommon</Commons>
+    </FinClassFactory>
+
+
+    <WPNpurchase>
+        <headername>purchase</headername>
+        <parentquery>select id \,name \,code from relation where relationtypeid='1' and id in (select distinct
+            wd.relationid from worksdetail wd where wd.isactive='1') order by id
+        </parentquery>
+        <intermediatequery>SELECT DISTINCT wd.ID AS id \,wd.name \,wd.code FROM worksdetail wd left outer join
+            eg_billregister ebr ON wd.id = ebr.worksdetailid WHERE wd.relationid=:parentId AND (ebr.worksdetailid NOT IN
+            (SELECT DISTINCT worksdetailid FROM eg_billregister WHERE UPPER(billtype)='FINAL BILL' AND
+            UPPER(billstatus)!='CANCELLED' AND worksdetailid IS NOT NULL ) OR ebr.worksdetailid IS NULL)
+        </intermediatequery>
+        <childquery></childquery>
+    </WPNpurchase>
+
+    <WPNworks>
+        <headername>works</headername>
+        <parentquery>select id \,name \,code from relation where relationtypeid='2' and id in (select distinct
+            wd.relationid from worksdetail wd where wd.isactive='1') order by id
+        </parentquery>
+        <intermediatequery>SELECT DISTINCT wd.ID AS id \,wd.name \,wd.code FROM worksdetail wd left outer join
+            eg_billregister ebr ON wd.id = ebr.worksdetailid WHERE wd.relationid=:parentId AND (ebr.worksdetailid NOT IN
+            (SELECT DISTINCT worksdetailid FROM eg_billregister WHERE UPPER(billtype)='FINAL BILL' AND
+            UPPER(billstatus)!='CANCELLED' AND worksdetailid IS NOT NULL ) OR ebr.worksdetailid IS NULL)
+        </intermediatequery>
+        <childquery></childquery>
+    </WPNworks>
+
+
+    <localhost>
+        <VoucherTypes>
+            <Journal>Auto</Journal>
+            <Receipt>Auto</Receipt>
+            <Payment>Auto</Payment>
+            <Contra>Auto</Contra>
+        </VoucherTypes>
+    </localhost>
+
+    <IEReport>
+        <reportlength>4</reportlength>
+        <t0>280-Add:Prior period Items(Net)</t0>
+        <t1>280a-Gross surplus/(deficit) of income over expenditure after Prior Period Items</t1>
+        <t2>290-Less: Transfer to Reserve Funds</t2>
+        <t3>290a-Net balance being surplus/ deficit carried over to Municipal Fund</t3>
+    </IEReport>
+    <IESchedule>
+        <reportlength>4</reportlength>
+        <t0>28-a.Prior-period Income</t0>
+        <t1>28-b.Prior Period Expenses</t1>
+        <t2>(Net)</t2>
+        <t3>Sub - Total</t3>
+    </IESchedule>
+    <IESchedulet0>
+        <glcode>281,282</glcode>
+    </IESchedulet0>
+
+    <IESchedulet1>
+        <glcode>286,288</glcode>
+    </IESchedulet1>
+
+    <IESchedulesFormatting>
+        <I-01>
+            <lesssubtotal>119</lesssubtotal>
+        </I-01>
+        <I-03>
+            <lesssubtotal>139</lesssubtotal>
+        </I-03>
+        <I-04>
+            <lesssubtotal>149</lesssubtotal>
+        </I-04>
+    </IESchedulesFormatting>
+
+    <AdvanceRegisterCode>
+        <ARGLCode>460</ARGLCode>
+    </AdvanceRegisterCode>
+
+    <SchemeUtilization>
+        <filterGlcodeForScheme>350\,450</filterGlcodeForScheme>
+    </SchemeUtilization>
+    <DepositRegReport>
+        <majorCodes>340\,341</majorCodes>
+    </DepositRegReport>
+
+
+    <BankAdviceReport>
+        <infavourof>Chairperson</infavourof>
+    </BankAdviceReport>
+</properties>
+ 

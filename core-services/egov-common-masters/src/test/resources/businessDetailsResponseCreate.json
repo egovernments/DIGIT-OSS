@@ -1,0 +1,65 @@
+{
+    "ResponseInfo": {
+        "apiId": "org.egov.collection",
+        "ver": "1.0",
+        "resMsgId": "uief87324",
+        "msgId": "654654",
+        "status": "200"
+    },
+    "BusinessDetailsInfo": [
+        {
+            "id": 1,
+            "code": "TL",
+            "name": "Trade Licence",
+            "active": true,
+            "businessCategory": 1,
+            "businessType": "C",
+            "businessUrl": "/receipts/receipt-create.action",
+            "department": "56",
+            "fundSource": "234",
+            "functionary": "456",
+            "voucherCreation": true,
+            "isVoucherApproved": true,
+            "callBackForApportioning":true,
+            "ordernumber": 2,
+            "fund": "12",
+            "function": "123",
+            "tenantId": "default",
+            "accountDetails": [
+                {
+                    "id": 1,
+                    "businessDetails":1,
+                    "chartOfAccounts": 56,
+                    "amount": 1000.00
+                },
+                {
+                    "id": 2,
+                    "businessDetails":1,
+                    "chartOfAccounts": 57,
+                    "amount": 2000.00
+                }
+            ],
+            "subledgerDetails": [
+                {
+                    "id": 1,
+                    "detailType": 34,
+                    "detailKey": 23,
+                    "amount": 10000.00,
+                    "businessAccountDetails":1
+                     
+                    }
+                ,
+                {
+                    "id": 2,
+                    "detailType": 35,
+                    "detailKey": 24,
+                    "amount": 20000.00,
+                    "businessAccountDetails":1
+                  
+                    }
+                
+            ]
+        }
+    ]
+}
+

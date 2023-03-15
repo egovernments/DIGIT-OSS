@@ -1,0 +1,12 @@
+*  @gajendran-egov @sathishp-eGov @kavi-egov
+*.yaml  @gajendran-egov @sathishp-eGov @kavi-egov
+
+business-services/ @sathishp-eGov @talele08 @kavi-egov @sirishrao-egov @subhashini-egov @talele08 
+core-services/ @sathishp-eGov @talele08 @kavi-egov @sirishrao-egov @subhashini-egov @talele08 
+municipal-services/ @sathishp-eGov @talele08 @kavi-egov @sirishrao-egov @subhashini-egov @talele08 @kapil-eGov @AmanKumar-eGov
+
+
+##Frontend
+frontend/micro-ui/  @sathishp-eGov @jagankumar-egov @sirishrao-egov @subhashini-egov @talele08
+frontend/micro-ui-internals/ @sathishp-eGov @jagankumar-egov @sirishrao-egov @subhashini-egov @talele08
+frontend/mono-ui/ @sathishp-eGov @jagankumar-egov @sirishrao-egov @subhashini-egov @talele08

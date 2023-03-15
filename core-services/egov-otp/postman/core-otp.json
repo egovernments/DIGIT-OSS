@@ -1,0 +1,51 @@
+{
+  "variables": [],
+  "info": {
+    "name": "core-otp",
+    "_postman_id": "16bdfae1-6e31-5351-3ff7-8fc5cbc35016",
+    "description": "",
+    "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "http://egov-micro-dev.egovernments.org/otp/v1/_validate",
+      "request": {
+        "url": "http://localhost:8089/otp/v1/_validate",
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"RequestInfo\": {\n    \"api_id\": \"1\",\n    \"ver\": \"1\",\n    \"ts\": null,\n    \"action\": \"create\",\n    \"did\": \"\",\n    \"key\": \"\",\n    \"msg_id\": \"\",\n    \"requester_id\": \"\",\n    \"auth_token\": null\n  },\n  \"otp\": {\n  \t\"tenantId\": \"ap.public\",\n  \t\"identity\": \"9880141280\",\n  \t\"otp\": \"90653\"\n  }\n}"
+        },
+        "description": "Validate otp"
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:8089/otp/v1/_create",
+      "request": {
+        "url": "http://localhost:8089/otp/v1/_create",
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "description": ""
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"RequestInfo\": {\n    \"api_id\": \"1\",\n    \"ver\": \"1\",\n    \"ts\": null,\n    \"action\": \"create\",\n    \"did\": \"\",\n    \"key\": \"\",\n    \"msg_id\": \"\",\n    \"requester_id\": \"\",\n    \"auth_token\": null\n  },\n  \"otp\": {\n  \t\"tenantId\": \"ap.public\",\n  \t\"identity\": \"userid\"\n  }\n}"
+        },
+        "description": "core otp create"
+      },
+      "response": []
+    }
+  ]
+}

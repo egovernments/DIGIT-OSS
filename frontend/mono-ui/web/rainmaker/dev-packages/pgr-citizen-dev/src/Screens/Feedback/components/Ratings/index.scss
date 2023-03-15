@@ -1,0 +1,10 @@
+.feedback-ratings-cont {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 29px 0 32px 0;
+}
+
+.feedback-ratings span:last-child {
+  margin: 0 !important;
+}

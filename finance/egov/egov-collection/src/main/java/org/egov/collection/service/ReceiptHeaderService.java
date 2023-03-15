@@ -1,0 +1,1700 @@
+/*
+
+ *    eGov  SmartCity eGovernance suite aims to improve the internal efficiency,transparency,
+ *    accountability and the service delivery of the government  organizations.
+ *
+ *     Copyright (C) 2017  eGovernments Foundation
+ *
+ *     The updated version of eGov suite of products as by eGovernments Foundation
+ *     is available at http://www.egovernments.org
+ *
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     any later version.
+ *
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program. If not, see http://www.gnu.org/licenses/ or
+ *     http://www.gnu.org/licenses/gpl.html .
+ *
+ *     In addition to the terms of the GPL license to be adhered to in using this
+ *     program, the following additional terms are to be complied with:
+ *
+ *         1) All versions of this program, verbatim or modified must carry this
+ *            Legal Notice.
+ *            Further, all user interfaces, including but not limited to citizen facing interfaces,
+ *            Urban Local Bodies interfaces, dashboards, mobile applications, of the program and any
+ *            derived works should carry eGovernments Foundation logo on the top right corner.
+ *
+ *            For the logo, please refer http://egovernments.org/html/logo/egov_logo.png.
+ *            For any further queries on attribution, including queries on brand guidelines,
+ *            please contact contact@egovernments.org
+ *
+ *         2) Any misrepresentation of the origin of the material is prohibited. It
+ *            is required that all modified versions of this material be marked in
+ *            reasonable ways as different from the original version.
+ *
+ *         3) This license does not grant any rights to any user of the program
+ *            with regards to rights under trademark law for use of the trade names
+ *            or trademarks of eGovernments Foundation.
+ *
+ *   In case of any queries, you can reach eGovernments Foundation at contact@egovernments.org.
+ *
+ */
+package org.egov.collection.service;
+
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.egov.billsaccounting.services.VoucherConstant;
+import org.egov.collection.constants.CollectionConstants;
+import org.egov.collection.entity.AccountPayeeDetail;
+import org.egov.collection.entity.Challan;
+import org.egov.collection.entity.CollectionIndex;
+import org.egov.collection.entity.ReceiptDetail;
+import org.egov.collection.entity.ReceiptHeader;
+import org.egov.collection.entity.ReceiptMisc;
+import org.egov.collection.entity.ReceiptVoucher;
+import org.egov.collection.integration.models.BillReceiptInfo;
+import org.egov.collection.integration.models.BillReceiptInfoImpl;
+import org.egov.collection.integration.models.BillReceiptReq;
+import org.egov.collection.integration.models.ReceiptCancellationInfo;
+import org.egov.collection.integration.services.BillingIntegrationService;
+import org.egov.collection.utils.CollectionsNumberGenerator;
+import org.egov.collection.utils.CollectionsUtil;
+import org.egov.collection.utils.FinancialsUtil;
+import org.egov.collection.utils.es.CollectionIndexUtils;
+import org.egov.commons.Bankaccount;
+import org.egov.commons.CFinancialYear;
+import org.egov.commons.CVoucherHeader;
+import org.egov.commons.EgwStatus;
+import org.egov.commons.dao.ChartOfAccountsHibernateDAO;
+import org.egov.eis.entity.Assignment;
+import org.egov.eis.entity.Employee;
+import org.egov.eis.entity.Jurisdiction;
+import org.egov.eis.service.AssignmentService;
+import org.egov.eis.service.OldEmployeeService;
+import org.egov.infra.admin.master.entity.Boundary;
+import org.egov.infra.admin.master.entity.Department;
+import org.egov.infra.admin.master.service.DepartmentService;
+import org.egov.infra.config.core.ApplicationThreadLocals;
+import org.egov.infra.exception.ApplicationRuntimeException;
+import org.egov.infra.microservice.contract.RequestInfoWrapper;
+import org.egov.infra.microservice.models.Bank;
+import org.egov.infra.microservice.models.Bill;
+import org.egov.infra.microservice.models.BillDetailAdditional;
+import org.egov.infra.microservice.models.BillResponse;
+import org.egov.infra.microservice.models.BillV2;
+import org.egov.infra.microservice.models.BusinessDetails;
+import org.egov.infra.microservice.models.CollectionType;
+import org.egov.infra.microservice.models.Demand;
+import org.egov.infra.microservice.models.DemandDetail;
+import org.egov.infra.microservice.models.DemandRequest;
+import org.egov.infra.microservice.models.DemandResponse;
+import org.egov.infra.microservice.models.Instrument;
+import org.egov.infra.microservice.models.InstrumentStatusEnum;
+import org.egov.infra.microservice.models.Payment;
+import org.egov.infra.microservice.models.PaymentDetail;
+import org.egov.infra.microservice.models.PaymentModeEnum;
+import org.egov.infra.microservice.models.PaymentResponse;
+import org.egov.infra.microservice.models.PaymentStatusEnum;
+import org.egov.infra.microservice.utils.PaymentUtils;
+import org.egov.infra.microservice.models.Receipt;
+import org.egov.infra.microservice.models.ReceiptRequest;
+import org.egov.infra.microservice.models.ReceiptResponse;
+import org.egov.infra.microservice.models.RequestInfo;
+import org.egov.infra.microservice.models.TaxPeriod;
+import org.egov.infra.microservice.utils.ApplicationConfigManager;
+import org.egov.infra.microservice.utils.MicroserviceUtils;
+import org.egov.infra.reporting.engine.ReportFormat;
+import org.egov.infra.reporting.engine.ReportRequest;
+import org.egov.infra.security.utils.SecurityUtils;
+import org.egov.infra.validation.exception.ValidationError;
+import org.egov.infra.validation.exception.ValidationException;
+import org.egov.infstr.models.ServiceDetails;
+import org.egov.infstr.services.PersistenceService;
+import org.egov.model.instrument.InstrumentHeader;
+import org.egov.model.instrument.InstrumentType;
+import org.egov.pims.commons.Designation;
+import org.egov.pims.commons.Position;
+import org.hibernate.ObjectNotFoundException;
+import org.hibernate.Query;
+import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.JsonPath;
+
+/**
+ * Provides services related to receipt header
+ */
+@Transactional(readOnly = true)
+public class ReceiptHeaderService extends PersistenceService<ReceiptHeader, Long> {
+
+    private static final Logger LOGGER = Logger.getLogger(ReceiptHeaderService.class);
+    private CollectionsUtil collectionsUtil;
+    private CollectionsNumberGenerator collectionsNumberGenerator;
+    private FinancialsUtil financialsUtil;
+    private PersistenceService persistenceService;
+    @Autowired
+    private OldEmployeeService employeeService;
+    @Autowired
+    private DepartmentService departmentService;
+
+    @Autowired
+    private AssignmentService assignmentService;
+
+    private ChallanService challanService;
+
+    @Autowired
+    private CollectionIndexService collectionIndexService;
+
+    @Autowired
+    private CollectionIndexUtils collectionIndexUtils;
+
+    @Autowired
+    private ChartOfAccountsHibernateDAO chartOfAccountsHibernateDAO;
+
+    @Autowired
+    protected SecurityUtils securityUtils;
+
+    @Autowired
+    private MicroserviceUtils microserviceUtils;
+    
+    @Autowired
+    private PaymentUtils paymentUtils;
+    
+    @Autowired
+    private ApplicationConfigManager appConfigManager;
+
+    @Value("${egov.services.billing.service.demand.create.url}")
+    private String demandCreateUrl;
+
+    @Value("${egov.services.billing.service.bill.generate}")
+    private String billGenerateUrl;
+
+    @Value("${egov.services.collection.service.receipts.create}")
+    private String receiptCreateUrl;
+
+    public ReceiptHeaderService() {
+        super(ReceiptHeader.class);
+    }
+
+    public ReceiptHeaderService(final Class<ReceiptHeader> type) {
+        super(type);
+    }
+
+    /**
+     * @param statusCode Status code of receipts to be fetched. If null or ALL, then receipts with all statuses are fetched
+     * @param userName User name of the user who has created the receipts. If null or ALL, then receipts of all users are fetched
+     * @param counterId Counter id on which the receipts were created. If negative, then receipts from all counters are fetched
+     * @param serviceCode Service code for which the receipts were created. If null or ALL, then receipts of all billing services
+     * are fetched
+     * @return List of all receipts created by given user from given counter id and having given status
+     */
+    public List<ReceiptHeader> findAllByPositionAndInboxItemDetails(final List<Long> positionIds,
+            final String groupingCriteria) {
+        final StringBuilder query = new StringBuilder(
+                " select distinct (receipt) from org.egov.collection.entity.ReceiptHeader receipt ");
+        String wfAction = null;
+        String serviceCode = null;
+        String userName = null;
+        String receiptDate = null;
+        String receiptType = null;
+        Integer counterId = null;
+        String paymentMode = null;
+        final String params[] = groupingCriteria.split(CollectionConstants.SEPARATOR_HYPHEN, -1);
+        if (params.length == 7) {
+            wfAction = params[0];
+            serviceCode = params[1];
+            userName = params[2];
+            counterId = Integer.valueOf(params[4]);
+            receiptDate = params[3];
+            receiptType = params[5];
+            paymentMode = params[6];
+        }
+        final boolean allCounters = counterId == null || counterId < 0;
+        // final boolean allPositions = positionIds == null ||
+        // positionIds.equals(CollectionConstants.ALL);
+        final boolean allServices = serviceCode == null || serviceCode.equals(CollectionConstants.ALL);
+        final boolean allWfAction = wfAction == null || wfAction.equals(CollectionConstants.ALL);
+        final boolean allUserName = userName == null || userName.equals(CollectionConstants.ALL);
+        final boolean allDate = receiptDate == null || receiptDate.equals(CollectionConstants.ALL);
+        final SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        Date rcptDate = null;
+        try {
+            rcptDate = formatter.parse(receiptDate);
+        } catch (final ParseException e) {
+            LOGGER.error("Exception while parsing ReceiptDate", e);
+            throw new ApplicationRuntimeException(e.getMessage());
+        }
+
+        if (paymentMode.equals(CollectionConstants.INSTRUMENTTYPE_CASH)
+                || paymentMode.equals(CollectionConstants.INSTRUMENTTYPE_CHEQUEORDD))
+            query.append("join receipt.receiptInstrument as instruments ");
+
+        query.append(" where 1=1 and receipt.state.value != 'END' and receipt.state.status != 2 ");
+        // if (!allPositions)
+        query.append(" and receipt.state.ownerPosition.id in :positionIds");
+        if (!allCounters)
+            query.append(" and receipt.location.id = :counterId");
+        if (!allServices && receiptType.equals(CollectionConstants.SERVICE_TYPE_BILLING))
+            query.append(" and receipt.service.code = :serviceCode");
+        if (!allWfAction)
+            query.append(" and receipt.state.nextAction = :wfAction");
+        if (!allUserName)
+            query.append(" and receipt.createdBy.username = :userName");
+        if (!allDate)
+            query.append(" and (cast(receipt.receiptdate as date)) = :rcptDate");
+        if (receiptType.equals(CollectionConstants.SERVICE_TYPE_BILLING))
+            query.append(" and receipt.receipttype = :receiptType");
+        else
+            query.append(" and receipt.receipttype in ('A', 'C')");
+
+        if (paymentMode.equals(CollectionConstants.INSTRUMENTTYPE_CASH)
+                || paymentMode.equals(CollectionConstants.INSTRUMENTTYPE_CHEQUEORDD))
+            query.append(" and instruments.instrumentType.type in (:paymentMode )");
+        query.append(" order by receipt.receiptdate  desc");
+        final Query listQuery = getSession().createQuery(query.toString());
+
+        // if (!allPositions)
+        listQuery.setParameterList("positionIds", positionIds);
+        if (!allCounters)
+            listQuery.setInteger("counterId", counterId);
+        if (!allServices && receiptType.equals(CollectionConstants.SERVICE_TYPE_BILLING))
+            listQuery.setString("serviceCode", serviceCode);
+        if (!allWfAction)
+            listQuery.setString("wfAction", wfAction);
+        if (!allUserName)
+            listQuery.setString("userName", userName);
+        if (!allDate)
+            listQuery.setDate("rcptDate", rcptDate);
+        if (receiptType.equals(CollectionConstants.SERVICE_TYPE_BILLING))
+            listQuery.setCharacter("receiptType", receiptType.charAt(0));
+        if (paymentMode.equals(CollectionConstants.INSTRUMENTTYPE_CASH))
+            listQuery.setString("paymentMode", paymentMode);
+        else if (paymentMode.equals(CollectionConstants.INSTRUMENTTYPE_CHEQUEORDD))
+            listQuery.setParameterList("paymentMode", new ArrayList<>(Arrays.asList("cheque", "dd")));
+        return listQuery.list();
+    }
+
+    /**
+     * This method is called for voucher creation into the financial system. For each receipt created in the collections module, a
+     * voucher is created.
+     *
+     * @param receiptHeader Receipt header for which the pre-approval voucher is to be created
+     * @param receiptBulkUpload
+     * @return The created voucher
+     */
+
+    protected CVoucherHeader createVoucher(final ReceiptHeader receiptHeader) {
+        final HashMap<String, Object> headerdetails = new HashMap<>(0);
+        final List<HashMap<String, Object>> accountCodeList = new ArrayList<>(0);
+        final List<HashMap<String, Object>> subledgerList = new ArrayList<>(0);
+        String fundCode = null;
+        String fundsourceCode = null;
+        String departmentCode = null;
+        Boolean isVoucherApproved = Boolean.FALSE;
+
+        final ReceiptMisc receiptMisc = receiptHeader.getReceiptMisc();
+        if (receiptMisc.getFund() != null)
+            fundCode = receiptMisc.getFund().getCode();
+        if (receiptMisc.getFundsource() != null)
+            fundsourceCode = receiptMisc.getFundsource().getCode();
+        if (receiptMisc.getDepartment() != null)
+            departmentCode = receiptMisc.getDepartment();
+
+        for (final InstrumentHeader instrumentHeader : receiptHeader.getReceiptInstrument())
+            if (instrumentHeader.getInstrumentType().getType().equals(CollectionConstants.INSTRUMENTTYPE_CASH)
+                    || instrumentHeader.getInstrumentType().getType().equals(CollectionConstants.INSTRUMENTTYPE_CHEQUE)
+                    || instrumentHeader.getInstrumentType().getType().equals(CollectionConstants.INSTRUMENTTYPE_DD)
+                    || instrumentHeader.getInstrumentType().getType().equals(CollectionConstants.INSTRUMENTTYPE_ONLINE)
+                    || instrumentHeader.getInstrumentType().getType().equals(CollectionConstants.INSTRUMENTTYPE_CARD)) {
+                headerdetails.put(VoucherConstant.VOUCHERNAME, CollectionConstants.FINANCIAL_RECEIPTS_VOUCHERNAME);
+                headerdetails.put(VoucherConstant.VOUCHERTYPE, CollectionConstants.FINANCIAL_RECEIPTS_VOUCHERTYPE);
+            } else if (instrumentHeader.getInstrumentType().getType().equals(CollectionConstants.INSTRUMENTTYPE_BANK)) {
+                headerdetails
+                        .put(VoucherConstant.VOUCHERNAME, CollectionConstants.FINANCIAL_CONTRATVOUCHER_VOUCHERNAME);
+                headerdetails.put(VoucherConstant.VOUCHERTYPE, CollectionConstants.FINANCIAL_CONTRAVOUCHER_VOUCHERTYPE);
+            }
+        headerdetails.put(VoucherConstant.DESCRIPTION, CollectionConstants.FINANCIAL_VOUCHERDESCRIPTION);
+        final SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            String dateString;
+            if (receiptHeader.getVoucherDate() == null) {
+                dateString = format.format(new Date());
+                headerdetails.put(VoucherConstant.VOUCHERDATE, format.parse(dateString));
+
+            } else {
+                dateString = format.format(receiptHeader.getVoucherDate());
+                headerdetails.put(VoucherConstant.VOUCHERDATE, format.parse(dateString));
+            }
+        } catch (final ParseException e) {
+            LOGGER.error("Exception while voucher date", e);
+            throw new ApplicationRuntimeException(e.getMessage());
+        }
+
+        if (receiptHeader.getVoucherNum() != null && !receiptHeader.getVoucherNum().isEmpty())
+            headerdetails.put(VoucherConstant.VOUCHERNUMBER, receiptHeader.getVoucherNum());
+
+        headerdetails.put(VoucherConstant.FUNDCODE, fundCode);
+        headerdetails.put(VoucherConstant.DEPARTMENTCODE, departmentCode);
+        headerdetails.put(VoucherConstant.FUNDSOURCECODE, fundsourceCode);
+        headerdetails.put(VoucherConstant.MODULEID, CollectionConstants.COLLECTIONS_EG_MODULES_ID);
+        headerdetails.put(VoucherConstant.SOURCEPATH,
+                CollectionConstants.RECEIPT_VIEW_SOURCEPATH + receiptHeader.getId());
+        Set<ReceiptDetail> receiptDetailSet;
+
+        /**
+         * Aggregate Amount in case of bill based receipt for account codes appearing more than once in receipt details
+         */
+        if (receiptHeader.getReceipttype() == 'B')
+            receiptDetailSet = aggregateDuplicateReceiptDetailObject(new ArrayList<ReceiptDetail>(
+                    receiptHeader.getReceiptDetails()));
+        else
+            receiptDetailSet = receiptHeader.getReceiptDetails();
+
+        for (final ReceiptDetail receiptDetail : receiptDetailSet)
+            if (receiptDetail.getCramount().compareTo(BigDecimal.ZERO) != 0
+                    || receiptDetail.getDramount().compareTo(BigDecimal.ZERO) != 0) {
+
+                final HashMap<String, Object> accountcodedetailsHashMap = new HashMap<>(0);
+                accountcodedetailsHashMap.put(VoucherConstant.GLCODE, receiptDetail.getAccounthead().getGlcode());
+
+                accountcodedetailsHashMap.put(VoucherConstant.DEBITAMOUNT,
+                        receiptDetail.getDramount().compareTo(BigDecimal.ZERO) == 0 ? 0 : receiptDetail.getDramount());
+                accountcodedetailsHashMap.put(VoucherConstant.CREDITAMOUNT,
+                        receiptDetail.getCramount().compareTo(BigDecimal.ZERO) == 0 ? 0 : receiptDetail.getCramount());
+                if (receiptDetail.getFunction() != null)
+                    accountcodedetailsHashMap.put(VoucherConstant.FUNCTIONCODE, receiptDetail.getFunction().getCode());
+                accountCodeList.add(accountcodedetailsHashMap);
+
+                for (final AccountPayeeDetail accpayeeDetail : receiptDetail.getAccountPayeeDetails())
+                    if (accpayeeDetail.getAmount().compareTo(BigDecimal.ZERO) != 0) {
+
+                        final HashMap<String, Object> subledgerdetailsHashMap = new HashMap<>(0);
+                        subledgerdetailsHashMap.put(VoucherConstant.GLCODE, accpayeeDetail.getReceiptDetail()
+                                .getAccounthead().getGlcode());
+                        subledgerdetailsHashMap.put(VoucherConstant.DETAILTYPEID, accpayeeDetail.getAccountDetailType()
+                                .getId());
+                        subledgerdetailsHashMap.put(VoucherConstant.DETAILKEYID, accpayeeDetail.getAccountDetailKey()
+                                .getDetailkey());
+                        if (accpayeeDetail.getReceiptDetail().getCramount().compareTo(BigDecimal.ZERO) != 0)
+                            subledgerdetailsHashMap.put(VoucherConstant.CREDITAMOUNT, accpayeeDetail.getAmount()
+                                    .compareTo(BigDecimal.ZERO) == 0 ? 0 : accpayeeDetail.getAmount());
+                        else if (accpayeeDetail.getReceiptDetail().getDramount().compareTo(BigDecimal.ZERO) != 0)
+                            subledgerdetailsHashMap.put(VoucherConstant.DEBITAMOUNT, accpayeeDetail.getAmount()
+                                    .compareTo(BigDecimal.ZERO) == 0 ? 0 : accpayeeDetail.getAmount());
+                        subledgerList.add(subledgerdetailsHashMap);
+
+                    }
+
+            }
+
+        return financialsUtil.createVoucher(headerdetails, accountCodeList, subledgerList, isVoucherApproved);
+    }
+
+    /**
+     * Creates voucher for given receipt header and maps it with the same. Also updates the instrument voucher mapping in
+     * financials.
+     *
+     * @param receiptHeader Receipt header for which voucher is to be created
+     * @return The created voucher header
+     */
+
+    public CVoucherHeader createVoucherForReceipt(final ReceiptHeader receiptHeader) {
+        CVoucherHeader voucherheader = null;
+
+        // Additional check for challan Based Receipt, if the receipt cancelled
+        // before remittance
+        // then need to check the instrument status of that receipt in order to
+        // create voucher
+        // as the challan has a 'PENDING' receipt object associated with it
+        boolean isParentReceiptInstrumentDeposited = false;
+
+        if (receiptHeader.getReceiptHeader() != null)
+            for (final InstrumentHeader instrumentHeader : receiptHeader.getReceiptHeader().getReceiptInstrument())
+                if (instrumentHeader.getInstrumentType().getType().equals(CollectionConstants.INSTRUMENTTYPE_CASH)) {
+                    if (instrumentHeader.getStatusId().getDescription()
+                            .equals(CollectionConstants.INSTRUMENT_RECONCILED_STATUS)) {
+                        isParentReceiptInstrumentDeposited = true;
+                        break;
+                    }
+                } else if (instrumentHeader.getStatusId().getDescription()
+                        .equals(CollectionConstants.INSTRUMENT_DEPOSITED_STATUS)) {
+                    isParentReceiptInstrumentDeposited = true;
+                    break;
+                }
+
+        if (receiptHeader.getReceiptHeader() == null || receiptHeader.getReceiptHeader() != null
+                && !isParentReceiptInstrumentDeposited) {
+            voucherheader = createVoucher(receiptHeader);
+            if (voucherheader != null) {
+                final ReceiptVoucher receiptVoucher = new ReceiptVoucher();
+                receiptVoucher.setVoucherheader(voucherheader);
+                receiptVoucher.setReceiptHeader(receiptHeader);
+                receiptHeader.addReceiptVoucher(receiptVoucher);
+            }
+        }
+
+        updateInstrument(receiptHeader);
+        LOGGER.debug("Created voucher for receipt : " + receiptHeader.getReceiptnumber());
+
+        return voucherheader;
+    }
+
+    /**
+     * Starts workflow for given set of receipt headers. Internally performs the following: 1. Start workflow 2. Transition
+     * workflow state with action "Create Receipt" 3. Create vouchers (if required) 4. If vouchers created, transition workflow
+     * state with action "Create Voucher"
+     *
+     * @param receiptHeaders set of receipt headers on which workflow is to be started
+     * @param receiptBulkUpload
+     */
+    public void startWorkflow(final ReceiptHeader receiptHeader) {
+        final Boolean createVoucherForBillingService = collectionsUtil.checkVoucherCreation(receiptHeader);
+        Position position;
+        if (!collectionsUtil.isEmployee(this.securityUtils.getCurrentUser()))
+            position = collectionsUtil.getPositionByDeptDesgAndBoundary(receiptHeader.getReceiptMisc().getBoundary());
+        else
+            position = collectionsUtil.getPositionOfUser(this.securityUtils.getCurrentUser());
+        if (receiptHeader.getState() == null && !createVoucherForBillingService)
+            receiptHeader
+                    .transition()
+                    .start()
+                    .withSenderName(
+                            this.securityUtils.getCurrentUser().getUsername() + "::"
+                                    + this.securityUtils.getCurrentUser().getName())
+                    .withComments(CollectionConstants.WF_STATE_RECEIPT_CREATED)
+                    .withStateValue(CollectionConstants.WF_STATE_RECEIPT_CREATED).withOwner(position)
+                    .withDateInfo(new Date()).withNextAction(CollectionConstants.WF_ACTION_SUBMIT);
+        else if (createVoucherForBillingService)
+            receiptHeader
+                    .transition()
+                    .start()
+                    .withSenderName(
+                            this.securityUtils.getCurrentUser().getUsername() + "::"
+                                    + this.securityUtils.getCurrentUser().getName())
+                    .withComments("Receipt voucher created")
+                    .withStateValue(CollectionConstants.WF_ACTION_CREATE_VOUCHER).withOwner(position)
+                    .withDateInfo(new Date()).withNextAction(CollectionConstants.WF_ACTION_SUBMIT);
+
+        persistenceService.applyAuditing(receiptHeader.getState());
+        LOGGER.debug("Workflow state transition complete");
+    }
+
+    /**
+     * Method to check if the given HashMap already exists in the List of HashMap
+     *
+     * @param queryResults
+     * @param objHashMap
+     * @param m
+     * @return index of objHashMap in the queryResults
+     */
+    public int checkIfMapObjectExist(final List<HashMap<String, Object>> paramList,
+            final Object[] arrayObjectInitialIndexTemp) {
+        int check = -1;
+        for (int m = 0; m < paramList.size(); m++) {
+            final HashMap<String, Object> objHashMapTemp = paramList.get(m);
+
+            if (arrayObjectInitialIndexTemp[1] != null && arrayObjectInitialIndexTemp[2] != null)
+                if (arrayObjectInitialIndexTemp[1].equals(objHashMapTemp
+                        .get(CollectionConstants.BANKREMITTANCE_RECEIPTDATE))
+                        && arrayObjectInitialIndexTemp[2].equals(objHashMapTemp
+                                .get(CollectionConstants.BANKREMITTANCE_SERVICENAME))
+                        && arrayObjectInitialIndexTemp[6].equals(objHashMapTemp
+                                .get(CollectionConstants.BANKREMITTANCE_FUNDCODE))
+                        && arrayObjectInitialIndexTemp[7].equals(objHashMapTemp
+                                .get(CollectionConstants.BANKREMITTANCE_DEPARTMENTCODE))) {
+                    check = m;
+                    break;
+                } else
+                    continue;
+
+        }
+        return check;
+    }
+
+    public int checkIfChequeMapObjectExist(final List<HashMap<String, Object>> paramList,
+            final Object[] arrayObjectInitialIndexTemp) {
+        int check = -1;
+        for (int m = 0; m < paramList.size(); m++) {
+            final HashMap<String, Object> objHashMapTemp = paramList.get(m);
+
+            if (arrayObjectInitialIndexTemp[1] != null && arrayObjectInitialIndexTemp[2] != null)
+                if (arrayObjectInitialIndexTemp[1].equals(objHashMapTemp
+                        .get(CollectionConstants.BANKREMITTANCE_RECEIPTDATE))
+                        && arrayObjectInitialIndexTemp[2].equals(objHashMapTemp
+                                .get(CollectionConstants.BANKREMITTANCE_RECEIPTNUMBER))
+                        && arrayObjectInitialIndexTemp[11].equals(objHashMapTemp
+                                .get(CollectionConstants.BANKREMITTANCE_INSTRUMENTID))) {
+                    check = m;
+                    break;
+                } else
+                    continue;
+
+        }
+        return check;
+    }
+
+    @Transactional
+    public void updateChequeCardRemittance(final Map<String, Object> instrumentDepositeMap,
+            final String voucherWorkflowMsg, final Boolean voucherTypeForChequeDDCard, final Date voucherDate,
+            final Bankaccount depositedBankAccount, final String serviceGlCode,
+            final List<InstrumentHeader> instrumentHeaderListCheque, final CVoucherHeader voucherHeaderCheque) {
+        final EgwStatus instrumentStatusDeposited = collectionsUtil.getStatusForModuleAndCode(
+                CollectionConstants.MODULE_NAME_INSTRUMENTHEADER, CollectionConstants.INSTRUMENT_DEPOSITED_STATUS);
+        int counter = 1;
+        for (InstrumentHeader instrumentHeader : instrumentHeaderListCheque) {
+            instrumentHeader = financialsUtil.updateInstrumentHeaderStatus(instrumentHeader, instrumentStatusDeposited,
+                    depositedBankAccount);
+            if (voucherHeaderCheque.getId() != null && serviceGlCode != null) {
+                final Map<String, Object> chequeMap = constructInstrumentMap(instrumentDepositeMap,
+                        depositedBankAccount, instrumentHeader, voucherHeaderCheque, voucherDate);
+                if (voucherTypeForChequeDDCard)
+                    financialsUtil.updateCheque_DD_Card_Deposit_Receipt(chequeMap);
+                else
+                    financialsUtil.updateCheque_DD_Card_Deposit(chequeMap);
+            }
+            if (counter % 20 == 0) {
+                getSession().flush();
+                getSession().clear();
+            }
+            counter++;
+        }
+    }
+
+    @Transactional
+    public void updateCashRemittance(final Map<String, Object> instrumentDepositeMap, final String voucherWorkflowMsg,
+            final Date voucherDate, final Bankaccount depositedBankAccount, final String serviceGlCode,
+            final List<InstrumentHeader> instrumentHeaderListCash, final CVoucherHeader voucherHeaderCash) {
+        int counter = 1;
+        for (final InstrumentHeader instrumentHeader : instrumentHeaderListCash) {
+            if (voucherHeaderCash.getId() != null && serviceGlCode != null) {
+                final Map<String, Object> cashMap = constructInstrumentMap(instrumentDepositeMap, depositedBankAccount,
+                        instrumentHeader, voucherHeaderCash, voucherDate);
+                financialsUtil.updateCashDeposit(cashMap);
+            }
+            if (counter % 20 == 0) {
+                getSession().flush();
+                getSession().clear();
+            }
+            counter++;
+        }
+    }
+
+    /**
+     * For Bill Based Receipt, aggregate the amount for same account heads
+     *
+     * @param receiptDetailSetParam
+     * @return Set of Receipt Detail after Aggregating Amounts
+     */
+    public Set<ReceiptDetail> aggregateDuplicateReceiptDetailObject(final List<ReceiptDetail> receiptDetailSetParam) {
+        final List<ReceiptDetail> newReceiptDetailList = new ArrayList<>(0);
+
+        int counter = 0;
+
+        for (final ReceiptDetail receiptDetailObj : receiptDetailSetParam) {
+            if (counter == 0)
+                newReceiptDetailList.add(receiptDetailObj);
+            else {
+                final int checknew = checkIfReceiptDetailObjectExist(newReceiptDetailList, receiptDetailObj);
+                if (checknew == -1)
+                    newReceiptDetailList.add(receiptDetailObj);
+                else {
+                    final ReceiptDetail receiptDetail = new ReceiptDetail();
+
+                    final ReceiptDetail newReceiptDetailObj = newReceiptDetailList.get(checknew);
+                    newReceiptDetailList.remove(checknew);
+
+                    receiptDetail.setAccounthead(newReceiptDetailObj.getAccounthead());
+                    receiptDetail.setAccountPayeeDetails(newReceiptDetailObj.getAccountPayeeDetails());
+                    receiptDetail.setCramount(newReceiptDetailObj.getCramount().add(receiptDetailObj.getCramount()));
+                    receiptDetail.setCramountToBePaid(newReceiptDetailObj.getCramountToBePaid());
+                    receiptDetail.setDescription(newReceiptDetailObj.getDescription());
+                    receiptDetail.setDramount(newReceiptDetailObj.getDramount().add(receiptDetailObj.getDramount()));
+                    receiptDetail.setFinancialYear(newReceiptDetailObj.getFinancialYear());
+                    receiptDetail.setFunction(newReceiptDetailObj.getFunction());
+                    receiptDetail.setOrdernumber(newReceiptDetailObj.getOrdernumber());
+
+                    newReceiptDetailList.add(receiptDetail);
+                }
+            }
+            counter++;
+        }
+        return new HashSet<>(newReceiptDetailList);
+    }
+
+    /**
+     * API to check if the given receipt detail object already exists in the list passed passed as parameter
+     *
+     * @param newReceiptDetailSet
+     * @param receiptDetailObj
+     * @return
+     */
+    public int checkIfReceiptDetailObjectExist(final List<ReceiptDetail> newReceiptDetailSet,
+            final ReceiptDetail receiptDetailObj) {
+        int check = -1;
+
+        for (int m = 0; m < newReceiptDetailSet.size(); m++) {
+
+            final ReceiptDetail receiptDetail = newReceiptDetailSet.get(m);
+
+            if (receiptDetailObj.getAccounthead().getId().equals(receiptDetail.getAccounthead().getId())) {
+                check = m;
+                break;
+            } else
+                continue;
+        }
+        return check;
+    }
+
+    /**
+     * End Work-flow of the given cancelled receipt
+     *
+     * @param receiptHeaders Set of receipt headers to be transitioned
+     * @param actionName Action name for the transition
+     * @param comment Comment for the transition
+     */
+    public void endReceiptWorkFlowOnCancellation(final ReceiptHeader receiptHeaderToBeCancelled) {
+        // End work-flow for the cancelled receipt
+        Position position = null;
+        /*
+         * if (!collectionsUtil.isEmployee(receiptHeaderToBeCancelled.getCreatedBy())) position =
+         * collectionsUtil.getPositionByDeptDesgAndBoundary(receiptHeaderToBeCancelled.getReceiptMisc() .getBoundary()); else
+         * position = collectionsUtil.getPositionOfUser(receiptHeaderToBeCancelled.getCreatedBy());
+         */
+        if (position != null)
+            receiptHeaderToBeCancelled
+                    .transition()
+                    .end()
+                    /*
+                     * .withSenderName( receiptHeaderToBeCancelled.getCreatedBy().getUsername() + "::" +
+                     * receiptHeaderToBeCancelled.getCreatedBy().getName())
+                     */
+                    .withComments("Receipt Cancelled - Workflow ends").withStateValue(CollectionConstants.WF_STATE_END)
+                    .withOwner(position).withDateInfo(new Date());
+    }
+
+    /**
+     * This method persists the given <code>ReceiptPayeeDetails</code> entity. The receipt number for all of the receipts is
+     * generated, if not already present. If the receipt is associated with a challan, and the challan number is not present, the
+     * challan number is generated and set into it.
+     */
+    @Override
+    @Transactional
+    public ReceiptHeader persist(final ReceiptHeader receiptHeader) throws ApplicationRuntimeException {
+        if (receiptHeader.getReceipttype() != CollectionConstants.RECEIPT_TYPE_CHALLAN
+                && !CollectionConstants.RECEIPT_STATUS_CODE_PENDING.equals(receiptHeader.getStatus().getCode())
+                && !CollectionConstants.RECEIPT_STATUS_CODE_FAILED.equals(receiptHeader.getStatus().getCode())
+                && receiptHeader.getReceiptnumber() == null)
+            setReceiptNumber(receiptHeader);
+
+        if (receiptHeader.getChallan() != null) {
+            final Challan challan = receiptHeader.getChallan();
+            if (challan.getChallanNumber() == null)
+                setChallanNumber(challan);
+
+            receiptHeader.setChallan(challan);
+            LOGGER.info("Persisted challan with challan number " + challan.getChallanNumber());
+        }
+
+        // Update Billing System regarding cancellation of the existing
+        if (CollectionConstants.RECEIPT_STATUS_CODE_CANCELLED.equals(receiptHeader.getStatus().getCode())) {
+            if (receiptHeader.getState() != null
+                    && !receiptHeader.getState().getValue().equals(CollectionConstants.WF_STATE_END))
+                endReceiptWorkFlowOnCancellation(receiptHeader);
+            if (receiptHeader.getReceipttype() == CollectionConstants.RECEIPT_TYPE_BILL) {
+                if (receiptHeader.getService().equals(CollectionConstants.SERVICECODE_LAMS)) {
+                    // TODO Implement separate API for Microservice billing services
+                    final BillReceiptInfo billReceipt = new BillReceiptInfoImpl(receiptHeader, chartOfAccountsHibernateDAO,
+                            persistenceService, null);
+                    collectionsUtil.updateReceiptDetailsAndGetReceiptAmountInfo(new BillReceiptReq(billReceipt),
+                            receiptHeader.getService());
+                } else
+                    updateBillingSystemWithReceiptInfo(receiptHeader, null, null);
+            }
+        }
+        return super.persist(receiptHeader);
+    }
+
+    /**
+     * This method persists the given <code>ReceiptPayeeDetails</code> entity. If the receipt number for all of the receipts is
+     * generated, if not already present.
+     */
+
+    @Transactional
+    public ReceiptHeader persistChallan(final ReceiptHeader receiptHeader, final Position position,
+            final String actionName, final String approvalRemarks) {
+        final Integer validUpto = Integer.valueOf(collectionsUtil.getAppConfigValue(
+                CollectionConstants.MODULE_NAME_COLLECTIONS_CONFIG,
+                CollectionConstants.APPCONFIG_VALUE_CHALLANVALIDUPTO));
+        final Challan challan = receiptHeader.getChallan();
+        DateTime date = new DateTime(challan.getChallanDate());
+        date = date.plusDays(validUpto);
+        challan.setValidUpto(date.toDate());
+        if (challan.getChallanNumber() == null)
+            setChallanNumber(challan);
+
+        challan.setReceiptHeader(receiptHeader);
+        receiptHeader.setChallan(challan);
+        super.persist(receiptHeader);
+        LOGGER.info("Persisting challan with challan number " + challan.getChallanNumber());
+        challanService.workflowtransition(receiptHeader.getChallan(), position, actionName, approvalRemarks);
+        return receiptHeader;
+    }
+
+    /**
+     * This method persists the given set of <code>ReceiptPayeeDetails</code> instances with receipt number as Pending
+     *
+     * @param entity a set of <code>ReceiptPayeeDetails</code> instances to be persisted
+     * @return the list of persisted <code>ReceiptPayeeDetails</code> instances
+     */
+    @Transactional
+    public ReceiptHeader persistReceiptObject(final ReceiptHeader receiptHeader) {
+        return super.persist(receiptHeader);
+    }
+
+    public void setReceiptNumber(final ReceiptHeader entity) {
+        entity.setReceiptnumber(collectionsNumberGenerator.generateReceiptNumber(entity));
+    }
+
+    private void setChallanNumber(final Challan challan) {
+        final CFinancialYear financialYear = collectionsUtil.getFinancialYearforDate(new Date());
+        challan.setChallanNumber(collectionsNumberGenerator.generateChallanNumber(challan, financialYear));
+    }
+
+    public void setCollectionsNumberGenerator(final CollectionsNumberGenerator collectionsNumberGenerator) {
+        this.collectionsNumberGenerator = collectionsNumberGenerator;
+    }
+
+    private BillingIntegrationService getBillingServiceBean(final String serviceCode) {
+        return (BillingIntegrationService) collectionsUtil.getBean(serviceCode
+                + CollectionConstants.COLLECTIONS_INTERFACE_SUFFIX);
+    }
+
+    /**
+     * This method looks up the bean to communicate with the billing system and updates the billing system.
+     */
+
+    @Transactional
+    public Boolean updateBillingSystem(final ServiceDetails serviceDetails, final Set<BillReceiptInfo> billReceipts,
+            BillingIntegrationService billingService) {
+        if (!serviceDetails.getServiceType().equals(CollectionConstants.SERVICE_TYPE_BILLING))
+            return true;
+        else if (billingService == null
+                && serviceDetails.getServiceType().equals(CollectionConstants.SERVICE_TYPE_BILLING))
+            billingService = getBillingServiceBean(serviceDetails.getCode());
+
+        if (billingService == null && serviceDetails.getServiceType().equals(CollectionConstants.SERVICE_TYPE_BILLING))
+            return false;
+        else
+            try {
+                billingService.updateReceiptDetails(billReceipts);
+                return true;
+            } catch (ValidationException e) {
+                LOGGER.error("Validation error occurred while updating receipt details ", e);
+                throw e;
+            } catch (final ApplicationRuntimeException e) {
+                final String errMsg = "Exception while updating billing system [" + serviceDetails.getCode()
+                        + "] with receipt details!";
+                LOGGER.error(errMsg, e);
+                throw new ApplicationRuntimeException(errMsg, e);
+            }
+    }
+
+    public String getAdditionalInfoForReceipt(final String serviceCode, final BillReceiptInfo billReceipt) {
+        final BillingIntegrationService billingService = getBillingServiceBean(serviceCode);
+        if (billingService == null)
+            throw new ApplicationRuntimeException("Unable to load bean for billing system: " + serviceCode);
+        else
+            try {
+                return billingService.constructAdditionalInfoForReceipt(billReceipt);
+            } catch (final ApplicationRuntimeException e) {
+                final String errMsg = "Exception while constructing additional info for receipt [" + serviceCode + "]!";
+                LOGGER.error(errMsg, e);
+                throw new ApplicationRuntimeException(errMsg, e);
+            }
+    }
+
+    /**
+     * This method is called for voucher reversal in case of intra-day receipt cancellation.
+     */
+
+    public void createReversalVoucher(final ReceiptVoucher receiptVoucher) {
+        final List<HashMap<String, Object>> reversalVoucherInfoList = new ArrayList<>(0);
+        final HashMap<String, Object> reversalVoucherInfo = new HashMap<>(0);
+
+        if (receiptVoucher.getVoucherheader() != null) {
+            reversalVoucherInfo.put(CollectionConstants.FINANCIALS_VOUCHERREVERSAL_ORIGINALVOUCHERID, receiptVoucher
+                    .getVoucherheader().getId());
+
+            if (receiptVoucher.getVoucherheader().getType()
+                    .equals(CollectionConstants.FINANCIAL_JOURNALVOUCHER_VOUCHERTYPE)) {
+
+                reversalVoucherInfo.put(CollectionConstants.FINANCIALS_VOUCHERREVERSAL_TYPE,
+                        CollectionConstants.FINANCIAL_JOURNALVOUCHER_VOUCHERTYPE);
+                reversalVoucherInfo.put(CollectionConstants.FINANCIALS_VOUCHERREVERSAL_NAME,
+                        CollectionConstants.FINANCIAL_JOURNALVOUCHER_VOUCHERNAME);
+            } else if (receiptVoucher.getVoucherheader().getType()
+                    .equals(CollectionConstants.FINANCIAL_RECEIPTS_VOUCHERTYPE)) {
+                reversalVoucherInfo.put(CollectionConstants.FINANCIALS_VOUCHERREVERSAL_TYPE,
+                        CollectionConstants.FINANCIAL_PAYMENTVOUCHER_VOUCHERTYPE);
+                reversalVoucherInfo.put(CollectionConstants.FINANCIALS_VOUCHERREVERSAL_NAME,
+                        CollectionConstants.FINANCIAL_PAYMENTVOUCHER_VOUCHERNAME);
+            }
+        }
+
+        reversalVoucherInfoList.add(reversalVoucherInfo);
+
+        try {
+            financialsUtil.getReversalVoucher(reversalVoucherInfoList);
+        } catch (final ParseException exp) {
+            final String errorMsg = "Receipt Service Exception while creating reversal voucher!";
+            LOGGER.error(errorMsg, exp);
+            throw new ApplicationRuntimeException(errorMsg, exp);
+        }
+    }
+
+    /**
+     * @param receiptPayeeDetails
+     * @return void @ Create instrument voucher list from receiptpayeelist and pass it to financialsutil
+     */
+
+    public void updateInstrument(final ReceiptHeader receiptHeader) {
+        final List<Map<String, Object>> instrumentVoucherList = new ArrayList<>(0);
+        if (receiptHeader.getReceiptVoucher() != null && !receiptHeader.getReceiptVoucher().isEmpty()) {
+            final CVoucherHeader voucherHeader = receiptHeader.getReceiptVoucher().iterator().next().getVoucherheader();
+            if (voucherHeader != null && receiptHeader.getReceiptInstrument() != null) {
+                for (final InstrumentHeader instrumentHeader : receiptHeader.getReceiptInstrument()) {
+                    final Map<String, Object> iVoucherMap = new HashMap<>(0);
+                    iVoucherMap.put(CollectionConstants.FINANCIAL_INSTRUMENTSERVICE_INSTRUMENTHEADEROBJECT,
+                            instrumentHeader);
+                    iVoucherMap.put(CollectionConstants.FINANCIAL_INSTRUMENTSERVICE_VOUCHERHEADEROBJECT, voucherHeader);
+                    instrumentVoucherList.add(iVoucherMap);
+                }
+                financialsUtil.updateInstrumentVoucher(instrumentVoucherList);
+            }
+        }
+    }
+
+    public List<InstrumentHeader> createInstrument(final List<InstrumentHeader> instrumentHeaderList) {
+        final List<Map<String, Object>> instrumentHeaderMapList = new ArrayList<>(0);
+        if (instrumentHeaderList != null)
+            for (final InstrumentHeader instrumentHeader : instrumentHeaderList) {
+                final Map<String, Object> instrumentHeaderMap = new HashMap<>(0);
+                instrumentHeaderMap.put(CollectionConstants.MAP_KEY_INSTRSERVICE_INSTRUMENTNUMBER,
+                        instrumentHeader.getInstrumentNumber());
+                instrumentHeaderMap.put(CollectionConstants.MAP_KEY_INSTRSERVICE_INSTRUMENTDATE,
+                        instrumentHeader.getInstrumentDate());
+                instrumentHeaderMap.put(CollectionConstants.MAP_KEY_INSTRSERVICE_INSTRUMENTAMOUNT,
+                        instrumentHeader.getInstrumentAmount());
+                instrumentHeaderMap.put(CollectionConstants.MAP_KEY_INSTRSERVICE_INSTRUMENTTYPE, instrumentHeader
+                        .getInstrumentType().getType());
+                instrumentHeaderMap.put(CollectionConstants.MAP_KEY_INSTRSERVICE_ISPAYCHEQUE,
+                        instrumentHeader.getIsPayCheque());
+                if (instrumentHeader.getBankId() != null)
+                    instrumentHeaderMap.put(CollectionConstants.MAP_KEY_INSTRSERVICE_BANKCODE, instrumentHeader
+                            .getBankId().getCode());
+                instrumentHeaderMap.put(CollectionConstants.MAP_KEY_INSTRSERVICE_BANKBRANCHNAME,
+                        instrumentHeader.getBankBranchName());
+                instrumentHeaderMap.put(CollectionConstants.MAP_KEY_INSTRSERVICE_TRANSACTIONNUMBER,
+                        instrumentHeader.getTransactionNumber());
+                instrumentHeaderMap.put(CollectionConstants.MAP_KEY_INSTRSERVICE_TRANSACTIONDATE,
+                        instrumentHeader.getTransactionDate());
+                if (instrumentHeader.getBankAccountId() != null)
+                    instrumentHeaderMap.put(CollectionConstants.MAP_KEY_INSTRSERVICE_BANKACCOUNTID, instrumentHeader
+                            .getBankAccountId().getId());
+                instrumentHeaderMapList.add(instrumentHeaderMap);
+                // should add bankaccount for bank : key = Bank account id;
+                // value = instrumentHeader.getBankAccount.getId()
+            }
+        return financialsUtil.createInstrument(instrumentHeaderMapList);
+    }
+
+    private Map<String, Object> constructInstrumentMap(final Map<String, Object> instrumentDepositeMap,
+            final Bankaccount bankaccount, final InstrumentHeader instrumentHeader, final CVoucherHeader voucherHeader,
+            final Date voucherDate) {
+        final InstrumentType instrumentType = (InstrumentType) persistenceService.find(
+                "select it from InstrumentType it,InstrumentHeader ih where " + "ih.instrumentType=it.id and ih.id=?",
+                instrumentHeader.getId());
+        instrumentDepositeMap.put("instrumentheader", instrumentHeader.getId());
+        instrumentDepositeMap.put("bankaccountid", bankaccount.getId());
+        instrumentDepositeMap.put("instrumentamount", instrumentHeader.getInstrumentAmount());
+        instrumentDepositeMap.put("instrumenttype", instrumentType.getType());
+        instrumentDepositeMap.put("depositdate", voucherDate);
+        instrumentDepositeMap.put("createdby", voucherHeader.getCreatedBy());
+        instrumentDepositeMap.put("ispaycheque", instrumentHeader.getIsPayCheque());
+        instrumentDepositeMap.put("payinid", voucherHeader.getId());
+        return instrumentDepositeMap;
+    }
+
+    @Transactional
+    public void performWorkflow(final String actionName, final ReceiptHeader receiptHeader, final String remarks) {
+        try {
+            Position operatorPosition = null;
+            Employee employee = employeeService.getEmployeeById(receiptHeader.getCreatedBy());
+
+            final Department department = departmentService.getDepartmentByName(collectionsUtil.getAppConfigValue(
+                    CollectionConstants.MODULE_NAME_COLLECTIONS_CONFIG,
+                    CollectionConstants.COLLECTION_DEPARTMENTFORWORKFLOWAPPROVER));
+            final Designation designation = collectionsUtil.getDesignationForApprover();
+            final Boolean isEmployee = null;// collectionsUtil.isEmployee(receiptHeader.getCreatedBy());
+            if (!isEmployee)
+                employee = employeeService.getEmployeeById(collectionsUtil.getLoggedInUser().getId());
+            Boundary boundary = null;
+            for (final Jurisdiction jur : employee.getJurisdictions())
+                boundary = jur.getBoundary();
+            List<Employee> emp = employeeService.findByDepartmentDesignationAndBoundary(department.getId(),
+                    designation.getId(), boundary.getId());
+            if (emp.isEmpty() && boundary.getParent() != null) {
+                emp = employeeService.findByDepartmentDesignationAndBoundary(department.getId(), designation.getId(),
+                        boundary.getParent().getId());
+                if (emp.isEmpty() && boundary.getParent().getParent() != null)
+                    emp = employeeService.findByDepartmentDesignationAndBoundary(department.getId(),
+                            designation.getId(), boundary.getParent().getParent().getId());
+            }
+            if (emp.isEmpty())
+                throw new ValidationException(Arrays.asList(new ValidationError("Manager does not exists",
+                        "submitcollections.validation.error.manager.notexists")));
+            Position approverPosition = null;
+            final List<Assignment> assignments = assignmentService.getAllActiveEmployeeAssignmentsByEmpId(emp.get(0)
+                    .getId());
+            for (final Assignment assign : assignments)
+                if (assign.getDesignation().equals(designation))
+                    approverPosition = assign.getPosition();
+            if (actionName.equals(CollectionConstants.WF_ACTION_SUBMIT))
+                perform(receiptHeader, CollectionConstants.WF_ACTION_APPROVE,
+                        CollectionConstants.RECEIPT_STATUS_CODE_SUBMITTED, CollectionConstants.WF_ACTION_APPROVE,
+                        approverPosition, remarks);
+            else if (actionName.equals(CollectionConstants.WF_ACTION_APPROVE))
+                perform(receiptHeader, CollectionConstants.WF_STATE_APPROVED,
+                        CollectionConstants.RECEIPT_STATUS_CODE_APPROVED, "", approverPosition, remarks);
+            else if (actionName.equals(CollectionConstants.WF_ACTION_REJECT)) {
+                /*
+                 * if (!isEmployee) operatorPosition =
+                 * collectionsUtil.getPositionByDeptDesgAndBoundary(receiptHeader.getReceiptMisc() .getBoundary()); else
+                 * operatorPosition = collectionsUtil.getPositionOfUser(receiptHeader.getCreatedBy());
+                 */
+                perform(receiptHeader, CollectionConstants.WF_STATE_REJECTED,
+                        CollectionConstants.RECEIPT_STATUS_CODE_TO_BE_SUBMITTED, CollectionConstants.WF_ACTION_SUBMIT,
+                        operatorPosition, remarks);
+            }
+        } catch (final ApplicationRuntimeException e) {
+            final String errorMsg = "Receipt Service Exception while workflow transition!";
+            LOGGER.error(errorMsg, e);
+            throw new ApplicationRuntimeException(e.getMessage());
+        }
+    }
+
+    @Transactional
+    public void performWorkflowForAllReceipts(final String actionName, final List<ReceiptHeader> receiptHeaders,
+            final String remarks) {
+        try {
+            final Position approverPosition = getApproverPosition(receiptHeaders.get(0));
+            for (final ReceiptHeader receiptHeader : receiptHeaders)
+                if (actionName.equals(CollectionConstants.WF_ACTION_SUBMIT))
+                    perform(receiptHeader, CollectionConstants.WF_ACTION_APPROVE,
+                            CollectionConstants.RECEIPT_STATUS_CODE_SUBMITTED, CollectionConstants.WF_ACTION_APPROVE,
+                            approverPosition, remarks);
+                else if (actionName.equals(CollectionConstants.WF_ACTION_APPROVE))
+                    perform(receiptHeader, CollectionConstants.WF_STATE_APPROVED,
+                            CollectionConstants.RECEIPT_STATUS_CODE_APPROVED, "", approverPosition, remarks);
+                else if (actionName.equals(CollectionConstants.WF_ACTION_REJECT)) {
+                    final Position operatorPosition = getOperatorPosition(receiptHeaders.get(0));
+                    perform(receiptHeader, CollectionConstants.WF_STATE_REJECTED,
+                            CollectionConstants.RECEIPT_STATUS_CODE_TO_BE_SUBMITTED,
+                            CollectionConstants.WF_ACTION_SUBMIT, operatorPosition, remarks);
+                }
+        } catch (final ValidationException e) {
+            final List<ValidationError> errors = new ArrayList<>();
+            errors.add(new ValidationError("exp", e.getErrors().get(0).getMessage()));
+            LOGGER.error(errors, e);
+            throw new ValidationException(errors);
+        }
+    }
+
+    public Position getApproverPosition(final ReceiptHeader receiptHeader) {
+        Employee employee;
+        final Boolean isEmployee = null;// collectionsUtil.isEmployee(receiptHeader.getCreatedBy());
+        if (!isEmployee)
+            employee = employeeService.getEmployeeById(collectionsUtil.getLoggedInUser().getId());
+        else
+            employee = employeeService.getEmployeeById(receiptHeader.getCreatedBy());
+        final Department department = departmentService.getDepartmentByName(collectionsUtil.getAppConfigValue(
+                CollectionConstants.MODULE_NAME_COLLECTIONS_CONFIG,
+                CollectionConstants.COLLECTION_DEPARTMENTFORWORKFLOWAPPROVER));
+        final Designation designation = collectionsUtil.getDesignationForApprover();
+        Boundary boundary = null;
+        for (final Jurisdiction jur : employee.getJurisdictions())
+            boundary = jur.getBoundary();
+        List<Employee> emp = employeeService.findByDepartmentDesignationAndBoundary(department.getId(),
+                designation.getId(), boundary.getId());
+        if (emp.isEmpty() && boundary.getParent() != null) {
+            emp = employeeService.findByDepartmentDesignationAndBoundary(department.getId(), designation.getId(),
+                    boundary.getParent().getId());
+            if (emp.isEmpty() && boundary.getParent().getParent() != null)
+                emp = employeeService.findByDepartmentDesignationAndBoundary(department.getId(), designation.getId(),
+                        boundary.getParent().getParent().getId());
+        }
+        if (emp.isEmpty())
+            throw new ValidationException(Arrays.asList(new ValidationError("Manager does not exists",
+                    "submitcollections.validation.error.manager.notexists")));
+        Position approverPosition = null;
+        final List<Assignment> assignments = assignmentService.getAllActiveEmployeeAssignmentsByEmpId(emp.get(0)
+                .getId());
+        for (final Assignment assign : assignments)
+            if (assign.getDesignation().equals(designation))
+                approverPosition = assign.getPosition();
+        return approverPosition;
+    }
+
+    public Position getOperatorPosition(final ReceiptHeader receiptHeader) {
+        Position operatorPosition = null;
+        /*
+         * final Boolean isEmployee = collectionsUtil.isEmployee(receiptHeader.getCreatedBy()); if (!isEmployee) operatorPosition
+         * = collectionsUtil.getPositionByDeptDesgAndBoundary(receiptHeader.getReceiptMisc() .getBoundary()); else
+         * operatorPosition = collectionsUtil.getPositionOfUser(receiptHeader.getCreatedBy());
+         */
+        return operatorPosition;
+    }
+
+    @Transactional
+    public void perform(final ReceiptHeader receiptHeader, final String wfState, final String newStatusCode,
+            final String nextAction, final Position ownerPosition, final String remarks) {
+        receiptHeader.setStatus(collectionsUtil.getReceiptStatusForCode(newStatusCode));
+
+        if (receiptHeader.getStatus().getCode().equals(CollectionConstants.RECEIPT_STATUS_CODE_APPROVED))
+            // Receipt approved. end workflow for this receipt.
+            receiptHeader
+                    .transition()
+                    .end()
+                    /*
+                     * .withSenderName( receiptHeader.getCreatedBy().getUsername() + "::" +
+                     * receiptHeader.getCreatedBy().getName())
+                     */
+                    .withComments("Receipt Approved - Workflow ends").withStateValue(CollectionConstants.WF_STATE_END)
+                    .withOwner(ownerPosition).withDateInfo(new Date());
+        else
+            receiptHeader
+                    .transition()
+                    .progressWithStateCopy()
+                    /*
+                     * .withSenderName( receiptHeader.getCreatedBy().getUsername() + "::" +
+                     * receiptHeader.getCreatedBy().getName())
+                     */
+                    .withComments(remarks).withStateValue(wfState).withOwner(ownerPosition).withDateInfo(new Date())
+                    .withNextAction(nextAction);
+        super.persist(receiptHeader);
+
+        updateCollectionIndexAndPushMail(receiptHeader);
+    }
+
+    public Set<InstrumentHeader> createOnlineInstrument(final Date transactionDate, final String transactionId,
+            final BigDecimal transactionAmt) {
+        final InstrumentHeader onlineInstrumentHeader = new InstrumentHeader();
+        Set<InstrumentHeader> instrumentHeaderSet;
+        onlineInstrumentHeader.setInstrumentType(financialsUtil
+                .getInstrumentTypeByType(CollectionConstants.INSTRUMENTTYPE_ONLINE));
+        onlineInstrumentHeader.setTransactionDate(transactionDate);
+        onlineInstrumentHeader.setIsPayCheque(CollectionConstants.ZERO_INT);
+        onlineInstrumentHeader.setTransactionNumber(transactionId);
+        onlineInstrumentHeader.setInstrumentAmount(transactionAmt);
+
+        final List<InstrumentHeader> instHeaderList = new ArrayList<>();
+        instHeaderList.add(onlineInstrumentHeader);
+        instrumentHeaderSet = new HashSet<>(createInstrument(instHeaderList));
+        return instrumentHeaderSet;
+    }
+
+	public String getReceiptHeaderforDishonor(final Long mode, final Long bankAccId, final Long bankId,
+			final String chequeDDNo, final String chqueDDDate, List<Object> params) {
+		final StringBuilder sb = new StringBuilder();
+		sb.append(
+				"FROM egcl_collectionheader rpt,egcl_collectioninstrument ci,egf_instrumentheader ih,egw_status status,bank b,")
+				.append("bankbranch bb,bankaccount ba WHERE rpt.id = ci.collectionheader AND ci.instrumentheader = ih.id")
+				.append(" AND status.id = ih.id_status ")
+				.append("AND b.id = bb.bankid AND bb.id = ba.branchid AND ba.id = ih.bankaccountid AND ih.instrumenttype = ?")
+				.append(" AND ((ih.ispaycheque ='0' AND status.moduletype = ? AND status.description = ?))");
+
+		params.add(mode);
+		params.add(CollectionConstants.MODULE_NAME_INSTRUMENTHEADER);
+		params.add(CollectionConstants.INSTRUMENT_DEPOSITED_STATUS);
+
+		if (bankAccId != null && bankAccId != -1) {
+			sb.append(" AND ih.bankaccountid=?");
+			params.add(bankAccId);
+		}
+		if ((bankAccId == null || bankAccId == -1) && bankId != null && bankId != 0) {
+			sb.append(" AND ih.bankid=?");
+			params.add(bankId);
+		}
+		if (!"".equals(chequeDDNo) && chequeDDNo != null) {
+			sb.append(" AND ih.instrumentnumber=trim(?) ");
+			params.add(chequeDDNo);
+		}
+		if (!"".equals(chqueDDDate) && chqueDDDate != null) {
+			sb.append(" AND ih.instrumentdate = ? ");
+			params.add(chqueDDDate);
+		}
+		return sb.toString();
+	}
+
+    /**
+     * This method performs the following for receipts to be newly created:
+     * <ol>
+     * <li>The user instrument header details, and actual amount paid by user is captured.</li>
+     * <li>A debit receipt detail account head is created for the total credit collected.</li>
+     * <li>Vouchers are created</li>
+     * </ol>
+     * <p>
+     * The receipts are persisted and work flow is started for these persisted receipts where in the receipt state is set to NEW
+     * The billing system is updated about the persisted receipts. These include details of both newly created as well as
+     * cancelled receipts. If the instrument list and voucher list are not empty, the .... is updated The receipt ids of the newly
+     * created receipts are collectively populated to be shown on the print screen
+     * @throws JsonProcessingException 
+     */
+    @Transactional
+    public ReceiptResponse populateAndPersistReceipts(final ReceiptHeader receiptHeader,
+            final List<InstrumentHeader> receiptInstrList) {
+        String consumerCode = getConsumerCode(receiptHeader);
+        DemandResponse demandResponse = generateDemand(consumerCode, receiptHeader);
+        List billList = generateBill(consumerCode, receiptHeader.getService());
+        return generateReceipt(receiptHeader, billList);
+    }
+
+    private DemandResponse generateDemand(String consumerCode, ReceiptHeader receiptHeader) {
+        DemandRequest request = new DemandRequest();
+        final RestTemplate restTemplate = microserviceUtils.createRestTemplate();
+        final String url = appConfigManager.getEgovBillingSerHost() + demandCreateUrl;
+        RequestInfo requestInfo = new RequestInfo();
+        requestInfo.setAuthToken(microserviceUtils.getUserToken());
+        requestInfo.setUserInfo(microserviceUtils.getUserInfo());
+        request.setRequestInfo(requestInfo);
+
+        Demand demand = new Demand();
+        demand.setTenantId(microserviceUtils.getTenentId());
+        demand.setConsumerCode(consumerCode);
+        demand.setConsumerType(CollectionConstants.MISCELLANEOUS_RECEIPT);
+        demand.setBusinessService(receiptHeader.getService());
+        demand.setMinimumAmountPayable(receiptHeader.getTotalcramount());
+        demand.setDemandDetails(new ArrayList<>());
+        TaxPeriod tp = microserviceUtils.getTaxPeriodsByService(receiptHeader.getService());
+        if (tp != null) {
+            demand.setTaxPeriodFrom(tp.getFromDate());
+            demand.setTaxPeriodTo(tp.getToDate());
+        }
+        DemandDetail dd = null;
+        if (receiptHeader.getReceiptDetails() != null) {
+            for (ReceiptDetail rd : receiptHeader.getReceiptDetails()) {
+                if (rd.getTaxheadCode() != null && !rd.getTaxheadCode().isEmpty()) {
+                    dd = new DemandDetail();
+                    dd.setTaxAmount(rd.getCramount());
+                    // dd.setCollectionAmount(rd.getCramount());
+                    dd.setTenantId(demand.getTenantId());
+                    dd.setTaxHeadMasterCode(rd.getTaxheadCode());
+                    demand.getDemandDetails().add(dd);
+                }
+            }
+
+        }
+        
+        request.setDemands(Collections.singletonList(demand));
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonInString = "";
+        try {
+            jsonInString = mapper.writeValueAsString(request);
+        } catch (JsonProcessingException e) {
+            LOGGER.error("json processing ", e);
+        }
+        System.out.println(jsonInString);
+        return restTemplate.postForObject(url, request, DemandResponse.class);
+    }
+
+    private List generateBill(String consumerCode, String service) {
+        final RestTemplate restTemplate = microserviceUtils.createRestTemplate();
+        final String url = appConfigManager.getEgovBillingSerHost() + billGenerateUrl + "?tenantId=" + microserviceUtils.getTenentId() + "&businessService="
+                + service + "&consumerCode=" + consumerCode;
+        RequestInfoWrapper reqWrapper = new RequestInfoWrapper();
+        RequestInfo requestInfo = new RequestInfo();
+        requestInfo.setAuthToken(microserviceUtils.getUserToken());
+        requestInfo.setUserInfo(microserviceUtils.getUserInfo());
+        reqWrapper.setRequestInfo(requestInfo);
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonInString = "";
+        try {
+            jsonInString = mapper.writeValueAsString(reqWrapper);
+        } catch (JsonProcessingException e) {
+           LOGGER.error("Json processing", e);
+        }
+        System.out.println(jsonInString);
+        Map postForObject = restTemplate.postForObject(url, reqWrapper, Map.class);
+        switch (ApplicationThreadLocals.getCollectionVersion().toUpperCase()) {
+        case "V2":
+        case "VERSION2":
+            return mapper.convertValue(JsonPath.read(postForObject, "$.Bill"),new TypeReference<List<BillV2>>(){});
+            
+        default:
+            return mapper.convertValue(JsonPath.read(postForObject, "$.Bill"),new TypeReference<List<Bill>>(){});
+        }
+    }
+
+    private ReceiptResponse generateReceipt(ReceiptHeader receiptHeader, List billList) {
+        ReceiptResponse response= new  ReceiptResponse();
+        switch (ApplicationThreadLocals.getCollectionVersion().toUpperCase()) {
+        case "V2":
+        case "VERSION2":
+            List<Payment> payments = this.generatePayments(receiptHeader, billList);
+            List<Receipt> receipts = new ArrayList<>();
+            paymentUtils.getReceiptsFromPayments(payments, receipts );
+            response.setReceipts(receipts);
+            break;
+
+        default:
+            String tenantId = microserviceUtils.getTenentId();
+            final RestTemplate restTemplate = microserviceUtils.createRestTemplate();
+            final String url = appConfigManager.getEgovCollSerHost() + receiptCreateUrl;
+            ReceiptRequest request = new ReceiptRequest();
+            RequestInfo requestInfo = new RequestInfo();
+            requestInfo.setAuthToken(microserviceUtils.getUserToken());
+            requestInfo.setUserInfo(microserviceUtils.getUserInfo());
+            requestInfo.getUserInfo().setId(ApplicationThreadLocals.getUserId());
+            Receipt receipt = new Receipt();
+            List<Bill> bills = billList;
+            if(!bills.isEmpty() && bills.get(0) != null){
+                Bill bill = bills.get(0);
+                bill.getBillDetails().get(0)
+                .setAmountPaid(bills.get(0).getBillDetails().get(0).getTotalAmount());
+                bill.getTaxAndPayments().get(0).setAmountPaid(bills.get(0).getBillDetails().get(0).getTotalAmount());
+                bill.setPaidBy(receiptHeader.getPaidBy());
+                bill.setPayerName(receiptHeader.getPayeeName());
+                bill.setPayerAddress(receiptHeader.getPayeeAddress());
+                bill.getBillDetails().get(0).setCollectionType(CollectionType.COUNTER);
+                bill.getBillDetails().get(0).setManualReceiptNumber(receiptHeader.getManualreceiptnumber());
+                bill.getBillDetails().get(0).setManualReceiptDate(
+                        receiptHeader.getManualreceiptdate() != null ? receiptHeader.getManualreceiptdate().getTime() : null);
+                bill.getBillDetails().get(0).setBillDescription(receiptHeader.getReferenceDesc());
+                
+                /* Setting Additional Detils in bill payload*/
+                BillDetailAdditional additional = new BillDetailAdditional();
+                additional.setNarration(receiptHeader.getReferenceDesc());
+                additional.setPayeeaddress(receiptHeader.getPayeeAddress());
+                additional.setBusinessReason(receiptHeader.getServiceIdText());
+                JsonNode jsonNode = new ObjectMapper().convertValue(additional, JsonNode.class);
+                bill.getBillDetails().get(0).setAdditionalDetails(jsonNode);
+                receipt.setBill(Arrays.asList(bill));
+            }
+            /* Setting Instrument Data in Receipt payload*/
+            Instrument instrument = new Instrument();
+            instrument.setInstrumentNumber(
+                    receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getInstrumentNumber());
+            instrument.setInstrumentDate(
+                    receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getInstrumentDate() != null
+                    ? receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getInstrumentDate().getTime()
+                            : null);
+            Long transactionDateInput = null;
+            Date transactionDate = null;
+            if (receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getTransactionDate() != null) {
+                transactionDate = receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getTransactionDate();
+            } else {
+                transactionDate = receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getInstrumentDate();
+            }
+            if (transactionDate != null) {
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(transactionDate);
+                cal.add(Calendar.HOUR_OF_DAY, 5);
+                cal.add(Calendar.MINUTE, 30);
+                transactionDateInput = cal.getTime().getTime();
+            }
+            instrument.setTransactionDateInput(transactionDateInput);
+            instrument.setTransactionNumber(
+                    receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getTransactionNumber() != null
+                    ? receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getTransactionNumber()
+                            : receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getInstrumentNumber());
+            
+            instrument.setInstrumentType(new org.egov.infra.microservice.models.InstrumentType());
+            instrument.getInstrumentType().setName(CollectionConstants.INSTRUMENT_MODES_MAP.get(receiptHeader.getInstrumentType()));
+            instrument.setPayee(receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getPayee());
+            instrument.setAmount(receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getInstrumentAmount());
+            instrument.setBank(new Bank());
+            instrument.getBank().setTenantId(tenantId);
+            instrument.getBank()
+            .setCode(receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getBankId() != null
+            ? receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getBankId().getCode()
+                    : null);
+            instrument.getBank()
+            .setName(receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getBankId() != null
+            ? receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getBankId().getName()
+                    : null);
+            instrument.setBranchName(receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getBankBranchName());
+            instrument.setTenantId(tenantId);
+            instrument.setIfscCode(receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0).getIfscCode());
+            receipt.setInstrument(instrument);
+            
+            receipt.setTenantId(tenantId);
+            request.setReceipt(Collections.singletonList(receipt));
+            request.setRequestInfo(requestInfo);
+            response = restTemplate.postForObject(url, request, ReceiptResponse.class);
+            break;
+        }
+        
+        return response;
+    }
+
+    private String getConsumerCode(ReceiptHeader receiptHeader) {
+        return receiptHeader.getServiceCategory() + "-" + receiptHeader.getService() + "-" + String.valueOf(new Date().getTime());
+    }
+
+    public Date getDataEntryCutOffDate() {
+        final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Date cutOffDate = null;
+        try {
+            cutOffDate = sdf.parse(collectionsUtil.getAppConfigValue(
+                    CollectionConstants.MODULE_NAME_COLLECTIONS_CONFIG,
+                    CollectionConstants.APPCONFIG_VALUE_COLLECTIONDATAENTRYCUTOFFDATE));
+        } catch (final ParseException e) {
+            LOGGER.error("Error parsing Cut Off Date", e);
+            throw new ApplicationRuntimeException(e.getMessage());
+        }
+        return cutOffDate;
+    }
+
+    /**
+     * Updates the billing system with receipt information
+     *
+     * @param receiptHeader
+     */
+    @Transactional
+    public void updateBillingSystemWithReceiptInfo(final ReceiptHeader receiptHeader,
+            final BillingIntegrationService billingService, final InstrumentHeader bouncedInstrumentInfo) {
+
+        /**
+         * for each receipt created, send the details back to the billing system
+         */
+        LOGGER.info("$$$$$$ Update Billing system for Service Code :"
+                + receiptHeader.getService()
+                + (receiptHeader.getConsumerCode() != null ? " and consumer code: " + receiptHeader.getConsumerCode()
+                        : ""));
+        final Set<BillReceiptInfo> billReceipts = new HashSet<>(0);
+        billReceipts.add(new BillReceiptInfoImpl(receiptHeader, chartOfAccountsHibernateDAO, persistenceService,
+                bouncedInstrumentInfo));
+
+        if (receiptHeader.getService().equals(CollectionConstants.SERVICECODE_LAMS)
+                || true) {// updateBillingSystem(receiptHeader.getService(), billReceipts, billingService)) {
+            receiptHeader.setIsReconciled(true);
+            // the receipts should be persisted again
+            super.persist(receiptHeader);
+            updateCollectionIndexAndPushMail(receiptHeader);
+        }
+        LOGGER.info("$$$$$$ Billing system updated for Service Code :"
+                + receiptHeader.getService()
+                + (receiptHeader.getConsumerCode() != null ? " and consumer code: " + receiptHeader.getConsumerCode()
+                        : ""));
+    }
+
+    @Transactional
+    public void updateCollectionIndexAndPushMail(final ReceiptHeader receiptHeader) {
+        if (receiptHeader.getPayeeEmail() != null
+                && !receiptHeader.getPayeeEmail().isEmpty()
+                && (receiptHeader.getCollectiontype().equals(CollectionConstants.COLLECTION_TYPE_ONLINECOLLECTION)
+                        && receiptHeader.getStatus().getCode().equals(CollectionConstants.RECEIPT_STATUS_CODE_APPROVED)
+                        || !receiptHeader
+                                .getCollectiontype().equals(CollectionConstants.COLLECTION_TYPE_ONLINECOLLECTION)
+                                && receiptHeader.getStatus().getCode()
+                                        .equals(CollectionConstants.RECEIPT_STATUS_CODE_TO_BE_SUBMITTED)))
+            pushMail(receiptHeader);
+        CollectionIndex collectionIndexObj = collectionIndexUtils.findByReceiptNumber(receiptHeader.getReceiptnumber());
+        if (collectionIndexObj != null) {
+            collectionIndexObj.setStatus(receiptHeader.getStatus().getDescription());
+            collectionIndexService.persistCollectionIndex(collectionIndexObj);
+
+        } else {
+            collectionIndexObj = collectionsUtil.constructCollectionIndex(receiptHeader);
+            collectionIndexService.pushCollectionIndex(collectionIndexObj);
+        }
+    }
+
+    private void pushMail(final ReceiptHeader receiptHeader) {
+        collectionsUtil.emailReceiptAsAttachment(receiptHeader,
+                collectionsUtil.createReport(getReportRequest(receiptHeader)).getReportOutputData());
+    }
+
+    public ReportRequest getReportRequest(final ReceiptHeader receiptHeader) {
+        String additionalMessage = null;
+        final List<BillReceiptInfo> receiptList = new ArrayList<>(0);
+        final Map<String, Object> reportParams = new HashMap<>(0);
+        final String serviceCode = receiptHeader.getService();
+
+        reportParams.put(CollectionConstants.REPORT_PARAM_COLLECTIONS_UTIL, collectionsUtil);
+        final String templateName = collectionsUtil.getReceiptTemplateName(receiptHeader.getReceipttype(), serviceCode);
+
+        if (receiptHeader.getReceipttype() == CollectionConstants.RECEIPT_TYPE_BILL) {
+            if (!receiptHeader.getService().equals(CollectionConstants.SERVICECODE_LAMS))
+                additionalMessage = getAdditionalInfoForReceipt(serviceCode, new BillReceiptInfoImpl(receiptHeader,
+                        chartOfAccountsHibernateDAO, persistenceService, null));
+            if (additionalMessage != null)
+                receiptList.add(new BillReceiptInfoImpl(receiptHeader, additionalMessage, chartOfAccountsHibernateDAO,
+                        persistenceService));
+            else
+                receiptList.add(new BillReceiptInfoImpl(receiptHeader, chartOfAccountsHibernateDAO, persistenceService,
+                        null));
+        }
+        final ReportRequest reportInput = new ReportRequest(templateName, receiptList, reportParams);
+        reportInput.setReportFormat(ReportFormat.PDF);
+        reportInput.setPrintDialogOnOpenReport(false);
+        return reportInput;
+    }
+
+    /**
+     * @param receipts - list of receipts which have to be processed as successful payments. For payments created as a response
+     * from bill desk, size of the array will be 1.
+     */
+    @Transactional
+    public ReceiptHeader createOnlineSuccessPayment(final ReceiptHeader receiptHeader, final Date transactionDate,
+            final String transactionId, final BigDecimal transactionAmt, final String authStatusCode,
+            final String remarks, final BillingIntegrationService billingService) {
+        receiptHeader.setStatus(collectionsUtil
+                .getReceiptStatusForCode(CollectionConstants.RECEIPT_STATUS_CODE_APPROVED));
+
+        receiptHeader.setReceiptInstrument(createOnlineInstrument(transactionDate, transactionId, transactionAmt));
+        receiptHeader.setIsReconciled(Boolean.FALSE);
+        receiptHeader.getOnlinePayment().setAuthorisationStatusCode(authStatusCode);
+        receiptHeader.getOnlinePayment().setTransactionNumber(transactionId);
+        receiptHeader.getOnlinePayment().setTransactionAmount(transactionAmt);
+        receiptHeader.getOnlinePayment().setTransactionDate(transactionDate);
+        receiptHeader.getOnlinePayment().setRemarks(remarks);
+
+        // set online payment status as SUCCESS
+        receiptHeader.getOnlinePayment().setStatus(
+                collectionsUtil.getStatusForModuleAndCode(CollectionConstants.MODULE_NAME_ONLINEPAYMENT,
+                        CollectionConstants.ONLINEPAYMENT_STATUS_CODE_SUCCESS));
+        persist(receiptHeader);
+        LOGGER.debug("Persisted receipt after receiving success message from the payment gateway");
+        return updateFinancialAndBillingSystem(receiptHeader, billingService);
+    }
+
+    @Transactional
+    public ReceiptHeader updateFinancialAndBillingSystem(final ReceiptHeader receiptHeader,
+            final BillingIntegrationService billingService) {
+        try {
+            final Boolean createVoucherForBillingService = collectionsUtil.checkVoucherCreation(receiptHeader);
+            if (createVoucherForBillingService) {
+                createVoucherForReceipt(receiptHeader);
+                LOGGER.debug("Updated financial systems and created voucher.");
+            }
+
+        } catch (final ApplicationRuntimeException ex) {
+            LOGGER.error("Receipt Service Exception while updateFinancialAndBillingSystem", ex);
+            throw new ApplicationRuntimeException("Failed to create voucher in Financials");
+        }
+        updateBillingSystemWithReceiptInfo(receiptHeader, billingService, null);
+        return receiptHeader;
+    }
+
+    @Transactional
+    public void persistFieldReceipt(final ReceiptHeader receiptHeader, final List<InstrumentHeader> instrumentHeaderList) {
+        final Set<InstrumentHeader> instHeaderSet = new HashSet<>(createInstrument(instrumentHeaderList));
+        receiptHeader.setReceiptInstrument(instHeaderSet);
+        persist(receiptHeader);
+        LOGGER.info("Receipt Created with receipt number: " + receiptHeader.getReceiptnumber());
+        updateFinancialAndBillingSystem(receiptHeader, null);
+        LOGGER.info("Billing system updated with receipt info");
+    }
+
+    @Transactional
+    public void updateDishonoredInstrumentStatus(final ReceiptHeader receiptHeader,
+            final InstrumentHeader bounceInstrumentInfo, final EgwStatus receiptStatus, final boolean isReconciled) {
+        financialsUtil.updateInstrumentHeader(bounceInstrumentInfo);
+        // update receipts - set status to INSTR_BOUNCED and recon flag to false
+        updateReceiptHeaderStatus(receiptHeader, receiptStatus, false);
+        LOGGER.debug("Updated receipt status to " + receiptStatus.getCode() + " set reconcilation to false");
+
+        updateBillingSystemWithReceiptInfo(receiptHeader, null, bounceInstrumentInfo);
+    }
+
+    /**
+     * This method updates the status and reconciliation flag for the given receipt
+     *
+     * @param receiptHeader <code>ReceiptHeader</code> objects whose status and reconciliation flag have to be modified
+     * @param status a <code>EgwStatus</code> instance representing the state to which the receipt has to be updated with
+     * @param isReconciled a <code>Boolean</code> flag indicating the value for the reconciliation status
+     */
+    @Transactional
+    public void updateReceiptHeaderStatus(final ReceiptHeader receiptHeader, final EgwStatus status,
+            final boolean isReconciled) {
+        if (status != null)
+            receiptHeader.setStatus(status);
+        receiptHeader.setIsReconciled(isReconciled);
+        update(receiptHeader);
+    }
+
+    @Transactional
+    public ReceiptHeader reconcileOnlineSuccessPayment(final ReceiptHeader onlinePaymentReceiptHeader,
+            final Date txnDate, final String txnRefNo, final BigDecimal txnAmount, final String txnAuthStatus,
+            final List<ReceiptDetail> reconstructedList, final ReceiptDetail debitAccountDetail) {
+        final BillingIntegrationService billingService = (BillingIntegrationService) collectionsUtil
+                .getBean(onlinePaymentReceiptHeader.getService()
+                        + CollectionConstants.COLLECTIONS_INTERFACE_SUFFIX);
+        if (reconstructedList != null) {
+            onlinePaymentReceiptHeader.getReceiptDetails().clear();
+            persistReceiptObject(onlinePaymentReceiptHeader);
+            LOGGER.debug("Reconstructed receiptDetailList : " + reconstructedList.toString());
+            for (final ReceiptDetail receiptDetail : reconstructedList) {
+                receiptDetail.setReceiptHeader(onlinePaymentReceiptHeader);
+                onlinePaymentReceiptHeader.addReceiptDetail(receiptDetail);
+            }
+            onlinePaymentReceiptHeader.addReceiptDetail(debitAccountDetail);
+
+        }
+
+        return createOnlineSuccessPayment(onlinePaymentReceiptHeader, txnDate, txnRefNo, txnAmount, txnAuthStatus,
+                null, billingService);
+
+    }
+
+    public void setCollectionsUtil(final CollectionsUtil collectionsUtil) {
+        this.collectionsUtil = collectionsUtil;
+    }
+
+    public void setFinancialsUtil(final FinancialsUtil financialsUtil) {
+        this.financialsUtil = financialsUtil;
+    }
+
+    public void setPersistenceService(final PersistenceService persistenceService) {
+        this.persistenceService = persistenceService;
+    }
+
+    public void setChallanService(final ChallanService challanService) {
+        this.challanService = challanService;
+    }
+
+    /**
+     * No work flow before cut off Date OR logged in user is Bank Collection Operator else Start work flow for newly created
+     * receipt.
+     */
+    public Boolean isReceiptCreateApprovedStatus(ReceiptHeader receiptHeader) {
+        final Date cutOffDate = getDataEntryCutOffDate();
+        if ((cutOffDate != null && receiptHeader.getReceiptdate().before(cutOffDate))
+                || collectionsUtil.isRoleToCreateReceiptApprovedStatus(collectionsUtil.getLoggedInUser()))
+            return true;
+        else
+            return false;
+    }
+
+    /**
+     * Create receipt in approved status
+     * @param receiptHeader
+     */
+    public void setReceiptApprovedStatus(ReceiptHeader receiptHeader) {
+        receiptHeader.setStatus(collectionsUtil
+                .getStatusForModuleAndCode(CollectionConstants.MODULE_NAME_RECEIPTHEADER,
+                        CollectionConstants.RECEIPT_STATUS_CODE_APPROVED));
+    }
+
+    public void validateReceiptCancellation(String receiptNumber, String serviceCode, String consumerCode) {
+        if (!serviceCode.equals(CollectionConstants.SERVICECODE_LAMS)) {
+            BillingIntegrationService billingService = getBillingServiceBean(serviceCode);
+            ReceiptCancellationInfo receiptCancellationInfo = billingService.validateCancelReceipt(receiptNumber, consumerCode);
+            if (!receiptCancellationInfo.getCancellationAllowed()) {
+                String validationMsg = receiptCancellationInfo.getValidationMessage();
+                throw new ValidationException(new ValidationError("validationMsg", validationMsg));
+            }
+        }
+    }
+    
+    public List<Payment> generatePayments(ReceiptHeader receiptHeader, List<BillV2> billList) {
+        List<PaymentDetail> paymentDetails = new ArrayList<PaymentDetail>();
+        billList.stream().forEach(bill -> {
+            PaymentDetail pd = PaymentDetail.builder()
+                    .billId(bill.getId())
+                    .businessService(bill.getBusinessService())
+                    .totalDue(bill.getTotalAmount())
+                    .totalAmountPaid(bill.getTotalAmount())
+                    .tenantId(microserviceUtils.getTenentId())
+                    .manualReceiptDate(receiptHeader.getManualreceiptdate() != null ? receiptHeader.getManualreceiptdate().getTime() : null)
+                    .manualReceiptNumber(receiptHeader.getManualreceiptnumber())
+                    .build();
+            paymentDetails.add(pd);
+        });
+        Payment payment = Payment.builder().paymentDetails(paymentDetails)
+                .tenantId(microserviceUtils.getTenentId())
+                .paymentMode(getPaymentModeEnum(receiptHeader.getModOfPayment()))
+                .totalDue(receiptHeader.getTotalAmount())
+                .totalAmountPaid(receiptHeader.getTotalAmount())
+                .paidBy(receiptHeader.getPaidBy())
+                .paymentStatus(PaymentStatusEnum.NEW)
+                .build();
+        this.prepareInstrumentsDetails(payment,receiptHeader);
+        PaymentResponse response = microserviceUtils.generatePayments(payment);
+        return response.getPayments();
+    }
+    
+    private void prepareInstrumentsDetails(Payment payment, ReceiptHeader receiptHeader) {
+        try {
+            InstrumentHeader instrumentHeader = receiptHeader.getInstruments(receiptHeader.getInstrumentType()).get(0);
+            Long instrumentDate = instrumentHeader.getInstrumentDate() != null ? instrumentHeader.getInstrumentDate().getTime() : new Date().getTime();
+            String instrumentNumber = instrumentHeader.getInstrumentNumber();
+            InstrumentStatusEnum instrumentStatus = InstrumentStatusEnum.APPROVED;
+            Long transactionDate = instrumentHeader.getTransactionDate() != null ? instrumentHeader.getTransactionDate().getTime() : instrumentDate;
+            String transactionNumber = instrumentHeader.getTransactionNumber() != null ? instrumentHeader.getTransactionNumber() : instrumentHeader.getInstrumentNumber();
+            String ifscCode = instrumentHeader.getIfscCode();
+            payment.setInstrumentDate(instrumentDate);
+            payment.setInstrumentNumber(instrumentNumber);
+            payment.setInstrumentStatus(instrumentStatus);
+            payment.setTransactionDate(transactionDate);
+            payment.setTransactionNumber(transactionNumber);
+            payment.setIfscCode(ifscCode);
+        } catch (ObjectNotFoundException e) {
+            LOGGER.error("ERROR occurred while setting the instruments details",e);
+        }
+    }
+
+    private PaymentModeEnum getPaymentModeEnum(String modeOfPayment){
+        PaymentModeEnum payModeEnum = null;
+        switch (modeOfPayment.toUpperCase()) {
+        case "CASH":
+            payModeEnum = PaymentModeEnum.CASH;
+            break;
+        case "CARD":
+            payModeEnum = PaymentModeEnum.CARD;
+            break;
+        case "CHEQUE":
+            payModeEnum = PaymentModeEnum.CHEQUE;
+            break;
+        case "DD":
+            payModeEnum = PaymentModeEnum.DD;
+            break;
+        case "ONLINE":
+            payModeEnum = PaymentModeEnum.ONLINE;
+            break;
+
+        default:
+            payModeEnum = PaymentModeEnum.CASH;
+        }
+        return payModeEnum;
+    }
+}

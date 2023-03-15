@@ -1,0 +1,210 @@
+curl --location --request POST 'https://dev.digit.org/egov-workflow-v2/egov-wf/businessservice/_create' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "RequestInfo": {
+    "apiId": "Rainmaker",
+    "action": "",
+    "did": 1,
+    "key": "",
+    "msgId": "20170310130900|en_IN",
+    "requesterId": "",
+    "ts": 1513579888683,
+    "ver": ".01",
+    "authToken": "b39181b1-5c6b-484a-b825-6be2f62012b8"
+  },
+ "BusinessServices": [
+    {
+      "tenantId": "pb",
+      "businessService": "ASMT",
+      "business": "pt-services",
+      "businessServiceSla": 172800000,
+      "states": [
+        {
+          "sla": null,
+          "state": null,
+          "applicationStatus": null,
+          "docUploadRequired": false,
+          "isStartState": true,
+          "isTerminateState": false,
+          "isStateUpdatable": true,
+          "actions": [
+            {
+              "action": "INITIATE",
+              "nextState": "INITIATED",
+              "roles": [
+                "CITIZEN",
+                "PT_CEMP"
+              ]
+            }
+          ]
+        },
+        {
+          "sla": null,
+          "state": "INITIATED",
+          "applicationStatus": "INITIATED",
+          "docUploadRequired": false,
+          "isStartState": true,
+          "isTerminateState": false,
+          "actions": [
+            {
+              "action": "APPLY",
+              "nextState": "APPLIED",
+              "roles": [
+                "CITIZEN",
+                "PT_CEMP"
+              ]
+            },
+            {
+              "action": "INITIATE",
+              "nextState": "INITIATED",
+              "roles": [
+                "CITIZEN",
+                "PT_CEMP"
+              ]
+            }
+          ]
+        },
+        {
+          "sla": null,
+          "state": "APPLIED",
+          "applicationStatus": "APPLIED",
+          "docUploadRequired": false,
+          "isStartState": false,
+          "isTerminateState": false,
+          "isStateUpdatable": true,
+          "actions": [
+            {
+              "action": "FORWARD",
+              "nextState": "FIELDINSPECTION",
+              "roles": [
+                "PT_DOC_VERIFIER"
+              ]
+            },
+            {
+              "action": "REJECT",
+              "nextState": "REJECTED",
+              "roles": [
+                "PT_DOC_VERIFIER"
+              ]
+            },
+            {
+              "action" : "SENDBACKTOCITIZEN",
+              "nextState" : "INITIATED",
+              "roles":["PT_DOC_VERIFIER"]
+            }
+          ]
+        },
+        {
+          "sla": null,
+          "state": "REJECTED",
+          "applicationStatus": "REJECTED",
+          "isStateUpdatable": false,
+          "docUploadRequired": false,
+          "isStartState": false,
+          "isTerminateState": true
+        },
+        {
+          "sla": 86400000,
+          "state": "FIELDINSPECTION",
+          "applicationStatus": "FIELDINSPECTION",
+          "docUploadRequired": false,
+          "isStartState": false,
+          "isStateUpdatable": true,
+          "isTerminateState": false,
+          "actions": [
+            {
+              "action": "FORWARD",
+              "nextState": "PENDINGAPPROVAL",
+              "roles": [
+                "PT_FIELD_INSPECTOR"
+              ]
+            },
+            {
+              "action": "REJECT",
+              "nextState": "REJECTED",
+              "roles": [
+                "PT_FIELD_INSPECTOR"
+              ]
+            },
+            {
+              "action": "SENDBACK",
+              "nextState": "APPLIED",
+              "roles": [
+                "PT_FIELD_INSPECTOR"
+              ]
+            }
+          ]
+        },
+        {
+          "sla": 43200000,
+          "state": "PENDINGAPPROVAL",
+          "applicationStatus": "PENDINGAPPROVAL",
+          "docUploadRequired": false,
+          "isStartState": false,
+          "isStateUpdatable": false,
+          "isTerminateState": false,
+          "actions": [
+            {
+              "action": "APPROVE",
+              "nextState": "PENDINGPAYMENT",
+              "roles": [
+                "PT_APPROVER"
+              ]
+            },
+            {
+              "action": "REJECT",
+              "nextState": "REJECTED",
+              "roles": [
+                "PT_APPROVER"
+              ]
+            },
+            {
+              "action": "SENDBACK",
+              "nextState": "FIELDINSPECTION",
+              "roles": [
+                "PT_APPROVER"
+              ]
+            }
+          ]
+        },
+        {
+          "sla": 43200000,
+          "state": "PENDINGPAYMENT",
+          "applicationStatus": "PENDINGPAYMENT",
+          "docUploadRequired": false,
+          "isStartState": false,
+          "isTerminateState": false,
+          "isStateUpdatable": false,
+          "actions": [
+            {
+              "action": "PAY",
+              "nextState": "APPROVED",
+              "roles": [
+                "CITIZEN",
+                "PT_CEMP",
+                "SYSTEM_PAYMENT"
+              ]
+            },
+            {
+              "action": "ADHOC",
+              "nextState": "PENDINGPAYMENT",
+              "roles": [
+                "PT_CEMP"
+              ]
+            }
+          ]
+        },
+        {
+          "sla": null,
+          "state": "APPROVED",
+          "applicationStatus": "APPROVED",
+          "isStateUpdatable": false,
+          "docUploadRequired": false,
+          "isStartState": false,
+          "isTerminateState": true
+        }
+      ]
+    }
+  ]
+}	
+'

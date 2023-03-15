@@ -1,0 +1,23 @@
+{
+  "RequestInfo": {
+    "apiId": null,
+    "ver": null,
+    "ts": null,
+    "resMsgId": null,
+    "msgId": null,
+    "status": null
+  },
+  "Bill": [
+    {
+      "id": "12",
+      "tenantId": "ap.kurnool",
+      "isActive": true,
+      "isCancelled": true,
+      "payeeAddress": "bangalore",
+      "payeeEmail": "abc@xyz.com",
+      "payeeName": "abcd",
+	  "billDetails":null,
+      "auditDetail": null
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+alter table eg_businessdetails add column callBackForApportioning boolean;
