@@ -409,53 +409,8 @@ function SelectDocument({ t, document: doc, setDocuments, documentsUploadList, e
             message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
             iserror={error}
           />
+          {/* {JSON.stringify(documentsUploadList?.[0])} */}
           {
-            // <span style={{ margin: "0 0.5rem" }}>
-            //   {doc?.code === "ARTICLES_OF_ASSOCIATION" ? (
-            //     documents?.data?.documentType == "ARTICLES_OF_ASSOCIATION" ? (
-            //       <button
-            //         type="button"
-            //         title="View Document"
-            //         onClick={() => getDocShareholding(documents?.data?.documentUid)}
-            //         className="btn btn-sm col-md-6"
-            //       >
-            //         <VisibilityIcon color="info" className="icon" />
-            //       </button>
-            //     ) : (
-            //       <button
-            //         type="button"
-            //         title="View Document"
-            //         onClick={() => getDocShareholding(documentsUploadList[0]?.articlesOfAssociation)}
-            //         className="btn btn-sm col-md-6"
-            //       >
-            //         <VisibilityIcon color="info" className="icon" />
-            //       </button>
-            //     )
-            //   ) : doc?.code === "REGISTERED_IRREVOCABLE_PARTNERSHIP_DEED" ? (
-            //     documents?.documentType === "REGISTERED_IRREVOCABLE_PARTNERSHIP_DEED" ? (
-            //       <button
-            //         type="button"
-            //         title="View Document"
-            //         onClick={() => getDocShareholding(documents?.documentUid)}
-            //         className="btn btn-sm col-md-6"
-            //       >
-            //         <VisibilityIcon color="info" className="icon" />
-            //       </button>
-            //     ) : (
-            //       <button
-            //         type="button"
-            //         title="View Document"
-            //         onClick={() => getDocShareholding(documentsUploadList[0]?.registeredIrrevocablePaternshipDeed)}
-            //         className="btn btn-sm col-md-6"
-            //       >
-            //         <VisibilityIcon color="info" className="icon" />
-            //       </button>
-            //     )
-            //   ) : (
-            //     ""
-            //   )}
-            // </span>
-
             <span style={{ margin: "0 0.5rem" }}>
               {doc?.code === "ARTICLES_OF_ASSOCIATION" && documentsUploadList?.length > 0 ? (
                 <button
@@ -484,7 +439,7 @@ function SelectDocument({ t, document: doc, setDocuments, documentsUploadList, e
                 >
                   <VisibilityIcon color="info" className="icon" />
                 </button>
-              ) : doc?.code === "APPL.BPAREG_OTHERS" && documentsUploadList?.length > 0 ? (
+              ) : doc?.code === "APPL.BPAREG_OTHERS" && documentsUploadList?.[0]?.length > 0 ? (
                 <button
                   type="button"
                   title="View Document"
