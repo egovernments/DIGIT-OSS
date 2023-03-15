@@ -1,1 +1,0 @@
-alter table edcr_pdf_detail alter COLUMN standardviolations type character varying(5000);

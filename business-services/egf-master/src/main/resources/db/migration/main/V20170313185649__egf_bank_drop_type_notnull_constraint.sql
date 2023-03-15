@@ -1,3 +1,0 @@
-ALTER TABLE egf_bank ALTER COLUMN type DROP NOT NULL;
-
---rollback ALTER TABLE egf_bank ALTER COLUMN type set NOT NULL;

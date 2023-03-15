@@ -1,3 +1,0 @@
-ALTER TABLE EG_CITYPREFERENCES DROP COLUMN giskml;
-ALTER TABLE EG_CITY ADD COLUMN regionName character varying(50);
-ALTER TABLE EG_CITY_AUD ADD COLUMN regionName character varying(50);

@@ -1,2 +1,0 @@
-DELETE FROM tenant;
-ALTER SEQUENCE seq_tenant RESTART WITH 1;

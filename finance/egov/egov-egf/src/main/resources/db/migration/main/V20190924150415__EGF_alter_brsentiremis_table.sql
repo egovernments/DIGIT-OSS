@@ -1,1 +1,0 @@
-ALTER TABLE BANKENTRIES_MIS ADD COLUMN departmentcode varchar(50);

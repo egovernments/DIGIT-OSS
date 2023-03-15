@@ -1,1 +1,0 @@
-alter table eg_applicationindex rename ulbname to cityname;

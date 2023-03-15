@@ -1,1 +1,0 @@
-update eg_businessdetails set businesstype='BILLBASED';

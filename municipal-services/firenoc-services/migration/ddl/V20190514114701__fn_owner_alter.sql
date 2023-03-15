@@ -1,1 +1,0 @@
-ALTER TABLE eg_fn_owner ADD useruuid character varying(64);

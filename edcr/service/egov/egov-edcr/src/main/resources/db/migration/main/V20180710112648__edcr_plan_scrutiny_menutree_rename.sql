@@ -1,1 +1,0 @@
-update eg_action set displayname ='Building Plan Scrutiny Report' where name='buildingplanscrutinysearchreport';

@@ -1,2 +1,0 @@
-# egov-java-template
-template

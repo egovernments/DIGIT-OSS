@@ -1,1 +1,0 @@
-ALTER TABLE EG_WF_STATES ADD COLUMN previousOwner bigint;

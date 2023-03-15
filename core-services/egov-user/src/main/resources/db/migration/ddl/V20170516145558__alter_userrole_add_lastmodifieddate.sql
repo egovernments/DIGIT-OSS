@@ -1,1 +1,0 @@
-alter table eg_userrole add column lastmodifieddate TIMESTAMP default now();

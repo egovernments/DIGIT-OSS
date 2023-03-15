@@ -1,1 +1,0 @@
-alter table edcr_application_detail add column scrutinizedDxfFileId bigint;

@@ -1,1 +1,0 @@
-ALTER TABLE eg_pt_document ALTER COLUMN documentType DROP NOT NULL;

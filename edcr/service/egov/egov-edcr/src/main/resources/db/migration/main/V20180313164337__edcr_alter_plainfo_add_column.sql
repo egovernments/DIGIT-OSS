@@ -1,1 +1,0 @@
-ALTER TABLE edcr_planinfo ADD COLUMN applicantname CHARACTER VARYING (128);

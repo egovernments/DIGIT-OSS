@@ -1,1 +1,0 @@
-ALTER TABLE tds ADD CONSTRAINT unq_glcodeid UNIQUE (glcodeid);

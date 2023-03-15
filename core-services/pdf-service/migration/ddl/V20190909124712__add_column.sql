@@ -1,1 +1,0 @@
-alter table egov_pdf_gen add column totalcount integer

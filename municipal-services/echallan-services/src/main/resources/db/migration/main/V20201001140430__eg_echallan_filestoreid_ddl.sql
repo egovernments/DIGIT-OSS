@@ -1,1 +1,0 @@
-ALTER TABLE eg_echallan ADD COLUMN filestoreid character varying(256);

@@ -1,1 +1,0 @@
-update eg_wf_types set link = '/services/EGF/expensebill/update/:ID' where type = 'EgBillregister';

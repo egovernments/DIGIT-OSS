@@ -1,1 +1,0 @@
-ALTER TABLE eg_pgr_address ALTER COLUMN housenoandstreetname TYPE character varying(512);

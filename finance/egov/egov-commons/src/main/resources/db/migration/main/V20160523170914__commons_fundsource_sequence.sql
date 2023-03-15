@@ -1,1 +1,0 @@
-SELECT setval('"seq_fundsource"',(SELECT MAX(ID) FROM fundsource ));

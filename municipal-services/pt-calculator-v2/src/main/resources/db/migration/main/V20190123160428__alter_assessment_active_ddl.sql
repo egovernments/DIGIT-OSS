@@ -1,1 +1,0 @@
-alter table eg_pt_assessment add column active boolean default true;

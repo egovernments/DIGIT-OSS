@@ -1,2 +1,0 @@
-update eg_occupancy set description = 'Hazardous (I1)' where description = 'Hazardous (1)' and isactive = true;
-update eg_occupancy set description = 'Hazardous (I2)' where description = 'Hazardous (2)' and isactive = true;

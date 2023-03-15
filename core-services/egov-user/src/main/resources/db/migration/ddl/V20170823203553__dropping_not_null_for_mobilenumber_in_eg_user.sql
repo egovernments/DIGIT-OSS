@@ -1,1 +1,0 @@
-ALTER TABLE eg_user ALTER COLUMN mobilenumber DROP NOT NULL;

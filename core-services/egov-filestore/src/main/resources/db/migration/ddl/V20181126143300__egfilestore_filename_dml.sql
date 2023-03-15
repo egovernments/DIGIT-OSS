@@ -1,1 +1,0 @@
-ALTER TABLE eg_filestoremap ALTER COLUMN filename TYPE  CHARACTER VARYING(256);

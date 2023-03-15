@@ -1,1 +1,0 @@
-alter table edcr_application add column projecttype character varying(512);

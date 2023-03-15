@@ -1,1 +1,0 @@
-update eg_wf_types set link = '/services/EGF/voucher/preApprovedVoucher-loadvoucher.action?vhid=:ID&from=Journal Voucher' where type = 'CVoucherHeader';

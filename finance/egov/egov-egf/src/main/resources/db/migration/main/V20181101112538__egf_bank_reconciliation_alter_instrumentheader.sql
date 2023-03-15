@@ -1,1 +1,0 @@
-ALTER TABLE bankreconciliation ALTER COLUMN instrumentheaderid TYPE varchar(256);

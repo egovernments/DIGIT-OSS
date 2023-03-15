@@ -1,1 +1,0 @@
-ALTER TABLE edcr_application_detail ADD COLUMN failurereasons CHARACTER VARYING (1024);

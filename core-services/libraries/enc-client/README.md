@@ -1,2 +1,0 @@
-# eGov-Enc-Client-APIs
-

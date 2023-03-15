@@ -1,1 +1,0 @@
-alter table egf_instrument add column remittanceVoucherId varchar(50);

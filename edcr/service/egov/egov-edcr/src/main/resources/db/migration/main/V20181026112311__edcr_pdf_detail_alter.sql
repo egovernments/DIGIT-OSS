@@ -1,1 +1,0 @@
-ALTER TABLE EDCR_PDF_DETAIL RENAME COLUMN failedLayers TO failurereasons;

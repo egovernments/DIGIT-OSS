@@ -1,1 +1,0 @@
-ALTER TABLE egeis_assignment ADD CONSTRAINT fk_egeis_assignment_employee FOREIGN KEY (employee) REFERENCES egeis_employee(id);

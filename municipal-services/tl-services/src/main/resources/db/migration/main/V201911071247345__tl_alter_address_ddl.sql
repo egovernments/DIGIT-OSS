@@ -1,1 +1,0 @@
-ALTER TABLE eg_tl_address ALTER COLUMN addressline1 TYPE text;

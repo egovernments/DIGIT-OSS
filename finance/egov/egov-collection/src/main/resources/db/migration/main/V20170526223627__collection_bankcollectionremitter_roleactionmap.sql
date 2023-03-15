@@ -1,1 +1,0 @@
-INSERT into eg_roleaction (roleid,actionid) values ((select id from eg_role where name='BANK COLLECTION REMITTER'),(select id from eg_action where name='RemittancePrintBankChallan'));

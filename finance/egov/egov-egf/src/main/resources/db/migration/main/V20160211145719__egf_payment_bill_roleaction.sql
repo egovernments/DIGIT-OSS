@@ -1,3 +1,0 @@
-Insert into eg_roleaction values((select id from eg_role where name='Payment Creator'),(select id from eg_action where name='Contingent Bill-View'));
-Insert into eg_roleaction values((select id from eg_role where name='Payment Approver'),(select id from eg_action where name='Contingent Bill-View'));
-Insert into eg_roleaction values((select id from eg_role where name='Bill Creator'),(select id from eg_action where name='ajax-common-entityby20'));

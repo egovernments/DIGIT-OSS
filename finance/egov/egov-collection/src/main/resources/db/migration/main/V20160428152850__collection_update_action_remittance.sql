@@ -1,1 +1,0 @@
-update eg_action set url = '/receipts/bankRemittance-newform.action' where name='BankRemittance' and contextroot='collection';

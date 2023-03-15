@@ -1,1 +1,0 @@
-ALTER table edcr_application_detail ADD COLUMN planinfoid bigint;

@@ -1,1 +1,0 @@
-alter table sub_scheme alter name type character varying(100);

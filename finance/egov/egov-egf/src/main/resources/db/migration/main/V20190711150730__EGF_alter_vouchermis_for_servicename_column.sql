@@ -1,1 +1,0 @@
-ALTER TABLE vouchermis add column servicename varchar(100) default '';

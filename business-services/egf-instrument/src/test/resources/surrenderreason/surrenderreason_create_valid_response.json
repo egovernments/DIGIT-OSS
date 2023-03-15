@@ -1,8 +1,0 @@
-"surrenderReasons": [
-	   	{
-	   	 	"id": null,
-			"name":"name",
-			"description":"description",
-	   		"tenantId":"default"
-	   	}
-   	]

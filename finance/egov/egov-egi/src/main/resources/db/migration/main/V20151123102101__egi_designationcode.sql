@@ -1,1 +1,0 @@
-alter table eg_designation add column code varchar(10);

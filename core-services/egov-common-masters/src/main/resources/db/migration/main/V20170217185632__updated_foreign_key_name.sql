@@ -1,2 +1,0 @@
-ALTER TABLE eg_holiday
-	RENAME CONSTRAINT fk_eg_holiday_calendaryear TO fk_eg_holiday_calendaryear_tenantid;

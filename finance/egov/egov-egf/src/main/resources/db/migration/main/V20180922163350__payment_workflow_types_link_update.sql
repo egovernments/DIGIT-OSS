@@ -1,1 +1,0 @@
-update eg_wf_types set link = '/services/EGF/payment/basePayment-viewInboxItems.action?paymentid=:ID' where type = 'Paymentheader';

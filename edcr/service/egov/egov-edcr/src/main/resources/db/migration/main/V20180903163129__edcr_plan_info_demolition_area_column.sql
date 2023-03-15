@@ -1,1 +1,0 @@
-alter table EDCR_PLANINFO add column demolitionArea double precision;

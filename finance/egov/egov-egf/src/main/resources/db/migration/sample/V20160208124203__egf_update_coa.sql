@@ -1,1 +1,0 @@
-update chartofaccounts set classification=2 where classification=1 and length(glcode)=5;

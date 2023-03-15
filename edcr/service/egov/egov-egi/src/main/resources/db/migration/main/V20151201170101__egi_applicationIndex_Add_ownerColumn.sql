@@ -1,1 +1,0 @@
-alter table eg_applicationindex add column ownername character varying(250);

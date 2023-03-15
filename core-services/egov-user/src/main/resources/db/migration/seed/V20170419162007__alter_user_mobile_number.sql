@@ -1,1 +1,0 @@
-UPDATE eg_user set mobilenumber='1234567890' where mobilenumber is null;

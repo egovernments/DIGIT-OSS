@@ -1,1 +1,0 @@
-ALTER TABLE eg_pt_owner DROP CONSTRAINT IF EXISTS pk_eg_pt_owner;

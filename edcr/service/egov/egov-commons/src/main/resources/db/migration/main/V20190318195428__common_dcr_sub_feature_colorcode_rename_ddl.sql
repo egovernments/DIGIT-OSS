@@ -1,3 +1,0 @@
-alter table egdcr_additional_feature_colorcodes rename to egdcr_sub_feature_colorcode;
-
-alter sequence seq_egdcr_additional_feature_colorcodes rename to seq_egdcr_sub_feature_colorcode;

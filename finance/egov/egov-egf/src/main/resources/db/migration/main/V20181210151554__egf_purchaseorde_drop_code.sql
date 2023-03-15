@@ -1,1 +1,0 @@
-ALTER TABLE egf_purchaseorder DROP COLUMN code RESTRICT;

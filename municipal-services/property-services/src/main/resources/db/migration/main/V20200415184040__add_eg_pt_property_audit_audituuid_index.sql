@@ -1,1 +1,0 @@
-CREATE INDEX IF NOT EXISTS index_eg_pt_property_audit_audituuid ON eg_pt_property_audit (audituuid);

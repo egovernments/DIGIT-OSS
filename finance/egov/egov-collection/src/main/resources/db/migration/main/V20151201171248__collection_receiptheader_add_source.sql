@@ -1,1 +1,0 @@
-ALTER TABLE egcl_collectionheader ADD COLUMN SOURCE character varying(20);

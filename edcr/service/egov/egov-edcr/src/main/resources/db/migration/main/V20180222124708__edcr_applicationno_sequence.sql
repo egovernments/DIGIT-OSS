@@ -1,1 +1,0 @@
-create sequence SEQ_ECDR_APPLICATIONNO;

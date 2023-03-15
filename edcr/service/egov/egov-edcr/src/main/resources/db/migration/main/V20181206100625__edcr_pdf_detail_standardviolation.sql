@@ -1,1 +1,0 @@
-ALTER TABLE EDCR_PDF_DETAIL ADD COLUMN standardviolations character varying(1024);

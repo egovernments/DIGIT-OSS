@@ -1,5 +1,0 @@
-Insert into egw_status (ID,MODULETYPE,DESCRIPTION,LASTMODIFIEDDATE,CODE,ORDER_ID) values (nextval('seq_egw_status'),'PURCHBILL','CREATED',now(),'CREATED',1);
-Insert into egw_status (ID,MODULETYPE,DESCRIPTION,LASTMODIFIEDDATE,CODE,ORDER_ID) values (nextval('seq_egw_status'),'PURCHBILL','Approved',now(),'Approved',1);
-Insert into egw_status (ID,MODULETYPE,DESCRIPTION,LASTMODIFIEDDATE,CODE,ORDER_ID) values (nextval('seq_egw_status'),'PURCHBILL','Voucher Created',now(),'Voucher Created',1);
-Insert into egw_status (ID,MODULETYPE,DESCRIPTION,LASTMODIFIEDDATE,CODE,ORDER_ID) values (nextval('seq_egw_status'),'PURCHBILL','Cancelled',now(),'Cancelled',1);
-Insert into egw_status (ID,MODULETYPE,DESCRIPTION,LASTMODIFIEDDATE,CODE,ORDER_ID) values (nextval('seq_egw_status'),'PURCHBILL','Rejected',now(),'Rejected',1);

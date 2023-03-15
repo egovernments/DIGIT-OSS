@@ -1,1 +1,0 @@
-ALTER TABLE eg_usrevents_events ALTER COLUMN description TYPE text;

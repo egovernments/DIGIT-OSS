@@ -1,1 +1,0 @@
-ALTER TABLE eg_pgr_service ALTER COLUMN description DROP NOT NULL;
