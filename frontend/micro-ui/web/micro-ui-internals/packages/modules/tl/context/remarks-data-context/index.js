@@ -11,8 +11,7 @@ const ScrutinyRemarksProvider = ({ children }) => {
 
     const [remarksData, setRemarksData] = useState({});
     const [iconStates,setIconState]= useState(null);
-    const [roleData,setRoleData]= useState(null);
-
+    const [rolesDate,setRolesData]= useState(null);
     const [bussinessService , setBusinessService] = useState("");
   
     const userInfo = Digit.UserService.getUser()?.info || {};
@@ -65,11 +64,11 @@ const ScrutinyRemarksProvider = ({ children }) => {
           }
       };
       try {
-        const Resp = await axios.post(`/land-services/egscrutiny/_search2?applicationNumber=${applicationNumber}`, dataToPass).then((response) => {
+        const Resp = await axios.post(`/land-services/egscrutiny/_search?applicationNumber=${applicationNumber}&userId=${userInfo?.id}`, dataToPass).then((response) => {
           return response.data;
         });
   
-        console.log("ResponseTABLE", Resp);
+        console.log("Response From API", Resp);
         setIconState(Resp);
         // setApiResponse(Resp);
       } catch (error) {
@@ -78,45 +77,37 @@ const ScrutinyRemarksProvider = ({ children }) => {
   
     }
 
-    // const handleRoleTable=async(applicationNumber)=>{
-    //     console.log("logger123...",applicationNumber)
-    //     const dataToPass={
-    //       "RequestInfo": {
-    //         "apiId": "Rainmaker",
+    const handleRoles = async (applicationNumber) => {
+        console.log("applicationlog...",applicationNumber)
+        const dataToSend = {
+            RequestInfo: {
+                apiId: "Rainmaker",
+                action: "_create",
+                did: 1,
+                key: "",
+                msgId: "20170310130900|en_IN",
+                ts: 0,
+                ver: ".01",
+                authToken: authToken,
+               
+            },
+        };
+        try {
+            const Resp = await axios.post(`/land-services/egscrutiny/_search2?applicationNumber=${applicationNumber}`, dataToSend).then((response) => {
+                return response.data;
+            });
 
-    //         "action": "_create",
+            console.log("Response roles", Resp);
+            setRolesData(Resp);
+        } catch (error) {
+            console.log(error);
+        }
+    };
     
-    //         "did": 1,
-    
-    //         "key": "",
-    
-    //         "msgId": "20170310130900|en_IN",
-    
-    //         "ts": 0,
-    
-    //         "ver": ".01",
-    
-    //         "authToken": authToken
-    
-    //       }
-    //   };
-    //   try {
-    //     const Resp = await axios.post(`/land-services/egscrutiny/_search2?applicationNumber=${applicationNumber}`, dataToPass).then((response) => {
-    //       return response.data;
-    //     });
-  
-    //     console.log("ResponsTable", Resp);
-    //     setRoleData(Resp);
-    //     // setApiResponse(Resp);
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-  
-    // }
 
 
     return (
-        <ScrutinyRemarksContext.Provider value={{remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues,bussinessService,setBusinessService}}>
+        <ScrutinyRemarksContext.Provider value={{remarksData,iconStates,rolesDate,handleRoles,handleGetFiledsStatesById,handleGetRemarkssValues,bussinessService,setBusinessService}}>
             {children}
         </ScrutinyRemarksContext.Provider>
     )

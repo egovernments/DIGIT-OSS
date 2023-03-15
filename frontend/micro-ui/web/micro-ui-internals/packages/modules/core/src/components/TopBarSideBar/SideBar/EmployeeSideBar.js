@@ -23,12 +23,20 @@ const EmployeeSideBar = () => {
   const NATADMIN = Digit.UserService.hasAccess("NATADMIN");
 
   let key = "ACTION_TEST_HOME";
+  let ke = "ACTION_TEST_TRACTKER";
+  
 
   if (STADMIN) {
     key = "ACTION_TEST_SURE_DASHBOARD";
   }
+  if (STADMIN) {
+    ke = "ACTION_TEST_SURE_DASHBOARD";
+  }
   if (NATADMIN) {
     key = "ACTION_TEST_NATDASHBOARD";
+  }
+  if (NATADMIN) {
+    ke = "ACTION_TEST_NATDASHBOARD";
   }
 
   function getRedirectionUrl(){
@@ -73,17 +81,17 @@ const EmployeeSideBar = () => {
           />
         </div>
       </a>
-      {/*
-      <a href={key.includes("DASHBOARD") ? `/employee/integration/dss/${NATADMIN ? "NURT_DASHBOARD" : "home"}` : "/employee"}>
+      
+      <a href={ke.includes("DASHBOARD") ? `/employee/integration/dss/${NATADMIN ? "NURT_DASHBOARD" : "TRACTKER"}` : "/digit-ui/employee/tl/Records"}>
         <div className="actions">
           <ToolTipWrapper
             child={
-              key.includes("DASHBOARD") ? (
+              ke.includes("DASHBOARD") ? (
                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M0 10H8V0H0V10ZM0 18H8V12H0V18ZM10 18H18V8H10V18ZM10 0V6H18V0H10Z" fill="white" />
                 </svg>
               ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" title="National DSS Home">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" title="National DSS Tractker">
                   <path d="M0 0h24v24H0z" fill="none" />
                   <path
                     d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"
@@ -93,11 +101,11 @@ const EmployeeSideBar = () => {
               )
             }
             t={t}
-            label={key}
+            label={ke}
           />
         </div>
       </a>
-      <a href="/employee/integration/dss/home">
+      {/* <a href="/employee/integration/dss/home">
         <div className="actions">
           <ToolTipWrapper
             child={
@@ -113,8 +121,8 @@ const EmployeeSideBar = () => {
             label={"ACTION_TEST_HOME"}
           />
         </div>
-      </a> 
-      */}
+      </a>  */}
+     
     </div>
   );
 };

@@ -34,6 +34,9 @@ const PersonalinfoChild = (props) => {
   const userRoles = user?.info?.roles?.map((e) => e.code) || [];
   const hideRemarks = userRoles.some((item) => item === "CTP_HR" || item === "CTP_HQ" || item === "DTP_HR" || item === "DTP_HQ")
   const hideRemarksPatwari = userRoles.some((item) => item === "Patwari_HQ")
+  
+  const personalinfo = props.personalinfo;
+  const iconStates = props.iconColorState;
 
   // let users = Digit.UserService.getUser();
   // const userRole = users?.info?.roles?.map((e) => e.code) || [];
@@ -41,10 +44,11 @@ const PersonalinfoChild = (props) => {
   //   const [handleChange,setHandleChange] =useState("");
   //   const handleClose = () => setShow(false);
   // const [handleshow ,setHandleShow] = () => setShow(true);
+  const applicationStatus = props.applicationStatus ;
   const [smShow, setSmShow] = useState(false);
   const [labelValue, setLabelValue] = useState("");
   const Colors = {
-    conditional: "#2874A6",
+    Conditional: "#2874A6",
     approved: "#09cb3d",
     disapproved: "#ff0000",
       info: "#FFB602"
@@ -100,62 +104,61 @@ const PersonalinfoChild = (props) => {
 
 
 
-  const personalinfo = props.personalinfo;
-  const iconStates = props.iconColorState;
 
-
-  const getColorofFieldIcon = () => {
+  
+  console.log("RemarksColor", iconStates);
+  const getColorofFieldIcon=()=>{
     let tempFieldColorState = fieldIconColors;
-    fieldIdList.forEach((item) => {
-      if (iconStates !== null && iconStates !== undefined) {
+    fieldIdList.forEach((item)=>{
+      if (iconStates!==null && iconStates!==undefined) {
         console.log("color method called");
-        const fieldPresent = iconStates.egScrutiny.filter(ele => (ele.fieldIdL === item.label));
-        console.log("filteration value", fieldPresent, fieldPresent[0]?.isApproved);
-        if (fieldPresent && fieldPresent.length) {
-          console.log("filteration value1", fieldPresent, fieldPresent[0]?.isApproved);
-          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved === "approved" ? Colors.approved : fieldPresent[0].isApproved === "disapproved" ? Colors.disapproved : fieldPresent[0].isApproved === "conditional" ? Colors.conditional : Colors.info }
-
+        const fieldPresent = iconStates.egScrutiny.filter(ele => (ele.fieldIdL===item.label));
+        console.log("filteration value", fieldPresent,fieldPresent[0]?.isApproved);
+        if(fieldPresent && fieldPresent.length){
+          console.log("filteration value1", fieldPresent,fieldPresent[0]?.isApproved);
+          tempFieldColorState = {...tempFieldColorState,[item.key]:fieldPresent[0].isApproved === "In Order" ?Colors.approved: fieldPresent[0].isApproved === "Not In Order" ? Colors.disapproved:fieldPresent[0].isApproved === "Conditional" ? Colors.Conditional:Colors.info}
+         
         }
       }
     })
-
+  
     setFieldIconColors(tempFieldColorState);
-
+  
   };
-
-
-  useEffect(() => {
+  
+  
+  useEffect(()=>{
     getColorofFieldIcon();
     console.log("repeating1...",)
-  }, [iconStates])
-
-  useEffect(() => {
-    if (labelValue) {
-      const fieldPresent = iconStates.egScrutiny.filter(ele => (ele.fieldIdL === labelValue));
+  },[iconStates])
+  
+  useEffect(()=>{
+    if(labelValue){
+      const fieldPresent = iconStates.egScrutiny.filter(ele => (ele.fieldIdL===labelValue));
       setSelectedFieldData(fieldPresent[0]);
-    } else {
+    }else{
       setSelectedFieldData(null);
     }
-  }, [labelValue])
-
-
-
+  },[labelValue])
+  
+  
+  
   const currentRemarks = (data) => {
-    props.showTable({ data: data.data });
+    showTable({ data: data.data });
   };
-
+  
   const handlemodaldData = (data) => {
-    setmodaldData(data.data);
+    // setmodaldData(data.data);
     setSmShow(false);
-    console.log("here", openedModal, data);
-    if (openedModal && data) {
-      setFieldIconColors({ ...fieldIconColors, [openedModal]: data.data.isApproved ? Colors.approved : Colors.disapproved })
-
-
+    console.log("here",openedModal,data);
+    if(openedModal && data){
+      setFieldIconColors({...fieldIconColors,[openedModal]:data.data.isApproved?Colors.approved:Colors.disapproved})
+  
+      
       // fieldPresent[0].isApproved === "approved" ?Colors.approved: fieldPresent[0].isApproved === "disapproved" ? Colors.disapproved:fieldPresent[0].isApproved === "conditional" ? Colors.conditional:Colors.info
     }
-    setOpennedModal("");
-    setLabelValue("");
+      setOpennedModal("");
+      setLabelValue("");
   };
 //////////////////////////////////////////Old code 
 // const [uncheckedValue, setUncheckedVlue] = useState([]);
@@ -238,6 +241,7 @@ const PersonalinfoChild = (props) => {
               }}
             ></ReportProblemIcon>
             <ModalChild
+           
               labelmodal={labelValue}
               passmodalData={handlemodaldData}
               displaymodal={smShow}
@@ -245,6 +249,7 @@ const PersonalinfoChild = (props) => {
               selectedFieldData={selectedFieldData}
               fieldValue={fieldValue}
               remarksUpdate={currentRemarks}
+              applicationStatus = {applicationStatus} 
             ></ModalChild>
           </div>
         </Col>

@@ -254,7 +254,7 @@ const ScrutinyDevelopment = (props) => {
       {/* {JSON.stringify(userRoles)}
       {JSON.stringify(showRemarksSection)} */}
 
-      {
+      {/* {
         showRemarksSection &&
         <TableContainer component={Paper} style={{ marginTop: 20 }}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -286,7 +286,9 @@ const ScrutinyDevelopment = (props) => {
             </TableBody>
           </Table>
         </TableContainer>
-      }
+      } */}
+      <br>
+      </br>
 
 
     </Container>

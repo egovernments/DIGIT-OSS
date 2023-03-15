@@ -41,6 +41,7 @@ const ScrutinyFormcontainer = (props) => {
   const [moduleCode, setModuleCode] = useState("TL")
   const [scrutinyDetails, setScrutinyDetails] = useState();
   const [feeandchargesData, SetFeeandchargesData] = useState();
+  const [status , setStatus] = useState();
 
   const [applicationDetails, setApplicationDetails] = useState();
   const [lastUpdate, SetLastUpdate] = useState();
@@ -112,6 +113,9 @@ const ScrutinyFormcontainer = (props) => {
       setApplicationData(Resp?.Licenses[0]);
       console.log("devDel1236", Resp?.Licenses[0]?.businessService)
       setBusinessService(Resp?.Licenses[0]?.businessService);
+      setStatus(Resp?.Licenses[0]?.status);
+      console.log("devStatus", Resp?.Licenses[0]?.status);
+
     } catch (error) {
       console.log(error);
     }
@@ -362,29 +366,34 @@ const ScrutinyFormcontainer = (props) => {
     <Card className="formColorEmp">
       <Card.Header className="head-application" >
         <div className="row fw-normal">
-          <div className="col-md-3">
+          <div className="col-sm-2">
             <b><p className="head-font">Application Number:</p></b>
             <b><p className="head-font">{id}</p></b>
           </div>
-          <div className="col-md-2">
+          <div className="col-sm-2">
             <b><p className="head-font">Service Id: </p></b>
             <b><p className="head-font">
               {/* {applicationData?.businessService} ask to renuka */}
               Licence
               </p></b>
           </div>
-          <div className="col-md-3">
+          <div className="col-sm-2">
             <b><p className="head-font">TCP Application Number:</p></b>
+            {/* {item.name.substring(0, 4)} */}
             <b><p className="head-font">{applicationData?.tcpApplicationNumber}</p></b>
           </div>
-          <div className="col-md-2">
+          <div className="col-sm-2">
             <b><p className="head-font">TCP Case Number:</p></b>
-            <b><p className="head-font">{applicationData?.tcpCaseNumber}</p></b>
+            <b><p className="head-font">{applicationData?.tcpCaseNumber.substring(0, 7)}</p></b>
           </div>
-          <div className="col-md-2">
+          <div className="col-sm-2">
             <b><p className="head-font">TCP Dairy Number: </p></b>
             <b><p className="head-font">{applicationData?.tcpDairyNumber}</p></b>
+           
           </div>
+          <div className="col-sm-2">
+          <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}>Views PDF</Button>
+            </div>
         </div>
       </Card.Header>
       <Row >
@@ -394,6 +403,7 @@ const ScrutinyFormcontainer = (props) => {
             histeroyData={workflowDetailsTemp}
             apiResponse={scrutinyDetails}
             applicationNumber={id}
+            applicationStatus={status}
             refreshScrutinyData={getScrutinyData}
           ></ScrutitnyForms>
         </div>
@@ -453,9 +463,9 @@ const ScrutinyFormcontainer = (props) => {
         {/* </Row> */}
         <Row>
 
-          <div class="col-md-12 bg-light text-right" style={{ position: "relative", marginBottom: 20 }}>
-            <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}>Views PDF</Button>
-          </div>
+          {/* <div class="col-md-12 bg-light text-right" style={{ position: "relative", marginBottom: 20 }}>
+            
+          </div> */}
           {/* {showhide19 === "Submit" && ( */}
           {/* <div>
             <Button style={{ textAlign: "right" }}> <a href="http://localhost:3000/digit-ui/employee/tl/Loi" >Generate LOI</a></Button>

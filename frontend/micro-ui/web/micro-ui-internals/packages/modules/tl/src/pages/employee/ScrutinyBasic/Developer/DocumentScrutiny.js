@@ -18,7 +18,7 @@ import { IconButton } from "@mui/material";
 import { getDocShareholding } from "../ScrutinyDevelopment/docview.helper";
 // const windowHeight = window !== undefined ? window.innerHeight : null;
 // const [open, setOpen] = useState(false);
-const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addInfo}) => {
+const DocumentScrutiny = ({developerType , iconColorState , getRemarkData, addInfo, applicationStatus}) => {
   const [open, setOpen] = useState(false);
   const classes = useStyles();
 

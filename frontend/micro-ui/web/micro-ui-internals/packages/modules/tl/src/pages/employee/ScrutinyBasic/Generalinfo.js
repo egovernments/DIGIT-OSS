@@ -14,7 +14,7 @@ import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import { useStyles } from "./css/personalInfoChild.style";
 import Visibility from "@mui/icons-material/Visibility";
 import FileDownload from "@mui/icons-material/FileDownload";
-import { IconButton } from "@mui/material";
+import { IconButton } from "@mui/material"; 
 import { getDocShareholding } from "./ScrutinyDevelopment/docview.helper";
 
 const Genarelinfo = (props) => {
@@ -29,7 +29,9 @@ const Genarelinfo = (props) => {
   const hideRemarksJE = userRoles.some((item)=>item ==="JE_HQ" || item === "JE_HR")
 
   const genarelinfo = props.genarelinfo;
+  const applicationStatus = props.applicationStatus;
   const dataIcons = props.dataForIcons;
+  
 
   const applicantInfoPersonal = props.ApiResponseData;
   console.log("personal info applicant data1", applicantInfoPersonal);
@@ -302,7 +304,7 @@ const Genarelinfo = (props) => {
         console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
         if (fieldPresent && fieldPresent.length) {
           console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
-          tempFieldColorState = {...tempFieldColorState,[item.key]:fieldPresent[0].isApproved === "approved" ?Colors.approved: fieldPresent[0].isApproved === "disapproved" ? Colors.disapproved:fieldPresent[0].isApproved === "conditional" ? Colors.conditional:Colors.info}
+          tempFieldColorState = {...tempFieldColorState,[item.key]:fieldPresent[0].isApproved === "In Order" ?Colors.approved: fieldPresent[0].isApproved === "Not In Order" ? Colors.disapproved:fieldPresent[0].isApproved === "conditional" ? Colors.conditional:Colors.info}
 
         }
       }
@@ -354,6 +356,7 @@ const Genarelinfo = (props) => {
         selectedFieldData={selectedFieldData}
         fieldValue={fieldValue}
         remarksUpdate={currentRemarks}
+        applicationStatus={applicationStatus}
       ></ModalChild>
       <div
         className="collapse-header"
@@ -1316,327 +1319,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
               <Button onClick={() => props.passUncheckedList({ data: uncheckedValue, purpose: purpose })}>Submit</Button>
             </div> */}
           </Form.Group>
-          <br></br>
-          <Form.Group className="justify-content-center" controlId="formBasicEmail" style={{ border: "2px solid #e9ecef", margin: 10, padding: 20 }}>
-          <div style={{overflow:"scroll"}}>
-            <Card> TO BE READ WITH LICENSE NO. 1-5 OF 1981 (LC-9A)</Card>
-              <table className="table table-bordered">
-                <thead>
-                  
-                  <tr className="border-bottom-0">
-                  <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      Sr.No  
-                    </th>
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                    Name of Land Owner 
-                    </th>
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                  	Revenue Estate   
-                    </th>
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                    Rectangle No.   
-                    </th>
-                    
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                    Rectangle No/Mustil.  
-                    </th>
-                     <th class="fw-normal pb-0 border-bottom-0 align-top">
-                    Khasra No.
-                    {/* khewats No */}
-                    </th>
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                    Rectangle No./Mustil(Changed)
-                    </th>
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                    khewats No(Changed)
-                    </th>
-                     
-                  <th class="fw-normal pb-0 border-bottom-0 align-top">
-                    Total Area
-                    </th> 
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                    Share
-                    </th>
-
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                    Area Take
-                    </th>
-                     
- </tr>
- {/* <tr className="border-top-0">
-                    <th class="fw-normal py-0 border-top-0">
-                       </th>
-                    <th class="fw-normal py-0 border-top-0">
-                       <ReportProblemIcon
-                      style={{
-                        display: hideRemarks || hideRemarksPatwari ?"none":"block",
-
-                        color: fieldIconColors.developmentPlan
-                      }}
-                      onClick={() => {
-                        setLabelValue("Development Plan"),
-                        setOpennedModal("developmentPlan")
-                          setSmShow(true),
-                          console.log("modal open"),
-                          // setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.district : null);
-                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.developmentPlan : null);
-                        }}
-                    ></ReportProblemIcon></th>
-                  <th class="fw-normal py-0 border-top-0">
-                    <ReportProblemIcon
-                    style={{
-                      display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                
-                      color: fieldIconColors.potential
-                    }}
-                    onClick={() => {
-                      setLabelValue("Potential Zone"),
-                      setOpennedModal("potential")
-                        setSmShow(true),
-                        console.log("modal open"),
-                        // setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.potential : null);
-                        setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.potential : null);
-                    }}
-                  ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                      <ReportProblemIcon
-                        style={{
-                         
-                          display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                          color: fieldIconColors.sector
-                        }}
-                        onClick={() => {
-                          setLabelValue("Sector"),
-                          setOpennedModal("sector")
-                          setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.sector : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                      <ReportProblemIcon
-                        style={{
-                         
-                          display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                          color: fieldIconColors.tehsil
-                        }}
-                        onClick={() => {
-                          setLabelValue("Tehsil"),
-                          setOpennedModal("tehsil")
-                          setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.tehsil : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                      <ReportProblemIcon
-                        style={{
-                          display: hideRemarks?"none":"block",
-                          color: fieldIconColors.revenue
-                        }}
-                        onClick={() => {
-                          setLabelValue("Revenue estate"),
-                          setOpennedModal("revenue")
-                          setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.revenueEstate : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
-                   <th class="fw-normal py-0 border-top-0">
-                      <ReportProblemIcon
-                        style={{
-                          display: hideRemarks || hideRemarksPatwari ?"none":"block",
-                         
-                          color: fieldIconColors.hadbastNo
-                        }}
-                        onClick={() => {
-                          setLabelValue(" Hadbast Number"),
-                          setOpennedModal("hadbastNo")
-                          setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.hadbastNo : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                      <ReportProblemIcon
-                        style={{
-                          // display: hideRemarks?"none":"block",
-                          display: hideRemarks || hideRemarksJE ?"none":"block",
-                          color: fieldIconColors.rectangleNo
-                        }}
-                        onClick={() => {
-                          setLabelValue("Rectangle No"),
-                          setOpennedModal("rectangeNo")
-                          setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.rectangleNo : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
-                  
-                    <th class="fw-normal py-0 border-top-0">
-                      {" "}
-                      <ReportProblemIcon
-                        style={{
-                          display: hideRemarks || hideRemarksJE ?"none":"block",
-                          color: fieldIconColors.agreementIrrevocialble
-                        }}
-                        onClick={() => {
-                          setLabelValue("Collabration Agreement Irrevociable"),
-                          setOpennedModal("agreementIrrevocialble")
-                          setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.agreementIrrevocialble : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                      {" "}
-                      <ReportProblemIcon
-                        style={{
-                          display: hideRemarks || hideRemarksJE ?"none":"block",
-                          color: fieldIconColors.authSignature
-                        }}
-                        onClick={() => {
-                          setLabelValue("Name of authorized signatory on behalf of land owner(s)"),
-                          setOpennedModal("authSignature")
-                          setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.authSignature : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                      {" "}
-                      <ReportProblemIcon
-                        style={{
-                          display: hideRemarks || hideRemarksJE ?"none":"block",
-                          color: fieldIconColors.nameAuthSign
-                        }}
-                        onClick={() => {
-                          setLabelValue("Name of authorized signatory on behalf of developer"),
-                          setOpennedModal("nameAuthSign")
-                          setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.nameAuthSign : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </th>
-                    
-                  </tr> */}
-                 
-                </thead>
-                <tbody>
-                {
-                    applicantInfoPersonal?.AppliedLandDetails?.map((item,index)=>(
-                      
-                  <tr key={index}>
-                   
-                    <td>
-                      <input type="text" className="form-control" placeholder={item?.index} disabled />
-                    </td>
-                    <td class="text-center">
-                      <input type="text" className="form-control" title={item?.landOwner} placeholder={item?.landOwner} disabled />
-                    </td>
-                    <td>
-                      <input type="text" className="form-control" placeholder={item?.revenueEstate} disabled />
-                    </td>
-                    
-                    <td>
-                      <input type="text" className="form-control" placeholder={item?.rectangleNo} disabled />
-                    </td>
-                    <td>
-                      <input type="text" className="form-control" placeholder={item?.khewats} disabled />
-                    </td>
-                    
-                    <td class="text-center">
-                      <input type="text" className="form-control" title={item?.editRectangleNo} placeholder="N/A" value={item?.editRectangleNo} disabled />
-                    </td>
-                    <td class="text-center">
-                      <input type="text" className="form-control" title={item?.editKhewats} placeholder={item?.editKhewats} disabled />
-                    </td>
-                    <td class="text-center">
-                      <input type="text" className="form-control" title={item?.landOwnerRegistry} placeholder={item?.landOwnerRegistry} disabled />
-                    </td>
-                    {item?.consolidationType == "non-consolidated" && 
-                      <td class="text-center">
-                      <input type="text" className="form-control" title={item?.nonConsolidatedTotal} placeholder={item?.nonConsolidatedTotal} disabled />
-                    </td>
-                     }
-                     {item?.consolidationType == "consolidated" && 
-                    <td class="text-center">
-                      <input type="text" className="form-control" title={item?.consolidatedTotal} placeholder={item?.consolidatedTotal} disabled />
-                    </td>
-                     }
-                      <td class="text-center">
-                      <input type="text" className="form-control" title={item?.landOwnerRegistry} placeholder={item?.landOwnerRegistry} disabled />
-                    </td>
-                    <td class="text-center">
-                      <input type="text" className="form-control" title={item?.landOwnerRegistry} placeholder={item?.landOwnerRegistry} disabled />
-                    </td>
-                    {/* <td class="text-center">
-                      {" "}
-                      <input type="text" className="form-control" title={item?.kanal} placeholder={item?.kanal} disabled />{" "}
-                    </td>
-                    <td class="text-center">
-                      <input type="text" className="form-control" title={item?.marla} placeholder={item?.marla} disabled />
-                    </td>
-                    <td class="text-center">
-                      <input type="text" className="form-control" title={item?.sarsai} placeholder={item?.sarsai} disabled />
-                    </td>
-                    <td class="text-center">
-                      <input type="text" className="form-control" title={item?.bigha} placeholder={item?.bigha} disabled />
-                    </td>
-                    <td class="text-center">
-                      <input type="text" className="form-control" title={item?.biswa} placeholder={item?.biswa} disabled />
-                    </td>
-                    <td class="text-center">
-                      <input type="text" className="form-control" title={item?.biswansi} placeholder={item?.biswansi} disabled />
-                    </td> */}
-                    {/* {item?.consolidationType == "non-consolidated" && 
-                      <td class="text-center">
-                      <input type="text" className="form-control" title={item?.nonConsolidatedTotal} placeholder={item?.nonConsolidatedTotal} disabled />
-                    </td>
-                     }
-                     {item?.consolidationType == "consolidated" && 
-                    <td class="text-center">
-                      <input type="text" className="form-control" title={item?.consolidatedTotal} placeholder={item?.consolidatedTotal} disabled />
-                    </td>
-                     }
-                     <td  class="text-center">
-                    
-                       <ReportProblemIcon
-                      style={{
-                        display: hideRemarks || hideRemarksPatwari ?"none":"block",
-
-                        color: fieldIconColors.district
-                      }}
-                      onClick={() => {
-                        setLabelValue("Land schedule Table"),
-                        setOpennedModal("district")
-                          setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(applicantInfoPersonal !== null ? applicantInfoPersonal?.district : null);
-                         
-                      }}
-                    ></ReportProblemIcon>
-                  
-                     </td> */}
-  </tr>
-                    ))
-                  }
-                </tbody>
-              </table>
-            </div>
-          </Form.Group>
-
-         
-        </div>
+   </div>
       </Collapse>
       {/* </Card> */}
     </Form>
