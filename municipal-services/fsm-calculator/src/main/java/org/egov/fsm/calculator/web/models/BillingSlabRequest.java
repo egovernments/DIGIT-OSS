@@ -11,7 +11,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-01-06T05:34:12.238Z[GMT]")
 @AllArgsConstructor
@@ -19,10 +18,10 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class BillingSlabRequest   {
-  @JsonProperty("RequestInfo")
-  private RequestInfo requestInfo = null;
+public class BillingSlabRequest {
+	@JsonProperty("RequestInfo")
+	private RequestInfo requestInfo = null;
 
-  @JsonProperty("billingSlab")
-  private BillingSlab billingSlab = null;
+	@JsonProperty("billingSlab")
+	private BillingSlab billingSlab = null;
 }

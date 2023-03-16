@@ -33,6 +33,6 @@ public class FSMConsumer {
 			log.error("Error while listening to value: " + record + " on topic: " + topic + ": " + e);
 		}
 		log.debug("FSM Received: " + fsmRequest.getFsm().getApplicationNo());
-		 notificationService.process(fsmRequest);//TODO enable after implementation
+		 notificationService.process(fsmRequest);
 	}
 }

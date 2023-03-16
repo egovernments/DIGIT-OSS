@@ -22,8 +22,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
-
 /**
  * Capture the vendor information in the system.
  */
@@ -38,21 +36,21 @@ public class Vendor {
 
 	@SafeHtml
 	@JsonProperty("id")
-	private String id = null;
+	private String id;
 
 	@SafeHtml
 	@JsonProperty("tenantId")
-	private String tenantId = null;
+	private String tenantId;
 
 	@SafeHtml
 	@JsonProperty("name")
-	private String name = null;
+	private String name;
 
 	@JsonProperty("address")
-	private Address address = null;
+	private Address address;
 
 	@JsonProperty("owner")
-	private User owner = null;
+	private User owner;
 
 	@JsonProperty("vehicles")
 	@Valid
@@ -60,22 +58,22 @@ public class Vendor {
 
 	@JsonProperty("drivers")
 	@Valid
-	private List<Driver> drivers = null;
+	private List<Driver> drivers;
 
 	@JsonProperty("additionalDetails")
-	private Object additionalDetails = null;
+	private Object additionalDetails;
 
 	@SafeHtml
 	@JsonProperty("source")
-	private String source = null;
+	private String source;
 
 	@SafeHtml
 	@JsonProperty("description")
-	private String description = null;
+	private String description;
 
 	@SafeHtml
 	@JsonProperty("ownerId")
-	private String ownerId = null;
+	private String ownerId;
 
 	/**
 	 * Inactive records will be consider as soft deleted
@@ -94,7 +92,7 @@ public class Vendor {
 		@Override
 		@JsonValue
 		public String toString() {
-		
+
 			return String.valueOf(value);
 		}
 
@@ -110,9 +108,9 @@ public class Vendor {
 	}
 
 	@JsonProperty("status")
-	private StatusEnum status = null;
+	private StatusEnum status;
 
 	@JsonProperty("auditDetails")
-	private AuditDetails auditDetails = null;
+	private AuditDetails auditDetails;
 
 }

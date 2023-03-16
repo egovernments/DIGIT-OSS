@@ -51,3 +51,13 @@
     @apply text-form-field text-text-primary;
   }
 }
+
+.fsm-citizen-rating-wrapper {
+  .card-label:last-of-type {
+    margin-top: 24px;
+  }
+
+  .card-label {
+    margin-bottom: 24px;
+  }
+}

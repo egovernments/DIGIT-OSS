@@ -277,11 +277,11 @@ const CheckPage = ({ onSubmit, value = {} }) => {
             text={`${t(checkForNA(PropertyType?.i18nKey))}`}
             actionButton={<ActionButton jumpTo={`/digit-ui/citizen/pt/property/${typeOfApplication}/property-type`} />}
           />
-          <Row
+          {PropertyType?.code !== "VACANT" &&<Row
             label={t("PT_ASSESMENT1_PLOT_SIZE")}
             text={`${landArea?.floorarea}`}
             actionButton={<ActionButton jumpTo={`/digit-ui/citizen/pt/property/${typeOfApplication}/landarea`} />}
-          />
+          />}
           {PropertyType?.code === "VACANT" && (
             <Row
               label={t("PT_ASSESMENT1_PLOT_SIZE")}

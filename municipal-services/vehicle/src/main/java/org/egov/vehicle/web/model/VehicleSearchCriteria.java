@@ -12,7 +12,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -33,78 +32,68 @@ public class VehicleSearchCriteria {
 
 	@JsonProperty("ownerId")
 	private List<String> ownerId;
-	
+
 	@JsonProperty("ids")
 	private List<String> ids;
-	
+
 	@JsonProperty("registrationNumber")
 	private List<String> registrationNumber;
-	
+
 	@JsonProperty("type")
 	private List<String> type;
-	
+
 	@JsonProperty("model")
 	private List<String> model;
-	
+
 	@JsonProperty("tankCapacity")
 	private Double tankCapacity;
-	
+
 	@JsonProperty("suctionType")
 	private List<String> suctionType;
 
 	@JsonProperty("vehicleOwner")
 	private List<String> vehicleOwner;
-	
+
 	@JsonProperty("applicationStatus")
-    private List<String> applicationStatus; 
-	
+	private List<String> applicationStatus;
+
 	@JsonProperty("status")
-    private List<String> status;
+	private List<String> status;
 
 	@JsonProperty("sortBy")
-    private SortBy sortBy;
-    
-    @JsonProperty("sortOrder")
-    private SortOrder sortOrder;
-    
-    @JsonProperty("vehicleWithNoVendor")
-	private boolean vehicleWithNoVendor; 
-	
-	@JsonProperty("vehicleVendorStatus")
-    private List<String> vehicleVendorStatus;      
-	    
-	    public enum SortOrder {
-	        ASC,
-	        DESC
-	    }
+	private SortBy sortBy;
 
-	    public enum SortBy {
-	        type,
-	        model,
-	        suctionType,
-	        vehicleOwner,
-	        pollutionCertiValidTill,
-	        InsuranceCertValidTill,
-	        fitnessValidTill,
-	        roadTaxPaidTill,
-	        tankCapicity,
-	        createdTime
-	    }
-	
+	@JsonProperty("sortOrder")
+	private SortOrder sortOrder;
+
+	@JsonProperty("vehicleWithNoVendor")
+	private boolean vehicleWithNoVendor;
+
+	@JsonProperty("vendorVehicleStatus")
+	private List<String> vendorVehicleStatus;
+
+	public enum SortOrder {
+		ASC, DESC
+	}
+
+	public enum SortBy {
+		type, model, suctionType, vehicleOwner, pollutionCertiValidTill, InsuranceCertValidTill, fitnessValidTill,
+		roadTaxPaidTill, tankCapicity, createdTime, registrationNumber
+	}
 
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return (this.tenantId == null && this.offset == null && this.limit == null && this.mobileNumber == null && this.tankCapacity ==null
-				&&  CollectionUtils.isEmpty(this.ownerId)  && CollectionUtils.isEmpty(this.type)
-				&& CollectionUtils.isEmpty(this.ids) && CollectionUtils.isEmpty(this.registrationNumber)
-				&& CollectionUtils.isEmpty(this.model) && CollectionUtils.isEmpty(this.suctionType) && CollectionUtils.isEmpty(this.vehicleOwner));
+		return (this.tenantId == null && this.offset == null && this.limit == null && this.mobileNumber == null
+				&& this.tankCapacity == null && CollectionUtils.isEmpty(this.ownerId)
+				&& CollectionUtils.isEmpty(this.type) && CollectionUtils.isEmpty(this.ids)
+				&& CollectionUtils.isEmpty(this.registrationNumber) && CollectionUtils.isEmpty(this.model)
+				&& CollectionUtils.isEmpty(this.suctionType) && CollectionUtils.isEmpty(this.vehicleOwner));
 	}
 
 	public boolean tenantIdOnly() {
-		// TODO Auto-generated method stub
-		return (this.tenantId != null && this.mobileNumber == null && this.tankCapacity ==null
-				&&  CollectionUtils.isEmpty(this.ownerId)  && CollectionUtils.isEmpty(this.type)
+		return (this.tenantId != null && this.mobileNumber == null && this.tankCapacity == null
+				&& CollectionUtils.isEmpty(this.ownerId) && CollectionUtils.isEmpty(this.type)
 				&& CollectionUtils.isEmpty(this.ids) && CollectionUtils.isEmpty(this.registrationNumber)
-				&& CollectionUtils.isEmpty(this.model) && CollectionUtils.isEmpty(this.suctionType) && CollectionUtils.isEmpty(this.vehicleOwner));
+				&& CollectionUtils.isEmpty(this.model) && CollectionUtils.isEmpty(this.suctionType)
+				&& CollectionUtils.isEmpty(this.vehicleOwner));
 	}
 }

@@ -14,7 +14,7 @@ import com.cedarsoftware.util.GraphComparator;
 public class ComparisionUtility {
 	public List<FSMAudit> compareData(FSMAuditUtil fsm, List<FSMAuditUtil> auditList) {
 		FSMAuditUtil source = fsm;
-		List<FSMAudit> auditDataList = new LinkedList<FSMAudit>();
+		List<FSMAudit> auditDataList = new LinkedList<>();
 		auditDataList.add(prepareFSMInfo(fsm));
 		for (FSMAuditUtil target : auditList) {
 			List<GraphComparator.Delta> deltas = GraphComparator.compare(target, source, new GraphComparator.ID() {

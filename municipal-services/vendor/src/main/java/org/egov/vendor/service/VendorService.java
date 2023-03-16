@@ -66,7 +66,7 @@ public class VendorService {
 			throw new CustomException("Invalid TenantId", " Application cannot be create at StateLevel");
 		}
 		Object mdmsData = util.mDMSCall(requestInfo, tenantId);
-		vendorValidator.validateCreateOrUpdateRequest(vendorRequest, mdmsData,true);
+		vendorValidator.validateCreateOrUpdateRequest(vendorRequest, mdmsData, true);
 		enrichmentService.enrichCreate(vendorRequest);
 		vendorRepository.save(vendorRequest);
 		return vendorRequest.getVendor();
@@ -103,7 +103,7 @@ public class VendorService {
 
 		VendorResponse existingVendorResult = vendorsearch(criteria, requestInfo);
 
-		if (existingVendorResult != null && existingVendorResult.getVendor().size() <= 0) {
+		if (existingVendorResult != null && existingVendorResult.getVendor().isEmpty()) {
 			throw new CustomException(VendorConstants.UPDATE_ERROR,
 					"Vendor Not found in the System" + vendorRequest.getVendor().getName());
 		}
@@ -112,7 +112,7 @@ public class VendorService {
 					"Found multiple application(s)" + vendorRequest.getVendor().getName());
 		}
 
-		Vendor oldVendor = existingVendorResult.getVendor().get(0);
+		Vendor oldVendor = existingVendorResult != null ? existingVendorResult.getVendor().get(0) : new Vendor();
 
 		if (!oldVendor.getOwnerId().equalsIgnoreCase(vendorRequest.getVendor().getOwnerId())) {
 			throw new CustomException(VendorConstants.UPDATE_ERROR,
@@ -125,7 +125,6 @@ public class VendorService {
 			throw new CustomException(VendorConstants.UPDATE_ERROR,
 					"Mobile number update is not allowed" + vendorRequest.getVendor().getOwner().getMobileNumber());
 		}
-		;
 
 		Object mdmsData = util.mDMSCall(requestInfo, tenantId);
 		vendorValidator.validateCreateOrUpdateRequest(vendorRequest, mdmsData, false);
@@ -137,42 +136,17 @@ public class VendorService {
 	}
 
 	private void updateVendor(VendorRequest vendorRequest, String tenantId) {
-		List<Driver> vendorDriverToBeUpdated = new ArrayList<Driver>();
-		List<Driver> vendorDriverToBeInserted = new ArrayList<Driver>();
-		List<Vehicle> vendorVehicleToBeUpdated = new ArrayList<Vehicle>();
-		List<Vehicle> vendorVehicleToBeInserted = new ArrayList<Vehicle>();
+		List<Driver> vendorDriverToBeUpdated = new ArrayList<>();
+		List<Driver> vendorDriverToBeInserted = new ArrayList<>();
+		List<Vehicle> vendorVehicleToBeUpdated = new ArrayList<>();
+		List<Vehicle> vendorVehicleToBeInserted = new ArrayList<>();
 
-		List<Vehicle> beforeUpdateOrInsertVehicle = new ArrayList<Vehicle>();
-		List<Driver> beforeUpdateOrInsertDriver = new ArrayList<Driver>();
-		;
-
-		if (vendorRequest.getVendor().getDrivers() != null && vendorRequest.getVendor().getDrivers().size() > 0) {
-
-			vendorRequest.getVendor().getDrivers().forEach(driver -> {
-				List<String> driverIds = vendorRepository.getVendorWithDrivers(VendorSearchCriteria.builder()
-						.driverIds(Arrays.asList(driver.getId())).tenantId(tenantId).build());
-				if (!CollectionUtils.isEmpty(driverIds)) {
-					vendorDriverToBeUpdated.add(driver);
-				} else {
-					vendorDriverToBeInserted.add(driver);
-				}
-				beforeUpdateOrInsertDriver.add(driver);
-			});
-		}
-
-		if (vendorRequest.getVendor().getVehicles() != null && vendorRequest.getVendor().getVehicles().size() > 0) {
-			vendorRequest.getVendor().getVehicles().forEach(vehicle -> {
-				List<String> vehicleIds = vendorRepository.getVendorWithVehicles(VendorSearchCriteria.builder()
-						.vehicleIds(Arrays.asList(vehicle.getId())).tenantId(tenantId).build());
-				if (!CollectionUtils.isEmpty(vehicleIds)) {
-					vendorVehicleToBeUpdated.add(vehicle);
-				} else {
-					vendorVehicleToBeInserted.add(vehicle);
-				}
-				beforeUpdateOrInsertVehicle.add(vehicle);
-			});
-		}
-
+		List<Vehicle> beforeUpdateOrInsertVehicle = new ArrayList<>();
+		List<Driver> beforeUpdateOrInsertDriver = new ArrayList<>();
+		getVehicleDriver(vendorRequest, vendorDriverToBeUpdated, vendorDriverToBeInserted, beforeUpdateOrInsertDriver,
+				tenantId);
+		getVendorVehicle(vendorRequest, vendorVehicleToBeUpdated, beforeUpdateOrInsertVehicle,
+				vendorVehicleToBeInserted, tenantId);
 		if (!CollectionUtils.isEmpty(vendorVehicleToBeUpdated)) {
 			vendorRequest.getVendor().getVehicles().clear();
 			vendorRequest.getVendor().setVehicles(vendorVehicleToBeUpdated);
@@ -187,15 +161,13 @@ public class VendorService {
 
 		boolean callInsert = false;
 
-		if (vendorRequest.getVendor().getDrivers() != null && vendorRequest.getVendor().getDrivers().size() > 0) {
+		if (vendorRequest.getVendor().getDrivers() != null && !vendorRequest.getVendor().getDrivers().isEmpty()) {
 			vendorRequest.getVendor().getDrivers().clear();
 		}
 
-		if (vendorRequest.getVendor().getVehicles() != null && vendorRequest.getVendor().getVehicles().size() > 0) {
+		if (vendorRequest.getVendor().getVehicles() != null && !vendorRequest.getVendor().getVehicles().isEmpty()) {
 			vendorRequest.getVendor().getVehicles().clear();
 		}
-		// vendorRequest.getVendor().getVehicles().clear();
-		// vendorRequest.getVendor().getDrivers().clear();
 
 		if (!CollectionUtils.isEmpty(vendorVehicleToBeInserted)) {
 			vendorRequest.getVendor().setVehicles(vendorVehicleToBeInserted);
@@ -205,6 +177,7 @@ public class VendorService {
 			vendorRequest.getVendor().setDrivers(vendorDriverToBeInserted);
 			callInsert = true;
 		}
+
 		if (callInsert) {
 			vendorRepository.updateVendorVehicleDriver(vendorRequest);
 		}
@@ -219,123 +192,158 @@ public class VendorService {
 
 	}
 
+	private void getVehicleDriver(VendorRequest vendorRequest, List<Driver> vendorDriverToBeUpdated,
+			List<Driver> vendorDriverToBeInserted, List<Driver> beforeUpdateOrInsertDriver, String tenantId) {
+		if (vendorRequest.getVendor().getDrivers() != null && !vendorRequest.getVendor().getDrivers().isEmpty()) {
+
+			vendorRequest.getVendor().getDrivers().forEach(driver -> {
+				List<String> driverIds = vendorRepository.getVendorWithDrivers(VendorSearchCriteria.builder()
+						.driverIds(Arrays.asList(driver.getId())).tenantId(tenantId).build());
+				if (!CollectionUtils.isEmpty(driverIds)) {
+					vendorDriverToBeUpdated.add(driver);
+				} else {
+					vendorDriverToBeInserted.add(driver);
+				}
+				beforeUpdateOrInsertDriver.add(driver);
+			});
+		}
+
+	}
+
+	private void getVendorVehicle(VendorRequest vendorRequest, List<Vehicle> vendorVehicleToBeUpdated,
+			List<Vehicle> beforeUpdateOrInsertVehicle, List<Vehicle> vendorVehicleToBeInserted, String tenantId) {
+		if (vendorRequest.getVendor().getVehicles() != null && !vendorRequest.getVendor().getVehicles().isEmpty()) {
+			vendorRequest.getVendor().getVehicles().forEach(vehicle -> {
+				List<String> vehicleIds = vendorRepository.getVendorWithVehicles(VendorSearchCriteria.builder()
+						.vehicleIds(Arrays.asList(vehicle.getId())).tenantId(tenantId).build());
+				if (!CollectionUtils.isEmpty(vehicleIds)) {
+					vendorVehicleToBeUpdated.add(vehicle);
+				} else {
+					vendorVehicleToBeInserted.add(vehicle);
+				}
+				beforeUpdateOrInsertVehicle.add(vehicle);
+			});
+		}
+
+	}
+
 	public VendorResponse vendorsearch(VendorSearchCriteria criteria, RequestInfo requestInfo) {
 
-		//List<Vendor> vendorList = new LinkedList<>();
-		List<String> uuids = new ArrayList<String>();
 		UserDetailResponse userDetailResponse;
-		
+
 		vendorValidator.validateSearch(requestInfo, criteria);
-		
-		if( criteria.getMobileNumber() !=null) {
-			userDetailResponse = userService.getOwner(criteria,requestInfo);
-			if(userDetailResponse !=null && userDetailResponse.getUser() != null && userDetailResponse.getUser().size() >0) {
-				uuids = userDetailResponse.getUser().stream().map(User::getUuid).collect(Collectors.toList());
-				if(CollectionUtils.isEmpty(criteria.getOwnerIds())) {
+
+		if (criteria.getMobileNumber() != null) {
+			userDetailResponse = userService.getOwner(criteria, requestInfo);
+			if (userDetailResponse != null && userDetailResponse.getUser() != null
+					&& !userDetailResponse.getUser().isEmpty()) {
+				List<String> uuids = userDetailResponse.getUser().stream().map(User::getUuid)
+						.collect(Collectors.toList());
+				if (CollectionUtils.isEmpty(criteria.getOwnerIds())) {
 					criteria.setOwnerIds(uuids);
-				}else {
+				} else {
 					criteria.getOwnerIds().addAll(uuids);
 				}
 			}
 		}
-		
-		if (criteria.getLimit() == null)
-		{ 
+
+		if (criteria.getLimit() == null) {
 			criteria.setLimit(config.getMaxSearchLimit());
 		}
 
-		if (criteria.getOffset() == null)
-		{
-		   criteria.setOffset(config.getDefaultOffset());
+		if (criteria.getOffset() == null) {
+			criteria.setOffset(config.getDefaultOffset());
 		}
-		
-		if (!CollectionUtils.isEmpty(criteria.getVehicleRegistrationNumber())
-				|| StringUtils.hasLength(criteria.getVehicleType())
-				|| StringUtils.hasLength(criteria.getVehicleCapacity())) {
-			
-			VehicleSearchCriteria vehicleSearchCriteria=new VehicleSearchCriteria();
-			vehicleSearchCriteria = VehicleSearchCriteria.builder()
-					.registrationNumber(criteria.getVehicleRegistrationNumber())
-					.vehicleType(criteria.getVehicleType())
-					.vehicleCapacity(criteria.getVehicleCapacity())
-					.tenantId(criteria.getTenantId())
-					.status(criteria.getStatus()).build();
-			
-			List<Vehicle> vehicles = vehicleService.getVehicles(vehicleSearchCriteria,requestInfo);
-			
-			/*
-			 * List<Vehicle> vehicles = vehicleService.getVehicles(null,
-			 * criteria.getVehicleRegistrationNumber(), criteria.getVehicleType(),
-			 * criteria.getVehicleCapacity(), requestInfo, criteria.getTenantId());
-			 */	
-			
-			if(CollectionUtils.isEmpty(vehicles)) {
-				List<Vendor> vendors=new ArrayList<Vendor>();
-				VendorResponse VendorResponse=new VendorResponse();
-				VendorResponse.setVendor(vendors);
-				return VendorResponse;
-			}
-			if(CollectionUtils.isEmpty(criteria.getVehicleIds())) {
-				criteria.setVehicleIds(vehicles.stream().map(Vehicle::getId).collect(Collectors.toList()));
-			}else {
-				criteria.getVehicleIds().addAll(vehicles.stream().map(Vehicle::getId).collect(Collectors.toList()));
-			}
-			
-		}
-		
-		if(!CollectionUtils.isEmpty(criteria.getVehicleIds())) {
-			List<String> vendorIds  = repository.getVendorWithVehicles(criteria);
-			if(CollectionUtils.isEmpty(vendorIds)) {
-				List<Vendor> vendors=new ArrayList<Vendor>();
-				VendorResponse VendorResponse=new VendorResponse();
-				VendorResponse.setVendor(vendors);
-				return VendorResponse;
-			}else {
-				if(CollectionUtils.isEmpty(criteria.getIds())) {
-					criteria.setIds(vendorIds);
-				}else {
-					criteria.getIds().addAll(vendorIds);
-				}					
-			}
-		}
-		
-		if (!CollectionUtils.isEmpty(criteria.getDriverIds())) {
-			List<String> vendorIds  = repository.getVendorWithDrivers(criteria);
-			if(CollectionUtils.isEmpty(vendorIds)) {
-				List<Vendor> vendors=new ArrayList<Vendor>();
-				VendorResponse vendorSearchResult=new VendorResponse();
-				vendorSearchResult.setVendor(vendors);
-				return vendorSearchResult;
 
-			}else {
-				if(CollectionUtils.isEmpty(criteria.getIds())) {
-					criteria.setIds(vendorIds);
-				}else {
-					criteria.getIds().addAll(vendorIds);
-				}					
+		VendorSearchCriteria vendorCriteria = getCriteria(criteria, requestInfo);
+		VendorResponse vendorResponse = new VendorResponse();
+		if ((CollectionUtils.isEmpty(criteria.getDriverIds()) && CollectionUtils.isEmpty(criteria.getVehicleIds()))
+				|| !CollectionUtils.isEmpty(vendorCriteria.getIds())) {
+
+			vendorResponse = repository.getVendorData(criteria);
+			if (vendorResponse != null && !vendorResponse.getVendor().isEmpty()) {
+				enrichmentService.enrichVendorSearch(vendorResponse.getVendor(), requestInfo, criteria.getTenantId());
 			}
-
-	    }
-
-		VendorResponse vendorResponse = repository.getVendorData(criteria);
-		if (vendorResponse!=null && !vendorResponse.getVendor().isEmpty()) {
-			enrichmentService.enrichVendorSearch(vendorResponse.getVendor(), requestInfo, criteria.getTenantId());
-		}
-		
-
-		if (vendorResponse!=null && vendorResponse.getVendor().isEmpty()) {
-			List<Vendor> vendors=new ArrayList<Vendor>();
-			vendorResponse.setVendor(vendors);
-			return vendorResponse;
+			if (vendorResponse != null && vendorResponse.getVendor().isEmpty()) {
+				vendorIsEmpty();
+			}
 		}
 
 		return vendorResponse;
 
 	}
 
+	private VendorSearchCriteria getCriteria(VendorSearchCriteria criteria, RequestInfo requestInfo) {
+		if (!CollectionUtils.isEmpty(criteria.getVehicleRegistrationNumber())
+				|| StringUtils.hasLength(criteria.getVehicleType())
+				|| StringUtils.hasLength(criteria.getVehicleCapacity())) {
+			List<Vehicle> vehicles = callGetVehicleRepo(requestInfo, criteria);
+
+			if (CollectionUtils.isEmpty(vehicles)) {
+				vendorIsEmpty();
+			}
+			if (CollectionUtils.isEmpty(criteria.getVehicleIds())) {
+				criteria.setVehicleIds(vehicles.stream().map(Vehicle::getId).collect(Collectors.toList()));
+			} else {
+				criteria.getVehicleIds().addAll(vehicles.stream().map(Vehicle::getId).collect(Collectors.toList()));
+			}
+
+		}
+
+		if (!CollectionUtils.isEmpty(criteria.getVehicleIds())) {
+			List<String> vendorIds = repository.getVendorWithVehicles(criteria);
+			if (CollectionUtils.isEmpty(vendorIds)) {
+				vendorIsEmpty();
+
+			} else {
+				if (CollectionUtils.isEmpty(criteria.getIds())) {
+					criteria.setIds(vendorIds);
+				} else {
+					criteria.getIds().addAll(vendorIds);
+				}
+			}
+		}
+
+		return getDriversCriteria(criteria);
+	}
+
+	private VendorSearchCriteria getDriversCriteria(VendorSearchCriteria criteria) {
+		if (!CollectionUtils.isEmpty(criteria.getDriverIds())) {
+			List<String> vendorIds = repository.getVendorWithDrivers(criteria);
+			if (CollectionUtils.isEmpty(vendorIds)) {
+				vendorIsEmpty();
+
+			} else {
+				if (CollectionUtils.isEmpty(criteria.getIds())) {
+					criteria.setIds(vendorIds);
+				} else {
+					criteria.getIds().addAll(vendorIds);
+				}
+			}
+
+		}
+		return criteria;
+	}
+
+	private VendorResponse vendorIsEmpty() {
+		List<Vendor> vendors = new ArrayList<>();
+		VendorResponse vendorResponse = new VendorResponse();
+		vendorResponse.setVendor(vendors);
+		return vendorResponse;
+	}
+
+	private List<Vehicle> callGetVehicleRepo(RequestInfo requestInfo, VendorSearchCriteria criteria) {
+		VehicleSearchCriteria vehicleSearchCriteria = VehicleSearchCriteria.builder()
+				.registrationNumber(criteria.getVehicleRegistrationNumber()).vehicleType(criteria.getVehicleType())
+				.vehicleCapacity(criteria.getVehicleCapacity()).tenantId(criteria.getTenantId())
+				.status(criteria.getStatus()).build();
+
+		return vehicleService.getVehicles(vehicleSearchCriteria, requestInfo);
+
+	}
+
 	public List<Vendor> vendorPlainSearch(@Valid VendorSearchCriteria criteria, RequestInfo requestInfo) {
-		List<Vendor> vendorList = getVendorPlainSearch(criteria, requestInfo);
-		return vendorList;
+		return getVendorPlainSearch(criteria, requestInfo);
 	}
 
 	private List<Vendor> getVendorPlainSearch(@Valid VendorSearchCriteria criteria, RequestInfo requestInfo) {

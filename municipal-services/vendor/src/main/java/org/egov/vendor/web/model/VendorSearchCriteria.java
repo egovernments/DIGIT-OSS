@@ -29,16 +29,16 @@ public class VendorSearchCriteria {
 
 	@JsonProperty("mobileNumber")
 	private String mobileNumber;
-	
+
 	@JsonProperty("vehicleType")
 	private String vehicleType;
 
 	@JsonProperty("ownerIds")
 	private List<String> ownerIds;
-	
+
 	@JsonProperty("vehicleRegistrationNumber")
 	private List<String> vehicleRegistrationNumber;
-	
+
 	@JsonProperty("vehicleIds")
 	private List<String> vehicleIds;
 
@@ -47,30 +47,44 @@ public class VendorSearchCriteria {
 
 	@JsonProperty("ids")
 	private List<String> ids;
-	
+
 	@JsonProperty("vehicleCapacity")
 	private String vehicleCapacity;
-	
-	@JsonProperty("status")
-	private List<String> status; 
 
+	@JsonProperty("status")
+	private List<String> status;
 
 	@JsonProperty("driverIds")
-	private List<String> driverIds; 
+	private List<String> driverIds;
+
+	@JsonProperty("sortBy")
+	private SortBy sortBy;
+
+	@JsonProperty("sortOrder")
+	private SortOrder sortOrder;
+
+	public enum SortOrder {
+		ASC, DESC
+	}
+
+	public enum SortBy {
+		tenantId, mobileNumber, vehicleType, ownerIds, vehicleRegistrationNumber, vehicleIds, name, ids,
+		vehicleCapacity, status, driverIds, createdTime,vendor_createdTime
+	}
 
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return (this.tenantId == null && this.offset == null && this.limit == null && this.mobileNumber == null && CollectionUtils.isEmpty(this.vehicleRegistrationNumber)
-				&& this.ownerIds == null && CollectionUtils.isEmpty(this.name) && CollectionUtils.isEmpty(this.vehicleIds)
-				&& CollectionUtils.isEmpty(this.ids) && this.vehicleType == null && this.vehicleCapacity == null && CollectionUtils.isEmpty(this.status));
+		return (this.tenantId == null && this.offset == null && this.limit == null && this.mobileNumber == null
+				&& CollectionUtils.isEmpty(this.vehicleRegistrationNumber) && this.ownerIds == null
+				&& CollectionUtils.isEmpty(this.name) && CollectionUtils.isEmpty(this.vehicleIds)
+				&& CollectionUtils.isEmpty(this.ids) && this.vehicleType == null && this.vehicleCapacity == null
+				&& CollectionUtils.isEmpty(this.status));
 	}
 
 	public boolean tenantIdOnly() {
-		// TODO Auto-generated method stub
 		return (this.tenantId != null && this.mobileNumber == null && this.ownerIds == null
 				&& CollectionUtils.isEmpty(this.vehicleRegistrationNumber) && CollectionUtils.isEmpty(this.vehicleIds)
-				&& CollectionUtils.isEmpty(this.name) && CollectionUtils.isEmpty(this.ids) && this.vehicleType == null && this.vehicleCapacity==null && CollectionUtils.isEmpty(this.status));
+				&& CollectionUtils.isEmpty(this.name) && CollectionUtils.isEmpty(this.ids) && this.vehicleType == null
+				&& this.vehicleCapacity == null && CollectionUtils.isEmpty(this.status));
 	}
-	
 
 }

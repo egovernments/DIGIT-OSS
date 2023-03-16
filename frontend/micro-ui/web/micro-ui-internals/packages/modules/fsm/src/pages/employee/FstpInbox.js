@@ -32,6 +32,10 @@ const FstpInbox = () => {
   });
 
   const userInfo = Digit.UserService.getUser();
+  let isMobile = window.Digit.Utils.browser.isMobile();
+  let paginationParams = isMobile
+    ? { limit: 100, offset: 0, sortOrder: sortParams?.[0]?.desc ? "DESC" : "ASC" }
+    : { limit: pageSize, offset: pageOffset, sortOrder: sortParams?.[0]?.desc ? "DESC" : "ASC" };
 
   const { isLoading: applicationLoading, isError, data: applicationData, error } = Digit.Hooks.fsm.useSearch(
     tenantId,
@@ -47,7 +51,6 @@ const FstpInbox = () => {
     },
     { enabled: searchParams?.name?.length > 1 }
   );
-
   let filters = {
     businessService: "FSM_VEHICLE_TRIP",
     refernceNos: applicationData !== undefined && searchParams?.refernceNos?.length > 0 ? applicationData?.applicationNo || "null" : "",
@@ -55,7 +58,7 @@ const FstpInbox = () => {
     // vehicleIds: applicationData !== undefined && searchParams?.applicationNos?.length > 0 ? applicationData?.vehicleId || "null" : vehicles !== undefined && searchParams?.registrationNumber?.length > 0 ? vehicles?.vehicle?.[0]?.id || "null" : "",
     tripOwnerIds: dsoData !== undefined && searchParams?.name?.length > 0 ? dsoData?.[0]?.ownerId || "null" : "",
     applicationStatus: searchParams?.applicationStatus,
-    sortOrder: sortParams[0]?.desc === false ? "ASC" : "DESC",
+    ...paginationParams,
   };
 
   if (applicationData == undefined) {
@@ -72,7 +75,6 @@ const FstpInbox = () => {
       totalCount: 0,
     };
   }
-
   const { isLoading, data: { totalCount, vehicleLog } = {}, isSuccess } = Digit.Hooks.fsm.useVehicleSearch({
     tenantId,
     filters,
@@ -118,7 +120,6 @@ const FstpInbox = () => {
     setSortParams(args);
   }, []);
 
-  let isMobile = window.Digit.Utils.browser.isMobile();
   // if (isSuccess) {
   if (isMobile) {
     return (
@@ -139,8 +140,10 @@ const FstpInbox = () => {
     );
   } else {
     return (
-      <div>
-        <Header>{t("ES_COMMON_INBOX")}</Header>
+      <React.Fragment>
+        <div style={{ marginLeft: "20px" }}>
+          <Header>{t("ES_COMMON_INBOX")}</Header>
+        </div>
         <DesktopInbox
           data={{ table: vehicleLog }}
           isLoading={isLoading}
@@ -158,7 +161,7 @@ const FstpInbox = () => {
           onPageSizeChange={handlePageSizeChange}
           totalRecords={totalCount || 0}
         />
-      </div>
+      </React.Fragment>
     );
   }
   // }

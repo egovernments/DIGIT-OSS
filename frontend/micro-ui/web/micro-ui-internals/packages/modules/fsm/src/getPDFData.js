@@ -10,11 +10,9 @@ const getSlumName = (application, t) => {
   return application?.slum?.i18nKey ? t(`${application?.slum?.i18nKey}`) : "N/A";
 };
 
-const getApplicationVehicleType = (application, t) => {
-  if (application?.vehicleMake && application?.vehicleCapacity) {
-    return getVehicleType({ i18nKey: application?.vehicleMake, capacity: application?.vehicleCapacity }, t);
-  }
-  return application?.pdfVehicleType ? application?.pdfVehicleType : "N/A";
+const getApplicationVehicleCapacity = (vehicleCapacity) => {
+  if (!vehicleCapacity) return "N/A";
+  return vehicleCapacity;
 };
 
 const getAmountPerTrip = (amountPerTrip) => {
@@ -27,11 +25,17 @@ const getTotalAmount = (totalAmount) => {
   return totalAmount !== 0 ? `₹ ${totalAmount}` : "N/A";
 };
 
-const getPDFData = (application, tenantInfo, t) => {
-  const { address, additionalDetails } = application;
+const getAdvanceAmount = (advanceAmount) => {
+  if (advanceAmount === null) return "N/A";
+  return `₹ ${advanceAmount}`;
+};
 
-  const amountPerTrip = application?.amountPerTrip || additionalDetails?.tripAmount || JSON.parse(address?.additionalDetails)?.tripAmount;
-  const totalAmount = application?.totalAmount || amountPerTrip * application?.noOfTrips;
+const getPDFData = (application, tenantInfo, t) => {
+  const { additionalDetails } = application;
+
+  const amountPerTrip = additionalDetails?.tripAmount;
+  const totalAmount = amountPerTrip * application?.noOfTrips;
+  const advanceAmountDue = application?.advanceAmount;
 
   return {
     t: t,
@@ -109,8 +113,8 @@ const getPDFData = (application, tenantInfo, t) => {
                 : "N/A",
           },
           {
-            title: t("ES_FSM_ACTION_VEHICLE_TYPE"),
-            value: getApplicationVehicleType(application, t),
+            title: t("ES_APPLICATION_DETAILS_VEHICLE_CAPACITY"),
+            value: getApplicationVehicleCapacity(application?.vehicleCapacity),
           },
           { title: t("CS_APPLICATION_DETAILS_TRIPS"), value: application?.noOfTrips || "N/A" },
           {
@@ -120,6 +124,10 @@ const getPDFData = (application, tenantInfo, t) => {
           {
             title: t("CS_APPLICATION_DETAILS_AMOUNT_DUE"),
             value: getTotalAmount(totalAmount),
+          },
+          {
+            title: t("CS_APPLICATION_DETAILS_ADV_AMOUNT_DUE"),
+            value: getAdvanceAmount(advanceAmountDue),
           },
         ],
       },

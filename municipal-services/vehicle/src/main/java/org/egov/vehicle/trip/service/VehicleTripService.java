@@ -29,35 +29,33 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class VehicleTripService {
-	
+
 	@Autowired
 	private VehicleTripRepository vehicleLogRepository;
-	
+
 	@Autowired
 	private VehicleLogEnrichmentService vehicleLogEnrichmentService;
-	
+
 	@Autowired
 	private VehicleTripValidator validator;
-	
+
 	@Autowired
 	private ActionValidator actionValidator;
-	
 
 	@Autowired
 	private WorkflowIntegrator wfIntegrator;
-	
+
 	@Autowired
 	private WorkflowService workflowService;
-    
-    @Autowired
-    private VehicleConfiguration config;
-    
-    @Autowired
+
+	@Autowired
+	private VehicleConfiguration config;
+
+	@Autowired
 	private NotificationService notificationService;
 
-	
 	public List<VehicleTrip> create(VehicleTripRequest request) {
-		
+
 		if (CollectionUtils.isEmpty(request.getVehicleTrip())) {
 			throw new CustomException(VehicleTripConstants.CREATE_VEHICLETRIP_ERROR,
 					"vehicleTrip not found in the Request" + request.getVehicleTrip());
@@ -65,77 +63,65 @@ public class VehicleTripService {
 		validator.validateCreateOrUpdateRequest(request);
 		vehicleLogEnrichmentService.setInsertData(request);
 		wfIntegrator.callWorkFlow(request);
-		
-		/*
-		 * request.getVehicleTrip().forEach(vehicleTrip->{
-		 * if(vehicleTrip.getTripDetails().get(0).getReferenceNo()==null ||
-		 * vehicleTrip.getTripDetails().get(0).getReferenceNo().isEmpty()) {
-		 * 
-		 * request.setWorkflow(Workflow.builder().action(VehicleTripConstants.
-		 * READY_FOR_DISPOSAL).build()); wfIntegrator.callWorkFlow(request);
-		 * 
-		 * request.setWorkflow(Workflow.builder().action(VehicleTripConstants.DISPOSE).
-		 * build()); wfIntegrator.callWorkFlow(request); } });
-		 */
-		
 		vehicleLogRepository.save(request);
+
 		return request.getVehicleTrip();
 	}
-	
+
 	public List<VehicleTrip> update(VehicleTripRequest request) {
-		
-		
+
 		if (CollectionUtils.isEmpty(request.getVehicleTrip())) {
 			throw new CustomException(VehicleTripConstants.UPDATE_VEHICLELOG_ERROR,
 					"vehicleLogId not found in the Request" + request.getVehicleTrip());
 		}
-		
+
 		BusinessService businessService = workflowService.getBusinessService(
 				request.getVehicleTrip().get(0).getTenantId(), request.getRequestInfo(),
-				VehicleTripConstants.FSM_VEHICLE_TRIP_BusinessService, null);
+				VehicleTripConstants.FSM_VEHICLE_TRIP_BUSINESSSERVICE, null);
 
-		if(!VehicleTripConstants.UPDATE_ONLY_VEHICLE_TRIP_RECORD.equalsIgnoreCase(request.getWorkflow().getAction())) {
-			actionValidator.validateUpdateRequest(request, businessService);	
+		if (!VehicleTripConstants.UPDATE_ONLY_VEHICLE_TRIP_RECORD.equalsIgnoreCase(request.getWorkflow().getAction())) {
+			actionValidator.validateUpdateRequest(request, businessService);
 		}
+
 		validator.validateCreateOrUpdateRequest(request);
 		validator.validateUpdateRecord(request);
 		vehicleLogEnrichmentService.setUpdateData(request);
-		
-		if(!VehicleTripConstants.UPDATE_ONLY_VEHICLE_TRIP_RECORD.equalsIgnoreCase(request.getWorkflow().getAction())) {
-			wfIntegrator.callWorkFlow(request);	
+
+		if (!VehicleTripConstants.UPDATE_ONLY_VEHICLE_TRIP_RECORD.equalsIgnoreCase(request.getWorkflow().getAction())) {
+			wfIntegrator.callWorkFlow(request);
 		}
 
-			request.getVehicleTrip().forEach(vehicleTrip->{
-			vehicleLogRepository.update(request.getRequestInfo(),vehicleTrip,
-			workflowService.isStateUpdatable(vehicleTrip.getApplicationStatus(), businessService));
+		request.getVehicleTrip().forEach(vehicleTrip -> {
+			vehicleLogRepository.update(request.getRequestInfo(), vehicleTrip,
+					workflowService.isStateUpdatable(vehicleTrip.getApplicationStatus(), businessService));
 		});
-		
-		//SAN-800: Send SMS notification if the vehicle trip is declined
-		if(VehicleTripConstants.DECLINEVEHICLE.equalsIgnoreCase(request.getWorkflow().getAction())) {
+
+		// SAN-800: Send SMS notification if the vehicle trip is declined
+		if (VehicleTripConstants.DECLINEVEHICLE.equalsIgnoreCase(request.getWorkflow().getAction())) {
 			notificationService.process(request);
 		}
 		return request.getVehicleTrip();
 	}
-	
+
 	public VehicleTripResponse search(VehicleTripSearchCriteria criteria, RequestInfo requestInfo) {
-		validator.validateSearch(requestInfo, criteria);
-		
-		if(criteria.getRefernceNos() != null && !CollectionUtils.isEmpty(criteria.getRefernceNos())) {
-			
+		validator.validateSearch(criteria);
+
+		if (criteria.getRefernceNos() != null && !CollectionUtils.isEmpty(criteria.getRefernceNos())) {
+
 			List<String> tripIds = vehicleLogRepository.getTripFromRefrences(criteria.getRefernceNos());
-			if(CollectionUtils.isEmpty(tripIds)) {
+			if (CollectionUtils.isEmpty(tripIds)) {
 				return VehicleTripResponse.builder().build();
-			}else {
-				if(CollectionUtils.isEmpty(criteria.getIds())) {
+			} else {
+				if (CollectionUtils.isEmpty(criteria.getIds())) {
 					criteria.setIds(tripIds);
-				}else {
+				} else {
 					criteria.getIds().addAll(tripIds);
-				}					
+				}
 			}
 		}
-		
+
 		VehicleTripResponse response = vehicleLogRepository.getVehicleLogData(criteria);
-		response.getVehicleTrip().forEach(trip->{
+		response.getVehicleTrip().forEach(trip -> {
 			trip.setTripDetails(vehicleLogRepository.getTrpiDetails(trip.getId()));
 		});
 		vehicleLogEnrichmentService.enrichSearch(response.getVehicleTrip(), requestInfo);
@@ -144,32 +130,34 @@ public class VehicleTripService {
 
 	public List<VehicleTrip> vehicleTripPlainSearch(@Valid VehicleTripSearchCriteria criteria,
 			RequestInfo requestInfo) {
-		List<VehicleTrip> vehicleLogList = getVehicleTripPlainSearch(criteria, requestInfo);
-		return vehicleLogList;
+		return getVehicleTripPlainSearch(criteria, requestInfo);
 	}
 
 	private List<VehicleTrip> getVehicleTripPlainSearch(@Valid VehicleTripSearchCriteria criteria,
 			RequestInfo requestInfo) {
 		if (criteria.getLimit() != null && criteria.getLimit() > config.getMaxSearchLimit())
-            criteria.setLimit(config.getMaxSearchLimit());
+			criteria.setLimit(config.getMaxSearchLimit());
 
-        List<String> ids = null;
+		List<String> ids = null;
 
-        if(criteria.getIds() != null && !criteria.getIds().isEmpty())
-            ids = criteria.getIds();
-        else
-            ids = vehicleLogRepository.fetchVehicleTripIds(criteria);
+		if (criteria.getIds() != null && !criteria.getIds().isEmpty())
+			ids = criteria.getIds();
+		else
+			ids = vehicleLogRepository.fetchVehicleTripIds(criteria);
 
-        if(ids.isEmpty())
-            return Collections.emptyList();
+		if (ids.isEmpty())
+			return Collections.emptyList();
 
-        VehicleTripSearchCriteria VehicleTripcriteria = VehicleTripSearchCriteria.builder().tenantId(criteria.getTenantId()).ids(ids).build();;
+		VehicleTripSearchCriteria vehicleTripcriteria = VehicleTripSearchCriteria.builder()
+				.tenantId(criteria.getTenantId()).ids(ids).build();
+		;
 
-        List<VehicleTrip> vehicleTripLogs = vehicleLogRepository.getVehicleTripPlainSearch(VehicleTripcriteria);
-        vehicleTripLogs.forEach(trip->{
+		List<VehicleTrip> vehicleTripLogs = vehicleLogRepository.getVehicleTripPlainSearch(vehicleTripcriteria);
+		vehicleTripLogs.forEach(trip -> {
 			trip.setTripDetails(vehicleLogRepository.getTrpiDetails(trip.getId()));
 		});
-        vehicleLogEnrichmentService.enrichSearch(vehicleTripLogs, requestInfo);
-        return vehicleTripLogs;
+		vehicleLogEnrichmentService.enrichSearch(vehicleTripLogs, requestInfo);
+		return vehicleTripLogs;
 	}
+
 }

@@ -1,16 +1,12 @@
-*  @gajendran-egov @sathishp-eGov
-*.yaml  @gajendran-egov @sathishp-eGov
+*  @gajendran-egov @sathishp-eGov @kavi-egov
+*.yaml  @gajendran-egov @sathishp-eGov @kavi-egov
 
-* business-services/ @sathishp-eGov @talele08 @kavi-egov @sirishrao-egov
-* core-services/ @sathishp-eGov @talele08 @kavi-egov @sirishrao-egov
-* municipal-services/ @sathishp-eGov @talele08 @kavi-egov @sirishrao-egov
-* frontend/ @sathishp-eGov @talele08 @kavi-egov @sirishrao-egov
-* edcr/ @pradeep
-* finance/ @elzan
+business-services/ @sathishp-eGov @talele08 @kavi-egov @sirishrao-egov @subhashini-egov @talele08 
+core-services/ @sathishp-eGov @talele08 @kavi-egov @sirishrao-egov @subhashini-egov @talele08 
+municipal-services/ @sathishp-eGov @talele08 @kavi-egov @sirishrao-egov @subhashini-egov @talele08 @kapil-eGov @AmanKumar-eGov
+
 
 ##Frontend
-frontend/micro-ui/  @sathishp-eGov @jagankumar-egov @saurabh-egov  @sirishrao-egov
-frontend/micro-ui-internals/ @sathishp-eGov @jagankumar-egov @saurabh-egov @sirishrao-egov
-frontend/mono-ui/ @sathishp-eGov @jagankumar-egov @sirishrao-egov
-
-
+frontend/micro-ui/  @sathishp-eGov @jagankumar-egov @sirishrao-egov @subhashini-egov @talele08
+frontend/micro-ui-internals/ @sathishp-eGov @jagankumar-egov @sirishrao-egov @subhashini-egov @talele08
+frontend/mono-ui/ @sathishp-eGov @jagankumar-egov @sirishrao-egov @subhashini-egov @talele08

@@ -14,7 +14,7 @@ public class FSMAuditQueryBuilder {
 	@Autowired
 	private FSMConfiguration config;
 
-	private static final String Query = "select fsm.*,fsm_address.*,fsm_geo.*,fsm_pit.*,fsm.id as fsm_id, fsm.createdby as fsm_createdby,"
+	private static final String QUERY = "select fsm.*,fsm_address.*,fsm_geo.*,fsm_pit.*,fsm.id as fsm_id, fsm.createdby as fsm_createdby,"
 			+ "  fsm.lastmodifiedby as fsm_lastmodifiedby, fsm.createdtime as fsm_createdtime, fsm.lastmodifiedtime as fsm_lastmodifiedtime,"
 			+ "	 fsm.additionaldetails,fsm_address.id as fsm_address_id,fsm_geo.id as fsm_geo_id,"
 			+ "	 fsm_pit.id as fsm_pit_id" + "	 FROM eg_fsm_application fsm"
@@ -22,7 +22,7 @@ public class FSMAuditQueryBuilder {
 			+ "	 LEFT OUTER JOIN  eg_fsm_geolocation fsm_geo on fsm_geo.address_id = fsm_address.id"
 			+ "	 LEFT OUTER JOIN  eg_fsm_pit_detail fsm_pit on fsm_pit.fsm_id = fsm.id where fsm.tenantid=?";
 	
-	private static final String AUDIT_Query = "select fsm.*,fsm_address.*,fsm_geo.*,fsm_pit.*,fsm.id as fsm_id, fsm.createdby as fsm_createdby,"
+	private static final String AUDIT_QUERY = "select fsm.*,fsm_address.*,fsm_geo.*,fsm_pit.*,fsm.id as fsm_id, fsm.createdby as fsm_createdby,"
 			+ "  fsm.lastmodifiedby as fsm_lastmodifiedby, fsm.createdtime as fsm_createdtime, fsm.lastmodifiedtime as fsm_lastmodifiedtime,"
 			+ "	 fsm.additionaldetails,fsm_address.id as fsm_address_id, fsm_geo.id as fsm_geo_id,"
 			+ "	 fsm_pit.id as fsm_pit_id	 FROM eg_fsm_application_auditlog fsm"
@@ -34,7 +34,7 @@ public class FSMAuditQueryBuilder {
 	private static final String APPLICATION_NO = " AND fsm.applicationno=?";
 
 	public String getFSMActualDataQuery(FSMAuditSearchCriteria criteria, List<Object> preparedStmtList) {
-		return generateQuery(Query, criteria, preparedStmtList);
+		return generateQuery(QUERY, criteria, preparedStmtList);
 	}
 	
 	private String generateQuery(String query, FSMAuditSearchCriteria criteria, List<Object> preparedStmtList) {
@@ -53,7 +53,7 @@ public class FSMAuditQueryBuilder {
 	}
 	
 	public String getFSMAuditDataQuery(FSMAuditSearchCriteria criteria, List<Object> preparedStmtList) {
-		return generateQuery(AUDIT_Query, criteria, preparedStmtList);
+		return generateQuery(AUDIT_QUERY, criteria, preparedStmtList);
 	}
 
 }

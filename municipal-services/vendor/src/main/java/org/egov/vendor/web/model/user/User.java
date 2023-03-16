@@ -8,7 +8,6 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.egov.common.contract.request.Role;
-import org.egov.vendor.web.model.vehicle.Vehicle.StatusEnum;
 import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.validation.annotation.Validated;
 
@@ -122,6 +121,7 @@ public class User {
     @JsonProperty("active")
     private Boolean active;
 
+    
     @JsonProperty("dob")
     private Long dob;
 
@@ -202,4 +202,6 @@ public class User {
     @SafeHtml
     @JsonProperty("tenantId")
     private String tenantId;
+    
+   	
 }

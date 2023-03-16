@@ -59,46 +59,13 @@ public class DriverUserService {
 		Driver driver = driverRequest.getDriver();
 		RequestInfo requestInfo = driverRequest.getRequestInfo();
 		User driverInfo = driver.getOwner();
-		HashMap<String, String> errorMap = new HashMap<String, String>();
+		HashMap<String, String> errorMap = new HashMap<>();
 
 		UserDetailResponse userDetailResponse = null;
 
-		if (driverInfo.getMobileNumber() != null) {
+		if (driverInfo != null && driverInfo.getMobileNumber() != null) {
+			driverInfoMobileNumber(driverInfo, requestInfo, errorMap, driver, driverRequest);
 
-			userDetailResponse = userExists(driverInfo, requestInfo);
-			User foundDriver = null;
-			if (userDetailResponse != null && !CollectionUtils.isEmpty(userDetailResponse.getUser())) {
-
-				for (int i = 0; i < userDetailResponse.getUser().size(); i++) {
-
-					if (isRoleAvailale(userDetailResponse.getUser().get(i), config.getDsoDriver(),
-							driver.getTenantId()) == Boolean.TRUE) {
-						foundDriver = userDetailResponse.getUser().get(i);
-					}
-				}
-
-				if (foundDriver == null) {
-					foundDriver = userDetailResponse.getUser().get(0);
-					foundDriver.getRoles().add(getRolObj(config.getDsoDriver(), config.getDsoDriverRoleName()));
-					UserRequest userRequest = UserRequest.builder().user(foundDriver).requestInfo(requestInfo).build();
-					StringBuilder uri = new StringBuilder();
-					uri.append(config.getUserHost()).append(config.getUserContextPath())
-							.append(config.getUserUpdateEndpoint());
-					UserDetailResponse userResponse = ownerCall(userRequest, uri);
-					if (userResponse != null || !CollectionUtils.isEmpty(userResponse.getUser())) {
-						foundDriver = userResponse.getUser().get(0);
-					} else {
-						errorMap.put(VendorErrorConstants.INVALID_DRIVER_ERROR,
-								"Unable to add Driver role to the existing user !");
-					}
-
-				}
-
-			} else {
-				foundDriver = createDriver(driverInfo, requestInfo);
-			}
-			
-			driverRequest.getDriver().setOwner(foundDriver);
 		} else {
 			log.debug("MobileNo is not provided in Application.");
 			errorMap.put(VendorErrorConstants.INVALID_DRIVER_ERROR,
@@ -111,7 +78,67 @@ public class DriverUserService {
 
 	}
 
-		
+	private void driverInfoMobileNumber(User driverInfo, RequestInfo requestInfo, HashMap<String, String> errorMap,
+			Driver driver, DriverRequest driverRequest) {
+		UserDetailResponse userDetailResponse = userExists(driverInfo);
+		User foundDriver = null;
+		if (userDetailResponse != null && !CollectionUtils.isEmpty(userDetailResponse.getUser())) {
+
+			for (int i = 0; i < userDetailResponse.getUser().size(); i++) {
+
+				if (isRoleAvailale(userDetailResponse.getUser().get(i), config.getDsoDriver(),
+						driver.getTenantId()) == Boolean.TRUE) {
+					foundDriver = userDetailResponse.getUser().get(i);
+				}
+			}
+
+			if (foundDriver == null) {
+				foundDriver = findDriver(userDetailResponse, requestInfo, errorMap);
+
+			} else {
+				updateUserDetails(driverInfo, requestInfo, errorMap);
+			}
+
+		} else {
+			foundDriver = createDriver(driverInfo, requestInfo);
+		}
+
+		driverRequest.getDriver().setOwner(foundDriver);
+	}
+
+	private User updateUserDetails(User driverInfo, RequestInfo requestInfo, HashMap<String, String> errorMap) {
+		User userUpdated = new User();
+		UserRequest userRequest = UserRequest.builder().user(driverInfo).requestInfo(requestInfo).build();
+		StringBuilder uri = new StringBuilder();
+		uri.append(config.getUserHost()).append(config.getUserContextPath()).append(config.getUserUpdateEndpoint());
+		UserDetailResponse userResponse = ownerCall(userRequest, uri);
+		if (userResponse != null && !userResponse.getUser().isEmpty()) {
+			userUpdated = userResponse.getUser().get(0);
+		} else {
+			errorMap.put(VendorErrorConstants.INVALID_DRIVER_ERROR,
+					"Unable to Update UserDetails to the existing user !");
+		}
+		return userUpdated;
+
+	}
+
+	private User findDriver(UserDetailResponse userDetailResponse, RequestInfo requestInfo,
+			HashMap<String, String> errorMap) {
+		User foundDriver = userDetailResponse.getUser().get(0);
+		foundDriver.getRoles().add(getRolObj(config.getDsoDriver(), config.getDsoDriverRoleName()));
+		UserRequest userRequest = UserRequest.builder().user(foundDriver).requestInfo(requestInfo).build();
+		StringBuilder uri = new StringBuilder();
+		uri.append(config.getUserHost()).append(config.getUserContextPath()).append(config.getUserUpdateEndpoint());
+		UserDetailResponse userResponse = ownerCall(userRequest, uri);
+		if (userResponse != null && !userResponse.getUser().isEmpty()) {
+			foundDriver = userResponse.getUser().get(0);
+		} else {
+			errorMap.put(VendorErrorConstants.INVALID_DRIVER_ERROR, "Unable to add Driver role to the existing user !");
+		}
+		return foundDriver;
+
+	}
+
 	/**
 	 * Sets the role,type,active and tenantId for a Citizen
 	 * 
@@ -160,14 +187,12 @@ public class DriverUserService {
 		try {
 			LinkedHashMap responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(uri, userRequest);
 			parseResponse(responseMap, dobFormat);
-			UserDetailResponse userDetailResponse = mapper.convertValue(responseMap, UserDetailResponse.class);
-			return userDetailResponse;
+			return mapper.convertValue(responseMap, UserDetailResponse.class);
 		} catch (IllegalArgumentException e) {
 			throw new CustomException("IllegalArgumentException", "ObjectMapper not able to convertValue in userCall");
 		}
 	}
 
-	
 	/**
 	 * create Employee in HRMS for Vendor owner
 	 * 
@@ -196,8 +221,6 @@ public class DriverUserService {
 		return userDetailResponse.getUser().get(0);
 	}
 
-	
-
 	/**
 	 * 
 	 * @return
@@ -209,9 +232,7 @@ public class DriverUserService {
 		return role;
 	}
 
-	
-
-	private UserDetailResponse userExists(User owner, @Valid RequestInfo requestInfo) {
+	private UserDetailResponse userExists(User owner) {
 
 		UserSearchRequest ownerSearchRequest = new UserSearchRequest();
 		ownerSearchRequest.setTenantId(owner.getTenantId().split("\\.")[0]);
@@ -220,9 +241,7 @@ public class DriverUserService {
 			ownerSearchRequest.setMobileNumber(owner.getMobileNumber());
 		}
 		StringBuilder uri = new StringBuilder(config.getUserHost()).append(config.getUserSearchEndpoint());
-		UserDetailResponse vendorDetailResponse = ownerCall(ownerSearchRequest, uri);
-
-		return vendorDetailResponse;
+		return ownerCall(ownerSearchRequest, uri);
 
 	}
 
@@ -250,8 +269,6 @@ public class DriverUserService {
 	}
 
 	private Boolean isRoleAvailable(List<String> ownerRoles, String role) {
-		Boolean flag = false;
-		// List<String> allowedRoles = Arrays.asList(actionRoles.get(0).split(","));
 		if (CollectionUtils.isEmpty(ownerRoles)) {
 			return false;
 		}
@@ -276,8 +293,7 @@ public class DriverUserService {
 		try {
 			LinkedHashMap responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(uri, ownerRequest);
 			parseResponse(responseMap, dobFormat);
-			UserDetailResponse ownerDetailResponse = mapper.convertValue(responseMap, UserDetailResponse.class);
-			return ownerDetailResponse;
+			return mapper.convertValue(responseMap, UserDetailResponse.class);
 		} catch (IllegalArgumentException e) {
 			throw new CustomException("IllegalArgumentException", "ObjectMapper not able to convertValue in ownerCall");
 		}
@@ -290,11 +306,13 @@ public class DriverUserService {
 		String format1 = "dd-MM-yyyy HH:mm:ss";
 		if (owners != null) {
 			owners.forEach(map -> {
-				map.put("createdDate", dateTolong((String) map.get("createdDate"), format1));
-				if ((String) map.get("lastModifiedDate") != null)
-					map.put("lastModifiedDate", dateTolong((String) map.get("lastModifiedDate"), format1));
-				if ((String) map.get("dob") != null)
-					map.put("dob", dateTolong((String) map.get("dob"), dobFormat));
+				map.put(VendorConstants.CREATED_DATE,
+						dateTolong((String) map.get(VendorConstants.CREATED_DATE), format1));
+				if ((String) map.get(VendorConstants.LAST_MODIFIED_DATE) != null)
+					map.put(VendorConstants.LAST_MODIFIED_DATE,
+							dateTolong((String) map.get(VendorConstants.LAST_MODIFIED_DATE), format1));
+				if ((String) map.get(VendorConstants.DOB) != null)
+					map.put(VendorConstants.DOB, dateTolong((String) map.get(VendorConstants.DOB), dobFormat));
 				if ((String) map.get("pwdExpiryDate") != null)
 					map.put("pwdExpiryDate", dateTolong((String) map.get("pwdExpiryDate"), format1));
 			});
@@ -309,22 +327,20 @@ public class DriverUserService {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		return d.getTime();
+		return d != null ? d.getTime() : 0;
 	}
 
 	public UserDetailResponse getOwner(DriverSearchCriteria criteria, RequestInfo requestInfo) {
 		UserSearchRequest ownerSearchRequest = getOwnerSearchRequest(criteria, requestInfo);
 		StringBuilder uri = new StringBuilder(config.getUserHost()).append(config.getUserSearchEndpoint());
-		UserDetailResponse ownerDetailResponse = ownerCall(ownerSearchRequest, uri);
-		return ownerDetailResponse;
+		return ownerCall(ownerSearchRequest, uri);
 
 	}
 
 	public UserDetailResponse getUsers(DriverSearchCriteria criteria, RequestInfo requestInfo) {
 		UserSearchRequest userSearchRequest = getUsersSearchRequest(criteria, requestInfo);
 		StringBuilder uri = new StringBuilder(config.getUserHost()).append(config.getUserSearchEndpoint());
-		UserDetailResponse ownerDetailResponse = ownerCall(userSearchRequest, uri);
-		return ownerDetailResponse;
+		return ownerCall(userSearchRequest, uri);
 	}
 
 	private UserSearchRequest getOwnerSearchRequest(DriverSearchCriteria criteria, RequestInfo requestInfo) {

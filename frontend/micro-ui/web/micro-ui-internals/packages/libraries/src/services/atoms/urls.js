@@ -50,7 +50,7 @@ const Urls = {
     createDriver: "/vendor/driver/v1/_create",
     updateDriver: "/vendor/driver/v1/_update",
     vehicleTripCreate: "/vehicle/trip/v1/_create",
-    advanceBalanceCalculate: "/fsm-calculator/v1/_advanceBalanceCalculate",
+    advanceBalanceCalculate: "/fsm-calculator/v1/_advancebalancecalculate",
   },
 
   payment: {

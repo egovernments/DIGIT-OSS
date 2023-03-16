@@ -91,14 +91,15 @@ public class Vendor {
 	@SafeHtml
 	@Size(max=128)
 	private String paymentPreference = null;
-
+	
+		
 	/**
 	 * Inactive records will be consider as soft deleted
 	 */
 	public enum StatusEnum {
 		ACTIVE("ACTIVE"),
-
-		INACTIVE("INACTIVE");
+		INACTIVE("INACTIVE"),
+		DISABLED("DISABLED");
 
 		private String value;
 

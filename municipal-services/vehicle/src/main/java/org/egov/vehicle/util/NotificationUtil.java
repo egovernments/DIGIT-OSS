@@ -34,24 +34,22 @@ public class NotificationUtil {
 	private ServiceRequestRepository serviceRequestRepository;
 
 	private VehicleProducer producer;
-	
+
 	private RestTemplate restTemplate;
-	
 
 	@Autowired
 	public NotificationUtil(VehicleConfiguration config, ServiceRequestRepository serviceRequestRepository,
-			VehicleProducer producer,RestTemplate restTemplate) {
+			VehicleProducer producer, RestTemplate restTemplate) {
 		this.config = config;
 		this.serviceRequestRepository = serviceRequestRepository;
 		this.producer = producer;
 		this.restTemplate = restTemplate;
 	}
 
-	final String receiptNumberKey = "receiptNumber";
+	static final String receiptNumberKey = "receiptNumber";
 
-	final String amountPaidKey = "amountPaid";
+	static final String amountPaidKey = "amountPaid";
 
-	
 	/**
 	 * Fetches messages from localization service
 	 * 
@@ -64,15 +62,13 @@ public class NotificationUtil {
 
 		LinkedHashMap responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(getUri(tenantId, requestInfo),
 				requestInfo);
-		String jsonString = new JSONObject(responseMap).toString();
-		return jsonString;
+		return new JSONObject(responseMap).toString();
 	}
 
 	/**
 	 * Returns the uri for the localization call
 	 * 
-	 * @param tenantId
-	 *            TenantId of the propertyRequest
+	 * @param tenantId TenantId of the propertyRequest
 	 * @return The uri for localization search call
 	 */
 	public StringBuilder getUri(String tenantId, RequestInfo requestInfo) {
@@ -90,6 +86,7 @@ public class NotificationUtil {
 				.append("&tenantId=").append(tenantId).append("&module=").append(config.getFsmSearchModule());
 		return uri;
 	}
+
 	/**
 	 * Send the SMSRequest on the SMSNotification kafka topic
 	 * 
@@ -105,32 +102,31 @@ public class NotificationUtil {
 			}
 		}
 	}
-	
+
 	/**
 	 * Creates sms request for the each owners
 	 * 
-	 * @param message The message for the specific ULB
+	 * @param message            The message for the specific ULB
 	 * @param mobileNumbeToOwner Name Map of mobileNumber to OwnerName
 	 * @return List of SMSRequest
 	 */
 	public List<SMSRequest> createSMSRequest(String message, Map<String, String> mobileNumberToOwner) {
 		List<SMSRequest> smsRequest = new LinkedList<>();
-		if(!StringUtils.isEmpty(message))
-		for (Map.Entry<String, String> entryset : mobileNumberToOwner.entrySet()) {
-			String customizedMsg = message.replace("{1}", entryset.getValue());
-			smsRequest.add(new SMSRequest(entryset.getKey(), customizedMsg));
+		if (!StringUtils.isEmpty(message)) {
+			for (Map.Entry<String, String> entryset : mobileNumberToOwner.entrySet()) {
+				String customizedMsg = message.replace("{1}", entryset.getValue());
+				smsRequest.add(new SMSRequest(entryset.getKey(), customizedMsg));
+			}
 		}
 		return smsRequest;
 	}
-	
+
 	/**
 	 * Creates customized message to be sent to the ULBs
 	 * 
-	 * @param vehicleTripRequest
-	 *            The declined trip for which message is to be sent
-	 * @param localizationMessage
-	 *            The messages from localization
-	 * @return customized message for declined vehicle trip 
+	 * @param vehicleTripRequest  The declined trip for which message is to be sent
+	 * @param localizationMessage The messages from localization
+	 * @return customized message for declined vehicle trip
 	 */
 	@SuppressWarnings("unchecked")
 	public String getCustomizedMsg(VehicleTripRequest vehicleTripRequest, String localizationMessage,
@@ -145,13 +141,13 @@ public class NotificationUtil {
 				try {
 					additionalDetails = vehicleTripRequest.getVehicleTrip().get(0).getAdditionalDetails() != null
 							? (Map<String, String>) vehicleTripRequest.getVehicleTrip().get(0).getAdditionalDetails()
-							: new HashMap<String, String>();
+							: new HashMap<>();
 				} catch (Exception e) {
 					throw new CustomException(VehicleTripConstants.INVALID_VEHICLE_DECLINE_REQUEST, e.getMessage());
 				}
 
 				if (null != additionalDetails) {
-					vehicleDeclineReason = (String) additionalDetails.get("vehicleDeclineReason");
+					vehicleDeclineReason = additionalDetails.get("vehicleDeclineReason");
 				}
 
 				message = message.replace("{FSM_FSTP_REJECT_REASON}", vehicleDeclineReason);
@@ -167,14 +163,11 @@ public class NotificationUtil {
 		return message;
 	}
 
-
 	/**
 	 * Extracts message for the specific code
 	 * 
-	 * @param notificationCode
-	 *            The code for which message is required
-	 * @param localizationMessage
-	 *            The localization messages
+	 * @param notificationCode    The code for which message is required
+	 * @param localizationMessage The localization messages
 	 * @return message for the specific code
 	 */
 	@SuppressWarnings("rawtypes")
@@ -193,30 +186,31 @@ public class NotificationUtil {
 		}
 		return message;
 	}
-	
+
 	/**
-	 * Method to shortent the url
-	 * returns the same url if shortening fails
+	 * Method to shortent the url returns the same url if shortening fails
+	 * 
 	 * @param url
 	 */
-	public String getShortenedUrl(String url){
+	public String getShortenedUrl(String url) {
 		String res = null;
-		HashMap<String,String> body = new HashMap<>();
-		body.put("url",url);
+		HashMap<String, String> body = new HashMap<>();
+		body.put("url", url);
 		StringBuilder builder = new StringBuilder(config.getUrlShortnerHost());
 		builder.append(config.getUrlShortnerEndpoint());
 		try {
 			res = restTemplate.postForObject(builder.toString(), body, String.class);
 
-		}catch(Exception e) {
-			 log.error("Error while shortening the url: " + url,e);
-			
+		} catch (Exception e) {
+			log.error("Error while shortening the url: " + url, e);
+
 		}
-		if(StringUtils.isEmpty(res)){
-			log.error("URL_SHORTENING_ERROR","Unable to shorten url: "+url); ;
+		if (StringUtils.isEmpty(res)) {
+			log.error("URL_SHORTENING_ERROR", "Unable to shorten url: " + url);
 			return url;
+		} else {
+			return res;
 		}
-		else return res;
 	}
-	
+
 }

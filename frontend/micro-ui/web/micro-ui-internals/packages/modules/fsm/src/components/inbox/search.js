@@ -1,6 +1,16 @@
 import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { TextInput, Label, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, CardLabelError } from "@egovernments/digit-ui-react-components";
+import {
+  TextInput,
+  Label,
+  SubmitBar,
+  LinkLabel,
+  ActionBar,
+  CloseSvg,
+  DatePicker,
+  CardLabelError,
+  Header,
+} from "@egovernments/digit-ui-react-components";
 import DropdownStatus from "./DropdownStatus";
 import { useTranslation } from "react-i18next";
 
@@ -96,10 +106,14 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
         );
     }
   };
-
+  const checkInboxLocation =
+    window.location.href.includes("employee/fsm/inbox") ||
+    window.location.href.includes("employee/fsm/fstp-inbox") ||
+    window.location.href.includes("employee/fsm/fstp-fsm-request");
   return (
     <form onSubmit={handleSubmit(onSubmitInput)}>
       <React.Fragment>
+        {!checkInboxLocation ? <Header styles={mobileView ? { marginTop: "10px" } : {}}>{t("ACTION_TEST_SEARCH_FSM_APPLICATION")}</Header> : ""}
         <div className="search-container" style={{ width: "auto", marginLeft: FSTP ? "" : isInboxPage ? "24px" : "revert" }}>
           <div className="search-complaint-container">
             {(type === "mobile" || mobileView) && (
