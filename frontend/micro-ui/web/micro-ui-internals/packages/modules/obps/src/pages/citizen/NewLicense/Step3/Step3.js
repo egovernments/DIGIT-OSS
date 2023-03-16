@@ -312,18 +312,18 @@ const LandScheduleForm = (props) => {
     }
   }, [stepData, purposeOptions, getPotentialOptons, typeOfLand]);
 
-  const getSubmitDataLabel = async () => {
-    try {
-      const Resp = await axios.get(`http://103.166.62.118:80/land-services/new/licenses/_get?id=${props.getId}`);
-      const userData = Resp?.data?.newServiceInfoData?.[0]?.LandSchedule;
-    } catch (error) {
-      return error.message;
-    }
-  };
+  // const getSubmitDataLabel = async () => {
+  //   try {
+  //     const Resp = await axios.get(`http://103.166.62.118:80/land-services/new/licenses/_get?id=${props.getId}`);
+  //     const userData = Resp?.data?.newServiceInfoData?.[0]?.LandSchedule;
+  //   } catch (error) {
+  //     return error.message;
+  //   }
+  // };
 
-  useEffect(() => {
-    getSubmitDataLabel();
-  }, []);
+  // useEffect(() => {
+  //   getSubmitDataLabel();
+  // }, []);
 
   const getDocumentData = async (file, fieldName) => {
     if (selectedFiles.includes(file.name)) {
@@ -672,7 +672,7 @@ const LandScheduleForm = (props) => {
                               <input type="text" {...register("specify")} className="form-control" pattern="[A-Za-z]+" />
                             </div>
 
-                            <div className="col col-4">
+                            <div className="col col-4 mt-2">
                               <h2>
                                 Third-party right created<span style={{ color: "red" }}>*</span>&nbsp; &nbsp;&nbsp;
                               </h2>
@@ -1399,7 +1399,7 @@ const LandScheduleForm = (props) => {
                           <div className="col col-12">
                             <label>
                               <h2>
-                                Remark <span style={{ color: "red" }}>*</span>
+                                Enter Kharsa No. <span style={{ color: "red" }}>*</span>
                               </h2>
                             </label>
                             <input type="text" className="form-control" {...register("landSandwichedRemark")} />
@@ -1528,13 +1528,6 @@ const LandScheduleForm = (props) => {
                               />
                               <div className="invalid-feedback">{errors?.releaseStatus?.message}</div>
                             </div>
-                            {/* <div className="col col-3">
-                              <label>
-                                <h2>Date of Award</h2>
-                              </label>
-                              <input type="date" {...register("awardDate")} className="form-control" />
-                              <div className="invalid-feedback">{errors?.awardDate?.message}</div>
-                            </div> */}
                             <div className="col col-3">
                               <label>
                                 <h2>Date of Release</h2>{" "}
@@ -1549,6 +1542,55 @@ const LandScheduleForm = (props) => {
                               <input type="text" {...register("siteDetail")} className="form-control" minLength={2} maxLength={99} />
                               <div className="invalid-feedback">{errors?.siteDetail?.message}</div>
                             </div>
+
+                            <div className="col col-3">
+                              <h6 style={{ display: "flex" }}>
+                                Copy of release order <span style={{ color: "red" }}>*</span>
+                              </h6>
+                              <label>
+                                <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                                <input
+                                  type="file"
+                                  style={{ display: "none" }}
+                                  onChange={(e) => getDocumentData(e?.target?.files[0], "releaseOrderCopyDoc")}
+                                  accept="application/pdf/jpeg/png"
+                                />
+                              </label>
+                              {watch("releaseOrderCopyDoc") && (
+                                <a onClick={() => getDocShareholding(watch("releaseOrderCopyDoc"), setLoader)} className="btn btn-sm ">
+                                  <VisibilityIcon color="info" className="icon" />
+                                </a>
+                              )}
+                            </div>
+
+                            <div className="col col-3 mt-2">
+                              <h2>whether litigation regarding release of Land</h2>
+                              <label htmlFor="litigationRegardingLandRelease">
+                                <input {...register("litigationRegardingLandRelease")} type="radio" value="Y" id="litigationRegardingLandRelease" />
+                                &nbsp; Yes &nbsp;&nbsp;
+                              </label>
+                              <label htmlFor="litigationRegardingLandRelease">
+                                <input {...register("litigationRegardingLandRelease")} type="radio" value="N" id="litigationRegardingLandRelease" />
+                                &nbsp; No &nbsp;&nbsp;
+                              </label>
+                            </div>
+                            {watch("litigationRegardingLandRelease") === "Y" && (
+                              // should be alpha numeric with 15 characters
+                              <div className="col col-3 mt-2">
+                                <div>
+                                  <label>
+                                    <h2>CWP/SLP Number</h2>
+                                  </label>
+                                </div>
+                                <input
+                                  autoComplete="off"
+                                  type="text"
+                                  className="form-control"
+                                  placeholder="Enter CWP/SLP Number"
+                                  {...register("CWPSLPNumber")}
+                                />
+                              </div>
+                            )}
                           </div>
                         )}
                       </div>
@@ -1832,7 +1874,7 @@ const LandScheduleForm = (props) => {
                             {errors?.irrevocableConsent && errors?.irrevocableConsent?.message}
                           </h3>
                           {watch("irrevocableConsent") === "Y" && (
-                            <div className="col col-3">
+                            <div className="col col-3 mt-3">
                               <h2 style={{ display: "flex" }}>
                                 Upload irrevocable consent <span style={{ color: "red" }}>*</span>
                               </h2>
@@ -1847,6 +1889,40 @@ const LandScheduleForm = (props) => {
                               </label>
                               {watch("uploadRrrevocableConsent") && (
                                 <a onClick={() => getDocShareholding(watch("uploadRrrevocableConsent"), setLoader)} className="btn btn-sm ">
+                                  <VisibilityIcon color="info" className="icon" />
+                                </a>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                        <div className="row">
+                          <div class="col-sm-6 text-left">
+                            <h2>(c)&nbsp;&nbsp;Access from NH/SR</h2>
+                          </div>
+                          <div class="col-sm-6 text-right">
+                            <label htmlFor="NHSRAccess">
+                              <input {...register("NHSRAccess")} type="radio" value="Y" id="NHSRAccess" />
+                              &nbsp; Yes &nbsp;&nbsp;
+                            </label>
+                            <label htmlFor="NHSRAccess">
+                              <input {...register("NHSRAccess")} type="radio" value="N" id="NHSRAccess" />
+                              &nbsp; No &nbsp;&nbsp;
+                            </label>
+                          </div>
+                          {watch("NHSRAccess") === "Y" && (
+                            <div className="col col-3 mt-3">
+                              <h2 style={{ display: "flex" }}>'Upload access permission from competent authority</h2>
+                              <label>
+                                <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                                <input
+                                  type="file"
+                                  style={{ display: "none" }}
+                                  onChange={(e) => getDocumentData(e?.target?.files[0], "accessPermissionAuthority")}
+                                  accept="application/pdf/jpeg/png"
+                                />
+                              </label>
+                              {watch("accessPermissionAuthority") && (
+                                <a onClick={() => getDocShareholding(watch("accessPermissionAuthority"), setLoader)} className="btn btn-sm ">
                                   <VisibilityIcon color="info" className="icon" />
                                 </a>
                               )}
@@ -2391,6 +2467,136 @@ const LandScheduleForm = (props) => {
                         </div>
                       )}
                     </div>
+
+                    <div className="col col-3">
+                      <h2>(g)&nbsp;Compact Block</h2>
+                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      <label htmlFor="compactBlock">
+                        <input {...register("compactBlock")} type="radio" value="Y" id="compactBlock" />
+                        &nbsp; Yes &nbsp;&nbsp;
+                      </label>
+                      <label htmlFor="compactBlock">
+                        <input {...register("compactBlock")} type="radio" value="N" id="compactBlock" />
+                        &nbsp; No &nbsp;&nbsp;
+                      </label>
+                      {watch("compactBlock") === "Y" && (
+                        <div className="row ">
+                          <div className="col col-12">
+                            <label>
+                              <h2>Remark</h2>
+                            </label>
+                            <input type="text" className="form-control" {...register("compactBlockRemark")} />
+                          </div>
+                        </div>
+                      )}
+                      {watch("compactBlock") === "N" && (
+                        <div className="row ">
+                          <div className="col col">
+                            <label>
+                              <h2>Remark</h2>
+                            </label>
+                            <input type="text" className="form-control" {...register("compactBlockRemark")} />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="col col-3">
+                      <h2>(h)&nbsp;Whether Others Land fall</h2>
+                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      <label htmlFor="othersLandFall">
+                        <input {...register("othersLandFall")} type="radio" value="Y" id="othersLandFall" />
+                        &nbsp; Yes &nbsp;&nbsp;
+                      </label>
+                      <label htmlFor="othersLandFall">
+                        <input {...register("othersLandFall")} type="radio" value="N" id="othersLandFall" />
+                        &nbsp; No &nbsp;&nbsp;
+                      </label>
+                      {watch("othersLandFall") === "Y" && (
+                        <div className="row ">
+                          <div className="col col-12">
+                            <label>
+                              <h2>Remark</h2>
+                            </label>
+                            <input type="text" className="form-control" {...register("othersLandFallRemark")} />
+                          </div>
+                        </div>
+                      )}
+                      {watch("othersLandFall") === "N" && (
+                        <div className="row ">
+                          <div className="col col">
+                            <label>
+                              <h2>Remark</h2>
+                            </label>
+                            <input type="text" className="form-control" {...register("othersLandFallRemark")} />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="col col-6 mt-3">
+                      <h2>(i)&nbsp;Surroundings</h2>
+
+                      <div className="row ">
+                        <div className="col col-3">
+                          <label>
+                            <h2>North</h2>
+                          </label>
+                          <input type="text" className="form-control" {...register("northSurroundings")} />
+                        </div>
+                        <div className="col col-3">
+                          <label>
+                            <h2>South</h2>
+                          </label>
+                          <input type="text" className="form-control" {...register("southSurroundings")} />
+                        </div>
+                        <div className="col col-3">
+                          <label>
+                            <h2>East</h2>
+                          </label>
+                          <input type="text" className="form-control" {...register("eastSurroundings")} />
+                        </div>
+                        <div className="col col-3">
+                          <label>
+                            <h2>West</h2>
+                          </label>
+                          <input type="text" className="form-control" {...register("westSurroundings")} />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="col col-3">
+                      <h2>(j)&nbsp;Any other feature passing through site</h2>
+                      &nbsp;&nbsp;&nbsp;&nbsp;
+                      <label htmlFor="passingOtherFeature">
+                        <input {...register("passingOtherFeature")} type="radio" value="Y" id="passingOtherFeature" />
+                        &nbsp; Yes &nbsp;&nbsp;
+                      </label>
+                      <label htmlFor="passingOtherFeature">
+                        <input {...register("passingOtherFeature")} type="radio" value="N" id="passingOtherFeature" />
+                        &nbsp; No &nbsp;&nbsp;
+                      </label>
+                      {watch("passingOtherFeature") === "Y" && (
+                        <div className="row ">
+                          <div className="col col-12">
+                            <label>
+                              <h2>Details thereof</h2>
+                            </label>
+                            <input type="text" className="form-control" {...register("detailsThereof")} />
+                          </div>
+                        </div>
+                      )}
+                      {watch("passingOtherFeature") === "N" && (
+                        <div className="row ">
+                          <div className="col col">
+                            <label>
+                              <h2>Details thereof</h2>
+                            </label>
+                            <input type="text" className="form-control" {...register("detailsThereof")} />
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
                   <br></br>
                   <hr></hr>
@@ -2818,6 +3024,133 @@ const LandScheduleForm = (props) => {
                   {errors?.area && errors?.area?.message}
                 </h3>
               </Col>
+              <div className="col col-4">
+                <h2>
+                  Third-party right created<span style={{ color: "red" }}>*</span>&nbsp; &nbsp;&nbsp;
+                </h2>
+                <br></br>
+                <label htmlFor="thirdParty">
+                  <input {...register("thirdParty")} type="radio" value="Y" id="thirdParty" />
+                  &nbsp; Yes &nbsp;&nbsp;
+                </label>
+                <label htmlFor="thirdParty">
+                  <input {...register("thirdParty")} type="radio" value="N" id="thirdParty" />
+                  &nbsp; No &nbsp;&nbsp;
+                </label>
+                <h3 className="error-message" style={{ color: "red" }}>
+                  {errors?.thirdParty && errors?.thirdParty?.message}
+                </h3>
+
+                {watch("thirdParty") === "N" && (
+                  <div className="row ">
+                    <div className="col col-12">
+                      <label>
+                        {" "}
+                        <h2>
+                          Upload affidavit <span style={{ color: "red" }}>*</span>
+                          <Tooltip title="Upload affidavit related to non-creation.">
+                            <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
+                          </Tooltip>
+                        </h2>
+                        <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          accept="application/pdf/jpeg/png"
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "thirdPartyDoc")}
+                        />
+                        {watch("thirdPartyDoc") && (
+                          <a onClick={() => getDocShareholding(watch("thirdPartyDoc"), setLoader)} className="btn btn-sm ">
+                            <VisibilityIcon color="info" className="icon" />
+                          </a>
+                        )}
+                        {/* <h3>{watch("thirdPartyDoc")}</h3> */}
+                      </label>
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.thirdPartyDoc && errors?.thirdPartyDoc?.message}
+                      </h3>
+                    </div>
+                    <div className="col col-12">
+                      <h2>
+                        Whether Project is RERA registered<span style={{ color: "red" }}>*</span>&nbsp; &nbsp;&nbsp;
+                      </h2>
+
+                      <label htmlFor="reraRegistered">
+                        <input {...register("reraRegistered")} type="radio" value="Y" id="reraRegistered" />
+                        &nbsp; Yes &nbsp;&nbsp;
+                      </label>
+                      <label htmlFor="reraRegistered">
+                        <input {...register("reraRegistered")} type="radio" value="N" id="reraRegistered" />
+                        &nbsp; No &nbsp;&nbsp;
+                      </label>
+                      {watch("reraRegistered") === "Y" && (
+                        <div className="row ">
+                          <div className="col col-12">
+                            <label>
+                              <h6>
+                                Upload RERA registration <span style={{ color: "red" }}>*</span>
+                                <Tooltip title="Upload copy of RERA registration">
+                                  <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
+                                </Tooltip>
+                              </h6>
+
+                              <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                              <input
+                                type="file"
+                                style={{ display: "none" }}
+                                onChange={(e) => getDocumentData(e?.target?.files[0], "reraDocUpload")}
+                                accept="application/pdf/jpeg/png"
+                              />
+
+                              {watch("reraDocUpload") && (
+                                <a onClick={() => getDocShareholding(watch("reraDocUpload"), setLoader)} className="btn btn-sm ">
+                                  <VisibilityIcon color="info" className="icon" />
+                                </a>
+                              )}
+                            </label>
+                            {/* <h3>{watch("reraDocUpload")}</h3> */}
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.reraDocUpload && errors?.reraDocUpload?.message}
+                            </h3>
+                          </div>
+                        </div>
+                      )}
+                      {watch("reraRegistered") === "N" && (
+                        <div className="row ">
+                          <div className="col col-12">
+                            <label>
+                              <h6>
+                                Affidavit <span style={{ color: "red" }}>*</span>
+                                <Tooltip title=" Upload Copy of non-registration of RERA">
+                                  <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
+                                </Tooltip>
+                              </h6>
+
+                              <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                              <input
+                                type="file"
+                                style={{ display: "none" }}
+                                onChange={(e) => getDocumentData(e?.target?.files[0], "reraNonRegistrationDoc")}
+                                accept="application/pdf/jpeg/png"
+                              />
+
+                              {watch("reraNonRegistrationDoc") && (
+                                <a onClick={() => getDocShareholding(watch("reraNonRegistrationDoc"), setLoader)} className="btn btn-sm ">
+                                  <VisibilityIcon color="info" className="icon" />
+                                </a>
+                              )}
+                            </label>
+                            {/* <h3>{watch("reraNonRegistrationDoc")}</h3> */}
+                            <h3 className="error-message" style={{ color: "red" }}>
+                              {errors?.reraNonRegistrationDoc && errors?.reraNonRegistrationDoc?.message}
+                            </h3>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
             </Row>
             <button type="submit" style={{ float: "right" }} class="btn btn-primary btn-md center-block">
               Submit
