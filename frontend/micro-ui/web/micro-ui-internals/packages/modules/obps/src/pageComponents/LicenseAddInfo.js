@@ -2660,7 +2660,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                     onChange={SelectExistingColonizerName}
                                     // onChange={(e) => setExistingColonizerDetails({ ...existingColonizerDetails, name: e.target.value})}
                                     className="form-control"
-                                    maxLength={10}
+                                    maxLength={30}
                                   />
                                   {existingColonizerDetails.name &&
                                     existingColonizerDetails.name.length > 0 &&
