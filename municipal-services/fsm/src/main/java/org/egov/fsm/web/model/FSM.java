@@ -174,4 +174,13 @@ public class FSM   {
  // @JsonProperty("receivedPayment")
  // private String receivedPayment;
 
+  @JsonProperty("applicationType")
+  private String applicationType ;
+  
+  @JsonProperty("oldApplicationNo")
+  private String oldApplicationNo ;
+  
+  @JsonProperty("paymentPreference")
+  private String paymentPreference ;
+
 }

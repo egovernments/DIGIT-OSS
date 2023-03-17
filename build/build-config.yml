@@ -260,6 +260,7 @@ config:
       - work-dir: "core-services/egov-survey-services/src/main/resources/db"
         image-name: "egov-survey-services-db"
 
+<<<<<<< HEAD
   - name: "builds/digit-dev/core-services/service-request"
     build:
       - work-dir: "core-services/service-request"
@@ -268,6 +269,8 @@ config:
       - work-dir: "core-services/service-request/src/main/resources/db"
         image-name: "service-request-db"
 
+=======
+>>>>>>> master
 
   - name: "builds/digit-dev/core-services/report"
     build:

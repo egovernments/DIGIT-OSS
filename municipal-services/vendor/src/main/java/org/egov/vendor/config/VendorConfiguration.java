@@ -22,6 +22,19 @@ public class VendorConfiguration {
 	// Persister Config
 	@Value("${persister.save.vendor.topic}")
 	private String saveTopic;
+	
+	@Value("${persister.update.vendor.topic}")
+	private String updateTopic;
+	
+	@Value("${persister.save.driver.topic}")
+	private String saveDriverTopic;
+
+
+	@Value("${persister.update.driver.topic}")
+	private String updateDriverTopic;
+
+	@Value("${persister.save.vendordrivervehicle.topic}")
+	private String saveVendorVehicleDriverTopic;
 
 	
 	@Value("${persister.update.vendor.topic}")

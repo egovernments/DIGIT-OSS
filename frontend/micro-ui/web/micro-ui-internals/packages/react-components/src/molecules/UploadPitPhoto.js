@@ -112,7 +112,6 @@ const UploadPitPhoto = (props) => {
             hiddenFileInput.current.click();
         } 
     }
-
     const hiddenFileInput = React.useRef(null);
 
     // Upload photo from storage by clicking the button 

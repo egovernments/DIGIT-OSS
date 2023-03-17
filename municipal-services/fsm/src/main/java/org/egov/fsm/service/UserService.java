@@ -131,6 +131,21 @@ public class UserService {
 		log.debug("owner created --> " + userDetailResponse.getUser().get(0).getUuid());
 		return userDetailResponse;
 	}
+	
+	/**
+	 * update user gender for applicant
+	 * @param applicant
+	 * @param requestInfo
+	 * @return
+	 */
+	public UserDetailResponse updateApplicantsGender(User applicant, RequestInfo requestInfo) {
+		applicant.setActive(true);
+		StringBuilder uri = new StringBuilder(config.getUserHost()).append(config.getUserContextPath())
+				.append(config.getUserUpdateEndpoint());
+		UserDetailResponse userDetailResponse = userCall(new CreateUserRequest(requestInfo, applicant), uri);
+		log.debug("owner created --> " + userDetailResponse.getUser().get(0).getUuid());
+		return userDetailResponse;
+	}
 
 	/**
 	 * update user gender for applicant

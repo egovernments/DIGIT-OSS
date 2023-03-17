@@ -1,0 +1,239 @@
+swagger: '2.0'
+
+info:
+  version: "1.1.0"
+  title: egov-localization
+  description: egov-localization services APIs, 
+  contact:
+    name: eGov
+    email: info@egovernments.org
+basePath: /messages
+x-common-path: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml'
+x-api-id: 'org.egov.localization'
+produces:
+  - application/json
+  
+#################################################  
+paths:
+  /v1/_search:
+    post:
+      summary: Get messages by locale and tenantId
+      description: |
+       Returns all the messages by locale and tenantId.
+      parameters:
+        - name: tenantId
+          in: query
+          description: Unique id for ulb.
+          required: true
+          type: string
+          format: varchar
+        - name: locale
+          in: query
+          description: locale for message.
+          required: true
+          type: string
+          format: varchar
+        - name : module
+          in : query
+          description : Module name for message
+          required: true
+          type : string
+          format : varchar
+      tags:
+        - Messages
+      responses:
+        200:
+          description: An array of Messages
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/MessagesResponse'
+        '400':
+          description: tenantId and locale is not present
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes' 
+            
+#################################################              
+  /v1/_create:
+    post:
+      summary: Create messages for different locale
+      description: |
+        Create messages for different locale.
+      parameters:
+        - name: messageRequest
+          in: body
+          description: Message Object to create messages for different locale
+          required: true
+          schema:
+            $ref: '#/definitions/MessagesRequest'
+      tags:
+        - Messages
+      responses:
+        200:
+          description: MessagesResponse as object
+          schema:
+            type: object
+            items:
+                $ref: '#/definitions/MessagesResponse'
+        '400':
+          description: Invalid message request input
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+            
+#################################################              
+  /v1/_update:
+    post:
+      summary: update messages for different locale
+      description: |
+        update messages for different locale.
+      parameters:
+        - name: messageRequest
+          in: body
+          description: Message Object to update messages for different locale
+          required: true
+          schema:
+            $ref: '#/definitions/UpdateMessageRequest'
+      tags:
+        - Messages
+      responses:
+        200:
+          description: MessagesResponse as object
+          schema:
+            $ref: '#/definitions/MessagesResponse'
+        '400':
+          description: Invalid message request input
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+            
+#################################################              
+  /v1/_delete:
+    post:
+      summary: delete messages
+      description: |
+        delete messages
+      parameters:
+        - name: messageRequest
+          in: body
+          description: Message Object to update messages for different locale
+          required: true
+          schema:
+            $ref: '#/definitions/DeleteMessagesRequest'
+      tags:
+        - Messages
+      responses:
+        200:
+          description: MessagesResponse as object
+          schema:
+            $ref: '#/definitions/DeleteMessagesResponse'
+        '400':
+          description: Invalid delete message request
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'   
+#################################################              
+
+definitions:
+  
+  MessagesResponse:
+    type: object
+    properties:
+      messages:
+        type: array
+        items:
+          $ref: '#/definitions/Message'
+      responseInfo :
+        type: object
+        items : 
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+#################################################  
+
+  DeleteMessagesResponse:
+    type: object
+    properties:
+      successful:
+        type: boolean
+      responseInfo :
+        type: object
+        items : 
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+  
+#################################################    
+  Message:
+    type: object
+    properties:
+      code:
+        type: string
+        description: Code of message.
+      message:
+        type: string
+        description: Description of Message.
+      module :
+        type : string
+        description : module for message
+      locale :
+        type : string
+        description : locale for message
+       
+     
+#################################################          
+  MessagesRequest:
+    type: object
+    properties:
+      RequestInfo:
+        items:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+      messages: 
+         type: array
+         items:
+          $ref: '#/definitions/Message'
+      tenantId :
+         type : string
+         description : Unique tenant id.
+         
+            
+#################################################           
+  UpdateMessageRequest:
+    type: object
+    properties:
+      RequestInfo:
+        items:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+      locale :
+        type: string
+        description: Locale of message.
+      tenantId :
+        type: string
+        description: Tenant of message.
+      module :
+        type: string
+        description: Module of message..
+      messages: 
+         type: array
+         items:
+          $ref: '#/definitions/UpdateMessage'
+        
+#################################################           
+  UpdateMessage:
+    type: object
+    properties:
+      code:
+        type: string
+        description: Code of message
+      message:
+        type: string
+        description: Message
+        
+#################################################                    
+  DeleteMessagesRequest:
+    type: object
+    properties:
+      RequestInfo:
+        items:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+      tenantId :
+        type: string
+        description: tenant id of message.
+      messages: 
+         type: array
+         items:
+          $ref: '#/definitions/Message'
+          
