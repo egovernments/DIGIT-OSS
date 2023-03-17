@@ -65,31 +65,29 @@ public class VehicleTripSearchCriteria {
     }
 
     public enum SortBy {
-    		applicationStatus,
-        applicationiNo,
-        vehicle,
-        referenceNo,
-        createdTime,
-        tripStartTime,
-        tripEndTime
+    	APPLICATIONSTATUS,
+    	APPLICATIONINO,
+    	VEHICLE,
+    	REFERENCENO,
+    	CREATEDTIME,
+    	TRIPSTARTTIME,
+    	TRIPENDTIME
     }
     
     public boolean isEmpty() {
-		// TODO Auto-generated method stub
 		 return (this.tenantId == null && this.offset == null && this.limit == null
 				 && CollectionUtils.isEmpty(this.applicationStatus)  && StringUtils.isEmpty(businessService) &&
 				 CollectionUtils.isEmpty(this.vehicleIds) &&
 				 CollectionUtils.isEmpty(this.tripOwnerIds) && CollectionUtils.isEmpty(this.ids) && CollectionUtils.isEmpty(this.driverIds)
-				 && CollectionUtils.isEmpty(this.applicationNos) && CollectionUtils.isEmpty(this.applicationNos));
+				 && CollectionUtils.isEmpty(this.applicationNos) && this.applicationNos.isEmpty());
 	}
     
     public boolean tenantIdOnly() {
-		// TODO Auto-generated method stub
 		 return (this.tenantId != null && this.offset == null && this.limit == null
 				 && CollectionUtils.isEmpty(this.applicationStatus)  && StringUtils.isEmpty(businessService) &&
 				 CollectionUtils.isEmpty(this.vehicleIds) &&
 				 CollectionUtils.isEmpty(this.tripOwnerIds) && CollectionUtils.isEmpty(this.ids) && CollectionUtils.isEmpty(this.driverIds)
-				 && CollectionUtils.isEmpty(this.applicationNos) && CollectionUtils.isEmpty(this.applicationNos));
+				 && CollectionUtils.isEmpty(this.applicationNos) && this.applicationNos.isEmpty());
 	}
     
 }

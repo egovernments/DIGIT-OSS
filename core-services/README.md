@@ -5,3 +5,11 @@ DIGIT Core Platform consists of the foundational microservices for authenticatio
 #### DIGIT is released under MIT License
 
 
+<<<<<<< HEAD
+=======
+License
+DIGIT is released under MIT License
+
+
+
+>>>>>>> upstream/master

@@ -14,7 +14,6 @@ import org.egov.vehicle.trip.web.model.VehicleTrip.StatusEnum;
 import org.egov.vehicle.web.model.AuditDetails;
 import org.postgresql.util.PGobject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Component;
 
@@ -26,8 +25,8 @@ public class VehicleTripRowMapper implements ResultSetExtractor<List<VehicleTrip
 
 	@Autowired
 	private ObjectMapper mapper;
-	
-	public int fullCount=0;
+
+	private int fullCount = 0;
 
 	public int getFullCount() {
 		return fullCount;
@@ -39,9 +38,9 @@ public class VehicleTripRowMapper implements ResultSetExtractor<List<VehicleTrip
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public List<VehicleTrip> extractData(ResultSet rs) throws SQLException, DataAccessException {
+	public List<VehicleTrip> extractData(ResultSet rs) throws SQLException {
 
-		Map<String, VehicleTrip> vehicleLogMap = new LinkedHashMap<String, VehicleTrip>();
+		Map<String, VehicleTrip> vehicleLogMap = new LinkedHashMap<>();
 		this.setFullCount(0);
 
 		while (rs.next()) {
@@ -84,7 +83,6 @@ public class VehicleTripRowMapper implements ResultSetExtractor<List<VehicleTrip
 						.tripStartTime(tripstarttime).tripEndTime(tripendtime).businessService(businesSservice)
 						.volumeCarried(volumeCarried).status(StatusEnum.valueOf(status)).auditDetails(audit).build();
 			}
-//			addChildrenToProperty(rs, vehicleLog);
 			vehicleLogMap.put(id, vehicleLog);
 		}
 
@@ -100,7 +98,6 @@ public class VehicleTripRowMapper implements ResultSetExtractor<List<VehicleTrip
 				additionalDetail = mapper.readTree(pgObj.getValue());
 			}
 		} catch (IOException | SQLException e) {
-			e.printStackTrace();
 			throw new CustomException("PARSING_ERROR", "Failed to parse additionalDetail object");
 		}
 		return additionalDetail;

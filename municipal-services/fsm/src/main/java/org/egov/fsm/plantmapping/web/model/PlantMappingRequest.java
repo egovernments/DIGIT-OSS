@@ -20,7 +20,7 @@ import lombok.Setter;
 public class PlantMappingRequest {
 	
 	  @JsonProperty("RequestInfo")
-	  private RequestInfo RequestInfo;
+	  private RequestInfo requestInfo;
 
 	  @Valid
 	  @JsonProperty("plantMapping")

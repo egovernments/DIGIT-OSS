@@ -22,27 +22,25 @@ import lombok.ToString;
 @Builder
 public class EventDetails {
 
-    private String id;
+	private String id;
 
-    private String eventId;
+	private String eventId;
 
-    private Long fromDate;
+	private Long fromDate;
 
-    private Long toDate;
+	private Long toDate;
 
-    private BigDecimal latitude;
+	private BigDecimal latitude;
 
-    private BigDecimal longitude;
+	private BigDecimal longitude;
 
-    private String address;
-
+	private String address;
 
 	public boolean isEmpty(EventDetails details) {
-		if (null == details.getFromDate() || null == details.getToDate() || null == details.getLatitude()
-				|| null == details.getLongitude()) {
-			return true;
-		}
-		return false;
+
+		return (null == details.getFromDate() || null == details.getToDate() || null == details.getLatitude()
+				|| null == details.getLongitude()) ? true : false;
+
 	}
 
 }

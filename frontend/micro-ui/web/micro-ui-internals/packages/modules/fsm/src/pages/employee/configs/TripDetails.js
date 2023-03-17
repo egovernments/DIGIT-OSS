@@ -36,28 +36,28 @@ const TripDetails = (vehicleMenu, vehicle, setVehicle) => {
         disable: true,
         // disable: customizationConfig ? !customizationConfig?.noOfTrips?.override : true,
       },
-      {
-        label: t("ES_NEW_APPLICATION_AMOUNT_PER_TRIP"),
-        type: "text",
-        populators: {
-          name: "amountPerTrip",
-          error: t("ES_NEW_APPLICATION_AMOUNT_INVALID"),
-          validation: { required: true },
-          // defaultValue: vehicle?.amount,
-        },
-        disable: true,
-        // disable: customizationConfig ? !customizationConfig["additionalDetails.tripAmount"]?.override : true,
-      },
-      {
-        label: t("ES_PAYMENT_DETAILS_TOTAL_AMOUNT"),
-        type: "text",
-        populators: {
-          name: "amount",
-          validation: { required: true },
-          // defaultValue: paymentAmount,
-        },
-        disable: true,
-      },
+      // {
+      //   label: t("ES_NEW_APPLICATION_AMOUNT_PER_TRIP"),
+      //   type: "text",
+      //   populators: {
+      //     name: "amountPerTrip",
+      //     error: t("ES_NEW_APPLICATION_AMOUNT_INVALID"),
+      //     validation: { required: true },
+      //     // defaultValue: vehicle?.amount,
+      //   },
+      //   disable: true,
+      //   // disable: customizationConfig ? !customizationConfig["additionalDetails.tripAmount"]?.override : true,
+      // },
+      // {
+      //   label: t("ES_PAYMENT_DETAILS_TOTAL_AMOUNT"),
+      //   type: "text",
+      //   populators: {
+      //     name: "amount",
+      //     validation: { required: true },
+      //     // defaultValue: paymentAmount,
+      //   },
+      //   disable: true,
+      // },
     ],
   };
 };

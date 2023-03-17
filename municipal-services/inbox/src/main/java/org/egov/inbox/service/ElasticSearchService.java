@@ -305,7 +305,6 @@ public class ElasticSearchService {
 
     private HttpHeaders getHttpHeaders() {
         HttpHeaders headers = new HttpHeaders();
-        headers.add(AUTHORIZATION, getBase64Value(config.getEsUserName(), config.getEsPassword()));
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         headers.setContentType(MediaType.APPLICATION_JSON);
 

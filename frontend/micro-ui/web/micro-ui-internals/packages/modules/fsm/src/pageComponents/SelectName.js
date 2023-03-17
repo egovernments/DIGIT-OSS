@@ -8,7 +8,7 @@ const SelectName = ({ t, config, onSelect, formData = {}, userType, register, er
   const { pathname: url } = useLocation();
   const editScreen = url.includes("/modify-application/");
   const [dropdownValue, setDropdownValue] = useState("");
-  const [genderTypes, setGenderTypes] = useState([])
+  const [genderTypes, setGenderTypes] = useState([]);
   const inputs = [
     {
       label: "ES_NEW_APPLICATION_APPLICANT_NAME",
@@ -31,6 +31,7 @@ const SelectName = ({ t, config, onSelect, formData = {}, userType, register, er
         type: "tel",
         title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID"),
       },
+      componentInFront: <div className="employee-card-input employee-card-input--front">+91</div>,
       isMandatory: true,
     },
     {
@@ -39,7 +40,7 @@ const SelectName = ({ t, config, onSelect, formData = {}, userType, register, er
       name: "applicantGender",
       options: genderTypes,
       isMandatory: false,
-    }
+    },
   ];
 
   useEffect(() => {
@@ -61,7 +62,7 @@ const SelectName = ({ t, config, onSelect, formData = {}, userType, register, er
     <div>
       {inputs?.map((input, index) => (
         <React.Fragment key={index}>
-          {input.type === "text" &&
+          {input.type === "text" && (
             <React.Fragment>
               {errors[input.name] && <CardLabelError>{t(input.error)}</CardLabelError>}
               <LabelFieldPair>
@@ -69,7 +70,8 @@ const SelectName = ({ t, config, onSelect, formData = {}, userType, register, er
                   {t(input.label)}
                   {input.isMandatory ? " * " : null}
                 </CardLabel>
-                <div className="field">
+                <div className="field" style={{display:"flex"}}>
+                  {input.componentInFront ? input.componentInFront : null}
                   <TextInput
                     key={input.name}
                     value={formData && formData[config.key] ? formData[config.key][input.name] : null}
@@ -80,8 +82,8 @@ const SelectName = ({ t, config, onSelect, formData = {}, userType, register, er
                 </div>
               </LabelFieldPair>
             </React.Fragment>
-          }
-          {input.type === "dropdown" &&
+          )}
+          {input.type === "dropdown" && (
             <LabelFieldPair>
               <CardLabel className="card-label-smaller">
                 {t(input.label)}
@@ -92,7 +94,7 @@ const SelectName = ({ t, config, onSelect, formData = {}, userType, register, er
                   option={input.options}
                   optionKey="i18nKey"
                   id="dropdown"
-                  selected={formData && formData[config.key] ? input.options.find((data)=> data.code === formData[config.key][input.name]) : null}
+                  selected={formData && formData[config.key] ? input.options.find((data) => data.code === formData[config.key][input.name]) : null}
                   select={selectDropdown}
                   t={t}
                   disable={editScreen}
@@ -100,7 +102,7 @@ const SelectName = ({ t, config, onSelect, formData = {}, userType, register, er
                 />
               </div>
             </LabelFieldPair>
-          }
+          )}
         </React.Fragment>
       ))}
     </div>

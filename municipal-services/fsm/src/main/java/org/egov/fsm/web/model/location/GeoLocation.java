@@ -24,16 +24,16 @@ public class GeoLocation   {
 
   @SafeHtml
   @JsonProperty("id")
-  private String id = null;
+  private String id ;
 
   @JsonProperty("latitude")
-  private Double latitude = null;
+  private Double latitude ;
 
   @JsonProperty("longitude")
-  private Double longitude = null;
+  private Double longitude ;
 
   @JsonProperty("additionalDetails")
-  private Object additionalDetails = null;
+  private Object additionalDetails ;
 
   public GeoLocation id(String id) {
     this.id = id;

@@ -100,7 +100,7 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
         </LabelFieldPair>
         <LabelFieldPair>
           <CardLabel className="card-label-smaller">
-            {t("CS_CREATECOMPLAINT_MOHALLA")}
+            {t("ES_NEW_APPLICATION_LOCATION_MOHALLA")}
             {config.isMandatory ? " * " : null}
           </CardLabel>
           <Dropdown
@@ -121,13 +121,7 @@ const SelectAddress = ({ t, config, onSelect, userType, formData }) => {
       <Timeline currentStep={1} flow="APPLY" />
       <FormStep config={config} onSelect={onSubmit} t={t} isDisabled={selectedLocality ? false : true}>
         <CardLabel>{`${t("MYCITY_CODE_LABEL")} *`}</CardLabel>
-        <RadioOrSelect
-          options={cities}
-          selectedOption={selectedCity}
-          optionKey="i18nKey"
-          onSelect={selectCity}
-          t={t}
-        />
+        <RadioOrSelect options={cities} selectedOption={selectedCity} optionKey="i18nKey" onSelect={selectCity} t={t} />
         {selectedCity && localities && <CardLabel>{`${t("CS_CREATECOMPLAINT_MOHALLA")} *`}</CardLabel>}
         {selectedCity && localities && (
           <RadioOrSelect
