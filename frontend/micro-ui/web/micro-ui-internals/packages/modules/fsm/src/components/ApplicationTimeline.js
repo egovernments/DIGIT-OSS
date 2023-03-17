@@ -89,7 +89,7 @@ export const ApplicationTimeline = (props) => {
           <div style={{ marginTop: "24px" }}>
             <Link
               to={{
-                pathname: `/digit-ui/citizen/payment/collect/FSM.TRIP_CHARGES/${props.id}/?tenantId=${props.application.tenantId}`,
+                pathname: `/digit-ui/citizen/payment/my-bills/FSM.TRIP_CHARGES/${props.id}/?tenantId=${props.application.tenantId}`,
                 state: { tenantId: props.application.tenantId },
               }}
             >

@@ -56,6 +56,9 @@
       @apply text-heading-s text-text-secondary;
     }
   }
+  .vendor-details-row {
+    margin-left: 15px !important;
+  }
 
   .last {
     border: none;
@@ -64,9 +67,10 @@
   }
 }
 
-
-
-.pt-citizen {.data-table {.row {
-  justify-content: space-between;
-
-}}}
+.pt-citizen {
+  .data-table {
+    .row {
+      justify-content: space-between;
+    }
+  }
+}

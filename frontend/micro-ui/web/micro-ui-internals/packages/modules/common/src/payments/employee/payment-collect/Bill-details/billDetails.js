@@ -154,6 +154,7 @@ const BillDetails = ({ businessService, consumerCode, _amount, onChange }) => {
   const { workflow: ModuleWorkflow, IsDisconnectionFlow } = Digit.Hooks.useQueryParams();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { data, isLoading } = Digit.Hooks.useFetchPayment({ tenantId, businessService, consumerCode });
+  const checkFSM = window.location.href.includes("FSM");
 
   const { isLoading: isDataLoading, data: applicationData } = Digit.Hooks.fsm.useSearch(
     tenantId,
@@ -162,12 +163,21 @@ const BillDetails = ({ businessService, consumerCode, _amount, onChange }) => {
   );
   const [bill, setBill] = useState();
   const [showDetails, setShowDetails] = useState(true);
-
+  const { isLoading: isFSMLoading, isError, error, data: application, error: errorApplication } = Digit.Hooks.fsm.useApplicationDetail(
+    t,
+    tenantId,
+    consumerCode,
+    { enabled: checkFSM ? true : false },
+    "EMPLOYEE"
+  );
   const yearWiseBills = bill?.billDetails?.sort((a, b) => b.fromPeriod - a.fromPeriod);
   const billDetails = yearWiseBills?.[0] || [];
   // const currentYear = new Date().getFullYear();
   const getTotal = () => (bill?.totalAmount ? bill?.totalAmount : 0);
+  const getTotalFSM = () => (application?.totalAmount ? application?.totalAmount : 0);
   const getAdvanceAmount = () => (applicationData?.advanceAmount ? applicationData?.advanceAmount : 0);
+  const dueAmountTobePaid = () => (bill?.totalAmount ? bill?.totalAmount : 0);
+  const getAmountPerTrip = () => (application?.additionalDetails?.tripAmount ? application?.additionalDetails?.tripAmount : 0);
 
   const arrears =
     bill?.billDetails
@@ -279,8 +289,7 @@ const BillDetails = ({ businessService, consumerCode, _amount, onChange }) => {
   const tdStyle = { textAlign: "left", borderBottom: "#D6D5D4 1px solid", padding: "8px 10px", breakWord: "no-break" };
 
   const config = BillDetailsKeyNoteConfig()[ModuleWorkflow ? ModuleWorkflow : businessService];
-  const checkFSM = window.location.href.includes("FSM");
-  const getAdvanceAmountLabel = applicationData?.paymentPreference === "PRE_PAY" && applicationData?.applicationStatus !== "DSO_INPROGRESS";
+  const getAdvanceAmountPaid = applicationData?.applicationStatus === "DSO_INPROGRESS";
 
   const renderArrearDetailsForWNS = () => {
     return (
@@ -341,12 +350,31 @@ const BillDetails = ({ businessService, consumerCode, _amount, onChange }) => {
       </StatusTable>
       {checkFSM ? (
         <StatusTable>
-          <Row label={t("ADV_TOTAL_AMOUNT")} textStyle={{ textAlign: "right", maxWidth: "100px" }} text={"₹ " + Number(getTotal()).toFixed(2)} />
-          {getAdvanceAmountLabel ? (
+          <Row
+            label={t("ES_PAYMENT_DETAILS_AMOUNT_PER_TRIP")}
+            textStyle={{ textAlign: "left" }}
+            text={"₹ " + Number(getAmountPerTrip()).toFixed(2)}
+          />
+          <Row label={t("ES_PAYMENT_DETAILS_TOTAL_AMOUNT")} textStyle={{ textAlign: "left" }} text={"₹ " + Number(getTotalFSM()).toFixed(2)} />
+          {getAdvanceAmountPaid ? (
             <Row
-              label={t("ADV_COLLECTION")}
-              textStyle={{ fontWeight: "bold", textAlign: "right", maxWidth: "100px" }}
+              label={t("ES_PAYMENT_DETAILS_ADV_AMOUNT_PAID")}
+              textStyle={{ fontWeight: "bold", textAlign: "left" }}
               text={"₹ " + Number(getAdvanceAmount()).toFixed(2)}
+            />
+          ) : (
+            <Row
+              label={t("ES_PAYMENT_DETAILS_ADV_AMOUNT_DUE")}
+              textStyle={{ fontWeight: "bold", textAlign: "left" }}
+              text={"₹ " + Number(getAdvanceAmount()).toFixed(2)}
+            />
+          )}
+
+          {applicationData?.applicationStatus !== "PENDING_APPL_FEE_PAYMENT" ? (
+            <Row
+              label={t("FSM_DUE_AMOUNT_TO_BE_PAID")}
+              textStyle={{ fontWeight: "bold", textAlign: "left" }}
+              text={"₹ " + Number(dueAmountTobePaid()).toFixed(2)}
             />
           ) : null}
         </StatusTable>

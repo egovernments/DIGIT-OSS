@@ -14,8 +14,8 @@ public class ResponseInfoFactory {
 		final String ver = requestInfo != null ? requestInfo.getVer() : StringUtils.EMPTY;
 		Long ts = null;
 		if (requestInfo != null)
-			 ts = requestInfo.getTs();
-		final String resMsgId = "uief87324"; // FIXME : Hard-coded
+			ts = requestInfo.getTs();
+		final String resMsgId = "uief87324";
 		final String msgId = requestInfo != null ? requestInfo.getMsgId() : StringUtils.EMPTY;
 		final String responseStatus = success ? "successful" : "failed";
 
@@ -24,4 +24,3 @@ public class ResponseInfoFactory {
 	}
 
 }
-

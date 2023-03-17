@@ -50,18 +50,17 @@ public class DriverRepository {
 	public DriverResponse getDriverData(DriverSearchCriteria driverSearchCriteria) {
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = driverQueryBuilder.getDriverSearchQuery(driverSearchCriteria, preparedStmtList);
+		log.info("DriverSearch Query" + query);
 		List<Driver> driverData = jdbcTemplate.query(query, preparedStmtList.toArray(), driverRowMapper);
-		DriverResponse response = DriverResponse.builder().driver(driverData)
-				.totalCount(Integer.valueOf(driverRowMapper.getFullCount())).build();
-
-		System.out.println("query is " + query);
-		return response;
+		return DriverResponse.builder().driver(driverData).totalCount(Integer.valueOf(driverRowMapper.getFullCount()))
+				.build();
 	}
+
 	public List<String> fetchDriverIdsWithNoVendor(@Valid DriverSearchCriteria criteria) {
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = driverQueryBuilder.getDriverIdsWithNoVendorQuery(criteria, preparedStmtList);
-		List<String> ids = jdbcTemplate.query(query,preparedStmtList.toArray(),	new SingleColumnRowMapper<>(String.class));
-		return ids;
+		log.info("DriverQuery:: " + query);
+		return jdbcTemplate.query(query, preparedStmtList.toArray(), new SingleColumnRowMapper<>(String.class));
 	}
 
 }

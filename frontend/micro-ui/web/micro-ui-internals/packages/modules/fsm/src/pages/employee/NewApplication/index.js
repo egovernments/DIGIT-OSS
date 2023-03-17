@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FormComposer, Loader } from "@egovernments/digit-ui-react-components";
+import { FormComposer, Loader, Header } from "@egovernments/digit-ui-react-components";
 import { useHistory } from "react-router-dom";
 
 const isConventionalSpecticTank = (tankDimension) => tankDimension === "lbd";
@@ -27,7 +27,6 @@ export const NewApplication = ({ parentUrl, heading }) => {
   }, []);
   // const { data: vehicleMenu } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
   // const { data: channelMenu } = Digit.Hooks.fsm.useMDMS(tenantId, "FSM", "EmployeeApplicationChannel");
-
   const { t } = useTranslation();
   const history = useHistory();
 
@@ -43,17 +42,18 @@ export const NewApplication = ({ parentUrl, heading }) => {
   };
 
   const onFormValueChange = (setValue, formData) => {
-
     if (
       formData?.propertyType &&
       formData?.subtype &&
       formData?.address?.locality?.code &&
       formData?.tripData?.vehicleType &&
       formData?.channel &&
-      formData?.tripData?.amountPerTrip
+      (formData?.tripData?.amountPerTrip || formData?.tripData?.amountPerTrip === 0)
     ) {
       setSubmitValve(true);
       const pitDetailValues = formData?.pitDetail ? Object.values(formData?.pitDetail).filter((value) => value > 0) : null;
+      let max = Digit.SessionStorage.get("total_amount");
+      let min = Digit.SessionStorage.get("advance_amount");
       if (formData?.pitType) {
         if (pitDetailValues === null || pitDetailValues?.length === 0) {
           setSubmitValve(true);
@@ -62,6 +62,14 @@ export const NewApplication = ({ parentUrl, heading }) => {
         } else if (!isConventionalSpecticTank(formData?.pitType?.dimension) && pitDetailValues?.length >= 2) {
           setSubmitValve(true);
         } else setSubmitValve(false);
+      }
+      if (
+        formData?.tripData?.amountPerTrip !== 0 &&
+        (formData?.advancepaymentPreference?.advanceAmount < min ||
+          formData?.advancepaymentPreference?.advanceAmount > max ||
+          formData?.advancepaymentPreference?.advanceAmount === "")
+      ) {
+        setSubmitValve(false);
       }
     } else {
       setSubmitValve(false);
@@ -85,7 +93,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
     const doorNo = data?.address?.doorNo?.trim();
     const slum = data?.address?.slum;
     const landmark = data?.address?.landmark?.trim();
-    const noOfTrips = data.tripData.noOfTrips;
+    const noOfTrips = data?.tripData?.noOfTrips;
     const amount = data.tripData.amountPerTrip;
     const cityCode = data?.address?.city?.code;
     const city = data?.address?.city?.name;
@@ -93,13 +101,15 @@ export const NewApplication = ({ parentUrl, heading }) => {
     const localityCode = data?.address?.locality?.code;
     const localityName = data?.address?.locality?.name;
     const gender = data.applicationData.applicantGender;
-    const paymentPreference = data?.paymentPreference ? data?.paymentPreference : 'POST_PAY';
+    const paymentPreference = amount === 0 ? null : data?.paymentPreference ? data?.paymentPreference : null;
+    const advanceAmount = amount === 0 ? null : data?.advancepaymentPreference?.advanceAmount;
+
     const formData = {
       fsm: {
         citizen: {
           name: applicantName,
           mobileNumber,
-          gender: gender
+          gender: gender,
         },
         tenantId: tenantId,
         sanitationtype: sanitationtype,
@@ -108,7 +118,6 @@ export const NewApplication = ({ parentUrl, heading }) => {
           tripAmount: amount,
         },
         propertyUsage: data?.subtype,
-        vehicleType: data?.tripData?.vehicleType?.type,
         vehicleCapacity: data?.tripData?.vehicleType?.capacity,
         pitDetail: {
           ...pitDimension,
@@ -134,6 +143,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
         },
         noOfTrips,
         paymentPreference,
+        advanceAmount,
       },
       workflow: null,
     };
@@ -150,23 +160,32 @@ export const NewApplication = ({ parentUrl, heading }) => {
     return <Loader />;
   }
 
-  const configs = [...preFields, ...commonFields, ...postFields];
+  const configs = [...preFields, ...commonFields];
 
   return (
-    <FormComposer
-      heading={t("ES_TITLE_NEW_DESULDGING_APPLICATION")}
-      isDisabled={!canSubmit}
-      label={t("ES_COMMON_APPLICATION_SUBMIT")}
-      config={configs.filter((i) => !i.hideInEmployee).map((config) => {
-        return {
-          ...config,
-          body: config.body.filter((a) => !a.hideInEmployee),
-        };
-      })}
-      fieldStyle={{ marginRight: 0 }}
-      onSubmit={onSubmit}
-      defaultValues={defaultValues}
-      onFormValueChange={onFormValueChange}
-    />
+    <React.Fragment>
+      <div style={{ marginLeft: "15px" }}>
+        <Header>{t("ES_TITLE_NEW_DESULDGING_APPLICATION")}</Header>
+      </div>
+      <FormComposer
+        isDisabled={!canSubmit}
+        label={t("ES_COMMON_APPLICATION_SUBMIT")}
+        config={configs
+          .filter((i) => !i.hideInEmployee)
+          .map((config) => {
+            return {
+              ...config,
+              body: config.body.filter((a) => !a.hideInEmployee),
+            };
+          })}
+        fieldStyle={{ marginRight: 0 }}
+        formCardStyle={true}
+        onSubmit={onSubmit}
+        defaultValues={defaultValues}
+        onFormValueChange={onFormValueChange}
+        noBreakLine={true}
+        fms_inline
+      />
+    </React.Fragment>
   );
 };

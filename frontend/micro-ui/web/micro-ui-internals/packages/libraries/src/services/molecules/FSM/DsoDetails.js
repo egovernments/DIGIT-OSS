@@ -40,6 +40,7 @@ const getDriverDetails = (drivers) => {
             { title: "ES_FSM_REGISTRY_DRIVER_NAME", value: driver?.name },
             { title: "ES_FSM_REGISTRY_DRIVER_PHONE", value: driver?.owner?.mobileNumber },
             { title: "ES_FSM_REGISTRY_DRIVER_LICENSE", value: driver?.licenseNumber },
+            { title: "ES_FSM_REGISTRY_DRIVER_STATUS", value: driver?.status },
           ],
         };
       })

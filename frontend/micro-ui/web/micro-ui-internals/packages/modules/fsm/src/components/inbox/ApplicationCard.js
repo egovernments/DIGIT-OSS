@@ -21,6 +21,7 @@ export const ApplicationCard = ({
   sortParams,
   linkPrefix,
   removeParam,
+  filterData,
 }) => {
   const [type, setType] = useState(isSearch ? "SEARCH" : "");
   const [popup, setPopup] = useState(isSearch ? true : false);
@@ -127,13 +128,13 @@ export const ApplicationCard = ({
             }}
           />
         )}
-        <FilterAction
+        {!isSearch && <FilterAction
           text="SORT"
           handleActionClick={() => {
             setType("SORT");
             setPopup(true);
           }}
-        />
+        />}
       </div>
       {result}
       {popup && (
@@ -145,6 +146,7 @@ export const ApplicationCard = ({
                   onFilterChange={selectParams}
                   onClose={handlePopupClose}
                   onSearch={onSearchPara}
+                  applications={filterData}
                   type="mobile"
                   searchParams={params}
                   removeParam={removeParam}

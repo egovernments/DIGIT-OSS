@@ -29,7 +29,7 @@ public class IdGenRepository {
 		this.config = config;
 	}
 
-	public IdGenerationResponse getId(RequestInfo requestInfo, String tenantId, String name, String format, int count) {
+	public IdGenerationResponse getId(RequestInfo requestInfo, String tenantId, String name, String format) {
 
 		List<IdRequest> reqList = new ArrayList<>();
 		reqList.add(IdRequest.builder().idName(name).format(format).tenantId(tenantId).build());

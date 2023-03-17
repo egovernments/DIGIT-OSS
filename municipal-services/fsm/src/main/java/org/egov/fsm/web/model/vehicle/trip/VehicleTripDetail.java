@@ -32,26 +32,26 @@ public class VehicleTripDetail {
 
 
 	  @JsonProperty("id")
-	  private String id = null;
+	  private String id ;
 
 	  @NotNull
 	  @NotBlank
 	  @JsonProperty("tenantId")
-	  private String tenantId = null;
+	  private String tenantId ;
 	  
 	  @NotNull
 	  @NotBlank
 	  @JsonProperty("referenceNo")
-	  private String referenceNo = null;
+	  private String referenceNo ;
 	  
 	  @NotBlank
 	  @NotNull
 	  @JsonProperty("referenceStatus")
-	  private String referenceStatus = null;
+	  private String referenceStatus ;
 	  
 
 	    @JsonProperty("additionalDetails")
-	    private Object additionalDetails = null;
+	    private Object additionalDetails ;
 	    
 	  /**
 	   * Gets or Sets status
@@ -84,19 +84,22 @@ public class VehicleTripDetail {
 	    }
 	  }
 	  @JsonProperty("status")
-	  private StatusEnum status = null;
+	  private StatusEnum status ;
 
 	  @JsonProperty("itemStartTime")
-	  private Long itemStartTime = null;
+	  private Long itemStartTime ;
 	  
 	  @JsonProperty("itemEndTime")
-	  private Long itemEndTime = null;
+	  private Long itemEndTime ;
 	  
 	  @JsonProperty("volume")
-	  private Double volume = null;
+	  private Double volume ;
 	  
 
 	  @JsonProperty("auditDetails")
-	  private AuditDetails auditDetails = null;
+	  private AuditDetails auditDetails ;
+	 
+	  @JsonProperty("trip_id")
+	  private String trip_id ;
 	  
 }

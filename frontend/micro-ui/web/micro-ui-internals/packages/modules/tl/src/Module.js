@@ -119,7 +119,7 @@ const componentsToRegister = {
   SelectOwnerAddress,
   SelectProofIdentity,
   SelectOwnershipProof,
-  SelectStreet,
+  TLSelectStreet: SelectStreet,
   TLCheckPage,
   TLDocument,
   TLAcknowledgement,

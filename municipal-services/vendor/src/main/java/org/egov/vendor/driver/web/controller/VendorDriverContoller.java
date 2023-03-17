@@ -39,10 +39,12 @@ public class VendorDriverContoller {
 	public ResponseEntity<DriverResponse> create(@Valid @RequestBody DriverRequest driverRequest) {
 		vendorUtil.defaultJsonPathConfig();
 		Driver driver = driverService.create(driverRequest);
-		List<Driver> driverList = new ArrayList<Driver>();
+		List<Driver> driverList = new ArrayList<>();
 		driverList.add(driver);
 		DriverResponse response = DriverResponse.builder().driver(driverList)
-				.responseInfo(responseInfoFactory.createResponseInfoFromRequestInfo(driverRequest.getRequestInfo(), true)).build();
+				.responseInfo(
+						responseInfoFactory.createResponseInfoFromRequestInfo(driverRequest.getRequestInfo(), true))
+				.build();
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 
@@ -52,24 +54,25 @@ public class VendorDriverContoller {
 	public ResponseEntity<DriverResponse> update(@Valid @RequestBody DriverRequest driverRequest) {
 		vendorUtil.defaultJsonPathConfig();
 		Driver driver = driverService.update(driverRequest);
-		List<Driver> driverList = new ArrayList<Driver>();
+		List<Driver> driverList = new ArrayList<>();
 		driverList.add(driver);
 		DriverResponse response = DriverResponse.builder().driver(driverList)
-				.responseInfo(responseInfoFactory.createResponseInfoFromRequestInfo(driverRequest.getRequestInfo(), true)).build();
+				.responseInfo(
+						responseInfoFactory.createResponseInfoFromRequestInfo(driverRequest.getRequestInfo(), true))
+				.build();
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 
 	}
 
-	
-	  @PostMapping(value = "/_search") 
-	  public ResponseEntity<DriverResponse> search(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
-				@Valid @ModelAttribute DriverSearchCriteria criteria) {
-		  	DriverResponse response = driverService.search(criteria, requestInfoWrapper.getRequestInfo());
-			response.setResponseInfo(responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true));
-			return new ResponseEntity<>(response, HttpStatus.OK);
+	@PostMapping(value = "/_search")
+	public ResponseEntity<DriverResponse> search(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+			@Valid @ModelAttribute DriverSearchCriteria criteria) {
+		DriverResponse response = driverService.search(criteria, requestInfoWrapper.getRequestInfo());
+		response.setResponseInfo(
+				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true));
+		return new ResponseEntity<>(response, HttpStatus.OK);
 
 	}
-	  
-		 
+
 }

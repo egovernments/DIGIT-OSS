@@ -86,13 +86,11 @@ public class FSMSearchCriteria {
     }
     
     public boolean isEmpty() {
-		// TODO Auto-generated method stub
 		 return (this.tenantId == null && this.offset == null && this.limit == null && !StringUtils.hasText(this.mobileNumber)
 				 && CollectionUtils.isEmpty(this.applicationStatus)  && CollectionUtils.isEmpty(this.ownerIds) && this.fromDate == null && this.toDate == null && CollectionUtils.isEmpty(this.applicationNos) && CollectionUtils.isEmpty(this.ids));
 	}
 
 	public boolean tenantIdOnly() {
-		// TODO Auto-generated method stub
 		return (this.tenantId != null && !StringUtils.hasText(this.mobileNumber)
                 && CollectionUtils.isEmpty(this.applicationStatus) && CollectionUtils.isEmpty(this.ownerIds) && this.fromDate == null && this.toDate == null && CollectionUtils.isEmpty(this.applicationNos) && CollectionUtils.isEmpty(this.ids));
 	} 

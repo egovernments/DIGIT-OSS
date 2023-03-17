@@ -281,6 +281,7 @@ public class FSMConfiguration {
 		@Value("${egov.fsm.avg.rating.comment.mandatory}")
 		private String averageRatingCommentMandatory;
 		
-		
+		@Value("${persister.update.fsm.vehicle.trip.details.topic}")
+		private String vehicleUpdateTripToInactive;
 		
 }

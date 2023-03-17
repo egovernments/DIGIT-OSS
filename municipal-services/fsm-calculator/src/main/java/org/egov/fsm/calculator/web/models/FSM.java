@@ -54,6 +54,9 @@ public class FSM   {
   @JsonProperty("source")
   private String source = null;
   
+  @JsonProperty("advanceAmount")
+  private String advanceAmount = null;
+
   @JsonProperty("sanitationtype")
   private String sanitationtype = null;
 
