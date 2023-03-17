@@ -247,7 +247,7 @@ export const PTSearch = {
         title: "PT_ASSESMENT_INFO_SUB_HEADER",
         values: [
           { title: "PT_ASSESMENT_INFO_TYPE_OF_BUILDING", value: getPropertyTypeLocale(response?.propertyType) },
-          { title: "PT_ASSESMENT_INFO_USAGE_TYPE", value: getPropertySubtypeLocale(response?.usageCategory) },
+          { title: "PT_ASSESMENT_INFO_USAGE_TYPE", value: response?.usageCategory ? getPropertySubtypeLocale(response?.usageCategory) : `N/A` },
           { title: "PT_ASSESMENT_INFO_PLOT_SIZE", value: response?.landArea },
           { title: "PT_ASSESMENT_INFO_NO_OF_FLOOR", value: response?.noOfFloors },
         ],

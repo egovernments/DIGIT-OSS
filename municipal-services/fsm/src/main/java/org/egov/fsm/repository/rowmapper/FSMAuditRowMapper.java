@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.egov.fsm.util.FSMAuditUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Component;
 
@@ -20,12 +19,11 @@ public class FSMAuditRowMapper implements ResultSetExtractor<List<FSMAuditUtil>>
 	private ObjectMapper mapper;
 
 	@Override
-	public List<FSMAuditUtil> extractData(ResultSet rs) throws SQLException, DataAccessException {
+	public List<FSMAuditUtil> extractData(ResultSet rs) throws SQLException {
 		
-		List<FSMAuditUtil> fsmAuditDataList = new ArrayList<FSMAuditUtil>();
+		List<FSMAuditUtil> fsmAuditDataList = new ArrayList<>();
 		while (rs.next()) {
 			FSMAuditUtil auditUtil = new FSMAuditUtil();
-			// TODO fill the FSM object with data in the result set record
 			auditUtil.setId(rs.getString("fsm_id"));
 			auditUtil.setApplicationNo(rs.getString("applicationno"));
 			auditUtil.setAccountId(rs.getString("accountId"));

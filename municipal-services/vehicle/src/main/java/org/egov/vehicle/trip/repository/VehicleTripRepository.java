@@ -27,36 +27,31 @@ import lombok.extern.slf4j.Slf4j;
 @Repository
 @Slf4j
 public class VehicleTripRepository {
-	
+
 	@Autowired
 	private VehicleProducer producer;
-	
+
 	@Autowired
 	private VehicleConfiguration config;
-    
-    @Autowired
+
+	@Autowired
 	private JdbcTemplate jdbcTemplate;
-    
-    @Autowired
-   	private VehicleTripRowMapper mapper;
-    
-    @Autowired
-   	private TripDetailRowMapper detailMapper;
-    
-    @Autowired
-    private VehicleTripQueryBuilder queryBuilder;
-	
+	@Autowired
+	private VehicleTripRowMapper mapper;
+
+	@Autowired
+	private TripDetailRowMapper detailMapper;
+
+	@Autowired
+	private VehicleTripQueryBuilder queryBuilder;
+
 	public void save(VehicleTripRequest request) {
 		producer.push(config.getSaveVehicleLogTopic(), request);
 	}
-	
+
 	public void update(RequestInfo requestInfo, VehicleTrip trip, boolean isStateUpdatable) {
-		//RequestInfo requestInfo = request.getRequestInfo();
-
-		List<VehicleTrip> tripForStatusUpdate = new ArrayList<VehicleTrip>();
-		List<VehicleTrip> tripForUpdate = new ArrayList<VehicleTrip>();
-
-		//VehicleTrip trip = request.getVehicleTrip();
+		List<VehicleTrip> tripForStatusUpdate = new ArrayList<>();
+		List<VehicleTrip> tripForUpdate = new ArrayList<>();
 
 		if (isStateUpdatable) {
 			tripForUpdate.add(trip);
@@ -64,34 +59,34 @@ public class VehicleTripRepository {
 			tripForStatusUpdate.add(trip);
 		}
 		if (tripForUpdate != null) {
-			producer.push(config.getUpdateVehicleLogTopic(), new VehicleTripRequest(requestInfo, tripForUpdate,null));
+			producer.push(config.getUpdateVehicleLogTopic(), new VehicleTripRequest(requestInfo, tripForUpdate, null));
 		}
-			
 
 		if (tripForStatusUpdate != null)
-			producer.push(config.getUpdateWorkflowVehicleLogTopic(), new VehicleTripRequest(requestInfo, tripForStatusUpdate,null));
+			producer.push(config.getUpdateWorkflowVehicleLogTopic(),
+					new VehicleTripRequest(requestInfo, tripForStatusUpdate, null));
 	}
-	
+
 	public Integer getDataCount(String query, List<Object> preparedStmtList) {
 		Integer count = null;
 		try {
-			count = jdbcTemplate.queryForObject(query,preparedStmtList.toArray(), Integer.class);
+			count = jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
 		} catch (Exception e) {
 			throw new CustomException("INVALID_DATA", "INVALID_DATA");
 		}
 		return count;
 	}
-	
+
 	public VehicleTripResponse getVehicleLogData(VehicleTripSearchCriteria criteria) {
 		List<VehicleTrip> vehicleTrips = null;
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = queryBuilder.getVehicleLogSearchQuery(criteria, preparedStmtList);
-		vehicleTrips = jdbcTemplate.query(query,preparedStmtList.toArray(), mapper);
-		VehicleTripResponse response = VehicleTripResponse.builder().vehicleTrip(vehicleTrips).totalCount(Integer.valueOf(mapper.getFullCount())).build();
-		return response;
+		vehicleTrips = jdbcTemplate.query(query, preparedStmtList.toArray(), mapper);
+		return VehicleTripResponse.builder().vehicleTrip(vehicleTrips)
+				.totalCount(Integer.valueOf(mapper.getFullCount())).build();
 	}
-	
-	public List<VehicleTripDetail> getTrpiDetails(String tripId){
+
+	public List<VehicleTripDetail> getTrpiDetails(String tripId) {
 		List<VehicleTripDetail> tripDetails = null;
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = queryBuilder.getTripDetailSarchQuery(tripId, preparedStmtList);
@@ -100,20 +95,20 @@ public class VehicleTripRepository {
 		} catch (Exception e) {
 			throw new CustomException("INVALID_VEHICLE_TRIP_DETAILS", "INVALID_VEHICLE_TRIP_DETAILS");
 		}
-		
+
 		return tripDetails;
 	}
 
 	public List<String> getTripFromRefrences(List<String> refernceNos) {
-		
+
 		List<String> ids = null;
 		String query = queryBuilder.getTripIdFromReferenceNosQuery(refernceNos);
 		try {
-			ids = jdbcTemplate.queryForList(query,String.class);
+			ids = jdbcTemplate.queryForList(query, String.class);
 		} catch (Exception e) {
 			throw new CustomException("INVALID_TRIP_FROM_REFERENCES", "INVALID_TRIP_FROM_REFERENCES");
 		}
-		
+
 		return ids;
 	}
 
@@ -122,23 +117,18 @@ public class VehicleTripRepository {
 		List<Object> preparedStmtList = new ArrayList<>();
 		preparedStmtList.add(criteria.getOffset());
 		preparedStmtList.add(criteria.getLimit());
-
-		List<String> ids = jdbcTemplate.query("SELECT id from eg_vehicle_trip ORDER BY createdtime offset " +
-						" ? " +
-						"limit ? ",
-				preparedStmtList.toArray(),
-				new SingleColumnRowMapper<>(String.class));
-		return ids;
+		return jdbcTemplate.query("SELECT id from eg_vehicle_trip ORDER BY createdtime offset " + " ? " + "limit ? ",
+				preparedStmtList.toArray(), new SingleColumnRowMapper<>(String.class));
 	}
 
 	public List<VehicleTrip> getVehicleTripPlainSearch(VehicleTripSearchCriteria criteria) {
-		if(criteria.getIds() == null || criteria.getIds().isEmpty())
+		if (criteria.getIds() == null || criteria.getIds().isEmpty())
 			throw new CustomException("PLAIN_SEARCH_ERROR", "Search only allowed by ids!");
 
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = queryBuilder.getvehicleTripLikeQuery(criteria, preparedStmtList);
-		log.info("Query: "+query);
-		log.info("PS: "+preparedStmtList);
+		log.info("Query: " + query);
+		log.info("PS: " + preparedStmtList);
 		return jdbcTemplate.query(query, preparedStmtList.toArray(), mapper);
 	}
 

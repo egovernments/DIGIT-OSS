@@ -1,6 +1,6 @@
 {
   "name": "@egovernments/digit-ui-module-common",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "license": "MIT",
   "description": "Digit Common Payment Module",
   "main": "dist/index.js",
@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@egovernments/digit-ui-libraries": "1.6.0",
-    "@egovernments/digit-ui-react-components": "1.6.0",
+    "@egovernments/digit-ui-react-components": "^1.6.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-hook-form": "6.15.8",

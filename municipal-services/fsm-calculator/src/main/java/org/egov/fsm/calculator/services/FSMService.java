@@ -31,11 +31,10 @@ public class FSMService {
 		StringBuilder url = getBPASearchURL();
 		url.append("tenantId=");
 		url.append(tenantId);
-		
+
 		url.append("&");
 		url.append("applicationNo=");
 		url.append(applicationNo);
-		
 		LinkedHashMap responseMap = null;
 		responseMap = (LinkedHashMap) serviceRequestRepository.fetchResult(url, new RequestInfoWrapper(requestInfo));
 
@@ -44,18 +43,19 @@ public class FSMService {
 		try {
 			fsmResponse = mapper.convertValue(responseMap, FSMResponse.class);
 		} catch (IllegalArgumentException e) {
-			throw new CustomException(CalculatorConstants.PARSING_ERROR, "Error while parsing response of FSM Application Search");
+			throw new CustomException(CalculatorConstants.PARSING_ERROR,
+					"Error while parsing response of FSM Application Search");
 		}
-		
+
 		if (fsmResponse.getFsm().isEmpty()) {
-			throw new CustomException(CalculatorConstants.APPLICATION_NOT_FOUND, "Application with applicationNo: "+ applicationNo + " not found !");
+			throw new CustomException(CalculatorConstants.APPLICATION_NOT_FOUND,
+					"Application with applicationNo: " + applicationNo + " not found !");
 		}
 
 		return fsmResponse.getFsm().get(0);
 	}
 
 	private StringBuilder getBPASearchURL() {
-		// TODO Auto-generated method stub
 		StringBuilder url = new StringBuilder(config.getFsmHost());
 		url.append(config.getFsmContextPath());
 		url.append(config.getFsmSearchEndpoint());
