@@ -218,7 +218,8 @@ export const CollectPayment = (props) => {
                 select={(d) => {
                   if (d.name == paidByMenu[0].name) {
                     props.setValue("payerName", bill?.payerName);
-                    props.setValue("payerMobile", bill?.mobileNumber);
+                    // SM-1953: commenting to resolve showing mobile number when selecting the owner option 
+                    // props.setValue("payerMobile", bill?.mobileNumber);
                   } else {
                     props.setValue("payerName", "");
                     props.setValue("payerMobile", "");

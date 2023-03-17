@@ -6,10 +6,8 @@ import org.egov.common.contract.request.RequestInfo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-
 
 @Getter
 @Setter
@@ -19,7 +17,7 @@ public class PlantMappingUserSearchRequest {
 	private RequestInfo requestInfo;
 
 	@JsonProperty("uuid")
-	private List<String> uuid;	
+	private List<String> uuid;
 
 	@JsonProperty("id")
 	private List<String> id;

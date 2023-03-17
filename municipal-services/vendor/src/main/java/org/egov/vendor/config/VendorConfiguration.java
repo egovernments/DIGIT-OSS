@@ -36,6 +36,20 @@ public class VendorConfiguration {
 	@Value("${persister.save.vendordrivervehicle.topic}")
 	private String saveVendorVehicleDriverTopic;
 
+	
+	@Value("${persister.update.vendor.topic}")
+	private String updateTopic;
+	
+	@Value("${persister.save.driver.topic}")
+	private String saveDriverTopic;
+
+	
+	@Value("${persister.update.driver.topic}")
+	private String updateDriverTopic;
+	
+	@Value("${persister.save.vendordrivervehicle.topic}")
+	private String saveVendorVehicleDriverTopic;
+
 	// MDMS
 	@Value("${egov.mdms.host}")
 	private String mdmsHost;

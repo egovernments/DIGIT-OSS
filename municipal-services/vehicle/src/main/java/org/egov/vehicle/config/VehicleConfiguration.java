@@ -21,7 +21,7 @@ public class VehicleConfiguration {
     @Value("${persister.save.vehicle.topic}")
     private String saveTopic;
     
- // Persister Config
+    // Persister Config
     @Value("${persister.update.vehicle.topic}")
     private String updateTopic;
 

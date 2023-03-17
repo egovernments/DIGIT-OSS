@@ -24,12 +24,11 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class BillingSlabResponse   {
-  @JsonProperty("responseInfo")
-  private ResponseInfo responseInfo = null;
+public class BillingSlabResponse {
+	@JsonProperty("responseInfo")
+	private ResponseInfo responseInfo = null;
 
-  @JsonProperty("billingSlab")
-  private List<BillingSlab> billingSlab = null;
-  
-} 
+	@JsonProperty("billingSlab")
+	private List<BillingSlab> billingSlab = null;
 
+}

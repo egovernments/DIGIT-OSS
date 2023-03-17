@@ -81,12 +81,13 @@ public class BoundaryService {
 			throw new CustomException("FSMErrorConstants.BOUNDARY_MDMS_DATA_ERROR", "The boundary data was not found");
 		}
 
-		Boundary boundary = mapper.convertValue(boundaryResponse.get(0), Boundary.class);
+		Boundary boundary = mapper.convertValue(boundaryResponse != null ? boundaryResponse.get(0) : new Boundary(),
+				Boundary.class);
 
 		if (boundary.getName() == null) {
 
-			throw new CustomException("FSMErrorConstants.INVALID_BOUNDARY_DATA",
-					"The boundary data for the code " + vendor.getAddress().getLocality().getCode() + " is not available");
+			throw new CustomException("FSMErrorConstants.INVALID_BOUNDARY_DATA", "The boundary data for the code "
+					+ vendor.getAddress().getLocality().getCode() + " is not available");
 		}
 
 		vendor.getAddress().setLocality(boundary);

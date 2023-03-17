@@ -27,7 +27,7 @@ const useApplicationStatus = (select, isEnabled = true, statusMap=[]) => {
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const fetch = async () => {
-    let WorkflowService = await Digit.WorkflowService.init(tenantId, "FSM,FSM_POST_PAY_SERVICE,FSM_ADVANCE_PAY_SERVICE");
+    let WorkflowService = await Digit.WorkflowService.init(tenantId, "FSM,FSM_POST_PAY_SERVICE,PAY_LATER_SERVICE,FSM_ADVANCE_PAY_SERVICE,FSM_ZERO_PAY_SERVICE");
     return workflowOrder.map(
       (status) => getStates(WorkflowService.BusinessServices)?.filter((workflowDetails) => status === workflowDetails?.state)[0]
     );

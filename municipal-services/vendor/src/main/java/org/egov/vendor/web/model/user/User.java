@@ -122,6 +122,7 @@ public class User {
     @JsonProperty("active")
     private Boolean active;
 
+    
     @JsonProperty("dob")
     private Long dob;
 
@@ -202,4 +203,6 @@ public class User {
     @SafeHtml
     @JsonProperty("tenantId")
     private String tenantId;
+    
+   	
 }

@@ -13,10 +13,9 @@ import lombok.NoArgsConstructor;
 @Builder
 public class TaxHeadEstimate {
 
+	private String taxHeadCode;
 
-    private String taxHeadCode;
+	private BigDecimal estimateAmount;
 
-    private BigDecimal estimateAmount;
-    
-    private Category category;
+	private Category category;
 }

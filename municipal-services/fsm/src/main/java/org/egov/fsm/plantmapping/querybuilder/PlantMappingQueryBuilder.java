@@ -15,14 +15,14 @@ public class PlantMappingQueryBuilder {
 	@Autowired
 	private FSMConfiguration config;
 	
-	private static final String Query = "select count(*) OVER() AS full_count, * from eg_fsm_plantmapping plantmapping ";
+	private static final String QUERY = "select count(*) OVER() AS full_count, * from eg_fsm_plantmapping plantmapping ";
 
-	private final String paginationWrapper = "{} {orderby} {pagination}";
+	private static final String PAGINATION_WRAPPER = "{} {orderby} {pagination}";
 
 
 	public String getPlantMapSearchQuery(PlantMappingSearchCriteria criteria, List<Object> preparedStmtList) {
 
-		StringBuilder builder = new StringBuilder(Query);
+		StringBuilder builder = new StringBuilder(QUERY);
 		if (criteria.getTenantId() != null) {
 			if (criteria.getTenantId().split("\\.").length == 1) {
 				addClauseIfRequired(preparedStmtList, builder);
@@ -57,7 +57,7 @@ public class PlantMappingQueryBuilder {
 			addToPreparedStatement(preparedStmtList, ids);
 		}
 		
-		return addPaginationWrapper(builder.toString(), preparedStmtList, criteria);
+		return addPaginationWrapper(builder.toString(), preparedStmtList);
 	}
 
 	private void addToPreparedStatement(List<Object> preparedStmtList, List<String> ids) {
@@ -97,24 +97,12 @@ public class PlantMappingQueryBuilder {
 	 *            fsm search criteria
 	 * @return the query by replacing the placeholders with preparedStmtList
 	 */
-	private String addPaginationWrapper(String query, List<Object> preparedStmtList, PlantMappingSearchCriteria criteria) {
+	private String addPaginationWrapper(String query, List<Object> preparedStmtList) {
 //		
 		int limit = config.getDefaultLimit();
 		int offset = config.getDefaultOffset();
-		String finalQuery = paginationWrapper.replace("{}", query);
-
-		/*
-		 * if (criteria.getLimit() != null && criteria.getLimit() <=
-		 * config.getMaxSearchLimit()) limit = criteria.getLimit();
-		 * 
-		 * if (criteria.getLimit() != null && criteria.getLimit() >
-		 * config.getMaxSearchLimit()) { limit = config.getMaxSearchLimit(); }
-		 * 
-		 * if (criteria.getOffset() != null) offset = criteria.getOffset();
-		 */
-
+		String finalQuery = PAGINATION_WRAPPER.replace("{}", query);
 		StringBuilder orderQuery = new StringBuilder();
-//		addOrderByClause(orderQuery,criteria);
 		finalQuery = finalQuery.replace("{orderby}", orderQuery.toString()); 
 		
 		if (limit == -1) {
@@ -128,25 +116,4 @@ public class PlantMappingQueryBuilder {
 		return finalQuery;
 
 	}
-	
-	/**
-	 * 
-	 * @param builder
-	 * @param criteria
-	 */
-	/*
-	 * private void addOrderByClause(StringBuilder builder,
-	 * PlantMappingSearchCriteria criteria) {
-	 * 
-	 * if (StringUtils.isEmpty(criteria.getSortBy()))
-	 * builder.append(" ORDER BY fsm_lastmodifiedtime ");
-	 * 
-	 * else if (criteria.getSortBy() == FSMSearchCriteria.SortBy.createdTime)
-	 * builder.append(" ORDER BY fsm.createdtime ");
-	 * 
-	 * if (criteria.getSortOrder() == FSMSearchCriteria.SortOrder.ASC)
-	 * builder.append(" ASC "); else builder.append(" DESC ");
-	 * 
-	 * }
-	 */
 }

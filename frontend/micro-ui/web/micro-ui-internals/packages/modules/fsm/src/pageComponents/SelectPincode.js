@@ -1,11 +1,12 @@
-import { FormStep, TextInput, CardLabel, LabelFieldPair } from "@egovernments/digit-ui-react-components";
-import React, { useState, useEffect } from "react";
+import { FormStep, TextInput, CardLabel, LabelFieldPair, CardLabelError } from "@egovernments/digit-ui-react-components";
+import React, { useState, useEffect, Fragment } from "react";
 import { useLocation } from "react-router-dom";
 import Timeline from "../components/TLTimelineInFSM";
 
 const SelectPincode = ({ t, config, onSelect, formData = {}, userType, register, errors, props }) => {
   const tenants = Digit.Hooks.fsm.useTenants();
-  const [pincode, setPincode] = useState(() => formData?.address?.pincode || "");
+  const [pincode, setPincode] = useState(formData?.address?.pincode || "");
+  const [pincodeServicability, setPincodeServicability] = useState(null);
 
   const { pathname } = useLocation();
   const presentInModifyApplication = pathname.includes("modify");
@@ -24,13 +25,25 @@ const SelectPincode = ({ t, config, onSelect, formData = {}, userType, register,
       },
     },
   ];
-  const [pincodeServicability, setPincodeServicability] = useState(null);
 
   useEffect(() => {
     if (formData?.address?.pincode) {
       setPincode(formData.address.pincode);
     }
   }, [formData?.address?.pincode]);
+
+  useEffect(() => {
+    if (formData?.address?.locality?.pincode !== pincode && userType === "employee") {
+      setPincode(formData?.address?.locality?.pincode || "");
+      setPincodeServicability(null);
+    }
+  }, [formData?.address?.locality]);
+
+  useEffect(() => {
+    if (userType === "employee" && pincode) {
+      onSelect(config.key, { ...formData.address, pincode: pincode?.[0] || pincode });
+    }
+  }, [pincode]);
 
   function onChange(e) {
     setPincode(e.target.value);
@@ -59,15 +72,22 @@ const SelectPincode = ({ t, config, onSelect, formData = {}, userType, register,
   if (userType === "employee") {
     return inputs?.map((input, index) => {
       return (
-        <LabelFieldPair key={index}>
-          <CardLabel className="card-label-smaller">
-            {t(input.label)}
-            {config.isMandatory ? " * " : null}
-          </CardLabel>
-          <div className="field">
-            <TextInput key={input.name} value={pincode} onChange={onChange} {...input.validation} />
-          </div>
-        </LabelFieldPair>
+        <>
+          <LabelFieldPair key={index}>
+            <CardLabel className="card-label-smaller">
+              {t(input.label)}
+              {config.isMandatory ? " * " : null}
+            </CardLabel>
+            <div className="field">
+              <TextInput key={input.name} value={pincode} onChange={onChange} {...input.validation} />
+            </div>
+          </LabelFieldPair>
+          {pincodeServicability && (
+            <CardLabelError style={{ width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" }}>
+              {t(pincodeServicability)}
+            </CardLabelError>
+          )}
+        </>
       );
     });
   }

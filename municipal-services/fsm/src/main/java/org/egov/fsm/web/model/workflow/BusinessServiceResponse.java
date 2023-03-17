@@ -34,7 +34,7 @@ public class BusinessServiceResponse {
 
     public BusinessServiceResponse addBusinessServiceItem(BusinessService businessServiceItem) {
         if (this.businessServices == null) {
-            this.businessServices = new ArrayList<BusinessService>();
+            this.businessServices = new ArrayList<>();
         }
         this.businessServices.add(businessServiceItem);
         return this;

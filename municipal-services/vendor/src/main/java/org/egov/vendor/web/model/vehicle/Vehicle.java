@@ -93,15 +93,19 @@ public class Vehicle {
 	@JsonProperty("vendorVehicleStatus")
 	private StatusEnum vendorVehicleStatus = null;
 
+	@JsonProperty("vendorVehicleStatus")
+	private StatusEnum vendorVehicleStatus = null;
+
+
+	
 	/**
 	 * Inactive records will be consider as soft deleted
 	 */
 	public enum StatusEnum {
 		ACTIVE("ACTIVE"),
-
 		INACTIVE("INACTIVE"),
 		DISABLED("DISABLED");
-
+		
 		private String value;
 
 		StatusEnum(String value) {

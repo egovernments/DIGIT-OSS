@@ -20,56 +20,51 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 public class BillingSlabSearchCriteria {
-	
-	@JsonProperty("offset")
-    private Integer offset;
 
-    @JsonProperty("limit")
-    private Integer limit;
-    
+	@JsonProperty("offset")
+	private Integer offset;
+
+	@JsonProperty("limit")
+	private Integer limit;
+
 	@JsonProperty("tenantId")
 	private String tenantId;
 
 	@JsonProperty("ids")
 	private List<String> ids;
-	
+
 	@JsonProperty("propertyType")
 	private String propertyType;
-	
+
 	@JsonProperty("capacity")
 	private Double capacity;
-	
+
 	@JsonProperty("sortBy")
-    private SortBy sortBy;
-    
-    @JsonProperty("sortOrder")
-    private SortOrder sortOrder;
-    
+	private SortBy sortBy;
 
-    @JsonProperty("slum")
-    private SlumEnum slum;
-    
-    
-    
-    public enum SortOrder {
-        ASC,
-        DESC
-    }
+	@JsonProperty("sortOrder")
+	private SortOrder sortOrder;
 
-    public enum SortBy {
-    	id,
-    	propertyType,
-        capacity
-    }
+	@JsonProperty("slum")
+	private SlumEnum slum;
 
-    public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		 return (this.tenantId == null && this.offset == null && this.limit == null && !StringUtils.hasText(this.propertyType)
-				 && CollectionUtils.isEmpty(this.ids)  && this.capacity == null);
+	public enum SortOrder {
+		ASC, DESC
 	}
-    public boolean tenantIdOnly() {
-		// TODO Auto-generated method stub
-		 return (this.tenantId != null && this.offset == null && this.limit == null && !StringUtils.hasText(this.propertyType)
-				 && CollectionUtils.isEmpty(this.ids)  && this.capacity == null);
+
+	public enum SortBy {
+		ID, PROPERTYTYPE, CAPACITY
+	}
+
+	public boolean isEmpty() {
+		return (this.tenantId == null && this.offset == null && this.limit == null
+				&& !StringUtils.hasText(this.propertyType) && CollectionUtils.isEmpty(this.ids)
+				&& this.capacity == null);
+	}
+
+	public boolean tenantIdOnly() {
+		return (this.tenantId != null && this.offset == null && this.limit == null
+				&& !StringUtils.hasText(this.propertyType) && CollectionUtils.isEmpty(this.ids)
+				&& this.capacity == null);
 	}
 }

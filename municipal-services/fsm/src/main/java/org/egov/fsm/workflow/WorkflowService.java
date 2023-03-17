@@ -117,7 +117,7 @@ public class WorkflowService {
 	public Boolean isStateUpdatable(String status, BusinessService businessService) {
 		for (org.egov.fsm.web.model.workflow.State state : businessService.getStates()) {
 			if (state.getApplicationStatus() != null
-					&& state.getApplicationStatus().equalsIgnoreCase(status.toString()))
+					&& state.getApplicationStatus().equalsIgnoreCase(status))
 				return state.getIsStateUpdatable();
 		}
 		return Boolean.FALSE;
@@ -137,7 +137,7 @@ public class WorkflowService {
 	public State getCurrentStateObj(String status, BusinessService businessService) {
 		for (State state : businessService.getStates()) {
 			if (state.getApplicationStatus() != null
-					&& state.getApplicationStatus().equalsIgnoreCase(status.toString()))
+					&& state.getApplicationStatus().equalsIgnoreCase(status))
 				return state;
 		}
 		return null;
