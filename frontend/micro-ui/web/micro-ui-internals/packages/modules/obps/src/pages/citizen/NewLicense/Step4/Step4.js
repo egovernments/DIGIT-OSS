@@ -369,21 +369,21 @@ const AppliedDetailForm = (props) => {
     }
   }, [stepData]);
 
-  const getSubmitDataLabel = async () => {
-    try {
-      const Resp = await axios.get(`http://103.166.62.118:80/land-services/new/licenses/_get?id=${props.getId}`).then((response) => {
-        return response;
-      });
-    } catch (error) {
-      return error;
-    }
-  };
+  // const getSubmitDataLabel = async () => {
+  //   try {
+  //     const Resp = await axios.get(`http://103.166.62.118:80/land-services/new/licenses/_get?id=${props.getId}`).then((response) => {
+  //       return response;
+  //     });
+  //   } catch (error) {
+  //     return error;
+  //   }
+  // };
 
   const handleWheel = (e) => e.target.blur();
 
-  useEffect(() => {
-    getSubmitDataLabel();
-  }, []);
+  // useEffect(() => {
+  //   getSubmitDataLabel();
+  // }, []);
 
   const getDocumentData = async (file, fieldName) => {
     if (selectedFiles.includes(file.name)) {
@@ -1120,6 +1120,26 @@ const AppliedDetailForm = (props) => {
                       </label>
                       {watch("guideMap") && (
                         <a onClick={() => getDocShareholding(watch("guideMap"), setLoader)} className="btn btn-sm ">
+                          <VisibilityIcon color="info" className="icon" />
+                        </a>
+                      )}
+                    </div>
+
+                    <div className="col col-3">
+                      <h6 style={{ display: "flex" }}>
+                        Idemnity Bond<span style={{ color: "red" }}>*</span>
+                      </h6>
+                      <label>
+                        <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "idemnityBondDoc")}
+                          accept="application/pdf/jpeg/png"
+                        />
+                      </label>
+                      {watch("idemnityBondDoc") && (
+                        <a onClick={() => getDocShareholding(watch("idemnityBondDoc"), setLoader)} className="btn btn-sm ">
                           <VisibilityIcon color="info" className="icon" />
                         </a>
                       )}

@@ -1378,37 +1378,60 @@ const ApllicantPuropseForm = (props) => {
                     <br></br>
                     <br></br>
                     <div className="row ">
-                      <div className="col col-4">
+                      <div className="col col-3">
+                        <h6 style={{ display: "flex" }}>
+                          Collaboration document <span style={{ color: "red" }}>*</span>
+                        </h6>
                         <label>
-                          <h2>
-                            Collaboration document <span style={{ color: "red" }}>*</span>{" "}
-                            <Tooltip title="Upload Document">
-                              <FileUpload style={{ cursor: "pointer" }} color="primary" />
-                            </Tooltip>
-                            <div>
-                              <input
-                                type="file"
-                                accept="application/pdf/jpeg/png"
-                                style={{ display: "none" }}
-                                onChange={(e) => getDocumentData(e?.target?.files[0], "registeringAuthorityDocFileName")}
-                              />
-                            </div>
-                          </h2>
+                          <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                          <input
+                            type="file"
+                            style={{ display: "none" }}
+                            onChange={(e) => getDocumentData(e?.target?.files[0], "registeringAuthorityDocFileName")}
+                            accept="application/pdf/jpeg/png"
+                          />
                         </label>
+                        {watch("registeringAuthorityDocFileName") && (
+                          <a onClick={() => getDocShareholding(watch("registeringAuthorityDocFileName"), setLoader)} className="btn btn-sm ">
+                            <VisibilityIcon color="info" className="icon" />
+                          </a>
+                        )}
+                      </div>
 
-                        {/* <h3>{watch("registeringAuthorityDocFileName")}</h3> */}
-                        <h3 className="error-message" style={{ color: "red" }}>
-                          {errors?.registeringAuthorityDocFileName && errors?.registeringAuthorityDocFileName?.message}
-                        </h3>
+                      <div className="col col-3">
+                        <h6 style={{ display: "flex" }}>Upload SPA/GPA of authorized signatory on behalf of land owner</h6>
+                        <label>
+                          <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                          <input
+                            type="file"
+                            style={{ display: "none" }}
+                            onChange={(e) => getDocumentData(e?.target?.files[0], "landOwnerSPAGPADoc")}
+                            accept="application/pdf/jpeg/png"
+                          />
+                        </label>
+                        {watch("landOwnerSPAGPADoc") && (
+                          <a onClick={() => getDocShareholding(watch("landOwnerSPAGPADoc"), setLoader)} className="btn btn-sm ">
+                            <VisibilityIcon color="info" className="icon" />
+                          </a>
+                        )}
+                      </div>
 
-                        {/* <input
-                          type="file"
-                          style={{ marginTop: "-6px" }}
-                          className="form-control"
-                          accept="application/pdf"
-                          required
-                          onChange={(e) => getDocumentData(e?.target?.files[0], "registeringAuthorityDoc")}
-                        /> */}
+                      <div className="col col-3">
+                        <h6 style={{ display: "flex" }}>Upload SPA/GPA of authorized signatory on behalf of developer</h6>
+                        <label>
+                          <FileUpload style={{ cursor: "pointer" }} color="primary" />
+                          <input
+                            type="file"
+                            style={{ display: "none" }}
+                            onChange={(e) => getDocumentData(e?.target?.files[0], "developerSPAGPADoc")}
+                            accept="application/pdf/jpeg/png"
+                          />
+                        </label>
+                        {watch("developerSPAGPADoc") && (
+                          <a onClick={() => getDocShareholding(watch("developerSPAGPADoc"), setLoader)} className="btn btn-sm ">
+                            <VisibilityIcon color="info" className="icon" />
+                          </a>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -1539,17 +1562,17 @@ const ApllicantPuropseForm = (props) => {
                       <tr>
                         <th>
                           <h2>
-                            Kanal (in acres) <span style={{ color: "red" }}>*</span>
+                            Kanal <span style={{ color: "red" }}>*</span>
                           </h2>
                         </th>
                         <th>
                           <h2>
-                            Marla (in acres) <span style={{ color: "red" }}>*</span>
+                            Marla <span style={{ color: "red" }}>*</span>
                           </h2>
                         </th>
                         <th>
                           <h2>
-                            Sarsai (in acres) <span style={{ color: "red" }}>*</span>
+                            Sarsai <span style={{ color: "red" }}>*</span>
                           </h2>
                         </th>
                         <th>

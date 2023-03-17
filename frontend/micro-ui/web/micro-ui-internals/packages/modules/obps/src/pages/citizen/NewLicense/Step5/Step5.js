@@ -116,6 +116,8 @@ const FeesChargesForm = (props) => {
       // setValue("licenseFee", charges?.licenseFeeCharges);
       // setValue("conversionCharges", charges?.conversionCharges);
       setValue("payableNow", Resp.data?.totalFee);
+      setValue("totalScrutinyFee", Resp.data?.totalScruitnyFee);
+      setValue("totalLicenseFee", Resp.data?.totalLicenceFee);
     } catch (error) {
       return error;
     }
@@ -152,15 +154,15 @@ const FeesChargesForm = (props) => {
     }
   };
 
-  const getSubmitDataLabel = async () => {
-    try {
-      const Resp = await axios.get(`http://103.166.62.118:80/land-services/new/licenses/_get?id=${props.getId}`).then((response) => {
-        return response;
-      });
-    } catch (error) {
-      return error;
-    }
-  };
+  // const getSubmitDataLabel = async () => {
+  //   try {
+  //     const Resp = await axios.get(`http://103.166.62.118:80/land-services/new/licenses/_get?id=${props.getId}`).then((response) => {
+  //       return response;
+  //     });
+  //   } catch (error) {
+  //     return error;
+  //   }
+  // };
 
   const getWholeData = async () => {
     try {
@@ -174,9 +176,9 @@ const FeesChargesForm = (props) => {
     getWholeData();
   }, []);
 
-  useEffect(() => {
-    getSubmitDataLabel();
-  }, []);
+  // useEffect(() => {
+  //   getSubmitDataLabel();
+  // }, []);
 
   const [fileStoreId, setFileStoreId] = useState({});
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -208,14 +210,14 @@ const FeesChargesForm = (props) => {
     }
   };
 
-  const dataArea = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.kanal;
-  const dataAreaMarla = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.marla;
-  const dataAreaSarai = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.sarsai;
-  const dataAreaBigha = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.bigha;
-  const dataAreaBiswa = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.biswa;
-  const dataAreaBiswansi = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.biswansi;
-  const totalAreaAcre =
-    dataArea * 0.125 + dataAreaMarla * 0.0062 + dataAreaSarai * 0.00069 + dataAreaBigha * 0.33 + dataAreaBiswa * 0.0309 + dataAreaBiswansi * 0.619;
+  // const dataArea = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.kanal;
+  // const dataAreaMarla = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.marla;
+  // const dataAreaSarai = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.sarsai;
+  // const dataAreaBigha = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.bigha;
+  // const dataAreaBiswa = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.biswa;
+  // const dataAreaBiswansi = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.biswansi;
+  // const totalAreaAcre =
+  //   dataArea * 0.125 + dataAreaMarla * 0.0062 + dataAreaSarai * 0.00069 + dataAreaBigha * 0.33 + dataAreaBiswa * 0.0309 + dataAreaBiswansi * 0.619;
 
   // const handleWorkflow = async () => {
   //   const token = window?.localStorage?.getItem("token");
