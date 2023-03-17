@@ -82,18 +82,11 @@ const MobileInbox = ({
         <div className="filters-container">
           {/* {!isFstpOperator && !isSearch && <ApplicationLinks linkPrefix={parentRoute} isMobile={true} />} */}
           <div style={{ display: "none" }}>
-<<<<<<< HEAD
             {!isSearch && <Filter searchParams={searchParams} applications={data} onFilterChange={onFilterChange} type="mobile" />}
           </div>
           <ApplicationCard
             t={t}
             filterData={data}
-=======
-            <Filter searchParams={searchParams} applications={data} onFilterChange={onFilterChange} type="mobile" />
-          </div>
-          <ApplicationCard
-            t={t}
->>>>>>> master
             data={!data ? (isFstpOperator && isFSMRequest ? fstp_citizen_data : fstpOperatorData) : getData()}
             onFilterChange={isFSMRequest || !isFstpOperator ? onFilterChange : false}
             serviceRequestIdKey={isFstpOperator ? t("ES_INBOX_VEHICLE_LOG") : DSO ? t("ES_INBOX_APPLICATION_NO") : t("ES_INBOX_APPLICATION_NO")}
