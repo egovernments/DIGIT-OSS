@@ -735,6 +735,7 @@ const ApllicantFormStep1 = (props) => {
               &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
               {developerDataLabel?.addInfo?.showDevTypeFields != "Hindu Undivided Family" &&
                 developerDataLabel?.addInfo?.showDevTypeFields != "Proprietorship Firm" &&
+                developerDataLabel?.addInfo?.showDevTypeFields != "Individual" &&
                 developerDataLabel?.addInfo?.showDevTypeFields != "Partnership Firm" && (
                   <FormControl>
                     <div

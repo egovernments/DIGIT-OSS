@@ -1436,7 +1436,7 @@ const LandScheduleForm = (props) => {
                               type="date"
                               {...register("sectionFour")}
                               className="form-control"
-                              max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
+                              min={convertEpochToDate(new Date().setFullYear(new Date().getFullYear()))}
                             />
                             <h3 className="error-message" style={{ color: "red" }}>
                               {errors?.sectionFour && errors?.sectionFour?.message}
@@ -2237,8 +2237,11 @@ const LandScheduleForm = (props) => {
                   <br></br>
                   <div className="row ">
                     <div className="col col-3">
-                      <h2 data-toggle="tooltip" data-placement="top" title="Any revenue rasta/road/bundh passing through proposed site (Yes/No)">
-                        (e) &nbsp;Any revenue rasta/road/bundh <span style={{ color: "red" }}>*</span>
+                      <h2>
+                        (e) &nbsp;Any revenue rasta <span style={{ color: "red" }}>*</span>
+                        <Tooltip title="Any revenue rasta/road/bundh passing through proposed site (Yes/No)">
+                          <InfoIcon style={{ cursor: "pointer" }} color="primary"></InfoIcon>
+                        </Tooltip>
                       </h2>
                       &nbsp;&nbsp;&nbsp;&nbsp;
                       <label htmlFor="road">
