@@ -1759,6 +1759,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
               <div className="card-body">
                 <p>1. I/ We hereby submit the following information/ enclose the relevant documents:-</p>
                 {data?.devDetail[0]?.addInfo?.showDevTypeFields === "Individual" ||
+                data?.devDetail[0]?.addInfo?.showDevTypeFields === "Limited Liability Partnership" ||
                 data?.devDetail[0]?.addInfo?.showDevTypeFields === "Proprietorship Firm" ||
                 data?.devDetail[0]?.addInfo?.showDevTypeFields === "Hindu Undivided Family" ? (
                   <p className="ml-1">
@@ -1768,12 +1769,13 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                 ) : (
                   <p className="d-none"></p>
                 )}
-                {data?.devDetail[0]?.addInfo?.showDevTypeFields === "Company" && (
-                  <p className="ml-1">
-                    (i) Whether the Developer has earlier been granted permission to set up a colony under HDRU Act, 1975:{" "}
-                    <span className="text-danger font-weight-bold">*</span>
-                  </p>
-                )}
+                {data?.devDetail[0]?.addInfo?.showDevTypeFields === "Company" ||
+                  (data?.devDetail[0]?.addInfo?.showDevTypeFields === "Partnership Firm" && (
+                    <p className="ml-1">
+                      (i) Whether the Developer has earlier been granted permission to set up a colony under HDRU Act, 1975:{" "}
+                      <span className="text-danger font-weight-bold">*</span>
+                    </p>
+                  ))}
                 <div className="form-group ml-1">
                   <input
                     type="radio"

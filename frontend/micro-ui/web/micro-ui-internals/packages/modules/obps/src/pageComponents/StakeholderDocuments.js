@@ -392,9 +392,9 @@ function SelectDocument({ t, document: doc, setDocuments, documentsUploadList, e
         <CardLabel style={{ marginBottom: "10px" }}>
           {doc?.required ? `${t(`BPAREG_HEADER_${doc?.code?.replace(".", "_")}`)} *` : `${t(`BPAREG_HEADER_${doc?.code?.replace(".", "_")}`)}`}
         </CardLabel>
-        {doc?.info ? (
+        {/* {doc?.info ? (
           <div style={{ fontSize: "12px", color: "#505A5F", fontWeight: 400, lineHeight: "15px", marginBottom: "10px" }}>{`${t(doc?.info)}`}</div>
-        ) : null}
+        ) : null} */}
         {/* {JSON.stringify(doc?.code)} */}
 
         <div className="" style={{ display: "flex", alignItems: "center" }}>
@@ -406,61 +406,61 @@ function SelectDocument({ t, document: doc, setDocuments, documentsUploadList, e
               setUploadedFile(null);
               setCheckRequiredFields(true);
             }}
-            message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
+            message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(``)}
             iserror={error}
           />
           {/* {JSON.stringify(documentsUploadList?.[0])} */}
           {
-            <span style={{ margin: "0 0.5rem" }}>
+            <div className="col-md-4">
               {doc?.code === "ARTICLES_OF_ASSOCIATION" && documentsUploadList?.length > 0 ? (
                 <button
                   type="button"
                   title="View Document"
                   onClick={() => getDocShareholding(documentsUploadList[0]?.articlesOfAssociation)}
-                  className="btn btn-sm col-md-6"
+                  className="btn btn-sm btn-info"
                 >
-                  <VisibilityIcon color="info" className="icon" />
+                  <VisibilityIcon fill="#fff" className="icon" /> View Uploaded Document
                 </button>
               ) : doc?.code === "REGISTERED_IRREVOCABLE_PARTNERSHIP_DEED" && documentsUploadList?.length > 0 ? (
                 <button
                   type="button"
                   title="View Document"
                   onClick={() => getDocShareholding(documentsUploadList[0]?.registeredIrrevocablePaternshipDeed)}
-                  className="btn btn-sm col-md-6"
+                  className="btn btn-sm btn-info"
                 >
-                  <VisibilityIcon color="info" className="icon" />
+                  <VisibilityIcon fill="#fff" className="icon" /> View Uploaded Document
                 </button>
               ) : doc?.code === "AFFIDAVIT_AND_PANCARD" && documentsUploadList?.length > 0 ? (
                 <button
                   type="button"
                   title="View Document"
                   onClick={() => getDocShareholding(documentsUploadList[0]?.affidavitAndPancard)}
-                  className="btn btn-sm col-md-6"
+                  className="btn btn-sm btn-info"
                 >
-                  <VisibilityIcon color="info" className="icon" />
+                  <VisibilityIcon fill="#fff" className="icon" /> View Uploaded Document
                 </button>
               ) : doc?.code === "MEMORANDUM_OF_ARTICLES" && documentsUploadList?.length > 0 ? (
                 <button
                   type="button"
                   title="View Document"
                   onClick={() => getDocShareholding(documentsUploadList[0]?.memorandumOfArticles)}
-                  className="btn btn-sm col-md-6"
+                  className="btn btn-sm btn-info"
                 >
-                  <VisibilityIcon color="info" className="icon" />
+                  <VisibilityIcon fill="#fff" className="icon" /> View Uploaded Document
                 </button>
               ) : doc?.code === "APPL.BPAREG_OTHERS" && documentsUploadList?.[0]?.anyOtherDoc ? (
                 <button
                   type="button"
                   title="View Document"
                   onClick={() => getDocShareholding(documentsUploadList[0]?.anyOtherDoc)}
-                  className="btn btn-sm col-md-6"
+                  className="btn btn-sm btn-info"
                 >
-                  <VisibilityIcon color="info" className="icon" />
+                  <VisibilityIcon fill="#fff" className="icon" /> View Uploaded Document
                 </button>
               ) : (
                 ""
               )}
-            </span>
+            </div>
           }
         </div>
       </div>
