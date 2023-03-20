@@ -8,6 +8,7 @@ import {
   CardLabelError,
   BackButton,
   MuiRadio,
+  Link,
 } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { stringReplaceAll } from "../utils";
@@ -198,8 +199,8 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
           onSkip={onSkip}
           isDisabled={
             licenceTypeSelected && licenceTypeSelected.includes("ARCHITECT")
-              ? !licenceTypeSelected || !ArchitectNo || !showDevTypeFields
-              : !licenceTypeSelected || licenceTypeSelected.includes("CITIZEN")
+              ? !licenceTypeSelected || !ArchitectNo
+              : licenceTypeSelected.includes("CITIZEN")
           }
         >
           <div className="happy">
@@ -280,6 +281,14 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
                           <MenuItem value={item.value}>{item?.code}</MenuItem>
                         ))}
                       </Select>
+                    </div>
+                  )}
+
+                  {licenceTypeSelected && licenceTypeSelected.includes("CITIZEN") && (
+                    <div>
+                      <a className="btn btn-primary btn-sm" href="/digit-ui/citizen">
+                        Licencing Services
+                      </a>
                     </div>
                   )}
                 </Form.Group>

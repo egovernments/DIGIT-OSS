@@ -54,6 +54,9 @@ const ApllicantFormStep1 = (props) => {
     delete data?.developerEmail;
     delete data?.developerType;
     delete data?.developerCinNo;
+    delete data?.developerPanNo;
+    delete data?.developerGstNo;
+    delete data?.developerLlpNo;
     delete data?.directorDinNo;
     delete data?.directorName;
     delete data?.directorContactNumber;
@@ -138,9 +141,13 @@ const ApllicantFormStep1 = (props) => {
     if (developerDataLabel) {
       setValue("developerName", developerDataLabel?.addInfo?.companyName);
       setValue("developerAddress", developerDataLabel?.addInfo?.registeredAddress);
-      setValue("developerEmail", developerDataLabel?.addInfo?.email);
+      setValue("developerEmail", developerDataLabel?.addInfo?.emailId);
       setValue("developerType", developerDataLabel?.addInfo?.showDevTypeFields);
       setValue("developerCinNo", developerDataLabel?.addInfo?.cin_Number);
+      setValue("developerPanNo", developerDataLabel?.addInfo?.PanNumber);
+      setValue("developerGstNo", developerDataLabel?.addInfo?.gst_Number);
+      setValue("developerLlpNo", developerDataLabel?.addInfo?.llp_Number);
+
       // setValue("directorDinNo", developerDataLabel?.addInfo?.DirectorsInformation?.[0]?.din);
       // setValue("directorName", developerDataLabel?.addInfo?.DirectorsInformation?.[0]?.name);
       // setValue("directorContactNumber", developerDataLabel?.addInfo?.DirectorsInformation?.[0]?.contactNumber);
@@ -288,36 +295,33 @@ const ApllicantFormStep1 = (props) => {
                   </h3>
                 </FormControl>
                 &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
-                {developerDataLabel?.addInfo?.showDevTypeFields != "Individual" &&
-                  developerDataLabel?.addInfo?.showDevTypeFields != "Proprietorship Firm" && (
-                    <FormControl>
-                      <h2>
-                        EmailId<span style={{ color: "red" }}>*</span>
-                      </h2>
+                <FormControl>
+                  <h2>
+                    EmailId<span style={{ color: "red" }}>*</span>
+                  </h2>
 
-                      <Controller
-                        control={control}
+                  <Controller
+                    control={control}
+                    name="developerEmail"
+                    render={({ field: { onChange, value } }) => (
+                      <input
+                        type="text"
+                        className="Inputcontrol"
+                        class="form-control"
+                        id="standard-disabled"
+                        label="Disabled"
+                        placeholder="N/A"
+                        readOnly
+                        value={value}
                         name="developerEmail"
-                        render={({ field: { onChange, value } }) => (
-                          <input
-                            type="text"
-                            className="Inputcontrol"
-                            class="form-control"
-                            id="standard-disabled"
-                            label="Disabled"
-                            placeholder="N/A"
-                            readOnly
-                            value={value}
-                            name="developerEmail"
-                          />
-                          // <OutlinedInput type="text" value={value} className="form-control" disabled name="developerEmail" />
-                        )}
                       />
-                      <h3 className="error-message" style={{ color: "red" }}>
-                        {errors?.developerEmail && errors?.developerEmail?.message}
-                      </h3>
-                    </FormControl>
-                  )}
+                      // <OutlinedInput type="text" value={value} className="form-control" disabled name="developerEmail" />
+                    )}
+                  />
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.developerEmail && errors?.developerEmail?.message}
+                  </h3>
+                </FormControl>
                 &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
                 <FormControl>
                   <h2>Developer Type</h2>
@@ -347,12 +351,12 @@ const ApllicantFormStep1 = (props) => {
               </div>
             </div>
             <br></br>
-            {developerDataLabel?.addInfo?.showDevTypeFields != "Individual" &&
-              developerDataLabel?.addInfo?.showDevTypeFields != "Limited Liability Partnership" &&
-              developerDataLabel?.addInfo?.showDevTypeFields != "Hindu Undivided Family" &&
-              developerDataLabel?.addInfo?.showDevTypeFields != "Proprietorship Firm" && (
-                <div className="row-12">
-                  <div className="col md={4} xxl lg-4">
+            <div className="row-12">
+              <div className="col md={4} xxl lg-4">
+                {developerDataLabel?.addInfo?.showDevTypeFields != "Individual" &&
+                  developerDataLabel?.addInfo?.showDevTypeFields != "Limited Liability Partnership" &&
+                  developerDataLabel?.addInfo?.showDevTypeFields != "Hindu Undivided Family" &&
+                  developerDataLabel?.addInfo?.showDevTypeFields != "Proprietorship Firm" && (
                     <FormControl>
                       <h2>
                         CIN Number<span style={{ color: "red" }}>*</span>
@@ -377,9 +381,96 @@ const ApllicantFormStep1 = (props) => {
                         {errors?.developerCinNo && errors?.developerCinNo?.message}
                       </h3>
                     </FormControl>
-                  </div>
-                </div>
-              )}
+                  )}
+                &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                {developerDataLabel?.addInfo?.showDevTypeFields != "Company" &&
+                  developerDataLabel?.addInfo?.showDevTypeFields != "Limited Liability Partnership" &&
+                  developerDataLabel?.addInfo?.showDevTypeFields != "Partnership Firm" && (
+                    <FormControl>
+                      <h2>
+                        PAN Number<span style={{ color: "red" }}>*</span>
+                      </h2>
+
+                      <Controller
+                        control={control}
+                        name="developerPanNo"
+                        render={({ field: { onChange, value } }) => (
+                          <input
+                            type="text"
+                            value={value}
+                            className="Inputcontrol"
+                            class="form-control"
+                            placeholder="N/A"
+                            disabled
+                            name="developerPanNo"
+                          />
+                        )}
+                      />
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.developerPanNo && errors?.developerPanNo?.message}
+                      </h3>
+                    </FormControl>
+                  )}
+                &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                {developerDataLabel?.addInfo?.showDevTypeFields != "Company" && (
+                  <FormControl>
+                    <h2>
+                      GST Number<span style={{ color: "red" }}>*</span>
+                    </h2>
+
+                    <Controller
+                      control={control}
+                      name="developerGstNo"
+                      render={({ field: { onChange, value } }) => (
+                        <input
+                          type="text"
+                          value={value}
+                          className="Inputcontrol"
+                          class="form-control"
+                          placeholder="N/A"
+                          disabled
+                          name="developerGstNo"
+                        />
+                      )}
+                    />
+                    <h3 className="error-message" style={{ color: "red" }}>
+                      {errors?.developerGstNo && errors?.developerGstNo?.message}
+                    </h3>
+                  </FormControl>
+                )}
+                &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                {developerDataLabel?.addInfo?.showDevTypeFields != "Individual" &&
+                  developerDataLabel?.addInfo?.showDevTypeFields != "Company" &&
+                  developerDataLabel?.addInfo?.showDevTypeFields != "Hindu Undivided Family" &&
+                  developerDataLabel?.addInfo?.showDevTypeFields != "Proprietorship Firm" &&
+                  developerDataLabel?.addInfo?.showDevTypeFields != "Partnership Firm" && (
+                    <FormControl>
+                      <h2>
+                        LLP Number<span style={{ color: "red" }}>*</span>
+                      </h2>
+
+                      <Controller
+                        control={control}
+                        name="developerLlpNo"
+                        render={({ field: { onChange, value } }) => (
+                          <input
+                            type="text"
+                            value={value}
+                            className="Inputcontrol"
+                            class="form-control"
+                            placeholder="N/A"
+                            disabled
+                            name="developerLlpNo"
+                          />
+                        )}
+                      />
+                      <h3 className="error-message" style={{ color: "red" }}>
+                        {errors?.developerLlpNo && errors?.developerLlpNo?.message}
+                      </h3>
+                    </FormControl>
+                  )}
+              </div>
+            </div>
             <br></br>
             {developerDataLabel?.addInfo?.showDevTypeFields != "Individual" &&
               developerDataLabel?.addInfo?.showDevTypeFields != "Limited Liability Partnership" &&
@@ -642,20 +733,25 @@ const ApllicantFormStep1 = (props) => {
                 </div>
               </FormControl>
               &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
-              <FormControl>
-                <div
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    if (developerDataLabel?.licensesDoc?.[0]?.memorandumOfArticles)
-                      getDocShareholding(developerDataLabel?.licensesDoc?.[0]?.memorandumOfArticles, setLoader);
-                    else setShowToastError({ label: "No pdf here", error: true, success: false });
-                  }}
-                  id="btnSearch"
-                  class=""
-                >
-                  View MOA Document <VisibilityIcon color="info" className="icon" />
-                </div>
-              </FormControl>
+              {developerDataLabel?.addInfo?.showDevTypeFields != "Hindu Undivided Family" &&
+                developerDataLabel?.addInfo?.showDevTypeFields != "Proprietorship Firm" &&
+                developerDataLabel?.addInfo?.showDevTypeFields != "Individual" &&
+                developerDataLabel?.addInfo?.showDevTypeFields != "Partnership Firm" && (
+                  <FormControl>
+                    <div
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        if (developerDataLabel?.licensesDoc?.[0]?.memorandumOfArticles)
+                          getDocShareholding(developerDataLabel?.licensesDoc?.[0]?.memorandumOfArticles, setLoader);
+                        else setShowToastError({ label: "No pdf here", error: true, success: false });
+                      }}
+                      id="btnSearch"
+                      class=""
+                    >
+                      View MOA Document <VisibilityIcon color="info" className="icon" />
+                    </div>
+                  </FormControl>
+                )}
             </div>
           </div>
           <div className="row mt-4">

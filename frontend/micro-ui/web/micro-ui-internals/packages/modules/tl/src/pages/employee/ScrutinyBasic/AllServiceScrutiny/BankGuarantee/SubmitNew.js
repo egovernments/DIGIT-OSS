@@ -19,6 +19,11 @@ import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
 import { getDocShareholding } from "../../ScrutinyDevelopment/docview.helper";
 
 const SubmitNew = (props) => {
+  let user = Digit.UserService.getUser();
+  const userRoles = user?.info?.roles?.map((e) => e.code) || [];
+  const showRemarks = userRoles.some((item) => item === "SO_HQ");
+  console.log("roleSO_HQ", showRemarks);
+
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
   const [open2, setOpen2] = useState(false);
@@ -29,9 +34,7 @@ const SubmitNew = (props) => {
 
     setShowhide(getuser);
   };
-  let user = Digit.UserService.getUser();
-  const userRoles = user?.info?.roles?.map((e) => e.code);
-  const showRemarks = userRoles.includes("AO_HQ" && "AD_HQ" && "JD_HQ" && "ATP_HQ" && "Patwari_HQ" && "NAYAB_TEHSILDAR");
+
   const landScheduleData = props.ApiResponseData;
   const {
     register,
@@ -226,7 +229,7 @@ const SubmitNew = (props) => {
                     <ReportProblemIcon
                       style={{
                         color: fieldIconColors.loiNumber,
-                        display: showRemarks ? "block" : "none",
+                        display: showRemarks ? "none" : "block",
                       }}
                       onClick={() => {
                         setOpennedModal("loiNumber");
@@ -257,7 +260,7 @@ const SubmitNew = (props) => {
                     <ReportProblemIcon
                       style={{
                         color: fieldIconColors.typeOfBg,
-                        display: showRemarks ? "block" : "none",
+                        display: showRemarks ? "none" : "block",
                       }}
                       onClick={() => {
                         setOpennedModal("typeOfBg");
@@ -273,7 +276,7 @@ const SubmitNew = (props) => {
               </Row>
               <br></br>
               <Row className="col-12">
-                <Col md={4} xxl lg="3">
+                <div className={classes.fieldContainer}>
                   <label htmlFor="businessService">
                     <input
                       {...register("businessService")}
@@ -284,6 +287,7 @@ const SubmitNew = (props) => {
                     />
                     &nbsp; Bank Gurantee &nbsp;&nbsp;
                   </label>
+
                   <label htmlFor="businessService">
                     <input
                       {...register("businessService")}
@@ -294,21 +298,18 @@ const SubmitNew = (props) => {
                     />
                     &nbsp; Mortgage &nbsp;&nbsp;
                   </label>
-                  <div className={classes.fieldContainer}>
-                    {/* <Form.Control className={classes.formControl} placeholder={apiResponse?.bgNumber} disabled></Form.Control> */}
-
-                    <ReportProblemIcon
-                      style={{
-                        color: fieldIconColors.businessService,
-                        display: showRemarks ? "block" : "none",
-                      }}
-                      onClick={() => {
-                        setOpennedModal("businessService");
-                        setLabelValue("Bank Guarantee mortgage"), setSmShow(true), console.log("modal open"), setFieldValue(bankGuarantee);
-                      }}
-                    ></ReportProblemIcon>
-                  </div>
-                </Col>
+                  {/* <Form.Control className={classes.formControl} placeholder={apiResponse?.bgNumber} disabled></Form.Control> */}
+                  <ReportProblemIcon
+                    style={{
+                      color: fieldIconColors.businessService,
+                      display: showRemarks ? "none" : "block",
+                    }}
+                    onClick={() => {
+                      setOpennedModal("businessService");
+                      setLabelValue("Bank Guarantee/Mortgage"), setSmShow(true), console.log("modal open"), setFieldValue(bankGuarantee);
+                    }}
+                  ></ReportProblemIcon>
+                </div>
               </Row>
               <Row className="col-12">
                 <Col md={4} xxl lg="12">
@@ -327,7 +328,7 @@ const SubmitNew = (props) => {
                             <ReportProblemIcon
                               style={{
                                 color: fieldIconColors.amountInFig,
-                                display: showRemarks ? "block" : "none",
+                                display: showRemarks ? "none" : "block",
                               }}
                               onClick={() => {
                                 setOpennedModal("amountInFig");
@@ -349,7 +350,7 @@ const SubmitNew = (props) => {
                             <ReportProblemIcon
                               style={{
                                 color: fieldIconColors.amountInWords,
-                                display: showRemarks ? "block" : "none",
+                                display: showRemarks ? "none" : "block",
                               }}
                               onClick={() => {
                                 setOpennedModal("amountInWords");
@@ -371,7 +372,7 @@ const SubmitNew = (props) => {
                             <ReportProblemIcon
                               style={{
                                 color: fieldIconColors.bgNumber,
-                                display: showRemarks ? "block" : "none",
+                                display: showRemarks ? "none" : "block",
                               }}
                               onClick={() => {
                                 setOpennedModal("bgNumber");
@@ -393,7 +394,7 @@ const SubmitNew = (props) => {
                             <ReportProblemIcon
                               style={{
                                 color: fieldIconColors.bankName,
-                                display: showRemarks ? "block" : "none",
+                                display: showRemarks ? "none" : "block",
                               }}
                               onClick={() => {
                                 setOpennedModal("bankName");
@@ -417,7 +418,7 @@ const SubmitNew = (props) => {
                             <ReportProblemIcon
                               style={{
                                 color: fieldIconColors.validity,
-                                display: showRemarks ? "block" : "none",
+                                display: showRemarks ? "none" : "block",
                               }}
                               onClick={() => {
                                 setOpennedModal("validity");
@@ -439,7 +440,7 @@ const SubmitNew = (props) => {
                             <ReportProblemIcon
                               style={{
                                 color: fieldIconColors.claimPeriod,
-                                display: showRemarks ? "block" : "none",
+                                display: showRemarks ? "none" : "block",
                               }}
                               onClick={() => {
                                 setOpennedModal("claimPeriod");
@@ -476,7 +477,7 @@ const SubmitNew = (props) => {
                             <ReportProblemIcon
                               style={{
                                 color: fieldIconColors.originCountry,
-                                display: showRemarks ? "block" : "none",
+                                display: showRemarks ? "none" : "block",
                               }}
                               onClick={() => {
                                 setOpennedModal("originCountry");
@@ -514,7 +515,7 @@ const SubmitNew = (props) => {
                                     <ReportProblemIcon
                                       style={{
                                         color: fieldIconColors.indianBankAdvisedCertificate,
-                                        display: showRemarks ? "block" : "none",
+                                        display: showRemarks ? "none" : "block",
                                       }}
                                       onClick={() => {
                                         setOpennedModal("indianBankAdvisedCertificate");
@@ -537,30 +538,28 @@ const SubmitNew = (props) => {
                         <Col md={4} xxl lg="3">
                           <div>
                             <Form.Label>
-                              <h2>Upload B.G. softcopy</h2>
+                              <h2>Upload B.G. softcopy </h2>
                             </Form.Label>
                           </div>
-                          <div>
+                          <div className={classes.fieldContainer}>
                             <div>
                               <IconButton onClick={() => getDocShareholding(apiResponse?.uploadBg)}>
                                 <DownloadForOfflineIcon color="primary" className="mx-1" />
                               </IconButton>
                             </div>
 
-                            <div className={classes.fieldContainer}>
-                              {/* <Form.Control className={classes.formControl} placeholder={apiResponse?.licenseApplied} disabled></Form.Control> */}
+                            {/* <Form.Control className={classes.formControl} placeholder={apiResponse?.licenseApplied} disabled></Form.Control> */}
 
-                              <ReportProblemIcon
-                                style={{
-                                  color: fieldIconColors.uploadBg,
-                                  display: showRemarks ? "block" : "none",
-                                }}
-                                onClick={() => {
-                                  setOpennedModal("uploadBg");
-                                  setLabelValue(" Upload B.G. softcopy"), setSmShow(true), console.log("modal open"), setFieldValue(uploadBg);
-                                }}
-                              ></ReportProblemIcon>
-                            </div>
+                            <ReportProblemIcon
+                              style={{
+                                color: fieldIconColors.uploadBg,
+                                display: showRemarks ? "none" : "block",
+                              }}
+                              onClick={() => {
+                                setOpennedModal("uploadBg");
+                                setLabelValue(" Upload B.G. softcopy"), setSmShow(true), console.log("modal open"), setFieldValue(uploadBg);
+                              }}
+                            ></ReportProblemIcon>
                           </div>
                           {/* <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "uploadBg")} /> */}
                         </Col>
@@ -569,6 +568,7 @@ const SubmitNew = (props) => {
                         <Col md={4} xxl lg="3">
                           <div>
                             <label>Hardcopy Submitted at TCP office. </label>
+
                             <label htmlFor="licenseApplied">
                               <input
                                 {...register("licenseApplied")}
@@ -592,22 +592,20 @@ const SubmitNew = (props) => {
                               &nbsp; No &nbsp;&nbsp;
                             </label>
                             {/* <div className={classes.fieldContainer}>
-                    
-
-                     <ReportProblemIcon
-                       style={{
-                         color: fieldIconColors.licenseApplied,
-                         display: showRemarks ? "block" : "none",
-                       }}
-                       onClick={() => {
-                         setOpennedModal("licenseApplied");
-                         setLabelValue(" Hardcopy Submitted at TCP office."),
-                           setSmShow(true),
-                           console.log("modal open"),
-                           setFieldValue(licenseApplied);
-                       }}
-                     ></ReportProblemIcon>
-                   </div> */}
+                              <ReportProblemIcon
+                                style={{
+                                  color: fieldIconColors.licenseApplied,
+                                  display: showRemarks ? "none" : "block",
+                                }}
+                                onClick={() => {
+                                  setOpennedModal("licenseApplied");
+                                  setLabelValue(" Hardcopy Submitted at TCP office."),
+                                    setSmShow(true),
+                                    console.log("modal open"),
+                                    setFieldValue(licenseApplied);
+                                }}
+                              ></ReportProblemIcon>
+                            </div> */}
                             <h3 className="error-message" style={{ color: "red" }}>
                               {errors?.licenseApplied && errors?.licenseApplied?.message}
                             </h3>
@@ -634,7 +632,7 @@ const SubmitNew = (props) => {
                                     <ReportProblemIcon
                                       style={{
                                         color: fieldIconColors.tcpSubmissionReceived,
-                                        display: showRemarks ? "block" : "none",
+                                        display: showRemarks ? "none" : "block",
                                       }}
                                       onClick={() => {
                                         setOpennedModal("tcpSubmissionReceived");
@@ -685,7 +683,7 @@ const SubmitNew = (props) => {
                             <ReportProblemIcon
                               style={{
                                 color: fieldIconColors.existingBgNumber,
-                                display: showRemarks ? "block" : "none",
+                                display: showRemarks ? "none" : "block",
                               }}
                               onClick={() => {
                                 setOpennedModal("existingBgNumber");
@@ -725,7 +723,7 @@ const SubmitNew = (props) => {
                                 <ReportProblemIcon
                                   style={{
                                     color: fieldIconColors.khasraNumber,
-                                    display: showRemarks ? "block" : "none",
+                                    display: showRemarks ? "none" : "block",
                                   }}
                                   onClick={() => {
                                     setOpennedModal("khasraNumber");
@@ -746,7 +744,7 @@ const SubmitNew = (props) => {
                                 <ReportProblemIcon
                                   style={{
                                     color: fieldIconColors.areaToBeMortgagedInSqMtrs,
-                                    display: showRemarks ? "block" : "none",
+                                    display: showRemarks ? "none" : "block",
                                   }}
                                   onClick={() => {
                                     setOpennedModal("areaToBeMortgagedInSqMtrs");
@@ -791,7 +789,7 @@ const SubmitNew = (props) => {
                             <ReportProblemIcon
                               style={{
                                 color: fieldIconColors.totalKhasraAreaToMortgage,
-                                display: showRemarks ? "block" : "none",
+                                display: showRemarks ? "none" : "block",
                               }}
                               onClick={() => {
                                 setOpennedModal("totalKhasraAreaToMortgage");
@@ -824,7 +822,7 @@ const SubmitNew = (props) => {
                                 <ReportProblemIcon
                                   style={{
                                     color: fieldIconColors.plotNumber,
-                                    display: showRemarks ? "block" : "none",
+                                    display: showRemarks ? "none" : "block",
                                   }}
                                   onClick={() => {
                                     setOpennedModal("plotNumber");
@@ -845,7 +843,7 @@ const SubmitNew = (props) => {
                                 <ReportProblemIcon
                                   style={{
                                     color: fieldIconColors.areaInSqMtrs,
-                                    display: showRemarks ? "block" : "none",
+                                    display: showRemarks ? "none" : "block",
                                   }}
                                   onClick={() => {
                                     setOpennedModal("areaInSqMtrs");
@@ -871,7 +869,7 @@ const SubmitNew = (props) => {
                             <ReportProblemIcon
                               style={{
                                 color: fieldIconColors.totalPlotAreaToMortgage,
-                                display: showRemarks ? "block" : "none",
+                                display: showRemarks ? "none" : "block",
                               }}
                               onClick={() => {
                                 setOpennedModal("totalPlotAreaToMortgage");
@@ -891,7 +889,7 @@ const SubmitNew = (props) => {
                             </IconButton>
                             <ReportProblemIcon
                               style={{
-                                display: showRemarks ? "block" : "none",
+                                display: showRemarks ? "none" : "block",
                                 color: fieldIconColors.mortgageLayoutPlan,
                               }}
                               onClick={() => {
@@ -911,7 +909,7 @@ const SubmitNew = (props) => {
                             </IconButton>
                             <ReportProblemIcon
                               style={{
-                                display: showRemarks ? "block" : "none",
+                                display: showRemarks ? "none" : "block",
                                 color: fieldIconColors.mortgageDeed,
                               }}
                               onClick={() => {
@@ -931,7 +929,7 @@ const SubmitNew = (props) => {
                             </IconButton>
                             <ReportProblemIcon
                               style={{
-                                display: showRemarks ? "block" : "none",
+                                display: showRemarks ? "none" : "block",
                                 color: fieldIconColors.mortgageLandScheduleAndPlotNumbersDoc,
                               }}
                               onClick={() => {
@@ -958,7 +956,7 @@ const SubmitNew = (props) => {
                             </IconButton>
                             <ReportProblemIcon
                               style={{
-                                display: showRemarks ? "block" : "none",
+                                display: showRemarks ? "none" : "block",
                                 color: fieldIconColors.mortgageDeedAfterBPApproval,
                               }}
                               onClick={() => {

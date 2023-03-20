@@ -165,15 +165,14 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
       let isRequired = false;
 
       documents?.map((data) => {
-        // if (doc.required && data !== null && data && doc.code == `${data.documentType.split(".")[0]}.${data.documentType.split(".")[1]}`) {
+        // if (doc.required == true && data !== null && doc.code == `${data.documentType.split(".")[0]}.${data.documentType.split(".")[1]}`) {
         //   isRequired = true;
         // }
         // if (doc.required && doc.code == `${data.documentType.split(".")[0]}.${data.documentType.split(".")[1]}`) {
         // }
-        console.log("ALLOW", data);
+        // console.log("ALLOW", data);
 
-        if (doc.required == true && data !== null && doc.code == data.documentType) {
-          // console.log("YES");
+        if (doc?.required == true && data !== null && doc?.code == data?.documentType) {
           isRequired = true;
         }
 
@@ -188,14 +187,20 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
         } else if (data.documentType === "APPL.BPAREG_OTHERS") {
           setAnyOtherDoc(data?.documentUid);
         }
+
+        // if (doc.required == false && doc.code === "APPL.BPAREG_OTHERS") {
+        //   setEnableSubmit(false);
+        // }
       });
 
       if (!isRequired && doc.required == true) {
         count = count + 1;
-        // console.log("+_+_+_+", count);
+        console.log("+_+_+_+", count);
       }
     });
-    if (((count == "0" || count == 0) && documents?.length > 0) || documentsUploadList?.length > 0) {
+    if (((count == "0" || count == 0 || count < 1) && documents?.length > 0) || documentsUploadList?.length > 0) {
+      setEnableSubmit(false);
+    } else if (count < 1 || count == 0) {
       setEnableSubmit(false);
     } else {
       setEnableSubmit(true);
@@ -397,7 +402,6 @@ function SelectDocument({ t, document: doc, setDocuments, documentsUploadList, e
             extraStyleName={"OBPS"}
             accept="image/*, .pdf, .png, .jpeg, .jpg"
             onUpload={selectfile}
-            // required={uploadedFile && doc.required !== true ? false : uploadedFile && doc.required === true ? false : true}
             onDelete={() => {
               setUploadedFile(null);
               setCheckRequiredFields(true);
@@ -405,53 +409,8 @@ function SelectDocument({ t, document: doc, setDocuments, documentsUploadList, e
             message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
             iserror={error}
           />
+          {/* {JSON.stringify(documentsUploadList?.[0])} */}
           {
-            // <span style={{ margin: "0 0.5rem" }}>
-            //   {doc?.code === "ARTICLES_OF_ASSOCIATION" ? (
-            //     documents?.data?.documentType == "ARTICLES_OF_ASSOCIATION" ? (
-            //       <button
-            //         type="button"
-            //         title="View Document"
-            //         onClick={() => getDocShareholding(documents?.data?.documentUid)}
-            //         className="btn btn-sm col-md-6"
-            //       >
-            //         <VisibilityIcon color="info" className="icon" />
-            //       </button>
-            //     ) : (
-            //       <button
-            //         type="button"
-            //         title="View Document"
-            //         onClick={() => getDocShareholding(documentsUploadList[0]?.articlesOfAssociation)}
-            //         className="btn btn-sm col-md-6"
-            //       >
-            //         <VisibilityIcon color="info" className="icon" />
-            //       </button>
-            //     )
-            //   ) : doc?.code === "REGISTERED_IRREVOCABLE_PARTNERSHIP_DEED" ? (
-            //     documents?.documentType === "REGISTERED_IRREVOCABLE_PARTNERSHIP_DEED" ? (
-            //       <button
-            //         type="button"
-            //         title="View Document"
-            //         onClick={() => getDocShareholding(documents?.documentUid)}
-            //         className="btn btn-sm col-md-6"
-            //       >
-            //         <VisibilityIcon color="info" className="icon" />
-            //       </button>
-            //     ) : (
-            //       <button
-            //         type="button"
-            //         title="View Document"
-            //         onClick={() => getDocShareholding(documentsUploadList[0]?.registeredIrrevocablePaternshipDeed)}
-            //         className="btn btn-sm col-md-6"
-            //       >
-            //         <VisibilityIcon color="info" className="icon" />
-            //       </button>
-            //     )
-            //   ) : (
-            //     ""
-            //   )}
-            // </span>
-
             <span style={{ margin: "0 0.5rem" }}>
               {doc?.code === "ARTICLES_OF_ASSOCIATION" && documentsUploadList?.length > 0 ? (
                 <button
@@ -471,6 +430,15 @@ function SelectDocument({ t, document: doc, setDocuments, documentsUploadList, e
                 >
                   <VisibilityIcon color="info" className="icon" />
                 </button>
+              ) : doc?.code === "AFFIDAVIT_AND_PANCARD" && documentsUploadList?.length > 0 ? (
+                <button
+                  type="button"
+                  title="View Document"
+                  onClick={() => getDocShareholding(documentsUploadList[0]?.affidavitAndPancard)}
+                  className="btn btn-sm col-md-6"
+                >
+                  <VisibilityIcon color="info" className="icon" />
+                </button>
               ) : doc?.code === "MEMORANDUM_OF_ARTICLES" && documentsUploadList?.length > 0 ? (
                 <button
                   type="button"
@@ -480,7 +448,7 @@ function SelectDocument({ t, document: doc, setDocuments, documentsUploadList, e
                 >
                   <VisibilityIcon color="info" className="icon" />
                 </button>
-              ) : doc?.code === "APPL.BPAREG_OTHERS" && documentsUploadList?.length > 0 ? (
+              ) : doc?.code === "APPL.BPAREG_OTHERS" && documentsUploadList?.[0]?.anyOtherDoc ? (
                 <button
                   type="button"
                   title="View Document"
