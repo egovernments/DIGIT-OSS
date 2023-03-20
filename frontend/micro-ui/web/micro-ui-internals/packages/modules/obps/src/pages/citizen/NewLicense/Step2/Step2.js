@@ -1317,7 +1317,7 @@ const ApllicantPuropseForm = (props) => {
                   data={revenueDataLabels?.data}
                   labels="Revenue Estate"
                   loading={revenueDataLabels?.isLoading}
-                  onChange={(e) => getMustilData(e.code)}
+                  onChange={(e) => getMustilData(e.value)}
                 />
 
                 <h3 className="error-message" style={{ color: "red" }}>
