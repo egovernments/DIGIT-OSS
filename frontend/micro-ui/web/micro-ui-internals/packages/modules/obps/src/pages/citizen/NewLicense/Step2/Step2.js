@@ -403,7 +403,8 @@ const ApllicantPuropseForm = (props) => {
 
   useEffect(() => {
     const district = DistrictType?.["common-masters"]?.District?.map(function (data) {
-      return { value: data?.districtCode, label: data?.name, distCodeTCP: data?.distCodeTCP };
+      console.log("data", data);
+      return { value: data?.disCode, label: data?.disName, distCodeTCP: data?.distCodeTCP };
     });
     setDistrictOptions({ data: district, isLoading: false });
   }, [DistrictType]);
@@ -530,6 +531,46 @@ const ApllicantPuropseForm = (props) => {
         return { value: data?.sectorCode, label: data?.sectorNo };
       });
       setSectorOptions({ data: sectorPlan, isLoading: false });
+    } catch (error) {
+      return error;
+    }
+  };
+
+  const getToptions = async (val) => {
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: "v1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msgId: "090909",
+        authToken: "",
+        correlationId: null,
+      },
+      MdmsCriteria: {
+        tenantId: "hr",
+        moduleDetails: [
+          {
+            tenantId: "hr",
+            moduleName: "common-masters",
+            masterDetails: [
+              {
+                name: "tehsil",
+                filter: `[?(@.tehCode=="${val}")]`,
+              },
+            ],
+          },
+        ],
+      },
+    };
+    try {
+      const Resp = await axios.post("/egov-mdms-service/v1/_search", payload);
+      console.log("Resp?.data?.MdmsRes?.", Resp?.data?.MdmsRes?.["common-masters"]);
+      const sectorPlan = Resp?.data?.MdmsRes?.["common-masters"]?.Sector?.map(function (data) {
+        return { value: data?.sectorCode, label: data?.sectorNo };
+      });
     } catch (error) {
       return error;
     }
