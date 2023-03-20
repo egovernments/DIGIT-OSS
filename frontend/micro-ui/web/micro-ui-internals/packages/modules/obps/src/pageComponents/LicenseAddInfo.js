@@ -1850,7 +1850,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
                                           {input + 1}
                                         </StyledTableCell>
                                         <StyledTableCell>{elementInArray.name}</StyledTableCell>
-                                        <StyledTableCell>{elementInArray.designation}</StyledTableCell>
+                                        <StyledTableCell>{elementInArray.designition}</StyledTableCell>
                                         <StyledTableCell>{elementInArray.percentage}</StyledTableCell>
                                         <StyledTableCell>
                                           <div className="row">
