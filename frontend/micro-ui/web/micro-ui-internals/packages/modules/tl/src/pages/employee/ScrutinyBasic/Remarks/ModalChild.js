@@ -9,7 +9,8 @@ import { ScrutinyRemarksContext } from "../../../../../context/remarks-data-cont
 
 
 function ModalChild(props) {
-  const { handleGetFiledsStatesById, handleGetRemarkssValues , bussinessService} = useContext(ScrutinyRemarksContext,);
+  const {handleRoles, handleGetFiledsStatesById, handleGetRemarkssValues , bussinessService} = useContext(ScrutinyRemarksContext,);
+  const applicationStatus = props.applicationStatus ;
   const userInfo = Digit.UserService.getUser()?.info || {};
   const classes = useStyles();
   const smShow = props.displaymodal;
@@ -22,12 +23,19 @@ function ModalChild(props) {
   const dateTime = new Date();
   const authToken = Digit.UserService.getUser()?.access_token || null;
   const { id } = useParams();
+  const userRolesArray = userInfo?.roles.filter((user) => user.code !=="EMPLOYEE" );
+  const filterDataRole = userRolesArray?.[0]?.code;
+  const designation = userRolesArray?.[0]?.name;
+
+  console.log("usern23233" , userRolesArray );
+  console.log("usern23" , filterDataRole );
+  console.log("usern23434" , designation );
 
 
   const handlemodalsubmit = async () => {
     if (status) {
       console.log("log", props.labelmodal);
-      props.passmodalData({ data: { label: props.labelmodal, Remarks: RemarksDeveloper.data, isApproved: status === "approved" ? true : false } });
+      props.passmodalData({ data: { label: props.labelmodal, Remarks: RemarksDeveloper.data, isApproved: status === "In Order" ? true : false } });
       const postData = {
         requestInfo: {
           api_id: "1",
@@ -46,19 +54,22 @@ function ModalChild(props) {
           fieldValue: inputFieldValue,
           fieldIdL: props.labelmodal,
           isApproved: status,
-          isLOIPart: status === "conditional" ?  true : null ,
+          isLOIPart: status === "Conditional" ?  true : null ,
           userid: userInfo?.id || null,
           serviceId: "123",
           documentId: null,
           ts: dateTime.toUTCString(),
           bussinessServiceName : bussinessService,
-          designation : userInfo?.name || null,
-          employeeName : userInfo?.roles?.[1]?.name || null,
+          designation : designation,
+          name : userInfo?.name || null,
+          employeeName : userInfo?.name || null,
+         role : filterDataRole,
+         applicationStatus : applicationStatus
         },
       };
 
       try {
-        const Resp = await axios.post("/land-services/egscrutiny/_create?status=submit1", postData, {}).then((response) => {
+        const Resp = await axios.post("/land-services/egscrutiny/_create?status=submit", postData, {}).then((response) => {
           return response.data;
         });
       } catch (error) {
@@ -66,6 +77,7 @@ function ModalChild(props) {
       }
       handleGetFiledsStatesById(id);
       handleGetRemarkssValues(id);
+      handleRoles(id)
       console.log("response from API", Resp);
       props?.remarksUpdate({ data: RemarksDeveloper.data });
     } else {
@@ -73,12 +85,13 @@ function ModalChild(props) {
     }
   };
   console.log("smshow", smShow);
+  console.log("applicationStatus", applicationStatus);
 
   useEffect(() => {
     if (props.selectedFieldData) {
-      setStatus(props.selectedFieldData.isApproved ? "approved" : "disapproved");
+      setStatus(props.selectedFieldData.isApproved ? "In Order" : "Not In Order");
       setDeveloperRemarks({ data: props.selectedFieldData.comment ? props.selectedFieldData.comment : "" });
-      // setDeveloperRemarks({data:props.selectedFieldData.isApproved?"approved":"disapproved"});
+      // setDeveloperRemarks({data:props.selectedFieldData.isApproved?"In Order":"Not In Order"});
     } else {
       setStatus(null);
       setDeveloperRemarks({ data: "" });
@@ -86,7 +99,9 @@ function ModalChild(props) {
   }, [props.selectedFieldData]);
 
   console.log("Isdata" , status )
-  console.log("username" , userInfo?.roles?.[1]?.name  )
+
+  // let empCode = "EMPLOYEE";
+  
 
   return (
     <Modal
@@ -122,38 +137,38 @@ function ModalChild(props) {
       <Modal.Body>
         {" "}
         <Form.Check
-          checked={status === "approved"}
+          checked={status === "In Order"}
           onChange={() => {
-            setStatus("approved");
+            setStatus("In Order");
           }}
           type="radio"
           id="default-radio"
           // label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-          label="Approved"
+          label="In Order"
           name="group0"
           inline
         ></Form.Check>
         <Form.Check
-          checked={status === "disapproved"}
+          checked={status === "Not In Order"}
           onChange={(e) => {
-            setStatus("disapproved");
+            setStatus("Not In Order");
           }}
           type="radio"
           id="default-radio"
           // label={<CancelIcon color="error" />}
-          label="Disapproved"
+          label="Not In Order"
           name="group0"
           inline
         ></Form.Check>
         <Form.Check
-          checked={status === "conditional"}
+          checked={status === "Conditional"}
           onChange={() => {
-            setStatus("conditional");
+            setStatus("Conditional");
           }}
           type="radio"
           id="default-radio"
           // label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-          label="conditional"
+          label="Conditional"
           name="group0"
           inline
         ></Form.Check>

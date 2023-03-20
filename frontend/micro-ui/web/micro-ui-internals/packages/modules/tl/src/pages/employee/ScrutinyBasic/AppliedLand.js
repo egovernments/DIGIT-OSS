@@ -36,6 +36,7 @@ const AppliedLandinfo = (props) => {
 
   const dataIcons = props.dataForIcons;
   const DetailsofAppliedLand = props.ApiResponseData;
+  const applicationStatus = props.applicationStatus;
   console.log("personal info applicant data4", DetailsofAppliedLand);
   let user = Digit.UserService.getUser();
   const userRoles = user?.info?.roles?.map((e) => e.code) || [];
@@ -258,7 +259,7 @@ const AppliedLandinfo = (props) => {
   const [smShow, setSmShow] = useState(false);
   const [labelValue, setLabelValue] = useState("");
   const Colors = {
-    conditional: "#2874A6",
+    Conditional: "#2874A6",
     approved: "#09cb3d",
     disapproved: "#ff0000",
 
@@ -303,7 +304,7 @@ const AppliedLandinfo = (props) => {
         console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
         if (fieldPresent && fieldPresent.length) {
           console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
-          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved === "approved" ? Colors.approved : fieldPresent[0].isApproved === "disapproved" ? Colors.disapproved : fieldPresent[0].isApproved === "conditional" ? Colors.conditional : Colors.info }
+          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved === "In Order" ? Colors.approved : fieldPresent[0].isApproved === "Not In Order" ? Colors.disapproved : fieldPresent[0].isApproved === "conditional" ? Colors.Conditional : Colors.info }
 
         }
       }
@@ -379,7 +380,60 @@ const AppliedLandinfo = (props) => {
   // const students = [DetailsofAppliedLand?.dgpsDetails]
   // const dgps = [DetailsofAppliedLand?.dgpsDetails?.index]
   const cart = [DetailsofAppliedLand?.dgpsDetails]
-
+/////////////////////////////////////////////////////////////////
+let Tree = ({ data }) => {
+  return (
+    <div>
+      <form>
+        {data?.length &&
+          data?.map((x, i) => {
+            const farsArr = [];
+            const testData = x?.fars?.forEach((i) => farsArr?.push({ label: i, value: i }));
+            setValue(x?.id, x?.area);
+            return (
+              <div key={i}>
+                <h6 style={{ marginTop: "10px" }}>
+                  <span>
+                    <b>Purpose Name: </b>
+                  </span>
+                  {x?.name}
+                </h6>
+                <div className="row">
+                  <div className="col col-4 mt-3">
+                    <h6>
+                      Area(in acres):
+                      <input
+                        type="number"
+                        className="form-control"
+                        placeholder="enter Area"
+                        defaultValue={x?.area}
+                      />
+                      <span style={{ fontSize: "13px", fontWeight: "bold" }}>Max Percentage:</span> {x?.maxPercentage},{" "}
+                      <span style={{ fontSize: "13px", fontWeight: "bold" }}>Min Percentage:</span> {x?.minPercentage}
+                    </h6>
+                  </div>
+                  {farsArr?.length > 0 && (
+                    <div className="col col-4 mt-3">
+                      <h6>
+                        FAR:{" "}
+                        <input
+                        type="number"
+                        className="form-control"
+                        placeholder="enter Area"
+                        defaultValue={x?.area}
+                      />
+                      </h6>
+                    </div>
+                  )}
+                  {!!x?.purposeDetail?.length && <div className="ml-4 mt-4">{Tree({ data: x?.purposeDetail })}</div>}
+                </div>
+              </div>
+            );
+          })}
+      </form>
+    </div>
+  );
+};
 
 
 
@@ -426,6 +480,7 @@ const AppliedLandinfo = (props) => {
         selectedFieldData={selectedFieldData}
         fieldValue={fieldValue}
         remarksUpdate={currentRemarks}
+        applicationStatus={applicationStatus}
       ></ModalChild>
 
       <div>

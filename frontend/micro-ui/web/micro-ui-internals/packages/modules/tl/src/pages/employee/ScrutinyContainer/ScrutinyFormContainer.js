@@ -41,8 +41,10 @@ const ScrutinyFormcontainer = (props) => {
   const [moduleCode, setModuleCode] = useState("TL")
   const [scrutinyDetails, setScrutinyDetails] = useState();
   const [feeandchargesData, SetFeeandchargesData] = useState();
+  const [status , setStatus] = useState();
 
   const [applicationDetails, setApplicationDetails] = useState();
+  const [lastUpdate, SetLastUpdate] = useState();
   const [workflowDetails, setWorkflowDetails] = useState();
   const [applicationData, setApplicationData] = useState();
   const { setBusinessService } = useContext(ScrutinyRemarksContext)
@@ -50,41 +52,41 @@ const ScrutinyFormcontainer = (props) => {
   const authToken = Digit.UserService.getUser()?.access_token || null;
   const userInfo = Digit.UserService.getUser()?.info || {};
 
-  
-  // const handleshow19 = async (e) => {
-  //   const payload = {
 
-  //     "RequestInfo": {
+  const handleshow19 = async (e) => {
+    const payload = {
 
-  //       "apiId": "Rainmaker",
+      "RequestInfo": {
 
-  //       "ver": ".01",
+        "apiId": "Rainmaker",
 
-  //       "ts": null,
+        "ver": ".01",
 
-  //       "action": "_update",
+        "ts": null,
 
-  //       "did": "1",
+        "action": "_update",
 
-  //       "key": "",
+        "did": "1",
 
-  //       "msgId": "20170310130900|en_IN",
+        "key": "",
 
-  //       "authToken": authToken
+        "msgId": "20170310130900|en_IN",
 
-  //     }
-  //   }
-  //   const Resp = await axios.post(`/tl-services/loi/report/_create?applicationNumber=${id}&userId=${userInfo?.id}`, payload,{responseType:"arraybuffer"})
+        "authToken": ""
 
-  //   console.log("logger12345...", Resp.data, userInfo)
+      }
+    }
+    const Resp = await axios.post(`/tl-services/new/license/pdf?applicationNumber=${id}`, payload, { responseType: "arraybuffer" })
 
-  //   const pdfBlob = new Blob([Resp.data], { type: 'application/pdf' });
-  //   const pdfUrl = URL.createObjectURL(pdfBlob);
-  //   window.open(pdfUrl);
+    console.log("logger12345...", Resp.data, userInfo)
 
-  //   console.log("logger123456...", pdfBlob,pdfUrl );
-    
-  // };
+    const pdfBlob = new Blob([Resp.data], { type: 'application/pdf' });
+    const pdfUrl = URL.createObjectURL(pdfBlob);
+    window.open(pdfUrl);
+
+    console.log("logger123456...", pdfBlob, pdfUrl);
+
+  };
   const handleChange = (e) => {
     this.setState({ isRadioSelected: true });
   };
@@ -111,28 +113,31 @@ const ScrutinyFormcontainer = (props) => {
       setApplicationData(Resp?.Licenses[0]);
       console.log("devDel1236", Resp?.Licenses[0]?.businessService)
       setBusinessService(Resp?.Licenses[0]?.businessService);
+      setStatus(Resp?.Licenses[0]?.status);
+      console.log("devStatus", Resp?.Licenses[0]?.status);
+
     } catch (error) {
       console.log(error);
     }
     const applicationNo = id
-    console.log("applicationNo" , applicationNo);
+    console.log("applicationNo", applicationNo);
     const feeAndChargesData = {
-     
 
-          "RequestInfo": {
-            "apiId": "Rainmaker",
-            "msgId": "1669293303096|en_IN",
-            userInfo : userInfo ,
-            "authToken": authToken,
-            
-    
-          },
-          applicationNo : applicationNo,
-        }
-        const feeandchargesRespon = await axios.post(`/tl-calculator/v1/_getPaymentEstimate`, feeAndChargesData)
-        SetFeeandchargesData(feeandchargesRespon);
-        console.log("Datafee", feeandchargesRespon);
-       
+
+      "RequestInfo": {
+        "apiId": "Rainmaker",
+        "msgId": "1669293303096|en_IN",
+        userInfo: userInfo,
+        "authToken": authToken,
+
+
+      },
+      applicationNo: applicationNo,
+    }
+    const feeandchargesRespon = await axios.post(`/tl-calculator/v1/_getPaymentEstimate`, feeAndChargesData)
+    SetFeeandchargesData(feeandchargesRespon?.data);
+    console.log("Datafee", feeandchargesRespon);
+
 
   };
   // console.log("Data334", feeandchargesData);
@@ -179,16 +184,17 @@ const ScrutinyFormcontainer = (props) => {
 
   const queryClient = useQueryClient();
 
-  
+
 
   const closeModal = () => {
-    
-    setTimeout(() => {
-      setSelectedAction(null);
+    setSelectedAction(null);
     setShowModal(false);
-   
-      window.location.href = `/digit-ui/employee/tl/inbox`
-    }, 3000);
+
+    // setTimeout(() => {
+     
+
+    //   window.location.href = `/digit-ui/employee/tl/inbox`
+    // }, 3000);
   };
 
   const closeWarningPopup = () => {
@@ -221,75 +227,81 @@ const ScrutinyFormcontainer = (props) => {
       }
     }
 
-    if (data.Licenses[0].action === "APPROVE_SITE_VERIFICATION" ){
+    if (data.Licenses[0].action === "APPROVE_SITE_VERIFICATION") {
+
 
       let requestInfo = {
-         
-          RequestInfo: {
-              apiId: "Rainmaker",
-              ver: "v1",
-              ts: 0,
-              action: "_search",
-              did: "",
-              key: "",
-              msgId: "090909",
-              requesterId: "",
-              authToken: authToken,
-              userInfo: userInfo
-          
-      }}
-      console.log("TCPaccess" , requestInfo)
+
+        RequestInfo: {
+          apiId: "Rainmaker",
+          ver: "v1",
+          ts: 0,
+          action: "_search",
+          did: "",
+          key: "",
+          msgId: "090909",
+          requesterId: "",
+          authToken: authToken,
+          userInfo: userInfo
+
+        }
+      }
+      console.log("TCPaccess", requestInfo)
       // return;
-      
+
       try {
         const Resp = await axios.post(`/tl-services/new/getDeptToken?applicationNumber=${id}`, requestInfo).then((response) => {
           return response?.data;
         });
-        
+        // setApplicationData(Resp?.Licenses[0]);
+        SetLastUpdate(Resp?.Licenses[0]?.tcpLoiNumber);
+    console.log("update" , Resp?.Licenses[0]);
+
       } catch (error) {
         console.log(error);
+    
       }
-      
-        const payload = {
-    
-          "RequestInfo": {
-    
-            "apiId": "Rainmaker",
-    
-            "ver": ".01",
-    
-            "ts": null,
-    
-            "action": "_update",
-    
-            "did": "1",
-    
-            "key": "",
-    
-            "msgId": "20170310130900|en_IN",
-    
-            "authToken": authToken
-    
-          }
+
+      const payload = {
+
+        "RequestInfo": {
+
+          "apiId": "Rainmaker",
+
+          "ver": ".01",
+
+          "ts": null,
+
+          "action": "_update",
+
+          "did": "1",
+
+          "key": "",
+
+          "msgId": "20170310130900|en_IN",
+
+          "authToken": authToken
+
         }
-        const Resp = await axios.post(`/tl-services/loi/report/_create?applicationNumber=${id}&userId=${userInfo?.id}&hqUserId=2247`, payload,{responseType:"arraybuffer"})
-    
-        console.log("logger12345...", Resp.data, userInfo)
-    
-        const pdfBlob = new Blob([Resp.data], { type: 'application/pdf' });
-        const pdfUrl = URL.createObjectURL(pdfBlob);
-        window.open(pdfUrl);
-    
-        console.log("logger123456...", pdfBlob,pdfUrl );
-        
-      
+      }
+      const Resp = await axios.post(`/tl-services/loi/report/_create?applicationNumber=${id}&userId=${userInfo?.id}&hqUserId=2247`, payload, { responseType: "arraybuffer" })
+
+      console.log("logger12345...", Resp.data, userInfo)
+
+      const pdfBlob = new Blob([Resp.data], { type: 'application/pdf' });
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+      window.open(pdfUrl);
+
+      console.log("logger123456...", pdfBlob, pdfUrl);
+
+
     }
-    
+
 
 
     if (mutate) {
-      console.log("TCPac234" , )
-      // return;
+      console.log("TCPac234",)
+   
       setIsEnableLoader(true);
       mutate(data, {
         onError: (error, variables) => {
@@ -328,6 +340,7 @@ const ScrutinyFormcontainer = (props) => {
 
   useEffect(() => {
     console.log("log123...applicationDetailsAPI", applicationDetailsTemp)
+    console.log("LastUpdate" , lastUpdate)
     if (applicationDetailsTemp?.data) {
       setApplicationDetails(applicationDetailsTemp?.data)
     }
@@ -353,95 +366,105 @@ const ScrutinyFormcontainer = (props) => {
     <Card className="formColorEmp">
       <Card.Header className="head-application" >
         <div className="row fw-normal">
-          <div className="col-md-3">
+          <div className="col-sm-2">
             <b><p className="head-font">Application Number:</p></b>
             <b><p className="head-font">{id}</p></b>
           </div>
-          <div className="col-md-2">
-          <b><p className="head-font">Service Id: </p></b>
-          <b><p className="head-font">{applicationData?.businessService}</p></b>
+          <div className="col-sm-2">
+            <b><p className="head-font">Service Id: </p></b>
+            <b><p className="head-font">
+              {/* {applicationData?.businessService} ask to renuka */}
+              Licence
+              </p></b>
           </div>
-          <div className="col-md-3">
+          <div className="col-sm-2">
             <b><p className="head-font">TCP Application Number:</p></b>
+            {/* {item.name.substring(0, 4)} */}
             <b><p className="head-font">{applicationData?.tcpApplicationNumber}</p></b>
           </div>
-          <div className="col-md-2">
+          <div className="col-sm-2">
             <b><p className="head-font">TCP Case Number:</p></b>
-            <b><p className="head-font">{applicationData?.tcpCaseNumber}</p></b>
+            {/* <b><p className="head-font">{applicationData?.tcpCaseNumber.substring(0, 7)}</p></b> */}
           </div>
-          <div className="col-md-2">
+          <div className="col-sm-2">
             <b><p className="head-font">TCP Dairy Number: </p></b>
             <b><p className="head-font">{applicationData?.tcpDairyNumber}</p></b>
+           
           </div>
+          <div className="col-sm-2">
+          <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}>Views PDF</Button>
+            </div>
         </div>
       </Card.Header>
       <Row >
         <div className="formlist">
-        <ScrutitnyForms
-        feeandcharges={feeandchargesData}
-         histeroyData={workflowDetailsTemp}
-          apiResponse={scrutinyDetails}
-          applicationNumber={id}
-          refreshScrutinyData={getScrutinyData}
-        ></ScrutitnyForms>
+          <ScrutitnyForms
+            feeandcharges={feeandchargesData}
+            histeroyData={workflowDetailsTemp}
+            apiResponse={scrutinyDetails}
+            applicationNumber={id}
+            applicationStatus={status}
+            refreshScrutinyData={getScrutinyData}
+          ></ScrutitnyForms>
         </div>
-        
+
       </Row>
       <Row style={{ top: 30, padding: "10px 22px" }}>
 
 
         {/* <Row> */}
 
-          <div class="col-md-10 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
-           
+        <div class="col-md-10 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
 
 
-            {showModal ? (
-              <ActionModal
-                t={t}
-                action={selectedAction}
-                tenantId={tenantId}
-                state={state}
-                id={id}
-                applicationDetails={applicationDetails}
-                applicationData={{ ...applicationDetails?.applicationData, workflowCode: applicationDetails?.applicationData?.workflowCode || "NewTL" }}
-                closeModal={closeModal}
-                submitAction={submitAction}
-                actionData={workflowDetails?.data?.timeline}
-                businessService={businessService}
-                workflowDetails={workflowDetails}
-                moduleCode={moduleCode}
-              />
-            ) : null}
-            {isWarningPop ? (
-              <ApplicationDetailsWarningPopup
-                action={selectedAction}
-                workflowDetails={workflowDetails}
-                businessService={businessService}
-                isWarningPop={isWarningPop}
-                closeWarningPopup={closeWarningPopup}
-              />
-            ) : null}
-            {/* <ApplicationDetailsToast t={t} showToast={showToast} closeToast={closeToast} businessService={businessService} /> */}
-            <ApplicationDetailsActionBar
-              workflowDetails={workflowDetails}
-              displayMenu={displayMenu}
-              onActionSelect={onActionSelect}
-              setDisplayMenu={setDisplayMenu}
+
+          {showModal ? (
+            <ActionModal
+              t={t}
+              action={selectedAction}
+              tenantId={tenantId}
+              state={state}
+              id={id}
+              applicationDetails={applicationDetails}
+              applicationData={{ ...applicationDetails?.applicationData, workflowCode: applicationDetails?.applicationData?.workflowCode || "NewTL" }}
+              closeModal={closeModal}
+              submitAction={submitAction}
+              actionData={workflowDetails?.data?.timeline}
               businessService={businessService}
-              // forcedActionPrefix={forcedActionPrefix}
-              ActionBarStyle={{}}
-              MenuStyle={{}}
+              tcpLoiNumber={lastUpdate}
+              workflowDetails={workflowDetails}
+              moduleCode={moduleCode}
             />
+          ) : null}
+          {isWarningPop ? (
+            <ApplicationDetailsWarningPopup
+              action={selectedAction}
+              workflowDetails={workflowDetails}
+              businessService={businessService}
+              isWarningPop={isWarningPop}
+              closeWarningPopup={closeWarningPopup}
+            />
+          ) : null}
+          
+          <ApplicationDetailsActionBar
+            workflowDetails={workflowDetails}
+            displayMenu={displayMenu}
+            onActionSelect={onActionSelect}
+            setDisplayMenu={setDisplayMenu}
+            businessService={businessService}
+            // forcedActionPrefix={forcedActionPrefix}
+            ActionBarStyle={{}}
+            MenuStyle={{}}
+          />
 
 
-          </div>
+        </div>
 
         {/* </Row> */}
         <Row>
-              
+
           {/* <div class="col-md-12 bg-light text-right" style={{ position: "relative", marginBottom: 20 }}>
-          <Button style={{ textAlign: "right" }} value="Submit" id="Submit" onChange1={handleChange} name="Submit" onClick={handleshow19}>Submit</Button>
+            
           </div> */}
           {/* {showhide19 === "Submit" && ( */}
           {/* <div>

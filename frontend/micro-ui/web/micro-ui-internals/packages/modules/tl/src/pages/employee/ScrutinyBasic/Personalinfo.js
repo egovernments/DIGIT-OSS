@@ -12,7 +12,7 @@ import InfoIcon from "@mui/icons-material/Info";
 import PersonalinfoChild from "./PersonalinfoChild";
 import CapacityScrutiny from "../ScrutinyBasic/Developer/CapacityScrutiny";
 import DocumentScrutiny from "./Developer/DocumentScrutiny";
-import Collapse from "react-bootstrap/Collapse";
+import Collapse from "react-bootstrap/Collapse";              
 import Modal from "react-bootstrap/Modal";
 import ModalChild from "./Remarks/ModalChild";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
@@ -41,6 +41,7 @@ const Personalinfo = (props) => {
 
   const iconStates = props.dataForIcons
   const applicantInfoPersonal = props.ApiResponseData;
+  const applicationStatus = props.applicationStatus ;
   console.log("personal info applicant data", applicantInfoPersonal);
 
   const handlemodaldData = (data) => {
@@ -163,6 +164,7 @@ const Personalinfo = (props) => {
                 showTable={currentRemarklifo}
                 personalinfo={applicantInfoPersonal !== null ? applicantInfoPersonal : null}
                 displayPersonal={open2 ? "block" : "none"}
+                applicationStatus={applicationStatus}
               />
             </div>
           </Collapse>
@@ -178,6 +180,7 @@ const Personalinfo = (props) => {
             capacityScrutinyInfo={applicantInfoPersonal?.devDetail?.capacityDevelopAColony ? applicantInfoPersonal?.devDetail?.capacityDevelopAColony : null}
             addInfo={applicantInfoPersonal?.devDetail?.addInfo ? applicantInfoPersonal?.devDetail?.addInfo : null}
             displayPersonal={open2 ? "block" : "none"}
+            applicationStatus={applicationStatus}
           />
           {/* <DocumentScrutiny 
           /> */}
@@ -186,6 +189,7 @@ const Personalinfo = (props) => {
             showTable={currentRemarklifo}
             addInfo={applicantInfoPersonal?.devDetail?.addInfo ? applicantInfoPersonal?.devDetail?.addInfo : null}
             displayPersonal={open2 ? "block" : "none"}
+            applicationStatus={applicationStatus}
           />
         </div>
       </Collapse>

@@ -13,9 +13,11 @@ import { Button, Row, Col } from "react-bootstrap";
 import { useForkRef } from "@mui/material";
 import axios from "axios";
 import { ScrutinyRemarksContext } from "../../../../context/remarks-data-context";
+import DataGridDemo from "./PatwariHQ";
 // import AddIcon from "@mui/icons-material/Add";
+// import TemplatesPatwar from "./TemplatePatwari";
 
-const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData , histeroyData, feeandcharges}) => {
+const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData , histeroyData, feeandcharges , applicationStatus }) => {
   const personalInfoRef = useRef();
   const generalInfoRef = useRef();
   const developerInfoRef = useRef();
@@ -37,7 +39,7 @@ const ScrutitnyForms = ({ apiResponse, applicationNumber, refreshScrutinyData , 
   const [displayFeeandCharges, setDisplayFeeandChargesInfo] = useState([]);
   // const [displayLicenseDetails, setDisplayLicenseDetailsInfo] = useState([]);
   // const [displayLicenseDetailsCheckedlist, setDisplayCheckedLicenseDetailsList] = useState([]);
-const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues } = useContext(ScrutinyRemarksContext);
+const { remarksData,iconStates,rolesDate,handleRoles,handleGetFiledsStatesById,handleGetRemarkssValues } = useContext(ScrutinyRemarksContext);
   const [displayJeLand, setDisplayJeLand] = useState([]);
   const [ActiveKey, setActiveKey] = useState(1);
   const [defaultHeightPersonal, setDefaultHeightPersonal] = useState(0);
@@ -223,6 +225,14 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
     }
   }, [applicationNumber]);
 
+  useEffect(() => {
+    if (applicationNumber) {
+      handleRoles(applicationNumber);
+    }
+  }, [applicationNumber]);
+
+  
+
   const curentDataPersonal = (data) => {
     setRemarksChanges(data.data);
   };
@@ -291,7 +301,8 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
   console.log("remarks api", remarksData.egScrutiny !== undefined ? remarksData.egScrutiny : null);
 
   console.log("remakes data parsnalinfo", remarksChanges);
-
+console.log("basiceData",iconStates )
+console.log("roleData",rolesDate )
   return (
     <div>
       <div style={{ position: "relative", maxWidth: "100%", padding: 2 }}>
@@ -305,6 +316,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
               ApiResponseData={apiResponse !== undefined ? apiResponse?.ApplicantInfo : null}
               showTable={curentDataPersonal}
               dataForIcons={iconStates}
+              applicationStatus={applicationStatus}
             ></Personalinfo>
           </div>
           <div>
@@ -315,6 +327,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
               onClick={() => setOpen(!open)}
               ApiResponseData={apiResponse !== undefined ? apiResponse?.ApplicantPurpose : null}
               dataForIcons={iconStates}
+              applicationStatus={applicationStatus}
             ></Genarelinfo>
             {/* </Col> */}
           </div>
@@ -328,6 +341,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
               onClick={() => setOpen(!open)}
               ApiResponseData={apiResponse !== undefined ? apiResponse?.LandSchedule : null}
               dataForIcons={iconStates}
+              applicationStatus={applicationStatus}
             ></Developerinfo>
             {/* </Col> */}
           </div>
@@ -341,6 +355,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
               ApiResponseData={apiResponse !== undefined ? apiResponse?.DetailsofAppliedLand : null}
               heightApplied={defaultheightApplied}
               dataForIcons={iconStates}
+              applicationStatus={applicationStatus}
             ></AppliedLandinfo>
             {/* </Col> */}
           </div>
@@ -351,6 +366,7 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
               heightFee={defaultheightFee}
               ApiResponseData={apiResponse !== undefined ? apiResponse?.FeesAndCharges : null}
               feeandchargesData={feeandcharges}
+              applicationStatus={applicationStatus}
             ></Feeandcharges>
             {/* </Col> */}
           </div>
@@ -367,6 +383,23 @@ const { remarksData,iconStates,handleGetFiledsStatesById,handleGetRemarkssValues
           // remarksum={sumrol.egScrutiny !== undefined ? sumrol.egScrutiny : null}
           histeroyData={histeroyData}
         ></ScrutinyDevelopment>
+      </div>
+      {/* <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
+        <TemplatesPatwar
+           ApiResponseData={apiResponse !== undefined ? apiResponse?.ApplicantPurpose : null}
+        ></TemplatesPatwar>
+      </div> */}
+
+      
+
+      <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
+      <DataGridDemo
+          
+          applicationNumber={applicationNumber}
+          dataForIcons={rolesDate}
+          applicationStatus={applicationStatus}
+          >
+          </DataGridDemo>
       </div>
     </div>
   );

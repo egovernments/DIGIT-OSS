@@ -7,13 +7,14 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 
+
 import Collapse from "react-bootstrap/Collapse";
 import ModalChild from "./Remarks/ModalChild";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import { useStyles } from "./css/personalInfoChild.style";
 import Visibility from "@mui/icons-material/Visibility";
 import FileDownload from "@mui/icons-material/FileDownload";
-import { IconButton } from "@mui/material";
+import { IconButton } from "@mui/material"; 
 import { getDocShareholding } from "./ScrutinyDevelopment/docview.helper";
 
 const Genarelinfo = (props) => {
@@ -28,7 +29,9 @@ const Genarelinfo = (props) => {
   const hideRemarksJE = userRoles.some((item)=>item ==="JE_HQ" || item === "JE_HR")
 
   const genarelinfo = props.genarelinfo;
+  const applicationStatus = props.applicationStatus;
   const dataIcons = props.dataForIcons;
+  
 
   const applicantInfoPersonal = props.ApiResponseData;
   console.log("personal info applicant data1", applicantInfoPersonal);
@@ -301,7 +304,7 @@ const Genarelinfo = (props) => {
         console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
         if (fieldPresent && fieldPresent.length) {
           console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
-          tempFieldColorState = {...tempFieldColorState,[item.key]:fieldPresent[0].isApproved === "approved" ?Colors.approved: fieldPresent[0].isApproved === "disapproved" ? Colors.disapproved:fieldPresent[0].isApproved === "conditional" ? Colors.conditional:Colors.info}
+          tempFieldColorState = {...tempFieldColorState,[item.key]:fieldPresent[0].isApproved === "In Order" ?Colors.approved: fieldPresent[0].isApproved === "Not In Order" ? Colors.disapproved:fieldPresent[0].isApproved === "conditional" ? Colors.conditional:Colors.info}
 
         }
       }
@@ -353,6 +356,7 @@ const Genarelinfo = (props) => {
         selectedFieldData={selectedFieldData}
         fieldValue={fieldValue}
         remarksUpdate={currentRemarks}
+        applicationStatus={applicationStatus}
       ></ModalChild>
       <div
         className="collapse-header"
@@ -1315,8 +1319,7 @@ Note: The term “Collaboration agreement" shall include all Development agreeme
               <Button onClick={() => props.passUncheckedList({ data: uncheckedValue, purpose: purpose })}>Submit</Button>
             </div> */}
           </Form.Group>
-          <br></br>
-        </div>
+   </div>
       </Collapse>
       {/* </Card> */}
     </Form>

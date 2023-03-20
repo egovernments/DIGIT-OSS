@@ -30,6 +30,7 @@
     "@mui/material": "^5.10.15",
     "@mui/styled-engine-sc": "^5.10.14",
     "@mui/utils": "^5.10.16",
+    "@mui/x-data-grid": "^6.0.1",
     "jspdf": "^2.5.1",
     "lodash.merge": "^4.6.2",
     "react": "17.0.2",

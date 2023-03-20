@@ -22,7 +22,7 @@ import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import { useStyles } from "../css/personalInfoChild.style";
 import { add } from "lodash";
 
-const CapacityScrutiny = ({ t, config, onSelect, showTable, formData, formDataValue, data, addInfo, capacityScrutinyInfo, iconColorState ,showDevTypeFields,getRemarkData}) => {
+const CapacityScrutiny = ({ t, config, onSelect, showTable, formData, formDataValue, data, addInfo,applicationStatus , capacityScrutinyInfo, iconColorState ,showDevTypeFields,getRemarkData}) => {
   const { pathname: url } = useLocation();
   const userInfo = Digit.UserService.getUser();
   let validation = {};
@@ -387,7 +387,7 @@ const getColorofFieldIcon=()=>{
       console.log("filteration value", fieldPresent,fieldPresent[0]?.isApproved);
       if(fieldPresent && fieldPresent.length){
         console.log("filteration value1", fieldPresent,fieldPresent[0]?.isApproved);
-        tempFieldColorState = {...tempFieldColorState,[item.key]:fieldPresent[0].isApproved === "approved" ?Colors.approved: fieldPresent[0].isApproved === "disapproved" ? Colors.disapproved:fieldPresent[0].isApproved === "conditional" ? Colors.conditional:Colors.info}
+        tempFieldColorState = {...tempFieldColorState,[item.key]:fieldPresent[0].isApproved === "In Order" ?Colors.approved: fieldPresent[0].isApproved === "Not In Order" ? Colors.disapproved:fieldPresent[0].isApproved === "conditional" ? Colors.conditional:Colors.info}
        
       }
     }
@@ -445,6 +445,7 @@ const handlemodaldData = (data) => {
         selectedFieldData={selectedFieldData}
         fieldValue={fieldValue}
         remarksUpdate={currentRemarks}
+        applicationStatus={applicationStatus}
         // getRemarkData={props.getRemarkData}
       ></ModalChild>
 
